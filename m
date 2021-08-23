@@ -1,52 +1,108 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C41A6D38
-	for <llvm@lists.linux.dev>; Thu, 19 Aug 2021 13:25:51 +0000 (UTC)
-Received: by mail-qt1-f181.google.com with SMTP id l3so4515376qtk.10
-        for <llvm@lists.linux.dev>; Thu, 19 Aug 2021 06:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=afjAy7aSxYkhGKeMt7qmlsAs+GUTzcqSdbomPjY+EF0=;
-        b=bXWLULKAbtNvFrW5/ydHe7u/WwgzrGfJ/nNMU0FTrODjvupdCkg+NK2LjI+aiXeYWy
-         JJBsNgOGYRU2FRSTiYcFXfv1fKdyThrTnOg+/1nrzPKILi6Vpqd+/HWhqFzWciGhTp25
-         I3KwHHpae7/AbcrdWD1RXkJ3T0N+kFlS+PTLk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=afjAy7aSxYkhGKeMt7qmlsAs+GUTzcqSdbomPjY+EF0=;
-        b=NGm0HsEx10zpHUt8n7lEeoP733Q9HesY/oKQgfhFjFebOKmEGnwHck9qwo/TWXIeo6
-         UjNXqzoflEJVB0s48Dd0/yf16OSEAW72fZcOWUfm4U8x7y4g9xtsRIidFmLb7O8LWsqR
-         xCTDtegM8tuQ5LoFnonh5JvwzwSC0BCG9JdL5YxOD67bsHmV/PHAzZMLfi7LUtz1yit1
-         RmEv6EM6atM/LP9vhImGHRiiAnjm5HZZKswBkEOeZqmI0rEqIu6YCdUm7V+qgIhKt9AO
-         DYGMjmQBrxgxVb46Dl5ekuwDJwl8gDrlHgVTjV2uepww2C/z8IRjZnx2gDZPTNistQcn
-         vKTw==
-X-Gm-Message-State: AOAM533qTxq/d6P49Nj9qrRmUB9jigFSi/P2i7cNmDMTB4SLphrq+j/6
-	3KSIM1AlhRxCmWUc8eORfnof6hUrgJwmDbQg
-X-Google-Smtp-Source: ABdhPJxcZrZVzCL3s78qBoeIHXleTP0c8zxPZNfRVrb+RWm4bbf6wopVv8pO56Jf2rBaiF0aXl5tAw==
-X-Received: by 2002:a05:622a:289:: with SMTP id z9mr12509275qtw.67.1629379549920;
-        Thu, 19 Aug 2021 06:25:49 -0700 (PDT)
-Received: from nitro.local ([89.36.78.230])
-        by smtp.gmail.com with ESMTPSA id g131sm1627542qke.122.2021.08.19.06.25.49
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 06:25:49 -0700 (PDT)
-Date: Thu, 19 Aug 2021 09:25:47 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: llvm@lists.linux.dev
-Subject: Test message to start the archive
-Message-ID: <20210819132547.sellxg45jzb4rkp3@nitro.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C364B3FC2
+	for <llvm@lists.linux.dev>; Mon, 23 Aug 2021 22:21:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A045B61037;
+	Mon, 23 Aug 2021 22:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1629757264;
+	bh=c2dWCa0HWj45H4vSGrBr15OdWr53psJLo9xCrc1YnH4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=e/1yYmL+23yyZdPAJh2VFBrbAvT2tVHcyZv2NdRUkAro1/nv233SU7opLMPeUu5os
+	 Xh22G+UnbeWNRwbguEYjwxiSL1Yb1IjnKg+DorzBMakWzQCuVtV9KWFlSQtEqrZg2x
+	 7hkauGS+GBVwZfGsxEHjWjjxZbezxu45Q4HEWyIW7m+PHUbxF1pffyH2toKjxtotB8
+	 QJ2cXyZJeVUcKrrJT2Bt7l2eCQWQ5kHlCPJgFIgt6yAw/dWdNXcUw5vQAPw77WI4+J
+	 KYbWUMQJr8iR/Jf8RGpV88AvYDQ4PfM67mWXEGh+4BxvfJSZjqeKhl+ReMjNNferiX
+	 UeX+cTO7PS8Gg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ping-Ke Shih <pkshih@realtek.com>,
+	Kalle Valo <kvalo@codeaurora.org>
+Cc: Colin Ian King <colin.king@canonical.com>,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux@googlegroups.com,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] rtlwifi: rtl8192de: Fix initialization of place in _rtl92c_phy_get_rightchnlplace()
+Date: Mon, 23 Aug 2021 15:20:14 -0700
+Message-Id: <20210823222014.764557-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 
-This is a test message to initiate the public-inbox archive.
+Clang warns:
 
--K
+drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c:901:6: warning:
+variable 'place' is used uninitialized whenever 'if' condition is false
+[-Wsometimes-uninitialized]
+        if (chnl > 14) {
+            ^~~~~~~~~
+drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c:909:9: note:
+uninitialized use occurs here
+        return place;
+               ^~~~~
+drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c:901:2: note: remove
+the 'if' if its condition is always true
+        if (chnl > 14) {
+        ^~~~~~~~~~~~~~~
+drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c:899:10: note:
+initialize the variable 'place' to silence this warning
+        u8 place;
+                ^
+                 = '\0'
+1 warning generated.
+
+Commit 369956ae5720 ("rtlwifi: rtl8192de: Remove redundant variable
+initializations") removed the initialization of place but it appears
+that this removal was in the wrong function.
+
+_rtl92c_phy_get_rightchnlplace() returns place's value at the end of the
+function so now if the if statement is false, place never gets
+initialized. Add that initialization back to address the warning.
+
+place's initialization is not necessary in
+rtl92d_get_rightchnlplace_for_iqk() as place is only used within the if
+statement so it can be removed, which is likely what was intended in the
+first place.
+
+Fixes: 369956ae5720 ("rtlwifi: rtl8192de: Remove redundant variable initializations")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c
+index 8ae69d914312..9b83c710c9b8 100644
+--- a/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c
++++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c
+@@ -896,7 +896,7 @@ static void _rtl92d_ccxpower_index_check(struct ieee80211_hw *hw,
+ 
+ static u8 _rtl92c_phy_get_rightchnlplace(u8 chnl)
+ {
+-	u8 place;
++	u8 place = chnl;
+ 
+ 	if (chnl > 14) {
+ 		for (place = 14; place < sizeof(channel5g); place++) {
+@@ -1363,7 +1363,7 @@ static void _rtl92d_phy_switch_rf_setting(struct ieee80211_hw *hw, u8 channel)
+ 
+ u8 rtl92d_get_rightchnlplace_for_iqk(u8 chnl)
+ {
+-	u8 place = chnl;
++	u8 place;
+ 
+ 	if (chnl > 14) {
+ 		for (place = 14; place < sizeof(channel_all); place++) {
+
+base-commit: 609c1308fbc6446fd6d8fec42b80e157768a5362
+-- 
+2.33.0
+
