@@ -1,139 +1,78 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D1F3FC0
-	for <llvm@lists.linux.dev>; Tue, 24 Aug 2021 02:56:53 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id e1so4421043plt.11
-        for <llvm@lists.linux.dev>; Mon, 23 Aug 2021 19:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=29Fb0DQb3lLM1RT0ONfW5Rl3roBtF0uhGZi6Clr4PQ8=;
-        b=GDUCXarovw3ukF3RwAsETeElR5eGZPBu70ayB2wBQ/TkJiUQsrK/LrueDGJCxotLKi
-         ONJSxgXeWrngVIsd79smxVSF174v3ocrKyIRx2FpMXOk9kzCNFVH2niEcM+R+iqNEmI7
-         ZlvmjevY3GS6Hme6xtZ3+Ptx+FnFMI9Yq/daLTAA4UCGxALn/6hgG5JG2QLb1sp4M1em
-         kl2plY0zoiACgUQbnHH2YRDzcEhkPyZQdD+mbfmlKIV9Vtf7FbLGrEhvgfrzAiF0T/Ex
-         QkqbMid4GkGvIAcMfdK7VJ5jWqv1njIol6NTXXsAqKIUXQJuVN0TAmsN7MSk3SSdFPmG
-         d1Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=29Fb0DQb3lLM1RT0ONfW5Rl3roBtF0uhGZi6Clr4PQ8=;
-        b=W3uE3APdnQq7xRZE5JeDQeYptAzTh4v3nGvasi1/McsZwR8jq8wAooMtCE6LP2hMDT
-         ZgrFpC8KECAa+yOwQq9PjJwH+yDXkNU8vLUKSGbcO1qgYAJyqW93KMFiH3GvGIYdwYZw
-         ol44fTPInCV22/+PaPJQjw2wGTWhsvqH0HCVJ4XrUWalvJ57I9h+N1VwzVGKnfULRNcz
-         +ylnspNI8AaArb8SdWUJJetY4sHAqqVoj9TSPgJh27dFvt7qiRE2EkPMSc+50xFQjlQF
-         CDrJZTgxTSM8eJ6oD4RpUplMSZfiIsuokWwLf4OMqitZ9LzjgBEtipV5E6yrZ6kqSqY1
-         OXmg==
-X-Gm-Message-State: AOAM530BVtDF/W2g7mpdf85r/9ldY6OXBaqIjUlw3mDR0aMMGqnedwJf
-	iwochVqgh2o3lzCMCVczinanIg==
-X-Google-Smtp-Source: ABdhPJwXFrQMieCMh9x9c+mtDLu/YP/iQ36j1IknXDrvOvDegeb32ZiTPGsKdkfnQ8HYxv43bwJgqw==
-X-Received: by 2002:a17:903:310a:b0:133:9bb6:98bd with SMTP id w10-20020a170903310a00b001339bb698bdmr9300777plc.19.1629773812408;
-        Mon, 23 Aug 2021 19:56:52 -0700 (PDT)
-Received: from google.com ([2620:15c:2ce:200:196f:5297:b0e8:1313])
-        by smtp.gmail.com with ESMTPSA id y12sm18770264pgl.65.2021.08.23.19.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Aug 2021 19:56:51 -0700 (PDT)
-Date: Mon, 23 Aug 2021 19:56:47 -0700
-From: Fangrui Song <maskray@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	clang-built-linux@googlegroups.com, llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 1/2] x86: Do not add -falign flags unconditionally for
- clang
-Message-ID: <20210824025647.tssnp7qtccbgvdq7@google.com>
-References: <20210824022640.2170859-1-nathan@kernel.org>
- <20210824022640.2170859-2-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19A23FC1
+	for <llvm@lists.linux.dev>; Tue, 24 Aug 2021 20:09:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA50B61357;
+	Tue, 24 Aug 2021 20:09:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1629835741;
+	bh=uUxS3w4NOSn9JSUG4eMqaNfVV/q8mARt5VKtS0HjAJY=;
+	h=To:Cc:From:Subject:Date:From;
+	b=VSa+FJEW1fAO9sC2RDHgJXnRm4cep9Jr8x9LNqqVZtQF4m2Y/XogiDGoga9/EO7ZI
+	 sX4fBWXmTFJoZevWtijrx4i/dYx7RpZaU+SlQAYTLavRKpWjJ9uaTIWvtRYf0AfkuS
+	 q009nb+cnd5G93COlmYLj0jZ87/UR80e3XnuFIyOTUBxPANK7PiHGG52QXsZyQ7JQp
+	 Q4XNaYkQYLBLP+wZhioJn66cD/TbpQUUuPlfWK0BbRMi/qATZ98CW2TnZ3tbcpLHG9
+	 s891+4NZiVkG2fz2uipkI8bJ2wsOOObUU1vSq9+qhHaPhPsvvJCJGfR7wKYaFBLojk
+	 ls1ba2BbiQt/g==
+To: Josh Poimboeuf <jpoimboe@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>,
+ clang-built-linux@googlegroups.com, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: objtool warning in cfg80211_edmg_chandef_valid() with ThinLTO
+Message-ID: <5913cdf4-9c8e-38f8-8914-d3b8a3565d73@kernel.org>
+Date: Tue, 24 Aug 2021 13:08:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210824022640.2170859-2-nathan@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On 2021-08-23, Nathan Chancellor wrote:
->clang does not support -falign-jumps and only recently gained support
->for -falign-loops. When one of the configuration options that adds these
->flags is enabled, clang warns and all cc-{disable-warning,option} that
->follow fail because -Werror gets added to test for the presence of this
->warning:
+Hi Josh and Peter,
 
-[I implemented clang -falign-loops :) It doesn't affect LTO, though.
-LTO ld.lld may use -Wl,-mllvm,-align-loops=32 for now.  ]
+An in-review LLVM patch [1] introduces an optimization around switch 
+cases, marking the default case unreachable when all known values are 
+covered. This ended up introducing a boot regression when building a 
+kernel with ThinLTO, which Sami reported initially [2] and I reported it 
+upstream, generating some discussion starting from [3].
 
->clang-14: warning: optimization flag '-falign-jumps=0' is not supported
->[-Wignored-optimization-argument]
+There is an objtool warning about the function that the author of the 
+patch tracked down to be problematic:
 
-grub made a similar mistake:) It thought the availability of -falign-X
-implies the availability of other -falign-*
-https://lists.gnu.org/archive/html/grub-devel/2021-08/msg00076.html
+vmlinux.o: warning: objtool: cfg80211_edmg_chandef_valid()+0x169: can't 
+find jump dest instruction at .text.cfg80211_edmg_chandef_valid+0x17b
 
->To resolve this, add a couple of cc-option calls when building with
->clang; gcc has supported these options since 3.2 so there is no point in
->testing for their support. -falign-functions was implemented in clang-7,
->-falign-loops was implemented in clang-14, and -falign-jumps has not
->been implemented yet.
->
->Link: https://lore.kernel.org/r/YSQE2f5teuvKLkON@Ryzen-9-3900X.localdomain/
->Reported-by: kernel test robot <lkp@intel.com>
->Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->---
-> arch/x86/Makefile_32.cpu | 12 +++++++++---
-> 1 file changed, 9 insertions(+), 3 deletions(-)
->
->diff --git a/arch/x86/Makefile_32.cpu b/arch/x86/Makefile_32.cpu
->index cd3056759880..e8c65f990afd 100644
->--- a/arch/x86/Makefile_32.cpu
->+++ b/arch/x86/Makefile_32.cpu
->@@ -10,6 +10,12 @@ else
-> tune		= $(call cc-option,-mcpu=$(1),$(2))
-> endif
->
->+ifdef CONFIG_CC_IS_CLANG
->+align		:= -falign-functions=0 $(call cc-option,-falign-jumps=0) $(call cc-option,-falign-loops=0)
->+else
->+align		:= -falign-functions=0 -falign-jumps=0 -falign-loops=0
->+endif
->+
-> cflags-$(CONFIG_M486SX)		+= -march=i486
-> cflags-$(CONFIG_M486)		+= -march=i486
-> cflags-$(CONFIG_M586)		+= -march=i586
->@@ -25,11 +31,11 @@ cflags-$(CONFIG_MK6)		+= -march=k6
-> # They make zero difference whatsosever to performance at this time.
-> cflags-$(CONFIG_MK7)		+= -march=athlon
-> cflags-$(CONFIG_MK8)		+= $(call cc-option,-march=k8,-march=athlon)
->-cflags-$(CONFIG_MCRUSOE)	+= -march=i686 -falign-functions=0 -falign-jumps=0 -falign-loops=0
->-cflags-$(CONFIG_MEFFICEON)	+= -march=i686 $(call tune,pentium3) -falign-functions=0 -falign-jumps=0 -falign-loops=0
->+cflags-$(CONFIG_MCRUSOE)	+= -march=i686 $(align)
->+cflags-$(CONFIG_MEFFICEON)	+= -march=i686 $(call tune,pentium3) $(align)
-> cflags-$(CONFIG_MWINCHIPC6)	+= $(call cc-option,-march=winchip-c6,-march=i586)
-> cflags-$(CONFIG_MWINCHIP3D)	+= $(call cc-option,-march=winchip2,-march=i586)
->-cflags-$(CONFIG_MCYRIXIII)	+= $(call cc-option,-march=c3,-march=i486) -falign-functions=0 -falign-jumps=0 -falign-loops=0
->+cflags-$(CONFIG_MCYRIXIII)	+= $(call cc-option,-march=c3,-march=i486) $(align)
-> cflags-$(CONFIG_MVIAC3_2)	+= $(call cc-option,-march=c3-2,-march=i686)
-> cflags-$(CONFIG_MVIAC7)		+= -march=i686
-> cflags-$(CONFIG_MCORE2)		+= -march=i686 $(call tune,core2)
->-- 
->2.33.0
+The LLVM developers are under the impression that this is an issue with 
+objtool; specifically quoting Eli Friedman:
 
-https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html says
-"If n is not specified or is zero, use a machine-dependent default."
+"The backend can, in general, create basic blocks that don't contain any 
+instructions, and don't fall through to another block. A jump table 
+entry can refer to such a block. I guess certain tools could be confused 
+by this.
 
-Unless some other files specify -falign-loops=N and expect 0 to reset to
-the machine default, -falign-jumps=0 -falign-loops=0 -falign-functions=0 should just be dropped.
+If that's the issue, it should be possible to work around it using 
+'-mllvm -trap-unreachable'."
 
-BTW: I believe GCC 8 (likely when fixing another issue with a large refactor
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84100) introduced a bug
-that -falign-X=0 was essentially -falign-X=1.
-GCC 11.0 (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96247) fixed the bug.
+I can confirm that adding '-mllvm -trap-unreachable' to 
+KBUILD_{C,LD}FLAGS does resolve the issue but I am curious if that is an 
+adequate solution (as Nick has frowned upon the presence of '-mllvm' 
+flags) or if there is something that could be done on the objtool side. 
+I do have a small reproducer on Phabricator [4] and I can provide any 
+binary files that would be helpful for seeing what is going on here.
+
+[1] https://reviews.llvm.org/D106056
+[2] https://github.com/ClangBuiltLinux/linux/issues/1440
+[3] https://reviews.llvm.org/D106056#2953104
+[4] https://reviews.llvm.org/D106056#2961136
+
+Cheers,
+Nathan
