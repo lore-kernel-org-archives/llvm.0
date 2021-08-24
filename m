@@ -1,78 +1,179 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19A23FC1
-	for <llvm@lists.linux.dev>; Tue, 24 Aug 2021 20:09:01 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AA50B61357;
-	Tue, 24 Aug 2021 20:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE27C3FC0
+	for <llvm@lists.linux.dev>; Tue, 24 Aug 2021 20:51:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C5AB0611C9;
+	Tue, 24 Aug 2021 20:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629835741;
-	bh=uUxS3w4NOSn9JSUG4eMqaNfVV/q8mARt5VKtS0HjAJY=;
-	h=To:Cc:From:Subject:Date:From;
-	b=VSa+FJEW1fAO9sC2RDHgJXnRm4cep9Jr8x9LNqqVZtQF4m2Y/XogiDGoga9/EO7ZI
-	 sX4fBWXmTFJoZevWtijrx4i/dYx7RpZaU+SlQAYTLavRKpWjJ9uaTIWvtRYf0AfkuS
-	 q009nb+cnd5G93COlmYLj0jZ87/UR80e3XnuFIyOTUBxPANK7PiHGG52QXsZyQ7JQp
-	 Q4XNaYkQYLBLP+wZhioJn66cD/TbpQUUuPlfWK0BbRMi/qATZ98CW2TnZ3tbcpLHG9
-	 s891+4NZiVkG2fz2uipkI8bJ2wsOOObUU1vSq9+qhHaPhPsvvJCJGfR7wKYaFBLojk
-	 ls1ba2BbiQt/g==
-To: Josh Poimboeuf <jpoimboe@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>,
- clang-built-linux@googlegroups.com, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org
+	s=k20201202; t=1629838279;
+	bh=T7jeklW73WtmhJ1+zmiWNQDRR5pBH/HBxRpffRugi/M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CB5fwzQA6I8chW6tqlPAkiHwVud7c0gISHsRyWExvDnFVHfnLo0P3FZjaUEQeUhiB
+	 JR3Y7ifK+h+YYqb3xK348QaIW2hY921IbYTBCYJSaNpS8Wg5XA/JmWdQ0EHeN/hRWo
+	 M6VlJq3tXcuC9KaDhNb92tvBHKb9Hv6Bn95TKFJKK3tubaiRV/CmP2IuhbO/Sv9YIQ
+	 shz2iuw8ddR33kEvhn3XfqtLQjGxPsalwjyeFkAq4BPvfcCoTh5Y0IY/hzm4wyaWBA
+	 C2xXoXDlREj5sPw8FP6v0vgrFHlSB3SUS1GvplsIl5Z214yoFeTvOt6AcBijQsVLke
+	 W8vNUAFvi4ooA==
 From: Nathan Chancellor <nathan@kernel.org>
-Subject: objtool warning in cfg80211_edmg_chandef_valid() with ThinLTO
-Message-ID: <5913cdf4-9c8e-38f8-8914-d3b8a3565d73@kernel.org>
-Date: Tue, 24 Aug 2021 13:08:58 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To: Raju Rangoju <rajur@chelsio.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux@googlegroups.com,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] cxgb4: Properly revert VPD changes
+Date: Tue, 24 Aug 2021 13:51:04 -0700
+Message-Id: <20210824205104.2778110-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 
-Hi Josh and Peter,
+Clang warns:
 
-An in-review LLVM patch [1] introduces an optimization around switch 
-cases, marking the default case unreachable when all known values are 
-covered. This ended up introducing a boot regression when building a 
-kernel with ThinLTO, which Sami reported initially [2] and I reported it 
-upstream, generating some discussion starting from [3].
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2785:2: error: variable 'kw_offset' is uninitialized when used here [-Werror,-Wuninitialized]
+        FIND_VPD_KW(i, "RV");
+        ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2776:39: note: expanded from macro 'FIND_VPD_KW'
+        var = pci_vpd_find_info_keyword(vpd, kw_offset, vpdr_len, name); \
+                                             ^~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2748:34: note: initialize the variable 'kw_offset' to silence this warning
+        unsigned int vpdr_len, kw_offset, id_len;
+                                        ^
+                                         = 0
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2785:2: error: variable 'vpdr_len' is uninitialized when used here [-Werror,-Wuninitialized]
+        FIND_VPD_KW(i, "RV");
+        ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2776:50: note: expanded from macro 'FIND_VPD_KW'
+        var = pci_vpd_find_info_keyword(vpd, kw_offset, vpdr_len, name); \
+                                                        ^~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2748:23: note: initialize the variable 'vpdr_len' to silence this warning
+        unsigned int vpdr_len, kw_offset, id_len;
+                             ^
+                              = 0
+2 errors generated.
 
-There is an objtool warning about the function that the author of the 
-patch tracked down to be problematic:
+The series "PCI/VPD: Convert more users to the new VPD API functions"
+was applied to net-next when it should have been applied to the PCI tree
+because of build errors. However, commit 82e34c8a9bdf ("Revert "Revert
+"cxgb4: Search VPD with pci_vpd_find_ro_info_keyword()""") reapplied a
+change, resulting in the warning above.
 
-vmlinux.o: warning: objtool: cfg80211_edmg_chandef_valid()+0x169: can't 
-find jump dest instruction at .text.cfg80211_edmg_chandef_valid+0x17b
+Properly revert commit 8d63ee602da3 ("cxgb4: Search VPD with
+pci_vpd_find_ro_info_keyword()") to fix the warning and restore proper
+functionality. This also reverts commit 3a93bedea050 ("cxgb4: Remove
+unused vpd_param member ec") to avoid future merge conflicts, as that
+change has been applied to the PCI tree.
 
-The LLVM developers are under the impression that this is an issue with 
-objtool; specifically quoting Eli Friedman:
+Link: https://lore.kernel.org/r/20210823120929.7c6f7a4f@canb.auug.org.au/
+Link: https://lore.kernel.org/r/1ca29408-7bc7-4da5-59c7-87893c9e0442@gmail.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4.h |  2 +
+ drivers/net/ethernet/chelsio/cxgb4/t4_hw.c | 44 +++++++++++++++++++---
+ 2 files changed, 40 insertions(+), 6 deletions(-)
 
-"The backend can, in general, create basic blocks that don't contain any 
-instructions, and don't fall through to another block. A jump table 
-entry can refer to such a block. I guess certain tools could be confused 
-by this.
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h b/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
+index ecea3cdd30b3..9058f09f921e 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
+@@ -84,6 +84,7 @@ extern struct mutex uld_mutex;
+ enum {
+ 	MAX_NPORTS	= 4,     /* max # of ports */
+ 	SERNUM_LEN	= 24,    /* Serial # length */
++	EC_LEN		= 16,    /* E/C length */
+ 	ID_LEN		= 16,    /* ID length */
+ 	PN_LEN		= 16,    /* Part Number length */
+ 	MACADDR_LEN	= 12,    /* MAC Address length */
+@@ -390,6 +391,7 @@ struct tp_params {
+ 
+ struct vpd_params {
+ 	unsigned int cclk;
++	u8 ec[EC_LEN + 1];
+ 	u8 sn[SERNUM_LEN + 1];
+ 	u8 id[ID_LEN + 1];
+ 	u8 pn[PN_LEN + 1];
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+index 70bb057320e4..6606fb8b3e42 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+@@ -2744,6 +2744,7 @@ int t4_seeprom_wp(struct adapter *adapter, bool enable)
+ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+ {
+ 	int i, ret = 0, addr;
++	int ec, sn, pn, na;
+ 	u8 *vpd, csum, base_val = 0;
+ 	unsigned int vpdr_len, kw_offset, id_len;
+ 
+@@ -2771,6 +2772,23 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+ 	}
+ 
+ 	id_len = pci_vpd_lrdt_size(vpd);
++	if (id_len > ID_LEN)
++		id_len = ID_LEN;
++
++	i = pci_vpd_find_tag(vpd, VPD_LEN, PCI_VPD_LRDT_RO_DATA);
++	if (i < 0) {
++		dev_err(adapter->pdev_dev, "missing VPD-R section\n");
++		ret = -EINVAL;
++		goto out;
++	}
++
++	vpdr_len = pci_vpd_lrdt_size(&vpd[i]);
++	kw_offset = i + PCI_VPD_LRDT_TAG_SIZE;
++	if (vpdr_len + kw_offset > VPD_LEN) {
++		dev_err(adapter->pdev_dev, "bad VPD-R length %u\n", vpdr_len);
++		ret = -EINVAL;
++		goto out;
++	}
+ 
+ #define FIND_VPD_KW(var, name) do { \
+ 	var = pci_vpd_find_info_keyword(vpd, kw_offset, vpdr_len, name); \
+@@ -2793,14 +2811,28 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+ 		goto out;
+ 	}
+ 
++	FIND_VPD_KW(ec, "EC");
++	FIND_VPD_KW(sn, "SN");
++	FIND_VPD_KW(pn, "PN");
++	FIND_VPD_KW(na, "NA");
++#undef FIND_VPD_KW
++
++	memcpy(p->id, vpd + PCI_VPD_LRDT_TAG_SIZE, id_len);
++	strim(p->id);
++	memcpy(p->ec, vpd + ec, EC_LEN);
++	strim(p->ec);
++	i = pci_vpd_info_field_size(vpd + sn - PCI_VPD_INFO_FLD_HDR_SIZE);
++	memcpy(p->sn, vpd + sn, min(i, SERNUM_LEN));
++	strim(p->sn);
++	i = pci_vpd_info_field_size(vpd + pn - PCI_VPD_INFO_FLD_HDR_SIZE);
++	memcpy(p->pn, vpd + pn, min(i, PN_LEN));
++	strim(p->pn);
++	memcpy(p->na, vpd + na, min(i, MACADDR_LEN));
++	strim((char *)p->na);
++
+ out:
+ 	vfree(vpd);
+-	if (ret < 0) {
+-		dev_err(adapter->pdev_dev, "error reading VPD\n");
+-		return ret;
+-	}
+-
+-	return 0;
++	return ret < 0 ? ret : 0;
+ }
+ 
+ /**
 
-If that's the issue, it should be possible to work around it using 
-'-mllvm -trap-unreachable'."
+base-commit: 3a62c333497b164868fdcd241842a1dd4e331825
+-- 
+2.33.0
 
-I can confirm that adding '-mllvm -trap-unreachable' to 
-KBUILD_{C,LD}FLAGS does resolve the issue but I am curious if that is an 
-adequate solution (as Nick has frowned upon the presence of '-mllvm' 
-flags) or if there is something that could be done on the objtool side. 
-I do have a small reproducer on Phabricator [4] and I can provide any 
-binary files that would be helpful for seeing what is going on here.
-
-[1] https://reviews.llvm.org/D106056
-[2] https://github.com/ClangBuiltLinux/linux/issues/1440
-[3] https://reviews.llvm.org/D106056#2953104
-[4] https://reviews.llvm.org/D106056#2961136
-
-Cheers,
-Nathan
