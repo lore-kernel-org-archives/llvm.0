@@ -1,179 +1,63 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE27C3FC0
-	for <llvm@lists.linux.dev>; Tue, 24 Aug 2021 20:51:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C5AB0611C9;
-	Tue, 24 Aug 2021 20:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629838279;
-	bh=T7jeklW73WtmhJ1+zmiWNQDRR5pBH/HBxRpffRugi/M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CB5fwzQA6I8chW6tqlPAkiHwVud7c0gISHsRyWExvDnFVHfnLo0P3FZjaUEQeUhiB
-	 JR3Y7ifK+h+YYqb3xK348QaIW2hY921IbYTBCYJSaNpS8Wg5XA/JmWdQ0EHeN/hRWo
-	 M6VlJq3tXcuC9KaDhNb92tvBHKb9Hv6Bn95TKFJKK3tubaiRV/CmP2IuhbO/Sv9YIQ
-	 shz2iuw8ddR33kEvhn3XfqtLQjGxPsalwjyeFkAq4BPvfcCoTh5Y0IY/hzm4wyaWBA
-	 C2xXoXDlREj5sPw8FP6v0vgrFHlSB3SUS1GvplsIl5Z214yoFeTvOt6AcBijQsVLke
-	 W8vNUAFvi4ooA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Raju Rangoju <rajur@chelsio.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	clang-built-linux@googlegroups.com,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] cxgb4: Properly revert VPD changes
-Date: Tue, 24 Aug 2021 13:51:04 -0700
-Message-Id: <20210824205104.2778110-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.33.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632B43FC0
+	for <llvm@lists.linux.dev>; Tue, 24 Aug 2021 21:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=hY99dBj8BXa4nQSsll4zO9lsRBPP5TAkRTfty6KZ8yY=; b=Dt9M/Zu8lbnYVB73K3IdJJ7WSu
+	jWA/b8fAj9kjZMp0Wx15Aj4sLuUsmomOJ6bGquJaFHT8r8WbzYuGqoaRhLUNA99STHI6bKjId3Ijr
+	/DUdzySByoeqoIcOcE4I61q88nD32EWQXV5mcXu9NsDRITF3niPydRJtEGRf6gBR0byvsNI8S/AJv
+	YLKlUQYQwJcQeOV/INUEWS04/Oigy+gsxdnyV1cwKug7X6bLvJ3metfS53R3DIVDvOERa7uD8Lw4N
+	zJC31bWQf3p6dCqb605cpGANGmzjeH7z2FVE4nqrw0Mno33G8TVY9/ZbGaQ/3cAvvFMJiD+acPCCX
+	XWxoH1Tw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mIdbY-00ChXp-Cs; Tue, 24 Aug 2021 21:05:08 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 27492981244; Tue, 24 Aug 2021 23:05:07 +0200 (CEST)
+Date: Tue, 24 Aug 2021 23:05:07 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	clang-built-linux@googlegroups.com, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: objtool warning in cfg80211_edmg_chandef_valid() with ThinLTO
+Message-ID: <20210824210507.GC17784@worktop.programming.kicks-ass.net>
+References: <5913cdf4-9c8e-38f8-8914-d3b8a3565d73@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5913cdf4-9c8e-38f8-8914-d3b8a3565d73@kernel.org>
 
-Clang warns:
+On Tue, Aug 24, 2021 at 01:08:58PM -0700, Nathan Chancellor wrote:
 
-drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2785:2: error: variable 'kw_offset' is uninitialized when used here [-Werror,-Wuninitialized]
-        FIND_VPD_KW(i, "RV");
-        ^~~~~~~~~~~~~~~~~~~~
-drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2776:39: note: expanded from macro 'FIND_VPD_KW'
-        var = pci_vpd_find_info_keyword(vpd, kw_offset, vpdr_len, name); \
-                                             ^~~~~~~~~
-drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2748:34: note: initialize the variable 'kw_offset' to silence this warning
-        unsigned int vpdr_len, kw_offset, id_len;
-                                        ^
-                                         = 0
-drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2785:2: error: variable 'vpdr_len' is uninitialized when used here [-Werror,-Wuninitialized]
-        FIND_VPD_KW(i, "RV");
-        ^~~~~~~~~~~~~~~~~~~~
-drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2776:50: note: expanded from macro 'FIND_VPD_KW'
-        var = pci_vpd_find_info_keyword(vpd, kw_offset, vpdr_len, name); \
-                                                        ^~~~~~~~
-drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2748:23: note: initialize the variable 'vpdr_len' to silence this warning
-        unsigned int vpdr_len, kw_offset, id_len;
-                             ^
-                              = 0
-2 errors generated.
+> The LLVM developers are under the impression that this is an issue with
+> objtool; specifically quoting Eli Friedman:
+> 
+> "The backend can, in general, create basic blocks that don't contain any
+> instructions, and don't fall through to another block. A jump table entry
+> can refer to such a block. I guess certain tools could be confused by this.
+> 
+> If that's the issue, it should be possible to work around it using '-mllvm
+> -trap-unreachable'."
 
-The series "PCI/VPD: Convert more users to the new VPD API functions"
-was applied to net-next when it should have been applied to the PCI tree
-because of build errors. However, commit 82e34c8a9bdf ("Revert "Revert
-"cxgb4: Search VPD with pci_vpd_find_ro_info_keyword()""") reapplied a
-change, resulting in the warning above.
+So jump-tables are a weak point; ARM64 was having worse problems than
+x86 there, they can't even locate them.
 
-Properly revert commit 8d63ee602da3 ("cxgb4: Search VPD with
-pci_vpd_find_ro_info_keyword()") to fix the warning and restore proper
-functionality. This also reverts commit 3a93bedea050 ("cxgb4: Remove
-unused vpd_param member ec") to avoid future merge conflicts, as that
-change has been applied to the PCI tree.
+As to having a jump-table entry to an empty block and not falling
+through; how are we supposed to know? Emitting them is a waste of space,
+so I'd say it's a compiler bug :-))
 
-Link: https://lore.kernel.org/r/20210823120929.7c6f7a4f@canb.auug.org.au/
-Link: https://lore.kernel.org/r/1ca29408-7bc7-4da5-59c7-87893c9e0442@gmail.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/ethernet/chelsio/cxgb4/cxgb4.h |  2 +
- drivers/net/ethernet/chelsio/cxgb4/t4_hw.c | 44 +++++++++++++++++++---
- 2 files changed, 40 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h b/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
-index ecea3cdd30b3..9058f09f921e 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
-@@ -84,6 +84,7 @@ extern struct mutex uld_mutex;
- enum {
- 	MAX_NPORTS	= 4,     /* max # of ports */
- 	SERNUM_LEN	= 24,    /* Serial # length */
-+	EC_LEN		= 16,    /* E/C length */
- 	ID_LEN		= 16,    /* ID length */
- 	PN_LEN		= 16,    /* Part Number length */
- 	MACADDR_LEN	= 12,    /* MAC Address length */
-@@ -390,6 +391,7 @@ struct tp_params {
- 
- struct vpd_params {
- 	unsigned int cclk;
-+	u8 ec[EC_LEN + 1];
- 	u8 sn[SERNUM_LEN + 1];
- 	u8 id[ID_LEN + 1];
- 	u8 pn[PN_LEN + 1];
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
-index 70bb057320e4..6606fb8b3e42 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
-@@ -2744,6 +2744,7 @@ int t4_seeprom_wp(struct adapter *adapter, bool enable)
- int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
- {
- 	int i, ret = 0, addr;
-+	int ec, sn, pn, na;
- 	u8 *vpd, csum, base_val = 0;
- 	unsigned int vpdr_len, kw_offset, id_len;
- 
-@@ -2771,6 +2772,23 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
- 	}
- 
- 	id_len = pci_vpd_lrdt_size(vpd);
-+	if (id_len > ID_LEN)
-+		id_len = ID_LEN;
-+
-+	i = pci_vpd_find_tag(vpd, VPD_LEN, PCI_VPD_LRDT_RO_DATA);
-+	if (i < 0) {
-+		dev_err(adapter->pdev_dev, "missing VPD-R section\n");
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	vpdr_len = pci_vpd_lrdt_size(&vpd[i]);
-+	kw_offset = i + PCI_VPD_LRDT_TAG_SIZE;
-+	if (vpdr_len + kw_offset > VPD_LEN) {
-+		dev_err(adapter->pdev_dev, "bad VPD-R length %u\n", vpdr_len);
-+		ret = -EINVAL;
-+		goto out;
-+	}
- 
- #define FIND_VPD_KW(var, name) do { \
- 	var = pci_vpd_find_info_keyword(vpd, kw_offset, vpdr_len, name); \
-@@ -2793,14 +2811,28 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
- 		goto out;
- 	}
- 
-+	FIND_VPD_KW(ec, "EC");
-+	FIND_VPD_KW(sn, "SN");
-+	FIND_VPD_KW(pn, "PN");
-+	FIND_VPD_KW(na, "NA");
-+#undef FIND_VPD_KW
-+
-+	memcpy(p->id, vpd + PCI_VPD_LRDT_TAG_SIZE, id_len);
-+	strim(p->id);
-+	memcpy(p->ec, vpd + ec, EC_LEN);
-+	strim(p->ec);
-+	i = pci_vpd_info_field_size(vpd + sn - PCI_VPD_INFO_FLD_HDR_SIZE);
-+	memcpy(p->sn, vpd + sn, min(i, SERNUM_LEN));
-+	strim(p->sn);
-+	i = pci_vpd_info_field_size(vpd + pn - PCI_VPD_INFO_FLD_HDR_SIZE);
-+	memcpy(p->pn, vpd + pn, min(i, PN_LEN));
-+	strim(p->pn);
-+	memcpy(p->na, vpd + na, min(i, MACADDR_LEN));
-+	strim((char *)p->na);
-+
- out:
- 	vfree(vpd);
--	if (ret < 0) {
--		dev_err(adapter->pdev_dev, "error reading VPD\n");
--		return ret;
--	}
--
--	return 0;
-+	return ret < 0 ? ret : 0;
- }
- 
- /**
-
-base-commit: 3a62c333497b164868fdcd241842a1dd4e331825
--- 
-2.33.0
-
+It's been brought up before; but perhaps we should look at an 'informal'
+ABI for jump-tables ?
