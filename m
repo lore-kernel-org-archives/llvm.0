@@ -1,78 +1,115 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952E172
-	for <llvm@lists.linux.dev>; Wed, 25 Aug 2021 09:57:30 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="278505655"
-X-IronPort-AV: E=Sophos;i="5.84,350,1620716400"; 
-   d="scan'208";a="278505655"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 02:57:30 -0700
-X-IronPort-AV: E=Sophos;i="5.84,350,1620716400"; 
-   d="scan'208";a="426393181"
-Received: from pjthomps-mobl1.ger.corp.intel.com (HELO [10.249.254.76]) ([10.249.254.76])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 02:57:26 -0700
-Subject: Re: [PATCH 2/3] drm/i915/selftests: Always initialize err in
- igt_dmabuf_import_same_driver_lmem()
-To: Nathan Chancellor <nathan@kernel.org>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Jason Ekstrand <jason@jlekstrand.net>,
- Matthew Auld <matthew.auld@intel.com>,
- "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- clang-built-linux@googlegroups.com, llvm@lists.linux.dev,
- Dan Carpenter <dan.carpenter@oracle.com>
-References: <20210824225427.2065517-1-nathan@kernel.org>
- <20210824225427.2065517-3-nathan@kernel.org>
-From: =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas.hellstrom@linux.intel.com>
-Message-ID: <354f7760-7b43-8e3f-414b-1556dabbcdb3@linux.intel.com>
-Date: Wed, 25 Aug 2021 11:57:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D5672
+	for <llvm@lists.linux.dev>; Wed, 25 Aug 2021 17:33:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 58CD1610CB;
+	Wed, 25 Aug 2021 17:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1629912816;
+	bh=StKbEN+KHuyLQXJf+AEBcWvhQNliMxECNYX4oGLIgpo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ndplRsWuWqTCLGHZslou+OzvktnNhlT1X8aBpbPPyGCeTfHzNTYaN0lTYNRHiwGNo
+	 YTeaIPWjJ6uvm9D0vnbn2Y2i1z2Hg1GLBl+LXCrd3jgLQRkmB+5rO4YUh2eL3ICbKx
+	 CkwSP/W4GIz9cFuMJIClVSpLMUJOaaAPzgW2ba1T+OgsGzULrSdy3o8UN1RT6I6nGl
+	 BEJTqLffS1AsIlwNXBuABLFoFOYYKScTYzJbrBVQVmm6bylcvmZ+m5TX6YBHvjeE9+
+	 JzxSpUND85J/OJeUeGsTiJueEdiiFxm4TJSkbdHU05kisFg1JbB93jGoKbVYnQvfFD
+	 hyxnqd1QIYzJw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	linux-cxl@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux@googlegroups.com,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] cxl/core: Avoid using dev uninitialized in devm_cxl_add_decoder()
+Date: Wed, 25 Aug 2021 10:33:01 -0700
+Message-Id: <20210825173301.358381-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20210824225427.2065517-3-nathan@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 
+Clang warns:
 
-On 8/25/21 12:54 AM, Nathan Chancellor wrote:
-> Clang warns:
->
-> drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c:127:13: warning:
-> variable 'err' is used uninitialized whenever 'if' condition is false
-> [-Wsometimes-uninitialized]
->          } else if (PTR_ERR(import) != -EOPNOTSUPP) {
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c:138:9: note:
-> uninitialized use occurs here
->          return err;
->                 ^~~
-> drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c:127:9: note: remove
-> the 'if' if its condition is always true
->          } else if (PTR_ERR(import) != -EOPNOTSUPP) {
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c:95:9: note:
-> initialize the variable 'err' to silence this warning
->          int err;
->                 ^
->                  = 0
->
-> The test is expected to pass if i915_gem_prime_import() returns
-> -EOPNOTSUPP so initialize err to zero in this case.
->
-> Fixes: cdb35d1ed6d2 ("drm/i915/gem: Migrate to system at dma-buf attach time (v7)")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+drivers/cxl/core/bus.c:527:6: warning: variable 'dev' is used
+uninitialized whenever 'if' condition is true
+[-Wsometimes-uninitialized]
+        if (rc)
+            ^~
+drivers/cxl/core/bus.c:541:13: note: uninitialized use occurs here
+        put_device(dev);
+                   ^~~
+drivers/cxl/core/bus.c:527:2: note: remove the 'if' if its condition is
+always false
+        if (rc)
+        ^~~~~~~
+drivers/cxl/core/bus.c:507:6: warning: variable 'dev' is used
+uninitialized whenever 'if' condition is true
+[-Wsometimes-uninitialized]
+        if (cxld->interleave_ways < 1) {
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/cxl/core/bus.c:541:13: note: uninitialized use occurs here
+        put_device(dev);
+                   ^~~
+drivers/cxl/core/bus.c:507:2: note: remove the 'if' if its condition is
+always false
+        if (cxld->interleave_ways < 1) {
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/cxl/core/bus.c:498:20: note: initialize the variable 'dev' to
+silence this warning
+        struct device *dev;
+                          ^
+                           = NULL
+2 warnings generated.
 
-Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Return the error code directly rather than attempting to call
+device_put() with an uninitialized pointer.
 
+Fixes: b7ca54b62551 ("cxl/core: Split decoder setup into alloc + add")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/cxl/core/bus.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cxl/core/bus.c b/drivers/cxl/core/bus.c
+index 1320a996220a..f4d5319e29e3 100644
+--- a/drivers/cxl/core/bus.c
++++ b/drivers/cxl/core/bus.c
+@@ -504,10 +504,8 @@ int devm_cxl_add_decoder(struct device *host, struct cxl_decoder *cxld,
+ 	if (IS_ERR(cxld))
+ 		return PTR_ERR(cxld);
+ 
+-	if (cxld->interleave_ways < 1) {
+-		rc = -EINVAL;
+-		goto err;
+-	}
++	if (cxld->interleave_ways < 1)
++		return -EINVAL;
+ 
+ 	device_lock(&port->dev);
+ 	if (list_empty(&port->dports))
+@@ -525,7 +523,7 @@ int devm_cxl_add_decoder(struct device *host, struct cxl_decoder *cxld,
+ 	}
+ 	device_unlock(&port->dev);
+ 	if (rc)
+-		goto err;
++		return rc;
+ 
+ 	dev = &cxld->dev;
+ 	rc = dev_set_name(dev, "decoder%d.%d", port->id, cxld->id);
+
+base-commit: 036a16a39e2fab9bf7279201d04cf7e90993521f
+-- 
+2.33.0
 
