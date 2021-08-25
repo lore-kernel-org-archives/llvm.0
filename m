@@ -1,35 +1,33 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D5672
-	for <llvm@lists.linux.dev>; Wed, 25 Aug 2021 17:33:36 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 58CD1610CB;
-	Wed, 25 Aug 2021 17:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A773FC0
+	for <llvm@lists.linux.dev>; Wed, 25 Aug 2021 20:39:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF503610D1;
+	Wed, 25 Aug 2021 20:39:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629912816;
-	bh=StKbEN+KHuyLQXJf+AEBcWvhQNliMxECNYX4oGLIgpo=;
+	s=k20201202; t=1629923946;
+	bh=Al3fzVCYqH1H1gq7uGZbNi/LPmkT9JqI42bjuOzxe6w=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ndplRsWuWqTCLGHZslou+OzvktnNhlT1X8aBpbPPyGCeTfHzNTYaN0lTYNRHiwGNo
-	 YTeaIPWjJ6uvm9D0vnbn2Y2i1z2Hg1GLBl+LXCrd3jgLQRkmB+5rO4YUh2eL3ICbKx
-	 CkwSP/W4GIz9cFuMJIClVSpLMUJOaaAPzgW2ba1T+OgsGzULrSdy3o8UN1RT6I6nGl
-	 BEJTqLffS1AsIlwNXBuABLFoFOYYKScTYzJbrBVQVmm6bylcvmZ+m5TX6YBHvjeE9+
-	 JzxSpUND85J/OJeUeGsTiJueEdiiFxm4TJSkbdHU05kisFg1JbB93jGoKbVYnQvfFD
-	 hyxnqd1QIYzJw==
+	b=j6yDQ7pwwSG8g9gbk1KgH07t9czWeOSU/SP2dFbqaqf6RU2zLEq0e+Q0+P8I7pjvy
+	 NTSsSjMawDRL52KBtsS+p6kxM/Lb/esTSH9g4Azp/L3bILW1ui+EIiu3KlpZsLxSGu
+	 0L8U/o/9W5ECU+IBtldwOueaxgCsWF33ar09tp7eCi67H3jAMUavH/vL7QIkAaCVL0
+	 8xQlfTlyx2nuqv258ofDjNFv8eE2WL+qS4rrJqr0c8sV4Se5Bruaph/SKivFWLBEgv
+	 lYm91dBy1sQZkMGCvow0idg6RKH9H60V4g1E0phTRmdQHcKY5wecwxgzLcSoiyIIt4
+	 PRBTRbPN3HASw==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Ben Widawsky <ben.widawsky@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-cxl@vger.kernel.org,
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	clang-built-linux@googlegroups.com,
 	llvm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] cxl/core: Avoid using dev uninitialized in devm_cxl_add_decoder()
-Date: Wed, 25 Aug 2021 10:33:01 -0700
-Message-Id: <20210825173301.358381-1-nathan@kernel.org>
+Subject: [PATCH] crypto: sm4 - Do not change section of ck and sbox
+Date: Wed, 25 Aug 2021 13:38:59 -0700
+Message-Id: <20210825203859.416449-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -40,76 +38,51 @@ MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 
-Clang warns:
+When building with clang and GNU as, there is a warning about ignored
+changed section attributes:
 
-drivers/cxl/core/bus.c:527:6: warning: variable 'dev' is used
-uninitialized whenever 'if' condition is true
-[-Wsometimes-uninitialized]
-        if (rc)
-            ^~
-drivers/cxl/core/bus.c:541:13: note: uninitialized use occurs here
-        put_device(dev);
-                   ^~~
-drivers/cxl/core/bus.c:527:2: note: remove the 'if' if its condition is
-always false
-        if (rc)
-        ^~~~~~~
-drivers/cxl/core/bus.c:507:6: warning: variable 'dev' is used
-uninitialized whenever 'if' condition is true
-[-Wsometimes-uninitialized]
-        if (cxld->interleave_ways < 1) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/cxl/core/bus.c:541:13: note: uninitialized use occurs here
-        put_device(dev);
-                   ^~~
-drivers/cxl/core/bus.c:507:2: note: remove the 'if' if its condition is
-always false
-        if (cxld->interleave_ways < 1) {
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/cxl/core/bus.c:498:20: note: initialize the variable 'dev' to
-silence this warning
-        struct device *dev;
-                          ^
-                           = NULL
-2 warnings generated.
+/tmp/sm4-c916c8.s: Assembler messages:
+/tmp/sm4-c916c8.s:677: Warning: ignoring changed section attributes for
+.data..cacheline_aligned
 
-Return the error code directly rather than attempting to call
-device_put() with an uninitialized pointer.
+"static const" places the data in .rodata but __cacheline_aligned has
+the section attribute to place it in .data..cacheline_aligned, in
+addition to the aligned attribute.
 
-Fixes: b7ca54b62551 ("cxl/core: Split decoder setup into alloc + add")
+To keep the alignment but avoid attempting to change sections, use the
+____cacheline_aligned attribute, which is just the aligned attribute.
+
+Fixes: 2b31277af577 ("crypto: sm4 - create SM4 library based on sm4 generic code")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1441
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/cxl/core/bus.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ lib/crypto/sm4.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cxl/core/bus.c b/drivers/cxl/core/bus.c
-index 1320a996220a..f4d5319e29e3 100644
---- a/drivers/cxl/core/bus.c
-+++ b/drivers/cxl/core/bus.c
-@@ -504,10 +504,8 @@ int devm_cxl_add_decoder(struct device *host, struct cxl_decoder *cxld,
- 	if (IS_ERR(cxld))
- 		return PTR_ERR(cxld);
+diff --git a/lib/crypto/sm4.c b/lib/crypto/sm4.c
+index 633b59fed9db..284e62576d0c 100644
+--- a/lib/crypto/sm4.c
++++ b/lib/crypto/sm4.c
+@@ -15,7 +15,7 @@ static const u32 fk[4] = {
+ 	0xa3b1bac6, 0x56aa3350, 0x677d9197, 0xb27022dc
+ };
  
--	if (cxld->interleave_ways < 1) {
--		rc = -EINVAL;
--		goto err;
--	}
-+	if (cxld->interleave_ways < 1)
-+		return -EINVAL;
+-static const u32 __cacheline_aligned ck[32] = {
++static const u32 ____cacheline_aligned ck[32] = {
+ 	0x00070e15, 0x1c232a31, 0x383f464d, 0x545b6269,
+ 	0x70777e85, 0x8c939aa1, 0xa8afb6bd, 0xc4cbd2d9,
+ 	0xe0e7eef5, 0xfc030a11, 0x181f262d, 0x343b4249,
+@@ -26,7 +26,7 @@ static const u32 __cacheline_aligned ck[32] = {
+ 	0x10171e25, 0x2c333a41, 0x484f565d, 0x646b7279
+ };
  
- 	device_lock(&port->dev);
- 	if (list_empty(&port->dports))
-@@ -525,7 +523,7 @@ int devm_cxl_add_decoder(struct device *host, struct cxl_decoder *cxld,
- 	}
- 	device_unlock(&port->dev);
- 	if (rc)
--		goto err;
-+		return rc;
- 
- 	dev = &cxld->dev;
- 	rc = dev_set_name(dev, "decoder%d.%d", port->id, cxld->id);
+-static const u8 __cacheline_aligned sbox[256] = {
++static const u8 ____cacheline_aligned sbox[256] = {
+ 	0xd6, 0x90, 0xe9, 0xfe, 0xcc, 0xe1, 0x3d, 0xb7,
+ 	0x16, 0xb6, 0x14, 0xc2, 0x28, 0xfb, 0x2c, 0x05,
+ 	0x2b, 0x67, 0x9a, 0x76, 0x2a, 0xbe, 0x04, 0xc3,
 
-base-commit: 036a16a39e2fab9bf7279201d04cf7e90993521f
+base-commit: abfc7fad63940b8dfdfd25da6f0fa813d9561645
 -- 
 2.33.0
 
