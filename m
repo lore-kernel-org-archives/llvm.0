@@ -1,55 +1,56 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317B73FC2
-	for <llvm@lists.linux.dev>; Fri, 27 Aug 2021 15:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A373FC2
+	for <llvm@lists.linux.dev>; Fri, 27 Aug 2021 16:29:48 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PrnxcH561cZWYjQgj7IUvbs6+IwbHJj8X2wQcUfUTHuCs8fmeeY6uRpnTLII7HttAFRgrkOU8DeWCjfQB6tmAHU+PZ1Vqi3k0P3+j05ORRt3UgqGqOJMh0iZuez7m9mW1ntoo5Z7whcpM30x01ViUjpPf47005Af2PCz/RLFs+OWbl9o4r0h0JCIi0TFDzjF9jQgyevmgyXvbYymeXvzEc8dIfA+7GWetxFTANGioOTdhEI/Tfv2PQnuTyEsCO8R6ZVbj2MfcyqoPa9eSxT5pXPnjeo1uaxTpc3+pakUrUuFBd/pOmeEYQz3csnaeBrYzj7eGFstAlE8VV2AdSR0+w==
+ b=RwhDRmiasd1WJfQYagA8U7qYUxFp6DlD+nImbp3JN9pEWFcCcxJz63MWwVDab68cht/6AQsxLQbaZ0VW24hDiGqHx5Cr+FfeGV4Vav5fSaWXcpi4ogCFfFIWMXNZwyueS0hCtAK6Z+vlxRVW4+yFmgVbybyxm/621jqGrxtK9XTwCulCIfbIm5EZ6B7pWIX2V7VCzFJUsXFVpYbD0GD6x3KmtEsb8VwnOfX4zgNRoUPYwmqmXerKDtDVCrdyQKMSZ1d2hKrQBF7tI01ZqXOlCnjUkFDN0kRXSZ8ie4EjtSKYR9TDahY6hNYRcvaHnVTJbhlmCqUuXJis9IfOBSeu1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pRAZJoGe/ZLkMREEbBRSnPAhIXAXEgG2xAnA1uXEBCw=;
- b=oSrR+5Lhr4PcE3VIejLzqzMYzPwGYYZEBU+EZJdNulLG2ZQTqbiJGM9Te4QSkPj2CY2eRoPvy0dAoTes0XQwj2i94lP0hPU1QZ3EROmGdM3Yw9f31Gjcm6ZVS+1yZ9in4FnbJh4NvwhUasckR75XG+vu+r4Zki8PNeKOUXQ0wBIDmsS7+cA6R5aS3QcT6Rj07fLUOGT32I1aeRy11Bt8fKL+xwkoB+VhOVAKLnSfdj4tKavHciBuYuD4CmbHeZhkMcLJJeRHDbvzBN3ofWaN6lHpeIhusd14PGBIUN5wEreIbgBbAEgvAtzvzFtA1gVZx3hIH4/jIzHNrrP5zGYAVA==
+ bh=Pj4Fq7ObgvXjrsdkmEIz5ZJGmCzydmLNVog1Rb+MdMI=;
+ b=Pd64V6YhnBB92ODDioV4o3kbr2ZDbhHuWScuS6/bPY3qR+hGJ7MLdZyF9hfRNjBSWPVQEoZuAPgBLcX3SBCBaowdLtoAZBjAC1funatnHfsG8k/wYNW+7sl0g54RzrMYuMB2Tlg99XiatLHaaRx+MC+Vn6oHV48Gm/sMLKrD24KMC+DOunoe48jrSn6U7v0kVcNKQmP2W7/MxAhopnVzFCCWkGrjPY+wpX2O6RMskpHTWu3VE4JVb7Wk7Vy8nYK3jDWelKqHkrazG2c6pu36W56FF7ywQ7ffxv9XVgKSR2ALeuqe9wg9cn+AH0zqzjUNHKmTcr0/cP0aeDBJnVdBWw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=secospa.onmicrosoft.com; s=selector2-secospa-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pRAZJoGe/ZLkMREEbBRSnPAhIXAXEgG2xAnA1uXEBCw=;
- b=fywHwnkZp3dXi2ywyRkY40lv9aRu6JiGgReC3Z3a7z/L3SIV7BMrj6OP1QzrA5dq0dmOvlDLwvzgfom0Hl8bCzFoEadRdrUw5q4utdtNuNoU2dPDR60ps5LJ5Tf2uBeh3UIsvTj5pcXG2S7imDwu+TjSszqXeBtKMUzq6vThjh23ho6GNAqrvTTgFNA65e+fWANjet79QRqsBj9Ov7sfhUhprYV96txT/5D8MqJN3O28qS/zf865I9DUO57lsb5FAIWHeh1j2cdq0D1m9PGuU/LXXWU03V8vMtUv6CWieBDT0BSRBF2FLeJZHvn/HjBBU85VcPFpt/VHMhCIgXKN7A==
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB5520.namprd12.prod.outlook.com (2603:10b6:5:208::9) by
- DM4PR12MB5136.namprd12.prod.outlook.com (2603:10b6:5:393::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4457.17; Fri, 27 Aug 2021 15:34:11 +0000
-Received: from DM6PR12MB5520.namprd12.prod.outlook.com
- ([fe80::81bc:3e01:d9e0:6c52]) by DM6PR12MB5520.namprd12.prod.outlook.com
- ([fe80::81bc:3e01:d9e0:6c52%9]) with mapi id 15.20.4436.024; Fri, 27 Aug 2021
- 15:34:11 +0000
-Date: Fri, 27 Aug 2021 12:34:09 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Max Gurtovoy <mgurtovoy@nvidia.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Yishai Hadas <yishaih@nvidia.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Subject: Re: [vfio:next 33/38] drivers/gpu/drm/i915/i915_pci.c:975:2:
- warning: missing field 'override_only' initializer
-Message-ID: <20210827153409.GV1721383@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202108272322.EipbBEAp-lkp@intel.com>
-X-ClientProxiedBy: BL0PR02CA0136.namprd02.prod.outlook.com
- (2603:10b6:208:35::41) To DM6PR12MB5520.namprd12.prod.outlook.com
- (2603:10b6:5:208::9)
+ bh=Pj4Fq7ObgvXjrsdkmEIz5ZJGmCzydmLNVog1Rb+MdMI=;
+ b=wicasUeI1k8fumokg8jESwUBHixTXQyQb5oUsvCK1gf1pM0vzmwZLrF18SNK9bx7CU8sxzjM38EtB3ZS5BflEXOVt6+47nc4Kvfqlyid5CogrAGXjaq9cHrVuwOuy4hfqn/i9mYTnS6TBN3+71qiB+C7NWJTNVErArL/5yCDA/c=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+ by DB7PR03MB4522.eurprd03.prod.outlook.com (2603:10a6:10:1a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19; Fri, 27 Aug
+ 2021 16:29:46 +0000
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::dc6c:815b:2062:d1f1]) by DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::dc6c:815b:2062:d1f1%7]) with mapi id 15.20.4436.025; Fri, 27 Aug 2021
+ 16:29:45 +0000
+Subject: Re: [PATCH v6 3/3] pwm: Add support for Xilinx AXI Timer
+To: kernel test robot <lkp@intel.com>, linux-pwm@vger.kernel.org,
+ devicetree@vger.kernel.org, Thierry Reding <thierry.reding@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Alvaro Gamez <alvaro.gamez@hazent.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+ linux-arm-kernel@lists.infradead.org, Lee Jones <lee.jones@linaro.org>,
+ michal.simek@xilinx.com, linux-kernel@vger.kernel.org
+References: <20210826211830.3311140-3-sean.anderson@seco.com>
+ <202108271550.btqnrtGU-lkp@intel.com>
+From: Sean Anderson <sean.anderson@seco.com>
+Message-ID: <c57c4b16-dc8c-76c7-3ac4-63a5b62144d3@seco.com>
+Date: Fri, 27 Aug 2021 12:29:40 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <202108271550.btqnrtGU-lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR15CA0004.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::17) To DB7PR03MB4523.eurprd03.prod.outlook.com
+ (2603:10a6:10:19::27)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,101 +58,109 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (142.162.113.129) by BL0PR02CA0136.namprd02.prod.outlook.com (2603:10b6:208:35::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.18 via Frontend Transport; Fri, 27 Aug 2021 15:34:10 +0000
-Received: from jgg by mlx with local (Exim 4.94)	(envelope-from <jgg@nvidia.com>)	id 1mJdrt-005j8D-RN; Fri, 27 Aug 2021 12:34:09 -0300
+Received: from [172.27.1.65] (50.195.82.171) by MN2PR15CA0004.namprd15.prod.outlook.com (2603:10b6:208:1b4::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.20 via Frontend Transport; Fri, 27 Aug 2021 16:29:44 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 46aa2e74-8c10-4a77-83e5-08d969701df3
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5136:
-X-MS-Exchange-Transport-Forked: True
+X-MS-Office365-Filtering-Correlation-Id: 9bc87eb4-1d27-498d-1834-08d96977e163
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4522:
 X-Microsoft-Antispam-PRVS:
-	<DM4PR12MB51366F3BF12B09AC0D1E3315C2C89@DM4PR12MB5136.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:525;
+	<DB7PR03MB45221ED7A7A61C19329ECEF196C89@DB7PR03MB4522.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2043;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	3r46rFlWROVhE38GrUln+aTinC1g5Qy/BnwvsLjnAv3qSZJJ+UxBc4WcE3AYtu4b/lX9RhPcTWB0ITzJ7hDLFiTU3MlxTswaL5TQgkOj+Ek4Jo85MPs9lL+bRQmFkAdzqbrRAf5GUCihyQU6WCbyHPXeVYz0W+51+iyWP6uTB49pLMYvkloCEL7RU5kQ3N6VgSxatxAUZJcaepWIFI2W5MbEhpid9xg0NKQ0L3ztUKnUXMwTtK2h21nHZkAJrdMl0arE8D0Z0cd5iTw2FYF/kl7tqjYHuBysKE1lF5yBV9iSjMy+wNHG5qaujrAZfsCvPuttNrG46KA7AzeDjPct1r2cN11r1xLNSBXMs7fNGdfP0sz0T/BLEapzMGf+GJxD3Ont0zm6pWbXAt+0rX6XkS8YqBeZFoJzQ24mxOtxaWQU59/Pn/NVEnCU6b/xExJ0KydvhYaFxMCgRTKnZ9btjusXfa4OyztVRcEqSK+uqvPPU+ZFM6EUpsnqNTisd1XWuBNV8rPZYj99xdjUq03Sh4wfXRK/mpKd3hrFZacJwHWcYOkuTC7T++oAR6FjdpxteAUMDX5Yrm7Hpac7A7/lNP5nldeZBzKrip82pVaxdWVIWUaXEi7kzjLBpJElfWinUD7T26h4g+rYV1dKo7JY0nNQiZEzShx96NnqhdISMhewprb7Ln6YUf2JyE6ctYr5RuHiQTHByGSLsJ/Nwf+zq+dKHSkaahkaN8548/WBwqCboiKaR8rT9zoOlpdlkdpM
+	LYc4Hm+aOxWLfg1eiz5PyE2NNx27OVHqJXx5F31wMoW4xTrk77wbZ3dk+ffZqxwT+mwsl/NWm4qMN3fMXFJy5I1WZH03o1rAWXFQLmLLdyLJ+q6gyHd3zn59Pgc41yXNqPQQxH1svH3TXrY6cdABbni8m8t4fw7ASVhOtwNdRwZRieykROlYEwC3GfUB5v0CJwJ1PwNNxU5Ma6rRVlrLfUWp8+z4Kfntp7BuKydd5jHqOEXLuZHFmgc90zFvjOAcrOdjozuilEJnGxeXlBy7zwP1XX7n2sjP7IdLLRYQwonpHRkxHFsGOR2wxD8ARnHkzxB47ZXvOTAGP/APb5n2FRhKhgQlDp0bbV3Oz1FSSK+hBP6ApPBjyYM1f3IMrzNdXTUrIAD3kHU2NN9Z1I7mIprpC+RDBcc6P3NRrVQHDL7hORvAePeR/tNcQYiTNag3O0rUeJCEQXzLJB/DWmsQDoEMO6OoNFF0PFqzduLRvlB6BzyatZNBdCQ9wREHm/k6yw7DmWccWIMWZoS/W/JcPEYiKiEOcGWn0V6HiyaMNAqQt/TWN87Zi98mhJKNqP6feRBsTAWuNl63DSq8ybQRQ9omwk6n7WdSuz8is/IuDA0vojqvwWeErltpwdmPVrKEKUv4X3Aq66z8JqqxHH8G5BFk4pS1ec5JwNaI++PrFnFd8c5iuFeVlZCFWgOS5R/rhnl3hNDcgo+pmr5RvgFc/GmUOKWTqxmjabTSjN4G+n6XME2x0ZoG+0+bLbvgzXwes4tzhecO/xqoM1dkafQxOuJLg9FKYpQil4ruRq370NKAYLtahN8CWaBve4cUXajKw+f4khnM8Uz74qbUSLPzqGzMyaVn+7KoCcou6/qN3so=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB5520.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(376002)(396003)(346002)(39860400002)(966005)(66476007)(186003)(66556008)(8676002)(1076003)(5660300002)(26005)(8936002)(66946007)(426003)(478600001)(86362001)(36756003)(33656002)(2906002)(83380400001)(9786002)(6916009)(4326008)(38100700002)(54906003)(316002)(2616005)(9746002);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39840400004)(366004)(346002)(376002)(396003)(110136005)(2616005)(31696002)(31686004)(44832011)(4326008)(2906002)(26005)(16576012)(36756003)(6486002)(956004)(83380400001)(316002)(54906003)(6666004)(53546011)(38100700002)(52116002)(38350700002)(66556008)(478600001)(5660300002)(66476007)(8936002)(966005)(66946007)(186003)(86362001)(7416002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?152cP/mGCOjFszuOzYd/GLP+p6yz3SRdl3pPZzmQlipyrX2Nt0CzmX7niEHl?=
- =?us-ascii?Q?ZZ13wzC6oadMLFf0ZiuBXLJZ3CdDXOcys7kcxarmTIh9l2lvcbNHNM77z5qS?=
- =?us-ascii?Q?ED8HFIXdUh/C2IIxcdoYa1HQvW+7ZzABr1kn/xJ20tAcpBz4yVjWbHEmFXyL?=
- =?us-ascii?Q?0DvU9V4YJ2JqCbKExACeWJA/gZIz/cGwhLGdB5sXtvW3RFQ+HB2H48rxmhIU?=
- =?us-ascii?Q?yZCBCMHRxdAFQbNbOQsO/BppohTVf53cN5MsjP5dJpGeJoi/OqvXowUSqYTu?=
- =?us-ascii?Q?J2UdaJGCMyYdR6T1ilem0vB0yp9imQ/scKtBVb+TqdpM2jXdgYycpnbRqdW6?=
- =?us-ascii?Q?XZrfzyKVwA1vyFpeEJFpvg+REbDQnToxaDHIhAkPxPWh4ocQQoNkE60lLwuI?=
- =?us-ascii?Q?faxv6/2INNio1lJJ90DcIuWLDiYccdYClgWezseXhisWpCfVGJu/6tmjjFdX?=
- =?us-ascii?Q?YlXeidun4ky42SJs1/OD+EnUJkO+xrlCizjTRN/tn7jBqQFk7fJdAHF3xb+a?=
- =?us-ascii?Q?GAE//z2Ejryt28Hj9h5TXZ4x4XWrfvxjfLmnYNXt1YM21nPrDpSSn953CXa/?=
- =?us-ascii?Q?Iw6RBZsKjKawlwGI94UZxNben3BU5YxCPItOU+9TLIJYqmqmiICR5c+K2wzD?=
- =?us-ascii?Q?81HhUI3o51GxS6wi+FwbT6nnS8XG9pBzaszmbUbEwCzFVX5k1Vvi57PmralJ?=
- =?us-ascii?Q?+CXAuAnOJkwwhVugMf7CLBS95xbawz2dHkGOt/R1YPtUDs+xrexRozorI8iM?=
- =?us-ascii?Q?HMzJf8KCPe4qrmjcR1EI9tECNJalhFfAg2pZHZHhLkYQBcSykXmKg/5uvEk0?=
- =?us-ascii?Q?UiSOD/wXJxPXdioE7zBQ7uFEvGrYyztQk39AYP/ADtMx2eBhrboiVvShQqX4?=
- =?us-ascii?Q?nhHv/Su8xbayVBOdYJwU07WKOMJZVRvXuiUP260MJzQSsJYQ6zL+5RDsujlV?=
- =?us-ascii?Q?SgcrXvcODBcvcZfJ6QC8VLAVkuRMLbYIeTYPyaceZ4pKcs+JscsRfQBVKlU+?=
- =?us-ascii?Q?CLnLxLEC9DvBqnhE98yenYcZ/YvN4UssKxFQAh1njEs+z2HXkStAPUhSiSoZ?=
- =?us-ascii?Q?duMXFkT2DAL502B4xsLzbPKJEAA5Xp97mMdM9/HpbUKVIrUkL1fpyjpF91Bq?=
- =?us-ascii?Q?0mY0LglHGFwTB3Qam30EvaKiBipGV0J/jBGCeNfncA6t1GQ13UO/kA1ULjj+?=
- =?us-ascii?Q?Cqmh/pRFt5HVrZBGQXVz2JVNVQ3vdNE39ZcATm4lLQOYgPzdxQU2dBgNuVtz?=
- =?us-ascii?Q?yJB2S1bEkowM1dsquK/Ek1RITSnbUO1pEx0+SRYoTBb43SiZko4Xy75hAMcm?=
- =?us-ascii?Q?hiorIFc5wE4+IUxMXZZweONe?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46aa2e74-8c10-4a77-83e5-08d969701df3
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB5520.namprd12.prod.outlook.com
+	=?Windows-1252?Q?XsyWJKfZeNIEw5seMR2IfhPZl7i1FItEC+5lJv2Fvfvuq42f4sKumH9d?=
+ =?Windows-1252?Q?9R4VXe4+E39M/AapL01CtMGMMTpqfNdLkelfMX2DaTMglhQrERTs0gMQ?=
+ =?Windows-1252?Q?Nc8cHE3mg6bIPRTbZw+3EU2wyB2dByO9OhGw8TrFFenKfYIKBKcaInlo?=
+ =?Windows-1252?Q?Dwri50eBiLmeQVMXoFZlkFdEgzhjFbM/epBOg/WdMNUjY9F8O+wJqgXV?=
+ =?Windows-1252?Q?IXU6QqknpDHC74Oo1HnG0zh2bPYVETWiM8ZFnVG3xjvuyb8mpPTKHvff?=
+ =?Windows-1252?Q?dWMb8+uuyGAYUMFoMlut8ZHYiNP3NCpKoHsz1pIcN8RQznPJniQRRBTa?=
+ =?Windows-1252?Q?fn9aRwW87sL4RsJ/e9W8HB+px5qccbTVDA+owGybme73TsWJweniwhoo?=
+ =?Windows-1252?Q?Y4lRaBGYLsPT7FYlflId7jmygXGW5O6qaDmnzQmoeu9DIG1Q1hj4xEK9?=
+ =?Windows-1252?Q?E17HUXu/vWmeKGU8HXdobmNMwQJwIlGBNY7+bfob+ijloA8ydLijs5MX?=
+ =?Windows-1252?Q?2SYT8pZ7WF6raCbedJ+h3xYUXMJA7FI3zi/3PX3vpjOnCi+6kG90P5wB?=
+ =?Windows-1252?Q?P3HFi+0Beuo9zKL0O7MJqm94JLMQCuFWAU/SZXW1fDGgtlIc5jQhJcut?=
+ =?Windows-1252?Q?l2EVP5lfjfhyhMM3fdpk9KorAQ6HPtJZh6zqsQP4QCsZbQVzM8HDDo4o?=
+ =?Windows-1252?Q?87mHTBQne1OlZAP6ZFqwpjbMgyNNHTbWC3vT2ASFAiUO8334gcEmaeAB?=
+ =?Windows-1252?Q?MXBFXW0b0yWc5tNUbN1QwAeaV9CS3c2fIwdJ5A/8NEWNe+yNSMN9dvZz?=
+ =?Windows-1252?Q?EGdgRBHeYrYFqObbRdDjs8oJ64Wv4lGc4M4IxY3hpQUCF8qORRU/2mh1?=
+ =?Windows-1252?Q?yfvrOcTI58QUFRiEtxuRBEwVLCPuvgiUEYnyyr9+Vfd0hrB8q+3OOur4?=
+ =?Windows-1252?Q?/zB/dCJ2+VrN6U6IQbogI98uQ9TMLAk2LN1jye4EY53+OjhRT+U1492Z?=
+ =?Windows-1252?Q?ZQTwIUY0WKXoTNsdEOLBfzyMQDznrz6w+gu9uD8F86CkHR59UNj5+7+s?=
+ =?Windows-1252?Q?demZgRwtYXZSrwKUJ4h+VKHrE5YNfIB36ApMr7BVwnpH1Na4EHlhgfJV?=
+ =?Windows-1252?Q?9Fe3MyYS7uNGGGvQXDZbVs6SjZIjnqCKkRqBRCNHnbG9e3Zf+G1WnlZW?=
+ =?Windows-1252?Q?IapQTLrKKpw/OuTAnst0d35PiY5epS45M41KkNn32BsxZLocAyAeRPD+?=
+ =?Windows-1252?Q?QLLKiJkz2Tvas9jAxSUgQ0L4PYn0QIZ/qZWu7wO8hJWy826E1eQXcyj7?=
+ =?Windows-1252?Q?OytvMj8vN9gOEW87TBHrWrnA4GDp+mDDUF65HE3UaWWmrQtRTsrBRqDR?=
+ =?Windows-1252?Q?nxBxt7d1jOyLZB4dOiQHoNR8setIQ3WZtdRbXNgWxJaNvq3F4SDhWS2I?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bc87eb4-1d27-498d-1834-08d96977e163
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2021 15:34:11.0562
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2021 16:29:45.6006
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +ngm5M+Anhru2t8ZhNscbVa+lt6zCbuZ1mj2fP//PzvwuBXqtwI5V6mcws8iRRAN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5136
+X-MS-Exchange-CrossTenant-UserPrincipalName: e03iNKWVQ21SsVH56TecNEDuIUHVugnxoL72D8uKq4mdCvMo64yWXKrc70dwTt9cSLlRCnsnYmFkasIHbYRzDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB4522
 
-On Fri, Aug 27, 2021 at 03:12:36PM +0000, kernel test robot wrote:
-> tree:   https://github.com/awilliam/linux-vfio.git next
-> head:   ea870730d83fc13a5fa2bd0e175176d7ac8a400a
-> commit: 343b7258687ecfbb363bfda8833a7cf641aac524 [33/38] PCI: Add 'override_only' field to struct pci_device_id
-> config: i386-randconfig-a004-20210827 (attached as .config)
+
+
+On 8/27/21 3:16 AM, kernel test robot wrote:
+> Hi Sean,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on tip/timers/core]
+> [also build test WARNING on pwm/for-next linus/master v5.14-rc7 next-20210826]
+> [cannot apply to xlnx/master]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Sean-Anderson/dt-bindings-pwm-Add-Xilinx-AXI-Timer/20210827-052011
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 127c92feb74a6721f62587f1b89128808f049cf1
+> config: mips-randconfig-r025-20210827 (attached as .config)
 > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1076082a0d97bd5c16a25ee7cf3dbb6ee4b5a9fe)
 > reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/awilliam/linux-vfio/commit/343b7258687ecfbb363bfda8833a7cf641aac524
->         git remote add vfio https://github.com/awilliam/linux-vfio.git
->         git fetch --no-tags vfio next
->         git checkout 343b7258687ecfbb363bfda8833a7cf641aac524
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386 
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install mips cross compiling tool for clang build
+>          # apt-get install binutils-mips-linux-gnu
+>          # https://github.com/0day-ci/linux/commit/eab56f0b0c5a62e40c04916eb1b4f21f478cec3a
+>          git remote add linux-review https://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review Sean-Anderson/dt-bindings-pwm-Add-Xilinx-AXI-Timer/20210827-052011
+>          git checkout eab56f0b0c5a62e40c04916eb1b4f21f478cec3a
+>          # save the attached .config to linux build tree
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips
 > 
 > If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/pwm/pwm-xilinx.c:249:34: warning: unused variable 'xilinx_timer_of_match' [-Wunused-const-variable]
+>     static const struct of_device_id xilinx_timer_of_match[] = {
+>                                      ^
+>     1 warning generated.
+> 
+> 
+> vim +/xilinx_timer_of_match +249 drivers/pwm/pwm-xilinx.c
+> 
+>     248	
+>   > 249	static const struct of_device_id xilinx_timer_of_match[] = {
+>     250		{ .compatible = "xlnx,xps-timer-1.00.a", },
+>     251		{},
+>     252	};
+>     253	MODULE_DEVICE_TABLE(of, xilinx_timer_of_match);
+>     254	
 
-Ugh, this is due to this code:
+For this and the error on the previous patch it looks like I am missing a dependency on OF_ADDR. Will add.
 
-#define INTEL_VGA_DEVICE(id, info) {		\
-	0x8086,	id,				\
-	~0, ~0,					\
-	0x030000, 0xff0000,			\
-	(unsigned long) info }
-
-#define INTEL_QUANTA_VGA_DEVICE(info) {		\
-	0x8086,	0x16a,				\
-	0x152d,	0x8990,				\
-	0x030000, 0xff0000,			\
-	(unsigned long) info }
-
-
-Which really should be using the normal pattern for defining these
-structs:
-
-#define PCI_DEVICE_CLASS(dev_class,dev_class_mask) \
-        .class = (dev_class), .class_mask = (dev_class_mask), \
-        .vendor = PCI_ANY_ID, .device = PCI_ANY_ID, \
-        .subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID
-
-The warning is also not a real issue, just clang being overzealous.
-
-Jason
+--Sean
