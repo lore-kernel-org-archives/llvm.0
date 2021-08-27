@@ -1,104 +1,145 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B8472
-	for <llvm@lists.linux.dev>; Fri, 27 Aug 2021 01:48:13 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10088"; a="278891117"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3EA272
+	for <llvm@lists.linux.dev>; Fri, 27 Aug 2021 02:27:01 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10088"; a="216034939"
 X-IronPort-AV: E=Sophos;i="5.84,355,1620716400"; 
-   d="gz'50?scan'50,208,50";a="278891117"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2021 18:47:59 -0700
+   d="gz'50?scan'50,208,50";a="216034939"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2021 19:27:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,355,1620716400"; 
-   d="gz'50?scan'50,208,50";a="687212058"
+   d="gz'50?scan'50,208,50";a="457241277"
 Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2021 18:47:57 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 26 Aug 2021 19:26:58 -0700
 Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mJQyK-0001rP-Or; Fri, 27 Aug 2021 01:47:56 +0000
-Date: Fri, 27 Aug 2021 09:47:07 +0800
+	id 1mJRa6-0001sT-4T; Fri, 27 Aug 2021 02:26:58 +0000
+Date: Fri, 27 Aug 2021 10:26:23 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [intel-tdx:guest 70/113] include/linux/protected_guest.h:53:12:
- error: incomplete definition of type 'struct device'
-Message-ID: <202108270959.Hb2gETHJ-lkp@intel.com>
+Subject: [intel-tdx:guest 75/113] drivers/virtio/virtio.c:350:6: error:
+ implicit declaration of function 'prot_guest_has'
+Message-ID: <202108271016.eEKfpskl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="3V7upXqbjpZ4EhLz"
+Content-Type: multipart/mixed; boundary="/04w6evG8XlLl3ft"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---3V7upXqbjpZ4EhLz
+--/04w6evG8XlLl3ft
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/intel/tdx.git guest
 head:   44e41606b85b08fad5378c876547f8557f835cf6
-commit: b3bb395b4eaa3d107b203d30dcf6dcc6d1d2fa29 [70/113] mm: Add prot_guest_authorized() interface
+commit: 6ab2ec84687b999b5f42477972779e801d557612 [75/113] virtio: Initialize authorized attribute for protected guest
 config: hexagon-buildonly-randconfig-r003-20210826 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ea08c4cd1c0869ec5024a8bb3f5cdf06ab03ae83)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/b3bb395b4eaa3d107b203d30dcf6dcc6d1d2fa29
+        # https://github.com/intel/tdx/commit/6ab2ec84687b999b5f42477972779e801d557612
         git remote add intel-tdx https://github.com/intel/tdx.git
         git fetch --no-tags intel-tdx guest
-        git checkout b3bb395b4eaa3d107b203d30dcf6dcc6d1d2fa29
+        git checkout 6ab2ec84687b999b5f42477972779e801d557612
         # save the attached .config to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/ drivers/virtio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=hexagon 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/drm_cache.c:34:
->> include/linux/protected_guest.h:53:12: error: incomplete definition of type 'struct device'
-           return dev->authorized;
-                  ~~~^
-   include/linux/bitmap.h:13:8: note: forward declaration of 'struct device'
-   struct device;
-          ^
-   1 error generated.
+>> drivers/virtio/virtio.c:350:6: error: implicit declaration of function 'prot_guest_has' [-Werror,-Wimplicit-function-declaration]
+           if (prot_guest_has(PATTR_GUEST_DEVICE_FILTER))
+               ^
+>> drivers/virtio/virtio.c:350:21: error: use of undeclared identifier 'PATTR_GUEST_DEVICE_FILTER'
+           if (prot_guest_has(PATTR_GUEST_DEVICE_FILTER))
+                              ^
+>> drivers/virtio/virtio.c:351:25: error: implicit declaration of function 'prot_guest_authorized' [-Werror,-Wimplicit-function-declaration]
+                   dev->dev.authorized = prot_guest_authorized(&dev->dev,
+                                         ^
+   3 errors generated.
 
 
-vim +53 include/linux/protected_guest.h
+vim +/prot_guest_has +350 drivers/virtio/virtio.c
 
-    40	
-    41	/*
-    42	 * prot_guest_authorized() - Used to get ARCH specific authorized status of
-    43	 *			     given device.
-    44	 * @dev - device structure
-    45	 * @dev_str - device search string (for PCI bus it is vendor:device, other
-    46	 *	      bus device may use dev_name(dev))
-    47	 *
-    48	 * Return True to allow the device or False to deny it.
-    49	 *
-    50	 */
-    51	static inline bool prot_guest_authorized(struct device *dev, char *dev_str)
-    52	{
-  > 53		return dev->authorized;
-    54	}
-    55	
+   321	
+   322	/**
+   323	 * register_virtio_device - register virtio device
+   324	 * @dev        : virtio device to be registered
+   325	 *
+   326	 * On error, the caller must call put_device on &@dev->dev (and not kfree),
+   327	 * as another code path may have obtained a reference to @dev.
+   328	 *
+   329	 * Returns: 0 on suceess, -error on failure
+   330	 */
+   331	int register_virtio_device(struct virtio_device *dev)
+   332	{
+   333		int err;
+   334	
+   335		dev->dev.bus = &virtio_bus;
+   336		device_initialize(&dev->dev);
+   337	
+   338		/* Assign a unique device index and hence name. */
+   339		err = ida_simple_get(&virtio_index_ida, 0, 0, GFP_KERNEL);
+   340		if (err < 0)
+   341			goto out;
+   342	
+   343		dev->index = err;
+   344		dev_set_name(&dev->dev, "virtio%u", dev->index);
+   345	
+   346		spin_lock_init(&dev->config_lock);
+   347		dev->config_enabled = false;
+   348		dev->config_change_pending = false;
+   349	
+ > 350		if (prot_guest_has(PATTR_GUEST_DEVICE_FILTER))
+ > 351			dev->dev.authorized = prot_guest_authorized(&dev->dev,
+   352							(char *)dev_name(&dev->dev));
+   353	
+   354		/* We always start by resetting the device, in case a previous
+   355		 * driver messed it up.  This also tests that code path a little. */
+   356		dev->config->reset(dev);
+   357	
+   358		/* Acknowledge that we've seen the device. */
+   359		virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+   360	
+   361		INIT_LIST_HEAD(&dev->vqs);
+   362	
+   363		/*
+   364		 * device_add() causes the bus infrastructure to look for a matching
+   365		 * driver.
+   366		 */
+   367		err = device_add(&dev->dev);
+   368		if (err)
+   369			ida_simple_remove(&virtio_index_ida, dev->index);
+   370	out:
+   371		if (err)
+   372			virtio_add_status(dev, VIRTIO_CONFIG_S_FAILED);
+   373		return err;
+   374	}
+   375	EXPORT_SYMBOL_GPL(register_virtio_device);
+   376	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---3V7upXqbjpZ4EhLz
+--/04w6evG8XlLl3ft
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICG86KGEAAy5jb25maWcAlDxdc9u2su/9FZr05dyHNv6K25w7eQBBUERFEhQAyrJfOIrN
+H4sICIVFKGEAAy5jb25maWcAlDxdc9u2su/9FZr05dyHNv6K25w7eQBBUERFEhQAyrJfOIrN
 JL51rIws9zT//izALwBcKr2daWvuLoDFYrFfAPTzTz8vyOtx/3V3fLzfPT19X3xunpvD7tg8
 LD49PjX/u4jFohB6wWKufwXi7PH59e+3X5q/d5/3z4t3v55f/Xr2y+H+arFqDs/N04Lunz89
 fn6FHh73zz/9/BMVRcKXNaX1hknFRVFrttUf3tw/7Z4/L/5qDi9AtzC9/Hq2+Nfnx+O/376F
@@ -651,4 +692,4 @@ ppkmHKlMZFpYfMHSzKjsVoRammlTIG5meBUec9VU1eVsLXo/V7f1TmX21psp1l/SvNb15ryv
 lmzarWZk4hiv5SR5MNo56OS83Jg9ULmJC8EoxxuLRqsh6pqV3MbHFtIg6VBwgD1YY01JyVuo
 zZ54LVjmqZ5PR23zzs3+D3nWQmLC2wEA
 
---3V7upXqbjpZ4EhLz--
+--/04w6evG8XlLl3ft--
