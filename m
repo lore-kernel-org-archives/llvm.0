@@ -1,89 +1,174 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEA43FC1
-	for <llvm@lists.linux.dev>; Mon, 30 Aug 2021 21:38:52 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id p69-20020a254248000000b00598282d96ceso4105205yba.3
-        for <llvm@lists.linux.dev>; Mon, 30 Aug 2021 14:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=HL0bHPC7fRhw8NveiezJuSyRlf1c6pLI+gcpO0vq9Sg=;
-        b=Vw0YkpLrhfKJfwJ/o+LiWW8iYhrqyu75s/mnuCG5dXhDSWakhU7/UrE0jtlsGXxnwG
-         iXFjlGLD5voK5KlOSCK4ZCoSlj7CQb/vgAiUU20YSaLD1eCtY9Y8Y0MV1Z0BvQUN7ARe
-         1m4VWFO7TQ32kIW91EXtJG1/9i6D5BtObjDDH1vqFc97HUye4X8oEo977sE3ieasNCwJ
-         h1AY4zPaCQQkAR1W8AtIL1AFSHIAYEmD6Uu8sZREtW+Na0a/uHt6bCxqGuxezMU9dONu
-         ZA6yM9sdwleWHTm1cx4DQmqGcwuFbjnHsanXtMOk5PE79GHtMzBcZl/wlo19kVyeUtGD
-         eUPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=HL0bHPC7fRhw8NveiezJuSyRlf1c6pLI+gcpO0vq9Sg=;
-        b=D2bQ9HxjaAvLljQCa22Wpw5abyh2b3/khNi7Gy9AXPg61MRpr35rz3u9NBysIXnUy/
-         czbFG2yk4SVwCmETrGSikpd3x/dZ7tuIfVY9sHdhrneFiNVAahNjmR7IiGBWzhMlY2GU
-         OJ91JyKByJkrTjA3iEpNB5RL1/OQ4NzpvpX/qqOsDKhUXkoLF9V4EXqudkqUKS7N75SC
-         J+8ZzRIRWcF6ss6u64HaBryFHUb9vKkhrnsIC7bVaLETbBnAJoX2B0/dED3SJzykQfH0
-         aeEClfTtQ/zh0VK5Z85X1QMu7kLwPtXcvdWkl6ZDN47wNrCragW+bxiyhriYEh0S3pnZ
-         NWhQ==
-X-Gm-Message-State: AOAM531jlxN/gqCURpR3AGUdMcgH3qmRJF6IgU/0KX9+FVlfKphqC4ln
-	Y6V4+bWd/fYv2SInPEBPCvHQTh+C0uXxYivUoak=
-X-Google-Smtp-Source: ABdhPJwIA5lJ67dNvJNzo05E+2L82lp32fjkWAPFbwD9w2A4+dtklq/RlB9I1vIcCowqPvM40IWGjkRYSiC3hSZi58c=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:266b:6ef5:38a3:394c])
- (user=ndesaulniers job=sendgmr) by 2002:a25:74cd:: with SMTP id
- p196mr15254588ybc.454.1630359531173; Mon, 30 Aug 2021 14:38:51 -0700 (PDT)
-Date: Mon, 30 Aug 2021 14:38:43 -0700
-Message-Id: <20210830213846.2609349-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69473FC2
+	for <llvm@lists.linux.dev>; Mon, 30 Aug 2021 22:34:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1B5460E98;
+	Mon, 30 Aug 2021 22:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1630362844;
+	bh=wlr+0GYj5AofoT2qLGQnGAd0De8XaqzW9JKk9OfETXI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WvvNsgssfkXqpGn/WQqRti1oOg9e3+5keyLeV+h/FY5iMBnW6NGD3RXQOThN5C+dd
+	 YmmaClMBnqiN0Jug1ruemGzaqGcTxHbCV/bXm0qRdBq8R8SlsXKnfsjWDo2LEK4Ok4
+	 PZSZd5LgsAukrOFPqaDF7lUSO9NGEXYJ/ZIuiuwRHpjbxyKc4vj/gF5DZ79Ezwe9rZ
+	 cypetSnlmu3d80ml+4HhrjBuAnH8YQN3JGkTqOb73fnEdnZNJimUPhHTFvlbVRgdep
+	 LLNFLXEmPoxmlFgmk+Xn7WNxPHPdnNW2ezmTQZbv+XU4YTudIqgxHXmv583MViTvWd
+	 IDbDQRlDKgT5g==
+Date: Mon, 30 Aug 2021 15:34:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Keith Packard <keithp@keithp.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 0/5] Enable -Warray-bounds and -Wzero-length-bounds
+Message-ID: <YS1c2UE487rkGnya@Ryzen-9-3900X.localdomain>
+References: <20210827163015.3141722-1-keescook@chromium.org>
+ <YS0nJtNDCwfbaubZ@Ryzen-9-3900X.localdomain>
+ <202108301314.22B3CB015C@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
-Subject: [PATCH] ARM: select HAVE_FUTEX_CMPXCHG
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Russell King <linux@armlinux.org.uk>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Linus Walleij <linus.walleij@linaro.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Anshuman Khandual <anshuman.khandual@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	YiFei Zhu <yifeifz2@illinois.edu>, 
-	"=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=" <u.kleine-koenig@pengutronix.de>, Mike Rapoport <rppt@kernel.org>, 
-	linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202108301314.22B3CB015C@keescook>
 
-tglx notes:
-  This function [futex_detect_cmpxchg] is only needed when an
-  architecture has to runtime discover whether the CPU supports it or
-  not.  ARM has unconditional support for this, so the obvious thing to
-  do is the below.
+On Mon, Aug 30, 2021 at 01:16:41PM -0700, Kees Cook wrote:
+> On Mon, Aug 30, 2021 at 11:44:54AM -0700, Nathan Chancellor wrote:
+> > arch/powerpc/kernel/signal_32.c:780:2: error: array index 3 is past the end of the array (which contains 1 element) [-Werror,-Warray-bounds]
+> >         unsafe_put_sigset_t(&frame->uc.uc_sigmask, oldset, failed);
+> >         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Or is this a Clang DCE failure?
+> 
+> #define unsafe_put_compat_sigset(compat, set, label) do {               \
+>         compat_sigset_t __user *__c = compat;                           \
+>         const sigset_t *__s = set;                                      \
+>                                                                         \
+>         switch (_NSIG_WORDS) {                                          \
+>         case 4:                                                         \
+>                 unsafe_put_user(__s->sig[3] >> 32, &__c->sig[7], label);        \
+>                 unsafe_put_user(__s->sig[3], &__c->sig[6], label);      \
+>                 fallthrough;                                            \
+>         case 3:                                                         \
+>                 unsafe_put_user(__s->sig[2] >> 32, &__c->sig[5], label);        \
+>                 unsafe_put_user(__s->sig[2], &__c->sig[4], label);      \
+>                 fallthrough;                                            \
+>         case 2:                                                         \
+>                 unsafe_put_user(__s->sig[1] >> 32, &__c->sig[3], label);        \
+>                 unsafe_put_user(__s->sig[1], &__c->sig[2], label);      \
+>                 fallthrough;                                            \
+>         case 1:                                                         \
+>                 unsafe_put_user(__s->sig[0] >> 32, &__c->sig[1], label);        \
+>                 unsafe_put_user(__s->sig[0], &__c->sig[0], label);      \
+>         }                                                               \
+> } while (0)
+> 
+> if "set" has only 1 element, then _NSIG_WORDS must be 1. The warnings
+> are coming from cases 4 and 3. (But why not 2, which would also access
+> beyond the end?)
 
-Fixes linkage failure from Clang randconfigs:
-kernel/futex.o:(.text.fixup+0x5c): relocation truncated to fit: R_ARM_JUMP24 against `.init.text'
-and boot failures for CONFIG_THUMB2_KERNEL.
+I trimmed the warnings down otherwise it would have been 400 lines long
+:) it did warn for the 2 case.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/325
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Clang does not like the use of asm goto in unsafe_put_user on powerpc it
+seems:
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index fc196421b2ce..b760dd45b734 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -92,6 +92,7 @@ config ARM
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER if !THUMB2_KERNEL && !CC_IS_CLANG
- 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
-+	select HAVE_FUTEX_CMPXCHG if FUTEX
- 	select HAVE_GCC_PLUGINS
- 	select HAVE_HW_BREAKPOINT if PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7)
- 	select HAVE_IRQ_TIME_ACCOUNTING
--- 
-2.33.0.259.gc128427fd7-goog
+$ cat warray-bounds.c
+#define NSIG_WORDS      1
 
+typedef struct {
+        unsigned long sig[NSIG_WORDS];
+} sigset_t;
+
+int handle_rt_signal32_bad(sigset_t *);
+int handle_rt_signal32_bad(sigset_t *oldset)
+{
+	switch (NSIG_WORDS) {
+	case 4:
+			__asm__ goto("" : : "r"(oldset->sig[3] >> 32) : : failed);
+			__asm__ goto("" : : "r"(oldset->sig[3]) : : failed);
+			__attribute__((fallthrough));
+	case 3:
+			__asm__ goto("" : : "r"(oldset->sig[2] >> 32) : : failed);
+			__asm__ goto("" : : "r"(oldset->sig[2]) : : failed);
+			__attribute__((fallthrough));
+	case 2:
+			__asm__ goto("" : : "r"(oldset->sig[1] >> 32) : : failed);
+			__asm__ goto("" : : "r"(oldset->sig[1]) : : failed);
+			__attribute__((fallthrough));
+	case 1:
+			__asm__ goto("" : : "r"(oldset->sig[0] >> 32) : : failed);
+			__asm__ goto("" : : "r"(oldset->sig[0]) : : failed);
+	}
+
+	return 0;
+failed:
+	return 1;
+}
+
+void normal_array_access(unsigned long);
+int handle_rt_signal32_good(sigset_t *);
+int handle_rt_signal32_good(sigset_t *oldset)
+{
+	switch (NSIG_WORDS) {
+	case 4:
+			normal_array_access(oldset->sig[3] >> 32);
+			normal_array_access(oldset->sig[3]);
+			__attribute__((fallthrough));
+	case 3:
+			normal_array_access(oldset->sig[2] >> 32);
+			normal_array_access(oldset->sig[2]);
+			__attribute__((fallthrough));
+	case 2:
+			normal_array_access(oldset->sig[1] >> 32);
+			normal_array_access(oldset->sig[1]);
+			__attribute__((fallthrough));
+	case 1:
+			normal_array_access(oldset->sig[0] >> 32);
+			normal_array_access(oldset->sig[0]);
+	}
+
+	return 0;
+}
+
+$ clang -fsyntax-only -Weverything warray-bounds.c
+warray-bounds.c:12:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                __asm__ goto("" : : "r"(oldset->sig[3] >> 32) : : failed);
+                                        ^           ~
+warray-bounds.c:4:2: note: array 'sig' declared here
+        unsigned long sig[NSIG_WORDS];
+        ^
+warray-bounds.c:16:27: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                __asm__ goto("" : : "r"(oldset->sig[2] >> 32) : : failed);
+                                        ^           ~
+warray-bounds.c:4:2: note: array 'sig' declared here
+        unsigned long sig[NSIG_WORDS];
+        ^
+warray-bounds.c:20:27: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                __asm__ goto("" : : "r"(oldset->sig[1] >> 32) : : failed);
+                                        ^           ~
+warray-bounds.c:4:2: note: array 'sig' declared here
+        unsigned long sig[NSIG_WORDS];
+        ^
+3 warnings generated.
+
+$ gcc -fsyntax-only -Wall -Wextra -Wpedantic warray-bounds.c
+
+godbolt link: https://godbolt.org/z/8xYojs1WY
+
+I've reported this on LLVM's bug tracker to see what the clang
+developers can do with you on CC:
+
+https://bugs.llvm.org/show_bug.cgi?id=51682
+
+Cheers,
+Nathan
