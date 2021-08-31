@@ -1,220 +1,140 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E584A3FC3
-	for <llvm@lists.linux.dev>; Tue, 31 Aug 2021 15:14:09 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id e63so16791014yba.7
-        for <llvm@lists.linux.dev>; Tue, 31 Aug 2021 08:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tPUwmAVFVnjBWawDBrxUxOpEnLefbnrOl2ytGj7RQLc=;
-        b=WsrDpTleNrePdvioytto9LsXnwzKlFUbpJoBxkg4G4Tm1HzQ3BmVk4zpoInDNGWv9/
-         LhfIKshopC1e4ZWB8EzKOW6yYyIbo62pNtXSK+ORQ5JBrQgh/Ef//5/iWDUzTYLAyu/p
-         SWQyPiytO/mfuM/Zux/rePL/3D72LHpMtCfjW8VKYVTHUiHNRWs4o1gvsMXckfGZp4lG
-         JrMa+pSM8W7CTWborMjXUvtyrv7O80WWW1B296v0I6cAiW6R+eXSbwjYUUQIO74iqfZY
-         QUgMhM5Y7Effn/lScfszQxH/6fdCou4CU7rh4GhI37MXKD8XpX0TAiIRa6UU/2OPQJP5
-         nmsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tPUwmAVFVnjBWawDBrxUxOpEnLefbnrOl2ytGj7RQLc=;
-        b=riojbnck7qXvEer0x1cwcsj4C7ZANViJtaUPEux6RvU86H+5jU3kLESRi04pUjUY7N
-         1K2CXbIuxE9/rqe3Pes3WewDo+b00rwgbO1jWRlMBskMQ/VzjoFp/yjjiHgHqFrm0QVD
-         v0wKG4NlY3T8O+GeiwPubCEt+IYtIgoGEZ1wWYqlpVb5ldCuRqxtfHFxpD4WPE2mPgbI
-         b/1ZtL6rxBKMS3W1LWqsO9czS/61nNd/jxB3vuZSXFB+Tjk1oU+HghDYu8WzL2oQsfTV
-         a5lyhkCP8SDlLPKIq26Rk4FDeSyarrgMTwuOfpp1AM7SlpaIxxMk+WV/NnRZT6jK0Q3/
-         gYJQ==
-X-Gm-Message-State: AOAM533/VYNAatxAlJXqkc39xrtlVvr1pLNIqVY2OQSb4n2n2MNy55pe
-	HOEK3azGwHYNY2bFGweepOJfgQDl6kLsMOuhzRQYzw==
-X-Google-Smtp-Source: ABdhPJyvk5hjS1obqXsbpcPj8ERMJjmoQVIkPG4SfWRBxn3wlbpGXKWfmnBmz7PYa8wlvgoKW4o3JMDpjfeQZ7mVhBI=
-X-Received: by 2002:a25:ea51:: with SMTP id o17mr32779096ybe.253.1630422848296;
- Tue, 31 Aug 2021 08:14:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0202D3FC3
+	for <llvm@lists.linux.dev>; Tue, 31 Aug 2021 15:18:46 +0000 (UTC)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+	by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17VF4TA3052060;
+	Tue, 31 Aug 2021 11:18:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=zuHAQQs0gmUCQco7aRWvmy11cWZcfnUYpyX3TZ43UXA=;
+ b=geLgWUQisEKJDUnurg1sfiX+fo4evxjnzjVzvbXl3ZSDW+94yPKFMECGxf6Gi5ElZh1y
+ qejCRqU5g+ZCjZr3uOwxfpzDjjtJ6IvZQOOiYTdqG7yzkeDM3TopRK2l5RVJcxe6MA5q
+ FQ5gnfk44T+pDTl+mL/CLJ1y7Q7gmSJWdU/D5Nks+G0Q0dkbfwnud1wV1FfGJ6QiV2AU
+ pOXlXIEwazZCOd8Ugb2mopSZ2VvIJpFseHz3qgsuAuriVGpCS2lJc6sQjtoygk60115d
+ ukeW9PbHTArw1RB4CTp/Wnm9jMGQhzu86Hc8k09zpbKUHgd6KwYQy0qjmUGGg7v6UGZK 7w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0b-001b2d01.pphosted.com with ESMTP id 3asp891pfj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 31 Aug 2021 11:18:38 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17VF5hbJ064295;
+	Tue, 31 Aug 2021 11:18:38 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+	by mx0b-001b2d01.pphosted.com with ESMTP id 3asp891pf6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 31 Aug 2021 11:18:38 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+	by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17VFGxVV008705;
+	Tue, 31 Aug 2021 15:18:36 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+	by ppma05fra.de.ibm.com with ESMTP id 3aqcs8uxr0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 31 Aug 2021 15:18:36 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17VFIWvG29032706
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 31 Aug 2021 15:18:32 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 240214208A;
+	Tue, 31 Aug 2021 15:18:32 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BF60542087;
+	Tue, 31 Aug 2021 15:18:31 +0000 (GMT)
+Received: from osiris (unknown [9.145.60.147])
+	by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+	Tue, 31 Aug 2021 15:18:31 +0000 (GMT)
+Date: Tue, 31 Aug 2021 17:18:30 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Marco Elver <elver@google.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        qemu-s390x <qemu-s390x@nongnu.org>
+Subject: Re: [GIT PULL] s390 updates for 5.15 merge window
+Message-ID: <YS5IRiFO9crNu46y@osiris>
+References: <YSzZFgBt6nMvpVgc@osiris>
+ <YS2RrUma2oOSYtIc@Ryzen-9-3900X.localdomain>
+ <82161448-2770-158c-fdd3-d253b4ae476f@de.ibm.com>
+ <YS4AufXrOCa4rzN0@osiris>
+ <CANpmjNPp3dAcr+WfYxM6_uQOmFmDf60aL-LbXF12NCzP6P3-6Q@mail.gmail.com>
+ <YS5Ed4Cyf+rOf9MR@elver.google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YS5Ed4Cyf+rOf9MR@elver.google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7xetOQ97Ah06IA0LnvIUpM37fwGRXaQ0
+X-Proofpoint-ORIG-GUID: QLg8D5EGsrGv4VqBqEToK6xy605cjhtA
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202108310136.TL90plMR-lkp@intel.com> <5c11c2e3-2d50-981e-623a-d43a897584f1@intel.com>
-In-Reply-To: <5c11c2e3-2d50-981e-623a-d43a897584f1@intel.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 31 Aug 2021 08:13:56 -0700
-Message-ID: <CANn89i+muzNH6nEZvPmEq5pUZbq3B-ZprFrLVw8mPd2iH8BNLw@mail.gmail.com>
-Subject: Re: [PATCH net 2/2] ipv4: make exception cache less predictible
-To: kernel test robot <yujie.liu@intel.com>
-Cc: Eric Dumazet <eric.dumazet@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	netdev <netdev@vger.kernel.org>, Willy Tarreau <w@1wt.eu>, Keyu Man <kman001@ucr.edu>, 
-	David Ahern <dsahern@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-31_07:2021-08-31,2021-08-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 bulkscore=0 spamscore=0 mlxlogscore=682
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108310080
 
-Honestly this report seems wrong to me.
+On Tue, Aug 31, 2021 at 05:02:15PM +0200, Marco Elver wrote:
+> On Tue, Aug 31, 2021 at 12:46PM +0200, Marco Elver wrote:
+> > On Tue, 31 Aug 2021 at 12:13, Heiko Carstens <hca@linux.ibm.com> wrote:
+> I repro'd, and the problem is part QEMU TCG and a minor problem with
+> stack_trace_save() on s390:
+> 
+> 1. QEMU TCG doesn't seem to want to execute threads concurrently,
+>    resulting in no "value changes" being observed. This is probably just
+>    a limitation of TCG, and if run on a real CPU, shouldn't be a problem.
+>    On QEMU, most test cases will pass with CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=n
+>    (There's one left that requires value changes to be observable)
+> 
+> 2. stack_trace_save() is subtly broken on s390: it starts the trace in
+>    stack_trace_save() itself. This is incorrect, as the trace should
+>    start with the caller. We reported something similar to arm64, also
+>    because one of our sanitizer tests failed:
+>    https://lkml.kernel.org/r/20210319184106.5688-1-mark.rutland@arm.com
+...
+> I fixed it with the below, and now most tests pass. Note that, other
+> debugging tools may also report misleading stack traces without the
+> stack_trace_save() fix (e.g. certain KFENCE reports).
+> 
+> If you have a better solution for how to fix stack_trace_save() on s390,
+> please discard my patch.
 
-Please kernel test robot, improve your automation.
+Ah, with your patch I get the below on a real machine; so it looks
+like this really was the only problem for the failing self tests.
 
-The function is only called when we know there are at least 6 items in
-the list, I do not think you took this into account.
+Thanks a lot for the patch! Will look into it later and apply if
+everything else still works!
 
-On Tue, Aug 31, 2021 at 12:48 AM kernel test robot <yujie.liu@intel.com> wr=
-ote:
->
-> Hi Eric,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on net/master]
->
-> url:    https://github.com/0day-ci/linux/commits/Eric-Dumazet/inet-make-e=
-xception-handling-less-predictible/20210830-061726
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 57f=
-780f1c43362b86fd23d20bd940e2468237716
-> :::::: branch date: 19 hours ago
-> :::::: commit date: 19 hours ago
-> config: x86_64-randconfig-c007-20210830 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b1f=
-de8a2b681dad2ce0c082a5d6422caa06b0bc)
-> reproduce (this is a W=3D1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
-in/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/0day-ci/linux/commit/adf305d00ec06cb771dc96=
-0f0d7bd62d07561371
->          git remote add linux-review https://github.com/0day-ci/linux
->          git fetch --no-tags linux-review Eric-Dumazet/inet-make-exceptio=
-n-handling-less-predictible/20210830-061726
->          git checkout adf305d00ec06cb771dc960f0d7bd62d07561371
->          # save the attached .config to linux build tree
->          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross A=
-RCH=3Dx86_64 clang-analyzer
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
->
-> clang-analyzer warnings: (new ones prefixed by >>)
->
->  >> net/ipv4/route.c:575:7: warning: Dereference of null pointer [clang-a=
-nalyzer-core.NullDereference]
->             rt =3D rcu_dereference(fnhe->fnhe_rth_input);
->                  ^
->     net/ipv4/route.c:592:34: note: 'oldest' initialized to a null pointer=
- value
->             struct fib_nh_exception *fnhe, *oldest =3D NULL;
->                                             ^~~~~~
->     net/ipv4/route.c:594:2: note: Loop condition is true.  Entering loop =
-body
->             for (fnhe_p =3D &hash->chain; ; fnhe_p =3D &fnhe->fnhe_next) =
-{
->             ^
->     net/ipv4/route.c:595:10: note: Assuming the condition is false
->                     fnhe =3D rcu_dereference_protected(*fnhe_p,
->                            ^
->     include/linux/rcupdate.h:587:2: note: expanded from macro 'rcu_derefe=
-rence_protected'
->             __rcu_dereference_protected((p), (c), __rcu)
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     include/linux/rcupdate.h:396:19: note: expanded from macro '__rcu_der=
-eference_protected'
->             RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected(=
-) usage"); \
->             ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~
->     include/linux/rcupdate.h:318:8: note: expanded from macro 'RCU_LOCKDE=
-P_WARN'
->                     if ((c) && debug_lockdep_rcu_enabled() && !__warned) =
-{  \
->                          ^
->     net/ipv4/route.c:595:10: note: Left side of '&&' is false
->                     fnhe =3D rcu_dereference_protected(*fnhe_p,
->                            ^
->     include/linux/rcupdate.h:587:2: note: expanded from macro 'rcu_derefe=
-rence_protected'
->             __rcu_dereference_protected((p), (c), __rcu)
->             ^
->     include/linux/rcupdate.h:396:2: note: expanded from macro '__rcu_dere=
-ference_protected'
->             RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected(=
-) usage"); \
->             ^
->     include/linux/rcupdate.h:318:11: note: expanded from macro 'RCU_LOCKD=
-EP_WARN'
->                     if ((c) && debug_lockdep_rcu_enabled() && !__warned) =
-{  \
->                             ^
->     net/ipv4/route.c:595:10: note: Loop condition is false.  Exiting loop
->                     fnhe =3D rcu_dereference_protected(*fnhe_p,
->                            ^
->     include/linux/rcupdate.h:587:2: note: expanded from macro 'rcu_derefe=
-rence_protected'
->             __rcu_dereference_protected((p), (c), __rcu)
->             ^
->     include/linux/rcupdate.h:396:2: note: expanded from macro '__rcu_dere=
-ference_protected'
->             RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected(=
-) usage"); \
->             ^
->     include/linux/rcupdate.h:316:2: note: expanded from macro 'RCU_LOCKDE=
-P_WARN'
->             do {                                                         =
-   \
->             ^
->     net/ipv4/route.c:597:7: note: Assuming 'fnhe' is null
->                     if (!fnhe)
->                         ^~~~~
->     net/ipv4/route.c:597:3: note: Taking true branch
->                     if (!fnhe)
->                     ^
->     net/ipv4/route.c:598:4: note:  Execution continues on line 605
->                             break;
->                             ^
->     net/ipv4/route.c:605:20: note: Passing null pointer value via 1st par=
-ameter 'fnhe'
->             fnhe_flush_routes(oldest);
->                               ^~~~~~
->     net/ipv4/route.c:605:2: note: Calling 'fnhe_flush_routes'
->             fnhe_flush_routes(oldest);
->             ^~~~~~~~~~~~~~~~~~~~~~~~~
->     net/ipv4/route.c:575:7: warning: Dereference of null pointer [clang-a=
-nalyzer-core.NullDereference]
->             rt =3D rcu_dereference(fnhe->fnhe_rth_input);
->                  ^
->
-> vim +575 net/ipv4/route.c
->
-> 4895c771c7f006 David S. Miller 2012-07-17  570
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  571  static void fnhe_flu=
-sh_routes(struct fib_nh_exception *fnhe)
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  572  {
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  573          struct rtabl=
-e *rt;
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  574
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27 @575          rt =3D rcu_d=
-ereference(fnhe->fnhe_rth_input);
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  576          if (rt) {
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  577                  RCU_=
-INIT_POINTER(fnhe->fnhe_rth_input, NULL);
-> 95c47f9cf5e028 Wei Wang        2017-06-17  578                  dst_dev_p=
-ut(&rt->dst);
-> 0830106c539001 Wei Wang        2017-06-17  579                  dst_relea=
-se(&rt->dst);
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  580          }
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  581          rt =3D rcu_d=
-ereference(fnhe->fnhe_rth_output);
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  582          if (rt) {
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  583                  RCU_=
-INIT_POINTER(fnhe->fnhe_rth_output, NULL);
-> 95c47f9cf5e028 Wei Wang        2017-06-17  584                  dst_dev_p=
-ut(&rt->dst);
-> 0830106c539001 Wei Wang        2017-06-17  585                  dst_relea=
-se(&rt->dst);
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  586          }
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  587  }
-> 2ffae99d1fac27 Timo Ter=C3=A4s      2013-06-27  588
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[    5.138547]     ok 1 - test_basic
+[    7.538799]     ok 2 - test_concurrent_races
+[    9.938524]     ok 3 - test_novalue_change
+[   11.620063]     ok 4 - test_novalue_change_exception
+[   11.952404]     ok 5 - test_unknown_origin
+[   14.349852]     ok 6 - test_write_write_assume_atomic
+[   14.681937]     ok 7 - test_write_write_struct
+[   15.031046]     ok 8 - test_write_write_struct_part
+[   17.429869]     ok 9 - test_read_atomic_write_atomic
+[   17.760862]     ok 10 - test_read_plain_atomic_write
+[   18.093500]     ok 11 - test_read_plain_atomic_rmw
+[   20.490570]     ok 12 - test_zero_size_access
+[   22.939270]     ok 13 - test_data_race
+[   23.271104]     ok 14 - test_assert_exclusive_writer
+[   23.601940]     ok 15 - test_assert_exclusive_access
+[   26.000281]     ok 16 - test_assert_exclusive_access_writer
+[   26.330718]     ok 17 - test_assert_exclusive_bits_change
+[   28.739480]     ok 18 - test_assert_exclusive_bits_nochange
+[   28.962218]     ok 19 - test_assert_exclusive_writer_scoped
+[   29.071385]     ok 20 - test_assert_exclusive_access_scoped
+[   31.479706]     ok 21 - test_jiffies_noreport
+[   33.879581]     ok 22 - test_seqlock_noreport
+[   36.279853]     ok 23 - test_atomic_builtins
+[   36.279893] ok 1 - kcsan
