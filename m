@@ -1,56 +1,56 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54953FC1
-	for <llvm@lists.linux.dev>; Thu,  2 Sep 2021 23:00:48 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10095"; a="217409470"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0F93FC1
+	for <llvm@lists.linux.dev>; Thu,  2 Sep 2021 23:32:46 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10095"; a="206495026"
 X-IronPort-AV: E=Sophos;i="5.85,263,1624345200"; 
-   d="gz'50?scan'50,208,50";a="217409470"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 16:00:35 -0700
+   d="gz'50?scan'50,208,50";a="206495026"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 16:32:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,263,1624345200"; 
-   d="gz'50?scan'50,208,50";a="689349661"
+   d="gz'50?scan'50,208,50";a="543003035"
 Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Sep 2021 16:00:34 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 02 Sep 2021 16:32:42 -0700
 Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mLvhB-0009My-An; Thu, 02 Sep 2021 23:00:33 +0000
-Date: Fri, 3 Sep 2021 07:00:01 +0800
+	id 1mLwCH-0009O5-JC; Thu, 02 Sep 2021 23:32:41 +0000
+Date: Fri, 3 Sep 2021 07:32:34 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [rcu:dev.2021.08.25a 98/115] kernel/time/hrtimer.c:1631:6: warning:
- no previous prototype for function 'hrtimer_interrupt_get_debug'
-Message-ID: <202109030655.LfhRW51M-lkp@intel.com>
+Subject: [rcu:dev.2021.08.25a 114/115] kernel/time/tick-oneshot.c:22:7:
+ warning: no previous prototype for function 'tick_program_event_get_debug'
+Message-ID: <202109030732.o6eTW2YJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8t9RHnE3ZwKMSgU+"
+Content-Type: multipart/mixed; boundary="Dxnq1zWXvFF0Q93v"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---8t9RHnE3ZwKMSgU+
+--Dxnq1zWXvFF0Q93v
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.08.25a
 head:   2ba1d046d9bc5b4496027d120e3ddcdfbb2fe9f4
-commit: cf9fcdcca72481c55d41aa2fbe276a79db5f62ec [98/115] EXP cpu: Print out hrtimer_interrupt() information
+commit: 79b77a560631f5a34c7dd062f1312430bc092f44 [114/115] EXP cpu: Track path through tick_program_event()
 config: hexagon-randconfig-r041-20210903 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c9948e9254fbb6ea00f66c7b4542311d21e060be)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=cf9fcdcca72481c55d41aa2fbe276a79db5f62ec
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=79b77a560631f5a34c7dd062f1312430bc092f44
         git remote add rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
         git fetch --no-tags rcu dev.2021.08.25a
-        git checkout cf9fcdcca72481c55d41aa2fbe276a79db5f62ec
+        git checkout 79b77a560631f5a34c7dd062f1312430bc092f44
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=hexagon 
 
@@ -59,66 +59,35 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
-                                     ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/hrtimer.c:1631:6: warning: no previous prototype for function 'hrtimer_interrupt_get_debug' [-Wmissing-prototypes]
-   void hrtimer_interrupt_get_debug(int cpu, unsigned short *nr_hangs, ktime_t *delta)
-        ^
-   kernel/time/hrtimer.c:1631:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hrtimer_interrupt_get_debug(int cpu, unsigned short *nr_hangs, ktime_t *delta)
+>> kernel/time/tick-oneshot.c:22:7: warning: no previous prototype for function 'tick_program_event_get_debug' [-Wmissing-prototypes]
+   char *tick_program_event_get_debug(int cpu)
+         ^
+   kernel/time/tick-oneshot.c:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   char *tick_program_event_get_debug(int cpu)
    ^
    static 
-   kernel/time/hrtimer.c:147:20: warning: unused function 'is_migration_base' [-Wunused-function]
-   static inline bool is_migration_base(struct hrtimer_clock_base *base)
-                      ^
-   kernel/time/hrtimer.c:1734:20: warning: unused function '__hrtimer_peek_ahead_timers' [-Wunused-function]
-   static inline void __hrtimer_peek_ahead_timers(void)
-                      ^
-   7 warnings generated.
+   1 warning generated.
 
 
-vim +/hrtimer_interrupt_get_debug +1631 kernel/time/hrtimer.c
+vim +/tick_program_event_get_debug +22 kernel/time/tick-oneshot.c
 
-  1630	
-> 1631	void hrtimer_interrupt_get_debug(int cpu, unsigned short *nr_hangs, ktime_t *delta)
-  1632	{
-  1633		*nr_hangs = READ_ONCE(per_cpu(hrtimer_bases, cpu).nr_hangs);
-  1634		*delta = READ_ONCE(per_cpu(hrtimer_interrupt_delta, cpu));
-  1635	}
-  1636	
+    21	
+  > 22	char *tick_program_event_get_debug(int cpu)
+    23	{
+    24		return READ_ONCE(per_cpu(tick_program_event_codepath, cpu));
+    25	}
+    26	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---8t9RHnE3ZwKMSgU+
+--Dxnq1zWXvFF0Q93v
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICBVRMWEAAy5jb25maWcAnDxbb+M2s+/9FUILHLTAt13buWxyDvaBpiiLtSQqJOU4+yJ4
+H4sICLxZMWEAAy5jb25maWcAnDxbb+M2s+/9FUILHLTAt13buWxyDvaBpiiLtSQqJOU4+yJ4
 E++uTxMnsJ22++/PDHUjJSpbnALbRDOjITkczo2j/PLTLwF5PT0/bU67+83j4/fg63a/PWxO
 24fgy+5x+z9BKIJM6ICFXP8OxMlu//rP+2/bfzZfn/fBxe/T898n7w73s2C5Pey3jwF93n/Z
 fX0FDrvn/U+//ERFFvFFSWm5YlJxkZWarfXHn+8fN/uvwV/bwxHoAuTy+yT49evu9N/v38P/
@@ -681,4 +650,4 @@ Lqvevb7hsYvSYPD0n93L9Z2SkYj8/AcKFG7/xNFUI/EhGoBZFm2p4yyMWLZuaSnPNNRhUbIm
 y+s5n8NhMIataotrJFsX1rC0uoc198gibk5wX0IiEZRghLaCCyfxHhgPLivaU7DnydisG4JJ
 GlcV1hXmQZM695WQYfxYDI93TjTUlv8Hmmh/df/pAQA=
 
---8t9RHnE3ZwKMSgU+--
+--Dxnq1zWXvFF0Q93v--
