@@ -1,29 +1,29 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3183FD3
-	for <llvm@lists.linux.dev>; Thu,  2 Sep 2021 21:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9CE29CA
+	for <llvm@lists.linux.dev>; Thu,  2 Sep 2021 21:33:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1630618360;
+	s=mimecast20190719; t=1630618397;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=dER2J5qXTexTV3nvPMrzGzrz9DofGB26up7ka/TGnc0=;
-	b=XujtyyeowpxvXy0mYteSihAXx3pXiyeQMRSsGiQQ0OE1SjtZjSzr8gbK3cQNiI7xyd1fZC
-	snjFzdLHBFMdYfpkI/k6RqZdY876BEoJ6eEP11ODklHp16416Iq3y3UP6iVBKGMDehdLSY
-	lMFAQx7XpXNFwed5ysfMHXOXYZDtQfc=
+	bh=KBYsHAJIeHSD40SrASDd4gnsnugp4elnkrYjcB4O81k=;
+	b=LQeoSdhqQHsQcCOBLMmsAQBK+4PPIbWPJHUSkU7Z+lpAw4YlXt1uM3xqRLK1I65zJ93Qjv
+	rKGxJlftmL3MzYVsIFjOqMl4cexSYBMF1ZYmVsKthvxBsDdqkQvD3ik+W0h+/ER9YSF4mQ
+	ccJoTPk+/0v2YPuIScO88USJeq9nb/k=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-581-5a8ujXO5OVu0wf93HdY4Bg-1; Thu, 02 Sep 2021 17:32:38 -0400
-X-MC-Unique: 5a8ujXO5OVu0wf93HdY4Bg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-471-1wPeFnSrMMaGHMHMsXN-SA-1; Thu, 02 Sep 2021 17:33:16 -0400
+X-MC-Unique: 1wPeFnSrMMaGHMHMsXN-SA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 62903107ACC7
-	for <llvm@lists.linux.dev>; Thu,  2 Sep 2021 21:32:37 +0000 (UTC)
+	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06F38195D560
+	for <llvm@lists.linux.dev>; Thu,  2 Sep 2021 21:33:15 +0000 (UTC)
 Received: from [172.64.9.18] (unknown [10.30.33.187])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E100C5D6B1;
-	Thu,  2 Sep 2021 21:32:22 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 554E210074F1;
+	Thu,  2 Sep 2021 21:33:01 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,20 +33,20 @@ MIME-Version: 1.0
 From: CKI Project <cki-project@redhat.com>
 To: skt-results-master@redhat.com, llvm@lists.linux.dev
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.14.0
- (mainline.kernel.org-clang, 9b2eacd8)
-Date: Thu, 02 Sep 2021 21:32:21 -0000
+ (mainline.kernel.org-clang, 8e235ff9)
+Date: Thu, 02 Sep 2021 21:33:01 -0000
 CC: Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
  Jan Stancek <jstancek@redhat.com>, Bruno Goncalves <bgoncalv@redhat.com>,
  Milos Malik <mmalik@redhat.com>, Ondrej Mosnacek <omosnace@redhat.com>,
  Xiaowu Wu <xiawu@redhat.com>, Baoquan He <bhe@redhat.com>,
  Jiri Dluhos <jdluhos@redhat.com>
-Message-ID: <cki.1E7AF0780F.H69N0Y2NML@redhat.com>
-X-Gitlab-Pipeline-ID: 362821141
+Message-ID: <cki.84B1F9EE36.U8ESOVB9LD@redhat.com>
+X-Gitlab-Pipeline-ID: 362835913
 X-Gitlab-Url: https://gitlab.com
 X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/362821141?=
-X-DataWarehouse-Checkout-IID: 18829
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/362835913?=
+X-DataWarehouse-Checkout-IID: 18835
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -61,8 +61,8 @@ We ran automated tests on a recent commit from this kernel tree:
 
        Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
 s/linux.git
-            Commit: 9b2eacd8f046 - Merge tag 'Smack-for-5.15' of git://gith=
-ub.com/cschaufler/smack-next
+            Commit: 8e235ff9a1e3 - Merge tag 'devprop-5.15-rc1' of git://gi=
+t.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
 The results of these automated tests are provided below.
 
@@ -76,7 +76,7 @@ All kernel binaries, config files, and logs are available for download here=
 :
 
   https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2021/08/31/362821141
+fix=3Ddatawarehouse-public/2021/08/31/362835913
 
 One or more kernel tests failed:
 
@@ -94,6 +94,7 @@ One or more kernel tests failed:
 
     x86_64:
      =E2=9D=8C LTP - syscalls
+     =E2=9D=8C LTP - commands
 
 We hope that these logs can help you find the problem quickly. For the full
 detail on our testing procedures, please scroll to the bottom of this messa=
@@ -233,6 +234,11 @@ We booted each kernel and ran the following tests:
 
   ppc64le:
     Host 1:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage: lvm device-mapper test - upstream
+
+    Host 2:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
@@ -291,11 +297,6 @@ est
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
 
-    Host 2:
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage: lvm device-mapper test - upstream
-
     Host 3:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
@@ -303,10 +304,10 @@ est
        with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
        This is not the fault of the kernel that was tested.
 
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
@@ -423,16 +424,8 @@ est
 
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
-est - as root
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
-est - as user
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-tests=
-uite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvme - tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
 
     Host 2:
 
@@ -500,18 +493,6 @@ t
 
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
@@ -522,6 +503,18 @@ est - as user
 uite
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvme - tcp
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
 
     Host 5:
 
@@ -595,7 +588,7 @@ t
        =E2=9C=85 LTP - sched
        =E2=9D=8C LTP - syscalls
        =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
+       =E2=9D=8C LTP - commands
        =E2=9C=85 LTP - containers
        =E2=9C=85 LTP - dio
        =E2=9C=85 LTP - fs
@@ -679,7 +672,7 @@ t
        =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
        =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
        =F0=9F=9A=A7 =E2=9D=8C selinux-policy: serge-testsuite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvme - tcp
+       =F0=9F=9A=A7 =E2=9C=85 Storage nvme - tcp
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvdimm ndctl test s=
 uite
        =F0=9F=9A=A7 =E2=9C=85 Storage: lvm device-mapper test - upstream
