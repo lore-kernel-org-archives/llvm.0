@@ -1,656 +1,667 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486BC72
-	for <llvm@lists.linux.dev>; Fri,  3 Sep 2021 00:36:00 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10095"; a="206505417"
-X-IronPort-AV: E=Sophos;i="5.85,263,1624345200"; 
-   d="gz'50?scan'50,208,50";a="206505417"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 17:35:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,263,1624345200"; 
-   d="gz'50?scan'50,208,50";a="543076548"
-Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Sep 2021 17:35:54 -0700
-Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mLxBR-0009Qr-SJ; Fri, 03 Sep 2021 00:35:53 +0000
-Date: Fri, 3 Sep 2021 08:35:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Kees Cook <keescook@chromium.org>
-Subject: [linux-next:master 8048/11508]
- arch/mips/alchemy/devboards/db1550.c:69:2: warning: unannotated fall-through
- between switch labels
-Message-ID: <202109030839.t2llsvmc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B2F3FC1
+	for <llvm@lists.linux.dev>; Fri,  3 Sep 2021 04:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1630642385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OWoOLlEzZ71v2p4Ef7K7lkzCVGPJmU48oSCTiQYmAEQ=;
+	b=L2o1ufWjp9wHZptYFSU5YUI/wtKnTzxaI6fjeWhoq5NuppzC36+d+Cbfqgltd094NyE6XI
+	fo7YHWmT74R/bOPd9bB9EFddldqaaElOmgV3Oimx8CGnqctUV1X3yYM8hyEcTUJXUXtztF
+	RJZIiDxsqKI/j9cd6DDipFOgFAc4fz0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-401-JJ48ZwJ8OoCLlaR0vMTmDg-1; Fri, 03 Sep 2021 00:13:01 -0400
+X-MC-Unique: JJ48ZwJ8OoCLlaR0vMTmDg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51A415122
+	for <llvm@lists.linux.dev>; Fri,  3 Sep 2021 04:13:00 +0000 (UTC)
+Received: from [172.64.9.18] (unknown [10.30.33.187])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1FB286A91D;
+	Fri,  3 Sep 2021 04:12:48 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="n8g4imXOkfNTN/H1"
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From: CKI Project <cki-project@redhat.com>
+To: skt-results-master@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.14.0
+ (mainline.kernel.org-clang, 7c636d4d)
+Date: Fri, 03 Sep 2021 04:12:46 -0000
+CC: Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
+ Jan Stancek <jstancek@redhat.com>, Bruno Goncalves <bgoncalv@redhat.com>,
+ Fei Liu <feliu@redhat.com>, Xiaowu Wu <xiawu@redhat.com>,
+ Baoquan He <bhe@redhat.com>, Jiri Dluhos <jdluhos@redhat.com>,
+ Milos Malik <mmalik@redhat.com>, Ondrej Mosnacek <omosnace@redhat.com>,
+ Filip Suba <fsuba@redhat.com>
+Message-ID: <cki.36C5B4EF55.1ZT5B2U089@redhat.com>
+X-Gitlab-Pipeline-ID: 363650000
+X-Gitlab-Url: https://gitlab.com
+X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/363650000?=
+X-DataWarehouse-Checkout-IID: None
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
 
---n8g4imXOkfNTN/H1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hello,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   34560ced20599a01660a693f464c7c7dc83db1d9
-commit: 7bc04ce6b914a06d5823509d1de237787c58e649 [8048/11508] Makefile: Enable -Wimplicit-fallthrough for Clang
-config: mips-randconfig-r016-20210903 (attached as .config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c9948e9254fbb6ea00f66c7b4542311d21e060be)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=7bc04ce6b914a06d5823509d1de237787c58e649
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 7bc04ce6b914a06d5823509d1de237787c58e649
-        # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips 
+We ran automated tests on a recent commit from this kernel tree:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git
+            Commit: 7c636d4d20f8 - Merge tag 'dt-5.15' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/soc/soc
 
-All warnings (new ones prefixed by >>):
+The results of these automated tests are provided below.
 
-   arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous prototype for function 'db1550_board_setup' [-Wmissing-prototypes]
-   int __init db1550_board_setup(void)
-              ^
-   arch/mips/alchemy/devboards/db1550.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init db1550_board_setup(void)
-   ^
-   static 
->> arch/mips/alchemy/devboards/db1550.c:69:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           case BCSR_WHOAMI_DB1550:
-           ^
-   arch/mips/alchemy/devboards/db1550.c:69:2: note: insert 'break;' to avoid fall-through
-           case BCSR_WHOAMI_DB1550:
-           ^
-           break; 
-   arch/mips/alchemy/devboards/db1550.c:500:12: warning: no previous prototype for function 'db1550_pci_setup' [-Wmissing-prototypes]
-   int __init db1550_pci_setup(int id)
-              ^
-   arch/mips/alchemy/devboards/db1550.c:500:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init db1550_pci_setup(int id)
-   ^
-   static 
-   arch/mips/alchemy/devboards/db1550.c:581:12: warning: no previous prototype for function 'db1550_dev_setup' [-Wmissing-prototypes]
-   int __init db1550_dev_setup(void)
-              ^
-   arch/mips/alchemy/devboards/db1550.c:581:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init db1550_dev_setup(void)
-   ^
-   static 
-   4 warnings generated.
---
->> drivers/pcmcia/db1xxx_ss.c:359:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           case 3:
-           ^
-   drivers/pcmcia/db1xxx_ss.c:359:2: note: insert 'break;' to avoid fall-through
-           case 3:
-           ^
-           break; 
-   1 warning generated.
+    Overall result: FAILED (see details below)
+             Merge: OK
+           Compile: OK
+ Selftests compile: FAILED
+             Tests: FAILED
+    Targeted tests: NO
+
+All kernel binaries, config files, and logs are available for download here=
+:
+
+  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
+fix=3Ddatawarehouse-public/2021/09/01/363650000
+
+One or more kernel tests failed:
+
+    ppc64le:
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C LTP - hugetlb
+
+    aarch64:
+     =E2=9D=8C Boot test
+     =E2=9D=8C Reboot test
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C Networking bridge: sanity
+     =E2=9D=8C kdump - kexec_boot
+     =E2=9D=8C Boot test
+     =E2=9D=8C Reboot test
+
+    x86_64:
+     =E2=9D=8C LTP - syscalls
+     =F0=9F=92=A5 lvm snapper test
+
+We hope that these logs can help you find the problem quickly. For the full
+detail on our testing procedures, please scroll to the bottom of this messa=
+ge.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
+Compile testing
+---------------
+
+We compiled the kernel for 4 architectures:
+
+    aarch64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    ppc64le:
+      make options: make CC=3Dclang -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    s390x:
+      make options: make CC=3Dclang -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
 
 
-vim +69 arch/mips/alchemy/devboards/db1550.c
+We built the following selftests:
 
-f869d42e580f62 Manuel Lauss 2011-11-10  55  
-bd8510df881f63 Manuel Lauss 2012-09-13  56  int __init db1550_board_setup(void)
-f869d42e580f62 Manuel Lauss 2011-11-10  57  {
-f869d42e580f62 Manuel Lauss 2011-11-10  58  	unsigned short whoami;
-f869d42e580f62 Manuel Lauss 2011-11-10  59  
-f869d42e580f62 Manuel Lauss 2011-11-10  60  	bcsr_init(DB1550_BCSR_PHYS_ADDR,
-f869d42e580f62 Manuel Lauss 2011-11-10  61  		  DB1550_BCSR_PHYS_ADDR + DB1550_BCSR_HEXLED_OFS);
-f869d42e580f62 Manuel Lauss 2011-11-10  62  
-24e8c1a611a706 Manuel Lauss 2012-09-14  63  	whoami = bcsr_read(BCSR_WHOAMI); /* PB1550 hexled offset differs */
-970e268d6ed1f1 Manuel Lauss 2014-02-20  64  	switch (BCSR_WHOAMI_BOARD(whoami)) {
-970e268d6ed1f1 Manuel Lauss 2014-02-20  65  	case BCSR_WHOAMI_PB1550_SDR:
-970e268d6ed1f1 Manuel Lauss 2014-02-20  66  	case BCSR_WHOAMI_PB1550_DDR:
-24e8c1a611a706 Manuel Lauss 2012-09-14  67  		bcsr_init(PB1550_BCSR_PHYS_ADDR,
-24e8c1a611a706 Manuel Lauss 2012-09-14  68  			  PB1550_BCSR_PHYS_ADDR + PB1550_BCSR_HEXLED_OFS);
-970e268d6ed1f1 Manuel Lauss 2014-02-20 @69  	case BCSR_WHOAMI_DB1550:
-970e268d6ed1f1 Manuel Lauss 2014-02-20  70  		break;
-970e268d6ed1f1 Manuel Lauss 2014-02-20  71  	default:
-970e268d6ed1f1 Manuel Lauss 2014-02-20  72  		return -ENODEV;
-970e268d6ed1f1 Manuel Lauss 2014-02-20  73  	}
-24e8c1a611a706 Manuel Lauss 2012-09-14  74  
-24e8c1a611a706 Manuel Lauss 2012-09-14  75  	pr_info("Alchemy/AMD %s Board, CPLD Rev %d Board-ID %d	"	\
-24e8c1a611a706 Manuel Lauss 2012-09-14  76  		"Daughtercard ID %d\n", get_system_type(),
-f869d42e580f62 Manuel Lauss 2011-11-10  77  		(whoami >> 4) & 0xf, (whoami >> 8) & 0xf, whoami & 0xf);
-f869d42e580f62 Manuel Lauss 2011-11-10  78  
-f869d42e580f62 Manuel Lauss 2011-11-10  79  	db1550_hw_setup();
-bd8510df881f63 Manuel Lauss 2012-09-13  80  	return 0;
-f869d42e580f62 Manuel Lauss 2011-11-10  81  }
-f869d42e580f62 Manuel Lauss 2011-11-10  82  
+  x86_64:
+      net: OK
+      bpf: fail
+      install and packaging: OK
 
-:::::: The code at line 69 was first introduced by commit
-:::::: 970e268d6ed1f1799829cc0c87ea271a9e127e79 MIPS: Alchemy: Unify Devboard support.
+You can find the full log (build-selftests.log) in the artifact storage abo=
+ve.
 
-:::::: TO: Manuel Lauss <manuel.lauss@gmail.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hardware testing
+----------------
+We booted each kernel and ran the following tests:
 
---n8g4imXOkfNTN/H1
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
+  aarch64:
+    Host 1:
 
-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
-AQA=
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
 
---n8g4imXOkfNTN/H1--
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
+est - as root
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
+est - as user
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-tests=
+uite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvme - tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9D=8C Boot test
+       =E2=9D=8C Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 ACPI enabled test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9D=8C Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9D=8C kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9C=85 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Networking: igmp conformance test
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 lvm snapper test
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
+est - as root
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
+est - as user
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-tests=
+uite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvme - tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng
+
+    Host 4:
+       =E2=9D=8C Boot test
+       =E2=9D=8C Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9C=85 Storage blktests
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =F0=9F=9A=A7 =E2=9C=85 Podman system integration test - as root
+       =F0=9F=9A=A7 =E2=9C=85 Podman system integration test - as user
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9D=8C selinux-policy: serge-testsuite
+       =F0=9F=9A=A7 =E2=9C=85 Storage nvme - tcp
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng
+
+  ppc64le:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9D=8C LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9C=85 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 lvm snapper test
+
+    Host 3:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage: lvm device-mapper test - upstream
+
+  s390x:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
+est - as root
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system integration t=
+est - as user
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-tests=
+uite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvme - tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+
+  x86_64:
+    Host 1:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 kdump - file-load
+       =F0=9F=9A=A7 =E2=9C=85 kdump - sysrq-c
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9C=85 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9D=8C xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Networking: igmp conformance test
+       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =F0=9F=92=A5 lvm snapper test
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9C=85 power-management: cpupower/sanity test
+       =E2=9C=85 Storage blktests
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =F0=9F=9A=A7 =E2=9C=85 Podman system integration test - as root
+       =F0=9F=9A=A7 =E2=9C=85 Podman system integration test - as user
+       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9D=8C selinux-policy: serge-testsuite
+       =F0=9F=9A=A7 =E2=9C=85 Storage nvme - tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvdimm ndctl test s=
+uite
+       =F0=9F=9A=A7 =E2=9C=85 Storage: lvm device-mapper test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng
+
+  Test sources: https://gitlab.com/cki-project/kernel-tests
+    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
+ existing tests!
+
+Aborted tests
+-------------
+Tests that didn't complete running successfully are marked with =E2=9A=A1=
+=E2=9A=A1=E2=9A=A1.
+If this was caused by an infrastructure issue, we try to mark that
+explicitly in the report.
+
+Waived tests
+------------
+If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
+uch tests are
+executed but their results are not taken into account. Tests are waived whe=
+n
+their results are not reliable enough, e.g. when they're just introduced or=
+ are
+being fixed.
+
+Testing timeout
+---------------
+We aim to provide a report within reasonable timeframe. Tests that haven't
+finished running yet are marked with =E2=8F=B1.
+Targeted tests
+--------------
+Test runs for patches always include a set of base tests, plus some
+tests chosen based on the file paths modified by the patch. The latter
+are called "targeted tests". If no targeted tests are run, that means
+no patch-specific tests are available. Please, consider contributing a
+targeted test for related patches to increase test coverage. See
+https://docs.engineering.redhat.com/x/_wEZB for more details.
+
