@@ -1,105 +1,157 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB17A3FC9
-	for <llvm@lists.linux.dev>; Fri,  3 Sep 2021 23:04:52 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A00A6101A;
-	Fri,  3 Sep 2021 23:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7B33FC9
+	for <llvm@lists.linux.dev>; Fri,  3 Sep 2021 23:24:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17D4460FDC;
+	Fri,  3 Sep 2021 23:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1630710292;
-	bh=kwXSNoztsapfek/7tY4BJ7A92I7Ax8v7jMAhfQGx4P8=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=VBpNgYVxlYcqc92N5qpBQjPqicLgFFNDzKeL8/V8pFfLJKu8s83FKiWXT6LclHlco
-	 VCSESOcdDqVwXfx4n3b2T6HAcn9VvuCMtSJLcwKcdot8Q4H+3oiAzOq33XWNvwkWDe
-	 qMtKxj5PeCAifOrrzcELYmxY00v9D4vIMtPrImjxOD0IdmwZsx3MxUZdX24Pk3GFhU
-	 gy11fK9vf2a3Stq5mbbYaXsLb1ZYbxUGKCMl2/7inye+n729JPtX2ebNR5TJYS2P9V
-	 EJOdZD/0f850MQstl+wcK4qM0shthcyIXyhV6sEV6G9TuxhMi+YFWItjp1Gj/AFRDb
-	 JgUnCwIlj0y9A==
-Subject: Re: [GIT PULL v2] Kbuild updates for v5.15-rc1
-To: Linus Torvalds <torvalds@linuxfoundation.org>,
- Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <clang-built-linux@googlegroups.com>,
- llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-References: <CAK7LNAQ0Q6CdXaD-dVGj_e3O3JYs_crpejWKpXHYQJYxyk-1VQ@mail.gmail.com>
- <CAHk-=wgoX0pVqNMMOcrhq=nuOfoZB_3qihyHB3y1S8qo=MDs6w@mail.gmail.com>
+	s=k20201202; t=1630711442;
+	bh=ACCxEolEsBare+4plIWhMemWYTJcclcvIZOrthMVAZM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ie3jZOjuQEegdSKsBXeNP5mzCP/oy8RYbKJ5vBRRmJm+QfeUjlJSH3cddq8ab3rHo
+	 kSmBI4RG6QnRyRXHSlMZM8LKOEsqwguAJVlVmDWW6bmJf+l9xQDcXhLbD/BHMJ83XJ
+	 /8O76OQD9aTe5HEnuryBrnaihzGJK2YqtC8sLa/JWme4EnelJw2BLEotA6u8DazbtZ
+	 VVC2JVoJWToAipnbGm4fhzvj9o31hI3EFZ02HUgVx18FaphDOUE1/HuhXgLdUAd1ID
+	 4NGr2R3r6khQI7pCGjl8l3pip8BVD85J0Iz+8GyIPKZpnZ4FVO5ncUcy8z9/bKtRQW
+	 muZk9jPiHkFXw==
+Date: Fri, 3 Sep 2021 16:23:59 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Message-ID: <3b461878-a4a0-2f84-e177-9daf8fe285e7@kernel.org>
-Date: Fri, 3 Sep 2021 16:04:50 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Marco Elver <elver@google.com>, Heiko Carstens <hca@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@de.ibm.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, qemu-s390x <qemu-s390x@nongnu.org>
+Subject: Re: [PATCH] s390/unwind: use current_frame_address() to unwind
+ current task
+Message-ID: <YTKuj0Bu0CJRKqU7@Ryzen-9-3900X.localdomain>
+References: <your-ad-here.call-01630505035-ext-2999@work.hours>
+ <patch.git-04dd26be3043.your-ad-here.call-01630504868-ext-6188@work.hours>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wgoX0pVqNMMOcrhq=nuOfoZB_3qihyHB3y1S8qo=MDs6w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <patch.git-04dd26be3043.your-ad-here.call-01630504868-ext-6188@work.hours>
 
-On 9/3/2021 3:53 PM, Linus Torvalds wrote:> On Thu, Sep 2, 2021 at 4:31 
-PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->>
->> I fixed the warnings observed in the previous PR.
+On Wed, Sep 01, 2021 at 04:05:59PM +0200, Vasily Gorbik wrote:
+> current_stack_pointer() simply returns current value of %r15. If
+> current_stack_pointer() caller allocates stack (which is the case in
+> unwind code) %r15 points to a stack frame allocated for callees, meaning
+> current_stack_pointer() caller (e.g. stack_trace_save) will end up in
+> the stacktrace. This is not expected by stack_trace_save*() callers and
+> causes problems.
 > 
-> Ok, let's try it again.
+> current_frame_address() on the other hand returns function stack frame
+> address, which matches %r15 upon function invocation. Using it in
+> get_stack_pointer() makes it more aligned with x86 implementation
+> (according to BACKTRACE_SELF_TEST output) and meets stack_trace_save*()
+> caller's expectations, notably KCSAN.
 > 
->>   - Add <linux/stdarg.h> to the kernel source instead of borrowing
->>     <stdarg.h> from the compiler.
+> Also make sure unwind_start is always inlined.
 > 
-> So I certainly agree with the reasoning, but this worries me a bit.
-> 
-> stdarg is truly intimately an internal compiler file, in ways that
-> stddef (to pick another example) isn't.
-> 
-> Yeah, yeah, offsetof() is "kind of compiler internal", and we end up
-> using __compiler_offsetof(), but in the absence of that we *can* just
-> do it by hand. So offsetof() really is one of those things where we
-> can just do our own version if some compiler is being difficult.
-> 
-> But va_start and friends absolutely *must* match the exact compiler version.
-> 
-> It does look like both gcc and clang have just standardized on using
-> __builtin_xyz for all the different stdarg things, and so I approve of
-> what that <linux/stdarg.h> ended up looking like.
-> 
-> But at the same time, it does make me go "ok, this is a big new
-> assumption that we've consciously avoided for a long time".
-> 
-> Nick is already on the cc here for other reasons, but let's add the
-> clang-built list and Nathan explicitly. Because this basically
-> codifies that
-> 
->      typedef __builtin_va_list va_list;
->      #define va_start(v, l)  __builtin_va_start(v, l)
->      #define va_end(v)       __builtin_va_end(v)
->      #define va_arg(v, T)    __builtin_va_arg(v, T)
->      #define va_copy(d, s)   __builtin_va_copy(d, s)
-> 
-> being the way all the supported compilers work.
-> 
-> Did people talk to any gcc maintainers too? We don't have the same
-> kind of "gcc kernel people" list or contacts. The above builtins have
-> been the case for a long long time for gcc, so I don't think it's
-> wrong or likely to change, but I think it would be a good thing to
-> just make compiler people aware of how we're now relying on that
-> explicitly.
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 
-We set up the linux-toolchains mailing list after Plumbers 2020 to have 
-a common place that kernel developers can bring issues and discussion to 
-both clang and GCC folks. I am not sure who exactly from the GCC world 
-is subscribed but I have added it now to see.
+Sorry for the late response and I see that this has already been applied
+but I took this for a spin and all of the tests pass with clang-14 in
+QEMU. Thank you for the quick fix so that we can get this turned on in
+CI :)
 
-> (Side note: Linux using the compiler <stdarg.h> goes so far back that
-> it very much predates all those nice builtins. I still have memories
-> of <stdarg.h> being a collection of nasty per-architecture messes back
-> in the bad old days. So I'm actually happy we can do this now, but
-> there most definitely was a time when we really really had to use the
-> compiler-provided stdarg.h).
+[   10.362073]     ok 1 - test_basic
+[   13.870386]     ok 2 - test_concurrent_races
+[   17.379643]     ok 3 - test_novalue_change
+[   17.393315]     ok 4 - test_novalue_change_exception
+[   17.409815]     ok 5 - test_unknown_origin
+[   20.914289]     ok 6 - test_write_write_assume_atomic
+[   20.982545]     ok 7 - test_write_write_struct
+[   21.106135]     ok 8 - test_write_write_struct_part
+[   24.622205]     ok 9 - test_read_atomic_write_atomic
+[   24.662048]     ok 10 - test_read_plain_atomic_write
+[   24.775291]     ok 11 - test_read_plain_atomic_rmw
+[   28.294457]     ok 12 - test_zero_size_access
+[   31.829529]     ok 13 - test_data_race
+[   31.867174]     ok 14 - test_assert_exclusive_writer
+[   31.929184]     ok 15 - test_assert_exclusive_access
+[   35.446281]     ok 16 - test_assert_exclusive_access_writer
+[   35.540228]     ok 17 - test_assert_exclusive_bits_change
+[   39.052271]     ok 18 - test_assert_exclusive_bits_nochange
+[   39.097020]     ok 19 - test_assert_exclusive_writer_scoped
+[   39.152914]     ok 20 - test_assert_exclusive_access_scoped
+[   42.675158]     ok 21 - test_jiffies_noreport
+[   46.192453]     ok 22 - test_seqlock_noreport
+[   49.712712]     ok 23 - test_atomic_builtins
+[   49.746428]     ok 24 - test_1bit_value_change
+[   49.753316] ok 1 - kcsan
 
-Cheers,
-Nathan
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  arch/s390/include/asm/stacktrace.h | 20 ++++++++++----------
+>  arch/s390/include/asm/unwind.h     |  8 ++++----
+>  2 files changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/stacktrace.h b/arch/s390/include/asm/stacktrace.h
+> index 3d8a4b94c620..22c41d7fd95c 100644
+> --- a/arch/s390/include/asm/stacktrace.h
+> +++ b/arch/s390/include/asm/stacktrace.h
+> @@ -34,16 +34,6 @@ static inline bool on_stack(struct stack_info *info,
+>  	return addr >= info->begin && addr + len <= info->end;
+>  }
+>  
+> -static __always_inline unsigned long get_stack_pointer(struct task_struct *task,
+> -						       struct pt_regs *regs)
+> -{
+> -	if (regs)
+> -		return (unsigned long) kernel_stack_pointer(regs);
+> -	if (task == current)
+> -		return current_stack_pointer();
+> -	return (unsigned long) task->thread.ksp;
+> -}
+> -
+>  /*
+>   * Stack layout of a C stack frame.
+>   */
+> @@ -74,6 +64,16 @@ struct stack_frame {
+>  	((unsigned long)__builtin_frame_address(0) -			\
+>  	 offsetof(struct stack_frame, back_chain))
+>  
+> +static __always_inline unsigned long get_stack_pointer(struct task_struct *task,
+> +						       struct pt_regs *regs)
+> +{
+> +	if (regs)
+> +		return (unsigned long) kernel_stack_pointer(regs);
+> +	if (task == current)
+> +		return current_frame_address();
+> +	return (unsigned long) task->thread.ksp;
+> +}
+> +
+>  /*
+>   * To keep this simple mark register 2-6 as being changed (volatile)
+>   * by the called function, even though register 6 is saved/nonvolatile.
+> diff --git a/arch/s390/include/asm/unwind.h b/arch/s390/include/asm/unwind.h
+> index de9006b0cfeb..5ebf534ef753 100644
+> --- a/arch/s390/include/asm/unwind.h
+> +++ b/arch/s390/include/asm/unwind.h
+> @@ -55,10 +55,10 @@ static inline bool unwind_error(struct unwind_state *state)
+>  	return state->error;
+>  }
+>  
+> -static inline void unwind_start(struct unwind_state *state,
+> -				struct task_struct *task,
+> -				struct pt_regs *regs,
+> -				unsigned long first_frame)
+> +static __always_inline void unwind_start(struct unwind_state *state,
+> +					 struct task_struct *task,
+> +					 struct pt_regs *regs,
+> +					 unsigned long first_frame)
+>  {
+>  	task = task ?: current;
+>  	first_frame = first_frame ?: get_stack_pointer(task, regs);
+> -- 
+> 2.25.4
