@@ -1,86 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0013FC7
-	for <llvm@lists.linux.dev>; Sat,  4 Sep 2021 15:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1630768771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zvDeup5okN2+a9recacvzIyRt8oQsyaj87C3UrFckM0=;
-	b=aCX9K6luu9eqsiplCHNWOLXh0hXNL2smLL+Zc+K1RFFUz8lITMbAY7u/4rIAoMKm+1coVc
-	ya52CAirO5/I49DQE4nINeiARMLhYQcA0LTcyI/mhzxRVsOuO38Jd3FZpxteT7KGizrln3
-	mLMOndYj4ZOvyR7HuzJpnUZuzWeKESQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-523-B4_Nd3ZlP523hyVUeBxjYg-1; Sat, 04 Sep 2021 11:19:27 -0400
-X-MC-Unique: B4_Nd3ZlP523hyVUeBxjYg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E763E8145E5;
-	Sat,  4 Sep 2021 15:19:25 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.194.140])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 28C55189C4;
-	Sat,  4 Sep 2021 15:19:22 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,  Linus Torvalds
- <torvalds@linuxfoundation.org>,  Masahiro Yamada <masahiroy@kernel.org>,
-  Nick Desaulniers <ndesaulniers@google.com>,  Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>,  Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>,  clang-built-linux
- <clang-built-linux@googlegroups.com>,  llvm@lists.linux.dev,
-  linux-toolchains@vger.kernel.org
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC6D3FC7
+	for <llvm@lists.linux.dev>; Sat,  4 Sep 2021 16:23:05 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 184GJurq016488;
+	Sat, 4 Sep 2021 11:19:56 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 184GJtXD016483;
+	Sat, 4 Sep 2021 11:19:55 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Sat, 4 Sep 2021 11:19:55 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
 Subject: Re: [GIT PULL v2] Kbuild updates for v5.15-rc1
-References: <CAK7LNAQ0Q6CdXaD-dVGj_e3O3JYs_crpejWKpXHYQJYxyk-1VQ@mail.gmail.com>
-	<CAHk-=wgoX0pVqNMMOcrhq=nuOfoZB_3qihyHB3y1S8qo=MDs6w@mail.gmail.com>
-	<3b461878-a4a0-2f84-e177-9daf8fe285e7@kernel.org>
-	<878s0c4vng.fsf@oldenburg.str.redhat.com>
-	<20210904131911.GP1583@gate.crashing.org>
-Date: Sat, 04 Sep 2021 17:19:21 +0200
-In-Reply-To: <20210904131911.GP1583@gate.crashing.org> (Segher Boessenkool's
-	message of "Sat, 4 Sep 2021 08:19:11 -0500")
-Message-ID: <871r644bd2.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+Message-ID: <20210904161955.GR1583@gate.crashing.org>
+References: <CAK7LNAQ0Q6CdXaD-dVGj_e3O3JYs_crpejWKpXHYQJYxyk-1VQ@mail.gmail.com> <CAHk-=wgoX0pVqNMMOcrhq=nuOfoZB_3qihyHB3y1S8qo=MDs6w@mail.gmail.com> <3b461878-a4a0-2f84-e177-9daf8fe285e7@kernel.org> <878s0c4vng.fsf@oldenburg.str.redhat.com> <20210904131911.GP1583@gate.crashing.org> <871r644bd2.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871r644bd2.fsf@oldenburg.str.redhat.com>
+User-Agent: Mutt/1.4.2.3i
 
-* Segher Boessenkool:
+On Sat, Sep 04, 2021 at 05:19:21PM +0200, Florian Weimer wrote:
+> * Segher Boessenkool:
+> 
+> > Let me quote the original mail (I had to dig it out of the archives as
+> > well, no nice threading, too lazy, sorry):
+> 
+> It still doesn't say why.  I did see a reference to fleeting reference
+> to <stdatomic.h> and <float.h>.
 
-> Let me quote the original mail (I had to dig it out of the archives as
-> well, no nice threading, too lazy, sorry):
+Yeah...  I dug out the actual patch from linux-kbuild:
 
-It still doesn't say why.  I did see a reference to fleeting reference
-to <stdatomic.h> and <float.h>.
+https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?h=kbuild-v5.15&id=c0891ac15f0428ffa81b2e818d416bdf3cb74ab6
 
-My conjecture is that the real reason is avoid atomic emulation
-(softatomic?)  and softfloat code.  It's not related to <stdarg.h> at
-all: this header is replaced so that GCC's include subdirectory can be
-dropped from the include search path.  What I don't know if this is to
-avoid obscure linker failures related to libatomic/softfloat (obviously
-not great) or run-time failures (worse).
+The reasoning in there is completely wrong.  <stdarg.h> is not a
+"userspace header".  Instead, it is a standard header, required for some
+functionality in C.
 
-In any case, it would be nice to know what the real motivation is.
+It also says
+"GPL 2 version of <stdarg.h> can be extracted from
+http://archive.debian.org/debian/pool/main/g/gcc-4.2/gcc-4.2_4.2.4.orig.tar.gz"
+which seems to suggest you cannot use stuff from GPLv3-licensed GCC.
+This is just wrong.  The header in question says
 
-After all, <stdatomic.h> is exactly like <stdarg.h> in that it's
-possible to use its functionality even without the header file.  The
-__atomic builtins are even documented in the GCC manual (unlike
-<stdatomic.h>), which is why some programmers prefer them over the
-standard interface.  And then there's the _Atomic keyword itself, whose
-use can easily result in calls to libatomic functions, too.  So blocking
-<stdatomic.h> makes little sense to me.
+"""
+Under Section 7 of GPL version 3, you are granted additional
+permissions described in the GCC Runtime Library Exception, version
+3.1, as published by the Free Software Foundation.
+"""
 
-I don't know enough about softfloat if blocking the inclusion of
-<float.h> is worth it.
+And <https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=COPYING.RUNTIME>
+reads in part
 
-Thanks,
-Florian
+"""
+ 1. Grant of Additional Permission.
 
+  You have permission to propagate a work of Target Code formed by
+  combining the Runtime Library with Independent Modules, even if such
+  propagation would otherwise violate the terms of GPLv3, provided that
+  all Target Code was generated by Eligible Compilation Processes. You
+  may then convey such a combination under terms of your choice,
+  consistent with the licensing of the Independent Modules.
+"""
+
+which says that if you compile with GCC, then it is perfectly fine if it
+uses the standard C headers, it does not make your work GPL-licenced.
+
+> After all, <stdatomic.h> is exactly like <stdarg.h> in that it's
+> possible to use its functionality even without the header file.  The
+> __atomic builtins are even documented in the GCC manual (unlike
+> <stdatomic.h>), which is why some programmers prefer them over the
+> standard interface.  And then there's the _Atomic keyword itself, whose
+> use can easily result in calls to libatomic functions, too.  So blocking
+> <stdatomic.h> makes little sense to me.
+> 
+> I don't know enough about softfloat if blocking the inclusion of
+> <float.h> is worth it.
+
+Blocking the use of <float.h> is pretty useless: it is possible to do
+millions of things in the kernel source that are frowned upon, or
+actively bad, or anything in between or more extreme.  That is what code
+review is for.  If it would be a common mistake (it is not afaik) you
+can warn for it from checkpatch.pl or something.
+
+The patch is just re-implementing part of the standard GCC <stdarg.h>,
+so that it will only work with recent GCC (and maybe clang as well if it
+implements the GCC internal interfaces correctly (i.e. compatibly) here,
+and the same for other compilers).  Almost all of the <stdarg.h> GCC
+itself uses is the same, but it also is compatible to the various C
+standards if this header is included indirectly.  That is all just some
+ifdeffery anyway, so doesn't influence compilation times noticeably, and
+all that.
+
+   - * -
+
+So as far as I can see the motivation behind the patch is a) a
+misunderstanding of what standard C headers are, are for, etc.; and b)
+a misunderstanding of the GPL and the GCC runtime exception to it.  The
+patch makes things worse than they were.  If on the contrary Linux would
+use *more* standard compiler headers, say <stddef.h>, then insidious
+bugs like that fixed by c46bbf5d2def would be prevented.
+
+
+Segher
