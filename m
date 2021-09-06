@@ -1,68 +1,83 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3495172
-	for <llvm@lists.linux.dev>; Mon,  6 Sep 2021 18:46:58 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 698D06103C;
-	Mon,  6 Sep 2021 18:46:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1630954017;
-	bh=zisaWbqqpGZ0wJmqZifUDVA1T5K6vpZ+x87rw+yc3jw=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=XrXAZ688983y7H+REwEZFvY9DDo4IC3ESBbIy+kC6FZml0Jk5QIBvsQacWYSsDHbS
-	 g0CaNBnwoVKfJsoO2/26iRzZMK66+yJVkb0CxHsFqIDnlN1fTAUUf8/MVC075ayNaQ
-	 2XKiG7oR/8yLmNBYsa/1j20Lstr/Vy18uVtxlTA7+qNpjNbqZT7gHkTuI9oJZvv/KY
-	 So9vFoCl0PHb3XduhFpqPKQlYeqcWrNm0QZvcTqhcI5uVjehXN17dix3CcP8yp6d5/
-	 MC4jYo+UdOd4IRpu0dnwNUPKAR5i6jlEY8sQKvNpEyZVD9R3xtBfVXGT4iJcLlbQml
-	 Y/S3j22y1bU+A==
-Subject: Re: [linux-next:master 10023/11721]
- include/linux/memory_hotplug.h:312:26: warning: unused parameter 'group'
-To: David Hildenbrand <david@redhat.com>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Linux Memory Management List <linux-mm@kvack.org>,
- Andrew Morton <akpm@linux-foundation.org>
-References: <202109061139.7rjMTWLn-lkp@intel.com>
- <8e405e43-c5f0-d58b-e38a-fe19f97c3333@redhat.com>
-From: Nathan Chancellor <nathan@kernel.org>
-Message-ID: <ece61908-f8eb-4c45-5d5f-bfc52f3b8f45@kernel.org>
-Date: Mon, 6 Sep 2021 11:46:56 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DA072
+	for <llvm@lists.linux.dev>; Mon,  6 Sep 2021 19:51:19 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 186JmAuS020071;
+	Mon, 6 Sep 2021 14:48:10 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 186Jm8MM020070;
+	Mon, 6 Sep 2021 14:48:08 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Mon, 6 Sep 2021 14:48:08 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Linus Torvalds <torvalds@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Subject: Re: [GIT PULL v2] Kbuild updates for v5.15-rc1
+Message-ID: <20210906194808.GY1583@gate.crashing.org>
+References: <20210904131911.GP1583@gate.crashing.org> <871r644bd2.fsf@oldenburg.str.redhat.com> <CAHk-=wi+XKYN+3u=_fm=ExqpEaHdER0XuKxVauHYVCPKpKR97Q@mail.gmail.com> <20210904191531.GS1583@gate.crashing.org> <CAHk-=wjc1rxah3xt8mKN=aCxQigjy3-hEf4xh_Y-r=MXAKVrag@mail.gmail.com> <20210906154642.GV1583@gate.crashing.org> <CAHk-=wj=WpWO_V86cZH99LgZGBbvdDb4wR26ce5van0hJqjzLA@mail.gmail.com> <20210906172701.GX1583@gate.crashing.org> <CAHk-=wh0MBVfA89WLWnCiSnJ2a=hSAoSxfG-jyf7JJeBDPK3ew@mail.gmail.com> <87lf49wodu.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <8e405e43-c5f0-d58b-e38a-fe19f97c3333@redhat.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lf49wodu.fsf@oldenburg.str.redhat.com>
+User-Agent: Mutt/1.4.2.3i
 
-On 9/6/2021 3:35 AM, David Hildenbrand wrote:
->>     include/linux/memory_hotplug.h:311:47: warning: unused parameter 
->> 'start_pfn' [-Wunused-parameter]
->>     static inline int offline_pages(unsigned long start_pfn, unsigned 
->> long nr_pages,
->>                                                   ^
->>     include/linux/memory_hotplug.h:311:72: warning: unused parameter 
->> 'nr_pages' [-Wunused-parameter]
->>     static inline int offline_pages(unsigned long start_pfn, unsigned 
->> long nr_pages,
->>                                                                            
->> ^
->>>> include/linux/memory_hotplug.h:312:26: warning: unused parameter 
->>>> 'group' [-Wunused-parameter]
->>                                     struct memory_group *group)
+On Mon, Sep 06, 2021 at 08:27:25PM +0200, Florian Weimer wrote:
+> * Linus Torvalds:
 > 
-> What a bunch of useless warnings ...
+> > We use the compiler intrinsics without the C library header files for
+> > everything else, so doing so for <stdarg.h> seems to actually be a
+> > clarification and improvement.
 > 
-> Nothing to fix here.
+> This is an exaggeration.  On several architectures, the kernel cannot
+> use the vector built-ins directly.  Some of the implementing headers are
+> very special and intertwined with the compiler.  <stdarg.h> is currently
+> not such a case, but it's just not technically not feasible to avoid
+> dependencies on all compiler headers.  I think this considerably weakens
+> the case against <stdarg.h> because the compiler version is so obviously
+> harmless.
 
-Sorry for the noise, it is a known issue with this randconfig :/
+Exactly Florian.  Thank you for so clearly making the point.
 
-https://lore.kernel.org/r/YSQE2f5teuvKLkON@Ryzen-9-3900X.localdomain/
-https://lore.kernel.org/r/20210824022640.2170859-1-nathan@kernel.org/
+> What the kernel is doing here is imposing an unnecesary constraint on
+> compiler development.  Basically, you are telling compiler writers that
+> implementing features with the help of header files is a bad idea
+> because it makes it more difficult to use them from the kernel.  (See
+> the proposed exceptions for vector code.)
 
-Cheers,
-Nathan
+Either it will constrain the compiler development, or perhaps more
+likely, building the kernel will break in ways that the kernel people
+will blame the compiler developers for.
+
+The compiler headers (standard or arch-specific, same reason here) are
+there because it decouples the user (that doesn't mean "userland", it
+means the kernel here) from the builtins.  Decoupling has many
+advantages.  The most obvious in general is you can use nicer names in
+a header file, names that can step on the user's toes (like "bool" vs.
+"_Bool", which is essentially all that <stdbool.h> does).  But another
+huge advantage of decoupling is it allows the compiler more freedom in
+bugfixing (or any other maintenance / new development).
+
+It is low probability that there are bugs in the compiler's standard
+headers, and it's not likely the kernel's ad-hoc imitation of it has
+bugs, this is all so small after all (but have I mentioned the
+c46bbf5d2def commit?)
+
+So there is no big pressure for changing anything here.  But OTOH it
+clearly is not a good idea to remove the existing uses of standard
+headers.  No upsides, various downsides, and some of those can be very
+costly.
+
+
+Segher
