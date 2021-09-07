@@ -1,109 +1,167 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBBD72
-	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 20:06:59 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BADE0610E9;
-	Tue,  7 Sep 2021 20:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631045218;
-	bh=pZvpWUpWcuO/wG2ergj6sy0KyKSMIXliQiAr8bwFSXY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ICc32nMj8K9B6kPwuYklgEEN60W7xkGeLOMHitcsEvlGAQmnS8Dr12J5Rq0bOQmUB
-	 +cJSkLcGBSUliEvKjeCxS0ZoQ6isClBNrXvvXQWcTLDiCKx9YhjziQ8K1ut0UjYRQY
-	 p4/IfkCrdKS+Lavdadr7yYE1Hbs9trEQx9KrXt5d7ySJ42JaUGYXv0qxOYtYvP17c0
-	 DmyOvYrBKtdyVVq3FPfBn8mmh6Mu31W697cbq5PbHgStyMrjKYmF5SIWm/wwhwhsTv
-	 IXiPohbN89VsocgWiP1/Na56MFfgDVRlhnquR190O4bgd7EnNs55/1W099jHPi3h3x
-	 cSEufNUbTS5Yg==
-Date: Tue, 7 Sep 2021 13:06:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kortan <kortanzh@gmail.com>
-Cc: ndesaulniers@google.com, clang-built-linux@googlegroups.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] fix missing 'sys' package
-Message-ID: <YTfGXn4cTZ87zTP1@archlinux-ax161>
-References: <20210907094336.16558-1-kortanzh@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5268972
+	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 20:30:55 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id k13so266818lfv.2
+        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 13:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BHU/b6iOWML31rDQD4Y7YAaTs9mMyU/Uk/P4sJ2b7NA=;
+        b=hVpdIZlAApogbIH1JgUwHFhlKoiKgiQ2kK6X+akQnUfn8TUcb2vVBov14g68Y1PY31
+         BZyxcWoyIZ+b42y6O0Kpb6WAwvPBy4u332g1OTHulr9ASmM9k6VK8JXzqbaYxKAVTQ/q
+         bzh3HwUrbmdxYfMYNocX0hvnds2j35kLTGkp8gJ1c8ixfC3oGPJ5w3y3jRvPHlKvC9P/
+         L4uzM9YwaqpxJKzL61Idmre2I7HXFdD1wQu6ycvx2e8pEsKiwSWgRx9dtd2tOQj/6rMZ
+         RA98YjsfXP0yoYR1l77PV/AZsU0FDvNILFp/SrizCxbOyiFphCgAc8ANJHKhgVtw3NcJ
+         eiQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BHU/b6iOWML31rDQD4Y7YAaTs9mMyU/Uk/P4sJ2b7NA=;
+        b=Ch+NyqKbAphwKsWO3+G59Sci3R0gU1yTa1x3QfQweX3dS9/8Dt6c2nIaN1/RZT317Q
+         e7zaSHbeVThq3h5shHoOmSlfGuJofUw503vB8GQ4ZXQk1SAb3FJNTB6GQITfQcVMTTFO
+         IaeLIXGCusO+H7Gu43nUr8vz0ruogulPK3XG6OGFAqEBemB7QDkI4P/KZReXN/KOm9v0
+         vfdsfSmSP37u91fAUjGBtS7+jbfe7mWVmGCwicKjZJxIfbgBr39hWAaDyEjANXWDGWgx
+         /gO4Jd/XnJ5ein7QOqX3gV2rJfg3soneGgYtSbfyFLUqOtogIKm4wDa+Ee42a4GGzL+Z
+         fnKA==
+X-Gm-Message-State: AOAM531Ydx9EN5LG+ExadVk1cRIKCJzsUrZZfFsJ09YcojM+LRL3KFZX
+	qZ1nwKELDazu4yRsGdPADY2Aga7dzgFjtKyEBgqZ8w==
+X-Google-Smtp-Source: ABdhPJzFVFDAojI+TEXcMkjX9qjJ7m1oCYmJv/nUmDIInkxoBZhahPTy/fe1PAmjUHYBPltHTjtGqD8vibWxslCWngU=
+X-Received: by 2002:a05:6512:2291:: with SMTP id f17mr149141lfu.489.1631046652902;
+ Tue, 07 Sep 2021 13:30:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210907094336.16558-1-kortanzh@gmail.com>
+References: <20210907183843.33028-1-ndesaulniers@google.com> <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 7 Sep 2021 13:30:42 -0700
+Message-ID: <CAKwvOdkuYoke=Sa8Qziveo9aSA2zaNWEcKW8LZLg+d3TPwHkoA@mail.gmail.com>
+Subject: Re: [PATCH] Revert "Enable '-Werror' by default for all kernel builds"
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: llvm@lists.linux.dev, LSM List <linux-security-module@vger.kernel.org>, 
+	linux-toolchains@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Kees Cook <keescook@chromium.org>, Mark Brown <broonie@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Michal Marek <michal.lkml@markovi.net>, Andrew Morton <akpm@linux-foundation.org>, 
+	Vipin Sharma <vipinsh@google.com>, Chris Down <chris@chrisdown.name>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Vlastimil Babka <vbabka@suse.cz>, Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kortan,
+On Tue, Sep 7, 2021 at 12:16 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Sep 7, 2021 at 11:39 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > The above commit seems as though it was merged in response to
+> > https://lore.kernel.org/linux-hardening/CAHk-=wj4EG=kCOaqyPEq5VXa97kyUHsBpBn3DWwE91qcnDytOQ@mail.gmail.com/.
+>
+> No. It was merged in response of _years_ of pain, with the last one
+> just being the final drop.
 
-Thank you for the patch! I have some comments inline.
+Well, I think it's important to enumerate some of the pain points
+explicitly so that we might all better understand what they are, and
+come to an agreement together on what the right way to resolve them
+is.
 
-The commit title/subject should have a prefix to it. You can see the
-prefix for this particular file by running:
+Impulse commits without discussion over a holiday weekend are firmly
+in the category of "I wish you'd rather not have done that."
 
-$ git log --oneline --format=%s scripts/clang-tools/gen_compile_commands.py
-gen_compile_commands: extract compiler command from a series of commands
-gen_compile_commands: prune some directories
-scripts/clang-tools: switch explicitly to Python 3
-Makefile: Add clang-tidy and static analyzer support to makefile
+Let's look closer at the final drop.  I think there's a bigger question here:
+1. did the CI have enough time to run in multiple configurations with
+multiple toolchains to even find a warning, let alone report it?
+2. what did the developer do with the report (if they even got it, see
+1 above)? Ignore it? Proceed with the PR anyways?
 
-So your commit title would be:
+it looks to me as though the "final drop" fits into 1 above. I'm not
+sure that -Werror is the correct way to resolve issues from that.
 
-gen_compile_commands: fix missing 'sys' package
+> I'm not going to revert that change. I probably will have to limit it
+> (by making that WERROR option depend on certain expectations), but
+> basically any maintainer who has code that causes warnings should
+> expect that they will have to fix those warnings.
 
-On Tue, Sep 07, 2021 at 05:43:36PM +0800, Kortan wrote:
+I'm not 100% against it; I think it could land in a more useful
+variation. But it would be good to discuss that on-list, and give it
+time to soak. This is a conversation we should be having with CI
+maintainers IMO, and folks that maintain the build infra, at least.
+I'm happy to kick off that discussion with this RFC.
 
-There needs to be a message here. It is obvious once you look at the
-file that we call sys.exit() so we need the import but that needs to be
-explained up front here. checkpatch.pl would have warned you about this:
+> If it's clang that generates bogus warnings, then we'll have to start
+> disable clang warnings. The clang people tend to be proud of thir
+> fewer false positives, but so far looking at things, I am not
+> convinced.
 
-WARNING: Missing commit description - Add an appropriate one
+Now you're just attacking a strawman.
 
-total: 0 errors, 1 warnings, 7 lines checked
+> And I'm most definitely not convinced when the "let's finally enable
+> -Werror after years of talking about it", people end up going "but but
+> but I have thousands of warnings".
 
-Otherwise, the change looks good to me. Please make these corrections
-and send a v2 of the patch, which can be done with the '-v#' flag to
-'git format-patch' (e.g. '-v2' in this case).
+The kernel is full of thousands of warnings at the moment.  It might
+not be for your limited set of configs, targets, and toolchains, but
+the folks running CI are very very well aware that the kernel is far
+from enabling -Werror seriously.
 
-> Signed-off-by: Kortan <kortanzh@gmail.com>
-> ---
+Any given maintainer sending you a PR cannot (and should not, IMO)
+know under what combination of configs, targets, and toolchains you'll
+test under, and -Werror isn't going to help them figure it out.
 
-Describe the diff between v1 and v2 here like:
+Not every commit that makes its way to mainline has spent equal
+amounts of soak time in -next. (I suspect there are commits going into
+mainline that spent zero time in -next, not just from you).  Patches
+merged by maintainers shortly before the merge window open have
+minimal coverage compared to older commits they've accepted.  So CI
+systems can't find diagnostics (warnings/errors) in various
+combinations of config/target/toolchain if patches are skipping -next
+or spending a short amount of time in -next.
 
-v1 -> v2:
+To be clear, you have merged patches into mainline that broke the
+build for combinations of configs/targets/toolchains that you are not
+testing.  It's not realistic for you or any one person to test all
+such combinations either.  Other software projects have solved this by
+relying on bots to handle merges. Bots that don't forget to test
+combinations of various targets, or enable developers to ignore
+warnings (if the warnings are even reported).
 
-* Fix commit title
+> That's the POINT of that commit. That "but but but I have thousands of
+> warnings" is not acceptable.
+>
+> I spent hours yesterday getting rid of some warnings. It shouldn't be
+> on me fixing peoples code. It shouldn't be on me noticing that people
+> send me crap that warns.
 
-* Improve commit message
+I agree. I disagree that -Werror will solve that.  Developers will get
+the same report from 0day bot, just now as an error rather than
+warning, and they will continue to ignore the report because "well it
+works for me."  (Maybe I'm attacking the strawman now).
 
-then be sure to also include Masahiro Yamada and the linux-kbuild
-mailing list as he will pick up the patch.
+> And it really shouldn't be "Linus cares about warnings, so
+> configurations that Linus doesn't test can continue for years to have
+> them".
 
-Masahiro Yamada <masahiroy@kernel.org>
-linux-kbuild@vger.kernel.org
+I agree, and we have been making progress on this. I'd say the advent
+of the various CI systems over the past 5 years is a much welcomed
+improvement in at least understanding which combinations are exposing
+issues.
 
-Please use our new mailing list as well:
+> My "no warnings" policy isn't exactly new, and people shouldn't be
+> shocked when I then say "time to clean up *YOUR* house too".
 
-llvm@lists.linux.dev
-
-Cheers,
-Nathan
-
->  scripts/clang-tools/gen_compile_commands.py | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index 0033eedce003..1d1bde1fd45e 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -13,6 +13,7 @@ import logging
->  import os
->  import re
->  import subprocess
-> +import sys
->  
->  _DEFAULT_OUTPUT = 'compile_commands.json'
->  _DEFAULT_LOG_LEVEL = 'WARNING'
-> -- 
-> 2.33.0
-> 
-> 
+We have been cleaning house, for nearly half a decade in my
+experience. Fixing warnings in the Linux kernel for all possible
+configs, targets, and toolchains while the toolchains continue to add
+more diagnostics is more sisyphean than digging a hole in wet sand.
+-- 
+Thanks,
+~Nick Desaulniers
