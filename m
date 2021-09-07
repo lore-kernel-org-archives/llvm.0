@@ -1,83 +1,104 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A8472
-	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 19:12:21 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 486ED610C8;
-	Tue,  7 Sep 2021 19:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631041940;
-	bh=9dkQcKP1D9mdioHnIChZqnmsDboQySZbW/TMDmx+WWs=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=clAQUC6SwmKmhM7Qwd+RtfwMyGn1b093W6hhyo1brvjtPB1qK8jdjMbezgXXpvBE+
-	 wzY+kqApuwW6Ye1+4NeAslJt8y4Ydh8IDzbuiwW/PDotEA1edhpcXq/Zmlmv/GSFTt
-	 aoxaHnsC1B/UDMpMHRCF3oT/epmQpV2XOt//JciIx7/txk6boVcb1QTxkiLb2dMXhg
-	 jj/l6zy7vIv4FOR/ZYlAvM+5GUw2L5FM5u560Vu2zQFK9LNXVVATCIbOoDsWwDL48H
-	 blknugrpqYHdFSoX9BKoJeFurqnvUsVPh+sfeqM4vhwV4X1+T2EtcLc2iuSNxl1IOe
-	 RTi3WJB4/egZg==
-Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
-To: Guenter Roeck <linux@roeck-us.net>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Arnd Bergmann <arnd@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-References: <20210906142615.GA1917503@roeck-us.net>
- <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
- <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain>
- <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
- <CAHk-=wgZkQ+eZ02TaCpAWo_ffiLMwA2tYNHyL+B1dQ4YB0qfmA@mail.gmail.com>
- <1b7cac01-adab-e2d4-769b-b14ed8903ad9@roeck-us.net>
-From: Nathan Chancellor <nathan@kernel.org>
-Message-ID: <4063ef23-d769-167f-75b4-6a27cee5ecba@kernel.org>
-Date: Tue, 7 Sep 2021 12:12:19 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D3572
+	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 19:16:42 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id z2so109294lft.1
+        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 12:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1fpdy3b2qMHUETeuDFTFbKg8FYwDRtrIQO5YjCA4iis=;
+        b=gvtqQqQ0P76l17nNx5gKAZmX9q0gXmkKiJplZ5GrV0Rp5D/GmeTFvutVYxXDmohdU0
+         Rg7GZWtGpo79LRFlloX9NBLbD7hga1UGVHT5sYVxcyx+e++dSBWbGFVZEFJrEiiMD80f
+         lT+vaaeWPC4g7dOg7Pm63HBqJdzPD3ESYM7uY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1fpdy3b2qMHUETeuDFTFbKg8FYwDRtrIQO5YjCA4iis=;
+        b=nDMDNDxDyIkrTqeKQUd7GuF4UxVO7QRROX+qC6byh4z4fwkYLuR0uMKRpE+/MSVhUy
+         h8svJUmsDYKCBLWzsAuNO8SWIk9KgJBOhhpBRt8r5uX7zqtVfBIsEr6/AfXT7jMQ6D5/
+         p9/AYD0tGP+gYRWgZXLZOowzkav+KMKx76hEBfSzY5cX4OSXjIbFcmRyn6ston6POc5q
+         SmHcFEwR9MCBSgGU0WIko5R+vWaSgwmTtiAwOj7QdiKV8kBFz5aTi78gUKI8198gSCA1
+         WK8BIoT1NQtu/B/1MJgA3tO4YPybjbxwYj+ccm7le9zQXVkDvxTgCHsUJuBWsjvsPTpl
+         RGlQ==
+X-Gm-Message-State: AOAM5302CjjHtUOzJdOJIvzuZPZnplWaeW7gYRHG6zMhiTHb602b3q4l
+	vGh6SC7eMm8hC6igmEHmlfVVNbyITGZ3RK1VpPY=
+X-Google-Smtp-Source: ABdhPJwBYr4xR55+jXsdh/xFHiJ5/REyWFP6Ml4LVC0Jcu1FoIYTl/pJTRKQjLKm5KEJ0rRaIA8xmg==
+X-Received: by 2002:ac2:488b:: with SMTP id x11mr14012728lfc.675.1631042199665;
+        Tue, 07 Sep 2021 12:16:39 -0700 (PDT)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
+        by smtp.gmail.com with ESMTPSA id i5sm1075938lfu.274.2021.09.07.12.16.38
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Sep 2021 12:16:38 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id c8so82532lfi.3
+        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 12:16:38 -0700 (PDT)
+X-Received: by 2002:a05:6512:3da5:: with SMTP id k37mr14175340lfv.655.1631042198154;
+ Tue, 07 Sep 2021 12:16:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <1b7cac01-adab-e2d4-769b-b14ed8903ad9@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210907183843.33028-1-ndesaulniers@google.com>
+In-Reply-To: <20210907183843.33028-1-ndesaulniers@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 7 Sep 2021 12:16:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
+Message-ID: <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
+Subject: Re: [PATCH] Revert "Enable '-Werror' by default for all kernel builds"
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, LSM List <linux-security-module@vger.kernel.org>, 
+	linux-toolchains@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Kees Cook <keescook@chromium.org>, Mark Brown <broonie@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Michal Marek <michal.lkml@markovi.net>, Andrew Morton <akpm@linux-foundation.org>, 
+	Vipin Sharma <vipinsh@google.com>, Chris Down <chris@chrisdown.name>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Vlastimil Babka <vbabka@suse.cz>, Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/7/2021 10:48 AM, Guenter Roeck wrote:
-> On 9/7/21 10:10 AM, Linus Torvalds wrote:
->> On Tue, Sep 7, 2021 at 2:11 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>>
->>>> x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.c:452:13: 
->>>> error: stack frame size (1800) exceeds limit (1280) in function 
->>>> 'dcn_bw_calc_rq_dlg_ttu' [-Werror,-Wframe-larger-than]
->>>> x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_21.c:1657:6: 
->>>> error: stack frame size (1336) exceeds limit (1280) in function 
->>>> 'dml21_rq_dlg_get_dlg_reg' [-Werror,-Wframe-larger-than]
->>>> x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_30.c:1831:6: 
->>>> error: stack frame size (1352) exceeds limit (1280) in function 
->>>> 'dml30_rq_dlg_get_dlg_reg' [-Werror,-Wframe-larger-than]
->>>> x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:1676:6: 
->>>> error: stack frame size (1336) exceeds limit (1280) in function 
->>>> 'dml31_rq_dlg_get_dlg_reg' [-Werror,-Wframe-larger-than]
->>>> x86_64-alpine.log:drivers/vhost/scsi.c:1831:12: error: stack frame 
->>>> size (1320) exceeds limit (1280) in function 'vhost_scsi_release' 
->>>> [-Werror,-Wframe-larger-than]
->>>>
-> 
-> FWIW, the above is because of
-> 
-> static void vhost_scsi_flush(struct vhost_scsi *vs)
-> {
->          struct vhost_scsi_inflight *old_inflight[VHOST_SCSI_MAX_VQ];
-> 
-> where VHOST_SCSI_MAX_VQ=128. Presumably some versions of clang inline
-> this function. gcc has the same problem here - its stack frame size is
-> also > 1024 for vhost_scsi_flush().
+On Tue, Sep 7, 2021 at 11:39 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> The above commit seems as though it was merged in response to
+> https://lore.kernel.org/linux-hardening/CAHk-=wj4EG=kCOaqyPEq5VXa97kyUHsBpBn3DWwE91qcnDytOQ@mail.gmail.com/.
 
-Good to know. When investigating these, I intend to compare against GCC 
-to see what the difference is to know if it is a problem with the code 
-or a compiler issue.
+No. It was merged in response of _years_ of pain, with the last one
+just being the final drop.
 
-Cheers,
-Nathan
+I'm not going to revert that change. I probably will have to limit it
+(by making that WERROR option depend on certain expectations), but
+basically any maintainer who has code that causes warnings should
+expect that they will have to fix those warnings.
 
+If it's clang that generates bogus warnings, then we'll have to start
+disable clang warnings. The clang people tend to be proud of thir
+fewer false positives, but so far looking at things, I am not
+convinced.
+
+And I'm most definitely not convinced when the "let's finally enable
+-Werror after years of talking about it", people end up going "but but
+but I have thousands of warnings".
+
+That's the POINT of that commit. That "but but but I have thousands of
+warnings" is not acceptable.
+
+I spent hours yesterday getting rid of some warnings. It shouldn't be
+on me fixing peoples code. It shouldn't be on me noticing that people
+send me crap that warns.
+
+And it really shouldn't be "Linus cares about warnings, so
+configurations that Linus doesn't test can continue for years to have
+them".
+
+My "no warnings" policy isn't exactly new, and people shouldn't be
+shocked when I then say "time to clean up *YOUR* house too".
+
+            Linus
