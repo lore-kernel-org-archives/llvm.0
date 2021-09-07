@@ -1,167 +1,192 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5268972
-	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 20:30:55 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id k13so266818lfv.2
-        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 13:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BHU/b6iOWML31rDQD4Y7YAaTs9mMyU/Uk/P4sJ2b7NA=;
-        b=hVpdIZlAApogbIH1JgUwHFhlKoiKgiQ2kK6X+akQnUfn8TUcb2vVBov14g68Y1PY31
-         BZyxcWoyIZ+b42y6O0Kpb6WAwvPBy4u332g1OTHulr9ASmM9k6VK8JXzqbaYxKAVTQ/q
-         bzh3HwUrbmdxYfMYNocX0hvnds2j35kLTGkp8gJ1c8ixfC3oGPJ5w3y3jRvPHlKvC9P/
-         L4uzM9YwaqpxJKzL61Idmre2I7HXFdD1wQu6ycvx2e8pEsKiwSWgRx9dtd2tOQj/6rMZ
-         RA98YjsfXP0yoYR1l77PV/AZsU0FDvNILFp/SrizCxbOyiFphCgAc8ANJHKhgVtw3NcJ
-         eiQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BHU/b6iOWML31rDQD4Y7YAaTs9mMyU/Uk/P4sJ2b7NA=;
-        b=Ch+NyqKbAphwKsWO3+G59Sci3R0gU1yTa1x3QfQweX3dS9/8Dt6c2nIaN1/RZT317Q
-         e7zaSHbeVThq3h5shHoOmSlfGuJofUw503vB8GQ4ZXQk1SAb3FJNTB6GQITfQcVMTTFO
-         IaeLIXGCusO+H7Gu43nUr8vz0ruogulPK3XG6OGFAqEBemB7QDkI4P/KZReXN/KOm9v0
-         vfdsfSmSP37u91fAUjGBtS7+jbfe7mWVmGCwicKjZJxIfbgBr39hWAaDyEjANXWDGWgx
-         /gO4Jd/XnJ5ein7QOqX3gV2rJfg3soneGgYtSbfyFLUqOtogIKm4wDa+Ee42a4GGzL+Z
-         fnKA==
-X-Gm-Message-State: AOAM531Ydx9EN5LG+ExadVk1cRIKCJzsUrZZfFsJ09YcojM+LRL3KFZX
-	qZ1nwKELDazu4yRsGdPADY2Aga7dzgFjtKyEBgqZ8w==
-X-Google-Smtp-Source: ABdhPJzFVFDAojI+TEXcMkjX9qjJ7m1oCYmJv/nUmDIInkxoBZhahPTy/fe1PAmjUHYBPltHTjtGqD8vibWxslCWngU=
-X-Received: by 2002:a05:6512:2291:: with SMTP id f17mr149141lfu.489.1631046652902;
- Tue, 07 Sep 2021 13:30:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453ED72
+	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 21:07:38 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GIyyqK4b4EAyNsqksnExa5uoW2TF2NUuIQwlg6CpmPpoStkXmsqcF9zAZZrKY2XjVMWxCY0s45Uggpqa0nJpjOOBT9f/ow1Fh3DPm3xxIIjI4FRUPuhAsym0jNiUx31sOVtYJUQhJavIN/Mv2seAaYttWwxPEcI24LjUAVfGndRcpZ+nbzzNJ4iBR6V9+/x0iWZnVjZZFuqvK8oA2LfPFIQX/FxyhxFoLQDX0vn9gZTvcOUAvrAQr17X8zaDaus86N1d2L2i4t93yJ8zXawdN0cjlEzlnk+9AxxyI92HWcelP/xrxaXtliL1f5Hgkl8RgYu32a87sdPH5aXScp2AGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=IdYsgp+KcjWA+hCk4mqDGdLRpo0uRT4j7Rw5ogIVxuQ=;
+ b=aftuwszMgwB72muQexOA3tQQ/HD9/dQSJI2TTxhZ+g6IgeHMDIxs2/AVBO6ck7uZeFwYMR9y0IjucGLiTKnVjhHVRV4gOLmkcIFZJpvHIGGmgXU/tSJst8/kEWq96akhlGmPrmRxSOJf8MMBYfCxMgbu7iepeeUInpw0YidGrJP70Re7BxORbWUg/eEoNX/AEX6J/YWKQNnzO0JKktjZ8PZmXLEp9d2Xhm3vptfrc1N1Ckt+Eln06OLGbttemp5RCXj4f6JmWjG9OiE4kn3TTJDowG4+yQ0Iz9fCVy3AVoBvrmbYCNEpL2Rfead3aHOQDepqZrf1xyv9p9PhaCTG6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IdYsgp+KcjWA+hCk4mqDGdLRpo0uRT4j7Rw5ogIVxuQ=;
+ b=ROA8SZycfbh9EQGnUOoagbzSuzBzBiCcbr6GLfHk2XumZWRQzWDlsic3LmxCg1XXyuvcg2Jh1h11NWxnI4c3mQuCyucXXunzEyI8yDyRtvkXBngFCTLlGe/cPMC7a9Z/dXuHwpIF8bhzLxvluKf3XnWOqEpFA3en/W1RjJhu2PM=
+Authentication-Results: lists.freedesktop.org; dkim=none (message not signed)
+ header.d=none;lists.freedesktop.org; dmarc=none action=none
+ header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by CO6PR12MB5394.namprd12.prod.outlook.com (2603:10b6:5:35f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.19; Tue, 7 Sep
+ 2021 21:07:35 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::d82f:e8c3:96ac:5465]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::d82f:e8c3:96ac:5465%9]) with mapi id 15.20.4500.014; Tue, 7 Sep 2021
+ 21:07:35 +0000
+Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+ Arnd Bergmann <arnd@kernel.org>, Leo Li <sunpeng.li@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Guenter Roeck
+ <linux@roeck-us.net>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+ amd-gfx@lists.freedesktop.org
+References: <20210906142615.GA1917503@roeck-us.net>
+ <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
+ <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain>
+ <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
+ <CAHk-=wgZkQ+eZ02TaCpAWo_ffiLMwA2tYNHyL+B1dQ4YB0qfmA@mail.gmail.com>
+ <CAHk-=wh37UWTqUzbh5qg_x9pFgqBVwpdq_Kf+hnB5mqEUkrjmg@mail.gmail.com>
+From: Harry Wentland <harry.wentland@amd.com>
+Message-ID: <fb50dc44-fbe4-e6b3-5abc-d90375992292@amd.com>
+Date: Tue, 7 Sep 2021 17:07:31 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+In-Reply-To: <CAHk-=wh37UWTqUzbh5qg_x9pFgqBVwpdq_Kf+hnB5mqEUkrjmg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0050.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:2::22) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210907183843.33028-1-ndesaulniers@google.com> <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
-In-Reply-To: <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Sep 2021 13:30:42 -0700
-Message-ID: <CAKwvOdkuYoke=Sa8Qziveo9aSA2zaNWEcKW8LZLg+d3TPwHkoA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "Enable '-Werror' by default for all kernel builds"
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: llvm@lists.linux.dev, LSM List <linux-security-module@vger.kernel.org>, 
-	linux-toolchains@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Kees Cook <keescook@chromium.org>, Mark Brown <broonie@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Michal Marek <michal.lkml@markovi.net>, Andrew Morton <akpm@linux-foundation.org>, 
-	Vipin Sharma <vipinsh@google.com>, Chris Down <chris@chrisdown.name>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Vlastimil Babka <vbabka@suse.cz>, Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Received: from [192.168.50.3] (209.195.106.179) by YQBPR01CA0050.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:2::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Tue, 7 Sep 2021 21:07:34 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5fa19f75-1336-42f9-8d1c-08d972438445
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5394:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS:
+	<CO6PR12MB53942D0A2B74BA58357B10758CD39@CO6PR12MB5394.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:51;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	I1BL0orZz308dnIEtkkroUDwwgy7ziTujvTKfkGABTOYevV2k5NrimqiYdRVRXZmiV9kyRCDO61wWJw34vpWAfyXInb4rrUPBPHFxgBAfclVgTgBtFHJdLM1/3Ir+catJm1soZmHmEMKK3wHaGyIwRf350p7qdoM2e8sHoPMyOP35gCWqH/kaGpeKQ8BEJnlidIFZ/Urx6HGczvixh3fu1PPElJLq/0zpCZwFtqKkcbWhPUM8Xj/YeHqsjJpwDsC47hy/WlkEjJfdgN72aA/+qycNESjZAayZ4zxO208EpnBwZhi4qzLCEIsn3E/fXsLJK/H7smAPFsZpCFYvjf1dHb/7rNEx/JcY6mEx2rRpsKTpMXfwjaS0uB47CvUI3Rox1fLniirSNyOGsp1S/kQwGSjfiyiu0AD917i3FmEUhHJJ4G0h5zELrytUwT0cQyrZSodKRGxlZd/M45WoKYb6TaeZ5r1dIABJ6GcKnbMnNEuQc1u+lDOAhqDy1VQ14mnW2xcF65DddgBNpZjg23Q0MVGKINA5IXQDHZ7AEv9lw1w4V8qjxKKzWJDO9WPBCOdA4rP4+RcJV1KiddFfm3y5kmD3b8far0GhMLfgDyr8jYmrZ0ayJfRX87O7X+rqE1DmjAuROKSDk9eTWj3yPkkiC+R5svOgfkXyXLeg4q/Gs9cRsSjRkVwfk9Pp0f/EZJZh56oRzTHsQ3/fZtsWrb0u8P2MVWtvWxhVIkufZnuLBI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(376002)(136003)(366004)(346002)(31696002)(86362001)(53546011)(66946007)(8676002)(66556008)(54906003)(186003)(66476007)(5660300002)(110136005)(2616005)(36756003)(31686004)(956004)(6636002)(8936002)(6486002)(316002)(16576012)(4326008)(478600001)(38100700002)(6666004)(44832011)(2906002)(83380400001)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VU1mUnFVcjRPa3lPdE1uWUFNTUdZZFg2WFVidXhvWjcwelgxZUZxeXhzZnpt?=
+ =?utf-8?B?S0ZvdGlSN0Z6U0xTSmhQY2tYTUNIdWNua2N0dkhIeU96T2dKVTA4YmU0Qy8y?=
+ =?utf-8?B?eDhGemtSaC82ZlJIbGtGQk5yUHR6SnVvMFV6SjZvUFBQTS9DeXBQK3I4Znh4?=
+ =?utf-8?B?YVM3VkloYWhwTDZwblBsMFpMNzBkVFY2UDRGYS9wc0VtVEtUMFNqMXgvZCtC?=
+ =?utf-8?B?MkNEYWZ5VDVDeVd5UWJ6NzdSMzVuM3NFL0ZPMDExcnZpUWFUWDQ0L21vTzZC?=
+ =?utf-8?B?cVRKN1pHVWlMVkJFeE9yeStydnpOd29yQTZoNHRIdFBQbmg4aW1oejRwazcz?=
+ =?utf-8?B?NnJXVWNUdWtRMGNHTHd6VGVGWDdFc2t5NWx2RFMxS2IyNWJkS3ZCaDNtbmpZ?=
+ =?utf-8?B?TkhTdmxDMHoyTTAvWUJiOWgvWGRaWXJlQ1dkeEo1M1BJWUpXOXJtelJWWVd0?=
+ =?utf-8?B?OVFkMVF1b052M2lzUVlqc0REdTdTd285TktYcU9KM3BndzFJSkpQWUpkYW1r?=
+ =?utf-8?B?eGh5a25yRktCeFlGNGlacVN6UkhPUjRjQytYUkdmeGFzaGdsZGlCY3NpVUYy?=
+ =?utf-8?B?UmtmTzU3UkxwNnJQekF1N3NvMXh5eFd2Z3NKU1BzbFM0ZXFsT0FlK05zbngx?=
+ =?utf-8?B?VzRYRm44bU9kWGpsMDEwalNJaldIa0Y2NkZlZTZqc1N5eXBzMG9Ud1NoN2JM?=
+ =?utf-8?B?MkhLZUNuNTJEQlQvYS83d011eFN1MlpUa0dZY0xNck9WbGVEUXcrdGxGaldB?=
+ =?utf-8?B?YUN5NHgxWGpObk1sS2pHRTFmSGl2eGxqQ0JjdTFwbXNnelpxUzRrbm1MVFNI?=
+ =?utf-8?B?dERNeW54Zm8rdmNyM0lKUG5jTFNXRU1WYWtlVk0rcVZzQ1hMOEpvWU5QaEs1?=
+ =?utf-8?B?Q3RNcFRvcmQzR0JzMzBwTUdqSkJkV3ZaRXRoUzNlMkllZTFaRzNxeEVJNkJk?=
+ =?utf-8?B?UmUyeGFURFFyQnFZTnpGZDBlSnRKQTErL05ITkRHVkk5eXF0a0Y5NVNiWWFa?=
+ =?utf-8?B?R3ZiSElMTWlXQSthMjhRME5LaGxhMjR3MTU3RGpjbDVVeW1rOGFPdlBBL1lW?=
+ =?utf-8?B?MkthZ3dRNWphaStCSzE3RmFWUmw0OEo2N3Mxby94aGdyeUxTSkpQS29ONWZ0?=
+ =?utf-8?B?ZWJEZnNHemVDSGRsZVVIZDByQXlma2g4SmgvZmpqemJlUXpBZk1XamJOUC92?=
+ =?utf-8?B?VG1XdzAzdmg1SUxlVDA0VWh4bkQzMEg5NXJHQ0RZZ1lPZExoT0FEWmNoSzVo?=
+ =?utf-8?B?cDhvS2pPZlBmMW5xbkJuQXdyWE1ObE53STA3WnZFVFNTQzBpMkFIWlJxK0ha?=
+ =?utf-8?B?d2QwVTRnK2cwN20xeWtlR3R1cHc3eE01TFdLOXU4V3FWV1VkbXc0SHlIOHpL?=
+ =?utf-8?B?MVByOUtRdEJEQzkwUkZMbmgvdEdPeXRqTklxZXkzbURsWkx4Y2lHTVlxekkv?=
+ =?utf-8?B?cUtUZHhYMDIwV1BOb2VPYlVFdVFpK0NDQ3NIMkFFa1c2YUFUY09qL25mZ3Np?=
+ =?utf-8?B?K0hPbS9TYlVzaW5GRG80TlBMQVRDbWhwaTlpQmFlcHFXb2h1WVNyV0d6T3A2?=
+ =?utf-8?B?OXY1YkVhUTc2UHpQYkRlREpEUytwd2NNdk9Fa0dsZG5URWhDMmZqVnNXM2s3?=
+ =?utf-8?B?LzFRaGVmWDRMR0FuY3hVbjdzSXlJRFZyQVRLK3oxd1dzN0JERUpBWDFEOW9N?=
+ =?utf-8?B?TTF0cVMvemp1UnNOa3pabnJ3cnpjREFqcTc5eDBZazdkTStyR083RXZOVzFD?=
+ =?utf-8?Q?2Jw82inMlOYJib1I7O0jtrQ2gNL7ytUq704tAZ4?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5fa19f75-1336-42f9-8d1c-08d972438445
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2021 21:07:35.8585
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gXIHjRN9Z28Fy3tNpz74uOSFhIS3QsDJDFg1DHNwHaojIfqkbfv5XoIb+AKXAdqDOV4s07aJCJMUkzXeGPzF8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5394
 
-On Tue, Sep 7, 2021 at 12:16 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Sep 7, 2021 at 11:39 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > The above commit seems as though it was merged in response to
-> > https://lore.kernel.org/linux-hardening/CAHk-=wj4EG=kCOaqyPEq5VXa97kyUHsBpBn3DWwE91qcnDytOQ@mail.gmail.com/.
->
-> No. It was merged in response of _years_ of pain, with the last one
-> just being the final drop.
 
-Well, I think it's important to enumerate some of the pain points
-explicitly so that we might all better understand what they are, and
-come to an agreement together on what the right way to resolve them
-is.
 
-Impulse commits without discussion over a holiday weekend are firmly
-in the category of "I wish you'd rather not have done that."
+On 2021-09-07 1:33 p.m., Linus Torvalds wrote:
+> On Tue, Sep 7, 2021 at 10:10 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> Do I know why? No. I do note that that code is disgusting.
+>>
+>> It's passing one of those structs around by value, for example. That's
+>> a 72-byte structure that is copied on the stack due to stupid calling
+>> conventions. Maybe clang generates a few extra temporaries for it as
+>> part of the function call stack setup? Who knows..
+> 
+> Ooh, yes.
+> 
+> This attached patch is crap - it converts the helper functions to use
+> const pointers instead of passing the whole structure, but it then
+> only converts that one file that *uses* them.
+> 
+> So the end result will not compile in general, but you can do
+> 
+>     make drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_30.o
+> 
+> and it compiles for me.
+> 
+> And while gcc doesn't care that much - it will apparently either
+> generate the argument stack every call - clang cares deeply.
+> 
+> The nasty 720-byte stack frame that clang generates turns into just a
+> 320-byte one, and code generation in general looks a *lot* better.
+> 
+> Now, as mentioned, this patch is broken and incomplete. But I really
+> think the AMD GPU people need to do this. It makes those functions go
+> from practically unusable to not horribly disgusting.
+> 
+> So Harry/Leo/Alex/Christian and amd-gfx list - can you look into
+> making this ugly "make one file compile better" patch actually work
+> properly?
+> 
 
-Let's look closer at the final drop.  I think there's a bigger question here:
-1. did the CI have enough time to run in multiple configurations with
-multiple toolchains to even find a warning, let alone report it?
-2. what did the developer do with the report (if they even got it, see
-1 above)? Ignore it? Proceed with the PR anyways?
+Yes, will take a look at this tonight. We definitely shouldn't be passing
+large structs by value.
 
-it looks to me as though the "final drop" fits into 1 above. I'm not
-sure that -Werror is the correct way to resolve issues from that.
+Harry
 
-> I'm not going to revert that change. I probably will have to limit it
-> (by making that WERROR option depend on certain expectations), but
-> basically any maintainer who has code that causes warnings should
-> expect that they will have to fix those warnings.
+> It *looks* lto me ike that code was perhaps written for a C++ compiler
+> and the helpers have been written as a "pass by reference", and the
+> arguments used to be
+> 
+>      const display_data_rq_misc_params_st& rq_misc_param
+> 
+> and then the compiler will pass the argument as a pointer. And then it
+> was converted to C, and the "pass by reference" in the function
+> declaration was turned into "pass by value", to avoid changing "." to
+> "->" in the use.
+> 
+> But a '&arg' thing in C++ really is a '*arg' pointer in C, and should
+> have been done as that.
+> 
+> Of course, it's also possible that that code was simply written by
+> somebody who didn't understand just *how* horrible it is to pass
+> structures bigger than a word or two by value.
+> 
+> Do we have a compiler warning for passing big structures by value?
+> 
+>                    Linus
+> 
 
-I'm not 100% against it; I think it could land in a more useful
-variation. But it would be good to discuss that on-list, and give it
-time to soak. This is a conversation we should be having with CI
-maintainers IMO, and folks that maintain the build infra, at least.
-I'm happy to kick off that discussion with this RFC.
-
-> If it's clang that generates bogus warnings, then we'll have to start
-> disable clang warnings. The clang people tend to be proud of thir
-> fewer false positives, but so far looking at things, I am not
-> convinced.
-
-Now you're just attacking a strawman.
-
-> And I'm most definitely not convinced when the "let's finally enable
-> -Werror after years of talking about it", people end up going "but but
-> but I have thousands of warnings".
-
-The kernel is full of thousands of warnings at the moment.  It might
-not be for your limited set of configs, targets, and toolchains, but
-the folks running CI are very very well aware that the kernel is far
-from enabling -Werror seriously.
-
-Any given maintainer sending you a PR cannot (and should not, IMO)
-know under what combination of configs, targets, and toolchains you'll
-test under, and -Werror isn't going to help them figure it out.
-
-Not every commit that makes its way to mainline has spent equal
-amounts of soak time in -next. (I suspect there are commits going into
-mainline that spent zero time in -next, not just from you).  Patches
-merged by maintainers shortly before the merge window open have
-minimal coverage compared to older commits they've accepted.  So CI
-systems can't find diagnostics (warnings/errors) in various
-combinations of config/target/toolchain if patches are skipping -next
-or spending a short amount of time in -next.
-
-To be clear, you have merged patches into mainline that broke the
-build for combinations of configs/targets/toolchains that you are not
-testing.  It's not realistic for you or any one person to test all
-such combinations either.  Other software projects have solved this by
-relying on bots to handle merges. Bots that don't forget to test
-combinations of various targets, or enable developers to ignore
-warnings (if the warnings are even reported).
-
-> That's the POINT of that commit. That "but but but I have thousands of
-> warnings" is not acceptable.
->
-> I spent hours yesterday getting rid of some warnings. It shouldn't be
-> on me fixing peoples code. It shouldn't be on me noticing that people
-> send me crap that warns.
-
-I agree. I disagree that -Werror will solve that.  Developers will get
-the same report from 0day bot, just now as an error rather than
-warning, and they will continue to ignore the report because "well it
-works for me."  (Maybe I'm attacking the strawman now).
-
-> And it really shouldn't be "Linus cares about warnings, so
-> configurations that Linus doesn't test can continue for years to have
-> them".
-
-I agree, and we have been making progress on this. I'd say the advent
-of the various CI systems over the past 5 years is a much welcomed
-improvement in at least understanding which combinations are exposing
-issues.
-
-> My "no warnings" policy isn't exactly new, and people shouldn't be
-> shocked when I then say "time to clean up *YOUR* house too".
-
-We have been cleaning house, for nearly half a decade in my
-experience. Fixing warnings in the Linux kernel for all possible
-configs, targets, and toolchains while the toolchains continue to add
-more diagnostics is more sisyphean than digging a hole in wet sand.
--- 
-Thanks,
-~Nick Desaulniers
