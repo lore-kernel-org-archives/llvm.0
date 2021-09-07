@@ -1,112 +1,109 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B658372
-	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 15:30:06 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 187FQwd6012880;
-	Tue, 7 Sep 2021 10:26:58 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 187FQuaU012874;
-	Tue, 7 Sep 2021 10:26:56 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 7 Sep 2021 10:26:56 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Linus Torvalds <torvalds@linuxfoundation.org>
-Cc: Jakub Jelinek <jakub@redhat.com>, Florian Weimer <fweimer@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Subject: Re: [GIT PULL v2] Kbuild updates for v5.15-rc1
-Message-ID: <20210907152656.GI1583@gate.crashing.org>
-References: <20210906154642.GV1583@gate.crashing.org> <CAHk-=wj=WpWO_V86cZH99LgZGBbvdDb4wR26ce5van0hJqjzLA@mail.gmail.com> <20210906172701.GX1583@gate.crashing.org> <CAHk-=wh0MBVfA89WLWnCiSnJ2a=hSAoSxfG-jyf7JJeBDPK3ew@mail.gmail.com> <87lf49wodu.fsf@oldenburg.str.redhat.com> <20210906194808.GY1583@gate.crashing.org> <20210906201432.GZ920497@tucnak> <CAHk-=wi80NGPppGmBpc5zuGRAsv4_7qsDu7ehW515J2FJoezAQ@mail.gmail.com> <20210906215218.GA920497@tucnak> <CAHk-=wiKy45R2vMHhjr16_Q+iYea-70byuj=mHLvp1GURqdYPA@mail.gmail.com>
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CAA72
+	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 17:10:29 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id k4so4116508lfj.7
+        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 10:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H+GlpUmGC3s0m862BFnaEghUBDcmr0hsoDqEpHfudes=;
+        b=ZrpTD11YcoTzlnxV9wbY07amfLrzROABaXwapPT/EEW1bkKcXuC/n8hMUS1To0EImi
+         DPnKnhPDFJMiXLp6aEjyyVpW8E7s3FPi0evoO0M+tFEFfJy19SP9BS7fxujNluGVqvaR
+         KofKwxkpnp3XGnzZgyHrIyRK5eh2/qXYrkUjM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H+GlpUmGC3s0m862BFnaEghUBDcmr0hsoDqEpHfudes=;
+        b=GVmZJyCXXcQRSWzZAZPdd+akvopAT2Vi/b3d+ByLbmb0s5jnZg6d0GXf8DZ2w7HWBX
+         JxhvOntFy+iD+MVmQdsXugUSzf8hrSIq3WwnCOlzKNpkhWYopTH/YQ/jrqPceU6HBadk
+         8aXXQdzNUF0Gq2JrpUL0bFy97IoRJBkpgE72K7wGUEnmrPDcO+plbq+sj3xlQEH4hk9+
+         xIBX2LwKjpKp7TwKf+tKxMDTZGLV+I6i8IcfNGzUOY5vo8QMZhNCTg8hTjSSx9HD6diM
+         6/WCPKtdnkQMU+zj0qHGmhE6WqP3VcvJ+UNBRnt8Ex/6YEvE3S90/CcyHfQ+6CZ09aU8
+         +p/A==
+X-Gm-Message-State: AOAM533+Qr6Xudadw/3ku3ftp7shHIHj8wEUCjRLQrpEM9kCtrah6P52
+	DEbxqvxVhXJgHgNX5KqSejMrqXHCKlv06A88dko=
+X-Google-Smtp-Source: ABdhPJx8CoH/bj84TFJQ6YNyexPWJG0iaGSRATRn4ibGy3Y5nbfQ7wMrfz5tb4uPMfVJM/57Jmk6cg==
+X-Received: by 2002:a05:6512:139c:: with SMTP id p28mr12983074lfa.523.1631034627584;
+        Tue, 07 Sep 2021 10:10:27 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id b7sm1053106lfv.275.2021.09.07.10.10.26
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Sep 2021 10:10:26 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id i28so17683296ljm.7
+        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 10:10:26 -0700 (PDT)
+X-Received: by 2002:a2e:a7d0:: with SMTP id x16mr15231271ljp.494.1631034626531;
+ Tue, 07 Sep 2021 10:10:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiKy45R2vMHhjr16_Q+iYea-70byuj=mHLvp1GURqdYPA@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+References: <20210906142615.GA1917503@roeck-us.net> <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
+ <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain> <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 7 Sep 2021 10:10:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgZkQ+eZ02TaCpAWo_ffiLMwA2tYNHyL+B1dQ4YB0qfmA@mail.gmail.com>
+Message-ID: <CAHk-=wgZkQ+eZ02TaCpAWo_ffiLMwA2tYNHyL+B1dQ4YB0qfmA@mail.gmail.com>
+Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 06, 2021 at 03:24:41PM -0700, Linus Torvalds wrote:
-> On Mon, Sep 6, 2021 at 2:52 PM Jakub Jelinek <jakub@redhat.com> wrote:
+On Tue, Sep 7, 2021 at 2:11 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> > x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.c:452:13: error: stack frame size (1800) exceeds limit (1280) in function 'dcn_bw_calc_rq_dlg_ttu' [-Werror,-Wframe-larger-than]
+> > x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_21.c:1657:6: error: stack frame size (1336) exceeds limit (1280) in function 'dml21_rq_dlg_get_dlg_reg' [-Werror,-Wframe-larger-than]
+> > x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_30.c:1831:6: error: stack frame size (1352) exceeds limit (1280) in function 'dml30_rq_dlg_get_dlg_reg' [-Werror,-Wframe-larger-than]
+> > x86_64-alpine.log:drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:1676:6: error: stack frame size (1336) exceeds limit (1280) in function 'dml31_rq_dlg_get_dlg_reg' [-Werror,-Wframe-larger-than]
+> > x86_64-alpine.log:drivers/vhost/scsi.c:1831:12: error: stack frame size (1320) exceeds limit (1280) in function 'vhost_scsi_release' [-Werror,-Wframe-larger-than]
 > >
-> > It is actually not that bad, stdlib.h is indeed included there because of 2
-> > intrinsics out of more than 5000 and when one doesn't need those, just
-> > #define _MM_MALLOC_H_INCLUDED
-> 
-> .. and on clang?
+> > Another instance where distros lower CONFIG_FRAME_WARN below the 2048
+> > default. Again, none look particularly scary but should still probably
+> > be dealt with.
+>
+> I would argue that they are still scary and should be addressed in the
+> code, it's just that we don't see them on build bots that use the 2048 byte default.
 
-Clang apparently has __MM_MALLOC_H  as header guard here.  But Clang
-does say
-  #if __STDC_HOSTED__
-  #include <mm_malloc.h>
-  #endif
-so they do not have this bug in the first place.  GCC should fix this as
-well.  I filed <https://gcc.gnu.org/PR102231>.  Thanks for bringing thisd
-to our attention!
+No, they are scary for another reason entirely: clang is clearly doing
+a *HORRIBLE* job with stack usage.
 
-> There, I think you have to undefine __STDC_HOSTED__. Maybe by using
-> -ffreestanding?
+To take that dml30_rq_dlg_get_dlg_reg() function as an example: yes,
+it has a few structures on the stack, but gcc allocates 512-720 bytes
+of stack space depending on my config.
 
-That defines it to 0, instead, as required by the C standard:
-$ :|gcc -E -dM -|grep HOSTED
-#define __STDC_HOSTED__ 1
-$ :|gcc -E -dM - -ffreestanding|grep HOSTED
-#define __STDC_HOSTED__ 0
+Not 1280 bytes.
 
-Yes, that is how this works: the command line flag says how the macro
-should be defined by the compiler (and changing it in your code is UB
-btw).
+So it's not even *close* to the 1024 byte limit with gcc, much less the 2kB one.
 
-> Except if you use -ffreestanding, you lose some very bvasic
-> functionality (*),
+I don't know why clang basically decides to use almost double the
+stack space. Maybe it's some other config option that does it, I tried
+a fairly normal one and a "almost everythign enabled" one, and
+couldn't get close to the reported stack frame size with gcc.
 
-(see below)
+Just to try to make things as close as possible, I tried with the
+exact same normal non-debug config (apart from obvious
+compiler-dependent things), and picked that dml30_rq_dlg_get_dlg_reg()
+function to look at (for no real reason other than that the stack
+frame was biggest above.
 
-> And they should very much *not*at*all* be considered some kind of
-> sacred "this is the only way to do things". Because that is clearly
-> not true, and has *never* been true.
+Gcc did a 720-byte stack frame for that case. Not great, but whatever.
 
-Take for example <stdint.h>.  There is no other way to find out what
-types to use for exact-width integers.  Unless you really want to do
-  typedef unsigned int __attribute__((mode (DI))) u64;
-but that is rather unportable to other compilers but GCC.
+clang did a 1136-byte stack frame for the same thing.
 
-<stdint.h> *is* the only portable way for getting exact-width integers
-(and some other things).  This is not something we decide, it is not
-something you can decide, it follows directly from the C standard.
+Do I know why? No. I do note that that code is disgusting.
 
-Using it is easy.  Not using it leads to the forest of include files and
-preprocessor conditionals the kernel currently uses.
+It's passing one of those structs around by value, for example. That's
+a 72-byte structure that is copied on the stack due to stupid calling
+conventions. Maybe clang generates a few extra temporaries for it as
+part of the function call stack setup? Who knows..
 
-> The usable header files are the odd special case, not the general case.
-> 
-> Really.
-> 
-> Is it really so hard to just admit that the kernel shouldn't use those
-> headers? When we have 30 years of experience in doing exactly that?
-
-That isn't the core issue at hand.  Yes, Linux has implemented all of it
-manually historically, and there even were good reasons for some of
-that.  That does not mean that it would be a good idea to throw out the
-few standard C headers it does use, and implement those with compiler
-internal interfaces instead, which we advice you against.
-
-> (*) iirc, with -ffreestanding gcc doesn't do all the basic memcpy()
-> optimizations. But I forget the exact details.
-
-I would love to hear any details about that.
-
-I do know the Glibc headers do (or did?) some premature optimisation
-wrt. some mem* and str*, hurting performance on newer compilers.  But
-you should not be using the Glibc headers for compiling the kernel at
-all anyway, so maybe there was some bug thereabouts?
-
-
-Segher
+                 Linus
