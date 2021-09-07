@@ -1,108 +1,86 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8823972
-	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 13:44:33 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id m2so6920136wmm.0
-        for <llvm@lists.linux.dev>; Tue, 07 Sep 2021 06:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WkJEILKIhdl3VRNi+o6WcfgG/yP64dQ+4mkD99PbiSY=;
-        b=XhJXnn6iv7V1MGRg9ZkLlas1IdzwsXckNYuZK2QugSrgr+IfNKJJ0bjcJUQrbOyr06
-         LrfxDlXRmjDHEcq0HrnbYOTSRwoM4wrJZM+Ife7R6e9gh7FUvhrPEb3WftwjnB1PhOH/
-         CMO0ofcZwZM6h4zBz0fBtTOJtRddgsWWEmuypIxs17tSO4BiVN97qpK0J877R15g7w8r
-         JDwnyFjnqEGDKCPfCv6bPiegXwWT3pNCJfsgQpeCXegUUTW6ZK1CqAAsnCUxN7hVuZwG
-         LEJIpqS92a/QTzlmsNdNxmFzQZf2l07YM7a194bNQnqguxs/jRbFHNkgr9Y5jk7ichEl
-         AmFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WkJEILKIhdl3VRNi+o6WcfgG/yP64dQ+4mkD99PbiSY=;
-        b=htul6GmlHVx6KiQQ2SWAsOMJ4Qah9e3qUvjt7THnfgsYiyCDfMuDdEGTP2fKV1wK9l
-         xOp6BEfgLpUaolm36UHf+yolvhLrbkvq4b8oKMRgSs2DrR42GADFQucy7VJOkd9U7tF0
-         lZn08uJnTiIHm7+Zs/hAcKyW3xA7aNY3E/jceexP38kru9wgHc60PfmTPzI7dIjpdIE9
-         nOR1lES6GaO5FnGOFpEdOM1vD+A8gifNsyyac+q3sOzBUNWtWFsoAcd9odkhN9zCFjU0
-         cBjhnEnieYuMKJZDiOFrCLC8QxAhMrA3lK6AZz9xyuzkQ7IWnHmkB9IubtHQazFiDpI0
-         +/Zg==
-X-Gm-Message-State: AOAM5305BRFwZ2XCO+tsljaRq4tUmXQ29/clBrsJ3ShSlkIUeGvTDxri
-	UuPuO4yaq8l/nPmXgjOMwnO9xclRN3AWj5VOQb4=
-X-Google-Smtp-Source: ABdhPJznwkAIj2BBCM00XE8Pt6l/jHjtuDBdb65PfqgK9fRTDong02ISge3DaBIZvF7SqOG/fhi2pQ==
-X-Received: by 2002:a7b:cd92:: with SMTP id y18mr4120310wmj.78.1631022271773;
-        Tue, 07 Sep 2021 06:44:31 -0700 (PDT)
-Received: from [192.168.1.165] ([139.47.33.227])
-        by smtp.gmail.com with ESMTPSA id r129sm2357134wmr.7.2021.09.07.06.44.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Sep 2021 06:44:31 -0700 (PDT)
-Subject: Re: [PATCH v5 17/31] target/arm: Enforce alignment for LDM/STM
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: qemu-devel@nongnu.org, Peter Maydell <peter.maydell@linaro.org>,
- qemu-arm@nongnu.org, llvm@lists.linux.dev
-References: <20210419202257.161730-1-richard.henderson@linaro.org>
- <20210419202257.161730-18-richard.henderson@linaro.org>
- <YS19IBEGrIUnUT2p@Ryzen-9-3900X.localdomain>
-From: Richard Henderson <richard.henderson@linaro.org>
-Message-ID: <0699da7b-354f-aecc-a62f-e25693209af4@linaro.org>
-Date: Tue, 7 Sep 2021 15:44:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BD172
+	for <llvm@lists.linux.dev>; Tue,  7 Sep 2021 14:32:54 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 187ETeIO006845;
+	Tue, 7 Sep 2021 09:29:40 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 187ETeHc006818;
+	Tue, 7 Sep 2021 09:29:40 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Tue, 7 Sep 2021 09:29:34 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: Jakub Jelinek <jakub@redhat.com>, Florian Weimer <fweimer@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Subject: Re: [GIT PULL v2] Kbuild updates for v5.15-rc1
+Message-ID: <20210907142934.GF1583@gate.crashing.org>
+References: <20210904191531.GS1583@gate.crashing.org> <CAHk-=wjc1rxah3xt8mKN=aCxQigjy3-hEf4xh_Y-r=MXAKVrag@mail.gmail.com> <20210906154642.GV1583@gate.crashing.org> <CAHk-=wj=WpWO_V86cZH99LgZGBbvdDb4wR26ce5van0hJqjzLA@mail.gmail.com> <20210906172701.GX1583@gate.crashing.org> <CAHk-=wh0MBVfA89WLWnCiSnJ2a=hSAoSxfG-jyf7JJeBDPK3ew@mail.gmail.com> <87lf49wodu.fsf@oldenburg.str.redhat.com> <20210906194808.GY1583@gate.crashing.org> <20210906201432.GZ920497@tucnak> <CAHk-=wi80NGPppGmBpc5zuGRAsv4_7qsDu7ehW515J2FJoezAQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <YS19IBEGrIUnUT2p@Ryzen-9-3900X.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi80NGPppGmBpc5zuGRAsv4_7qsDu7ehW515J2FJoezAQ@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
 
-On 8/31/21 2:51 AM, Nathan Chancellor wrote:
-> I just bisected a boot hang with an LLVM-built multi_v7_defconfig +
-> CONFIG_THUMB2_KERNEL=y kernel down to this commit. I do not see the same
-> hang when the kernel is compiled with GCC 11.2.0 and binutils 2.37 nor
-> do I see a hang with multi_v7_defconfig by itself. Is there something
-> that LLVM is doing wrong when compiling/assembling/linking the kernel or
-> is there something wrong/too aggressive with this commit? I can
-> reproduce this with current QEMU HEAD (ad22d05833).
+On Mon, Sep 06, 2021 at 02:08:58PM -0700, Linus Torvalds wrote:
+> On Mon, Sep 6, 2021 at 1:14 PM Jakub Jelinek <jakub@redhat.com> wrote:
+> >
+> > the only guaranteed APIs are
+> > those provided by the headers (x86intrin.h/*mmintrin.h etc. on x86,
+> > arm_{neon,sve}.h etc. on arm*, ...)
 > 
-> My QEMU invocation is:
+> You guys realize we don't use those, do you?
+
+Linux does use the Arm and Power vector intrinsics (arm_neon.h and
+altivec.h).
+
+> And you don't seem to realize that you are actively arguing *AGAINST*
+> what you think you argue for.
+
+I have no idea what you think we are arguing for, only what we are.
+
+> That "immintrin.h" file, for example, is simply not usable for the
+> kernel. I just checked.
+
+Yes.  It cannot be used in freestanding environments; it includes a
+header file we don't ship (<mm_malloc.h>, via <xmmintrin.h>).  Or
+perhaps we do ship it, but only on native systems?  Same issue, anyway.
+
+The top comment in the latter says
+  /* Implemented from the specification included in the Intel C++ Compiler
+     User Guide and Reference, version 9.0.  */
+so the shortcoming exists there already probably?
+
+>       27 | #include <stdlib.h>
+>          |          ^~~~~~~~~~
 > 
-> $ qemu-system-arm \
->      -append "console=ttyAMA0 earlycon" \
->      -display none \
->      -initrd rootfs.cpio \
->      -kernel zImage \
->      -M virt \
->      -m 512m \
->      -nodefaults \
->      -no-reboot \
->      -serial mon:stdio
-> 
-> and the rootfs.cpio and zImage files can be found here:
-> 
-> https://github.com/nathanchance/bug-files/tree/15c1fd6e44622a3c27823d2c5c3083dfc7246146/qemu-2e1f39e29bf9a6b28eaee9fc0949aab50dbad94a
+> Oops.
 
-Hmm.  I see
+Yup, that is not a (freestanding) standard C header.
 
-IN:
-0xc13038e2:  e890 008c  ldm.w    r0, {r2, r3, r7}
+> Very similar things happens if you try to use that <stdint.h> file
+> that somebody mentioned earlier.
 
-R00=c13077ca R01=c11a8058 R02=c11a8058 R03=c031737f
-R04=48379000 R05=00000024 R06=c031748d R07=c03174bb
-R08=412fc0f1 R09=c0ce9308 R10=50c5387d R11=00000000
-R12=00000009 R13=c1501f88 R14=c0301739 R15=c13038e2
-PSR=200001f3 --C- T svc32
-Taking exception 4 [Data Abort]
-...from EL1 to EL1
-...with ESR 0x25/0x9600003f
-...with DFSR 0x1 DFAR 0xc13077ca
+Not at all.  <stdint.h> *is* a standard C header, and we ship it, it
+always works.  If you find problems with it, please report them!
 
-So, yes, it's a ldm from an address % 4 = 2, so it is correct that we should trap.  You 
-should see the same trap on real hw.
+> You also don't seem to realize how hard it is to separate out the
+> user-land crap that we really cannot use, and must not use.
+
+We have worked very hard for many years to make this better.  For the
+freestanding headers only <limits.h> is still problematic, and you do
+not need that one anyway, it is legacy more than anything else.
 
 
-r~
+Segher
