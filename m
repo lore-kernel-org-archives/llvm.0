@@ -1,110 +1,128 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3232672
-	for <llvm@lists.linux.dev>; Wed,  8 Sep 2021 21:17:34 +0000 (UTC)
-Received: by mail-ot1-f43.google.com with SMTP id k12-20020a056830150c00b0051abe7f680bso4798254otp.1
-        for <llvm@lists.linux.dev>; Wed, 08 Sep 2021 14:17:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695CC72
+	for <llvm@lists.linux.dev>; Wed,  8 Sep 2021 21:59:04 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id u16so5410787wrn.5
+        for <llvm@lists.linux.dev>; Wed, 08 Sep 2021 14:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TPlAlW9m0l3/305TAZdOn8PajEjpurMWCxqwt3GbkS4=;
-        b=k5Abv4lPU09XKV+T9DT6mwM4nvhzpbp8w1z70/OHtY75Ynul9pQ6hYn5bXFmBFeMrW
-         O0+919A9pdjrK0y3dcJvzhZin3ZKvXoUiyDt23xQHj/SSnlPAAi9VRQzz8a1I4ubHeF0
-         4nYBDLB8Lz6QbbDkoFiuCJHvyWUVUa3EzltHvqTW/L4+AUCf7EQWCKr68+2A7LB0C3ZB
-         q4oXu0fljrYBN40kLy/hL1DYa7IAkakc0Yf4BDFQNlOFsl5vyYVrUyyUyf3OAkf0Gq/o
-         aDrKuO+c9bQIEHnV0CzehyjBRrbMdQCVCf6U1wUNm2OTmqSD0tlRXzMVuymIfnAuoQV+
-         izxA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+LR8frgXEe3ow5R83HHc128uph7ex7SBJh9j6e+S9jU=;
+        b=Db08IbxJ13EWKYQNGZ2BEuYsakhUSoIWFEo23AxCjh0j+YYZUAYir81XobnmhdiQFC
+         1iSVB74cCVzPUS1vGu59yP4rT4pCrd4YDNYH7j7c3dsrwlrdxSnP4oy0loI6+6CtalWJ
+         LKXTNXMJVTgRiy0U9o3cqCOmJTqWvfPGpCabxpOLQ71sUgtL4uo66+t8MWgMPhYieet8
+         sbMaCQLCKSjeTPhIL7lYpAIf6SX9Jo+Y3p5sQFLYc1YSIVTP9WSd2LfIphpbBDvU1LVL
+         4TTP9wwvFOJnOuTkfJZQqhMJ1gBJZD4IDEXw290MmI/VunlC/CDYSxsp1JwZn9nDgCqs
+         99DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TPlAlW9m0l3/305TAZdOn8PajEjpurMWCxqwt3GbkS4=;
-        b=MfykRxT18im9qvbPcfBccRbN4FNbSXFXNng1uM1VLASQUeAwj6BkZ/Hlk67WN4Ab02
-         MiJdldbPxqjIpkVZkm1qF1qs31hGYp2h79pfRZSBDK8GsBs3dsZ810xjLmo/epf0r0U1
-         kQgPsE7d4lS2+3QUwUbQ4Wc6F5yOGi6OLrs1kj9NXMY0nPfa0I3l6pV8HtMgBSfeBrNT
-         8ZYzQ00UOI2VgHi1DkbCqH6UpC7/5ru+QLnzCxLaLuMPeidpGh4+uiw/yT7V2dwcgbsN
-         4ZG/m6w3Jl6As6jW8j4ms/jRRSv6nDeH/F1jiFXT6XRjTlvJ5Jou0AIa7Vufn+8HIp2y
-         sp1Q==
-X-Gm-Message-State: AOAM532SSisDnzZxiB0Po0M7S9TDt3rTLofM4pWEZX7lWgwYCagKtw/c
-	qOwoapt5u2T626Ni/B01rL8=
-X-Google-Smtp-Source: ABdhPJxkjqUmx0EXZUtOM51rkpogDdc1elqKgJf+LSadeuZxUOTgYN8HN8JPtJWeUSz2gihbxedmdg==
-X-Received: by 2002:a9d:7f07:: with SMTP id j7mr181524otq.84.1631135853295;
-        Wed, 08 Sep 2021 14:17:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j8sm39523ooc.21.2021.09.08.14.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Sep 2021 14:17:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+LR8frgXEe3ow5R83HHc128uph7ex7SBJh9j6e+S9jU=;
+        b=0DJpHcRQn1E/AaCFRBqyZrPP3Iq/IMVx/4YYUXx4LGDDaqRmRX+/daPQnAQ3thJLHy
+         0OF/T+E5RYk5sUy9ikFluj1Y9gYZoEohfCr2ThFZbQF6ruwi3bXNkVgWnnHyFotEKsXl
+         dK96WS9Z37DL9VjcEkgWn+90Fvn2+WOX9Z1KNfuxx3YJW8XzhaogjLA+AjMoHaW27Nss
+         iizL1OI/9i+SMXZpN5DO6mhW1J29CTfuwc+RQHMM/7cposMljn8lP+RNmFKasUdPFgtv
+         /BJ+cxZ7S3EwTRZn9GNd9+MjgSDB3owzpIVEhx0+KvRizHvZQYR/7ptyuvt6K1nGo/vL
+         41zA==
+X-Gm-Message-State: AOAM530RmRPa9mspu1gxM651MM4VVgHNzVvISPl0YPRBhZDm6JGErvw3
+	KHkjnY761cqSVWtkgu/5l8Dt6g==
+X-Google-Smtp-Source: ABdhPJy9LuBylSkfGDLomcMbGliUY/gfERj/SWVa0XWOQWuMBf30BqzMK/CEeBFTW6NaaPpKmnfwMg==
+X-Received: by 2002:adf:f208:: with SMTP id p8mr418298wro.379.1631138342436;
+        Wed, 08 Sep 2021 14:59:02 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:6c42:a08d:7652:61ef])
+        by smtp.gmail.com with ESMTPSA id o10sm358689wrc.16.2021.09.08.14.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Sep 2021 14:59:01 -0700 (PDT)
+Date: Wed, 8 Sep 2021 23:58:56 +0200
+From: Marco Elver <elver@google.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com
 Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
-To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linux-riscv@lists.infradead.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com
+Message-ID: <YTkyIAevt7XOd+8j@elver.google.com>
 References: <20210906142615.GA1917503@roeck-us.net>
  <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
  <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain>
  <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
  <YTkjJPCdR1VGaaVm@archlinux-ax161>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
-Date: Wed, 8 Sep 2021 14:16:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YTkjJPCdR1VGaaVm@archlinux-ax161>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 
-On 9/8/21 1:55 PM, Nathan Chancellor wrote:
-> Hi Arnd,
+On Wed, Sep 08, 2021 at 02:16PM -0700, Guenter Roeck wrote:
+> On 9/8/21 1:55 PM, Nathan Chancellor wrote:
+[...]
+> > I have started taking a look at these. Most of the allmodconfig ones
+> > appear to be related to CONFIG_KASAN, which is now supported for
+> > CONFIG_ARM.
+> > 
 > 
-> On Tue, Sep 07, 2021 at 11:11:17AM +0200, Arnd Bergmann wrote:
->> On Tue, Sep 7, 2021 at 4:32 AM Nathan Chancellor <nathan@kernel.org> wrote:
->>>
->>> arm32-allmodconfig.log: crypto/wp512.c:782:13: error: stack frame size (1176) exceeds limit (1024) in function 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/firmware/tegra/bpmp-debugfs.c:294:12: error: stack frame size (1256) exceeds limit (1024) in function 'bpmp_debug_show' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/firmware/tegra/bpmp-debugfs.c:357:16: error: stack frame size (1264) exceeds limit (1024) in function 'bpmp_debug_store' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: error: stack frame size (1384) exceeds limit (1024) in function 'bw_calcs' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: error: stack frame size (5560) exceeds limit (1024) in function 'calculate_bandwidth' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: error: stack frame size (1064) exceeds limit (1024) in function 'cfi_intelext_writev' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/ntb/hw/idt/ntb_hw_idt.c:1041:27: error: stack frame size (1032) exceeds limit (1024) in function 'idt_scan_mws' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/staging/fbtft/fbtft-core.c:902:12: error: stack frame size (1072) exceeds limit (1024) in function 'fbtft_init_display_from_property' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/staging/fbtft/fbtft-core.c:992:5: error: stack frame size (1064) exceeds limit (1024) in function 'fbtft_init_display' [-Werror,-Wframe-larger-than]
->>> arm32-allmodconfig.log: drivers/staging/rtl8723bs/core/rtw_security.c:1288:5: error: stack frame size (1040) exceeds limit (1024) in function 'rtw_aes_decrypt' [-Werror,-Wframe-larger-than]
->>> arm32-fedora.log: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: error: stack frame size (1376) exceeds limit (1024) in function 'bw_calcs' [-Werror,-Wframe-larger-than]
->>> arm32-fedora.log: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: error: stack frame size (5384) exceeds limit (1024) in function 'calculate_bandwidth' [-Werror,-Wframe-larger-than]
->>>
->>> Aside from the dce_calcs.c warnings, these do not seem too bad. I
->>> believe allmodconfig turns on UBSAN but it could also be aggressive
->>> inlining by clang. I intend to look at all -Wframe-large-than warnings
->>> closely later.
->>
->> I've had them close to zero in the past, but a couple of new ones came in.
->>
->> The amdgpu ones are probably not fixable unless they stop using 64-bit
->> floats in the kernel for
->> random calculations. The crypto/* ones tend to be compiler bugs, but hard to fix
-> 
-> I have started taking a look at these. Most of the allmodconfig ones
-> appear to be related to CONFIG_KASAN, which is now supported for
-> CONFIG_ARM.
-> 
+> Would it make sense to make KASAN depend on !COMPILE_TEST ?
+> After all, the point of KASAN is runtime testing, not build testing.
 
-Would it make sense to make KASAN depend on !COMPILE_TEST ?
-After all, the point of KASAN is runtime testing, not build testing.
+It'd be good to avoid. It has helped uncover build issues with KASAN in
+the past. Or at least make it dependent on the problematic architecture.
+For example if arm is a problem, something like this:
 
-Guenter
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -71,7 +71,7 @@ config ARM
+ 	select HAVE_ARCH_BITREVERSE if (CPU_32v7M || CPU_32v7) && !CPU_32v6
+ 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
+ 	select HAVE_ARCH_KGDB if !CPU_ENDIAN_BE32 && MMU
+-	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL
++	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL && (!COMPILE_TEST || !CC_IS_CLANG)
+ 	select HAVE_ARCH_MMAP_RND_BITS if MMU
+ 	select HAVE_ARCH_PFN_VALID
+ 	select HAVE_ARCH_SECCOMP
+
+More generally, with clang, the problem is known and due to KASAN stack
+instrumentation (CONFIG_KASAN_STACK):
+
+ | config KASAN_STACK
+ |         bool "Enable stack instrumentation (unsafe)" if CC_IS_CLANG && !COMPILE_TEST
+ |         depends on KASAN_GENERIC || KASAN_SW_TAGS
+ |         depends on !ARCH_DISABLE_KASAN_INLINE
+ |         default y if CC_IS_GCC
+ |         help
+ |           The LLVM stack address sanitizer has a know problem that
+ |           causes excessive stack usage in a lot of functions, see
+ |           https://bugs.llvm.org/show_bug.cgi?id=38809
+ |           Disabling asan-stack makes it safe to run kernels build
+ |           with clang-8 with KASAN enabled, though it loses some of
+ |           the functionality.
+ |           This feature is always disabled when compile-testing with clang
+ |           to avoid cluttering the output in stack overflow warnings,
+ |           but clang users can still enable it for builds without
+ |           CONFIG_COMPILE_TEST.  On gcc it is assumed to always be safe
+ |           to use and enabled by default.
+ |           If the architecture disables inline instrumentation, stack
+ |           instrumentation is also disabled as it adds inline-style
+ |           instrumentation that is run unconditionally.
+
+This is already disabled if COMPILE_TEST and building with clang. As
+far as I know, there's no easy fix for clang and it's been discussed
+many times over with LLVM devs.
+
+Thanks,
+-- Marco
