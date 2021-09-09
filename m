@@ -1,86 +1,92 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260603FE1
-	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 10:49:39 +0000 (UTC)
-Received: by mail-wm1-f73.google.com with SMTP id p11-20020a05600c204b00b002f05aff1663so559188wmg.2
-        for <llvm@lists.linux.dev>; Thu, 09 Sep 2021 03:49:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF2B3FE1
+	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 10:53:15 +0000 (UTC)
+Received: by mail-oi1-f175.google.com with SMTP id v2so1941371oie.6
+        for <llvm@lists.linux.dev>; Thu, 09 Sep 2021 03:53:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=JKG2Csw+REpqX6pYLoajkSbStNWY+2P13qnXNLcGPTo=;
-        b=oVBgZSF0f7gZb8HxrZbIdXzorsMl6/30hQtezrkGiG8Mjm7GMEenEEeX5JUiCbYIgx
-         Doy4WrNjWdwiqs8RasWNSvfZMqCqnH3qDP5QY3UwDBgMIVon3xP9XEhsjAd1s9G2oe3x
-         RiqzigUTJHbCf4sZNRHKAS30r6yHw0KBwy5YQPG1DjBL3/6mFcF5IBV5cgzgfseyw+lr
-         N53YN3j9A/2jMxFze4B4nunFb0XIP42E5YN4mAKc7Ck8rGjvakkPbQCWqASi8Y3uDwYC
-         thMRP3jA2e6aXbyMrjruuJeGvI7gZjIhXqKuZKJDaRFVke0PxsNbBzmW77HK7kksfQ58
-         J8nQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fU5ufvRRjTtfwnNvK13MR5zMOLz3I8fk1OzlUMqINLQ=;
+        b=svEsGSMujFvTtR4UMtARJNXuZvz+U/550aXRIc+7UMzXzxYASPNNCNz75C6NHgXQGg
+         dVJIPTelpAL58scaurL0kBQOQTMznlEy8QRnyHQfYxdvgW794LiM1IeQsfZLCEJ22GDQ
+         qeYJDSw9yib0rswsAY4EiMIpR09/rniDzcmwUBU47L1cdLS7q206vZncbq5ddz/unqpR
+         JjT6q7GZ3YxYt0F0WB2frZxiJ2+sILr+1ax6Ri2HSHO4/nyZOnqbiOVisCjJQDDu6QAo
+         hcv1jpLE7VOWgiP2TLIVuvoIKnrgb/YQjoBfw63Ub7F4cpzR210zw6O/4AgWl9NTv+i7
+         YCmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=JKG2Csw+REpqX6pYLoajkSbStNWY+2P13qnXNLcGPTo=;
-        b=RBJzo6vFQusTHqOGWrdIc02LV6OECPq1K2U1Cg26eWDJ0WajoAvjJYTQZWhI+d5j/C
-         StpiWzIsSoMCTXXv4UKBsqZPOVzXAb0EfbQ408J5inTNh+M6DBHGduAlUArz0nw2YhkJ
-         ps+HPmbM6bz4zA7ngOMAtCDWG4eVTCp2FoDOLkyHUTnyjUKpIXzsSMmQ3xrBbG2P/5nT
-         S8EriSpRhbpgglzh8Dh+SrEE2gkzv/ATZnsz69Ns6u+vntbWGQyjs+vhTFiqR3wSV/Ww
-         t1UU11sAmKCdAvGTAjoVYbTICVtZbtApL/feeSUOUFUer3xelZhoBexeS0GvgqAo0DvV
-         TVag==
-X-Gm-Message-State: AOAM533KlvsTZNkEGgHG1GUtk6wpR01ub2zJz1Cql8I8KeaP6xatnbTb
-	imjN7JNVlTI+YZCNohXpoYbZUa5UlA==
-X-Google-Smtp-Source: ABdhPJzkOAvHKQVqCuqxsCtyM6C/PyG02n+39nThS1IWFPChq3RDEGCJm3IbSKaPCz97WE1D6JAp5UuEWQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:98f9:2b1c:26b6:bc81])
- (user=elver job=sendgmr) by 2002:a05:600c:b4e:: with SMTP id
- k14mr2206453wmr.151.1631184577256; Thu, 09 Sep 2021 03:49:37 -0700 (PDT)
-Date: Thu,  9 Sep 2021 12:49:25 +0200
-Message-Id: <20210909104925.809674-1-elver@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fU5ufvRRjTtfwnNvK13MR5zMOLz3I8fk1OzlUMqINLQ=;
+        b=knL3T/1uDH6nlNtdTlA5rkMkv1GaOKoh5eP88gXMS+HlRlCF+QRohr7gelt2EIqpcZ
+         XqESsogHJHvpVzkB1D+bQUOpS3aAhGrveFGVbWjIRwBxfey3d2RWvJ7kSwtMymQotPw2
+         0ZTm446994dNi0X3WSZiQouvG+d/y/nQgW0rq3wT+pMK70Ty+gTQ53hCcoxWu3/0aVPz
+         MOCmdd4/fjwmB32yfWvKpHbKwwxL7TuE/dvLjR+Rz4g6SAL4A9O1tr6Ty1vsrWdxmvFF
+         pD7Q98b4fqWnEXGvj/NgQhA1tn4ed+rL40wxu08+VoppGq3IPNIk9/gFWbP0uMba60Qb
+         4b7Q==
+X-Gm-Message-State: AOAM531TVq/KuBODgagQSehiBcMRU2wBQuISgrX4jAr0gIp+o7lZGlZN
+	jF5M/HYCDDAt9ic0qR+hNePMy882PklJWrvFmJZvkg==
+X-Google-Smtp-Source: ABdhPJypirAM1jjdo9XWTXuE1r/IYJFmD049z7WphsmfidtaQM2qvedJJrF7FPI9vKRmcHUWVT9heQSyJAVB96uljac=
+X-Received: by 2002:a05:6808:21a5:: with SMTP id be37mr1443831oib.172.1631184794726;
+ Thu, 09 Sep 2021 03:53:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
-Subject: [PATCH] kasan: double -Wframe-larger-than threshold if KASAN
+MIME-Version: 1.0
+References: <20210906142615.GA1917503@roeck-us.net> <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
+ <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain> <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
+ <YTkjJPCdR1VGaaVm@archlinux-ax161> <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
+ <YTkyIAevt7XOd+8j@elver.google.com> <YTmidYBdchAv/vpS@infradead.org>
+In-Reply-To: <YTmidYBdchAv/vpS@infradead.org>
 From: Marco Elver <elver@google.com>
-To: elver@google.com, Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
-	Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@infradead.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Aleksandr Nogikh <nogikh@google.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Taras Madan <tarasmadan@google.com>, linux-mm@kvack.org, llvm@lists.linux.dev
+Date: Thu, 9 Sep 2021 12:53:03 +0200
+Message-ID: <CANpmjNNCVu8uyn=8=5_8rLeKM5t3h7-KzVg1aCJASxF8u_6tEQ@mail.gmail.com>
+Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Nathan Chancellor <nathan@kernel.org>, 
+	Arnd Bergmann <arnd@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	linux-riscv@lists.infradead.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-All architectures at least double stack size when using one of the KASAN
-software modes that rely on compiler instrumentation.
+On Thu, 9 Sept 2021 at 07:59, Christoph Hellwig <hch@infradead.org> wrote:
+> On Wed, Sep 08, 2021 at 11:58:56PM +0200, Marco Elver wrote:
+> > It'd be good to avoid. It has helped uncover build issues with KASAN in
+> > the past. Or at least make it dependent on the problematic architecture=
+.
+> > For example if arm is a problem, something like this:
+>
+> I'm also seeing quite a few stack size warnings with KASAN on x86_64
+> without COMPILT_TEST using gcc 10.2.1 from Debian.  In fact there are a
+> few warnings without KASAN, but with KASAN there are a lot more.
+> I'll try to find some time to dig into them.
 
-Until now, warnings emitted by -Wframe-larger-than could easily be
-ignored, as we would still get a working kernel.
+Right, this reminded me that we actually at least double the real
+stack size for KASAN builds, because it inherently requires more stack
+space. I think we need Wframe-larger-than to match that, otherwise
+we'll just keep having this problem:
 
-However, with the introduction of -Werror (CONFIG_WERROR=y), it makes
-sense to at least double the -Wframe-larger-than threshold for
-software-based KASAN modes to reflect the already increased stack sizes
-when building a kernel with KASAN enabled.
+https://lkml.kernel.org/r/20210909104925.809674-1-elver@google.com
 
-Link: https://lkml.kernel.org/r/YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain
-Signed-off-by: Marco Elver <elver@google.com>
----
- lib/Kconfig.debug | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ed4a31e34098..2055bbb6724a 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -345,6 +345,8 @@ endif # DEBUG_INFO
- config FRAME_WARN
- 	int "Warn for stack frames larger than"
- 	range 0 8192
-+	default 4096 if 64BIT && (KASAN_GENERIC || KASAN_SW_TAGS)
-+	default 2048 if !64BIT && (KASAN_GENERIC || KASAN_SW_TAGS)
- 	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
- 	default 1536 if (!64BIT && PARISC)
- 	default 1024 if (!64BIT && !PARISC)
--- 
-2.33.0.153.gba50c8fa24-goog
-
+> While we're at it, with -Werror something like this is really futile:
+>
+> drivers/gpu/drm/amd/amdgpu/amdgpu_object.c: In function =E2=80=98amdgpu_b=
+o_support_uswc=E2=80=99:
+> drivers/gpu/drm/amd/amdgpu/amdgpu_object.c:493:2: warning: #warning
+> Please enable CONFIG_MTRR and CONFIG_X86_PAT for better performance thank=
+s to write-combining [-Wcpp
+>   493 | #warning Please enable CONFIG_MTRR and CONFIG_X86_PAT for better =
+performance \
+>       |  ^~~~~~~
