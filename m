@@ -1,66 +1,148 @@
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2040.outbound.protection.outlook.com [40.107.92.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B98E72
-	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 00:13:53 +0000 (UTC)
-Received: by mail-io1-f53.google.com with SMTP id b200so30696iof.13
-        for <llvm@lists.linux.dev>; Wed, 08 Sep 2021 17:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u/oNyUzVDcvaYcpDh9wmrylwNICdOwMu/2YDLPmGpIY=;
-        b=qz63LbSJJsuJtmyjrkE3D/8rI6hdOS0JHCJTfxLDv2cZ14JotrnFgqbZVAohleOrHi
-         ghmHQvT3IonWSlFIYxTkyBE+87CmPJhh0oKL6I1k5NV5/M5Wth7QILaf73R4PWL8SVFt
-         sVCfrMADxbAqwi+PDZZCWKr0qDPhRbG0sK+mdffoPjnhE6W+QchY+da8kmHrJRuSY+Tg
-         sluIhYjJJ4Ke7O3OkBPyb4Yw/DM4DiRd7wFsBT8AmFzHcUzcvQLNN53GDuyoz+z5uoOn
-         XgkcA8O7XnNbGIMctBOo/BKLGCr+pAUBDQWUTdVXeMkI5V3j0R7fWJJK5Hc6ZInj/om/
-         uGDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u/oNyUzVDcvaYcpDh9wmrylwNICdOwMu/2YDLPmGpIY=;
-        b=d+AeSmR6Fd14zB7TML5l+KtBd60l6hcbSY3gM+W+HdKgTBf7M0odsbxFz9roB/eyTj
-         TCBE+8djcadnZxyHol9dYnQQuU1qPJc+ZRNcL4hfFFMWKcDfU1kJIyuIUbBkjFVGf4Od
-         PI4yRJQMvxWzjoQt5gntrW1ymWRrwiyG5vP1w0NSzribvMEZ0JjQYPyRx6IVNcb4McDB
-         S1C1f2q/tea4uQlcaK3l9v03dd3zH+ciG/fgqdRDZCbwnvdqNS5s6YZWKAN9QvZP48yJ
-         P1NyqU7+k4FOYQVhjkrbhSfZ2Sd4Euamvi/DYzZJiyLTXnCJeSCJHo49dozIfSZqJuwZ
-         DlYA==
-X-Gm-Message-State: AOAM531yLiOA4musYEw9aGlC9ZZCDGLYpPfEVbohIIBbNqdWsUBAnLGI
-	6RCvih6vykf/jxhaF6JVW9/IUN+XXl/eWjkDBWM=
-X-Google-Smtp-Source: ABdhPJxXnIrbyiyXQS2l6IB2elzke3/RP7HKSNs3rsH+0XGKvDYLboosLPBvZQbKIL/fLEtmVhBWhOxmf/dkoRm4rHE=
-X-Received: by 2002:a05:6638:4122:: with SMTP id ay34mr191161jab.131.1631146432540;
- Wed, 08 Sep 2021 17:13:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0053FC7
+	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 00:30:47 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=amEJN884B+4jEEOrJfNrcS04ni3NtDjc8vABmrz9yPWSwQXaDFhONKyfvGxCHaNAfGVFprvIJo6BJMAi2dcZtmpB9L7KL67BNXEEM8G0SrJyLm5AJJMJVODFWpT5qxOO/Bk7D9Ihed5CRGmJoVGtyqakhV1Ptq+ucpmtiYHMwhlFYXlBYBB5/MNrIz7daZTpFwM6sKmSVXQQb14n7EZpKDOcBy57v+AzOW8YCq6pDIPYZ2YGgqwlnkwsTSfDZjJcO/iXANpwTgngGtEf5cUDxZRlDaKUylMNpBdbp7AF0Lu+2N3LC1ZKSsQUFwWL0/asjU4FPqp+ScJm6NFAFAbRbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=iJCCsDddwZZJpsQWkszl7zYVZ01PqM9BETF5j4tTo2M=;
+ b=kTWe+T4PiCXBA2ZM4desgjjd3vysK8FqbAW48pBtapNjEitKhrU/P9o9TiAJir1QhqSgtcU5+jkOrDYQTg75W2YwNjzleOS696RKWQn1EyiVZ7r032eMXC5zGSciBIAwuZkZ3RyRAZPj++BiNp14VIWQMoC0EQ5k62+VCHvyUr6a31LKxVDhpqNSf7w+EvyP2y4fP/3oWgKz6+UXHpZ7zpvjzI7lXZUWjW50hldV4Y5D0EVC6nOPCCF71t1pIY06Wt4QcaEv6CUxJ585hzBm9oOL2+KrKYZ4kg391nSGZGR3Zd+TVHsJkihZLLIzRLKXGNlKTOgA2Er+2GB0V3YpXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iJCCsDddwZZJpsQWkszl7zYVZ01PqM9BETF5j4tTo2M=;
+ b=G++gt+NGgw4ESBciX6u0qlyOQIwB6w+o6vNAvP8xDohXzuLD1OaHvVAhOmPBRXWMQsgRBBqpaeE0H+jSVGwJozXz9ma4HErTRMP1YW804/HPTe621rHBYLfIPclEqq5HhfQ6a6Uj4xc1MPQi4D4Rv6zQzaCYCYhFmbNY0XJWoT8=
+Received: from CO2PR04CA0110.namprd04.prod.outlook.com (2603:10b6:104:7::12)
+ by CY4PR12MB1573.namprd12.prod.outlook.com (2603:10b6:910:d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14; Thu, 9 Sep
+ 2021 00:30:44 +0000
+Received: from CO1NAM11FT013.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:104:7:cafe::3f) by CO2PR04CA0110.outlook.office365.com
+ (2603:10b6:104:7::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend
+ Transport; Thu, 9 Sep 2021 00:30:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; lists.freedesktop.org; dkim=none (message not signed)
+ header.d=none;lists.freedesktop.org; dmarc=pass action=none
+ header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT013.mail.protection.outlook.com (10.13.174.227) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4500.14 via Frontend Transport; Thu, 9 Sep 2021 00:30:44 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 8 Sep 2021
+ 19:30:43 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 8 Sep 2021
+ 17:30:42 -0700
+Received: from hwentlanryzen.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2308.8 via Frontend
+ Transport; Wed, 8 Sep 2021 19:30:42 -0500
+From: Harry Wentland <harry.wentland@amd.com>
+To: <amd-gfx@lists.freedesktop.org>
+CC: <ndesaulniers@google.com>, <torvalds@linux-foundation.org>,
+	<linux-kernel@vger.kernel.org>, <arnd@kernel.org>, <sunpeng.li@amd.com>,
+	<alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+	<Xinhui.Pan@amd.com>, <nathan@kernel.org>, <linux@roeck-us.net>,
+	<llvm@lists.linux.dev>, Harry Wentland <harry.wentland@amd.com>
+Subject: [PATCH 0/4] Fix stack usage of DML
+Date: Wed, 8 Sep 2021 20:30:35 -0400
+Message-ID: <20210909003039.25870-1-harry.wentland@amd.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210908234751.GA8052@kernel.org> <20210909000141.3136241-1-ndesaulniers@google.com>
-In-Reply-To: <20210909000141.3136241-1-ndesaulniers@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 9 Sep 2021 02:13:41 +0200
-Message-ID: <CANiq72nwzPt2zx-m8Cbi8-GAztknEefVDVM4VGhOFyUvagcukQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Compiler Attributes for v5.15-rc1
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Marco Elver <elver@google.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a683dbd3-18f4-4f40-1441-08d973290fa3
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1573:
+X-Microsoft-Antispam-PRVS:
+	<CY4PR12MB1573C20DBE47E4F698E40CFB8CD59@CY4PR12MB1573.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	HVH9CME7ZQHl8Lg50/4vysO7Q/EG/73LzWaYYhPAfAUwwqXQON2I0uVDpAy7t40KzZiqc5EJ3drqk2+bgOPgjP7aXz2DGuzi1qzFjbzSFKrNFlSoDjPBF1/cbeWMfRnWH1OayaxXJ3LReiJ9PFX3fA4cN88g2A/q8xZaWEuVnPJWbeAzuwhy3QmOln2H/HIp4iibh3SLQqieKBM0B/pVpGqDKW8FtGYCbWOK79qTEiVQHzB6HizMBDwRR1qtqyfV1oXkV0eEtZzVfBkq1eNe70vWBjyYg5dhgdu3zuo0Urr/8s9AWKWu+bBbuyCiB2W/cfeDWlLRjH6zaOH384UyCNfX6BfCXAGXNm8ZHiSEFRavghtrmQkErs5xKBM4E+yxgeewjY1Jf+JkIZt5HA1B8dcib/Fhk+7R4BjJZeqTnrmfqFT+LE34H+/Q8PQIr/1snntjovw+m72oRXGmNQfHRBuXw9/XXeavW2WIPojvElht9pkStAIxzG9yo3DDYSaf6x7v5MysyxM+1nlnSLOXAG20SIif6B3COkjbOTXQQnMjuG+JlOf7fK1k/1qxXg8IYi5x6bDTGYDta2xFg1OI6TRxLyxgiRuAoVAButoLg1ELJjSpFMPHidonKPMaydSqcjtz825HLJyPd1qYAORIxZ0buoJQEhG2iGQjfq32iSYIRIkQlJiVMjsLxWP2165jPQYKKL5dGmkN3QQ/c+cRaO8A5F2inPar0ayBXdxAg/Y=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(396003)(136003)(39860400002)(346002)(376002)(46966006)(36840700001)(478600001)(2906002)(86362001)(6666004)(5660300002)(336012)(1076003)(8936002)(44832011)(356005)(8676002)(7696005)(54906003)(81166007)(82740400003)(186003)(316002)(82310400003)(36756003)(36860700001)(70586007)(426003)(4326008)(2616005)(70206006)(6916009)(26005)(83380400001)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2021 00:30:44.1295
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a683dbd3-18f4-4f40-1441-08d973290fa3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1NAM11FT013.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1573
 
-Hi Nick,
+With the '-Werror' enablement patch the amdgpu build was failing
+on clang builds because a bunch of functions were blowing past
+the 1024 byte stack frame default. Due to this we also noticed
+that a lot of functions were passing large structs by value
+instead of by pointer.
 
-On Thu, Sep 9, 2021 at 2:01 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> What about
-> https://lore.kernel.org/lkml/20210802202326.1817503-1-ndesaulniers@google.com/
-> (modified to mention clang-14 rather than clang-13)?
+This series attempts to fix this.
 
-I would like to have that one in -next for a couple days before making
-the PR. Since we are in the merge window too, I decided to send the
-one I had in the queue first.
+There is still one remaining function that blows the 1024 limit by 40 bytes:
 
-Cheers,
-Miguel
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.c:3397:6: 
+error: stack frame size of 1064 bytes in function 
+'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=]
+
+This will be a slightly more challenging fix but I'll see if we can get it
+below 1024 by breaking it into smaller functions.
+
+With this series I can build amdgpu with CC=clang and a stack frame limit of 
+1064.
+
+This series boots on a Radeon RX 5500 XT.
+
+Harry Wentland (4):
+  drm/amd/display: Pass display_pipe_params_st as const in DML
+  drm/amd/display: Pass all structs in display_rq_dlg_helpers by pointer
+  drm/amd/display: Fix rest of pass-by-value structs in DML
+  drm/amd/display: Allocate structs needed by dcn_bw_calc_rq_dlg_ttu in
+    pipe_ctx
+
+ .../gpu/drm/amd/display/dc/calcs/dcn_calcs.c  |  55 ++--
+ .../drm/amd/display/dc/dcn20/dcn20_resource.c |   2 +-
+ .../dc/dml/dcn20/display_rq_dlg_calc_20.c     | 158 +++++------
+ .../dc/dml/dcn20/display_rq_dlg_calc_20.h     |   4 +-
+ .../dc/dml/dcn20/display_rq_dlg_calc_20v2.c   | 156 +++++------
+ .../dc/dml/dcn20/display_rq_dlg_calc_20v2.h   |   4 +-
+ .../dc/dml/dcn21/display_rq_dlg_calc_21.c     | 156 +++++------
+ .../dc/dml/dcn21/display_rq_dlg_calc_21.h     |   4 +-
+ .../dc/dml/dcn30/display_rq_dlg_calc_30.c     | 132 ++++-----
+ .../dc/dml/dcn30/display_rq_dlg_calc_30.h     |   4 +-
+ .../dc/dml/dcn31/display_rq_dlg_calc_31.c     | 166 ++++++------
+ .../dc/dml/dcn31/display_rq_dlg_calc_31.h     |   4 +-
+ .../drm/amd/display/dc/dml/display_mode_lib.h |   4 +-
+ .../display/dc/dml/display_rq_dlg_helpers.c   | 256 +++++++++---------
+ .../display/dc/dml/display_rq_dlg_helpers.h   |  20 +-
+ .../display/dc/dml/dml1_display_rq_dlg_calc.c | 246 ++++++++---------
+ .../display/dc/dml/dml1_display_rq_dlg_calc.h |  10 +-
+ .../gpu/drm/amd/display/dc/inc/core_types.h   |   3 +
+ 18 files changed, 695 insertions(+), 689 deletions(-)
+
+-- 
+2.33.0
+
