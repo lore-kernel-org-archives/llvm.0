@@ -1,128 +1,56 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695CC72
-	for <llvm@lists.linux.dev>; Wed,  8 Sep 2021 21:59:04 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id u16so5410787wrn.5
-        for <llvm@lists.linux.dev>; Wed, 08 Sep 2021 14:59:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8ED772
+	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 00:01:44 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id b9-20020a5b07890000b0290558245b7eabso78810ybq.10
+        for <llvm@lists.linux.dev>; Wed, 08 Sep 2021 17:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+LR8frgXEe3ow5R83HHc128uph7ex7SBJh9j6e+S9jU=;
-        b=Db08IbxJ13EWKYQNGZ2BEuYsakhUSoIWFEo23AxCjh0j+YYZUAYir81XobnmhdiQFC
-         1iSVB74cCVzPUS1vGu59yP4rT4pCrd4YDNYH7j7c3dsrwlrdxSnP4oy0loI6+6CtalWJ
-         LKXTNXMJVTgRiy0U9o3cqCOmJTqWvfPGpCabxpOLQ71sUgtL4uo66+t8MWgMPhYieet8
-         sbMaCQLCKSjeTPhIL7lYpAIf6SX9Jo+Y3p5sQFLYc1YSIVTP9WSd2LfIphpbBDvU1LVL
-         4TTP9wwvFOJnOuTkfJZQqhMJ1gBJZD4IDEXw290MmI/VunlC/CDYSxsp1JwZn9nDgCqs
-         99DA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=o8PDKzqZH5YnDx25CbdHIwEItPJ7rMvUJBtgP5mFYfg=;
+        b=FBFtm342q8giAehQf40xGgLSuw3lM1gsmX52JN146g5aDYG+WU0u7zAP026p6L3vZN
+         TKzeme4N56M2tzwWC6e3PgXW7e9e8G23Q5hx76eEOCVNcdb+IQUHLQGa60ObgmrnSZ6T
+         5mu2SWGpFVW0xCORrpU/KuWPVJVGS9uEtF9zmvUSuVpm00p5FB2bPOcZpLBLMfkjhjTX
+         HhUdycqqcXrNl24bmrWcOaTwRYFr5O1QXYwiN0BpeXHGhldehaSZ9b3UHgYj+NrT5hCo
+         mBGy2jc+xFbO3G3CK1hDX8C03catENyq9nSsADmQGkKEtmB7kjxlaI4Ml6eI8Oiqio2c
+         kr7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+LR8frgXEe3ow5R83HHc128uph7ex7SBJh9j6e+S9jU=;
-        b=0DJpHcRQn1E/AaCFRBqyZrPP3Iq/IMVx/4YYUXx4LGDDaqRmRX+/daPQnAQ3thJLHy
-         0OF/T+E5RYk5sUy9ikFluj1Y9gYZoEohfCr2ThFZbQF6ruwi3bXNkVgWnnHyFotEKsXl
-         dK96WS9Z37DL9VjcEkgWn+90Fvn2+WOX9Z1KNfuxx3YJW8XzhaogjLA+AjMoHaW27Nss
-         iizL1OI/9i+SMXZpN5DO6mhW1J29CTfuwc+RQHMM/7cposMljn8lP+RNmFKasUdPFgtv
-         /BJ+cxZ7S3EwTRZn9GNd9+MjgSDB3owzpIVEhx0+KvRizHvZQYR/7ptyuvt6K1nGo/vL
-         41zA==
-X-Gm-Message-State: AOAM530RmRPa9mspu1gxM651MM4VVgHNzVvISPl0YPRBhZDm6JGErvw3
-	KHkjnY761cqSVWtkgu/5l8Dt6g==
-X-Google-Smtp-Source: ABdhPJy9LuBylSkfGDLomcMbGliUY/gfERj/SWVa0XWOQWuMBf30BqzMK/CEeBFTW6NaaPpKmnfwMg==
-X-Received: by 2002:adf:f208:: with SMTP id p8mr418298wro.379.1631138342436;
-        Wed, 08 Sep 2021 14:59:02 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:6c42:a08d:7652:61ef])
-        by smtp.gmail.com with ESMTPSA id o10sm358689wrc.16.2021.09.08.14.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Sep 2021 14:59:01 -0700 (PDT)
-Date: Wed, 8 Sep 2021 23:58:56 +0200
-From: Marco Elver <elver@google.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com
-Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
-Message-ID: <YTkyIAevt7XOd+8j@elver.google.com>
-References: <20210906142615.GA1917503@roeck-us.net>
- <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
- <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain>
- <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
- <YTkjJPCdR1VGaaVm@archlinux-ax161>
- <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=o8PDKzqZH5YnDx25CbdHIwEItPJ7rMvUJBtgP5mFYfg=;
+        b=zD+tsnvicXb3Bm8lnHAfNfiDuLK875RRK6W6h9YfP2byCFcel6LVVQIEzOF4dXIclX
+         TI1kym+HdAO3NQF573q4QfUSg+BemN5LZA5Sg0YzwigbNi5bSN81ZB9tLPWWr442IMMs
+         c4y/6DuP1da+yjLUv8Bg8UHv9Y6zJhuW/K0+RRJXUfqxdlPVahKjad3MCcDIcqMmdM52
+         A9H9v4cl519au5NAzGWk0QPW+XWuBIYnASZUShA1a1iKism0PO8hXPCO4gJ6P7xuKgKy
+         6vQgSEvdtOdj6E7/SWZtfDSNebVrbIkZTA91mttT4n4OyXBG0B9BZa1y615SP5++oBDY
+         q/xg==
+X-Gm-Message-State: AOAM530Hia9iaEOSMCZTSBPh1087fFUpr8HmZd4f4dJnnFRPoUbvDowI
+	ypaV1TafADcsx59MnuV0KmZRzTQ24QxmZ+KA16Q=
+X-Google-Smtp-Source: ABdhPJwwkdww7Py5G40Xq57UJ6i+9ju3eG7gPNOGMVYD3lJJ85Sv7neRHNIbGG/yXsoWkR4T/pG+zWigQ7SoKaH6eek=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:73d2:a834:c835:2de6])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:47c4:: with SMTP id
+ u187mr82103yba.225.1631145703826; Wed, 08 Sep 2021 17:01:43 -0700 (PDT)
+Date: Wed,  8 Sep 2021 17:01:41 -0700
+In-Reply-To: <20210908234751.GA8052@kernel.org>
+Message-Id: <20210909000141.3136241-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Mime-Version: 1.0
+References: <20210908234751.GA8052@kernel.org>
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
+Subject: Re: [GIT PULL] Compiler Attributes for v5.15-rc1
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: ojeda@kernel.org
+Cc: elver@google.com, geert@linux-m68k.org, linux-kernel@vger.kernel.org, 
+	torvalds@linux-foundation.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 08, 2021 at 02:16PM -0700, Guenter Roeck wrote:
-> On 9/8/21 1:55 PM, Nathan Chancellor wrote:
-[...]
-> > I have started taking a look at these. Most of the allmodconfig ones
-> > appear to be related to CONFIG_KASAN, which is now supported for
-> > CONFIG_ARM.
-> > 
-> 
-> Would it make sense to make KASAN depend on !COMPILE_TEST ?
-> After all, the point of KASAN is runtime testing, not build testing.
-
-It'd be good to avoid. It has helped uncover build issues with KASAN in
-the past. Or at least make it dependent on the problematic architecture.
-For example if arm is a problem, something like this:
-
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -71,7 +71,7 @@ config ARM
- 	select HAVE_ARCH_BITREVERSE if (CPU_32v7M || CPU_32v7) && !CPU_32v6
- 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
- 	select HAVE_ARCH_KGDB if !CPU_ENDIAN_BE32 && MMU
--	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL
-+	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL && (!COMPILE_TEST || !CC_IS_CLANG)
- 	select HAVE_ARCH_MMAP_RND_BITS if MMU
- 	select HAVE_ARCH_PFN_VALID
- 	select HAVE_ARCH_SECCOMP
-
-More generally, with clang, the problem is known and due to KASAN stack
-instrumentation (CONFIG_KASAN_STACK):
-
- | config KASAN_STACK
- |         bool "Enable stack instrumentation (unsafe)" if CC_IS_CLANG && !COMPILE_TEST
- |         depends on KASAN_GENERIC || KASAN_SW_TAGS
- |         depends on !ARCH_DISABLE_KASAN_INLINE
- |         default y if CC_IS_GCC
- |         help
- |           The LLVM stack address sanitizer has a know problem that
- |           causes excessive stack usage in a lot of functions, see
- |           https://bugs.llvm.org/show_bug.cgi?id=38809
- |           Disabling asan-stack makes it safe to run kernels build
- |           with clang-8 with KASAN enabled, though it loses some of
- |           the functionality.
- |           This feature is always disabled when compile-testing with clang
- |           to avoid cluttering the output in stack overflow warnings,
- |           but clang users can still enable it for builds without
- |           CONFIG_COMPILE_TEST.  On gcc it is assumed to always be safe
- |           to use and enabled by default.
- |           If the architecture disables inline instrumentation, stack
- |           instrumentation is also disabled as it adds inline-style
- |           instrumentation that is run unconditionally.
-
-This is already disabled if COMPILE_TEST and building with clang. As
-far as I know, there's no easy fix for clang and it's been discussed
-many times over with LLVM devs.
-
-Thanks,
--- Marco
+What about
+https://lore.kernel.org/lkml/20210802202326.1817503-1-ndesaulniers@google.com/
+(modified to mention clang-14 rather than clang-13)?
