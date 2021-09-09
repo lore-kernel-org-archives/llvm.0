@@ -1,141 +1,73 @@
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A6772
-	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 05:22:18 +0000 (UTC)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-06.nifty.com with ESMTP id 1895FFOA012401
-	for <llvm@lists.linux.dev>; Thu, 9 Sep 2021 14:15:15 +0900
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
-	by conssluserg-04.nifty.com with ESMTP id 1895Ettr029901
-	for <llvm@lists.linux.dev>; Thu, 9 Sep 2021 14:14:55 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 1895Ettr029901
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1631164495;
-	bh=ghCcarr3Wa8g2fBREVBbfn3a3wQyCXTSnt9W+mVN4Mw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rGqgIpLlT7n/rxTXzUo+6MUEomBhjVrmkJT2P1Im6Y/S1T9ntkNciz/Qymu546Q/J
-	 6bFNFQz5G2o3Ez4a2w3Kck8x9R2Vfg9mdsssZNfYlhvCOjS2euWNZPgoz6/FwQ3PBZ
-	 BgeWVPb39rsU7WA9lXdR5mdukFPrv3xEXjA0ePLlrHvB0PPcGWvNRgplB5fDiD1y2B
-	 g3CB35uBI0PeWaBpym9q/TOCGxmEG0VtiVZvQLSL4YgTpp2JCQBmwKVOKvGj6E9hDa
-	 cSBK2wIGgqkoZxrmPMDZ3RZe1GRdVlDrQv/pvE8Yd/GV7b2MOQoyGkOYJr/Kwvqltz
-	 WYKLNTbB9MbiA==
-X-Nifty-SrcIP: [209.85.216.47]
-Received: by mail-pj1-f47.google.com with SMTP id u11-20020a17090adb4b00b00181668a56d6so565228pjx.5
-        for <llvm@lists.linux.dev>; Wed, 08 Sep 2021 22:14:55 -0700 (PDT)
-X-Gm-Message-State: AOAM530H3EeybfqDAjbu14IiaO89CiUhsKnZvnRAg5QM7tHC/mPkJgyI
-	waX0vqEWtKFKgIacVFayrU7C/8AJiJ7hSzsW3rc=
-X-Google-Smtp-Source: ABdhPJwZNsMXFApjgplVXDMFN/yESX/46Fzfe2Fjn/3/fRjwdi4HheLFDoRreqN1vd/j/Idb5fi7KFiatlzL1Zk90CU=
-X-Received: by 2002:a17:902:6b42:b0:13a:54d0:39c4 with SMTP id
- g2-20020a1709026b4200b0013a54d039c4mr1244141plt.42.1631164494718; Wed, 08 Sep
- 2021 22:14:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A5672
+	for <llvm@lists.linux.dev>; Thu,  9 Sep 2021 06:00:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=EmyOmO4OA1vu17LO++qu8IgyrFImV3HoLCHV1XeAKXU=; b=m7G+7uozvp+6qWoVstSpXJCgaX
+	UPOdR2T7SaQtREbiqpM6Jcsh5kaHXhhj3aflDl5LkolWq3yc27aonGNNrXtPKCr4tb5Uy2lVEExDP
+	8zROfQNLR6zByM+dZokX6WIBi3FnjaCUChyLZmAkNIbZzSLhZMXNaOZN9r0BEyYXJttayMFKqt15c
+	OS2R1emd8XY987B+kWdUPOJYTR0OjotOItygDpYek33SuKTY8EcDJkR4XmQRXyunwghdk/0L/QExf
+	+xJ7HG7FkmIFERFpzkFMIdCo35aQxb8lqtvvw2CRQKyytkhukTWgTJu/D/V+arn0kWKLJ6xwR32Fo
+	WvKtaFUQ==;
+Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mOD4f-009WcX-Hg; Thu, 09 Sep 2021 05:58:27 +0000
+Date: Thu, 9 Sep 2021 06:58:13 +0100
+From: Christoph Hellwig <hch@infradead.org>
+To: Marco Elver <elver@google.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com,
+	Christian =?unknown-8bit?B?S8O2bmln?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH] Enable '-Werror' by default for all kernel builds
+Message-ID: <YTmidYBdchAv/vpS@infradead.org>
+References: <20210906142615.GA1917503@roeck-us.net>
+ <CAHk-=wgjTePY1v_D-jszz4NrpTso0CdvB9PcdroPS=TNU1oZMQ@mail.gmail.com>
+ <YTbOs13waorzamZ6@Ryzen-9-3900X.localdomain>
+ <CAK8P3a3_Tdc-XVPXrJ69j3S9048uzmVJGrNcvi0T6yr6OrHkPw@mail.gmail.com>
+ <YTkjJPCdR1VGaaVm@archlinux-ax161>
+ <75a10e8b-9f11-64c4-460b-9f3ac09965e2@roeck-us.net>
+ <YTkyIAevt7XOd+8j@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHk-=wjc1rxah3xt8mKN=aCxQigjy3-hEf4xh_Y-r=MXAKVrag@mail.gmail.com>
- <20210906154642.GV1583@gate.crashing.org> <CAHk-=wj=WpWO_V86cZH99LgZGBbvdDb4wR26ce5van0hJqjzLA@mail.gmail.com>
- <20210906172701.GX1583@gate.crashing.org> <CAHk-=wh0MBVfA89WLWnCiSnJ2a=hSAoSxfG-jyf7JJeBDPK3ew@mail.gmail.com>
- <87lf49wodu.fsf@oldenburg.str.redhat.com> <20210906194808.GY1583@gate.crashing.org>
- <20210906201432.GZ920497@tucnak> <CAHk-=wi80NGPppGmBpc5zuGRAsv4_7qsDu7ehW515J2FJoezAQ@mail.gmail.com>
- <20210906215218.GA920497@tucnak> <20210907145247.GH1583@gate.crashing.org>
-In-Reply-To: <20210907145247.GH1583@gate.crashing.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 9 Sep 2021 14:14:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATNZRbdxCkdu=+wW1bcyoX0YcZYRTSW129n7AnnLyKbWg@mail.gmail.com>
-Message-ID: <CAK7LNATNZRbdxCkdu=+wW1bcyoX0YcZYRTSW129n7AnnLyKbWg@mail.gmail.com>
-Subject: Re: [GIT PULL v2] Kbuild updates for v5.15-rc1
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Jakub Jelinek <jakub@redhat.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=unknown-8bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YTkyIAevt7XOd+8j@elver.google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On Tue, Sep 7, 2021 at 11:54 PM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> On Mon, Sep 06, 2021 at 11:52:18PM +0200, Jakub Jelinek wrote:
-> > On Mon, Sep 06, 2021 at 02:08:58PM -0700, Linus Torvalds wrote:
-> > There is a stddef.h include too and that's it
-> > (I must say I don't see the reason for that include though).
->
-> Yeah me neither.  Maybe the header used NULL before?
->
-> > Other compiler provided headers (not talking about C++ now) also have no
-> > or very limited includes, including stddef.h, stdarg.h, stdatomic.h, etc.
-> > The only exceptions are tgmath.h which isn't usable without libc
-> > math.h/complex.h,
->
-> <tgmath.h> is only for hosted environments.  That requires a C library
-> for GCC (we do not implement this stuff ourselves).  The compiler and
-> the C library have to work together to get this done, and the relation
-> between GCC and Glibc has been a bit too tight for this, it is true.
->
-> But a kernel build is not in a hosted environment.
->
-> > in some cases stdint.h and limits.h which are in some
-> > configurations provided both by the C library and the compiler and include
-> > each other in that case (but e.g. stdint.h has an alternate version that
-> > only uses compiler provided builtin macros) and openacc.h.
->
-> On what targets is <stdint.h> still problematic?  And <limits.h>?
+On Wed, Sep 08, 2021 at 11:58:56PM +0200, Marco Elver wrote:
+> It'd be good to avoid. It has helped uncover build issues with KASAN in
+> the past. Or at least make it dependent on the problematic architecture.
+> For example if arm is a problem, something like this:
 
+I'm also seeing quite a few stack size warnings with KASAN on x86_64
+without COMPILT_TEST using gcc 10.2.1 from Debian.  In fact there are a
+few warnings without KASAN, but with KASAN there are a lot more.
+I'll try to find some time to dig into them.
 
-Since commit 0c79a8e29b5fcbcbfd611daf9d500cfad8370fcf
-all architectures in the kernel space use the same fixed-width
-types, which are defined by
-include/uapi/asm-generic/int-ll64.h
+While we're at it, with -Werror something like this is really futile:
 
-So, u32 is always 'unsigned int',
-and u64 is always 'unsigned long long'.
-
-It is convenient for printk() in common code
-because we can always use the 'll' prefix for u64.
-
-
-  u32 foo = 1;
-  u64 bar = 1;
-
-  printk("foo = %u\n", foo);
-  printk("bar = %llu\n, bar);
-
-
-
-If we use compiler-provided <stdint.h>,
-it is not convenient for printk() because
-uint64_t is 'unsigned long' on some compilers
-and 'unsigned long long' on others.
-
-<intypes.h> provides macros such as PRIx64
-
-    uint32_t foo = 1;
-    uint64_t bar = 1;
-
-    printk("foo = %" PRIu32 "\n", foo);
-    printk("bar = %" PRIu64 "\n", bar);
-
-
-This works, but ends up with ugly code,
-which I want to avoid.
-
-
-
-
-
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+drivers/gpu/drm/amd/amdgpu/amdgpu_object.c: In function ‘amdgpu_bo_support_uswc’:
+drivers/gpu/drm/amd/amdgpu/amdgpu_object.c:493:2: warning: #warning
+Please enable CONFIG_MTRR and CONFIG_X86_PAT for better performance thanks to write-combining [-Wcpp
+  493 | #warning Please enable CONFIG_MTRR and CONFIG_X86_PAT for better performance \
+      |  ^~~~~~~
