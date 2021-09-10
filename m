@@ -1,194 +1,64 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCA73FC3
-	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 19:05:16 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id f18so5994855lfk.12
-        for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 12:05:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13313FC3
+	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 19:08:32 +0000 (UTC)
+Received: by mail-il1-f181.google.com with SMTP id z2so3131814iln.0
+        for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 12:08:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=au3UJuAXsOBp2QIfYfO6rQxcEPY/9XDh+TQuvn9TJlE=;
-        b=l6V0pRLB2h9Kyk9ZJGvZ1RhTj/V8OT617C35ohsJy8pAh9CoggGNiTetZTPuWPKNeH
-         IhFZjkhYhpYEE/FQCPr4q5EQ9qB0QaqqLSlTOlHnPHB8TJmRK8vCtIEHn2Dr1US5aGAO
-         K7sMIapzFKThAzrrT9GHey5auyrMmK9ziWjoupgnWNP1P4nWwRYz2WwPXOLP3yjP+hoG
-         InhgmclhVFMzNwyaQ2n+qM5cpdk5nfk1Wp0CAvrrgLt7BvDHVSH19f6VRzWQPLBUWPnY
-         Cl8Kik9k1jF/90Pth1pOquYmoO1hqgRZinzoeXklnqnhgpgeWtaDhlq0gGE4PhtSii++
-         PqAg==
+        bh=CGR2907jA1AKoyCj8Tk/IjWSPxjZVjA/qpLk/UXRDlY=;
+        b=Hu9zaQGAp6wamEYNfxPwGiKlL47T37nt9w+WbLEo2ZSyIQiTi28r+GC4veIIKwxspb
+         vM+tG30AJxLZRuKJ4H/qOCIwR3xrkKXzrU5RUIYsNzMWo8U+0qE4cp1kTZwl7yjzUBrk
+         cwb61bWa0uruAVM6j+kSRzKaXx6hsl7nnFLcu0aH1r9huIs/u2MQLX7IJ81nAL2ycMg3
+         cPbrjHTYXJqEuKcBjSvPKPVNh3b3KpHnGKuGHByPpmQHrRi52snHgGSeFNtAQElpPrTg
+         KAXF4zaH0y84+rp55mN9a3eBYcgq374jDodYyer6EBrBg4ncKoQuoT8BtNSsDM2Vohiz
+         pl8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=au3UJuAXsOBp2QIfYfO6rQxcEPY/9XDh+TQuvn9TJlE=;
-        b=C2wLvu+arAlaeyaw+QpKG+gfEawMC6/m8hoy0sTZGfrlbB7CH/4bv49SDSUE4834+r
-         jRln2+JAPPQOvDy7ngFkjW9ed535nA4IFrsWT3aGkxeOqomV8wIfIYD1cQc1LNzLC4a2
-         g/x44n2+g6L9lri48za0aKXqbLn4KqXLyi3QF1MKIIObI0zCMiPEzegrEj7C43YrhLom
-         /S9bmMdfmjnqtXm+GWmCg8ht/yYbSdGFnIaQuIjMLiWSS5VZ7MXHLyvnLSO0tZMKS+un
-         13hs0Iu6YFIBxOAxM8dyccfL9xjMqzZr6TFn01B2Ut3ypvWQ+toY6D7GQVYWYFL+MTYV
-         SGug==
-X-Gm-Message-State: AOAM530TQKWMaVlyFtd5TIxiw0fGbu0P0EPWPDVdxw7Cz9B32zwtjNLy
-	BqTun9cw971DMi9pY+wj64k+75zC8rpkn1NP3kyEHg==
-X-Google-Smtp-Source: ABdhPJyHRLl11RnOuvc4WYrL69wHXY7G2D7NJ2kTDF21tHIMS83OwgEpKI0M3LFvWWV3BxJtFDRJieOEUwun8sHg03Y=
-X-Received: by 2002:a05:6512:1114:: with SMTP id l20mr5182680lfg.550.1631300714719;
- Fri, 10 Sep 2021 12:05:14 -0700 (PDT)
+        bh=CGR2907jA1AKoyCj8Tk/IjWSPxjZVjA/qpLk/UXRDlY=;
+        b=iJlUUn89Khps0NgsZEOOXSUFYwXYcnVBGP9ZgpAgBW3xHY/E/QSDDhqq9xaGmM9E6/
+         Z3xUsSW0MVlWu90/djdoagKBAExUH+dKVbXK/kbKDYuhFskNbD6Eiz7y4aKYYfyUvBw2
+         gde+UYdNm7dKwTfcNBYC3NdVAPjKRQjEJTCTV8PsSYwNt4gdwPFYQ+wTZtNrY/w2vytX
+         MMnao7TLeb2/5lKornQ8BeJ1j5jzK2QdcyuhiN/TJD25J6TPkWgzD8MustTbMc5YsIww
+         F5GG5Fk5KTn4cDW4kd5D5KElyIjB+mfqHc/Vw1r4yjaTZxl/SrzZM1wCRCv8zwfKj0qn
+         Ca2A==
+X-Gm-Message-State: AOAM530Q8uOQzbutu5KbIuoz9NFRvK3880MxK/YSexxdXZf2L9eQdkq0
+	27TKKIduNeZbZpxjr1ukWj5Cr6et8t9G8nQBl2A=
+X-Google-Smtp-Source: ABdhPJzhzdUaBPwCkzhBi3vRe37qRpviqGQRMvzN5lvBxYoOuwJiWfGRLbrhlhc9KPcsN5usBcAmO1gX9XwapXqESCA=
+X-Received: by 2002:a05:6e02:1747:: with SMTP id y7mr5105442ill.5.1631300911962;
+ Fri, 10 Sep 2021 12:08:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210910165851.3296624-1-keescook@chromium.org>
-In-Reply-To: <20210910165851.3296624-1-keescook@chromium.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 10 Sep 2021 12:05:03 -0700
-Message-ID: <CAKwvOdngxD7P=qEvGcFZXB7mZp+Ub8_Rp3V3nXq5uMEcsrUsGA@mail.gmail.com>
-Subject: Re: [PATCH] Compiler Attributes: Check GCC version for __alloc_size attribute
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Marco Elver <elver@google.com>, Will Deacon <will@kernel.org>, 
-	Arvind Sankar <nivedita@alum.mit.edu>, Masahiro Yamada <masahiroy@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>, llvm@lists.linux.dev, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
+References: <20210908234751.GA8052@kernel.org> <20210909000141.3136241-1-ndesaulniers@google.com>
+ <CANiq72nwzPt2zx-m8Cbi8-GAztknEefVDVM4VGhOFyUvagcukQ@mail.gmail.com>
+In-Reply-To: <CANiq72nwzPt2zx-m8Cbi8-GAztknEefVDVM4VGhOFyUvagcukQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 10 Sep 2021 21:08:21 +0200
+Message-ID: <CANiq72muNDdCeiA8EWMkuD9Ksa8KKoqMT1h081UfoM3iWbxj8g@mail.gmail.com>
+Subject: Re: [GIT PULL] Compiler Attributes for v5.15-rc1
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Marco Elver <elver@google.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 10, 2021 at 9:58 AM Kees Cook <keescook@chromium.org> wrote:
+On Thu, Sep 9, 2021 at 2:13 AM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> Unfortunately, just version checking the use of -Wno-alloc-size-larger-than
-> is not sufficient to make the __alloc_size attribute behave correctly
-> under older GCC versions. The attribute itself must be disabled in those
-> situations too, as there appears to be no way to reliably silence the
-> SIZE_MAX constant expression cases for GCC versions less than 9.1:
->
-> In file included from ./include/linux/resource_ext.h:11,
->                  from ./include/linux/pci.h:40,
->                  from drivers/net/ethernet/intel/ixgbe/ixgbe.h:9,
->                  from drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c:4:
-> In function 'kmalloc_node',
->     inlined from 'ixgbe_alloc_q_vector' at ./include/linux/slab.h:743:9:
-> ./include/linux/slab.h:618:9: error: argument 1 value '18446744073709551615' exceeds maximum object size 9223372036854775807 [-Werror=alloc-size-larger-than=]
->   return __kmalloc_node(size, flags, node);
->          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/slab.h: In function 'ixgbe_alloc_q_vector':
-> ./include/linux/slab.h:455:7: note: in a call to allocation function '__kmalloc_node' declared here
->  void *__kmalloc_node(size_t size, gfp_t flags, int node) __assume_slab_alignment __malloc;
->        ^~~~~~~~~~~~~~
->
-> Specifically:
-> -Wno-alloc-size-larger-than is not correctly handled by GCC < 9.1
->   https://godbolt.org/z/hqsfG7q84 (doesn't disable)
+> I would like to have that one in -next for a couple days before making
+> the PR. Since we are in the merge window too, I decided to send the
+> one I had in the queue first.
 
-(heh, clang has had similar bugs with command line flags with `=` seperators)
+I am sending v2 now.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Though some of the below examples don't make sense to me (the one
-above is fine).
-
->   https://godbolt.org/z/P9jdrPTYh (doesn't admit to not knowing about option)
-
-^ technically your first link demonstrates that. This link doesn't add
-anything new and makes it look like there are more issues that there
-are.
-
->   https://godbolt.org/z/465TPMWKb (only warns when other warnings appear)
-
-^ this example doesn't make sense to me.  I couldn't reproduce what
-you're describing.
-
->
-> -Walloc-size-larger-than=18446744073709551615 is not handled by GCC < 8
->   https://godbolt.org/z/73hh1EPxz (ignores numeric value)
-
-Should this be GCC < 8.2?
-
-
-Some other feedback on the general use of godbolt.  Under Output,
-please always disable Intel Asm Syntax; it causes me physical pain.
-Also under output, usually disabling Execute the Output is what you
-want, too.
-
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Arvind Sankar <nivedita@alum.mit.edu>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> I've been digging through older GCC build logs and found this needed to
-> be fixed even harder than prior attempts from what Randy had been seeing.
-> ---
->  include/linux/compiler-gcc.h        | 9 +++++++++
->  include/linux/compiler_attributes.h | 6 ------
->  include/linux/compiler_types.h      | 5 +++++
->  3 files changed, 14 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index 01985821944b..ffe0a7570d66 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -151,3 +151,12 @@
->  #else
->  #define __diag_GCC_8(s)
->  #endif
-> +
-> +/*
-> + * https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alloc_005fsize-function-attribute
-> + * However, prior to 9.1, -Wno-alloc-size-larger-than does not work,
-> + * making this attribute unusable.
-> + */
-> +#if GCC_VERSION < 90100
-> +#define __alloc_size           /**/
-> +#endif
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 19f178e20e61..2487be0e7199 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -53,12 +53,6 @@
->  #define __aligned(x)                    __attribute__((__aligned__(x)))
->  #define __aligned_largest               __attribute__((__aligned__))
->
-> -/*
-> - *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alloc_005fsize-function-attribute
-> - * clang: https://clang.llvm.org/docs/AttributeReference.html#alloc-size
-> - */
-> -#define __alloc_size(x, ...)           __attribute__((__alloc_size__(x, ## __VA_ARGS__)))
-> -
->  /*
->   * Note: users of __always_inline currently do not write "inline" themselves,
->   * which seems to be required by gcc to apply the attribute according
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index c43308b0a9a9..91de9bead40d 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -254,6 +254,11 @@ struct ftrace_likely_data {
->  #define asm_volatile_goto(x...) asm goto(x)
->  #endif
->
-> +/* If not specifically disabled, allow the use of __alloc_size attribute. */
-> +#ifndef __alloc_size
-> +# define __alloc_size(x, ...)          __attribute__((__alloc_size__(x, ## __VA_ARGS__)))
-> +#endif
-> +
->  #ifdef CONFIG_CC_HAS_ASM_INLINE
->  #define asm_inline asm __inline
->  #else
-> --
-> 2.30.2
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Cheers,
+Miguel
