@@ -1,87 +1,92 @@
-Received: from mail-qt1-f201.google.com (mail-qt1-f201.google.com [209.85.160.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171F52F80
-	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 23:41:16 +0000 (UTC)
-Received: by mail-qt1-f201.google.com with SMTP id a22-20020ac86116000000b002a1463f30ddso41611620qtm.17
-        for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 16:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=YEmwi7Tj0kCjh6V7g9aN0YraW8uzMWFmrARhRhvny3I=;
-        b=RPBIg95u6Anq/SGueX445eP7TczY5dK74ouUzISfoUl7PMfpwk74LbgNA84ioOq7dL
-         dbrOusRGKsifFAvO9rS2ey3c/4djphfaL5Fb5kQah4ToMLID/Cp/fKirCeW8kYuyXo+r
-         9NX6Ee9afYRreiLl9ZFEIwwz0FbdfWn12xI/OlSaLrQgDq41Bz9B2G6nNn3c4N9TViW/
-         GauEsd0xyhfJmGttXPEzz4bzipacXmT3rGcqGu1ISsEhm/mZHct0RC0jj7FSMBvsw8aQ
-         mJA6JXxA2XsrHwfm3L0lp2YCKamjDcr7v2SZ6Zmsdt4uudq71AwIac24meZBC/BC0CPI
-         YJlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=YEmwi7Tj0kCjh6V7g9aN0YraW8uzMWFmrARhRhvny3I=;
-        b=Ffl39WrBGjeO9MGcaRqvDXtOWBy3devigq8I04Gjg2HSqz/xTtzalqTff4J4M3t/Pm
-         s3I+n1nsTLsuHNNoMyo2ddIXUoxZytbNBK3Eiq0e6yjQyOwZkOxosQZsukEZ5ftp0qIp
-         blg2INmwRXjDjaZi2dC3fNm4gHyr9VHrAiE6Oa38y17m1O+KFEjwVjQUvuNFBO6szTCT
-         jPYag2mL3uZVFyx1rrwWcywS8XSleqJx4FMeMpvR1gwi9oLeYlLNOm2UyT7KlDVhYPlz
-         Yqg7gG7EsUFB+n+N8mTg/dEeywx+y9M/BzUs/ar1F/JVlwbzv0ifQw1xx+Vp9tmRey4B
-         jm9Q==
-X-Gm-Message-State: AOAM533tm5F1rAAmePEqRU5CmUBdt1hPOcOVqiginMdPp7FLSzW6caMb
-	VI2UGFrS6NScgNijorAXwzktFCJ7wTBdgX/oo7M=
-X-Google-Smtp-Source: ABdhPJwAvYOSR2O8xm1EsycpD3M3UheO+Uw5/QhtUMB9XjozM/U8NcKbCquOrf1ej0cyOrQhl25lUCvoJNBOPjt58R4=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:2b76:71d3:b5fb:3734])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6214:1324:: with SMTP id
- c4mr43709qvv.61.1631317274899; Fri, 10 Sep 2021 16:41:14 -0700 (PDT)
-Date: Fri, 10 Sep 2021 16:40:47 -0700
-In-Reply-To: <20210910234047.1019925-1-ndesaulniers@google.com>
-Message-Id: <20210910234047.1019925-11-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5BA3FC3
+	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 23:48:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 53CDF611BF;
+	Fri, 10 Sep 2021 23:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1631317703;
+	bh=3W+6f0wuipTibyjTQaN5vgjbRHyQ1UrUz0L6qzxUplo=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=KrXuEsLQIXYeh9eXjpq16ZYWxHkH1WKFaE5hG2+4bXOmbBKajE6+K36WBkyjLHeyS
+	 eKFv24TqMQXYQqVMk6mrx+RU19w1nOz9pH9XF2rOZ95sCLmquwI9BE51WUXEkYpaBF
+	 8RkK8UfnGtQA3x4rATph8qC3uKDp9d2VQz/hAbFxMKvK4hDbew9QgCKm55he2f3w1v
+	 YrUP8LHlt6PJhToOv4sAeceahYMsxDn4WfexupxoLJM9GTQbht9lxUCWgUg8tzdWoI
+	 WHMy+eff9sVxectgaPmxHdq7NHT5WCoQXjgQNJARg7qXBmd4+Te7RyzLss+7SM92v6
+	 5gpQvxgkkyESw==
+Subject: Re: [PATCH 06/10] powerpc: remove GCC version check for UPD_CONSTR
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Masahiro Yamada <masahiroy@kernel.org>, Joe Perches <joe@perches.com>,
+ Arnd Bergmann <arnd@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Paul Mackerras <paulus@samba.org>,
+ Segher Boessenkool <segher@kernel.crashing.org>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, linuxppc-dev@lists.ozlabs.org
+References: <20210910234047.1019925-1-ndesaulniers@google.com>
+ <20210910234047.1019925-7-ndesaulniers@google.com>
+From: Nathan Chancellor <nathan@kernel.org>
+Message-ID: <b940bd2c-21d2-dfe9-e171-e265085a2b11@kernel.org>
+Date: Fri, 10 Sep 2021 16:48:20 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20210910234047.1019925-1-ndesaulniers@google.com>
-X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
-Subject: [PATCH 10/10] vmlinux.lds.h: remove old check for GCC 4.9
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Nathan Chancellor <nathan@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+In-Reply-To: <20210910234047.1019925-7-ndesaulniers@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Now that GCC 5.1 is the minimally supported version of GCC, we can
-effectively revert
+On 9/10/2021 4:40 PM, Nick Desaulniers wrote:
+> Now that GCC 5.1 is the minimum supported version, we can drop this
+> workaround for older versions of GCC. This adversely affected clang,
+> too.
+> 
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Segher Boessenkool <segher@kernel.crashing.org>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>   arch/powerpc/include/asm/asm-const.h | 10 ----------
+>   1 file changed, 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/asm-const.h b/arch/powerpc/include/asm/asm-const.h
+> index 0ce2368bd20f..dbfa5e1e3198 100644
+> --- a/arch/powerpc/include/asm/asm-const.h
+> +++ b/arch/powerpc/include/asm/asm-const.h
+> @@ -12,16 +12,6 @@
+>   #  define ASM_CONST(x)		__ASM_CONST(x)
+>   #endif
+>   
+> -/*
+> - * Inline assembly memory constraint
+> - *
+> - * GCC 4.9 doesn't properly handle pre update memory constraint "m<>"
+> - *
+> - */
+> -#if defined(GCC_VERSION) && GCC_VERSION < 50000
+> -#define UPD_CONSTR ""
+> -#else
+>   #define UPD_CONSTR "<>"
+> -#endif
 
-commit 85c2ce9104eb ("sched, vmlinux.lds: Increase STRUCT_ALIGNMENT to
-64 bytes for GCC-4.9")
+The only reason this exists is because of commit 592bbe9c505d 
+("powerpc/uaccess: Don't use "m<>" constraint with GCC 4.9"). It is 
+probably just worth sinking "<>" into all of the callsites and removing
+UPD_CONSTR.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- include/asm-generic/vmlinux.lds.h | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index aa50bf2959fe..f2984af2b85b 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -116,11 +116,7 @@
-  * GCC 4.5 and later have a 32 bytes section alignment for structures.
-  * Except GCC 4.9, that feels the need to align on 64 bytes.
-  */
--#if __GNUC__ == 4 && __GNUC_MINOR__ == 9
--#define STRUCT_ALIGNMENT 64
--#else
- #define STRUCT_ALIGNMENT 32
--#endif
- #define STRUCT_ALIGN() . = ALIGN(STRUCT_ALIGNMENT)
- 
- /*
--- 
-2.33.0.309.g3052b89438-goog
-
+>   
+>   #endif /* _ASM_POWERPC_ASM_CONST_H */
+> 
