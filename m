@@ -1,34 +1,34 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3163FC3
-	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 23:50:57 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C14761215;
-	Fri, 10 Sep 2021 23:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CDE3FC3
+	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 23:55:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 270AC6052B;
+	Fri, 10 Sep 2021 23:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631317857;
-	bh=uIpzXfyi8+fV+u3rmhdW4lpuq9BRwztl6U+ksNKr5PI=;
+	s=k20201202; t=1631318158;
+	bh=DNbYPXmd3IEaN88m25hO+5ZGRjkmqcd4V/ITcTDtlJ8=;
 	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=PIBWcXKzrLpgOJluRe/nYh34CXuRmxKG27Dbkve6wm+0eJ7x7H6z1IbAhgZArFREO
-	 1az18KO+TyHJppslmxXpR0LoXiXckEnto/CeJUadea/vLrq5JZXOn6QE9u/9gvPh3l
-	 BzFIULLWf1jk/uYBj1MjA2kQ+Z1d8xjnPxe4YPNw74JLvUyQzYkn2Lr+sf4eFvxeSh
-	 /IuDhsR1qGJ67svnFkpkL4xyAqunt6zgwVkeAUJW9U61xopJL6l2khHnwWL/kBEz06
-	 OpdpNLK0eu9nvb5P/G60oOIskv+VfLNCD8sMEtGb10Nw/LMYD/E2fhoXFATagx+e79
-	 InTBhzg2s9w6A==
-Subject: Re: [PATCH 10/10] vmlinux.lds.h: remove old check for GCC 4.9
+	b=ZthXR82/C9yEorBA8YiAX0b2E2fFmoJkua0IZVv/q72g2apayUeTCMDZEL+8Dy9g4
+	 LDII2t6/ey5bAQgqpVdbft6M8C4dsR2cWvqFwwL5xxxJCj0iU2cuNOyUCiJ2TgKvZs
+	 QXFeAzkv62k9eEuqzlUtXlcMRV8qh2PuGwMTmRWq4CJds1gcSvvKs9WYrlOK4ApSYm
+	 Leuo6iDnpBV4ATweXcRxEY5j0C0YHlIhAvmtB0Ew9bZRZ0KTVlE9XIyfBQwsYqioen
+	 GXiIuzme6LkBFx6fIxiLoYrkQJIPT0d4jcOrDOOzH3MNucVYhLoXIYX6nsfgppHP1L
+	 aotqFKwOA3R3Q==
+Subject: Re: [PATCH 01/10] Documentation: raise minimum supported version of
+ GCC to 5.1
 To: Nick Desaulniers <ndesaulniers@google.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
  Rasmus Villemoes <linux@rasmusvillemoes.dk>,
  Masahiro Yamada <masahiroy@kernel.org>, Joe Perches <joe@perches.com>,
  Arnd Bergmann <arnd@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- Peter Zijlstra <peterz@infradead.org>
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
 References: <20210910234047.1019925-1-ndesaulniers@google.com>
- <20210910234047.1019925-11-ndesaulniers@google.com>
+ <20210910234047.1019925-2-ndesaulniers@google.com>
 From: Nathan Chancellor <nathan@kernel.org>
-Message-ID: <9433c702-ecf2-4197-2456-59857d38538d@kernel.org>
-Date: Fri, 10 Sep 2021 16:50:54 -0700
+Message-ID: <cb42c578-d037-3297-d0c2-ab107b7a838f@kernel.org>
+Date: Fri, 10 Sep 2021 16:55:55 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 Precedence: bulk
@@ -37,41 +37,89 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20210910234047.1019925-11-ndesaulniers@google.com>
+In-Reply-To: <20210910234047.1019925-2-ndesaulniers@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 On 9/10/2021 4:40 PM, Nick Desaulniers wrote:
-> Now that GCC 5.1 is the minimally supported version of GCC, we can
-> effectively revert
+> commit fad7cd3310db ("nbd: add the check to prevent overflow in
+> __nbd_ioctl()")
 > 
-> commit 85c2ce9104eb ("sched, vmlinux.lds: Increase STRUCT_ALIGNMENT to
-> 64 bytes for GCC-4.9")
+> raised an issue from the fallback helpers added in
 > 
-> Cc: Peter Zijlstra <peterz@infradead.org>
+> commit f0907827a8a9 ("compiler.h: enable builtin overflow checkers and add fallback code")
+> 
+> Specifically, the helpers for checking whether the results of a
+> multiplication overflowed (__unsigned_mul_overflow,
+> __signed_add_overflow) use the division operator when
+> !COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW. This is problematic for 64b
+> operands on 32b hosts.
+
+"hosts" -> "targets" or "architectures"?
+
+It might be worth putting the error that Stephen found here?
+
+> Also, because the macro is type agnostic, it is very difficult to write
+> a similarly type generic macro that dispatches to one of:
+> * div64_s64
+> * div64_u64
+> * div_s64
+> * div_u64
+> 
+> Raising the minimum supported versions allows us to remove all of the
+> fallback helpers for !COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW, instead
+> dispatching the compiler builtins.
+> 
+> arm64 has already raised the minimum supported GCC version to 5.1, do
+> this for all targets now. See the link below for the previous
+> discussion.
+> 
+> Link: https://lore.kernel.org/all/20210909182525.372ee687@canb.auug.org.au/
+> Link: https://lore.kernel.org/lkml/CAK7LNASs6dvU6D3jL2GG3jW58fXfaj6VNOe55NJnTB8UPuk2pA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1438
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
->   include/asm-generic/vmlinux.lds.h | 4 ----
->   1 file changed, 4 deletions(-)
+>   Documentation/process/changes.rst | 2 +-
+>   scripts/min-tool-version.sh       | 8 +-------
+>   2 files changed, 2 insertions(+), 8 deletions(-)
 > 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index aa50bf2959fe..f2984af2b85b 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -116,11 +116,7 @@
->    * GCC 4.5 and later have a 32 bytes section alignment for structures.
->    * Except GCC 4.9, that feels the need to align on 64 bytes.
-
-Comment should be adjusted.
-
->    */
-> -#if __GNUC__ == 4 && __GNUC_MINOR__ == 9
-> -#define STRUCT_ALIGNMENT 64
-> -#else
->   #define STRUCT_ALIGNMENT 32
-> -#endif
->   #define STRUCT_ALIGN() . = ALIGN(STRUCT_ALIGNMENT)
->   
->   /*
+> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+> index d3a8557b66a1..e35ab74a0f80 100644
+> --- a/Documentation/process/changes.rst
+> +++ b/Documentation/process/changes.rst
+> @@ -29,7 +29,7 @@ you probably needn't concern yourself with pcmciautils.
+>   ====================== ===============  ========================================
+>           Program        Minimal version       Command to check the version
+>   ====================== ===============  ========================================
+> -GNU C                  4.9              gcc --version
+> +GNU C                  5.1              gcc --version
+>   Clang/LLVM (optional)  10.0.1           clang --version
+>   GNU make               3.81             make --version
+>   binutils               2.23             ld -v
+> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+> index 319f92104f56..4edc708baa63 100755
+> --- a/scripts/min-tool-version.sh
+> +++ b/scripts/min-tool-version.sh
+> @@ -17,13 +17,7 @@ binutils)
+>   	echo 2.23.0
+>   	;;
+>   gcc)
+> -	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63293
+> -	# https://lore.kernel.org/r/20210107111841.GN1551@shell.armlinux.org.uk
+> -	if [ "$SRCARCH" = arm64 ]; then
+> -		echo 5.1.0
+> -	else
+> -		echo 4.9.0
+> -	fi
+> +	echo 5.1.0
+>   	;;
+>   icc)
+>   	# temporary
 > 
