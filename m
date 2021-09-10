@@ -1,41 +1,41 @@
 Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C642F80
-	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 23:41:01 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id j9-20020a2581490000b02905897d81c63fso4549862ybm.8
-        for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 16:41:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F172F80
+	for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 23:41:03 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id j4-20020a258b84000000b005a203c5e066so4527851ybl.19
+        for <llvm@lists.linux.dev>; Fri, 10 Sep 2021 16:41:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Q5Lb7e2vgavVwQ4D08qL5EmkhBoCA6wKbGlKTNkLNSI=;
-        b=aWtGEFs/z5evTm1HEbnJiIjzV6zhziqLmrYqKg00fjbO6TLvF8GVhJ+YqRpgjwRdxs
-         lHWuWXuIK8Rb7fiRL3nZB1Xla/xqH3InnQ9eU4FZJBgn5DapWVLNfJSz5JDkhXiI4JZv
-         jdo7I3YEn7pjHurXKaTswqYkCygOk44ZIWPF5tlNa92ENnSOTSfXVQXIVVPyCNVsRbQF
-         9Q8Ww7/sZNnW/81IGG9qLWiKDOwANhiVAsMabS04vNGFzu+/mK3gI1DHVblzcadiDswz
-         Za38BmAEGfrh/5DOp0lXxkGzlQDXd6wnDjrKpgCd+hEoG/oLHfLfieFfDzGwB9d/ZJpG
-         /RTA==
+        bh=YcybJ36BhVQqnQ/Zp3BgBUwuPlp4Dytcf9sCPFcMjQI=;
+        b=YgJpLsayXI0kRA30Qyay/Kq/6VBc852ZzPTDo9EzTjJTNtF9D0UVBAUgqY/mnDPOl+
+         pGTUFD61EqoICDCAXs//AXw0PdPDQ06DEbrW0h4xmAfxhA1egiPkgqeuA7aKa8DqjerJ
+         PkrJtScmhKJbvHhlEWfI0lnnSj1rsD/G/nSp5hmtW+wkXtRhBg9B1Pr1u9QjmvKsjABP
+         4t5hd33qwRgzZ8nO7gWCYz+rmQJH3tPDL9uozMFUhmmG0u0lAtZvjl2tiHD4Tt+my1V7
+         m0LFoef1gwGQFGCuSx+R+cF4s5MbzwcLeEGELfhig5F8S/YsXDwM6cw+dQEFKnbIgIYN
+         tP1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Q5Lb7e2vgavVwQ4D08qL5EmkhBoCA6wKbGlKTNkLNSI=;
-        b=UgNylBMCS61AD8ieYjYeW+NAflVgRed7XQeQzesLfBgwgQ0B/plVDaYGkNZLUR+4yk
-         glr8iLXK/YGI9zI1cHcJFqDU4Miji0ZHYDMveop3YUGkRor+WlU4FBIdNjETh0D0ZH0D
-         Rh7nX741TGO5AkJS0lDnSCzMZ7Ngb6M0I//V+9wGilAZxHqdVUes+yuZF+hxKKkLQlF/
-         ce29PPIHaDaa21zUEPiq+Ug1Pp2H5S3Zwt27Em5fXj3WsRa/0jBeEa8LKud8JezO3Mea
-         ZK7yKxscHCgxiQ6W8plyME8EaRD2oDNqxk32h4byyLLgVydZsPXDoE+45FBgJ17lRqRk
-         E/fg==
-X-Gm-Message-State: AOAM533DyLOKqtMX1BMxrCby6qurkWUS7MKXmuhCcgEpFCvWo6iWZJwF
-	4jNzyHOncHT3JCixRcPUAnDzlE6LI2mG/mIax34=
-X-Google-Smtp-Source: ABdhPJzxzb+3bK+bR8SA2swgwjDHDcBccp8Nxjg24ARkUTHf7IrR/2cU954HvNmJuNCK8FQwmJ88Yf1ZbWbbqJmK/CM=
+        bh=YcybJ36BhVQqnQ/Zp3BgBUwuPlp4Dytcf9sCPFcMjQI=;
+        b=JSvo7Td+YuXA1v6hH5vGSu5PiqO3aK6ZD/muWQ6HppVinmZwxbFQNPzTaFcWch2uGI
+         7aqPrrodNLmVDpqLEP3YSmDw7GRa5NPB2KuZbj+Zgj9WgKtKyvMlApI4WmqEueeVAjEu
+         YZLaQBxB/uDfJip4nm0CDkhsK2phO9/7G3u6pfm2NnSDoVU0leKT9qappFso7H54Cq6f
+         3CCmZt4yhA+BJMgmClBlicNq6HvVDcSmLyjmBvQqk6rFVuH5aDcg0NhgL7wK6/zv4zWx
+         B8uHPXK5eoep2oWQUB3jhFatN03K7luyYhxMKY6PJ4kqiQz8CmWrW34dLN+wS341kkwL
+         HD2w==
+X-Gm-Message-State: AOAM531y71SnrXqK1ZpBNqhDyZ/9OUcjQlvxLrqa2tSd47u/Va0udgc1
+	7pN7GTqeuTOQXIxrSqgjD8p4Xn0Vf1LL9Xg1sg4=
+X-Google-Smtp-Source: ABdhPJw0Jp3nHTv3ruhAHm4RkeseXcb8gI25D2fzseDBVW5d8S8nqZvDZTYEl37UNWxcGpM+JEUlWwmPxuiXFe7eVe0=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:2b76:71d3:b5fb:3734])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6902:110b:: with SMTP id
- o11mr360373ybu.207.1631317260479; Fri, 10 Sep 2021 16:41:00 -0700 (PDT)
-Date: Fri, 10 Sep 2021 16:40:41 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:2302:: with SMTP id
+ j2mr315979ybj.507.1631317263067; Fri, 10 Sep 2021 16:41:03 -0700 (PDT)
+Date: Fri, 10 Sep 2021 16:40:42 -0700
 In-Reply-To: <20210910234047.1019925-1-ndesaulniers@google.com>
-Message-Id: <20210910234047.1019925-5-ndesaulniers@google.com>
+Message-Id: <20210910234047.1019925-6-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,37 +44,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20210910234047.1019925-1-ndesaulniers@google.com>
 X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
-Subject: [PATCH 04/10] Kconfig.debug: drop GCC 5+ version check for DWARF5
+Subject: [PATCH 05/10] riscv: remove Kconfig check for GCC version for ARCH_RV64I
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Nathan Chancellor <nathan@kernel.org>, 
 	Masahiro Yamada <masahiroy@kernel.org>, Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>, 
 	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>
+	Nick Desaulniers <ndesaulniers@google.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Now that the minimum supported version of GCC is 5.1, we no longer need
-this Kconfig version check for CONFIG_DEBUG_INFO_DWARF5.
+The minimum supported version of GCC is now 5.1. The check wasn't
+correct as written anyways since GCC_VERSION is 0 when CC=clang.
 
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- lib/Kconfig.debug | 2 +-
+ arch/riscv/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ed4a31e34098..d566f601780f 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -295,7 +295,7 @@ config DEBUG_INFO_DWARF4
- 
- config DEBUG_INFO_DWARF5
- 	bool "Generate DWARF Version 5 debuginfo"
--	depends on GCC_VERSION >= 50000 || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-+	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
- 	depends on !DEBUG_INFO_BTF
- 	help
- 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c79955655fa4..5fc1d0cc82e1 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -235,7 +235,7 @@ config ARCH_RV32I
+ config ARCH_RV64I
+ 	bool "RV64I"
+ 	select 64BIT
+-	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128 && GCC_VERSION >= 50000
++	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+ 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
+ 	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+ 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
 -- 
 2.33.0.309.g3052b89438-goog
 
