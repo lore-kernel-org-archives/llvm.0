@@ -1,128 +1,106 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193C23FC3
-	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 13:13:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EDF2D6121F;
-	Sat, 11 Sep 2021 13:13:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631365982;
-	bh=1hv/tJtozOoDLf0cxrTyIzGNXzwE9pY0zWKMoVJLTrY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PUrzLoXIz4mbST5/JjVrvWtdpAUJTthE6j8TRqk7EIx9S2Hj+xhF2T/gKBNWeUef+
-	 l5x/El+rzS8hsWA2F/6T8tW7N7C3wu8c2TZrHu9hgBdRRFdiyWTRxVf2QN2cLHSWnm
-	 ET1FAYRisxy50m3mcvcQw4c53+c6lK3NBJtvtpVftTCBROclhip04p50MJLB6WT4h5
-	 0Qk8QnHD/OquQy2ICOwth7NEM+Ym05krnL5i5gjpCMfIsmOInbgUOWOOI/k5rE8XXG
-	 OoV9Z8PWf2xEHccVoLXu8UfbeO9yflCqXOBCnwUz+lkYAaIQ3vpSUuiD5vIxraCT6l
-	 QUOxU6cMBZnQw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-	"David S . Miller" <davem@davemloft.net>,
-	Sasha Levin <sashal@kernel.org>,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.13 22/29] flow: fix object-size-mismatch warning in flowi{4,6}_to_flowi_common()
-Date: Sat, 11 Sep 2021 09:12:26 -0400
-Message-Id: <20210911131233.284800-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210911131233.284800-1-sashal@kernel.org>
-References: <20210911131233.284800-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF59B3FD4
+	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 16:01:09 +0000 (UTC)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4H6GyR4H6fz9sX6;
+	Sat, 11 Sep 2021 17:34:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o_KNaW9TnEo4; Sat, 11 Sep 2021 17:34:55 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4H6GyR2WJPz9sWt;
+	Sat, 11 Sep 2021 17:34:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 351398B768;
+	Sat, 11 Sep 2021 17:34:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 1Bo0Q-pGQz96; Sat, 11 Sep 2021 17:34:55 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.204.127])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id F3FE68B763;
+	Sat, 11 Sep 2021 17:34:53 +0200 (CEST)
+Subject: Re: [PATCH 06/10] powerpc: remove GCC version check for UPD_CONSTR
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Joe Perches <joe@perches.com>,
+ Arnd Bergmann <arnd@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Paul Mackerras <paulus@samba.org>,
+ Segher Boessenkool <segher@kernel.crashing.org>,
+ linuxppc-dev@lists.ozlabs.org
+References: <20210910234047.1019925-1-ndesaulniers@google.com>
+ <20210910234047.1019925-7-ndesaulniers@google.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <10516ec8-2650-3984-76a0-b38245527443@csgroup.eu>
+Date: Sat, 11 Sep 2021 17:34:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <20210910234047.1019925-7-ndesaulniers@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr-FR
 Content-Transfer-Encoding: 8bit
 
-From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 
-[ Upstream commit b9edbfe1adecfc48fd11061dce68afb03d6adbdc ]
 
-Commit 3df98d79215ace13 ("lsm,selinux: pass flowi_common instead of flowi
-to the LSM hooks") introduced flowi{4,6}_to_flowi_common() functions which
-cause UBSAN warning when building with LLVM 11.0.1 on Ubuntu 21.04.
+Le 11/09/2021 à 01:40, Nick Desaulniers a écrit :
+> Now that GCC 5.1 is the minimum supported version, we can drop this
+> workaround for older versions of GCC. This adversely affected clang,
+> too.
 
- ================================================================================
- UBSAN: object-size-mismatch in ./include/net/flow.h:197:33
- member access within address ffffc9000109fbd8 with insufficient space
- for an object of type 'struct flowi'
- CPU: 2 PID: 7410 Comm: systemd-resolve Not tainted 5.14.0 #51
- Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 02/27/2020
- Call Trace:
-  dump_stack_lvl+0x103/0x171
-  ubsan_type_mismatch_common+0x1de/0x390
-  __ubsan_handle_type_mismatch_v1+0x41/0x50
-  udp_sendmsg+0xda2/0x1300
-  ? ip_skb_dst_mtu+0x1f0/0x1f0
-  ? sock_rps_record_flow+0xe/0x200
-  ? inet_send_prepare+0x2d/0x90
-  sock_sendmsg+0x49/0x80
-  ____sys_sendmsg+0x269/0x370
-  __sys_sendmsg+0x15e/0x1d0
-  ? syscall_enter_from_user_mode+0xf0/0x1b0
-  do_syscall_64+0x3d/0xb0
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
- RIP: 0033:0x7f7081a50497
- Code: 0c 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 89 54 24 1c 48 89 74 24 10
- RSP: 002b:00007ffc153870f8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
- RAX: ffffffffffffffda RBX: 000000000000000c RCX: 00007f7081a50497
- RDX: 0000000000000000 RSI: 00007ffc15387140 RDI: 000000000000000c
- RBP: 00007ffc15387140 R08: 0000563f29a5e4fc R09: 000000000000cd28
- R10: 0000563f29a68a30 R11: 0000000000000246 R12: 000000000000000c
- R13: 0000000000000001 R14: 0000563f29a68a30 R15: 0000563f29a5e50c
- ================================================================================
+Why do you say that GCC 5.1 is the minimum supported ?
 
-I don't think we need to call flowi{4,6}_to_flowi() from these functions
-because the first member of "struct flowi4" and "struct flowi6" is
+As far as I can see, the minimum supported is still 4.9, see 
+https://github.com/torvalds/linux/blob/master/Documentation/process/changes.rst
 
-  struct flowi_common __fl_common;
+> 
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Segher Boessenkool <segher@kernel.crashing.org>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>   arch/powerpc/include/asm/asm-const.h | 10 ----------
+>   1 file changed, 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/asm-const.h b/arch/powerpc/include/asm/asm-const.h
+> index 0ce2368bd20f..dbfa5e1e3198 100644
+> --- a/arch/powerpc/include/asm/asm-const.h
+> +++ b/arch/powerpc/include/asm/asm-const.h
+> @@ -12,16 +12,6 @@
+>   #  define ASM_CONST(x)		__ASM_CONST(x)
+>   #endif
+>   
+> -/*
+> - * Inline assembly memory constraint
+> - *
+> - * GCC 4.9 doesn't properly handle pre update memory constraint "m<>"
+> - *
+> - */
+> -#if defined(GCC_VERSION) && GCC_VERSION < 50000
+> -#define UPD_CONSTR ""
+> -#else
+>   #define UPD_CONSTR "<>"
+> -#endif
 
-while the first member of "struct flowi" is
+There is no point in keeping UPD_CONSTR if it becomes invariant. You 
+should just replace all instances of UPD_CONSTR with <> and drop 
+UPD_CONSTR completely.
 
-  union {
-    struct flowi_common __fl_common;
-    struct flowi4       ip4;
-    struct flowi6       ip6;
-    struct flowidn      dn;
-  } u;
-
-which should point to the same address without access to "struct flowi".
-
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/net/flow.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/net/flow.h b/include/net/flow.h
-index 6f5e70240071..58beb16a49b8 100644
---- a/include/net/flow.h
-+++ b/include/net/flow.h
-@@ -194,7 +194,7 @@ static inline struct flowi *flowi4_to_flowi(struct flowi4 *fl4)
- 
- static inline struct flowi_common *flowi4_to_flowi_common(struct flowi4 *fl4)
- {
--	return &(flowi4_to_flowi(fl4)->u.__fl_common);
-+	return &(fl4->__fl_common);
- }
- 
- static inline struct flowi *flowi6_to_flowi(struct flowi6 *fl6)
-@@ -204,7 +204,7 @@ static inline struct flowi *flowi6_to_flowi(struct flowi6 *fl6)
- 
- static inline struct flowi_common *flowi6_to_flowi_common(struct flowi6 *fl6)
- {
--	return &(flowi6_to_flowi(fl6)->u.__fl_common);
-+	return &(fl6->__fl_common);
- }
- 
- static inline struct flowi *flowidn_to_flowi(struct flowidn *fldn)
--- 
-2.30.2
-
+Christophe
