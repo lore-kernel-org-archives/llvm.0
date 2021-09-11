@@ -1,20 +1,20 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD723FC3
-	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 13:12:21 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFEA3611CC;
-	Sat, 11 Sep 2021 13:12:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193C23FC3
+	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 13:13:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EDF2D6121F;
+	Sat, 11 Sep 2021 13:13:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631365940;
+	s=k20201202; t=1631365982;
 	bh=1hv/tJtozOoDLf0cxrTyIzGNXzwE9pY0zWKMoVJLTrY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D++9pPY5eMNRN3I3g8gO4ByQrbMaBFCTxTjQq2J8ipMsyVnK/x85w1w/ovxeKtfa2
-	 UX11+AvIgHVQWV4bDMUeZZCs+UwmvoKv/qOjLu/Q6kx75kBHAD+GbZF8F/VGAltCQL
-	 LpljQcqt+zSTIOAGwIKFr966MB6Os+G3LvW2EgOB+cbtHphyPBHPKL5Ol6k7xgfloC
-	 /cfdjOwGVASlLqsPzKHLSFiBp9eNE0+oEJTd65S7VvnpqTFT6FC1V8in/Mef+AwwyQ
-	 b8+bgA6kj9dfDdStyitOTJqk2eth/UU6T06OrCXa1DnLKU1qkW440x98K6EIwi0SL/
-	 4N+DPchUlDwSQ==
+	b=PUrzLoXIz4mbST5/JjVrvWtdpAUJTthE6j8TRqk7EIx9S2Hj+xhF2T/gKBNWeUef+
+	 l5x/El+rzS8hsWA2F/6T8tW7N7C3wu8c2TZrHu9hgBdRRFdiyWTRxVf2QN2cLHSWnm
+	 ET1FAYRisxy50m3mcvcQw4c53+c6lK3NBJtvtpVftTCBROclhip04p50MJLB6WT4h5
+	 0Qk8QnHD/OquQy2ICOwth7NEM+Ym05krnL5i5gjpCMfIsmOInbgUOWOOI/k5rE8XXG
+	 OoV9Z8PWf2xEHccVoLXu8UfbeO9yflCqXOBCnwUz+lkYAaIQ3vpSUuiD5vIxraCT6l
+	 QUOxU6cMBZnQw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -24,12 +24,12 @@ Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
 	Sasha Levin <sashal@kernel.org>,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.14 23/32] flow: fix object-size-mismatch warning in flowi{4,6}_to_flowi_common()
-Date: Sat, 11 Sep 2021 09:11:40 -0400
-Message-Id: <20210911131149.284397-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 22/29] flow: fix object-size-mismatch warning in flowi{4,6}_to_flowi_common()
+Date: Sat, 11 Sep 2021 09:12:26 -0400
+Message-Id: <20210911131233.284800-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210911131149.284397-1-sashal@kernel.org>
-References: <20210911131149.284397-1-sashal@kernel.org>
+In-Reply-To: <20210911131233.284800-1-sashal@kernel.org>
+References: <20210911131233.284800-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
