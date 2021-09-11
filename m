@@ -1,21 +1,21 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683BD2F80
-	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 00:11:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 43FD661153;
-	Sat, 11 Sep 2021 00:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD983FC3
+	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 00:12:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8CCB461208;
+	Sat, 11 Sep 2021 00:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631319068;
-	bh=yeeED2XMwiYj2Vyk5oFYVTWh2J/e+jx7vDdEx6zHkaA=;
+	s=k20201202; t=1631319167;
+	bh=of31m9USNn0F2OSpITeIKlXCg0CVdcBvK/Ub7sxEVOM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OH44Dm9E/m8nTgon7/ykIa2PVxuVXWyyJodxT/7qa/A3ptGVXbRFkn5ne+XnQMoQ6
-	 +NvL2aqi+/pCqravPaPv/GU+5tog4+D3wi5V3t8MHLUV0r4Rj+6vR5yrLNXtzKq4/4
-	 hPA/AnjEG1QUFG8faYUsbTWRx70Baa9mPUgkb7HbkJM2VcEi1q5UzJ9BbuqU9cjlZa
-	 jK61WbJjHJk+3Wv1DDaot96NfJkep8lLmL6FIKmOp2iWG4Jj0LEIAMxbh9+5J9/1Td
-	 Qsii5hYxErCPuPn2RTeIiuS5Ryth+OoxMe/AlDfbT+iYFEk8PKxPrQ9JK7zfjX5cKS
-	 djKBHxatAsKvg==
-Date: Fri, 10 Sep 2021 17:11:03 -0700
+	b=rvvVA7WpLkJ9+3PWT3MoKPBT3rK+UWXq7C8BK2yCLPe8gIKWIFHgbjw5xwobYOE89
+	 IhLz8d5pchiWZskoW+0rmfTh28tm8F8K3iCiZLiIWWwDXdmrvaireKTEXoXx1sQAkX
+	 2Bn0LtAxwJgm6GwWPtSeUN8xEVkL66sGgwtkkskIaWQkB0O/LhvM1Jiv5Xd4UGgFKt
+	 sIUVvgtNBxx4L36cn1ls/81+i/fIj8w0cH6K5sgafwgbI2dyZNkQ0/qbQdfe/uWLo9
+	 tjWwuZJeYaodPt94l/FM9H6B7500LmZC3e0to8apC+908Yz4xBUzCoXjI7WtdYNX/c
+	 QKh0Gr7K79WGw==
+Date: Fri, 10 Sep 2021 17:12:42 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -25,11 +25,10 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>,
 	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/10] Makefile: drop GCC < 5
- -fno-var-tracking-assignments workaround
-Message-ID: <YTv0F8LrjrzenT0n@archlinux-ax161>
+Subject: Re: [PATCH 09/10] compiler-gcc.h: drop checks for older GCC versions
+Message-ID: <YTv0elkfY9JIuEVQ@archlinux-ax161>
 References: <20210910234047.1019925-1-ndesaulniers@google.com>
- <20210910234047.1019925-9-ndesaulniers@google.com>
+ <20210910234047.1019925-10-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,37 +37,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210910234047.1019925-9-ndesaulniers@google.com>
+In-Reply-To: <20210910234047.1019925-10-ndesaulniers@google.com>
 
-On Fri, Sep 10, 2021 at 04:40:45PM -0700, Nick Desaulniers wrote:
-> Now that GCC 5.1 is the minimally supported version, we can drop this
-> workaround for older versions of GCC.
+On Fri, Sep 10, 2021 at 04:40:46PM -0700, Nick Desaulniers wrote:
+> Now that GCC 5.1 is the minimally supported default, drop the values we
+> don't use.
 > 
 > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  Makefile | 6 ------
->  1 file changed, 6 deletions(-)
+>  include/linux/compiler-gcc.h       | 4 +---
+>  tools/include/linux/compiler-gcc.h | 4 +---
+>  2 files changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 2d1e491f7737..f9ef07f573e0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -849,12 +849,6 @@ endif
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index 3f7f6fa0e051..fd82ce169ce9 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -98,10 +98,8 @@
 >  
->  DEBUG_CFLAGS	:=
+>  #if GCC_VERSION >= 70000
+>  #define KASAN_ABI_VERSION 5
+> -#elif GCC_VERSION >= 50000
+> +#else
+>  #define KASAN_ABI_VERSION 4
+> -#elif GCC_VERSION >= 40902
+> -#define KASAN_ABI_VERSION 3
+>  #endif
 >  
-> -# Workaround for GCC versions < 5.0
-> -# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61801
-> -ifdef CONFIG_CC_IS_GCC
-> -DEBUG_CFLAGS	+= $(call cc-ifversion, -lt, 0500, $(call cc-option, -fno-var-tracking-assignments))
-> -endif
-> -
->  ifdef CONFIG_DEBUG_INFO
+>  #if __has_attribute(__no_sanitize_address__)
+> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
+> index a590a1dfafd9..43d9a46d36f0 100644
+> --- a/tools/include/linux/compiler-gcc.h
+> +++ b/tools/include/linux/compiler-gcc.h
+> @@ -16,9 +16,7 @@
+>  # define __fallthrough __attribute__ ((fallthrough))
+>  #endif
 >  
->  ifdef CONFIG_DEBUG_INFO_SPLIT
+> -#if GCC_VERSION >= 40300
+> -# define __compiletime_error(message) __attribute__((error(message)))
+> -#endif /* GCC_VERSION >= 40300 */
+> +#define __compiletime_error(message) __attribute__((error(message)))
+>  
+>  /* &a[0] degrades to a pointer: a different type from an array */
+>  #define __must_be_array(a)	BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
 > -- 
 > 2.33.0.309.g3052b89438-goog
 > 
