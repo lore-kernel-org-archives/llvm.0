@@ -1,28 +1,30 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E3F3FC3
-	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 01:36:52 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10103"; a="220890605"
-X-IronPort-AV: E=Sophos;i="5.85,284,1624345200"; 
-   d="scan'208";a="220890605"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 18:36:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,284,1624345200"; 
-   d="scan'208";a="541062669"
-Received: from pl-dbox.sh.intel.com (HELO pl-dbox) ([10.239.159.39])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Sep 2021 18:36:49 -0700
-Date: Sat, 11 Sep 2021 09:28:53 +0800
-From: Philip Li <philip.li@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E482F3FC3
+	for <llvm@lists.linux.dev>; Sat, 11 Sep 2021 01:52:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 383DD6120A;
+	Sat, 11 Sep 2021 01:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1631325127;
+	bh=mdHTwi3bPAgwigVkTbRKEkcrsC0tJKyvT6eXvTAILXg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lYdwZIQxWGjp4AFrIR8NjQuCzyky7E3OsVxlq1+gXJ94R9+U6Tgy6wPrD9fmaKcRg
+	 QNk2dY8MzWDetP9aFwSAwpjez/h4bg9V4ArNlZiSKvwLM04vYKlJAWIM2E+JkbRvI5
+	 x3qo0zTnaBPjYJyBE0TRBqDy3IpqKV1BDitN2zy3lMGPZ/TvacUg3taRm9cQzSxJLW
+	 5MAFbqFam32IBZWSKJNfm8PuFJ5P/yLD/IEeTBmimTKxpjxpv3XkONtMLj1npc6YoJ
+	 8QVXFJZ9n2Lwd0lJaxEJKEklZHifn32ioIwzX+KqRcs+/DHoPzwxMNu/Lb5COBJLuw
+	 yXK025PRjhBzA==
+Date: Fri, 10 Sep 2021 18:52:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Luis Chamberlain <mcgrof@kernel.org>
 Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
 	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
 	Borislav Petkov <bp@suse.de>
-Subject: Re: [kbuild-all] Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
+Subject: Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
  drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous
  prototype for function 'firmware_is_builtin'
-Message-ID: <20210911012853.GA834679@pl-dbox>
+Message-ID: <YTwLw+frJLbntgCJ@archlinux-ax161>
 References: <202109101524.pjY4q0Dy-lkp@intel.com>
  <YTv817Srt8hoySP5@bombadil.infradead.org>
 Precedence: bulk
@@ -61,60 +63,10 @@ On Fri, Sep 10, 2021 at 05:48:23PM -0700, Luis Chamberlain wrote:
 > >    bool firmware_is_builtin(const struct firmware *fw)
 > 
 > This is a lie though its defined on drivers/base/firmware_loader/firmware.h
-> 
-> >         ^
-> >    drivers/base/firmware_loader/builtin/main.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> >    bool firmware_is_builtin(const struct firmware *fw)
-> >    ^
-> >    static 
-> >    1 error generated.
-> 
-> I get these odd errors:
-> 
-> Compiler will be installed in /home/mcgrof/0day
-hi Luis, would you mind to download the make.cross tool again to give a try, it
-was updated recently to use latest clang instead of this 12.0.0?
 
-> cd: received redirection to
-> `https://download.01.org/0day-ci/cross-package/'
-> lftpget -c
-> https://download.01.org/0day-ci/cross-package/./clang_hexagon/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl.tar.xz
-> tar Jxf
-> clang_hexagon/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl.tar.xz
-> -C /home/mcgrof/0day                                                    
-> make --keep-going
-> HOSTCC=/home/mcgrof/0day/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl/x86_64-linux-gnu/bin/clang
-> CC=/home/mcgrof/0day/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl/x86_64-linux-gnu/bin/clang
-> LD=/home/mcgrof/0day/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl/x86_64-linux-gnu/bin/ld.lld
-> HOSTLD=/home/mcgrof/0day/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl/x86_64-linux-gnu/bin/ld.lld
-> AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump
-> OBJSIZE=llvm-size READELF=llvm-readelf HOSTCXX=clang++ HOSTAR=llvm-ar
-> LLVM_IAS=1 CROSS_COMPILE=hexagon-unknown-linux-musl- --jobs=24
-> ARCH=hexagon
->   SYNC    include/config/auto.conf.cmd
->     HOSTCC  scripts/basic/fixdep
->     /home/mcgrof/0day/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl/x86_64-linux-gnu/bin/clang:
->     error while loading shared libraries: libtinfo.so.5: cannot open
->     shared object file: No such file or directory
->     make[2]: *** [scripts/Makefile.host:95: scripts/basic/fixdep] Error
->     127
->     make[2]: Target '__build' not remade because of errors.
->     make[1]: *** [Makefile:594: scripts_basic] Error 2
->     make[1]: Target 'syncconfig' not remade because of errors.
->     make: *** [Makefile:771: include/config/auto.conf.cmd] Error 2
->     make: Failed to remake makefile 'include/config/auto.conf.cmd'.
->     make: Failed to remake makefile 'include/config/auto.conf'.
->       HOSTCC  scripts/basic/fixdep
->       /home/mcgrof/0day/clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl/x86_64-linux-gnu/bin/clang:
->       error while loading shared libraries: libtinfo.so.5: cannot open
->       shared object file: No such file or directory
->       make[1]: *** [scripts/Makefile.host:95: scripts/basic/fixdep]
->       Error 127
-> 
-> 
-> I have a feeling these issues are not correct...
-> 
->   Luis
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+Unless I am missing something, you don't include the firmware_loader
+copy of firmware.h in builtin/main.c (only the linux one)? Isn't that
+the source of the warning?
+
+Cheers,
+Nathan
