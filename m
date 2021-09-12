@@ -1,50 +1,50 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3473C3FC5
-	for <llvm@lists.linux.dev>; Sun, 12 Sep 2021 06:44:48 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10104"; a="221456951"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908993FC3
+	for <llvm@lists.linux.dev>; Sun, 12 Sep 2021 10:24:59 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10104"; a="201608408"
 X-IronPort-AV: E=Sophos;i="5.85,287,1624345200"; 
-   d="gz'50?scan'50,208,50";a="221456951"
+   d="gz'50?scan'50,208,50";a="201608408"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2021 23:44:48 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2021 03:24:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,287,1624345200"; 
-   d="gz'50?scan'50,208,50";a="608338920"
+   d="gz'50?scan'50,208,50";a="608391996"
 Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Sep 2021 23:44:46 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 12 Sep 2021 03:24:56 -0700
 Received: from kbuild by 730d49888f40 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mPJEL-0006MY-F4; Sun, 12 Sep 2021 06:44:45 +0000
-Date: Sun, 12 Sep 2021 14:43:55 +0800
+	id 1mPMfP-0006Xy-TG; Sun, 12 Sep 2021 10:24:55 +0000
+Date: Sun, 12 Sep 2021 18:24:04 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v3 08/16] ASoC: rich-graph-card: add Codec2Codec support
-Message-ID: <202109121456.E5Sy8Umo-lkp@intel.com>
-References: <87ilz9usv9.wl-kuninori.morimoto.gx@renesas.com>
+Subject: Re: [PATCH v3 05/16] ASoC: add Rich Graph Card driver
+Message-ID: <202109121856.V3BorP48-lkp@intel.com>
+References: <87mtolusvs.wl-kuninori.morimoto.gx@renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="VS++wcV0S1rZb1Fb"
+Content-Type: multipart/mixed; boundary="oyUTqETQ0mS9luUI"
 Content-Disposition: inline
-In-Reply-To: <87ilz9usv9.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <87mtolusvs.wl-kuninori.morimoto.gx@renesas.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---VS++wcV0S1rZb1Fb
+--oyUTqETQ0mS9luUI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi Kuninori,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on asoc/for-next]
-[also build test WARNING on sound/for-next v5.14 next-20210910]
+[auto build test ERROR on asoc/for-next]
+[also build test ERROR on sound/for-next v5.14 next-20210910]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
@@ -56,147 +56,76 @@ compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/75094c7c873a758d2196b5867d930669a15d2e20
+        # https://github.com/0day-ci/linux/commit/b5ce49ac5dc76b68460729e0ec976c7f7ad870cf
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Kuninori-Morimoto/ASoC-Add-Rich-Graph-Card-support/20210910-092924
-        git checkout 75094c7c873a758d2196b5867d930669a15d2e20
+        git checkout b5ce49ac5dc76b68460729e0ec976c7f7ad870cf
         # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/generic/rich-graph-card.c:879:6: warning: variable 'ep0' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!of_get_property(ports, "rate", &val)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/generic/rich-graph-card.c:920:14: note: uninitialized use occurs here
-           of_node_put(ep0);
-                       ^~~
-   sound/soc/generic/rich-graph-card.c:879:2: note: remove the 'if' if its condition is always false
-           if (!of_get_property(ports, "rate", &val)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/generic/rich-graph-card.c:854:25: note: initialize the variable 'ep0' to silence this warning
-           struct device_node *ep0, *ep1;
-                                  ^
-                                   = NULL
->> sound/soc/generic/rich-graph-card.c:879:6: warning: variable 'ep1' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!of_get_property(ports, "rate", &val)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/generic/rich-graph-card.c:921:14: note: uninitialized use occurs here
-           of_node_put(ep1);
-                       ^~~
-   sound/soc/generic/rich-graph-card.c:879:2: note: remove the 'if' if its condition is always false
-           if (!of_get_property(ports, "rate", &val)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/generic/rich-graph-card.c:854:31: note: initialize the variable 'ep1' to silence this warning
-           struct device_node *ep0, *ep1;
-                                        ^
-                                         = NULL
-   sound/soc/generic/rich-graph-card.c:1119:10: error: label at end of compound statement: expected statement
+>> sound/soc/generic/rich-graph-card.c:511:10: error: label at end of compound statement: expected statement
            default:
                    ^
                     ;
-   2 warnings and 1 error generated.
+   1 error generated.
 
 
-vim +879 sound/soc/generic/rich-graph-card.c
+vim +511 sound/soc/generic/rich-graph-card.c
 
-   844	
-   845	int rich_graph_link_c2c(struct asoc_simple_priv *priv,
-   846				struct device_node *lnk,
-   847				struct link_info *li)
-   848	{
-   849		struct snd_soc_dai_link *dai_link = simple_priv_to_link(priv, li->link);
-   850		struct simple_dai_props *dai_props = simple_priv_to_props(priv, li->link);
-   851		struct snd_soc_pcm_stream *c2c_conf = dai_props->c2c_conf;
-   852		struct device_node *port0, *port1, *ports;
-   853		struct device_node *codec0_port, *codec1_port;
-   854		struct device_node *ep0, *ep1;
-   855		u32 val;
-   856		int ret = -EINVAL;
-   857	
-   858		/*
-   859		 * codec2codec {
-   860		 *	ports {
-   861		 *		rate = <48000>;
-   862		 * =>	lnk:	port@0 { c2c0_ep: { ... = codec0_ep; }; };
-   863		 *		port@1 { c2c1_ep: { ... = codec1_ep; }; };
-   864		 *	};
-   865		 * };
-   866		 *
-   867		 * Codec {
-   868		 *	ports {
-   869		 *		port@0 { codec0_ep: ... }; };
-   870		 *		port@1 { codec1_ep: ... }; };
-   871		 *	};
-   872		 * };
-   873		 */
-   874		of_node_get(lnk);
-   875		port0 = lnk;
-   876		ports = of_get_parent(port0);
-   877		port1 = of_get_next_child(ports, lnk);
-   878	
- > 879		if (!of_get_property(ports, "rate", &val)) {
-   880			struct device *dev = simple_priv_to_dev(priv);
-   881	
-   882			dev_err(dev, "Codec2Codec needs rate settings\n");
-   883			goto err;
-   884		}
-   885	
-   886		c2c_conf->formats	= SNDRV_PCM_FMTBIT_S32_LE; /* update ME */
-   887		c2c_conf->rate_min	=
-   888		c2c_conf->rate_max	= val;
-   889		c2c_conf->channels_min	=
-   890		c2c_conf->channels_max	= 2; /* update ME */
-   891		dai_link->params	= c2c_conf;
-   892	
-   893		ep0 = port_to_endpoint(port0);
-   894		ep1 = port_to_endpoint(port1);
-   895	
-   896		codec0_port = of_graph_get_remote_port(ep0);
-   897		codec1_port = of_graph_get_remote_port(ep1);
-   898	
-   899		/*
-   900		 * call Codec first.
-   901		 * see
-   902		 *	__graph_parse_node() :: DAI Naming
-   903		 */
-   904		ret = graph_parse_node(priv, GRAPH_C2C, codec1_port, li, 0);
-   905		if (ret < 0)
-   906			goto err;
-   907	
-   908		/*
-   909		 * call CPU, and set DAI Name
-   910		 */
-   911		ret = graph_parse_node(priv, GRAPH_C2C, codec0_port, li, 1);
-   912		if (ret < 0)
-   913			goto err;
-   914	
-   915		graph_link_init(priv, codec0_port, li, 1);
-   916	err:
-   917		of_node_put(ports);
-   918		of_node_put(port0);
-   919		of_node_put(port1);
-   920		of_node_put(ep0);
-   921		of_node_put(ep1);
-   922	
-   923		return ret;
-   924	}
-   925	EXPORT_SYMBOL_GPL(rich_graph_link_c2c);
-   926	
+   491	
+   492	static int graph_count(struct asoc_simple_priv *priv,
+   493			       struct graph_custom_hooks *hooks,
+   494			       enum graph_type gtype,
+   495			       struct device_node *lnk,
+   496			       struct link_info *li)
+   497	{
+   498		struct device *dev = simple_priv_to_dev(priv);
+   499		GRAPH_CUSTOM func = NULL;
+   500		int ret = -EINVAL;
+   501	
+   502		if (li->link >= SNDRV_MAX_LINKS) {
+   503			dev_err(dev, "too many links\n");
+   504			return ret;
+   505		}
+   506	
+   507		switch (gtype) {
+   508		case GRAPH_NORMAL:
+   509			func = graph_count_normal;
+   510			break;
+ > 511		default:
+   512		}
+   513	
+   514		if (!func) {
+   515			dev_err(dev, "non supported gtype (%d)\n", gtype);
+   516			goto err;
+   517		}
+   518	
+   519		ret = func(priv, lnk, li);
+   520		if (ret < 0)
+   521			goto err;
+   522	
+   523		li->link++;
+   524	err:
+   525		return ret;
+   526	}
+   527	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---VS++wcV0S1rZb1Fb
+--oyUTqETQ0mS9luUI
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICH+YPWEAAy5jb25maWcAjDzLdts4svv+Cp30pmfRHcuvdt97vIBIUEKLIBgAlGVveBxH
+H4sICOLFPWEAAy5jb25maWcAjDzLdts4svv+Cp30pmfRHcuvdt97vIBIUEKLIBgAlGVveBxH
 yfiOY2dku6fz97cK4AOAis5kkUSoAlAA6o0Cf/7p5xl7fXn6evtyf3f78PB99mX3uNvfvuw+
 zT7fP+z+d5arWaXsjOfC/gbI5f3j69/v708uzmdnv81Pfzv6dX/3+2y92z/uHmbZ0+Pn+y+v
 0P3+6fGnn3/KVFWIZZtl7YZrI1TVWr61l+/uHm4fv8z+2u2fAW+Go/x2NPvly/3L/7x/D39/
@@ -947,4 +876,4 @@ RQGyWiCTpoAcIHxbBauGkWl1KqYFZaKuzPZlND30dFlzsXTqHoMRoC7BVXb15T4vcVb9l2gt
 Hdl70jRI6W6eX1DiR41b/ON/N09fb29MN6cNtsr2d5Rv0eSiaua4u/yVY8fmDb+FtsCqwC2m
 Sajl8NIAs0Asr9J/kUdV6OECmQw4nK4uRBex8vbihHhRHJQZz/8B1UEI4g2AAgA=
 
---VS++wcV0S1rZb1Fb--
+--oyUTqETQ0mS9luUI--
