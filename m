@@ -1,305 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672BC2FB2
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 19:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1631561899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type;
-	bh=mw+qqFLP+q4HRT4fChrdBvYxZnfkKBg754dQvnSqwPI=;
-	b=L6TQXTTVvfUe5sjR+BGbLgYqOgFc/bc12kCswfvwuAvwFCbqd3ghlqxlNu2WgpUMLkEXVm
-	OLsi/rcirnlHpZC8UKshFaqI+s3UtfxRlXVUgcunnatz2yJTmkT+lVu2+gXHOnuhDYLEg8
-	gbbYeTp4w8lCzGpOjXmAMjznb/gRfBI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-109-HXaWte12OLe5-ySy2w-7yg-1; Mon, 13 Sep 2021 15:38:15 -0400
-X-MC-Unique: HXaWte12OLe5-ySy2w-7yg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F11211084683
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 19:38:14 +0000 (UTC)
-Received: from [172.64.9.18] (unknown [10.30.33.187])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C2B2977F2C;
-	Mon, 13 Sep 2021 19:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D2E3FC3
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 19:53:31 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id i7so7313538lfr.13
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 12:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IuIV1pMgtSTFHYB/MlE6n0ObQf+QrwwyHfpeOlhLGV4=;
+        b=KtLYMNSMN0Y5c8c4r4J0ZLqCJXsRLL29VR5uX/2Yu4BVj5zwY2hNGlKuYA+6nTpKM1
+         ivocdJ+TW1l885Sq1gNrjIVMJ8HXJuAGqEkh92ycGBDRf1c2rfkZRpvYFsy3oAxFDGUW
+         qaxOOWivMUORLVhuNZz2TQd6lccTVM0cm2bUF0QCL00suayRvj14i4d67X8frC65ox1j
+         m4MFscHPBjjXUEqDTQ356k+5sssUHbTvpg7sBwdXEvNlH8GkYqhFp8bud6Yi44KxE8hi
+         48knGdoWzMrFo1fqqE/HDdhaxB9RXcCee9xpP7vflu05cgMvZkTEo0YYwmoB7vRUkjGt
+         G8zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IuIV1pMgtSTFHYB/MlE6n0ObQf+QrwwyHfpeOlhLGV4=;
+        b=rAPgUQb3y7dG89dgWHFiyMLfwbRK5Ab/J8fBXe00CbNwInEgsAKDDOdTSxhZvkZBZa
+         ELkmeG32YT1rcA+4jqqpsuxcaWX0ju3VB1+sR7HPFK7tAnlLOzKdmdC9w3DQoKaelI7A
+         uc8TcCcYMganqJ2QV99jVdgfxY1P8/2SkCp8laNtn9ouMY8DdnSITMsipbJx8pxZfs21
+         Whsuan8b2/ZNCq7y1B+WPVK/V5VfNOB0iAxWTm/CVro9jbSky43zJO23jE1Nn/LqCBxZ
+         2YmTAoRoAL0wEiRwR1K49AMHTCCdAnHNzh5HEJbnVhriuVYfJnJMIpEq/mYteljlpZTR
+         0EkQ==
+X-Gm-Message-State: AOAM533Ba39l1FWRICxaZijmyJS26YS8HKRbqUs0D50vePPhQCtD3kcC
+	q5ZkNmM5dgwCiOFlGSX4TIyLrz8reIYRcoXWM+Yh5A==
+X-Google-Smtp-Source: ABdhPJxUVIrSRPA+S6grlctRP94ZAZIBKy5defr5w6yBJRo3gzNh1hyZtfPLM5hyf7YELNj1ADse+/Ttsx8GxAJU0Tc=
+X-Received: by 2002:ac2:4c46:: with SMTP id o6mr10039958lfk.240.1631562809064;
+ Mon, 13 Sep 2021 12:53:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.15.0-rc1
- (mainline.kernel.org-clang, 31634624)
-Date: Mon, 13 Sep 2021 19:38:10 -0000
-Message-ID: <cki.FB987EB7E1.AVGF4TDMK3@redhat.com>
-X-Gitlab-Pipeline-ID: 369970613
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/369970613?=
-X-DataWarehouse-Checkout-IID: None
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/mixed; boundary="===============6675276339723994374=="
+References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.028340332@linuxfoundation.org>
+ <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
+ <YT+RKemKfg6GFq0S@kroah.com> <CAKwvOdmOAKTkgFK4Oke1SFGR_NxNqXe-buj1uyDgwZ4JdnP2Vg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmOAKTkgFK4Oke1SFGR_NxNqXe-buj1uyDgwZ4JdnP2Vg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 13 Sep 2021 12:53:17 -0700
+Message-ID: <CAKwvOdmCS5Q7AzUL5nziYVU7RrtRjoE9JjOXfVBWagO1Bzbsew@mail.gmail.com>
+Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, Nathan Chancellor <natechancellor@gmail.com>, 
+	Baokun Li <libaokun1@huawei.com>, open list <linux-kernel@vger.kernel.org>, 
+	linux-stable <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>, 
+	Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>, 
+	clang-built-linux <clang-built-linux@googlegroups.com>, lkft-triage@lists.linaro.org, 
+	llvm@lists.linux.dev, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
---===============6675276339723994374==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+On Mon, Sep 13, 2021 at 11:39 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Mon, Sep 13, 2021 at 10:58 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Sep 13, 2021 at 09:52:33PM +0530, Naresh Kamboju wrote:
+> > > [PATCH 00/10] raise minimum GCC version to 5.1
+> > > https://lore.kernel.org/lkml/20210910234047.1019925-1-ndesaulniers@google.com/
+> >
+> > Has anyone submitted a fix for this upstream yet?  I can't seem to find
+> > one :(
+>
+> That lore link has a series to address this, though that's maybe
+> something we don't want to backport to stable.
+>
+> I thought about this all weekend; I think I might be able to work
+> around the one concern I had with my other approach, using
+> __builtin_choose_expr().
+>
+> There's an issue with my alternative approach
+> (https://gist.github.com/nickdesaulniers/2479818f4983bbf2d688cebbab435863)
+> with declaring the local variable z in div_64() since either operand
+> could be 64b, which result in an unwanted truncation if the dividend
+> is 32b (or less, and divisor is 64b). I think (what I realized this
+> weekend) is that we might be able to replace the `if` with
+> `__builtin_choose_expr`, then have that whole expression be the final
+> statement and thus the "return value" of the statement expression.
 
+Christ...that...works? Though, did Linus just merge my patches for gcc 5.1?
 
-Hello,
+Anyways, I'll send something like this for stable:
+---
 
-We ran automated tests on a recent commit from this kernel tree:
+diff --git a/include/linux/math64.h b/include/linux/math64.h
+index 2928f03d6d46..e9ab8c25f8d3 100644
+--- a/include/linux/math64.h
++++ b/include/linux/math64.h
+@@ -11,6 +11,9 @@
 
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: 316346243be6 - Merge branch 'gcc-min-version-5.1' (make=
- gcc-5.1 the minimum version)
+ #define div64_long(x, y) div64_s64((x), (y))
+ #define div64_ul(x, y)   div64_u64((x), (y))
++#ifndef is_signed_type
++#define is_signed_type(type)       (((type)(-1)) < (type)1)
++#endif
 
-The results of these automated tests are provided below.
+ /**
+  * div_u64_rem - unsigned 64bit divide with 32bit divisor with remainder
+@@ -112,6 +115,15 @@ extern s64 div64_s64(s64 dividend, s64 divisor);
 
-    Overall result: FAILED (see details below)
-             Merge: OK
-           Compile: FAILED
- Selftests compile: OK
+ #endif /* BITS_PER_LONG */
 
-All kernel binaries, config files, and logs are available for download here=
-:
++#define div64_x64(dividend, divisor) ({                        \
++       BUILD_BUG_ON_MSG(sizeof(dividend) < sizeof(u64),\
++                        "prefer div_x64");             \
++       __builtin_choose_expr(                          \
++               is_signed_type(typeof(dividend)),       \
++               div64_s64(dividend, divisor),           \
++               div64_u64(dividend, divisor));          \
++})
++
+ /**
+  * div_u64 - unsigned 64bit divide with 32bit divisor
+  * @dividend: unsigned 64bit dividend
+@@ -142,6 +154,28 @@ static inline s64 div_s64(s64 dividend, s32 divisor)
+ }
+ #endif
 
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2021/09/13/369970613
++#define div_x64(dividend, divisor) ({                  \
++       BUILD_BUG_ON_MSG(sizeof(dividend) > sizeof(u32),\
++                        "prefer div64_x64");           \
++       __builtin_choose_expr(                          \
++               is_signed_type(typeof(dividend)),       \
++               div_s64(dividend, divisor),             \
++               div_u64(dividend, divisor));            \
++})
++
++// TODO: what if divisor is 128b?
++#define div_64(dividend, divisor) ({
+         \
++       __builtin_choose_expr(
+         \
++               __builtin_types_compatible_p(typeof(dividend), s64) ||
+         \
++               __builtin_types_compatible_p(typeof(dividend), u64),
+         \
++               __builtin_choose_expr(
+         \
++                       __builtin_types_compatible_p(typeof(divisor),
+s64) ||   \
++                       __builtin_types_compatible_p(typeof(divisor),
+u64),     \
++                       div64_x64(dividend, divisor),
+         \
++                       div_x64(dividend, divisor)),
+         \
++               dividend / divisor);
+         \
++})
++
+ u32 iter_div_u64_rem(u64 dividend, u32 divisor, u64 *remainder);
 
-We attempted to compile the kernel for multiple architectures, but the comp=
-ile
-failed on one or more architectures:
-
-            x86_64: FAILED (see build-x86_64.log.xz attachment)
-
-We hope that these logs can help you find the problem quickly. For the full
-detail on our testing procedures, please scroll to the bottom of this messa=
-ge.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
-Compile testing
----------------
-
-We compiled the kernel for 4 architectures:
-
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-
-
---===============6675276339723994374==
-Content-Type: application/x-xz
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="build-x86_64.log.xz"
-MIME-Version: 1.0
-
-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
-AARZWg==
---===============6675276339723994374==--
-
+ #ifndef mul_u32_u32
+---
+-- 
+Thanks,
+~Nick Desaulniers
