@@ -1,32 +1,32 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F24E3FC5
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 18:00:22 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C7C560F3A;
-	Mon, 13 Sep 2021 18:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638A93FC5
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 18:08:34 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1037560EE9;
+	Mon, 13 Sep 2021 18:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631556022;
-	bh=DYDrQ8asXy8E6ShLKQ8yhrI2cPvVW4y0r3KhwB7+5Ww=;
+	s=k20201202; t=1631556514;
+	bh=ywiRedTR5zeyIz8MBcSAEfY/rfpHmNISjeocjDRzgzI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eCeCAfmBHwqjlMj/QhfHamnuGx5cSzG51yvIe+FIijNu6X+9gXf/9cnmAzVVtyyxL
-	 q2Y0Kr0wxOF4/72rWthAHmPdu6IjurW3fFdopOty8VninXwQJy8ZiAIfU8wvkwaSUq
-	 G/6qZER6UT+4/URf8L956foWL/fLT8WC/8vdsbFcaRl8LDPg1B5mrfK1SJyzNL8pw4
-	 pXJfLuKgNEOSmj1moGi9XSlRCoq+SYBG1hlmY3VQ3BvZBdKhPV16gXCy39fQPijV9v
-	 ZlAWkDwG3WemwJN+YvgvkxE8Pjf9fDnELQ99l4R53L25Rg7lOTZZT6GM5gbuf7V7+b
-	 3/7YsEOqE2vyA==
-Date: Mon, 13 Sep 2021 11:00:10 -0700
+	b=ebY5qZQgF1O3prH+NZwpoV4lCtWt2UxvQ5jFaOgo7IXSYrbpjzXRtH922oEnxs3it
+	 2XhK0/vgQSpcYzsJIOVPFWyCbS/ttldHMSOu+uVg3mlpRyEWZeri9nIfEmJhWM0sEZ
+	 agYIhsPLnOMEyop3PBPTR0/s2/ZA4Di+8wwGXLOl7v7w1WH8o2dRxLSKGnZjK0h20+
+	 OBdlyinH0cCnqG9pciu2ac1mdkMsInmDRZk9doY+Oo7Tx6bhpfO9z2s0aUQbhUKiCn
+	 tY0t5TGXo4XRHyAjIN5N+YSZeNIwOHiWxPAAqAeFftQkYILXS3EAVuIjuBe6FPYBrW
+	 ro0TK5fH2UK/g==
+Date: Mon, 13 Sep 2021 11:08:19 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	philip.li@intel.com, alexei.starovoitov@gmail.com,
-	andrii@kernel.org
-Subject: Re: [dborkman:pr/bpf-cgrp 2/4] include/linux/cgroup-defs.h:771:70:
- warning: unused parameter 'skcd'
-Message-ID: <YT+RqrkQAOVhbkWu@archlinux-ax161>
-References: <202109110835.fBYQcLIG-lkp@intel.com>
- <89bba45c-d15c-88b7-0e32-9280cd4e4990@iogearbox.net>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	clang-built-linux@googlegroups.com, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] Harden clang against unknown flag options
+Message-ID: <YT+Tk55IKG/PyYgr@archlinux-ax161>
+References: <20210824022640.2170859-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,93 +35,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <89bba45c-d15c-88b7-0e32-9280cd4e4990@iogearbox.net>
+In-Reply-To: <20210824022640.2170859-1-nathan@kernel.org>
 
-Hi Daniel,
-
-On Mon, Sep 13, 2021 at 05:19:26PM +0200, Daniel Borkmann wrote:
-> [ +Philip ]
+On Mon, Aug 23, 2021 at 07:26:38PM -0700, Nathan Chancellor wrote:
+> Hi all,
 > 
-> On 9/11/21 2:38 AM, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git pr/bpf-cgrp
-> > head:   5a6e78baee7515884b93a90c5d03db601bc9063a
-> > commit: f36377d0c40cce0cdeaff50031c268bc640d94f0 [2/4] bpf, cgroups: Fix cgroup v2 fallback on v1/v2 mixed mode
-> > config: i386-randconfig-r032-20210910 (attached as .config)
-> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38f8c1ee1a482fe76511110e790f58a)
-> > reproduce (this is a W=1 build):
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git/commit/?id=f36377d0c40cce0cdeaff50031c268bc640d94f0
-> >          git remote add dborkman https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git
-> >          git fetch --no-tags dborkman pr/bpf-cgrp
-> >          git checkout f36377d0c40cce0cdeaff50031c268bc640d94f0
-> >          # save the attached .config to linux build tree
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
+> This series cleans up an issue that was noticed by the kernel test robot
+> where flags that clang does not implement support for are
+> unconditionally added to the command line, which causes all subsequent
+> calls to cc-{disable-warning,option} to fail, meaning developers are
+> flooded with unnecessary and pointless warnings.
 > 
-> Not sure how useful these warnings below are given it is quite conventional in the kernel
-> to have some static inline helper which e.g. look:
+> I hope the patches in and of themselves are reasonable and
+> non-controversial. This is based on Masahiro's kbuild tree as there was
+> a fairly large refactor around where clang's flags were added so I
+> figured it would be best to go there with an x86 ack since the first
+> patch does not depend on anything in -tip.
 > 
-> static inline int bla(struct foo *bar)
-> {
-> #ifdef CONFIG_<XYZ>
->         return ... /// do something with bar
-> #else
->         return 0;
-> #endif
-> }
+> Cheers,
+> Nathan
 > 
-> I presume consensus here is to ignore these given also the gazillion other cases in the
-> kernel tree. In other words, goal on -Wunused-parameter for kernel would be to really
-> only catch cases where a parameter is indeed in all cases unused and should be removed
-> from the signature.
+> Nathan Chancellor (2):
+>   x86: Do not add -falign flags unconditionally for clang
+>   kbuild: Add -Werror=ignored-optimization-argument to CLANG_FLAGS
+> 
+>  arch/x86/Makefile_32.cpu | 12 +++++++++---
+>  scripts/Makefile.clang   |  4 ++++
+>  2 files changed, 13 insertions(+), 3 deletions(-)
+> 
+> 
+> base-commit: fb3fdea450305d932d933d7e75eead0477249d8e
+> -- 
+> 2.33.0
+> 
+> 
 
-Unfortunately, it looks like you are getting bit by a tangential issue
-here:
+Hello x86 folks,
 
-https://lore.kernel.org/r/YSQE2f5teuvKLkON@Ryzen-9-3900X.localdomain/
+Would you guys be able to give me feedback on this series or accept it?
+We are continuously getting false positive warning reports from i386 randconfigs.
 
-The full include log:
-
-In file included from drivers/gpu/drm/i915/display/intel_dpll.c:7:
-In file included from drivers/gpu/drm/i915/display/intel_de.h:9:
-In file included from ./drivers/gpu/drm/i915/i915_drv.h:39:
-In file included from ./include/linux/i2c.h:18:
-In file included from ./include/linux/regulator/consumer.h:35:
-In file included from ./include/linux/suspend.h:5:
-In file included from ./include/linux/swap.h:9:
-In file included from ./include/linux/memcontrol.h:13:
-In file included from ./include/linux/cgroup.h:28:
-In file included from ./include/linux/cgroup-defs.h:22:
-In file included from ./include/linux/bpf-cgroup.h:5:
-./include/linux/bpf.h:770:61: warning: unused parameter 'prog' [-Wunused-parameter]
-static inline int bpf_trampoline_link_prog(struct bpf_prog *prog,
-                                                            ^
-./include/linux/bpf.h:771:32: warning: unused parameter 'tr' [-Wunused-parameter]
-                                           struct bpf_trampoline *tr)
-                                                                  ^
-...
-
-The fixes are here:
-
-https://lore.kernel.org/r/20210824022640.2170859-1-nathan@kernel.org/
-https://lore.kernel.org/r/20210824232237.2085342-1-nathan@kernel.org/
-
-I will push to get these fixes accepted as quickly as possible.
-
-Philip, would it be possible for you guys to avoid sending reports for
-i386 configurations that contain any of the following three
-configurations for the time being?
-
-CONFIG_MCRUSOE=y
-CONFIG_MEFFICEON=y
-CONFIG_MCYRIXIII=y
-
-They are resulting in a lot of false positives, as I have linked above.
+https://lore.kernel.org/r/ece61908-f8eb-4c45-5d5f-bfc52f3b8f45@kernel.org/
+https://lore.kernel.org/r/YT+RqrkQAOVhbkWu@archlinux-ax161/
 
 Cheers,
 Nathan
