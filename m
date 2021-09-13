@@ -1,37 +1,37 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E264A3FC4
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 21:14:09 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id g1so12443576lfj.12
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 14:14:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DC13FC4
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 21:15:34 +0000 (UTC)
+Received: by mail-lj1-f170.google.com with SMTP id p15so19721940ljn.3
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 14:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h6laIf/b4mPqz9ieIo0BoLxfadBv/pBLzz57FwMCWS8=;
-        b=SEu7xaZSAjVMKNw5hjypkoLJ+5JYwWZcOY2BABqYuBro/CZPK17EczUQuLCrutTPGL
-         16Qz1HYIlWBLiIz9fuIN+11uBldPo/W5AePdN6GsQEA+SUtc8P+uASAYS6tS0ldHx07E
-         2lonLGUWd9SBbHuElL3JERelxOI/WCQiYZQMZ+cnIB22lorehJTp1jfpHpUXPGwAVLsr
-         iug/4lH2iw/Q756RGmEMyqecg2b3vt+REqwODu74njL+3uIRYmD7FhCYQoWZA7S/e7X4
-         zbL4RRw54fmrJ/xhPMXQuEF33NXAg8H1490G0IrDnCzFSwlQt8KLs4uiBLXAehRStlz0
-         T9Mw==
+        bh=KsP30ov9xl9zhULjcWutgVa5WGmRNrz9j2ugExJGuYo=;
+        b=mygUPtbJXKFBf25Ytt4weIVj36Yui1nGLTd+cq+lXbA73j0/0gxaMT0z1qklKDwZjP
+         oYzbIV8uJoXpVLqWOm88+JSCNtqV5oJK1ekAwjAFKDkYP2JMkh38dpX8b729gelnHLCM
+         4SLlGe56m3hX+Trb53z9qVBgR0utshgzVDurHqGX35l9QYyRHVZ4owOVp9qrVetiNWAH
+         pynFZ5/s5LpdhpR6CWHyBac4qRy9kt1zN5ZHmylBp8QQfwqrhjs8KvmsdTDHTSHvSc74
+         zOsfV7AcfseUdFrfEaskaPe6x85pgcP3h2+G/UI382g+ahpXXdnlQghyJXOzrP7ZNEhA
+         GV5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h6laIf/b4mPqz9ieIo0BoLxfadBv/pBLzz57FwMCWS8=;
-        b=LLhaWydW3HI0M9aQPdQGfzY7LRSrhykd/3mlTNFDCVzHDGF+ebGN2uQaZKvDBPiUit
-         6OTOzXz8jZy5/krHxGwOY1haStdQsRcLwx8TkFCGwhJG2KEIvE7mTZso4pCDOsxkpJgA
-         zvSPSQ2KpXmY3AoCGghoiPIYCC1R4xFHdVFnxD3JkRAQN42FQa7v+Xx8LsBGViMxM5VW
-         fjWEhOftOy6NddLtiGznSpjlD2ZeuZC9vQfWFzRqCiMmeUks3KIjKjJ+VRiy74irtHu+
-         NkmXaDbsaU1ljgHnnaLpVjoJaZc4SexyhK9FYJLGebtl/5hSq1R3/q5gRV1bXV0QmtKZ
-         DTEg==
-X-Gm-Message-State: AOAM531J+htXmCp0f4xj3KmI52w0JYCd2Wu+mQ1NwItGWGVmCYUNEpTl
-	6viniKVTcDu6107FcssxDx2t0xNI5c7EF16A6YebuA==
-X-Google-Smtp-Source: ABdhPJxkLmqkKxedt4K1O1ibv9lFvdfqJ+fiA/MxD/66QbtZI4YNO+29iajeZ9ssOU5ujtimoPSmNKGFx6XRwVjLntg=
-X-Received: by 2002:a05:6512:3b9e:: with SMTP id g30mr10188187lfv.651.1631567647760;
- Mon, 13 Sep 2021 14:14:07 -0700 (PDT)
+        bh=KsP30ov9xl9zhULjcWutgVa5WGmRNrz9j2ugExJGuYo=;
+        b=wYLN+vnke44tb/B7DsPlWdERd7iw5JokEZWR0W1pHh6NT69bmfVGFNMnB3DoZsthQq
+         5kJwssBIY5Oo3TyS+mRJa0DjakgF/LnOJQrGxx13g1IcbHuNsPy2rLXz5n8CETcjsbAP
+         gYxxiEUxBsd34wb6RN0K6r5HMssqHh3o5z5KSE+TdGzZHlg648K2TTpoo8oJ5j6+1iuY
+         WrJbsLVTQ5TsGmU6Dd955br2yIKgfWbSq+guVxJFg62+XpB5R/p1aNkZPX7hV74qAQ1W
+         q0BemVGoo03ApNiuSZpE5cEDRNYxEfvc5qpkVYD4PrKMlyeYIkoBX9h1yEHysXm/sHDL
+         csPA==
+X-Gm-Message-State: AOAM530SfzILorfgLofxzG4e8XfWutNCzeAP42qu3m/9qCJggTJLixje
+	HSDlNTaBMfA+MF2p3JIXCOec+9Y7AUQl5DtKEcgafw==
+X-Google-Smtp-Source: ABdhPJzo28mpD6c9vf+D6J9UtP0Lt3zndpgJfN3ZNLmyoo3VdiTr5GeG8q0j15d63LccbyV8mZDyilBazCACdxixi/Y=
+X-Received: by 2002:a2e:b551:: with SMTP id a17mr12026583ljn.128.1631567732248;
+ Mon, 13 Sep 2021 14:15:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,11 +46,12 @@ References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.02834
  <CAKwvOdmN3nQe8aL=jUwi0nGXzYQGic=NA2o40Q=yeHeafSsS3g@mail.gmail.com>
  <CAHk-=whwREzjT7=OSi5=qqOkQsvMkCOYVhyKQ5t8Rdq4bBEzuw@mail.gmail.com>
  <CAKwvOdkf3B41RRe8FDkw1H-0hBt1_PhZtZxBZ5pj0pyh7vDLmA@mail.gmail.com>
- <CAHk-=wjP2ijctPt2Hw3DagSZ-KgdRsO6zWTTKQNnSk0MajtJgA@mail.gmail.com> <CAKwvOd=ZG8sf1ZOkuidX_49VGkQE+BJDa19_vR4gh2FNQ2F_9Q@mail.gmail.com>
-In-Reply-To: <CAKwvOd=ZG8sf1ZOkuidX_49VGkQE+BJDa19_vR4gh2FNQ2F_9Q@mail.gmail.com>
+ <CAHk-=wjP2ijctPt2Hw3DagSZ-KgdRsO6zWTTKQNnSk0MajtJgA@mail.gmail.com>
+ <CAKwvOd=ZG8sf1ZOkuidX_49VGkQE+BJDa19_vR4gh2FNQ2F_9Q@mail.gmail.com> <CAKwvOdkz4e3HdNKFvOdDDWVijB7AKaeP14_vAEbxWXD1AviVhA@mail.gmail.com>
+In-Reply-To: <CAKwvOdkz4e3HdNKFvOdDDWVijB7AKaeP14_vAEbxWXD1AviVhA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 13 Sep 2021 14:13:56 -0700
-Message-ID: <CAKwvOdkz4e3HdNKFvOdDDWVijB7AKaeP14_vAEbxWXD1AviVhA@mail.gmail.com>
+Date: Mon, 13 Sep 2021 14:15:21 -0700
+Message-ID: <CAKwvOdmtX8Y8eWESYj4W-H-KF7cZx6w1NbSjoSPt5x5U9ezQUQ@mail.gmail.com>
 Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
 To: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Arnd Bergmann <arnd@kernel.org>, Sedat Dilek <sedat.dilek@gmail.com>, 
@@ -63,89 +64,99 @@ Cc: Arnd Bergmann <arnd@kernel.org>, Sedat Dilek <sedat.dilek@gmail.com>,
 	Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 13, 2021 at 1:50 PM Nick Desaulniers
+On Mon, Sep 13, 2021 at 2:13 PM Nick Desaulniers
 <ndesaulniers@google.com> wrote:
 >
-> On Mon, Sep 13, 2021 at 1:42 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+> On Mon, Sep 13, 2021 at 1:50 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
 > >
-> > On Mon, Sep 13, 2021 at 1:16 PM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
+> > On Mon, Sep 13, 2021 at 1:42 PM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
 > > >
-> > > Do we have access to _Generic in GCC 4.9?
+> > > On Mon, Sep 13, 2021 at 1:16 PM Nick Desaulniers
+> > > <ndesaulniers@google.com> wrote:
+> > > >
+> > > > Do we have access to _Generic in GCC 4.9?
+> > >
+> > > We've ended up using it unconditionally since last year, so yes.
 > >
-> > We've ended up using it unconditionally since last year, so yes.
+> > Sorry, grepping would have taken < 1s. I'm very lazy.
+> > http://threevirtues.com/
+> >
+> > >
+> > > In fact, the compiler version tests got removed when we raised the gcc
+> > > version requirement to 4.9 in commit 6ec4476ac825 ("Raise gcc version
+> > > requirement to 4.9"):
+> > >
+> > >    "In particular, raising the minimum to 4.9 means that we can now just
+> > >     assume _Generic() exists, which is likely the much better replacement
+> > >     for a lot of very convoluted built-time magic with conditionals on
+> > >     sizeof and/or __builtin_choose_expr() with same_type() etc"
+> > >
+> > > but we haven't used it much since.
+> > >
+> > > The "seqprop" code for picking the right lock for seqlock is perhaps
+> > > the main example, and staring at that code will make you go blind, so
+> > > look away.
+> >
+> > Looking at my patch:
+> > https://lore.kernel.org/stable/20210913203201.1844253-1-ndesaulniers@google.com/
+> > I don't think _Generic helps us in the case of dispatching based on
+> > the result of is_signed_type() (the operands could undergo type
+> > promotion, so we'd need lots of cases that are more concisely covered
+> > by is_signed_type()). It could replace the nested checks in div_64
+> > with nested _Generics, I think. Not sure it's a huge win for
+> > readability.  Maybe cut the number of expansions of the parameters in
+> > half though. Let me give it a try just to see what it looks like.
 >
-> Sorry, grepping would have taken < 1s. I'm very lazy.
-> http://threevirtues.com/
->
-> >
-> > In fact, the compiler version tests got removed when we raised the gcc
-> > version requirement to 4.9 in commit 6ec4476ac825 ("Raise gcc version
-> > requirement to 4.9"):
-> >
-> >    "In particular, raising the minimum to 4.9 means that we can now just
-> >     assume _Generic() exists, which is likely the much better replacement
-> >     for a lot of very convoluted built-time magic with conditionals on
-> >     sizeof and/or __builtin_choose_expr() with same_type() etc"
-> >
-> > but we haven't used it much since.
-> >
-> > The "seqprop" code for picking the right lock for seqlock is perhaps
-> > the main example, and staring at that code will make you go blind, so
-> > look away.
->
-> Looking at my patch:
-> https://lore.kernel.org/stable/20210913203201.1844253-1-ndesaulniers@google.com/
-> I don't think _Generic helps us in the case of dispatching based on
-> the result of is_signed_type() (the operands could undergo type
-> promotion, so we'd need lots of cases that are more concisely covered
-> by is_signed_type()). It could replace the nested checks in div_64
-> with nested _Generics, I think. Not sure it's a huge win for
-> readability.  Maybe cut the number of expansions of the parameters in
-> half though. Let me give it a try just to see what it looks like.
+> Is this more readable? Same line count.  I'm not sure if there's such
+> a thing as "fallthrough" between the "cases" of _Generic to minimize
+> duplication, or whether this could be factored further.  Needs lots
+> more () around macro param use and tab'ed out line endings...
 
-Is this more readable? Same line count.  I'm not sure if there's such
-a thing as "fallthrough" between the "cases" of _Generic to minimize
-duplication, or whether this could be factored further.  Needs lots
-more () around macro param use and tab'ed out line endings...
-
-
-
-
-
-
+Sorry wrong diff:
 diff --git a/include/linux/math64.h b/include/linux/math64.h
-index 8652a8a35d70..8fc4d56a45b9 100644
+index bc9c12c168d0..8fc4d56a45b9 100644
 --- a/include/linux/math64.h
 +++ b/include/linux/math64.h
-@@ -162,17 +162,17 @@ static inline s64 div_s64(s64 dividend, s32 divisor)
+@@ -162,18 +162,18 @@ static inline s64 div_s64(s64 dividend, s32 divisor)
                 div_u64(dividend, divisor));            \
  })
 
--#define __div_64(dividend) _Generic((divisor), \
--  s64: div64_x64,      \
--  u64: div64_x64,      \
--  default: div_x64)
 +#define __div_64(dividend, divisor) _Generic((divisor),        \
 +  s64: div64_x64(dividend, divisor),   \
 +  u64: div64_x64(dividend, divisor),   \
 +  default: div_x64(dividend, divisor))
-
++
  #define div_64(dividend, divisor) ({
          \
         BUILD_BUG_ON_MSG(sizeof(dividend) > sizeof(u64),
          \
                          "128b div unsupported");
          \
-        _Generic((dividend),    \
--               s64: __div_64(dividend)(dividend, divisor),     \
--               u64: __div_64(dividend)(dividend, divisor),     \
+-       __builtin_choose_expr(
+         \
+-               __builtin_types_compatible_p(typeof(dividend), s64) ||
+         \
+-               __builtin_types_compatible_p(typeof(dividend), u64),
+         \
+-               __builtin_choose_expr(
+         \
+-                       __builtin_types_compatible_p(typeof(divisor),
+s64) ||   \
+-                       __builtin_types_compatible_p(typeof(divisor),
+u64),     \
+-                       div64_x64(dividend, divisor),
+         \
+-                       div_x64(dividend, divisor)),
+         \
+-               dividend / divisor);
+         \
++       _Generic((dividend),    \
 +               s64: __div_64(dividend, divisor),       \
 +               u64: __div_64(dividend, divisor),       \
-                default: dividend / divisor);   \
++               default: dividend / divisor);   \
  })
-
 -- 
 Thanks,
 ~Nick Desaulniers
