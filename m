@@ -1,34 +1,53 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8573A3FD0
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uW4i1svhg8YjGMTBnNqrqhLORoqiX7VnOzTOfuBW32k=; b=AiBDvG2gqdhCk1U1W15Y5XQ9gt
-	DVyHoe728FFvtJASMMD/yvPD3yuegS2hS73KGiLfvk3Qu75y3DpKL/NO4grS7LDPBR7uwzs2FNCYS
-	yl8Nbl2LoJdz6sjz7iUzU9BTPX0wV1Hh8BZOlF5xc6K9vHs+PTkL0xNmmmp1BtzNwJa5SlpS4PoGZ
-	ITuTckPbVAN9zqE+Jbcl1Y/t5BEhkF+iT3OJmO62WSIvvx5HMCZK5kCcBlkJ8sMaHws9I+jepw3mx
-	bvZTTz8s9XvanIQ0SlIUPUFOG0b+hoTZicKiMioQfBNpqMI1Lnm9hilEuss4w8yKEVT4Yc3pJlcaN
-	jvdEmFug==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mPoi5-002MLD-Te; Mon, 13 Sep 2021 16:21:33 +0000
-Date: Mon, 13 Sep 2021 09:21:33 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Philip Li <philip.li@intel.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Borislav Petkov <bp@suse.de>
-Subject: Re: [kbuild-all] Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
- drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous
- prototype for function 'firmware_is_builtin'
-Message-ID: <YT96jYtYsWVjag8w@bombadil.infradead.org>
-References: <202109101524.pjY4q0Dy-lkp@intel.com>
- <YTv817Srt8hoySP5@bombadil.infradead.org>
- <20210911012853.GA834679@pl-dbox>
- <YT91dprXpGy+ywBu@bombadil.infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E093FD0
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:21:40 +0000 (UTC)
+Received: by mail-pg1-f182.google.com with SMTP id g184so9931184pgc.6
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IKFED9y0v7w+FhMaqd2QIA2eUP5bCbT2SCT49mPxoTQ=;
+        b=HCLOGlBq7MF6o8jKgFWWRIU4KSTMhQLrYDiW6j7kEwXvWCbDnQATyXEIJYuLlqQRHk
+         XFChA0ly+uvX8gd7pXobRS1fKuuS++LPbjPsARkcV9BEH4GJGJn2aZ6+TqpJs38pHdSX
+         r+EpLKHBGSfIHj26xJPcEBL12cZM2JRiScAcg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IKFED9y0v7w+FhMaqd2QIA2eUP5bCbT2SCT49mPxoTQ=;
+        b=0CVgOTVhnMmncpTW0zYYkVaPPZF6qptnLc5B8o15BcvCZf5wniG0lC7f/0DxNaer9O
+         YzsG3ZNysMSvNcMCHwC91EwdnGmTkIRbIfDsZ2RMc6KDbkgczyLezgMUQmsV+7mHUIfT
+         q5Sxw4O4FiiFjVYR7tBmgx7OZNJbH3vDgRQE9htln8OrRADll6Q/MIVwqkLJILRPO0LS
+         /nsII8czN45fzi9JKTsOU+fH3MGSQHvi/LoOId043d7DwIWDIor4j2/kJyp8RWru0g/M
+         H3SHUUYzQXOTKsWJQ9EMqvb+9oP7u3nqWkHeSPl3wYvVWMTmXjPiYeYbuIZRG2JnrUwn
+         YV6A==
+X-Gm-Message-State: AOAM530i7gZRcFZTVAJuH9iymBHaYj1x/NLUWzUixArTiyZom2rrNNYj
+	LMp8XQRib7Z3uRfp3WPSgbZnDw==
+X-Google-Smtp-Source: ABdhPJxnGP1kflyzFYPVzBgUMBLquG5UxHgd7HMXFZ68h+oy5s9G+QJ8KqObmwV16Y9egJHSVzwwtw==
+X-Received: by 2002:a05:6a00:c3:b0:43d:e6be:b2a6 with SMTP id e3-20020a056a0000c300b0043de6beb2a6mr261966pfj.34.1631550100562;
+        Mon, 13 Sep 2021 09:21:40 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o6sm7514071pjk.4.2021.09.13.09.21.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Sep 2021 09:21:40 -0700 (PDT)
+Date: Mon, 13 Sep 2021 09:21:39 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/10] compiler.h: drop fallback overflow checkers
+Message-ID: <202109130921.D423C72@keescook>
+References: <20210910234047.1019925-1-ndesaulniers@google.com>
+ <20210910234047.1019925-3-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,62 +56,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YT91dprXpGy+ywBu@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20210910234047.1019925-3-ndesaulniers@google.com>
 
-On Mon, Sep 13, 2021 at 08:59:50AM -0700, Luis Chamberlain wrote:
-> On Sat, Sep 11, 2021 at 09:28:53AM +0800, Philip Li wrote:
-> > On Fri, Sep 10, 2021 at 05:48:23PM -0700, Luis Chamberlain wrote:
-> > > On Fri, Sep 10, 2021 at 03:41:31PM +0800, kernel test robot wrote:
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210908-firmware-builtin-v4
-> > > > head:   1c69d6a17750179d68bcaf6b16f9a08d2e475989
-> > > > commit: 79e9fce20ee88ffe37542a66277628e6c53dde14 [2/11] firmware_loader: formalize built-in firmware API
-> > > > config: hexagon-buildonly-randconfig-r004-20210910 (attached as .config)
-> > > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38f8c1ee1a482fe76511110e790f58a)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=79e9fce20ee88ffe37542a66277628e6c53dde14
-> > > >         git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-> > > >         git fetch --no-tags mcgrof-next 20210908-firmware-builtin-v4
-> > > >         git checkout 79e9fce20ee88ffe37542a66277628e6c53dde14
-> > > >         # save the attached .config to linux build tree
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=hexagon 
-> > > > 
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > 
-> > > > All errors (new ones prefixed by >>):
-> > > > 
-> > > > >> drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous prototype for function 'firmware_is_builtin' [-Werror,-Wmissing-prototypes]
-> > > >    bool firmware_is_builtin(const struct firmware *fw)
-> > > 
-> > > This is a lie though its defined on drivers/base/firmware_loader/firmware.h
-> > > 
-> > > >         ^
-> > > >    drivers/base/firmware_loader/builtin/main.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> > > >    bool firmware_is_builtin(const struct firmware *fw)
-> > > >    ^
-> > > >    static 
-> > > >    1 error generated.
-> > > 
-> > > I get these odd errors:
-> > > 
-> > > Compiler will be installed in /home/mcgrof/0day
-> > hi Luis, would you mind to download the make.cross tool again to give a try, it
-> > was updated recently to use latest clang instead of this 12.0.0?
+On Fri, Sep 10, 2021 at 04:40:39PM -0700, Nick Desaulniers wrote:
+> Once upgrading the minimum supported version of GCC to 5.1, we can drop
+> the fallback code for !COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW.
 > 
-> I had clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl and this was
-> used already. Is there a more recent one? Just in case I rm -rf'd it
-> and tried again with the latest make.cross.
+> Effectively a revert of
+> commit f0907827a8a9 ("compiler.h: enable builtin overflow checkers and
+> add fallback code")
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1438#issuecomment-916745801
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I rm -rf ~/0day and tried again but the failure I get is:
+With Nathan's comments addressed:
 
-  CALL    scripts/checksyscalls.sh
-  <stdin>:1515:2: warning: syscall clone3 not implemented [-W#warnings]
-  #warning syscall clone3 not implemented
+Acked-by: Kees Cook <keescook@chromium.org>
 
-Even if I disable CONFIG_WERROR and COMPILE_TEST this still fails here
-and so I can't even test compile the code in question.
+-Kees
 
-  Luis
+-- 
+Kees Cook
