@@ -1,35 +1,32 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FDA3FC5
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 17:58:04 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4789B60F25;
-	Mon, 13 Sep 2021 17:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1631555883;
-	bh=wKCgWwoggfMMEuOXBW33VvCRW6LZGGnafN7FiiDq0po=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F24E3FC5
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 18:00:22 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C7C560F3A;
+	Mon, 13 Sep 2021 18:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1631556022;
+	bh=DYDrQ8asXy8E6ShLKQ8yhrI2cPvVW4y0r3KhwB7+5Ww=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GVc7OI7qomibj+raAPEjY0UE8y/XsG3CJBeVKxT/5I+pml7HfSZatFAoBHdmO8hMf
-	 B4sF/hEfbMZvKo0GdiqrKxq/puFzbu+1iClo7Rim1tTKQyW4lCLGYZiPPs3o8aeLRB
-	 4i776bLcYny/wE3eRkpN79oS/jmeNQpx24V+/hvQ=
-Date: Mon, 13 Sep 2021 19:58:01 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Nathan Chancellor <natechancellor@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Baokun Li <libaokun1@huawei.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	linux-stable <stable@vger.kernel.org>,
-	Hulk Robot <hulkci@huawei.com>, Josef Bacik <josef@toxicpanda.com>,
-	Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-	clang-built-linux <clang-built-linux@googlegroups.com>,
-	lkft-triage@lists.linaro.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in
- __nbd_ioctl()
-Message-ID: <YT+RKemKfg6GFq0S@kroah.com>
-References: <20210913131113.390368911@linuxfoundation.org>
- <20210913131114.028340332@linuxfoundation.org>
- <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
+	b=eCeCAfmBHwqjlMj/QhfHamnuGx5cSzG51yvIe+FIijNu6X+9gXf/9cnmAzVVtyyxL
+	 q2Y0Kr0wxOF4/72rWthAHmPdu6IjurW3fFdopOty8VninXwQJy8ZiAIfU8wvkwaSUq
+	 G/6qZER6UT+4/URf8L956foWL/fLT8WC/8vdsbFcaRl8LDPg1B5mrfK1SJyzNL8pw4
+	 pXJfLuKgNEOSmj1moGi9XSlRCoq+SYBG1hlmY3VQ3BvZBdKhPV16gXCy39fQPijV9v
+	 ZlAWkDwG3WemwJN+YvgvkxE8Pjf9fDnELQ99l4R53L25Rg7lOTZZT6GM5gbuf7V7+b
+	 3/7YsEOqE2vyA==
+Date: Mon, 13 Sep 2021 11:00:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	philip.li@intel.com, alexei.starovoitov@gmail.com,
+	andrii@kernel.org
+Subject: Re: [dborkman:pr/bpf-cgrp 2/4] include/linux/cgroup-defs.h:771:70:
+ warning: unused parameter 'skcd'
+Message-ID: <YT+RqrkQAOVhbkWu@archlinux-ax161>
+References: <202109110835.fBYQcLIG-lkp@intel.com>
+ <89bba45c-d15c-88b7-0e32-9280cd4e4990@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,92 +35,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
+In-Reply-To: <89bba45c-d15c-88b7-0e32-9280cd4e4990@iogearbox.net>
 
-On Mon, Sep 13, 2021 at 09:52:33PM +0530, Naresh Kamboju wrote:
-> On Mon, 13 Sept 2021 at 19:51, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > From: Baokun Li <libaokun1@huawei.com>
-> >
-> > [ Upstream commit fad7cd3310db3099f95dd34312c77740fbc455e5 ]
-> >
-> > If user specify a large enough value of NBD blocks option, it may trigger
-> > signed integer overflow which may lead to nbd->config->bytesize becomes a
-> > large or small value, zero in particular.
-> >
-> > UBSAN: Undefined behaviour in drivers/block/nbd.c:325:31
-> > signed integer overflow:
-> > 1024 * 4611686155866341414 cannot be represented in type 'long long int'
-> > [...]
-> > Call trace:
-> > [...]
-> >  handle_overflow+0x188/0x1dc lib/ubsan.c:192
-> >  __ubsan_handle_mul_overflow+0x34/0x44 lib/ubsan.c:213
-> >  nbd_size_set drivers/block/nbd.c:325 [inline]
-> >  __nbd_ioctl drivers/block/nbd.c:1342 [inline]
-> >  nbd_ioctl+0x998/0xa10 drivers/block/nbd.c:1395
-> >  __blkdev_driver_ioctl block/ioctl.c:311 [inline]
-> > [...]
-> >
-> > Although it is not a big deal, still silence the UBSAN by limit
-> > the input value.
-> >
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> > Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-> > Link: https://lore.kernel.org/r/20210804021212.990223-1-libaokun1@huawei.com
-> > [axboe: dropped unlikely()]
-> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > ---
-> >  drivers/block/nbd.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-> > index 19f5d5a8b16a..acf3f85bf3c7 100644
-> > --- a/drivers/block/nbd.c
-> > +++ b/drivers/block/nbd.c
-> > @@ -1388,6 +1388,7 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
-> >                        unsigned int cmd, unsigned long arg)
-> >  {
-> >         struct nbd_config *config = nbd->config;
-> > +       loff_t bytesize;
-> >
-> >         switch (cmd) {
-> >         case NBD_DISCONNECT:
-> > @@ -1402,8 +1403,9 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
-> >         case NBD_SET_SIZE:
-> >                 return nbd_set_size(nbd, arg, config->blksize);
-> >         case NBD_SET_SIZE_BLOCKS:
-> > -               return nbd_set_size(nbd, arg * config->blksize,
-> > -                                   config->blksize);
-> > +               if (check_mul_overflow((loff_t)arg, config->blksize, &bytesize))
-> > +                       return -EINVAL;
-> > +               return nbd_set_size(nbd, bytesize, config->blksize);
-> >         case NBD_SET_TIMEOUT:
-> >                 nbd_set_cmd_timeout(nbd, arg);
-> >                 return 0;
-> 
-> arm clang-10, clang-11, clang-12 and clang-13 builds failed.
-> due to this commit on 5.14 and 5.13 on following configs,
->   - footbridge_defconfig
->   - mini2440_defconfig
->   - s3c2410_defconfig
-> 
-> This was already reported on the mailing list.
-> 
-> ERROR: modpost: "__mulodi4" [drivers/block/nbd.ko] undefined! #1438
-> https://github.com/ClangBuiltLinux/linux/issues/1438
-> 
-> [PATCH 00/10] raise minimum GCC version to 5.1
-> https://lore.kernel.org/lkml/20210910234047.1019925-1-ndesaulniers@google.com/
-> 
-> linux-next: build failure while building Linus' tree
-> https://lore.kernel.org/all/20210909182525.372ee687@canb.auug.org.au/
-> 
-> Full build log,
-> https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/1585407346#L1111
+Hi Daniel,
 
-Has anyone submitted a fix for this upstream yet?  I can't seem to find
-one :(
+On Mon, Sep 13, 2021 at 05:19:26PM +0200, Daniel Borkmann wrote:
+> [ +Philip ]
+> 
+> On 9/11/21 2:38 AM, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git pr/bpf-cgrp
+> > head:   5a6e78baee7515884b93a90c5d03db601bc9063a
+> > commit: f36377d0c40cce0cdeaff50031c268bc640d94f0 [2/4] bpf, cgroups: Fix cgroup v2 fallback on v1/v2 mixed mode
+> > config: i386-randconfig-r032-20210910 (attached as .config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38f8c1ee1a482fe76511110e790f58a)
+> > reproduce (this is a W=1 build):
+> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          # https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git/commit/?id=f36377d0c40cce0cdeaff50031c268bc640d94f0
+> >          git remote add dborkman https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git
+> >          git fetch --no-tags dborkman pr/bpf-cgrp
+> >          git checkout f36377d0c40cce0cdeaff50031c268bc640d94f0
+> >          # save the attached .config to linux build tree
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> 
+> Not sure how useful these warnings below are given it is quite conventional in the kernel
+> to have some static inline helper which e.g. look:
+> 
+> static inline int bla(struct foo *bar)
+> {
+> #ifdef CONFIG_<XYZ>
+>         return ... /// do something with bar
+> #else
+>         return 0;
+> #endif
+> }
+> 
+> I presume consensus here is to ignore these given also the gazillion other cases in the
+> kernel tree. In other words, goal on -Wunused-parameter for kernel would be to really
+> only catch cases where a parameter is indeed in all cases unused and should be removed
+> from the signature.
+
+Unfortunately, it looks like you are getting bit by a tangential issue
+here:
+
+https://lore.kernel.org/r/YSQE2f5teuvKLkON@Ryzen-9-3900X.localdomain/
+
+The full include log:
+
+In file included from drivers/gpu/drm/i915/display/intel_dpll.c:7:
+In file included from drivers/gpu/drm/i915/display/intel_de.h:9:
+In file included from ./drivers/gpu/drm/i915/i915_drv.h:39:
+In file included from ./include/linux/i2c.h:18:
+In file included from ./include/linux/regulator/consumer.h:35:
+In file included from ./include/linux/suspend.h:5:
+In file included from ./include/linux/swap.h:9:
+In file included from ./include/linux/memcontrol.h:13:
+In file included from ./include/linux/cgroup.h:28:
+In file included from ./include/linux/cgroup-defs.h:22:
+In file included from ./include/linux/bpf-cgroup.h:5:
+./include/linux/bpf.h:770:61: warning: unused parameter 'prog' [-Wunused-parameter]
+static inline int bpf_trampoline_link_prog(struct bpf_prog *prog,
+                                                            ^
+./include/linux/bpf.h:771:32: warning: unused parameter 'tr' [-Wunused-parameter]
+                                           struct bpf_trampoline *tr)
+                                                                  ^
+...
+
+The fixes are here:
+
+https://lore.kernel.org/r/20210824022640.2170859-1-nathan@kernel.org/
+https://lore.kernel.org/r/20210824232237.2085342-1-nathan@kernel.org/
+
+I will push to get these fixes accepted as quickly as possible.
+
+Philip, would it be possible for you guys to avoid sending reports for
+i386 configurations that contain any of the following three
+configurations for the time being?
+
+CONFIG_MCRUSOE=y
+CONFIG_MEFFICEON=y
+CONFIG_MCYRIXIII=y
+
+They are resulting in a lot of false positives, as I have linked above.
+
+Cheers,
+Nathan
