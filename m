@@ -1,89 +1,74 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B473FC3
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 18:39:35 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id w4so18969449ljh.13
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 11:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Gsr5LZp4mspjysvxu5nUdPKorXySGG+JMQ2KUyjakOE=;
-        b=tcNOwy+hx3G7tDym26NrZiXL2XWVfVOinWzaPRaxtSumdMCEMHyQMS5xN+W+Z2a3Pp
-         Yyjh/Aquz4bS5k72F8kzeTZLT6pSCAwxItpi90F1EBgGsfx0a7X5GHKo9kEfQnIw/K5o
-         7FmsF1N2fJOdGgHBXU9jSs6LZXwz6kp3GvpswTBmJ4XVr+8MLfvY2DnXC45Tf+PJiita
-         sPgwimOij4te8yuQYluDFNeehCU/E13bJ7Z26XkxG5BIjzjHtbrIcJtf/SECJRqEzJoS
-         lGMzeeTXj49IrKVF2TkOEbCd9wb8x356nbZqWE8MShw7jmb6O6C2PkQEEgNqFbtUqPLA
-         Zngg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Gsr5LZp4mspjysvxu5nUdPKorXySGG+JMQ2KUyjakOE=;
-        b=VYwnOhRfUQXdGuH5ZaI2WVef9S/2KA5T3pC30w4+IFLmWbwHEbU9G9Q6/difKomj8K
-         hvu5x9e0ynexctvBTAk9ZRM3Ni6eXl+8KBV2x2wN8ChqBEF7BmiSaGSzg7my+ysKf81p
-         056v7nNg4xhZSR1bW1207HQFBi6CTXSqIvCAl/MUsysga548b5OmJhTpv9JU/oPCgmgm
-         N3ym9W1UF76glQiRTXp5eo8wXXO4B/4CWMwARXADWPUo9eSxsnvJ9ZHAmJdsjuIM+rSb
-         yXppZP5c/NMTj0UXGYO1akVO6lqNyXETp4UqRxjmObUQl12ak8nzS/ekbGIIWmdzrlfx
-         pkCw==
-X-Gm-Message-State: AOAM530d0wEbjcXn09j0z47AYTkanJc8ftSTXSBtkQFZvXH5EWxEjxcy
-	fzUi+NPNcV2FDBPum0dYNmaqPujcEcCib5HVBOV37A==
-X-Google-Smtp-Source: ABdhPJxr4FCmAlu5SlbIY3KpCOou2NcGaA/MSwV9TxbMuHHx3SyU4FoEmbG/iNG0U1htM5yQCZ0AvH3kwb0F3zNiDOw=
-X-Received: by 2002:a2e:8808:: with SMTP id x8mr12089846ljh.220.1631558373845;
- Mon, 13 Sep 2021 11:39:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E328F3FC3
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 18:53:35 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E652860F24;
+	Mon, 13 Sep 2021 18:53:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1631559214;
+	bh=YILugTkzyXwATz0qqlrum5V7nKWX1bT+knVxHyNOA9c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=praELURUY/GLHNH2qLYD3tZceMheOY18RPQhQiMQCPjfVZpsmnneQtHS5FNI6TXH4
+	 etPVoeAjdqozGMclhnHW2ljAb7IAAgVcC7aW5TIn/3K5iob65roL3Y5n6AOx+vSG+F
+	 v7QKVlxfrh9lw7uS6bvfxMWsTyM4PK7I+jMxmtB/L5Vi3rgRfKIEXs9xepn6EJInGL
+	 xcVuQZya4J0GO7Ve6u7kC65oHBNKUe65vf79hYmBOWkpXWr2zEoi28Fo96+XGOfuJr
+	 xGzSKIhkdo5ZItryKc5xNjcZcCjIQB7KRgrmsqKvnsa7yH20asN2JMqHaKVf6B89dN
+	 El52q5qXVbFPg==
+Date: Mon, 13 Sep 2021 11:53:25 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	clang-built-linux@googlegroups.com
+Subject: Re: drivers/infiniband/hw/qib/qib_sysfs.c:413:1: error:
+ static_assert expression is not an integral constant expression
+Message-ID: <YT+eJY4JoobVsKWu@archlinux-ax161>
+References: <202109112002.NZceUwiC-lkp@intel.com>
+ <20210913165317.GX2505917@nvidia.com>
+ <CAKwvOdnGaVb1XGwYpNK_3zAEyZ0JC1SDjC1UzzFEH=d_Mdi7Fw@mail.gmail.com>
+ <20210913183813.GY2505917@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.028340332@linuxfoundation.org>
- <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com> <YT+RKemKfg6GFq0S@kroah.com>
-In-Reply-To: <YT+RKemKfg6GFq0S@kroah.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 13 Sep 2021 11:39:22 -0700
-Message-ID: <CAKwvOdmOAKTkgFK4Oke1SFGR_NxNqXe-buj1uyDgwZ4JdnP2Vg@mail.gmail.com>
-Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, Nathan Chancellor <natechancellor@gmail.com>, 
-	Baokun Li <libaokun1@huawei.com>, open list <linux-kernel@vger.kernel.org>, 
-	linux-stable <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>, 
-	Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>, 
-	clang-built-linux <clang-built-linux@googlegroups.com>, lkft-triage@lists.linaro.org, 
-	llvm@lists.linux.dev, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210913183813.GY2505917@nvidia.com>
 
-On Mon, Sep 13, 2021 at 10:58 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Sep 13, 2021 at 09:52:33PM +0530, Naresh Kamboju wrote:
-> > [PATCH 00/10] raise minimum GCC version to 5.1
-> > https://lore.kernel.org/lkml/20210910234047.1019925-1-ndesaulniers@google.com/
->
-> Has anyone submitted a fix for this upstream yet?  I can't seem to find
-> one :(
+On Mon, Sep 13, 2021 at 03:38:13PM -0300, Jason Gunthorpe wrote:
+> On Mon, Sep 13, 2021 at 10:00:02AM -0700, Nick Desaulniers wrote:
+> 
+> > > This macro would like to know that the passed in member name has a u64
+> > > type, all the things I've come up with fail on clang - but many work
+> > > fine on gcc. Frankly I think this case is a clang bug myself..
+> > 
+> > Perhaps, though this assertion looks a bit like offsetof() to me. I
+> > wonder if that can help here?
+> 
+> The assertion would logically like to be this:
+> 
+>          static_assert(typecheck(((struct qib_port *)0)->N, u64))
 
-That lore link has a series to address this, though that's maybe
-something we don't want to backport to stable.
+This works for me with both GCC and clang, if that is acceptable to you?
+It fails if you change one of the variables to 'u32'.
 
-I thought about this all weekend; I think I might be able to work
-around the one concern I had with my other approach, using
-__builtin_choose_expr().
+Cheers,
+Nathan
 
-There's an issue with my alternative approach
-(https://gist.github.com/nickdesaulniers/2479818f4983bbf2d688cebbab435863)
-with declaring the local variable z in div_64() since either operand
-could be 64b, which result in an unwanted truncation if the dividend
-is 32b (or less, and divisor is 64b). I think (what I realized this
-weekend) is that we might be able to replace the `if` with
-`__builtin_choose_expr`, then have that whole expression be the final
-statement and thus the "return value" of the statement expression.
-
-I need to play with that idea more; maybe that could be a more
-manageable patch for stable.  But I also need to eat lunch, and I've
-been in the Rust for Linux conference, and trying to organize 3 other
-conferences for the next two weeks...
--- 
-Thanks,
-~Nick Desaulniers
+diff --git a/drivers/infiniband/hw/qib/qib_sysfs.c b/drivers/infiniband/hw/qib/qib_sysfs.c
+index 452e2355d24e..0a3b28142c05 100644
+--- a/drivers/infiniband/hw/qib/qib_sysfs.c
++++ b/drivers/infiniband/hw/qib/qib_sysfs.c
+@@ -403,7 +403,7 @@ static ssize_t diagc_attr_store(struct ib_device *ibdev, u32 port_num,
+ }
+ 
+ #define QIB_DIAGC_ATTR(N)                                                      \
+-	static_assert(&((struct qib_ibport *)0)->rvp.n_##N != (u64 *)NULL);    \
++	static_assert(__same_type(((struct qib_ibport *)0)->rvp.n_##N, u64));  \
+ 	static struct qib_diagc_attr qib_diagc_attr_##N = {                    \
+ 		.attr = __ATTR(N, 0664, diagc_attr_show, diagc_attr_store),    \
+ 		.counter =                                                     \
