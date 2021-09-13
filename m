@@ -1,194 +1,98 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F913FC4
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 20:32:14 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id i77-20020a25d150000000b005b1d20152b0so1342244ybg.14
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 13:32:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6D43FCF
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 20:37:05 +0000 (UTC)
+Received: by mail-lf1-f41.google.com with SMTP id k13so23725952lfv.2
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 13:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=iuVSNTEj/IrVtot2IP0rOmE+tkb9TmEFRChI7WrvsVQ=;
-        b=QfsUizU+ni8bMJ8NAONpVHC3V/328414sovWfgK5sAwuAfSUh6x2O8/d85OqrluMzl
-         TzH2VGLQ0E7Ah8Z58EEcKpadNKIBf8ka5SaRAoCW80G6WrsVaFA4PuCSEKNTlZ1SHMlu
-         BI4AD8sqcAugho8eO2KKG2wRqn3MTu9hMRXq6zdt/y0cZ7FS9bDWJKICngh7WOgPPPvy
-         wN1xkDEICdMUYs6Ql13jsM94dZ1bPO0RxNhV9RhoEHp/h8hthXtEotyNhcsSSTGNV5dv
-         y5IHh++pc0tzxISdH5GYHZC9u9cjonhFSz9oYydsGJo3nKhWVq2VR2fbabLf3mTrZFkd
-         YuhQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc;
+        bh=uNcqj9xjWIfQIY0QflXDG20YjitmguOx4ywcCWl73/U=;
+        b=ilWLGdi3Cf8peiOJcbZixLNgXePN5jQ7FtqkR0ne0wGyCRK96xVTx6VujOtvGJnwOA
+         t29LDmRG+oQphsKQLnpgKx0qT0UFM0awAHItWH/qAMoFwuMy1QfcQ+Htb6PtxMKA0yfi
+         FfYper/cc47ppbEIm94dxrSsOZzWauuRFeUEGD1On65oseTwVG4b7swRd5bBE7KJ9ugH
+         muU1CEublYt5PHRS7COzLUHbPECVYPxwPrD9v0OcSC5aw/MKDfgo+UWjHNk1XfiEJZSA
+         QEUvgjOv/V+CZ1qNhRAAq28FWdx6nR1p3+erxw08PjXPab3mgwlZu/7cKFrCj+ejmrOK
+         9Pmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=iuVSNTEj/IrVtot2IP0rOmE+tkb9TmEFRChI7WrvsVQ=;
-        b=0fBUuNZtDy8RDPDLqqBHJgpgq75+dehZNe/ML9zZ4huPAmUIm390pQ/L9qW06Frm2h
-         ljkJXfjLYwqpeS1ry3ski0YD8LgOztXpS80Ljgww3danoT6Uo87wb6hkzqY3Mbw31gPF
-         Q15tf6cVrLYkTjsx+2gIQFAZJotbhBwfFrIFJVASfoyHNwYPNB9zu5tGSPJ1VdYwUqMz
-         RtWG2B1kAzGjIUOkcuSqqqAVLtyZdYeQzIknCCt3gl547UbL/G9AsYt04SMAGSIlWylN
-         ui8e/8REF8cBOBQUwOKCyGkOC+WufW7iuGH4iCcyboDPzFMQUon22EQNV4qFN0L3fEwR
-         sDPA==
-X-Gm-Message-State: AOAM530jZ1Xe6bsQ0wrwPQZDPySe3DLkv2MR75H/fmdPqetrilcz0vOu
-	slMTdyEQmMkxJh2R8zvrr0fXbPCdSfYWRvHKIi8=
-X-Google-Smtp-Source: ABdhPJyCJBVWKkqUWGh+Aa18x15EeEHvZbuAtWv2VaDsr4cGSS1eyqeI+yo8WXzQNPGM8k1FEZtJUhi7X3UtLLjCb5I=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:18fb:7cc2:db5f:5817])
- (user=ndesaulniers job=sendgmr) by 2002:a25:ca08:: with SMTP id
- a8mr17928720ybg.231.1631565133012; Mon, 13 Sep 2021 13:32:13 -0700 (PDT)
-Date: Mon, 13 Sep 2021 13:32:01 -0700
-Message-Id: <20210913203201.1844253-1-ndesaulniers@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:cc;
+        bh=uNcqj9xjWIfQIY0QflXDG20YjitmguOx4ywcCWl73/U=;
+        b=8Q1mU5wctP/nK3li81tJIOE12B19HhPd4DicgdyrRgP+xbTYPR7gSzKoPMtiY+Oo5g
+         rWyYVs76jgIiDFgzBY4RFdQ5rbqAHzcZZbK6yellxHiIh12WbMarScpofMYfpJqfWInA
+         6BJfsGIPIfceBFadRNnqtVFjRdT6yQa3mQnBvfH9GiB4/QtvQPRl1oT0aeQuaPGz3blW
+         u5A+vgnTMfxmBRVh5npOB7xRdXpojZ2XySew1uEp8GyLOggZn5vHJu0gphhullr9jR83
+         vkj9UGHHuaFycpv8iik45hYnH/u4HJ5rDDubX9WJYPIwNaAaV+gECM1GvRL4kESKPTAC
+         1E3Q==
+X-Gm-Message-State: AOAM533iBxaDdYsg65uHcmdN8VLI+LdW4qKvS4wGtl1GY9B4nWhyX8pj
+	HhlqzC/y6M7N++5y1X7pu/tmsQeiumnfll5ezLKk7w==
+X-Received: by 2002:a05:6512:1114:: with SMTP id l20mt4770215lfg.550.1631565420008;
+ Mon, 13 Sep 2021 13:37:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
-Subject: [PATCH 5.10] overflow.h: use new generic division helpers to avoid / operator
+MIME-Version: 1.0
+References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.028340332@linuxfoundation.org>
+ <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
+ <YT+RKemKfg6GFq0S@kroah.com> <CAKwvOdmOAKTkgFK4Oke1SFGR_NxNqXe-buj1uyDgwZ4JdnP2Vg@mail.gmail.com>
+ <CAKwvOdmCS5Q7AzUL5nziYVU7RrtRjoE9JjOXfVBWagO1Bzbsew@mail.gmail.com>
+ <CA+icZUVuRaMs=bx775gDF88_xzy8LFkBA5xaK21hFDeYvgo12A@mail.gmail.com>
+ <CAKwvOdmN3nQe8aL=jUwi0nGXzYQGic=NA2o40Q=yeHeafSsS3g@mail.gmail.com>
+ <CAHk-=whwREzjT7=OSi5=qqOkQsvMkCOYVhyKQ5t8Rdq4bBEzuw@mail.gmail.com> <CAKwvOdkf3B41RRe8FDkw1H-0hBt1_PhZtZxBZ5pj0pyh7vDLmA@mail.gmail.com>
+In-Reply-To: <CAKwvOdkf3B41RRe8FDkw1H-0hBt1_PhZtZxBZ5pj0pyh7vDLmA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, stable@vger.kernel.org, 
-	Arnd Bergmann <arnd@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Naresh Kamboju <naresh.kamboju@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Pavel Machek <pavel@ucw.cz>
+Date: Mon, 13 Sep 2021 13:36:49 -0700
+Message-ID: <CAKwvOdkpsvNK2x+=S80crW0reFBH-vwuNop7-2mFayajFMcqog@mail.gmail.com>
+Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
+Cc: Sedat Dilek <sedat.dilek@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>, Nathan Chancellor <natechancellor@gmail.com>, 
+	Baokun Li <libaokun1@huawei.com>, open list <linux-kernel@vger.kernel.org>, 
+	linux-stable <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>, 
+	Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>, 
+	clang-built-linux <clang-built-linux@googlegroups.com>, lkft-triage@lists.linaro.org, 
+	llvm@lists.linux.dev, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-commit fad7cd3310db ("nbd: add the check to prevent overflow in
-__nbd_ioctl()") raised an issue from the fallback helpers added in
-commit f0907827a8a9 ("compiler.h: enable builtin overflow checkers and
-add fallback code")
+On Mon, Sep 13, 2021 at 1:16 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Mon, Sep 13, 2021 at 1:10 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Mon, Sep 13, 2021 at 1:02 PM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > Ha! I pulled+rebased and this code disappeared...I thought I had
+> > > rebased on the wrong branch or committed work to master accidentally.
+> > > Patch to stable-only inbound.
+> >
+> > Side note: for stable, can you look into using _Generic() instead of
+> > __builtin_choose_expression() with typeof, or some
+> > __builtin_types_compatible_p() magic?
+> >
+> > Yes, yes, we use __builtin_choose_expression() elsewhere, but we've
+> > started using _Generic(), and it's really the more natural model - in
+> > addition to being the standard C one.
+> >
+> > Of course, there may be some reason why _Generic() doesn't work, but
+> > it _is_ the natural fit for any "for type X, do Y" kind of thing.
+> >
+> > No?
+>
+> Man, c'mon, I just got the __builtin_choose_expression() working! It's
+> not...too bad...ish. (Besides, I'd actually have to learn how to use
+> _Generic...I've never quite gotten anything I've written trying to use
+> it to actually compile).
+>
+> Do we have access to _Generic in GCC 4.9?
 
-ERROR: modpost: "__divdi3" [drivers/block/nbd.ko] undefined!
-
-As Stephen Rothwell notes:
-  The added check_mul_overflow() call is being passed 64 bit values.
-  COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW is not set for this build (see
-  include/linux/overflow.h).
-
-Specifically, the helpers for checking whether the results of a
-multiplication overflowed (__unsigned_mul_overflow,
-__signed_add_overflow) use the division operator when
-!COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW.  This is problematic for 64b
-operands on 32b hosts.
-
-This was fixed upstream by
-commit 76ae847497bc ("Documentation: raise minimum supported version of
-GCC to 5.1")
-which is not suitable to be backported to stable; I didn't have this
-patch ready in time.
-
-Cc: stable@vger.kernel.org
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Suggested-by: Pavel Machek <pavel@ucw.cz>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1438
-Link: https://lore.kernel.org/all/20210909182525.372ee687@canb.auug.org.au/
-Link: https://lore.kernel.org/lkml/20210910234047.1019925-1-ndesaulniers@google.com/
-Fixes: f0907827a8a9 ("compiler.h: enable builtin overflow checkers and
-add fallback code")
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-This kind of generic meta-programming in C and my lack of experience in
-doing so makes me very uncomfortable (and slightly ashamed) to send
-this. I would appreciate careful review and feedback. I would appreciate
-if Naresh can test this with GCC 4.9, which I don't have handy.
-
-Linus also suggested I look into the use of _Generic; I haven't
-evaluated that approach yet, but I felt like posting this early for
-feedback.
-
- include/linux/math64.h   | 35 +++++++++++++++++++++++++++++++++++
- include/linux/overflow.h |  8 ++++----
- 2 files changed, 39 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/math64.h b/include/linux/math64.h
-index 66deb1fdc2ef..bc9c12c168d0 100644
---- a/include/linux/math64.h
-+++ b/include/linux/math64.h
-@@ -10,6 +10,9 @@
- 
- #define div64_long(x, y) div64_s64((x), (y))
- #define div64_ul(x, y)   div64_u64((x), (y))
-+#ifndef is_signed_type
-+#define is_signed_type(type)       (((type)(-1)) < (type)1)
-+#endif
- 
- /**
-  * div_u64_rem - unsigned 64bit divide with 32bit divisor with remainder
-@@ -111,6 +114,15 @@ extern s64 div64_s64(s64 dividend, s64 divisor);
- 
- #endif /* BITS_PER_LONG */
- 
-+#define div64_x64(dividend, divisor) ({			\
-+	BUILD_BUG_ON_MSG(sizeof(dividend) < sizeof(u64),\
-+	                 "prefer div_x64");		\
-+	__builtin_choose_expr(				\
-+		is_signed_type(typeof(dividend)),	\
-+		div64_s64(dividend, divisor),		\
-+		div64_u64(dividend, divisor));		\
-+})
-+
- /**
-  * div_u64 - unsigned 64bit divide with 32bit divisor
-  * @dividend: unsigned 64bit dividend
-@@ -141,6 +153,29 @@ static inline s64 div_s64(s64 dividend, s32 divisor)
- }
- #endif
- 
-+#define div_x64(dividend, divisor) ({			\
-+	BUILD_BUG_ON_MSG(sizeof(dividend) > sizeof(u32),\
-+	                 "prefer div64_x64");		\
-+	__builtin_choose_expr(				\
-+		is_signed_type(typeof(dividend)),	\
-+		div_s64(dividend, divisor),		\
-+		div_u64(dividend, divisor));		\
-+})
-+
-+#define div_64(dividend, divisor) ({						\
-+	BUILD_BUG_ON_MSG(sizeof(dividend) > sizeof(u64),			\
-+	                 "128b div unsupported");				\
-+	__builtin_choose_expr(							\
-+		__builtin_types_compatible_p(typeof(dividend), s64) ||		\
-+		__builtin_types_compatible_p(typeof(dividend), u64),		\
-+		__builtin_choose_expr(						\
-+			__builtin_types_compatible_p(typeof(divisor), s64) ||	\
-+			__builtin_types_compatible_p(typeof(divisor), u64),	\
-+			div64_x64(dividend, divisor),				\
-+			div_x64(dividend, divisor)),				\
-+		dividend / divisor);						\
-+})
-+
- u32 iter_div_u64_rem(u64 dividend, u32 divisor, u64 *remainder);
- 
- #ifndef mul_u32_u32
-diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-index ef74051d5cfe..2ebdf220c184 100644
---- a/include/linux/overflow.h
-+++ b/include/linux/overflow.h
-@@ -123,8 +123,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 	(void) (&__a == __d);				\
- 	*__d = __a * __b;				\
- 	__builtin_constant_p(__b) ?			\
--	  __b > 0 && __a > type_max(typeof(__a)) / __b : \
--	  __a > 0 && __b > type_max(typeof(__b)) / __a;	 \
-+	  __b > 0 && __a > div_64(type_max(typeof(__a)), __b) :	\
-+	  __a > 0 && __b > div_64(type_max(typeof(__b)), __a);	\
- })
- 
- /*
-@@ -195,8 +195,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 	(void) (&__a == &__b);						\
- 	(void) (&__a == __d);						\
- 	*__d = (u64)__a * (u64)__b;					\
--	(__b > 0   && (__a > __tmax/__b || __a < __tmin/__b)) ||	\
--	(__b < (typeof(__b))-1  && (__a > __tmin/__b || __a < __tmax/__b)) || \
-+	(__b > 0 && (__a > div_64(__tmax, __b) || __a < div_64(__tmin, __b))) ||		\
-+	(__b < (typeof(__b))-1 && (__a > div_64(__tmin, __b) || __a < div_64(__tmax, __b))) ||	\
- 	(__b == (typeof(__b))-1 && __a == __tmin);			\
- })
- 
+Follow up thread, sorry/not sorry for not taking the full cc list:
+https://lore.kernel.org/stable/20210913203201.1844253-1-ndesaulniers@google.com/
 -- 
-2.33.0.309.g3052b89438-goog
-
+Thanks,
+~Nick Desaulniers
