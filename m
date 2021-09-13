@@ -1,36 +1,35 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8EF3FC5
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 17:55:51 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A1F0360E97;
-	Mon, 13 Sep 2021 17:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631555750;
-	bh=9hCsDfa152YCgrx2lvwHetmU1uS6j7bALqOO6SjfsBo=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FDA3FC5
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 17:58:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4789B60F25;
+	Mon, 13 Sep 2021 17:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1631555883;
+	bh=wKCgWwoggfMMEuOXBW33VvCRW6LZGGnafN7FiiDq0po=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kCzjSSdCZH9GmfVIx8YGg35ecGbRj3kGBdijAGtlqO4WEMWosxchtOBbWUhJmwpON
-	 K7EzWyw9tObM0NefsDXNfHs2mxJK2wX64M/hPyNxVCNGVD8smZG58IyQyJmn4x96qd
-	 ByzHGLy7UtvE/gMluPvdMqS+E/mz0lyOIoDq7manEo0IFLzJH8q+/QxjdwWOHI/yVY
-	 KQDTwQcTLPORF+OaSc8OIczMKQSu+C3xASC24gWQ8Uq8UzAFsplvWgiLYlS2MtP9SJ
-	 6srSvyePYxQ9pn8Uewqrr/utN6RCvCZmopoWSVSTDMWODkEIAvnTSVdPGn0VVD3m8n
-	 gePHJqb3mmCFw==
-Date: Mon, 13 Sep 2021 10:55:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Jason Ekstrand <jason@jlekstrand.net>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	b=GVc7OI7qomibj+raAPEjY0UE8y/XsG3CJBeVKxT/5I+pml7HfSZatFAoBHdmO8hMf
+	 B4sF/hEfbMZvKo0GdiqrKxq/puFzbu+1iClo7Rim1tTKQyW4lCLGYZiPPs3o8aeLRB
+	 4i776bLcYny/wE3eRkpN79oS/jmeNQpx24V+/hvQ=
+Date: Mon, 13 Sep 2021 19:58:01 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Nathan Chancellor <natechancellor@gmail.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] drm/i915: Enable -Wsometimes-uninitialized
-Message-ID: <YT+QmKyKCdotTcqA@archlinux-ax161>
-References: <20210824225427.2065517-1-nathan@kernel.org>
+	Baokun Li <libaokun1@huawei.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	linux-stable <stable@vger.kernel.org>,
+	Hulk Robot <hulkci@huawei.com>, Josef Bacik <josef@toxicpanda.com>,
+	Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+	clang-built-linux <clang-built-linux@googlegroups.com>,
+	lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in
+ __nbd_ioctl()
+Message-ID: <YT+RKemKfg6GFq0S@kroah.com>
+References: <20210913131113.390368911@linuxfoundation.org>
+ <20210913131114.028340332@linuxfoundation.org>
+ <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,37 +38,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210824225427.2065517-1-nathan@kernel.org>
+In-Reply-To: <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
 
-On Tue, Aug 24, 2021 at 03:54:24PM -0700, Nathan Chancellor wrote:
-> Commit 46e2068081e9 ("drm/i915: Disable some extra clang warnings")
-> disabled -Wsometimes-uninitialized as noisy but there have been a few
-> fixes to clang that make the false positive rate fairly low so it should
-> be enabled to help catch obvious mistakes. The first two patches fix
-> revent instances of this warning then enables it for i915 like the rest
-> of the tree.
+On Mon, Sep 13, 2021 at 09:52:33PM +0530, Naresh Kamboju wrote:
+> On Mon, 13 Sept 2021 at 19:51, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > From: Baokun Li <libaokun1@huawei.com>
+> >
+> > [ Upstream commit fad7cd3310db3099f95dd34312c77740fbc455e5 ]
+> >
+> > If user specify a large enough value of NBD blocks option, it may trigger
+> > signed integer overflow which may lead to nbd->config->bytesize becomes a
+> > large or small value, zero in particular.
+> >
+> > UBSAN: Undefined behaviour in drivers/block/nbd.c:325:31
+> > signed integer overflow:
+> > 1024 * 4611686155866341414 cannot be represented in type 'long long int'
+> > [...]
+> > Call trace:
+> > [...]
+> >  handle_overflow+0x188/0x1dc lib/ubsan.c:192
+> >  __ubsan_handle_mul_overflow+0x34/0x44 lib/ubsan.c:213
+> >  nbd_size_set drivers/block/nbd.c:325 [inline]
+> >  __nbd_ioctl drivers/block/nbd.c:1342 [inline]
+> >  nbd_ioctl+0x998/0xa10 drivers/block/nbd.c:1395
+> >  __blkdev_driver_ioctl block/ioctl.c:311 [inline]
+> > [...]
+> >
+> > Although it is not a big deal, still silence the UBSAN by limit
+> > the input value.
+> >
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> > Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+> > Link: https://lore.kernel.org/r/20210804021212.990223-1-libaokun1@huawei.com
+> > [axboe: dropped unlikely()]
+> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > ---
+> >  drivers/block/nbd.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+> > index 19f5d5a8b16a..acf3f85bf3c7 100644
+> > --- a/drivers/block/nbd.c
+> > +++ b/drivers/block/nbd.c
+> > @@ -1388,6 +1388,7 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
+> >                        unsigned int cmd, unsigned long arg)
+> >  {
+> >         struct nbd_config *config = nbd->config;
+> > +       loff_t bytesize;
+> >
+> >         switch (cmd) {
+> >         case NBD_DISCONNECT:
+> > @@ -1402,8 +1403,9 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
+> >         case NBD_SET_SIZE:
+> >                 return nbd_set_size(nbd, arg, config->blksize);
+> >         case NBD_SET_SIZE_BLOCKS:
+> > -               return nbd_set_size(nbd, arg * config->blksize,
+> > -                                   config->blksize);
+> > +               if (check_mul_overflow((loff_t)arg, config->blksize, &bytesize))
+> > +                       return -EINVAL;
+> > +               return nbd_set_size(nbd, bytesize, config->blksize);
+> >         case NBD_SET_TIMEOUT:
+> >                 nbd_set_cmd_timeout(nbd, arg);
+> >                 return 0;
 > 
-> Cheers,
-> Nathan
+> arm clang-10, clang-11, clang-12 and clang-13 builds failed.
+> due to this commit on 5.14 and 5.13 on following configs,
+>   - footbridge_defconfig
+>   - mini2440_defconfig
+>   - s3c2410_defconfig
 > 
-> Nathan Chancellor (3):
->   drm/i915/selftests: Do not use import_obj uninitialized
->   drm/i915/selftests: Always initialize err in
->     igt_dmabuf_import_same_driver_lmem()
->   drm/i915: Enable -Wsometimes-uninitialized
+> This was already reported on the mailing list.
 > 
->  drivers/gpu/drm/i915/Makefile                        | 1 -
->  drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c | 7 ++++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> ERROR: modpost: "__mulodi4" [drivers/block/nbd.ko] undefined! #1438
+> https://github.com/ClangBuiltLinux/linux/issues/1438
 > 
+> [PATCH 00/10] raise minimum GCC version to 5.1
+> https://lore.kernel.org/lkml/20210910234047.1019925-1-ndesaulniers@google.com/
 > 
-> base-commit: fb43ebc83e069625cfeeb2490efc3ffa0013bfa4
-> -- 
-> 2.33.0
+> linux-next: build failure while building Linus' tree
+> https://lore.kernel.org/all/20210909182525.372ee687@canb.auug.org.au/
 > 
-> 
+> Full build log,
+> https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/1585407346#L1111
 
-Ping, could this be picked up for an -rc as these are very clearly bugs?
-
-Cheers,
-Nathan
+Has anyone submitted a fix for this upstream yet?  I can't seem to find
+one :(
