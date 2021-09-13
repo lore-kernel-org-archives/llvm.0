@@ -1,33 +1,33 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2F43FD0
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 15:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E812F3FD0
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 15:59:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=hkOXi5xr4aXoqhdGU7WryuhpzwY8D8TDudCJdLImCV0=; b=210NTgaIKAXb1FhiRk6o/LMiLc
-	IJKzhy3SH7P4lYTYX5vJSR4KZT1T7DTF0c2FVBKG3t5sSqBHmzcy7xJLoGQ94IbpbQ2lEmScPOQqd
-	NJSk2+Pnbqy9Z+WTNq/jjkVl0bidijL4gGCSALLpOWIU7z6QAxzZ8cZg2TuYy6KgZAidHeSp3UxUs
-	J369m2lG91y3VFGMc5i5PWPLfuydWXr+8DYL/eMsarc8OT5oW4S6P/25d1nMFk1XBKUSSqjipEoiU
-	h4GD6jLgUnRPQRAMzjsOdgIr1r/dqfX/yNKGaCNpYkkLSEazymePOrupb0a6razJ98kNx6hVK5Nd+
-	8T4q5A1Q==;
+	bh=KaliKYYkNMqrhjKwpWKqxXm8VgZh11hwlXmN3oD3zZk=; b=SY0xVqk7mI72ydm3mgM8JYkEqJ
+	m4o4HwcN5IWtxcW0tjrqFWgZDfENT2mJTaih2bwiLEgJvu+OfSF+VBrgU57c/KNKKZy7oR0ylDfLC
+	eIO92nHgGmseg6OqOK549uP4e6BPwPps1+8zw9XB0FS/G4x6hiJt2MQu968Wa1jvEg4eJMqlw2lvw
+	pH5mEbUrvqGls9G4XZul084lWAHpV1YxYmmPZY4Ec9gwhpCrRg+k5G6xDzcPztusUZQ5HSclTQzI6
+	KAb0R1ZAa2FeYp5y3pUSRCze1KX1hdJiDsiJUK8o0Q+3+v+xpQSQ9D+mQD9nv9h2JjrYAO41WVQOp
+	1eXsbBRg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mPoK6-002G1j-A4; Mon, 13 Sep 2021 15:56:46 +0000
-Date: Mon, 13 Sep 2021 08:56:46 -0700
+	id 1mPoN4-002GLi-Au; Mon, 13 Sep 2021 15:59:50 +0000
+Date: Mon, 13 Sep 2021 08:59:50 -0700
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
+To: Philip Li <philip.li@intel.com>
 Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
 	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
 	Borislav Petkov <bp@suse.de>
-Subject: Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
+Subject: Re: [kbuild-all] Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
  drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous
  prototype for function 'firmware_is_builtin'
-Message-ID: <YT90vvVi7oYH0xpb@bombadil.infradead.org>
+Message-ID: <YT91dprXpGy+ywBu@bombadil.infradead.org>
 References: <202109101524.pjY4q0Dy-lkp@intel.com>
  <YTv817Srt8hoySP5@bombadil.infradead.org>
- <YTwLw+frJLbntgCJ@archlinux-ax161>
+ <20210911012853.GA834679@pl-dbox>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,10 +36,10 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YTwLw+frJLbntgCJ@archlinux-ax161>
+In-Reply-To: <20210911012853.GA834679@pl-dbox>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Fri, Sep 10, 2021 at 06:52:03PM -0700, Nathan Chancellor wrote:
+On Sat, Sep 11, 2021 at 09:28:53AM +0800, Philip Li wrote:
 > On Fri, Sep 10, 2021 at 05:48:23PM -0700, Luis Chamberlain wrote:
 > > On Fri, Sep 10, 2021 at 03:41:31PM +0800, kernel test robot wrote:
 > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210908-firmware-builtin-v4
@@ -66,13 +66,22 @@ On Fri, Sep 10, 2021 at 06:52:03PM -0700, Nathan Chancellor wrote:
 > > >    bool firmware_is_builtin(const struct firmware *fw)
 > > 
 > > This is a lie though its defined on drivers/base/firmware_loader/firmware.h
-> 
-> Unless I am missing something, you don't include the firmware_loader
-> copy of firmware.h in builtin/main.c (only the linux one)? Isn't that
-> the source of the warning?
+> > 
+> > >         ^
+> > >    drivers/base/firmware_loader/builtin/main.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+> > >    bool firmware_is_builtin(const struct firmware *fw)
+> > >    ^
+> > >    static 
+> > >    1 error generated.
+> > 
+> > I get these odd errors:
+> > 
+> > Compiler will be installed in /home/mcgrof/0day
+> hi Luis, would you mind to download the make.cross tool again to give a try, it
+> was updated recently to use latest clang instead of this 12.0.0?
 
-You would think, but nope, its there:
-
-#include "firmware.h"
+I had clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl and this was
+used already. Is there a more recent one? Just in case I rm -rf'd it
+and tried again with the latest make.cross.
 
   Luis
