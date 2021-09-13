@@ -1,39 +1,39 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E093FD0
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:21:40 +0000 (UTC)
-Received: by mail-pg1-f182.google.com with SMTP id g184so9931184pgc.6
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:21:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CF93FD0
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:22:16 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id v1so6168996plo.10
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=IKFED9y0v7w+FhMaqd2QIA2eUP5bCbT2SCT49mPxoTQ=;
-        b=HCLOGlBq7MF6o8jKgFWWRIU4KSTMhQLrYDiW6j7kEwXvWCbDnQATyXEIJYuLlqQRHk
-         XFChA0ly+uvX8gd7pXobRS1fKuuS++LPbjPsARkcV9BEH4GJGJn2aZ6+TqpJs38pHdSX
-         r+EpLKHBGSfIHj26xJPcEBL12cZM2JRiScAcg=
+        bh=x9bengKu+CI5Uy0lxK3X1t9kIOqgRUCo1n/+q3eZAGw=;
+        b=atKV3P/8k/Yz8cBigFlc9fXFfyCBqkZFUT4+RKL1Z2tJeLgayOQJvz/EPJpYdPW+vj
+         XB9aylqdgIXvWFV2ZaZmy7g73rqq2+ki3DTPisx3U9sGYtJi4LOl5LCUNRzaLaxNkygQ
+         4aw/h2na3FhYoUcmwmfGh87UYgO68GUZMKRGQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=IKFED9y0v7w+FhMaqd2QIA2eUP5bCbT2SCT49mPxoTQ=;
-        b=0CVgOTVhnMmncpTW0zYYkVaPPZF6qptnLc5B8o15BcvCZf5wniG0lC7f/0DxNaer9O
-         YzsG3ZNysMSvNcMCHwC91EwdnGmTkIRbIfDsZ2RMc6KDbkgczyLezgMUQmsV+7mHUIfT
-         q5Sxw4O4FiiFjVYR7tBmgx7OZNJbH3vDgRQE9htln8OrRADll6Q/MIVwqkLJILRPO0LS
-         /nsII8czN45fzi9JKTsOU+fH3MGSQHvi/LoOId043d7DwIWDIor4j2/kJyp8RWru0g/M
-         H3SHUUYzQXOTKsWJQ9EMqvb+9oP7u3nqWkHeSPl3wYvVWMTmXjPiYeYbuIZRG2JnrUwn
-         YV6A==
-X-Gm-Message-State: AOAM530i7gZRcFZTVAJuH9iymBHaYj1x/NLUWzUixArTiyZom2rrNNYj
-	LMp8XQRib7Z3uRfp3WPSgbZnDw==
-X-Google-Smtp-Source: ABdhPJxnGP1kflyzFYPVzBgUMBLquG5UxHgd7HMXFZ68h+oy5s9G+QJ8KqObmwV16Y9egJHSVzwwtw==
-X-Received: by 2002:a05:6a00:c3:b0:43d:e6be:b2a6 with SMTP id e3-20020a056a0000c300b0043de6beb2a6mr261966pfj.34.1631550100562;
-        Mon, 13 Sep 2021 09:21:40 -0700 (PDT)
+        bh=x9bengKu+CI5Uy0lxK3X1t9kIOqgRUCo1n/+q3eZAGw=;
+        b=v/DQyDIZ26CvpKf/zlojaW3MokDSP12JfRKvxq+Gkgh9uTqUq2opyhpE2568JJLKf0
+         Wv+mhz0zIDxDgy/Wwu78CNBnegU7O0OGZ3sYPEOONdONXi4YwmNjLvFYGnP1M3BqFI8P
+         +GLszqLfY1h2qAnQ4kb1WpXLwM84vd5IIPi8KFMWHraTVbiuZHUR1zyP7PZkAkm7lsGs
+         PBGpHEME7oHW3juYVZxGBvnsmKYNmWdXrHjPtN3uSYHs4F1PL7BUji46QtAZV98P7PRA
+         ulE3LCLnOtbkoh12ZH6DddGP1CXQPt49yzOb1DJYHxMNaxfYfq9MB2txKEgVkQ9ja3RD
+         Ptqw==
+X-Gm-Message-State: AOAM532uiRNzmewxntgzTB66tZUL46HJ+QbBPZepBES7PEP7S49a6s4p
+	L2AJl5vadK6mF/4mFWp7yxcNNw==
+X-Google-Smtp-Source: ABdhPJzjqGdWhTndUENRXXSU0o8Taq3svhepsDvQaON2wiOrnYg1dZyKG9Bszyg7IEOrraOFxs5ykg==
+X-Received: by 2002:a17:90a:eb0b:: with SMTP id j11mr369315pjz.173.1631550135873;
+        Mon, 13 Sep 2021 09:22:15 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o6sm7514071pjk.4.2021.09.13.09.21.39
+        by smtp.gmail.com with ESMTPSA id h10sm2302588pjs.51.2021.09.13.09.22.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 09:21:40 -0700 (PDT)
-Date: Mon, 13 Sep 2021 09:21:39 -0700
+        Mon, 13 Sep 2021 09:22:15 -0700 (PDT)
+Date: Mon, 13 Sep 2021 09:22:14 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -44,10 +44,10 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>,
 	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/10] compiler.h: drop fallback overflow checkers
-Message-ID: <202109130921.D423C72@keescook>
+Subject: Re: [PATCH 03/10] mm/ksm: remove old GCC 4.9+ check
+Message-ID: <202109130922.D8C51303@keescook>
 References: <20210910234047.1019925-1-ndesaulniers@google.com>
- <20210910234047.1019925-3-ndesaulniers@google.com>
+ <20210910234047.1019925-4-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,25 +56,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210910234047.1019925-3-ndesaulniers@google.com>
+In-Reply-To: <20210910234047.1019925-4-ndesaulniers@google.com>
 
-On Fri, Sep 10, 2021 at 04:40:39PM -0700, Nick Desaulniers wrote:
-> Once upgrading the minimum supported version of GCC to 5.1, we can drop
-> the fallback code for !COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW.
+On Fri, Sep 10, 2021 at 04:40:40PM -0700, Nick Desaulniers wrote:
+> The minimum supported version of GCC has been raised to GCC 5.1.
 > 
-> Effectively a revert of
-> commit f0907827a8a9 ("compiler.h: enable builtin overflow checkers and
-> add fallback code")
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1438#issuecomment-916745801
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-With Nathan's comments addressed:
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
--Kees
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
