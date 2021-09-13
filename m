@@ -1,91 +1,68 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908573FD6
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1631526645;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FWYCzeGtceqA/rq/kRIZJcCWrApBFOcolNNuHNemAH8=;
-	b=bcxT/nYCt1HfAKtcDpLnPTM8jW84o9paV8oFdZQca4Wekbqa910O6nAmJm1sOQVY82MvFF
-	L11D9CnWttpO3OknhiogCut1nvBsudDdEXnHKqBogUYG2Vb3zD6lJ0EQIzTg079/lrzb6l
-	TQaAsa+kcMUG2/OxX5rVdIxVC0xY2QI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-259-ySxaI00DMc2dKdYIgVhaQw-1; Mon, 13 Sep 2021 05:50:44 -0400
-X-MC-Unique: ySxaI00DMc2dKdYIgVhaQw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664193FD6
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:56:11 +0000 (UTC)
+Received: from [192.168.0.4] (ip5f5aef84.dynamic.kabel-deutschland.de [95.90.239.132])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21ED4802B9F;
-	Mon, 13 Sep 2021 09:50:40 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.195.4])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id AEAC01972E;
-	Mon, 13 Sep 2021 09:50:33 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Pavel Machek <pavel@ucw.cz>
-Cc: Randy Dunlap <rdunlap@infradead.org>,  Linus Torvalds
- <torvalds@linux-foundation.org>,  Marco Elver <elver@google.com>,  Nick
- Desaulniers <ndesaulniers@google.com>,  llvm@lists.linux.dev,  LSM List
- <linux-security-module@vger.kernel.org>,
-  linux-toolchains@vger.kernel.org,  Arnd Bergmann <arnd@arndb.de>,  Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,  Guenter Roeck
- <linux@roeck-us.net>,  Kees Cook <keescook@chromium.org>,  Mark Brown
- <broonie@kernel.org>,  Masahiro Yamada <masahiroy@kernel.org>,  Nathan
- Chancellor <nathan@kernel.org>,  Michal Marek <michal.lkml@markovi.net>,
-  Andrew Morton <akpm@linux-foundation.org>,  Vipin Sharma
- <vipinsh@google.com>,  Chris Down <chris@chrisdown.name>,  Rasmus
- Villemoes <linux@rasmusvillemoes.dk>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Vlastimil Babka <vbabka@suse.cz>,  Linux Kbuild
- mailing list <linux-kbuild@vger.kernel.org>,  Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Revert "Enable '-Werror' by default for all kernel builds"
-References: <20210907183843.33028-1-ndesaulniers@google.com>
-	<CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
-	<CAKwvOdkuYoke=Sa8Qziveo9aSA2zaNWEcKW8LZLg+d3TPwHkoA@mail.gmail.com>
-	<YTfkO2PdnBXQXvsm@elver.google.com>
-	<CAHk-=wgPaQsEr+En=cqCqAC_sWmVP6x5rD2rmZRomH9EnTQL7Q@mail.gmail.com>
-	<c8fb537f-26e5-b305-6bc5-06f0d27a4029@infradead.org>
-	<20210913093256.GA12225@amd>
-Date: Mon, 13 Sep 2021 11:50:31 +0200
-In-Reply-To: <20210913093256.GA12225@amd> (Pavel Machek's message of "Mon, 13
-	Sep 2021 11:32:56 +0200")
-Message-ID: <87a6kgerdk.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7107561E5FE00;
+	Mon, 13 Sep 2021 11:48:21 +0200 (CEST)
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: LLVM/clang ias build fails with unsupported arguments '-mpower4' and
+ '-many' to option 'Wa,'
+To: Michael Ellerman <mpe@ellerman.id.au>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Paul Mackerras <paulus@samba.org>
+Cc: linuxppc-dev@lists.ozlabs.org, Derek Parker <parkerderek86@gmail.com>,
+ Dmitrii Okunev <xaionaro@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Message-ID: <62cc7e62-d072-7b16-8b6c-006f067b1ed7@molgen.mpg.de>
+Date: Mon, 13 Sep 2021 11:48:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 
-* Pavel Machek:
+Dear Linux folks,
 
-> Do we really want developers treat warnings as errors? When the code
-> is okay but some random version of gcc dislikes it...
 
-There are some warnings-as-errors which are quite reasonable, like
--Werror=implicit-function-declaration (which we can't make the compiler
-default without cleaning up userspace first) and perhaps
--Werror=implicit-int.  Some other warnings can be used to enforce coding
-style, and there -Werror could make sense as well (-Werror=vla and
-others).
+Building Linux with LLVM’s integrated assembler fails with the error 
+below [1].
 
-But there are also warnings which are emitted by the GCC middle-end (the
-optimizers), and turning on -Werror for those is very problematic.
-These warnings are very target-specific and also depend on compiler
-version and optimization parameters.  Unfortunately that includes the
-buffer size warnings based on function attributes (which would otherwise
-be a good fit for the kernel because it uses few external headers).
+```
+$ ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- make LLVM=1 
+LLVM_IAS=1 -j72 pseries_defconfig arch/powerpc/kernel/vdso32/gettimeofday.o
+...
+arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported 
+directive '.stabs'
+.stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; 
+_restgpr_31_x:
+        ^
+arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported 
+directive '.stabs'
+.stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl 
+_rest32gpr_31_x; _rest32gpr_31_x:
+        ^
+```
 
-GCC also lacks a facility to suppress warnings if they concern code that
-was introduced during optimization and removed again later
-(e.g. inlining, constant propagation, dead code removal).
+The LLVM developers are not planning on implementing this, as Stab has 
+been succeeded by DWARF [2].
 
-Thanks,
-Florian
 
+Kind regards,
+
+Paul
+
+
+[1]: https://github.com/ClangBuiltLinux/linux/issues/1418
+[2]: https://bugs.llvm.org/show_bug.cgi?id=31134
