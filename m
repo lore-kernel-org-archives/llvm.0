@@ -1,162 +1,87 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DC13FC4
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 21:15:34 +0000 (UTC)
-Received: by mail-lj1-f170.google.com with SMTP id p15so19721940ljn.3
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 14:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KsP30ov9xl9zhULjcWutgVa5WGmRNrz9j2ugExJGuYo=;
-        b=mygUPtbJXKFBf25Ytt4weIVj36Yui1nGLTd+cq+lXbA73j0/0gxaMT0z1qklKDwZjP
-         oYzbIV8uJoXpVLqWOm88+JSCNtqV5oJK1ekAwjAFKDkYP2JMkh38dpX8b729gelnHLCM
-         4SLlGe56m3hX+Trb53z9qVBgR0utshgzVDurHqGX35l9QYyRHVZ4owOVp9qrVetiNWAH
-         pynFZ5/s5LpdhpR6CWHyBac4qRy9kt1zN5ZHmylBp8QQfwqrhjs8KvmsdTDHTSHvSc74
-         zOsfV7AcfseUdFrfEaskaPe6x85pgcP3h2+G/UI382g+ahpXXdnlQghyJXOzrP7ZNEhA
-         GV5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KsP30ov9xl9zhULjcWutgVa5WGmRNrz9j2ugExJGuYo=;
-        b=wYLN+vnke44tb/B7DsPlWdERd7iw5JokEZWR0W1pHh6NT69bmfVGFNMnB3DoZsthQq
-         5kJwssBIY5Oo3TyS+mRJa0DjakgF/LnOJQrGxx13g1IcbHuNsPy2rLXz5n8CETcjsbAP
-         gYxxiEUxBsd34wb6RN0K6r5HMssqHh3o5z5KSE+TdGzZHlg648K2TTpoo8oJ5j6+1iuY
-         WrJbsLVTQ5TsGmU6Dd955br2yIKgfWbSq+guVxJFg62+XpB5R/p1aNkZPX7hV74qAQ1W
-         q0BemVGoo03ApNiuSZpE5cEDRNYxEfvc5qpkVYD4PrKMlyeYIkoBX9h1yEHysXm/sHDL
-         csPA==
-X-Gm-Message-State: AOAM530SfzILorfgLofxzG4e8XfWutNCzeAP42qu3m/9qCJggTJLixje
-	HSDlNTaBMfA+MF2p3JIXCOec+9Y7AUQl5DtKEcgafw==
-X-Google-Smtp-Source: ABdhPJzo28mpD6c9vf+D6J9UtP0Lt3zndpgJfN3ZNLmyoo3VdiTr5GeG8q0j15d63LccbyV8mZDyilBazCACdxixi/Y=
-X-Received: by 2002:a2e:b551:: with SMTP id a17mr12026583ljn.128.1631567732248;
- Mon, 13 Sep 2021 14:15:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBF33FC4
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 22:09:31 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8ECD861056;
+	Mon, 13 Sep 2021 22:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1631570970;
+	bh=IePkNmKFbdLFCj1jfB5UusK9wK0C5A0MxJXpkPLT5QY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HTRoX2Pn+mJqjk3XvyOuZ0vEchdG2RGsBOvwA9zB2dI+vj0D8KH6Uig75MWVdRpcW
+	 LK/kfh9t83wy6U8IKQnHRYZ9K9YoG06ZrcdnTbqGVp35VYdaqNRDl4LCx4QhghebeJ
+	 zpyDiIo9ZTBmq+YYTQWqTZc9i3PPwzzgbOGyZyIDSsjD8lmREhP6z0eRum2N7OISgK
+	 Ks3hwiUgaZ0Os/XUxwDzMQZbv/dqcy3u4Vc0sH/pj9zNpUeO3CfhUraeFhjdqjYQ+B
+	 wHLCcTMyOvZAnA9NNVHOmKtA7iFFPIYe/FxHg3igG5GFxwmrF8vOqVFm8MdJ3QVgNp
+	 HY2YDpLzumxKA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] tools: compiler-gcc.h: Guard error attribute use with __has_attribute
+Date: Mon, 13 Sep 2021 15:09:00 -0700
+Message-Id: <20210913220900.142820-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.028340332@linuxfoundation.org>
- <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
- <YT+RKemKfg6GFq0S@kroah.com> <CAKwvOdmOAKTkgFK4Oke1SFGR_NxNqXe-buj1uyDgwZ4JdnP2Vg@mail.gmail.com>
- <CAKwvOdmCS5Q7AzUL5nziYVU7RrtRjoE9JjOXfVBWagO1Bzbsew@mail.gmail.com>
- <CA+icZUVuRaMs=bx775gDF88_xzy8LFkBA5xaK21hFDeYvgo12A@mail.gmail.com>
- <CAKwvOdmN3nQe8aL=jUwi0nGXzYQGic=NA2o40Q=yeHeafSsS3g@mail.gmail.com>
- <CAHk-=whwREzjT7=OSi5=qqOkQsvMkCOYVhyKQ5t8Rdq4bBEzuw@mail.gmail.com>
- <CAKwvOdkf3B41RRe8FDkw1H-0hBt1_PhZtZxBZ5pj0pyh7vDLmA@mail.gmail.com>
- <CAHk-=wjP2ijctPt2Hw3DagSZ-KgdRsO6zWTTKQNnSk0MajtJgA@mail.gmail.com>
- <CAKwvOd=ZG8sf1ZOkuidX_49VGkQE+BJDa19_vR4gh2FNQ2F_9Q@mail.gmail.com> <CAKwvOdkz4e3HdNKFvOdDDWVijB7AKaeP14_vAEbxWXD1AviVhA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkz4e3HdNKFvOdDDWVijB7AKaeP14_vAEbxWXD1AviVhA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 13 Sep 2021 14:15:21 -0700
-Message-ID: <CAKwvOdmtX8Y8eWESYj4W-H-KF7cZx6w1NbSjoSPt5x5U9ezQUQ@mail.gmail.com>
-Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Nathan Chancellor <natechancellor@gmail.com>, Baokun Li <libaokun1@huawei.com>, 
-	open list <linux-kernel@vger.kernel.org>, linux-stable <stable@vger.kernel.org>, 
-	Hulk Robot <hulkci@huawei.com>, Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, 
-	Sasha Levin <sashal@kernel.org>, clang-built-linux <clang-built-linux@googlegroups.com>, 
-	lkft-triage@lists.linaro.org, llvm@lists.linux.dev, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 13, 2021 at 2:13 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, Sep 13, 2021 at 1:50 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Mon, Sep 13, 2021 at 1:42 PM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > On Mon, Sep 13, 2021 at 1:16 PM Nick Desaulniers
-> > > <ndesaulniers@google.com> wrote:
-> > > >
-> > > > Do we have access to _Generic in GCC 4.9?
-> > >
-> > > We've ended up using it unconditionally since last year, so yes.
-> >
-> > Sorry, grepping would have taken < 1s. I'm very lazy.
-> > http://threevirtues.com/
-> >
-> > >
-> > > In fact, the compiler version tests got removed when we raised the gcc
-> > > version requirement to 4.9 in commit 6ec4476ac825 ("Raise gcc version
-> > > requirement to 4.9"):
-> > >
-> > >    "In particular, raising the minimum to 4.9 means that we can now just
-> > >     assume _Generic() exists, which is likely the much better replacement
-> > >     for a lot of very convoluted built-time magic with conditionals on
-> > >     sizeof and/or __builtin_choose_expr() with same_type() etc"
-> > >
-> > > but we haven't used it much since.
-> > >
-> > > The "seqprop" code for picking the right lock for seqlock is perhaps
-> > > the main example, and staring at that code will make you go blind, so
-> > > look away.
-> >
-> > Looking at my patch:
-> > https://lore.kernel.org/stable/20210913203201.1844253-1-ndesaulniers@google.com/
-> > I don't think _Generic helps us in the case of dispatching based on
-> > the result of is_signed_type() (the operands could undergo type
-> > promotion, so we'd need lots of cases that are more concisely covered
-> > by is_signed_type()). It could replace the nested checks in div_64
-> > with nested _Generics, I think. Not sure it's a huge win for
-> > readability.  Maybe cut the number of expansions of the parameters in
-> > half though. Let me give it a try just to see what it looks like.
->
-> Is this more readable? Same line count.  I'm not sure if there's such
-> a thing as "fallthrough" between the "cases" of _Generic to minimize
-> duplication, or whether this could be factored further.  Needs lots
-> more () around macro param use and tab'ed out line endings...
+When building objtool with HOSTCC=clang, there are several errors along
+the lines of
 
-Sorry wrong diff:
-diff --git a/include/linux/math64.h b/include/linux/math64.h
-index bc9c12c168d0..8fc4d56a45b9 100644
---- a/include/linux/math64.h
-+++ b/include/linux/math64.h
-@@ -162,18 +162,18 @@ static inline s64 div_s64(s64 dividend, s32 divisor)
-                div_u64(dividend, divisor));            \
- })
+orc_dump.c:201:28: error: unknown attribute 'error' ignored
+[-Werror,-Wunknown-attributes]
 
-+#define __div_64(dividend, divisor) _Generic((divisor),        \
-+  s64: div64_x64(dividend, divisor),   \
-+  u64: div64_x64(dividend, divisor),   \
-+  default: div_x64(dividend, divisor))
-+
- #define div_64(dividend, divisor) ({
-         \
-        BUILD_BUG_ON_MSG(sizeof(dividend) > sizeof(u64),
-         \
-                         "128b div unsupported");
-         \
--       __builtin_choose_expr(
-         \
--               __builtin_types_compatible_p(typeof(dividend), s64) ||
-         \
--               __builtin_types_compatible_p(typeof(dividend), u64),
-         \
--               __builtin_choose_expr(
-         \
--                       __builtin_types_compatible_p(typeof(divisor),
-s64) ||   \
--                       __builtin_types_compatible_p(typeof(divisor),
-u64),     \
--                       div64_x64(dividend, divisor),
-         \
--                       div_x64(dividend, divisor)),
-         \
--               dividend / divisor);
-         \
-+       _Generic((dividend),    \
-+               s64: __div_64(dividend, divisor),       \
-+               u64: __div_64(dividend, divisor),       \
-+               default: dividend / divisor);   \
- })
+This occurs after commit 4e59869aa655 ("compiler-gcc.h: drop checks for
+older GCC versions"), which removed the GCC_VERSION gating. The removed
+version check just so happened to prevent __compiletime_error() from
+being defined with clang because it pretends to be GCC 4.2.1 for
+compatibility but the error attribute was not added to clang until
+14.0.0.
+
+Commit 815f0ddb346c ("include/linux/compiler*.h: make compiler-*.h
+mutually exclusive") and commit a3f8a30f3f00 ("Compiler Attributes: use
+feature checks instead of version checks") refactored the handling of
+attributes in the main kernel to avoid situations like this but that
+refactoring has never been done for the tools directory.
+
+Refactoring is a rather large undertaking and this has never been an
+issue before so instead, just guard the definition of
+__compiletime_error() with __has_attribute() so that there are no more
+errors.
+
+Fixes: 4e59869aa655 ("compiler-gcc.h: drop checks for older GCC versions")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ tools/include/linux/compiler-gcc.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
+index 43d9a46d36f0..8816f06fc6c7 100644
+--- a/tools/include/linux/compiler-gcc.h
++++ b/tools/include/linux/compiler-gcc.h
+@@ -16,7 +16,9 @@
+ # define __fallthrough __attribute__ ((fallthrough))
+ #endif
+ 
+-#define __compiletime_error(message) __attribute__((error(message)))
++#if __has_attribute(__error__)
++# define __compiletime_error(message) __attribute__((error(message)))
++#endif
+ 
+ /* &a[0] degrades to a pointer: a different type from an array */
+ #define __must_be_array(a)	BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+
+base-commit: 316346243be6df12799c0b64b788e06bad97c30b
 -- 
-Thanks,
-~Nick Desaulniers
+2.33.0
+
