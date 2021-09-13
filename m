@@ -1,97 +1,123 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBFD3FC5
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 17:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=y7Foc9Z7zhR5fwxXcBPgaj9Izqeozx1ChyyFKB+hvA4=; b=bQwzXOt1EPnT7L+7hZ3kSnk9Wg
-	FYTLZZCR0UO04mpQTpd4K/2McQ92OoRmC4DRopgUlIiKSzy+F73bl1cNGyLAEX8IOccIlkO0oyXXm
-	rCYjul66IPPR0utl334hShV5/BS/sAxs0iwDIyl/KejCrddfK883uf7BP7P7zr1ulFEnVu7eaMZZ9
-	c9UdTl9l7qXdtxpA+fbLCwME2EbollArLPW0n+OyVnl8s+yoWKP3MF9yhos9cKVsGNU6RHCiDkY7j
-	aXKGM3iTXUfx+ZYH/Nzv/AF+ord/D9n1Yo5yYaSUX6uSbsJ2B3uXW2cgkeS9Qmh4XOdIMkQAa4SCF
-	EGh2E52g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mPpn9-002hlb-9P; Mon, 13 Sep 2021 17:30:51 +0000
-Date: Mon, 13 Sep 2021 10:30:51 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Borislav Petkov <bp@suse.de>
-Subject: Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
- drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous
- prototype for function 'firmware_is_builtin'
-Message-ID: <YT+Ky1+cXrqesI6G@bombadil.infradead.org>
-References: <202109101524.pjY4q0Dy-lkp@intel.com>
- <YTv817Srt8hoySP5@bombadil.infradead.org>
- <YTwLw+frJLbntgCJ@archlinux-ax161>
- <YT90vvVi7oYH0xpb@bombadil.infradead.org>
- <993e03a8-b07c-a8d8-8c9f-75bfbab00f0e@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E683FC5
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 17:42:43 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id i7so6573396lfr.13
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 10:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/fXusuKKh/e5rHl3WvKLT7/eIYqq9n/M32FO5AEfQZ4=;
+        b=Bb8jIWZyUA2JnH1dNvqA8PhazKDoFToI8m/EWHAoOqKLNqV8zTPjzKX6vSeXFJuKyf
+         tIz9q+4BcBJIZrm/Iu+TQqerdjnjQiXXxiZVROuzlUAiYHdpJ05Qtsggzr+XxSztzHDf
+         1zrSjLLUXzKthlfdL5NA8jPU2NHbiFKkxBxww=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/fXusuKKh/e5rHl3WvKLT7/eIYqq9n/M32FO5AEfQZ4=;
+        b=Co7peV5TxFd8zsEoEjIBfl5oQ9OQt9eaRxim+BIsF1zNrxMzypsdACcJvTyiDSRSJ5
+         iv2z+dHw5FBCcwFqjGVlq1lU71eLZQobAYBjwwEPq5g8LkqfiMnK2UBcPVlus+SoLQqJ
+         C3R9Nq55y9phuaSy2eUtTba7AqmQVZf6dZYPS9mhE1cC+pAhHKeslgB5pKvO7J4pXfbi
+         XgNcudXYByExPl25COUcVzdh4ZGlda9UxWM2S1Sp+tt6snY/2NuEVDxvm1UkBV6RkCcy
+         T8kiiHIQEXUBJE6XDOYsnQhGjNLw6fN7kf3BE/FMTzRi5mDyGiWy22DT7jDRhWVshVvt
+         i5WQ==
+X-Gm-Message-State: AOAM531VP/h7sP8YenvUBwnDM+uiGxuaDtbWl0dwF3g2ytE2Xm4RUxTO
+	YKR5Q8rpocLseHsv5CQaq6Vv3DA+o9yU0m5U44g=
+X-Google-Smtp-Source: ABdhPJy8shkCYbZaePuBXMiM7OobIrcl1T/Lff2nOEpi+RTpGyCLLNm2QgDWzKxbPdioosUVrZg2qw==
+X-Received: by 2002:a05:6512:2211:: with SMTP id h17mr10025287lfu.285.1631554961381;
+        Mon, 13 Sep 2021 10:42:41 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id i18sm278971ljj.84.2021.09.13.10.42.41
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Sep 2021 10:42:41 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id j12so18708628ljg.10
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 10:42:41 -0700 (PDT)
+X-Received: by 2002:a2e:1542:: with SMTP id 2mr11735241ljv.249.1631554960750;
+ Mon, 13 Sep 2021 10:42:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <993e03a8-b07c-a8d8-8c9f-75bfbab00f0e@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20210907183843.33028-1-ndesaulniers@google.com>
+ <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
+ <CAKwvOdkuYoke=Sa8Qziveo9aSA2zaNWEcKW8LZLg+d3TPwHkoA@mail.gmail.com>
+ <YTfkO2PdnBXQXvsm@elver.google.com> <CAHk-=wgPaQsEr+En=cqCqAC_sWmVP6x5rD2rmZRomH9EnTQL7Q@mail.gmail.com>
+ <c8fb537f-26e5-b305-6bc5-06f0d27a4029@infradead.org> <20210913093256.GA12225@amd>
+ <87a6kgerdk.fsf@oldenburg.str.redhat.com>
+In-Reply-To: <87a6kgerdk.fsf@oldenburg.str.redhat.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 13 Sep 2021 10:42:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj7M1_BXG2MXLv4OhjzjV-opy=5fE7+vafW5fHOyDrg+w@mail.gmail.com>
+Message-ID: <CAHk-=wj7M1_BXG2MXLv4OhjzjV-opy=5fE7+vafW5fHOyDrg+w@mail.gmail.com>
+Subject: Re: [PATCH] Revert "Enable '-Werror' by default for all kernel builds"
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Randy Dunlap <rdunlap@infradead.org>, Marco Elver <elver@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	LSM List <linux-security-module@vger.kernel.org>, linux-toolchains@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Kees Cook <keescook@chromium.org>, 
+	Mark Brown <broonie@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Andrew Morton <akpm@linux-foundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Chris Down <chris@chrisdown.name>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Vlastimil Babka <vbabka@suse.cz>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 13, 2021 at 10:25:35AM -0700, Nathan Chancellor wrote:
-> On 9/13/2021 8:56 AM, Luis Chamberlain wrote:
-> > On Fri, Sep 10, 2021 at 06:52:03PM -0700, Nathan Chancellor wrote:
-> > > On Fri, Sep 10, 2021 at 05:48:23PM -0700, Luis Chamberlain wrote:
-> > > > On Fri, Sep 10, 2021 at 03:41:31PM +0800, kernel test robot wrote:
-> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210908-firmware-builtin-v4
-> > > > > head:   1c69d6a17750179d68bcaf6b16f9a08d2e475989
-> > > > > commit: 79e9fce20ee88ffe37542a66277628e6c53dde14 [2/11] firmware_loader: formalize built-in firmware API
-> > > > > config: hexagon-buildonly-randconfig-r004-20210910 (attached as .config)
-> > > > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38f8c1ee1a482fe76511110e790f58a)
-> > > > > reproduce (this is a W=1 build):
-> > > > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > > >          chmod +x ~/bin/make.cross
-> > > > >          # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=79e9fce20ee88ffe37542a66277628e6c53dde14
-> > > > >          git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-> > > > >          git fetch --no-tags mcgrof-next 20210908-firmware-builtin-v4
-> > > > >          git checkout 79e9fce20ee88ffe37542a66277628e6c53dde14
-> > > > >          # save the attached .config to linux build tree
-> > > > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=hexagon
-> > > > > 
-> > > > > If you fix the issue, kindly add following tag as appropriate
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > 
-> > > > > All errors (new ones prefixed by >>):
-> > > > > 
-> > > > > > > drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous prototype for function 'firmware_is_builtin' [-Werror,-Wmissing-prototypes]
-> > > > >     bool firmware_is_builtin(const struct firmware *fw)
-> > > > 
-> > > > This is a lie though its defined on drivers/base/firmware_loader/firmware.h
-> > > 
-> > > Unless I am missing something, you don't include the firmware_loader
-> > > copy of firmware.h in builtin/main.c (only the linux one)? Isn't that
-> > > the source of the warning?
-> > 
-> > You would think, but nope, its there:
-> > 
-> > #include "firmware.h"
-> 
-> I see that in drivers/base/firmware_loader/main.c but the warning is
-> complaining about drivers/base/firmware_loader/builtin/main.c, where I only
-> see
-> 
-> #include <linux/firmware.h>
-> 
-> Sorry for the issues with reproducing. For what it's worth, I can reproduce
-> this locally and adding
-> 
-> #include "../firmware.h"
-> 
-> to drivers/base/firmware_loader/builtin/main.c fixes it for me.
+On Mon, Sep 13, 2021 at 2:50 AM Florian Weimer <fweimer@redhat.com> wrote:
+>
+> But there are also warnings which are emitted by the GCC middle-end (the
+> optimizers), and turning on -Werror for those is very problematic.
 
-Got it, thanks! I've ammended this change.
+People say that, but let's face it, that's simply not true.
 
- Luis
+There are real problematic warnings, and we just turn those warnings
+off. People who want the self-flagellation can enable them with W=1
+(or bigger values), and spend their life fighting stupid random
+compiler warnings that have tons of false positives.
+
+But the fact is, I've required a warning-free build on x86-64 for
+anything I notice for the last several years by now, and it really
+hasn't been a problem.
+
+What _has_ been a problem is that (a) build bots don't care about and
+(b) the configs I don't personally test (other non-x86-64
+architectures stand out, but there's certainly been other
+configuration issues too).
+
+But "bogus compiler warnings" is very much *not* in that list of problems.
+
+I've looked at a lot of the warnings that are now errors, and while a
+number of them have made me go "So why didn't we see that on x86-64?"
+not one of them has actually made me go "-Werror was wrong".
+
+Because EVERY single one I've seen has been for something that should
+have been fixed. Presumably long long ago, but the warning it
+generated had been ignored.
+
+So stop with the "some warnings just happen" crap. Outside of actual
+compiler bugs, and truly stupid warnings (that we turn off), that's
+simply not true.
+
+And yes, those compiler bugs happen. The new warning already found one
+issue with current gcc trunk (non-released). So right now the count is
+"lots of valid warnings, and one compiler bug that was found _thanks_
+to me enabling -Werror".
+
+Yes, we have issues with having to work around older compiler bugs.
+Those aren't going away, and yes, -Werror may well mean that
+non-x86-64 people now have to deal with them.
+
+And yes, this is painful. I'm very much aware of that. But we just
+need to do it. Because the warnings don't go away on their own, and
+not making them fatal clearly just means that they'll stay around
+forever.
+
+           Linus
