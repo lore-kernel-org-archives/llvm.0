@@ -1,101 +1,208 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19F23FD0
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 23:23:51 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id i25so20547781lfg.6
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:23:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDD03FD0
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 23:34:57 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id i25so20597257lfg.6
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:34:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Bq011lt5dgdAQr/ZuHdy0F7gQGrCf2JBCgapEFXHuqM=;
-        b=B5LAKq0e9Lnd5npvhdHcFrbSooQRxBJX1Mid0sG0F3Y8SpqoLVt1M/6eaaJxNPhc6n
-         INFlj/Tt1MoyRllidkDtLVM+x6eN87fZX6VP5txNWI92MLfBYCgGHOf3RwiK7p0Kx4Ag
-         82m683k6K6uDE2tGwFS+1G0xYpeTnVV6tnskfN1LZcU4NLKxpmgMLVzbhJ1gET8kLl+a
-         OecFijs+X1BqnYIeWbaSM059NUhSXkWGEmuCHcOTdTBXQyrqcbV27hzBFV3toN+J7u3h
-         Lj1bSuh+muSl1kUSArFWPu9/nKBp518gZrtFshFffdP3E/AtaEduBFN6MqOcpxzu2YAJ
-         kghA==
+        bh=4fHD5mvOD863PzLd7doJzNopyieEVyj6nrvmu/yIikk=;
+        b=g+uz8sfKvxGxT8T3ABAb0VMx/H56pvR6vopw9aiCT+a8puVQ/97lV4Wv/+97PE3WQ8
+         HrFPwrdQRs59NxU3ZJ5CVI1quRTbXbO4sXt8vujdRHDd8MiKSGOTvwJAc9mqG3YsDFQf
+         Ql5f2pwhNpn3GAppGxzC1F7TdotApzNWkv5xXZDZNti39lE2mkPV4jekta6kK18etgk7
+         G3061xIxBWcnP+lth+APlky5edGhhUySrGCh9sstV8qKTwlVYzlQqbspQ7VF2g2P5z9R
+         j2ktWzR6CMkOMO50ZrQP7GEt30fEs1qaqv/LUZvMucCsOkLSv4rY8fyot+AFtS0i5pWH
+         kGvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Bq011lt5dgdAQr/ZuHdy0F7gQGrCf2JBCgapEFXHuqM=;
-        b=Em8A0isf4vVPyU5TkIp9CVJgV7FYrE+vqtpPxZxzdodJN6xT0bM48lzo4qV7XA+glX
-         1ZWLVr3p8TEVZl8+zrGiImp/S+uHpYh3N8F1Y5JEq0lSnWEqsNlydH+J2Qtp3BvxIMbP
-         5UbaSo/K1lPkmc1X26IgsrUSOtuXfruqNZoZhUSphxwYijQclVx7w6z2OeT0JYdRZ6/E
-         3oJCLEJfqJeR5hpXZ5Db4qpT83LZAaETzibAfm4jHyd/PmzgNdyrWGc7SiQVVM20i8bm
-         1gflZXeY7FWDN1Sru+fZ+wXmPH8pNq09BVrJ/aWQbTh2RyU0EgE+O5GCASG6hC61c2rP
-         eiaA==
-X-Gm-Message-State: AOAM5306LvRzHhgCYxHOlzsT05bDWqr1nAK9JhuBXknuaSeY9un8gFas
-	wllc2tV82FkhHw07hn/cWOQM86mf5fb0xxTjpyUCsg==
-X-Google-Smtp-Source: ABdhPJyRu0132dCsRG8tz1y1crskr9yuGZHfzZNvZ99ClzfCUoixYndoyN2Uj8tpYCdhjmynt9+8gjPGFMCEmh/PV6w=
-X-Received: by 2002:a05:6512:1114:: with SMTP id l20mr11222779lfg.550.1631575429882;
- Mon, 13 Sep 2021 16:23:49 -0700 (PDT)
+        bh=4fHD5mvOD863PzLd7doJzNopyieEVyj6nrvmu/yIikk=;
+        b=dzznKkkSXPY2L0pbcGlItX12FX0m50tymvU/unAoqgNKg3A2ay9YXP9uml1iXnsu7W
+         g3iabiQsi8Cc3ogpNu0zwfV/s/a6ti8xJCqPH6paSq/nv/KzXV72roOydvc+iQrHTaJN
+         J1prJReRAmzm3eCtKwXbVfHJhgzNdbo7rPWFDX+HIrZrpgJKO73zZ1ONutYvZQMJF5ds
+         kJbZtVMR+6GzA6qKw7jn8cCqm9eYxn5bgA20zGc19LgM8Qa/gdItCNVZcn4NHYObXeZV
+         nsmj9/CAYT5Ejnlo3ByQctmVPI1FRI4EQqGnyP8gsMWon+N5dyRMV8aRtPPvA5/x8HWn
+         6utw==
+X-Gm-Message-State: AOAM532OiTMIzA5fZMaTDOmILEFaq4n4CIJUbY1eWqypAVB/lsYwdqwQ
+	WydVCyNAOTR592RmKexmDViK7JbTqZsqvRPLT7Y=
+X-Google-Smtp-Source: ABdhPJwx97n4KleuDmQF9RVTBF8b7joi9RmUaAQs9QUlJ/R96G0GrGNxiGp2Bx++W9RUUoDaz15CYbHH1gwyKizxOlQ=
+X-Received: by 2002:a05:6512:20f:: with SMTP id a15mr10482273lfo.537.1631576095760;
+ Mon, 13 Sep 2021 16:34:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.028340332@linuxfoundation.org>
- <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
- <YT+RKemKfg6GFq0S@kroah.com> <CAKwvOdmOAKTkgFK4Oke1SFGR_NxNqXe-buj1uyDgwZ4JdnP2Vg@mail.gmail.com>
- <CAKwvOdmCS5Q7AzUL5nziYVU7RrtRjoE9JjOXfVBWagO1Bzbsew@mail.gmail.com>
- <CA+icZUVuRaMs=bx775gDF88_xzy8LFkBA5xaK21hFDeYvgo12A@mail.gmail.com>
- <CAKwvOdmN3nQe8aL=jUwi0nGXzYQGic=NA2o40Q=yeHeafSsS3g@mail.gmail.com>
- <CAHk-=whwREzjT7=OSi5=qqOkQsvMkCOYVhyKQ5t8Rdq4bBEzuw@mail.gmail.com>
- <CAKwvOdkf3B41RRe8FDkw1H-0hBt1_PhZtZxBZ5pj0pyh7vDLmA@mail.gmail.com>
- <CAHk-=wjP2ijctPt2Hw3DagSZ-KgdRsO6zWTTKQNnSk0MajtJgA@mail.gmail.com>
- <CAKwvOd=ZG8sf1ZOkuidX_49VGkQE+BJDa19_vR4gh2FNQ2F_9Q@mail.gmail.com>
- <CAKwvOdkz4e3HdNKFvOdDDWVijB7AKaeP14_vAEbxWXD1AviVhA@mail.gmail.com>
- <CAKwvOdmtX8Y8eWESYj4W-H-KF7cZx6w1NbSjoSPt5x5U9ezQUQ@mail.gmail.com> <CAHk-=whjhJgk7hD-ftUy-8+9cenhMDHqaNKXOyeNVoMxZRD-_A@mail.gmail.com>
-In-Reply-To: <CAHk-=whjhJgk7hD-ftUy-8+9cenhMDHqaNKXOyeNVoMxZRD-_A@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 13 Sep 2021 16:23:38 -0700
-Message-ID: <CAKwvOdnFRhKDZ3XuePSGsuxhOpuS5RmZ1u+MeN=PRPPKSS3wFg@mail.gmail.com>
-Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Nathan Chancellor <natechancellor@gmail.com>, Baokun Li <libaokun1@huawei.com>, 
-	open list <linux-kernel@vger.kernel.org>, linux-stable <stable@vger.kernel.org>, 
-	Hulk Robot <hulkci@huawei.com>, Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, 
-	Sasha Levin <sashal@kernel.org>, clang-built-linux <clang-built-linux@googlegroups.com>, 
-	lkft-triage@lists.linaro.org, llvm@lists.linux.dev, 
-	Kees Cook <keescook@chromium.org>
+References: <202109131721.EnzYJS4k-lkp@intel.com>
+In-Reply-To: <202109131721.EnzYJS4k-lkp@intel.com>
+From: Steve French <smfrench@gmail.com>
+Date: Mon, 13 Sep 2021 18:34:44 -0500
+Message-ID: <CAH2r5ms=ZmOWDNo1huZajeRrSmz8Cr0gwtx+Tt85d-f-6SYiZQ@mail.gmail.com>
+Subject: Re: [cifs:for-next 1/1] fs/smbfs/ioctl.c:324:10: warning: variable
+ 'caps' set but not used
+To: CIFS <linux-cifs@vger.kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	samba-technical <samba-technical@lists.samba.org>
+Content-Type: multipart/mixed; boundary="0000000000009cc7a205cbe8e96f"
+
+--0000000000009cc7a205cbe8e96f
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 13, 2021 at 4:00 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, Sep 13, 2021 at 2:15 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Sorry wrong diff:
->
-> Well, this second diff was seriously whitespace-damaged and hard to
-> read, but while it seems to be the same number of lines, it sure looks
-> a lot more readable in this format.
->
-> Except I think that
->
->                 default: dividend / divisor);
->
-> should really have parentheses around both of those macro arguments.
->
-> That's a preexisting problem, but it should be fixed while at it.
+[PATCH] cifs: fix incorrect kernel doc comments
 
-Ok, I'll send a revised v2 based on _Generic; Rasmus can help review
-when he's awake.
+Correct kernel-doc comments pointed out by the
+automated kernel test robot - see attached patch.
 
-> I'm also not sure why that (again, preexisting) BUILD_BUG_ON_MSG()
-> only checks the size of the dividend, not the divisor. Very strange.
-> But probably not worth worrying about.
+Reported-by: kernel test robot <lkp@intel.com>
 
-I sent a not-yet-applied diff of my not-yet-applied diff.  I was
-playing with this last week, and IIRC we had divisors that were less
-than 32b being promoted to int. But I'll test it some more.
+On Mon, Sep 13, 2021 at 4:13 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Steve,
+>
+> First bad commit (maybe != root cause):
+>
+> tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+> head:   bba805a46c91e7a8a1d04704e5409f890acf8b66
+> commit: bba805a46c91e7a8a1d04704e5409f890acf8b66 [1/1] cifs: rename fs/cifs directory to fs/smbfs
+> config: hexagon-randconfig-r045-20210913 (attached as .config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38f8c1ee1a482fe76511110e790f58a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git remote add cifs git://git.samba.org/sfrench/cifs-2.6.git
+>         git fetch --no-tags cifs for-next
+>         git checkout bba805a46c91e7a8a1d04704e5409f890acf8b66
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=hexagon
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> fs/smbfs/ioctl.c:324:10: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
+>            __u64   caps;
+>                    ^
+>    1 warning generated.
+> --
+> >> fs/smbfs/connect.c:1093: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * Returns true if srcaddr isn't specified and rhs isn't specified, or
+>    fs/smbfs/connect.c:1558: warning: Function parameter or member 'ses' not described in 'cifs_setup_ipc'
+>    fs/smbfs/connect.c:1558: warning: Function parameter or member 'ctx' not described in 'cifs_setup_ipc'
+>    fs/smbfs/connect.c:1618: warning: Function parameter or member 'ses' not described in 'cifs_free_ipc'
+>    fs/smbfs/connect.c:1864: warning: Function parameter or member 'server' not described in 'cifs_get_smb_ses'
+>    fs/smbfs/connect.c:1864: warning: Function parameter or member 'ctx' not described in 'cifs_get_smb_ses'
+>    fs/smbfs/connect.c:2087: warning: Function parameter or member 'ses' not described in 'cifs_get_tcon'
+>    fs/smbfs/connect.c:2087: warning: Function parameter or member 'ctx' not described in 'cifs_get_tcon'
+>    fs/smbfs/connect.c:3046: warning: Function parameter or member 'xid' not described in 'expand_dfs_referral'
+>    fs/smbfs/connect.c:3046: warning: Function parameter or member 'ses' not described in 'expand_dfs_referral'
+>    fs/smbfs/connect.c:3046: warning: Function parameter or member 'ctx' not described in 'expand_dfs_referral'
+>    fs/smbfs/connect.c:3046: warning: Function parameter or member 'cifs_sb' not described in 'expand_dfs_referral'
+>    fs/smbfs/connect.c:3046: warning: Function parameter or member 'ref_path' not described in 'expand_dfs_referral'
+>
+>
+> vim +/caps +324 fs/smbfs/ioctl.c
+>
+> 7ba3d1cdb7988c fs/cifs/ioctl.c Steve French    2021-05-02  312
+> f9ddcca4cf7d95 fs/cifs/ioctl.c Steve French    2008-05-15  313  long cifs_ioctl(struct file *filep, unsigned int command, unsigned long arg)
+> ^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  314  {
+> 496ad9aa8ef448 fs/cifs/ioctl.c Al Viro         2013-01-23  315          struct inode *inode = file_inode(filep);
+> 7e7db86c7e1088 fs/cifs/ioctl.c Steve French    2019-09-19  316          struct smb3_key_debug_info pkey_inf;
+> ^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  317          int rc = -ENOTTY; /* strange error - but the precedent */
+> 6d5786a34d98bf fs/cifs/ioctl.c Pavel Shilovsky 2012-06-20  318          unsigned int xid;
+> ba00ba64cf0895 fs/cifs/ioctl.c Jeff Layton     2010-09-20  319          struct cifsFileInfo *pSMBFile = filep->private_data;
+> 96daf2b09178d8 fs/cifs/ioctl.c Steve French    2011-05-27  320          struct cifs_tcon *tcon;
+> a77592a70081ed fs/cifs/ioctl.c Ronnie Sahlberg 2020-07-09  321          struct tcon_link *tlink;
+> d26c2ddd335696 fs/cifs/ioctl.c Steve French    2020-02-06  322          struct cifs_sb_info *cifs_sb;
+> f654bac2227adc fs/cifs/ioctl.c Steve French    2005-04-28  323          __u64   ExtAttrBits = 0;
+> 618763958b2291 fs/cifs/ioctl.c Jeff Layton     2010-11-08 @324          __u64   caps;
+>
+> :::::: The code at line 324 was first introduced by commit
+> :::::: 618763958b2291a09057dbfa553da6ded93dcfad cifs: make cifs_ioctl handle NULL filp->private_data correctly
+>
+> :::::: TO: Jeff Layton <jlayton@redhat.com>
+> :::::: CC: Steve French <sfrench@us.ibm.com>
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+
 -- 
 Thanks,
-~Nick Desaulniers
+
+Steve
+
+--0000000000009cc7a205cbe8e96f
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cifs-fix-incorrect-kernel-doc-comments.patch"
+Content-Disposition: attachment; 
+	filename="0001-cifs-fix-incorrect-kernel-doc-comments.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ktja9um70>
+X-Attachment-Id: f_ktja9um70
+
+RnJvbSA0YzUxZGUxZThmOTI4YTViMDUyNDg3MTRkODMyZDdkOTkxYWMzMTlhIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IE1vbiwgMTMgU2VwIDIwMjEgMTg6Mjk6NDYgLTA1MDAKU3ViamVjdDogW1BBVENIXSBj
+aWZzOiBmaXggaW5jb3JyZWN0IGtlcm5lbCBkb2MgY29tbWVudHMKCkNvcnJlY3Qga2VybmVsLWRv
+YyBjb21tZW50cyBwb2ludGVkIG91dCBieSB0aGUKYXV0b21hdGVkIGtlcm5lbCB0ZXN0IHJvYm90
+LgoKUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPgpTaWduZWQt
+b2ZmLWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvY2lm
+cy9jb25uZWN0LmMgfCAxMiArKysrKysrKysrLS0KIGZzL2NpZnMvaW9jdGwuYyAgIHwgIDIgKy0K
+IDIgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYg
+LS1naXQgYS9mcy9jaWZzL2Nvbm5lY3QuYyBiL2ZzL2NpZnMvY29ubmVjdC5jCmluZGV4IDM5OWEw
+ZjA4NDU3My4uNzg4MTExNWNmYmVlIDEwMDY0NAotLS0gYS9mcy9jaWZzL2Nvbm5lY3QuYworKysg
+Yi9mcy9jaWZzL2Nvbm5lY3QuYwpAQCAtMTA4OSw3ICsxMDg5LDcgQEAgY2lmc19kZW11bHRpcGxl
+eF90aHJlYWQodm9pZCAqcCkKIAltb2R1bGVfcHV0X2FuZF9leGl0KDApOwogfQogCi0vKioKKy8q
+CiAgKiBSZXR1cm5zIHRydWUgaWYgc3JjYWRkciBpc24ndCBzcGVjaWZpZWQgYW5kIHJocyBpc24n
+dCBzcGVjaWZpZWQsIG9yCiAgKiBpZiBzcmNhZGRyIGlzIHNwZWNpZmllZCBhbmQgbWF0Y2hlcyB0
+aGUgSVAgYWRkcmVzcyBvZiB0aGUgcmhzIGFyZ3VtZW50CiAgKi8KQEAgLTE1NDksNiArMTU0OSw5
+IEBAIHN0YXRpYyBpbnQgbWF0Y2hfc2Vzc2lvbihzdHJ1Y3QgY2lmc19zZXMgKnNlcywgc3RydWN0
+IHNtYjNfZnNfY29udGV4dCAqY3R4KQogCiAvKioKICAqIGNpZnNfc2V0dXBfaXBjIC0gaGVscGVy
+IHRvIHNldHVwIHRoZSBJUEMgdGNvbiBmb3IgdGhlIHNlc3Npb24KKyAqIEBzZXM6IHNtYiBzZXNz
+aW9uIHRvIGlzc3VlIHRoZSByZXF1ZXN0IG9uCisgKiBAY3R4OiB0aGUgc3VwZXJibG9jayBjb25m
+aWd1cmF0aW9uIGNvbnRleHQgdG8gdXNlIGZvciBidWlsZGluZyB0aGUKKyAqICAgICAgIG5ldyB0
+cmVlIGNvbm5lY3Rpb24gZm9yIHRoZSBJUEMgKGludGVycHJvY2VzcyBjb21tdW5pY2F0aW9uIFJQ
+QykKICAqCiAgKiBBIG5ldyBJUEMgY29ubmVjdGlvbiBpcyBtYWRlIGFuZCBzdG9yZWQgaW4gdGhl
+IHNlc3Npb24KICAqIHRjb25faXBjLiBUaGUgSVBDIHRjb24gaGFzIHRoZSBzYW1lIGxpZmV0aW1l
+IGFzIHRoZSBzZXNzaW9uLgpAQCAtMTYwNCw2ICsxNjA3LDcgQEAgY2lmc19zZXR1cF9pcGMoc3Ry
+dWN0IGNpZnNfc2VzICpzZXMsIHN0cnVjdCBzbWIzX2ZzX2NvbnRleHQgKmN0eCkKIAogLyoqCiAg
+KiBjaWZzX2ZyZWVfaXBjIC0gaGVscGVyIHRvIHJlbGVhc2UgdGhlIHNlc3Npb24gSVBDIHRjb24K
+KyAqIEBzZXM6IHNtYiBzZXNzaW9uIHRvIHVubW91bnQgdGhlIElQQyBmcm9tCiAgKgogICogTmVl
+ZHMgdG8gYmUgY2FsbGVkIGV2ZXJ5dGltZSBhIHNlc3Npb24gaXMgZGVzdHJveWVkLgogICoKQEAg
+LTE4NTQsNiArMTg1OCw4IEBAIGNpZnNfc2V0X2NpZnNjcmVkcyhzdHJ1Y3Qgc21iM19mc19jb250
+ZXh0ICpjdHggX19hdHRyaWJ1dGVfXygodW51c2VkKSksCiAKIC8qKgogICogY2lmc19nZXRfc21i
+X3NlcyAtIGdldCBhIHNlc3Npb24gbWF0Y2hpbmcgQGN0eCBkYXRhIGZyb20gQHNlcnZlcgorICog
+QHNlcnZlcjogc2VydmVyIHRvIHNldHVwIHRoZSBzZXNzaW9uIHRvCisgKiBAY3R4OiBzdXBlcmJs
+b2NrIGNvbmZpZ3VyYXRpb24gY29udGV4dCB0byB1c2UgdG8gc2V0dXAgdGhlIHNlc3Npb24KICAq
+CiAgKiBUaGlzIGZ1bmN0aW9uIGFzc3VtZXMgaXQgaXMgYmVpbmcgY2FsbGVkIGZyb20gY2lmc19t
+b3VudCgpIHdoZXJlIHdlCiAgKiBhbHJlYWR5IGdvdCBhIHNlcnZlciByZWZlcmVuY2UgKHNlcnZl
+ciByZWZjb3VudCArMSkuIFNlZQpAQCAtMjA2NCw2ICsyMDcwLDggQEAgY2lmc19wdXRfdGNvbihz
+dHJ1Y3QgY2lmc190Y29uICp0Y29uKQogCiAvKioKICAqIGNpZnNfZ2V0X3Rjb24gLSBnZXQgYSB0
+Y29uIG1hdGNoaW5nIEBjdHggZGF0YSBmcm9tIEBzZXMKKyAqIEBzZXM6IHNtYiBzZXNzaW9uIHRv
+IGlzc3VlIHRoZSByZXF1ZXN0IG9uCisgKiBAY3R4OiB0aGUgc3VwZXJibG9jayBjb25maWd1cmF0
+aW9uIGNvbnRleHQgdG8gdXNlIGZvciBidWlsZGluZyB0aGUKICAqCiAgKiAtIHRjb24gcmVmY291
+bnQgaXMgdGhlIG51bWJlciBvZiBtb3VudCBwb2ludHMgdXNpbmcgdGhlIHRjb24uCiAgKiAtIHNl
+cyByZWZjb3VudCBpcyB0aGUgbnVtYmVyIG9mIHRjb24gdXNpbmcgdGhlIHNlc3Npb24uCkBAIC0z
+MDI5LDcgKzMwMzcsNyBAQCBidWlsZF91bmNfcGF0aF90b19yb290KGNvbnN0IHN0cnVjdCBzbWIz
+X2ZzX2NvbnRleHQgKmN0eCwKIAlyZXR1cm4gZnVsbF9wYXRoOwogfQogCi0vKioKKy8qCiAgKiBl
+eHBhbmRfZGZzX3JlZmVycmFsIC0gUGVyZm9ybSBhIGRmcyByZWZlcnJhbCBxdWVyeSBhbmQgdXBk
+YXRlIHRoZSBjaWZzX3NiCiAgKgogICogSWYgYSByZWZlcnJhbCBpcyBmb3VuZCwgY2lmc19zYi0+
+Y3R4LT5tb3VudF9vcHRpb25zIHdpbGwgYmUgKHJlLSlhbGxvY2F0ZWQKZGlmZiAtLWdpdCBhL2Zz
+L2NpZnMvaW9jdGwuYyBiL2ZzL2NpZnMvaW9jdGwuYwppbmRleCA0NGFlOTk0NTRmYjMuLjAzNTli
+NjA0YmRiYyAxMDA2NDQKLS0tIGEvZnMvY2lmcy9pb2N0bC5jCisrKyBiL2ZzL2NpZnMvaW9jdGwu
+YwpAQCAtMzU4LDcgKzM1OCw3IEBAIGxvbmcgY2lmc19pb2N0bChzdHJ1Y3QgZmlsZSAqZmlsZXAs
+IHVuc2lnbmVkIGludCBjb21tYW5kLCB1bnNpZ25lZCBsb25nIGFyZykKIAkJCWlmIChwU01CRmls
+ZSA9PSBOVUxMKQogCQkJCWJyZWFrOwogCQkJdGNvbiA9IHRsaW5rX3Rjb24ocFNNQkZpbGUtPnRs
+aW5rKTsKLQkJCWNhcHMgPSBsZTY0X3RvX2NwdSh0Y29uLT5mc1VuaXhJbmZvLkNhcGFiaWxpdHkp
+OworCQkJLyogY2FwcyA9IGxlNjRfdG9fY3B1KHRjb24tPmZzVW5peEluZm8uQ2FwYWJpbGl0eSk7
+ICovCiAKIAkJCWlmIChnZXRfdXNlcihFeHRBdHRyQml0cywgKGludCBfX3VzZXIgKilhcmcpKSB7
+CiAJCQkJcmMgPSAtRUZBVUxUOwotLSAKMi4zMC4yCgo=
+--0000000000009cc7a205cbe8e96f--
