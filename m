@@ -1,69 +1,143 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CF93FD0
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:22:16 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id v1so6168996plo.10
-        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:22:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CB93FD0
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:22:45 +0000 (UTC)
+Received: by mail-oi1-f169.google.com with SMTP id r26so14786807oij.2
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x9bengKu+CI5Uy0lxK3X1t9kIOqgRUCo1n/+q3eZAGw=;
-        b=atKV3P/8k/Yz8cBigFlc9fXFfyCBqkZFUT4+RKL1Z2tJeLgayOQJvz/EPJpYdPW+vj
-         XB9aylqdgIXvWFV2ZaZmy7g73rqq2+ki3DTPisx3U9sGYtJi4LOl5LCUNRzaLaxNkygQ
-         4aw/h2na3FhYoUcmwmfGh87UYgO68GUZMKRGQ=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4/ivNU19vgx8JM95ZcxudD+bsQ3V+RD7J/J7pfkup6o=;
+        b=a1kK2KQfiezpSLJ2ORWWym+07BdpzPI+E6gijxIsvsZQamk6qGrPWV/3o5PSSAsuOr
+         3A+MsrvZXXq9ScwMKCl3Jz2clIb3a9oB5bXugBk+kOyvRJegjV57DmSz9AEz+Aiqslf4
+         f2GQ5sqhzgkHTI6wJ91yabyDkmYOQg8mXmjBD+qTZMOjHWiJBQ8Gd8OudErVWiWm8LHb
+         lk10kSue7CYfSDDIbp9h7Exl94gah9Qbuk/PN03BVfiJen1pSrRstSprN2S/H6L53YyI
+         OLZf5bwowa9GyrvGQXd4LoQ77XiiZutJzeceFf6JdIjod/XQ4gvqgZZ8HO4sZR7oIDRm
+         RMNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x9bengKu+CI5Uy0lxK3X1t9kIOqgRUCo1n/+q3eZAGw=;
-        b=v/DQyDIZ26CvpKf/zlojaW3MokDSP12JfRKvxq+Gkgh9uTqUq2opyhpE2568JJLKf0
-         Wv+mhz0zIDxDgy/Wwu78CNBnegU7O0OGZ3sYPEOONdONXi4YwmNjLvFYGnP1M3BqFI8P
-         +GLszqLfY1h2qAnQ4kb1WpXLwM84vd5IIPi8KFMWHraTVbiuZHUR1zyP7PZkAkm7lsGs
-         PBGpHEME7oHW3juYVZxGBvnsmKYNmWdXrHjPtN3uSYHs4F1PL7BUji46QtAZV98P7PRA
-         ulE3LCLnOtbkoh12ZH6DddGP1CXQPt49yzOb1DJYHxMNaxfYfq9MB2txKEgVkQ9ja3RD
-         Ptqw==
-X-Gm-Message-State: AOAM532uiRNzmewxntgzTB66tZUL46HJ+QbBPZepBES7PEP7S49a6s4p
-	L2AJl5vadK6mF/4mFWp7yxcNNw==
-X-Google-Smtp-Source: ABdhPJzjqGdWhTndUENRXXSU0o8Taq3svhepsDvQaON2wiOrnYg1dZyKG9Bszyg7IEOrraOFxs5ykg==
-X-Received: by 2002:a17:90a:eb0b:: with SMTP id j11mr369315pjz.173.1631550135873;
-        Mon, 13 Sep 2021 09:22:15 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h10sm2302588pjs.51.2021.09.13.09.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 09:22:15 -0700 (PDT)
-Date: Mon, 13 Sep 2021 09:22:14 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/10] mm/ksm: remove old GCC 4.9+ check
-Message-ID: <202109130922.D8C51303@keescook>
-References: <20210910234047.1019925-1-ndesaulniers@google.com>
- <20210910234047.1019925-4-ndesaulniers@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4/ivNU19vgx8JM95ZcxudD+bsQ3V+RD7J/J7pfkup6o=;
+        b=Gz03iTBq5nF5emzavoWJ03uYjasYWU62SJ1Kj9km2EWoRYVbsw0PjpA04N95lpMCJZ
+         xDlmBMeE5Vb1QnEFqidZsjYjikkv/4IJCQZivMm4U0LFnlEphVkOhx8SUhWS6oWPByan
+         SUOTaqPvup9gsvgBeOMUMbFXt7hV03ZrQpVCZv6H7/o1yyMxKEaZvq/3hbfsX7ZzBNS1
+         UJsKBvBBQxtOt1f63sHNvQg0834NaI0ZGUBGpeGV47YFZSTgs2W+Ow7v4vM7/g6BRBFd
+         07gPvgosPjnR7m4euljuPq/dwrz9o4RsxJecjRZJMUV4zr7OXh8KyPidDZJtP4R02utv
+         /T/Q==
+X-Gm-Message-State: AOAM533ofh/tIR/9SICRZURHV0SNjiRyIazbUek/1ui+h005shLMZyV1
+	+tbcVOdT1q//eGKtMh2QKNdnBBELU6qLBTvm23gDhw==
+X-Google-Smtp-Source: ABdhPJwBHMz+LzOFUiQTIwbzPzdvrXtTVwYQpG2iiSp91TzBtWRskcUIoeGW7uJi+Qpxvni4TX/PSl9W+KQ5xZ2gyXg=
+X-Received: by 2002:a05:6808:118:: with SMTP id b24mr8614615oie.0.1631550164556;
+ Mon, 13 Sep 2021 09:22:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210910234047.1019925-4-ndesaulniers@google.com>
+References: <20210913131113.390368911@linuxfoundation.org> <20210913131114.028340332@linuxfoundation.org>
+In-Reply-To: <20210913131114.028340332@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 13 Sep 2021 21:52:33 +0530
+Message-ID: <CA+G9fYtdPnwf+fi4Oyxng65pWjW9ujZ7dd2Z-EEEHyJimNHN6g@mail.gmail.com>
+Subject: Re: [PATCH 5.14 018/334] nbd: add the check to prevent overflow in __nbd_ioctl()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Nathan Chancellor <natechancellor@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Baokun Li <libaokun1@huawei.com>
+Cc: open list <linux-kernel@vger.kernel.org>, linux-stable <stable@vger.kernel.org>, 
+	Hulk Robot <hulkci@huawei.com>, Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, 
+	Sasha Levin <sashal@kernel.org>, clang-built-linux <clang-built-linux@googlegroups.com>, 
+	lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 10, 2021 at 04:40:40PM -0700, Nick Desaulniers wrote:
-> The minimum supported version of GCC has been raised to GCC 5.1.
-> 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Mon, 13 Sept 2021 at 19:51, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> From: Baokun Li <libaokun1@huawei.com>
+>
+> [ Upstream commit fad7cd3310db3099f95dd34312c77740fbc455e5 ]
+>
+> If user specify a large enough value of NBD blocks option, it may trigger
+> signed integer overflow which may lead to nbd->config->bytesize becomes a
+> large or small value, zero in particular.
+>
+> UBSAN: Undefined behaviour in drivers/block/nbd.c:325:31
+> signed integer overflow:
+> 1024 * 4611686155866341414 cannot be represented in type 'long long int'
+> [...]
+> Call trace:
+> [...]
+>  handle_overflow+0x188/0x1dc lib/ubsan.c:192
+>  __ubsan_handle_mul_overflow+0x34/0x44 lib/ubsan.c:213
+>  nbd_size_set drivers/block/nbd.c:325 [inline]
+>  __nbd_ioctl drivers/block/nbd.c:1342 [inline]
+>  nbd_ioctl+0x998/0xa10 drivers/block/nbd.c:1395
+>  __blkdev_driver_ioctl block/ioctl.c:311 [inline]
+> [...]
+>
+> Although it is not a big deal, still silence the UBSAN by limit
+> the input value.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+> Link: https://lore.kernel.org/r/20210804021212.990223-1-libaokun1@huawei.com
+> [axboe: dropped unlikely()]
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/block/nbd.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+> index 19f5d5a8b16a..acf3f85bf3c7 100644
+> --- a/drivers/block/nbd.c
+> +++ b/drivers/block/nbd.c
+> @@ -1388,6 +1388,7 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
+>                        unsigned int cmd, unsigned long arg)
+>  {
+>         struct nbd_config *config = nbd->config;
+> +       loff_t bytesize;
+>
+>         switch (cmd) {
+>         case NBD_DISCONNECT:
+> @@ -1402,8 +1403,9 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
+>         case NBD_SET_SIZE:
+>                 return nbd_set_size(nbd, arg, config->blksize);
+>         case NBD_SET_SIZE_BLOCKS:
+> -               return nbd_set_size(nbd, arg * config->blksize,
+> -                                   config->blksize);
+> +               if (check_mul_overflow((loff_t)arg, config->blksize, &bytesize))
+> +                       return -EINVAL;
+> +               return nbd_set_size(nbd, bytesize, config->blksize);
+>         case NBD_SET_TIMEOUT:
+>                 nbd_set_cmd_timeout(nbd, arg);
+>                 return 0;
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+arm clang-10, clang-11, clang-12 and clang-13 builds failed.
+due to this commit on 5.14 and 5.13 on following configs,
+  - footbridge_defconfig
+  - mini2440_defconfig
+  - s3c2410_defconfig
 
--- 
-Kees Cook
+This was already reported on the mailing list.
+
+ERROR: modpost: "__mulodi4" [drivers/block/nbd.ko] undefined! #1438
+https://github.com/ClangBuiltLinux/linux/issues/1438
+
+[PATCH 00/10] raise minimum GCC version to 5.1
+https://lore.kernel.org/lkml/20210910234047.1019925-1-ndesaulniers@google.com/
+
+linux-next: build failure while building Linus' tree
+https://lore.kernel.org/all/20210909182525.372ee687@canb.auug.org.au/
+
+Full build log,
+https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/1585407346#L1111
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
