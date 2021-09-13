@@ -1,87 +1,261 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E812F3FD0
-	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 15:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=KaliKYYkNMqrhjKwpWKqxXm8VgZh11hwlXmN3oD3zZk=; b=SY0xVqk7mI72ydm3mgM8JYkEqJ
-	m4o4HwcN5IWtxcW0tjrqFWgZDfENT2mJTaih2bwiLEgJvu+OfSF+VBrgU57c/KNKKZy7oR0ylDfLC
-	eIO92nHgGmseg6OqOK549uP4e6BPwPps1+8zw9XB0FS/G4x6hiJt2MQu968Wa1jvEg4eJMqlw2lvw
-	pH5mEbUrvqGls9G4XZul084lWAHpV1YxYmmPZY4Ec9gwhpCrRg+k5G6xDzcPztusUZQ5HSclTQzI6
-	KAb0R1ZAa2FeYp5y3pUSRCze1KX1hdJiDsiJUK8o0Q+3+v+xpQSQ9D+mQD9nv9h2JjrYAO41WVQOp
-	1eXsbBRg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mPoN4-002GLi-Au; Mon, 13 Sep 2021 15:59:50 +0000
-Date: Mon, 13 Sep 2021 08:59:50 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Philip Li <philip.li@intel.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Borislav Petkov <bp@suse.de>
-Subject: Re: [kbuild-all] Re: [mcgrof-next:20210908-firmware-builtin-v4 2/11]
- drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous
- prototype for function 'firmware_is_builtin'
-Message-ID: <YT91dprXpGy+ywBu@bombadil.infradead.org>
-References: <202109101524.pjY4q0Dy-lkp@intel.com>
- <YTv817Srt8hoySP5@bombadil.infradead.org>
- <20210911012853.GA834679@pl-dbox>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93603FD0
+	for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 16:00:45 +0000 (UTC)
+Received: by mail-lj1-f180.google.com with SMTP id l18so18187606lji.12
+        for <llvm@lists.linux.dev>; Mon, 13 Sep 2021 09:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tnso6ZagMQK9pK7YlwLa0K1RsHVORZGH60a5gBpaGlI=;
+        b=e0r2tpsDwdbWMHqRYYycTuAs/igasHt0vklO4CrLKHVSC2sT1mMecSU59nYOqL7IuK
+         jsa0Od/qAEpc5jDylRTgA3K7RepFI2pdLpZxgfz9ZmBkQci7oNNU0E6oZaZe7e9JC2dV
+         EdlIq1OX2lLHIcrQn6k3DSeQsHbxd5X3kbUgTxpvEXLCLANYC9h5gy82UuvZXcxcIVS0
+         iAPcg1/rKxOX3Suub9B02wPUf7PMrXGWWPY0e1DexAjXXBAoWeE4iPKsoLfjRdecAQdt
+         akuWY22kPKFcaIwGRtyj+N7Qw2Wew2D6bLzOUatFArUm5TfBh0jnA4KDO7z6YDbSef49
+         FXJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tnso6ZagMQK9pK7YlwLa0K1RsHVORZGH60a5gBpaGlI=;
+        b=eYDFFSpPpiieYrE/3G6EQHB8fSIr/dehrV1os2ss5cD+i8rwEcoGvpV9Me04Du9xWj
+         cJ4S7/rjx3zamW9/ohxBBHjaFbR+dWRA6S4LiP0/ZUC7SNa2a6iUTLP+jhI9JJgN4azI
+         B7JPR0HevqyOu3938C8KE+miTMtAZLbd6xYVqsrqypsKmprzdGPMQW1AChAwo0cS1eR9
+         Kocl5tWFdtekY091QvK6ghPZ7x8VMRKiBpTJlraP5evzf7I+qfFCDE84RLlHcHl52XL/
+         0IcuDxQPOke3xyb6BywELGg7Lw139C6uASnUeYQO+wkXZXPTqsvwxutrB2MQy9B6dF/K
+         3Urw==
+X-Gm-Message-State: AOAM532NnWagvG6j3njNnqFIlTP2TvLBgTLZNDzriiCCI+BylqK4/6yA
+	IMc74Oe4cX5n7ToeatE99AniCGTQ6YOGhxIpjGZo1A==
+X-Google-Smtp-Source: ABdhPJzwxNehhDgdc7NG25AtQhh/6ceP6pcGAemKEXDbdz4RMy9zcqz2YB5/RmK+c1OQO7MFW3XSVaoyc9tQX06yY48=
+X-Received: by 2002:a05:651c:1305:: with SMTP id u5mr10831205lja.198.1631548843315;
+ Mon, 13 Sep 2021 09:00:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210911012853.GA834679@pl-dbox>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <1723771714.8049.1630601502888@localhost> <CAKwvOdmSW1Ntom389FD3qOC=iTCwJH=g5MiuRdeftxMdwbRBbg@mail.gmail.com>
+ <CAFYwA27_YcNO3zebCAXNZ+Emb2vYNtjeTaoDqm17KMh=23H3DQ@mail.gmail.com>
+In-Reply-To: <CAFYwA27_YcNO3zebCAXNZ+Emb2vYNtjeTaoDqm17KMh=23H3DQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 13 Sep 2021 09:00:31 -0700
+Message-ID: <CAKwvOdndJA-6jEAka9Zzsto==D49=Kk=YyPMf6ZYpFPwHCuriQ@mail.gmail.com>
+Subject: Re: [CI-NOTIFY]: TCWG Bisect tcwg_kernel/llvm-master-aarch64-mainline-allmodconfig
+ - Build # 10 - Successful!
+To: Diana Picus <diana.picus@linaro.org>
+Cc: ci_notify@linaro.org, Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>, 
+	tcwg-validation@linaro.org, clang-built-linux@googlegroups.com, 
+	llvm@lists.linux.dev, arnd@linaro.org, 
+	Linaro Toolchain Mailman List <linaro-toolchain@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 11, 2021 at 09:28:53AM +0800, Philip Li wrote:
-> On Fri, Sep 10, 2021 at 05:48:23PM -0700, Luis Chamberlain wrote:
-> > On Fri, Sep 10, 2021 at 03:41:31PM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210908-firmware-builtin-v4
-> > > head:   1c69d6a17750179d68bcaf6b16f9a08d2e475989
-> > > commit: 79e9fce20ee88ffe37542a66277628e6c53dde14 [2/11] firmware_loader: formalize built-in firmware API
-> > > config: hexagon-buildonly-randconfig-r004-20210910 (attached as .config)
-> > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 261cbe98c38f8c1ee1a482fe76511110e790f58a)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=79e9fce20ee88ffe37542a66277628e6c53dde14
-> > >         git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-> > >         git fetch --no-tags mcgrof-next 20210908-firmware-builtin-v4
-> > >         git checkout 79e9fce20ee88ffe37542a66277628e6c53dde14
-> > >         # save the attached .config to linux build tree
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=hexagon 
-> > > 
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> drivers/base/firmware_loader/builtin/main.c:36:6: error: no previous prototype for function 'firmware_is_builtin' [-Werror,-Wmissing-prototypes]
-> > >    bool firmware_is_builtin(const struct firmware *fw)
-> > 
-> > This is a lie though its defined on drivers/base/firmware_loader/firmware.h
-> > 
-> > >         ^
-> > >    drivers/base/firmware_loader/builtin/main.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> > >    bool firmware_is_builtin(const struct firmware *fw)
-> > >    ^
-> > >    static 
-> > >    1 error generated.
-> > 
-> > I get these odd errors:
-> > 
-> > Compiler will be installed in /home/mcgrof/0day
-> hi Luis, would you mind to download the make.cross tool again to give a try, it
-> was updated recently to use latest clang instead of this 12.0.0?
+On Mon, Sep 13, 2021 at 12:13 AM Diana Picus <diana.picus@linaro.org> wrote=
+:
+>
+> Hi Nick,
+>
+> We have changed our infrastructure to email llvm@lists.linux.dev on the 6=
+th of September [1]. The email you reported seems to have been sent before =
+that (on the 2nd of September). Newer emails ought to go to the right place=
+, please let us know if you find emails to @googlegroups from jobs started =
+after the 6th of September.
 
-I had clang+llvm-12.0.0-cross-hexagon-unknown-linux-musl and this was
-used already. Is there a more recent one? Just in case I rm -rf'd it
-and tried again with the latest make.cross.
+Ah, thanks!
 
-  Luis
+>
+> Cheers,
+> Diana
+>
+> [1] https://git.linaro.org/toolchain/jenkins-scripts.git/commit/?id=3D18e=
+73813f104f4d93b8f2b91c9c676b23cb6adea
+>
+> On Fri, 10 Sept 2021 at 21:13, Nick Desaulniers <ndesaulniers@google.com>=
+ wrote:
+>>
+>> Hi Maxim,
+>> We're looking to turn down our old @googlegroups.com mailing list. Any
+>> chance these reports can instead be sent to llvm@lists.linux.dev so
+>> that they are archived by lore.kernel.org?
+>>
+>> On Thu, Sep 9, 2021 at 10:20 PM <ci_notify@linaro.org> wrote:
+>> >
+>> > Successfully identified regression in *linux* in CI configuration tcwg=
+_kernel/llvm-master-aarch64-mainline-allmodconfig.  So far, this commit has=
+ regressed CI configurations:
+>> >  - tcwg_kernel/llvm-master-aarch64-mainline-allmodconfig
+>> >
+>> > Culprit:
+>> > <cut>
+>> > commit c3496da580b0fc10fdeba8f6a5e6aef4c78b5598
+>> > Author: Slark Xiao <slark_xiao@163.com>
+>> > Date:   Tue Aug 31 10:40:25 2021 +0800
+>> >
+>> >     net: Add depends on OF_NET for LiteX's LiteETH
+>> >
+>> >     Current settings may produce a build error when
+>> >     CONFIG_OF_NET is disabled. The CONFIG_OF_NET controls
+>> >     a headfile <linux/of.h> and some functions
+>> >      in <linux/of_net.h>.
+>> >
+>> >     Signed-off-by: Slark Xiao <slark_xiao@163.com>
+>> >     Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> > </cut>
+>> >
+>> > Results regressed to (for first_bad =3D=3D c3496da580b0fc10fdeba8f6a5e=
+6aef4c78b5598)
+>> > # reset_artifacts:
+>> > -10
+>> > # build_abe binutils:
+>> > -9
+>> > # build_llvm:
+>> > -5
+>> > # build_abe qemu:
+>> > -2
+>> > # linux_n_obj:
+>> > 29873
+>> > # linux build successful:
+>> > all
+>> > # First few build errors in logs:
+>> >
+>> > from (for last_good =3D=3D a9e7c3cedc2914f63cd135b75832b9bf850af782)
+>> > # reset_artifacts:
+>> > -10
+>> > # build_abe binutils:
+>> > -9
+>> > # build_llvm:
+>> > -5
+>> > # build_abe qemu:
+>> > -2
+>> > # linux_n_obj:
+>> > 29873
+>> > # linux build successful:
+>> > all
+>> > # linux boot successful:
+>> > boot
+>> >
+>> > Artifacts of last_good build: https://ci.linaro.org/job/tcwg_kernel-ll=
+vm-bisect-llvm-master-aarch64-mainline-allmodconfig/10/artifact/artifacts/b=
+uild-a9e7c3cedc2914f63cd135b75832b9bf850af782/
+>> > Artifacts of first_bad build: https://ci.linaro.org/job/tcwg_kernel-ll=
+vm-bisect-llvm-master-aarch64-mainline-allmodconfig/10/artifact/artifacts/b=
+uild-c3496da580b0fc10fdeba8f6a5e6aef4c78b5598/
+>> > Build top page/logs: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect=
+-llvm-master-aarch64-mainline-allmodconfig/10/
+>> >
+>> > Configuration details:
+>> >
+>> >
+>> > Reproduce builds:
+>> > <cut>
+>> > mkdir investigate-linux-c3496da580b0fc10fdeba8f6a5e6aef4c78b5598
+>> > cd investigate-linux-c3496da580b0fc10fdeba8f6a5e6aef4c78b5598
+>> >
+>> > git clone https://git.linaro.org/toolchain/jenkins-scripts
+>> >
+>> > mkdir -p artifacts/manifests
+>> > curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/jo=
+b/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allmodconfig/10/arti=
+fact/artifacts/manifests/build-baseline.sh --fail
+>> > curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/=
+job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allmodconfig/10/ar=
+tifact/artifacts/manifests/build-parameters.sh --fail
+>> > curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-b=
+isect-llvm-master-aarch64-mainline-allmodconfig/10/artifact/artifacts/test.=
+sh --fail
+>> > chmod +x artifacts/test.sh
+>> >
+>> > # Reproduce the baseline build (build all pre-requisites)
+>> > ./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-ba=
+seline.sh
+>> >
+>> > # Save baseline build state (which is then restored in artifacts/test.=
+sh)
+>> > mkdir -p ./bisect
+>> > rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifac=
+ts/ --exclude /linux/ ./ ./bisect/baseline/
+>> >
+>> > cd linux
+>> >
+>> > # Reproduce first_bad build
+>> > git checkout --detach c3496da580b0fc10fdeba8f6a5e6aef4c78b5598
+>> > ../artifacts/test.sh
+>> >
+>> > # Reproduce last_good build
+>> > git checkout --detach a9e7c3cedc2914f63cd135b75832b9bf850af782
+>> > ../artifacts/test.sh
+>> >
+>> > cd ..
+>> > </cut>
+>> >
+>> > History of pending regressions and results: https://git.linaro.org/too=
+lchain/ci/base-artifacts.git/log/?h=3Dlinaro-local/ci/tcwg_kernel/llvm-mast=
+er-aarch64-mainline-allmodconfig
+>> >
+>> > Artifacts: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-mast=
+er-aarch64-mainline-allmodconfig/10/artifact/artifacts/
+>> > Build log: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-mast=
+er-aarch64-mainline-allmodconfig/10/consoleText
+>> >
+>> > Full commit (up to 1000 lines):
+>> > <cut>
+>> > commit c3496da580b0fc10fdeba8f6a5e6aef4c78b5598
+>> > Author: Slark Xiao <slark_xiao@163.com>
+>> > Date:   Tue Aug 31 10:40:25 2021 +0800
+>> >
+>> >     net: Add depends on OF_NET for LiteX's LiteETH
+>> >
+>> >     Current settings may produce a build error when
+>> >     CONFIG_OF_NET is disabled. The CONFIG_OF_NET controls
+>> >     a headfile <linux/of.h> and some functions
+>> >      in <linux/of_net.h>.
+>> >
+>> >     Signed-off-by: Slark Xiao <slark_xiao@163.com>
+>> >     Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> > ---
+>> >  drivers/net/ethernet/litex/Kconfig | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> >
+>> > diff --git a/drivers/net/ethernet/litex/Kconfig b/drivers/net/ethernet=
+/litex/Kconfig
+>> > index 265dba414b41..63bf01d28f0c 100644
+>> > --- a/drivers/net/ethernet/litex/Kconfig
+>> > +++ b/drivers/net/ethernet/litex/Kconfig
+>> > @@ -17,6 +17,7 @@ if NET_VENDOR_LITEX
+>> >
+>> >  config LITEX_LITEETH
+>> >         tristate "LiteX Ethernet support"
+>> > +       depends on OF_NET
+>> >         help
+>> >           If you wish to compile a kernel for hardware with a LiteX Li=
+teEth
+>> >           device then you should answer Y to this.
+>> > </cut>
+>> >
+>> > --
+>> > You received this message because you are subscribed to the Google Gro=
+ups "Clang Built Linux" group.
+>> > To unsubscribe from this group and stop receiving emails from it, send=
+ an email to clang-built-linux+unsubscribe@googlegroups.com.
+>> > To view this discussion on the web visit https://groups.google.com/d/m=
+sgid/clang-built-linux/1723771714.8049.1630601502888%40localhost.
+>>
+>>
+>>
+>> --
+>> Thanks,
+>> ~Nick Desaulniers
+>> _______________________________________________
+>> linaro-toolchain mailing list
+>> linaro-toolchain@lists.linaro.org
+>> https://lists.linaro.org/mailman/listinfo/linaro-toolchain
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
