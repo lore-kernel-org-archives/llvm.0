@@ -1,90 +1,109 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12E729CA
-	for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 16:01:30 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id h16so29882777lfk.10
-        for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 09:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O7o8nytLXMUXQdmXcn0J+cx6AmEuTmtKjrOwXucFFVw=;
-        b=V9DkA3YxNFNKt+kZfIU6UYrbnjxqTVpU5jxLXsh+y7SsxT3fJ0JPgfzuoszBZZZtTF
-         jksmWVGYCq05qzNmFTHTCJ4xcvTQvUtqU1RFlAeKMSohHNvkuV1h+llPH9kBRWDHtj/D
-         YVV2qWwx2D8qnjaPYa3v/ADQKFRZwfamoKYegxKGfl6UwF4LF8Mu3e4pIREZ7ee8h3/l
-         Wawh0vASCAtz0qH+oEMOx1Uabk4pngW0LUghGESdC/F0a+Yph5g9p/bsTqMU4LDEm1EG
-         LJUY7DprzgF9dQ/2pg0hOjZZILp1WIOVJ36rDc5THVEPyPjKCY78FzBo7JvfKxIBnH70
-         79RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O7o8nytLXMUXQdmXcn0J+cx6AmEuTmtKjrOwXucFFVw=;
-        b=mEZu0eI8hP+Z3TTMzkoXX5iiCTXem7gz7/bOpbf3u8CeCSpHM34nh5wVF/+d3D/agB
-         0mhtmbTGvoVdtJtN1IIz6cGAuKaxTSqqtmFQstU7RvtnlrYYXS59LfzH5X8LM0TTtvyw
-         S0CyUUHiIeo/uuIsn3ElwG4MqYF67Zh9ReaRJOXVzc8iqcmfCvOKIhhyNwJyQH0eWLJ+
-         zC2TSruupe1Ce/70g8tajp+gWiQp1Pqtmll4DJZxE6rPxIWJCNdPUhSLeJH8+k4mry9K
-         LUnefae6UHZKDTijsdgMOs+IITqjsdqVdXTrXUIlWa43isBNNHq3iatl84XqzateC0rm
-         sBXA==
-X-Gm-Message-State: AOAM533j7v1cpjYrXRtxDKKEdk0anje+jM08EiaBctLsRmUZ64z9vZhl
-	gIWswtlsZ9YufFpuqSocZc1/3oLZzUIivX05xYBa2LPXS7rP9w==
-X-Google-Smtp-Source: ABdhPJwtPU5sKsSabfh0/4yuY25XZ69r6VnK8XAXkSz7SaLhqqmYnXbo0MQ9LZqRpoAguVUswo3zICjPngHSMuQ0+fA=
-X-Received: by 2002:a05:6512:3b9e:: with SMTP id g30mr13372286lfv.651.1631635288279;
- Tue, 14 Sep 2021 09:01:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6039A3FD0
+	for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 16:04:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F87B61151;
+	Tue, 14 Sep 2021 16:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1631635485;
+	bh=ebhcQ4hUXkMW4qIBZ9SKW8WREnfyFPdJTHRQdASpbhM=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=BtPCcFnN+Tn1BATjo5zVC6sM2/8MAKG6FsKLHlOMu0kSqQaejBBJe8KW9coliJXuP
+	 WMSmmkkhlffDhY1HcKm+gx6p7lxGLgW9/fm5zd3tJ99W9KaXVCMUStE+nXpn4jbUf4
+	 kOXAK7f3Gu2OJgS9g00y6jSn9zCkuQ2yCCeroBqd9eV4C8A45PtO8v7gyJV2LO5lHt
+	 RspeO7j8OCvZoa9slEfXSxkToLHkZ2S/CGKVMdwng2IXnbQNP2DMQ9KKqVUxkEbR4t
+	 /ygdFRtiP6TfWvpNQGZhFssICaw1bwg+5hl7oYSvLPyfclBFvzvTcxFq5SByEWJFaw
+	 vZT9wwBA5aSnw==
+Subject: Re: [PATCH 02/10] compiler.h: drop fallback overflow checkers
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Masahiro Yamada <masahiroy@kernel.org>, Joe Perches <joe@perches.com>,
+ Arnd Bergmann <arnd@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20210910234047.1019925-1-ndesaulniers@google.com>
+ <20210910234047.1019925-3-ndesaulniers@google.com>
+ <YTvyiv6M05Zk/C70@archlinux-ax161>
+ <CAKwvOdn==O+yJHLbxSEyx=xwpKbOsXY9_YkyU2m7+kiEwtPMrA@mail.gmail.com>
+From: Nathan Chancellor <nathan@kernel.org>
+Message-ID: <8d1f262c-77fb-c40c-ac96-1c2c4eb36011@kernel.org>
+Date: Tue, 14 Sep 2021 09:04:43 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210914154441.1726853-1-andreas@rammhold.de>
-In-Reply-To: <20210914154441.1726853-1-andreas@rammhold.de>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 14 Sep 2021 09:01:16 -0700
-Message-ID: <CAKwvOdnW8kNHFC2sSOASm63m1D5vULF9-UOy2mJrF2tPdgh6pQ@mail.gmail.com>
-Subject: Re: [PATCH] gen_compile_commands: add missing sys import
-To: andreas@rammhold.de
-Cc: Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAKwvOdn==O+yJHLbxSEyx=xwpKbOsXY9_YkyU2m7+kiEwtPMrA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 14, 2021 at 8:44 AM <andreas@rammhold.de> wrote:
->
-> From: Andreas Rammhold <andreas@rammhold.de>
->
-> The sys.exit was being used at multiple locations within the script but
-> never imported. This lead to the script exiting with a error instead of
-> with the nicely formatted (useful) error output.
->
-> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+On 9/14/2021 8:33 AM, Nick Desaulniers wrote:
+> On Fri, Sep 10, 2021 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Fri, Sep 10, 2021 at 04:40:39PM -0700, Nick Desaulniers wrote:
+>>> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+>>> index 0f12345c21fb..4669632bd72b 100644
+>>> --- a/include/linux/overflow.h
+>>> +++ b/include/linux/overflow.h
+>>> @@ -6,12 +6,9 @@
+>>>   #include <linux/limits.h>
+>>>
+>>>   /*
+>>> - * In the fallback code below, we need to compute the minimum and
+>>> - * maximum values representable in a given type. These macros may also
+>>> - * be useful elsewhere, so we provide them outside the
+>>> - * COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW block.
+>>> - *
+>>> - * It would seem more obvious to do something like
+>>> + * We need to compute the minimum and maximum values representable in a given
+>>> + * type. These macros may also be useful elsewhere. It would seem more obvious
+>>> + * to do something like:
+>>>    *
+>>>    * #define type_min(T) (T)(is_signed_type(T) ? (T)1 << (8*sizeof(T)-1) : 0)
+>>>    * #define type_max(T) (T)(is_signed_type(T) ? ((T)1 << (8*sizeof(T)-1)) - 1 : ~(T)0)
+>>
+>> The signed and type macros right below this comment can be removed as
+>> they were only used in the !COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW case.
+> 
+> Did you check for users outside of this header?
+> 
+> I see:
+> type_min ->
+> lib/test_scanf.c:189
+> include/rdma/uverbs_ioctl.h:951
+> include/rdma/uverbs_ioctl.h:973
+> 
+> type_max ->
+> lib/test_scanf.c:189
+> lib/test_scanf.c:190
+> include/rdma/uverbs_ioctl.h:952
+> include/rdma/uverbs_ioctl.h:962
+> include/rdma/uverbs_ioctl.h:974
+> include/rdma/uverbs_ioctl.h:985
+> 
+> is_signed_type has many many users throughout the kernel.
+> 
+> Or were you referring to other defines?
 
-Hi Andreas,
-Thanks for the patch. Someone beat you to the punch though:
-https://lore.kernel.org/lkml/20210908032847.18683-1-kortanzh@gmail.com/.
+Ah, I did not even think to look outside this file, I figured they were 
+intended to only be used here :/ good catch.
 
-This is good; it means folks are playing with this. :)
+>>
+>> Also applies to the tools/ version.
+> 
+> The version in tools/ should probably be "refreshed" ie. copy+pasted
+> over.  Why there is a separate copy under tools/...
+> 
 
-> ---
->  scripts/clang-tools/gen_compile_commands.py | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index 0033eedce003e..1d1bde1fd45eb 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -13,6 +13,7 @@ import logging
->  import os
->  import re
->  import subprocess
-> +import sys
->
->  _DEFAULT_OUTPUT = 'compile_commands.json'
->  _DEFAULT_LOG_LEVEL = 'WARNING'
-> --
-> 2.32.0
->
+Yes, they probably should, as I noted in commit d0ee23f9d78b ("tools: 
+compiler-gcc.h: Guard error attribute use with __has_attribute"). At the 
+same time, I don't really want to do it :)
 
-
--- 
-Thanks,
-~Nick Desaulniers
+Cheers,
+Nathan
