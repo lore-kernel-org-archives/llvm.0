@@ -1,109 +1,82 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C413FD0
-	for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 15:34:08 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id s12so24749904ljg.0
-        for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 08:34:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10F63FD0
+	for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 15:44:53 +0000 (UTC)
+Received: by mail-wr1-f49.google.com with SMTP id t18so21025173wrb.0
+        for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 08:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ICD+lh04ktszv5GKgo+I7gDa5qnX1ofZQCfwJyIAnWY=;
-        b=ShqjgPLcB3v+vuV946tnrUqG+LM093fj/YhcZTvLjKG4anY/YTyitvKlnv4e1JspcO
-         Y/addYnmSk820RkiaB6s5MDI2MQZbVE+FOuZjHgY19IqWUBTvrnrtw2xptNY9ztWJyWH
-         GqboDpDAE6MrGW01ul7IFIvmTtNjoSSsaTuiqoX2d4V5DYvUQdBPLaGOJc/FxBgWcobA
-         PNeMGyqeQWf5OeOTIpX2Z7czNIAe0rClPqwftdF5qr+/cgrVhevwMNIjaG0BLI+F1rdH
-         YgW9b1AruWVNuG4iLz7LPGHbBmyd5hSfbz7qc/EmA65hKkHMVG3caepDxZH3wB/UKq0M
-         yJKg==
+        d=rammhold-de.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xB5A2oEf3U8Ifr6DwVPVPmZXqJzCQ/TxKjqPJnOVvSw=;
+        b=YEGAM5EzV/rMOgfYuWLuKDLUs2BwsuiLV1yNTyqJVb4AfvERwA8Ct4jCuJSKERT8Ze
+         iTg6A14ro/tZbdpWiKYTcyRvjklT801kLYuQv5jVr1sJreT7aUp7h8YpXcvR0KanJISi
+         JKWHr64A4Trz1RTCFNQ7o+k1E0UcOrNuNpo/gjPDdnoOCfoZRF/J1cBLeEdNm4YFyOxn
+         b+06TZB92Yy4w5OhIRdxX+l0MayFSGMYWa0sIjQPlAwbMyIKQt5Uisvbn6e+oimQ769+
+         Oq95AGHyOV3r+mi3CI0F+wRNNaR4ATaXNJ4EzjDe4umiDjcFIOwt2NiKcGed9N/1+DfG
+         sZFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ICD+lh04ktszv5GKgo+I7gDa5qnX1ofZQCfwJyIAnWY=;
-        b=K1G1pBUPBhv4qnu+N//VFgbLFjH+wA0/5rwY2QoShmdt8JYpBeHgBauhOJUvyJ/jA0
-         N+uVfqxS2VF87AIYnhZrQcJt/6OAv7ruIIQyr1JdKa8tQjhX30354+R3DYuW7YMMgrKa
-         1dbBKjsOE7aGD/qWz8/WLWgWev5BQEoCqW6rzGm7BYNPx+y+TSqis/fKgjnEmhE0rct7
-         yNEpHXo9Uqz+/kOGxD80b3yvh8AzkN66nAUsHmHmKFPi5ilZzAAPHvA32SyF7D9OpY2N
-         7dhu4PP5x0aiRUAer/OQ2eElAz8EVIsKwMLTsHzC4C5kCjJerB5qyNIWFJEEja4Vor5b
-         rcIg==
-X-Gm-Message-State: AOAM5323BzdMDvez4OSYctVsIQjltkfwEHmhXRzHpLt4x+Nvw+HNooXs
-	GdeAJDiWge3exmKETfvT3F4s41e1vDE5OkAB7AKyUg==
-X-Google-Smtp-Source: ABdhPJw0bz3NZ0k+7kAHLE8DMSK3SJwdxRvOGVAegQ/CkeY4vydYdRL59oDg3vtcM6CL6Km2awF0cn7Fd2+TG9cHFGY=
-X-Received: by 2002:a2e:b551:: with SMTP id a17mr15761414ljn.128.1631633646572;
- Tue, 14 Sep 2021 08:34:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xB5A2oEf3U8Ifr6DwVPVPmZXqJzCQ/TxKjqPJnOVvSw=;
+        b=XpVt835wsZq88Efux2xQelv7UI3N5xzVTlaqlRDVKajkJHy+MIftP+CvEX9Btoo1IU
+         OvsOR3SrcjZ7orNaAv9uCUQ9bQRv12n+zXD7PKmrFWolBgLuKYHLAcpqz7bCLJEuZEpL
+         67mUkyyK2BOSmq7Kf+BeYxRCkObI36v/wuBMKmP8HvbVEnyqGOOHEV+4sU+W8O+wSdkz
+         MZQjGtVy3Ih99U+OaYzFY3nfSMAWHjJXfkOKrFBYj7pZZtYxy7u96fd/On7GC45EMlZi
+         rzNLZ5exPI8M2N41pgv2vVnn2DSWlDDBs6oUE4gWP7wvJuKEbxCrYqu23ewmos540CWt
+         q+IA==
+X-Gm-Message-State: AOAM531IjeTNxrsIeup3fYSg2LZ6xdTYPUat9MT9FZXlovXxj2BqV96M
+	7oIoPTzV+rIrTjKrtdqVzQpbWQ==
+X-Google-Smtp-Source: ABdhPJzDau7pwVvLCpxszXC/rXBjGfaEgQZEqVtE/A1z/aUdFKjyOLxyw0A9z+XxnRsr7X7tc1nCnA==
+X-Received: by 2002:adf:f805:: with SMTP id s5mr321672wrp.259.1631634291752;
+        Tue, 14 Sep 2021 08:44:51 -0700 (PDT)
+Received: from localhost ([2a00:e67:5c9:a:2e15:c474:2ef7:bc26])
+        by smtp.gmail.com with ESMTPSA id j17sm10632383wrh.67.2021.09.14.08.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Sep 2021 08:44:51 -0700 (PDT)
+From: andreas@rammhold.de
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andreas Rammhold <andreas@rammhold.de>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] gen_compile_commands: add missing sys import
+Date: Tue, 14 Sep 2021 17:44:40 +0200
+Message-Id: <20210914154441.1726853-1-andreas@rammhold.de>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210910234047.1019925-1-ndesaulniers@google.com>
- <20210910234047.1019925-3-ndesaulniers@google.com> <YTvyiv6M05Zk/C70@archlinux-ax161>
-In-Reply-To: <YTvyiv6M05Zk/C70@archlinux-ax161>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 14 Sep 2021 08:33:54 -0700
-Message-ID: <CAKwvOdn==O+yJHLbxSEyx=xwpKbOsXY9_YkyU2m7+kiEwtPMrA@mail.gmail.com>
-Subject: Re: [PATCH 02/10] compiler.h: drop fallback overflow checkers
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Joe Perches <joe@perches.com>, Arnd Bergmann <arnd@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 10, 2021 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Fri, Sep 10, 2021 at 04:40:39PM -0700, Nick Desaulniers wrote:
-> > diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-> > index 0f12345c21fb..4669632bd72b 100644
-> > --- a/include/linux/overflow.h
-> > +++ b/include/linux/overflow.h
-> > @@ -6,12 +6,9 @@
-> >  #include <linux/limits.h>
-> >
-> >  /*
-> > - * In the fallback code below, we need to compute the minimum and
-> > - * maximum values representable in a given type. These macros may also
-> > - * be useful elsewhere, so we provide them outside the
-> > - * COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW block.
-> > - *
-> > - * It would seem more obvious to do something like
-> > + * We need to compute the minimum and maximum values representable in a given
-> > + * type. These macros may also be useful elsewhere. It would seem more obvious
-> > + * to do something like:
-> >   *
-> >   * #define type_min(T) (T)(is_signed_type(T) ? (T)1 << (8*sizeof(T)-1) : 0)
-> >   * #define type_max(T) (T)(is_signed_type(T) ? ((T)1 << (8*sizeof(T)-1)) - 1 : ~(T)0)
->
-> The signed and type macros right below this comment can be removed as
-> they were only used in the !COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW case.
+From: Andreas Rammhold <andreas@rammhold.de>
 
-Did you check for users outside of this header?
+The sys.exit was being used at multiple locations within the script but
+never imported. This lead to the script exiting with a error instead of
+with the nicely formatted (useful) error output.
 
-I see:
-type_min ->
-lib/test_scanf.c:189
-include/rdma/uverbs_ioctl.h:951
-include/rdma/uverbs_ioctl.h:973
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+---
+ scripts/clang-tools/gen_compile_commands.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-type_max ->
-lib/test_scanf.c:189
-lib/test_scanf.c:190
-include/rdma/uverbs_ioctl.h:952
-include/rdma/uverbs_ioctl.h:962
-include/rdma/uverbs_ioctl.h:974
-include/rdma/uverbs_ioctl.h:985
-
-is_signed_type has many many users throughout the kernel.
-
-Or were you referring to other defines?
-
->
-> Also applies to the tools/ version.
-
-The version in tools/ should probably be "refreshed" ie. copy+pasted
-over.  Why there is a separate copy under tools/...
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index 0033eedce003e..1d1bde1fd45eb 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -13,6 +13,7 @@ import logging
+ import os
+ import re
+ import subprocess
++import sys
+ 
+ _DEFAULT_OUTPUT = 'compile_commands.json'
+ _DEFAULT_LOG_LEVEL = 'WARNING'
 -- 
-Thanks,
-~Nick Desaulniers
+2.32.0
+
