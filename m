@@ -1,118 +1,87 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F313FC4
-	for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 19:18:48 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id x27so675912lfu.5
-        for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 12:18:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3C73FC4
+	for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 19:46:10 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id k13so871183lfv.2
+        for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 12:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/YxCg+Ff5e18Lo5SLxz2RohY8wIeS7mnNr94SiNjtXE=;
-        b=MAAULZ4URU5MTmtKRWymxurd+Zu6ETEEDIunC1m5EtPyL8I0MQlFAdKvzoK6qKJomw
-         qw+saZ9NCqKKF9FlwDUGiOyvAmlXYwOF7O3XP4wRG7NSrfOZmJl87gAFOG1J81g9q+cH
-         6RYe0cCAP/vNZGkM9eljVjR19I9Wsiig/vp+dlTY3kKRu6LBouisQGPCSZevvSD+j1Qm
-         IMpSzG0iUHG2aS7hXlnBYZkL121q/rK08HRxTbmFHXzxag0mEdnq45lBKQTVY9k1hege
-         j3iPe+iLBkLXELjnu+2QuWmJYHoxfj2wYKlz1JgJc8TN2fiasfHOhgBpaAzPDjrKMCHn
-         CIUA==
+        bh=x8yJeL9IaeMJNKciVPbI0B3y4VivrodBAJBKdlNt/EY=;
+        b=MvIPaYviMa6bUaahGefLg7MqZeyl5u9ob4BwphzBuC0SpT6uFW4ChNga/yMrclrhbR
+         rizIHwOMPweM98hVjXEg812jsnx3bpEmMfuQ0N7W1frLnYXSqcUNqsYp4i89XnWBwzpD
+         FryiWj7xnM1ptXmRAWwqgMTw8fmKM1jCqbJ8o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/YxCg+Ff5e18Lo5SLxz2RohY8wIeS7mnNr94SiNjtXE=;
-        b=ffEb8gln/ZwJacysE2QMrNTTMEukqh3z/w+FiueJFBMbRlE3qjDfpgOlX80ovDcEd/
-         ShSfwQzcTAvGa9evy3p6zNPic+kJe1ZP9QZ5LuYgDdfjxoctZ2FTJWg+vVpn2jQWje5c
-         ccC1yqL8phVqtGvYHYBjb7AkugHanudy6Tj1WWm5Us63mUHAwEAfmJHUwwAKAf/Xhuxt
-         JntAbEYrKkFkFl4gHZAfJ7BNrY4dQJIgg9OnziJWR4xaH0akY7td8X+aMy7sqSgmfZrm
-         8nDC+6cL+ssz4IbZLl/GLuaLLvnAc1knNv87k6BZ4/X0XxZG7trJmOGgvjcobWxrss5q
-         sRRA==
-X-Gm-Message-State: AOAM533uadRzUhz9UuGFzb0cVWcSOd+Ghc6yXDRfBwfyud6b0rI4nJ5o
-	3GXWwZcM1aqbL7mXQ8MV7eN65hXh4BuovD1CMZLb+Q==
-X-Google-Smtp-Source: ABdhPJw16ccf80fVUt2Ftx18ZwpsavjrFkyaXZ38lNAQGEztzwddr/2uECAcEJCIiz5gjGcanzI2I0+0jH3Kicyx5S0=
-X-Received: by 2002:a05:6512:318a:: with SMTP id i10mr14931868lfe.444.1631647126453;
- Tue, 14 Sep 2021 12:18:46 -0700 (PDT)
+        bh=x8yJeL9IaeMJNKciVPbI0B3y4VivrodBAJBKdlNt/EY=;
+        b=WeSPU3WTJDsmYjw+ZCAvNGgoG4wIRigPnXFKXjKi4m4UU8/+/VZWhdo7xAhL1mLq/m
+         Ag+ta5agCRGMXhloNsmgq5wA76BJ65c8+Vhj+ZeGBsGtB4l3kmqabZrXyuSLPH7FH78Z
+         QE1OHCAMd6L3REVgKXBLBdgkELWly+niPaWk8vjYth5x9ms97Bb/rbO434Y+QM9M6aFc
+         HlQOJRynvyV2+dT8NRe4ZxyGi/5SQPNADV/9VAHND6IgzTbxgKxCLXa0l45xsKvyD09m
+         jA6TZt6nCQy4HRQccRbSx3ZcEC/CmBJZ513alYpTXKmJVtAtmzkoBeQSIibp4PZjg8Iv
+         26cw==
+X-Gm-Message-State: AOAM531Cip7AG/tndvC9ASxeSc9PzKZ1hhKPjjUq4Fi09wQdWeS9NbMk
+	ikFcPLLcXsm9kRljuxhQTLWY7zmNpFUIdW3G+H4=
+X-Google-Smtp-Source: ABdhPJzVC4YBZZ1XAZ0C/SbY/yxsy5AYIrQxipxyijbvAs8hAlLi8Gzxc7tuTcO+rm2ZnvYsE3md9g==
+X-Received: by 2002:a19:670a:: with SMTP id b10mr13647764lfc.431.1631648766501;
+        Tue, 14 Sep 2021 12:46:06 -0700 (PDT)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id x33sm1196688lfu.8.2021.09.14.12.46.05
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Sep 2021 12:46:05 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id q21so770131ljj.6
+        for <llvm@lists.linux.dev>; Tue, 14 Sep 2021 12:46:05 -0700 (PDT)
+X-Received: by 2002:a2e:96c7:: with SMTP id d7mr17124610ljj.191.1631648765005;
+ Tue, 14 Sep 2021 12:46:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0-v1-1b789bd4dbd4+14b16-clang-fix_jgg@nvidia.com>
-In-Reply-To: <0-v1-1b789bd4dbd4+14b16-clang-fix_jgg@nvidia.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 14 Sep 2021 12:18:35 -0700
-Message-ID: <CAKwvOd=Py3qAmn5e1gqWPe9bhzQ6pwmjRsRyqf+KBtwd7OQbyg@mail.gmail.com>
-Subject: Re: [PATCH rc] IB/qib: Fix clang confusion of NULL pointer comparison
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: linux-rdma@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+References: <20210913203201.1844253-1-ndesaulniers@google.com>
+ <195b2f47-b92e-a00b-a2bc-d91bfdbd9d12@rasmusvillemoes.dk> <202109141031.AEFD06F03F@keescook>
+ <CAHk-=wjac_3K+NQNO6tjQZU1KLgba==BOvHmHE2sgNSVj3j85g@mail.gmail.com>
+ <CAHk-=whiQBofgis_rkniz8GBP9wZtSZdcDEffgSLO62BUGV3gg@mail.gmail.com>
+ <CAKwvOdkOHxtsRGjZ2Y8x84sBaqWy8t-U3F9UbMiR7h=3_+mtqA@mail.gmail.com>
+ <CAHk-=wjUR7FwE5LsZNaoQxrKu2TS7T-=1j8XqZK2miQuEmqf3Q@mail.gmail.com>
+ <CAHk-=wgPupayk3GpwSMtkV5_onFzmmK2g3WmBV1EbSCj+D0eqw@mail.gmail.com> <CAKwvOdkab9O5q=DNn643+7HRgTDdD1i201Qi_cSuXYbJbXf1qw@mail.gmail.com>
+In-Reply-To: <CAKwvOdkab9O5q=DNn643+7HRgTDdD1i201Qi_cSuXYbJbXf1qw@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 14 Sep 2021 12:45:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjf6ABFwPdsbk2674DwSLQCH0jr7w-BYvG-f2nvRQDqtQ@mail.gmail.com>
+Message-ID: <CAHk-=wjf6ABFwPdsbk2674DwSLQCH0jr7w-BYvG-f2nvRQDqtQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10] overflow.h: use new generic division helpers to
+ avoid / operator
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Jens Axboe <axboe@kernel.dk>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, llvm@lists.linux.dev, 
+	stable <stable@vger.kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Pavel Machek <pavel@ucw.cz>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 14, 2021 at 12:01 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Tue, Sep 14, 2021 at 12:10 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> clang becomes confused due to the comparision to NULL in a contexpr context:
+> Isn't the parameter `blksize` of `nbd_set_size` declared as `loff_t`?
 
-s/comparision/comparison/
+So?
 
-s/contexpr/Integer Constant Expression/
+I'm not seeing your point.
 
-I don't think constexpr is the equivalent to an ICE. We know what you
-mean though. :^)
+We've checked the range of it - in loff_t.
 
->
->  >> drivers/infiniband/hw/qib/qib_sysfs.c:413:1: error: static_assert expression is not an integral constant expression
->     QIB_DIAGC_ATTR(rc_resends);
->     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->     drivers/infiniband/hw/qib/qib_sysfs.c:406:16: note: expanded from macro 'QIB_DIAGC_ATTR'
->             static_assert(&((struct qib_ibport *)0)->rvp.n_##N != (u64 *)NULL);    \
->
-> Nick found __same_type that solves this problem nicely, so use it instead.
+So the *value* is already checked, and most definitely fits in 'unsigned long'.
 
-Sorry, Nathan found that.  Should be:
+So __ffs() is perfectly fine. It will truncate that loff_t to a sane type.
 
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+What is the problem you're trying to solve?
 
-Thanks for the patch.
-
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> ---
->  drivers/infiniband/hw/qib/qib_sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Hopefully third time is the charm here..
-
-:^)
-
->
-> diff --git a/drivers/infiniband/hw/qib/qib_sysfs.c b/drivers/infiniband/hw/qib/qib_sysfs.c
-> index 452e2355d24eeb..0a3b28142c05b6 100644
-> --- a/drivers/infiniband/hw/qib/qib_sysfs.c
-> +++ b/drivers/infiniband/hw/qib/qib_sysfs.c
-
-Consider explicitly including <linux/compiler_types.h> in this
-translation unit.  I know it may compile today, and it might just be
-our internal style guide talking here...
-
-> @@ -403,7 +403,7 @@ static ssize_t diagc_attr_store(struct ib_device *ibdev, u32 port_num,
->  }
->
->  #define QIB_DIAGC_ATTR(N)                                                      \
-> -       static_assert(&((struct qib_ibport *)0)->rvp.n_##N != (u64 *)NULL);    \
-> +       static_assert(__same_type(((struct qib_ibport *)0)->rvp.n_##N, u64));  \
->         static struct qib_diagc_attr qib_diagc_attr_##N = {                    \
->                 .attr = __ATTR(N, 0664, diagc_attr_show, diagc_attr_store),    \
->                 .counter =                                                     \
->
-> base-commit: 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f
-> --
-> 2.33.0
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+         Linus
