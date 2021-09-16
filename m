@@ -1,90 +1,102 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7188E3FC5
-	for <llvm@lists.linux.dev>; Thu, 16 Sep 2021 18:42:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B876E6103B;
-	Thu, 16 Sep 2021 18:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83502FB2
+	for <llvm@lists.linux.dev>; Thu, 16 Sep 2021 18:42:22 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E065610A6;
+	Thu, 16 Sep 2021 18:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1631817727;
-	bh=+Ka55t+zK8hXcliKTLebgVmF2QEIa1Ci4abGrfu4t7g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sreg9WjosXGGTgtw/e840hKZkI6/W2sz0RJKHKlfvPnOJvMs/BsHNbUVRCGSlFidD
-	 o0ACjDq37MUmY6jPhs887PQMPfCmtX4uYm3czgPgBJgdANzspfC9ITaM35/HIkVfa1
-	 CjC3njZqtRskHPI539xD+hTuBhkniyAkeFiNFni0LR7DEMYIsOHidJHpwCF9MJY/ex
-	 AQ6yP/7u1VKzRrW2GHf0xiLnhYqHGjcUcFc/zMRh+3iDFSHSXt4xFxOax8YN/1gFfB
-	 VHTDSeEpOfVgqxoYLPFuWgDYJF8s+qhguk+k66+NvSyjFUzYwpo1Zr3nHotFYWlnmy
-	 xBbyp2pE/hx0w==
+	s=k20201202; t=1631817742;
+	bh=W8lmbPG+Y7dzqY16kJIWhu7Hte7q4CpDtoM8X9UOKiM=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=naUyEq4E5gf3apJKSzndPpK7/aIAe+JSS11lI1ZBRDlVSeotuOczaxJ43zzK02LCa
+	 rD3zGSc2Lt9KEmwk6RQu+UkOMlTQV3sRshuH5PhUWy/lrT2A2CpGegUCx7um3fzi38
+	 RF9IbCMzODaL9mRzNiW3jG90gQL3l4SZqKVnvSR0weYqu50gEIHWshudMnbxMbpm8y
+	 hiwGHnyfCFhuudQvDt5AxlfqDL4syXomLcCqritQb7WuhdDR/9rTsJwMC9D5jPaXsY
+	 MmJOhQdSp3koJVBFRx6b4cgp3fbUnfXHUsvqtRXwk2HYpWwpMNt+8B9lW1qzbdXT2I
+	 WDdzk2HDk0KVw==
+Subject: Re: [PATCH 1/2] x86: Do not add -falign flags unconditionally for
+ clang
+To: Borislav Petkov <bp@alien8.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ x86@kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Nick Desaulniers
+ <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+References: <20210824022640.2170859-1-nathan@kernel.org>
+ <20210824022640.2170859-2-nathan@kernel.org> <YUN8coiEx3JZQytc@zn.tnic>
 From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 2/2] kbuild: Add -Werror=ignored-optimization-argument to CLANG_FLAGS
-Date: Thu, 16 Sep 2021 11:40:17 -0700
-Message-Id: <20210916184017.1881473-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210916184017.1881473-1-nathan@kernel.org>
-References: <20210916184017.1881473-1-nathan@kernel.org>
+Message-ID: <4d88e0ed-422d-447a-ea8f-36e54b38fac1@kernel.org>
+Date: Thu, 16 Sep 2021 11:42:19 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YUN8coiEx3JZQytc@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Similar to commit 589834b3a009 ("kbuild: Add
--Werror=unknown-warning-option to CLANG_FLAGS").
+On 9/16/2021 10:18 AM, Borislav Petkov wrote:
+> On Mon, Aug 23, 2021 at 07:26:39PM -0700, Nathan Chancellor wrote:
+> 
+> A couple of nitpicks:
+> 
+>> Subject: [PATCH 1/2] x86: Do not add -falign flags unconditionally for clang
+> 
+> Make that prefix into "x86/build: "
 
-Clang ignores certain GCC flags that it has not implemented, only
-emitting a warning:
+Done, I'll be sure to keep that prefix in mind for future flag-based 
+changes.
 
-$ echo | clang -fsyntax-only -falign-jumps -x c -
-clang-14: warning: optimization flag '-falign-jumps' is not supported
-[-Wignored-optimization-argument]
+>> clang does not support -falign-jumps and only recently gained support
+>> for -falign-loops. When one of the configuration options that adds these
+>> flags is enabled, clang warns and all cc-{disable-warning,option} that
+>> follow fail because -Werror gets added to test for the presence of this
+>> warning:
+>>
+>> clang-14: warning: optimization flag '-falign-jumps=0' is not supported
+>> [-Wignored-optimization-argument]
+>>
+>> To resolve this, add a couple of cc-option calls when building with
+>> clang; gcc has supported these options since 3.2 so there is no point in
+>> testing for their support. -falign-functions was implemented in clang-7,
+>> -falign-loops was implemented in clang-14, and -falign-jumps has not
+>> been implemented yet.
+>>
+>> Link: https://lore.kernel.org/r/YSQE2f5teuvKLkON@Ryzen-9-3900X.localdomain/
+> 
+> Also, there should be a second Link: tag which points to this mail
+> thread so that we can find it later, when we dig for the "why we did
+> that" question :)
+> 
+> I.e.,
+> 
+> Link: 20210824022640.2170859-2-nathan@kernel.org
 
-When one of these flags gets added to KBUILD_CFLAGS unconditionally, all
-subsequent cc-{disable-warning,option} calls fail because -Werror was
-added to these invocations to turn the above warning and the equivalent
--W flag warning into errors.
+Sure thing, kind of hard to do that on the initial submission but I will 
+do it for the v2 shortly :)
 
-To catch the presence of these flags earlier, turn
--Wignored-optimization-argument into an error so that the flags can
-either be implemented or ignored via cc-option and there are no more
-weird errors.
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>> ---
+>>   arch/x86/Makefile_32.cpu | 12 +++++++++---
+>>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> with that:
+> 
+> Acked-by: Borislav Petkov <bp@suse.de>
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- scripts/Makefile.clang | 5 +++++
- 1 file changed, 5 insertions(+)
+Thank you for the ack. The conflicting changes that I mentioned in the 
+cover letter have been merged in 5.15-rc1 so if you guys want to take 
+these changes via -tip, just holler for an ack from Masahiro on the 
+second patch on v2 (but I am going with the assumption this will be 
+merged via the kbuild tree).
 
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 4cce8fd0779c..51fc23e2e9e5 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -29,7 +29,12 @@ CLANG_FLAGS	+= --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
- else
- CLANG_FLAGS	+= -fintegrated-as
- endif
-+# By default, clang only warns when it encounters an unknown warning flag or
-+# certain optimization flags it knows it has not implemented.
-+# Make it behave more like gcc by erroring when these flags are encountered
-+# so they can be implemented or wrapped in cc-option.
- CLANG_FLAGS	+= -Werror=unknown-warning-option
-+CLANG_FLAGS	+= -Werror=ignored-optimization-argument
- KBUILD_CFLAGS	+= $(CLANG_FLAGS)
- KBUILD_AFLAGS	+= $(CLANG_FLAGS)
- export CLANG_FLAGS
--- 
-2.33.0
-
+Cheers,
+Nathan
