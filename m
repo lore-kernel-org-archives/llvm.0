@@ -1,47 +1,47 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3323FC5
-	for <llvm@lists.linux.dev>; Fri, 17 Sep 2021 15:47:09 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10110"; a="220937196"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982F13FC3
+	for <llvm@lists.linux.dev>; Fri, 17 Sep 2021 16:35:17 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10110"; a="222883683"
 X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
-   d="gz'50?scan'50,208,50";a="220937196"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2021 08:47:08 -0700
+   d="gz'50?scan'50,208,50";a="222883683"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2021 09:35:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
-   d="gz'50?scan'50,208,50";a="530877591"
+   d="gz'50?scan'50,208,50";a="701304501"
 Received: from lkp-server01.sh.intel.com (HELO 285e7b116627) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Sep 2021 08:47:06 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 17 Sep 2021 09:35:13 -0700
 Received: from kbuild by 285e7b116627 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mRG4w-0004EL-2O; Fri, 17 Sep 2021 15:47:06 +0000
-Date: Fri, 17 Sep 2021 23:46:51 +0800
+	id 1mRGpT-0004GD-UT; Fri, 17 Sep 2021 16:35:11 +0000
+Date: Sat, 18 Sep 2021 00:34:39 +0800
 From: kernel test robot <lkp@intel.com>
 To: Russell King <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [arm:zii 7/47] drivers/net/phy/marvell-88x2222.c:492:54: error: too
- few arguments to function call, expected 4, have 3
-Message-ID: <202109172343.7skZ3IbB-lkp@intel.com>
+Subject: [arm:zii 15/47] drivers/net/phy/at803x.c:706:7: error: implicit
+ declaration of function 'at803x_match_phy_id'
+Message-ID: <202109180028.1BDBkd4M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1yeeQ81UyVL57Vl7"
+Content-Type: multipart/mixed; boundary="HcAYCG3uE/tztfnV"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---1yeeQ81UyVL57Vl7
+--HcAYCG3uE/tztfnV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git zii
 head:   9f8234d7e443de598635ed7a7ac69753ce3e71d4
-commit: 726d1692bc2833d0335a2ee0f9cf61f751435610 [7/47] net: sfp: augment SFP parsing with phy_interface_t bitmap
+commit: 968d6c22446ff44207fd9b4b7750a0035661036a [15/47] net: phy: at803x: simplify custom phy id matching
 config: arm64-randconfig-r032-20210916 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c8b3d7d6d6de37af68b2f379d0e37304f78e115f)
 reproduce (this is a W=1 build):
@@ -51,86 +51,69 @@ reproduce (this is a W=1 build):
         # apt-get install binutils-aarch64-linux-gnu
         git remote add arm git://git.armlinux.org.uk/~rmk/linux-arm.git
         git fetch --no-tags arm zii
-        git checkout 726d1692bc2833d0335a2ee0f9cf61f751435610
+        git checkout 968d6c22446ff44207fd9b4b7750a0035661036a
         # save the attached .config to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/phy/ drivers/pci/controller/mobiveil/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/phy/marvell-88x2222.c:492:54: error: too few arguments to function call, expected 4, have 3
-           sfp_parse_support(phydev->sfp_bus, id, sfp_supported);
-           ~~~~~~~~~~~~~~~~~                                   ^
-   include/linux/sfp.h:569:20: note: 'sfp_parse_support' declared here
-   static inline void sfp_parse_support(struct sfp_bus *bus,
-                      ^
+>> drivers/net/phy/at803x.c:706:7: error: implicit declaration of function 'at803x_match_phy_id' [-Werror,-Wimplicit-function-declaration]
+           if (!at803x_match_phy_id(phydev, ATH8031_PHY_ID))
+                ^
    1 error generated.
 
 
-vim +492 drivers/net/phy/marvell-88x2222.c
+vim +/at803x_match_phy_id +706 drivers/net/phy/at803x.c
 
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  478  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  479  static int mv2222_sfp_insert(void *upstream, const struct sfp_eeprom_id *id)
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  480  {
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  481  	struct phy_device *phydev = upstream;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  482  	phy_interface_t sfp_interface;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  483  	struct mv2222_data *priv;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  484  	struct device *dev;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  485  	int ret;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  486  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  487  	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_supported) = { 0, };
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  488  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  489  	priv = (struct mv2222_data *)phydev->priv;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  490  	dev = &phydev->mdio.dev;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  491  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15 @492  	sfp_parse_support(phydev->sfp_bus, id, sfp_supported);
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  493  	sfp_interface = sfp_select_interface(phydev->sfp_bus, sfp_supported);
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  494  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  495  	dev_info(dev, "%s SFP module inserted\n", phy_modes(sfp_interface));
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  496  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  497  	if (sfp_interface != PHY_INTERFACE_MODE_10GBASER &&
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  498  	    sfp_interface != PHY_INTERFACE_MODE_1000BASEX &&
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  499  	    sfp_interface != PHY_INTERFACE_MODE_SGMII) {
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  500  		dev_err(dev, "Incompatible SFP module inserted\n");
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  501  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  502  		return -EINVAL;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  503  	}
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  504  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  505  	priv->line_interface = sfp_interface;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  506  	linkmode_and(priv->supported, phydev->supported, sfp_supported);
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  507  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  508  	ret = mv2222_config_line(phydev);
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  509  	if (ret < 0)
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  510  		return ret;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  511  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  512  	if (mutex_trylock(&phydev->lock)) {
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  513  		ret = mv2222_config_aneg(phydev);
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  514  		mutex_unlock(&phydev->lock);
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  515  	}
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  516  
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  517  	return ret;
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  518  }
-6e3bac3eba448a Ivan Bornyakov 2021-03-15  519  
+2318ca8aef3877 Michael Walle 2020-01-30  697  
+b856150c8098f1 David Bauer   2021-06-27  698  static int at803x_get_features(struct phy_device *phydev)
+b856150c8098f1 David Bauer   2021-06-27  699  {
+b856150c8098f1 David Bauer   2021-06-27  700  	int err;
+b856150c8098f1 David Bauer   2021-06-27  701  
+b856150c8098f1 David Bauer   2021-06-27  702  	err = genphy_read_abilities(phydev);
+b856150c8098f1 David Bauer   2021-06-27  703  	if (err)
+b856150c8098f1 David Bauer   2021-06-27  704  		return err;
+b856150c8098f1 David Bauer   2021-06-27  705  
+b856150c8098f1 David Bauer   2021-06-27 @706  	if (!at803x_match_phy_id(phydev, ATH8031_PHY_ID))
+b856150c8098f1 David Bauer   2021-06-27  707  		return 0;
+b856150c8098f1 David Bauer   2021-06-27  708  
+b856150c8098f1 David Bauer   2021-06-27  709  	/* AR8031/AR8033 have different status registers
+b856150c8098f1 David Bauer   2021-06-27  710  	 * for copper and fiber operation. However, the
+b856150c8098f1 David Bauer   2021-06-27  711  	 * extended status register is the same for both
+b856150c8098f1 David Bauer   2021-06-27  712  	 * operation modes.
+b856150c8098f1 David Bauer   2021-06-27  713  	 *
+b856150c8098f1 David Bauer   2021-06-27  714  	 * As a result of that, ESTATUS_1000_XFULL is set
+b856150c8098f1 David Bauer   2021-06-27  715  	 * to 1 even when operating in copper TP mode.
+b856150c8098f1 David Bauer   2021-06-27  716  	 *
+b856150c8098f1 David Bauer   2021-06-27  717  	 * Remove this mode from the supported link modes,
+b856150c8098f1 David Bauer   2021-06-27  718  	 * as this driver currently only supports copper
+b856150c8098f1 David Bauer   2021-06-27  719  	 * operation.
+b856150c8098f1 David Bauer   2021-06-27  720  	 */
+b856150c8098f1 David Bauer   2021-06-27  721  	linkmode_clear_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT,
+b856150c8098f1 David Bauer   2021-06-27  722  			   phydev->supported);
+b856150c8098f1 David Bauer   2021-06-27  723  	return 0;
+b856150c8098f1 David Bauer   2021-06-27  724  }
+b856150c8098f1 David Bauer   2021-06-27  725  
 
-:::::: The code at line 492 was first introduced by commit
-:::::: 6e3bac3eba448a438840ab8152cb8bbfcb8787b8 net: phy: add Marvell 88X2222 transceiver support
+:::::: The code at line 706 was first introduced by commit
+:::::: b856150c8098f12996ee81c3ab2a65adbaeeb3ec net: phy: at803x: mask 1000 Base-X link mode
 
-:::::: TO: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+:::::: TO: David Bauer <mail@david-bauer.net>
 :::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---1yeeQ81UyVL57Vl7
+--HcAYCG3uE/tztfnV
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICGyxRGEAAy5jb25maWcAnDzLduM2svv5Cp1kk1lMWm+75x4vIBCUEJEEGyAl2RsexaY7
+H4sICA+9RGEAAy5jb25maWcAnDzLduM2svv5Cp1kk1lMWm+75x4vIBCUEJEEGyAl2RsexaY7
 vvGjR5Y76b+fKoAPgATdfW9y0mmiCkABKNQb+vkfP4/I2/nl6Xh+uD0+Pn4bfS6fy9PxXN6N
 7h8ey/8ZBWKUiGzEAp79CsjRw/Pb3x+Op6flfLT4dTL/dTzalqfn8nFEX57vHz6/Qd+Hl+d/
 /PwPKpKQrwtKix2TioukyNghu/rp9vH4/Hn0tTy9At4IR4Axfvn8cP73hw/w59PD6fRy+vD4
@@ -747,4 +730,4 @@ izY9rwHIC3Fjq45949pvfsN13tB3Erkm2szqWn7qmu06qXVjV3E9xGB5r09qw9TGt8mNv9RF
 JldmavE22vRpgSz4ZNQe8eEaK0iURnCBQBO3mXgJ/2X252Jm3Fu2IJ5xCQR6EhcONFnyVQzV
 48qsNAfDSLDdDZBD0zhwlTljmGlaJ7we2lASB7JtLjqdEcmrx9X/D+mUdf2YGgIA
 
---1yeeQ81UyVL57Vl7--
+--HcAYCG3uE/tztfnV--
