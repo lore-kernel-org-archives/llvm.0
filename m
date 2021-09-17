@@ -1,25 +1,22 @@
-Received: from deadmen.hmeau.com (helcar.hmeau.com [216.24.177.18])
+Received: from smtp1.emailarray.com (smtp1.emailarray.com [65.39.216.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856DA3FCB
-	for <llvm@lists.linux.dev>; Fri, 17 Sep 2021 03:58:32 +0000 (UTC)
-Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
-	by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
-	id 1mR4Or-000695-Op; Fri, 17 Sep 2021 11:18:53 +0800
-Received: from herbert by gondobar with local (Exim 4.92)
-	(envelope-from <herbert@gondor.apana.org.au>)
-	id 1mR4Oq-0001jI-1W; Fri, 17 Sep 2021 11:18:52 +0800
-Date: Fri, 17 Sep 2021 11:18:52 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7608C3FC0
+	for <llvm@lists.linux.dev>; Fri, 17 Sep 2021 04:36:16 +0000 (UTC)
+Received: (qmail 3104 invoked by uid 89); 17 Sep 2021 04:29:35 -0000
+Received: from unknown (HELO localhost) (amxlbW9uQGZsdWdzdmFtcC5jb21AMTYzLjExNC4xMzIuMQ==) (POLARISLOCAL)  
+  by smtp1.emailarray.com with SMTP; 17 Sep 2021 04:29:35 -0000
+Date: Thu, 16 Sep 2021 21:29:33 -0700
+From: Jonathan Lemon <jonathan.lemon@gmail.com>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	clang-built-linux@googlegroups.com, llvm@lists.linux.dev
-Subject: Re: [PATCH] crypto: sm4 - Do not change section of ck and sbox
-Message-ID: <20210917031851.GB6559@gondor.apana.org.au>
-References: <20210825203859.416449-1-nathan@kernel.org>
+Cc: Richard Cochran <richardcochran@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ptp: ocp: Avoid operator precedence warning in
+ ptp_ocp_summary_show()
+Message-ID: <20210917042933.d42m5ijbiiqrctxp@bsd-mbp.dhcp.thefacebook.com>
+References: <20210916194351.3860836-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -28,33 +25,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210825203859.416449-1-nathan@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210916194351.3860836-1-nathan@kernel.org>
 
-On Wed, Aug 25, 2021 at 01:38:59PM -0700, Nathan Chancellor wrote:
-> When building with clang and GNU as, there is a warning about ignored
-> changed section attributes:
+On Thu, Sep 16, 2021 at 12:43:51PM -0700, Nathan Chancellor wrote:
+> Clang warns twice:
 > 
-> /tmp/sm4-c916c8.s: Assembler messages:
-> /tmp/sm4-c916c8.s:677: Warning: ignoring changed section attributes for
-> .data..cacheline_aligned
+> drivers/ptp/ptp_ocp.c:2065:16: error: operator '?:' has lower precedence
+> than '&'; '&' will be evaluated first
+> [-Werror,-Wbitwise-conditional-parentheses]
+>                            on & map ? " ON" : "OFF", src);
+>                            ~~~~~~~~ ^
+> drivers/ptp/ptp_ocp.c:2065:16: note: place parentheses around the '&'
+> expression to silence this warning
+>                            on & map ? " ON" : "OFF", src);
+>                                     ^
+>                            (       )
+> drivers/ptp/ptp_ocp.c:2065:16: note: place parentheses around the '?:'
+> expression to evaluate it first
+>                            on & map ? " ON" : "OFF", src);
+>                                     ^
 > 
-> "static const" places the data in .rodata but __cacheline_aligned has
-> the section attribute to place it in .data..cacheline_aligned, in
-> addition to the aligned attribute.
-> 
-> To keep the alignment but avoid attempting to change sections, use the
-> ____cacheline_aligned attribute, which is just the aligned attribute.
-> 
-> Fixes: 2b31277af577 ("crypto: sm4 - create SM4 library based on sm4 generic code")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1441
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  lib/crypto/sm4.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> It is clearly intentional that the bitwise operation be done before the
+> ternary operation so add the parentheses as it suggests to fix the
+> warning.
 
-Patch applied.  Thanks.
+Actually, the correct fix is to change '&' to '&&', so a logical
+operation is done instead of an arithmetic operation.  I believe
+this will silence the warning from clang.
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Jonathan
