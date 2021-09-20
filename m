@@ -1,104 +1,70 @@
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC94F3FC3
-	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 08:47:30 +0000 (UTC)
-Received: from [192.168.0.3] (ip5f5aef72.dynamic.kabel-deutschland.de [95.90.239.114])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0FB6E61E5FE00;
-	Mon, 20 Sep 2021 10:47:29 +0200 (CEST)
-Subject: Re: [PATCH v2] lib/zlib_inflate/inffast: Check config in C to avoid
- unused function warning
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Benjamin Herrenschmidt <benh@kernel.crashing.org>,
- Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20210920074633.13089-1-pmenzel@molgen.mpg.de>
- <00f8d7d7-cb13-203e-5a37-aee34a3258ff@csgroup.eu>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <dcae41fe-b09b-eb0c-f518-f49e2ea36aa8@molgen.mpg.de>
-Date: Mon, 20 Sep 2021 10:47:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2295972
+	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 14:30:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E50960E76;
+	Mon, 20 Sep 2021 14:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632148219;
+	bh=Q9AttzYMMlrQ9pqRSwf8ZRicqkLjL7wPmPl+QB6Dqw8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RDkwv2niPIMZc3hgsAxpdvEuyVP+F5N/JUNkW66BOpvgSf4CoVfmrciUp7kzVTtcd
+	 vJpGZa1i3FV11K4wwUlsEBAWmgeTmL+9KbgS5EiBPJsmmMIjZke6jN6yqhoY5Rw+1v
+	 NLyl5E+Ht2w3D5fP5Hrv0nCaxiFBHvCKNqWWHQDow+10eDHDaZcxEtZBWaPgxU6svG
+	 zwKGHAH4xxP+WqgoIK34diFMkNXM3Kew3NGnArqQak2EbmjLpJYXg3yteJP6u3M52g
+	 fO+W0vP20ycNgIC1V8/TCohayPJ7AnWswWi2EOdQnHSV31s6W+iEwRioS1Fpbs2UfP
+	 E4HosL1jloyBA==
+Date: Mon, 20 Sep 2021 07:30:15 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Ulrich Teichert <krypton@ulrich-teichert.org>,
+	linux-arch <linux-arch@vger.kernel.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	llvm@lists.linux.dev
+Subject: Re: Odd pci_iounmap() declaration rules..
+Message-ID: <YUia9zfbiertRRNR@archlinux-ax161>
+References: <CAHk-=wjRrh98pZoQ+AzfWmsTZacWxTJKXZ9eKU2X_0+jM=O8nw@mail.gmail.com>
+ <YUdti08rLzfDZy8S@ls3530>
+ <CAHk-=wgKc5TY-LiAjog5VKNUQ84CSZyPu+FQekMHDar=kdSW=Q@mail.gmail.com>
+ <YUeriU9EIJ5hiFjL@archlinux-ax161>
+ <CAHk-=wgNfaf03Dw78q1qLLZs6G=iJjfo5ZTcnyXgSk3w1tp0yg@mail.gmail.com>
+ <CAHk-=wirqeqb59bbFjCQ9L9BiVOQFqD=JbUEG+hU2bF4BDWqVg@mail.gmail.com>
+ <CAHk-=wgzc8EUcH=V7P0GoxVYw4bQ7URJvQVZ7_5pODQmrSkAnw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <00f8d7d7-cb13-203e-5a37-aee34a3258ff@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgzc8EUcH=V7P0GoxVYw4bQ7URJvQVZ7_5pODQmrSkAnw@mail.gmail.com>
 
-Dear Christophe,
-
-
-Thank you for the review.
-
-Am 20.09.21 um 10:36 schrieb Christophe Leroy:
+On Sun, Sep 19, 2021 at 05:44:03PM -0700, Linus Torvalds wrote:
+> On Sun, Sep 19, 2021 at 3:44 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > The fix seems to be to just move that odd code from the header file to
+> > lib/pci_iomap.c, and that should make it all JustWork(tm).
 > 
+> I'm not 100% happy about the end result, and in particular I think
+> that the new generic pci_iounmap() function for the
+> ARCH_WANTS_GENERIC_PCI_IOUNMAP case should do the "iounmap(p)" thing
+> even if ARCH_HAS_GENERIC_IOPORT_MAP wasn't true, but I tried to keep
+> the old rules, even if they seemed broken.
 > 
-> Le 20/09/2021 à 09:46, Paul Menzel a écrit :
->> Building Linux for ppc64le with Ubuntu clang version 12.0.0-3ubuntu1~21.04.1
->> shows the warning below.
->>
->>      arch/powerpc/boot/inffast.c:20:1: warning: unused function 'get_unaligned16' [-Wunused-function]
->>      get_unaligned16(const unsigned short *p)
->>      ^
->>      1 warning generated.
->>
->> Fix it, by moving the check from the preprocessor to C, so the compiler
->> sees the use.
->>
->> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->> ---
->>   lib/zlib_inflate/inffast.c | 7 ++-----
->>   1 file changed, 2 insertions(+), 5 deletions(-)
->>
->> diff --git a/lib/zlib_inflate/inffast.c b/lib/zlib_inflate/inffast.c
->> index f19c4fbe1be7..fb87a3120f0f 100644
->> --- a/lib/zlib_inflate/inffast.c
->> +++ b/lib/zlib_inflate/inffast.c
->> @@ -254,11 +254,8 @@ void inflate_fast(z_streamp strm, unsigned start)
->>               sfrom = (unsigned short *)(from);
->>               loops = len >> 1;
->>               do
->> -#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
->> -                *sout++ = *sfrom++;
->> -#else
->> -                *sout++ = get_unaligned16(sfrom++);
->> -#endif
->> +                *sout++ = 
->> IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ?
->> +                *sfrom++ : get_unaligned16(sfrom++);
+> arm and arm64 build for me, as did sparc64 and alpha. At least in the
+> configs I tested.
 > 
-> I think it would be more readable as
-> 
-> do {
->          if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
->                  *sout++ = *sfrom++;
->          else
->                  *sout++ = get_unaligned16(sfrom++);
-> } while (--loops);
+> And the code _does_ make a bit more sense than it used to. It still
+> has crazy corners, but moving the pci_iounmap() code out of the header
+> file should make it easier to fix up in the future.
 
-I prefer the ternary operator, as it’s less lines, and it’s clear, that 
-only the variable assignment is affected by the condition. But as style 
-is subjective, I sent v3.
+Thanks, I can confirm that all of my build tests pass without any
+issues now.
 
->>               while (--loops);
->>               out = (unsigned char *)sout;
->>               from = (unsigned char *)sfrom;
-
-
-Kind regards,
-
-Paul
+Cheers,
+Nathan
