@@ -1,121 +1,232 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f202.google.com (mail-qk1-f202.google.com [209.85.222.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EE372
-	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 23:08:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1632179301;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g7bKpAyTX7x8C8f1trrgcEx0ZWLT6lt0pjDqefZ3l1Q=;
-	b=cUUCOQBPp7qvCYC3jNreTBXpqaRii9HJevcSaWTudoIGPsaMYj78EAgjcRDrYndzGdrpEw
-	0LinJMBc27NcLAXaaby3qT1IM4BFYq8xVj0hz/eeshGBd60t7riEUdjyQdY1z070eST4XP
-	3c6jT1MxWsQPNUMvowxw/C5b25C2UQA=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-61-JOtgCN1QPV-Or6pGtlK_Aw-1; Mon, 20 Sep 2021 19:08:20 -0400
-X-MC-Unique: JOtgCN1QPV-Or6pGtlK_Aw-1
-Received: by mail-oo1-f71.google.com with SMTP id s20-20020a4aead40000b029028b41986b27so45266086ooh.14
-        for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 16:08:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0994C72
+	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 23:25:47 +0000 (UTC)
+Received: by mail-qk1-f202.google.com with SMTP id bk33-20020a05620a1a2100b00432fff50d40so80056635qkb.22
+        for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 16:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pguml3paj2LeB5heWrEsmrwhMCMlKDyRkBgZeHcvxlM=;
+        b=QZvWuxoHRNl58kiylK3SiDmPeerQVYX1bUDQBZvz+VKz1OMGl/VnuqM0ABNzQDb6Ks
+         /8L5utuNlUXChpYBFhNF2j+HVg1mUtaSM1C++icVmp55GCqaiFMAekzxaXp7yLULEBqL
+         B2M3VblthoUdv+c424XdVu3PIbqROYvkP6q636u4C/xksk7EMrpPw9C629VarSo0IUgj
+         bWWo3JG1sp5xNKkdMuAr9md9rg4qE/dxFKhz5Si/8nKiCl82o2FbENB0TMZLhDtZZBD8
+         bjh175RLHfVQLJIWq9UxDARd2i3adArN3u2WB+UH6d3D2QhVW5wM6mD6Cm5Gc74zLwbI
+         Zclw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=g7bKpAyTX7x8C8f1trrgcEx0ZWLT6lt0pjDqefZ3l1Q=;
-        b=58R32Io+ZDSn7jCBO+KenUg3E56hR3Mwgld//LpFuEBcJzWLbXPEe6Yk/N87IluaAm
-         NoND0/GQx9lqzpvoSig+/ly4L/5mUAV0Y5k4k42TRoGbyPgPWnzrIE7vzhgKak8KEsGG
-         FPlrKewV+SH/mXvuHkupUW9JyLkSSzNsWnVrpGRKi4ddy89enJSS4G9KVMLwOuSfSp0/
-         REJP81tww9jsbiBgneQyhbJR6BNFslrAjUszSleaBc6WUpeqJTKtNgb/GQJK7K+D3JXc
-         JpSgPhXEXftVoewdEeqjYdK+PZGo5ZGs94hE3lCUalY2YH+J9LJRif/lg3SsIG5Bms52
-         J1vg==
-X-Gm-Message-State: AOAM53138jYWjwSmI1ol8IacMG5Vb7WykurkszOtSnpbVeliFZcMISE7
-	yDlLwiqd3MljvFrUOyS1nmSaXD+yn8LVVnViPcW5fWXUvjruPiEW+HX2iRMCy1AJuYsWnEC/Y5z
-	LyVShbWoqoWhDxg==
-X-Received: by 2002:a05:6830:1212:: with SMTP id r18mr21991979otp.159.1632179299857;
-        Mon, 20 Sep 2021 16:08:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwLp/e5IRrlOF0BrSHhE7BuQByvaS73fu5gWXW17CjzvDKE8uc/ZdiPcjOkFCctyn4D2drE1g==
-X-Received: by 2002:a05:6830:1212:: with SMTP id r18mr21991968otp.159.1632179299636;
-        Mon, 20 Sep 2021 16:08:19 -0700 (PDT)
-Received: from ibm-p8-rhevm-15-fsp.mgmt.pnr.lab.eng.rdu2.redhat.com ([12.183.173.244])
-        by smtp.gmail.com with ESMTPSA id d26sm837804oij.49.2021.09.20.16.08.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 16:08:19 -0700 (PDT)
-Subject: Re: [PATCH] octeontx2-af: fix uninitialized variable
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
- jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
- davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
- schalla@marvell.com, vvelumuri@marvell.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Colin Ian King <colin.king@canonical.com>
-References: <20210920165347.164087-1-trix@redhat.com>
- <CAKwvOdkSt5VymxtJ4jmOe9LM1rdy+CV7yYXhjCgOFAgbKGEPfQ@mail.gmail.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <9926e65d-6083-8d9d-efa2-a755c411ea03@redhat.com>
-Date: Mon, 20 Sep 2021 16:08:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pguml3paj2LeB5heWrEsmrwhMCMlKDyRkBgZeHcvxlM=;
+        b=oqxe9vzOyGx18UYQQt3SuwQ8PdVqEEwrVPY9EnNYdhCiiK/79ZjIqCt7MOqCO40lMc
+         ZGKKUUXz323amz0HLaHpSfh6N8l81V1rnZqDIF4/9T6KSHxs8VJvTMVFtQTHzzH+nlJF
+         l1BCP+8W0kgTp8/1yGDmZ+rbWtV0RsAyiY7ZVaZ6iUHWlR2dU2a7mAFd5XTjnmlMVvfK
+         Xsazx4Qm0yynInFRw7/pcUf4P7bKi0/7KHuRv7duY9ER0AMJqgCVvKO78ZFiKh1NFwRj
+         NOCg73NZDsP7n4ksfIj8OwA+VCkJeTUh2AYC0Hi6FiMBP9NBrBsMra867JTKEiJldMhc
+         AePQ==
+X-Gm-Message-State: AOAM532ypd8yhxvWo/hotmlCZzQvEjb+u5tLLMJFyulY3jn2QWmjUh4F
+	LTjJIvZMxfo+aONEO0kLWzeU49K+4YFwa5mj/GE=
+X-Google-Smtp-Source: ABdhPJynuijKVoLP4/VxFshGz4xzdVcUOFIM1JQUgfFc54WcKcKHkKbKBrxx0Jq/2ZeuvyKmn4VSCDiGwarRap9I62E=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:5f32:153:b2ea:296d])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:1388:: with SMTP id
+ 130mr33364420ybt.58.1632180346968; Mon, 20 Sep 2021 16:25:46 -0700 (PDT)
+Date: Mon, 20 Sep 2021 16:25:33 -0700
+Message-Id: <20210920232533.4092046-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <CAKwvOdkSt5VymxtJ4jmOe9LM1rdy+CV7yYXhjCgOFAgbKGEPfQ@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
+Subject: [PATCH] nbd: use shifts rather than multiplies
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	stable@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Kees Cook <keescook@chromium.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
+	nbd@other.debian.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+commit fad7cd3310db ("nbd: add the check to prevent overflow in
+__nbd_ioctl()") raised an issue from the fallback helpers added in
+commit f0907827a8a9 ("compiler.h: enable builtin overflow checkers and
+add fallback code")
 
-On 9/20/21 3:22 PM, Nick Desaulniers wrote:
-> On Mon, Sep 20, 2021 at 9:54 AM <trix@redhat.com> wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> Building with clang 13 reports this error
->> rvu_nix.c:4600:7: error: variable 'val' is used uninitialized whenever
->>    'if' condition is false
->>                  if (!is_rvu_otx2(rvu))
->>                      ^~~~~~~~~~~~~~~~~
->>
->> So initialize val.
->>
->> Fixes: 4b5a3ab17c6c ("octeontx2-af: Hardware configuration for inline IPsec")
->> Signed-off-by: Tom Rix <trix@redhat.com>
-> Thanks for the patch, but it looks like Colin beat you to the punch.
-> In linux-next, I see:
-> commit d853f1d3c900 ("octeontx2-af: Fix uninitialized variable val")
+ERROR: modpost: "__divdi3" [drivers/block/nbd.ko] undefined!
 
-No worries, those allyesconfig breaks are easy to find :)
+As Stephen Rothwell notes:
+  The added check_mul_overflow() call is being passed 64 bit values.
+  COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW is not set for this build (see
+  include/linux/overflow.h).
 
-Tom
+Specifically, the helpers for checking whether the results of a
+multiplication overflowed (__unsigned_mul_overflow,
+__signed_add_overflow) use the division operator when
+!COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW.  This is problematic for 64b
+operands on 32b hosts.
 
->
->> ---
->>   drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
->> index ea3e03fa55d45c..70431db866b328 100644
->> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
->> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
->> @@ -4592,7 +4592,7 @@ static void nix_inline_ipsec_cfg(struct rvu *rvu, struct nix_inline_ipsec_cfg *r
->>                                   int blkaddr)
->>   {
->>          u8 cpt_idx, cpt_blkaddr;
->> -       u64 val;
->> +       u64 val = 0;
->>
->>          cpt_idx = (blkaddr == BLKADDR_NIX0) ? 0 : 1;
->>          if (req->enable) {
->> --
->> 2.26.3
->>
->
+This was fixed upstream by
+commit 76ae847497bc ("Documentation: raise minimum supported version of
+GCC to 5.1")
+which is not suitable to be backported to stable.
+
+Further, __builtin_mul_overflow() would emit a libcall to a
+compiler-rt-only symbol when compiling with clang < 14 for 32b targets.
+
+ld.lld: error: undefined symbol: __mulodi4
+
+In order to keep stable buildable with GCC 4.9 and clang < 14, modify
+struct nbd_config to instead track the number of bits of the block size;
+reconstructing the block size using runtime checked shifts that are not
+problematic for those compilers and in a ways that can be backported to
+stable.
+
+In nbd_set_size, we do validate that the value of blksize must be a
+power of two (POT) and is in the range of [512, PAGE_SIZE] (both
+inclusive).
+
+This does modify the debugfs interface.
+
+Cc: stable@vger.kernel.org
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1438
+Link: https://lore.kernel.org/all/20210909182525.372ee687@canb.auug.org.au/
+Link: https://lore.kernel.org/stable/CAHk-=whiQBofgis_rkniz8GBP9wZtSZdcDEffgSLO62BUGV3gg@mail.gmail.com/
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Suggested-by: Kees Cook <keescook@chromium.org>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+This patch is kind of a v3 for solving this problem.
+v2: https://lore.kernel.org/stable/20210914002318.2298583-1-ndesaulniers@google.com/
+v1: https://lore.kernel.org/stable/20210913203201.1844253-1-ndesaulniers@google.com/
+But is quite different in approach. Instead of trying to fix up the
+overflow routines in stable, we amend the code in nbd.c as per Linus
+(against mainline) with fixes from Kees to use the named overflow
+checker.
+
+ drivers/block/nbd.c | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 5170a630778d..1183f7872b71 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -97,13 +97,18 @@ struct nbd_config {
+ 
+ 	atomic_t recv_threads;
+ 	wait_queue_head_t recv_wq;
+-	loff_t blksize;
++	unsigned int blksize_bits;
+ 	loff_t bytesize;
+ #if IS_ENABLED(CONFIG_DEBUG_FS)
+ 	struct dentry *dbg_dir;
+ #endif
+ };
+ 
++static inline unsigned int nbd_blksize(struct nbd_config *config)
++{
++	return 1u << config->blksize_bits;
++}
++
+ struct nbd_device {
+ 	struct blk_mq_tag_set tag_set;
+ 
+@@ -146,7 +151,7 @@ static struct dentry *nbd_dbg_dir;
+ 
+ #define NBD_MAGIC 0x68797548
+ 
+-#define NBD_DEF_BLKSIZE 1024
++#define NBD_DEF_BLKSIZE_BITS 10
+ 
+ static unsigned int nbds_max = 16;
+ static int max_part = 16;
+@@ -317,12 +322,12 @@ static int nbd_set_size(struct nbd_device *nbd, loff_t bytesize,
+ 		loff_t blksize)
+ {
+ 	if (!blksize)
+-		blksize = NBD_DEF_BLKSIZE;
++		blksize = 1u << NBD_DEF_BLKSIZE_BITS;
+ 	if (blksize < 512 || blksize > PAGE_SIZE || !is_power_of_2(blksize))
+ 		return -EINVAL;
+ 
+ 	nbd->config->bytesize = bytesize;
+-	nbd->config->blksize = blksize;
++	nbd->config->blksize_bits = __ffs(blksize);
+ 
+ 	if (!nbd->task_recv)
+ 		return 0;
+@@ -1337,7 +1342,7 @@ static int nbd_start_device(struct nbd_device *nbd)
+ 		args->index = i;
+ 		queue_work(nbd->recv_workq, &args->work);
+ 	}
+-	return nbd_set_size(nbd, config->bytesize, config->blksize);
++	return nbd_set_size(nbd, config->bytesize, nbd_blksize(config));
+ }
+ 
+ static int nbd_start_device_ioctl(struct nbd_device *nbd, struct block_device *bdev)
+@@ -1406,11 +1411,11 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
+ 	case NBD_SET_BLKSIZE:
+ 		return nbd_set_size(nbd, config->bytesize, arg);
+ 	case NBD_SET_SIZE:
+-		return nbd_set_size(nbd, arg, config->blksize);
++		return nbd_set_size(nbd, arg, nbd_blksize(config));
+ 	case NBD_SET_SIZE_BLOCKS:
+-		if (check_mul_overflow((loff_t)arg, config->blksize, &bytesize))
++		if (check_shl_overflow(arg, config->blksize_bits, &bytesize))
+ 			return -EINVAL;
+-		return nbd_set_size(nbd, bytesize, config->blksize);
++		return nbd_set_size(nbd, bytesize, nbd_blksize(config));
+ 	case NBD_SET_TIMEOUT:
+ 		nbd_set_cmd_timeout(nbd, arg);
+ 		return 0;
+@@ -1476,7 +1481,7 @@ static struct nbd_config *nbd_alloc_config(void)
+ 	atomic_set(&config->recv_threads, 0);
+ 	init_waitqueue_head(&config->recv_wq);
+ 	init_waitqueue_head(&config->conn_wait);
+-	config->blksize = NBD_DEF_BLKSIZE;
++	config->blksize_bits = NBD_DEF_BLKSIZE_BITS;
+ 	atomic_set(&config->live_connections, 0);
+ 	try_module_get(THIS_MODULE);
+ 	return config;
+@@ -1604,7 +1609,7 @@ static int nbd_dev_dbg_init(struct nbd_device *nbd)
+ 	debugfs_create_file("tasks", 0444, dir, nbd, &nbd_dbg_tasks_fops);
+ 	debugfs_create_u64("size_bytes", 0444, dir, &config->bytesize);
+ 	debugfs_create_u32("timeout", 0444, dir, &nbd->tag_set.timeout);
+-	debugfs_create_u64("blocksize", 0444, dir, &config->blksize);
++	debugfs_create_u32("blocksize_bits", 0444, dir, &config->blksize_bits);
+ 	debugfs_create_file("flags", 0444, dir, nbd, &nbd_dbg_flags_fops);
+ 
+ 	return 0;
+@@ -1826,7 +1831,7 @@ nbd_device_policy[NBD_DEVICE_ATTR_MAX + 1] = {
+ static int nbd_genl_size_set(struct genl_info *info, struct nbd_device *nbd)
+ {
+ 	struct nbd_config *config = nbd->config;
+-	u64 bsize = config->blksize;
++	u64 bsize = nbd_blksize(config);
+ 	u64 bytes = config->bytesize;
+ 
+ 	if (info->attrs[NBD_ATTR_SIZE_BYTES])
+@@ -1835,7 +1840,7 @@ static int nbd_genl_size_set(struct genl_info *info, struct nbd_device *nbd)
+ 	if (info->attrs[NBD_ATTR_BLOCK_SIZE_BYTES])
+ 		bsize = nla_get_u64(info->attrs[NBD_ATTR_BLOCK_SIZE_BYTES]);
+ 
+-	if (bytes != config->bytesize || bsize != config->blksize)
++	if (bytes != config->bytesize || bsize != nbd_blksize(config))
+ 		return nbd_set_size(nbd, bytes, bsize);
+ 	return 0;
+ }
+
+base-commit: 4c17ca27923c16fd73bbb9ad033c7d749c3bcfcc
+-- 
+2.33.0.464.g1972c5931b-goog
 
