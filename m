@@ -1,93 +1,97 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0C272
-	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 15:45:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A27E761159;
-	Mon, 20 Sep 2021 15:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632152713;
-	bh=EC+9dyajYM2OPNtBQsJoiGoRd9MZ5dbX2yOO9/Uoq6U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NQfTBETIlpVtKbA/+UDc+h1Ycdfi45SAPzATlwtFJTjYsBq6Mc3UvwPR2UUgVqSPq
-	 xMXRQo1l8idyhR9VJ30vQYai5gQlAlgRocso5YwY4Vcp9vzACHWjMQ3DDxSY762Zoa
-	 AIaqdF8h2C2XItW7pFDb/SjOj+f6fgKw7Ox/Nw/YJW/i6ZyOdiGkbruY6Ls6Z6VNBx
-	 g/AaCCjaTcD21MCKHy4OQH0nDr6o23qJlVRtwvqrcV7uNhudKLLt5z9KImL0KiPZJa
-	 APYEnZkJhTzK2mQVdHruVNHCkizkjfvMiP9HQ/PR1iX6fW3O1Z2fvNouaPyCv3RXJo
-	 8YN/X+jF8hiuw==
-Date: Mon, 20 Sep 2021 08:45:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Zhen Lei <thunder.leizhen@huawei.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] lib/zlib_inflate/inffast: Check config in C to avoid
- unused function warning
-Message-ID: <YUishGbHeaDMJDj+@archlinux-ax161>
-References: <20210920084332.5752-1-pmenzel@molgen.mpg.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42D472
+	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 16:27:00 +0000 (UTC)
+Received: by mail-ua1-f50.google.com with SMTP id 6so770285uac.1
+        for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 09:27:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9xo0jIRnxuOOhc30CoYi6LuiF/umxAgJKZ4MGnDGawY=;
+        b=dC4FHYhJlBw5gHGztx9jfy6ok7U3K3OF/sleWl9+5T5uR+MsG3TQTRMQHxsIoAYB1M
+         fBKxPDtky/8VkDmg529nVSjafH6RpVP3hvf2mY1bqb3XXTO9Zs1fctodOJKBf4PUYi/g
+         fSRBRkc5g/M9koV9heQsbUY7ZnncDt9Mz2RZrXYlDMXAjvTWHWKoNcGIK/kAYwmTHSYE
+         +2qnLWTxrUHEdzdyHAZMpeu1QsXAw0VkftycNZ8N4VwOQizfvlQre1d3a4ZmbaVHsQEI
+         xzyJByTIBpl5LKoLO+Xxs/5+CP+T2MTQ9BkiMz6tDMzV7YzFkIftW4zOvO5QsJkCQh2B
+         tYTA==
+X-Gm-Message-State: AOAM533vhk40wp3a9KoMni1p94RhaHDrmiCZEJ6Xup/iNjYbIhHdpM27
+	l+nM3dqj4U71OfrDNkqne2jEtSiu1HJbWeWYAQk=
+X-Google-Smtp-Source: ABdhPJwoB/0/VBD9Bv7XJkpjjyCTFva9x1S/l0eGg68vZoWX7Uope7tWe5j8vOPoSsjhkKDy81kIFBG7m6cIsfz+iVo=
+X-Received: by 2002:ab0:6dc7:: with SMTP id r7mr12548577uaf.14.1632155219490;
+ Mon, 20 Sep 2021 09:26:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210920084332.5752-1-pmenzel@molgen.mpg.de>
+References: <20210907183843.33028-1-ndesaulniers@google.com>
+ <CAHk-=whJOxDefgSA1_ojGbweRJGonWX9_nihA-=fbXFV1DhuxQ@mail.gmail.com>
+ <CAKwvOdkuYoke=Sa8Qziveo9aSA2zaNWEcKW8LZLg+d3TPwHkoA@mail.gmail.com>
+ <YTfkO2PdnBXQXvsm@elver.google.com> <CAHk-=wgPaQsEr+En=cqCqAC_sWmVP6x5rD2rmZRomH9EnTQL7Q@mail.gmail.com>
+ <c8fb537f-26e5-b305-6bc5-06f0d27a4029@infradead.org> <20210913093256.GA12225@amd>
+ <YT8d5a6ZVW7JlsRl@kroah.com> <20210913100230.GB11752@amd>
+In-Reply-To: <20210913100230.GB11752@amd>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 20 Sep 2021 18:26:48 +0200
+Message-ID: <CAMuHMdXGK165nXPJSDdB1hsAfqu3nprXtskZz4z1GcgH_vz+ow@mail.gmail.com>
+Subject: Re: [PATCH] Revert "Enable '-Werror' by default for all kernel builds"
+To: Pavel Machek <pavel@ucw.cz>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Marco Elver <elver@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	LSM List <linux-security-module@vger.kernel.org>, linux-toolchains@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>, Kees Cook <keescook@chromium.org>, 
+	Mark Brown <broonie@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Andrew Morton <akpm@linux-foundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Chris Down <chris@chrisdown.name>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Vlastimil Babka <vbabka@suse.cz>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 20, 2021 at 10:43:33AM +0200, Paul Menzel wrote:
-> Building Linux for ppc64le with Ubuntu clang version 12.0.0-3ubuntu1~21.04.1
-> shows the warning below.
-> 
->     arch/powerpc/boot/inffast.c:20:1: warning: unused function 'get_unaligned16' [-Wunused-function]
->     get_unaligned16(const unsigned short *p)
->     ^
->     1 warning generated.
-> 
-> Fix it, by moving the check from the preprocessor to C, so the compiler
-> sees the use.
-> 
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+On Mon, Sep 13, 2021 at 12:50 PM Pavel Machek <pavel@ucw.cz> wrote:
+> > > Do we really want developers treat warnings as errors? When the code
+> > > is okay but some random version of gcc dislikes it...
+> > >
+> > > Plus, there's question of stable. We already get ton of churn there
+> > > ("this fixes random warning"). WERROR will only encourage that...
+> >
+> > I will not be backporting this patch to older stable kernels, but I
+> > _want_ to see stable builds build with no warnings.  When we add
+> > warnings, they are almost always things we need to fix up properly.
+>
+> Well, everyone _wants_ to see clean builds... unless the price is too
+> high.
+>
+> > Over time, I have worked to reduce the number of build warnings in older
+> > stable kernels.  For newer versions of gcc, sometimes that is
+> > impossible, but we are close...
+>
+> You clearly can't backport this patch, but for 5.16-stable, you'll
+> have it in, and now warnings are same as errors... and I don't believe
+> that's good idea for stable.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+The good thing about the config option is that there's now a single point
+to enable or disable -Werror.  In the past, maintainers sprinkled -Werror
+all over the various Makefiles in the tree, which means you have to
+edit multiple files to disable it again.
 
-> ---
-> v2: Use IS_ENABLED
-> v3: Use if statement over ternary operator as requested by Christophe
-> 
->  lib/zlib_inflate/inffast.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/lib/zlib_inflate/inffast.c b/lib/zlib_inflate/inffast.c
-> index f19c4fbe1be7..2843f9bb42ac 100644
-> --- a/lib/zlib_inflate/inffast.c
-> +++ b/lib/zlib_inflate/inffast.c
-> @@ -253,13 +253,12 @@ void inflate_fast(z_streamp strm, unsigned start)
->  
->  			sfrom = (unsigned short *)(from);
->  			loops = len >> 1;
-> -			do
-> -#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-> -			    *sout++ = *sfrom++;
-> -#else
-> -			    *sout++ = get_unaligned16(sfrom++);
-> -#endif
-> -			while (--loops);
-> +			do {
-> +			    if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
-> +				*sout++ = *sfrom++;
-> +			    else
-> +				*sout++ = get_unaligned16(sfrom++);
-> +			} while (--loops);
->  			out = (unsigned char *)sout;
->  			from = (unsigned char *)sfrom;
->  		    } else { /* dist == 1 or dist == 2 */
-> -- 
-> 2.33.0
-> 
+Background: I've been investigating an issue that involved building old
+v2.6.x kernels. Apart from having to use very old compilers, it still caused
+compiler warnings that obviously weren't seen with the slightly different
+compiler versions used by maintainers who added -Werror.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
