@@ -1,74 +1,102 @@
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529CB72
-	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 07:47:31 +0000 (UTC)
-Received: from localhost.localdomain (ip5f5aef72.dynamic.kabel-deutschland.de [95.90.239.114])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6ED0F61E5FE00;
-	Mon, 20 Sep 2021 09:47:22 +0200 (CEST)
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Zhen Lei <thunder.leizhen@huawei.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>,
-	linuxppc-dev@lists.ozlabs.org,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] lib/zlib_inflate/inffast: Check config in C to avoid unused function warning
-Date: Mon, 20 Sep 2021 09:46:33 +0200
-Message-Id: <20210920074633.13089-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.33.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB8A3FC3
+	for <llvm@lists.linux.dev>; Mon, 20 Sep 2021 08:37:01 +0000 (UTC)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4HCdFx6BFMz9sVK;
+	Mon, 20 Sep 2021 10:36:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V_9QalPWqNnZ; Mon, 20 Sep 2021 10:36:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4HCdFx5DLxz9sVJ;
+	Mon, 20 Sep 2021 10:36:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E55C8B76E;
+	Mon, 20 Sep 2021 10:36:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 9mQA2CH--3lc; Mon, 20 Sep 2021 10:36:53 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 601ED8B764;
+	Mon, 20 Sep 2021 10:36:53 +0200 (CEST)
+Subject: Re: [PATCH v2] lib/zlib_inflate/inffast: Check config in C to avoid
+ unused function warning
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: Zhen Lei <thunder.leizhen@huawei.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20210920074633.13089-1-pmenzel@molgen.mpg.de>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <00f8d7d7-cb13-203e-5a37-aee34a3258ff@csgroup.eu>
+Date: Mon, 20 Sep 2021 10:36:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <20210920074633.13089-1-pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr-FR
 Content-Transfer-Encoding: 8bit
 
-Building Linux for ppc64le with Ubuntu clang version 12.0.0-3ubuntu1~21.04.1
-shows the warning below.
 
-    arch/powerpc/boot/inffast.c:20:1: warning: unused function 'get_unaligned16' [-Wunused-function]
-    get_unaligned16(const unsigned short *p)
-    ^
-    1 warning generated.
 
-Fix it, by moving the check from the preprocessor to C, so the compiler
-sees the use.
+Le 20/09/2021 à 09:46, Paul Menzel a écrit :
+> Building Linux for ppc64le with Ubuntu clang version 12.0.0-3ubuntu1~21.04.1
+> shows the warning below.
+> 
+>      arch/powerpc/boot/inffast.c:20:1: warning: unused function 'get_unaligned16' [-Wunused-function]
+>      get_unaligned16(const unsigned short *p)
+>      ^
+>      1 warning generated.
+> 
+> Fix it, by moving the check from the preprocessor to C, so the compiler
+> sees the use.
+> 
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>   lib/zlib_inflate/inffast.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/lib/zlib_inflate/inffast.c b/lib/zlib_inflate/inffast.c
+> index f19c4fbe1be7..fb87a3120f0f 100644
+> --- a/lib/zlib_inflate/inffast.c
+> +++ b/lib/zlib_inflate/inffast.c
+> @@ -254,11 +254,8 @@ void inflate_fast(z_streamp strm, unsigned start)
+>   			sfrom = (unsigned short *)(from);
+>   			loops = len >> 1;
+>   			do
+> -#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+> -			    *sout++ = *sfrom++;
+> -#else
+> -			    *sout++ = get_unaligned16(sfrom++);
+> -#endif
+> +			    *sout++ = IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ?
+> +				*sfrom++ : get_unaligned16(sfrom++);
 
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
- lib/zlib_inflate/inffast.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+I think it would be more readable as
 
-diff --git a/lib/zlib_inflate/inffast.c b/lib/zlib_inflate/inffast.c
-index f19c4fbe1be7..fb87a3120f0f 100644
---- a/lib/zlib_inflate/inffast.c
-+++ b/lib/zlib_inflate/inffast.c
-@@ -254,11 +254,8 @@ void inflate_fast(z_streamp strm, unsigned start)
- 			sfrom = (unsigned short *)(from);
- 			loops = len >> 1;
- 			do
--#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--			    *sout++ = *sfrom++;
--#else
--			    *sout++ = get_unaligned16(sfrom++);
--#endif
-+			    *sout++ = IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ?
-+				*sfrom++ : get_unaligned16(sfrom++);
- 			while (--loops);
- 			out = (unsigned char *)sout;
- 			from = (unsigned char *)sfrom;
--- 
-2.33.0
+do {
+         if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
+                 *sout++ = *sfrom++;
+         else
+                 *sout++ = get_unaligned16(sfrom++);
+} while (--loops);
 
+
+
+>   			while (--loops);
+>   			out = (unsigned char *)sout;
+>   			from = (unsigned char *)sfrom;
+> 
