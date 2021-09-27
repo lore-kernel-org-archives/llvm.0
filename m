@@ -1,34 +1,38 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862ED3FC8
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:18:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 634DE6103B;
-	Mon, 27 Sep 2021 12:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901FC2FB2
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:19:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C105F6103B;
+	Mon, 27 Sep 2021 12:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632745095;
-	bh=Q51NkLhfdP9cqBSlpTRPX/qx56tDI5PJVgL+PG3DiO8=;
+	s=k20201202; t=1632745142;
+	bh=F9/Tr9COtm4Stj4bhDIokvzMkSf99FLpUsv9Um0t5FI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=FGWy3XGVbDh9POAkE0jOMILMxXxn2dHjEaB65vSUN2ibK4GKnnLvO+jDJSa5Y8W5b
-	 z+bNFnP4ihkhgUT96JUBije9Jwg7bhNTAsjBQc3tnbJfAHe67NCQzgdNmfwOPgm0Zj
-	 uD9uG5dZ+s6sfdZHbknAVtUYf7g+tSCbbxs9gGat9oIJuqMnxe4lz43GYDTm5sZc0S
-	 v+L5qFU/E23Zg3XoskoNZgSXDojlrSoRTWnW9S2uOhqoKe5gt2HCosD5bh51KlVDnd
-	 flG7waqG00wNJpTPlF1ZIip6TxilRlR7N03SwIQVsx9Kt0MlY0pcUlb651Z1C5X8aS
-	 jjTsIv0YG+ZXw==
+	b=iQ1cVnEtOm5m5/2kAdPUnsn+F/m6UMiVUTNVuuJVHQzqfCTB37Wh92MSJMucsKtLS
+	 hE6EEfH26Y7f55flpw2XxZbTXZOaSqx5aWlljUGX/puBub5sCl6FwV6KHrALTMS0fj
+	 fXJcasgF8W/8SdTAezOjWsJAoAYktTuihAPRjRFtFdXLoXXkfgGk3Sgu1u/jaHthW5
+	 2L+vEP9AaPWCp8njdVAzDZLerxAtaI/Cv5lOJ4OTkc1gIyZiiuNgwrdLQCd4QP6O89
+	 3HeumoPYO5S/iEZyMKOr9XjdjDictDEY86eIyVDUKsZ2B+AZKZPoYfjJRhaeLjgBbJ
+	 5JrGQXrIaY2Fg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Gilad Ben-Yossef <gilad@benyossef.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
+To: Yong Wu <yong.wu@mediatek.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	YueHaibing <yuehaibing@huawei.com>,
-	linux-crypto@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tomasz Figa <tfiga@chromium.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	iommu@lists.linux-foundation.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] crypto: ccree - avoid out-of-range warnings from clang
-Date: Mon, 27 Sep 2021 14:18:03 +0200
-Message-Id: <20210927121811.940899-1-arnd@kernel.org>
+Subject: [PATCH] iommu/mediatek: fix out-of-range warning with clang
+Date: Mon, 27 Sep 2021 14:18:44 +0200
+Message-Id: <20210927121857.941160-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -40,43 +44,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang points out inconsistencies in the FIELD_PREP() invocation in
-this driver that result from the 'mask' being a 32-bit value:
+clang-14 notices that a comparison is never true when
+CONFIG_PHYS_ADDR_T_64BIT is disabled:
 
-drivers/crypto/ccree/cc_driver.c:117:18: error: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        cache_params |= FIELD_PREP(mask, val);
-                        ^~~~~~~~~~~~~~~~~~~~~
-include/linux/bitfield.h:94:3: note: expanded from macro 'FIELD_PREP'
-                __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/bitfield.h:52:28: note: expanded from macro '__BF_FIELD_CHECK'
-                BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/iommu/mtk_iommu.c:553:34: error: result of comparison of constant 5368709120 with expression of type 'phys_addr_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+        if (dom->data->enable_4GB && pa >= MTK_IOMMU_4GB_MODE_REMAP_BASE)
+                                     ~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This does not happen in other places that just pass a constant here.
+Add an explicit check for the type of the variable to skip the check
+and the warning in that case.
 
-Work around the warnings by widening the type of the temporary variable.
-
-Fixes: 05c2a705917b ("crypto: ccree - rework cache parameters handling")
+Fixes: b4dad40e4f35 ("iommu/mediatek: Adjust the PA for the 4GB Mode")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/crypto/ccree/cc_driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/iommu/mtk_iommu.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/ccree/cc_driver.c b/drivers/crypto/ccree/cc_driver.c
-index e599ac6dc162..790fa9058a36 100644
---- a/drivers/crypto/ccree/cc_driver.c
-+++ b/drivers/crypto/ccree/cc_driver.c
-@@ -103,7 +103,8 @@ MODULE_DEVICE_TABLE(of, arm_ccree_dev_of_match);
- static void init_cc_cache_params(struct cc_drvdata *drvdata)
- {
- 	struct device *dev = drvdata_to_dev(drvdata);
--	u32 cache_params, ace_const, val, mask;
-+	u32 cache_params, ace_const, val;
-+	u64 mask;
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index d837adfd1da5..25b834104790 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -550,7 +550,9 @@ static phys_addr_t mtk_iommu_iova_to_phys(struct iommu_domain *domain,
+ 	phys_addr_t pa;
  
- 	/* compute CC_AXIM_CACHE_PARAMS */
- 	cache_params = cc_ioread(drvdata, CC_REG(AXIM_CACHE_PARAMS));
+ 	pa = dom->iop->iova_to_phys(dom->iop, iova);
+-	if (dom->data->enable_4GB && pa >= MTK_IOMMU_4GB_MODE_REMAP_BASE)
++	if (IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT) &&
++	    dom->data->enable_4GB &&
++	    pa >= MTK_IOMMU_4GB_MODE_REMAP_BASE)
+ 		pa &= ~BIT_ULL(32);
+ 
+ 	return pa;
 -- 
 2.29.2
 
