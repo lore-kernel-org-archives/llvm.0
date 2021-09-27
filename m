@@ -1,126 +1,62 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9CF3FCB
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:19:20 +0000 (UTC)
-Received: by mail-ed1-f43.google.com with SMTP id dm26so35073696edb.12
-        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 06:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TGkYYxYMY9704XpvY0f5AEHt0EkjStSYqCKUbuGu+HA=;
-        b=b4wG63MDZjK2m11e8k6xAmyzN38yWDpm5ZjOxm6OyLrntdchH9Pl+ZV1dp9spFZoiv
-         X2whDFMFl1TxP9GDNrVD9Vro59sb5pEXMAjAwh9yQ8OqDFmgoal1pc+mcjxZdTt/Kpt4
-         cJjP0GLP94JUw65TLWB0hnNYhEFJFznQSP1Vw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TGkYYxYMY9704XpvY0f5AEHt0EkjStSYqCKUbuGu+HA=;
-        b=qJ/HA8EqvR+qWiKWT2eyj4SG3Acoz96F4vIJdDyem0BxbqNtQ3tdMRKvSMJqmoQ5Hf
-         CJxcnaEsmJgI04+Xll1pQa74LZvB0vMatUUBv8j28cFfB/GHgOrpB0dMe0vhIh+D+xaP
-         lo3vFQUXc7A1PrLx/JjFdtDLtGu4RRx+WO9mYXnV61ZlIvO2zFCNGlFjZ9sjWAivkr6t
-         NBTM7ZRUAG+TSL0X+/MDewPDWWlAxS4NkpaEYKpV+nELw/60/1ZdCyk43mGeZg05GPGd
-         3j6Yhf+8KyuoBfyUnbwFjvJiAd4h//DlPwTYttRKonuDlyooBxgfe/6AsllZWASOoHgZ
-         LFbg==
-X-Gm-Message-State: AOAM530gKonODdxmOU/ezvcWu9wRM1yjvBmcO831bGwe9uJqP+1j5rFo
-	tRS0nJmH9Xz1/MXFSxHlZmeD1w==
-X-Google-Smtp-Source: ABdhPJwu3oh//1+a0FRI2G9uEQnHh7+1y4yE8IakxkxjuNBnuw+cVYa4H9XHGCGcdnOTZMGhFC2UkQ==
-X-Received: by 2002:a05:6402:1607:: with SMTP id f7mr23223447edv.187.1632748759168;
-        Mon, 27 Sep 2021 06:19:19 -0700 (PDT)
-Received: from localhost ([2620:10d:c093:400::5:6664])
-        by smtp.gmail.com with ESMTPSA id p8sm8726489ejo.2.2021.09.27.06.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Sep 2021 06:19:18 -0700 (PDT)
-Date: Mon, 27 Sep 2021 14:19:18 +0100
-From: Chris Down <chris@chrisdown.name>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Petr Mladek <pmladek@suse.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Jessica Yu <jeyu@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] printk: avoid -Wsometimes-uninitialized warning
-Message-ID: <YVHE1qclD6ZyjvvD@chrisdown.name>
-References: <20210927125007.1581919-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC1F3FCB
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:22:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7DE1E610E8
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632748926;
+	bh=Das70DqAnDl+vU2D9E9K2Sm7+IL1whzT5AdV7Cv64RI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OOFnIZyHjl73BWpGX+Odm656Lyv/9q2gXQ5Nzg06FS72+jSBjAT3ye3rcK6JThKXn
+	 ogfnUKFoKLZanzkbm/eyK8AX5kJqeDCFCRdDTauFJQU/n3K+RYlD4dksXT6dbd6PXy
+	 eCfZivWVyPXsL9sUsyfpTVD5+9jxIC+chV2ckEWXiOquv9WPcj8YTutekB71mT2f32
+	 SCPn96NDRZCYC/GDdYXQ0c2excIFUXZK4s3EjL8v0VgM5SztqdrVgMO3VED5lN79nH
+	 ItpHfQLkAM2rm+RlVi/jpV/zvNo6b9x/Si1W647vCGpGji1+JviZxWTT79PrUfP9T7
+	 IHQkyKOCYQVJw==
+Received: by mail-wr1-f46.google.com with SMTP id r23so26581319wra.6
+        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 06:22:06 -0700 (PDT)
+X-Gm-Message-State: AOAM532KA3g0HvBfM+l/tMoci0zoffq7SmDZ52qaV4I8+fn3c+YxAhKP
+	+sKHduxuaWxgWSaBZ7EoCfeAIx7YPXCKriUtJJs=
+X-Google-Smtp-Source: ABdhPJwd+GjhtNJa0Ksv9WnIRk55xwwRShFQt0ktXM1OP+lbfAd9C7QYDfCYsXPfvRbsZgn+i5G1Bmd2QLm1EhnryJs=
+X-Received: by 2002:a5d:4b50:: with SMTP id w16mr27916738wrs.71.1632748925101;
+ Mon, 27 Sep 2021 06:22:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210927125007.1581919-1-arnd@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+References: <20210927094123.576521-1-arnd@kernel.org> <40217483-1b8d-28ec-bbfc-8f979773b166@redhat.com>
+ <20210927130253.GH2083@kadam>
+In-Reply-To: <20210927130253.GH2083@kadam>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 27 Sep 2021 15:21:49 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
+Message-ID: <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
+Subject: Re: [PATCH] vboxsf: fix old signature detection
+To: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: Hans de Goede <hdegoede@redhat.com>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	linux-sparse@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Arnd Bergmann <arnd@arndb.de>, Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arnd,
-
-Arnd Bergmann writes:
->From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Sep 27, 2021 at 3:02 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 >
->clang notices that the pi_get_entry() function would use
->uninitialized data if it was called with a non-NULL module
->pointer on a kernel that does not support modules:
+> GCC handles it the same way as Clang.  '\377' is -1 but in Sparse it's
+> 255.  I've added the Sparse mailing list to the CC.
 
-On a !CONFIG_MODULES kernel, we _never_ pass a non-NULL module pointer. This 
-isn't just convention: we don't even have `struct module` fully fleshed out, so 
-it technically cannot be so.
+More specifically, ' think '\377' may be either -1 or 255 depending on
+the architecture.
+On most architectures, 'char' is implicitly signed, but on some others
+it is not.
 
->kernel/printk/index.c:32:6: error: variable 'nr_entries' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->        if (!mod) {
->            ^~~~
->kernel/printk/index.c:38:13: note: uninitialized use occurs here
->        if (pos >= nr_entries)
->                   ^~~~~~~~~~
->kernel/printk/index.c:32:2: note: remove the 'if' if its condition is always true
->        if (!mod) {
->
->Rework the condition to make it clear to the compiler that we are always
->in the second case. Unfortunately the #ifdef is still required as the
->definition of 'struct module' is hidden when modules are disabled.
+The original code before 9d682ea6bcc7 should have worked either way because
+both sides of the comparison were the same 'char' type, marking one of them
+as explicitly 'unsigned char' seems to have broken all architectures on which
+the type is implicitly 'signed'.
 
-Having IS_ENABLED and then an #ifdef seems to hurt code readability to me.
-
->Fixes: 337015573718 ("printk: Userspace format indexing support")
-
-Does this really fix anything, or just clang's ignorance? If the latter, clang 
-needs to be smarter here: as far as I can see there are no occasions where 
-there's even any opportunity for a non-NULL pointer to come in on a 
-!CONFIG_MODULES kernel, since `struct module` isn't even complete.
-
->Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->---
-> kernel/printk/index.c | 6 ++----
-> 1 file changed, 2 insertions(+), 4 deletions(-)
->
->diff --git a/kernel/printk/index.c b/kernel/printk/index.c
->index d3709408debe..b4d90bab6d4d 100644
->--- a/kernel/printk/index.c
->+++ b/kernel/printk/index.c
->@@ -22,14 +22,12 @@ static struct pi_entry *pi_get_entry(const struct module *mod, loff_t pos)
-> 	struct pi_entry **entries;
-> 	unsigned int nr_entries;
->
->+	if (IS_ENABLED(CONFIG_MODULES) && mod) {
-> #ifdef CONFIG_MODULES
->-	if (mod) {
-> 		entries = mod->printk_index_start;
-> 		nr_entries = mod->printk_index_size;
->-	}
-> #endif
->-
->-	if (!mod) {
->+	} else {
-> 		/* vmlinux, comes from linker symbols */
-> 		entries = __start_printk_index;
-> 		nr_entries = __stop_printk_index - __start_printk_index;
->-- 
->2.29.2
->
+       Arnd
