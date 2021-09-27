@@ -1,38 +1,34 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB6D3FC8
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:17:02 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4744A6103B;
-	Mon, 27 Sep 2021 12:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862ED3FC8
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:18:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 634DE6103B;
+	Mon, 27 Sep 2021 12:18:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632745021;
-	bh=kg6cqnxzry6/+Av1WRHhc3o3FRqLV9iNvalhK8jK0I0=;
+	s=k20201202; t=1632745095;
+	bh=Q51NkLhfdP9cqBSlpTRPX/qx56tDI5PJVgL+PG3DiO8=;
 	h=From:To:Cc:Subject:Date:From;
-	b=YAoQb5O0Qg44lcoRdQPW2cCt4aC4f4bBHW7tXweJWw/zQXN8VzDdk079kZk+uFOdH
-	 XAgnN1r8aDLZvWeALDKcYNOHCM69BmN6/CjNtZMY4k+KG7AgIMxA/SsmL0RZQtrnkh
-	 lroyVZssRyyVKZ80TfThBbfSBzKCIyR3FVSxtiM83wh67dL0OeJFJve2olbZjIrh8Q
-	 r3MYmj1pFFbRtL54JNwKXov5YaBJVG14uvBr7Ax0y5q/LyGP9x30WBkcAlDJ9umDT6
-	 cp69bOHg3eiZwJCMHI+Uum4JKDJ49sky3CpQKCDt8q/NJRl98wavT20M1sGtcVviwO
-	 OH69STxaYIrZg==
+	b=FGWy3XGVbDh9POAkE0jOMILMxXxn2dHjEaB65vSUN2ibK4GKnnLvO+jDJSa5Y8W5b
+	 z+bNFnP4ihkhgUT96JUBije9Jwg7bhNTAsjBQc3tnbJfAHe67NCQzgdNmfwOPgm0Zj
+	 uD9uG5dZ+s6sfdZHbknAVtUYf7g+tSCbbxs9gGat9oIJuqMnxe4lz43GYDTm5sZc0S
+	 v+L5qFU/E23Zg3XoskoNZgSXDojlrSoRTWnW9S2uOhqoKe5gt2HCosD5bh51KlVDnd
+	 flG7waqG00wNJpTPlF1ZIip6TxilRlR7N03SwIQVsx9Kt0MlY0pcUlb651Z1C5X8aS
+	 jjTsIv0YG+ZXw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Amitkumar Karwar <amitkarwar@gmail.com>,
-	Ganapathi Bhat <ganapathi017@gmail.com>,
-	Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-	Xinming Hu <huxinming820@gmail.com>,
-	Kalle Valo <kvalo@codeaurora.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+To: Gilad Ben-Yossef <gilad@benyossef.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
 	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	YueHaibing <yuehaibing@huawei.com>,
+	linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] mwifiex: avoid null-pointer-subtraction warning
-Date: Mon, 27 Sep 2021 14:16:35 +0200
-Message-Id: <20210927121656.940304-1-arnd@kernel.org>
+Subject: [PATCH] crypto: ccree - avoid out-of-range warnings from clang
+Date: Mon, 27 Sep 2021 14:18:03 +0200
+Message-Id: <20210927121811.940899-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,52 +40,43 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang complains about some NULL pointer arithmetic in this driver:
+clang points out inconsistencies in the FIELD_PREP() invocation in
+this driver that result from the 'mask' being a 32-bit value:
 
-drivers/net/wireless/marvell/mwifiex/sta_tx.c:65:59: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
-        pad = ((void *)skb->data - (sizeof(*local_tx_pd) + hroom)-
-                                                                 ^
-drivers/net/wireless/marvell/mwifiex/uap_txrx.c:478:53: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
-        pad = ((void *)skb->data - (sizeof(*txpd) + hroom) - NULL) &
+drivers/crypto/ccree/cc_driver.c:117:18: error: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+        cache_params |= FIELD_PREP(mask, val);
+                        ^~~~~~~~~~~~~~~~~~~~~
+include/linux/bitfield.h:94:3: note: expanded from macro 'FIELD_PREP'
+                __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/bitfield.h:52:28: note: expanded from macro '__BF_FIELD_CHECK'
+                BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Rework that expression to do the same thing using a uintptr_t.
+This does not happen in other places that just pass a constant here.
 
+Work around the warnings by widening the type of the temporary variable.
+
+Fixes: 05c2a705917b ("crypto: ccree - rework cache parameters handling")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/wireless/marvell/mwifiex/sta_tx.c   | 4 ++--
- drivers/net/wireless/marvell/mwifiex/uap_txrx.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/crypto/ccree/cc_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/sta_tx.c b/drivers/net/wireless/marvell/mwifiex/sta_tx.c
-index 241305377e20..a9b5eb992220 100644
---- a/drivers/net/wireless/marvell/mwifiex/sta_tx.c
-+++ b/drivers/net/wireless/marvell/mwifiex/sta_tx.c
-@@ -62,8 +62,8 @@ void *mwifiex_process_sta_txpd(struct mwifiex_private *priv,
+diff --git a/drivers/crypto/ccree/cc_driver.c b/drivers/crypto/ccree/cc_driver.c
+index e599ac6dc162..790fa9058a36 100644
+--- a/drivers/crypto/ccree/cc_driver.c
++++ b/drivers/crypto/ccree/cc_driver.c
+@@ -103,7 +103,8 @@ MODULE_DEVICE_TABLE(of, arm_ccree_dev_of_match);
+ static void init_cc_cache_params(struct cc_drvdata *drvdata)
+ {
+ 	struct device *dev = drvdata_to_dev(drvdata);
+-	u32 cache_params, ace_const, val, mask;
++	u32 cache_params, ace_const, val;
++	u64 mask;
  
- 	pkt_type = mwifiex_is_skb_mgmt_frame(skb) ? PKT_TYPE_MGMT : 0;
- 
--	pad = ((void *)skb->data - (sizeof(*local_tx_pd) + hroom)-
--			 NULL) & (MWIFIEX_DMA_ALIGN_SZ - 1);
-+	pad = ((uintptr_t)skb->data - (sizeof(*local_tx_pd) + hroom)) &
-+	       (MWIFIEX_DMA_ALIGN_SZ - 1);
- 	skb_push(skb, sizeof(*local_tx_pd) + pad);
- 
- 	local_tx_pd = (struct txpd *) skb->data;
-diff --git a/drivers/net/wireless/marvell/mwifiex/uap_txrx.c b/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
-index 9bbdb8dfce62..245ff644f81e 100644
---- a/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
-+++ b/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
-@@ -475,8 +475,8 @@ void *mwifiex_process_uap_txpd(struct mwifiex_private *priv,
- 
- 	pkt_type = mwifiex_is_skb_mgmt_frame(skb) ? PKT_TYPE_MGMT : 0;
- 
--	pad = ((void *)skb->data - (sizeof(*txpd) + hroom) - NULL) &
--			(MWIFIEX_DMA_ALIGN_SZ - 1);
-+	pad = ((uintptr_t)skb->data - (sizeof(*txpd) + hroom)) &
-+	       (MWIFIEX_DMA_ALIGN_SZ - 1);
- 
- 	skb_push(skb, sizeof(*txpd) + pad);
- 
+ 	/* compute CC_AXIM_CACHE_PARAMS */
+ 	cache_params = cc_ioread(drvdata, CC_REG(AXIM_CACHE_PARAMS));
 -- 
 2.29.2
 
