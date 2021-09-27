@@ -1,33 +1,34 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F50772
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:41:28 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79C2460F70;
-	Mon, 27 Sep 2021 09:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E1C72
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:43:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B85C61157;
+	Mon, 27 Sep 2021 09:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632735688;
-	bh=9hhtJVsGexG0XVk3k/pwBPZOJmTujKncE9iL0HXJp30=;
+	s=k20201202; t=1632735812;
+	bh=Qo5N2+4XdsKjUHvt2oBi52TBPhJ3ME/G/ELJqQK9RKk=;
 	h=From:To:Cc:Subject:Date:From;
-	b=do7Grx6Q2G3z3JCOdoY72cgg/pNHi9Hw4uOyOAIVymjxJtguRuFrBjo+9Uc/xi6QH
-	 bJG7HYtl+c5EFp2DGkIbb3dLU/HZHp/7hdFk3G674B5sgxMTKEJRZOHHAEWhp4UHqa
-	 45pSzv4j8v3wGo1ookpJs9YjLnph54fHfZK14pI9JwhCItVPyG5WOf+A5mVxqxeMwb
-	 HYPsFht2GVeWKjRPDo9AnotnrPrk2EfBviwluHIfbx3c2UHM55s6sFAI89uZtZrOxK
-	 XjDiLaINnWPg70jpFsYcIGt+cnKNKw/6T61fCSBXAP1sDkP+6WtS6K9ueqZ7sl2dip
-	 RGZyku3YMepOg==
+	b=vLFWLOZbv7aiqpKTuuB76Lv3lX5+Ga0leEjW9XNc4YO6ggLtmJ0oc8f8B6oosi7u2
+	 QkvtifMd/uCxxbDecXZvcV5HAbuRWlAgSSqjsDWNeJxVJKwn8BGhlrNqCxJbTqjkvr
+	 /2rGvYfl8mmyKt3mXVW8hptgQtLdHTzHG1YKbonPs6xUbcB7nmwHexI47R8R1DMmbl
+	 MUlstFAMIMm3uV1r8KCDJ2NeMraKLYKtGqSvwlZoI7MbsxuTc8Kzh1xtx+VV9moqUJ
+	 yh1MB6o/FVrLJbxEKh9e8daOA1VAIgxfWHXVM4cRexZSaISd64+v4aEO8cGDJR+ZKD
+	 g9F8F9/0XUQVA==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Hans de Goede <hdegoede@redhat.com>,
+To: Jens Axboe <axboe@kernel.dk>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Al Viro <viro@zeniv.linux.org.uk>
+	Martijn Coenen <maco@android.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Dan Carpenter <dan.carpenter@oracle.com>,
-	linux-fsdevel@vger.kernel.org,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Dan Schatzberg <schatzberg.dan@gmail.com>,
+	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] vboxsf: fix old signature detection
-Date: Mon, 27 Sep 2021 11:40:58 +0200
-Message-Id: <20210927094123.576521-1-arnd@kernel.org>
+Subject: [PATCH] loop: avoid out-of-range warning
+Date: Mon, 27 Sep 2021 11:43:00 +0200
+Message-Id: <20210927094327.644665-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -39,56 +40,35 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The constant-out-of-range check in clang found an actual bug in
-vboxsf, which leads to the detection of old mount signatures always
-failing:
+clang warns that the sanity check for page size always succeeds
+when building with 64KB pages:
 
-fs/vboxsf/super.c:394:21: error: result of comparison of constant -3 with expression of type 'unsigned char' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-                       options[3] == VBSF_MOUNT_SIGNATURE_BYTE_3) {
-                       ~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fs/vboxsf/super.c:393:21: error: result of comparison of constant -2 with expression of type 'unsigned char' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-                       options[2] == VBSF_MOUNT_SIGNATURE_BYTE_2 &&
-                       ~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fs/vboxsf/super.c:392:21: error: result of comparison of constant -1 with expression of type 'unsigned char' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-                       options[1] == VBSF_MOUNT_SIGNATURE_BYTE_1 &&
-                       ~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/loop.c:282:27: error: result of comparison of constant 65536 with expression of type 'unsigned short' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+        if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
+                           ~~~~~ ^ ~~~~~~~~~
 
-The problem is that the pointer is of type 'unsigned char' but the
-constant is a 'char'. My first idea was to change the type of the
-pointer to 'char *', but I noticed that this was the original code
-and it got changed after 'smatch' complained about this.
+There is nothing wrong here, so just shut up the check by changing
+the type of the bsize argument.
 
-I don't know if there is a bug in smatch here, but it sounds to me
-that clang's warning is correct. Forcing the constants to an unsigned
-type should make the code behave consistently and avoid the warning
-on both.
-
-Fixes: 9d682ea6bcc7 ("vboxsf: Fix the check for the old binary mount-arguments struct")
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- fs/vboxsf/super.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/block/loop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
-index 4f5e59f06284..84e2236021de 100644
---- a/fs/vboxsf/super.c
-+++ b/fs/vboxsf/super.c
-@@ -21,10 +21,10 @@
- 
- #define VBOXSF_SUPER_MAGIC 0x786f4256 /* 'VBox' little endian */
- 
--#define VBSF_MOUNT_SIGNATURE_BYTE_0 ('\000')
--#define VBSF_MOUNT_SIGNATURE_BYTE_1 ('\377')
--#define VBSF_MOUNT_SIGNATURE_BYTE_2 ('\376')
--#define VBSF_MOUNT_SIGNATURE_BYTE_3 ('\375')
-+#define VBSF_MOUNT_SIGNATURE_BYTE_0 (u8)('\000')
-+#define VBSF_MOUNT_SIGNATURE_BYTE_1 (u8)('\377')
-+#define VBSF_MOUNT_SIGNATURE_BYTE_2 (u8)('\376')
-+#define VBSF_MOUNT_SIGNATURE_BYTE_3 (u8)('\375')
- 
- static int follow_symlinks;
- module_param(follow_symlinks, int, 0444);
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index 7bf4686af774..51315a93b399 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -277,7 +277,7 @@ static void __loop_update_dio(struct loop_device *lo, bool dio)
+  * @bsize: size to validate
+  */
+ static int
+-loop_validate_block_size(unsigned short bsize)
++loop_validate_block_size(unsigned int bsize)
+ {
+ 	if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
+ 		return -EINVAL;
 -- 
 2.29.2
 
