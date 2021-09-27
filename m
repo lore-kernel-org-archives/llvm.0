@@ -1,74 +1,62 @@
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7153FCC
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 15:40:12 +0000 (UTC)
-Received: from remote.user (localhost [127.0.0.1])
-	by rere.qmqm.pl (Postfix) with ESMTPSA id 4HJ65M3ccLz4p;
-	Mon, 27 Sep 2021 17:29:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-	t=1632756600; bh=NjIDyBuZsrAIXiftVniqch5Zog92VtwzLgbabmREaKo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=is/5qg9cRXgH8YZYgR5MpffEmFztXijj1YK8Jf52q9bBlq+cCyuW8KXcj0mZZt5CX
-	 0Ckfh1jaKaXYbFa9uxCyxOGcD188kfEj6mCsXAEgGicxGtKIrclYiqrZzunRiTQsG6
-	 ZDr4aTLrLWFwV9amsYps6pxTb0HNtuOIbLZ8v/vgEicQ2EdvykwdWepVbSosL7G4xD
-	 LD0Uei7MEHo93ewUKJzVUzjrKRDhJbl6Ltnll5dR2k2uP5aLGN3qyXPVVn95n5oHDd
-	 erevnpjePPWhW8JBlCYa6OCU6EXwXwUipRYmMx6AxOY2Ateu5/BJ+qbTkatOwz2S9T
-	 VlhPF8nVmRbPw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.3 at mail
-Date: Mon, 27 Sep 2021 17:31:56 +0200
-From: =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pierre Ossman <pierre@ossman.eu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] cb710: avoid NULL pointer subtraction
-Message-ID: <YVHj7AMD8KJ76xM5@qmqm.qmqm.pl>
-References: <20210927121408.939246-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119B73FCC
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 16:21:38 +0000 (UTC)
+Received: from oasis.local.home (unknown [209.210.2.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPSA id 93E676108E;
+	Mon, 27 Sep 2021 16:21:38 +0000 (UTC)
+Date: Mon, 27 Sep 2021 12:21:38 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Chris Down <chris@chrisdown.name>
+Cc: Arnd Bergmann <arnd@kernel.org>, Petr Mladek <pmladek@suse.com>, Sergey
+ Senozhatsky <senozhatsky@chromium.org>, Andy Shevchenko
+ <andy.shevchenko@gmail.com>, Jessica Yu <jeyu@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, John Ogness <john.ogness@linutronix.de>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, YueHaibing
+ <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] printk: avoid -Wsometimes-uninitialized warning
+Message-ID: <20210927122138.56cb1d8e@oasis.local.home>
+In-Reply-To: <YVHE1qclD6ZyjvvD@chrisdown.name>
+References: <20210927125007.1581919-1-arnd@kernel.org>
+	<YVHE1qclD6ZyjvvD@chrisdown.name>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210927121408.939246-1-arnd@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 27, 2021 at 02:13:57PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang-14 complains about an unusual way of converting a pointer to
-> an integer:
-> 
-> drivers/misc/cb710/sgbuf2.c:50:15: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
->         return ((ptr - NULL) & 3) != 0;
-> 
-> Replace this with a normal cast to uintptr_t.
-> 
-> Fixes: 5f5bac8272be ("mmc: Driver for CB710/720 memory card reader (MMC part)")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/misc/cb710/sgbuf2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/cb710/sgbuf2.c b/drivers/misc/cb710/sgbuf2.c
-> index e5a4ed3701eb..a798fad5f03c 100644
-> --- a/drivers/misc/cb710/sgbuf2.c
-> +++ b/drivers/misc/cb710/sgbuf2.c
-> @@ -47,7 +47,7 @@ static inline bool needs_unaligned_copy(const void *ptr)
->  #ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
->  	return false;
->  #else
-> -	return ((ptr - NULL) & 3) != 0;
-> +	return ((uintptr_t)ptr & 3) != 0;
->  #endif
->  }
->  
+On Mon, 27 Sep 2021 14:19:18 +0100
+Chris Down <chris@chrisdown.name> wrote:
 
-Acked-by: Micha³ Miros³aw <mirq-linux@rere.qmqmq.pl>
+> Having IS_ENABLED and then an #ifdef seems to hurt code readability to me.
+
+I agree.
+
+Would this be a better solution?
+
+-- Steve
+
+diff --git a/kernel/printk/index.c b/kernel/printk/index.c
+index d3709408debe..ce3a0c8c5770 100644
+--- a/kernel/printk/index.c
++++ b/kernel/printk/index.c
+@@ -26,10 +26,10 @@ static struct pi_entry *pi_get_entry(const struct module *mod, loff_t pos)
+ 	if (mod) {
+ 		entries = mod->printk_index_start;
+ 		nr_entries = mod->printk_index_size;
+-	}
++	} else
+ #endif
++	{
+ 
+-	if (!mod) {
+ 		/* vmlinux, comes from linker symbols */
+ 		entries = __start_printk_index;
+ 		nr_entries = __stop_printk_index - __start_printk_index;
