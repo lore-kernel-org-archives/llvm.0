@@ -1,32 +1,37 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BAA3FC8
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:14:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F028260F94;
-	Mon, 27 Sep 2021 12:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D6B3FC8
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:15:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC99F61002;
+	Mon, 27 Sep 2021 12:15:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632744854;
-	bh=c44S59J8vMtBO5Jgm/qFk/4jrGFfqAT+vfRj3LdVSAE=;
+	s=k20201202; t=1632744946;
+	bh=I2kLfjcYEq3Pn4ErFSyTzDxe3WqNuLFDliR3QOYIh48=;
 	h=From:To:Cc:Subject:Date:From;
-	b=NYLCmpZli0BJ4jzHBW4yHtHyWM/Wxej1PRkK4l0y64wGYQpraLajNTpDwbDuYzpLY
-	 9bvC+Et8aCDsGckoTtJvSzzpphcF2+se+EWJIliwUME/n165+O1BiWBMDidI9HIc2d
-	 ztDLgkaIwzXCKqA8hMaKTRwz90e73JxdLZGyouEdPFQ7yzUfBCwFxVkp+MQuo2Ez9v
-	 oihjsY63KzVq6i/C1NB+c2SUSW4hssZn/hJBksUr2P4UXHG6t3mG6aNgg1nmCk7CAf
-	 9HYHUBXYM4o/ln6Xe7BbVL7qd3dhX4fjF+qjpIAzjnILEwPAM4JsgEHOZ5Pjm4XANI
-	 wMuuGiapHMZFA==
+	b=fIIKqxL9qw6wTOMU611lb1v/toPd+VhxDI/BgUfGmR1T2ir6HsQfn41QNIPpCD7qr
+	 vZYaDMslpVZ/tvuoXJ+YMphKNyDe01JNssCwQ/RHBTlu2oVTi40Est+zgBNnfGu5eC
+	 k0GOvaTQqVNDaHdyGgnVQ+alHPJwmj2mnMXuF2E4pTPd4vShvVeWqQ+xaGzeuzo3nJ
+	 LO31rVjjKFpXBSCooPD1zIXue1RwsLyIfAVXBTnChTnMCSNkRY+Y1yb6KXZO2nGqjN
+	 WmWkEUf6CzGOzV1V/US9MxWBzCXZPdUmHiLkH07OALSGDO2nkY1J/3B5AJVUb9rDgu
+	 1S6jlxVMb/J1Q==
 From: Arnd Bergmann <arnd@kernel.org>
-To: =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pierre Ossman <pierre@ossman.eu>
-Cc: Nathan Chancellor <nathan@kernel.org>,
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Jessica Yu <jeyu@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Sergey Shtylyov <s.shtylyov@omprussia.ru>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Stephen Boyd <swboyd@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] cb710: avoid NULL pointer subtraction
-Date: Mon, 27 Sep 2021 14:13:57 +0200
-Message-Id: <20210927121408.939246-1-arnd@kernel.org>
+Subject: [PATCH] module: fix clang CFI with MODULE_UNLOAD=n
+Date: Mon, 27 Sep 2021 14:15:10 +0200
+Message-Id: <20210927121541.939745-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -38,33 +43,35 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-14 complains about an unusual way of converting a pointer to
-an integer:
+When CONFIG_MODULE_UNLOAD is disabled, the module->exit member
+is not defined, causing a build failure:
 
-drivers/misc/cb710/sgbuf2.c:50:15: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
-        return ((ptr - NULL) & 3) != 0;
+kernel/module.c:4493:8: error: no member named 'exit' in 'struct module'
+                mod->exit = *exit;
 
-Replace this with a normal cast to uintptr_t.
+add an #ifdef block around this.
 
-Fixes: 5f5bac8272be ("mmc: Driver for CB710/720 memory card reader (MMC part)")
+Fixes: cf68fffb66d6 ("add support for Clang CFI")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/misc/cb710/sgbuf2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/module.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/misc/cb710/sgbuf2.c b/drivers/misc/cb710/sgbuf2.c
-index e5a4ed3701eb..a798fad5f03c 100644
---- a/drivers/misc/cb710/sgbuf2.c
-+++ b/drivers/misc/cb710/sgbuf2.c
-@@ -47,7 +47,7 @@ static inline bool needs_unaligned_copy(const void *ptr)
- #ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	return false;
- #else
--	return ((ptr - NULL) & 3) != 0;
-+	return ((uintptr_t)ptr & 3) != 0;
- #endif
- }
+diff --git a/kernel/module.c b/kernel/module.c
+index 40ec9a030eec..5c26a76e800b 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4489,8 +4489,10 @@ static void cfi_init(struct module *mod)
+ 	/* Fix init/exit functions to point to the CFI jump table */
+ 	if (init)
+ 		mod->init = *init;
++#ifdef CONFIG_MODULE_UNLOAD
+ 	if (exit)
+ 		mod->exit = *exit;
++#endif
  
+ 	cfi_module_add(mod, module_addr_min);
+ #endif
 -- 
 2.29.2
 
