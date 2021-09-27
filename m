@@ -1,75 +1,94 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C349C72
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:45:25 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E597461157;
-	Mon, 27 Sep 2021 09:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632735924;
-	bh=gFGitQYEbKU+ll1qJ4OCqESVHY1IMF80+p0Jqsb7qYE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=o6PSo81tkdTwK2YP2LSaneKqFnF7Ou7RHR44P7NLtHNmh9aGGhJ+XPQSxGi7gfxjj
-	 QDh/V2gXj4WWHOMI2J22bBciYlwxSrH0/q25j/mViAP9yg0vAcWoxMKb4tWWJ+lY4e
-	 IwrtDqS4CLTH1b0VH05ynKY+uwD+E+7Jr9EElnKZdBh1obUEOJKFm4fJWtB3gm7SzW
-	 M9bqm6EwZhifWOwPZwYQoSkvs/O5IKYtbuC7TE6Qc63v/Q7ggIJBDqxPs8aEoOB47j
-	 4m1zB/FMn4NUuUI6fEItZ1t+3U4rPtw5b8Qhg0z+xDjmD1pJ1GiNz4+977X0v9fDu3
-	 NfBV/yZQG8tDw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Maxim Levitsky <maximlevitsky@gmail.com>,
-	Alex Dubov <oakad@yahoo.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-mmc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] memstick: avoid out-of-range warning
-Date: Mon, 27 Sep 2021 11:44:47 +0200
-Message-Id: <20210927094520.696665-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677D772
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:51:28 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id bj3-20020a17090b088300b0019e6603fe89so11388823pjb.4
+        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 02:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SRePW3/TNCc7XAOvX2Kj8B2CrMxOQEcmgec1IIbW5Bc=;
+        b=Kv0CFzwqmrmNCeq5ie36LnoFoefO3upoJO65nED9HFSLpOR8RWZrEybbVYO7On51L+
+         yDr5vWV5JZQBK6y3B+w9GeG8IYVc4uzKBgVSguCCkzT3hUli/9zvA9HXvMzYD9YSwuB+
+         Ed9zJmWD4L6tMMshbGjdANvnABU4nNzy3YaG9twfYmOKTHpbOq5XVOQFouj30mAUlZTi
+         H3oFHfOM+UR1UEd4iPmH7cyAmNzYhkNgma7rk9envMghYIk6IYIK/UFa+wcf+L51zh/9
+         gKntTZE8Te8MSY2DqGPODRBkP7dg8699MLXvo+eU1rfvJ38sNCJ5Bs9rSHwMJHQjaO73
+         BLpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SRePW3/TNCc7XAOvX2Kj8B2CrMxOQEcmgec1IIbW5Bc=;
+        b=wlWxJEZqlinCNdkQkl+kBx8ohDvE8spHmITDEOLsrCWInhfJiIoP7Kj4mn1K478cLb
+         LIbfRcem4YWhMnTTBSVdwJPvAp08HDXL2P0rM3m6A6i63mkbUDWF1/msfGg7eyT0Q5S2
+         YYCKKPNvi8UgnW9lkflXfu01ydF3V2GMBh7VVq736CA4gpuPPrQXSC0HyOieo/6BW9iv
+         eG+OHfXeCYp01VXPoxW2W6kS9EkokQiHWvUVPYxyMvCnmgWkmm1SUy3yI6dilb/bjafC
+         tU40uv0acIDmBXNsPJteKRFk5O9LhYMHlASpfr4q2MpKS85csl8SEt23Xi+Ux1pZCFWm
+         cALQ==
+X-Gm-Message-State: AOAM532gDknm4QfuL18lDSjWorovHIjhAPcbOBYfU7iSEX30Muz2mCEd
+	ZBfEopdO3Kz6S1J7ClkG9UQvSN6zti8X1NVKYAsQGw==
+X-Google-Smtp-Source: ABdhPJy8qcfslrU6xWthqnTohHRpxrn9aUuU1mGA/gd6Rw6vxMIxAEKfecnkKiSEsHRjsb3BAljBhVwwKX2poMkSz6U=
+X-Received: by 2002:a17:90a:f293:: with SMTP id fs19mr6467832pjb.137.1632736287919;
+ Mon, 27 Sep 2021 02:51:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210927094327.644665-1-arnd@kernel.org>
+In-Reply-To: <20210927094327.644665-1-arnd@kernel.org>
+From: Martijn Coenen <maco@android.com>
+Date: Mon, 27 Sep 2021 11:51:17 +0200
+Message-ID: <CAB0TPYGWXAs5t_bG8BMs_9xvOmfsJiy1ejM0WoJC3Ts3yC6E1Q@mail.gmail.com>
+Subject: Re: [PATCH] loop: avoid out-of-range warning
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	Dan Schatzberg <schatzberg.dan@gmail.com>, linux-block <linux-block@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Arnd Bergmann <arnd@arndb.de>
+Thanks!
 
-clang-14 complains about a sanity check that always passes when the
-page size is 64KB or larger:
+On Mon, Sep 27, 2021 at 11:43 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> clang warns that the sanity check for page size always succeeds
+> when building with 64KB pages:
+>
+> drivers/block/loop.c:282:27: error: result of comparison of constant 65536 with expression of type 'unsigned short' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>         if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
+>                            ~~~~~ ^ ~~~~~~~~~
+>
+> There is nothing wrong here, so just shut up the check by changing
+> the type of the bsize argument.
+>
+> Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Martijkn Coenen <maco@android.com>
 
-drivers/memstick/core/ms_block.c:1739:21: error: result of comparison of constant 65536 with expression of type 'unsigned short' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (msb->page_size > PAGE_SIZE) {
-            ~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-
-This is fine, it will still work on all architectures, so just shut
-up that warning with a cast.
-
-Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/memstick/core/ms_block.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
-index acf36676e388..487e4cc2951e 100644
---- a/drivers/memstick/core/ms_block.c
-+++ b/drivers/memstick/core/ms_block.c
-@@ -1736,7 +1736,7 @@ static int msb_init_card(struct memstick_dev *card)
- 	msb->pages_in_block = boot_block->attr.block_size * 2;
- 	msb->block_size = msb->page_size * msb->pages_in_block;
- 
--	if (msb->page_size > PAGE_SIZE) {
-+	if ((size_t)msb->page_size > PAGE_SIZE) {
- 		/* this isn't supported by linux at all, anyway*/
- 		dbg("device page %d size isn't supported", msb->page_size);
- 		return -EINVAL;
--- 
-2.29.2
-
+> ---
+>  drivers/block/loop.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index 7bf4686af774..51315a93b399 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -277,7 +277,7 @@ static void __loop_update_dio(struct loop_device *lo, bool dio)
+>   * @bsize: size to validate
+>   */
+>  static int
+> -loop_validate_block_size(unsigned short bsize)
+> +loop_validate_block_size(unsigned int bsize)
+>  {
+>         if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
+>                 return -EINVAL;
+> --
+> 2.29.2
+>
