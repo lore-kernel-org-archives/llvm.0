@@ -1,62 +1,101 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC1F3FCB
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:22:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7DE1E610E8
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55583FCB
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:28:40 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 77DF66113D
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 13:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632748926;
-	bh=Das70DqAnDl+vU2D9E9K2Sm7+IL1whzT5AdV7Cv64RI=;
+	s=k20201202; t=1632749320;
+	bh=vns6d7q7snjlnOGxuPZz3LzGfbU3pA9uIcUCFNFCBl0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OOFnIZyHjl73BWpGX+Odm656Lyv/9q2gXQ5Nzg06FS72+jSBjAT3ye3rcK6JThKXn
-	 ogfnUKFoKLZanzkbm/eyK8AX5kJqeDCFCRdDTauFJQU/n3K+RYlD4dksXT6dbd6PXy
-	 eCfZivWVyPXsL9sUsyfpTVD5+9jxIC+chV2ckEWXiOquv9WPcj8YTutekB71mT2f32
-	 SCPn96NDRZCYC/GDdYXQ0c2excIFUXZK4s3EjL8v0VgM5SztqdrVgMO3VED5lN79nH
-	 ItpHfQLkAM2rm+RlVi/jpV/zvNo6b9x/Si1W647vCGpGji1+JviZxWTT79PrUfP9T7
-	 IHQkyKOCYQVJw==
-Received: by mail-wr1-f46.google.com with SMTP id r23so26581319wra.6
-        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 06:22:06 -0700 (PDT)
-X-Gm-Message-State: AOAM532KA3g0HvBfM+l/tMoci0zoffq7SmDZ52qaV4I8+fn3c+YxAhKP
-	+sKHduxuaWxgWSaBZ7EoCfeAIx7YPXCKriUtJJs=
-X-Google-Smtp-Source: ABdhPJwd+GjhtNJa0Ksv9WnIRk55xwwRShFQt0ktXM1OP+lbfAd9C7QYDfCYsXPfvRbsZgn+i5G1Bmd2QLm1EhnryJs=
-X-Received: by 2002:a5d:4b50:: with SMTP id w16mr27916738wrs.71.1632748925101;
- Mon, 27 Sep 2021 06:22:05 -0700 (PDT)
+	b=rhhWa5RW0yQoJ4jqoEt5H5Uofm+jScQJy35aNLJ8PXqNbOcyKf2XD/jgwAfSdt3pB
+	 M3FWGdOlZTUrpTCAaddDpXdsWXc1Z/OBuQ5++wdyvmpKg5uj/k8/q69ormsZIgSyrX
+	 iIQgHs0qvuwnYWepuH2y9TPA+0pQIXNkZY/G0Rig+Z4MEe0yj1SKhmLVze4NzgLxIe
+	 iuC1W0XQMvp9TH7sWmhFTKnc4tPSN5ojmoeupA+c4+NBXteLHhgRL8oITIjJ/1vMX8
+	 8UzDqzxBX8eztOurMyEa9jTnKkiDIDOgTuGAjoN2FmqP66lGogVi6kcNxUqkP81BSU
+	 ToF3bTNBQqV/g==
+Received: by mail-wr1-f50.google.com with SMTP id r23so26620342wra.6
+        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 06:28:40 -0700 (PDT)
+X-Gm-Message-State: AOAM531WjZbnPoGuLBR3Y29YT1M2HEZfNx/nkP2zHdLiPhAm3LyXxViF
+	Oe1eVStKhtAPyoV5hMtUjx8tYkFA84uAw083CJ4=
+X-Google-Smtp-Source: ABdhPJxbWPlRuOELSlE0iUvzwb9mv8lxk5wVCNSZHg1zaADn1v3AAN1pQjR4+krJ1avS9O0dJh2L8K7krNWt2DcmhtQ=
+X-Received: by 2002:a5d:4b50:: with SMTP id w16mr27956996wrs.71.1632749318987;
+ Mon, 27 Sep 2021 06:28:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210927094123.576521-1-arnd@kernel.org> <40217483-1b8d-28ec-bbfc-8f979773b166@redhat.com>
- <20210927130253.GH2083@kadam>
-In-Reply-To: <20210927130253.GH2083@kadam>
+References: <20210927125007.1581919-1-arnd@kernel.org> <YVHE1qclD6ZyjvvD@chrisdown.name>
+In-Reply-To: <YVHE1qclD6ZyjvvD@chrisdown.name>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 27 Sep 2021 15:21:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
-Message-ID: <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
-Subject: Re: [PATCH] vboxsf: fix old signature detection
-To: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Hans de Goede <hdegoede@redhat.com>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	linux-sparse@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
+Date: Mon, 27 Sep 2021 15:28:23 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3_0njnrTokeXmOuZ1vA00Nk9pqbxsOZw+6QcCL-Ng=xg@mail.gmail.com>
+Message-ID: <CAK8P3a3_0njnrTokeXmOuZ1vA00Nk9pqbxsOZw+6QcCL-Ng=xg@mail.gmail.com>
+Subject: Re: [PATCH] printk: avoid -Wsometimes-uninitialized warning
+To: Chris Down <chris@chrisdown.name>
+Cc: Petr Mladek <pmladek@suse.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>, Jessica Yu <jeyu@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Steven Rostedt <rostedt@goodmis.org>, 
+	John Ogness <john.ogness@linutronix.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, YueHaibing <yuehaibing@huawei.com>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 27, 2021 at 3:02 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Mon, Sep 27, 2021 at 3:20 PM Chris Down <chris@chrisdown.name> wrote:
 >
-> GCC handles it the same way as Clang.  '\377' is -1 but in Sparse it's
-> 255.  I've added the Sparse mailing list to the CC.
+> Hi Arnd,
+>
+> Arnd Bergmann writes:
+> >From: Arnd Bergmann <arnd@arndb.de>
+> >
+> >clang notices that the pi_get_entry() function would use
+> >uninitialized data if it was called with a non-NULL module
+> >pointer on a kernel that does not support modules:
+>
+> On a !CONFIG_MODULES kernel, we _never_ pass a non-NULL module pointer. This
+> isn't just convention: we don't even have `struct module` fully fleshed out, so
+> it technically cannot be so.
 
-More specifically, ' think '\377' may be either -1 or 255 depending on
-the architecture.
-On most architectures, 'char' is implicitly signed, but on some others
-it is not.
+Yes, I understand that part, hence the "if it was called" rather then
+"when it is called".
 
-The original code before 9d682ea6bcc7 should have worked either way because
-both sides of the comparison were the same 'char' type, marking one of them
-as explicitly 'unsigned char' seems to have broken all architectures on which
-the type is implicitly 'signed'.
+> >kernel/printk/index.c:32:6: error: variable 'nr_entries' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+> >        if (!mod) {
+> >            ^~~~
+> >kernel/printk/index.c:38:13: note: uninitialized use occurs here
+> >        if (pos >= nr_entries)
+> >                   ^~~~~~~~~~
+> >kernel/printk/index.c:32:2: note: remove the 'if' if its condition is always true
+> >        if (!mod) {
+> >
+> >Rework the condition to make it clear to the compiler that we are always
+> >in the second case. Unfortunately the #ifdef is still required as the
+> >definition of 'struct module' is hidden when modules are disabled.
+>
+> Having IS_ENABLED and then an #ifdef seems to hurt code readability to me.
+>
+> >Fixes: 337015573718 ("printk: Userspace format indexing support")
+>
+> Does this really fix anything, or just clang's ignorance? If the latter, clang
+> needs to be smarter here: as far as I can see there are no occasions where
+> there's even any opportunity for a non-NULL pointer to come in on a
+> !CONFIG_MODULES kernel, since `struct module` isn't even complete.
 
-       Arnd
+I don't see how you would expect clang to understand that part. It does
+not do cross-function analysis for the purpose of diagnostic output, and
+even if it did, then this caller
+
+static void *pi_next(struct seq_file *s, void *v, loff_t *pos)
+{
+        const struct module *mod = s->file->f_inode->i_private;
+        struct pi_entry *entry = pi_get_entry(mod, *pos);
+...
+}
+
+has no indication that "s->file->f_inode->i_private" is guaranteed to
+be a NULL pointer.
+
+         Arnd
