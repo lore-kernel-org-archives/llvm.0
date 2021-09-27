@@ -1,129 +1,122 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0488372
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 18:33:21 +0000 (UTC)
-Received: by mail-lf1-f52.google.com with SMTP id g41so81232050lfv.1
-        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 11:33:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC9772
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 19:20:24 +0000 (UTC)
+Received: by mail-oo1-f43.google.com with SMTP id h11-20020a4aa74b000000b002a933d156cbso6366998oom.4
+        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zBKO83J1C1DNn2R4raJlP58CTJ+u3r/ACscvA3njVnA=;
-        b=YbDQ5OpSuV6v9NSHnBKcDUKW4oeDmXF0NHBGuo3vHIF2Mp24W0VXIFsXRLwyniRIzR
-         aDTXrs5dla+qbA47Mgcez8/uDJZ7dJZZiKprKSFRNEPDPSMmKJT6hPFTaxWvgqSBizR+
-         VAPbppHwvThw+fFO74IZ68YspiGMMjy+yalYc=
+         :cc:content-transfer-encoding;
+        bh=DxxDnArAuqMzLOKrnNqBxORaTd+7/JcrK9bDcFPx9BQ=;
+        b=E9fwq5bTre/IrnXwZ/2oEJhk10H+KaHc08PWNXgjOdhLuUJdU3V/PDBPGGcH4aB6EG
+         vbqUjNv9ClfzM9n9n8OdWHiQaBYKlO6riTNMumO2z35RshxodLeNmh7FEphBSza23fvF
+         /RW6yO5Y0JV916oTome5iBE3PMnJ8aCKZ1Y4XPDKv5YQH18GO90n97xXLlEQrSgNK6Pi
+         /P2EQmG63tM/8mFlDUzWK5I3KY9XTT6C9zdrUQTveO3EcOCxrHQIHB2omyozhfaGhKo9
+         XQFrYfgyss99y3+08WWPCMBbbsvy8SoaCiwiXiBYZNmvO7Wkm/vzlC6JgSRNAiofslBs
+         IsUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zBKO83J1C1DNn2R4raJlP58CTJ+u3r/ACscvA3njVnA=;
-        b=soy68+8QT/UUIR71MnyhVR9ql8k/CSWXkjAEfDuNrG8uBpdXg3CfCksIs36bE9b0as
-         2nexCVuOS+x8nEKJ6o8XzLkwPexEau2nmdcBU9J4prCDjcpX9gnSg6bmPcGvR/QfhsL4
-         cx3tNVl97e2UJx3ll25VwP8+1biJ9C4rHYIXf5tLUvJLjBW5QbToJSNI7ZVDl/z3ye5y
-         nBLGkppaAQsyPaoCwSQ+mgS0dDp9MRQifKKvsyLAAmZUqZpAnyf/jTF0SF5EzOnijWU5
-         FdgXWMGnXLHhYh+9eQM+a3w8RXu4qX0sHjG5g3v33N6kSCh/YtWh/pyokPf0AQr4wqJa
-         Mblg==
-X-Gm-Message-State: AOAM530u3IWcMna1VWtexnwCLotLqiH4uF1BAS2wiL++afCY1y9OreJz
-	UPerynnU+7Ijs0oGCVAfgxw1Y35cLCXG2+f3Hv0=
-X-Google-Smtp-Source: ABdhPJxA1f240u2eGylFAWDGZPMAxv3uIl6tdm11UcMQMH4LRIQgya34RqKHiLFORQNH5cbyPkzI+Q==
-X-Received: by 2002:a05:6512:b8b:: with SMTP id b11mr1182043lfv.433.1632767599258;
-        Mon, 27 Sep 2021 11:33:19 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id k3sm1679253lfo.9.2021.09.27.11.33.17
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Sep 2021 11:33:17 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id u8so80379985lff.9
-        for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 11:33:17 -0700 (PDT)
-X-Received: by 2002:a2e:a7d0:: with SMTP id x16mr1309663ljp.494.1632767596702;
- Mon, 27 Sep 2021 11:33:16 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DxxDnArAuqMzLOKrnNqBxORaTd+7/JcrK9bDcFPx9BQ=;
+        b=mFkoysdSdRwbRHyUcl8Nwy2CTxXNZGqgfRqrtQaAyOZaCx5LX8iHIkGsjAFe9yrndH
+         5qmOP7CwkvQHWjVaQl9WLlxryF96ptYpS+rItjSdNWdWKyDOxUvBvdQVPPANFwW9Plvz
+         VpL6Lt4AQY+8G58WQzAQaD76yQ3jSXG+HJXBz0h0yoqdPQ+r84zrZB3FLvrwxA7Sq1qI
+         n3bNPVSU4cXcPEMw2eBUR5JuAawsWm18VZ4/gT+IpCxQ3jGAiQjD7rA6aTBsyO4lSL64
+         kjZ7Z3NhF6u41Cn/pMbHrRJfFYh5bvGuRSfg9l5RvUkUFW/Pv3F3/YFjBjryRAZI62F6
+         5ikA==
+X-Gm-Message-State: AOAM531ezE+lwumzrvQ+S3wS9r0FojdzkUBcbxQtSc13690qLKZytEBT
+	buKM9Nu5cgF+nD7TctxxCaPRxUS5znBssGJHYsQ=
+X-Google-Smtp-Source: ABdhPJxK9Pl7nDDrEjCckoKhzIkfsziDqe9p0oskMIry7aZ1ewD2rkdZK6eZm+ZpzCPRqBiNvG4eBEMomJ0BLTdG8Ws=
+X-Received: by 2002:a4a:e899:: with SMTP id g25mr1334984ooe.68.1632770423330;
+ Mon, 27 Sep 2021 12:20:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210927094123.576521-1-arnd@kernel.org> <40217483-1b8d-28ec-bbfc-8f979773b166@redhat.com>
- <20210927130253.GH2083@kadam> <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 27 Sep 2021 11:33:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wheEHQxdSJgTkt7y4yFjzhWxMxE-p7dKLtQSBs4ceHLmw@mail.gmail.com>
-Message-ID: <CAHk-=wheEHQxdSJgTkt7y4yFjzhWxMxE-p7dKLtQSBs4ceHLmw@mail.gmail.com>
-Subject: Re: [PATCH] vboxsf: fix old signature detection
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>, Hans de Goede <hdegoede@redhat.com>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	Sparse Mailing-list <linux-sparse@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: multipart/mixed; boundary="0000000000009a84d405ccfe541b"
-
---0000000000009a84d405ccfe541b
+References: <20210927125824.1583474-1-arnd@kernel.org> <a27a9db3-1186-8fea-8952-fca4171bcee5@amd.com>
+In-Reply-To: <a27a9db3-1186-8fea-8952-fca4171bcee5@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 27 Sep 2021 15:20:12 -0400
+Message-ID: <CADnq5_NcRQO=VAGONoBBebZAXXaNDshUZk9=RpLVu3LdGnztXA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: fix warning for overflow check
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Alex Deucher <alexander.deucher@amd.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	Chunming Zhou <david1.zhou@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	amd-gfx list <amd-gfx@lists.freedesktop.org>, 
+	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 27, 2021 at 6:22 AM Arnd Bergmann <arnd@kernel.org> wrote:
+Applied.  Thanks!
+
+On Mon, Sep 27, 2021 at 9:07 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
-> More specifically, ' think '\377' may be either -1 or 255 depending on
-> the architecture.
-> On most architectures, 'char' is implicitly signed, but on some others
-> it is not.
-
-Yeah. That code is just broken.
-
-And Arnd, your patch may be "conceptually minimal", in that it keeps
-thed broken code and makes it work. But it just dials up the oddity to
-11.
-
-The proper patch is just this appended thing that stops playing silly
-games, and just uses "memcmp()".
-
-I've verified that with sane build configurations, it just generates
-
-        testq   %rsi, %rsi
-        je      .L25
-        cmpl    $-33620224, (%rsi)
-        je      .L31
-
-for that
-
-        if (data && !memcmp(data, VBSF_MOUNT_SIGNATURE, 4)) {
-
-test. With a lot of crazy debug options you'll actually see the
-"memcmp()", but the bad code generation is the least of your options
-in that case.
-
-               Linus
-
---0000000000009a84d405ccfe541b
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ku2z8brl0>
-X-Attachment-Id: f_ku2z8brl0
-
-IGZzL3Zib3hzZi9zdXBlci5jIHwgMTIgKystLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMiBp
-bnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9mcy92Ym94c2Yvc3Vw
-ZXIuYyBiL2ZzL3Zib3hzZi9zdXBlci5jCmluZGV4IDRmNWU1OWYwNjI4NC4uMzdkZDNmZTViMWU5
-IDEwMDY0NAotLS0gYS9mcy92Ym94c2Yvc3VwZXIuYworKysgYi9mcy92Ym94c2Yvc3VwZXIuYwpA
-QCAtMjEsMTAgKzIxLDcgQEAKIAogI2RlZmluZSBWQk9YU0ZfU1VQRVJfTUFHSUMgMHg3ODZmNDI1
-NiAvKiAnVkJveCcgbGl0dGxlIGVuZGlhbiAqLwogCi0jZGVmaW5lIFZCU0ZfTU9VTlRfU0lHTkFU
-VVJFX0JZVEVfMCAoJ1wwMDAnKQotI2RlZmluZSBWQlNGX01PVU5UX1NJR05BVFVSRV9CWVRFXzEg
-KCdcMzc3JykKLSNkZWZpbmUgVkJTRl9NT1VOVF9TSUdOQVRVUkVfQllURV8yICgnXDM3NicpCi0j
-ZGVmaW5lIFZCU0ZfTU9VTlRfU0lHTkFUVVJFX0JZVEVfMyAoJ1wzNzUnKQorc3RhdGljIGNvbnN0
-IHVuc2lnbmVkIGNoYXIgVkJTRl9NT1VOVF9TSUdOQVRVUkVbNF0gPSAiXDAwMFwzNzdcMzc2XDM3
-NSI7CiAKIHN0YXRpYyBpbnQgZm9sbG93X3N5bWxpbmtzOwogbW9kdWxlX3BhcmFtKGZvbGxvd19z
-eW1saW5rcywgaW50LCAwNDQ0KTsKQEAgLTM4NiwxMiArMzgzLDcgQEAgc3RhdGljIGludCB2Ym94
-c2Zfc2V0dXAodm9pZCkKIAogc3RhdGljIGludCB2Ym94c2ZfcGFyc2VfbW9ub2xpdGhpYyhzdHJ1
-Y3QgZnNfY29udGV4dCAqZmMsIHZvaWQgKmRhdGEpCiB7Ci0JdW5zaWduZWQgY2hhciAqb3B0aW9u
-cyA9IGRhdGE7Ci0KLQlpZiAob3B0aW9ucyAmJiBvcHRpb25zWzBdID09IFZCU0ZfTU9VTlRfU0lH
-TkFUVVJFX0JZVEVfMCAmJgotCQkgICAgICAgb3B0aW9uc1sxXSA9PSBWQlNGX01PVU5UX1NJR05B
-VFVSRV9CWVRFXzEgJiYKLQkJICAgICAgIG9wdGlvbnNbMl0gPT0gVkJTRl9NT1VOVF9TSUdOQVRV
-UkVfQllURV8yICYmCi0JCSAgICAgICBvcHRpb25zWzNdID09IFZCU0ZfTU9VTlRfU0lHTkFUVVJF
-X0JZVEVfMykgeworCWlmIChkYXRhICYmICFtZW1jbXAoZGF0YSwgVkJTRl9NT1VOVF9TSUdOQVRV
-UkUsIDQpKSB7CiAJCXZiZ19lcnIoInZib3hzZjogT2xkIGJpbmFyeSBtb3VudCBkYXRhIG5vdCBz
-dXBwb3J0ZWQsIHJlbW92ZSBvYnNvbGV0ZSBtb3VudC52Ym94c2YgYW5kL29yIHVwZGF0ZSB5b3Vy
-IFZCb3hTZXJ2aWNlLlxuIik7CiAJCXJldHVybiAtRUlOVkFMOwogCX0K
---0000000000009a84d405ccfe541b--
+> Am 27.09.21 um 14:58 schrieb Arnd Bergmann:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The overflow check in amdgpu_bo_list_create() causes a warning with
+> > clang-14 on 64-bit architectures, since the limit can never be
+> > exceeded.
+> >
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c:74:18: error: result of com=
+parison of constant 256204778801521549 with expression of type 'unsigned in=
+t' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+> >          if (num_entries > (SIZE_MAX - sizeof(struct amdgpu_bo_list))
+> >              ~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > The check remains useful for 32-bit architectures, so just avoid the
+> > warning by using size_t as the type for the count.
+> >
+> > Fixes: 920990cb080a ("drm/amdgpu: allocate the bo_list array after the =
+list")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c | 2 +-
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h | 2 +-
+> >   2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_bo_list.c
+> > index 15c45b2a3983..714178f1b6c6 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c
+> > @@ -61,7 +61,7 @@ static void amdgpu_bo_list_free(struct kref *ref)
+> >
+> >   int amdgpu_bo_list_create(struct amdgpu_device *adev, struct drm_file=
+ *filp,
+> >                         struct drm_amdgpu_bo_list_entry *info,
+> > -                       unsigned num_entries, struct amdgpu_bo_list **r=
+esult)
+> > +                       size_t num_entries, struct amdgpu_bo_list **res=
+ult)
+> >   {
+> >       unsigned last_entry =3D 0, first_userptr =3D num_entries;
+> >       struct amdgpu_bo_list_entry *array;
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_bo_list.h
+> > index c905a4cfc173..044b41f0bfd9 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h
+> > @@ -61,7 +61,7 @@ int amdgpu_bo_create_list_entry_array(struct drm_amdg=
+pu_bo_list_in *in,
+> >   int amdgpu_bo_list_create(struct amdgpu_device *adev,
+> >                                struct drm_file *filp,
+> >                                struct drm_amdgpu_bo_list_entry *info,
+> > -                              unsigned num_entries,
+> > +                              size_t num_entries,
+> >                                struct amdgpu_bo_list **list);
+> >
+> >   static inline struct amdgpu_bo_list_entry *
+>
