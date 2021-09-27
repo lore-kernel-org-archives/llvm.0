@@ -1,78 +1,67 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082C23FC8
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 11:36:37 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED57060F58;
-	Mon, 27 Sep 2021 11:36:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632742597;
-	bh=Rl3OTC7V1DvxO5S+CLcKb/G4xypiFLCG7rhJzIouM9o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GIRQdOlWtQeOMLb+VYfzHERHrDKA38VhnFhqfoB27L2ZztW1kG/YwfGnx8+bG5m2w
-	 tIDcTjzg8OBfBy9I1T9duPEeXgoEHSjzRE69zF4UJ7AN7s9NWuE0m658Wci7xL0xai
-	 ea0aXKeWWRmrVH1JbjRfizMoUuLHo3hr8X0TrZixmNsPDHbeeIng78GbIcOuvMrqu8
-	 SE4vg9tVwLTVvaJB9O6sjiGoXNzhsd0WjChOtXE+Iu3PjfXtqu4Gt2Iej5V8WYyQ4x
-	 +/9bhZDBAYhH7wIdixdaYvEL5yVXxdw563oV7wHam7QvEezxKicYyfyS58W33vgEEx
-	 LNh6HRkSCn50A==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Rob Clark <robdclark@gmail.com>,
-	Sean Paul <sean@poorly.run>,
-	David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"Kristian H. Kristensen" <hoegsberg@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Jordan Crouse <jordan@cosmicpenguin.net>,
-	linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] drm/msm/submit: fix overflow check on 64-bit architectures
-Date: Mon, 27 Sep 2021 13:36:23 +0200
-Message-Id: <20210927113632.3849987-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332AA3FC8
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:11:55 +0000 (UTC)
+Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 18RBH0N1054907;
+	Mon, 27 Sep 2021 20:17:00 +0900 (JST)
+	(envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
+ Mon, 27 Sep 2021 20:17:00 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 18RBH0Yq054885
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 27 Sep 2021 20:17:00 +0900 (JST)
+	(envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] loop: avoid out-of-range warning
+To: Martijn Coenen <maco@android.com>, Arnd Bergmann <arnd@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20210927094327.644665-1-arnd@kernel.org>
+ <CAB0TPYGWXAs5t_bG8BMs_9xvOmfsJiy1ejM0WoJC3Ts3yC6E1Q@mail.gmail.com>
+From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <755aa284-06f4-ee10-ec7b-0f69a1617349@i-love.sakura.ne.jp>
+Date: Mon, 27 Sep 2021 20:16:59 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAB0TPYGWXAs5t_bG8BMs_9xvOmfsJiy1ejM0WoJC3Ts3yC6E1Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+Well, you found a bug here.
 
-The overflow check does causes a warning from clang-14 when 'sz' is a type
-that is smaller than size_t:
+lo_simple_ioctl(LOOP_SET_BLOCK_SIZE) passes "unsigned long arg" to
+loop_validate_block_size() via loop_set_block_size(), and uses only
+lower 32bits. "(lo->lo_queue->limits.logical_block_size == arg)" is
+failing to "return 0;" if lower 32bits are the same but higher 32bits
+are not 0. Shouldn't we also check that higher 32bits are 0, by either
+making loop_validate_block_size() to accept "unsigned long" or making
+loop_set_block_size() return -EINVAL if larger than UINT_MAX ?
 
-drivers/gpu/drm/msm/msm_gem_submit.c:217:10: error: result of comparison of constant 18446744073709551615 with expression of type 'unsigned int' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-                if (sz == SIZE_MAX) {
+> There is nothing wrong here, so just shut up the check by changing
+> the type of the bsize argument.
 
-Change the type accordingly.
+I think there is something wrong here.
+Since "unsigned short bsize" checked only lower 16bits, a fuzzer can
+pass e.g. 0xDEAD0200 (which is not a is_power_of_2() 32bits value) to
 
-Fixes: 20224d715a88 ("drm/msm/submit: Move copy_from_user ahead of locking bos")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/gpu/drm/msm/msm_gem_submit.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+	blk_queue_logical_block_size(lo->lo_queue, arg);
+	blk_queue_physical_block_size(lo->lo_queue, arg);
+	blk_queue_io_min(lo->lo_queue, arg);
 
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index fdc5367aecaa..ac23bbdb0bab 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -171,7 +171,8 @@ static int submit_lookup_objects(struct msm_gem_submit *submit,
- static int submit_lookup_cmds(struct msm_gem_submit *submit,
- 		struct drm_msm_gem_submit *args, struct drm_file *file)
- {
--	unsigned i, sz;
-+	unsigned i;
-+	size_t sz;
- 	int ret = 0;
- 
- 	for (i = 0; i < args->nr_cmds; i++) {
--- 
-2.29.2
-
+and confuse the system?
