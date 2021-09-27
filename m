@@ -1,34 +1,35 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E1C72
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:43:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B85C61157;
-	Mon, 27 Sep 2021 09:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C349C72
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:45:25 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E597461157;
+	Mon, 27 Sep 2021 09:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632735812;
-	bh=Qo5N2+4XdsKjUHvt2oBi52TBPhJ3ME/G/ELJqQK9RKk=;
+	s=k20201202; t=1632735924;
+	bh=gFGitQYEbKU+ll1qJ4OCqESVHY1IMF80+p0Jqsb7qYE=;
 	h=From:To:Cc:Subject:Date:From;
-	b=vLFWLOZbv7aiqpKTuuB76Lv3lX5+Ga0leEjW9XNc4YO6ggLtmJ0oc8f8B6oosi7u2
-	 QkvtifMd/uCxxbDecXZvcV5HAbuRWlAgSSqjsDWNeJxVJKwn8BGhlrNqCxJbTqjkvr
-	 /2rGvYfl8mmyKt3mXVW8hptgQtLdHTzHG1YKbonPs6xUbcB7nmwHexI47R8R1DMmbl
-	 MUlstFAMIMm3uV1r8KCDJ2NeMraKLYKtGqSvwlZoI7MbsxuTc8Kzh1xtx+VV9moqUJ
-	 yh1MB6o/FVrLJbxEKh9e8daOA1VAIgxfWHXVM4cRexZSaISd64+v4aEO8cGDJR+ZKD
-	 g9F8F9/0XUQVA==
+	b=o6PSo81tkdTwK2YP2LSaneKqFnF7Ou7RHR44P7NLtHNmh9aGGhJ+XPQSxGi7gfxjj
+	 QDh/V2gXj4WWHOMI2J22bBciYlwxSrH0/q25j/mViAP9yg0vAcWoxMKb4tWWJ+lY4e
+	 IwrtDqS4CLTH1b0VH05ynKY+uwD+E+7Jr9EElnKZdBh1obUEOJKFm4fJWtB3gm7SzW
+	 M9bqm6EwZhifWOwPZwYQoSkvs/O5IKYtbuC7TE6Qc63v/Q7ggIJBDqxPs8aEoOB47j
+	 4m1zB/FMn4NUuUI6fEItZ1t+3U4rPtw5b8Qhg0z+xDjmD1pJ1GiNz4+977X0v9fDu3
+	 NfBV/yZQG8tDw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>,
+To: Maxim Levitsky <maximlevitsky@gmail.com>,
+	Alex Dubov <oakad@yahoo.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Martijn Coenen <maco@android.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Dan Schatzberg <schatzberg.dan@gmail.com>,
-	linux-block@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-mmc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] loop: avoid out-of-range warning
-Date: Mon, 27 Sep 2021 11:43:00 +0200
-Message-Id: <20210927094327.644665-1-arnd@kernel.org>
+Subject: [PATCH] memstick: avoid out-of-range warning
+Date: Mon, 27 Sep 2021 11:44:47 +0200
+Message-Id: <20210927094520.696665-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -40,34 +41,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang warns that the sanity check for page size always succeeds
-when building with 64KB pages:
+clang-14 complains about a sanity check that always passes when the
+page size is 64KB or larger:
 
-drivers/block/loop.c:282:27: error: result of comparison of constant 65536 with expression of type 'unsigned short' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
-                           ~~~~~ ^ ~~~~~~~~~
+drivers/memstick/core/ms_block.c:1739:21: error: result of comparison of constant 65536 with expression of type 'unsigned short' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+        if (msb->page_size > PAGE_SIZE) {
+            ~~~~~~~~~~~~~~ ^ ~~~~~~~~~
 
-There is nothing wrong here, so just shut up the check by changing
-the type of the bsize argument.
+This is fine, it will still work on all architectures, so just shut
+up that warning with a cast.
 
-Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
+Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/block/loop.c | 2 +-
+ drivers/memstick/core/ms_block.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 7bf4686af774..51315a93b399 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -277,7 +277,7 @@ static void __loop_update_dio(struct loop_device *lo, bool dio)
-  * @bsize: size to validate
-  */
- static int
--loop_validate_block_size(unsigned short bsize)
-+loop_validate_block_size(unsigned int bsize)
- {
- 	if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
+diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
+index acf36676e388..487e4cc2951e 100644
+--- a/drivers/memstick/core/ms_block.c
++++ b/drivers/memstick/core/ms_block.c
+@@ -1736,7 +1736,7 @@ static int msb_init_card(struct memstick_dev *card)
+ 	msb->pages_in_block = boot_block->attr.block_size * 2;
+ 	msb->block_size = msb->page_size * msb->pages_in_block;
+ 
+-	if (msb->page_size > PAGE_SIZE) {
++	if ((size_t)msb->page_size > PAGE_SIZE) {
+ 		/* this isn't supported by linux at all, anyway*/
+ 		dbg("device page %d size isn't supported", msb->page_size);
  		return -EINVAL;
 -- 
 2.29.2
