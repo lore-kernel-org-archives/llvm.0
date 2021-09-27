@@ -1,32 +1,38 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3564B2FB2
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:16:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E18C61002;
-	Mon, 27 Sep 2021 12:16:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB6D3FC8
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 12:17:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4744A6103B;
+	Mon, 27 Sep 2021 12:16:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632744975;
-	bh=VLo/T7QE7PzxvCAvdD1Dx6SHSPfV7VXt+9sxJ8jwEdY=;
+	s=k20201202; t=1632745021;
+	bh=kg6cqnxzry6/+Av1WRHhc3o3FRqLV9iNvalhK8jK0I0=;
 	h=From:To:Cc:Subject:Date:From;
-	b=jiflBaFmGv0Wu3oK+iueZyRJ55VwwX9vyZeFt788/RY4FibsFj3Yfcniw3mRgn1P1
-	 UPMUkcJ7N1KhwNeKeZHurdBjEnRW87BgiNbPsaUsjsQlQspNEOSkczWnKN9X/nx3TN
-	 KKPoLgkhTZIquV2ZWTSG4ICRDfSd4EE9f42ibgPrrICx684BTza2m3gefFvx64yFUT
-	 l71jotSFZ6RWl1Wm8tShtCYyU3FacgteXG2MF1G3Tb4kApaFsXxmGDEVTXp9FkMBqX
-	 hyaJe9mOfWyuDo931hyPKiSoNnTtBUI/yic3oyy2qZejhhXNt7skFkwjvZfH3CvIKr
-	 xV/d30/DIRj8A==
+	b=YAoQb5O0Qg44lcoRdQPW2cCt4aC4f4bBHW7tXweJWw/zQXN8VzDdk079kZk+uFOdH
+	 XAgnN1r8aDLZvWeALDKcYNOHCM69BmN6/CjNtZMY4k+KG7AgIMxA/SsmL0RZQtrnkh
+	 lroyVZssRyyVKZ80TfThBbfSBzKCIyR3FVSxtiM83wh67dL0OeJFJve2olbZjIrh8Q
+	 r3MYmj1pFFbRtL54JNwKXov5YaBJVG14uvBr7Ax0y5q/LyGP9x30WBkcAlDJ9umDT6
+	 cp69bOHg3eiZwJCMHI+Uum4JKDJ49sky3CpQKCDt8q/NJRl98wavT20M1sGtcVviwO
+	 OH69STxaYIrZg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>
+To: Amitkumar Karwar <amitkarwar@gmail.com>,
+	Ganapathi Bhat <ganapathi017@gmail.com>,
+	Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+	Xinming Hu <huxinming820@gmail.com>,
+	Kalle Valo <kvalo@codeaurora.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-wireless@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] cxgb: avoid open-coded offsetof()
-Date: Mon, 27 Sep 2021 14:16:04 +0200
-Message-Id: <20210927121611.940046-1-arnd@kernel.org>
+Subject: [PATCH] mwifiex: avoid null-pointer-subtraction warning
+Date: Mon, 27 Sep 2021 14:16:35 +0200
+Message-Id: <20210927121656.940304-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -38,34 +44,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-14 does not like the custom offsetof() macro in vsc7326:
+clang complains about some NULL pointer arithmetic in this driver:
 
-drivers/net/ethernet/chelsio/cxgb/vsc7326.c:597:3: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
-                HW_STAT(RxUnicast, RxUnicastFramesOK),
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/ethernet/chelsio/cxgb/vsc7326.c:594:56: note: expanded from macro 'HW_STAT'
-        { reg, (&((struct cmac_statistics *)NULL)->stat_name) - (u64 *)NULL }
+drivers/net/wireless/marvell/mwifiex/sta_tx.c:65:59: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
+        pad = ((void *)skb->data - (sizeof(*local_tx_pd) + hroom)-
+                                                                 ^
+drivers/net/wireless/marvell/mwifiex/uap_txrx.c:478:53: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
+        pad = ((void *)skb->data - (sizeof(*txpd) + hroom) - NULL) &
 
-Rewrite this to use the version provided by the kernel.
+Rework that expression to do the same thing using a uintptr_t.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/ethernet/chelsio/cxgb/vsc7326.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/marvell/mwifiex/sta_tx.c   | 4 ++--
+ drivers/net/wireless/marvell/mwifiex/uap_txrx.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb/vsc7326.c b/drivers/net/ethernet/chelsio/cxgb/vsc7326.c
-index 873c1c7b4ca0..a19284bdb80e 100644
---- a/drivers/net/ethernet/chelsio/cxgb/vsc7326.c
-+++ b/drivers/net/ethernet/chelsio/cxgb/vsc7326.c
-@@ -591,7 +591,7 @@ static void port_stats_update(struct cmac *mac)
- 	} hw_stats[] = {
+diff --git a/drivers/net/wireless/marvell/mwifiex/sta_tx.c b/drivers/net/wireless/marvell/mwifiex/sta_tx.c
+index 241305377e20..a9b5eb992220 100644
+--- a/drivers/net/wireless/marvell/mwifiex/sta_tx.c
++++ b/drivers/net/wireless/marvell/mwifiex/sta_tx.c
+@@ -62,8 +62,8 @@ void *mwifiex_process_sta_txpd(struct mwifiex_private *priv,
  
- #define HW_STAT(reg, stat_name) \
--	{ reg, (&((struct cmac_statistics *)NULL)->stat_name) - (u64 *)NULL }
-+	{ reg, offsetof(struct cmac_statistics, stat_name) / sizeof(u64) }
+ 	pkt_type = mwifiex_is_skb_mgmt_frame(skb) ? PKT_TYPE_MGMT : 0;
  
- 		/* Rx stats */
- 		HW_STAT(RxUnicast, RxUnicastFramesOK),
+-	pad = ((void *)skb->data - (sizeof(*local_tx_pd) + hroom)-
+-			 NULL) & (MWIFIEX_DMA_ALIGN_SZ - 1);
++	pad = ((uintptr_t)skb->data - (sizeof(*local_tx_pd) + hroom)) &
++	       (MWIFIEX_DMA_ALIGN_SZ - 1);
+ 	skb_push(skb, sizeof(*local_tx_pd) + pad);
+ 
+ 	local_tx_pd = (struct txpd *) skb->data;
+diff --git a/drivers/net/wireless/marvell/mwifiex/uap_txrx.c b/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
+index 9bbdb8dfce62..245ff644f81e 100644
+--- a/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
++++ b/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
+@@ -475,8 +475,8 @@ void *mwifiex_process_uap_txpd(struct mwifiex_private *priv,
+ 
+ 	pkt_type = mwifiex_is_skb_mgmt_frame(skb) ? PKT_TYPE_MGMT : 0;
+ 
+-	pad = ((void *)skb->data - (sizeof(*txpd) + hroom) - NULL) &
+-			(MWIFIEX_DMA_ALIGN_SZ - 1);
++	pad = ((uintptr_t)skb->data - (sizeof(*txpd) + hroom)) &
++	       (MWIFIEX_DMA_ALIGN_SZ - 1);
+ 
+ 	skb_push(skb, sizeof(*txpd) + pad);
+ 
 -- 
 2.29.2
 
