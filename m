@@ -1,32 +1,33 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E6272
-	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:38:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2650161157;
-	Mon, 27 Sep 2021 09:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F50772
+	for <llvm@lists.linux.dev>; Mon, 27 Sep 2021 09:41:28 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 79C2460F70;
+	Mon, 27 Sep 2021 09:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632735487;
-	bh=r3unqzpj0fOYnSoUg73JGoF/nR4E/IrF3UzNJJ94Uo0=;
+	s=k20201202; t=1632735688;
+	bh=9hhtJVsGexG0XVk3k/pwBPZOJmTujKncE9iL0HXJp30=;
 	h=From:To:Cc:Subject:Date:From;
-	b=nOGLAXutnF5xHS+z4e+lVuOVwFQVbpfJgMEeXfRc0oKyftVekmdLpju/822dj9Bkz
-	 Y4CAR9PqjBSnWf36ZSUQ1ANnc/U0aI6mVlbkoVoxgNlMKz7RTunvfXCYu3XECMBe7V
-	 Fl03K7orN2moG2+rvewTgJlElMXTHirV9FQpv7MoC8RzxktNPeY++odzjn9RwfZ2r+
-	 U59jA5Uf4scfxk2xdZ0GM6vwbHwlGzBEhCF5B2/rcNU97Mud4JDcndVGBt99aYSboA
-	 /Mr7fEhhl9MLByyRfQYSeLq7pa8GgG8g+BQR9QiUpyIZa2ySlxBtRwUmcxRcBOqrRq
-	 B4MDgsuiAVI+Q==
+	b=do7Grx6Q2G3z3JCOdoY72cgg/pNHi9Hw4uOyOAIVymjxJtguRuFrBjo+9Uc/xi6QH
+	 bJG7HYtl+c5EFp2DGkIbb3dLU/HZHp/7hdFk3G674B5sgxMTKEJRZOHHAEWhp4UHqa
+	 45pSzv4j8v3wGo1ookpJs9YjLnph54fHfZK14pI9JwhCItVPyG5WOf+A5mVxqxeMwb
+	 HYPsFht2GVeWKjRPDo9AnotnrPrk2EfBviwluHIfbx3c2UHM55s6sFAI89uZtZrOxK
+	 XjDiLaINnWPg70jpFsYcIGt+cnKNKw/6T61fCSBXAP1sDkP+6WtS6K9ueqZ7sl2dip
+	 RGZyku3YMepOg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
+To: Hans de Goede <hdegoede@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Al Viro <viro@zeniv.linux.org.uk>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	netdev@vger.kernel.org,
+	Dan Carpenter <dan.carpenter@oracle.com>,
+	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] am65-cpsw: avoid null pointer arithmetic
-Date: Mon, 27 Sep 2021 11:37:57 +0200
-Message-Id: <20210927093803.474510-1-arnd@kernel.org>
+Subject: [PATCH] vboxsf: fix old signature detection
+Date: Mon, 27 Sep 2021 11:40:58 +0200
+Message-Id: <20210927094123.576521-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -38,36 +39,56 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang warns about arithmetic on NULL pointers:
+The constant-out-of-range check in clang found an actual bug in
+vboxsf, which leads to the detection of old mount signatures always
+failing:
 
-drivers/net/ethernet/ti/am65-cpsw-ethtool.c:71:2: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
-        AM65_CPSW_REGDUMP_REC(AM65_CPSW_REGDUMP_MOD_NUSS, 0x0, 0x1c),
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/ethernet/ti/am65-cpsw-ethtool.c:64:29: note: expanded from macro 'AM65_CPSW_REGDUMP_REC'
-        .hdr.len = (((u32 *)(end)) - ((u32 *)(start)) + 1) * sizeof(u32) * 2 + \
-                                   ^ ~~~~~~~~~~~~~~~~
+fs/vboxsf/super.c:394:21: error: result of comparison of constant -3 with expression of type 'unsigned char' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+                       options[3] == VBSF_MOUNT_SIGNATURE_BYTE_3) {
+                       ~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fs/vboxsf/super.c:393:21: error: result of comparison of constant -2 with expression of type 'unsigned char' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+                       options[2] == VBSF_MOUNT_SIGNATURE_BYTE_2 &&
+                       ~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fs/vboxsf/super.c:392:21: error: result of comparison of constant -1 with expression of type 'unsigned char' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+                       options[1] == VBSF_MOUNT_SIGNATURE_BYTE_1 &&
+                       ~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The expression here is easily changed to a calculation based on integers
-that is no less readable.
+The problem is that the pointer is of type 'unsigned char' but the
+constant is a 'char'. My first idea was to change the type of the
+pointer to 'char *', but I noticed that this was the original code
+and it got changed after 'smatch' complained about this.
 
+I don't know if there is a bug in smatch here, but it sounds to me
+that clang's warning is correct. Forcing the constants to an unsigned
+type should make the code behave consistently and avoid the warning
+on both.
+
+Fixes: 9d682ea6bcc7 ("vboxsf: Fix the check for the old binary mount-arguments struct")
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/ethernet/ti/am65-cpsw-ethtool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/vboxsf/super.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-index 6e4d4f9e32e0..b05de9b61ad6 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-@@ -61,7 +61,7 @@ struct am65_cpsw_regdump_item {
+diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
+index 4f5e59f06284..84e2236021de 100644
+--- a/fs/vboxsf/super.c
++++ b/fs/vboxsf/super.c
+@@ -21,10 +21,10 @@
  
- #define AM65_CPSW_REGDUMP_REC(mod, start, end) { \
- 	.hdr.module_id = (mod), \
--	.hdr.len = (((u32 *)(end)) - ((u32 *)(start)) + 1) * sizeof(u32) * 2 + \
-+	.hdr.len = (end + 4 - start) * 2 + \
- 		   sizeof(struct am65_cpsw_regdump_hdr), \
- 	.start_ofs = (start), \
- 	.end_ofs = end, \
+ #define VBOXSF_SUPER_MAGIC 0x786f4256 /* 'VBox' little endian */
+ 
+-#define VBSF_MOUNT_SIGNATURE_BYTE_0 ('\000')
+-#define VBSF_MOUNT_SIGNATURE_BYTE_1 ('\377')
+-#define VBSF_MOUNT_SIGNATURE_BYTE_2 ('\376')
+-#define VBSF_MOUNT_SIGNATURE_BYTE_3 ('\375')
++#define VBSF_MOUNT_SIGNATURE_BYTE_0 (u8)('\000')
++#define VBSF_MOUNT_SIGNATURE_BYTE_1 (u8)('\377')
++#define VBSF_MOUNT_SIGNATURE_BYTE_2 (u8)('\376')
++#define VBSF_MOUNT_SIGNATURE_BYTE_3 (u8)('\375')
+ 
+ static int follow_symlinks;
+ module_param(follow_symlinks, int, 0444);
 -- 
 2.29.2
 
