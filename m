@@ -1,114 +1,83 @@
-Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3439A72
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 16:07:46 +0000 (UTC)
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-	by pb-smtp1.pobox.com (Postfix) with ESMTP id B5296DF42F;
-	Tue, 28 Sep 2021 12:02:55 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-	:to:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=sasl; bh=4bMrkmufLiQqbAD1pzxtLKc7Xm2QXqXXrC6POt
-	E4iUI=; b=BMHo6YdQv9IC0ETzCDkW52HY/40nCzu3F0DbX0M6Fk7bUKCZpl644y
-	Wn3Fu4UEMXmD6awsFWiveDmFKa9cygsxdD65KmUFUI1Fq/vVe2CHeWAMlU1SyWoN
-	KusuQg+yxXKp9lWpJQhDcEWHxxzQ/5XTvoy1W98MjIyyvjlOtEhSs=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-	by pb-smtp1.pobox.com (Postfix) with ESMTP id AA7C7DF42C;
-	Tue, 28 Sep 2021 12:02:55 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=4bMrkmufLiQqbAD1pzxtLKc7Xm2QXqXXrC6POtE4iUI=; b=egrd5wPIzSwp4hqzxwpKTlca22zszwfK3BNI+f60YZjGo9b8hVlEOi9Ty0JbVcLZCunJz1WdSNt9Y7p69/dgCNC0n6ZPYkIF2rcybOnYXxVKUkvvtPXqUz1TYnJ1e7hwf8TDWDYibYA0VfM4JI15HZ8/hyOh6wSvLFyXcQVC37c=
-Received: from yoda.home (unknown [96.21.170.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 12920DF42B;
-	Tue, 28 Sep 2021 12:02:55 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-Received: from xanadu.home (xanadu.home [192.168.2.2])
-	by yoda.home (Postfix) with ESMTPSA id 154692DA0083;
-	Tue, 28 Sep 2021 12:02:54 -0400 (EDT)
-Date: Tue, 28 Sep 2021 12:02:53 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Arnd Bergmann <arnd@kernel.org>
-cc: Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, 
-    linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-    Ard Biesheuvel <ardb@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 12/14] ARM: add CONFIG_PHYS_OFFSET default values
-In-Reply-To: <20210928154143.2106903-13-arnd@kernel.org>
-Message-ID: <5n4on6-8483-3417-1r59-86no56q082p1@syhkavp.arg>
-References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-13-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B889229CA
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 16:43:35 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21FB661262;
+	Tue, 28 Sep 2021 16:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632847415;
+	bh=DhJjFTTFkazjP1XuwCae41RMyEElrP/mXzZaoteYjUo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M/RzLMhQRcyIEjAFhh0GhTf993U7L7630Owtw6N494O+uUDxaqiutCHMveFCeJuuS
+	 22pp3ILDAtbbmxJDALokVoZ94L3CVtvderAJsof2sfZaMtP0iL8ngG4Ecxlk2eNFFz
+	 W3bXjGbNlox6m/oPdQ6biFJYW7Xt6EVr6zr/eCxzK91kMqIjrCsJSrdglt4QfidLv3
+	 tk4mxVZ7f8I7G8m1f2cNuBHNKjZedSP3Knccax6eam6Qmjw1PVOj8Ip9uwRV//yzu0
+	 AEJRrDkv1B7+Z/15bFKbllxQ9FKkCNCVAoTYgJF6YuFqrgf0SDjBSXTatLTDZXAHGP
+	 j+lN6FzSUM3Ug==
+Date: Tue, 28 Sep 2021 09:43:30 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function
+ 'set_test_mode_src_osc_freq_target_low_bits'
+Message-ID: <YVNGMg/TI+jo/1R1@archlinux-ax161>
+References: <202109282205.VsHhj6PP-lkp@intel.com>
+ <CAMuHMdX0Zm_hMheZ0e1Xu991jnUr=aY_cDBHHGFvQ1sKqM1b9A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID:
- 8AA52D24-2075-11EC-81F6-62A2C8D8090B-78420484!pb-smtp1.pobox.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdX0Zm_hMheZ0e1Xu991jnUr=aY_cDBHHGFvQ1sKqM1b9A@mail.gmail.com>
 
-On Tue, 28 Sep 2021, Arnd Bergmann wrote:
+Hi Geert,
 
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Sep 28, 2021 at 05:39:19PM +0200, Geert Uytterhoeven wrote:
+> On Tue, Sep 28, 2021 at 5:09 PM kernel test robot <lkp@intel.com> wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   0513e464f9007b70b96740271a948ca5ab6e7dd7
+> > commit: ade896460e4a62f5e4a892a98d254937f6f5b64c drm: DRM_KMB_DISPLAY should depend on ARCH_KEEMBAY
+> > date:   11 months ago
+> > config: mips-randconfig-r013-20210928 (attached as .config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mips-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ade896460e4a62f5e4a892a98d254937f6f5b64c
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout ade896460e4a62f5e4a892a98d254937f6f5b64c
+> >         # save the attached .config to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/kmb/ drivers/net/ethernet/mellanox/mlxsw/ mm/
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
+> >    set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi
+> >    ^
+> > >> drivers/gpu/drm/kmb/kmb_dsi.c:824:2: warning: unused function 'set_test_mode_src_osc_freq_target_hi_bits'
+> >    set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi
 > 
-> For platforms that are not yet converted to ARCH_MULTIPLATFORM,
-> we can disable CONFIG_ARM_PATCH_PHYS_VIRT, which in turn requires
-> setting a correct address here.
-> 
-> As we actualy know what all the values are supposed to be based
-> on the old mach/memory.h header file contents (from git history),
-> we can just add them here.
-> 
-> This also solves a problem in Kconfig where 'make randconfig'
-> fails to continue if no number is selected for a 'hex' option.
-> Users can still override the number at configuration time, e.g.
-> when the memory visible to the kernel starts at a nonstandard
-> address on some machine, but it should no longer be required
-> now.
-> 
-> I originally posted this back in 2016, but the problem still
-> persists. The patch has gotten much simpler though, as almost
-> all platforms rely on ARM_PATCH_PHYS_VIRT now.
-> 
-> Acked-by: Nicolas Pitre <nico@linaro.org>
+> These two functions are "static inline", so there should not be such
+> warning. Toolchain issue?
 
-Acked-by: Nicolas Pitre <nico@fluxnic.net>
+No toolchain issue, Masahiro specifically made clang W=1 builds warns on
+static inline unused functions because of instances like this, see
+commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
+functions for W=1 build").
 
-> Link: https://lore.kernel.org/linux-arm-kernel/1455804123-2526139-5-git-send-email-arnd@arndb.de/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/Kconfig | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 12a0bd4b315d..0d4f3e2d50ad 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -264,10 +264,12 @@ config PHYS_OFFSET
->  	hex "Physical address of main memory" if MMU
->  	depends on !ARM_PATCH_PHYS_VIRT
->  	default DRAM_BASE if !MMU
-> -	default 0x00000000 if ARCH_FOOTBRIDGE
-> +	default 0x00000000 if ARCH_FOOTBRIDGE || ARCH_IXP4XX
->  	default 0x10000000 if ARCH_OMAP1 || ARCH_RPC
-> -	default 0x20000000 if ARCH_S5PV210
-> -	default 0xc0000000 if ARCH_SA1100
-> +	default 0x30000000 if ARCH_S3C24XX
-> +	default 0xa0000000 if ARCH_IOP32X || ARCH_PXA
-> +	default 0xc0000000 if ARCH_EP93XX || ARCH_SA1100
-> +	default 0
->  	help
->  	  Please provide the physical address corresponding to the
->  	  location of main memory in your system.
-> -- 
-> 2.29.2
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+Cheers,
+Nathan
