@@ -1,105 +1,186 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDC529CA
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 17:20:56 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id y26so56410018lfa.11
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 10:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oovrzJURHWJ6qCmrUM9JSWjLkbl3a0JTJO2dczu7GzA=;
-        b=Ok+ALmAEK+cZnQ6LuSSxPh+ShUTJqGCiOvmoU/FE8+AFDbt3w2xhf+OJV+wicegC6O
-         zU2DU4rpLyA0i2Uy7MMceYMncHY/4DZIXQRThvvvLyG/WcXtf+4JNsa58sUAo+1aj/mX
-         ON0HnvzkhDxEhQLZSLEsq4CHpc1tpzlgy0y2FlvYGd1Ocrkzy5HD82giCejK//R+7hGc
-         2LZXlfyICmNNA6D/mQkr26WrfwwJpQotDXTrg9YhgOu16u0AqgkKz6M5PqcrV+1Auksa
-         BIEPMAbqdhZe9qWJWdZokywf9Qi+0eW8StkBU5rPa+QxgyIrvn+v+bk9IsszNjTqpzbV
-         L+IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oovrzJURHWJ6qCmrUM9JSWjLkbl3a0JTJO2dczu7GzA=;
-        b=XtDWoBGOlT2du/9yTydWjoUHS9J0BAFlZ2KFBWptayC+svXyFN69F2FDpxQU8g73W3
-         OXbrWqsPKoQCRaz3oRWrB/p48DGoLu1EvlaU6JhwwFJpBuXnkdJWRZh/ham+a0a0vO15
-         6uSOiKFzHL59zGW9vFvGxNIUsQ3uxfDmaAfFYN3sDQ9t1zAMUSJu+doU0QAbVovqdCqR
-         X8CyIodePzgFWFQOAK2EE+jH+A+g6lca381ynCR4jzcCdqdEtLOE9bLWAGpQc6f2IRXu
-         dyJnxzcTR7DDC/WAtoZLBZNyyHd/LJ0Vco/CvdzZZ3YRgzu1Rv7p581yNVTiSsBUMO5M
-         0trA==
-X-Gm-Message-State: AOAM533XbUxWmwLRdEOGQk9xUson3J9ZoAE0po7V0WfZzsHCLjc0Kb5X
-	D5pzn+Ye3ooDQbHA1LGG/7J6M+WvAXu2dy/TOMz/jQ==
-X-Google-Smtp-Source: ABdhPJwui+sJR23H1nkOUy19dPvbUaqlhgFcXDNU9AQv+t/weNik7LllxBjVxzZsr61RZATSJV00S+5+8Lx+VKX9mTg=
-X-Received: by 2002:a05:6512:b0c:: with SMTP id w12mr6917372lfu.240.1632849654306;
- Tue, 28 Sep 2021 10:20:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F4E29CA
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 17:44:10 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10121"; a="224417411"
+X-IronPort-AV: E=Sophos;i="5.85,330,1624345200"; 
+   d="scan'208";a="224417411"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2021 10:44:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,330,1624345200"; 
+   d="scan'208";a="456713280"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga002.jf.intel.com with ESMTP; 28 Sep 2021 10:44:05 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 28 Sep 2021 10:44:05 -0700
+Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 28 Sep 2021 10:44:04 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Tue, 28 Sep 2021 10:44:04 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.12; Tue, 28 Sep 2021 10:44:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ou94BDC1SYDKxkdW3ez4YHsKGWROYjf1038nCB/TnQ8oHbWsdknxmiJAEp7n8BubZKx+Csb5AGOMa7oN5R78kTdu6aohHS8zso2hiZLW5zj4zW35urpp6U/V/eNy+ISGxFZ4bWSwZzcEa04/zLJvuy/mppclysmmH+XPGgCuTBaOUGJW7CfBMToF06DHJGqMXTyF5kfc7jkdiYjNr+kHcAunUcmAtXGg+Y1k0V8Dku/XAGhV9TSuO2BJ5rgBhYZOPhx51zSMvMsw0Z2cVZ0yISJh26JbEoY+6l/1gN1fh0nkXh6s+hik30BnF24X9VA3cSigu3iFMJ0ELVSx3SzEIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=dCXYAkk2BBmmPF7M9x9PiX2xjFUlnKkjN69T/KYHkaM=;
+ b=eDxZVaUqfiv2f+yzLW/caBDn5eH9w+NzlmDkZV2FhlziePbNV78DchGTpvYywMkNoXY6Cptt5z9kzcm3UFHo4ox0jKoEhiYlqA0osz4i8UK4+2GkDDAoYU+zeThxuHtQTYlsiTxOLaM1qU/pqOcBQB+uOrD7ehIGXGOCR93YJESLoW0axg/m5BbIm5m9nHdQsfMhc/0eDyl/F048K+az2AYaZjglCf48Qd5XTolVuPxydJCToMeosBc9JibOveLTz2GyjR5+x7j2q5PcDJq5gK/5ukIEhSnVpjUmgY927b1s5Gpgzx51mozQdg+rrK0+qqwN+jAuE2fv3sEP9iGxZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dCXYAkk2BBmmPF7M9x9PiX2xjFUlnKkjN69T/KYHkaM=;
+ b=X3FBES+dW5i9DLjHvuMic8+ny5FmhoaUCBL332OaNx9EJn0q6HhgJD8dHOiyjNp87gXSyfF4Aq6lNRVVkxPFbkCb23KpClWuJNTBcIEFmt+wCAnwG0h81wdXjUp4JmMffuIOKpqqnNUl1XOaIZfEd7vH80O+fHKe9DO6CGaswkQ=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5326.namprd11.prod.outlook.com (2603:10b6:5:391::8) by
+ DM4PR11MB5264.namprd11.prod.outlook.com (2603:10b6:5:38b::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4544.14; Tue, 28 Sep 2021 17:44:02 +0000
+Received: from DM4PR11MB5326.namprd11.prod.outlook.com
+ ([fe80::c61:d5d8:c71e:66da]) by DM4PR11MB5326.namprd11.prod.outlook.com
+ ([fe80::c61:d5d8:c71e:66da%9]) with mapi id 15.20.4544.022; Tue, 28 Sep 2021
+ 17:44:02 +0000
+Subject: Re: [PATCH] ACPI: avoid NULL pointer arithmetic
+To: Arnd Bergmann <arnd@kernel.org>, Robert Moore <robert.moore@intel.com>
+CC: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Erik Kaneda <erik.kaneda@intel.com>,
+	<linux-acpi@vger.kernel.org>, <devel@acpica.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, Len Brown
+	<lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20210927121338.938994-1-arnd@kernel.org>
+From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <92b02547-3aa5-537f-a782-7a25854d88fe@intel.com>
+Date: Tue, 28 Sep 2021 19:43:55 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+In-Reply-To: <20210927121338.938994-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: DBBPR09CA0004.eurprd09.prod.outlook.com
+ (2603:10a6:10:c0::16) To DM4PR11MB5326.namprd11.prod.outlook.com
+ (2603:10b6:5:391::8)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-15-arnd@kernel.org>
-In-Reply-To: <20210928154143.2106903-15-arnd@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 28 Sep 2021 10:20:42 -0700
-Message-ID: <CAKwvOdmhZiOQ1h6_qfOxTKkzoA+Go8BCp-GEUZ6LNQpd0cimzA@mail.gmail.com>
-Subject: Re: [PATCH 14/14] [RFC] ARM: forbid ftrace with clang and thumb2_kernel
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Ard Biesheuvel <ardb@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, Peter Smith <Peter.Smith@arm.com>, 
-	Kristof Beyls <Kristof.Beyls@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Received: from [192.168.100.217] (213.134.187.41) by DBBPR09CA0004.eurprd09.prod.outlook.com (2603:10a6:10:c0::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend Transport; Tue, 28 Sep 2021 17:44:00 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d020b049-d31c-4fa0-ec2e-08d982a78f3b
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5264:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM4PR11MB526491D55BBF42EEDFC979C6CBA89@DM4PR11MB5264.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: stJLxnLzhaGaWME+BcthfZSU9oU0rA5Sfo+1lEad04rEVk9SdojiE4hv1u7NMB7++ky5K3Waq3Z+bSyd3Wwpnu1YQ8gojvk5R9E4BQNb4scxPjrLA+N3jLJ/ZotciWwDF+o5Y5GkNz7Bz0Bg2j90YQWRJNXm0/dQ5LIB4dhWb9IEFCR0Arav+vFQs40VelZDbUldtDxxsMMV5gPgPwqn6n2rXBx0afoWLLCU/MjFyDK2yj+fN9fnSp0nIY8K+gAczyo4eNXp5qTdEzP6NRu+EwSh+MuIbvGDTB5pSKslmk0qU+DHXQaLlYXlbQpwtXLkgqoPDgPtfEntSroK3CXlQhhYiGfNiwel5I2/YBOulAUZiVPNg1dNndBVrw6Bcv+EBxA+bV73EdMn4NigB1Y6xL2817EQdqUvRjpgOuTWHMVvaUm2aGng6ckYIHparxx/ZO7dBthOrJLlF7bSA00dX2UXI5duZRctVhsqkX3lJp5iBhuVRCvmD+87M/W1mSXbiU8NsyKygJ6wx0/M/RKhbptgfVsGc+nHs+Tw/9WD9+W8Xkeeuy6A4IIwRyqwYyv0tZ6xL8RKpfp7C1I5TNGoJS0id89BLbTI5PDUwUTsEig4WPMnKgSYVsulP4R83FtdGu6cGKzhAqgyAjyhdlwQ5cnyOWmrf1v54DJ/OSdvjEAoFtP3+p9baTX9bWd8QwTMVsOzps8A1jllYA2wVzL2QXyo0kYc3INE6yWYw38V5GObqJyGGGI1C9fzcF8tjm1u
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5326.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36916002)(5660300002)(110136005)(31696002)(6666004)(86362001)(186003)(16576012)(31686004)(66946007)(54906003)(8676002)(2616005)(53546011)(316002)(26005)(7416002)(66556008)(66476007)(4326008)(6486002)(508600001)(956004)(6636002)(83380400001)(36756003)(38100700002)(8936002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YlEvdS83YmVVVHI4Nys2WmFoMXBDV3dPS0dZVzNMUUNlaFJvUjJPcXdSVUVj?=
+ =?utf-8?B?WTByVkxXazdDZ3gydE1HK1ZycVgxNHdMc1JFVDFUNG8vMWhqOHRTTmVNQlFk?=
+ =?utf-8?B?NkxZTmdqNkhROURsOS9GL2JCNDkvRWpsQlVvbWprRDhGMjY5TDlyaGNOSy85?=
+ =?utf-8?B?MHBFWmRXbW1obTlRZmRMQkl0Vi9vUGVBUjNqYlU3L2x4MXR3Q0g4enBESkRT?=
+ =?utf-8?B?RXdKMFBMTTV4VWdYNHo3WE1rbjFxckNvaGFwYmN4NVNod3BmclFVOTBjV05M?=
+ =?utf-8?B?SFBLcjhIL1o4ZzRhYnVKVVRFWWxrd1Jtc3BnTXd4WXk3MlFLN3h1REZXcThs?=
+ =?utf-8?B?VWQ3cm9yNWRhRnpIWFVyWEtFWGFYR2RQNGw5TW9kWWZyL0VnTktOcG1jcnNv?=
+ =?utf-8?B?ekxzdWw0dDdZNUE2aGMyZEczTE55Rlg5UFExTGZ2ZTUvMGZqeEpPUXUvck9r?=
+ =?utf-8?B?TElsOGkzMHNielpzOTZhWnJBSWtmaFphaWxFMUpzU1VKdE51RmN6dkMrVG82?=
+ =?utf-8?B?cmpNMFF4cWhJa0xHdTMxL2ZrYzRuUTgzYW9SYlRqSDhMNHkxZEUyQ2tUYjdm?=
+ =?utf-8?B?bnVFUmIxZ0dRSnJPVGswaFV6T3FOa1hqUUZrSDI1Nmx2Z3dHcjlIVklyS1Ew?=
+ =?utf-8?B?SFp6RThnRVJ2MTJhS0NWbWZIK1RzUmZ0anVIbCtyQ0tla1dadzB2R3MveHVN?=
+ =?utf-8?B?a3hiSEV4ZzYzMllpQThrZmQ2RkZTdlFpaWZBdm80aHBpa1I0S1o4cU8zMnNm?=
+ =?utf-8?B?ZVdDdW5QVnFNYWc4Z1pYUDVwTngydytKY2gwbmJpa0xoU2RpSklTVGZOVHpO?=
+ =?utf-8?B?V3ZHNEkxK2U5Z05USURTRW5VOHVuRGR4d3dGQk5vcVBVSk1hYkFvMjZVemdO?=
+ =?utf-8?B?SUpJQm1SY0c0NFdGZVEwVXFTTlM5NnQrck4zWHZoRkNEaE9Xa3F2a3liMWl4?=
+ =?utf-8?B?U2M3ZzFqYXU1Zk93TXlISm1XQ0t4MUg2M0FiZVdjaUpKSEFNbTc1UnBTSUM0?=
+ =?utf-8?B?NXRPMURXL1dVc09zZGpHT1N2VXE5WWVTMU9TWURZelZJZDJIMzBOc0tMcnFs?=
+ =?utf-8?B?bk11RVVXQ2lWSHFhSzh2T0RrcGRJNm03amcvU3p0T1lPT045TE1MbEZXbHkr?=
+ =?utf-8?B?cjFjV3lzQmxGY3llMVhMb2tqa1Zha0M3d3J4WGJXcUVZbER2Rm1TRUJpSmlI?=
+ =?utf-8?B?QnllS0hQSnhTV0ozbE82YXBSSnJCN3MvdzVTQXZVeTRsZGoyNmI2SXhleEdD?=
+ =?utf-8?B?MlNZb3NjeDVWZlJRRG5ab2JKT2ZjVktXdFNQZFR4K3phU0NrclNUUDBQaHkz?=
+ =?utf-8?B?d2s0KzIzdWw3eFQ2ZEF6TklHZHZza0hZZkozYVljaTh5T21DUjFXTWFkdUVh?=
+ =?utf-8?B?YjRZK2xmaEx0NDkxVXFheTBHeWFIQ1gzVGU5aC9JSTJvM0ZnYkFXM0dmY1Rv?=
+ =?utf-8?B?RDljamVHQXdnR2t0WFlWMlI0MjNKZUNnNytTdmczSTBIVGV6SWlLZ21SZ3VG?=
+ =?utf-8?B?RklheFRXVGlEMENaNGdmUndoV24yL21pVmNGRmlVRnE2em1DT012YURyd2U2?=
+ =?utf-8?B?RGdVZEJzLzhyS3A3UDREWVFTcDJwQ0NxOFVkQjcvOG1JYlJDNElsYWhwMFBH?=
+ =?utf-8?B?WmVoMUxib2tjeTlrS1pGUzVySysya2VaeTFNdzBDQkpDSjR4RlhEU0F0THcv?=
+ =?utf-8?B?MCs0czFnM2NOYjJtZzJGRmVSM3huSm9LS2RoRDhzUWU1WnVrN3AyNDhqeVJ1?=
+ =?utf-8?Q?PTF9qYFOwYyYhM/WixZcQ+VcaaNRQG4xE1UiB86?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d020b049-d31c-4fa0-ec2e-08d982a78f3b
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5326.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2021 17:44:02.6333
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wUe6Goc5GJ2blhcOSZJIpfO4Rb/fBAOV+2mzbUkEKaRpaJfIp6mQrE66+oULNilqq9L8umqmpHW2/QSCbHLD2bxBDGGrNKIkZdPbOxJCB0I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5264
+X-OriginatorOrg: intel.com
 
-On Tue, Sep 28, 2021 at 8:42 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
+Bob, this is ACPICA material.
+
+Would it be possible to apply this to the upstream from the patch or do 
+you need  a PR for this?
+
+On 9/27/2021 2:13 PM, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> clang fails to build kernels with THUMB2 and FUNCTION_TRACER
-> enabled when there is any inline asm statement containing
-> the frame pointer register r7:
+> There are some very old macros for doing an open-coded offsetof() and
+> cast between pointer and integer in ACPI headers. clang-14 now complains
+> about these:
 >
-> arch/arm/mach-versatile/dcscb.c:95:2: error: inline asm clobber list contains reserved registers: R7 [-Werror,-Winline-asm]
-
-^ This file no longer exists in tree?
-
-> arch/arm/mach-exynos/mcpm-exynos.c:154:2: error: inline asm clobber list contains reserved registers: R7 [-Werror,-Winline-asm]
-> arch/arm/probes/kprobes/actions-thumb.c:449:3: error: inline asm clobber list contains reserved registers: R7 [-Werror,-Winline-asm]
+> drivers/acpi/acpica/tbfadt.c:86:3: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
+>           ACPI_FADT_OFFSET(pm_timer_block),
+>           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/acpi/actbl.h:376:47: note: expanded from macro 'ACPI_FADT_OFFSET'
+>   #define ACPI_FADT_OFFSET(f)             (u16) ACPI_OFFSET (struct acpi_table_fadt, f)
+>                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/acpi/actypes.h:511:41: note: expanded from macro 'ACPI_OFFSET'
+>   #define ACPI_OFFSET(d, f)               ACPI_PTR_DIFF (&(((d *) 0)->f), (void *) 0)
+>                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/acpi/actypes.h:505:79: note: expanded from macro 'ACPI_PTR_DIFF'
+>   #define ACPI_PTR_DIFF(a, b)             ((acpi_size) (ACPI_CAST_PTR (u8, (a)) - ACPI_CAST_PTR (u8, (b))))
+>                                                                                ^ ~~~~~~~~~~~~~~~~~~~~~~~
+> Convert them to the modern equivalents.
 >
-> Apparently gcc should also have warned about this, and the
-> configuration is actually invalid, though there is some
-> disagreement on the bug trackers about this.
->
-> Link: https://bugs.llvm.org/show_bug.cgi?id=45826
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94986
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
 > ---
->  arch/arm/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   include/acpi/actypes.h | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 0d4f3e2d50ad..7ea95bb40004 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -91,7 +91,7 @@ config ARM
->         select HAVE_FAST_GUP if ARM_LPAE
->         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->         select HAVE_FUNCTION_GRAPH_TRACER if !THUMB2_KERNEL && !CC_IS_CLANG
-> -       select HAVE_FUNCTION_TRACER if !XIP_KERNEL
-> +       select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !(THUMB2_KERNEL && CC_IS_CLANG)
->         select HAVE_GCC_PLUGINS
->         select HAVE_HW_BREAKPOINT if PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7)
->         select HAVE_IRQ_TIME_ACCOUNTING
-> --
-> 2.29.2
->
->
+> diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
+> index 92c71dfce0d5..285bc7b73de3 100644
+> --- a/include/acpi/actypes.h
+> +++ b/include/acpi/actypes.h
+> @@ -507,8 +507,8 @@ typedef u64 acpi_integer;
+>   /* Pointer/Integer type conversions */
+>   
+>   #define ACPI_TO_POINTER(i)              ACPI_CAST_PTR (void, (acpi_size) (i))
+> -#define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
+> -#define ACPI_OFFSET(d, f)               ACPI_PTR_DIFF (&(((d *) 0)->f), (void *) 0)
+> +#define ACPI_TO_INTEGER(p)              ((uintptr_t)(p))
+> +#define ACPI_OFFSET(d, f)               offsetof(d, f)
+>   #define ACPI_PHYSADDR_TO_PTR(i)         ACPI_TO_POINTER(i)
+>   #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
+>   
 
 
--- 
-Thanks,
-~Nick Desaulniers
