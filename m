@@ -1,83 +1,116 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DF03FCC
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 10:11:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 966AC611BD
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 10:11:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632823915;
-	bh=Y7wSC7xrhvCDGxkQBLr8UtzzFVjfJNotICIdTFFi8Ok=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QPA9Ru63h3uBzj/aj83aKCrlH2Ho8nnjT4vdhNQFbKk6Co+Hn3FZjekL20EX1KpLI
-	 FL50GDzBdXWbriiurg+DrVuvmonDBe+jhJPB9bTyL/d4bY6OWoPPP5YRIMnBp6zzTw
-	 4n6A0yz8bTyAoop4B6nU7eiw7K8JyZLtCey1qr+Zb8wm4DVWjA55dTV6XKU1d3hS5V
-	 ir2Y3SKmHjwXJxijmKqLnENDPWKtHFTMKYpsYZTuFbx5KaEp4r5gYEtI1TbD5/tjPI
-	 owKYzZULoX5Q1ynW2wOZjGKXLrR2XIotIoIGmlVJriTxfHr33WKSUXvpwrW4d4sGeP
-	 Xh83CeYtUYlgw==
-Received: by mail-wr1-f50.google.com with SMTP id t8so57134331wrq.4
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 03:11:55 -0700 (PDT)
-X-Gm-Message-State: AOAM530wCQLT/I/aYKIU+D8L2JxvI995P0cnycYb/7M2UcrnTsRdYPRJ
-	YmjMqvCAFkd9BNRK/brDIrl+JurwarOkdtRljdU=
-X-Google-Smtp-Source: ABdhPJzl6fwe7LMgMXeAMdLDt7NX7OTZg0SUJ6tJy/beE2gt+W2VZjPnxuFCXVxpHsdh8A8pu2A/KyaXdaX8tg+YXgM=
-X-Received: by 2002:adf:f481:: with SMTP id l1mr5373570wro.411.1632823914100;
- Tue, 28 Sep 2021 03:11:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CC93FCC
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 10:17:29 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id s17so62510583edd.8
+        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 03:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qy/OhkG7/nBN/uH+Xm8mLuhr2toXlD8zRFmyBJAngNk=;
+        b=n4R/gO+WpLz/LARVBdI+rPe42jV5ePxKm7MKiEnEa2dA+0AuYCow8Hxg860n7OVWoi
+         78Hsl0SMnL5f1vjqdAz2mhEENPF5/usDuSZW+qoJ2dy9aQTIcI7ov4e211r/gyt4ZaZa
+         SaEyhxsCzQ8/nivCEy80UNOa2P40ovsbNCCp0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qy/OhkG7/nBN/uH+Xm8mLuhr2toXlD8zRFmyBJAngNk=;
+        b=PcceDXHXYkEEltHJ8m6fppgIeELOGg2wRTMkTnzZ6UFJwhZLzXamYXDmo2w8wsdFWN
+         m757kGsQmF/o3hxrA9EXKJPfJIcv0hIXNPru2fERw6QA/PIgtbqGzjETa2HaIdKXbxp+
+         OYMtYPQZNMhhFh9OCK1nE1ojrvQy3RsyXLKF1tyT9CkfTq60v7QFgsySjucO5/fLH/HS
+         9rTyHfDDPH2ypHVL0jw4BKZDYjiS3VjcE2eNGfJC9c2SrXUHbq1PkdWjiFRYw4rPsn2k
+         mEkCqaVrrxYdpJJU5uEoR4wbsy1g8So/G9FFY19DJEp8m7aKvRtWVEZUHOJHxTLG1o3S
+         QywQ==
+X-Gm-Message-State: AOAM5334/+Gl/sbdwqJU1zLUAAqS5XrAk+n50/i1mvhF0pNMIZVXMmpF
+	QOL1EJDeEKaqYM5e+G3DF02STA==
+X-Google-Smtp-Source: ABdhPJy6NZ0BOuVQI1vFfC17Astd6UY/xUNYmy6YlAYEbVdMM3i5Z9Zhg0B+6qxSU9rwMZ9G3PtGCw==
+X-Received: by 2002:a50:bf07:: with SMTP id f7mr6555611edk.288.1632824247838;
+        Tue, 28 Sep 2021 03:17:27 -0700 (PDT)
+Received: from localhost ([2620:10d:c093:400::5:6664])
+        by smtp.gmail.com with ESMTPSA id l18sm12788934edw.78.2021.09.28.03.17.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Sep 2021 03:17:27 -0700 (PDT)
+Date: Tue, 28 Sep 2021 11:17:26 +0100
+From: Chris Down <chris@chrisdown.name>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Petr Mladek <pmladek@suse.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Arnd Bergmann <arnd@arndb.de>, Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	YueHaibing <yuehaibing@huawei.com>, Jessica Yu <jeyu@kernel.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [v2] printk: avoid -Wsometimes-uninitialized warning
+Message-ID: <YVLrttKajDU+1ZvX@chrisdown.name>
+References: <20210928093456.2438109-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210927094123.576521-1-arnd@kernel.org> <40217483-1b8d-28ec-bbfc-8f979773b166@redhat.com>
- <20210927130253.GH2083@kadam> <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
- <CAHk-=wheEHQxdSJgTkt7y4yFjzhWxMxE-p7dKLtQSBs4ceHLmw@mail.gmail.com> <70a77e44-c43a-f5ce-58d5-297ca2cfe5d9@redhat.com>
-In-Reply-To: <70a77e44-c43a-f5ce-58d5-297ca2cfe5d9@redhat.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Tue, 28 Sep 2021 12:11:38 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3sEy7NAhMHcV7XPpZxo5tHnQz1oCP43YTe_ZQuzOHgPA@mail.gmail.com>
-Message-ID: <CAK8P3a3sEy7NAhMHcV7XPpZxo5tHnQz1oCP43YTe_ZQuzOHgPA@mail.gmail.com>
-Subject: Re: [PATCH] vboxsf: fix old signature detection
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Dan Carpenter <dan.carpenter@oracle.com>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	Sparse Mailing-list <linux-sparse@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20210928093456.2438109-1-arnd@kernel.org>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 
-On Tue, Sep 28, 2021 at 11:40 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 9/27/21 8:33 PM, Linus Torvalds wrote:
-> > On Mon, Sep 27, 2021 at 6:22 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >>
-> >> More specifically, ' think '\377' may be either -1 or 255 depending on
-> >> the architecture.
-> >> On most architectures, 'char' is implicitly signed, but on some others
-> >> it is not.
-> >
-> > Yeah. That code is just broken.
-> >
-> > And Arnd, your patch may be "conceptually minimal", in that it keeps
-> > thed broken code and makes it work. But it just dials up the oddity to
-> > 11.
+Arnd Bergmann writes:
+>From: Arnd Bergmann <arnd@arndb.de>
+>
+>clang notices that the pi_get_entry() function would use
+>uninitialized data if it was called with a non-NULL module
+>pointer on a kernel that does not support modules:
+>
+>kernel/printk/index.c:32:6: error: variable 'nr_entries' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>        if (!mod) {
+>            ^~~~
+>kernel/printk/index.c:38:13: note: uninitialized use occurs here
+>        if (pos >= nr_entries)
+>                   ^~~~~~~~~~
+>kernel/printk/index.c:32:2: note: remove the 'if' if its condition is always true
+>        if (!mod) {
+>
+>Rework the condition to make it clear to the compiler that we are always
+>in the second case. Unfortunately the #ifdef is still required as the
+>definition of 'struct module' is hidden when modules are disabled.
+>
+>Fixes: 337015573718 ("printk: Userspace format indexing support")
 
-Thank you for addressing it. I usually try to avoid overthinking changes
-to "unusual" code like this, but your solution is clearly an improvement.
+This changelog should make it clear that this is theoretical and will never 
+actually happen, which is salient information for people who are considering 
+whether it should go in stable or similar.
 
-What really threw me off this time is that my first attempt to address
-the warning was an exact revert of 9d682ea6bcc7 ("vboxsf: Fix the
-check for the old binary mount-arguments struct"), which in turn
-came from a tool that is usually correct and and that both Dan
-and Al thought the original patch was correct when it looked like
-it turned a working (though unusual) implementation  into a broken
-one.
-
-> I agree that your suggestion is to be the best solution,
-> so how do we move forward with this, do I turn this into a
-> proper patch with you as the author and Arnd as Reported-by and
-> if yes may I add your Signed-off-by to the patch ?
-
-It's already upstream, see d5f6545934c4 ("qnx4: work around gcc
-false positive warning bug").
-
-      Arnd
+>Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+>Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>--
+>v2: use a simpler trick of having an 'else' in the #ifdef
+>    block, as Steven suggested.
+>---
+> kernel/printk/index.c | 5 ++---
+> 1 file changed, 2 insertions(+), 3 deletions(-)
+>
+>diff --git a/kernel/printk/index.c b/kernel/printk/index.c
+>index d3709408debe..43b45a916ff6 100644
+>--- a/kernel/printk/index.c
+>+++ b/kernel/printk/index.c
+>@@ -26,10 +26,9 @@ static struct pi_entry *pi_get_entry(const struct module *mod, loff_t pos)
+> 	if (mod) {
+> 		entries = mod->printk_index_start;
+> 		nr_entries = mod->printk_index_size;
+>-	}
+>+	} else
+> #endif
+>-
+>-	if (!mod) {
+>+	{
+> 		/* vmlinux, comes from linker symbols */
+> 		entries = __start_printk_index;
+> 		nr_entries = __stop_printk_index - __start_printk_index;
+>-- 
+>2.29.2
+>
