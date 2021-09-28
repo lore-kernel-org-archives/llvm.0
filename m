@@ -1,49 +1,49 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D712F80
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 21:33:41 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id b20so1916671lfv.3
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 14:33:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E0F2F80
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 21:39:58 +0000 (UTC)
+Received: by mail-ed1-f50.google.com with SMTP id r18so399112edv.12
+        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 14:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zAK5KWONO/Z7HLFe2Uv80i/fStPUDPzXZXg2mThOE4o=;
-        b=vXjvDduX8Iyl6bM/yznsWEvsPMgEbgx9IlDYrdNaTNvP0HMwe129N9WgEzIfyCGNKX
-         UFr0ie9SnOxPmXQfypPg3olY5I+3sDILif4FYnDDdACQ1BFkSlunw1sIn7fPN4FuPOcr
-         R+uY2KZr6KnLUHt+cXKsXwWU3dLprFgqwLzn0tWG0tf7NIOdrzoLR4WaUOD7a6uxcMJM
-         hosBJGe6FfhMWOjprNTQ06w+1vRYVpvjbU5CUkvvfZtJHWXoc0y0Rch4gdCp/9AZxLDw
-         fczhVyjJnF/54YWqtyNOtvn+kiuQt8QA830LEFeHsovnNSk8717WpxQM/r+CYNS4yQ31
-         goYQ==
+        bh=gDh9+EkJ1XaioXG706gkM4MC/zvXOsIVOcJCDT0kPlA=;
+        b=By1oZKn5ZK9lpmbNq9hmZ9zb4Q5xi6mybeF9MwvF2f8trWsWis+vN0IT+3VXJSeKXg
+         +R2RtWPiXDlLjsZdkcekT6ysH7JpyHG94Tb6k2xKDjnRIaKq+kjoKO5tAoU2tc+19nam
+         +7xiU8S3OSUHHeCLbkbYDUPPTslbhFrmnmT6mxCIaOMOiEHurXSexF/D7Esh5QgCbea9
+         ErtdN+oWwQhRV4WmBJpeylpvRpPKQoE2BJfE+GA8sJyXrJhZvt26Pftiwbdi/Unzm16Q
+         PM4yejiUuDuVmAfug58LWDePo2zbeT9FpSmz2FFInlZVP67VbX06bMLh63VA5F+Xtbw8
+         PZ3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zAK5KWONO/Z7HLFe2Uv80i/fStPUDPzXZXg2mThOE4o=;
-        b=SN4LbyhsFtNE0vi7LBeqd4j1OXh4C8gPqsKHpzmPN77H5Um1XNRuE6QEj2gS/x524X
-         h8BYn1k14kN+vSSAhBiiGQ8UZ4jLjCU1bqQiTzf/VFDArWf8npI8Q+ypGwgjnYg4AecC
-         Tew2748VqoFoznha0ZTDK/wpQ4gRFx2Jpk/yfe+QrfyrOhqBIPsxtsATjMyG2GZ1wkMt
-         LPe3vTw2DExFYccFwe/Sk4SXJ7OjOKs/ePgFH68A3OJU08TPzqMxFhDHgTJtwU7DmLVP
-         MXTtPXXmymRzCUT+oe4LL/iIVcHyN7BOuBmO6RuL5vlAf5nZ1nKnevuxielPN5RT6IZ7
-         mYcA==
-X-Gm-Message-State: AOAM5325X6Z4/dcP5KHVi940+1VeU4SzLnSLewJ06Lcp4opdeXx0g1Yn
-	r1LIZRXldDVG7YUKcw1W5+RIUc2WsOVhrxFOoR/FPg==
-X-Google-Smtp-Source: ABdhPJzxOmJ4vA/QR0y62A+k8pNNEjGO4hO5qkA0b5HDkhnTghJMoX9c8iVn83p2LEJa2c8W6qfmS+k1z7OJGgZ1FFI=
-X-Received: by 2002:a05:6512:e82:: with SMTP id bi2mr7767870lfb.95.1632864819075;
- Tue, 28 Sep 2021 14:33:39 -0700 (PDT)
+        bh=gDh9+EkJ1XaioXG706gkM4MC/zvXOsIVOcJCDT0kPlA=;
+        b=SaSCLfg9wnRN70JG/2+5Te+22mVCqfb5ZwxmXZbawf3K/+K/Y/lrE+Sr63+N6gx/fD
+         yZNXitF+oGgTKgqyiglSKx6bEGzHRMP//RbT1WZ7WOeUIjmEO+lNRpXsMljG4C2uOuzz
+         b9mWZg/Oowj4VdlStV3rkJR/P0Ofll7L5oxm1x8wXDSERAjnEsksocgdVwSJ+vQgq/qp
+         MrJWajCrq4U272A89gU87yEYPzDKxhd4dycbmqND8X9uzGFp/zhfzz/RGAa5Ne/o95DA
+         m3QiTqA6J6ocrDSC6IXMZ1aLIWbu0C/XHFWtAigaulKiJFVVtvaAJWLwlOrL5vUqzfiH
+         k9Sw==
+X-Gm-Message-State: AOAM5305b4QlFHlzLQmpwLTsT9NpJgcRM20L5cFZcQM93Yd0hShZtSG4
+	f6eVBH9r6ZztmZJzthSSBn2IiAgOtlXWDoafhMRW9w==
+X-Google-Smtp-Source: ABdhPJxNM3CwYb0naketQjkRI2A0IGPc/ibk6F55WPHNr5CZpsGwvlMmC4LJjLEfkXKKOmGc0AXr+WUGMOXXH44mSV4=
+X-Received: by 2002:a17:906:8618:: with SMTP id o24mr6777111ejx.189.1632865197080;
+ Tue, 28 Sep 2021 14:39:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-3-arnd@kernel.org>
-In-Reply-To: <20210928154143.2106903-3-arnd@kernel.org>
+References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-4-arnd@kernel.org>
+In-Reply-To: <20210928154143.2106903-4-arnd@kernel.org>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 28 Sep 2021 23:33:28 +0200
-Message-ID: <CACRpkdY2cjyzCtAwzuOE-4XoGNcxEzP+xEUWmUUs-b9wW+pjsA@mail.gmail.com>
-Subject: Re: [PATCH 02/14] ARM: patch: fix BE32 compilation
+Date: Tue, 28 Sep 2021 23:39:46 +0200
+Message-ID: <CACRpkdZYJogU_SN3H9oeVq=zJkRgRT1gDz3xp59gdqWXxw-B=w@mail.gmail.com>
+Subject: Re: [PATCH 03/14] ARM: remove duplicate memcpy() definition
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: Russell King <linux@armlinux.org.uk>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
 	linux-kernel <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
@@ -55,22 +55,46 @@ On Tue, Sep 28, 2021 at 5:42 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> On BE32 kernels, the __opcode_to_mem_thumb32() interface is intentionally
-> not defined, but it is referenced whenever runtime patching is enabled
-> for the kernel, which may be for ftrace, jump label, kprobes or kgdb:
+> Both the decompressor code and the kasan logic try to override
+> the memcpy() and memmove()  definitions, which leading to a clash
+> in a KASAN-enabled kernel with XZ decompression:
 >
-> arch/arm/kernel/patch.c: In function '__patch_text_real':
-> arch/arm/kernel/patch.c:94:32: error: implicit declaration of function '__opcode_to_mem_thumb32' [-Werror=implicit-function-declaration]
->    94 |                         insn = __opcode_to_mem_thumb32(insn);
->       |                                ^~~~~~~~~~~~~~~~~~~~~~~
+> arch/arm/boot/compressed/decompress.c:50:9: error: 'memmove' macro redefined [-Werror,-Wmacro-redefined]
+>  #define memmove memmove
+>         ^
+> arch/arm/include/asm/string.h:59:9: note: previous definition is here
+>  #define memmove(dst, src, len) __memmove(dst, src, len)
+>         ^
+> arch/arm/boot/compressed/decompress.c:51:9: error: 'memcpy' macro redefined [-Werror,-Wmacro-redefined]
+>  #define memcpy memcpy
+>         ^
+> arch/arm/include/asm/string.h:58:9: note: previous definition is here
+>  #define memcpy(dst, src, len) __memcpy(dst, src, len)
+>         ^
 >
-> Since BE32 kernels never run Thumb2 code, we never end up using the
-> result of this call, so providing an extern declaration without
-> a definition makes it build correctly.
+> Here we want the set of functions from the decompressor, so undefine
+> the other macros before the override.
 >
+> Fixes: d6d51a96c7d6 ("ARM: 9014/2: Replace string mem* functions for KASan")
+> Fixes: a7f464f3db93 ("ARM: 7001/2: Wire up support for the XZ decompressor")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Looks good to me!
+Solves this, right?
+https://lore.kernel.org/lkml/202105091112.F5rmd4By-lkp@intel.com/
+
+Can you put in a reported-by and Link: to this so we got it tracked?
+
+>  #ifdef CONFIG_KERNEL_XZ
+> +#undef memmove
+>  #define memmove memmove
+> +#undef memcpy
+>  #define memcpy memcpy
+>  #include "../../../../lib/decompress_unxz.c"
+>  #endif
+
+That's clever, maybe drop a small comment in the code why we do this
+pretty unintuitive looking thing and how this works?
+
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
