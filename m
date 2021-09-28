@@ -1,127 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6C13FCC
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 09:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1632821962;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i2uyMcFBCVrIDBWQdHgkCbftCKZFjQ/HH9/eUB243hc=;
-	b=CosQk+HnUtrpcV2AfyBTQn63Wo87BgXSmOQEta+xJKzYkCBL893jmfkU6spoCODJ/83MGi
-	Xc3BG+RxpGh6vnJtWp33LcVhCx8Gt2mjL3NiXoEkG9ATD3PEzVmPN0HCytewwuWSMnpk5T
-	hRgEEyeBDWjdD1y7+JArxXOAmzeb8/w=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-367-Aout2SqpMTeAj6ZhLX3RGg-1; Tue, 28 Sep 2021 05:39:21 -0400
-X-MC-Unique: Aout2SqpMTeAj6ZhLX3RGg-1
-Received: by mail-ed1-f70.google.com with SMTP id n5-20020a05640206c500b003cf53f7cef2so21092609edy.12
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 02:39:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F007D3FCC
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 09:56:15 +0000 (UTC)
+Received: by mail-lf1-f48.google.com with SMTP id z24so91150710lfu.13
+        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 02:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sU/LhEZ8q3BeQ6P/PiHIYla/ZdlSW3YiCmnYV8PIXuI=;
+        b=VZb+3cpQfdzvddM3ZSwyo95tO1IwqURM2VUyschymPHl9RVL+g8ruFk5g23boV7dhD
+         nI0uXn9W2EmbAY9wgbbOZoGKTUdapoQYzHW5BdSyxvA7ygd+xNKNK5TilO2yE8708XAo
+         7IWDjKg5fWb3I6i4p631kDaURnh4cIsZuiaHE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=i2uyMcFBCVrIDBWQdHgkCbftCKZFjQ/HH9/eUB243hc=;
-        b=d1e0tiPsCdDuDEz621sf5ECbVEldz/Yhziow7eTKpJLcJUeNSkGCkEiqOHIVlLmU4a
-         b1v3wBon6GzLyyhx/h+GveQytjaKoh+wI4Ae1cXpNpyic4r7tsaECr3N+MdgexPcTvK+
-         eMv/DiDASY6rjpRyxXoXYOWJhCX5hKD5nGmX2pk97Jo3wmovVQXQ9vUMM4A+V0vWN/tN
-         36Azz7v6B+ge+cg+b7YmmH9sYFLAaZSifVCCberAk0DggOTOm1jU0yu+rw9n+w3zaZJq
-         LZ88h1PVaYegp7bfKF7Qwydyxl3lUqQYO/jKFF7V8S76LKsy5JpkkxTEdTVpFoL5Y23+
-         lYyQ==
-X-Gm-Message-State: AOAM532/UqWt3kDTZSqFK0qb78JJT07bvHfnTT/K2dcp87vJM989ju6T
-	qTwlZoB3THkWVBPSWEeh5nUtqLx5ASxPuKxh9nZII+4zaZSUOWpP4856cflM81KxuwolbTjHQ2H
-	0Fd1RuxFxkYbXP25r2KuP6L/YklhVA5FXJv3D007yoPynrgdDII5+oQjMng0KpiFvqg==
-X-Received: by 2002:a17:906:32d9:: with SMTP id k25mr5584705ejk.290.1632821959678;
-        Tue, 28 Sep 2021 02:39:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzj/uQoNsIYtJkfNoCs3oxlZlXiGiHVMDCqJw3+0oiGI8SSqcnheFy6heoARl3+raOp0WwbkA==
-X-Received: by 2002:a17:906:32d9:: with SMTP id k25mr5584577ejk.290.1632821958364;
-        Tue, 28 Sep 2021 02:39:18 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id ds10sm2442705ejc.99.2021.09.28.02.39.17
+        bh=sU/LhEZ8q3BeQ6P/PiHIYla/ZdlSW3YiCmnYV8PIXuI=;
+        b=mSLpkwcMqlQXbwK9kZ8Lp9BAngtShWSnAc3tszAscf06ItVadW/gExumh5Ih5rRf4g
+         qcHvY3SEfRz9h082Z+IWU996aUQTmZmqDtcky56K8nLx7CmwJ3v7F2MlQJwkj5z79dfJ
+         xCUgKFkEai1pU5fGxURm1EeL9YOxCHJA2ur6ZQLApAy69Ro5oLXgZLnGJIYJ3Q3aCnvN
+         3TrJH8kH1VVrl+grw9KdS9UFUcomqfpbj2gTivAOn6AoDbZMviV1d2Q+U5Wd608H1YWJ
+         Sf0FV9D8T5UM5D1OGe/dn2UQkyyzU6jZ4o/Nk0JFHf0NRtDgGGuXXcdNup7g6kV1rVGr
+         /Nig==
+X-Gm-Message-State: AOAM5306fad2hzqRys//LAD05vtLKk6aw2yWV0RSpM64tAoYzOuwW5E5
+	5tHLNh/jZXDA+SygQxkEdBOxQb/ktICuWUQi
+X-Google-Smtp-Source: ABdhPJxjuKx366aHmjXKCPqMcpTQrMD3DfYUL7mY6FrOib4BAVfQ6jz5zRT6TMz0E0yCtzNZ314LdA==
+X-Received: by 2002:a2e:974b:: with SMTP id f11mr4842574ljj.385.1632822973596;
+        Tue, 28 Sep 2021 02:56:13 -0700 (PDT)
+Received: from [172.16.11.1] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id y20sm2304960ljn.88.2021.09.28.02.56.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Sep 2021 02:39:17 -0700 (PDT)
+        Tue, 28 Sep 2021 02:56:13 -0700 (PDT)
 Subject: Re: [PATCH] vboxsf: fix old signature detection
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Arnd Bergmann <arnd@kernel.org>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>,
+To: Dan Carpenter <dan.carpenter@oracle.com>,
+ Hans de Goede <hdegoede@redhat.com>,
  Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
- Sparse Mailing-list <linux-sparse@vger.kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
+ linux-sparse@vger.kernel.org
+Cc: Arnd Bergmann <arnd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Al Viro
  <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
- Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev
 References: <20210927094123.576521-1-arnd@kernel.org>
  <40217483-1b8d-28ec-bbfc-8f979773b166@redhat.com>
  <20210927130253.GH2083@kadam>
- <CAK8P3a3YFh4QTC6dk6onsaKcqCM3Nmb2JhMXK5QdZpHtffjyLg@mail.gmail.com>
- <CAHk-=wheEHQxdSJgTkt7y4yFjzhWxMxE-p7dKLtQSBs4ceHLmw@mail.gmail.com>
-From: Hans de Goede <hdegoede@redhat.com>
-Message-ID: <70a77e44-c43a-f5ce-58d5-297ca2cfe5d9@redhat.com>
-Date: Tue, 28 Sep 2021 11:39:17 +0200
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <78f6d6cc-2be5-c69b-bd17-7da135448438@rasmusvillemoes.dk>
+Date: Tue, 28 Sep 2021 11:56:12 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.13.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wheEHQxdSJgTkt7y4yFjzhWxMxE-p7dKLtQSBs4ceHLmw@mail.gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=hdegoede@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210927130253.GH2083@kadam>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+On 27/09/2021 15.02, Dan Carpenter wrote:
+> GCC handles it the same way as Clang.  '\377' is -1 but in Sparse it's
+> 255.  I've added the Sparse mailing list to the CC.
 
-On 9/27/21 8:33 PM, Linus Torvalds wrote:
-> On Mon, Sep 27, 2021 at 6:22 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>
->> More specifically, ' think '\377' may be either -1 or 255 depending on
->> the architecture.
->> On most architectures, 'char' is implicitly signed, but on some others
->> it is not.
-> 
-> Yeah. That code is just broken.
-> 
-> And Arnd, your patch may be "conceptually minimal", in that it keeps
-> thed broken code and makes it work. But it just dials up the oddity to
-> 11.
-> 
-> The proper patch is just this appended thing that stops playing silly
-> games, and just uses "memcmp()".
-> 
-> I've verified that with sane build configurations, it just generates
-> 
->         testq   %rsi, %rsi
->         je      .L25
->         cmpl    $-33620224, (%rsi)
->         je      .L31
-> 
-> for that
-> 
->         if (data && !memcmp(data, VBSF_MOUNT_SIGNATURE, 4)) {
-> 
-> test. With a lot of crazy debug options you'll actually see the
-> "memcmp()", but the bad code generation is the least of your options
-> in that case.
+FTR, while examples are not normative, this:
 
-I agree that your suggestion is to be the best solution,
-so how do we move forward with this, do I turn this into a
-proper patch with you as the author and Arnd as Reported-by and
-if yes may I add your Signed-off-by to the patch ?
+EXAMPLE 2 Consider implementations that use two's complement
+representation for integers and eight bits for objects that have type
+char. In an implementation in which type char has the same range of
+values as signed char, the integer character constant '\xFF' has the
+value -1; if type char has the same range of values as unsigned char,
+the character constant '\xFF' has the value +255.
 
-Or do I make myself author and set you as Suggested-by ?
+doesn't leave any ambiguity or (implementation|un)-definednes, and
+sparse interpreting '\377' as 255 independent of its
+target->unsigned_char is a plain bug in sparse.
 
-Regards,
-
-Hans
-
+Rasmus
