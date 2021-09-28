@@ -1,97 +1,88 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952C82FB2
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 14:02:18 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id s18so17410731ybc.0
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 07:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=benyossef-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rqQtIk/6RZp+oHtGBLpGghq9zf27UXMh7gjDqhWItOo=;
-        b=HqVIPg4A0tsJolcMNt2D5+uuLjf75KaCHkCr07E3YcgufntBlKo1+07kC0z/0YS/F4
-         hah88xjBDePVCPFuTVClSxTuhPhVOVJdfG9Ox9nFi/g30cuFRDugQs4+5quByhOu8mow
-         UJrJ+tq9Z53bY/YF0KE07hIAZEreZT4B8DeMV+47OkiBGIGgKWFGsGVYLwL8W/ApAyF3
-         HshGlV6RW50oaacQwrEBusuHbWpgqXPC1MpRznn/lGkNGBaHqK2kYc0LAaZWEJ8QsQm5
-         Y8TmtHB0wGWb6pOb6dpClyudlcfy45MAHy1UyIAIqHPT7xFEUv/NEEklgSv56AWrzMdy
-         PUoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rqQtIk/6RZp+oHtGBLpGghq9zf27UXMh7gjDqhWItOo=;
-        b=mxu9rBY44bYTXKBS9aSVjSD3NXiXGvDN18cpy6sZAx5R/whzFr52v1J5iymAjy9CW2
-         LjdVa7gM6XwteSfJ5ykjpn6zHvHM+1gp/6/i9NOxgYhJTowuKv12JAAtSLpa6NpzRX5s
-         NVc1W/oClYGVN1iCuPPCsdtjWN6tWCGDI7IRppQQnyG/Kj/0zMmpFR/Hp8gcZmpw8W0k
-         sJpY45Mv06ICDv3V3i3qWZ+lLdW/FI4W9cGR8YxfDEUv4DTXOyjfiIiIMHnVQ9rK6fai
-         BGnKcFfxoRvmY738fSa+U3YkYDoyn8w0A01LkBhfGo3LJFhW5G7c7rP3wAHQ1CeTxjpA
-         Wgzw==
-X-Gm-Message-State: AOAM533SdqGco9gNpeuCKZzhy9+NY950i0E8SHRraxoyJJh/HsDyOcj2
-	iPV62Y1HWk8MRClOzKkU0CeIrE5Ehm7mvw5xhlFWPQ==
-X-Google-Smtp-Source: ABdhPJxcWNapNwbSMYpNuoLOZ/mFxsLh85WxLn5ZgLcnaaDmX2gfm0tqgls9grUv0gtjs4QFMD1DwqEBvGlihgmmXlo=
-X-Received: by 2002:a25:188b:: with SMTP id 133mr6630188yby.80.1632837737044;
- Tue, 28 Sep 2021 07:02:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F135D72
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 14:43:19 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1632840209; h=Date: Message-Id: Cc: To: References:
+ In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
+ Content-Type: Sender; bh=1dZzT/O2EuqvWRhXR4fqGlJ/ncH11bxKPNZw5IankD8=;
+ b=CT3kz8IDpYIRGfVKIh7Z+/a9O9roIg1RF0FeDkXibV8cLuxEB25bap1oLZ+hLG7D1j4War44
+ 2XC+7s0zuk+ZyHN+tvQlvtfnpIvP7DNofjpaiq1RZTWdL1G78F/Am2ExvFHDvio2FERPDFZ8
+ F7jxYjMCVqh8zS0bJKCcJC1BZPM=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGYzNyIsICJsbHZtQGxpc3RzLmxpbnV4LmRldiIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 615329e0713d5d6f966a0044 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 28 Sep 2021 14:42:40
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+	id 80D0EC43618; Tue, 28 Sep 2021 14:42:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+	MISSING_DATE,MISSING_MID,SPF_FAIL autolearn=no autolearn_force=no
+	version=3.4.0
+Received: from tykki.adurom.net (tynnyri.adurom.net [51.15.11.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: kvalo)
+	by smtp.codeaurora.org (Postfix) with ESMTPSA id 9294AC4338F;
+	Tue, 28 Sep 2021 14:42:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 9294AC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210927121811.940899-1-arnd@kernel.org>
-In-Reply-To: <20210927121811.940899-1-arnd@kernel.org>
-From: Gilad Ben-Yossef <gilad@benyossef.com>
-Date: Tue, 28 Sep 2021 17:02:06 +0300
-Message-ID: <CAOtvUMfNYkfKw-Vji7uVWXO=CbwGLj6=+awCKif5=cPCK1P-cQ@mail.gmail.com>
-Subject: Re: [PATCH] crypto: ccree - avoid out-of-range warnings from clang
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] mwifiex: avoid null-pointer-subtraction warning
+From: Kalle Valo <kvalo@codeaurora.org>
+In-Reply-To: <20210927121656.940304-1-arnd@kernel.org>
+References: <20210927121656.940304-1-arnd@kernel.org>
 To: Arnd Bergmann <arnd@kernel.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, YueHaibing <yuehaibing@huawei.com>, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	Linux kernel mailing list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Amitkumar Karwar <amitkarwar@gmail.com>,
+ Ganapathi Bhat <ganapathi017@gmail.com>,
+ Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+ Xinming Hu <huxinming820@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-wireless@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-Id: <20210928144239.80D0EC43618@smtp.codeaurora.org>
+Date: Tue, 28 Sep 2021 14:42:39 +0000 (UTC)
 
-Hi,
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-Thank you Arnd.
-
-On Mon, Sep 27, 2021 at 3:18 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
 > From: Arnd Bergmann <arnd@arndb.de>
->
-> clang points out inconsistencies in the FIELD_PREP() invocation in
-> this driver that result from the 'mask' being a 32-bit value:
->
-> drivers/crypto/ccree/cc_driver.c:117:18: error: result of comparison of c=
-onstant 18446744073709551615 with expression of type 'u32' (aka 'unsigned i=
-nt') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->         cache_params |=3D FIELD_PREP(mask, val);
->                         ^~~~~~~~~~~~~~~~~~~~~
-> include/linux/bitfield.h:94:3: note: expanded from macro 'FIELD_PREP'
->                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/bitfield.h:52:28: note: expanded from macro '__BF_FIELD_CHE=
-CK'
->                 BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> This does not happen in other places that just pass a constant here.
->
-> Work around the warnings by widening the type of the temporary variable.
->
-> Fixes: 05c2a705917b ("crypto: ccree - rework cache parameters handling")
+> 
+> clang complains about some NULL pointer arithmetic in this driver:
+> 
+> drivers/net/wireless/marvell/mwifiex/sta_tx.c:65:59: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
+>         pad = ((void *)skb->data - (sizeof(*local_tx_pd) + hroom)-
+>                                                                  ^
+> drivers/net/wireless/marvell/mwifiex/uap_txrx.c:478:53: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
+>         pad = ((void *)skb->data - (sizeof(*txpd) + hroom) - NULL) &
+> 
+> Rework that expression to do the same thing using a uintptr_t.
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Gilad ben-Yossef <gilad@benyossef.com>
+Patch applied to wireless-drivers.git, thanks.
 
-Gilad
+603a1621caa0 mwifiex: avoid null-pointer-subtraction warning
 
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20210927121656.940304-1-arnd@kernel.org/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
---=20
-Gilad Ben-Yossef
-Chief Coffee Drinker
-
-values of =CE=B2 will give rise to dom!
