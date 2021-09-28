@@ -1,101 +1,87 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E0F2F80
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 21:39:58 +0000 (UTC)
-Received: by mail-ed1-f50.google.com with SMTP id r18so399112edv.12
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 14:39:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87D82F80
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 21:44:22 +0000 (UTC)
+Received: by mail-ed1-f42.google.com with SMTP id g7so628791edv.1
+        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 14:44:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gDh9+EkJ1XaioXG706gkM4MC/zvXOsIVOcJCDT0kPlA=;
-        b=By1oZKn5ZK9lpmbNq9hmZ9zb4Q5xi6mybeF9MwvF2f8trWsWis+vN0IT+3VXJSeKXg
-         +R2RtWPiXDlLjsZdkcekT6ysH7JpyHG94Tb6k2xKDjnRIaKq+kjoKO5tAoU2tc+19nam
-         +7xiU8S3OSUHHeCLbkbYDUPPTslbhFrmnmT6mxCIaOMOiEHurXSexF/D7Esh5QgCbea9
-         ErtdN+oWwQhRV4WmBJpeylpvRpPKQoE2BJfE+GA8sJyXrJhZvt26Pftiwbdi/Unzm16Q
-         PM4yejiUuDuVmAfug58LWDePo2zbeT9FpSmz2FFInlZVP67VbX06bMLh63VA5F+Xtbw8
-         PZ3w==
+        bh=/OvWBlXIC3vAiOn884UWZV20fUxwEJyO2lDA28+sf/E=;
+        b=hVZm+Iba9fHNkhnmfNB1AbH1LpNEe7jMDaK4jiHnsjnThMdsYOmFjWOfwdHpdznSz9
+         WV/equMm28tsPhg8snenVYB2KQg6gi7ZPfV/jNGbD2cQr9hZFtFfFxdUClVCPDgno5DN
+         +2FcYUj2ijocVOFQSFOHa+BBegr9dTBOayzGGvAxKo2ZV1cLqX/P/Go7JPTYn0pqDBpZ
+         YrX/1Zs72RSN5J5H1vYjw3/yUY05b3/FD0VR7OUVEz//KizuGcdcg2e5p5m8QfW60IKH
+         +3YvN2yhht53qOXlnE2ydKzznLYhMJdSXGakGHu+rtGMb5k3gYPGeyCQ7wRee+AC+CIz
+         04QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gDh9+EkJ1XaioXG706gkM4MC/zvXOsIVOcJCDT0kPlA=;
-        b=SaSCLfg9wnRN70JG/2+5Te+22mVCqfb5ZwxmXZbawf3K/+K/Y/lrE+Sr63+N6gx/fD
-         yZNXitF+oGgTKgqyiglSKx6bEGzHRMP//RbT1WZ7WOeUIjmEO+lNRpXsMljG4C2uOuzz
-         b9mWZg/Oowj4VdlStV3rkJR/P0Ofll7L5oxm1x8wXDSERAjnEsksocgdVwSJ+vQgq/qp
-         MrJWajCrq4U272A89gU87yEYPzDKxhd4dycbmqND8X9uzGFp/zhfzz/RGAa5Ne/o95DA
-         m3QiTqA6J6ocrDSC6IXMZ1aLIWbu0C/XHFWtAigaulKiJFVVtvaAJWLwlOrL5vUqzfiH
-         k9Sw==
-X-Gm-Message-State: AOAM5305b4QlFHlzLQmpwLTsT9NpJgcRM20L5cFZcQM93Yd0hShZtSG4
-	f6eVBH9r6ZztmZJzthSSBn2IiAgOtlXWDoafhMRW9w==
-X-Google-Smtp-Source: ABdhPJxNM3CwYb0naketQjkRI2A0IGPc/ibk6F55WPHNr5CZpsGwvlMmC4LJjLEfkXKKOmGc0AXr+WUGMOXXH44mSV4=
-X-Received: by 2002:a17:906:8618:: with SMTP id o24mr6777111ejx.189.1632865197080;
- Tue, 28 Sep 2021 14:39:57 -0700 (PDT)
+        bh=/OvWBlXIC3vAiOn884UWZV20fUxwEJyO2lDA28+sf/E=;
+        b=gF+9DhXwRDo8o0np/nIsGlKOR60j6F1farWxEYvximV3yHYKFW/5eNJALth8xVMDqq
+         XhpF/LCRYPV8iB4JoQKOXHGKsEJxGr6Ix0g8hO5vlb7EUGiUlXLSBIWS4pRmze8HjES5
+         XOrAdk5fOJxY5l9YMtEiy1FtpnGcXRv/18/YInCcBiPSHD8f159xiGYlReaoAuA4VMVB
+         PKi0OmkzUfixojfLUjobP2tDDoIVQ3aHNUAoyewRzHIumXxZX3zDJS8YUQLY8i289CH/
+         c38IFWZ+fGzVeZ0ObnkKg7pQwi+gY7scv4xWM8bo5qMn/Zu/4I3qwpcGjOui4hbo67Z/
+         7xvA==
+X-Gm-Message-State: AOAM5313IJuoa5w43BFRTVBf4U95T1bCd4RVdW6x3wmHq4yA2vJqAl09
+	AwKH28p2k20jPstVqmXOzZ6V8QEnz8oL7odPa+nlwA==
+X-Google-Smtp-Source: ABdhPJzMysAzvEEoqbdkqUNii2z3Bkjw4Co1mDyvel80h8sKftwI/zcnhzdgGdWA1oucJ2HRG9U7hQ/xqa2+puwgLgs=
+X-Received: by 2002:a17:906:8618:: with SMTP id o24mr6798492ejx.189.1632865461191;
+ Tue, 28 Sep 2021 14:44:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-4-arnd@kernel.org>
-In-Reply-To: <20210928154143.2106903-4-arnd@kernel.org>
+References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-13-arnd@kernel.org>
+In-Reply-To: <20210928154143.2106903-13-arnd@kernel.org>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 28 Sep 2021 23:39:46 +0200
-Message-ID: <CACRpkdZYJogU_SN3H9oeVq=zJkRgRT1gDz3xp59gdqWXxw-B=w@mail.gmail.com>
-Subject: Re: [PATCH 03/14] ARM: remove duplicate memcpy() definition
+Date: Tue, 28 Sep 2021 23:44:10 +0200
+Message-ID: <CACRpkdZ+v4BPSJhmztd5Visyo3tMmJXDBXOt5B_c7BdtvBQuQQ@mail.gmail.com>
+Subject: Re: [PATCH 12/14] ARM: add CONFIG_PHYS_OFFSET default values
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: Russell King <linux@armlinux.org.uk>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
 	linux-kernel <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
 	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	Nicolas Pitre <nico@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, Sep 28, 2021 at 5:42 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> Both the decompressor code and the kasan logic try to override
-> the memcpy() and memmove()  definitions, which leading to a clash
-> in a KASAN-enabled kernel with XZ decompression:
+> For platforms that are not yet converted to ARCH_MULTIPLATFORM,
+> we can disable CONFIG_ARM_PATCH_PHYS_VIRT, which in turn requires
+> setting a correct address here.
 >
-> arch/arm/boot/compressed/decompress.c:50:9: error: 'memmove' macro redefined [-Werror,-Wmacro-redefined]
->  #define memmove memmove
->         ^
-> arch/arm/include/asm/string.h:59:9: note: previous definition is here
->  #define memmove(dst, src, len) __memmove(dst, src, len)
->         ^
-> arch/arm/boot/compressed/decompress.c:51:9: error: 'memcpy' macro redefined [-Werror,-Wmacro-redefined]
->  #define memcpy memcpy
->         ^
-> arch/arm/include/asm/string.h:58:9: note: previous definition is here
->  #define memcpy(dst, src, len) __memcpy(dst, src, len)
->         ^
+> As we actualy know what all the values are supposed to be based
+> on the old mach/memory.h header file contents (from git history),
+> we can just add them here.
 >
-> Here we want the set of functions from the decompressor, so undefine
-> the other macros before the override.
+> This also solves a problem in Kconfig where 'make randconfig'
+> fails to continue if no number is selected for a 'hex' option.
+> Users can still override the number at configuration time, e.g.
+> when the memory visible to the kernel starts at a nonstandard
+> address on some machine, but it should no longer be required
+> now.
 >
-> Fixes: d6d51a96c7d6 ("ARM: 9014/2: Replace string mem* functions for KASan")
-> Fixes: a7f464f3db93 ("ARM: 7001/2: Wire up support for the XZ decompressor")
+> I originally posted this back in 2016, but the problem still
+> persists. The patch has gotten much simpler though, as almost
+> all platforms rely on ARM_PATCH_PHYS_VIRT now.
+>
+> Acked-by: Nicolas Pitre <nico@linaro.org>
+> Link: https://lore.kernel.org/linux-arm-kernel/1455804123-2526139-5-git-send-email-arnd@arndb.de/
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Solves this, right?
-https://lore.kernel.org/lkml/202105091112.F5rmd4By-lkp@intel.com/
-
-Can you put in a reported-by and Link: to this so we got it tracked?
-
->  #ifdef CONFIG_KERNEL_XZ
-> +#undef memmove
->  #define memmove memmove
-> +#undef memcpy
->  #define memcpy memcpy
->  #include "../../../../lib/decompress_unxz.c"
->  #endif
-
-That's clever, maybe drop a small comment in the code why we do this
-pretty unintuitive looking thing and how this works?
-
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+BTW thanks for this very nice cleanup patch set!
 
 Yours,
 Linus Walleij
