@@ -1,100 +1,72 @@
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A411629CA
-	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 18:09:58 +0000 (UTC)
-Received: by mail-vs1-f48.google.com with SMTP id q66so23118996vsa.4
-        for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 11:09:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sr1N3OdR9r/bSiG1VxeyejkeCTjyewOKJdAHjGzabZA=;
-        b=NRUFnCvqrbcWBlRTBuvHRadwTihpbiSmPh7jdF8AbAqXsDUq5eCyq15FGHdOYSyAli
-         30HR05aVZFQW0yKLTnteHcH0AxcMhNK8eNb8gzfKeR+HdrW2mwWlM8OcEvQBTKjrKjuq
-         2HTWR6yYhELqahs6c8sgBlFNDfsjtEAljY/1Tb/HqKwgbyewN7qrRhvFD6YWYvX/GN+/
-         tlUtHeIAbckXwy12ZInsXqjyqSUJDiYr2limpg91gz1JALXDGJTC91bPmJcA9gT4QE0c
-         pTmE05jLGwK23hCDJAolPhnn8crGTifvnd1XiTM1X4r+0lbhtQjDCN5Bp4Pu2Z7EIYlL
-         SZBw==
-X-Gm-Message-State: AOAM5329bO6z/4t/9MP+59tnCPYNC/Sp3Mh0L60H5JC5VTVN75ix7rP5
-	Iu3nGnKzclliB5+0UqdJTXpWCvND7LKMvwenRxQ=
-X-Google-Smtp-Source: ABdhPJwN5gXFR0tjZSDhFmg+f0NFG4JJ6iP9/Qypk5MWyQdIWLY3eox0kHc0hmuU+a19StfWP+Ieloi5kCItsQ7douo=
-X-Received: by 2002:a67:f147:: with SMTP id t7mr6925773vsm.41.1632852597572;
- Tue, 28 Sep 2021 11:09:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD19F2FAF
+	for <llvm@lists.linux.dev>; Tue, 28 Sep 2021 18:32:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4761861246;
+	Tue, 28 Sep 2021 18:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632853933;
+	bh=ITumyMSLVuu7tgo4iRF6EGhJy0N7SHomYPhr6cSr0MI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VaC3EgKSrHGizNtBgdPVNZzinC4iR1U0WSkLghN+fHfbtWd7dYGoUB2w1IZ2nHo0N
+	 aR/koF6+R91rbaE36NwCaK7XMe0BkSH8XqyyMdCVV+DMExUCgCzfDAPuTOVWmE3V6R
+	 khIyqvTQDIPQ3/HnlHXJV65m902aJ1FY/qapyy+akG7rPX27khZHMPjGSmt1bzAqTN
+	 VzW8dccLjOD7BAdqCAFdNZDM0TJ99Hi+/646v67sLa0cGTkF8HkkDPszPSNQRX+1r9
+	 Xei6OpzlxS/05iY90x9qK3uCL0LaTetJsInjTyvMyw2/0UeXsu0JtESBhG6rCayGxO
+	 uOlMPA9hglGRQ==
+Date: Tue, 28 Sep 2021 11:32:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	Vladis Dronov <vdronov@redhat.com>, Simo Sorce <ssorce@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [v2 PATCH] crypto: api - Fix built-in testing dependency failures
+Message-ID: <YVNfqUVJ7w4Z3WXK@archlinux-ax161>
+References: <20210913071251.GA15235@gondor.apana.org.au>
+ <20210917002619.GA6407@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202109282205.VsHhj6PP-lkp@intel.com> <CAMuHMdX0Zm_hMheZ0e1Xu991jnUr=aY_cDBHHGFvQ1sKqM1b9A@mail.gmail.com>
- <YVNGMg/TI+jo/1R1@archlinux-ax161>
-In-Reply-To: <YVNGMg/TI+jo/1R1@archlinux-ax161>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 28 Sep 2021 20:09:46 +0200
-Message-ID: <CAMuHMdVfbAhCCxzKgbW1rPrzkS6Z7DU5vu4G6wTsBvHRb6yBpA@mail.gmail.com>
-Subject: Re: drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210917002619.GA6407@gondor.apana.org.au>
 
-Hi Nathan,
+On Fri, Sep 17, 2021 at 08:26:19AM +0800, Herbert Xu wrote:
+> When complex algorithms that depend on other algorithms are built
+> into the kernel, the order of registration must be done such that
+> the underlying algorithms are ready before the ones on top are
+> registered.  As otherwise they would fail during the self-test
+> which is required during registration.
+> 
+> In the past we have used subsystem initialisation ordering to
+> guarantee this.  The number of such precedence levels are limited
+> and they may cause ripple effects in other subsystems.
+> 
+> This patch solves this problem by delaying all self-tests during
+> boot-up for built-in algorithms.  They will be tested either when
+> something else in the kernel requests for them, or when we have
+> finished registering all built-in algorithms, whichever comes
+> earlier.
+> 
+> Reported-by: Vladis Dronov <vdronov@redhat.com>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-On Tue, Sep 28, 2021 at 6:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Tue, Sep 28, 2021 at 05:39:19PM +0200, Geert Uytterhoeven wrote:
-> > On Tue, Sep 28, 2021 at 5:09 PM kernel test robot <lkp@intel.com> wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   0513e464f9007b70b96740271a948ca5ab6e7dd7
-> > > commit: ade896460e4a62f5e4a892a98d254937f6f5b64c drm: DRM_KMB_DISPLAY should depend on ARCH_KEEMBAY
-> > > date:   11 months ago
-> > > config: mips-randconfig-r013-20210928 (attached as .config)
-> > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # install mips cross compiling tool for clang build
-> > >         # apt-get install binutils-mips-linux-gnu
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ade896460e4a62f5e4a892a98d254937f6f5b64c
-> > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > >         git fetch --no-tags linus master
-> > >         git checkout ade896460e4a62f5e4a892a98d254937f6f5b64c
-> > >         # save the attached .config to linux build tree
-> > >         mkdir build_dir
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/kmb/ drivers/net/ethernet/mellanox/mlxsw/ mm/
-> > >
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > > >> drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
-> > >    set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi
-> > >    ^
-> > > >> drivers/gpu/drm/kmb/kmb_dsi.c:824:2: warning: unused function 'set_test_mode_src_osc_freq_target_hi_bits'
-> > >    set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi
-> >
-> > These two functions are "static inline", so there should not be such
-> > warning. Toolchain issue?
->
-> No toolchain issue, Masahiro specifically made clang W=1 builds warns on
-> static inline unused functions because of instances like this, see
-> commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
-> functions for W=1 build").
+This patch as commit 3cefb01905df ("crypto: api - Fix built-in testing
+dependency failures") in -next (along with the follow up fix) causes the
+following depmod error:
 
-IC, I wasn't aware of that work.
+$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux- INSTALL_MOD_PATH=rootfs ppc44x_defconfig all modules_install
+depmod: ERROR: Cycle detected: crypto -> crypto_algapi -> crypto
+depmod: ERROR: Found 2 modules in dependency cycles!
+make: *** [Makefile:1946: modules_install] Error 1
 
-Anyway, the "first bad commit" is the commit introducing the code, not
-my commit enabling compile-testing (nor Yamada-san's commit to warn
-about it ;-).
+Initially reported on our CI:
 
-Gr{oetje,eeting}s,
+https://github.com/ClangBuiltLinux/continuous-integration2/runs/3732847295?check_suite_focus=true
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Nathan
