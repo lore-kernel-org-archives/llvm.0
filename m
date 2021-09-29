@@ -1,75 +1,364 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2055.outbound.protection.outlook.com [40.107.95.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B70572
-	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 08:45:53 +0000 (UTC)
-Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MS3rB-1mPlfI085L-00TRTt for <llvm@lists.linux.dev>; Wed, 29 Sep 2021
- 10:45:51 +0200
-Received: by mail-wm1-f48.google.com with SMTP id c73-20020a1c9a4c000000b0030d040bb895so1141811wme.2
-        for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 01:45:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532gpZgdc4Jow3cnzYyp9sxDGwdecJKdxfuu9ZtyGucGI3r3IJ7T
-	34DW9WEkGl1zdBqACGDMJ/Z+dZ+fcYDXZt2f4mY=
-X-Google-Smtp-Source: ABdhPJzqCwKl127cz2QAIug9k52aEJ4YFVJl10H5ExaqWrNYDMbabj08uEdj8WGiI+vahIxKZLPvws0pQjSbmc21pfc=
-X-Received: by 2002:a05:600c:22d4:: with SMTP id 20mr9258111wmg.82.1632905150672;
- Wed, 29 Sep 2021 01:45:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E9B72
+	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 09:44:22 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zupgz71MqicQ8bXvhgBmv7n2S1JJ1QiQQ0TEncH6N2xl4m54tI+T5wwOO8YE9Ok218sPs0sSarpXV1QD6LNtJxEnUYFi7ZFvL6VzsAlc8yx+nXCVgKcwdUIaaAw4H6cXxMlQfGuHqmosgx/hxK/1cg2a1KQIkiXfMy7yjyXqYqtyMaZc5lO7jGf3ruZcg49M7ZTv5IQBaQhrON1OojdUk0NucMpZaT0L+X8KUO5AzDGBA99PO+nEPwnHX284JWyUqSLx91eoJRUbjiYQqhBx5hkUmHyi8Jg1/bjXpnBDpCe92p3h2HkFTIVB+Nb5KxRMKcdT8TpnNAaKWGd98zyuZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=+3AnSmRwjJmg0uLNKpDn/sQynmBopytZaRLk7c+UZi4=;
+ b=JB3qi/vZPyE8RIHcULEy/0BaKM+pIRbWXjvzpcezZeak0/kVVPA5pgpw79aRm63kZAc4W2QIWIU0vwu4ezT7RrOzciLl6VzE6Nj8X1UxYxk2cgYsCRpwn+TG5zzLHXh+LNQY9oFvUrF/u95HumAu53mPkDn9b6+uRRqPxwtHHH2FjBVKOlKYqh8bGjTN+drs1srar1Xii3SaEjSLT7tk9si4rTlif8HBhX5cPf3g3I/BDxe6w48JZ+gOoSXIka1Ob0NjMJBr7i3Ve9tVFIE+L1GP6y1MBCfNSi+hujiILMVDEzyr81gSTXI7t7fVJuvRUW54Q4t/Zy+8+tY9VFJ+WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.35) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+3AnSmRwjJmg0uLNKpDn/sQynmBopytZaRLk7c+UZi4=;
+ b=k4VnFzuVC5Cq6ncWz8OU51XHWDv5DDqacD4/yES5tX/ttlloiRSgqYAtX2qriYqj3jad9TwkJUgJgN0w+cDXGiqcLCewF9QGGbnrK5ZTJGUjUaq147qBjnStm6LkyBAluExSAFsLomNzbxp/mt+F2briyY8fdaLkdXcjGFxhKi1GPgVSXPpWfI+74Pc9DNslA0Wqy2m62Iwm4vmCUEbd+uCAh1txRKpEREueNMwJFDJzig08k/Re5JHI30j40yiFJSzQ1u9UFhXSkN+pZFevWGcWuMd3fa8sbT8FyrEIDsX/2UqTY4c4PlfjUXdSXmbl1kG/qHJTCsx8+flNe8sqJQ==
+Received: from MWHPR14CA0009.namprd14.prod.outlook.com (2603:10b6:300:ae::19)
+ by DM4PR12MB5294.namprd12.prod.outlook.com (2603:10b6:5:39e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13; Wed, 29 Sep
+ 2021 09:44:21 +0000
+Received: from CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:ae:cafe::a3) by MWHPR14CA0009.outlook.office365.com
+ (2603:10b6:300:ae::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13 via Frontend
+ Transport; Wed, 29 Sep 2021 09:44:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.35)
+ smtp.mailfrom=nvidia.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.35 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.35; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.35) by
+ CO1NAM11FT034.mail.protection.outlook.com (10.13.174.248) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4566.14 via Frontend Transport; Wed, 29 Sep 2021 09:44:20 +0000
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 29 Sep
+ 2021 09:44:20 +0000
+Received: from localhost (172.20.187.6) by DRHQMAIL107.nvidia.com (10.27.9.16)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 29 Sep 2021 09:44:19
+ +0000
+Date: Wed, 29 Sep 2021 12:44:16 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: kernel test robot <lkp@intel.com>, <nathan@kernel.org>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, "kbuild-all@lists.01.org"
+	<kbuild-all@lists.01.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Jiri Pirko <jiri@nvidia.com>
+Subject: Re:
+ drivers/net/ethernet/mellanox/mlxsw/core_acl_flex_actions.c:2022:1: warning:
+ unused function 'mlxsw_afa_sampler_mirror_agent_get'
+Message-ID: <YVQ1cE0Ke2cWzB0r@shredder>
+References: <202109290245.bpgij5Zs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-2-arnd@kernel.org>
- <CAK8P3a2mrVOXHzNKnLuHsdNCR3uVePE9W-Yn2CmW3nDpE8J7iA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2mrVOXHzNKnLuHsdNCR3uVePE9W-Yn2CmW3nDpE8J7iA@mail.gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 29 Sep 2021 10:45:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Mxmqj7t4TtYjzae-iCRPs2YtVMR=7v1vvUG-ixuKAtw@mail.gmail.com>
-Message-ID: <CAK8P3a3Mxmqj7t4TtYjzae-iCRPs2YtVMR=7v1vvUG-ixuKAtw@mail.gmail.com>
-Subject: Re: [PATCH 01/14] ARM: RiscPC needs older gcc version
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:AJd6gu8IuiyomzdvOGNAK5EMbwiN65A5mbDN0O0vsIxiQQzDGai
- o0S1x3hyjurj5BjjSQOO6HZ7sSTR6VSVYsoG22duzq5QbDIAMp4gZQCoZaWRtS8V67zYV3x
- M0udDjKPKuSAS02lJEApy40K5CSqGSV8+LbGHbftY0/OysawCP/zZpsaB0UJ0nOYsGhbnDn
- vZ/yfGFIgtyZQJyTac0yQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:992ZU6V5WOA=:Tvhh3hokRVJ6nUQXVRPf6y
- CCbAIpZYs4DFkri3W0bOSJc2VwwCXxKuYLsUCHTLPTYs6ysQaVzQ9oqkRwWy0eS4Joqe/53Wv
- OMHIdqbUC/nECBuQCqqPU0oRuDs13HgXY6fYrd9xGFySi/SNSsv7YWdg+SHrvXEExmy7fNjYr
- 2tXyR0e1GPQ1+3I3EsdVYyybxXtEzPh5glXpNJTWPIlWKeJ2U3ORBnwdAU6BFkeYu6t6KGj8h
- W7tLEsXqm5i2/dx45LiQSkHmfeqxyvviFS9RDWQpRTt53oqBjDCNf9E0PP1ukGiaWrUgOHswV
- AxGkHZyCbMLCUtInuXrFjPN/rDNpyjym/Yn7hmQ9vqb1LuPQunOyNScDY3C+Fi67rc4q/c7Be
- ndvdGWCPrp1VLNAC0q0GnsnyXsGLMXzf1LhwOAu6szMWJLIitdy8nwvA3PyzHyM8RyDXurhk9
- wVWlQh7z1Ew9va9lJZPZflIePYAOsZDIxJ2hQzuGb5Ha/2pzG4aDJlmbPtwnY+nxdTk/yo1Yw
- pJn0nFZwosgW83GF6WxNvUJcleQZ0lfPXn1rZEwifLQK0G3xtZY+qyrOOOUitDWd6hp7gj5HF
- xoh63bHR9jobp1Q6xfoAIk+b/EKcaLmBD3oTTBcWTkF42+n7MvrymWzeqcXUoX8qh97iEcLMm
- 7KOdDBDndYfMG79IM+kOBOtOnK1PW37YFrOk5W2J+BM+v8+AhSQGUKzJmDeqqoxY23v/sCnkx
- FqPO995HF42dg0HC/x0dxFsGpldzvjf7LM2XKg==
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <202109290245.bpgij5Zs-lkp@intel.com>
+X-Originating-IP: [172.20.187.6]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 079a77dd-374b-4fcf-6b0d-08d9832db66b
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5294:
+X-Microsoft-Antispam-PRVS:
+	<DM4PR12MB529468A8E48BB0A74659A3C1B2A99@DM4PR12MB5294.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	3G8ifmGIuOEfSOwj70zHZCZxQTm5rCUKO3BsSk1AfyIpHncmCF614+SsTYpRLvU6J0mb65Benp3GrbNNSapfeDm3Q61uG1VVAaKKbh9mTg63fN+QJXopEwDxrN+EBUeUqc0zjiX2bV5FtmGXT+Dq+SzSygitaW+GRMuqMHqPn7krD1wDmm1xPNiLggM3pn1A++CnMb/qbt6BqBfO1OKzq4OENZhU9EGNKUcJ+s+RF5XIB+mgfeNjZ2z8lTGngK5loeO07wPZJzCQbfstOd/aGdrRi0zWtul81sFO2QWbs2n8tl5qJp0xLOQUwL7oW4H/Sx9oqxpfPji6MQe/YXwkK/wtgpuyvcCelmzLCQfNzZV7gIx8su/oEK0cqaTzLwVR8E8p7XruJ+aYam9VdocgbplJnki6pWr1zmgtOmScz4g5NmXZ2RFdxh5znwp8B96p2diBnfUYtESXBKEyrB8Dogwq9g2ULP2B3Ap5O/3jef4ez9n+vuaPE03zR8YdUUEcv3tRNOBacB3cmXDAh905jGBzqrmpYaXq3KoHA+U63npqS7jAHIsDdOG5D9casAPqwc3d93mnVZaSeBMXnzLafVmKKCDaXIfnZPlESpd0aIXrN4ne9131+gR5k4QLKlaU+I8yI3gKmoG8UgYIAzFQhxmm4/438Pn2eOkkNMtEJwZdEJLv/Wr5MDt+Shhuq013wNW1JGiCX0rtwnT9/jTYpuiH+gnVHIU+FIIZr8I0gtlkree/zB88Y8O+RE5FN0n+2e/3pQn/L2byAMXF+M/15qC0cfubgC0N4guezlrUTA0=
+X-Forefront-Antispam-Report:
+	CIP:216.228.112.35;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid02.nvidia.com;CAT:NONE;SFS:(4636009)(7916004)(36840700001)(46966006)(54906003)(4326008)(86362001)(82310400003)(30864003)(2906002)(110136005)(83380400001)(36860700001)(316002)(6666004)(70206006)(107886003)(66574015)(7636003)(336012)(8676002)(26005)(8936002)(47076005)(33716001)(966005)(356005)(508600001)(9686003)(5660300002)(426003)(16526019)(186003)(70586007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2021 09:44:20.5606
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 079a77dd-374b-4fcf-6b0d-08d9832db66b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.35];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5294
 
-On Tue, Sep 28, 2021 at 6:03 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Sep 28, 2021 at 5:42 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> > index fc196421b2ce..12a0bd4b315d 100644
-> > --- a/arch/arm/Kconfig
-> > +++ b/arch/arm/Kconfig
-> > @@ -431,7 +431,7 @@ config ARCH_PXA
-> >
-> >  config ARCH_RPC
-> >         bool "RiscPC"
-> > -       depends on MMU
->
-> This line was a botched rebase, it obviously has to stay here.
->
-> > +       depends on !CC_IS_CLANG || GCC_VERSION < 90100
+On Tue, Sep 28, 2021 at 09:06:54PM +0300, kernel test robot wrote:
+> All warnings (new ones prefixed by >>):
+> 
+>    static inline u32 mlxsw_##_type##_##_cname##_##_iname##_get(const char ^
+>    <scratch space>:119:1: note: expanded from here
+>    mlxsw_afa_polcnt_c_p_get
+>    ^
 
-This line is also wrong, it needs to be '&&', not '||'.
+Nathan,
 
-        Arnd
+I saw your reply to a similar issue here [1] and I got the impression
+that you are leading the LLVM-related efforts, so I thought I will
+consult with you regarding a possible solution.
+
+The inline functions that clang is complaining about are generated by
+macros that make it easy to set/get fields in the payloads of
+configuration messages used to communicate with the device. It is
+possible that sometime we only set a field, but never retrieve its value
+such as in the warning above. This is very much intentional and not
+indicative of a function we forgot to remove.
+
+The patch below [2] adds the "__maybe_unused" keyword to these macros
+and makes clang happy [3].
+
+Is this acceptable or you suggest a different solution?
+
+Thanks
+
+[1] https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/TIUWC7KZVTHGJKIZ4M3LI3JJYVAAINJX/
+
+[2]
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/item.h b/drivers/net/ethernet/mellanox/mlxsw/item.h
+index e92cadc98128..d2c8f436efb7 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/item.h
++++ b/drivers/net/ethernet/mellanox/mlxsw/item.h
+@@ -290,13 +290,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u8								\
++static inline u8 __maybe_unused							\
+ mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf, unsigned short index)\
+ {										\
+ 	return __mlxsw_item_get8(buf, &__ITEM_NAME(_type, _cname, _iname),	\
+ 				 index);					\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, unsigned short index,	\
+ 					  u8 val)				\
+ {										\
+@@ -311,11 +311,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u16 mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf)	\
++static inline u16 __maybe_unused						\
++mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf)			\
+ {										\
+ 	return __mlxsw_item_get16(buf, &__ITEM_NAME(_type, _cname, _iname), 0);	\
+ }										\
+-static inline void mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u16 val)\
++static inline void __maybe_unused						\
++mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u16 val)			\
+ {										\
+ 	__mlxsw_item_set16(buf, &__ITEM_NAME(_type, _cname, _iname), 0, val);	\
+ }
+@@ -331,13 +333,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u16								\
++static inline u16 __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf, unsigned short index)\
+ {										\
+ 	return __mlxsw_item_get16(buf, &__ITEM_NAME(_type, _cname, _iname),	\
+ 				  index);					\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, unsigned short index,	\
+ 					  u16 val)				\
+ {										\
+@@ -352,11 +354,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u32 mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf)	\
++static inline u32 __maybe_unused						\
++mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf)			\
+ {										\
+ 	return __mlxsw_item_get32(buf, &__ITEM_NAME(_type, _cname, _iname), 0);	\
+ }										\
+-static inline void mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u32 val)\
++static inline void __maybe_unused						\
++mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u32 val)			\
+ {										\
+ 	__mlxsw_item_set32(buf, &__ITEM_NAME(_type, _cname, _iname), 0, val);	\
+ }
+@@ -372,13 +376,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u32								\
++static inline u32 __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf, unsigned short index)\
+ {										\
+ 	return __mlxsw_item_get32(buf, &__ITEM_NAME(_type, _cname, _iname),	\
+ 				  index);					\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, unsigned short index,	\
+ 					  u32 val)				\
+ {										\
+@@ -393,11 +397,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u64 mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf)	\
++static inline u64 __maybe_unused						\
++mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf)			\
+ {										\
+ 	return __mlxsw_item_get64(buf, &__ITEM_NAME(_type, _cname, _iname), 0);	\
+ }										\
+-static inline void mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u64 val)\
++static inline void __maybe_unused						\
++mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u64 val)			\
+ {										\
+ 	__mlxsw_item_set64(buf, &__ITEM_NAME(_type, _cname, _iname), 0,	val);	\
+ }
+@@ -413,13 +419,13 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bits = _sizebits,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u64								\
++static inline u64 __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf, unsigned short index)\
+ {										\
+ 	return __mlxsw_item_get64(buf, &__ITEM_NAME(_type, _cname, _iname),	\
+ 				  index);					\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, unsigned short index,	\
+ 					  u64 val)				\
+ {										\
+@@ -433,19 +439,19 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bytes = _sizebytes,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_memcpy_from(const char *buf, char *dst)	\
+ {										\
+ 	__mlxsw_item_memcpy_from(buf, dst,					\
+ 				 &__ITEM_NAME(_type, _cname, _iname), 0);	\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_memcpy_to(char *buf, const char *src)	\
+ {										\
+ 	__mlxsw_item_memcpy_to(buf, src,					\
+ 			       &__ITEM_NAME(_type, _cname, _iname), 0);		\
+ }										\
+-static inline char *								\
++static inline char * __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_data(char *buf)				\
+ {										\
+ 	return __mlxsw_item_data(buf, &__ITEM_NAME(_type, _cname, _iname), 0);	\
+@@ -460,7 +466,7 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bytes = _sizebytes,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_memcpy_from(const char *buf,		\
+ 						  unsigned short index,		\
+ 						  char *dst)			\
+@@ -468,7 +474,7 @@ mlxsw_##_type##_##_cname##_##_iname##_memcpy_from(const char *buf,		\
+ 	__mlxsw_item_memcpy_from(buf, dst,					\
+ 				 &__ITEM_NAME(_type, _cname, _iname), index);	\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_memcpy_to(char *buf,			\
+ 						unsigned short index,		\
+ 						const char *src)		\
+@@ -476,7 +482,7 @@ mlxsw_##_type##_##_cname##_##_iname##_memcpy_to(char *buf,			\
+ 	__mlxsw_item_memcpy_to(buf, src,					\
+ 			       &__ITEM_NAME(_type, _cname, _iname), index);	\
+ }										\
+-static inline char *								\
++static inline char * __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_data(char *buf, unsigned short index)	\
+ {										\
+ 	return __mlxsw_item_data(buf,						\
+@@ -491,14 +497,14 @@ static struct mlxsw_item __ITEM_NAME(_type, _cname, _iname) = {			\
+ 	.size = {.bytes = _sizebytes,},						\
+ 	.name = #_type "_" #_cname "_" #_iname,					\
+ };										\
+-static inline u8								\
++static inline u8 __maybe_unused							\
+ mlxsw_##_type##_##_cname##_##_iname##_get(const char *buf, u16 index)		\
+ {										\
+ 	return __mlxsw_item_bit_array_get(buf,					\
+ 					  &__ITEM_NAME(_type, _cname, _iname),	\
+ 					  index);				\
+ }										\
+-static inline void								\
++static inline void __maybe_unused						\
+ mlxsw_##_type##_##_cname##_##_iname##_set(char *buf, u16 index, u8 val)		\
+ {										\
+ 	return __mlxsw_item_bit_array_set(buf,					\
+
+[3]
+$ make -j8 CC=clang C=2 W=1 drivers/net/ethernet/mellanox/mlxsw/                                                                                      
+  DESCEND bpf/resolve_btfids                                                          
+  DESCEND objtool                                                                     
+  CHECK   scripts/mod/empty.c                                                         
+  CALL    scripts/atomic/check-atomics.sh                                             
+  CALL    scripts/checksyscalls.sh                                                    
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/core.c              
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/core_acl_flex_keys.c       
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/core_acl_flex_actions.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/core_env.c     
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c       
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c   
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/pci.c         
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/i2c.c         
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum.c     
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_buffers.c         
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_switchdev.c    
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c  
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_router_xm.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum1_kvdl.c  
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum2_kvdl.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_kvdl.c 
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_tcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_ctcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_atcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_erp.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum1_acl_tcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum2_acl_tcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_bloom_filter.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_flow.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_matchall.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_flower.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_ipip.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_flex_actions.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_flex_keys.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum1_mr_tcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum2_mr_tcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_mr_tcam.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_mr.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_span.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_nve.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_nve_vxlan.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_dpipe.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_trap.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_ethtool.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_policer.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/spectrum_ptp.c
+  CHECK   drivers/net/ethernet/mellanox/mlxsw/minimal.c
