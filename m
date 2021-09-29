@@ -1,97 +1,154 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260DB72
-	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 19:20:31 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id d81-20020a251d54000000b005b55772ca97so4731980ybd.19
-        for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 12:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=63GoLmMa0FISTNSj54qXjbso1R5Gm74Cq4uLpOpYGuc=;
-        b=ATWvAqdpQVpqVi4K3NqKAqDFl3zEfb62R+RuzCeC1G0ZhU6f2/anEr9Q3QSCT6t4UM
-         6EGIK8wuaWhvpSxTKnZNdh3nK5MR6/r8tGgVpeSYO6nAwCLUADKEYLRAqpowbWylhLLh
-         b/atyNM8TbsxrqxmEkQ6eN5ffBfdaGbMFfXec99LhIYkD+kW+d6w7ItvVHe8R8RAQqfa
-         sejzsbhuOq/WMOYgdWvmoJekAqRzoNjHjI4BB4jkbS/cWQ2A58E8O6DwmP8kCmkOK93G
-         fziZ84ik03TP8/PLBTZ16lBLhnJWO3V35UeueoaWixFRXV0EQVIQV3qHxoJRp+T38n8I
-         rJbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=63GoLmMa0FISTNSj54qXjbso1R5Gm74Cq4uLpOpYGuc=;
-        b=E54uyMRYVqzfYL7FExRfntckv2jIdgdvWIiWJLG6n3HG9g/ZZ91YrwnibYD5l2ISjn
-         bVSO6maPGSV07B2709GSIG8/JJExgzsz5ueBmzy8ftBBojh52OcHSigIPv8IqjJOr9tm
-         X8gY1PurEoe39dnc3VqO79bWSD7bXk7rj5EEkHktVWdZ8zLOSRkqKflS4JRbLoRRYRQb
-         VrAqGdr6P1eOmU7G7EvZsBAOAKUM0WNFycM1wp0E59pkukxw5ZerO4zrRpaqGT3gUKTM
-         uDEA4+9B+uc5wECJQOd6Z+1mm4c/FHvssjXg0Y8EUMhkDXoJq7FIekT1XTkmL2mfcdy6
-         aQhw==
-X-Gm-Message-State: AOAM533kN4Jeyu3xJqjFajBHv2AjDj0dU0NHMzOz1MetB97F2jBq57pj
-	AOqN5jen2n3BO6PpZq80nxMiOvEkHe4Cguy05JU=
-X-Google-Smtp-Source: ABdhPJwCgxungjpkRehOgF/M2ddpxBC327A5mIHGC9y7oK8GZI1Rw+c/3t7/cNjQIvN8YqA80g8deU0ImyL5J5rvrUU=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:da31:1dfd:2e69:dc82])
- (user=ndesaulniers job=sendgmr) by 2002:a25:690a:: with SMTP id
- e10mr1739500ybc.393.1632943230203; Wed, 29 Sep 2021 12:20:30 -0700 (PDT)
-Date: Wed, 29 Sep 2021 12:20:24 -0700
-In-Reply-To: <CAKwvOdmjZ+QmjTJnQ-w5hLPJjow1gYnWTe6f8RBhQUJ2b3cYnw@mail.gmail.com>
-Message-Id: <20210929192026.1604095-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED8472
+	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 19:24:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D669F6140F;
+	Wed, 29 Sep 2021 19:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632943452;
+	bh=Kic1xJl340EDGWe45l8iOlr2pQS1CGNbWFMeOBeCVnQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IV9s+ltdhsqghIwkv47ivP4VliZE95ZjYph5zm7PrF+feipDFsaYdAfYHrYHP+o0A
+	 4XjDdKqz5o9ZKLmYkZF2bJmEqO0FE8mdOU9FAaDQfOCnPReQrWPkMvs28GQdMxaXU8
+	 MB38pj16HImpN4iSocIU0nRR7gU9Niv5fMZTmXK39CczqigP9s9jSQ+kFJ7d3seBFA
+	 K35UkTtgv8ZKKFtE7b+ljU8gW91H6CA6DHe8dIcv1JCHku47lSJlc8EDC5/kuwIynw
+	 l6VM7HOhMvDgT8DAqopy6fodKqmpWD1AjYNKqNrn53dAP2iqyB+SeBK3/3XquBLVAE
+	 J/Kno9ZVXtRCw==
+Date: Wed, 29 Sep 2021 12:24:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Zhenguo Yao <yaozhenguo1@gmail.com>
+Cc: mike.kravetz@oracle.com, mpe@ellerman.id.au, benh@kernel.crashing.org,
+	paulus@samba.org, corbet@lwn.net, rppt@kernel.org,
+	akpm@linux-foundation.org, yaozhenguo@jd.com, willy@infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v7] hugetlbfs: Extend the definition of hugepages
+ parameter to support node allocation
+Message-ID: <YVS9VhrAuKE2YdbF@archlinux-ax161>
+References: <20210927104149.46884-1-yaozhenguo1@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <CAKwvOdmjZ+QmjTJnQ-w5hLPJjow1gYnWTe6f8RBhQUJ2b3cYnw@mail.gmail.com>
-X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH v2] ARM: mm: proc-macros: ensure *_tlb_fns are 4B aligned
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Fangrui Song <maskray@google.com>, Peter Smith <peter.smith@arm.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Richard Henderson <richard.henderson@linaro.org>, 
-	Russell King <linux@armlinux.org.uk>, Dave Martin <dave.martin@arm.com>, 
-	Nicolas Pitre <nico@fluxnic.net>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210927104149.46884-1-yaozhenguo1@gmail.com>
 
-QEMU 6.1.0 is more correct about trapping on misaligned accesses. A
-kernel built with CONFIG_THUMB2_KERNEL=y and using clang as the
-assembler could generate non-naturally-aligned v7wbi_tlb_fns which
-results in a boot failure. The original commit adding the macro missed
-the .align directive on this data.
+On Mon, Sep 27, 2021 at 06:41:49PM +0800, Zhenguo Yao wrote:
+> We can specify the number of hugepages to allocate at boot. But the
+> hugepages is balanced in all nodes at present. In some scenarios,
+> we only need hugepages in one node. For example: DPDK needs hugepages
+> which are in the same node as NIC. if DPDK needs four hugepages of 1G
+> size in node1 and system has 16 numa nodes. We must reserve 64 hugepages
+> in kernel cmdline. But, only four hugepages are used. The others should
+> be free after boot. If the system memory is low(for example: 64G), it will
+> be an impossible task. So, Extending hugepages parameter to support
+> specifying hugepages at a specific node.
+> For example add following parameter:
+> 
+> hugepagesz=1G hugepages=0:1,1:3
+> 
+> It will allocate 1 hugepage in node0 and 3 hugepages in node1.
+> 
+> Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
 
-Fixes: 66a625a88174 ("ARM: mm: proc-macros: Add generic proc/cache/tlb struct definition macros")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1447
-Link: https://lore.kernel.org/all/0699da7b-354f-aecc-a62f-e25693209af4@linaro.org/
-Debugged-by: Ard Biesheuvel <ardb@kernel.org>
-Debugged-by: Nathan Chancellor <nathan@kernel.org>
-Debugged-by: Richard Henderson <richard.henderson@linaro.org>
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes V1 -> V2:
-* Drop accidentally committed Kconfig change.
-* Pick up Ard's AB tag.
+<snip>
 
- arch/arm/mm/proc-macros.S | 1 +
- 1 file changed, 1 insertion(+)
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 95dc7b83381f..ca00676a1bdd 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -66,6 +66,7 @@ static struct hstate * __initdata parsed_hstate;
+>  static unsigned long __initdata default_hstate_max_huge_pages;
+>  static bool __initdata parsed_valid_hugepagesz = true;
+>  static bool __initdata parsed_default_hugepagesz;
+> +static unsigned int default_hugepages_in_node[MAX_NUMNODES] __initdata;
+>  
+>  /*
+>   * Protects updates to hugepage_freelists, hugepage_activelist, nr_huge_pages,
+> @@ -2868,33 +2869,41 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
+>  	return ERR_PTR(-ENOSPC);
+>  }
+>  
+> -int alloc_bootmem_huge_page(struct hstate *h)
+> +int alloc_bootmem_huge_page(struct hstate *h, int nid)
+>  	__attribute__ ((weak, alias("__alloc_bootmem_huge_page")));
+> -int __alloc_bootmem_huge_page(struct hstate *h)
+> +int __alloc_bootmem_huge_page(struct hstate *h, int nid)
+>  {
+>  	struct huge_bootmem_page *m;
+>  	int nr_nodes, node;
+>  
+> +	if (nid >= nr_online_nodes)
+> +		return 0;
+> +	/* do node specific alloc */
+> +	if (nid != NUMA_NO_NODE) {
+> +		m = memblock_alloc_try_nid_raw(huge_page_size(h), huge_page_size(h),
+> +				0, MEMBLOCK_ALLOC_ACCESSIBLE, nid);
+> +		if (m)
+> +			goto found;
+> +		else
+> +			return 0;
+> +	}
+> +	/* do all node balanced alloc */
+>  	for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
+> -		void *addr;
+> -
+> -		addr = memblock_alloc_try_nid_raw(
+> +		m = memblock_alloc_try_nid_raw(
+>  				huge_page_size(h), huge_page_size(h),
+>  				0, MEMBLOCK_ALLOC_ACCESSIBLE, node);
+> -		if (addr) {
+> -			/*
+> -			 * Use the beginning of the huge page to store the
+> -			 * huge_bootmem_page struct (until gather_bootmem
+> -			 * puts them into the mem_map).
+> -			 */
+> -			m = addr;
+> +		/*
+> +		 * Use the beginning of the huge page to store the
+> +		 * huge_bootmem_page struct (until gather_bootmem
+> +		 * puts them into the mem_map).
+> +		 */
+> +		if (m)
+>  			goto found;
+> -		}
+> +		else
+> +			return 0;
+>  	}
+> -	return 0;
+>  
+>  found:
+> -	BUG_ON(!IS_ALIGNED(virt_to_phys(m), huge_page_size(h)));
+>  	/* Put them into a private list first because mem_map is not up yet */
+>  	INIT_LIST_HEAD(&m->list);
+>  	list_add(&m->list, &huge_boot_pages);
 
-diff --git a/arch/arm/mm/proc-macros.S b/arch/arm/mm/proc-macros.S
-index e2c743aa2eb2..d9f7dfe2a7ed 100644
---- a/arch/arm/mm/proc-macros.S
-+++ b/arch/arm/mm/proc-macros.S
-@@ -340,6 +340,7 @@ ENTRY(\name\()_cache_fns)
- 
- .macro define_tlb_functions name:req, flags_up:req, flags_smp
- 	.type	\name\()_tlb_fns, #object
-+	.align 2
- ENTRY(\name\()_tlb_fns)
- 	.long	\name\()_flush_user_tlb_range
- 	.long	\name\()_flush_kern_tlb_range
+This hunk causes a clang warning now:
 
-base-commit: 02d5e016800d082058b3d3b7c3ede136cdc6ddcb
-prerequisite-patch-id: 3edbe4a8485c7a75a61dbbe299e8ce1985d87ee0
--- 
-2.33.0.685.g46640cef36-goog
+mm/hugetlb.c:2957:33: error: variable 'm' is used uninitialized whenever '&&' condition is false [-Werror,-Wsometimes-uninitialized]
+        for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mm/hugetlb.c:1254:3: note: expanded from macro 'for_each_node_mask_to_alloc'
+                nr_nodes > 0 &&                                         \
+                ^~~~~~~~~~~~
+mm/hugetlb.c:2974:18: note: uninitialized use occurs here
+        INIT_LIST_HEAD(&m->list);
+                        ^
+mm/hugetlb.c:2957:33: note: remove the '&&' if its condition is always true
+        for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
+                                       ^
+mm/hugetlb.c:2942:29: note: initialize the variable 'm' to silence this warning
+        struct huge_bootmem_page *m;
+                                   ^
+                                    = NULL
+1 error generated.
 
+I am not sure if it is possible for nr_nodes to be 0 right out of the
+gate so might be a false positive?
+
+Cheers,
+Nathan
