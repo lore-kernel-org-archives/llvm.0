@@ -1,159 +1,216 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f202.google.com (mail-qt1-f202.google.com [209.85.160.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02EC12FAF
-	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 22:27:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7282461269;
-	Wed, 29 Sep 2021 22:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632954439;
-	bh=TiAVjeCvaMBmopk6bpwrU43wJ+DafuaJ7G6PBsfHy0E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jz6oAJgibL7Zi8KnvG5mvLiNQWkmteIzSCvv39YAbDUvt4JYWxIHIdRNu4q59X+wT
-	 aHqyqFUOEWrLMgLMX7iTZibFx+4zrnwaUPj6uADTxk/gc8SIU+9pOUs3YdxOAteVt4
-	 ze/5ZPUK4WQWixaNLvGv0i0GoEX2Q7nzCqZOODnTelY+ZYDQ/kYf7rdH4VouCAt7YK
-	 wmD47/35IsRCnLbgCZdeU2o+vDQ87hKi21V3lZqzZfQh35MGl/Hfymhmf0dgy4Zo9L
-	 ak5DTqwxohHLyC9XFewvEMqStkXAco5VueULwqnVc6qkV8zpKVRxTsvLKXU4gHUxgS
-	 AgIuaiaqyqKDg==
-Date: Wed, 29 Sep 2021 15:27:18 -0700
-From: Mike Rapoport <rppt@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Zhenguo Yao <yaozhenguo1@gmail.com>, mike.kravetz@oracle.com,
-	mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-	corbet@lwn.net, akpm@linux-foundation.org, yaozhenguo@jd.com,
-	willy@infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v7] hugetlbfs: Extend the definition of hugepages
- parameter to support node allocation
-Message-ID: <YVToRpjbg5mO0bru@kernel.org>
-References: <20210927104149.46884-1-yaozhenguo1@gmail.com>
- <YVS9VhrAuKE2YdbF@archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3F229CA
+	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 22:59:01 +0000 (UTC)
+Received: by mail-qt1-f202.google.com with SMTP id o7-20020ac86d07000000b002a69537d614so10177198qtt.21
+        for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 15:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Y0fyPdUie1iSxIBYtbb4DeMpLSWx01C9hO67e6l3dr0=;
+        b=nu9TcOGaSlq3xlUF2IUW3fpIATmfengtbYq6jTg23D+ETIyP5m/nduYBm7l/vJpGYr
+         8DzmfaTt5faVWB1feuN6nBQ1cOHlBRiyZ9CCTX3nUcR0hhK/wtStvbCAK3z3o9pNIb5r
+         DhhT5vtCfDC99AnWqpTgyAJ6dazpMq79FoXjZMFdZvxAJKyCNo7aTegex/7BEoFii9lH
+         WnZSnMPzxmndP/NYhtA/Acdi7WmJj2LPrge0l60K2BmT7yYyIXvt+0MM/vpzIiNC/VOD
+         cQ6g41MV4dyMjOlHx4iN207wQBcD5ghOBKN3dJeblTcpP0VStzlFHy9Wh43tHS9FBpRo
+         EauA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Y0fyPdUie1iSxIBYtbb4DeMpLSWx01C9hO67e6l3dr0=;
+        b=sy8joE06atyBz55rQGC0NWipzlBVOmGbzdDmw1bBt7UQrn2b4Tst0K0+7DOZpbQ/3q
+         qjGDn60Nj3olwESngorapuTf32le+jQlHSX0Z0OUI0dTIyAgoxoUbJVHTNXQFegHbFO1
+         f5Z12Ktasi9qOuYwIDA3frW8VqGhE+ZTMTNv9PC00L434PFrziBvTre/m7ZF178UMO7d
+         El2ii4ptyHo6XehZVM1rGh1mr/zpBcd9OpyTxglzcciM7XQOAEZLj3xRsDFBF1xMuVTE
+         bwc1peHfiBWnAxz8U1roB/8W3Jzd8Zjg5M9fB5pBWuR69a80+uRVvEWF75mp7WSGCaKy
+         X5ng==
+X-Gm-Message-State: AOAM533fQKBopYZ/rGueIZRt/Z7WH548wA5zHo5i5CxGAosyUg/xfVg5
+	G2kdMpcNLUuALfQAA6OtVGVJP3++nX0TSUcn6fE=
+X-Google-Smtp-Source: ABdhPJzsGtOgTGzcZeycB3hzn+zehXj8IMbUcTiceRrok8CcxB5CYI/qNsX46VPtqvOX/Y8MYnDtlPJx1tqGeu9QqUI=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:da31:1dfd:2e69:dc82])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6214:1022:: with SMTP id
+ k2mr916562qvr.53.1632956340603; Wed, 29 Sep 2021 15:59:00 -0700 (PDT)
+Date: Wed, 29 Sep 2021 15:58:50 -0700
+Message-Id: <20210929225850.3889950-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YVS9VhrAuKE2YdbF@archlinux-ax161>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
+Subject: [PATCH] modpost: add allow list for llvm IPSCCP
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 29, 2021 at 12:24:06PM -0700, Nathan Chancellor wrote:
-> On Mon, Sep 27, 2021 at 06:41:49PM +0800, Zhenguo Yao wrote:
-> > We can specify the number of hugepages to allocate at boot. But the
-> > hugepages is balanced in all nodes at present. In some scenarios,
-> > we only need hugepages in one node. For example: DPDK needs hugepages
-> > which are in the same node as NIC. if DPDK needs four hugepages of 1G
-> > size in node1 and system has 16 numa nodes. We must reserve 64 hugepages
-> > in kernel cmdline. But, only four hugepages are used. The others should
-> > be free after boot. If the system memory is low(for example: 64G), it will
-> > be an impossible task. So, Extending hugepages parameter to support
-> > specifying hugepages at a specific node.
-> > For example add following parameter:
-> > 
-> > hugepagesz=1G hugepages=0:1,1:3
-> > 
-> > It will allocate 1 hugepage in node0 and 3 hugepages in node1.
-> > 
-> > Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
-> 
-> <snip>
-> 
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index 95dc7b83381f..ca00676a1bdd 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -66,6 +66,7 @@ static struct hstate * __initdata parsed_hstate;
-> >  static unsigned long __initdata default_hstate_max_huge_pages;
-> >  static bool __initdata parsed_valid_hugepagesz = true;
-> >  static bool __initdata parsed_default_hugepagesz;
-> > +static unsigned int default_hugepages_in_node[MAX_NUMNODES] __initdata;
-> >  
-> >  /*
-> >   * Protects updates to hugepage_freelists, hugepage_activelist, nr_huge_pages,
-> > @@ -2868,33 +2869,41 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
-> >  	return ERR_PTR(-ENOSPC);
-> >  }
-> >  
-> > -int alloc_bootmem_huge_page(struct hstate *h)
-> > +int alloc_bootmem_huge_page(struct hstate *h, int nid)
-> >  	__attribute__ ((weak, alias("__alloc_bootmem_huge_page")));
-> > -int __alloc_bootmem_huge_page(struct hstate *h)
-> > +int __alloc_bootmem_huge_page(struct hstate *h, int nid)
-> >  {
-> >  	struct huge_bootmem_page *m;
-> >  	int nr_nodes, node;
-> >  
-> > +	if (nid >= nr_online_nodes)
-> > +		return 0;
-> > +	/* do node specific alloc */
-> > +	if (nid != NUMA_NO_NODE) {
-> > +		m = memblock_alloc_try_nid_raw(huge_page_size(h), huge_page_size(h),
-> > +				0, MEMBLOCK_ALLOC_ACCESSIBLE, nid);
-> > +		if (m)
-> > +			goto found;
-> > +		else
-> > +			return 0;
-> > +	}
-> > +	/* do all node balanced alloc */
-> >  	for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
-> > -		void *addr;
-> > -
-> > -		addr = memblock_alloc_try_nid_raw(
-> > +		m = memblock_alloc_try_nid_raw(
-> >  				huge_page_size(h), huge_page_size(h),
-> >  				0, MEMBLOCK_ALLOC_ACCESSIBLE, node);
-> > -		if (addr) {
-> > -			/*
-> > -			 * Use the beginning of the huge page to store the
-> > -			 * huge_bootmem_page struct (until gather_bootmem
-> > -			 * puts them into the mem_map).
-> > -			 */
-> > -			m = addr;
-> > +		/*
-> > +		 * Use the beginning of the huge page to store the
-> > +		 * huge_bootmem_page struct (until gather_bootmem
-> > +		 * puts them into the mem_map).
-> > +		 */
-> > +		if (m)
-> >  			goto found;
-> > -		}
-> > +		else
-> > +			return 0;
-> >  	}
-> > -	return 0;
-> >  
-> >  found:
-> > -	BUG_ON(!IS_ALIGNED(virt_to_phys(m), huge_page_size(h)));
-> >  	/* Put them into a private list first because mem_map is not up yet */
-> >  	INIT_LIST_HEAD(&m->list);
-> >  	list_add(&m->list, &huge_boot_pages);
-> 
-> This hunk causes a clang warning now:
-> 
-> mm/hugetlb.c:2957:33: error: variable 'm' is used uninitialized whenever '&&' condition is false [-Werror,-Wsometimes-uninitialized]
->         for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
->         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> mm/hugetlb.c:1254:3: note: expanded from macro 'for_each_node_mask_to_alloc'
->                 nr_nodes > 0 &&                                         \
->                 ^~~~~~~~~~~~
-> mm/hugetlb.c:2974:18: note: uninitialized use occurs here
->         INIT_LIST_HEAD(&m->list);
->                         ^
-> mm/hugetlb.c:2957:33: note: remove the '&&' if its condition is always true
->         for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
->                                        ^
-> mm/hugetlb.c:2942:29: note: initialize the variable 'm' to silence this warning
->         struct huge_bootmem_page *m;
->                                    ^
->                                     = NULL
-> 1 error generated.
-> 
-> I am not sure if it is possible for nr_nodes to be 0 right out of the
-> gate so might be a false positive?
+Modpost validation of calls from .text to .init sections relies on GCC's
+constant propagation renaming specialized functions being renamed to
+have .constprop.* suffixes. See the comment on Pattern 5 in
+scripts/mod/modpost.c:
 
-With nr_nodes == 0 there will be no memory in the system :)
+  GCC may optimize static inlines when fed constant arg(s) resulting
+  in functions like cpumask_empty() -- generating an associated symbol
+  cpumask_empty.constprop.3 that appears in the audit.  If the const that
+  is passed in comes from __init, like say nmi_ipi_mask, we get a
+  meaningless section warning.
 
+LLVM does similar optimizations (inter-procedural sparse conditional
+constant propagation; IPSCCP), but doesn't rename the specialized
+functions, so we still observe modpost warnings.
+
+Add checks in modpost to check if the .comment section contains that
+string "clang" (ie. was the object file built with clang?), and if so
+additionally check an allow list.
+
+Fixes the following modpost warnings observed on clang-13+:
+
+allmodconfig:
+WARNING: modpost: vmlinux.o(.text+0x*): Section mismatch in reference
+from the function
+  test_bit() to the variable .init.data:numa_nodes_parsed
+  __first_node() to the variable .init.data:numa_nodes_parsed
+  __next_node() to the variable .init.data:numa_nodes_parsed
+  __nodes_weight() to the variable .init.data:numa_nodes_parsed
+  early_get_smp_config() to the variable .init.data:x86_init
+defconfig:
+  __nodes_weight() to the variable .init.data:numa_nodes_parsed
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1302
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ scripts/mod/modpost.c | 56 ++++++++++++++++++++++++++++++++++++++-----
+ scripts/mod/modpost.h |  2 ++
+ 2 files changed, 52 insertions(+), 6 deletions(-)
+
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index cb8ab7d91d30..c3d0395315ef 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -865,6 +865,29 @@ static int match(const char *sym, const char * const pat[])
+ 	return 0;
+ }
+ 
++struct secref_exception {
++	const char * const fromsym, * const tosym;
++};
++
++static const struct secref_exception secref_allowlist[] = {
++	{ .fromsym = "__first_node", .tosym = "numa_nodes_parsed" },
++	{ .fromsym = "__next_node", .tosym = "numa_nodes_parsed" },
++	{ .fromsym = "__nodes_weight", .tosym = "numa_nodes_parsed" },
++	{ .fromsym = "early_get_smp_config", .tosym = "x86_init" },
++	{ .fromsym = "test_bit", .tosym = "numa_nodes_parsed" },
++};
++
++static int match_allowlist(const char *fromsym, const char *tosym)
++{
++	int i = 0, e = ARRAY_SIZE(secref_allowlist);
++
++	for (; i != e; ++i)
++		if (!strcmp(secref_allowlist[i].fromsym, fromsym) &&
++		    !strcmp(secref_allowlist[i].tosym, tosym))
++			return 1;
++	return 0;
++}
++
+ /* sections that we do not want to do full section mismatch check on */
+ static const char *const section_white_list[] =
+ {
+@@ -1204,6 +1227,8 @@ static const struct sectioncheck *section_mismatch(
+  *   tosec   = init section
+  *   fromsec = text section
+  *   refsymname = *.constprop.*
++ *   LLVM will do similar constant propagation, but it will not rename the
++ *   transformed callee.
+  *
+  * Pattern 6:
+  *   Hide section mismatch warnings for ELF local symbols.  The goal
+@@ -1216,7 +1241,8 @@ static const struct sectioncheck *section_mismatch(
+  **/
+ static int secref_whitelist(const struct sectioncheck *mismatch,
+ 			    const char *fromsec, const char *fromsym,
+-			    const char *tosec, const char *tosym)
++			    const char *tosec, const char *tosym,
++			    _Bool isclang)
+ {
+ 	/* Check for pattern 1 */
+ 	if (match(tosec, init_data_sections) &&
+@@ -1247,9 +1273,10 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
+ 
+ 	/* Check for pattern 5 */
+ 	if (match(fromsec, text_sections) &&
+-	    match(tosec, init_sections) &&
+-	    match(fromsym, optim_symbols))
+-		return 0;
++	    match(tosec, init_sections))
++		if (match(fromsym, optim_symbols) ||
++		    (isclang && match_allowlist(fromsym, tosym)))
++			return 0;
+ 
+ 	/* Check for pattern 6 */
+ 	if (strstarts(fromsym, ".L"))
+@@ -1573,6 +1600,21 @@ static void report_sec_mismatch(const char *modname,
+ 	fprintf(stderr, "\n");
+ }
+ 
++static _Bool is_clang(struct elf_info *elf)
++{
++	Elf_Sym *sym;
++
++	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
++		if (is_shndx_special(sym->st_shndx))
++			continue;
++		if (strcmp(sec_name(elf, get_secindex(elf, sym)), ".comment") != 0)
++			continue;
++		return strstr(sym_get_data(elf, sym), "clang") != NULL;
++	}
++
++	return false;
++}
++
+ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 				     const struct sectioncheck* const mismatch,
+ 				     Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
+@@ -1582,6 +1624,7 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 	Elf_Sym *from;
+ 	const char *tosym;
+ 	const char *fromsym;
++	_Bool isclang;
+ 
+ 	from = find_elf_symbol2(elf, r->r_offset, fromsec);
+ 	fromsym = sym_name(elf, from);
+@@ -1592,10 +1635,11 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 	tosec = sec_name(elf, get_secindex(elf, sym));
+ 	to = find_elf_symbol(elf, r->r_addend, sym);
+ 	tosym = sym_name(elf, to);
++	isclang = is_clang(elf);
+ 
+ 	/* check whitelist - we may ignore it */
+-	if (secref_whitelist(mismatch,
+-			     fromsec, fromsym, tosec, tosym)) {
++	if (secref_whitelist(mismatch, fromsec, fromsym, tosec, tosym,
++			     isclang)) {
+ 		report_sec_mismatch(modname, mismatch,
+ 				    fromsec, r->r_offset, fromsym,
+ 				    is_function(from), tosec, tosym,
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 0c47ff95c0e2..d8afc912fd92 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -214,3 +214,5 @@ void modpost_log(enum loglevel loglevel, const char *fmt, ...);
+ #define warn(fmt, args...)	modpost_log(LOG_WARN, fmt, ##args)
+ #define error(fmt, args...)	modpost_log(LOG_ERROR, fmt, ##args)
+ #define fatal(fmt, args...)	modpost_log(LOG_FATAL, fmt, ##args)
++
++#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 -- 
-Sincerely yours,
-Mike.
+2.33.0.685.g46640cef36-goog
+
