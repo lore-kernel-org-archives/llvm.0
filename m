@@ -1,79 +1,95 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0682529CA
-	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 23:25:39 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A2AB61504;
-	Wed, 29 Sep 2021 23:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1632957939;
-	bh=xUoojM5baZbirs9n9pr5p0EQ68LtFMWxRkYfM9vHTrk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=xXoW1nkhG5+Xw7yT2XvU8PGVUVE/7WTX2YuRi/JaC+nKLFdktXY5T00uXpCkrHVOH
-	 nhCsbNPC43twMUhs60qozYairoRHpJQrynslXyqCgZ+e0ra8zVcs47mXjoYC4zCNwq
-	 crlC5ixAuTkJMRo7zORBkUtvy5sbGpEoaUuH4v8s=
-Date: Wed, 29 Sep 2021 16:25:38 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Zhenguo Yao
- <yaozhenguo1@gmail.com>, mike.kravetz@oracle.com, mpe@ellerman.id.au,
- benh@kernel.crashing.org, paulus@samba.org, corbet@lwn.net,
- yaozhenguo@jd.com, willy@infradead.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v7] hugetlbfs: Extend the definition of hugepages
- parameter to support node allocation
-Message-Id: <20210929162538.5c1452d63e064bf9da3cc9e5@linux-foundation.org>
-In-Reply-To: <YVToRpjbg5mO0bru@kernel.org>
-References: <20210927104149.46884-1-yaozhenguo1@gmail.com>
-	<YVS9VhrAuKE2YdbF@archlinux-ax161>
-	<YVToRpjbg5mO0bru@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC4329CA
+	for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 23:28:59 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id g41so17435427lfv.1
+        for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 16:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wu7M9DqJBeP0nkRCi2RNd2jpALrZarew4V0B2j/Hy5M=;
+        b=bhHpZyvcnjj667ISJMLub0celi+kt+zVqfIzcCPfZukUu5XefTPXRfdWC8knj6kXPc
+         jgMg2WV5OIO31aRDSyVX4N6krkVbNHuqKLNa4W/V101X8LhdVflUZwttL6myDyzVAHJM
+         XI3kq/uqBUUwVKgeHOH6PKPwESm35JtMrexfU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wu7M9DqJBeP0nkRCi2RNd2jpALrZarew4V0B2j/Hy5M=;
+        b=ODEvGyH8MFJ3+JCPxR27MzTZptQINk65/AMXsYJ4FukP02tcWRUU/Z0LrSfNyF5zJM
+         dNSftwHIb64cu/+LDJkDFtYGVB++ZhvcjN8QL/x4ybBXD6rxMChrJzsJtaCTsaV/2Swz
+         Zc5+AhGD/51lByeeqYdBiEo4Uobghb9M3jsnpbc0x2CuA72ca6nwLr5Ey3wLsFpLrjE8
+         k6zznIuay2dOiXyxsPc3WziqAY6acRo6SGE4Y8RhYPE8PJnnNjjIrRk4Yvd1m4xEXBQf
+         If0NQjgvXDRFrf3Lj4T2/JfJYmfLCVOaoHBr2cMzdCX2cwPsEbCLPRC9NOiKcR9i1nwx
+         VGcQ==
+X-Gm-Message-State: AOAM531zpqDQ8ohj+fNd8YeW2+a/PllbCKpmhTsAhVFNLkM+U6R7LIfl
+	ikfNZChUOU3VXzxg5K/NAmfVzQ49StoaUdXT2C8=
+X-Google-Smtp-Source: ABdhPJw//vEHdXIaFjduQl8eFM+nhMKu0jCGugC9neRFIvrE9MsfZMiVzNm6oKJ3xcMSdxGZKljNTQ==
+X-Received: by 2002:ac2:5195:: with SMTP id u21mr2279102lfi.91.1632958137389;
+        Wed, 29 Sep 2021 16:28:57 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id i3sm139933lja.47.2021.09.29.16.28.56
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Sep 2021 16:28:56 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id i4so17600083lfv.4
+        for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 16:28:56 -0700 (PDT)
+X-Received: by 2002:a2e:4e01:: with SMTP id c1mr2701754ljb.31.1632958136150;
+ Wed, 29 Sep 2021 16:28:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20210929225850.3889950-1-ndesaulniers@google.com>
+In-Reply-To: <20210929225850.3889950-1-ndesaulniers@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 29 Sep 2021 16:28:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh0BNEDz+uOdJWG8iW=n0PeOEjZpHyuSN2g0pKSCj+6iQ@mail.gmail.com>
+Message-ID: <CAHk-=wh0BNEDz+uOdJWG8iW=n0PeOEjZpHyuSN2g0pKSCj+6iQ@mail.gmail.com>
+Subject: Re: [PATCH] modpost: add allow list for llvm IPSCCP
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Michal Marek <michal.lkml@markovi.net>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 29 Sep 2021 15:27:18 -0700 Mike Rapoport <rppt@kernel.org> wrote:
+On Wed, Sep 29, 2021 at 3:59 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> +static const struct secref_exception secref_allowlist[] = {
+> +       { .fromsym = "__first_node", .tosym = "numa_nodes_parsed" },
+> +       { .fromsym = "__next_node", .tosym = "numa_nodes_parsed" },
+> +       { .fromsym = "__nodes_weight", .tosym = "numa_nodes_parsed" },
+> +       { .fromsym = "early_get_smp_config", .tosym = "x86_init" },
+> +       { .fromsym = "test_bit", .tosym = "numa_nodes_parsed" },
+> +};
 
-> > mm/hugetlb.c:2957:33: error: variable 'm' is used uninitialized whenever '&&' condition is false [-Werror,-Wsometimes-uninitialized]
-> >         for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
-> >         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > mm/hugetlb.c:1254:3: note: expanded from macro 'for_each_node_mask_to_alloc'
-> >                 nr_nodes > 0 &&                                         \
-> >                 ^~~~~~~~~~~~
-> > mm/hugetlb.c:2974:18: note: uninitialized use occurs here
-> >         INIT_LIST_HEAD(&m->list);
-> >                         ^
-> > mm/hugetlb.c:2957:33: note: remove the '&&' if its condition is always true
-> >         for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
-> >                                        ^
-> > mm/hugetlb.c:2942:29: note: initialize the variable 'm' to silence this warning
-> >         struct huge_bootmem_page *m;
-> >                                    ^
-> >                                     = NULL
-> > 1 error generated.
-> > 
-> > I am not sure if it is possible for nr_nodes to be 0 right out of the
-> > gate so might be a false positive?
-> 
-> With nr_nodes == 0 there will be no memory in the system :)
+This list is basically made-up and random.
 
-Let's keep clang happy?
+Why did those functions not get inlined? Wouldn't it be better to make
+them always-inline?
 
---- a/mm/hugetlb.c~hugetlbfs-extend-the-definition-of-hugepages-parameter-to-support-node-allocation-fix
-+++ a/mm/hugetlb.c
-@@ -2939,7 +2939,7 @@ int alloc_bootmem_huge_page(struct hstat
- 	__attribute__ ((weak, alias("__alloc_bootmem_huge_page")));
- int __alloc_bootmem_huge_page(struct hstate *h, int nid)
- {
--	struct huge_bootmem_page *m;
-+	struct huge_bootmem_page *m = NULL;	/* initialize for clang */
- 	int nr_nodes, node;
- 
- 	if (nid >= nr_online_nodes)
-_
+Or, like in at least the early_get_smp_config() case, just make it be
+marked __init, so that if it doesn't get inlined it gets the right
+section?
 
+It seems silly to add random source mappings to a checking program.
+
+It was bad for the gcc constprop hack, but at least there it was a
+clear case of "this inlining failed". This ad-hoc list has cases of
+things that are clearly wrong in general ("test_bit()" must not use
+initdata), and that "ok, the function just doesn't have the right
+section marker.
+
+(All of get_smp_config/early_get_smp_config/find_smp_config should be
+__init, since they most definitely cannot work after __init time - but
+why a compiler doesn't just inline them when they are one single
+indirect call, I don't really get)
+
+         Linus
