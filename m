@@ -1,80 +1,193 @@
-Received: from mail-qk1-f202.google.com (mail-qk1-f202.google.com [209.85.222.202])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737C872
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 18:06:11 +0000 (UTC)
-Received: by mail-qk1-f202.google.com with SMTP id w2-20020a3794020000b02903b54f40b442so14390133qkd.0
-        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 11:06:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954A12FAE
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 18:38:56 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id i4so29638388lfv.4
+        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 11:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YTs3o+Lcv5DCr2QuauAOS05kw4e75hGm1Ap6LaNmDuQ=;
-        b=X2H89x2ZY/Vpdf/BQvunK6wfPqMyb4DEDk9pbiFs6nK3/2FbhHHbrE6V4xLhMLMO72
-         drYHTD2/KCJ6G99TSY9C0aO1sKa6Of2qEhogYWv2HQTGYu0JWgUpAaLMIJzwMu+or7pa
-         iHk0oBTabObWMRZMT4JZN8w06cBqyUEON9DOp1KFYQGQ3SL+tbs7p/0CMzwj/JX+J6Bv
-         wWym0ky/0NAtPtaaqTZBHkMxxafKQWsjUiZH+m2pu8IQRQNs99qH5Pfj/TWo3mDJ7327
-         NFrnHKXLRwYMI9ciPDGRpaNES499YGFq66cYMWgu6ugJqzdhsfWL/THEpUxc1niccano
-         aXmw==
+        bh=wlIko8aPk3VVcvZPvZ8HxhCUc+6fNRzNwVLsaCQfzA0=;
+        b=WAb7E5lqBsCk+wqY0InBUtLXN8Amgkchb7ntGxro9rqclov2ntOg/znlDZoAD3QpeJ
+         PNJ2C5mQaoHOH2hwTzWp7QkO6T/GUCl5nqMT2FlkBRsahNaOnpQ052fPxodyIJF6QkGV
+         VrHcCddBwZUCpM8lAmtxjaG+o+gr8FJTPWznJ5UsN+EHLqG3K5GZnDs5tlkoc27h8KSS
+         e6ryLYzWlZ2f508f6M0DZRK3AwDDPJZl3Xhi15WGEU/b5CbpaRkdlsFto57lMNBp7q5X
+         cSukOzIh5RDmX8RHj5FrG+jxumzraA+PSe+y5Dyv6TaU10IpsgIaCUUp4rIajc25hQ+n
+         SUqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=YTs3o+Lcv5DCr2QuauAOS05kw4e75hGm1Ap6LaNmDuQ=;
-        b=Zzo+shvGj5hLaglncACUixzFcLFsFjF7DjfqETVhqQRDsU9lLOtWdp+moUCc7bPZxF
-         wqaE1PXWUi5wvti0dkDpLGQS7Dh5mvpYlkZiAJF0dLU5QJ5abPrJKlMsEVZ4H/1sLgTQ
-         eYT3Caj8eQFR7BbuTyR/JLaSsJmfSQ1iOeUMGLeRW0LgnBF/jeNZoW03UFlVsmUXo1vm
-         TO8u6sMNhyNFmwxystOnRukPp0EQZC/blblaYYDAWXFLdJvOJ3q4ODerPo8dmU/zN4rO
-         B/RdcbD++8Cgx+N5vjjGc04dAPl2PkAYyXGdyml9AOqrgNxieMm+lplZ2938fCNdseFb
-         n/UQ==
-X-Gm-Message-State: AOAM5309BlDA5rYJujsnB7taSgmQ0USW05rd3n0ZNp8ATr4ev5TC3pYi
-	W9hDTj4Y/joVJ1DLcMgP1kpliOE8q+azcUNAOwk=
-X-Google-Smtp-Source: ABdhPJxQHjdB5w0u1pGsQKGQzmTIef8NLz4brDiegqDKDUQgvgv1vEwzWyrPFnKCP//0W8Pt+jlJdM7oOGX+dho9Rwo=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:ce43:4366:95ca:d6e9])
- (user=samitolvanen job=sendgmr) by 2002:a0c:8e8e:: with SMTP id
- x14mr5086772qvb.67.1633025170495; Thu, 30 Sep 2021 11:06:10 -0700 (PDT)
-Date: Thu, 30 Sep 2021 11:05:31 -0700
-In-Reply-To: <20210930180531.1190642-1-samitolvanen@google.com>
-Message-Id: <20210930180531.1190642-16-samitolvanen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wlIko8aPk3VVcvZPvZ8HxhCUc+6fNRzNwVLsaCQfzA0=;
+        b=4gVIdH3wzh3Oo3bHtVzQlQhm3JKD9qleI/srV8XqW4bhIE4At0gXGIdDZqGgY/tcCB
+         YmImbgA8hjh7gYKmB4apIifUosi5IrJLRJA+maaEg3oDDSrIjvKylRvFU+WqPa4mXdF5
+         bBPCO1bhmNNb6a7/g+SRYV6fFDbonHPDBjED190dKMPI9BUDWvXwJUBXYKRRAkCd/9Wg
+         cOZNckgT2or4aCLekvIdKPFNDWzcdZs6FCRvaT9kJT0dzrw3zURp22GGUHVnAAyDzi9i
+         4tIKZI+wzOZHp6OFUtTVmdBWFssPJOaIpVBc3oZiTBeHl+3CjYpC6aW5+kCMpTpNkYQs
+         L14w==
+X-Gm-Message-State: AOAM533CaXhryB8oENwqlzePBNRJnjhsdPSW3nI7iqnvi8Y65kQEM8UF
+	Ydat2HT4Z1e3Lc/Q9s07DNF2A5qcO1ytp0zGG9yDMg==
+X-Google-Smtp-Source: ABdhPJy0gPE9CQiHSNP8VNq9U4LTVmnRr8cYd4pty4EITEWHI6OdV74ixxCAB4NExFgWixc8PnfPOQmC2BjjPEtugyU=
+X-Received: by 2002:a2e:5059:: with SMTP id v25mr7504943ljd.128.1633027134353;
+ Thu, 30 Sep 2021 11:38:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20210930180531.1190642-1-samitolvanen@google.com>
-X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
-Subject: [PATCH v4 15/15] x86, build: Allow CONFIG_CFI_CLANG to be selected
-From: Sami Tolvanen <samitolvanen@google.com>
-To: x86@kernel.org
-Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+In-Reply-To: <20210930180531.1190642-1-samitolvanen@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 30 Sep 2021 11:38:43 -0700
+Message-ID: <CAKwvOdkmbW9dUqDiziC3mwRiJ5bGXr+wuOkJjeCwTddq_F9TAw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/15] x86: Add support for Clang CFI
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: x86@kernel.org, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Sedat Dilek <sedat.dilek@gmail.com>, 
 	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Select ARCH_SUPPORTS_CFI_CLANG to allow CFI to be enabled with
-Clang >= 13.
+On Thu, Sep 30, 2021 at 11:05 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> This series adds support for Clang's Control-Flow Integrity (CFI)
+> checking to x86_64. With CFI, the compiler injects a runtime
+> check before each indirect function call to ensure the target is
+> a valid function with the correct static type. This restricts
+> possible call targets and makes it more difficult for an attacker
+> to exploit bugs that allow the modification of stored function
+> pointers. For more details, see:
+>
+>   https://clang.llvm.org/docs/ControlFlowIntegrity.html
+>
+> Note that v4 is based on tip/master. The first two patches contain
+> objtool support for CFI, the remaining patches change function
+> declarations to use opaque types, fix type mismatch issues that
+> confuse the compiler, and disable CFI where it can't be used.
+>
+> You can also pull this series from
+>
+>   https://github.com/samitolvanen/linux.git x86-cfi-v4
 
-Link: https://bugs.llvm.org/show_bug.cgi?id=51588
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+I tested this series with near ToT clang with CONFIG_LTO_CLANG_THIN=y
+and our small buildroot-based userspace image in QEMU, then again with
+CONFIG_LTO_CLANG_FULL=y. No new warnings from objtool, everything
+seemed fine.  FWIW,
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 16e216b57863..ea6d255a125f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -107,6 +107,7 @@ config X86
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
- 	select ARCH_SUPPORTS_LTO_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
-+	select ARCH_SUPPORTS_CFI_CLANG		if X86_64 && CLANG_VERSION >= 130000
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> ---
+> Changes in v4:
+> - Dropped the extable patch after the code was refactored in -tip.
+>
+> - Switched to __section() instead of open-coding the attribute.
+>
+> - Added an explicit ifdef for filtering out CC_FLAGS_CFI in
+>   purgatory for readability.
+>
+> - Added a comment to arch_cfi_jump_reloc_offset() in objtool.
+>
+> Changes in v3:
+> - Dropped Clang requirement to >= 13 after the missing compiler
+>   fix was backported there.
+>
+> - Added DEFINE_CFI_IMMEDIATE_RETURN_STUB to address the issue
+>   with tp_stub_func in kernel/tracepoint.c.
+>
+> - Renamed asm_func_t to asm_func_ptr.
+>
+> - Changed extable handlers to use __cficanonical instead of
+>   disabling CFI for fixup_exception.
+>
+> Changes in v2:
+> - Dropped the first objtool patch as the warnings were fixed in
+>   separate patches.
+>
+> - Changed fix_cfi_relocs() in objtool to not rely on jump table
+>   symbols, and to return an error if it can't find a relocation.
+>
+> - Fixed a build issue with ASM_STACK_FRAME_NON_STANDARD().
+>
+> - Dropped workarounds for inline assembly references to
+>   address-taken static functions with CFI as this was fixed in
+>   the compiler.
+>
+> - Changed the C declarations of non-callable functions to use
+>   opaque types and dropped the function_nocfi() patches.
+>
+> - Changed ARCH_SUPPORTS_CFI_CLANG to depend on Clang >=14 for
+>   the compiler fixes.
+>
+>
+> Kees Cook (1):
+>   x86, relocs: Ignore __typeid__ relocations
+>
+> Sami Tolvanen (14):
+>   objtool: Add CONFIG_CFI_CLANG support
+>   objtool: Add ASM_STACK_FRAME_NON_STANDARD
+>   linkage: Add DECLARE_ASM_FUNC_SYMBOL
+>   cfi: Add DEFINE_CFI_IMMEDIATE_RETURN_STUB
+>   tracepoint: Exclude tp_stub_func from CFI checking
+>   ftrace: Use an opaque type for functions not callable from C
+>   lkdtm: Disable UNSET_SMEP with CFI
+>   lkdtm: Use an opaque type for lkdtm_rodata_do_nothing
+>   x86: Use an opaque type for functions not callable from C
+>   x86/purgatory: Disable CFI
+>   x86, module: Ignore __typeid__ relocations
+>   x86, cpu: Use LTO for cpu.c with CFI
+>   x86, kprobes: Fix optprobe_template_func type mismatch
+>   x86, build: Allow CONFIG_CFI_CLANG to be selected
+>
+>  arch/x86/Kconfig                      |  1 +
+>  arch/x86/include/asm/ftrace.h         |  2 +-
+>  arch/x86/include/asm/idtentry.h       | 10 +++---
+>  arch/x86/include/asm/page_64.h        |  7 ++--
+>  arch/x86/include/asm/paravirt_types.h |  3 +-
+>  arch/x86/include/asm/processor.h      |  2 +-
+>  arch/x86/include/asm/proto.h          | 25 ++++++-------
+>  arch/x86/include/asm/uaccess_64.h     |  9 ++---
+>  arch/x86/kernel/alternative.c         |  2 +-
+>  arch/x86/kernel/ftrace.c              |  2 +-
+>  arch/x86/kernel/kprobes/opt.c         |  4 +--
+>  arch/x86/kernel/module.c              |  4 +++
+>  arch/x86/kernel/paravirt.c            |  4 +--
+>  arch/x86/kvm/emulate.c                |  4 +--
+>  arch/x86/kvm/kvm_emulate.h            |  9 ++---
+>  arch/x86/power/Makefile               |  2 ++
+>  arch/x86/purgatory/Makefile           |  4 +++
+>  arch/x86/tools/relocs.c               |  7 ++++
+>  arch/x86/xen/enlighten_pv.c           |  6 ++--
+>  arch/x86/xen/xen-ops.h                | 10 +++---
+>  drivers/misc/lkdtm/bugs.c             |  2 +-
+>  drivers/misc/lkdtm/lkdtm.h            |  2 +-
+>  drivers/misc/lkdtm/perms.c            |  2 +-
+>  drivers/misc/lkdtm/rodata.c           |  2 +-
+>  include/asm-generic/vmlinux.lds.h     | 11 ++++++
+>  include/linux/cfi.h                   | 13 +++++++
+>  include/linux/ftrace.h                |  7 ++--
+>  include/linux/linkage.h               | 13 +++++++
+>  include/linux/objtool.h               |  6 ++++
+>  kernel/cfi.c                          | 24 ++++++++++++-
+>  kernel/tracepoint.c                   |  5 +--
+>  tools/include/linux/objtool.h         |  6 ++++
+>  tools/objtool/arch/x86/decode.c       | 17 +++++++++
+>  tools/objtool/elf.c                   | 51 +++++++++++++++++++++++++++
+>  tools/objtool/include/objtool/arch.h  |  3 ++
+>  tools/objtool/include/objtool/elf.h   |  2 +-
+>  36 files changed, 217 insertions(+), 66 deletions(-)
+>
+>
+> base-commit: d4bfebd9ef497ee0afb498f6028a5074a6ccf307
+> --
+> 2.33.0.800.g4c38ced690-goog
+>
+
+
 -- 
-2.33.0.800.g4c38ced690-goog
-
+Thanks,
+~Nick Desaulniers
