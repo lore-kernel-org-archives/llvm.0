@@ -1,121 +1,105 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2069.outbound.protection.outlook.com [40.107.93.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA482F80
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 05:47:18 +0000 (UTC)
-Received: by mail-wr1-f47.google.com with SMTP id m22so2535596wrb.0
-        for <llvm@lists.linux.dev>; Wed, 29 Sep 2021 22:47:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EzwNWjTA5Fd4xVXh78xrF5nbIKyF+4Pya3O8qiR1rIQ=;
-        b=iRNJz/xqpqPoyQSLh2ywRVa0n3uxvx/wojGCs5GD4Y46iHvtmD2RbrQPoQShBDj7jV
-         5U4WVatDOnZz7lcBbJuzazHLx7kFrEUd4pCUEF4Ku0W9YD0QVb5GPge0j+i5KeFYIER3
-         Ld5CTKmmdfGNB+oh2aARdjI+i9Us3Y9EFpAvlGc/FdoG8pScnD/WryLC5IjDT1PCS31w
-         iqm+8zLlW39WZxW+NPPHqRc6Nr5wV3we3jty1LZxBD5j2LvAltCzESLqPM3hhpSR4/Bd
-         9B8j3Kw/lANMm/WIrbPLHb0dtdoRJ8hPJH8fcwvuKVB5lXrqeV15d22TyLkQmwVc7qRd
-         3O/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EzwNWjTA5Fd4xVXh78xrF5nbIKyF+4Pya3O8qiR1rIQ=;
-        b=d83Pw3bM9R1+ouU287UJYguzl7Euc7UHO0FjPptXB0GevFiFRHGQpuc8KrcR8xg1F0
-         moJirUYF8Fe/V2XP9YYLMvGAGH93iYik7dyAjW76ZuB1OJgRpYwRCMZZa0XpAEucdkHd
-         tVmYJQ+qs38OQL4cOzuyoZMwPAI7q/l6KxVlf6wp6DDv036jvXjdbgt1OHcy6jzThstA
-         s30lEo+KL7brpAoJYaeDxMmuplBvkrJbGE8Oy1965yyCkw+pRzqGN3C6sHV+6G29Q5B0
-         DrZ3WW3jZr9d10t2P54WMoBBD1zea9G7H69cBXGit+r9HM6thK47Cl8P69WRsCN3SN6L
-         3IGg==
-X-Gm-Message-State: AOAM530I+3TDTgo6KOKSovw1DXU6bKfq98eBN0rWuvW2V+cdSd6uQc1Y
-	eAGzijOZ4KwBQiYJ8Cjc23HydA==
-X-Google-Smtp-Source: ABdhPJzHH5fuu3NOH3D91vWmB3Krt08tYXnI2l0GMVsYoBCqe6guLSe24o0X2MIAIj2+fAibSYRBkw==
-X-Received: by 2002:adf:a18d:: with SMTP id u13mr3915822wru.83.1632980836200;
-        Wed, 29 Sep 2021 22:47:16 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:4c54:2b8f:fabf:78b0])
-        by smtp.gmail.com with ESMTPSA id h11sm1333555wru.10.2021.09.29.22.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 22:47:15 -0700 (PDT)
-Date: Thu, 30 Sep 2021 07:47:09 +0200
-From: Marco Elver <elver@google.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mark:arm64/kcsan 11/13] ld.lld: error: undefined symbol:
- __tsan_atomic64_fetch_add
-Message-ID: <YVVPXS6I6TwOudcX@elver.google.com>
-References: <202109300534.s1xCnxOR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE64E168
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 06:41:47 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XM/pY3HSe7jITFDFNq4FRz+kXoLoz7diSGR7lspxjYkYhOgexi81e0eZHarI94YBgn6eWS7N3nkKunnFjAsXeMA5LBY0PZFHi+FtNDsDXaDEDJ8Kr31Q9BgU2dDX2AI17vwTISCovLcFS0qqhf1ct612o8//3QbhMF2TPmAouCQNRKNude6KUWOss+1144LHFr+GfKZsi8OiI8+nASgjnb6lYrAcUoMTeEu9giUeMgjF9rbkW5EH/zcbAwIE09+lQLBRsxjvBuKo7XIE777eJKdn6dErg9VYcRcfwsU8syfH26Ni7woTTslcGkGpd+ar+MpcyRVS4wlItnuD4JrmCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=doO7o9jEr4nKsmiDnV3pgrPe+RrvT71+o8qMNizl/2k=;
+ b=d2xTP7T5XItfq3odp3eQJ1onejUSuloeugyvkQ/escFPlndDow68x1fr7EHqEgFAuh6aXjBv5vsR1bB5DDcO3v3qUA3vH6MbT3f4fq7E6JHjgpACXEWE2PxhAIBs2oh6nEGxHnj9ED6oYKWDjwcFALHgu+ILlBA8VWUORU9Onk3fKC6BAtgEubJHA+7ctHuA206sOhZU5hKrYlqgy+pb+s1CU/AxL/G9fNss01Uya6cvk73MhgfzzRea1IDeezFMIOjeOP3nagCQRKX60F9prrg8EL9qcwO/u8QH7f7/IU4BsyB4IISVbvt826f0LhRd3ISO2oDDkl7fcNCQI0SRnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=lists.01.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=doO7o9jEr4nKsmiDnV3pgrPe+RrvT71+o8qMNizl/2k=;
+ b=p1M4BuT272c6UwkeufO/do7IEWmhl0wXraggBDmwZ8MXeMVgJqBfgR6HK03Vp+XVIOF32fit0NUMeVJWA3c3y6GY1IzesXzLsAHOJuUa9okHiFTFSGwvKKdSOmM4Pu2qnf3jyoOVhfkG0an7L0pgyI3PUDiH+JA6X1mpMhaGpba52E3q8AlZv0u7phzRKDU7uzH8Ik1DfuZbq7hFXW4t6rxzRAZCWahIb2jOv+LeX4vR0mOo9ndMEjr5tCtmQgEwame54APZBG5JIgyMQftVHhWt5WOlvrKND2yYzVltbDwqLiWSwkEiSPIX904HozwTlSpgx9d3P85zvYoMM72f+Q==
+Received: from BN6PR1101CA0021.namprd11.prod.outlook.com
+ (2603:10b6:405:4a::31) by MWHPR12MB1280.namprd12.prod.outlook.com
+ (2603:10b6:300:12::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13; Thu, 30 Sep
+ 2021 06:41:45 +0000
+Received: from BN8NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:4a:cafe::1f) by BN6PR1101CA0021.outlook.office365.com
+ (2603:10b6:405:4a::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend
+ Transport; Thu, 30 Sep 2021 06:41:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; lists.01.org; dkim=none (message not signed)
+ header.d=none;lists.01.org; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT010.mail.protection.outlook.com (10.13.177.53) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4566.14 via Frontend Transport; Thu, 30 Sep 2021 06:41:45 +0000
+Received: from localhost (172.20.187.6) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 30 Sep
+ 2021 06:41:43 +0000
+Date: Thu, 30 Sep 2021 09:41:40 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Nathan Chancellor <nathan@kernel.org>
+CC: kernel test robot <lkp@intel.com>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Jiri Pirko
+	<jiri@nvidia.com>
+Subject: Re:
+ drivers/net/ethernet/mellanox/mlxsw/core_acl_flex_actions.c:2022:1: warning:
+ unused function 'mlxsw_afa_sampler_mirror_agent_get'
+Message-ID: <YVVcJLSwGPWyFXKl@shredder>
+References: <202109290245.bpgij5Zs-lkp@intel.com>
+ <YVQ1cE0Ke2cWzB0r@shredder>
+ <YVSWzZvv5fX4iDb7@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <202109300534.s1xCnxOR-lkp@intel.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+In-Reply-To: <YVSWzZvv5fX4iDb7@archlinux-ax161>
+X-Originating-IP: [172.20.187.6]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 528bc7b7-da89-4b8f-6e32-08d983dd5ed6
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1280:
+X-Microsoft-Antispam-PRVS:
+	<MWHPR12MB1280BEE025D205CE164B077BB2AA9@MWHPR12MB1280.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	MJr/OJsP8fLvUVPIp5pPG1KhvaV5jinkht7ZwnrclhQQAPEmx1Llz8crIg+GAemqZEm1lSOPRSSQlkLNSlxGcH3Mv9/lk9GzmIVFEfnCE7VOtJqgTnQfb9boEbBaCl1qCj1R0k6gn93QKc6MrSBsmEok0IehvtE0oYnYXWn9xhEqTU4ND97gsJcMUK+35RiV7lNSrrALWhS5vWarntACyq79JWvr8YaNelmt6dqLadF2HJqt0QT6vttkJ46LAs+t0JM/Miq7McZvnP1LwqhpDyLYWVftEzrTVNFjtJJo1FoQseTFBWX9ySgtUvD4UHGCEu1Zi3G1aDhzLDhMAwsZ0aq6n8URAEBXP+aapUlox/ipDMTWQUYHp5N0vMDlaywJIqU08NzS6Io+4cthGQPVtc4Pxlz+XPkaBZb2Msd1uIpDHXzP+meHC2CBAewYU19wqW4OPVtqkA7i/MNaM3L5V8zI9T+hTLw6gzOPDK7pGD+5nihvr6oQGwdC4nIkkE4z14S6YxXtxjqMRM1ElqAELTu4ski0R4UVVG71jpQGxHjPHRjTb9Z/DJPOiYkOjWR2Jj3+PsOVIz8On0vsd3IxUyf/8bZsCMufG0qtttwJP5YnTGH1Lz1zZN0wzDT/UjzJ827SYvU/5Oo8niXG6pqkbN9RPumaBeqAZvi0N6ySImytZo2/HvKKZn8I/IaRvT/5uff7+DkyVkNfmQhBvylbRw==
+X-Forefront-Antispam-Report:
+	CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(7916004)(36840700001)(46966006)(4326008)(336012)(356005)(6916009)(426003)(4744005)(16526019)(186003)(107886003)(36860700001)(82310400003)(86362001)(26005)(33716001)(7636003)(83380400001)(316002)(508600001)(2906002)(5660300002)(8936002)(54906003)(9686003)(8676002)(70206006)(70586007)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 06:41:45.0179
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 528bc7b7-da89-4b8f-6e32-08d983dd5ed6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN8NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1280
 
-On Thu, Sep 30, 2021 at 05:48AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/kcsan
-> head:   4fe9d6c2ef85257d80291086e4514eaaebd3504e
-> commit: f5bc7f69b328f00a6accd9a11f5981d2d0c11cb5 [11/13] kcsan: remove atomic builtin support
-> config: x86_64-randconfig-a011-20210929 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=f5bc7f69b328f00a6accd9a11f5981d2d0c11cb5
->         git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
->         git fetch --no-tags mark arm64/kcsan
->         git checkout f5bc7f69b328f00a6accd9a11f5981d2d0c11cb5
->         # save the attached .config to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: undefined symbol: __tsan_atomic64_fetch_add
->    >>> referenced by initcall.h:10 (include/trace/events/initcall.h:10)
->    >>>               main.o:(__traceiter_initcall_level) in archive init/built-in.a
->    >>> referenced by initcall.h:10 (include/trace/events/initcall.h:10)
->    >>>               main.o:(__traceiter_initcall_level) in archive init/built-in.a
->    >>> referenced by initcall.h:10 (include/trace/events/initcall.h:10)
->    >>>               main.o:(__traceiter_initcall_level) in archive init/built-in.a
->    >>> referenced 744943 more times
+On Wed, Sep 29, 2021 at 09:39:41AM -0700, Nathan Chancellor wrote:
+> Yes, I would say this is a perfectly fine solution. The warning is there
+> to make you consider if you have forgotten to use or remove a function
+> depending on the context and if this is expected behavior, silencing the
+> compiler with the __maybe_unused attribute is the right thing to do. The
+> kernel does this for resume and suspend functions as CONFIG_PM might not
+> be set.
 
-This was another reason why I added the __tsan_atomic instrumentation
-calls -- to avoid chasing the odd driver or however this happened using
-builtin atomics and the blame always falling on KCSAN. ;-)
-
-This happened more than once, and I just got frustrated and added them,
-also in preparation of other odd arches wanting it. I think KCSAN isn't
-meant to be the do-not-use-atomic-builtins linter.
-
-If you can somehow keep them, I would prefer that, just to avoid going
-back to a world where I have to chase the odd builtin atomic user after
-they broke the KCSAN build.
-
-Would a $(call cc-option,-mno-outline-atomics) help?
-
---- a/kernel/kcsan/Makefile
-+++ b/kernel/kcsan/Makefile
-@@ -8,7 +8,8 @@ CFLAGS_REMOVE_debugfs.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
- 
- CFLAGS_core.o := $(call cc-option,-fno-conserve-stack) \
--	-fno-stack-protector -DDISABLE_BRANCH_PROFILING
-+	-fno-stack-protector -DDISABLE_BRANCH_PROFILING \
-+	$(call cc-option,-mno-outline-atomics)
- 
- obj-y := core.o debugfs.o report.o
- obj-$(CONFIG_KCSAN_SELFTEST) += selftest.o
-
-A quick test with a compiler version which generated outline
-atomics suggests that this works.
-
-Thanks,
--- Marco
+Thanks, Nathan. Will send the patch to net-next (most likely next week)
+and copy you.
