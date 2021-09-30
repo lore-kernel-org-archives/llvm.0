@@ -1,98 +1,89 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB37C2FAE
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 19:22:12 +0000 (UTC)
-Received: by mail-qk1-f173.google.com with SMTP id x12so6919785qkf.9
-        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 12:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A/tuWyi96ya0DlbzWNr34/HVx+HP3Iol741vjN64iIc=;
-        b=AnkZHp5Jxa0Wk/NFWfm8jROZ4vvwpLiSaBjXqAL2Oj1rT8lPI5/T+3P56rGO8gKyxc
-         kvInbIhXASrI/xTvh9/fbw4QmCGU0MaFulfd4JkXMuFWPqLvO4VCU+udtyP9m4y21FSZ
-         Rw2TC2kmSA+ecaVyQDNVXPE9k049LXNX+T1MU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A/tuWyi96ya0DlbzWNr34/HVx+HP3Iol741vjN64iIc=;
-        b=lSOHa6ZusAxW6gz25U2eZuC+0s98eR9rOE97bFm+jkkgG+tMxmZYPJfnnnBg/pfR39
-         d4+IBxa+EEKyonzJ4PseOps/wMQrF19hXWiuIs82JFF5jYMBqETRKjxcmk4LEMw18GaT
-         PSo77pGblCZ9Ft7KyZZE9ooC2i43iMxz9hQY/oYmWbpYDY6AYOLnIZruK09OcrwUQWdk
-         uPH1zBoFpT5Wa7mO54a37sXI58mxafTpOAvhniDqC/6Z/UJNzjin1EA/8BRUKjzPZpgP
-         NLTcAOQCc6mwu6wndo9Rpyv/k9XQJl3GyjhUXb6jb5J6f2M7FFIU1+/25krjV+6REcgf
-         RJiA==
-X-Gm-Message-State: AOAM5318BiQmuojj8lVQTloIeNNbsiDbx7hUtlAWy6/24dp8eKlsWXgx
-	svA08yYrR/fql8pdEUHf1AG78nBwbTeIgnzoN55aLw==
-X-Google-Smtp-Source: ABdhPJyu6UK46UBS0OHj2irlAkBg9aMdwS5Co0/0aOtKyGefuOKuYsb1XI+LyBQcOZdjLAAAKvP6iQ==
-X-Received: by 2002:a37:a54c:: with SMTP id o73mr6381651qke.334.1633029731301;
-        Thu, 30 Sep 2021 12:22:11 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id x79sm1887410qkb.65.2021.09.30.12.22.10
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Sep 2021 12:22:10 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id r4so15639659ybp.4
-        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 12:22:10 -0700 (PDT)
-X-Received: by 2002:a25:6b11:: with SMTP id g17mr1212374ybc.251.1633029729737;
- Thu, 30 Sep 2021 12:22:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D5529CA
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 20:37:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B84D061A57
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 20:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1633034235;
+	bh=ZN/Nq4IgDxA5EErobLPJ0c5Be2iycRE3S97JflvWD9A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BPq32jzrlVuSLzPIdtejsKSzsAH69I5mBXX6U4MgMyQOLfcspvQV45lqUpUrsWCEP
+	 ayiHVc8S8I85gJOUfnTpxVRaOuMnPHiuwzZaLjgSX5uVOOcHev30cMAckqhb3WMJtE
+	 XO+nPmZzryQW9u/Ygz4l9jCDCxh7MlS/5Dx2Z1z8sIASb42Sc4fuwbtIxMBR7UcUV3
+	 eYdDPf0skysbXbzxf+BvPSOJGiaccSsyiErFWYr6LJr5Q8jIK64Xnd5qkUAX0nm7/J
+	 ohdo96/J1aZzlxeIChDpd4fJBgkVkyWWoWDy8HcU/F22d1enAByOlaPg8haOwuHkjk
+	 mM22RjtiJYdkg==
+Received: by mail-wr1-f42.google.com with SMTP id v25so1488895wra.2
+        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 13:37:15 -0700 (PDT)
+X-Gm-Message-State: AOAM5332jE69OL9nlZ6Fn4lPyktbKYnv06c8SJPEMq5j1fvoTJ8icchN
+	NgajpNnqHWK2x5ZxWiWFsYOejpLFKwdlmyKgl14=
+X-Google-Smtp-Source: ABdhPJxnvUmd3Sbm2atNTl5zn2nKYHQQUHYsV989BMn4qOekZwOKzz7lOcoZ2V0mgqE23bRnU5Gh6fYz6YWSBCH+J7o=
+X-Received: by 2002:a5d:564f:: with SMTP id j15mr8376557wrw.336.1633034234173;
+ Thu, 30 Sep 2021 13:37:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210929225850.3889950-1-ndesaulniers@google.com>
- <CAHk-=wh0BNEDz+uOdJWG8iW=n0PeOEjZpHyuSN2g0pKSCj+6iQ@mail.gmail.com>
- <CAKwvOdn-Z1q99zZW4GQ2aNnVMQ_JYuczrResTG7tvcfv0WLJ-w@mail.gmail.com> <CAHk-=wip2uVAaRtPNFF4+C2ZmkUZ+rs2-676syUR_kJ9+8hFNA@mail.gmail.com>
-In-Reply-To: <CAHk-=wip2uVAaRtPNFF4+C2ZmkUZ+rs2-676syUR_kJ9+8hFNA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 30 Sep 2021 12:21:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wix+P0EtxFSEhmubWNZ++Qg1fj46e32uEKo+mzPu0jPAA@mail.gmail.com>
-Message-ID: <CAHk-=wix+P0EtxFSEhmubWNZ++Qg1fj46e32uEKo+mzPu0jPAA@mail.gmail.com>
-Subject: Re: [PATCH] modpost: add allow list for llvm IPSCCP
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Michal Marek <michal.lkml@markovi.net>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20210927121338.938994-1-arnd@kernel.org> <CAJZ5v0jJRYQPSfVV_hCD6uxch+vU6kvWV9-KAfqHckHgkFOeaA@mail.gmail.com>
+ <CAJZ5v0jDKK6ecsubVDv_=EUF3goiiDW28tvbKF9cesMphgKaug@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jDKK6ecsubVDv_=EUF3goiiDW28tvbKF9cesMphgKaug@mail.gmail.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Thu, 30 Sep 2021 22:36:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Xmj0O8zORM9O+GLS9maqKV-awuSNQdC_zxN1z7mnjnA@mail.gmail.com>
+Message-ID: <CAK8P3a1Xmj0O8zORM9O+GLS9maqKV-awuSNQdC_zxN1z7mnjnA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: avoid NULL pointer arithmetic
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Erik Kaneda <erik.kaneda@intel.com>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	"open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 30, 2021 at 11:54 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Sep 30, 2021 at 8:52 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Hmm. That's just a "bitmap_weight()", and that function in turn is
-> __always_inline.
+> On Wed, Sep 29, 2021 at 8:47 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Mon, Sep 27, 2021 at 2:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > >
+> > >  #define ACPI_TO_POINTER(i)              ACPI_CAST_PTR (void, (acpi_size) (i))
+> > > -#define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
+> > > -#define ACPI_OFFSET(d, f)               ACPI_PTR_DIFF (&(((d *) 0)->f), (void *) 0)
+> > > +#define ACPI_TO_INTEGER(p)              ((uintptr_t)(p))
+> > > +#define ACPI_OFFSET(d, f)               offsetof(d, f)
+> > >  #define ACPI_PHYSADDR_TO_PTR(i)         ACPI_TO_POINTER(i)
+> > >  #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
+> > >
+> > > --
+> >
+> > Queued up as 5.16 material, converted into an upstream ACPICA pull
+> > request and submitted, thanks!
 >
-> And the *reason* it is __always_inline is that it really wants to act
-> as a macro, and look at the second argument and do special things if
-> it is a small constant value.
+> And reverted from there, because it introduced build issues.
+>
+> Can we use alternative definitions that don't depend on uintptr_t and
+> offsetof()?
 
-Looking around, it's not the only one. A lot of the bitmap functions
-do that, but it looks like we're missing a few __always_inline cases.
+It's a bit tricky, as both were introduced to avoid portability issues.
 
-I wonder if we should have a macro to generate those "do X or Y
-depending on small_const_nbits()" - and have it generate
-__always_inline functions.
+For uintptr_t, we could use 'unsigned long', which works on everything
+that Linux can run on, but wouldn't work if this code can be compiled
+for 64-bit Windows. 'size_t' probably works, but likely has the same problem
+as 'uintptr_t' because they require and additional #include. I see
+that some code uses acpi_uintptr_t, which looks like it is meant to
+replace uintptr_t, this is defined as 'void *' in include/acpi/actypes.h,
+so that probably wouldn't avoid the warning.
 
-Of course, some of those functions have more complex "check at build
-time" cases, like that bitmap_clear/set() thing that has a special
-case for when it just turns into "memset()"
+For offsetof(), we could use __builtin_offsetof(), which would work with
+any gcc-compatible compiler, if the goal is to avoid including <stddef.h>.
+If it has to work on other compilers, there is no portable way that doesn't
+rely on standard headers. The best idea I'd have would be to use
+"#ifdef offsetof" to choose between the trivial implementation I had
+and the old one that works for non-standard C but may invoke
+undefined behavior.
 
-We have a lot of these kinds of situations where we have a "generic"
-function that specializes itself based on arguments. And yes, they are
-often recursive, so that you need more than one level of inlining to
-actually determine what the arguments are.
-
-I don't know if we might have some way to mark these (and detect the
-cases where they don't get inlined and we lose the vasy basic
-optimizations).
-
-It's kind of similar to the _Generic() thing that does different
-things based on static types, it's just that it does it based on
-argument ranges.
-
-          Linus
+       Arnd
