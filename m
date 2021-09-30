@@ -1,20 +1,20 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5D9168
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 16:16:53 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D7CF261350;
-	Thu, 30 Sep 2021 16:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A786168
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 16:23:49 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B0D3C61139;
+	Thu, 30 Sep 2021 16:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633018612;
-	bh=nCm24fdzKI9A0hhedzu8MKlkLPZNsO0zfw6Ufjqtw1s=;
+	s=k20201202; t=1633019028;
+	bh=SFAuczdPhuuWJXLs0XfQ/hIiVtLdDPdd1uYoA5KobTw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=SNYZDE4cB9ZKnXPiLID0J9mW0WYRHEnkyUwDKacOGjwGmflwsAzAcbT51bZgykUPx
-	 VtCGKIPqZFfkd/8SgC455IYJwlEeIETYi11AcHBWptBBQqcyq0Kbz1fAcaV7uj0beo
-	 W3mx3RD3QKnIdlDhSbAm+7RwFWT4G0szsB1eDW0GGe+JjkTo1AAt5BC/42cJLRSNga
-	 ramwKJB8eU/cbcFoqkkUTUNU4FmIdmQmvJDkS81UpvVDV4g6RbJGZ2xczI3VjofBmO
-	 O9Qn2kidIO+6b72r4hLtBPgX9KaAMRrG+WyD203dBA+tP3+Vto8P7RG4M2l8EI4vuE
-	 nEQ9hoaflfUSQ==
+	b=t630z/tBR0JsvcDkaupuV6XlaWMEW+/eHqaJUiVwvD83oi7YkijX9RN+M1o+yJ5bG
+	 ziAJANnhmGQaXAlrigMwECfvl+E9hk/uV6sqO8EagLzYN60qIWNFQ93rdFJ2lds7Hj
+	 IssDWkkngoQgSVTzeAD3bej+vrLPM07TcDfCAQXipkOodUXqcr291Kb1ey0tMx/wJP
+	 f4ezOH2JT6+OFB/UnDhnrjrSQgVQYC+a8hsRKvcJfA84QvvxjTR2TNYM4no4CBPYgw
+	 xDjFVdXShUZSH8x1Wgs2bLHhMOZCPy/rcg1bBSPq+H+FOo4ZLPokMw28p6//9WZfMN
+	 C447b766TxUdQ==
 From: Nathan Chancellor <nathan@kernel.org>
 To: Harry Wentland <harry.wentland@amd.com>,
 	Leo Li <sunpeng.li@amd.com>,
@@ -27,9 +27,9 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] drm/amd: Initialize remove_mpcc in dcn201_update_mpcc()
-Date: Thu, 30 Sep 2021 09:16:42 -0700
-Message-Id: <20210930161641.2333583-1-nathan@kernel.org>
+Subject: [PATCH] drm/amd: Return NULL instead of false in dcn201_acquire_idle_pipe_for_layer()
+Date: Thu, 30 Sep 2021 09:23:03 -0700
+Message-Id: <20210930162302.2344542-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.33.0.591.gddb1055343
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -42,47 +42,36 @@ Content-Transfer-Encoding: 8bit
 
 Clang warns:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:505:6: error: variable 'remove_mpcc' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        if (mpc->funcs->get_mpcc_for_dpp_from_secondary)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:509:6: note: uninitialized use occurs here
-        if (remove_mpcc != NULL && mpc->funcs->remove_mpcc_from_secondary)
-            ^~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:505:2: note: remove the 'if' if its condition is always true
-        if (mpc->funcs->get_mpcc_for_dpp_from_secondary)
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:442:26: note: initialize the variable 'remove_mpcc' to silence this warning
-        struct mpcc *remove_mpcc;
-                                ^
-                                 = NULL
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_resource.c:1017:10: error: expression which evaluates to zero treated as a null pointer constant of type 'struct pipe_ctx *' [-Werror,-Wnon-literal-null-conversion]
+                return false;
+                       ^~~~~
 1 error generated.
 
-The code already handles remove_mpcc being NULL just fine so initialize
-it to NULL at the beginning of the function so it is never used
-uninitialized.
+Use NULL instead of false since the function is returning a pointer
+rather than a boolean.
 
 Fixes: ff7e396f822f ("drm/amd/display: add cyan_skillfish display support")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1469
+Link: https://github.com/ClangBuiltLinux/linux/issues/1470
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c | 2 +-
+ drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c
-index ceaaeeb8f2de..cfd09b3f705e 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c
-@@ -439,7 +439,7 @@ void dcn201_update_mpcc(struct dc *dc, struct pipe_ctx *pipe_ctx)
- 	bool per_pixel_alpha = pipe_ctx->plane_state->per_pixel_alpha && pipe_ctx->bottom_pipe;
- 	int mpcc_id, dpp_id;
- 	struct mpcc *new_mpcc;
--	struct mpcc *remove_mpcc;
-+	struct mpcc *remove_mpcc = NULL;
- 	struct mpc *mpc = dc->res_pool->mpc;
- 	struct mpc_tree *mpc_tree_params = &(pipe_ctx->stream_res.opp->mpc_tree_params);
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
+index aec276e1db65..8523a048e6f6 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
+@@ -1014,7 +1014,7 @@ static struct pipe_ctx *dcn201_acquire_idle_pipe_for_layer(
+ 		ASSERT(0);
  
+ 	if (!idle_pipe)
+-		return false;
++		return NULL;
+ 
+ 	idle_pipe->stream = head_pipe->stream;
+ 	idle_pipe->stream_res.tg = head_pipe->stream_res.tg;
 
-base-commit: 30fc33064c846df29888c3c61e30a064aad3a342
+base-commit: b47b99e30cca8906753c83205e8c6179045dd725
 -- 
 2.33.0.591.gddb1055343
 
