@@ -1,96 +1,96 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D592FAE
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 18:51:10 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id b20so29604120lfv.3
-        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 11:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IO2yScWcP1V3nkSCAyqfJDaTb8wvqyBUDTytiX1OoYI=;
-        b=soIWJ7+oT5oJYc/VTgT4oO8XQJsb/jD0w3MRT9k9qq1A9c1ZaQS3s4W/9o8W3j6V8p
-         5pbIutFIOS6cJasSJhN7HM1fbbbS1EZuQNrp1sWV1O/EYelYQ3FYHKZUI1TkQ780sqnT
-         u19dcZmAqeTRNMvKdNEa27nspq3S570gqBYkXrfvyQ/U+lKWVVR3vThrLKqp6vrKxPF5
-         sLLrcLijrtzLw8qWLTxQ4Fy5SGVDtd2BvWqR/VpkNAGF/kZa9Vf+G36OzHJyJyKeTh6c
-         36B8YtmmujuiiddyndiXgPesk2OsxgcSUoo/L4wl9kEpFWvicCQIK4PMFaypYyCPYhNS
-         XKDw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D952FAE
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 18:53:11 +0000 (UTC)
+Received: by mail-oo1-f51.google.com with SMTP id j11-20020a4a92cb000000b002902ae8cb10so2161696ooh.7
+        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 11:53:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IO2yScWcP1V3nkSCAyqfJDaTb8wvqyBUDTytiX1OoYI=;
-        b=J+HbjpLiwdLEKn43ueh9pSybCagOSFAo+cgZS/dfhsYAJ1RR/DnRut1YqmjFHiPh0D
-         ddCvHR0l325ADJy+X+adIWZxsQEozVx9exAbXuYY22Yo/xQdi0Yb8NMuw7H2Ud1v8LZC
-         1h3O004aD9V17HFPS8klL083yeaRxCHAnRyMQFE2r4b2aGmvdw5RL9cTmjQHr5ia9O0u
-         7lwvNt1HnCwibplFuvazZeCxJMfzsR37Zl5KtJ39TzeG6Ltd962ASvHjxK0bP9FpoqMX
-         64FSy0seuntjXAwBSKZJ9dwf9402VoCjGDor/5MInYthj05pgecnBhsdtYdRPWQzYaEF
-         JjGw==
-X-Gm-Message-State: AOAM531eXgyhbtZo2btRKXtxg/w2ZAXkj0V/+QgKZ8ainjdOJAbV2bUU
-	2g49JOJu5SW9OuG0Pxpi+k+HvrmREfiKipq8Vi+EKQ==
-X-Google-Smtp-Source: ABdhPJwliirpZ6GgdbLM//GKHu/jI+FUv6Eo6sSVuFPqLNLIXYKUMrEJTAvhFCRFN+Qnuok9jzqx8j5kXlYAdUyYD+s=
-X-Received: by 2002:a2e:9b98:: with SMTP id z24mr7204666lji.339.1633027868339;
- Thu, 30 Sep 2021 11:51:08 -0700 (PDT)
+        bh=AWz5foWcr+bWR6CSFDKJoUEhYPxpGczQBoONhahdcus=;
+        b=OJc36zIDK5C+Tb3bHNBI+W8xbqsvlVE51B4aySuXZamiC419RbGZ4zuLkMhWYMEGLf
+         C4LfN4i97m5V3pxALH8lYQh/4XerNj7I2ZH9ugI1Hh4sosJQYv3avHUA9vgF3PNY5kR0
+         4Z7q54TsM5IyDvZ81N7aVGdZh/m2SnkMq9CqgBqcwGhwam8Xmhl3dK+ZzkHmRDCb1n3H
+         A/SLloSfBfmfVeauVybcvdF6wAVb06ORb9Dl35Y5XmB95BzAdDzC7hbLsomMet/VMMZe
+         pfva1K1cGhZ1V19JGZehw2vUkkUvkNZhdfttXSgWjuGM/6eqEW96Y6k9S6FtsvQ6fd2d
+         Cf7A==
+X-Gm-Message-State: AOAM530sT8DOsAPGLxlnC8Mf0MBplNFxkQmNsaPwnKmlBPHigWGhypMB
+	/zz86UXCPmcpBz8F+P/4IQHWWLpf/JqlFrptygg=
+X-Google-Smtp-Source: ABdhPJw8+m2xqrDVqABBbHFhPc+Vi/u0KcQlXUvSeYYp71RAa69bRuSXSureyv6cjZyWA10UqXHMSc2jbi7XhFK/J08=
+X-Received: by 2002:a05:6820:17a:: with SMTP id k26mr6219832ood.37.1633027990202;
+ Thu, 30 Sep 2021 11:53:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210930180531.1190642-1-samitolvanen@google.com> <20210930180531.1190642-6-samitolvanen@google.com>
-In-Reply-To: <20210930180531.1190642-6-samitolvanen@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 30 Sep 2021 11:50:57 -0700
-Message-ID: <CAKwvOdnJ6EPPd5UbhZhdggPRzCXmdrnxg_tO=Bq_+Gcgarvw1g@mail.gmail.com>
-Subject: Re: [PATCH v4 05/15] tracepoint: Exclude tp_stub_func from CFI checking
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: x86@kernel.org, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+References: <20210927121338.938994-1-arnd@kernel.org> <CAJZ5v0jJRYQPSfVV_hCD6uxch+vU6kvWV9-KAfqHckHgkFOeaA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jJRYQPSfVV_hCD6uxch+vU6kvWV9-KAfqHckHgkFOeaA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 30 Sep 2021 20:52:59 +0200
+Message-ID: <CAJZ5v0jDKK6ecsubVDv_=EUF3goiiDW28tvbKF9cesMphgKaug@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: avoid NULL pointer arithmetic
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Erik Kaneda <erik.kaneda@intel.com>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	"open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 30, 2021 at 11:05 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+On Wed, Sep 29, 2021 at 8:47 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> If allocate_probes fails, func_remove replaces the old function
-> with a pointer to tp_stub_func, which is called using a mismatching
-> function pointer that will always trip indirect call checks with
-> CONFIG_CFI_CLANG. Use DEFINE_CFI_IMMEDATE_RETURN_STUB to define
-> tp_stub_func to allow it to pass CFI checking.
+> On Mon, Sep 27, 2021 at 2:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > There are some very old macros for doing an open-coded offsetof() and
+> > cast between pointer and integer in ACPI headers. clang-14 now complains
+> > about these:
+> >
+> > drivers/acpi/acpica/tbfadt.c:86:3: error: performing pointer subtraction with a null pointer has undefined behavior [-Werror,-Wnull-pointer-subtraction]
+> >          ACPI_FADT_OFFSET(pm_timer_block),
+> >          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > include/acpi/actbl.h:376:47: note: expanded from macro 'ACPI_FADT_OFFSET'
+> >  #define ACPI_FADT_OFFSET(f)             (u16) ACPI_OFFSET (struct acpi_table_fadt, f)
+> >                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > include/acpi/actypes.h:511:41: note: expanded from macro 'ACPI_OFFSET'
+> >  #define ACPI_OFFSET(d, f)               ACPI_PTR_DIFF (&(((d *) 0)->f), (void *) 0)
+> >                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > include/acpi/actypes.h:505:79: note: expanded from macro 'ACPI_PTR_DIFF'
+> >  #define ACPI_PTR_DIFF(a, b)             ((acpi_size) (ACPI_CAST_PTR (u8, (a)) - ACPI_CAST_PTR (u8, (b))))
+> >                                                                               ^ ~~~~~~~~~~~~~~~~~~~~~~~
+> > Convert them to the modern equivalents.
+> >
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  include/acpi/actypes.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
+> > index 92c71dfce0d5..285bc7b73de3 100644
+> > --- a/include/acpi/actypes.h
+> > +++ b/include/acpi/actypes.h
+> > @@ -507,8 +507,8 @@ typedef u64 acpi_integer;
+> >  /* Pointer/Integer type conversions */
+> >
+> >  #define ACPI_TO_POINTER(i)              ACPI_CAST_PTR (void, (acpi_size) (i))
+> > -#define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
+> > -#define ACPI_OFFSET(d, f)               ACPI_PTR_DIFF (&(((d *) 0)->f), (void *) 0)
+> > +#define ACPI_TO_INTEGER(p)              ((uintptr_t)(p))
+> > +#define ACPI_OFFSET(d, f)               offsetof(d, f)
+> >  #define ACPI_PHYSADDR_TO_PTR(i)         ACPI_TO_POINTER(i)
+> >  #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
+> >
+> > --
 >
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  kernel/tracepoint.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-> index 64ea283f2f86..58acc7d86c3f 100644
-> --- a/kernel/tracepoint.c
-> +++ b/kernel/tracepoint.c
+> Queued up as 5.16 material, converted into an upstream ACPICA pull
+> request and submitted, thanks!
 
-looking at 4+5/15 together, I wonder if this TU should explicitly
-include linux/cfi.h?
+And reverted from there, because it introduced build issues.
 
-> @@ -99,10 +99,7 @@ struct tp_probes {
->  };
->
->  /* Called in removal of a func but failed to allocate a new tp_funcs */
-> -static void tp_stub_func(void)
-> -{
-> -       return;
-> -}
-> +static DEFINE_CFI_IMMEDIATE_RETURN_STUB(tp_stub_func);
->
->  static inline void *allocate_probes(int count)
->  {
-> --
-> 2.33.0.800.g4c38ced690-goog
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Can we use alternative definitions that don't depend on uintptr_t and
+offsetof()?
