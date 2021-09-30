@@ -1,41 +1,41 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FE172
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 18:05:55 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id w4-20020a056902100400b005b6b29d9a27so9563830ybt.20
-        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 11:05:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78E972
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 18:05:57 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id s6-20020a254506000000b005b6b6434cd6so9555864yba.9
+        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 11:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=fPre9riEtsWDn3nT/Sr4LcMmmeeCRXoVSu1AIB6M7IQ=;
-        b=WOqKG4pCG4OG7NbKOjdPUlyrET1QwyjhNoXM+aIOZw4h0mqTSFrygPNgZWNl3rJbMt
-         ML1pg1BjoWcbeGwL9iWhIBhRu94ny8XE0YqMSBcYge2bqQCuYxe6MX874k7SY90mzw3Y
-         jII4mgP4SW+9kJcE8r5WwgwTH67+Na/lflvYaG9d2yMhYIbQaWYy6157X3WkK+fwEAeZ
-         TFeIKl7Bl19j1EM4wzKjC/hLn/0dDGGmOKStF0nzGx5lrmYtksNqbTpx4hRMh8ikb6g3
-         3QNQuzIAKHhNiAI9PEpmiGHCmsLVSSCwkoYoAnvMyKiyBHS8WVu1OkICCZv4IWS8SnCI
-         rNhQ==
+        bh=yQU12La/KcSmVBf8yylpekUFgOmt+PXL3oVr9qE0LoI=;
+        b=pnTMN3fz++vB2Sf9sZZOcWzPPVW20xTtE3g0a3MCpfyP3dl4edEhM5M39xvNnN+KBo
+         TB11zIdLXzr37SI94slGbWoDmz924atm9XmR9llxKsUYosrkJFca2AePhVEJ2KDrVV5w
+         ZVK6bJw5MkirHnCrnUIrk/+3EtR1Vg3yjbCQjq71ZZbKtr+mHHB93rdjHoeaupu51wJx
+         Hm/oiLabeYfCrQkI77o/vlLvl1ph5LHHZraQbPnZZQsHhfa7RzBJ2HhTFJYO2GfPVb3J
+         kW3LIUHEV5ayen+WkY6BPJZT+ddZ5P3Md0XtJkc6cN0ZEsCieJ1nuAqT+22CrDtBhd7S
+         QdPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=fPre9riEtsWDn3nT/Sr4LcMmmeeCRXoVSu1AIB6M7IQ=;
-        b=fqlJI3nVyN7dgOhK7PRAi22gl19YUI7gXTSCuha5GfPiNOqT7dk9cE9v6t0qRi7Ptl
-         Z0I/DXn6/OKom1DQloMtjtDJH0XenYposdRYrf1YgaTq60Dam+vmxgGrF5tocIkLZeFo
-         FNRosKvNATklZAlrRrnauUNE/fXSeYTL4qOBOYxIbRrMKLFxkZ5OD/sVOZOVFspQ+2tO
-         jsQKh9GUUCFUHTawEnevCtPhaRgOJxGCfHaP9p5jCZzgikDo3qKpfxVExGohqVxvECYV
-         hZh9+9oLYluLyYGK0O9zb7cz/cBTSr/JiMh6CJsO28qBzuYyhLDEm2gn6gysYgGjVVoF
-         kqyg==
-X-Gm-Message-State: AOAM531BwTHMwuJcUXyx6CU02hDpc9kqdpVqEeeSh/WHIKJnZT24spXE
-	fP83b8QTi7WB0jUMTuLZYQ8yVVxmANW9FtCsLNs=
-X-Google-Smtp-Source: ABdhPJxSAVWIMsARi3nfwWxlFk7SoNUuPOxAnFKLyn/tb5cb4kWVXe1gudHXrJc1oNAyYUvYK7dAfI4tbix6w58R9is=
+        bh=yQU12La/KcSmVBf8yylpekUFgOmt+PXL3oVr9qE0LoI=;
+        b=2WfskwnKs58di2AghIJAwS8QH709K3AwqQfGAmHlydIQA3C9Kf5B8rD3AUdCa/JYi0
+         sV78vdUHg2cMbH7X2mhLLA3cFWDNI3trKjE9gH6DK5IwX/o/ajxaH2Ew43xi5n9kjU1Z
+         Czz4LFsSv81F1GUiD+MUoL4dIspC5XcY36JUXCDsFifanyuswGkZPlUQqfdlP3tHVF66
+         CpGX1tJpRbEgTC8PyGGsA+BkFtz063FZkd7IOt/2Mu0I6sGtREV5f2Urc5SRQp6Er9jl
+         hNCktWH6xrI7+Y61ymqRFIJkcs82h8IRyaVbYMfV/T9Tt7BlY+fzpZFbQD/waDu3ig+x
+         goow==
+X-Gm-Message-State: AOAM533VDnvM5plvfhDelyPntaQMQIHI8h9/C8C1vQhTlfwpihJw89VL
+	cXOQTdc0+2sYtzCuNN0+3uR8hY6BpduiKP62NRw=
+X-Google-Smtp-Source: ABdhPJznfmrqE91cvelw1V7oFVJ8N8612t77FEmRP1grMD+n+ILKJlOvgn1gcdjF4WvXOl343eChfkNX6jk2zU7uUtE=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:ce43:4366:95ca:d6e9])
- (user=samitolvanen job=sendgmr) by 2002:a25:d48f:: with SMTP id
- m137mr655048ybf.109.1633025154238; Thu, 30 Sep 2021 11:05:54 -0700 (PDT)
-Date: Thu, 30 Sep 2021 11:05:24 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:bb8b:: with SMTP id
+ y11mr700022ybg.384.1633025156793; Thu, 30 Sep 2021 11:05:56 -0700 (PDT)
+Date: Thu, 30 Sep 2021 11:05:25 -0700
 In-Reply-To: <20210930180531.1190642-1-samitolvanen@google.com>
-Message-Id: <20210930180531.1190642-9-samitolvanen@google.com>
+Message-Id: <20210930180531.1190642-10-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,7 +44,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20210930180531.1190642-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
-Subject: [PATCH v4 08/15] lkdtm: Use an opaque type for lkdtm_rodata_do_nothing
+Subject: [PATCH v4 09/15] x86: Use an opaque type for functions not callable
+ from C
 From: Sami Tolvanen <samitolvanen@google.com>
 To: x86@kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -54,56 +55,354 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Use an opaque type for lkdtm_rodata_do_nothing to stop the compiler
-from generating a CFI jump table entry that jumps to .rodata.
+The kernel has several assembly functions that are not directly callable
+from C. Use an opaque type for these function prototypes to make misuse
+harder, and to avoid the need to annotate references to these functions
+for Clang's Control-Flow Integrity (CFI).
 
+Suggested-by: Andy Lutomirski <luto@amacapital.net>
+Suggested-by: Alexander Lobakin <alobakin@pm.me>
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/lkdtm/lkdtm.h  | 2 +-
- drivers/misc/lkdtm/perms.c  | 2 +-
- drivers/misc/lkdtm/rodata.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/ftrace.h         |  2 +-
+ arch/x86/include/asm/idtentry.h       | 10 +++++-----
+ arch/x86/include/asm/page_64.h        |  7 ++++---
+ arch/x86/include/asm/paravirt_types.h |  3 ++-
+ arch/x86/include/asm/processor.h      |  2 +-
+ arch/x86/include/asm/proto.h          | 25 +++++++++++++------------
+ arch/x86/include/asm/uaccess_64.h     |  9 +++------
+ arch/x86/kernel/alternative.c         |  2 +-
+ arch/x86/kernel/ftrace.c              |  2 +-
+ arch/x86/kernel/paravirt.c            |  4 ++--
+ arch/x86/kvm/emulate.c                |  4 ++--
+ arch/x86/kvm/kvm_emulate.h            |  9 ++-------
+ arch/x86/xen/enlighten_pv.c           |  6 +++---
+ arch/x86/xen/xen-ops.h                | 10 +++++-----
+ 14 files changed, 45 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index c212a253edde..2da74236c005 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -137,7 +137,7 @@ void lkdtm_REFCOUNT_TIMING(void);
- void lkdtm_ATOMIC_TIMING(void);
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 9f3130f40807..54d23f421c16 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -17,7 +17,7 @@
  
- /* rodata.c */
--void lkdtm_rodata_do_nothing(void);
-+DECLARE_ASM_FUNC_SYMBOL(lkdtm_rodata_do_nothing);
+ #ifndef __ASSEMBLY__
+ extern atomic_t modifying_ftrace_code;
+-extern void __fentry__(void);
++DECLARE_ASM_FUNC_SYMBOL(__fentry__);
  
- /* usercopy.c */
- void __init lkdtm_usercopy_init(void);
-diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
-index 2dede2ef658f..fa2bd90bd8ee 100644
---- a/drivers/misc/lkdtm/perms.c
-+++ b/drivers/misc/lkdtm/perms.c
-@@ -151,7 +151,7 @@ void lkdtm_EXEC_VMALLOC(void)
- 
- void lkdtm_EXEC_RODATA(void)
+ static inline unsigned long ftrace_call_adjust(unsigned long addr)
  {
--	execute_location(lkdtm_rodata_do_nothing, CODE_AS_IS);
-+	execute_location((void *)lkdtm_rodata_do_nothing, CODE_AS_IS);
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 1345088e9902..2f6d0528bdd2 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -27,8 +27,8 @@
+  * as well which is used to emit the entry stubs in entry_32/64.S.
+  */
+ #define DECLARE_IDTENTRY(vector, func)					\
+-	asmlinkage void asm_##func(void);				\
+-	asmlinkage void xen_asm_##func(void);				\
++	DECLARE_ASM_FUNC_SYMBOL(asm_##func);				\
++	DECLARE_ASM_FUNC_SYMBOL(xen_asm_##func);				\
+ 	__visible void func(struct pt_regs *regs)
+ 
+ /**
+@@ -78,8 +78,8 @@ static __always_inline void __##func(struct pt_regs *regs)
+  * C-handler.
+  */
+ #define DECLARE_IDTENTRY_ERRORCODE(vector, func)			\
+-	asmlinkage void asm_##func(void);				\
+-	asmlinkage void xen_asm_##func(void);				\
++	DECLARE_ASM_FUNC_SYMBOL(asm_##func);				\
++	DECLARE_ASM_FUNC_SYMBOL(xen_asm_##func);				\
+ 	__visible void func(struct pt_regs *regs, unsigned long error_code)
+ 
+ /**
+@@ -386,7 +386,7 @@ static __always_inline void __##func(struct pt_regs *regs)
+  * - The C handler called from the C shim
+  */
+ #define DECLARE_IDTENTRY_DF(vector, func)				\
+-	asmlinkage void asm_##func(void);				\
++	DECLARE_ASM_FUNC_SYMBOL(asm_##func);				\
+ 	__visible void func(struct pt_regs *regs,			\
+ 			    unsigned long error_code,			\
+ 			    unsigned long address)
+diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+index 4bde0dc66100..d6760b6773de 100644
+--- a/arch/x86/include/asm/page_64.h
++++ b/arch/x86/include/asm/page_64.h
+@@ -5,6 +5,7 @@
+ #include <asm/page_64_types.h>
+ 
+ #ifndef __ASSEMBLY__
++#include <linux/linkage.h>
+ #include <asm/alternative.h>
+ 
+ /* duplicated to the one in bootmem.h */
+@@ -40,9 +41,9 @@ extern unsigned long __phys_addr_symbol(unsigned long);
+ #define pfn_valid(pfn)          ((pfn) < max_pfn)
+ #endif
+ 
+-void clear_page_orig(void *page);
+-void clear_page_rep(void *page);
+-void clear_page_erms(void *page);
++DECLARE_ASM_FUNC_SYMBOL(clear_page_orig);
++DECLARE_ASM_FUNC_SYMBOL(clear_page_rep);
++DECLARE_ASM_FUNC_SYMBOL(clear_page_erms);
+ 
+ static inline void clear_page(void *page)
+ {
+diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+index d9d6b0203ec4..dfaa50d20d6a 100644
+--- a/arch/x86/include/asm/paravirt_types.h
++++ b/arch/x86/include/asm/paravirt_types.h
+@@ -38,6 +38,7 @@
+ #include <asm/desc_defs.h>
+ #include <asm/pgtable_types.h>
+ #include <asm/nospec-branch.h>
++#include <asm/proto.h>
+ 
+ struct page;
+ struct thread_struct;
+@@ -271,7 +272,7 @@ struct paravirt_patch_template {
+ 
+ extern struct pv_info pv_info;
+ extern struct paravirt_patch_template pv_ops;
+-extern void (*paravirt_iret)(void);
++extern asm_func_ptr paravirt_iret;
+ 
+ #define PARAVIRT_PATCH(x)					\
+ 	(offsetof(struct paravirt_patch_template, x) / sizeof(void *))
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 577f342dbfb2..02743d701fa8 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -449,7 +449,7 @@ static inline unsigned long cpu_kernelmode_gs_base(int cpu)
+ 
+ DECLARE_PER_CPU(void *, hardirq_stack_ptr);
+ DECLARE_PER_CPU(bool, hardirq_stack_inuse);
+-extern asmlinkage void ignore_sysret(void);
++DECLARE_ASM_FUNC_SYMBOL(ignore_sysret);
+ 
+ /* Save actual FS/GS selectors and bases to current->thread */
+ void current_save_fsgs(void);
+diff --git a/arch/x86/include/asm/proto.h b/arch/x86/include/asm/proto.h
+index 8c5d1910a848..a6aa64eb3657 100644
+--- a/arch/x86/include/asm/proto.h
++++ b/arch/x86/include/asm/proto.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_X86_PROTO_H
+ #define _ASM_X86_PROTO_H
+ 
++#include <linux/linkage.h>
+ #include <asm/ldt.h>
+ 
+ struct task_struct;
+@@ -11,26 +12,26 @@ struct task_struct;
+ void syscall_init(void);
+ 
+ #ifdef CONFIG_X86_64
+-void entry_SYSCALL_64(void);
+-void entry_SYSCALL_64_safe_stack(void);
++DECLARE_ASM_FUNC_SYMBOL(entry_SYSCALL_64);
++DECLARE_ASM_FUNC_SYMBOL(entry_SYSCALL_64_safe_stack);
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2);
+ #endif
+ 
+ #ifdef CONFIG_X86_32
+-void entry_INT80_32(void);
+-void entry_SYSENTER_32(void);
+-void __begin_SYSENTER_singlestep_region(void);
+-void __end_SYSENTER_singlestep_region(void);
++DECLARE_ASM_FUNC_SYMBOL(entry_INT80_32);
++DECLARE_ASM_FUNC_SYMBOL(entry_SYSENTER_32);
++DECLARE_ASM_FUNC_SYMBOL(__begin_SYSENTER_singlestep_region);
++DECLARE_ASM_FUNC_SYMBOL(__end_SYSENTER_singlestep_region);
+ #endif
+ 
+ #ifdef CONFIG_IA32_EMULATION
+-void entry_SYSENTER_compat(void);
+-void __end_entry_SYSENTER_compat(void);
+-void entry_SYSCALL_compat(void);
+-void entry_SYSCALL_compat_safe_stack(void);
+-void entry_INT80_compat(void);
++DECLARE_ASM_FUNC_SYMBOL(entry_SYSENTER_compat);
++DECLARE_ASM_FUNC_SYMBOL(__end_entry_SYSENTER_compat);
++DECLARE_ASM_FUNC_SYMBOL(entry_SYSCALL_compat);
++DECLARE_ASM_FUNC_SYMBOL(entry_SYSCALL_compat_safe_stack);
++DECLARE_ASM_FUNC_SYMBOL(entry_INT80_compat);
+ #ifdef CONFIG_XEN_PV
+-void xen_entry_INT80_compat(void);
++DECLARE_ASM_FUNC_SYMBOL(xen_entry_INT80_compat);
+ #endif
+ #endif
+ 
+diff --git a/arch/x86/include/asm/uaccess_64.h b/arch/x86/include/asm/uaccess_64.h
+index 45697e04d771..df2be1efa35e 100644
+--- a/arch/x86/include/asm/uaccess_64.h
++++ b/arch/x86/include/asm/uaccess_64.h
+@@ -17,12 +17,9 @@
+  */
+ 
+ /* Handles exceptions in both to and from, but doesn't do access_ok */
+-__must_check unsigned long
+-copy_user_enhanced_fast_string(void *to, const void *from, unsigned len);
+-__must_check unsigned long
+-copy_user_generic_string(void *to, const void *from, unsigned len);
+-__must_check unsigned long
+-copy_user_generic_unrolled(void *to, const void *from, unsigned len);
++DECLARE_ASM_FUNC_SYMBOL(copy_user_enhanced_fast_string);
++DECLARE_ASM_FUNC_SYMBOL(copy_user_generic_string);
++DECLARE_ASM_FUNC_SYMBOL(copy_user_generic_unrolled);
+ 
+ static __always_inline __must_check unsigned long
+ copy_user_generic(void *to, const void *from, unsigned len)
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index e9da3dc71254..0c60a7fa6fa5 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -530,7 +530,7 @@ extern struct paravirt_patch_site __start_parainstructions[],
+  * convention such that we can 'call' it from assembly.
+  */
+ 
+-extern void int3_magic(unsigned int *ptr); /* defined in asm */
++DECLARE_ASM_FUNC_SYMBOL(int3_magic);
+ 
+ asm (
+ "	.pushsection	.init.text, \"ax\", @progbits\n"
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 1b3ce3b4a2a2..9e0c07a82b44 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -589,7 +589,7 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-extern void ftrace_graph_call(void);
++DECLARE_ASM_FUNC_SYMBOL(ftrace_graph_call);
+ 
+ static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
+ {
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index ebc45360ffd4..737437043e40 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -138,7 +138,7 @@ void paravirt_set_sched_clock(u64 (*func)(void))
  }
  
- void lkdtm_EXEC_USERSPACE(void)
-diff --git a/drivers/misc/lkdtm/rodata.c b/drivers/misc/lkdtm/rodata.c
-index baacb876d1d9..17ed0ad4e6ae 100644
---- a/drivers/misc/lkdtm/rodata.c
-+++ b/drivers/misc/lkdtm/rodata.c
-@@ -3,7 +3,7 @@
-  * This includes functions that are meant to live entirely in .rodata
-  * (via objcopy tricks), to validate the non-executability of .rodata.
-  */
--#include "lkdtm.h"
-+void lkdtm_rodata_do_nothing(void);
+ /* These are in entry.S */
+-extern void native_iret(void);
++DECLARE_ASM_FUNC_SYMBOL(native_iret);
  
- void noinstr lkdtm_rodata_do_nothing(void)
- {
+ static struct resource reserve_ioports = {
+ 	.start = 0,
+@@ -403,7 +403,7 @@ struct paravirt_patch_template pv_ops = {
+ #ifdef CONFIG_PARAVIRT_XXL
+ NOKPROBE_SYMBOL(native_load_idt);
+ 
+-void (*paravirt_iret)(void) = native_iret;
++asm_func_ptr paravirt_iret = native_iret;
+ #endif
+ 
+ EXPORT_SYMBOL(pv_ops);
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 2837110e66ed..1f81f939d982 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -201,7 +201,7 @@ struct opcode {
+ 		const struct escape *esc;
+ 		const struct instr_dual *idual;
+ 		const struct mode_dual *mdual;
+-		void (*fastop)(struct fastop *fake);
++		fastop_t fastop;
+ 	} u;
+ 	int (*check_perm)(struct x86_emulate_ctxt *ctxt);
+ };
+@@ -322,7 +322,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	__FOP_RET(#name)
+ 
+ #define FOP_START(op) \
+-	extern void em_##op(struct fastop *fake); \
++	DECLARE_ASM_FUNC_SYMBOL(em_##op); \
+ 	asm(".pushsection .text, \"ax\" \n\t" \
+ 	    ".global em_" #op " \n\t" \
+ 	    ".align " __stringify(FASTOP_SIZE) " \n\t" \
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 68b420289d7e..44c1a9324e1c 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -290,13 +290,8 @@ enum x86emul_mode {
+ #define X86EMUL_SMM_MASK             (1 << 6)
+ #define X86EMUL_SMM_INSIDE_NMI_MASK  (1 << 7)
+ 
+-/*
+- * fastop functions are declared as taking a never-defined fastop parameter,
+- * so they can't be called from C directly.
+- */
+-struct fastop;
+-
+-typedef void (*fastop_t)(struct fastop *);
++/* fastop functions cannot be called from C directly. */
++typedef asm_func_ptr fastop_t;
+ 
+ struct x86_emulate_ctxt {
+ 	void *vcpu;
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 6cf3c379bbaa..62dd7ae00e3f 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -612,8 +612,8 @@ DEFINE_IDTENTRY_RAW(xenpv_exc_machine_check)
+ #endif
+ 
+ struct trap_array_entry {
+-	void (*orig)(void);
+-	void (*xen)(void);
++	asm_func_ptr orig;
++	asm_func_ptr xen;
+ 	bool ist_okay;
+ };
+ 
+@@ -672,7 +672,7 @@ static bool __ref get_trap_addr(void **addr, unsigned int ist)
+ 		struct trap_array_entry *entry = trap_array + nr;
+ 
+ 		if (*addr == entry->orig) {
+-			*addr = entry->xen;
++			*addr = (void *)entry->xen;
+ 			ist_okay = entry->ist_okay;
+ 			found = true;
+ 			break;
+diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
+index 8d7ec49a35fb..b5ceb3007cfe 100644
+--- a/arch/x86/xen/xen-ops.h
++++ b/arch/x86/xen/xen-ops.h
+@@ -8,12 +8,12 @@
+ #include <xen/xen-ops.h>
+ 
+ /* These are code, but not functions.  Defined in entry.S */
+-extern const char xen_failsafe_callback[];
++DECLARE_ASM_FUNC_SYMBOL(xen_failsafe_callback);
+ 
+-void xen_sysenter_target(void);
++DECLARE_ASM_FUNC_SYMBOL(xen_sysenter_target);
+ #ifdef CONFIG_X86_64
+-void xen_syscall_target(void);
+-void xen_syscall32_target(void);
++DECLARE_ASM_FUNC_SYMBOL(xen_syscall_target);
++DECLARE_ASM_FUNC_SYMBOL(xen_syscall32_target);
+ #endif
+ 
+ extern void *xen_initial_gdt;
+@@ -136,7 +136,7 @@ __visible unsigned long xen_read_cr2(void);
+ __visible unsigned long xen_read_cr2_direct(void);
+ 
+ /* These are not functions, and cannot be called normally */
+-__visible void xen_iret(void);
++DECLARE_ASM_FUNC_SYMBOL(xen_iret);
+ 
+ extern int xen_panic_handler_init(void);
+ 
 -- 
 2.33.0.800.g4c38ced690-goog
 
