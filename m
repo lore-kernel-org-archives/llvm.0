@@ -1,112 +1,125 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EE472
-	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 17:30:02 +0000 (UTC)
-Received: by mail-lf1-f50.google.com with SMTP id z24so28508590lfu.13
-        for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 10:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ye/qqO0p8PKVzbuUoEwamPcpYGy0s9HnvVApER+R6kA=;
-        b=ftI3Z0SVqMbhoWdnhg5bUeF+owpQShwFKiFCCXBcdn4RZHbJbc2J0o5nj5aw/QCKc0
-         Vdv2kgukq9RGNxjvjCA3DkRkCBBBad79JhJxxgNrkccjH4TiJmRBW0i0ltEOb3yFMdev
-         fFeMeE/vjhHmOt6rD9YvGkHtfgRxvfpXrATQ9+w5QnzKHBDo8urSjo0OMyTAAQJAH+zc
-         EwvsOhDC+BRkFf8OyUTq4uGhLOTBNWDzgLni0BSbv5tf0eiZ2g1db+Bz2V5XwFVunwsL
-         zbC/56A/1fmE7NB8Ti2l0dQyedYulC894HG+7anlAY/mFjb5fTXbiZUoIMQ/I8y6CLKy
-         8uww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ye/qqO0p8PKVzbuUoEwamPcpYGy0s9HnvVApER+R6kA=;
-        b=06H282LXAnPYH9XiIBfhVVp1+XFd/+OWGKkgsFbQDHbwNSi8CaTuAmBCO8aEX6pSGK
-         2MkNRtTygqWzfnJdJ/jNDxKH6sYOBikpO29vwtWZCtIfaHFqQlR3AnLtPdGqT5vpDuGX
-         P6waploaMFIoGt7PmJX0waQGiZ36dItYi9vxYCWHoQlu/wa/FWPWfkMfvV3GqS+k4e/L
-         aYxBOdY9zh3q4tF4UxxhikGCIVVaaORhKLSmV+2y0LBpXXkTPNvzDasQZfxyKAOTe9It
-         90kDzsn2zpR5e/XTNtxdz9kK54U8S7jK8d0XYcIJUUZnA31OJoHWWfXDuwJmPSkbkHzz
-         oulg==
-X-Gm-Message-State: AOAM530S+4ASSuxQhS+sioSpbygvAY+19o5IDPjH1FA7GOjF5+DrPK2+
-	FWdSt1yTx5tdC2kLqiWILkOAEoxrMqcmoGy1e3EQuw==
-X-Google-Smtp-Source: ABdhPJyhCryWkdo+UwgKGKjWkIyiSDBhEOEx2SxpkNiPWf9uVV7dyEnhQqYnZexjKufQh9L+L+s2Toet+ZTQxKlAHrM=
-X-Received: by 2002:a05:651c:b20:: with SMTP id b32mr7192491ljr.62.1633023000715;
- Thu, 30 Sep 2021 10:30:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9232972
+	for <llvm@lists.linux.dev>; Thu, 30 Sep 2021 17:32:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A5DAD613D1;
+	Thu, 30 Sep 2021 17:32:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1633023132;
+	bh=RamI4y2DEDbVycOyQwMn9nbwuJrPQmgsrgklzEyEVlo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kybyUF4qOB+1FVwjRr5vLvom+HThY3jueIzDsL1bj6Up0kyZR/N0/qGR+hcLjkKVx
+	 tKTAh7iGOT8hFnvM3BVcJzs4bhyAk0bTLdLHzuXpsAgJZPUz5X0jg3xNwjNN6ct4rJ
+	 tkxkPdWu2sMqIdIHINFXxa4xaNUZCVYWIqwLKR6e8PATHosFBwKoUr8tsTX3A/7f8Y
+	 fow4+PI9DPrHOhQT40Jv63uIUM2OVZSKn4pxboB9GWYPnERHwxfDnO9R3huSoaw4FO
+	 2DlxLHKY2CnCa1aDs2asiHT3iX0zNMwHdBwixgqBdCPMmuZlwCvnOVZO0kiF0h323U
+	 kpbbXid/jhHFA==
+Date: Thu, 30 Sep 2021 10:32:07 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, sfr@canb.auug.org.au, mbenes@suse.cz,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] objtool: Teach get_alt_entry() about more relocation
+ types
+Message-ID: <YVX0lxyRxZuN1idm@archlinux-ax161>
+References: <YVWUvknIEVNkPvnP@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210930160142.2301257-1-nathan@kernel.org>
-In-Reply-To: <20210930160142.2301257-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 30 Sep 2021 10:29:49 -0700
-Message-ID: <CAKwvOdkrD4WuZzUnBc2LeCjLVAumBCKXJdyr=k=dPDX1BsMhOg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd: Guard IS_OLD_GCC assignment with CONFIG_CC_IS_GCC
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YVWUvknIEVNkPvnP@hirez.programming.kicks-ass.net>
 
-On Thu, Sep 30, 2021 at 9:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> cc-ifversion only works for GCC, as clang pretends to be GCC 4.2.1 for
-> glibc compatibility, which means IS_OLD_GCC will get set and unsupported
-> flags will be passed to clang when building certain code within the DCN
-> files:
->
-> clang-14: error: unknown argument: '-mpreferred-stack-boundary=4'
-> make[5]: *** [scripts/Makefile.build:277: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_resource.o] Error 1
->
-> Guard the call to cc-ifversion with CONFIG_CC_IS_GCC so that everything
-> continues to work properly. See commit 00db297106e8 ("drm/amdgpu: fix stack
-> alignment ABI mismatch for GCC 7.1+") for more context.
->
-> Fixes: ff7e396f822f ("drm/amd/display: add cyan_skillfish display support")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1468
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Thu, Sep 30, 2021 at 12:43:10PM +0200, Peter Zijlstra wrote:
+> 
+> Occasionally objtool encounters symbol (as opposed to section)
+> relocations in .altinstructions. Typically they are the alternatives
+> written by elf_add_alternative() as encountered on a noinstr
+> validation run on vmlinux after having already ran objtool on the
+> individual .o files.
+> 
+> Basically this is the counterpart of commit 44f6a7c0755d ("objtool:
+> Fix seg fault with Clang non-section symbols"), because when these new
+> assemblers (binutils now also does this) strip the section symbols,
+> elf_add_reloc_to_insn() is forced to emit symbol based relocations.
+> 
+> As such, teach get_alt_entry() about different relocation types.
+> 
+> Fixes: 9bc0bb50727c ("objtool/x86: Rewrite retpoline thunk calls")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported-by: Borislav Petkov <bp@alien8.de>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+This resolves the instance of the warning that I see with clang-12:
 
-$ grep -rn "ifdef IS_OLD_GCC" drivers/gpu/drm/amd/display/dc/ | wc -l
-11
-
-It's probably time to put this pattern in a Makefile under scripts/
-and include it in all of these Makefiles.  Anything to minimize the
-amount of code that has to be carried forward to new subdirs.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  drivers/gpu/drm/amd/display/dc/dcn201/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/Makefile b/drivers/gpu/drm/amd/display/dc/dcn201/Makefile
-> index d98d69705117..96cbd4ccd344 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn201/Makefile
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn201/Makefile
-> @@ -14,9 +14,11 @@ ifdef CONFIG_PPC64
->  CFLAGS_$(AMDDALPATH)/dc/dcn201/dcn201_resource.o := -mhard-float -maltivec
->  endif
->
-> +ifdef CONFIG_CC_IS_GCC
->  ifeq ($(call cc-ifversion, -lt, 0701, y), y)
->  IS_OLD_GCC = 1
->  endif
-> +endif
->
->  ifdef CONFIG_X86
->  ifdef IS_OLD_GCC
->
-> base-commit: b47b99e30cca8906753c83205e8c6179045dd725
-> --
-> 2.33.0.591.gddb1055343
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+>  tools/objtool/special.c |   32 +++++++++++++++++++++++++-------
+>  1 file changed, 25 insertions(+), 7 deletions(-)
+> 
+> --- a/tools/objtool/special.c
+> +++ b/tools/objtool/special.c
+> @@ -58,6 +58,24 @@ void __weak arch_handle_alternative(unsi
+>  {
+>  }
+>  
+> +static bool reloc2sec_off(struct reloc *reloc, struct section **sec, unsigned long *off)
+> +{
+> +	switch (reloc->sym->type) {
+> +	case STT_FUNC:
+> +		*sec = reloc->sym->sec;
+> +		*off = reloc->sym->offset + reloc->addend;
+> +		return true;
+> +
+> +	case STT_SECTION:
+> +		*sec = reloc->sym->sec;
+> +		*off = reloc->addend;
+> +		return true;
+> +
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  static int get_alt_entry(struct elf *elf, struct special_entry *entry,
+>  			 struct section *sec, int idx,
+>  			 struct special_alt *alt)
+> @@ -91,15 +109,12 @@ static int get_alt_entry(struct elf *elf
+>  		WARN_FUNC("can't find orig reloc", sec, offset + entry->orig);
+>  		return -1;
+>  	}
+> -	if (orig_reloc->sym->type != STT_SECTION) {
+> -		WARN_FUNC("don't know how to handle non-section reloc symbol %s",
+> +	if (!reloc2sec_off(orig_reloc, &alt->orig_sec, &alt->orig_off)) {
+> +		WARN_FUNC("don't know how to handle reloc symbol type: %s",
+>  			   sec, offset + entry->orig, orig_reloc->sym->name);
+>  		return -1;
+>  	}
+>  
+> -	alt->orig_sec = orig_reloc->sym->sec;
+> -	alt->orig_off = orig_reloc->addend;
+> -
+>  	if (!entry->group || alt->new_len) {
+>  		new_reloc = find_reloc_by_dest(elf, sec, offset + entry->new);
+>  		if (!new_reloc) {
+> @@ -116,8 +131,11 @@ static int get_alt_entry(struct elf *elf
+>  		if (arch_is_retpoline(new_reloc->sym))
+>  			return 1;
+>  
+> -		alt->new_sec = new_reloc->sym->sec;
+> -		alt->new_off = (unsigned int)new_reloc->addend;
+> +		if (!reloc2sec_off(new_reloc, &alt->new_sec, &alt->new_off)) {
+> +			WARN_FUNC("don't know how to handle reloc symbol type: %s",
+> +				  sec, offset + entry->new, new_reloc->sym->name);
+> +			return -1;
+> +		}
+>  
+>  		/* _ASM_EXTABLE_EX hack */
+>  		if (alt->new_off >= 0x7ffffff0)
+> 
