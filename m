@@ -1,48 +1,48 @@
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255462F80
-	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 04:31:04 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="289000472"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B652F80
+	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 05:13:56 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="289004514"
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="gz'50?scan'50,208,50";a="289000472"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 21:31:03 -0700
+   d="gz'50?scan'50,208,50";a="289004514"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 22:13:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="gz'50?scan'50,208,50";a="480282189"
+   d="gz'50?scan'50,208,50";a="709482966"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Sep 2021 21:30:53 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 30 Sep 2021 22:13:53 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mWACC-0000nJ-TB; Fri, 01 Oct 2021 04:30:52 +0000
-Date: Fri, 1 Oct 2021 12:30:32 +0800
+	id 1mWArp-0000oT-9D; Fri, 01 Oct 2021 05:13:53 +0000
+Date: Fri, 1 Oct 2021 13:13:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Liu Yi L <yi.l.liu@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [luxis1999-dev-iommu:dev-iommu-5.14-rfcv1 7/20]
- drivers/iommu/iommufd/iommufd.c:181:7: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202110011223.CY0JeX0i-lkp@intel.com>
+Subject: [luxis1999-dev-iommu:dev-iommu-5.14-rfcv1 11/20]
+ drivers/iommu/iommufd/iommufd.c:205:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202110011307.Jw4JbHsw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="SUOF0GtieIMvvwua"
+Content-Type: multipart/mixed; boundary="1yeeQ81UyVL57Vl7"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---SUOF0GtieIMvvwua
+--1yeeQ81UyVL57Vl7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/luxis1999/dev-iommu dev-iommu-5.14-rfcv1
 head:   8d2f14a235e67092365d15107cfc357e86d69629
-commit: e2fbb8c54de073a2a173e15b62884c64e6c4a4b6 [7/20] iommu/iommufd: Add iommufd_[un]bind_device()
+commit: 2be7ba5547b46f6a0629995df75601f6552c40d1 [11/20] iommu/iommufd: Add IOMMU_IOASID_ALLOC/FREE
 config: riscv-randconfig-r042-20211001 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 962e503cc8bc411f7523cc393acae8aae425b1c4)
 reproduce (this is a W=1 build):
@@ -50,10 +50,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/luxis1999/dev-iommu/commit/e2fbb8c54de073a2a173e15b62884c64e6c4a4b6
+        # https://github.com/luxis1999/dev-iommu/commit/2be7ba5547b46f6a0629995df75601f6552c40d1
         git remote add luxis1999-dev-iommu https://github.com/luxis1999/dev-iommu
         git fetch --no-tags luxis1999-dev-iommu dev-iommu-5.14-rfcv1
-        git checkout e2fbb8c54de073a2a173e15b62884c64e6c4a4b6
+        git checkout 2be7ba5547b46f6a0629995df75601f6552c40d1
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
@@ -62,118 +62,88 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iommu/iommufd/iommufd.c:181:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>> drivers/iommu/iommufd/iommufd.c:205:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (refcount_read(&ioas->refs) > 1) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/iommufd/iommufd.c:213:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/iommu/iommufd/iommufd.c:205:2: note: remove the 'if' if its condition is always true
+           if (refcount_read(&ioas->refs) > 1) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/iommufd/iommufd.c:189:17: note: initialize the variable 'ret' to silence this warning
+           int ioasid, ret;
+                          ^
+                           = 0
+   drivers/iommu/iommufd/iommufd.c:369:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
                    if (idev->dev == dev || idev->dev_cookie == dev_cookie) {
                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/iommufd/iommufd.c:221:17: note: uninitialized use occurs here
+   drivers/iommu/iommufd/iommufd.c:409:17: note: uninitialized use occurs here
            return ERR_PTR(ret);
                           ^~~
-   drivers/iommu/iommufd/iommufd.c:181:3: note: remove the 'if' if its condition is always false
+   drivers/iommu/iommufd/iommufd.c:369:3: note: remove the 'if' if its condition is always false
                    if (idev->dev == dev || idev->dev_cookie == dev_cookie) {
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iommu/iommufd/iommufd.c:181:7: warning: variable 'ret' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+   drivers/iommu/iommufd/iommufd.c:369:7: warning: variable 'ret' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
                    if (idev->dev == dev || idev->dev_cookie == dev_cookie) {
                        ^~~~~~~~~~~~~~~~
-   drivers/iommu/iommufd/iommufd.c:221:17: note: uninitialized use occurs here
+   drivers/iommu/iommufd/iommufd.c:409:17: note: uninitialized use occurs here
            return ERR_PTR(ret);
                           ^~~
-   drivers/iommu/iommufd/iommufd.c:181:7: note: remove the '||' if its condition is always false
+   drivers/iommu/iommufd/iommufd.c:369:7: note: remove the '||' if its condition is always false
                    if (idev->dev == dev || idev->dev_cookie == dev_cookie) {
                        ^~~~~~~~~~~~~~~~~~~
-   drivers/iommu/iommufd/iommufd.c:171:9: note: initialize the variable 'ret' to silence this warning
+   drivers/iommu/iommufd/iommufd.c:359:9: note: initialize the variable 'ret' to silence this warning
            int ret;
                   ^
                    = 0
-   2 warnings generated.
+   3 warnings generated.
 
 
-vim +181 drivers/iommu/iommufd/iommufd.c
+vim +205 drivers/iommu/iommufd/iommufd.c
 
-   151	
-   152	/**
-   153	 * iommufd_bind_device - Bind a physical device marked by a device
-   154	 *			 cookie to an iommu fd.
-   155	 * @fd:		[in] iommufd file descriptor.
-   156	 * @dev:	[in] Pointer to a physical device struct.
-   157	 * @dev_cookie:	[in] A cookie to mark the device in /dev/iommu uAPI.
-   158	 *
-   159	 * A successful bind establishes a security context for the device
-   160	 * and returns struct iommufd_device pointer. Otherwise returns
-   161	 * error pointer.
-   162	 *
-   163	 */
-   164	struct iommufd_device *iommufd_bind_device(int fd, struct device *dev,
-   165						   u64 dev_cookie)
-   166	{
-   167		struct iommufd_ctx *ictx;
-   168		struct iommufd_device *idev;
-   169		unsigned long index;
-   170		unsigned int id;
-   171		int ret;
-   172	
-   173		ictx = iommufd_ctx_fdget(fd);
-   174		if (!ictx)
-   175			return ERR_PTR(-EINVAL);
-   176	
-   177		mutex_lock(&ictx->lock);
-   178	
-   179		/* check duplicate registration */
-   180		xa_for_each(&ictx->device_xa, index, idev) {
- > 181			if (idev->dev == dev || idev->dev_cookie == dev_cookie) {
-   182				idev = ERR_PTR(-EBUSY);
-   183				goto out_unlock;
-   184			}
-   185		}
-   186	
-   187		idev = kzalloc(sizeof(*idev), GFP_KERNEL);
-   188		if (!idev) {
-   189			ret = -ENOMEM;
-   190			goto out_unlock;
-   191		}
-   192	
-   193		/* Establish the security context */
-   194		ret = iommu_device_init_user_dma(dev, (unsigned long)ictx);
-   195		if (ret)
-   196			goto out_free;
-   197	
-   198		ret = xa_alloc(&ictx->device_xa, &id, idev,
-   199			       XA_LIMIT(IOMMUFD_DEVID_MIN, IOMMUFD_DEVID_MAX),
-   200			       GFP_KERNEL);
-   201		if (ret) {
-   202			idev = ERR_PTR(ret);
-   203			goto out_user_dma;
-   204		}
-   205	
-   206		idev->ictx = ictx;
-   207		idev->dev = dev;
-   208		idev->dev_cookie = dev_cookie;
-   209		idev->id = id;
-   210		mutex_unlock(&ictx->lock);
-   211	
-   212		return idev;
-   213	out_user_dma:
-   214		iommu_device_exit_user_dma(idev->dev);
-   215	out_free:
-   216		kfree(idev);
-   217	out_unlock:
-   218		mutex_unlock(&ictx->lock);
-   219		iommufd_ctx_put(ictx);
-   220	
-   221		return ERR_PTR(ret);
-   222	}
-   223	EXPORT_SYMBOL_GPL(iommufd_bind_device);
-   224	
+   185	
+   186	static int iommufd_ioasid_free(struct iommufd_ctx *ictx, unsigned long arg)
+   187	{
+   188		struct iommufd_ioas *ioas = NULL;
+   189		int ioasid, ret;
+   190	
+   191		if (copy_from_user(&ioasid, (void __user *)arg, sizeof(ioasid)))
+   192			return -EFAULT;
+   193	
+   194		if (ioasid < 0)
+   195			return -EINVAL;
+   196	
+   197		mutex_lock(&ictx->lock);
+   198		ioas = xa_load(&ictx->ioasid_xa, ioasid);
+   199		if (IS_ERR(ioas)) {
+   200			ret = -EINVAL;
+   201			goto out_unlock;
+   202		}
+   203	
+   204		/* Disallow free if refcount is not 1 */
+ > 205		if (refcount_read(&ioas->refs) > 1) {
+   206			ret = -EBUSY;
+   207			goto out_unlock;
+   208		}
+   209	
+   210		ioas_put_locked(ioas);
+   211	out_unlock:
+   212		mutex_unlock(&ictx->lock);
+   213		return ret;
+   214	};
+   215	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---SUOF0GtieIMvvwua
+--1yeeQ81UyVL57Vl7
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICDWMVmEAAy5jb25maWcAlDzLktu2svt8BSvZJIskI8373poFRIISIpKgAVDSzIYla2RH
+H4sICI6WVmEAAy5jb25maWcAlDzLktu2svt8BSvZJIskI8373poFRIISIpKgAVDSzIYla2RH
 94wll6Rxkr+/3eALAEE5J3WOy+puAI1Go5+gf/rhp4C8nw9f1ufdZv329k/webvfHtfn7Wvw
 afe2/d8g4kHGVUAjpn4D4mS3f//79+PutPkW3P42uvntKphvj/vtWxAe9p92n99h7O6w/+Gn
 H0KexWxahmG5oEIynpWKrtTTj5u39f5z8G17PAFdgDPAHD9/3p3/5/ff4c8vu+PxcPz97e3b
@@ -822,4 +792,4 @@ XV3xZ7bbWA7N09i9vtAexmMWmxWIEkOdlqieOdY2M+HMO0ODgPE4EP92bRVjktT4PNvWz67i
 MgW1w+3XTRli5kDfHDlA4E4BnOP+jGmpIx5iNPZZl4CNDdcqmnhp7gvkKJjeCJ7lS7wHuKEu
 IjtkOpdOHoVxHHmg+QY7LI1WtowNT5RTuTiXi/8Hqvoh5CcvAgA=
 
---SUOF0GtieIMvvwua--
+--1yeeQ81UyVL57Vl7--
