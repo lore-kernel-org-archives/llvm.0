@@ -1,120 +1,104 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F313829CA
-	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 17:45:52 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D234619EC;
-	Fri,  1 Oct 2021 17:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633110352;
-	bh=db7GD7Lnx1ZtZAtaCWF8cwt5PJRMhlQFMCeZ5e1Xap4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CA9DLkAq4PPpVa8KaA6SFQb3N2r+mJyrAjBXTOmwDu6gH7UNs6KSDSccC0dczmlYO
-	 vHAnJeiTdCGtqjSkULM8CBsaU0V3Z/NestItDaJGjJv4anJEn3eUXWo/UiFY3D9P64
-	 DEXxGfNa3Yipvff31Lba0s/krLrdIDRwCCeSImCwXNygbfyRAipD9t4zZbiR23D+o3
-	 7tEYMxyT5s7Xkju18LLyMvGnpu5vd+VedA6hjV90lF66X1gZZha82M10vXOm7PWd7H
-	 uBveIXumosPUh2i+TdI7cHYyVCNh4yOfDAXsDXQAufZz5d307YAAf9EFcm7TVfWWMg
-	 Qal2JwOooV24Q==
-Date: Fri, 1 Oct 2021 10:45:47 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, kernel test robot <lkp@intel.com>,
-	Max Gurtovoy <mgurtovoy@nvidia.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Yishai Hadas <yishaih@nvidia.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [vfio:next 33/38]
- drivers/gpu/drm/i915/i915_pci.c:975:2: warning: missing field
- 'override_only' initializer
-Message-ID: <YVdJS5RUjvokrSnn@archlinux-ax161>
-References: <20210827153409.GV1721383@nvidia.com>
- <878rzdt3a3.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117FF29CA
+	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 17:48:04 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id g41so41443296lfv.1
+        for <llvm@lists.linux.dev>; Fri, 01 Oct 2021 10:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s4DCq/SL+0pzR+f05QcJy4s8pIeom8elV/jmmuJRofY=;
+        b=alwG9T4t9LMLGhDVpUrSGu70LA+myA6nRYFBA6QZj+URP2cEPLWxHW8u19Kqx8jqnf
+         623WEKwdlCcU9/t85/hdPjeq5klZWJi544a4UmBIoKSopTkDNeE1Ucl8ll3YTH7mq8da
+         lsaVQPjA4NP9maPfCSWKfjWHH45gjdeMTIsouhPxWFxkKEZCycCB6U+6wnU+MyOvblKZ
+         rcyEv8uPZ5lkJaXoLgXJPklpABwB+TcWSvC6VbP33yM44cr6JDkVTe2URYF6h/sTcOtw
+         L+y2ATVIPsKo24PBuH1XszLtuk66pKKKcW/kxMlLwyVf8zi0njRXqmo4hExAvvjBxLLP
+         gYrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s4DCq/SL+0pzR+f05QcJy4s8pIeom8elV/jmmuJRofY=;
+        b=MtROTVoCAVlR2xHqy4KOYx0islZa104fTjx/QFYxaCVkyr/4fMUM3S7BZCM8OW7Rkc
+         KsramgR5h+kX1Hn6aLsyO7o3+OXj+vTnCIhxXMdPcgLNZ3ckNji6ppNC+I5vSd0xtKmV
+         dR7gsVVaknqsKwLVlTDwebCA1gaWn2t1KMPa2sg51P+m2jquzoliNpj1e2AJza0fYLB2
+         8bU0JvrrVy67EJPuYr5c8UH2sZ7wuGGZzKj6JYEtcy1TxNN+58DJbQjNE4OFjDBz5X5d
+         0pnkNgPIrI2a+Rue3/DnIAvfmzBzswmZzs6Vi1qMrxt351OLT9SEwEiKWNGXdqOfL9mx
+         GXJQ==
+X-Gm-Message-State: AOAM531qlOPI4MboWHzTnOKbF3l9+aaHT+tECFT9M2LYFZQMUtb6Jg4e
+	uFFArIUK5XEIgBqhAOn16S96j3bczI+c8D6dlVxO4A==
+X-Google-Smtp-Source: ABdhPJzXS3QNigZNqBcfBGLHLfQpXltfshXLki57pm3OPFzY7e+K6FhzQvh1vWXdq09CQaUvaz3Blv1zDnQX0ayhpzs=
+X-Received: by 2002:a05:6512:3ba5:: with SMTP id g37mr6529539lfv.651.1633110482681;
+ Fri, 01 Oct 2021 10:48:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878rzdt3a3.fsf@intel.com>
+References: <CAKwvOdmrOYTxVd1f+=g4e-+q0fD+BZZTBGOkzcRq494bYYCkgw@mail.gmail.com>
+ <CAKdWgSyH4tYESpUEBx1SqK0F=ydG_0r=MT0-s5D9zC4rS0EppA@mail.gmail.com>
+In-Reply-To: <CAKdWgSyH4tYESpUEBx1SqK0F=ydG_0r=MT0-s5D9zC4rS0EppA@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 1 Oct 2021 10:47:50 -0700
+Message-ID: <CAKwvOdmSA2LmFXsPPrpBahR7bWXaLH=KdwepwvF+DqA+zGjROA@mail.gmail.com>
+Subject: Re: missing build.log files
+To: Vishal Bhoj <vishal.bhoj@linaro.org>
+Cc: llvm@lists.linux.dev, tuxsuite <tuxsuite@linaro.org>, 
+	Sedat Dilek <sedat.dilek@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 01, 2021 at 02:04:04PM +0300, Jani Nikula wrote:
-> On Fri, 27 Aug 2021, Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > On Fri, Aug 27, 2021 at 03:12:36PM +0000, kernel test robot wrote:
-> >> tree:   https://github.com/awilliam/linux-vfio.git next
-> >> head:   ea870730d83fc13a5fa2bd0e175176d7ac8a400a
-> >> commit: 343b7258687ecfbb363bfda8833a7cf641aac524 [33/38] PCI: Add 'override_only' field to struct pci_device_id
-> >> config: i386-randconfig-a004-20210827 (attached as .config)
-> >> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1076082a0d97bd5c16a25ee7cf3dbb6ee4b5a9fe)
-> >> reproduce (this is a W=1 build):
-> >>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>         chmod +x ~/bin/make.cross
-> >>         # https://github.com/awilliam/linux-vfio/commit/343b7258687ecfbb363bfda8833a7cf641aac524
-> >>         git remote add vfio https://github.com/awilliam/linux-vfio.git
-> >>         git fetch --no-tags vfio next
-> >>         git checkout 343b7258687ecfbb363bfda8833a7cf641aac524
-> >>         # save the attached .config to linux build tree
-> >>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386 
-> >> 
-> >> If you fix the issue, kindly add following tag as appropriate
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > Ugh, this is due to this code:
-> >
-> > #define INTEL_VGA_DEVICE(id, info) {		\
-> > 	0x8086,	id,				\
-> > 	~0, ~0,					\
-> > 	0x030000, 0xff0000,			\
-> > 	(unsigned long) info }
-> >
-> > #define INTEL_QUANTA_VGA_DEVICE(info) {		\
-> > 	0x8086,	0x16a,				\
-> > 	0x152d,	0x8990,				\
-> > 	0x030000, 0xff0000,			\
-> > 	(unsigned long) info }
-> >
-> >
-> > Which really should be using the normal pattern for defining these
-> > structs:
-> >
-> > #define PCI_DEVICE_CLASS(dev_class,dev_class_mask) \
-> >         .class = (dev_class), .class_mask = (dev_class_mask), \
-> >         .vendor = PCI_ANY_ID, .device = PCI_ANY_ID, \
-> >         .subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID
-> >
-> > The warning is also not a real issue, just clang being overzealous.
-> 
-> Stumbled upon this old report, sorry for the delayed response.
-> 
-> The reason it's not using designated initializers is that the same file
-> gets synced to some userspace projects (at least libdrm and
-> igt-gpu-tools) which use the macros to initialize slightly different
-> structs. For example, igt uses struct pci_id_match from libpciaccess-dev
-> (/usr/include/pciaccess.h) and can't easily adapt to different member
-> names.
-> 
-> Anyway, we've got
-> 
-> subdir-ccflags-y += $(call cc-disable-warning, missing-field-initializers)
-> subdir-ccflags-y += $(call cc-disable-warning, initializer-overrides)
-> 
-> in drivers/gpu/drm/i915/Makefile, so I wonder why they're not respected.
+On Fri, Oct 1, 2021 at 10:21 AM Vishal Bhoj <vishal.bhoj@linaro.org> wrote:
+>
+> Hi Nick,
+>
+> I saw the build failures today morning. These builds try to apply
+> patches and fail to apply them and hence the build is marked as
+> failed. This info is available in build logs and also as part of
+> "status_message" field in the build.json file saved by tuxsuite cli
+> (--json-out option).
 
-This report was from an i386 randconfig, which we recently had a lot of
-issues with:
+That makes sense; I was trolling our build logs because Sedat noticed
+a patch we were carrying made it to mainline. I went to check and see
+what the failure would look like in our CI when a patch fails to
+apply.  We want it to fail loudly, for sure, but we may need to update
+our client to make it clearer what the failure was.  We can add code
+to check the "status_message" isn't "Unable to apply kernel patch"
+before trying to fetch the build logs.
 
-https://git.kernel.org/linus/7fa6a2746616c8de4c40b748c2bb0656e00624ff
+>
+> The build.log is generated from tuxmake and since the patching itself
+> failed, a build.log was not generated. I have opened a bug to track
+> this issue to publish the build.log:
+> https://gitlab.com/Linaro/tuxsuite/-/issues/138
 
-Applying my patch to remove most of the cc-disable-warnings in your
-Makefile would help avoid these reports in the future :)
+Ah, or if we just always had the log that would be good, too.
 
-https://lore.kernel.org/r/20210914194944.4004260-1-nathan@kernel.org/
+>
+> Regards,
+> Vishal
+>
+>
+> On Fri, 1 Oct 2021 at 22:37, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > Hi Vishal,
+> > Last night's run had a few HTTP 404's where the build.log files
+> > weren't produced, example:
+> > https://github.com/ClangBuiltLinux/continuous-integration2/runs/3767134165?check_suite_focus=true
+> >
+> > download_url: https://builds.tuxbuild.com/1yuAt3oatFT1XZifxO2YoBUadf4/
+> >
+> > expected the log file to be at
+> > https://builds.tuxbuild.com/1yuAt3oatFT1XZifxO2YoBUadf4/build.log
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
 
-Cheers,
-Nathan
+
+
+-- 
+Thanks,
+~Nick Desaulniers
