@@ -1,49 +1,48 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE7929CA
-	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 07:26:09 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="204848932"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CAB82FB3
+	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 08:38:21 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="225414414"
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="gz'50?scan'50,208,50";a="204848932"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 00:26:05 -0700
+   d="gz'50?scan'50,208,50";a="225414414"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 01:38:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="gz'50?scan'50,208,50";a="480318973"
+   d="gz'50?scan'50,208,50";a="709671719"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Oct 2021 00:25:57 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 01 Oct 2021 01:38:17 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mWCvc-0000tO-T2; Fri, 01 Oct 2021 07:25:56 +0000
-Date: Fri, 1 Oct 2021 15:25:13 +0800
+	id 1mWE3d-0000xS-AU; Fri, 01 Oct 2021 08:38:17 +0000
+Date: Fri, 1 Oct 2021 16:38:06 +0800
 From: kernel test robot <lkp@intel.com>
 To: Bart Van Assche <bvanassche@acm.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [bvanassche:scsi-for-next 1/2]
- drivers/message/fusion/mptscsih.c:3238:11: error: initializing 'struct
- attribute **' with an expression of type 'const struct attribute *[13]'
- discards qualifiers in nested pointer types
-Message-ID: <202110011506.Z0BWftNg-lkp@intel.com>
+Subject: [bvanassche:scsi-for-next 2/2]
+ drivers/scsi/smartpqi/smartpqi_init.c:6952:22: error: use of undeclared
+ identifier 'pqi_sdev_attr_groups'; did you mean 'pqi_shost_attr_groups'?
+Message-ID: <202110011600.V648K2PG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="gBBFr7Ir9EOA20Yy"
+Content-Type: multipart/mixed; boundary="ZPt4rx8FFjLCG7dd"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---gBBFr7Ir9EOA20Yy
+--ZPt4rx8FFjLCG7dd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/bvanassche/linux scsi-for-next
 head:   3d4f1af1fe85f0f2cc435ea177d25f9bad454965
-commit: 983ecfd3c8e1418e0bd073bac176b8065ec619fd [1/2] scsi: Register SCSI host sysfs attributes earlier
+commit: 3d4f1af1fe85f0f2cc435ea177d25f9bad454965 [2/2] scsi: Register SCSI device sysfs attributes earlier
 config: arm-randconfig-r034-20211001 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 962e503cc8bc411f7523cc393acae8aae425b1c4)
 reproduce (this is a W=1 build):
@@ -51,42 +50,67 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/bvanassche/linux/commit/983ecfd3c8e1418e0bd073bac176b8065ec619fd
+        # https://github.com/bvanassche/linux/commit/3d4f1af1fe85f0f2cc435ea177d25f9bad454965
         git remote add bvanassche https://github.com/bvanassche/linux
         git fetch --no-tags bvanassche scsi-for-next
-        git checkout 983ecfd3c8e1418e0bd073bac176b8065ec619fd
+        git checkout 3d4f1af1fe85f0f2cc435ea177d25f9bad454965
         # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/smartpqi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/message/fusion/mptscsih.c:3238:11: error: initializing 'struct attribute **' with an expression of type 'const struct attribute *[13]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           .attrs = mptscsih_host_attrs
-                    ^~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/scsi/smartpqi/smartpqi_init.c:6952:22: error: use of undeclared identifier 'pqi_sdev_attr_groups'; did you mean 'pqi_shost_attr_groups'?
+           .sdev_attr_groups = pqi_sdev_attr_groups,
+                               ^~~~~~~~~~~~~~~~~~~~
+                               pqi_shost_attr_groups
+   drivers/scsi/smartpqi/smartpqi_init.c:6652:38: note: 'pqi_shost_attr_groups' declared here
+   static const struct attribute_group *pqi_shost_attr_groups[] = {
+                                        ^
+   drivers/scsi/smartpqi/smartpqi_init.c:8028:10: warning: shift count >= width of type [-Wshift-count-overflow]
+                   mask = DMA_BIT_MASK(64);
+                          ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 1 error generated.
 
 
-vim +3238 drivers/message/fusion/mptscsih.c
+vim +6952 drivers/scsi/smartpqi/smartpqi_init.c
 
-  3236	
-  3237	static const struct attribute_group mptscsih_host_attr_group = {
-> 3238		.attrs = mptscsih_host_attrs
-  3239	};
-  3240	
+  6937	
+  6938	static struct scsi_host_template pqi_driver_template = {
+  6939		.module = THIS_MODULE,
+  6940		.name = DRIVER_NAME_SHORT,
+  6941		.proc_name = DRIVER_NAME_SHORT,
+  6942		.queuecommand = pqi_scsi_queue_command,
+  6943		.scan_start = pqi_scan_start,
+  6944		.scan_finished = pqi_scan_finished,
+  6945		.this_id = -1,
+  6946		.eh_device_reset_handler = pqi_eh_device_reset_handler,
+  6947		.ioctl = pqi_ioctl,
+  6948		.slave_alloc = pqi_slave_alloc,
+  6949		.slave_configure = pqi_slave_configure,
+  6950		.slave_destroy = pqi_slave_destroy,
+  6951		.map_queues = pqi_map_queues,
+> 6952		.sdev_attr_groups = pqi_sdev_attr_groups,
+  6953		.shost_attr_groups = pqi_shost_attr_groups,
+  6954	};
+  6955	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---gBBFr7Ir9EOA20Yy
+--ZPt4rx8FFjLCG7dd
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICBCzVmEAAy5jb25maWcAlFxbd9u2k3/vp+BpX/p/aGP5kja7xw8gCUqoSIIGQF38wqPI
+H4sICJDEVmEAAy5jb25maWcAlFxbd9u2k3/vp+BpX/p/aGP5kja7xw8gCUqoSIIGQF38wqPI
 TOqtbWVlOW2+/c6ANwAElW4e2mhmAAyAwcxvBmB++uGngLydDs+70+N+9/T0Lfhcv9TH3al+
 CD49PtX/HcQ8yLkKaMzUryCcPr68/fNud3wObn6d3fx68ctxPwuW9fGlfgqiw8unx89v0Prx
 8PLDTz9EPE/YvIqiakWFZDyvFN2o2x/3T7uXz8HX+vgKcsHs+teLXy+Cnz8/nv7r3Tv47/Pj
@@ -866,4 +890,4 @@ RIgG4hu9hXtx6lHYPjcbSezlbzvk8M3dSyLa/QK3CndUtLSxD6lcarXt0rvKOEVM4FaE9Ahw
 I060KjOHsx+nkSBpmOBMp+s4/gdfX7ay0wiQfngw3GgLWUUPxnqDJ78gGvzB7UEkIxyadc/e
 KXOJKV66tE5UX+hZ0qbRJNezRKf18jat/x8bsCtdQqoCAA==
 
---gBBFr7Ir9EOA20Yy--
+--ZPt4rx8FFjLCG7dd--
