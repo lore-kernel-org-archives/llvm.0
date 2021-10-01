@@ -1,142 +1,97 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB662FAE
-	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 10:58:18 +0000 (UTC)
-Received: by mail-ed1-f48.google.com with SMTP id l8so33554296edw.2
-        for <llvm@lists.linux.dev>; Fri, 01 Oct 2021 03:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TTPu8WxtNfGWy6R5J1kog5z5I/HdOclpvXu9/TjPYkI=;
-        b=B3n84obtuH7/Si/VlCtf999g8dmTgTCF7dKj2Y+QtfZRj9P/Ei0BDjyll/MPzeBR3p
-         lZKj7iiD5IE4rSJs4rG7VXvz+GVY0hKYusNJf8O6b5RNrLuW+wokveyxAQbBQQem8L7m
-         rUtXTEzLPpQcupg44C/C7i3GCX9fsMZpzN3FJHtxql5SlFo/cIy3VGHGIEBhrmx4B0gQ
-         KD5dLJSr3j+dwPuMFFTNX2rmXmZNWsKx2DapKheI8AsDsbokl8XpH1hxxlfHFB2SCZOk
-         mio1id1dA9aTUJEiWNgbx4vzND9FlZhZJNwVfMoqcNchr8i6vdtbgZw1jQI3wF6GXBoX
-         spUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TTPu8WxtNfGWy6R5J1kog5z5I/HdOclpvXu9/TjPYkI=;
-        b=07N/CJ2gAFWnS99laQ4N8w45fvk+8apVBk9e3P3cRqh2DOQ1Aln9hqZoTU/4ldapj3
-         XVcjqNUTIt2F7SfKS4fbcQ7CePweDs2xroSJWRMs/KXXQGNzaVYT92kbNYHD1eEP01L0
-         eQOdZ9a8C/BHcFhOJJhC8SDllmRO+YgWHZHcAyEvyxKhK/pFxxoTSDwBxRo8i68VdWJc
-         hUdk2dTVtLek7S7sI4+KkVuQHVor7LWbT/u8pnCzDWzV1n5ygN9B78+k+B3zm6EVYgM2
-         fGR/DMvvEitjH+JvTh3/1SxtfuslT4WbFjJPvcV8/L2b4pBWHE5oxpPT3viJGXMIOAgJ
-         enQQ==
-X-Gm-Message-State: AOAM533xXAxihBgikCLMZ6aAORoOGv30r36ywve0moLgJMCLPqTRFoi0
-	v8BeYV6+X/Dx7QSbT/Kli+sEddqo4w0TJeqQ+HAlsQ==
-X-Google-Smtp-Source: ABdhPJwkF1v2pLCEee/7m9lD3UfOJZ8LUK6b8P9lh2U8MQoc3XULSTy6PlmyP5Bwm2WP9Skoc3BaD2s0lMvBcqFqvdM=
-X-Received: by 2002:a17:906:318b:: with SMTP id 11mr5664872ejy.493.1633085896597;
- Fri, 01 Oct 2021 03:58:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA072FAE
+	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 11:04:12 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="247958870"
+X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
+   d="scan'208";a="247958870"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 04:04:12 -0700
+X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
+   d="scan'208";a="709734709"
+Received: from kdoertel-mobl.ger.corp.intel.com (HELO localhost) ([10.251.222.34])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 04:04:07 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>, kernel test robot <lkp@intel.com>
+Cc: Max Gurtovoy <mgurtovoy@nvidia.com>, "llvm\@lists.linux.dev" <llvm@lists.linux.dev>, "kbuild-all\@lists.01.org" <kbuild-all@lists.01.org>, "kvm\@vger.kernel.org" <kvm@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, Yishai Hadas <yishaih@nvidia.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, intel-gfx@lists.freedesktop.org
+Subject: Re: [vfio:next 33/38] drivers/gpu/drm/i915/i915_pci.c:975:2: warning: missing field 'override_only' initializer
+In-Reply-To: <20210827153409.GV1721383@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20210827153409.GV1721383@nvidia.com>
+Date: Fri, 01 Oct 2021 14:04:04 +0300
+Message-ID: <878rzdt3a3.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210913071251.GA15235@gondor.apana.org.au> <20210917002619.GA6407@gondor.apana.org.au>
- <YVNfqUVJ7w4Z3WXK@archlinux-ax161> <20211001055058.GA6081@gondor.apana.org.au>
-In-Reply-To: <20211001055058.GA6081@gondor.apana.org.au>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 1 Oct 2021 16:28:05 +0530
-Message-ID: <CA+G9fYvZC3+hfkMXWte1vUmmO9jLnTNnCrVMhHYnJjw15MWzSw@mail.gmail.com>
-Subject: Re: [v2 PATCH] crypto: api - Fix built-in testing dependency failures
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, Vladis Dronov <vdronov@redhat.com>, 
-	Simo Sorce <ssorce@redhat.com>, Eric Biggers <ebiggers@kernel.org>, llvm@lists.linux.dev, 
-	lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-Hi Herbert,
-
-
-I do see the reported problem while building modules.
-you may use the steps to reproduce.
-
-On Fri, 1 Oct 2021 at 11:58, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+On Fri, 27 Aug 2021, Jason Gunthorpe <jgg@nvidia.com> wrote:
+> On Fri, Aug 27, 2021 at 03:12:36PM +0000, kernel test robot wrote:
+>> tree:   https://github.com/awilliam/linux-vfio.git next
+>> head:   ea870730d83fc13a5fa2bd0e175176d7ac8a400a
+>> commit: 343b7258687ecfbb363bfda8833a7cf641aac524 [33/38] PCI: Add 'override_only' field to struct pci_device_id
+>> config: i386-randconfig-a004-20210827 (attached as .config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1076082a0d97bd5c16a25ee7cf3dbb6ee4b5a9fe)
+>> reproduce (this is a W=1 build):
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # https://github.com/awilliam/linux-vfio/commit/343b7258687ecfbb363bfda8833a7cf641aac524
+>>         git remote add vfio https://github.com/awilliam/linux-vfio.git
+>>         git fetch --no-tags vfio next
+>>         git checkout 343b7258687ecfbb363bfda8833a7cf641aac524
+>>         # save the attached .config to linux build tree
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386 
+>> 
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
 >
-> On Tue, Sep 28, 2021 at 11:32:09AM -0700, Nathan Chancellor wrote:
-> >
-> > This patch as commit 3cefb01905df ("crypto: api - Fix built-in testing
-> > dependency failures") in -next (along with the follow up fix) causes the
-> > following depmod error:
-> >
-> > $ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux- INSTALL_MOD_PATH=rootfs ppc44x_defconfig all modules_install
-> > depmod: ERROR: Cycle detected: crypto -> crypto_algapi -> crypto
-> > depmod: ERROR: Found 2 modules in dependency cycles!
-> > make: *** [Makefile:1946: modules_install] Error 1
-> >
-> > Initially reported on our CI:
-> >
-> > https://github.com/ClangBuiltLinux/continuous-integration2/runs/3732847295?check_suite_focus=true
+> Ugh, this is due to this code:
 >
-> That's weird, I can't reproduce this.  Where can I find your Kconfig
-> file? Alternatively, can you identify exactly what is in algapi that
-> is being depended on by crypto?
+> #define INTEL_VGA_DEVICE(id, info) {		\
+> 	0x8086,	id,				\
+> 	~0, ~0,					\
+> 	0x030000, 0xff0000,			\
+> 	(unsigned long) info }
 >
-> The crypto module should be at the very base and there should be no
-> depenedencies from it on algapi.  The algapi module is meant to be
-> on top of crypto obviously.
+> #define INTEL_QUANTA_VGA_DEVICE(info) {		\
+> 	0x8086,	0x16a,				\
+> 	0x152d,	0x8990,				\
+> 	0x030000, 0xff0000,			\
+> 	(unsigned long) info }
+>
+>
+> Which really should be using the normal pattern for defining these
+> structs:
+>
+> #define PCI_DEVICE_CLASS(dev_class,dev_class_mask) \
+>         .class = (dev_class), .class_mask = (dev_class_mask), \
+>         .vendor = PCI_ANY_ID, .device = PCI_ANY_ID, \
+>         .subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID
+>
+> The warning is also not a real issue, just clang being overzealous.
 
+Stumbled upon this old report, sorry for the delayed response.
 
-#!/bin/sh
+The reason it's not using designated initializers is that the same file
+gets synced to some userspace projects (at least libdrm and
+igt-gpu-tools) which use the macros to initialize slightly different
+structs. For example, igt uses struct pci_id_match from libpciaccess-dev
+(/usr/include/pciaccess.h) and can't easily adapt to different member
+names.
 
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
+Anyway, we've got
 
+subdir-ccflags-y += $(call cc-disable-warning, missing-field-initializers)
+subdir-ccflags-y += $(call cc-disable-warning, initializer-overrides)
 
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig rt305x_defconfig
+in drivers/gpu/drm/i915/Makefile, so I wonder why they're not respected.
 
+BR,
+Jani.
 
-# to reproduce this build locally: tuxmake --target-arch=mips
---kconfig=rt305x_defconfig --toolchain=gcc-10 --wrapper=sccache
---environment=KBUILD_BUILD_TIMESTAMP=@1633074287
---environment=KBUILD_BUILD_USER=tuxmake
---environment=KBUILD_BUILD_HOST=tuxmake
---environment=SCCACHE_BUCKET=sccache.tuxbuild.com --runtime=podman
---image=855116176053.dkr.ecr.us-east-1.amazonaws.com/tuxmake/mips_gcc-10
-config default kernel xipkernel modules dtbs dtbs-legacy debugkernel
-headers
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' rt305x_defconfig
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' uImage.gz
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' modules_install INSTALL_MOD_STRIP=1
-INSTALL_MOD_PATH=/home/tuxbuild/.cache/tuxmake/builds/current/modinstall
-depmod: ERROR: Cycle detected: crypto -> crypto_algapi -> crypto
-depmod: ERROR: Found 2 modules in dependency cycles!
-make[1]: *** [/builds/linux/Makefile:1961: modules_install] Error 1
-make: *** [Makefile:226: __sub-make] Error 2
-make: Target 'modules_install' not remade because of errors.
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Jani Nikula, Intel Open Source Graphics Center
