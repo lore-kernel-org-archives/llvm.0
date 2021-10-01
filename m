@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769E729CA
-	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 18:28:01 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10124"; a="205016349"
-X-IronPort-AV: E=Sophos;i="5.85,339,1624345200"; 
-   d="gz'50?scan'50,208,50";a="205016349"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 11:27:57 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE333FDF
+	for <llvm@lists.linux.dev>; Fri,  1 Oct 2021 19:33:00 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10124"; a="248118291"
+X-IronPort-AV: E=Sophos;i="5.85,340,1624345200"; 
+   d="gz'50?scan'50,208,50";a="248118291"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 12:32:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,339,1624345200"; 
-   d="gz'50?scan'50,208,50";a="619321381"
+X-IronPort-AV: E=Sophos;i="5.85,340,1624345200"; 
+   d="gz'50?scan'50,208,50";a="556489271"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Oct 2021 11:27:55 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Oct 2021 12:32:57 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mWNGE-0001UP-Ps; Fri, 01 Oct 2021 18:27:54 +0000
-Date: Sat, 2 Oct 2021 02:26:58 +0800
+	id 1mWOHA-0001XZ-LK; Fri, 01 Oct 2021 19:32:56 +0000
+Date: Sat, 2 Oct 2021 03:32:24 +0800
 From: kernel test robot <lkp@intel.com>
 To: Simon Horman <simon.horman@corigine.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC/PATCH net-next v2 2/5] flow_offload: allow user to offload
- tc action to net device
-Message-ID: <202110020222.5nP4MP4E-lkp@intel.com>
-References: <20211001113237.14449-3-simon.horman@corigine.com>
+Subject: Re: [RFC/PATCH net-next v2 4/5] flow_offload: add reoffload process
+ to update hw_count
+Message-ID: <202110020357.QQc7Uhj2-lkp@intel.com>
+References: <20211001113237.14449-5-simon.horman@corigine.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="zhXaljGHf11kAtnf"
+Content-Type: multipart/mixed; boundary="CE+1k2dSO48ffgeK"
 Content-Disposition: inline
-In-Reply-To: <20211001113237.14449-3-simon.horman@corigine.com>
+In-Reply-To: <20211001113237.14449-5-simon.horman@corigine.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---zhXaljGHf11kAtnf
+--CE+1k2dSO48ffgeK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -52,10 +52,10 @@ compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 962e503cc8b
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/9a454eedd446af072f867f4927802d3b42ed3406
+        # https://github.com/0day-ci/linux/commit/1c5bf029ff1f0cef6b1e41a3fbdfdd489bee4baa
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Simon-Horman/allow-user-to-offload-tc-action-to-net-device/20211001-193504
-        git checkout 9a454eedd446af072f867f4927802d3b42ed3406
+        git checkout 1c5bf029ff1f0cef6b1e41a3fbdfdd489bee4baa
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
 
@@ -64,127 +64,74 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/sched/act_api.c:1171:13: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+   net/sched/act_api.c:1240:13: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
            } else if (is_tcf_gate(act)) {
                       ^~~~~~~~~~~~~~~~
-   net/sched/act_api.c:1179:9: note: uninitialized use occurs here
+   net/sched/act_api.c:1248:9: note: uninitialized use occurs here
            return err;
                   ^~~
-   net/sched/act_api.c:1171:9: note: remove the 'if' if its condition is always true
+   net/sched/act_api.c:1240:9: note: remove the 'if' if its condition is always true
            } else if (is_tcf_gate(act)) {
                   ^~~~~~~~~~~~~~~~~~~~~~
-   net/sched/act_api.c:1096:9: note: initialize the variable 'err' to silence this warning
+   net/sched/act_api.c:1165:9: note: initialize the variable 'err' to silence this warning
            int err;
                   ^
                    = 0
-   1 warning generated.
+>> net/sched/act_api.c:1416:5: warning: no previous prototype for function 'tcf_action_offload_del_ex' [-Wmissing-prototypes]
+   int tcf_action_offload_del_ex(struct tc_action *action,
+       ^
+   net/sched/act_api.c:1416:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tcf_action_offload_del_ex(struct tc_action *action,
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +1171 net/sched/act_api.c
+vim +/tcf_action_offload_del_ex +1416 net/sched/act_api.c
 
-  1090	
-  1091	static int flow_action_init(struct flow_offload_action *fl_action,
-  1092				    struct tc_action *act,
-  1093				    enum flow_act_command cmd,
-  1094				    struct netlink_ext_ack *extack)
-  1095	{
-  1096		int err;
-  1097	
-  1098		if (!fl_action)
-  1099			return -EINVAL;
-  1100	
-  1101		fl_action->extack = extack;
-  1102		fl_action->command = cmd;
-  1103		fl_action->index = act->tcfa_index;
-  1104	
-  1105		if (is_tcf_gact_ok(act)) {
-  1106			fl_action->id = FLOW_ACTION_ACCEPT;
-  1107		} else if (is_tcf_gact_shot(act)) {
-  1108			fl_action->id = FLOW_ACTION_DROP;
-  1109		} else if (is_tcf_gact_trap(act)) {
-  1110			fl_action->id = FLOW_ACTION_TRAP;
-  1111		} else if (is_tcf_gact_goto_chain(act)) {
-  1112			fl_action->id = FLOW_ACTION_GOTO;
-  1113		} else if (is_tcf_mirred_egress_redirect(act)) {
-  1114			fl_action->id = FLOW_ACTION_REDIRECT;
-  1115		} else if (is_tcf_mirred_egress_mirror(act)) {
-  1116			fl_action->id = FLOW_ACTION_MIRRED;
-  1117		} else if (is_tcf_mirred_ingress_redirect(act)) {
-  1118			fl_action->id = FLOW_ACTION_REDIRECT_INGRESS;
-  1119		} else if (is_tcf_mirred_ingress_mirror(act)) {
-  1120			fl_action->id = FLOW_ACTION_MIRRED_INGRESS;
-  1121		} else if (is_tcf_vlan(act)) {
-  1122			switch (tcf_vlan_action(act)) {
-  1123			case TCA_VLAN_ACT_PUSH:
-  1124				fl_action->id = FLOW_ACTION_VLAN_PUSH;
-  1125				break;
-  1126			case TCA_VLAN_ACT_POP:
-  1127				fl_action->id = FLOW_ACTION_VLAN_POP;
-  1128				break;
-  1129			case TCA_VLAN_ACT_MODIFY:
-  1130				fl_action->id = FLOW_ACTION_VLAN_MANGLE;
-  1131				break;
-  1132			default:
-  1133				err = -EOPNOTSUPP;
-  1134				goto err_out;
-  1135			}
-  1136		} else if (is_tcf_tunnel_set(act)) {
-  1137			fl_action->id = FLOW_ACTION_TUNNEL_ENCAP;
-  1138		} else if (is_tcf_tunnel_release(act)) {
-  1139			fl_action->id = FLOW_ACTION_TUNNEL_DECAP;
-  1140		} else if (is_tcf_pedit(act)) {
-  1141			fl_action->id = FLOW_ACTION_PEDIT;
-  1142		} else if (is_tcf_csum(act)) {
-  1143			fl_action->id = FLOW_ACTION_CSUM;
-  1144		} else if (is_tcf_skbedit_mark(act)) {
-  1145			fl_action->id = FLOW_ACTION_MARK;
-  1146		} else if (is_tcf_sample(act)) {
-  1147			fl_action->id = FLOW_ACTION_SAMPLE;
-  1148		} else if (is_tcf_police(act)) {
-  1149			fl_action->id = FLOW_ACTION_POLICE;
-  1150		} else if (is_tcf_ct(act)) {
-  1151			fl_action->id = FLOW_ACTION_CT;
-  1152		} else if (is_tcf_mpls(act)) {
-  1153			switch (tcf_mpls_action(act)) {
-  1154			case TCA_MPLS_ACT_PUSH:
-  1155				fl_action->id = FLOW_ACTION_MPLS_PUSH;
-  1156				break;
-  1157			case TCA_MPLS_ACT_POP:
-  1158				fl_action->id = FLOW_ACTION_MPLS_POP;
-  1159				break;
-  1160			case TCA_MPLS_ACT_MODIFY:
-  1161				fl_action->id = FLOW_ACTION_MPLS_MANGLE;
-  1162				break;
-  1163			default:
-  1164				err = -EOPNOTSUPP;
-  1165				goto err_out;
-  1166			}
-  1167		} else if (is_tcf_skbedit_ptype(act)) {
-  1168			fl_action->id = FLOW_ACTION_PTYPE;
-  1169		} else if (is_tcf_skbedit_priority(act)) {
-  1170			fl_action->id = FLOW_ACTION_PRIORITY;
-> 1171		} else if (is_tcf_gate(act)) {
-  1172			fl_action->id = FLOW_ACTION_GATE;
-  1173		} else {
-  1174			goto err_out;
-  1175		}
-  1176		return 0;
-  1177	
-  1178	err_out:
-  1179		return err;
-  1180	}
-  1181	
+  1415	
+> 1416	int tcf_action_offload_del_ex(struct tc_action *action,
+  1417				      flow_indr_block_bind_cb_t *cb, void *cb_priv)
+  1418	{
+  1419		struct flow_offload_action fl_act;
+  1420		u32 in_hw_count = 0;
+  1421		int err = 0;
+  1422	
+  1423		if (!action)
+  1424			return -EINVAL;
+  1425	
+  1426		if (!tc_act_in_hw(action->tcfa_flags))
+  1427			return 0;
+  1428	
+  1429		err = flow_action_init(&fl_act, action, FLOW_ACT_DESTROY, NULL);
+  1430		if (err)
+  1431			return err;
+  1432	
+  1433		err = tcf_action_offload_cmd(&fl_act, &in_hw_count, cb, cb_priv);
+  1434		if (err < 0)
+  1435			return err;
+  1436	
+  1437		/* do not need to update hw state when deleting action */
+  1438		if (cb && in_hw_count)
+  1439			flow_action_update_hw(action, in_hw_count, FLOW_ACT_HW_DEL);
+  1440	
+  1441		if (!cb && action->in_hw_count != in_hw_count)
+  1442			return -EINVAL;
+  1443	
+  1444		return 0;
+  1445	}
+  1446	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---zhXaljGHf11kAtnf
+--CE+1k2dSO48ffgeK
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICGpLV2EAAy5jb25maWcAnDzLdtu4kvv+Cp30pu+iE8uvzp05XkAkKKFFEgwASrI3OIoj
+H4sICOdcV2EAAy5jb25maWcAnDzLdtu4kvv+Cp30pu+iE8uvzp05XkAkKKFFEgwASrI3OIoj
 pz3XtnJluW/n76cK4AMAQaVnskiiqsK73ijw559+npC34/55e3y83z49fZ983b3sDtvj7svk
 4fFp99+TlE9KriY0Zeo9EOePL29/fXi8+Hg9uXo/vXp/9uvh/nyy3B1edk+TZP/y8Pj1DZo/
 7l9++vmnhJcZm+sk0SsqJOOlVnSjbt7dP21fvk7+3B1egW4yvXx/9v5s8svXx+N/ffgAfz8/
@@ -859,4 +806,4 @@ PKcuTBo4xtJoOEy17aYS340HKMuCY8HsISv9RViE5pPhnL5hFlGKnMlqUY1ulUrP5lx1vWOE
 ibTm07mb7U1LAaS8UTnlERpnIYjw3KHQF4J6+sStHr5EuO9DCriD9hC6hE8I8zYmGCm01NT1
 vKaPm0SBGOq2h0SBWCXo5M3sxPmR1pz/B+cST3lMRgIA
 
---zhXaljGHf11kAtnf--
+--CE+1k2dSO48ffgeK--
