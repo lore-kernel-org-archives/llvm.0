@@ -1,56 +1,111 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249183FE6
-	for <llvm@lists.linux.dev>; Sun,  3 Oct 2021 13:56:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=bb6oxK0ETsJpDFUGrY5gmGOR2+a+l1AmXX+OJwTt1Po=; b=IlEMk0E8xa0+q0EqOi/61wBjvL
-	oO0sL4LnbuJs/3s8+zVMo9eb7sWoNz/WgmJ8zi+0QgEL/ssXHvzUT/K1BW1S8wst4XNJuxgQIN04M
-	fTIK2IgVon/pc6m9/66f1zo8GuuUspvoZxRofmmtQ3sOWyL4BV4moJCa5gcYN4e0riurJThPN5/e3
-	TPIfWkwzSHBt8FlMe63MLpP/UyUlfAZlv6ZTwCML4moKS0SVFl9Lp1VYNCZpH7vcC5/yq3wGtxWz8
-	sWPXbvDnDJZBOUYz/kHz8MUW6JVDYZeUHRqspkL2S9RJYryQ+oBmnzQpJ4n5miFTILDyKwNueslN3
-	dCCEwO5Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mX1xA-00G0Nj-AW; Sun, 03 Oct 2021 13:55:07 +0000
-Date: Sun, 3 Oct 2021 14:54:56 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Nghia Le <nghialm78@gmail.com>
-Cc: mike.kravetz@oracle.com, akpm@linux-foundation.org, nathan@kernel.org,
-	ndesaulniers@google.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	lukas.bulwahn@gmail.com, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] mm/hugetlb.c: remove dead store in demote_size_show()
-Message-ID: <YVm2MHbhEU0b7HPM@casper.infradead.org>
-References: <20211003114113.109463-1-nghialm78@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1AD3FEA
+	for <llvm@lists.linux.dev>; Sun,  3 Oct 2021 18:05:04 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id 5so5168349iov.9
+        for <llvm@lists.linux.dev>; Sun, 03 Oct 2021 11:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0t/uC6UY+gZWkI7u9HEXsrryIwtnXmLh6shI3cfFXHw=;
+        b=cB6WICj3ZrwgOR0Ic+R8lmr9MqGCJSjbqzjS/sDhbyud/r8u+UnfjPxTCJTSLWRt4+
+         V6y5PAv6L4Yq4CsIjP35UkZ7PCt6QdkKRYUPTYH04s3mtu0sGObyz0XPpFcWpMtrp79D
+         Rgqo+nD95CxYkJutsZiIUFKvP02dN0/JQnZRd5zW0bwO4SEUjjSJdDLmimfOuxqlMDA1
+         Jo1gCyYZPpYEouHk0QUNmV2ciOagnuF8WJqWOlL+yvMD7LEqD6+XjGdodlNdIsZch40w
+         cVUo7foe41DX1dcfeB04jXSdxKrtIpHy+WMW51vGTDUKxqz26DewSm5PQZ5gLJWXaOwh
+         F5gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0t/uC6UY+gZWkI7u9HEXsrryIwtnXmLh6shI3cfFXHw=;
+        b=MXZBfnhR9AFR6M7Kv0CElcgLZYMmIIFus0Ljy38WPMgazWplQDN+kgGi5e4sO42Rar
+         8frSmWtCNkUcdOGTe9qYpz3jh4M2JrVYl8tNq9FgqHbnqp2pQ8wldpL6qIAOWUC8EkuN
+         GYN/3t9RiX0R7c+DzcdTIcfgmOiv9GQCsT+vFt3asv0SOAj9Va0eS81kbHQiNFFOA31P
+         mSQ2vtTz8MwMCRWqiV2kKPq+Gb62sVIx4Nx1NYSLdJas04LgfyLFBufPfazezEqnfGG7
+         HTmyJ3qMfsSIi9KvuZ9ZBfm9ddq0Y49RmNHkz2Ut7axu8QvJGiZZLD3ayJfpaLu0Ss3N
+         cwZQ==
+X-Gm-Message-State: AOAM530pZinG5rA3EwKX4WsjRS4KasQrYvxOAZeDY3sWIExoXJZTURZc
+	PcZthInPIlZAUsvMeON5yBWCUsvgwEfWlb+ieZk=
+X-Google-Smtp-Source: ABdhPJwDVfrttSPm9m8jYxfYJ/qQN44t4XnSk0Jhu7W+St8ZuSLv9HUuBgDcghtNm0TzWUFmTK1FeeXxM4ShmSbA7k0=
+X-Received: by 2002:a6b:c38d:: with SMTP id t135mr6528600iof.99.1633284304078;
+ Sun, 03 Oct 2021 11:05:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211003114113.109463-1-nghialm78@gmail.com>
+References: <20210922205525.570068-1-nathan@kernel.org>
+In-Reply-To: <20210922205525.570068-1-nathan@kernel.org>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Sun, 3 Oct 2021 20:04:53 +0200
+Message-ID: <CA+fCnZdfMYvQ1o8n41dDzgJUArsUyhnb9Y_azgCVuzj6_KBifA@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Always respect CONFIG_KASAN_STACK
+To: Nathan Chancellor <nathan@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Marco Elver <elver@google.com>
+Cc: Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	kasan-dev <kasan-dev@googlegroups.com>, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 03, 2021 at 06:41:13PM +0700, Nghia Le wrote:
->  {
->  	struct hstate *h;
-> -	unsigned long demote_size;
->  	int nid;
->  
->  	h = kobj_to_hstate(kobj, &nid);
-> -	demote_size = h->demote_order;
->  
->  	return sysfs_emit(buf, "%lukB\n",
->  			(unsigned long)(PAGE_SIZE << h->demote_order) / SZ_1K);
+On Wed, Sep 22, 2021 at 10:55 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Currently, the asan-stack parameter is only passed along if
+> CFLAGS_KASAN_SHADOW is not empty, which requires KASAN_SHADOW_OFFSET to
+> be defined in Kconfig so that the value can be checked. In RISC-V's
+> case, KASAN_SHADOW_OFFSET is not defined in Kconfig, which means that
+> asan-stack does not get disabled with clang even when CONFIG_KASAN_STACK
+> is disabled, resulting in large stack warnings with allmodconfig:
+>
+> drivers/video/fbdev/omap2/omapfb/displays/panel-lgphilips-lb035q02.c:117:12:
+> error: stack frame size (14400) exceeds limit (2048) in function
+> 'lb035q02_connect' [-Werror,-Wframe-larger-than]
+> static int lb035q02_connect(struct omap_dss_device *dssdev)
+>            ^
+> 1 error generated.
+>
+> Ensure that the value of CONFIG_KASAN_STACK is always passed along to
+> the compiler so that these warnings do not happen when
+> CONFIG_KASAN_STACK is disabled.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1453
+> References: 6baec880d7a5 ("kasan: turn off asan-stack for clang-8 and earlier")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/Makefile.kasan | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> index 801c415bac59..b9e94c5e7097 100644
+> --- a/scripts/Makefile.kasan
+> +++ b/scripts/Makefile.kasan
+> @@ -33,10 +33,11 @@ else
+>         CFLAGS_KASAN := $(CFLAGS_KASAN_SHADOW) \
+>          $(call cc-param,asan-globals=1) \
+>          $(call cc-param,asan-instrumentation-with-call-threshold=$(call_threshold)) \
+> -        $(call cc-param,asan-stack=$(stack_enable)) \
+>          $(call cc-param,asan-instrument-allocas=1)
+>  endif
 
-I'd suggest this function would look better written as:
+This part of code always looked weird to me.
 
-	int nid;
-	struct hstate *h = kobj_to_hstate(kobj, &nid);
-	unsigned long demote_size = (PAGE_SIZE << h->demote_order) / SZ_1K;
+Shouldn't we be able to pull all these options out of the else section?
 
-	return sysfs_emit(buf, "%lukB\n", demote_size);
+Then, the code structure would make sense: first, try applying
+KASAN_SHADOW_OFFSET; if failed, use CFLAGS_KASAN_MINIMAL; and then try
+applying all these options one by one.
+
+> +CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
+> +
+>  endif # CONFIG_KASAN_GENERIC
+>
+>  ifdef CONFIG_KASAN_SW_TAGS
+>
+> base-commit: 4057525736b159bd456732d11270af2cc49ec21f
+> --
+> 2.33.0.514.g99c99ed825
+>
