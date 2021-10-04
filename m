@@ -1,76 +1,121 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F9E3FE6
-	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 18:38:09 +0000 (UTC)
-Received: by mail-qt1-f169.google.com with SMTP id c20so16823048qtb.2
-        for <llvm@lists.linux.dev>; Mon, 04 Oct 2021 11:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LY3XIgAipiKQ5KOBfmir+6O81dFl8bwFaRJNVWIJEOQ=;
-        b=WswXKoAQ5C7dw5sMYuGmP4LURhz4dqg1ae/EZlIMAXM7NlNuxb5Y2q+UxF4eLf2fpz
-         Rg7X+SnBw+hg+GSpbPv0qhJKh2a7jrp5lLV1co9uteJ06nnevhs8ZDCVn9rSkgaie2/4
-         Qqgbz1ix7KDs8MKB9RG1XQf/01v8wXsEv9J/M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LY3XIgAipiKQ5KOBfmir+6O81dFl8bwFaRJNVWIJEOQ=;
-        b=sTr/6yLU6EX8Novvzk3YjRbAwr8l7y7B0DPDTry3cVsw5MwRTNXdVT8tv6wArHdqW/
-         A+Gf/IoJ1CY+f9uM8P9dxMsCoZwDrpYLgz6ZfTs5btvOW4OiRjETrbWAMgUcI3OgzjgV
-         Y9kcqa9HqwfsAuzGD6KBw1xvZWixnjCqvqEaEDB0RPlNv1U3C2+LVfMEornX1cfaLuhZ
-         gXc5IkD8loLN14OHSeH+byJeLaDqxnlXRhB5GfOPi+BC+dqvovGy2098IVun1w00H/IQ
-         wwhASBfRDDpr1/LfwuLTx6vPTfzdfrqXuubtqBv3Kfy9AW71Vv4+owcQxxJZ9XbgZY57
-         jjng==
-X-Gm-Message-State: AOAM530EageinGU9jpMrGQXSH/4/NOgr3j0Za6KUqV7Ci4cMO/EwgoE6
-	uccAHQisyij4zFd9vLSh2c0bXg==
-X-Google-Smtp-Source: ABdhPJy5qVo8YAG+9IfB7eA2QUTEyLjVNo1J041cwh/+k3Es6uTMBlFZh52NqBmQYegfPH+0wdpiUA==
-X-Received: by 2002:ac8:7769:: with SMTP id h9mr15238642qtu.156.1633372688728;
-        Mon, 04 Oct 2021 11:38:08 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-181.dsl.bell.ca. [216.209.220.181])
-        by smtp.gmail.com with ESMTPSA id g4sm1259206qtp.43.2021.10.04.11.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 11:38:08 -0700 (PDT)
-Date: Mon, 4 Oct 2021 14:38:06 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-	"KE . LI" <like1@oppo.com>, Stephen Boyd <swboyd@chromium.org>,
-	Fangrui Song <maskray@google.com>, Miroslav Benes <mbenes@suse.cz>,
-	Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Joe Perches <joe@perches.com>, Jessica Yu <jeyu@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v6] kallsyms: strip LTO suffixes from static functions
-Message-ID: <20211004183806.5weyuk554ppe5olb@meerkat.local>
-References: <202110020501.RKX4zca7-lkp@intel.com>
- <20211004162936.21961-1-ndesaulniers@google.com>
- <163337043811.3396838.458236649388694225.b4-ty@chromium.org>
- <CAKwvOdm5bBUE0df8jbXq+bSCf9U0AM3Wm4NsZeHu=Nuhi0yd-A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EA83FE6
+	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 19:03:36 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="311763116"
+X-IronPort-AV: E=Sophos;i="5.85,346,1624345200"; 
+   d="scan'208";a="311763116"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 10:44:18 -0700
+X-IronPort-AV: E=Sophos;i="5.85,346,1624345200"; 
+   d="scan'208";a="477275904"
+Received: from pmittal1-mobl.gar.corp.intel.com (HELO localhost) ([10.251.223.27])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 10:43:55 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v2] drm/i915: Clean up disabled warnings
+In-Reply-To: <20210914194944.4004260-1-nathan@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20210914194944.4004260-1-nathan@kernel.org>
+Date: Mon, 04 Oct 2021 20:43:41 +0300
+Message-ID: <87v92c1y9e.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdm5bBUE0df8jbXq+bSCf9U0AM3Wm4NsZeHu=Nuhi0yd-A@mail.gmail.com>
+Content-Type: text/plain
 
-On Mon, Oct 04, 2021 at 11:32:43AM -0700, Nick Desaulniers wrote:
-> $ git format-patch HEAD~
-> 0001-ARM-mm-proc-macros-ensure-_tlb_fns-are-4B-aligned.patch
-> $ git send-email --suppress-cc=body --to keescook@chromium.org
-> 0001-ARM-mm-proc-macros-ensure-_tlb_fns-are-4B-aligned.patch
-> patatt: E: -: Not a valid RFC2822 message
-> fatal: 0001-ARM-mm-proc-macros-ensure-_tlb_fns-are-4B-aligned.patch:
-> rejected by sendemail-validate hook
-> fatal: command 'git hook run sendemail-validate -- <patch>' died with
-> exit code 1
-> warning: no patches were sent
+On Tue, 14 Sep 2021, Nathan Chancellor <nathan@kernel.org> wrote:
+> i915 enables a wider set of warnings with '-Wall -Wextra' then disables
+> several with cc-disable-warning. If an unknown flag gets added to
+> KBUILD_CFLAGS when building with clang, all subsequent calls to
+> cc-{disable-warning,option} will fail, meaning that all of these
+> warnings do not get disabled [1].
+>
+> A separate series will address the root cause of the issue by not adding
+> these flags when building with clang [2]; however, the symptom of these
+> extra warnings appearing can be addressed separately by just removing
+> the calls to cc-disable-warning, which makes the build ever so slightly
+> faster because the compiler does not need to be called as much before
+> building.
+>
+> The following warnings are supported by GCC 4.9 and clang 10.0.1, which
+> are the minimum supported versions of these compilers so the call to
+> cc-disable-warning is not necessary. Masahiro cleaned this up for the
+> reset of the kernel in commit 4c8dd95a723d ("kbuild: add some extra
+> warning flags unconditionally").
+>
+> * -Wmissing-field-initializers
+> * -Wsign-compare
+> * -Wtype-limits
+> * -Wunused-parameter
+>
+> -Wunused-but-set-variable was implemented in clang 13.0.0 and
+> -Wframe-address was implemented in clang 12.0.0 so the
+> cc-disable-warning calls are kept for these two warnings.
+>
+> Lastly, -Winitializer-overrides is clang's version of -Woverride-init,
+> which is disabled for the specific files that are problematic. clang
+> added a compatibility alias in clang 8.0.0 so -Winitializer-overrides
+> can be removed.
+>
+> [1]: https://lore.kernel.org/r/202108210311.CBtcgoUL-lkp@intel.com/
+> [2]: https://lore.kernel.org/r/20210824022640.2170859-1-nathan@kernel.org/
+>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Woah. What git version is this?
+Thanks for the patch, and sorry for the delay.
 
--K
+Exceptionally pushed to drm-intel-gt-next instead of drm-intel-next
+because some of the dependencies such as 43192617f781 ("drm/i915: Enable
+-Wsometimes-uninitialized") were queued there too.
+
+
+BR,
+Jani.
+
+
+> ---
+>
+> v1 -> v2: https://lore.kernel.org/r/20210824232237.2085342-1-nathan@kernel.org/
+>
+> * Rebase on drm-intel-gt-next now that the prerequisite patch series has
+>   been merged: https://lore.kernel.org/r/87wnnj13t5.fsf@intel.com/
+>
+> * Add Nick's reviewed-by tag.
+>
+>  drivers/gpu/drm/i915/Makefile | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+> index c584188aa15a..fd99374583d5 100644
+> --- a/drivers/gpu/drm/i915/Makefile
+> +++ b/drivers/gpu/drm/i915/Makefile
+> @@ -13,13 +13,11 @@
+>  # will most likely get a sudden build breakage... Hopefully we will fix
+>  # new warnings before CI updates!
+>  subdir-ccflags-y := -Wall -Wextra
+> -subdir-ccflags-y += $(call cc-disable-warning, unused-parameter)
+> -subdir-ccflags-y += $(call cc-disable-warning, type-limits)
+> -subdir-ccflags-y += $(call cc-disable-warning, missing-field-initializers)
+> +subdir-ccflags-y += -Wno-unused-parameter
+> +subdir-ccflags-y += -Wno-type-limits
+> +subdir-ccflags-y += -Wno-missing-field-initializers
+> +subdir-ccflags-y += -Wno-sign-compare
+>  subdir-ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
+> -# clang warnings
+> -subdir-ccflags-y += $(call cc-disable-warning, sign-compare)
+> -subdir-ccflags-y += $(call cc-disable-warning, initializer-overrides)
+>  subdir-ccflags-y += $(call cc-disable-warning, frame-address)
+>  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) += -Werror
+>  
+>
+> base-commit: 43192617f7816bb74584c1df06f57363afd15337
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
