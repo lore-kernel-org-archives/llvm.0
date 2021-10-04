@@ -1,173 +1,111 @@
-Received: from lb2-smtp-cloud9.xs4all.net (lb2-smtp-cloud9.xs4all.net [194.109.24.26])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A453FED
-	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 10:57:04 +0000 (UTC)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-	by smtp-cloud9.xs4all.net with ESMTPA
-	id XLdQmgyEhk4mTXLdTm9JxD; Mon, 04 Oct 2021 12:55:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-	t=1633344956; bh=t303QSdfTKzaG3cHjlA1aT3kiRKmACQ1ZBJh3qWn+TI=;
-	h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-	 Subject;
-	b=vSuZ6ZptvM8eQSDyD3scRSTCIgegoI6c8KYAGibXO3ctpOSb+v0sstF9kBx3keOxK
-	 sF2yRiWpBZmbwPTPuhYLOvVP7EzVD+yruk4nFJEPdrDKqzDRC83GJVDta0YYjOZ3Qe
-	 qMiXOM9mDAV3sDx0D0ujgy1RVDKpqUXQ3/KztHpkfbTn/S0/4TjnxVAXXCvcCwIeAo
-	 uNIA1li0aMaRA29URVHH4oD6YqKysBvcYUYfkBgkT2uCutyUnJMcquJqsl9umoD4eM
-	 9fBXIgv4pwhWhYv/EtUfgCfB9v+jT7eaWMbTjwxPmacGtXFhFVknMMlQdCBo3+NZSh
-	 McxxsqMwkdVwQ==
-Subject: Re: [PATCH] media: gspca/gl860-mi1320: avoid -Wstring-concatenation
- warning
-To: Arnd Bergmann <arnd@kernel.org>, Olivier Lorin <o.lorin@laposte.net>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20210927122024.941874-1-arnd@kernel.org>
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <ea4cbdd2-3f78-7bc6-d378-b9edb14ce80d@xs4all.nl>
-Date: Mon, 4 Oct 2021 12:55:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4DA3FC7
+	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 11:38:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 093F46136F
+	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 11:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1633347521;
+	bh=o+Rpfn1IC4KVCQeTsymhJ0z7e32ceLwRcmHzK/wEniw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JM7d+iCbONZJRHYECgQ7zEA8E1YeS49mlMARkiWTW2oHFWsR0XdokiJ8JsPmk2UdI
+	 lq5YCIUihsVteM9TUim+0enXwG3P1q1AGeGhaEKX54VX1Rt1e7aJKx/eJ4bklJHxF+
+	 OIq2Yo8wBz+Oy4QuNDqQxuXYa3hRVqmDtto1x/hykJtKSLqcHzxi4RXajnmjCG6bI+
+	 +OjPDxuuQ6/h+61b/nFdUx1h/FhCo7sfLhYTlek/0cHneRmIpJq6LPwozd5oKCZ/kx
+	 uOBWtYECYGew0RnNNwJVG3dXfG4Z3Nt3d0viebhL7Djwy191cuBUEPGUKxqUgc3aT/
+	 vq050GFtZjXwg==
+Received: by mail-wr1-f52.google.com with SMTP id r10so13744932wra.12
+        for <llvm@lists.linux.dev>; Mon, 04 Oct 2021 04:38:40 -0700 (PDT)
+X-Gm-Message-State: AOAM532m2IY2G3V1b+u/QS42HKX9V1P74oevd11rjj6eNpikIxY3ghKW
+	DPvJkZUH1x3DGnsboAbiRpUoDU8TsGTYWP9vfag=
+X-Google-Smtp-Source: ABdhPJxv9OQzgkYLcrhTEoNwZKjERfe5+BmhLWHHuHXPpk8ez+hpUBxHKKihnnuZMc6vtUQnuufmrxm2EI/4F5RzHJw=
+X-Received: by 2002:a5d:564f:: with SMTP id j15mr13449053wrw.336.1633347519578;
+ Mon, 04 Oct 2021 04:38:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20210927122024.941874-1-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfD3NrMulHZoSYEcurEIz5qTyVrIeGd6zPKAmEBjsKdlJmE1577mBBokUmG7W00P5nd77TMhY3EGm5fYZBkzzcsQVDIFRjjAVMYO0D0Au3obyaqnaqn5+
- FEZRZSWKf0/bxBu9svaJExQda0bpRngdcRlzV4dcP6fx70L8TXB7wGCjgy3AOXG22uyAVS2/Nw8djGu/upNvXkiXHLsTc3OzRPwMleFcWmNaLRDsfDYDS3ss
- 9TW0Q8Rw1fQ0xgNnfwpBO2d14gMfN3CxkeX0/hfuMTB3Guj6h/yFOfG6TjAEb6jmvc4NxOnjNIdLr+6RZ3vXVTwLySbRbP6JfOTQLSwaFVABNwfQun3eM5BX
- IlGZ8J9l6L6FGgb7BsAsiPPIxkGOx+AbpcGJavfe7ybP403hp3qCZozsfAN6EgkHATRt31wE6ZNRKgOCwUw498JLetslCQ==
+References: <20210927122024.941874-1-arnd@kernel.org> <ea4cbdd2-3f78-7bc6-d378-b9edb14ce80d@xs4all.nl>
+In-Reply-To: <ea4cbdd2-3f78-7bc6-d378-b9edb14ce80d@xs4all.nl>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 4 Oct 2021 13:38:23 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0ZOO-1QHAQbhPqFe9URX77bXORCybemLyd8DNQC-wVQw@mail.gmail.com>
+Message-ID: <CAK8P3a0ZOO-1QHAQbhPqFe9URX77bXORCybemLyd8DNQC-wVQw@mail.gmail.com>
+Subject: Re: [PATCH] media: gspca/gl860-mi1320: avoid -Wstring-concatenation warning
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Olivier Lorin <o.lorin@laposte.net>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Linux Media Mailing List <linux-media@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arnd,
+On Mon, Oct 4, 2021 at 12:55 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> Hi Arnd,
+>
+> On 27/09/2021 14:20, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Newer clang versions are suspicious of definitions that mix concatenated
+> > strings with comma-separated arrays of strings, this has found real bugs
+> > elsewhere, but this seems to be a false positive:
+> >
+> > drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:37: error: suspicious concatenation of string literals in an array initialization; did you mean to separate the elements with a comma? [-Werror,-Wstring-concatenation]
+> >         "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
+> >                                            ^
+> >                                           ,
+> > drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:2: note: place parentheses around the string literal to silence warning
+> >         "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
+> >
+> > Use the extra parentheses as suggested in the warning message.
+>
+> I noticed that gl860-ov9655.c uses the same construct, doesn't that produce the
+> same warning?
 
-On 27/09/2021 14:20, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Newer clang versions are suspicious of definitions that mix concatenated
-> strings with comma-separated arrays of strings, this has found real bugs
-> elsewhere, but this seems to be a false positive:
-> 
-> drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:37: error: suspicious concatenation of string literals in an array initialization; did you mean to separate the elements with a comma? [-Werror,-Wstring-concatenation]
->         "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
->                                            ^
->                                           ,
-> drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:2: note: place parentheses around the string literal to silence warning
->         "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
-> 
-> Use the extra parentheses as suggested in the warning message.
+Curiously, it does not. I tried reproducing this in godbolt.org,
+see https://godbolt.org/z/W6K69qcz3
 
-I noticed that gl860-ov9655.c uses the same construct, doesn't that produce the
-same warning?
+For some reason, clang only warns about some of those, and it appears to
+depend on the ratio between string concatenations and array elements.
 
-Also, does clang only warn about 'static u8 *tbl[]' initializers, or also
-for 'static u8 *tbl' initializers (i.e. not a pointer array) with the same
-string concatenation?
+> Also, does clang only warn about 'static u8 *tbl[]' initializers, or also
+> for 'static u8 *tbl' initializers (i.e. not a pointer array) with the same
+> string concatenation?
 
-I made a patch that replaces these ugly hex strings with compound initializers:
+When there is only one element rather than an array, it does not warn,
+because it's not a mix of concatenation and array elements.
 
-static u8 *tbl_640[] = {
-        (u8[]){
-                0x0d, 0x80, 0xf1, 0x08, 0x03, 0x04, 0xf1, 0x04,
-                0x04, 0x05, 0xf1, 0x02, 0x07, 0x01, 0xf1, 0x7c,
-                0x08, 0x00, 0xf1, 0x0e, 0x21, 0x80, 0xf1, 0x00,
-                0x0d, 0x00, 0xf1, 0x08, 0xf0, 0x00, 0xf1, 0x01,
-                0x34, 0x10, 0xf1, 0x10, 0x3a, 0x43, 0xf1, 0x00,
-                0xa6, 0x05, 0xf1, 0x02, 0xa9, 0x04, 0xf1, 0x04,
-                0xa7, 0x02, 0xf1, 0x81, 0xaa, 0x01, 0xf1, 0xe2,
-                0xae, 0x0c, 0xf1, 0x09
-        }, (u8[]){
-                0xf0, 0x00, 0xf1, 0x02, 0x39, 0x03, 0xf1, 0xfc,
-                0x3b, 0x04, 0xf1, 0x04, 0x57, 0x01, 0xf1, 0xb6,
-                0x58, 0x02, 0xf1, 0x0d, 0x5c, 0x1f, 0xf1, 0x19,
-                0x5d, 0x24, 0xf1, 0x1e, 0x64, 0x5e, 0xf1, 0x1c,
-                0xd2, 0x00, 0xf1, 0x00, 0xcb, 0x00, 0xf1, 0x01
-        }, (u8[]){
-                0xd3, 0x02, 0xd4, 0x10, 0xd5, 0x81, 0xd0, 0x02,
-                0xd1, 0x08, 0xd2, 0xe1
-        }
-};
+> I made a patch that replaces these ugly hex strings with compound initializers:
+>
+> static u8 *tbl_640[] = {
+>         (u8[]){
+>                 0x0d, 0x80, 0xf1, 0x08, 0x03, 0x04, 0xf1, 0x04,
+>                 0x04, 0x05, 0xf1, 0x02, 0x07, 0x01, 0xf1, 0x7c,
+>                 0x08, 0x00, 0xf1, 0x0e, 0x21, 0x80, 0xf1, 0x00,
+>                 0x0d, 0x00, 0xf1, 0x08, 0xf0, 0x00, 0xf1, 0x01,
+>                 0x34, 0x10, 0xf1, 0x10, 0x3a, 0x43, 0xf1, 0x00,
+>                 0xa6, 0x05, 0xf1, 0x02, 0xa9, 0x04, 0xf1, 0x04,
+>                 0xa7, 0x02, 0xf1, 0x81, 0xaa, 0x01, 0xf1, 0xe2,
+>                 0xae, 0x0c, 0xf1, 0x09
+>         }, (u8[]){
+>                 0xf0, 0x00, 0xf1, 0x02, 0x39, 0x03, 0xf1, 0xfc,
+>                 0x3b, 0x04, 0xf1, 0x04, 0x57, 0x01, 0xf1, 0xb6,
+>                 0x58, 0x02, 0xf1, 0x0d, 0x5c, 0x1f, 0xf1, 0x19,
+>                 0x5d, 0x24, 0xf1, 0x1e, 0x64, 0x5e, 0xf1, 0x1c,
+>                 0xd2, 0x00, 0xf1, 0x00, 0xcb, 0x00, 0xf1, 0x01
+>         }, (u8[]){
+>                 0xd3, 0x02, 0xd4, 0x10, 0xd5, 0x81, 0xd0, 0x02,
+>                 0xd1, 0x08, 0xd2, 0xe1
+>         }
+> };
+>
+> but it clang also warns about 'static u8 *tbl' multi-string initializers,
+> then it would make sense to replace all these hex-strings. It's rather
+> ugly.
 
-but it clang also warns about 'static u8 *tbl' multi-string initializers,
-then it would make sense to replace all these hex-strings. It's rather
-ugly.
+This seems fine.
 
-Regards,
-
-	Hans
-
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/media/usb/gspca/gl860/gl860-mi1320.c | 24 ++++++++++----------
->  1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/media/usb/gspca/gl860/gl860-mi1320.c b/drivers/media/usb/gspca/gl860/gl860-mi1320.c
-> index 0749fe13160f..1253eb145c99 100644
-> --- a/drivers/media/usb/gspca/gl860/gl860-mi1320.c
-> +++ b/drivers/media/usb/gspca/gl860/gl860-mi1320.c
-> @@ -49,44 +49,44 @@ static struct validx tbl_post_unset_alt[] = {
->  	{0x0061, 0x0000}, {0x0068, 0x000d},
->  };
->  
-> -static u8 *tbl_1280[] = {
-> +static u8 *tbl_1280[] = {(
->  	"\x0d\x80\xf1\x08\x03\x04\xf1\x00" "\x04\x05\xf1\x02\x05\x00\xf1\xf1"
->  	"\x06\x00\xf1\x0d\x20\x01\xf1\x00" "\x21\x84\xf1\x00\x0d\x00\xf1\x08"
->  	"\xf0\x00\xf1\x01\x34\x00\xf1\x00" "\x9b\x43\xf1\x00\xa6\x05\xf1\x00"
->  	"\xa9\x04\xf1\x00\xa1\x05\xf1\x00" "\xa4\x04\xf1\x00\xae\x0a\xf1\x08"
-> -	,
-> +	), (
->  	"\xf0\x00\xf1\x02\x3a\x05\xf1\xf1" "\x3c\x05\xf1\xf1\x59\x01\xf1\x47"
->  	"\x5a\x01\xf1\x88\x5c\x0a\xf1\x06" "\x5d\x0e\xf1\x0a\x64\x5e\xf1\x1c"
->  	"\xd2\x00\xf1\xcf\xcb\x00\xf1\x01"
-> -	,
-> +	), (
->  	"\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
-> -};
-> +)};
->  
-> -static u8 *tbl_800[] = {
-> +static u8 *tbl_800[] = { (
->  	"\x0d\x80\xf1\x08\x03\x03\xf1\xc0" "\x04\x05\xf1\x02\x05\x00\xf1\xf1"
->  	"\x06\x00\xf1\x0d\x20\x01\xf1\x00" "\x21\x84\xf1\x00\x0d\x00\xf1\x08"
->  	"\xf0\x00\xf1\x01\x34\x00\xf1\x00" "\x9b\x43\xf1\x00\xa6\x05\xf1\x00"
->  	"\xa9\x03\xf1\xc0\xa1\x03\xf1\x20" "\xa4\x02\xf1\x5a\xae\x0a\xf1\x08"
-> -	,
-> +	), (
->  	"\xf0\x00\xf1\x02\x3a\x05\xf1\xf1" "\x3c\x05\xf1\xf1\x59\x01\xf1\x47"
->  	"\x5a\x01\xf1\x88\x5c\x0a\xf1\x06" "\x5d\x0e\xf1\x0a\x64\x5e\xf1\x1c"
->  	"\xd2\x00\xf1\xcf\xcb\x00\xf1\x01"
-> -	,
-> +	), (
->  	"\xd3\x02\xd4\x18\xd5\x21\xd0\x02" "\xd1\x10\xd2\x59"
-> -};
-> +)};
->  
-> -static u8 *tbl_640[] = {
-> +static u8 *tbl_640[] = {(
->  	"\x0d\x80\xf1\x08\x03\x04\xf1\x04" "\x04\x05\xf1\x02\x07\x01\xf1\x7c"
->  	"\x08\x00\xf1\x0e\x21\x80\xf1\x00" "\x0d\x00\xf1\x08\xf0\x00\xf1\x01"
->  	"\x34\x10\xf1\x10\x3a\x43\xf1\x00" "\xa6\x05\xf1\x02\xa9\x04\xf1\x04"
->  	"\xa7\x02\xf1\x81\xaa\x01\xf1\xe2" "\xae\x0c\xf1\x09"
-> -	,
-> +	), (
->  	"\xf0\x00\xf1\x02\x39\x03\xf1\xfc" "\x3b\x04\xf1\x04\x57\x01\xf1\xb6"
->  	"\x58\x02\xf1\x0d\x5c\x1f\xf1\x19" "\x5d\x24\xf1\x1e\x64\x5e\xf1\x1c"
->  	"\xd2\x00\xf1\x00\xcb\x00\xf1\x01"
-> -	,
-> +	), (
->  	"\xd3\x02\xd4\x10\xd5\x81\xd0\x02" "\xd1\x08\xd2\xe1"
-> -};
-> +)};
->  
->  static s32 tbl_sat[] = {0x25, 0x1d, 0x15, 0x0d, 0x05, 0x4d, 0x55, 0x5d, 0x2d};
->  static s32 tbl_bright[] = {0, 8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70};
-> 
-
+       Arnd
