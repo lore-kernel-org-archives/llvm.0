@@ -1,121 +1,111 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EA83FE6
-	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 19:03:36 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="311763116"
-X-IronPort-AV: E=Sophos;i="5.85,346,1624345200"; 
-   d="scan'208";a="311763116"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 10:44:18 -0700
-X-IronPort-AV: E=Sophos;i="5.85,346,1624345200"; 
-   d="scan'208";a="477275904"
-Received: from pmittal1-mobl.gar.corp.intel.com (HELO localhost) ([10.251.223.27])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 10:43:55 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Nathan Chancellor <nathan@kernel.org>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v2] drm/i915: Clean up disabled warnings
-In-Reply-To: <20210914194944.4004260-1-nathan@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20210914194944.4004260-1-nathan@kernel.org>
-Date: Mon, 04 Oct 2021 20:43:41 +0300
-Message-ID: <87v92c1y9e.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442783FE6
+	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 19:10:59 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id u32so40076339ybd.9
+        for <llvm@lists.linux.dev>; Mon, 04 Oct 2021 12:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TX98aLvs0jm488r8l6cPv4x2o09VgHdP6nIV9yzsoR8=;
+        b=jrdny670eRSrixabawz8NM8mV1j3NcKBf3/5o2HmMYs5Pt/3jEDKejaagNLZuHD4eA
+         XsA7lnk5rlDb255PMmTfbkU01FmcbAxBIYEQtM94T1iMAclIOyb2sv35ZTukC2pwU2GG
+         ltnDtI/O33I3Ik/UGu+M8Yrc0A6fNj4jCPp0p3IE11EK9JyQmUG6php2mjyq7W1jvwzx
+         hm4UYlfHmBM4ZggOpSlbBQ2TH3Rh8u5TAQjTysy9vuPEMDgSJTBc8GQ46Bm7g/nowXkw
+         mNseks8sftxpTK7nsWq+M26M6JTRKKfc+IXpLEJJw6dXy7eJuoEmg5mbmgeSD8SJR7lw
+         RJxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TX98aLvs0jm488r8l6cPv4x2o09VgHdP6nIV9yzsoR8=;
+        b=1aSrfH5CjPIT7+5d4D+erBtcxSMxRmnPaHWmFv1iitNPUWSK5IKv6e8iFdSB+SGPMI
+         4ngAYA1hpYlLWTV4CpZtJFAFSEGuJzi4lrduvOkrHWRkSXRIvkOw3xfZH5xYkloiH3lo
+         sMgjWZFyJJHMhyRE8K3H7dfa7jDDbGeaRQauPf1454nwDzwY8Shz0aWljpAkBy2tZ40f
+         i700TpwTzJb/AIMAodnD/etAsg++8/5x0tySx8PxdudAo/Qae5Z2Yet89ZRUqcLDogRO
+         U5CubsQIuu4J/VOWOwAfUc1vRcXYFao3SlCCIoagg094dEXazAiVE1ZRjv7HEptx6HVz
+         hVyA==
+X-Gm-Message-State: AOAM533w3tutvWBK9A8MAdDBazzQBQKVNJYZivi6JIzsdxwVIrlNrzjw
+	7q+3WscT5Aqc3ruhiKg61fJBooY0l62AAOpQ6PpvqA==
+X-Google-Smtp-Source: ABdhPJyvignQgUWVGULEBdeVmUDF7c5rAhbNIgSFqFjfcL8Oh9L1Nm3LtbDC/MhhvQjpl759ZDx6OBAK3+tEv7om3q8=
+X-Received: by 2002:a25:aaec:: with SMTP id t99mr17333011ybi.456.1633374657849;
+ Mon, 04 Oct 2021 12:10:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210930180531.1190642-1-samitolvanen@google.com>
+ <20210930180531.1190642-5-samitolvanen@google.com> <YVsGoJ+NN6wRFi22@hirez.programming.kicks-ass.net>
+In-Reply-To: <YVsGoJ+NN6wRFi22@hirez.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 4 Oct 2021 12:10:46 -0700
+Message-ID: <CABCJKudBrHfwR=gQc=9=cfBjR9p5jm65ovSNwzLLEpDUdo6ZPQ@mail.gmail.com>
+Subject: Re: [PATCH v4 04/15] cfi: Add DEFINE_CFI_IMMEDIATE_RETURN_STUB
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	linux-hardening@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 14 Sep 2021, Nathan Chancellor <nathan@kernel.org> wrote:
-> i915 enables a wider set of warnings with '-Wall -Wextra' then disables
-> several with cc-disable-warning. If an unknown flag gets added to
-> KBUILD_CFLAGS when building with clang, all subsequent calls to
-> cc-{disable-warning,option} will fail, meaning that all of these
-> warnings do not get disabled [1].
+On Mon, Oct 4, 2021 at 6:50 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> A separate series will address the root cause of the issue by not adding
-> these flags when building with clang [2]; however, the symptom of these
-> extra warnings appearing can be addressed separately by just removing
-> the calls to cc-disable-warning, which makes the build ever so slightly
-> faster because the compiler does not need to be called as much before
-> building.
+> On Thu, Sep 30, 2021 at 11:05:20AM -0700, Sami Tolvanen wrote:
+> > This change introduces the DEFINE_CFI_IMMEDIATE_RETURN_STUB macro,
+> > which defines a stub function that immediately returns and when
+> > defined in the core kernel, always passes indirect call checking
+> > with CONFIG_CFI_CLANG. Note that this macro should only be used when
+> > a stub cannot be called using the correct function type.
 >
-> The following warnings are supported by GCC 4.9 and clang 10.0.1, which
-> are the minimum supported versions of these compilers so the call to
-> cc-disable-warning is not necessary. Masahiro cleaned this up for the
-> reset of the kernel in commit 4c8dd95a723d ("kbuild: add some extra
-> warning flags unconditionally").
+> > diff --git a/include/linux/cfi.h b/include/linux/cfi.h
+> > index 879744aaa6e0..19f74af8eac2 100644
+> > --- a/include/linux/cfi.h
+> > +++ b/include/linux/cfi.h
+> > @@ -20,6 +20,17 @@ extern void __cfi_check(uint64_t id, void *ptr, void *diag);
+> >  #define __CFI_ADDRESSABLE(fn, __attr) \
+> >       const void *__cfi_jt_ ## fn __visible __attr = (void *)&fn
+> >
+> > +/*
+> > + * Defines a stub function that returns immediately, and when defined and
+> > + * referenced in the core kernel, always passes CFI checking. This should
+> > + * be used only for stubs that cannot be called using the correct function
+> > + * pointer type, which should be rare.
+> > + */
+> > +#define DEFINE_CFI_IMMEDIATE_RETURN_STUB(fn) \
+> > +     void fn(void) { return; } \
+> > +     const void *__cfi_excl_ ## fn __visible \
+> > +             __section(".cfi_excluded_stubs") = (void *)&fn
+> > +
+> >  #ifdef CONFIG_CFI_CLANG_SHADOW
+> >
+> >  extern void cfi_module_add(struct module *mod, unsigned long base_addr);
+> > @@ -35,6 +46,8 @@ static inline void cfi_module_remove(struct module *mod, unsigned long base_addr
+> >  #else /* !CONFIG_CFI_CLANG */
+> >
+> >  #define __CFI_ADDRESSABLE(fn, __attr)
+> > +#define DEFINE_CFI_IMMEDIATE_RETURN_STUB(fn) \
+> > +     void fn(void) { return; }
+> >
+> >  #endif /* CONFIG_CFI_CLANG */
+> >
 >
-> * -Wmissing-field-initializers
-> * -Wsign-compare
-> * -Wtype-limits
-> * -Wunused-parameter
->
-> -Wunused-but-set-variable was implemented in clang 13.0.0 and
-> -Wframe-address was implemented in clang 12.0.0 so the
-> cc-disable-warning calls are kept for these two warnings.
->
-> Lastly, -Winitializer-overrides is clang's version of -Woverride-init,
-> which is disabled for the specific files that are problematic. clang
-> added a compatibility alias in clang 8.0.0 so -Winitializer-overrides
-> can be removed.
->
-> [1]: https://lore.kernel.org/r/202108210311.CBtcgoUL-lkp@intel.com/
-> [2]: https://lore.kernel.org/r/20210824022640.2170859-1-nathan@kernel.org/
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Why DEFINE_CFI_IMMEDIATE_RETURN_STUB() vs __no_cfi attribute that we can
+> stick on the relvant functions?
 
-Thanks for the patch, and sorry for the delay.
+To avoid accidentally creating useful gadgets for attackers. For
+example, while excluding an empty stub isn't necessarily ideal,
+allowing calls to a function that always returns zero would be worse.
 
-Exceptionally pushed to drm-intel-gt-next instead of drm-intel-next
-because some of the dependencies such as 43192617f781 ("drm/i915: Enable
--Wsometimes-uninitialized") were queued there too.
+> Because I've got at least one more variant for you :-) See
+> kernel/static_call.c:__static_call_return0
 
+Does __static_call_return0 ever get called indirectly on architectures
+that support static calls? If it's always patched into a direct call,
+the type mismatch isn't an issue.
 
-BR,
-Jani.
-
-
-> ---
->
-> v1 -> v2: https://lore.kernel.org/r/20210824232237.2085342-1-nathan@kernel.org/
->
-> * Rebase on drm-intel-gt-next now that the prerequisite patch series has
->   been merged: https://lore.kernel.org/r/87wnnj13t5.fsf@intel.com/
->
-> * Add Nick's reviewed-by tag.
->
->  drivers/gpu/drm/i915/Makefile | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-> index c584188aa15a..fd99374583d5 100644
-> --- a/drivers/gpu/drm/i915/Makefile
-> +++ b/drivers/gpu/drm/i915/Makefile
-> @@ -13,13 +13,11 @@
->  # will most likely get a sudden build breakage... Hopefully we will fix
->  # new warnings before CI updates!
->  subdir-ccflags-y := -Wall -Wextra
-> -subdir-ccflags-y += $(call cc-disable-warning, unused-parameter)
-> -subdir-ccflags-y += $(call cc-disable-warning, type-limits)
-> -subdir-ccflags-y += $(call cc-disable-warning, missing-field-initializers)
-> +subdir-ccflags-y += -Wno-unused-parameter
-> +subdir-ccflags-y += -Wno-type-limits
-> +subdir-ccflags-y += -Wno-missing-field-initializers
-> +subdir-ccflags-y += -Wno-sign-compare
->  subdir-ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
-> -# clang warnings
-> -subdir-ccflags-y += $(call cc-disable-warning, sign-compare)
-> -subdir-ccflags-y += $(call cc-disable-warning, initializer-overrides)
->  subdir-ccflags-y += $(call cc-disable-warning, frame-address)
->  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) += -Werror
->  
->
-> base-commit: 43192617f7816bb74584c1df06f57363afd15337
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Sami
