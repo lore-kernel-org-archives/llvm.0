@@ -1,194 +1,173 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lb2-smtp-cloud9.xs4all.net (lb2-smtp-cloud9.xs4all.net [194.109.24.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E718F3FC7
-	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 10:46:43 +0000 (UTC)
-Received: by mail-ed1-f54.google.com with SMTP id b8so28544416edk.2
-        for <llvm@lists.linux.dev>; Mon, 04 Oct 2021 03:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=IxNHYqpx71SK8KsCu4OkkYu0KJdlZ7YtGsY3wp3JnYA=;
-        b=HMQLUmPKfVhqzx0IhQSd8/KHpfSiJaBjykG7tH17fIAsFWTwW0i2LNeydupuH5XK4u
-         2tSC0wM3PvqmW8lWM1mMiA0r9VpRmRWU+7ouFJqZoN8S5H5Ej1531olM2MkYwsiTwRcE
-         DWyrA0AI5d1S+ClfgbRH2HWI6c+WCVItVi21duczJ27mDaFBnUsmC5Lhs9Ygi5KhfO9x
-         dqta/WOEifTF3Arw+Yz6KelSoGVqAahCQRwFAAry8C9micUtRgTUlC850FFx/AlHlUAP
-         CuvDKWgxwUtXIwH8utaWAS4U0Jd0/2d6erOErbBUf5p8zhRSasXX0M54/x/pFFeNJ7Iu
-         RmGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IxNHYqpx71SK8KsCu4OkkYu0KJdlZ7YtGsY3wp3JnYA=;
-        b=nCJwECfT5+nPUVdjh5NywxTFQLoWhHFyB50Zyz4u8/2rO6RiCDWidYU47CMXaoLqm7
-         YaufBKI6DoFjBDOFcIOPvHXuWzKXdhpenOF7trw6Unqlny91ChJedWv/HUX5+yNIgCkH
-         DK9xqgylnBwQEvEPp8gKqtbQ8gJ9J0Bx1brMld2rmdFKiLzzlKjx1zx+EtitAUcfxeUB
-         F/W6xF4wMI4gw4AEGHCCyG9XTQj2VyVsddcHjjDyEGbQSLVKyTkatuYT18MQBp9NS2lN
-         IN9S4+Hxsqk2CTTGCARJqSsY4YzrHETwbjK29STaFJl//vhQOVWF+fr69AkVRk1RnCvB
-         WSoQ==
-X-Gm-Message-State: AOAM533bO2X6I6hH9iySPGU1NuFdhG1frHNqEYuQA68pRLLsZDz3nezt
-	PpqLtwW2BwTSz5M7bcL8hvJZjuRDXg/DofZFJvw=
-X-Google-Smtp-Source: ABdhPJyYqRAk3TskMhMpUSaogTcj5/iexRMvU/Ie9auB6P+p2EkmJSp8B17AypHvmorRT/NOJq21bg==
-X-Received: by 2002:a17:906:2708:: with SMTP id z8mr15848417ejc.309.1633344401849;
-        Mon, 04 Oct 2021 03:46:41 -0700 (PDT)
-Received: from pswork ([62.96.250.75])
-        by smtp.gmail.com with ESMTPSA id r3sm335354ejr.79.2021.10.04.03.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 03:46:41 -0700 (PDT)
-Date: Mon, 4 Oct 2021 12:46:40 +0200
-From: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-To: ndesaulniers@google.com, Sami Tolvanen <samitolvanen@google.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Kees Cook <keescook@chromium.org>, "KE . LI" <like1@oppo.com>,
-	Fangrui Song <maskray@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, Jessica Yu <jeyu@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-	Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v5] kallsyms: strip LTO suffixes from static functions
-Message-ID: <20211004104640.GA27368@pswork>
-References: <CABCJKue5Ay6_+8sibzh5wRh3gPzV1g72gJ9m2ot4E1ezj8bpHA@mail.gmail.com>
- <20211001195823.581937-1-ndesaulniers@google.com>
- <CABCJKufdncRjVLy9iq6fk8VbZrhyfr_rw0DiNwdJXkJrzxxGNg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A453FED
+	for <llvm@lists.linux.dev>; Mon,  4 Oct 2021 10:57:04 +0000 (UTC)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+	by smtp-cloud9.xs4all.net with ESMTPA
+	id XLdQmgyEhk4mTXLdTm9JxD; Mon, 04 Oct 2021 12:55:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+	t=1633344956; bh=t303QSdfTKzaG3cHjlA1aT3kiRKmACQ1ZBJh3qWn+TI=;
+	h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+	 Subject;
+	b=vSuZ6ZptvM8eQSDyD3scRSTCIgegoI6c8KYAGibXO3ctpOSb+v0sstF9kBx3keOxK
+	 sF2yRiWpBZmbwPTPuhYLOvVP7EzVD+yruk4nFJEPdrDKqzDRC83GJVDta0YYjOZ3Qe
+	 qMiXOM9mDAV3sDx0D0ujgy1RVDKpqUXQ3/KztHpkfbTn/S0/4TjnxVAXXCvcCwIeAo
+	 uNIA1li0aMaRA29URVHH4oD6YqKysBvcYUYfkBgkT2uCutyUnJMcquJqsl9umoD4eM
+	 9fBXIgv4pwhWhYv/EtUfgCfB9v+jT7eaWMbTjwxPmacGtXFhFVknMMlQdCBo3+NZSh
+	 McxxsqMwkdVwQ==
+Subject: Re: [PATCH] media: gspca/gl860-mi1320: avoid -Wstring-concatenation
+ warning
+To: Arnd Bergmann <arnd@kernel.org>, Olivier Lorin <o.lorin@laposte.net>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20210927122024.941874-1-arnd@kernel.org>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <ea4cbdd2-3f78-7bc6-d378-b9edb14ce80d@xs4all.nl>
+Date: Mon, 4 Oct 2021 12:55:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKufdncRjVLy9iq6fk8VbZrhyfr_rw0DiNwdJXkJrzxxGNg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210927122024.941874-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfD3NrMulHZoSYEcurEIz5qTyVrIeGd6zPKAmEBjsKdlJmE1577mBBokUmG7W00P5nd77TMhY3EGm5fYZBkzzcsQVDIFRjjAVMYO0D0Au3obyaqnaqn5+
+ FEZRZSWKf0/bxBu9svaJExQda0bpRngdcRlzV4dcP6fx70L8TXB7wGCjgy3AOXG22uyAVS2/Nw8djGu/upNvXkiXHLsTc3OzRPwMleFcWmNaLRDsfDYDS3ss
+ 9TW0Q8Rw1fQ0xgNnfwpBO2d14gMfN3CxkeX0/hfuMTB3Guj6h/yFOfG6TjAEb6jmvc4NxOnjNIdLr+6RZ3vXVTwLySbRbP6JfOTQLSwaFVABNwfQun3eM5BX
+ IlGZ8J9l6L6FGgb7BsAsiPPIxkGOx+AbpcGJavfe7ybP403hp3qCZozsfAN6EgkHATRt31wE6ZNRKgOCwUw498JLetslCQ==
 
-On Fri, Oct 01, 2021 at 01:05:44PM -0700, Sami Tolvanen wrote:
-> On Fri, Oct 1, 2021 at 12:58 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Similar to:
-> > commit 8b8e6b5d3b01 ("kallsyms: strip ThinLTO hashes from static
-> > functions")
-> >
-> > It's very common for compilers to modify the symbol name for static
-> > functions as part of optimizing transformations. That makes hooking
-> > static functions (that weren't inlined or DCE'd) with kprobes difficult.
-> >
-> > LLVM has yet another name mangling scheme used by thin LTO.
-> >
-> > Combine handling of the various schemes by truncating after the first
-> > '.'.  Strip off these suffixes so that we can continue to hook such
-> > static functions.  Clang releases prior to clang-13 would use '$'
-> > instead of '.'
-> >
-> > Link: https://reviews.llvm.org/rGc6e5c4654bd5045fe22a1a52779e48e2038a404c
-> > Reported-by: KE.LI(Lieke) <like1@oppo.com>
-> > Suggested-by: Fangrui Song <maskray@google.com>
-> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > Suggested-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-> > Suggested-by: Sami Tolvanen <samitolvanen@google.com>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> > Changes v4 -> v5:
-> > * Absorb Padmanabha Srinivasaiah's patch from
-> >   https://lore.kernel.org/lkml/20210814124224.8551-1-treasure4paddy@gmail.com/.
-> > * Add Padmanabha's Suggested-by tag.
-> > * Rewrite the patch to truncate after first '.', as per Sami's comment
-> >   from
-> >   https://lore.kernel.org/lkml/CABCJKue5Ay6_+8sibzh5wRh3gPzV1g72gJ9m2ot4E1ezj8bpHA@mail.gmail.com/.
-> > * Add Sami's Suggested-by tag.
-> > * Verify that the '$' delimiter only appears for
-> >   thin LTO + CFI + clang <= 12, use __clang_minor__ to check.
-> > * Update comments as per Nathan + Fangrui, add their Suggested-by tags.
-> > * While Nathan + Fangrui did review v4, v5 is too different IMO to carry
-> >   those tags forward.
-> >
-> > Changes v3 -> v4:
-> > * Convert this function to use IS_ENABLED rather than provide multiple
-> >   definitions based on preprocessor checks.
-> > * Add Nathan's suggested-by.
-> >
-> > Changes v2 -> v3:
-> > * Un-nest preprocessor checks, as per Nathan.
-> >
-> > Changes v1 -> v2:
-> > * Both mangling schemes can occur for thinLTO + CFI, this new scheme can
-> >   also occur for thinLTO without CFI. Split cleanup_symbol_name() into
-> >   two function calls.
-> > * Drop KE.LI's tested by tag.
-> > * Do not carry Fangrui's Reviewed by tag.
-> > * Drop the inline keyword; it is meaningless.
-> >
-> >  kernel/kallsyms.c | 45 ++++++++++++++++++++++++++++++++-------------
-> >  1 file changed, 32 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index 0ba87982d017..3e4766204b07 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -164,26 +164,45 @@ static unsigned long kallsyms_sym_address(int idx)
-> >         return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
-> >  }
-> >
-> > -#if defined(CONFIG_CFI_CLANG) && defined(CONFIG_LTO_CLANG_THIN)
-> > -/*
-> > - * LLVM appends a hash to static function names when ThinLTO and CFI are
-> > - * both enabled, i.e. foo() becomes foo$707af9a22804d33c81801f27dcfe489b.
-> > - * This causes confusion and potentially breaks user space tools, so we
-> > - * strip the suffix from expanded symbol names.
-> > - */
-> > -static inline bool cleanup_symbol_name(char *s)
-> > +static bool cleanup_symbol_name(char *s)
-> >  {
-> >         char *res;
-> >
-> > +       if (!IS_ENABLED(CONFIG_LTO_CLANG))
-> > +               return false;
-> > +
-> > +       /*
-> > +        * LLVM appends various suffixes for local functions and variables that must
-> > +        * be promoted to global scope as part of LTO.  This can break hooking of
-> > +        * static functions with kprobes. '.' is not a valid character in an
-> > +        * identifier in C. Suffixes observed:
-> > +        * - foo.llvm.[0-9a-f]+
-> > +        * - foo.[0-9a-f]+
-> > +        * - foo.[0-9a-f]+.cfi_jt
-> > +        */
-> > +       res = strchr(s, '.');
-> > +       if (res) {
-> > +               *res = '\0';
-> > +               return true;
-> > +       }
-> > +
-> > +       if (!IS_ENABLED(CONFIG_CFI_CLANG) || !IS_ENABLED(CONFIG_LTO_CLANG_THIN) ||
-> > +           __clang_major__ >= 13)
-> > +               return false;
-> > +
-> > +       /*
-> > +        * Prior to LLVM 13, the following suffixes were observed when thinLTO
-> > +        * and CFI are both enabled:
-> > +        * - foo$[0-9]+
-> > +        */
-> >         res = strrchr(s, '$');
-> > -       if (res)
-> > +       if (res) {
-> >                 *res = '\0';
-> > +               return true;
-> > +       }
-> >
-> > -       return res != NULL;
-> > +       return false;
-> >  }
-> > -#else
-> > -static inline bool cleanup_symbol_name(char *s) { return false; }
-> > -#endif
-> 
-> Thanks for sending the patch, Nick. This looks correct to me.
-> 
-> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-> 
-> Sami
+Hi Arnd,
 
-Nick, Thanks for absorbing the patch and sharing same.
-Sami, Thanks for reviewing and yours inputs
+On 27/09/2021 14:20, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Newer clang versions are suspicious of definitions that mix concatenated
+> strings with comma-separated arrays of strings, this has found real bugs
+> elsewhere, but this seems to be a false positive:
+> 
+> drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:37: error: suspicious concatenation of string literals in an array initialization; did you mean to separate the elements with a comma? [-Werror,-Wstring-concatenation]
+>         "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
+>                                            ^
+>                                           ,
+> drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:2: note: place parentheses around the string literal to silence warning
+>         "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
+> 
+> Use the extra parentheses as suggested in the warning message.
+
+I noticed that gl860-ov9655.c uses the same construct, doesn't that produce the
+same warning?
+
+Also, does clang only warn about 'static u8 *tbl[]' initializers, or also
+for 'static u8 *tbl' initializers (i.e. not a pointer array) with the same
+string concatenation?
+
+I made a patch that replaces these ugly hex strings with compound initializers:
+
+static u8 *tbl_640[] = {
+        (u8[]){
+                0x0d, 0x80, 0xf1, 0x08, 0x03, 0x04, 0xf1, 0x04,
+                0x04, 0x05, 0xf1, 0x02, 0x07, 0x01, 0xf1, 0x7c,
+                0x08, 0x00, 0xf1, 0x0e, 0x21, 0x80, 0xf1, 0x00,
+                0x0d, 0x00, 0xf1, 0x08, 0xf0, 0x00, 0xf1, 0x01,
+                0x34, 0x10, 0xf1, 0x10, 0x3a, 0x43, 0xf1, 0x00,
+                0xa6, 0x05, 0xf1, 0x02, 0xa9, 0x04, 0xf1, 0x04,
+                0xa7, 0x02, 0xf1, 0x81, 0xaa, 0x01, 0xf1, 0xe2,
+                0xae, 0x0c, 0xf1, 0x09
+        }, (u8[]){
+                0xf0, 0x00, 0xf1, 0x02, 0x39, 0x03, 0xf1, 0xfc,
+                0x3b, 0x04, 0xf1, 0x04, 0x57, 0x01, 0xf1, 0xb6,
+                0x58, 0x02, 0xf1, 0x0d, 0x5c, 0x1f, 0xf1, 0x19,
+                0x5d, 0x24, 0xf1, 0x1e, 0x64, 0x5e, 0xf1, 0x1c,
+                0xd2, 0x00, 0xf1, 0x00, 0xcb, 0x00, 0xf1, 0x01
+        }, (u8[]){
+                0xd3, 0x02, 0xd4, 0x10, 0xd5, 0x81, 0xd0, 0x02,
+                0xd1, 0x08, 0xd2, 0xe1
+        }
+};
+
+but it clang also warns about 'static u8 *tbl' multi-string initializers,
+then it would make sense to replace all these hex-strings. It's rather
+ugly.
+
+Regards,
+
+	Hans
+
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/media/usb/gspca/gl860/gl860-mi1320.c | 24 ++++++++++----------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/media/usb/gspca/gl860/gl860-mi1320.c b/drivers/media/usb/gspca/gl860/gl860-mi1320.c
+> index 0749fe13160f..1253eb145c99 100644
+> --- a/drivers/media/usb/gspca/gl860/gl860-mi1320.c
+> +++ b/drivers/media/usb/gspca/gl860/gl860-mi1320.c
+> @@ -49,44 +49,44 @@ static struct validx tbl_post_unset_alt[] = {
+>  	{0x0061, 0x0000}, {0x0068, 0x000d},
+>  };
+>  
+> -static u8 *tbl_1280[] = {
+> +static u8 *tbl_1280[] = {(
+>  	"\x0d\x80\xf1\x08\x03\x04\xf1\x00" "\x04\x05\xf1\x02\x05\x00\xf1\xf1"
+>  	"\x06\x00\xf1\x0d\x20\x01\xf1\x00" "\x21\x84\xf1\x00\x0d\x00\xf1\x08"
+>  	"\xf0\x00\xf1\x01\x34\x00\xf1\x00" "\x9b\x43\xf1\x00\xa6\x05\xf1\x00"
+>  	"\xa9\x04\xf1\x00\xa1\x05\xf1\x00" "\xa4\x04\xf1\x00\xae\x0a\xf1\x08"
+> -	,
+> +	), (
+>  	"\xf0\x00\xf1\x02\x3a\x05\xf1\xf1" "\x3c\x05\xf1\xf1\x59\x01\xf1\x47"
+>  	"\x5a\x01\xf1\x88\x5c\x0a\xf1\x06" "\x5d\x0e\xf1\x0a\x64\x5e\xf1\x1c"
+>  	"\xd2\x00\xf1\xcf\xcb\x00\xf1\x01"
+> -	,
+> +	), (
+>  	"\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
+> -};
+> +)};
+>  
+> -static u8 *tbl_800[] = {
+> +static u8 *tbl_800[] = { (
+>  	"\x0d\x80\xf1\x08\x03\x03\xf1\xc0" "\x04\x05\xf1\x02\x05\x00\xf1\xf1"
+>  	"\x06\x00\xf1\x0d\x20\x01\xf1\x00" "\x21\x84\xf1\x00\x0d\x00\xf1\x08"
+>  	"\xf0\x00\xf1\x01\x34\x00\xf1\x00" "\x9b\x43\xf1\x00\xa6\x05\xf1\x00"
+>  	"\xa9\x03\xf1\xc0\xa1\x03\xf1\x20" "\xa4\x02\xf1\x5a\xae\x0a\xf1\x08"
+> -	,
+> +	), (
+>  	"\xf0\x00\xf1\x02\x3a\x05\xf1\xf1" "\x3c\x05\xf1\xf1\x59\x01\xf1\x47"
+>  	"\x5a\x01\xf1\x88\x5c\x0a\xf1\x06" "\x5d\x0e\xf1\x0a\x64\x5e\xf1\x1c"
+>  	"\xd2\x00\xf1\xcf\xcb\x00\xf1\x01"
+> -	,
+> +	), (
+>  	"\xd3\x02\xd4\x18\xd5\x21\xd0\x02" "\xd1\x10\xd2\x59"
+> -};
+> +)};
+>  
+> -static u8 *tbl_640[] = {
+> +static u8 *tbl_640[] = {(
+>  	"\x0d\x80\xf1\x08\x03\x04\xf1\x04" "\x04\x05\xf1\x02\x07\x01\xf1\x7c"
+>  	"\x08\x00\xf1\x0e\x21\x80\xf1\x00" "\x0d\x00\xf1\x08\xf0\x00\xf1\x01"
+>  	"\x34\x10\xf1\x10\x3a\x43\xf1\x00" "\xa6\x05\xf1\x02\xa9\x04\xf1\x04"
+>  	"\xa7\x02\xf1\x81\xaa\x01\xf1\xe2" "\xae\x0c\xf1\x09"
+> -	,
+> +	), (
+>  	"\xf0\x00\xf1\x02\x39\x03\xf1\xfc" "\x3b\x04\xf1\x04\x57\x01\xf1\xb6"
+>  	"\x58\x02\xf1\x0d\x5c\x1f\xf1\x19" "\x5d\x24\xf1\x1e\x64\x5e\xf1\x1c"
+>  	"\xd2\x00\xf1\x00\xcb\x00\xf1\x01"
+> -	,
+> +	), (
+>  	"\xd3\x02\xd4\x10\xd5\x81\xd0\x02" "\xd1\x08\xd2\xe1"
+> -};
+> +)};
+>  
+>  static s32 tbl_sat[] = {0x25, 0x1d, 0x15, 0x0d, 0x05, 0x4d, 0x55, 0x5d, 0x2d};
+>  static s32 tbl_bright[] = {0, 8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70};
+> 
+
