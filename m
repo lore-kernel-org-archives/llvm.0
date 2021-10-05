@@ -1,44 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A213FC9
-	for <llvm@lists.linux.dev>; Tue,  5 Oct 2021 07:56:38 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="225621969"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E02E3FE6
+	for <llvm@lists.linux.dev>; Tue,  5 Oct 2021 08:32:36 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="226001202"
 X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="gz'50?scan'50,208,50";a="225621969"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 00:56:35 -0700
+   d="gz'50?scan'50,208,50";a="226001202"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 01:32:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="gz'50?scan'50,208,50";a="477557606"
+   d="gz'50?scan'50,208,50";a="487939715"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 05 Oct 2021 00:56:31 -0700
+  by orsmga008.jf.intel.com with ESMTP; 05 Oct 2021 01:32:32 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mXfJP-0005hP-71; Tue, 05 Oct 2021 07:56:31 +0000
-Date: Tue, 5 Oct 2021 15:55:33 +0800
+	id 1mXfsF-0005iE-H8; Tue, 05 Oct 2021 08:32:31 +0000
+Date: Tue, 5 Oct 2021 16:31:35 +0800
 From: kernel test robot <lkp@intel.com>
 To: Matthew Brost <matthew.brost@intel.com>,
 	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	john.c.harrison@intel.com, daniele.ceraolospurio@intel.com
-Subject: Re: [Intel-gfx] [PATCH 12/26] drm/i915/guc: Implement multi-lrc
- submission
-Message-ID: <202110051523.hcL25nJO-lkp@intel.com>
-References: <20211004220637.14746-13-matthew.brost@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 21/26] drm/i915: Multi-BB execbuf
+Message-ID: <202110051625.JsLT7Kor-lkp@intel.com>
+References: <20211004220637.14746-22-matthew.brost@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="W/nzBZO5zC0uMSeA"
+Content-Type: multipart/mixed; boundary="bg08WKrSYDhXBjb5"
 Content-Disposition: inline
-In-Reply-To: <20211004220637.14746-13-matthew.brost@intel.com>
+In-Reply-To: <20211004220637.14746-22-matthew.brost@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---W/nzBZO5zC0uMSeA
+--bg08WKrSYDhXBjb5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -59,10 +58,10 @@ compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c0039de2953
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3bea3cc438df1105d0d8c1bcc01b96559d4bb78c
+        # https://github.com/0day-ci/linux/commit/758202922dad66c1b302eb34a141961acbefe417
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Matthew-Brost/Parallel-submission-aka-multi-bb-execbuf/20211005-061424
-        git checkout 3bea3cc438df1105d0d8c1bcc01b96559d4bb78c
+        git checkout 758202922dad66c1b302eb34a141961acbefe417
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
 
@@ -71,62 +70,82 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1486:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (multi_lrc_submit(rq)) {
-                       ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1499:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1486:3: note: remove the 'if' if its condition is always true
-                   if (multi_lrc_submit(rq)) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1479:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
+>> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2361:6: warning: variable 'rq' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (throttle)
+               ^~~~~~~~
+   drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2365:6: note: uninitialized use occurs here
+           if (rq) {
+               ^~
+   drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2361:2: note: remove the 'if' if its condition is always true
+           if (throttle)
+           ^~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2346:25: note: initialize the variable 'rq' to silence this warning
+           struct i915_request *rq;
+                                  ^
+                                   = NULL
    1 warning generated.
 
 
-vim +1486 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
+vim +2361 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
 
-  1475	
-  1476	static int guc_bypass_tasklet_submit(struct intel_guc *guc,
-  1477					     struct i915_request *rq)
-  1478	{
-  1479		int ret;
-  1480	
-  1481		__i915_request_submit(rq);
-  1482	
-  1483		trace_i915_request_in(rq, 0);
-  1484	
-  1485		if (is_multi_lrc_rq(rq)) {
-> 1486			if (multi_lrc_submit(rq)) {
-  1487				ret = guc_wq_item_append(guc, rq);
-  1488				if (!ret)
-  1489					ret = guc_add_request(guc, rq);
-  1490			}
-  1491		} else {
-  1492			guc_set_lrc_tail(rq);
-  1493			ret = guc_add_request(guc, rq);
-  1494		}
-  1495	
-  1496		if (unlikely(ret == -EPIPE))
-  1497			disable_submission(guc);
-  1498	
-  1499		return ret;
-  1500	}
-  1501	
+e5dadff4b09376 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-15  2341  
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2342  static int eb_pin_timeline(struct i915_execbuffer *eb, struct intel_context *ce,
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2343  			   bool throttle)
+8f2a1057d6ec21 drivers/gpu/drm/i915/i915_gem_execbuffer.c     Chris Wilson      2019-04-25  2344  {
+e5dadff4b09376 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-15  2345  	struct intel_timeline *tl;
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2346  	struct i915_request *rq;
+8f2a1057d6ec21 drivers/gpu/drm/i915/i915_gem_execbuffer.c     Chris Wilson      2019-04-25  2347  
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2348  	/*
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2349  	 * Take a local wakeref for preparing to dispatch the execbuf as
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2350  	 * we expect to access the hardware fairly frequently in the
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2351  	 * process, and require the engine to be kept awake between accesses.
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2352  	 * Upon dispatch, we acquire another prolonged wakeref that we hold
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2353  	 * until the timeline is idle, which in turn releases the wakeref
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2354  	 * taken on the engine, and the parent device.
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2355  	 */
+e5dadff4b09376 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-15  2356  	tl = intel_context_timeline_lock(ce);
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2357  	if (IS_ERR(tl))
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2358  		return PTR_ERR(tl);
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2359  
+a4e57f9031ccd5 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-04  2360  	intel_context_enter(ce);
+2bf541ff6d06f4 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Maarten Lankhorst 2020-08-19 @2361  	if (throttle)
+2bf541ff6d06f4 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Maarten Lankhorst 2020-08-19  2362  		rq = eb_throttle(eb, ce);
+e5dadff4b09376 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-15  2363  	intel_context_timeline_unlock(tl);
+e5dadff4b09376 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Chris Wilson      2019-08-15  2364  
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2365  	if (rq) {
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2366  		bool nonblock = eb->file->filp->f_flags & O_NONBLOCK;
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2367  		long timeout = nonblock ? 0 : MAX_SCHEDULE_TIMEOUT;
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2368  
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2369  		if (i915_request_wait(rq, I915_WAIT_INTERRUPTIBLE,
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2370  				      timeout) < 0) {
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2371  			i915_request_put(rq);
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2372  
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2373  			tl = intel_context_timeline_lock(ce);
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2374  			intel_context_exit(ce);
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2375  			intel_context_timeline_unlock(tl);
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2376  
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2377  			if (nonblock)
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2378  				return -EWOULDBLOCK;
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2379  			else
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2380  				return -EINTR;
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2381  		}
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2382  		i915_request_put(rq);
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2383  	}
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2384  
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2385  	return 0;
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2386  }
+758202922dad66 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c Matthew Brost     2021-10-04  2387  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---W/nzBZO5zC0uMSeA
+--bg08WKrSYDhXBjb5
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICF0BXGEAAy5jb25maWcAnDzLduO2kvt8hU5nk7tIt+VXOjPHC4gEJUQEwQCkHt7gqN3q
+H4sICNMJXGEAAy5jb25maWcAnDzLduO2kvt8hU5nk7tIt+VXOjPHC4gEJUQEwQCkHt7gqN3q
 vp7YVo8sJ+m/nyqADwAElXsmi45ZVQAKQKFeKOjHH36ckLfT4Xl3enzYPT19n3zdv+yPu9P+
 8+TL49P+vyepmBSimtCUVe+BOH98efv7w+PVx9vJzfvpzfuLn48P15Pl/viyf5okh5cvj1/f
 oPnj4eWHH39IRJGxuU4SvaJSMVHoim6qu3cPT7uXr5M/98dXoJtMr99fvL+Y/PT18fRfHz7A
@@ -722,4 +741,4 @@ F6+KRZY4W5PzSTjyQ4xcwY5FGcOx1m6FE3XqhEKnus7rAunEvtF+ExTZoOPEkPza0pE8ZlNS
 SoxknhLmiq5DZYP5qjrPYJdKgNyMheYiHc8SWibgA79tZIIoI128QxXdFPVFEMy8SKsZp2IK
 MJYaxvaXdS0IUxnIukmU74Ajxv4FKcr8IILzAQA=
 
---W/nzBZO5zC0uMSeA--
+--bg08WKrSYDhXBjb5--
