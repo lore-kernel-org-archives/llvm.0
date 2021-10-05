@@ -1,92 +1,103 @@
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350DF2C81
-	for <llvm@lists.linux.dev>; Tue,  5 Oct 2021 20:29:15 +0000 (UTC)
-Received: by mail-yb1-f182.google.com with SMTP id s64so415316yba.11
-        for <llvm@lists.linux.dev>; Tue, 05 Oct 2021 13:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OcQv/s+1PQ0ZjDCw+SRTOFCxUQmvWoG+IaGmgRCu54s=;
-        b=MW14OSQ1gFA4P7702EgFpqM3qR3T4ysOSPqEqQduRialXr2rl+z6u1qfBew5gCMwxP
-         He0OejT6iuY2z8ccXO2nJN2cvrfEb3xsVI2LTu9Dq+HbqvZLLzKClVUbl2lCw2cxayay
-         bjMlUpJL4oXj88XjInk7lSQBsjgghYRFeZq66op4EtfF4MEf07gQqOJGAKnMo6LR6R9r
-         agZjlErLE9uBq3uzftWy/5vlpMpuF6hapb8jPGMhmMdwnb9oLoHxfLKXAfGCQnV/ckZO
-         tIyrfw0Q9PYNgG8xvztQ+v6/B+DG1lxyTv5RrdFo4HqZ5OApN9bxwaDHd6NWUiP+MZEp
-         wSng==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90A12C84
+	for <llvm@lists.linux.dev>; Tue,  5 Oct 2021 20:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1633466222;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/2lg8os1dn3LeWQY69s6PgxMEZ7LguAFPcGthQmKdLc=;
+	b=dU7exhJo0H9xHK1s/2bW9arXkc8GsghZ/EtTw3T34T+6wv/V+LLl+wBqpnAU7LTxwotQAk
+	UmuYI/O1cvhjZdPFgSAPduPb+xlyRK5dn23utoxa8VWXkwJFVdoAfkGLxNMBd0a9xsRuu5
+	n1rwUqJFNyaDnkfvD96+2DR7wNim84A=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-150-xoAUmwIUNzqlWLAeiibQ8g-1; Tue, 05 Oct 2021 16:36:59 -0400
+X-MC-Unique: xoAUmwIUNzqlWLAeiibQ8g-1
+Received: by mail-qv1-f70.google.com with SMTP id e6-20020a0cb446000000b0037eeb9851dfso588993qvf.17
+        for <llvm@lists.linux.dev>; Tue, 05 Oct 2021 13:36:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OcQv/s+1PQ0ZjDCw+SRTOFCxUQmvWoG+IaGmgRCu54s=;
-        b=rrEQW52RhYbG+OF/iqRnjl2/sRk2ORzSRIpZ9RTCaXv8P7bqy91o7oPiQsEG6iMkJ+
-         JjbEQk7r0X0zzHD5cwkIT071UCxJfja6+cy6EOBiQ/YWCV0rldT5cUrevC6xIwBMWwZc
-         YxTF3LaoPWc4xp1uzS78okkAxaX8YtO3wsam7U9DKY1u3NYz3Kk7Ad10qG+7FAAaou8x
-         oij2Iq09r/9qflBiZWiaicJrGqbhhY1VL/tCxKe6bPo63k1Xkrbpn5+llvNkjR9HwUKw
-         7384X9Rpq0F60Be7O3RmsjVV8WwJoleIpEpy6N90DO83fa8b7CZ14i00mXwMrWr+8zDR
-         fzLg==
-X-Gm-Message-State: AOAM5301/sXZitfxU8dmVwjj62c9QFd+cDBJI1awNyENDG9d6XBeyV4b
-	jP7oYbZegu1CoFYvwne3U016CGAjCvxGvaFiLscVFg==
-X-Google-Smtp-Source: ABdhPJzJsAm0jIvkO40dr+sZFTs2tR+7kzjFwmvCvA4ilABfEgSVApT0Rz05CRz9lseERDmx31G5dQQz6jq8IE2Ituw=
-X-Received: by 2002:a25:cf8f:: with SMTP id f137mr26144522ybg.338.1633465753946;
- Tue, 05 Oct 2021 13:29:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/2lg8os1dn3LeWQY69s6PgxMEZ7LguAFPcGthQmKdLc=;
+        b=Vw2dC2txWAngGoUgpHP9ffCjFZ54yfgbBJ/d3x/iZlB0BTw3RWT9JKhPgfGCzjRUnF
+         OhcBXzg1/ELsG78jL6M6uE+IG/ciGIqZr4sYHhzkDVSeo5lvS8DR/p+OJX3LP+j8FVxl
+         vrVX4uUBYaiUXRnHVRwTpbigGmaSiTqYNIw7PMiBneJhGdew4GQDxFnPI3RzYlrmBiFk
+         h6nY9se0YvwlVqQj63HPiX+FwrCy8uSIoMczDJmPTQU9DIQw+fWgQrozPomnluSeKAzT
+         DCxAYKAJ+l0+yHyNoJEfWYxaSNol6DT1MoyQTPDenBQo40qMzoS/MrBDS3H6WtsEpyhH
+         4yiQ==
+X-Gm-Message-State: AOAM532T/pV9gIS4ESMtOXMZy8NxMYo3GnogqU8hXhJjNmg+3/oxc/+8
+	G9EGyMg4zEA7u1fgJOg5Haw0f+Jmms7GRpwYnDrkFfkxbuwWZnqxlkHNoR/ur17kZKj32M8pNoH
+	Q0qTfxGi4MG/ybA==
+X-Received: by 2002:ac8:615c:: with SMTP id d28mr4325702qtm.103.1633466219387;
+        Tue, 05 Oct 2021 13:36:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxiUlDt7M96h8AoBqBLpXzaS3T7Kh4lNL7lZpOFg6AtZ305uLibjt9iiB/xDGibdlAu3aY9YQ==
+X-Received: by 2002:ac8:615c:: with SMTP id d28mr4325678qtm.103.1633466219183;
+        Tue, 05 Oct 2021 13:36:59 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id 18sm11884045qtz.49.2021.10.05.13.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Oct 2021 13:36:58 -0700 (PDT)
+Date: Tue, 5 Oct 2021 13:36:55 -0700
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: x86@kernel.org, Kees Cook <keescook@chromium.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 00/15] x86: Add support for Clang CFI
+Message-ID: <20211005203655.cvjfxmjvgx2knkuk@treble>
+References: <20210930180531.1190642-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210930180531.1190642-1-samitolvanen@google.com>
- <20210930180531.1190642-5-samitolvanen@google.com> <YVsGoJ+NN6wRFi22@hirez.programming.kicks-ass.net>
- <CABCJKudBrHfwR=gQc=9=cfBjR9p5jm65ovSNwzLLEpDUdo6ZPQ@mail.gmail.com> <20211005065923.GH4323@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211005065923.GH4323@worktop.programming.kicks-ass.net>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 5 Oct 2021 13:29:02 -0700
-Message-ID: <CABCJKud1Gm0ouROKLAw9t03qbs+_EASky053=SqijPJahqogng@mail.gmail.com>
-Subject: Re: [PATCH v4 04/15] cfi: Add DEFINE_CFI_IMMEDIATE_RETURN_STUB
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-hardening@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210930180531.1190642-1-samitolvanen@google.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Mon, Oct 4, 2021 at 11:59 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Oct 04, 2021 at 12:10:46PM -0700, Sami Tolvanen wrote:
-> > On Mon, Oct 4, 2021 at 6:50 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > > Why DEFINE_CFI_IMMEDIATE_RETURN_STUB() vs __no_cfi attribute that we can
-> > > stick on the relvant functions?
-> >
-> > To avoid accidentally creating useful gadgets for attackers. For
-> > example, while excluding an empty stub isn't necessarily ideal,
-> > allowing calls to a function that always returns zero would be worse.
->
-> I was afraid you'd say something like that...
->
-> > > Because I've got at least one more variant for you :-) See
-> > > kernel/static_call.c:__static_call_return0
-> >
-> > Does __static_call_return0 ever get called indirectly on architectures
-> > that support static calls? If it's always patched into a direct call,
-> > the type mismatch isn't an issue.
->
-> For x86_64 it should indeed never get called, however if you plan on
-> supporting i386 then you need the annotation. Also, it might get called
-> on arm64 which is about to grow basic HAVE_STATIC_CALL support.
+On Thu, Sep 30, 2021 at 11:05:16AM -0700, Sami Tolvanen wrote:
+> This series adds support for Clang's Control-Flow Integrity (CFI)
+> checking to x86_64. With CFI, the compiler injects a runtime
+> check before each indirect function call to ensure the target is
+> a valid function with the correct static type. This restricts
+> possible call targets and makes it more difficult for an attacker
+> to exploit bugs that allow the modification of stored function
+> pointers. For more details, see:
+> 
+>   https://clang.llvm.org/docs/ControlFlowIntegrity.html
+> 
+> Note that v4 is based on tip/master. The first two patches contain
+> objtool support for CFI, the remaining patches change function
+> declarations to use opaque types, fix type mismatch issues that
+> confuse the compiler, and disable CFI where it can't be used.
+> 
+> You can also pull this series from
+> 
+>   https://github.com/samitolvanen/linux.git x86-cfi-v4
 
-Good point. I read through the latest arm64 static call proposal and
-while it can fall back to an indirect call, it doesn't look like that
-would cause issues with CFI.
+Does this work for indirect calls made from alternatives?
 
-> (and just in case you care about CFI on PPC32, they too grew basic
-> static_call support)
+I'm also wondering whether this works on CONFIG_RETPOLINE systems which
+disable retpolines at runtime, combined with Peter's patch to use
+objtool to replace retpoline thunk calls with indirect branches:
 
-We are currently targeting only x86_64 and arm64, but I'll keep that
-in mind in case we want to add more platforms.
+  9bc0bb50727c ("objtool/x86: Rewrite retpoline thunk calls")
 
-Sami
+Since presumably objtool runs after the CFI stuff is inserted.
+
+-- 
+Josh
+
