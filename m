@@ -1,102 +1,74 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1B62C83
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 08:22:14 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id t8so6324903wri.1
-        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 01:22:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAF42C89
+	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 11:57:39 +0000 (UTC)
+Received: by mail-io1-f47.google.com with SMTP id h129so2521917iof.1
+        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 04:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xtmKhpid0Egxie2Iw2C5px+jdI/2/t58HcZiShikhEg=;
-        b=UMdXZXvRK+KB24Qmn+sEV2fkRBHjx2JetJ1V1FldatAQgdskN8G/Unn5tkxFGwBYoD
-         m5xiafoaloahtQWkHX/LJqTFn5aF88/xekYmpoJ6t1DQhMkrBJ7AH+O9SV0moJGfFXPX
-         cqJpnWtvtgnqLEvdbguwfnxp8f2EDXrb7eahj/PtEtQydf6QL/0juW81nzF9s0x9sSu4
-         ALbTWiGAy3/qGhzsRaaSE+xlywLdXX0dkLH24unzHcCRZuwZ6ZU3zcKt2LX4KNVljbEs
-         ZtdC9f+Qkb8FdeYbeaJy5a/CJIVbm6Iw8/NO6JVXuFv6/rl4cSvHSymmvvGmt7ZcEtjE
-         QLRQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qP8qUdurFon+vS8eyUqKuAmxlr00Ucs7J31uCZEKlng=;
+        b=RHqUFEetTG/eYk7o+keixgzTsx76qze7UUJ06SBYaebyHUQ2d5IplJMpy/dauoI6iB
+         dXDfk49UADHMti+mCSw3jTWGQjE/NgyfiGmOE5qL/lL/MPBMO0UjMMvD7P5hwfEGmnTp
+         fswdFmXWOJINyEbFlJ8T5NobRk2GBLe1NKBcVcC+ueLeV1X1P5jxzNRiQvzBt/26KEZs
+         fgXpPBMzaFop8NrepFeSG5d5inz6n9u76TL2FuJjgOh0lxhzA98scObInb5Bpu/19LBT
+         pEsirjNTqtAilTcjDnmEoaZ0eH2ebJd6P7nA1tXnCkBRiyLQcvZYF13hpRZrB5GMogAt
+         Fk1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xtmKhpid0Egxie2Iw2C5px+jdI/2/t58HcZiShikhEg=;
-        b=y0CzjqYhUKX1gdPh1WGZW29lsop0mQW8GDiYHiM8xpzumlMVxHIpsiAUfIdiFDFOgY
-         i3SlGc5gThJPYBcgdW9Vh4KwDxPbqGXB5FgDJPVJe5CkpHttUVOxhuwqSiZF7DyKj6gh
-         e3P2/7tG8FfZsjAkzYUOen9oMnuMC2wfKkG8aGTreYrAzyiGmR/nTcOzuP4WWraS5/n4
-         0JKYml1PIDeUk6Ox55+AMohb7tMbHnJLPhf1oSu5JKUNfGdTKwE3iGi32uPWWzimf0Vf
-         DqSfssWcz93bg3In2ZDe/VADB79wpfZQfKDJEb1y2D5aZ74LBj0o2SOmo+ovCowmeHkb
-         Ctzw==
-X-Gm-Message-State: AOAM531DUOVK/bS6kx6XFPpaltndU4mNnal3frPkU5KGH8avC9PWL58y
-	OPMbWCWqFQ45VgR001lgRsE=
-X-Google-Smtp-Source: ABdhPJzlGGPhWwbXnW93of0HIaIOYgCK8jVui529YWYn4EryuglYibg7wbxQVE3OE732gkOJS1HQfA==
-X-Received: by 2002:a05:600c:210f:: with SMTP id u15mr8278165wml.157.1633508533302;
-        Wed, 06 Oct 2021 01:22:13 -0700 (PDT)
-Received: from localhost.localdomain (i577BCBA0.versanet.de. [87.123.203.160])
-        by smtp.gmail.com with ESMTPSA id 36sm17769818wrc.92.2021.10.06.01.22.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 01:22:12 -0700 (PDT)
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] elfcore: correct reference to CONFIG_UML
-Date: Wed,  6 Oct 2021 10:22:09 +0200
-Message-Id: <20211006082209.417-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qP8qUdurFon+vS8eyUqKuAmxlr00Ucs7J31uCZEKlng=;
+        b=Ff217CSfgBlE8RxPLUZSETpohdGkGNuOKzidQLC3KiIE3KSojBf5ORVoLBJdNc2j1U
+         Jvb9aYeyNlaVkJIXjrli4f2G+BsAaf3HuI8JcKNXl2BQSkP9xjqFXsVO+C864M7TCZRv
+         8p0oMGYXp8TJys8lqY2a8HdWXptVxuY5wsgRB61x+Tf5cXUzHV1i8IQD/Qtb0xFGimMN
+         +fmLMluJN5pMGyyAAoKok6IEZY87eBll3Sa/b77yQPbUGvplNFV/ivs9wEJkLB9+Wf00
+         hBMJdH8XaAdifO2PkX8sWSVPZvr2HDHWOH3oCcFJNe/Zmw8vnD2TydYJ6PmF0h3OgMXM
+         6TwQ==
+X-Gm-Message-State: AOAM5336Iq941m2v+HLyUK/JqGeLxBFLr2KDqXAS1IwhxjaUmbp5cHpc
+	sPhXCd9G1TqG6pX/YXHm2gdflYPiyKqPQYTKbGs=
+X-Google-Smtp-Source: ABdhPJzrUCrbL4qoMWWF4ycdUPgt1QQgBnX/C1pCX8aC6wNFiNRQWvoYqGnSTsMpnJdJpFN7PKPT/9sQv64HdBNoy10=
+X-Received: by 2002:a5e:9b18:: with SMTP id j24mr6049480iok.202.1633521459169;
+ Wed, 06 Oct 2021 04:57:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210922205525.570068-1-nathan@kernel.org> <CA+fCnZdfMYvQ1o8n41dDzgJUArsUyhnb9Y_azgCVuzj6_KBifA@mail.gmail.com>
+ <YV0NPnUbElw7cTRH@archlinux-ax161>
+In-Reply-To: <YV0NPnUbElw7cTRH@archlinux-ax161>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Wed, 6 Oct 2021 13:57:28 +0200
+Message-ID: <CA+fCnZc5=fqM=eEZ3RLqBFaxR72bjxndDdnM_rOkiSBi3+2L6A@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Always respect CONFIG_KASAN_STACK
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Marco Elver <elver@google.com>, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	kasan-dev <kasan-dev@googlegroups.com>, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Commit 6e7b64b9dd6d ("elfcore: fix building with clang") introduces
-special handling for two architectures, ia64 and User Mode Linux.
-However, the wrong name, i.e., CONFIG_UM, for the intended Kconfig symbol
-for User-Mode Linux was used.
+On Wed, Oct 6, 2021 at 4:43 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> > This part of code always looked weird to me.
+> >
+> > Shouldn't we be able to pull all these options out of the else section?
+> >
+> > Then, the code structure would make sense: first, try applying
+> > KASAN_SHADOW_OFFSET; if failed, use CFLAGS_KASAN_MINIMAL; and then try
+> > applying all these options one by one.
+>
+> Prior to commit 1a69e7ce8391 ("kasan/Makefile: support LLVM style asan
+> parameters"), all the flags were run under one cc-option, meaning that
+> if $(KASAN_SHADOW_OFFSET) was not set, the whole call would fail.
+> However, after that commit, it is possible to do this but I was not sure
+> if that was intentional so I went for the minimal fix.
 
-Although the directory for User Mode Linux is ./arch/um; the Kconfig
-symbol for this architecture is called CONFIG_UML.
+Ack. Filed https://bugzilla.kernel.org/show_bug.cgi?id=214629 for the rest.
 
-Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
-
-UM
-Referencing files: include/linux/elfcore.h
-Similar symbols: UML, NUMA
-
-Correct the name of the config to the intended one.
-
-Fixes: 6e7b64b9dd6d ("elfcore: fix building with clang")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-applies cleanly on next-20211005
-
-Arnd, please ack.
-Andrew, please pick this fix.
-
- include/linux/elfcore.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/elfcore.h b/include/linux/elfcore.h
-index 2aaa15779d50..127716b58235 100644
---- a/include/linux/elfcore.h
-+++ b/include/linux/elfcore.h
-@@ -109,7 +109,7 @@ static inline int elf_core_copy_task_fpregs(struct task_struct *t, struct pt_reg
- #endif
- }
- 
--#if defined(CONFIG_UM) || defined(CONFIG_IA64)
-+#if defined(CONFIG_UML) || defined(CONFIG_IA64)
- /*
-  * These functions parameterize elf_core_dump in fs/binfmt_elf.c to write out
-  * extra segments containing the gate DSO contents.  Dumping its
--- 
-2.26.2
-
+Thanks!
