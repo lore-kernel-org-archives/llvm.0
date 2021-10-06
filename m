@@ -1,121 +1,141 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052472C87
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 13:24:04 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id z11so2305917lfj.4
-        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 06:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WS14M02mZrzoEQN1o6wiWSulz9IINclcD4VShwS4gQg=;
-        b=YTDRHHEgJdBj0D00T9pyOuhm8h1JTZfknempnR79qX1zzj94Mlv701kAUhSavo0rjh
-         CGzn+RjcHp7aJKK/6JF+oNFlHAB+xMuIr7cgHYGP8YHn5Bv5nkuR6LmChfrafu1wouTo
-         oAxr4kWsGNmDKRLdVEZmj+04ANYmqw+JE9XApzBibmhl9kLmhflektTxBaayHUsJ9ovF
-         cRuIQWziI2Frz3JbAhH9mLoVFU0ZBscFngX0yJHmYE99XreF8jPQgdzcGRKi7oizgjER
-         q8J810JQMABS6wtH+DefXZh4BL4TNwG80T8zy93Uds4dRc3jmsIMTh4WmXJjkLgZR7ae
-         CCXw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58A02C87
+	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 13:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1633528463;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SUoxOb//3TH/xMoqrFKXCtQoVmxHUsUFva7/RQKSUug=;
+	b=Y0VUEWuepPfF1M0yHhwJqOf5lUsihZ0tMPj4+yXLq7B0lLPJXsf+UlwlGc3R8dh/w1qTf7
+	RDYDxCrSdQAO1uO5suvCgNOHxfAaQj9Onk+/4yFlBq8ZgRBNJXRCKSQ8Bqq91uiKl6IWTm
+	ofnwfRGONGqUq/0wFDRtz1G7b6SFOn0=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-371-LJhqI5pxPWKZCYJgbVJecg-1; Wed, 06 Oct 2021 09:54:22 -0400
+X-MC-Unique: LJhqI5pxPWKZCYJgbVJecg-1
+Received: by mail-oo1-f69.google.com with SMTP id o8-20020a4aabc8000000b002b601d1fb33so1703024oon.23
+        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 06:54:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WS14M02mZrzoEQN1o6wiWSulz9IINclcD4VShwS4gQg=;
-        b=Xz3otNchC2ajVV+zBizm5vgUt1b7RDLvRgXNVV03SNZRZ1PZWVKAKMKrxkH7A5XMRU
-         b3DL+aSZZYysXIHxuOE3XYibIN+uNaMU0esivXqOnRrAP+IgZrXetS3RuCOxrNtrAwBp
-         63CJ+JdZRUw/rowGHxmzHUxSvbpY4vhbuomxa43a4vbPuaH4nJO9LD+VByugrlUu7k68
-         II6jW2ZJChM6trfsVueojhUbmPN4UldjJaYNvr053wfmtebgOwjpsd3CgsovK/LzJYIX
-         TjkQ+17uXPwezLXp8QSWL3PcKpqS9IpF8F2O01za8RHWXZ0KqzqvaZBB17EsjsvyD1h1
-         hQAg==
-X-Gm-Message-State: AOAM533GI7JlQQvpdmjUalMAX7vpwaOQ0C+5pI8daOR9RM6w3zkkdniS
-	8qep5Z4riI9xbsyTJmdhWIsnd7/wmUFJA6C8U63e3A==
-X-Google-Smtp-Source: ABdhPJzqyXF9Ww3e4Iwxx3ZQuKiigcWnahMGa+hgZ8jHpihyXxXZCEDMbZbT+30YZE0uf6PZUC44+QO+bSf8Xy99PNY=
-X-Received: by 2002:a05:6512:3409:: with SMTP id i9mr9482583lfr.396.1633526642784;
- Wed, 06 Oct 2021 06:24:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SUoxOb//3TH/xMoqrFKXCtQoVmxHUsUFva7/RQKSUug=;
+        b=IkCDXDSbtt5uOmPsdioQadRfXUbj1R5Vq3pvLaWJDJnR7zdnXS300WWQ8oJpE89bUt
+         94orfEU5j+Gu3z5zGxvok7PYtPjnoz5lXSUwelanfrsbKSCYOt/yEQuU+q2s9r3T25/a
+         Vn9kzK0wdu3K/ROH+WKCSh+kr3zDnBUGoueA+4NGyiZQ85pYuxOvoCsrjIGsE2728B78
+         7+bZ6TLrcEYH0uBNFSWkb8EhpWihrRvaa7Qo0fwFF+7FGVe0w3239mBlLIR5eWOlny22
+         m/MxONbaa/DsuSfEHAF24vBngQj5DwXYM5CeYrjuPHitWXT/V78seyDZ4RKaumo/Lywp
+         Y9LA==
+X-Gm-Message-State: AOAM530Wg0XZSwwnVi1fxG7yV7x8wwn1gnxoQ2rjxpQOVUzOYsSTTvG1
+	3en+bXT3p8TZroL1mk/Qou//Dt13oXYUjl5z3MgCQlwl3tzt09MYIGLYY5U3LTY96rdiYs26F+m
+	xCzIe4Co6QHKIeA==
+X-Received: by 2002:a54:4f0e:: with SMTP id e14mr7500182oiy.73.1633528461113;
+        Wed, 06 Oct 2021 06:54:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyDO4di3VOt+xJP1xAbbGCbGjPY6Am+ulVkpZnWgsgHk16Sl/FM4xHh8vjh8enqfYZsYV6nfQ==
+X-Received: by 2002:a54:4f0e:: with SMTP id e14mr7500157oiy.73.1633528460868;
+        Wed, 06 Oct 2021 06:54:20 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::49])
+        by smtp.gmail.com with ESMTPSA id l8sm3980645oii.57.2021.10.06.06.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Oct 2021 06:54:20 -0700 (PDT)
+Date: Wed, 6 Oct 2021 06:54:17 -0700
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, x86@kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 06/15] ftrace: Use an opaque type for functions not
+ callable from C
+Message-ID: <20211006135417.tvdns3ykpgupi47q@treble>
+References: <20210930180531.1190642-1-samitolvanen@google.com>
+ <20210930180531.1190642-7-samitolvanen@google.com>
+ <20211006032945.axlqh3vehgar6adr@treble>
+ <20211006090249.248c65b0@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdmrOYTxVd1f+=g4e-+q0fD+BZZTBGOkzcRq494bYYCkgw@mail.gmail.com>
- <CAKdWgSyH4tYESpUEBx1SqK0F=ydG_0r=MT0-s5D9zC4rS0EppA@mail.gmail.com>
- <CAKwvOdmSA2LmFXsPPrpBahR7bWXaLH=KdwepwvF+DqA+zGjROA@mail.gmail.com> <CAKdWgSzX9VR-SogD5bG0mgVDTE-fWbO1d1h4Uk7OW5STPsDB3w@mail.gmail.com>
-In-Reply-To: <CAKdWgSzX9VR-SogD5bG0mgVDTE-fWbO1d1h4Uk7OW5STPsDB3w@mail.gmail.com>
-From: Vishal Bhoj <vishal.bhoj@linaro.org>
-Date: Wed, 6 Oct 2021 18:53:51 +0530
-Message-ID: <CAKdWgSyKkN5m-qJsAyk9S27xnsV6EjAw8js8WeMfjd6Ose0mFA@mail.gmail.com>
-Subject: Re: missing build.log files
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, tuxsuite <tuxsuite@linaro.org>, 
-	Sedat Dilek <sedat.dilek@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211006090249.248c65b0@gandalf.local.home>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Wed, 6 Oct 2021 at 18:35, Vishal Bhoj <vishal.bhoj@linaro.org> wrote:
->
-> Hi Nick,
->
->
-> On Fri, 1 Oct 2021 at 23:18, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Fri, Oct 1, 2021 at 10:21 AM Vishal Bhoj <vishal.bhoj@linaro.org> wrote:
-> > >
-> > > Hi Nick,
-> > >
-> > > I saw the build failures today morning. These builds try to apply
-> > > patches and fail to apply them and hence the build is marked as
-> > > failed. This info is available in build logs and also as part of
-> > > "status_message" field in the build.json file saved by tuxsuite cli
-> > > (--json-out option).
-> >
-> > That makes sense; I was trolling our build logs because Sedat noticed
-> > a patch we were carrying made it to mainline. I went to check and see
-> > what the failure would look like in our CI when a patch fails to
-> > apply.  We want it to fail loudly, for sure, but we may need to update
-> > our client to make it clearer what the failure was.  We can add code
-> > to check the "status_message" isn't "Unable to apply kernel patch"
-> > before trying to fetch the build logs.
-> >
-> > >
-> > > The build.log is generated from tuxmake and since the patching itself
-> > > failed, a build.log was not generated. I have opened a bug to track
-> > > this issue to publish the build.log:
-> > > https://gitlab.com/Linaro/tuxsuite/-/issues/138
-> >
-> > Ah, or if we just always had the log that would be good, too.
->
-> We now publish build.log with "git quiltimport" output for all patched
-> builds. Here is an example build:
-> https://builds.tuxbuild.com/1yl8XNzEt3MytISR7Lh3gV7ivDX/config
+On Wed, Oct 06, 2021 at 09:02:49AM -0400, Steven Rostedt wrote:
+> On Tue, 5 Oct 2021 20:29:45 -0700
+> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> 
+> Thanks for Cc'ing me, as I should have been Cc'd on the original patch.
+> 
+> > On Thu, Sep 30, 2021 at 11:05:22AM -0700, Sami Tolvanen wrote:
+> > > With CONFIG_CFI_CLANG, the compiler changes function references to point
+> > > to the CFI jump table. As ftrace_call, ftrace_regs_call, and mcount_call
+> > > are not called from C, use DECLARE_ASM_FUNC_SYMBOL to declare them.
+> 
+> "not called from C" is a bit confusing.
+> 
+> > > 
+> > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > > ---
+> > >  include/linux/ftrace.h | 7 ++++---
+> > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> > > index 832e65f06754..67de28464aeb 100644
+> > > --- a/include/linux/ftrace.h
+> > > +++ b/include/linux/ftrace.h
+> > > @@ -578,9 +578,10 @@ extern void ftrace_replace_code(int enable);
+> > >  extern int ftrace_update_ftrace_func(ftrace_func_t func);
+> > >  extern void ftrace_caller(void);
+> > >  extern void ftrace_regs_caller(void);
+> > > -extern void ftrace_call(void);
+> > > -extern void ftrace_regs_call(void);
+> > > -extern void mcount_call(void);
+> > > +
+> > > +DECLARE_ASM_FUNC_SYMBOL(ftrace_call);
+> > > +DECLARE_ASM_FUNC_SYMBOL(ftrace_regs_call);
+> > > +DECLARE_ASM_FUNC_SYMBOL(mcount_call);  
+> > 
+> > I'm thinking DECLARE_ASM_FUNC_SYMBOL needs a better name. It's not clear
+> > from reading it why some asm symbols need the macro and others don't.
+> > 
+> > I guess it means "an asm text symbol which isn't callable from C code
+> > (not including alternatives)"?
+> > 
+> > DECLARE_UNCALLED_SYMBOL() maybe?
+> > 
+> 
+> That's even worse ;-) Because "called" is an assembler command in x86, and
+> it is "called" from assembly (when you look at an objdump, it is most
+> definitely "called").
+> 
+> Perhaps DECLARE_ASM_INTERNAL_SYMBOL() ?
+> 
+> Or call it "DECLARE_ASM_MCOUNT_SYMBOL()" as "mcount" is the original name
+> of what a compiler does when passed the -pg option, and that's exactly what
+> those functions are.
 
-Sorry for the wrong link. Here is how the build.log would look:
-https://builds.tuxbuild.com/1z8Lj56Txf3Ibe0tfVlobPFuU39/build.log
-https://builds.tuxbuild.com/1z8Lj56Txf3Ibe0tfVlobPFuU39/
+But this macro is used in other places as well:
 
-> >
-> > >
-> > > Regards,
-> > > Vishal
-> > >
-> > >
-> > > On Fri, 1 Oct 2021 at 22:37, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > > >
-> > > > Hi Vishal,
-> > > > Last night's run had a few HTTP 404's where the build.log files
-> > > > weren't produced, example:
-> > > > https://github.com/ClangBuiltLinux/continuous-integration2/runs/3767134165?check_suite_focus=true
-> > > >
-> > > > download_url: https://builds.tuxbuild.com/1yuAt3oatFT1XZifxO2YoBUadf4/
-> > > >
-> > > > expected the log file to be at
-> > > > https://builds.tuxbuild.com/1yuAt3oatFT1XZifxO2YoBUadf4/build.log
-> > > >
-> > > > --
-> > > > Thanks,
-> > > > ~Nick Desaulniers
-> >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
+  https://lkml.kernel.org/r/20210930180531.1190642-10-samitolvanen@google.com
+
+And many of them aren't internal to a function like the above symbols,
+they're actual functions that are called in other ways.
+
+DECLARE_UNCALLED_FROM_C() ?
+
+-- 
+Josh
+
