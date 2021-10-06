@@ -1,101 +1,70 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0F72C86
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 16:01:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2771B610E6
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 16:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633536094;
-	bh=ZlaiC0n6P5r9j8bdKPC7sgApMtJMYoiumv6YMDwMIYE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cRq8b+GkF+Z16Yxq4pCkXjHpb0Lt1XIkRzLrmviXQKI457GNdGL32P6BZBGwT2wFx
-	 V+Cp3cOEpmbSOOZ7v+bOmFVH2e7O3pVLtvdL7fvlcyGwmzxwJsq9wyZ/WwxcLD5ysa
-	 BTfXJrs8lGHwVmbMrmugHv4jrgQb56nTCz58JACf5xYejs7dwfz3JQxcoinR80V1by
-	 I1b9uSO4ZqnF/ErYvzn2Q5VImQWROOBe4CD+/iN1IEYzJRxxi6RVqFkxIJGQVMrflM
-	 sGaZZNfdi5RifYwlmvvtF4rINu2UMNGMjs1NsIlklSZCGIUBVg+Me/WsHpXjxUFyLA
-	 2EJs8sai5pFBw==
-Received: by mail-ot1-f41.google.com with SMTP id h16-20020a9d3e50000000b0054e25708f41so2888823otg.0
-        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 09:01:34 -0700 (PDT)
-X-Gm-Message-State: AOAM5327o2WLvNjl5YvANesyCkymI9S7qttfJ7w1kW8bCsIu7JS7G6gv
-	XS9qgyJbQ+qm9CDjo+ef1GmJWBt40HaijEUEx0g=
-X-Google-Smtp-Source: ABdhPJyZQ57EKW43tv7SPSNvfHisRpT/RfL8WcMrAs9oQM6KMMZU8HVVF10G0DOUcga9tCV5zpzCtvKLo6ZGqAckfAU=
-X-Received: by 2002:a05:6830:3189:: with SMTP id p9mr19970544ots.147.1633536093391;
- Wed, 06 Oct 2021 09:01:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09ABF2C86
+	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 16:18:04 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id a7so6683509yba.6
+        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 09:18:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9Az3RnbDsbDEe5BQeBA4RkbM3K2KO2nnyOEu1gJMKy8=;
+        b=h12w95BSDwtU2m8MnPhdNVT8cMBy/deUTCoZeqUhZdgQsLqDe+FrqOR/aQ8faIbNW1
+         FWnQwsHuYKFCfwI9UkUgP6+dqR6jOFk8mjFYz7rqMNNPxZakginPk/sVEj9/lOhdHXjd
+         uNLwkmbsQU6ilj1th4AJMkStoYSLcynW80ZlGkZHfcVImauavrpLSslFBFGgn/vRbNep
+         WlUEkUbDN/LBIBJDnmT0dKOwi+M56mp3i70eCmdt30vQ5fPdTnlyIb1YFg6I1ZDHY3kk
+         4rPGi2Jjv5OaJj6z0C18lVCqNYpni4hdsrJwQ00lFbDrU9njbAQm1R2UcmbVV31oQRGU
+         NTDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Az3RnbDsbDEe5BQeBA4RkbM3K2KO2nnyOEu1gJMKy8=;
+        b=Ob2/RHIJ1Lh0Z0fzYh6WijOrGYlKoo3Vq2T/RND0Qv7yx40np0TxiXJpA2yDvrTNp0
+         PhlFWtecz7kQ8agNJbyVcyfSfkwsGaTC2/cfBqP5N0h+6TGPUE2n+OPfxNCsvUzsEKut
+         f8LGlN7IoawWd9GaAuc91eQLWTIMWO79HAJd/TrTwaXJE3XMTCmvOLw5yMolqf9INGth
+         BTNlA+IxaoHXf6Wp6nX5MUKivK9u8x0LqiW6luRpobE7r/upvN1oYP8U+Xpk6bm1UH1y
+         idXm3i/ZV71kWT2+amn8y2u91MLg/tRooOQssdzU1szd/UUFS2k9kskF9nSQq+ACibT/
+         rk6A==
+X-Gm-Message-State: AOAM530M5UnsWC0GcoZEclMeWDYNblfB6FhMKKsWLQ+iHluOpzUw/A7O
+	2BnVZ5CJR5MTb/qfYiZcecFa2V+tcCm1PyOP5KvO7w==
+X-Google-Smtp-Source: ABdhPJxT/XIupfjSJyXj/eYUPTKnfTRQjMGA4Hv97bbuvkz3AF2BKXvxYWlKmo9d5Jzx+hJU9aedr3RiS7pgaW3BV3o=
+X-Received: by 2002:a5b:286:: with SMTP id x6mr29888199ybl.59.1633537083704;
+ Wed, 06 Oct 2021 09:18:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210928154143.2106903-1-arnd@kernel.org> <20210928154143.2106903-7-arnd@kernel.org>
-In-Reply-To: <20210928154143.2106903-7-arnd@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 6 Oct 2021 18:01:22 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF-iJj2cg=M8BD96OE8ozA_vB8yEN+f8HvRHY=VYb0pwg@mail.gmail.com>
-Message-ID: <CAMj1kXF-iJj2cg=M8BD96OE8ozA_vB8yEN+f8HvRHY=VYb0pwg@mail.gmail.com>
-Subject: Re: [PATCH 06/14] ARM: disallow CONFIG_THUMB with ARMv4
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linus Walleij <linus.walleij@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+References: <20210930180531.1190642-1-samitolvanen@google.com>
+ <20210930180531.1190642-12-samitolvanen@google.com> <20211006033145.vcj3ohkekv5rexpo@treble>
+In-Reply-To: <20211006033145.vcj3ohkekv5rexpo@treble>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 6 Oct 2021 09:17:52 -0700
+Message-ID: <CABCJKufSkOKm6MXzH3gJP17wte=5QfW0qoXH=Py6e6cAH5YkjQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/15] x86, relocs: Ignore __typeid__ relocations
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	linux-hardening@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 28 Sept 2021 at 17:42, Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, Oct 5, 2021 at 8:31 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> On Thu, Sep 30, 2021 at 11:05:27AM -0700, Sami Tolvanen wrote:
+> > From: Kees Cook <keescook@chromium.org>
+> >
+> > The __typeid__* symbols aren't actually relocations, so they can be
+> > ignored during relocation generation.
 >
-> We can currently build a multi-cpu enabled kernel that allows both ARMv4
-> and ARMv5 CPUs, and also supports THUMB mode in user space.
->
-> However, returning to user space in this configuration with the usr_ret
-> macro requires the use of the 'bx' instruction, which is refused by
-> the assembler:
->
-> arch/arm/kernel/entry-armv.S: Assembler messages:
-> arch/arm/kernel/entry-armv.S:937: Error: selected processor does not support `bx lr' in ARM mode
-> arch/arm/kernel/entry-armv.S:960: Error: selected processor does not support `bx lr' in ARM mode
-> arch/arm/kernel/entry-armv.S:1003: Error: selected processor does not support `bx lr' in ARM mode
-> <instantiation>:2:2: note: instruction requires: armv4t
->  bx lr
->
-> While it would be possible to handle this correctly in principle, doing so
-> seems to not be worth it, if we can simply avoid the problem by enforcing
-> that a kernel supporting both ARMv4 and a later CPU architecture cannot
-> run THUMB binaries.
->
+> Then what are they?  It would be good to add that information here.
 
-I had a quick look, and it seems that the only way to handle this
-correctly is to emit the BX instructions, and use code patching to
-change them into 'mov pc, <reg>' if the runtime detected CPU is not
-Thumb capable. The usual approach (emitting 'tst <reg>, #1; moveq pc,
-<reg>; bx lr') is not feasible here, since we run out of space in the
-kuser helper slots.
+These relocations are for compiler-generated constants that it uses
+for indirect call type checking. I think we can clarify this in the
+next version.
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
-> This turned up while build-testing with clang; for some reason,
-> gcc never triggered the problem.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/mm/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
-> index 82aa990c4180..58afba346729 100644
-> --- a/arch/arm/mm/Kconfig
-> +++ b/arch/arm/mm/Kconfig
-> @@ -675,7 +675,7 @@ config ARM_PV_FIXUP
->
->  config ARM_THUMB
->         bool "Support Thumb user binaries" if !CPU_THUMBONLY && EXPERT
-> -       depends on CPU_THUMB_CAPABLE
-> +       depends on CPU_THUMB_CAPABLE && !CPU_32v4
->         default y
->         help
->           Say Y if you want to include kernel support for running user space
-> --
-> 2.29.2
->
+Sami
