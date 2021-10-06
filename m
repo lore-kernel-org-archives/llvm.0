@@ -1,1003 +1,766 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D5A2C83
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 22:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1633558190;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9oWEPwG9XnaXrjmBFp14NBtNz9zFlO/ymm8tLJi0/Ag=;
-	b=RfH/zRes0ZNMkmxhbIbXwHXVq1yY5bux/G4NS34tQcDKaJy36RioTUN7TS0IBRdjImTTl4
-	JsLOBTi8x1SH0KKIWs9i11cAtl31+RBntnyvL3ATof6QPvkCHCKh7kPxPozntmHVIPkY48
-	zVM9aKWi9FUf0eW0dOuVM2rwxw7pKpg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-512-NzYQ8otwOYWSyzcTMh-lHQ-1; Wed, 06 Oct 2021 18:09:42 -0400
-X-MC-Unique: NzYQ8otwOYWSyzcTMh-lHQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17BBD802935
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 22:09:42 +0000 (UTC)
-Received: from [172.64.10.21] (unknown [10.30.32.136])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7345F5D9C6;
-	Wed,  6 Oct 2021 22:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63E32C83
+	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 22:17:59 +0000 (UTC)
+Received: by mail-wr1-f42.google.com with SMTP id o20so13015817wro.3
+        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 15:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:cc:message-id:subject:mime-version;
+        bh=Sf9Fqgb4tR+DBWGk+GMo/OgmpqmS33lbT1EpXH/g/dw=;
+        b=nNz09kC+StSvTFH4hP7FVKAlpDJGHAYrp5l6+dtl2hNOqTaUqYIqxKzKwI8N/K86Ep
+         r0LwPNxaf3fGX0NU1AXVQm2B4MlUkqvD7b6YK9qhkqLpRlh2nG3pj81ApIt9dZs/TNdW
+         9ODw+r1gWtRPUjGF1pSOBBrqjpQDIlifI+Lbm8KUeIppUQ4pEdN+j86fAIbFh9k9Jch7
+         CZtmXQ2VyCA9f2sxsme1kp/kVUL7WQtzkLaI1oSUQnEUAuQj9J3Q/1nKuNVG2FemVKoj
+         dl4Zn1vXx/3MxnhOkhhiTu2bt8BbaW2mZXaOWcEM2Ym6fxXQS/LBzxUvHq7GWsQH/gii
+         jF5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version;
+        bh=Sf9Fqgb4tR+DBWGk+GMo/OgmpqmS33lbT1EpXH/g/dw=;
+        b=Pl3tDqHYI8knaZa/Rr8p3/CukVg4O4dPKqyUySJNLptrb39Cq4GnXF57XqsbuJTBbm
+         DXsSf7GdUP+YI9I7Tjszi9qWVfA6XByS7vPIgc8UyB4nWR51U3A51FZEFu47PXmtLbvI
+         OaRxWqbynlivSe3JTU/S/KNbiOnt6NLnQ26YkII+t7h3jqZpw/nDlFoA36hYuvBblbQf
+         Q1P7WtjJgyTrr5ozEgLmB7MKXUF0c75MRKBQw/hqAuG3Es3SaNMZ9KVFDch7Fka//Cls
+         TjLg7JhPPrhKfR03DZDJLNyEffyfiAfk3MZGqr26YRZDpD+lw0psQLUTxZY2eluV/gxs
+         dsTA==
+X-Gm-Message-State: AOAM531Lps0Pmqr78yttQ41A19T/rVS2NJkDxvj3QQjpJSkDOxKtgg07
+	kCJTR5Oo3s50jQP0iXxdlubiGTmo+wh+HA==
+X-Google-Smtp-Source: ABdhPJzioWKVO0YfzD0qYlEo6QolViEQ8jl7adu9JgfK8a/gaInKNmN3uFg/HXvf7kpqkyR43jL1iQ==
+X-Received: by 2002:a7b:c386:: with SMTP id s6mr603338wmj.183.1633558677694;
+        Wed, 06 Oct 2021 15:17:57 -0700 (PDT)
+Received: from 172.17.0.5 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id l11sm9071199wms.45.2021.10.06.15.17.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Oct 2021 15:17:57 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Wed, 6 Oct 2021 22:17:56 +0000 (UTC)
+To: Jingu Kang <jingu.kang@arm.com>
+Cc: llvm@lists.linux.dev
+Message-ID: <1133377776.9620.1633558677135@localhost>
+Subject: [TCWG CI] Regression caused by llvm: [AArch64] Split bitmask
+ immediate of bitwise AND operation
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: skt-results-master@redhat.com, llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.15.0-rc4
- (mainline.kernel.org-clang, f6274b06)
-Date: Wed, 06 Oct 2021 22:09:10 -0000
-CC: Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
- Jan Stancek <jstancek@redhat.com>, Ziqian Sun <zsun@redhat.com>,
- Jiri Dluhos <jdluhos@redhat.com>, Milos Malik <mmalik@redhat.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Yi Zhang <yizhan@redhat.com>
-Message-ID: <cki.3DD6966DC6.RE198KPZGF@redhat.com>
-X-Gitlab-Pipeline-ID: 382349991
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/382349991?=
-X-DataWarehouse-Checkout-IID: None
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-
-Hello,
-
-We ran automated tests on a recent commit from this kernel tree:
-
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: f6274b06e326 - Merge tag 'linux-kselftest-fixes-5.15-rc=
-5' of git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
-
-The results of these automated tests are provided below.
-
-    Overall result: FAILED (see details below)
-             Merge: OK
-           Compile: OK
- Selftests compile: FAILED
-             Tests: FAILED
-    Targeted tests: NO
-
-All kernel binaries, config files, and logs are available for download here=
-:
-
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2021/10/04/382349991
-
-One or more kernel tests failed:
-
-    x86_64:
-     =E2=9D=8C LTP - commands
-     =E2=9D=8C LTP: openposix test suite
-     =E2=9D=8C trace: ftrace/tracer
-     =E2=9D=8C selinux-policy: serge-testsuite
-     =E2=9D=8C Storage blktests - blk
-
-We hope that these logs can help you find the problem quickly. For the full
-detail on our testing procedures, please scroll to the bottom of this messa=
-ge.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
-Compile testing
----------------
-
-We compiled the kernel for 5 architectures:
-
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-
-We built the following selftests:
-
-  x86_64:
-      net: OK
-      bpf: fail
-      seccomp: OK
-      lkdtm: OK
-      install and packaging: OK
-
-You can find the full log (build-selftests.log) in the artifact storage abo=
-ve.
-
-
-Hardware testing
-----------------
-We booted each kernel and ran the following tests:
-
-  aarch64:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interru=
-pt
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cac=
-he
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity - mlx5
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity - mlx5
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI enabled test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
-e test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-    Host 6:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interru=
-pt
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cac=
-he
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 7:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity - mlx5
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity - mlx5
-
-  ppc64le:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-
-  s390x:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interru=
-pt
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cac=
-he
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-
-    Host 6:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interru=
-pt
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cac=
-he
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 7:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-
-  x86_64 (debug):
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
-e test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interru=
-pt
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cac=
-he
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
-e test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
-e test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-
-  x86_64:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9D=8C LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9D=8C LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9C=85 POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking ipsec: basic netns - transport
-       =E2=9C=85 Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: sanity smoke test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9C=85 ALSA PCM loopback test
-       =E2=9C=85 ALSA Control (mixer) Userspace Element test
-       =E2=9C=85 storage: dm/common
-       =E2=9C=85 storage: SCSI VPD
-       =E2=9D=8C trace: ftrace/tracer
-       =E2=9C=85 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9C=85 xarray-idr-radixtree-test
-       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
-       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
-       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9C=85 Networking: igmp conformance test
-       =F0=9F=9A=A7 =E2=9C=85 audit: audit testsuite test
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =F0=9F=9A=A7 =E2=9C=85 lvm snapper test
-
-    Host 2:
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-
-    Host 3:
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - srp
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =E2=9C=85 xfstests - nfsv4.2
-       =E2=9C=85 xfstests - cifsv3.11
-       =E2=9C=85 IPMI driver test
-       =E2=9C=85 IPMItool loop stress test
-       =E2=9D=8C selinux-policy: serge-testsuite
-       =E2=9C=85 power-management: cpupower/sanity test
-       =E2=9D=8C Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 storage: software RAID testing
-       =E2=9C=85 Storage: swraid mdadm raid_module test
-       =F0=9F=9A=A7 =E2=9C=85 Podman system test - as root
-       =F0=9F=9A=A7 =E2=9C=85 Podman system test - as user
-       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvdimm ndctl test s=
-uite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - interrupt
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - cpu
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - cpu-cache
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
-
-    Host 5:
-       =E2=9C=85 Boot test
-       =E2=9C=85 Reboot test
-       =E2=9C=85 kdump - file-load
-       =F0=9F=9A=A7 =E2=9C=85 kdump - sysrq-c
-
-  Test sources: https://gitlab.com/cki-project/kernel-tests
-    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
- existing tests!
-
-Aborted tests
--------------
-Tests that didn't complete running successfully are marked with =E2=9A=A1=
-=E2=9A=A1=E2=9A=A1.
-If this was caused by an infrastructure issue, we try to mark that
-explicitly in the report.
-
-Waived tests
-------------
-If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
-uch tests are
-executed but their results are not taken into account. Tests are waived whe=
-n
-their results are not reliable enough, e.g. when they're just introduced or=
- are
-being fixed.
-
-Testing timeout
----------------
-We aim to provide a report within reasonable timeframe. Tests that haven't
-finished running yet are marked with =E2=8F=B1.
-Targeted tests
---------------
-Test runs for patches always include a set of base tests, plus some
-tests chosen based on the file paths modified by the patch. The latter
-are called "targeted tests". If no targeted tests are run, that means
-no patch-specific tests are available. Please, consider contributing a
-targeted test for related patches to increase test coverage. See
-https://docs.engineering.redhat.com/x/_wEZB for more details.
-
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_9619_610164726.1633558676228"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
+X-Jenkins-Result: SUCCESS
+
+------=_Part_9619_610164726.1633558676228
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+[TCWG CI] Regression caused by llvm: [AArch64] Split bitmask immediate of bitwise AND operation:
+commit 864b206796ae8aa7f35f830655337751dbd9176c
+Author: Jingu Kang <jingu.kang@arm.com>
+
+    [AArch64] Split bitmask immediate of bitwise AND operation
+
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+19861
+# First few build errors in logs:
+# 00:01:34 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:01:35 make[1]: *** [scripts/Makefile.build:277: ipc/sem.o] Error 134
+# 00:01:45 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:01:46 make[2]: *** [scripts/Makefile.build:277: drivers/irqchip/exynos-combiner.o] Error 134
+# 00:01:48 make: *** [Makefile:1868: ipc] Error 2
+# 00:02:00 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:02:00 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:02:00 make[2]: *** [scripts/Makefile.build:277: drivers/pwm/pwm-atmel.o] Error 134
+# 00:02:00 make[2]: *** [scripts/Makefile.build:277: arch/arm64/kernel/cpu_errata.o] Error 134
+# 00:02:00 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+
+from
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+20223
+# linux build successful:
+all
+
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
+
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/build-864b206796ae8aa7f35f830655337751dbd9176c/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/build-4f01a02d738b033c10bfed5b47014fc197509a4f/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/
+
+Reproduce builds:
+<cut>
+mkdir investigate-llvm-864b206796ae8aa7f35f830655337751dbd9176c
+cd investigate-llvm-864b206796ae8aa7f35f830655337751dbd9176c
+
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
+
+# Fetch manifests and test.sh script
+mkdir -p artifacts/manifests
+curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/manifests/build-baseline.sh --fail
+curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/manifests/build-parameters.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+
+cd llvm
+
+# Reproduce first_bad build
+git checkout --detach 864b206796ae8aa7f35f830655337751dbd9176c
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach 4f01a02d738b033c10bfed5b47014fc197509a4f
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit 864b206796ae8aa7f35f830655337751dbd9176c
+Author: Jingu Kang <jingu.kang@arm.com>
+Date:   Wed Sep 22 17:01:21 2021 +0100
+
+    [AArch64] Split bitmask immediate of bitwise AND operation
+    
+    MOVi32imm + ANDWrr ==> ANDWri + ANDWri
+    MOVi64imm + ANDXrr ==> ANDXri + ANDXri
+    
+    The mov pseudo instruction could be expanded to multiple mov instructions later.
+    In this case, try to split the constant operand of mov instruction into two
+    bitmask immediates. It makes only two AND instructions intead of multiple
+    mov + and instructions.
+    
+    Added a peephole optimization pass on MIR level to implement it.
+    
+    Differential Revision: https://reviews.llvm.org/D109963
+---
+ llvm/lib/Target/AArch64/AArch64.h                  |   2 +
+ llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp   | 213 ++++++++++++++++++
+ llvm/lib/Target/AArch64/AArch64TargetMachine.cpp   |  10 +
+ llvm/lib/Target/AArch64/CMakeLists.txt             |   1 +
+ .../AArch64/MCTargetDesc/AArch64AddressingModes.h  |   1 +
+ llvm/test/CodeGen/AArch64/O3-pipeline.ll           |   3 +-
+ .../AArch64/aarch64-split-and-bitmask-immediate.ll | 245 +++++++++++++++++++++
+ ...old-masked-merge-scalar-constmask-innerouter.ll |   5 +-
+ 8 files changed, 476 insertions(+), 4 deletions(-)
+
+diff --git a/llvm/lib/Target/AArch64/AArch64.h b/llvm/lib/Target/AArch64/AArch64.h
+index 658d44771e8d..b0dd30c13137 100644
+--- a/llvm/lib/Target/AArch64/AArch64.h
++++ b/llvm/lib/Target/AArch64/AArch64.h
+@@ -51,6 +51,7 @@ FunctionPass *createAArch64A53Fix835769();
+ FunctionPass *createFalkorHWPFFixPass();
+ FunctionPass *createFalkorMarkStridedAccessesPass();
+ FunctionPass *createAArch64BranchTargetsPass();
++FunctionPass *createAArch64MIPeepholeOptPass();
+ 
+ FunctionPass *createAArch64CleanupLocalDynamicTLSPass();
+ 
+@@ -82,6 +83,7 @@ void initializeAArch64SLSHardeningPass(PassRegistry&);
+ void initializeAArch64SpeculationHardeningPass(PassRegistry&);
+ void initializeAArch64LoadStoreOptPass(PassRegistry&);
+ void initializeAArch64LowerHomogeneousPrologEpilogPass(PassRegistry &);
++void initializeAArch64MIPeepholeOptPass(PassRegistry &);
+ void initializeAArch64SIMDInstrOptPass(PassRegistry&);
+ void initializeAArch64O0PreLegalizerCombinerPass(PassRegistry &);
+ void initializeAArch64PreLegalizerCombinerPass(PassRegistry&);
+diff --git a/llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp b/llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp
+new file mode 100644
+index 000000000000..f77928520b7d
+--- /dev/null
++++ b/llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp
+@@ -0,0 +1,213 @@
++//===- AArch64MIPeepholeOpt.cpp - AArch64 MI peephole optimization pass ---===//
++//
++// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
++// See https://llvm.org/LICENSE.txt for license information.
++// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
++//
++//===----------------------------------------------------------------------===//
++//
++// This pass performs below peephole optimizations on MIR level.
++//
++// 1. MOVi32imm + ANDWrr ==> ANDWri + ANDWri
++//    MOVi64imm + ANDXrr ==> ANDXri + ANDXri
++//
++//    The mov pseudo instruction could be expanded to multiple mov instructions
++//    later. In this case, we could try to split the constant  operand of mov
++//    instruction into two bitmask immediates. It makes two AND instructions
++//    intead of multiple `mov` + `and` instructions.
++//===----------------------------------------------------------------------===//
++
++#include "AArch64ExpandImm.h"
++#include "AArch64InstrInfo.h"
++#include "MCTargetDesc/AArch64AddressingModes.h"
++#include "llvm/ADT/SetVector.h"
++#include "llvm/CodeGen/MachineDominators.h"
++#include "llvm/CodeGen/MachineLoopInfo.h"
++
++using namespace llvm;
++
++#define DEBUG_TYPE "aarch64-mi-peephole-opt"
++
++namespace {
++
++struct AArch64MIPeepholeOpt : public MachineFunctionPass {
++  static char ID;
++
++  AArch64MIPeepholeOpt() : MachineFunctionPass(ID) {
++    initializeAArch64MIPeepholeOptPass(*PassRegistry::getPassRegistry());
++  }
++
++  const AArch64InstrInfo *TII;
++  MachineLoopInfo *MLI;
++  MachineRegisterInfo *MRI;
++
++  template <typename T>
++  bool visitAND(MachineInstr &MI,
++                SmallSetVector<MachineInstr *, 8> &ToBeRemoved);
++  bool runOnMachineFunction(MachineFunction &MF) override;
++
++  StringRef getPassName() const override {
++    return "AArch64 MI Peephole Optimization pass";
++  }
++
++  void getAnalysisUsage(AnalysisUsage &AU) const override {
++    AU.setPreservesCFG();
++    AU.addRequired<MachineLoopInfo>();
++    MachineFunctionPass::getAnalysisUsage(AU);
++  }
++};
++
++char AArch64MIPeepholeOpt::ID = 0;
++
++} // end anonymous namespace
++
++INITIALIZE_PASS(AArch64MIPeepholeOpt, "aarch64-mi-peephole-opt",
++                "AArch64 MI Peephole Optimization", false, false)
++
++template <typename T>
++static bool splitBitmaskImm(T Imm, unsigned RegSize, T &Imm1Enc, T &Imm2Enc) {
++  T UImm = static_cast<T>(Imm);
++  if (AArch64_AM::isLogicalImmediate(UImm, RegSize))
++    return false;
++
++  // If this immediate can be handled by one instruction, do not split it.
++  SmallVector<AArch64_IMM::ImmInsnModel, 4> Insn;
++  AArch64_IMM::expandMOVImm(UImm, RegSize, Insn);
++  if (Insn.size() == 1)
++    return false;
++
++  // The bitmask immediate consists of consecutive ones.  Let's say there is
++  // constant 0b00000000001000000000010000000000 which does not consist of
++  // consecutive ones. We can split it in to two bitmask immediate like
++  // 0b00000000001111111111110000000000 and 0b11111111111000000000011111111111.
++  // If we do AND with these two bitmask immediate, we can see original one.
++  unsigned LowestBitSet = countTrailingZeros(UImm);
++  unsigned HighestBitSet = Log2_64(UImm);
++
++  // Create a mask which is filled with one from the position of lowest bit set
++  // to the position of highest bit set.
++  T NewImm1 = (static_cast<T>(2) << HighestBitSet) -
++              (static_cast<T>(1) << LowestBitSet);
++  // Create a mask which is filled with one outside the position of lowest bit
++  // set and the position of highest bit set.
++  T NewImm2 = UImm | ~NewImm1;
++
++  // If the splitted value is not valid bitmask immediate, do not split this
++  // constant.
++  if (!AArch64_AM::isLogicalImmediate(NewImm2, RegSize))
++    return false;
++
++  Imm1Enc = AArch64_AM::encodeLogicalImmediate(NewImm1, RegSize);
++  Imm2Enc = AArch64_AM::encodeLogicalImmediate(NewImm2, RegSize);
++  return true;
++}
++
++template <typename T>
++bool AArch64MIPeepholeOpt::visitAND(
++    MachineInstr &MI, SmallSetVector<MachineInstr *, 8> &ToBeRemoved) {
++  // Try below transformation.
++  //
++  // MOVi32imm + ANDWrr ==> ANDWri + ANDWri
++  // MOVi64imm + ANDXrr ==> ANDXri + ANDXri
++  //
++  // The mov pseudo instruction could be expanded to multiple mov instructions
++  // later. Let's try to split the constant operand of mov instruction into two
++  // bitmask immediates. It makes only two AND instructions intead of multiple
++  // mov + and instructions.
++
++  unsigned RegSize = sizeof(T) * 8;
++  assert((RegSize == 32 || RegSize == 64) &&
++         "Invalid RegSize for AND bitmask peephole optimization");
++
++  // Check whether AND's MBB is in loop and the AND is loop invariant.
++  MachineBasicBlock *MBB = MI.getParent();
++  MachineLoop *L = MLI->getLoopFor(MBB);
++  if (L && !L->isLoopInvariant(MI))
++    return false;
++
++  // Check whether AND's operand is MOV with immediate.
++  MachineInstr *MovMI = MRI->getUniqueVRegDef(MI.getOperand(2).getReg());
++  MachineInstr *SubregToRegMI = nullptr;
++  // If it is SUBREG_TO_REG, check its operand.
++  if (MovMI->getOpcode() == TargetOpcode::SUBREG_TO_REG) {
++    SubregToRegMI = MovMI;
++    MovMI = MRI->getUniqueVRegDef(MovMI->getOperand(2).getReg());
++  }
++
++  // If the MOV has multiple uses, do not split the immediate because it causes
++  // more instructions.
++  if (!MRI->hasOneUse(MovMI->getOperand(0).getReg()))
++    return false;
++
++  if (MovMI->getOpcode() != AArch64::MOVi32imm &&
++      MovMI->getOpcode() != AArch64::MOVi64imm)
++    return false;
++
++  // Split the bitmask immediate into two.
++  T UImm = static_cast<T>(MovMI->getOperand(1).getImm());
++  T Imm1Enc;
++  T Imm2Enc;
++  if (!splitBitmaskImm(UImm, RegSize, Imm1Enc, Imm2Enc))
++    return false;
++
++  // Create new AND MIs.
++  DebugLoc DL = MI.getDebugLoc();
++  Register DstReg = MI.getOperand(0).getReg();
++  Register SrcReg = MI.getOperand(1).getReg();
++  Register NewTmpReg = MRI->createVirtualRegister(MRI->getRegClass(DstReg));
++  unsigned Opcode = (RegSize == 32) ? AArch64::ANDWri : AArch64::ANDXri;
++
++  BuildMI(*MBB, MI, DL, TII->get(Opcode), NewTmpReg)
++      .addReg(SrcReg)
++      .addImm(Imm1Enc);
++
++  BuildMI(*MBB, MI, DL, TII->get(Opcode), DstReg)
++      .addReg(NewTmpReg)
++      .addImm(Imm2Enc);
++
++  ToBeRemoved.insert(&MI);
++  if (SubregToRegMI)
++    ToBeRemoved.insert(SubregToRegMI);
++  ToBeRemoved.insert(MovMI);
++
++  return true;
++}
++
++bool AArch64MIPeepholeOpt::runOnMachineFunction(MachineFunction &MF) {
++  if (skipFunction(MF.getFunction()))
++    return false;
++
++  TII = static_cast<const AArch64InstrInfo *>(MF.getSubtarget().getInstrInfo());
++  MLI = &getAnalysis<MachineLoopInfo>();
++  MRI = &MF.getRegInfo();
++
++  if (!MRI->isSSA())
++    return false;
++
++  bool Changed = false;
++  SmallSetVector<MachineInstr *, 8> ToBeRemoved;
++
++  for (MachineBasicBlock &MBB : MF) {
++    for (MachineInstr &MI : MBB) {
++      switch (MI.getOpcode()) {
++      default:
++        break;
++      case AArch64::ANDWrr:
++        Changed = visitAND<uint32_t>(MI, ToBeRemoved);
++        break;
++      case AArch64::ANDXrr:
++        Changed = visitAND<uint64_t>(MI, ToBeRemoved);
++        break;
++      }
++    }
++  }
++
++  for (MachineInstr *MI : ToBeRemoved)
++    MI->eraseFromParent();
++
++  return Changed;
++}
++
++FunctionPass *llvm::createAArch64MIPeepholeOptPass() {
++  return new AArch64MIPeepholeOpt();
++}
+diff --git a/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp b/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp
+index 99bcb2f4649a..637f69af0365 100644
+--- a/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp
++++ b/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp
+@@ -195,6 +195,7 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeAArch64Target() {
+   initializeAArch64DeadRegisterDefinitionsPass(*PR);
+   initializeAArch64ExpandPseudoPass(*PR);
+   initializeAArch64LoadStoreOptPass(*PR);
++  initializeAArch64MIPeepholeOptPass(*PR);
+   initializeAArch64SIMDInstrOptPass(*PR);
+   initializeAArch64O0PreLegalizerCombinerPass(*PR);
+   initializeAArch64PreLegalizerCombinerPass(*PR);
+@@ -479,6 +480,7 @@ public:
+   bool addRegBankSelect() override;
+   void addPreGlobalInstructionSelect() override;
+   bool addGlobalInstructionSelect() override;
++  void addMachineSSAOptimization() override;
+   bool addILPOpts() override;
+   void addPreRegAlloc() override;
+   void addPostRegAlloc() override;
+@@ -649,6 +651,14 @@ bool AArch64PassConfig::addGlobalInstructionSelect() {
+   return false;
+ }
+ 
++void AArch64PassConfig::addMachineSSAOptimization() {
++  // Run default MachineSSAOptimization first.
++  TargetPassConfig::addMachineSSAOptimization();
++
++  if (TM->getOptLevel() != CodeGenOpt::None)
++    addPass(createAArch64MIPeepholeOptPass());
++}
++
+ bool AArch64PassConfig::addILPOpts() {
+   if (EnableCondOpt)
+     addPass(createAArch64ConditionOptimizerPass());
+diff --git a/llvm/lib/Target/AArch64/CMakeLists.txt b/llvm/lib/Target/AArch64/CMakeLists.txt
+index a77a66bacc4c..aeedeb4eebac 100644
+--- a/llvm/lib/Target/AArch64/CMakeLists.txt
++++ b/llvm/lib/Target/AArch64/CMakeLists.txt
+@@ -66,6 +66,7 @@ add_llvm_target(AArch64CodeGen
+   AArch64LowerHomogeneousPrologEpilog.cpp
+   AArch64MachineFunctionInfo.cpp
+   AArch64MacroFusion.cpp
++  AArch64MIPeepholeOpt.cpp
+   AArch64MCInstLower.cpp
+   AArch64PromoteConstant.cpp
+   AArch64PBQPRegAlloc.cpp
+diff --git a/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h b/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h
+index c3e74757675b..876526093591 100644
+--- a/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h
++++ b/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h
+@@ -13,6 +13,7 @@
+ #ifndef LLVM_LIB_TARGET_AARCH64_MCTARGETDESC_AARCH64ADDRESSINGMODES_H
+ #define LLVM_LIB_TARGET_AARCH64_MCTARGETDESC_AARCH64ADDRESSINGMODES_H
+ 
++#include "AArch64ExpandImm.h"
+ #include "llvm/ADT/APFloat.h"
+ #include "llvm/ADT/APInt.h"
+ #include "llvm/ADT/bit.h"
+diff --git a/llvm/test/CodeGen/AArch64/O3-pipeline.ll b/llvm/test/CodeGen/AArch64/O3-pipeline.ll
+index 1d6eca60838f..6796022a95e6 100644
+--- a/llvm/test/CodeGen/AArch64/O3-pipeline.ll
++++ b/llvm/test/CodeGen/AArch64/O3-pipeline.ll
+@@ -40,7 +40,7 @@
+ ; CHECK-NEXT:         Induction Variable Users
+ ; CHECK-NEXT:         Loop Strength Reduction
+ ; CHECK-NEXT:       Basic Alias Analysis (stateless AA impl)
+-; CHECK-NEXT:         Function Alias Analysis Results
++; CHECK-NEXT:       Function Alias Analysis Results
+ ; CHECK-NEXT:       Merge contiguous icmps into a memcmp
+ ; CHECK-NEXT:       Natural Loop Information
+ ; CHECK-NEXT:       Lazy Branch Probability Analysis
+@@ -131,6 +131,7 @@
+ ; CHECK-NEXT:       Machine code sinking
+ ; CHECK-NEXT:       Peephole Optimizations
+ ; CHECK-NEXT:       Remove dead machine instructions
++; CHECK-NEXT:       AArch64 MI Peephole Optimization pass
+ ; CHECK-NEXT:       AArch64 Dead register definitions
+ ; CHECK-NEXT:       Detect Dead Lanes
+ ; CHECK-NEXT:       Process Implicit Definitions
+diff --git a/llvm/test/CodeGen/AArch64/aarch64-split-and-bitmask-immediate.ll b/llvm/test/CodeGen/AArch64/aarch64-split-and-bitmask-immediate.ll
+new file mode 100644
+index 000000000000..0b082e313396
+--- /dev/null
++++ b/llvm/test/CodeGen/AArch64/aarch64-split-and-bitmask-immediate.ll
+@@ -0,0 +1,245 @@
++; NOTE: Assertions have been autogenerated by utils/update_llc_test_checks.py
++; RUN: llc -mtriple=aarch64-none-linux-gnu < %s | FileCheck %s
++
++define i8 @test1(i32 %a) {
++; CHECK-LABEL: test1:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    and w8, w0, #0x3ffc00
++; CHECK-NEXT:    and w8, w8, #0xffe007ff
++; CHECK-NEXT:    cmp w8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i32 %a, 2098176
++  %cmp = icmp eq i32 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++; This constant should not be split because it can be handled by one mov.
++define i8 @test2(i32 %a) {
++; CHECK-LABEL: test2:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    mov w8, #135
++; CHECK-NEXT:    and w8, w0, w8
++; CHECK-NEXT:    cmp w8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i32 %a, 135
++  %cmp = icmp eq i32 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++; This constant should not be split because the split immediate is not valid
++; bitmask immediate.
++define i8 @test3(i32 %a) {
++; CHECK-LABEL: test3:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    mov w8, #1024
++; CHECK-NEXT:    movk w8, #33, lsl #16
++; CHECK-NEXT:    and w8, w0, w8
++; CHECK-NEXT:    cmp w8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i32 %a, 2163712
++  %cmp = icmp eq i32 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++define i8 @test4(i64 %a) {
++; CHECK-LABEL: test4:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    and x8, x0, #0x3ffc00
++; CHECK-NEXT:    and x8, x8, #0xffffffffffe007ff
++; CHECK-NEXT:    cmp x8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i64 %a, 2098176
++  %cmp = icmp eq i64 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++define i8 @test5(i64 %a) {
++; CHECK-LABEL: test5:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    and x8, x0, #0x3ffffc000
++; CHECK-NEXT:    and x8, x8, #0xfffffffe00007fff
++; CHECK-NEXT:    cmp x8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i64 %a, 8589950976
++  %cmp = icmp eq i64 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++; This constant should not be split because it can be handled by one mov.
++define i8 @test6(i64 %a) {
++; CHECK-LABEL: test6:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    mov w8, #135
++; CHECK-NEXT:    and x8, x0, x8
++; CHECK-NEXT:    cmp x8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i64 %a, 135
++  %cmp = icmp eq i64 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++; This constant should not be split because the split immediate is not valid
++; bitmask immediate.
++define i8 @test7(i64 %a) {
++; CHECK-LABEL: test7:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    mov w8, #1024
++; CHECK-NEXT:    movk w8, #33, lsl #16
++; CHECK-NEXT:    and x8, x0, x8
++; CHECK-NEXT:    cmp x8, #1024
++; CHECK-NEXT:    cset w0, eq
++; CHECK-NEXT:    ret
++entry:
++  %and = and i64 %a, 2163712
++  %cmp = icmp eq i64 %and, 1024
++  %conv = zext i1 %cmp to i8
++  ret i8 %conv
++}
++
++; The split bitmask immediates should be hoisted outside loop because they are
++; loop invariant.
++define void @test8(i64 %a, i64* noalias %src, i64* noalias %dst, i64 %n) {
++; CHECK-LABEL: test8:
++; CHECK:       // %bb.0: // %loop.ph
++; CHECK-NEXT:    and x9, x0, #0x3ffc00
++; CHECK-NEXT:    mov x8, xzr
++; CHECK-NEXT:    and x9, x9, #0xffffffffffe007ff
++; CHECK-NEXT:    b .LBB7_2
++; CHECK-NEXT:  .LBB7_1: // %for.inc
++; CHECK-NEXT:    // in Loop: Header=BB7_2 Depth=1
++; CHECK-NEXT:    add x8, x8, #1
++; CHECK-NEXT:    cmp x8, x3
++; CHECK-NEXT:    b.gt .LBB7_4
++; CHECK-NEXT:  .LBB7_2: // %loop
++; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
++; CHECK-NEXT:    cmp x8, x9
++; CHECK-NEXT:    b.hs .LBB7_1
++; CHECK-NEXT:  // %bb.3: // %if.then
++; CHECK-NEXT:    // in Loop: Header=BB7_2 Depth=1
++; CHECK-NEXT:    lsl x10, x8, #3
++; CHECK-NEXT:    ldr x11, [x1, x10]
++; CHECK-NEXT:    str x11, [x2, x10]
++; CHECK-NEXT:    b .LBB7_1
++; CHECK-NEXT:  .LBB7_4: // %exit
++; CHECK-NEXT:    ret
++loop.ph:
++  br label %loop
++
++loop:
++  %iv = phi i64 [ %inc, %for.inc ], [ 0, %loop.ph ]
++  %and = and i64 %a, 2098176
++  %cmp = icmp ult i64 %iv, %and
++  br i1 %cmp, label %if.then, label %if.else
++
++if.then:
++  %src.arrayidx = getelementptr inbounds i64, i64* %src, i64 %iv
++  %val = load i64, i64* %src.arrayidx
++  %dst.arrayidx = getelementptr inbounds i64, i64* %dst, i64 %iv
++  store i64 %val, i64* %dst.arrayidx
++  br label %for.inc
++
++if.else:
++  br label %for.inc
++
++for.inc:
++  %inc = add nuw nsw i64 %iv, 1
++  %cond = icmp sgt i64 %inc, %n
++  br i1 %cond, label %exit, label %loop
++
++exit:
++  ret void
++}
++
++; This constant should not be split because the `and` is not loop invariant.
++define i32 @test9(i32* nocapture %x, i32* nocapture readonly %y, i32 %n) {
++; CHECK-LABEL: test9:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    cmp w2, #1
++; CHECK-NEXT:    b.lt .LBB8_3
++; CHECK-NEXT:  // %bb.1: // %for.body.preheader
++; CHECK-NEXT:    mov w9, #1024
++; CHECK-NEXT:    mov w8, w2
++; CHECK-NEXT:    movk w9, #32, lsl #16
++; CHECK-NEXT:  .LBB8_2: // %for.body
++; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
++; CHECK-NEXT:    ldr w10, [x1], #4
++; CHECK-NEXT:    subs x8, x8, #1
++; CHECK-NEXT:    and w10, w10, w9
++; CHECK-NEXT:    str w10, [x0], #4
++; CHECK-NEXT:    b.ne .LBB8_2
++; CHECK-NEXT:  .LBB8_3: // %for.cond.cleanup
++; CHECK-NEXT:    mov w0, wzr
++; CHECK-NEXT:    ret
++entry:
++  %cmp8 = icmp sgt i32 %n, 0
++  br i1 %cmp8, label %for.body.preheader, label %for.cond.cleanup
++
++for.body.preheader:                               ; preds = %entry
++  %wide.trip.count = zext i32 %n to i64
++  br label %for.body
++
++for.cond.cleanup:                                 ; preds = %for.body, %entry
++  ret i32 0
++
++for.body:                                         ; preds = %for.body.preheader, %for.body
++  %indvars.iv = phi i64 [ 0, %for.body.preheader ], [ %indvars.iv.next, %for.body ]
++  %arrayidx = getelementptr inbounds i32, i32* %y, i64 %indvars.iv
++  %0 = load i32, i32* %arrayidx, align 4
++  %and = and i32 %0, 2098176
++  %arrayidx2 = getelementptr inbounds i32, i32* %x, i64 %indvars.iv
++  store i32 %and, i32* %arrayidx2, align 4
++  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
++  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
++  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body
++}
++
++; After instruction selection end, we can see the `and` and `or` share the
++; constant as below.
++;
++; %4:gpr32 = MOVi32imm 2098176
++; %5:gpr32 = ANDWrr killed %3:gpr32, %4:gpr32
++; STRWui killed %5:gpr32, %0:gpr64common, 0 :: (store (s32) into %ir.x, !tbaa !8)
++; %6:gpr32 = LDRWui %1:gpr64common, 0 :: (load (s32) from %ir.y, !tbaa !8)
++; %7:gpr32 = ORRWrr killed %6:gpr32, %4:gpr32
++;
++; In this case, the constant should not be split because it causes more
++; instructions.
++define void @test10(i32* nocapture %x, i32* nocapture readonly %y, i32* nocapture %z) {
++; CHECK-LABEL: test10:
++; CHECK:       // %bb.0: // %entry
++; CHECK-NEXT:    ldr w8, [x1]
++; CHECK-NEXT:    mov w9, #1024
++; CHECK-NEXT:    movk w9, #32, lsl #16
++; CHECK-NEXT:    and w8, w8, w9
++; CHECK-NEXT:    str w8, [x0]
++; CHECK-NEXT:    ldr w8, [x1]
++; CHECK-NEXT:    orr w8, w8, w9
++; CHECK-NEXT:    str w8, [x2]
++; CHECK-NEXT:    ret
++entry:
++  %0 = load i32, i32* %y, align 4
++  %and = and i32 %0, 2098176
++  store i32 %and, i32* %x, align 4
++  %1 = load i32, i32* %y, align 4
++  %or = or i32 %1, 2098176
++  store i32 %or, i32* %z, align 4
++  ret void
++}
+diff --git a/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll b/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll
+index 2e20ef67b2a2..3e30f45cfabb 100644
+--- a/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll
++++ b/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll
+@@ -245,10 +245,9 @@ define i32 @in_multiuse_B_constmask(i32 %x, i32 %y, i32 %z) nounwind {
+ define i32 @n0_badconstmask(i32 %x, i32 %y) {
+ ; CHECK-LABEL: n0_badconstmask:
+ ; CHECK:       // %bb.0:
+-; CHECK-NEXT:    mov w9, #256
+-; CHECK-NEXT:    movk w9, #65280, lsl #16
++; CHECK-NEXT:    and w9, w1, #0xffffff00
+ ; CHECK-NEXT:    and w8, w0, #0xffff00
+-; CHECK-NEXT:    and w9, w1, w9
++; CHECK-NEXT:    and w9, w9, #0xff0001ff
+ ; CHECK-NEXT:    orr w0, w8, w9
+ ; CHECK-NEXT:    ret
+   %mx = and i32 %x, 16776960
+</cut>
+------=_Part_9619_610164726.1633558676228--
