@@ -1,79 +1,106 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF302C8E
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 17:45:53 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id w10so7292254ybt.4
-        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 10:45:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ymHLGH0Raq7ZmGFbhtXmAYW4w7KWD4EjLyVclCp4QNk=;
-        b=FDtgJKC2yf2w+mH0oA+D57k3nx54eAv/j4VPf/geQ25vy2h5bs5gGf0Yl1iswCf1br
-         twAlku9c9HaQSksJSdqaGILpkNO3VsxHP9T1pKiFZm1xd81utR7KiW1+TbdnVFM9dzpv
-         8MoBpvwGcgoktnH8xTxKJKbmy6W3EpmN8/refTKp/q1c/VYBmgAmlELHwB6dYPrGl42f
-         EK8d99G65Tdvk9Jmz13SG4Pw3nOYOepqAVXVBjNnwjzcGQfYX7qjEKWCQW1sl81JGpj/
-         wPwKz8QCcOlukoAR89S4zRJYHYvhB8UdTQ37d5TO0bIL21axXkguID2Igqxbg/MNVIs/
-         eROQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27BB2C83
+	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 20:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1633553020;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1KF1LW5cDfM/ueFGMcYEy3hhTDIYMy6oUHH//f81E6c=;
+	b=Tjxe5zsG2Do4oxNXCQ6NlspjMNz7ShjOvTRyRrPBfvnP0yna03H57a3uiSQU86+s34MGg9
+	3Rskpt4szuNtRhz8/GXUbgQdKHTXGXSvKRv+0Vq6hU39zTIT1JH/fN+YCV6ObY0a18RIKj
+	9/W/NWiceu4DoR42OAmbKTFdGAGvRvY=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-599-hJ0i1tCEMT2kB90Fcrgd1A-1; Wed, 06 Oct 2021 16:43:39 -0400
+X-MC-Unique: hJ0i1tCEMT2kB90Fcrgd1A-1
+Received: by mail-qt1-f198.google.com with SMTP id w10-20020ac87e8a000000b002a68361412bso3209725qtj.7
+        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 13:43:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ymHLGH0Raq7ZmGFbhtXmAYW4w7KWD4EjLyVclCp4QNk=;
-        b=PcJL5nNjXUWNFsuNWk1/Aq66P3QgqvrJaieeONkufbH/EIc/6VQvYN6kZ5Av3dzKHt
-         0Z/EOyRxzpAcBoGPjmSPbtwPuVwyc30A3UkWqBkyk6UcafgR9lMR3gHnWGzNdjG/dMff
-         ULDVE1bTGjql5jN8fJG+lUAWGPy6fZe3RWK51INVe8jcZPMBhS56wEOnaIoxl2YHZlxl
-         hsf08TAaipA0/FvTh86U8RdyrbdboKNm6MDzzEm5Ibru9TU/W8tZ7fcVCo1FPswSbAeP
-         fAr2vWpB0imPR+lHeLCVGLMytYrQQZVxX4QjNDhRWB8QNapePdLruQ6ag4auTxk3dcib
-         44dw==
-X-Gm-Message-State: AOAM531YD9W5tfQgYsELZTw7QoAro6Iox+JLBqvqIfDlNVoCsILl5IG8
-	qmzncgCbjBPxDB7e/bhl+zt1Rs65uSY5JWkTF6lnJw==
-X-Google-Smtp-Source: ABdhPJx/PRDppXa0Kq84b+6Rsz/D47+Ohg3rhbB34IFTWREHPFR3I/tnnF4mNhbpL2vllEq5+bhlJ18BTkRVcOXB5SQ=
-X-Received: by 2002:a5b:286:: with SMTP id x6mr30426375ybl.59.1633542352526;
- Wed, 06 Oct 2021 10:45:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1KF1LW5cDfM/ueFGMcYEy3hhTDIYMy6oUHH//f81E6c=;
+        b=h3e8Z1S8qtfztHjie9HyQUpDYFlkIQmQ8kNkBdTaqMrbrMcqgmHcSqoC77dFuZxCbD
+         VqcFqHjuZgpX4vkqnu54ANvaMd71uao0FZBMRw60/vUvCo9Z40j9hB+7VDDoFzX/bk5t
+         aFtpH77tkyMbTz+Nic9MCYTfHUFFHsNQ9ge0hZUQT/yRVzoT3ksfPvCJZmnefNbCk7B5
+         96maNLl2JgyeZW1WBjxvDeHkjGpxi2EBS7K5T5c4RcutW1SFQ0rSeS3qewc5nIHHW5iJ
+         DYVkSkWzgFsH8hQzf5czHiOZkZMUzLaYymQP3SThVw1ZX+aC8unu7rnsWmOak7NureTL
+         Ravw==
+X-Gm-Message-State: AOAM530gfbqY+brCck6TnZw933akWo+k70RUNFsf1Qj96/LZ6+YOWcBs
+	/6h88McMlxOD/mdLNEhh/SOKK8rrFmXjYj3j1IIt/Dl9eqix7hEjsdWM5vEuiUsa/we+QZ7CYmW
+	U87cUwtkgqWw2eA==
+X-Received: by 2002:a37:5f02:: with SMTP id t2mr244856qkb.264.1633553019257;
+        Wed, 06 Oct 2021 13:43:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxdGPlYUsWoR+CzZXbwhCp1TXr5QdHbHnuo20r9V6zPZV/k5CSYKHLQylIKXUmk2hZiajgHMQ==
+X-Received: by 2002:a37:5f02:: with SMTP id t2mr244838qkb.264.1633553018965;
+        Wed, 06 Oct 2021 13:43:38 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::49])
+        by smtp.gmail.com with ESMTPSA id 130sm12405680qkh.99.2021.10.06.13.43.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Oct 2021 13:43:38 -0700 (PDT)
+Date: Wed, 6 Oct 2021 13:43:35 -0700
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, X86 ML <x86@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	linux-hardening@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 06/15] ftrace: Use an opaque type for functions not
+ callable from C
+Message-ID: <20211006204335.xtymxt6wk4akx6fc@treble>
+References: <20210930180531.1190642-1-samitolvanen@google.com>
+ <20210930180531.1190642-7-samitolvanen@google.com>
+ <20211006032945.axlqh3vehgar6adr@treble>
+ <20211006090249.248c65b0@gandalf.local.home>
+ <CABCJKueL4Ebaan=JBUyO3oewq7RTHHXWUQpixgf2AfC_r5T3uA@mail.gmail.com>
+ <20211006125809.5389b2a3@gandalf.local.home>
+ <CABCJKudTuheEd5jyhXmfJHup7iYzOz3_OcO92hFnpRK1MapJSg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210930180531.1190642-1-samitolvanen@google.com>
- <20210930180531.1190642-7-samitolvanen@google.com> <20211006032945.axlqh3vehgar6adr@treble>
- <20211006090249.248c65b0@gandalf.local.home> <CABCJKueL4Ebaan=JBUyO3oewq7RTHHXWUQpixgf2AfC_r5T3uA@mail.gmail.com>
- <20211006125809.5389b2a3@gandalf.local.home>
-In-Reply-To: <20211006125809.5389b2a3@gandalf.local.home>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 6 Oct 2021 10:45:41 -0700
-Message-ID: <CABCJKudTuheEd5jyhXmfJHup7iYzOz3_OcO92hFnpRK1MapJSg@mail.gmail.com>
-Subject: Re: [PATCH v4 06/15] ftrace: Use an opaque type for functions not
- callable from C
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, linux-hardening@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CABCJKudTuheEd5jyhXmfJHup7iYzOz3_OcO92hFnpRK1MapJSg@mail.gmail.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Wed, Oct 6, 2021 at 9:58 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Wed, 6 Oct 2021 09:31:04 -0700
-> Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> > > > On Thu, Sep 30, 2021 at 11:05:22AM -0700, Sami Tolvanen wrote:
-> > > > > With CONFIG_CFI_CLANG, the compiler changes function references to point
-> > > > > to the CFI jump table. As ftrace_call, ftrace_regs_call, and mcount_call
-> > > > > are not called from C, use DECLARE_ASM_FUNC_SYMBOL to declare them.
-> > >
-> > > "not called from C" is a bit confusing.
+On Wed, Oct 06, 2021 at 10:45:41AM -0700, Sami Tolvanen wrote:
+> On Wed, Oct 6, 2021 at 9:58 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 > >
-> > Any thoughts on how to make this less confusing?
->
->  "Not called by C code, but injected by the compiler."
->
-> ?
+> > On Wed, 6 Oct 2021 09:31:04 -0700
+> > Sami Tolvanen <samitolvanen@google.com> wrote:
+> >
+> > > > > On Thu, Sep 30, 2021 at 11:05:22AM -0700, Sami Tolvanen wrote:
+> > > > > > With CONFIG_CFI_CLANG, the compiler changes function references to point
+> > > > > > to the CFI jump table. As ftrace_call, ftrace_regs_call, and mcount_call
+> > > > > > are not called from C, use DECLARE_ASM_FUNC_SYMBOL to declare them.
+> > > >
+> > > > "not called from C" is a bit confusing.
+> > >
+> > > Any thoughts on how to make this less confusing?
+> >
+> >  "Not called by C code, but injected by the compiler."
+> >
+> > ?
+> 
+> Sure, sounds good to me. I'll update this in v5.
 
-Sure, sounds good to me. I'll update this in v5.
+"injected by the compiler" sounds even more confusing.  It almost sounds
+like those functions are generated by GCC, which they are most
+definitely not.
 
-Sami
+-- 
+Josh
+
