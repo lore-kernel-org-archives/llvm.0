@@ -1,106 +1,64 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC032C83
-	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 21:58:50 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id b20so16563517lfv.3
-        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 14:58:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7AD42C83
+	for <llvm@lists.linux.dev>; Wed,  6 Oct 2021 22:00:34 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id m3so16470603lfu.2
+        for <llvm@lists.linux.dev>; Wed, 06 Oct 2021 15:00:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gDe/CCgzbVL8cdlihpSKcZ9kkAIpNWk3w42F2ZBCbZg=;
-        b=DpDarEaj1O5yO8x4BdIM2Z/QGnUEayQsIHKYbYRjnyzgH1esE022dwFqrhXwc6O5fb
-         JOSG4NCOh4lBDQG6UOc7cvFWeA+sj0AzYTEr5cClzf3a4p3Y8LB8oqaZqBjiauJr5xg1
-         8ESjgwjYcEbeS9PfhXdSQvk9oMdgLTik5/iZ4V2CY+r2yFgBbUSdTXI9yjXFPtgJEb7V
-         HiCutC1fb4tudyIy8/s+qObuEJFapRCQJNeYJyQ1ywTjoFE7Q9b+HFci138yJTYwwokH
-         z2w9tMdPXLiJSuSsAdZT7xIXmA9tEjdSrm4bRyzkEn2vaaR7N8RIYBh5M4vHHJi/EQaS
-         cLMg==
+        bh=oxgd4bleC6C+lexYJzk93QvGLlJ7mbzEbFb+QheFLXg=;
+        b=NsWmbaQ05qI+dYK9dIElo34qEjE1XjnCFBNdsDZ2GTk/ig5jIHixHlySH+8D9BDJ3X
+         OSnnxpuEVGLtuqfOej9IOTMuqZLsEx2q9nyudWfkj/N4VHp/40Pxr3fFk83NLHGi+Ar8
+         zSPFr2eO3wdFImbRHR188qCyj2EmFsxXzChrohWTfzHQIGbjAQzo8EPmYoxRUvtUqXub
+         ZhFpvAdmMRR2i0PMs78TKAkUD24jRUfxOaoGtr5xGmhZVZ+aWBAJdOYBwf2vQP7H5FK4
+         nYamksetskJNAdJuTi312vUqABubmwWrL1tgTtLR/npPWvqwyh+Xj9hdfKWLrE/8988T
+         aHog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gDe/CCgzbVL8cdlihpSKcZ9kkAIpNWk3w42F2ZBCbZg=;
-        b=MMj9DEpDNWScZaD8IJ7gvFaX3SZVq59Nqdji1P3Q0pzZnQq/FRlflxZFjglnqPNEmA
-         CHk9jiR+0y3i4WzoBrBK4ejyKnGdBgvTzINHsalJUmz+mR4xeeBXJDNNJdszCkXkL5OS
-         gV6XO55e7/gNrGnoG5eBaES0vuTaPewx/qNvLI0qHAjj0WrTvlSJZ+LQk7Co7neEvkXj
-         vr0Bx+ZO2Q/5uteGPQaARIx1095l67bWtQYOlDw8cRZyx72Bq3ewWr164C8AxDkBV2ck
-         sz7MxlPn7ZHMai58ZF0QpYijDXQ+1RB9+Sz5/00rnNXIyYK6EuEz+G8Xkwh5QN4bnUVX
-         OesA==
-X-Gm-Message-State: AOAM530WhrRsLqS+R9QlR5nM7u6nlTlxJrDVAsqlWK9Wv05PT965Y340
-	pZTKWsOC2u9ns+38ln9P3VcqrjWJwTAVgV9hcAdnhg==
-X-Google-Smtp-Source: ABdhPJw6/4P9YojbZ4+TF/BbAh9j+NIH0UVeOWkFJsuSEGRFBhFgpeb3nv6DA7bKovrjbGLFVHAi7Nh6gnC/VpLE9m8=
-X-Received: by 2002:a05:651c:b20:: with SMTP id b32mr578167ljr.62.1633557528140;
- Wed, 06 Oct 2021 14:58:48 -0700 (PDT)
+        bh=oxgd4bleC6C+lexYJzk93QvGLlJ7mbzEbFb+QheFLXg=;
+        b=pPL2Q/O2ACjofCiHo5DgXzum00fVVXsZDKArSvcnq3PEJSzXAenrCSbUoWMOTYd1L6
+         dWSCh1tXtTY0HpaMRdvgcXHu3lsL78EcmaVZa+rupcOYuwU3ZV9SvhKE1kyKpQFrZ3Xn
+         bgrn0ZnoDIVMvtA4ZJxgxg4yX8PdULkskNYVksPGiHe9bEjl/RclsA/6EkWXLbekjntt
+         VvXKioVD5BYfkAiFNoQDy+uyaisED5xFkizC21Q0vnNL2UTyl0obeRCSLzj0r+/Nb3aS
+         wkm1X79Cyzmgu3NOo69lKv1kLHe70mkrjeq6Omz/LhCwy/Jztp/Eyk/OwRgM8Ltw3RgB
+         GCEg==
+X-Gm-Message-State: AOAM532rzLxeAHd1yYY2GxzJEoxI0Ie2dDBvjkHvLiiDh6XqSIQzVu17
+	y7MJoIjuVucHSXVoAFBb8oj1D5xe+fz02sNSTRo0GA==
+X-Google-Smtp-Source: ABdhPJzrzk7JqOrwnXi2fahE4L8/jK+yyxAyTW0kXLgotlyRv5UBVWtqjtdXFMtGdFNRXUUl4iiIihb/UfiDok7WZ6o=
+X-Received: by 2002:a2e:750e:: with SMTP id q14mr592688ljc.338.1633557632709;
+ Wed, 06 Oct 2021 15:00:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211006082209.417-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20211006082209.417-1-lukas.bulwahn@gmail.com>
+References: <CAKwvOdmrOYTxVd1f+=g4e-+q0fD+BZZTBGOkzcRq494bYYCkgw@mail.gmail.com>
+ <CAKdWgSyH4tYESpUEBx1SqK0F=ydG_0r=MT0-s5D9zC4rS0EppA@mail.gmail.com>
+ <CAKwvOdmSA2LmFXsPPrpBahR7bWXaLH=KdwepwvF+DqA+zGjROA@mail.gmail.com>
+ <CAKdWgSzX9VR-SogD5bG0mgVDTE-fWbO1d1h4Uk7OW5STPsDB3w@mail.gmail.com> <CAKdWgSyKkN5m-qJsAyk9S27xnsV6EjAw8js8WeMfjd6Ose0mFA@mail.gmail.com>
+In-Reply-To: <CAKdWgSyKkN5m-qJsAyk9S27xnsV6EjAw8js8WeMfjd6Ose0mFA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 6 Oct 2021 14:58:36 -0700
-Message-ID: <CAKwvOd=X-ZFPraS2EL24ps1aKdT3bWhtASA0vUjXdzo655XGiQ@mail.gmail.com>
-Subject: Re: [PATCH] elfcore: correct reference to CONFIG_UML
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	kernel-janitors@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>
+Date: Wed, 6 Oct 2021 15:00:21 -0700
+Message-ID: <CAKwvOdncFaA6Bdnr8x1K3DOjC=EiH_qu5Cw6p--je-szRgd=AA@mail.gmail.com>
+Subject: Re: missing build.log files
+To: Vishal Bhoj <vishal.bhoj@linaro.org>
+Cc: llvm@lists.linux.dev, tuxsuite <tuxsuite@linaro.org>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-+ Catalin who just sent a very similar patch after Lukas:
-https://lore.kernel.org/lkml/20211006181119.2851441-1-catalin.marinas@arm.com/
-EOM
+On Wed, Oct 6, 2021 at 6:24 AM Vishal Bhoj <vishal.bhoj@linaro.org> wrote:
+>
+> Sorry for the wrong link. Here is how the build.log would look:
+> https://builds.tuxbuild.com/1z8Lj56Txf3Ibe0tfVlobPFuU39/build.log
+> https://builds.tuxbuild.com/1z8Lj56Txf3Ibe0tfVlobPFuU39/
 
-On Wed, Oct 6, 2021 at 1:22 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Commit 6e7b64b9dd6d ("elfcore: fix building with clang") introduces
-> special handling for two architectures, ia64 and User Mode Linux.
-> However, the wrong name, i.e., CONFIG_UM, for the intended Kconfig symbol
-> for User-Mode Linux was used.
->
-> Although the directory for User Mode Linux is ./arch/um; the Kconfig
-> symbol for this architecture is called CONFIG_UML.
->
-> Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
->
-> UM
-> Referencing files: include/linux/elfcore.h
-> Similar symbols: UML, NUMA
->
-> Correct the name of the config to the intended one.
->
-> Fixes: 6e7b64b9dd6d ("elfcore: fix building with clang")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> applies cleanly on next-20211005
->
-> Arnd, please ack.
-> Andrew, please pick this fix.
->
->  include/linux/elfcore.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/elfcore.h b/include/linux/elfcore.h
-> index 2aaa15779d50..127716b58235 100644
-> --- a/include/linux/elfcore.h
-> +++ b/include/linux/elfcore.h
-> @@ -109,7 +109,7 @@ static inline int elf_core_copy_task_fpregs(struct task_struct *t, struct pt_reg
->  #endif
->  }
->
-> -#if defined(CONFIG_UM) || defined(CONFIG_IA64)
-> +#if defined(CONFIG_UML) || defined(CONFIG_IA64)
->  /*
->   * These functions parameterize elf_core_dump in fs/binfmt_elf.c to write out
->   * extra segments containing the gate DSO contents.  Dumping its
-> --
-> 2.26.2
->
-
-
+LGTM, thanks Vishal!
 -- 
 Thanks,
 ~Nick Desaulniers
