@@ -1,58 +1,56 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012512C94
-	for <llvm@lists.linux.dev>; Thu,  7 Oct 2021 20:15:08 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213299529"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135192C83
+	for <llvm@lists.linux.dev>; Thu,  7 Oct 2021 20:38:08 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="226308147"
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="gz'50?scan'50,208,50";a="213299529"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 13:15:08 -0700
+   d="gz'50?scan'50,208,50";a="226308147"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 13:38:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="gz'50?scan'50,208,50";a="657528845"
+   d="gz'50?scan'50,208,50";a="478710525"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Oct 2021 13:15:06 -0700
+  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2021 13:38:06 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mYZnF-0007bq-Hj; Thu, 07 Oct 2021 20:15:05 +0000
-Date: Fri, 8 Oct 2021 04:14:30 +0800
+	id 1mYa9V-0007cP-Oa; Thu, 07 Oct 2021 20:38:05 +0000
+Date: Fri, 8 Oct 2021 04:37:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kanchan Joshi <joshi.k@samsung.com>
+To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	Anuj Gupta <anuj20.g@samsung.com>
-Subject: [axboe-block:nvme-passthru-wip 14/19]
- drivers/nvme/host/ioctl.c:158:5: warning: no previous prototype for function
- 'nvme_rq_map_user_fixedb'
-Message-ID: <202110080426.iEAAMTTr-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [axboe-block:nvme-passthru-wip 16/19]
+ drivers/nvme/host/ioctl.c:82:25: warning: variable 'ucd' set but not used
+Message-ID: <202110080401.Q0GElaZ1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="FL5UXtIhxfXey3p5"
+Content-Type: multipart/mixed; boundary="8t9RHnE3ZwKMSgU+"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---FL5UXtIhxfXey3p5
+--8t9RHnE3ZwKMSgU+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git nvme-passthru-wip
 head:   9c18980ac90053bcdb21594eae48935d89bf389c
-commit: 2e6a09df7c3f2f4161b9d6aa691f2801b2428eae [14/19] nvme: enable passthrough with fixed-buffer
+commit: 40669a7355a5518181c2f7c4113d9f8fb808c658 [16/19] nvme: don't store intermediate result/status in command
 config: hexagon-randconfig-r045-20211007 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 58b68e70ebf6308f982426a2618782f473218eed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=2e6a09df7c3f2f4161b9d6aa691f2801b2428eae
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=40669a7355a5518181c2f7c4113d9f8fb808c658
         git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
         git fetch --no-tags axboe-block nvme-passthru-wip
-        git checkout 2e6a09df7c3f2f4161b9d6aa691f2801b2428eae
+        git checkout 40669a7355a5518181c2f7c4113d9f8fb808c658
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
 
@@ -61,122 +59,58 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/nvme/host/ioctl.c:158:5: warning: no previous prototype for function 'nvme_rq_map_user_fixedb' [-Wmissing-prototypes]
+>> drivers/nvme/host/ioctl.c:82:25: warning: variable 'ucd' set but not used [-Wunused-but-set-variable]
+           struct uring_cmd_data *ucd;
+                                  ^
+   drivers/nvme/host/ioctl.c:155:5: warning: no previous prototype for function 'nvme_rq_map_user_fixedb' [-Wmissing-prototypes]
    int nvme_rq_map_user_fixedb(struct request_queue *q, struct request *rq,
        ^
-   drivers/nvme/host/ioctl.c:158:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   drivers/nvme/host/ioctl.c:155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    int nvme_rq_map_user_fixedb(struct request_queue *q, struct request *rq,
    ^
    static 
-   1 warning generated.
+   drivers/nvme/host/ioctl.c:244:3: error: implicit declaration of function '__blk_execute_rq_nowait' [-Werror,-Wimplicit-function-declaration]
+                   __blk_execute_rq_nowait(ns ? ns->disk : NULL, req, false, false,
+                   ^
+   drivers/nvme/host/ioctl.c:244:3: note: did you mean 'blk_execute_rq_nowait'?
+   include/linux/blkdev.h:894:13: note: 'blk_execute_rq_nowait' declared here
+   extern void blk_execute_rq_nowait(struct gendisk *,
+               ^
+   2 warnings and 1 error generated.
 
 
-vim +/nvme_rq_map_user_fixedb +158 drivers/nvme/host/ioctl.c
+vim +/ucd +82 drivers/nvme/host/ioctl.c
 
-   108	
-   109	static void *nvme_add_user_metadata(struct bio *bio, void __user *ubuf,
-   110			unsigned len, u32 seed, bool write)
-   111	{
-   112		struct bio_integrity_payload *bip;
-   113		int ret = -ENOMEM;
-   114		void *buf;
-   115	
-   116		buf = kmalloc(len, GFP_KERNEL);
-   117		if (!buf)
-   118			goto out;
-   119	
-   120		ret = -EFAULT;
-   121		if (write && copy_from_user(buf, ubuf, len))
-   122			goto out_free_meta;
-   123	
-   124		bip = bio_integrity_alloc(bio, GFP_KERNEL, 1);
-   125		if (IS_ERR(bip)) {
-   126			ret = PTR_ERR(bip);
-   127			goto out_free_meta;
-   128		}
-   129	
-   130		bip->bip_iter.bi_size = len;
-   131		bip->bip_iter.bi_sector = seed;
-   132		ret = bio_integrity_add_page(bio, virt_to_page(buf), len,
-   133				offset_in_page(buf));
-   134		if (ret == len)
-   135			return buf;
-   136		ret = -ENOMEM;
-   137	out_free_meta:
-   138		kfree(buf);
-   139	out:
-   140		return ERR_PTR(ret);
-   141	}
-   142	static inline bool nvme_is_fixedb_passthru(struct io_uring_cmd *ioucmd)
-   143	{
-   144		struct block_uring_cmd *bcmd;
-   145	
-   146		if (!ioucmd)
-   147			return false;
-   148		bcmd = (struct block_uring_cmd *)&ioucmd->pdu;
-   149		if (bcmd && ((bcmd->ioctl_cmd == NVME_IOCTL_IO_CMD_FIXED) ||
-   150					(bcmd->ioctl_cmd == NVME_IOCTL_IO64_CMD_FIXED)))
-   151			return true;
-   152		return false;
-   153	}
-   154	/*
-   155	 * Unlike blk_rq_map_user () this is only for fixed-buffer async passthrough.
-   156	 * And hopefully faster as well.
-   157	 */
- > 158	int nvme_rq_map_user_fixedb(struct request_queue *q, struct request *rq,
-   159			     void __user *ubuf, unsigned long len, gfp_t gfp_mask,
-   160			     struct io_uring_cmd *ioucmd)
-   161	{
-   162		struct iov_iter iter;
-   163		size_t iter_count, nr_segs;
-   164		struct bio *bio;
-   165		int ret;
-   166	
-   167		/*
-   168		 * Talk to io_uring to obtain BVEC iterator for the buffer.
-   169		 * And use that iterator to form bio/request.
-   170		 */
-   171		ret = io_uring_cmd_import_fixed(ubuf, len, rq_data_dir(rq), &iter,
-   172				ioucmd);
-   173		if (unlikely(ret < 0))
-   174			return ret;
-   175		iter_count = iov_iter_count(&iter);
-   176		nr_segs = iter.nr_segs;
-   177	
-   178		if (!iter_count || (iter_count >> 9) > queue_max_hw_sectors(q))
-   179			return -EINVAL;
-   180		if (nr_segs > queue_max_segments(q))
-   181			return -EINVAL;
-   182		/* no iovecs to alloc, as we already have a BVEC iterator */
-   183		bio = bio_kmalloc(gfp_mask, 0);
-   184		if (!bio)
-   185			return -ENOMEM;
-   186	
-   187		bio->bi_opf |= req_op(rq);
-   188		ret = bio_iov_iter_get_pages(bio, &iter);
-   189		if (ret)
-   190			goto out_free;
-   191	
-   192		blk_rq_bio_prep(rq, bio, nr_segs);
-   193		return 0;
-   194	
-   195	out_free:
-   196		bio_release_pages(bio, false);
-   197		bio_put(bio);
-   198		return ret;
-   199	}
-   200	
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  78  
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  79  static void nvme_end_async_pt(struct request *req, blk_status_t err)
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  80  {
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  81  	struct io_uring_cmd *ioucmd;
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05 @82  	struct uring_cmd_data *ucd;
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  83  
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  84  	ioucmd = req->end_io_data;
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  85  	ucd = (struct uring_cmd_data *) nvme_ioucmd_data_addr(ioucmd);
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  86  
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  87  	/* this takes care of setting up task-work */
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  88  	io_uring_cmd_complete_in_task(ioucmd, nvme_pt_task_cb);
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  89  }
+5cc445dd8df6e06f Kanchan Joshi 2021-08-05  90  
+
+:::::: The code at line 82 was first introduced by commit
+:::::: 5cc445dd8df6e06f3482711aa590170450364393 nvme: wire-up support for async-passthru on char-device.
+
+:::::: TO: Kanchan Joshi <joshi.k@samsung.com>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---FL5UXtIhxfXey3p5
+--8t9RHnE3ZwKMSgU+
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICCJRX2EAAy5jb25maWcAnDzbctu4ku/zFaxM1dZM1UkiyZc4u+UHCARFHPEWAJQlv7AU
+H4sICM9XX2EAAy5jb25maWcAnDzbctu4ku/zFaxM1dZM1UkiyZc4u+UHCARFHPEWAJQlv7AU
 mU60I0s+kpyZ/P12gzeQBO3UTtXMRN2NRqPR6BvA/P7b7w55OR+e1uftZr3b/XS+5fv8uD7n
 D87jdpf/j+PGThQrh7lcfQDiYLt/+efj9/yf9bfD3rn6ML76MHp/3EyceX7c5zuHHvaP228v
 wGF72P/2+280jjw+yyjNFkxIHkeZYkt1+26zW++/OT/y4wnonPHlh9GHkfPHt+35vz9+hP8+
@@ -644,4 +578,4 @@ mz3fSEO8O+il6aG7E/tF9q/N5/qFOzVsKqgLKOXmeMKhwpnpo2/L9ctGszRaiHXcGPTwJ0Z8
 yMgNo3mC1AyaSAtXvIaK1sqRd1E7hpXJH4Ar+OmyEiJOZpyV5osE+5fngF3XjhDUttYgG91k
 x2cZ7NgF5hWk/gLyc1i+iwk5YSi4pDnt2bYlCv4fG7hvrnuQAQA=
 
---FL5UXtIhxfXey3p5--
+--8t9RHnE3ZwKMSgU+--
