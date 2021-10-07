@@ -1,119 +1,173 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7672F2C83
-	for <llvm@lists.linux.dev>; Thu,  7 Oct 2021 11:32:49 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="287110375"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B057A2C83
+	for <llvm@lists.linux.dev>; Thu,  7 Oct 2021 12:07:56 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="226185113"
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="gz'50?scan'50,208,50";a="287110375"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 04:32:48 -0700
+   d="gz'50?scan'50,208,50";a="226185113"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 05:07:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="gz'50?scan'50,208,50";a="439493726"
+   d="gz'50?scan'50,208,50";a="590118425"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Oct 2021 04:32:46 -0700
+  by orsmga004.jf.intel.com with ESMTP; 07 Oct 2021 05:07:46 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mYRdl-0007MB-3w; Thu, 07 Oct 2021 11:32:45 +0000
-Date: Thu, 7 Oct 2021 19:32:34 +0800
+	id 1mYSBd-0007NW-Fr; Thu, 07 Oct 2021 12:07:45 +0000
+Date: Thu, 7 Oct 2021 20:07:33 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Darrick J. Wong" <djwong@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	"Darrick J. Wong" <darrick.wong@oracle.com>,
 	linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:zero-initialize-pmem-5.16 25/28]
- fs/iomap/buffered-io.c:948:1: warning: no previous prototype for function
- 'iomap_zeroinit_range'
-Message-ID: <202110071933.4jER8Mnq-lkp@intel.com>
+Subject: [djwong-xfs:zero-initialize-pmem-5.16 28/28]
+ fs/ext4/extents.c:4488:4: error: use of undeclared identifier
+ 'FALLOC_FL_ZEROINIT_RANGE'
+Message-ID: <202110072029.e9ym5OhH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="jRHKVT23PllUwdXP"
+Content-Type: multipart/mixed; boundary="+HP7ph2BbKc20aGI"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---jRHKVT23PllUwdXP
+--+HP7ph2BbKc20aGI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git zero-initialize-pmem-5.16
 head:   34b80c3d1203abd5fd64242ef25898c7d64166ca
-commit: 262459cd3e039d51ed6f6c478e1b794dda7d9de8 [25/28] iomap: use accelerated zeroing on a block device to zero a file range
+commit: 34b80c3d1203abd5fd64242ef25898c7d64166ca [28/28] ext4: implement FALLOC_FL_ZEROINIT_RANGE
 config: hexagon-randconfig-r045-20211007 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 58b68e70ebf6308f982426a2618782f473218eed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=262459cd3e039d51ed6f6c478e1b794dda7d9de8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=34b80c3d1203abd5fd64242ef25898c7d64166ca
         git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
         git fetch --no-tags djwong-xfs zero-initialize-pmem-5.16
-        git checkout 262459cd3e039d51ed6f6c478e1b794dda7d9de8
+        git checkout 34b80c3d1203abd5fd64242ef25898c7d64166ca
         # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/iomap/buffered-io.c:948:1: warning: no previous prototype for function 'iomap_zeroinit_range' [-Wmissing-prototypes]
-   iomap_zeroinit_range(struct inode *inode, loff_t pos, loff_t len,
-   ^
-   fs/iomap/buffered-io.c:947:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   1 warning generated.
---
->> fs/iomap/buffered-io.c:943: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Force a filesystem to write zeroes to mapped extents, even if they're
+>> fs/ext4/extents.c:4488:4: error: use of undeclared identifier 'FALLOC_FL_ZEROINIT_RANGE'
+                           FALLOC_FL_ZEROINIT_RANGE | FALLOC_FL_KEEP_SIZE);
+                           ^
+   fs/ext4/extents.c:4743:33: error: use of undeclared identifier 'FALLOC_FL_ZEROINIT_RANGE'
+                        FALLOC_FL_INSERT_RANGE | FALLOC_FL_ZEROINIT_RANGE))
+                                                 ^
+   fs/ext4/extents.c:4772:13: error: use of undeclared identifier 'FALLOC_FL_ZEROINIT_RANGE'
+           if (mode & FALLOC_FL_ZEROINIT_RANGE) {
+                      ^
+   3 errors generated.
 
 
-vim +/iomap_zeroinit_range +948 fs/iomap/buffered-io.c
+vim +/FALLOC_FL_ZEROINIT_RANGE +4488 fs/ext4/extents.c
 
-   941	
-   942	/**
- > 943	 * Force a filesystem to write zeroes to mapped extents, even if they're
-   944	 * unwritten.  DAX files are not supported, and the caller should fsync the
-   945	 * file before returning to userspace.
-   946	 */
-   947	int
- > 948	iomap_zeroinit_range(struct inode *inode, loff_t pos, loff_t len,
-   949			     const struct iomap_ops *ops)
-   950	{
-   951		struct iomap_iter iter = {
-   952			.inode		= inode,
-   953			.pos		= pos,
-   954			.len		= len,
-   955			.flags		= IOMAP_ZERO,
-   956		};
-   957		int ret;
-   958	
-   959		if (IS_DAX(inode))
-   960			return -EOPNOTSUPP;
-   961	
-   962		while ((ret = iomap_iter(&iter, ops)) > 0)
-   963			iter.processed = iomap_zero_iter(&iter, NULL, false);
-   964		return ret;
-   965	}
-   966	EXPORT_SYMBOL_GPL(iomap_zeroinit_range);
-   967	
+  4478	
+  4479	static long ext4_zeroinit_range(struct file *file, loff_t offset, loff_t len)
+  4480	{
+  4481		struct inode *inode = file_inode(file);
+  4482		struct address_space *mapping = inode->i_mapping;
+  4483		handle_t *handle = NULL;
+  4484		loff_t end = offset + len;
+  4485		long ret;
+  4486	
+  4487		trace_ext4_zeroinit_range(inode, offset, len,
+> 4488				FALLOC_FL_ZEROINIT_RANGE | FALLOC_FL_KEEP_SIZE);
+  4489	
+  4490		/* We don't support data=journal mode */
+  4491		if (ext4_should_journal_data(inode))
+  4492			return -EOPNOTSUPP;
+  4493	
+  4494		inode_lock(inode);
+  4495	
+  4496		/*
+  4497		 * Indirect files do not support unwritten extents
+  4498		 */
+  4499		if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))) {
+  4500			ret = -EOPNOTSUPP;
+  4501			goto out_mutex;
+  4502		}
+  4503	
+  4504		/* Wait all existing dio workers, newcomers will block on i_mutex */
+  4505		inode_dio_wait(inode);
+  4506	
+  4507		/*
+  4508		 * Prevent page faults from reinstantiating pages we have released from
+  4509		 * page cache.
+  4510		 */
+  4511		filemap_invalidate_lock(mapping);
+  4512	
+  4513		ret = ext4_break_layouts(inode);
+  4514		if (ret)
+  4515			goto out_mmap;
+  4516	
+  4517		/* Now release the pages and zero block aligned part of pages */
+  4518		truncate_pagecache_range(inode, offset, end - 1);
+  4519		inode->i_mtime = inode->i_ctime = current_time(inode);
+  4520	
+  4521		if (IS_DAX(inode))
+  4522			ret = dax_zeroinit_range(inode, offset, len,
+  4523					&ext4_iomap_report_ops);
+  4524		else
+  4525			ret = iomap_zeroout_range(inode, offset, len,
+  4526					&ext4_iomap_report_ops);
+  4527		if (ret == -ECANCELED)
+  4528			ret = -EOPNOTSUPP;
+  4529		if (ret)
+  4530			goto out_mmap;
+  4531	
+  4532		handle = ext4_journal_start(inode, EXT4_HT_MISC, 1);
+  4533		if (IS_ERR(handle)) {
+  4534			ret = PTR_ERR(handle);
+  4535			ext4_std_error(inode->i_sb, ret);
+  4536			goto out_mmap;
+  4537		}
+  4538	
+  4539		inode->i_mtime = inode->i_ctime = current_time(inode);
+  4540		ret = ext4_mark_inode_dirty(handle, inode);
+  4541		if (unlikely(ret))
+  4542			goto out_handle;
+  4543		ext4_fc_track_range(handle, inode, offset >> inode->i_sb->s_blocksize_bits,
+  4544				(offset + len - 1) >> inode->i_sb->s_blocksize_bits);
+  4545		ext4_update_inode_fsync_trans(handle, inode, 1);
+  4546	
+  4547		if (file->f_flags & O_SYNC)
+  4548			ext4_handle_sync(handle);
+  4549	
+  4550	out_handle:
+  4551		ext4_journal_stop(handle);
+  4552	out_mmap:
+  4553		filemap_invalidate_unlock(mapping);
+  4554	out_mutex:
+  4555		inode_unlock(inode);
+  4556		return ret;
+  4557	}
+  4558	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---jRHKVT23PllUwdXP
+--+HP7ph2BbKc20aGI
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICLDYXmEAAy5jb25maWcAnDzbctu4ku/zFaxM1dZM1UkiyZc4u+UHCARFHPEWAJQlv7AU
+H4sICJDbXmEAAy5jb25maWcAnDzbctu4ku/zFaxM1dZM1UkiyZc4u+UHCARFHPEWAJQlv7AU
 mU60I0s+kpyZ/P12gzeQBO3UTtXMRN2NRqPR6BvA/P7b7w55OR+e1uftZr3b/XS+5fv8uD7n
 D87jdpf/j+PGThQrh7lcfQDiYLt/+efj9/yf9bfD3rn6ML76MHp/3IydeX7c5zuHHvaP228v
 wGF72P/2+280jjw+yyjNFkxIHkeZYkt1+26zW++/OT/y4wnonPHlh9GHkfPHt+35vz9+hP8+
@@ -581,4 +635,4 @@ mz3fSEO8O+il6aG7E/tF9q/N5/qFOzVsKqgLKOXmeMKhwpnpo2/L9ctGszRaiHXcGPTwJ0Z8
 yMgNo3mC1AyaSAtXvIaK1sqRd1E7hpXJH4Ar+OmyEiJOZpyV5osE+5fngF3XjhDUttYgG91k
 x2cZ7NgF5hWk/gLyc1i+iwk5YSi4pDnt2bYlCv4fxxw6vHuQAQA=
 
---jRHKVT23PllUwdXP--
+--+HP7ph2BbKc20aGI--
