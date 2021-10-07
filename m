@@ -1,944 +1,559 @@
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7326F2C88
-	for <llvm@lists.linux.dev>; Thu,  7 Oct 2021 08:37:58 +0000 (UTC)
-Received: by mail-vs1-f49.google.com with SMTP id l22so3482462vsq.9
-        for <llvm@lists.linux.dev>; Thu, 07 Oct 2021 01:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O7g+xcDbTNfdlnpP4f4PkabhMr3HoFUd0lP6l29kEos=;
-        b=GYeeWNKiwLqD934MzuOMc5oLIOOyd42QhOqIg1zbH7p/BQMmFC4VUHqwAjxJVv2LW1
-         nABuiWMjPjDYcTmdGZQ1CykfDtrNp+WVLswplYUrsi5o9+vKJ+bAyhORA9YxiYWANbxg
-         LCXLuSqnLlS0phxX1vcASA1GxLQvTfAZVtQNdH132HEFCvj78plnuyU6Yp2+0AwUisJM
-         v0Vy5FZBMIVH/Xxl0A9qLUaRJKx+asXrY+zd58DRQfrAeeELywW0QvB0BugN9Cr5662k
-         NN/pg1M22vkfPtiHbZPU3++nRARiqDMDj/TqrD1SsyaCImrjtxONZ4nfQ9YsD4RJ0EzL
-         OvWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O7g+xcDbTNfdlnpP4f4PkabhMr3HoFUd0lP6l29kEos=;
-        b=jhuv3krjN6M1eDaanG+geU/khRoNUAzzP4/2X0paUC9LUsBuaHGnE+5g1ubhi6gpSl
-         0dIHgyG3+WRWlJCEPG6T+JNa78UUoyou0oIO/w9FvIYneBhJdMEsNXE00N5B/JiBWeME
-         0z6uAooTcnwC3Fm+S2IgPDCd+Zl2SsDtjARWEbVbDijFIjM+t41Z7kBoVyR9kvuQQdC5
-         ChhU773YQhfvrqWyC87B6MVM0411M404KSkeXPTeWa+JFL3O886YSP+3c6xpGBf0yK/D
-         wPnILa3YHr747w5NIYjcttrOVrNIYHsnlwNle9+76g18yNljIeOUTAsTk1goOACPEhj0
-         A83w==
-X-Gm-Message-State: AOAM533CnoO3cLQ4KVDj7Y0eKwflaMlOVlKmeAE3+TRM/Vw3N1qCGJqW
-	1197T5QhmA01z0XJo8WG6aWApouF8JWBqG8Lb/vOJA==
-X-Google-Smtp-Source: ABdhPJylSSkT0S2S7lt+22kSoAYdWbazjE1oKyW0/yUpjxcrz0ko3KxnW31Pl/m/0af06haZhNkCUlItEvUcSjnyaWI=
-X-Received: by 2002:a05:6102:275a:: with SMTP id p26mr2617074vsu.29.1633595877015;
- Thu, 07 Oct 2021 01:37:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA452C88
+	for <llvm@lists.linux.dev>; Thu,  7 Oct 2021 08:54:38 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="206321296"
+X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
+   d="gz'50?scan'50,208,50";a="206321296"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 01:54:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
+   d="gz'50?scan'50,208,50";a="478481921"
+Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2021 01:54:35 -0700
+Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mYPAh-0007EB-5C; Thu, 07 Oct 2021 08:54:35 +0000
+Date: Thu, 7 Oct 2021 16:53:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/wip-freezer 4/6] kernel/ptrace.c:69:35: error:
+ use of undeclared identifier 'task'
+Message-ID: <202110071642.moIMcv6P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1133377776.9620.1633558677135@localhost>
-In-Reply-To: <1133377776.9620.1633558677135@localhost>
-From: David Spickett <david.spickett@linaro.org>
-Date: Thu, 7 Oct 2021 09:37:45 +0100
-Message-ID: <CACBW-2KmF=DMxfwM90aDZaLuaFV6gkTEVaNJ-y2e4bEBRouxsA@mail.gmail.com>
-Subject: Re: [TCWG CI] Regression caused by llvm: [AArch64] Split bitmask
- immediate of bitwise AND operation
-To: ci_notify@linaro.org
-Cc: Jingu Kang <jingu.kang@arm.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="3V7upXqbjpZ4EhLz"
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-This was already reverted a couple of times
-(https://reviews.llvm.org/rGfc36fb4d23a5e419cf33002c87c0082f682cb77b
-most recently) due to issues on the llvm bots.
 
-The assert clang hit here is pasted below. Could be its own issue
-since we didn't see asserts on our llvm bots.
+--3V7upXqbjpZ4EhLz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-00:53:18 make[3]: *** [scripts/Makefile.build:277:
-drivers/iio/adc/mxs-lradc-adc.o] Error 134
-00:55:17 clang:
-../llvm/llvm/include/llvm/CodeGen/MachineOperand.h:361: llvm::Register
-llvm::MachineOperand::getReg() const: Assertion `isReg() && "This is
-not a register operand!"' failed.
-00:55:17 PLEASE submit a bug report to https://bugs.llvm.org/ and
-include the crash backtrace, preprocessed source, and associated run
-script.
-00:55:17 Stack dump:
-00:55:17 0. Program arguments:
-/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang
--Wp,-MMD,drivers/iio/adc/.xilinx-xadc-core.o.d -nostdinc -isystem
-/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/lib/clang/14.0.0/include
--I./arch/arm64/include -I./arch/arm64/include/generated -I./include
--I./arch/arm64/include/uapi -I./arch/arm64/include/generated/uapi
--I./include/uapi -I./include/generated/uapi -include
-./include/linux/compiler-version.h -include ./include/linux/kconfig.h
--include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian
--DCC_USING_PATCHABLE_FUNCTION_ENTRY -DKASAN_SHADOW_SCALE_SHIFT=3
--Qunused-arguments -fmacro-prefix-map=./= -Wall -Wundef
--Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing
--fno-common -fshort-wchar -fno-PIE
--Werror=implicit-function-declaration -Werror=implicit-int
--Werror=return-type -Wno-format-security -std=gnu89
---target=aarch64-linux-gnu -fintegrated-as
--Werror=unknown-warning-option -Werror=ignored-optimization-argument
--mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi
--fno-asynchronous-unwind-tables -fno-unwind-tables
--mbranch-protection=pac-ret+leaf+bti -Wa,-march=armv8.5-a
--DARM64_ASM_ARCH=\"armv8.5-a\" -ffixed-x18
--DKASAN_SHADOW_SCALE_SHIFT=3 -fno-delete-null-pointer-checks
--Wno-frame-address -Wno-address-of-packed-member -O2
--Wframe-larger-than=2048 -fstack-protector-strong -Werror -Wno-gnu
--mno-global-merge -Wno-unused-but-set-variable
--Wno-unused-const-variable -fno-omit-frame-pointer
--fno-optimize-sibling-calls -ftrivial-auto-var-init=pattern
--fno-stack-clash-protection -fpatchable-function-entry=2
--fsanitize=shadow-call-stack -falign-functions=64
--Wdeclaration-after-statement -Wvla -Wno-pointer-sign
--Wno-array-bounds -fno-strict-overflow -fno-stack-check
--Werror=date-time -Werror=incompatible-pointer-types
--Wno-initializer-overrides -Wno-format -Wno-sign-compare
--Wno-format-zero-length -Wno-pointer-to-enum-cast
--Wno-tautological-constant-out-of-range-compare
--mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0
--mstack-protector-guard-offset=1456 -fsanitize=kernel-address -mllvm
--asan-mapping-offset=0xdfffffc000000000 -mllvm -asan-globals=1 -mllvm
--asan-instrumentation-with-call-threshold=0 --param
-asan-instrument-allocas=1 -mllvm -asan-stack=0 -fsanitize=array-bounds
--fsanitize=shift -fsanitize=integer-divide-by-zero
--fsanitize=unreachable -fsanitize=object-size -fsanitize=bool
--fsanitize=enum -fsanitize-coverage=trace-pc
--fsanitize-coverage=trace-cmp
--DKBUILD_MODFILE=\"drivers/iio/adc/xilinx-xadc\"
--DKBUILD_BASENAME=\"xilinx_xadc_core\"
--DKBUILD_MODNAME=\"xilinx_xadc\" -D__KBUILD_MODNAME=kmod_xilinx_xadc
--c -o drivers/iio/adc/xilinx-xadc-core.o
-drivers/iio/adc/xilinx-xadc-core.c
-00:55:17 1. <eof> parser at end of file
-00:55:17 2. Code generation
-00:55:17 3. Running pass 'Function Pass Manager' on module
-'drivers/iio/adc/xilinx-xadc-core.c'.
-00:55:17 4. Running pass 'AArch64 MI Peephole Optimization pass' on
-function '@xadc_axi_interrupt_handler'
-00:55:18  #0 0x000055e659852234 PrintStackTraceSignalHandler(void*)
-Signals.cpp:0:0
-00:55:18  #1 0x000055e659850034 llvm::sys::CleanupOnSignal(unsigned
-long) (/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2240034)
-00:55:18  #2 0x000055e65979d468 CrashRecoverySignalHandler(int)
-CrashRecoveryContext.cpp:0:0
-00:55:18  #3 0x00007f746cf043c0 __restore_rt
-(/lib/x86_64-linux-gnu/libpthread.so.0+0x153c0)
-00:55:18  #4 0x00007f746c9a318b raise
-/build/glibc-eX1tMB/glibc-2.31/signal/../sysdeps/unix/sysv/linux/raise.c:51:1
-00:55:18  #5 0x00007f746c982859 abort
-/build/glibc-eX1tMB/glibc-2.31/stdlib/abort.c:81:7
-00:55:18  #6 0x00007f746c982729 get_sysdep_segment_value
-/build/glibc-eX1tMB/glibc-2.31/intl/loadmsgcat.c:509:8
-00:55:18  #7 0x00007f746c982729 _nl_load_domain
-/build/glibc-eX1tMB/glibc-2.31/intl/loadmsgcat.c:970:34
-00:55:18  #8 0x00007f746c993f36 (/lib/x86_64-linux-gnu/libc.so.6+0x36f36)
-00:55:18  #9 0x000055e65860cebd (anonymous
-namespace)::AArch64MIPeepholeOpt::runOnMachineFunction(llvm::MachineFunction&)
-AArch64MIPeepholeOpt.cpp:0:0
-00:55:18 #10 0x000055e658b4a668
-llvm::MachineFunctionPass::runOnFunction(llvm::Function&)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x153a668)
-00:55:18 #11 0x000055e659083d85
-llvm::FPPassManager::runOnFunction(llvm::Function&)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x1a73d85)
-00:55:18 #12 0x000055e659083fc9
-llvm::FPPassManager::runOnModule(llvm::Module&)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x1a73fc9)
-00:55:18 #13 0x000055e6590850b2
-llvm::legacy::PassManagerImpl::run(llvm::Module&)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x1a750b2)
-00:55:18 #14 0x000055e659b84840 (anonymous
-namespace)::EmitAssemblyHelper::EmitAssemblyWithNewPassManager(clang::BackendAction,
-std::unique_ptr<llvm::raw_pwrite_stream,
-std::default_delete<llvm::raw_pwrite_stream> >) BackendUtil.cpp:0:0
-00:55:18 #15 0x000055e659b883e5
-clang::EmitBackendOutput(clang::DiagnosticsEngine&,
-clang::HeaderSearchOptions const&, clang::CodeGenOptions const&,
-clang::TargetOptions const&, clang::LangOptions const&,
-llvm::StringRef, llvm::Module*, clang::BackendAction,
-std::unique_ptr<llvm::raw_pwrite_stream,
-std::default_delete<llvm::raw_pwrite_stream> >)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x25783e5)
-00:55:18 #16 0x000055e65aa23c2f
-clang::BackendConsumer::HandleTranslationUnit(clang::ASTContext&)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x3413c2f)
-00:55:18 #17 0x000055e65b88f649 clang::ParseAST(clang::Sema&, bool,
-bool) (/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x427f649)
-00:55:18 #18 0x000055e65aa22768 clang::CodeGenAction::ExecuteAction()
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x3412768)
-00:55:18 #19 0x000055e65a2ad579 clang::FrontendAction::Execute()
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2c9d579)
-00:55:18 #20 0x000055e65a23dd4e
-clang::CompilerInstance::ExecuteAction(clang::FrontendAction&)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2c2dd4e)
-00:55:18 #21 0x000055e65a38d670
-clang::ExecuteCompilerInvocation(clang::CompilerInstance*)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2d7d670)
-00:55:18 #22 0x000055e6584745a7 cc1_main(llvm::ArrayRef<char const*>,
-char const*, void*)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0xe645a7)
-00:55:18 #23 0x000055e658470a48
-ExecuteCC1Tool(llvm::SmallVectorImpl<char const*>&) driver.cpp:0:0
-00:55:18 #24 0x000055e65a0c5119 void llvm::function_ref<void
-()>::callback_fn<clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef>
->, std::__cxx11::basic_string<char, std::char_traits<char>,
-std::allocator<char> >*, bool*) const::'lambda'()>(long) Job.cpp:0:0
-00:55:18 #25 0x000055e65979d5ec
-llvm::CrashRecoveryContext::RunSafely(llvm::function_ref<void ()>)
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x218d5ec)
-00:55:18 #26 0x000055e65a0c582d
-clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef>
->, std::__cxx11::basic_string<char, std::char_traits<char>,
-std::allocator<char> >*, bool*) const (.part.0) Job.cpp:0:0
-00:55:18 #27 0x000055e65a0974db
-clang::driver::Compilation::ExecuteCommand(clang::driver::Command
-const&, clang::driver::Command const*&) const
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2a874db)
-00:55:18 #28 0x000055e65a097fe9
-clang::driver::Compilation::ExecuteJobs(clang::driver::JobList const&,
-llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*>
->&) const (/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2a87fe9)
-00:55:18 #29 0x000055e65a0a3859
-clang::driver::Driver::ExecuteCompilation(clang::driver::Compilation&,
-llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*>
->&) (/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0x2a93859)
-00:55:18 #30 0x000055e6583f5426 main
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0xde5426)
-00:55:18 #31 0x00007f746c9840b3 __libc_start_main
-/build/glibc-eX1tMB/glibc-2.31/csu/../csu/libc-start.c:342:3
-00:55:18 #32 0x000055e6584705be _start
-(/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin/clang+0xe605be)
-00:55:18 clang-14: error: clang frontend command failed with exit code
-134 (use -v to see invocation)
-00:55:18 clang version 14.0.0
-(https://github.com/llvm/llvm-project.git
-864b206796ae8aa7f35f830655337751dbd9176c)
-00:55:18 Target: aarch64-unknown-linux-gnu
-00:55:18 Thread model: posix
-00:55:18 InstalledDir:
-/home/tcwg-buildslave/workspace/tcwg_kernel_1/llvm-install/bin
-00:55:19 clang-14: note: diagnostic msg:
-00:55:19 ********************
-00:55:19
-00:55:19 PLEASE ATTACH THE FOLLOWING FILES TO THE BUG REPORT:
-00:55:19 Preprocessed source(s) and associated run script(s) are located at:
-00:55:19 clang-14: note: diagnostic msg: /tmp/xilinx-xadc-core-405592.c
-00:55:19 clang-14: note: diagnostic msg: /tmp/xilinx-xadc-core-405592.sh
-00:55:19 clang-14: note: diagnostic msg:
-00:55:19
-00:55:19 ********************
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/wip-freezer
+head:   0e2f83a04e7aec955e7b3c759564e51e56450b25
+commit: a0e4dbb5aa2a5180d38c539a15f49dce51fe39c7 [4/6] ptrace: Track __TASK_TRACED state in p->ptrace
+config: hexagon-randconfig-r045-20211007 (attached as .config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 58b68e70ebf6308f982426a2618782f473218eed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=a0e4dbb5aa2a5180d38c539a15f49dce51fe39c7
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/wip-freezer
+        git checkout a0e4dbb5aa2a5180d38c539a15f49dce51fe39c7
+        # save the attached .config to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-On Wed, 6 Oct 2021 at 23:18, <ci_notify@linaro.org> wrote:
->
-> [TCWG CI] Regression caused by llvm: [AArch64] Split bitmask immediate of bitwise AND operation:
-> commit 864b206796ae8aa7f35f830655337751dbd9176c
-> Author: Jingu Kang <jingu.kang@arm.com>
->
->     [AArch64] Split bitmask immediate of bitwise AND operation
->
-> Results regressed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 19861
-> # First few build errors in logs:
-> # 00:01:34 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-> # 00:01:35 make[1]: *** [scripts/Makefile.build:277: ipc/sem.o] Error 134
-> # 00:01:45 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-> # 00:01:46 make[2]: *** [scripts/Makefile.build:277: drivers/irqchip/exynos-combiner.o] Error 134
-> # 00:01:48 make: *** [Makefile:1868: ipc] Error 2
-> # 00:02:00 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-> # 00:02:00 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-> # 00:02:00 make[2]: *** [scripts/Makefile.build:277: drivers/pwm/pwm-atmel.o] Error 134
-> # 00:02:00 make[2]: *** [scripts/Makefile.build:277: arch/arm64/kernel/cpu_errata.o] Error 134
-> # 00:02:00 clang-14: error: clang frontend command failed with exit code 134 (use -v to see invocation)
->
-> from
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 20223
-> # linux build successful:
-> all
->
-> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
->
-> This commit has regressed these CI configurations:
->  - tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
->
-> First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/build-864b206796ae8aa7f35f830655337751dbd9176c/
-> Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/build-4f01a02d738b033c10bfed5b47014fc197509a4f/
-> Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/build-baseline/
-> Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/
->
-> Reproduce builds:
-> <cut>
-> mkdir investigate-llvm-864b206796ae8aa7f35f830655337751dbd9176c
-> cd investigate-llvm-864b206796ae8aa7f35f830655337751dbd9176c
->
-> # Fetch scripts
-> git clone https://git.linaro.org/toolchain/jenkins-scripts
->
-> # Fetch manifests and test.sh script
-> mkdir -p artifacts/manifests
-> curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/manifests/build-baseline.sh --fail
-> curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/manifests/build-parameters.sh --fail
-> curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/18/artifact/artifacts/test.sh --fail
-> chmod +x artifacts/test.sh
->
-> # Reproduce the baseline build (build all pre-requisites)
-> ./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
->
-> # Save baseline build state (which is then restored in artifacts/test.sh)
-> mkdir -p ./bisect
-> rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
->
-> cd llvm
->
-> # Reproduce first_bad build
-> git checkout --detach 864b206796ae8aa7f35f830655337751dbd9176c
-> ../artifacts/test.sh
->
-> # Reproduce last_good build
-> git checkout --detach 4f01a02d738b033c10bfed5b47014fc197509a4f
-> ../artifacts/test.sh
->
-> cd ..
-> </cut>
->
-> Full commit (up to 1000 lines):
-> <cut>
-> commit 864b206796ae8aa7f35f830655337751dbd9176c
-> Author: Jingu Kang <jingu.kang@arm.com>
-> Date:   Wed Sep 22 17:01:21 2021 +0100
->
->     [AArch64] Split bitmask immediate of bitwise AND operation
->
->     MOVi32imm + ANDWrr ==> ANDWri + ANDWri
->     MOVi64imm + ANDXrr ==> ANDXri + ANDXri
->
->     The mov pseudo instruction could be expanded to multiple mov instructions later.
->     In this case, try to split the constant operand of mov instruction into two
->     bitmask immediates. It makes only two AND instructions intead of multiple
->     mov + and instructions.
->
->     Added a peephole optimization pass on MIR level to implement it.
->
->     Differential Revision: https://reviews.llvm.org/D109963
-> ---
->  llvm/lib/Target/AArch64/AArch64.h                  |   2 +
->  llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp   | 213 ++++++++++++++++++
->  llvm/lib/Target/AArch64/AArch64TargetMachine.cpp   |  10 +
->  llvm/lib/Target/AArch64/CMakeLists.txt             |   1 +
->  .../AArch64/MCTargetDesc/AArch64AddressingModes.h  |   1 +
->  llvm/test/CodeGen/AArch64/O3-pipeline.ll           |   3 +-
->  .../AArch64/aarch64-split-and-bitmask-immediate.ll | 245 +++++++++++++++++++++
->  ...old-masked-merge-scalar-constmask-innerouter.ll |   5 +-
->  8 files changed, 476 insertions(+), 4 deletions(-)
->
-> diff --git a/llvm/lib/Target/AArch64/AArch64.h b/llvm/lib/Target/AArch64/AArch64.h
-> index 658d44771e8d..b0dd30c13137 100644
-> --- a/llvm/lib/Target/AArch64/AArch64.h
-> +++ b/llvm/lib/Target/AArch64/AArch64.h
-> @@ -51,6 +51,7 @@ FunctionPass *createAArch64A53Fix835769();
->  FunctionPass *createFalkorHWPFFixPass();
->  FunctionPass *createFalkorMarkStridedAccessesPass();
->  FunctionPass *createAArch64BranchTargetsPass();
-> +FunctionPass *createAArch64MIPeepholeOptPass();
->
->  FunctionPass *createAArch64CleanupLocalDynamicTLSPass();
->
-> @@ -82,6 +83,7 @@ void initializeAArch64SLSHardeningPass(PassRegistry&);
->  void initializeAArch64SpeculationHardeningPass(PassRegistry&);
->  void initializeAArch64LoadStoreOptPass(PassRegistry&);
->  void initializeAArch64LowerHomogeneousPrologEpilogPass(PassRegistry &);
-> +void initializeAArch64MIPeepholeOptPass(PassRegistry &);
->  void initializeAArch64SIMDInstrOptPass(PassRegistry&);
->  void initializeAArch64O0PreLegalizerCombinerPass(PassRegistry &);
->  void initializeAArch64PreLegalizerCombinerPass(PassRegistry&);
-> diff --git a/llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp b/llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp
-> new file mode 100644
-> index 000000000000..f77928520b7d
-> --- /dev/null
-> +++ b/llvm/lib/Target/AArch64/AArch64MIPeepholeOpt.cpp
-> @@ -0,0 +1,213 @@
-> +//===- AArch64MIPeepholeOpt.cpp - AArch64 MI peephole optimization pass ---===//
-> +//
-> +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-> +// See https://llvm.org/LICENSE.txt for license information.
-> +// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-> +//
-> +//===----------------------------------------------------------------------===//
-> +//
-> +// This pass performs below peephole optimizations on MIR level.
-> +//
-> +// 1. MOVi32imm + ANDWrr ==> ANDWri + ANDWri
-> +//    MOVi64imm + ANDXrr ==> ANDXri + ANDXri
-> +//
-> +//    The mov pseudo instruction could be expanded to multiple mov instructions
-> +//    later. In this case, we could try to split the constant  operand of mov
-> +//    instruction into two bitmask immediates. It makes two AND instructions
-> +//    intead of multiple `mov` + `and` instructions.
-> +//===----------------------------------------------------------------------===//
-> +
-> +#include "AArch64ExpandImm.h"
-> +#include "AArch64InstrInfo.h"
-> +#include "MCTargetDesc/AArch64AddressingModes.h"
-> +#include "llvm/ADT/SetVector.h"
-> +#include "llvm/CodeGen/MachineDominators.h"
-> +#include "llvm/CodeGen/MachineLoopInfo.h"
-> +
-> +using namespace llvm;
-> +
-> +#define DEBUG_TYPE "aarch64-mi-peephole-opt"
-> +
-> +namespace {
-> +
-> +struct AArch64MIPeepholeOpt : public MachineFunctionPass {
-> +  static char ID;
-> +
-> +  AArch64MIPeepholeOpt() : MachineFunctionPass(ID) {
-> +    initializeAArch64MIPeepholeOptPass(*PassRegistry::getPassRegistry());
-> +  }
-> +
-> +  const AArch64InstrInfo *TII;
-> +  MachineLoopInfo *MLI;
-> +  MachineRegisterInfo *MRI;
-> +
-> +  template <typename T>
-> +  bool visitAND(MachineInstr &MI,
-> +                SmallSetVector<MachineInstr *, 8> &ToBeRemoved);
-> +  bool runOnMachineFunction(MachineFunction &MF) override;
-> +
-> +  StringRef getPassName() const override {
-> +    return "AArch64 MI Peephole Optimization pass";
-> +  }
-> +
-> +  void getAnalysisUsage(AnalysisUsage &AU) const override {
-> +    AU.setPreservesCFG();
-> +    AU.addRequired<MachineLoopInfo>();
-> +    MachineFunctionPass::getAnalysisUsage(AU);
-> +  }
-> +};
-> +
-> +char AArch64MIPeepholeOpt::ID = 0;
-> +
-> +} // end anonymous namespace
-> +
-> +INITIALIZE_PASS(AArch64MIPeepholeOpt, "aarch64-mi-peephole-opt",
-> +                "AArch64 MI Peephole Optimization", false, false)
-> +
-> +template <typename T>
-> +static bool splitBitmaskImm(T Imm, unsigned RegSize, T &Imm1Enc, T &Imm2Enc) {
-> +  T UImm = static_cast<T>(Imm);
-> +  if (AArch64_AM::isLogicalImmediate(UImm, RegSize))
-> +    return false;
-> +
-> +  // If this immediate can be handled by one instruction, do not split it.
-> +  SmallVector<AArch64_IMM::ImmInsnModel, 4> Insn;
-> +  AArch64_IMM::expandMOVImm(UImm, RegSize, Insn);
-> +  if (Insn.size() == 1)
-> +    return false;
-> +
-> +  // The bitmask immediate consists of consecutive ones.  Let's say there is
-> +  // constant 0b00000000001000000000010000000000 which does not consist of
-> +  // consecutive ones. We can split it in to two bitmask immediate like
-> +  // 0b00000000001111111111110000000000 and 0b11111111111000000000011111111111.
-> +  // If we do AND with these two bitmask immediate, we can see original one.
-> +  unsigned LowestBitSet = countTrailingZeros(UImm);
-> +  unsigned HighestBitSet = Log2_64(UImm);
-> +
-> +  // Create a mask which is filled with one from the position of lowest bit set
-> +  // to the position of highest bit set.
-> +  T NewImm1 = (static_cast<T>(2) << HighestBitSet) -
-> +              (static_cast<T>(1) << LowestBitSet);
-> +  // Create a mask which is filled with one outside the position of lowest bit
-> +  // set and the position of highest bit set.
-> +  T NewImm2 = UImm | ~NewImm1;
-> +
-> +  // If the splitted value is not valid bitmask immediate, do not split this
-> +  // constant.
-> +  if (!AArch64_AM::isLogicalImmediate(NewImm2, RegSize))
-> +    return false;
-> +
-> +  Imm1Enc = AArch64_AM::encodeLogicalImmediate(NewImm1, RegSize);
-> +  Imm2Enc = AArch64_AM::encodeLogicalImmediate(NewImm2, RegSize);
-> +  return true;
-> +}
-> +
-> +template <typename T>
-> +bool AArch64MIPeepholeOpt::visitAND(
-> +    MachineInstr &MI, SmallSetVector<MachineInstr *, 8> &ToBeRemoved) {
-> +  // Try below transformation.
-> +  //
-> +  // MOVi32imm + ANDWrr ==> ANDWri + ANDWri
-> +  // MOVi64imm + ANDXrr ==> ANDXri + ANDXri
-> +  //
-> +  // The mov pseudo instruction could be expanded to multiple mov instructions
-> +  // later. Let's try to split the constant operand of mov instruction into two
-> +  // bitmask immediates. It makes only two AND instructions intead of multiple
-> +  // mov + and instructions.
-> +
-> +  unsigned RegSize = sizeof(T) * 8;
-> +  assert((RegSize == 32 || RegSize == 64) &&
-> +         "Invalid RegSize for AND bitmask peephole optimization");
-> +
-> +  // Check whether AND's MBB is in loop and the AND is loop invariant.
-> +  MachineBasicBlock *MBB = MI.getParent();
-> +  MachineLoop *L = MLI->getLoopFor(MBB);
-> +  if (L && !L->isLoopInvariant(MI))
-> +    return false;
-> +
-> +  // Check whether AND's operand is MOV with immediate.
-> +  MachineInstr *MovMI = MRI->getUniqueVRegDef(MI.getOperand(2).getReg());
-> +  MachineInstr *SubregToRegMI = nullptr;
-> +  // If it is SUBREG_TO_REG, check its operand.
-> +  if (MovMI->getOpcode() == TargetOpcode::SUBREG_TO_REG) {
-> +    SubregToRegMI = MovMI;
-> +    MovMI = MRI->getUniqueVRegDef(MovMI->getOperand(2).getReg());
-> +  }
-> +
-> +  // If the MOV has multiple uses, do not split the immediate because it causes
-> +  // more instructions.
-> +  if (!MRI->hasOneUse(MovMI->getOperand(0).getReg()))
-> +    return false;
-> +
-> +  if (MovMI->getOpcode() != AArch64::MOVi32imm &&
-> +      MovMI->getOpcode() != AArch64::MOVi64imm)
-> +    return false;
-> +
-> +  // Split the bitmask immediate into two.
-> +  T UImm = static_cast<T>(MovMI->getOperand(1).getImm());
-> +  T Imm1Enc;
-> +  T Imm2Enc;
-> +  if (!splitBitmaskImm(UImm, RegSize, Imm1Enc, Imm2Enc))
-> +    return false;
-> +
-> +  // Create new AND MIs.
-> +  DebugLoc DL = MI.getDebugLoc();
-> +  Register DstReg = MI.getOperand(0).getReg();
-> +  Register SrcReg = MI.getOperand(1).getReg();
-> +  Register NewTmpReg = MRI->createVirtualRegister(MRI->getRegClass(DstReg));
-> +  unsigned Opcode = (RegSize == 32) ? AArch64::ANDWri : AArch64::ANDXri;
-> +
-> +  BuildMI(*MBB, MI, DL, TII->get(Opcode), NewTmpReg)
-> +      .addReg(SrcReg)
-> +      .addImm(Imm1Enc);
-> +
-> +  BuildMI(*MBB, MI, DL, TII->get(Opcode), DstReg)
-> +      .addReg(NewTmpReg)
-> +      .addImm(Imm2Enc);
-> +
-> +  ToBeRemoved.insert(&MI);
-> +  if (SubregToRegMI)
-> +    ToBeRemoved.insert(SubregToRegMI);
-> +  ToBeRemoved.insert(MovMI);
-> +
-> +  return true;
-> +}
-> +
-> +bool AArch64MIPeepholeOpt::runOnMachineFunction(MachineFunction &MF) {
-> +  if (skipFunction(MF.getFunction()))
-> +    return false;
-> +
-> +  TII = static_cast<const AArch64InstrInfo *>(MF.getSubtarget().getInstrInfo());
-> +  MLI = &getAnalysis<MachineLoopInfo>();
-> +  MRI = &MF.getRegInfo();
-> +
-> +  if (!MRI->isSSA())
-> +    return false;
-> +
-> +  bool Changed = false;
-> +  SmallSetVector<MachineInstr *, 8> ToBeRemoved;
-> +
-> +  for (MachineBasicBlock &MBB : MF) {
-> +    for (MachineInstr &MI : MBB) {
-> +      switch (MI.getOpcode()) {
-> +      default:
-> +        break;
-> +      case AArch64::ANDWrr:
-> +        Changed = visitAND<uint32_t>(MI, ToBeRemoved);
-> +        break;
-> +      case AArch64::ANDXrr:
-> +        Changed = visitAND<uint64_t>(MI, ToBeRemoved);
-> +        break;
-> +      }
-> +    }
-> +  }
-> +
-> +  for (MachineInstr *MI : ToBeRemoved)
-> +    MI->eraseFromParent();
-> +
-> +  return Changed;
-> +}
-> +
-> +FunctionPass *llvm::createAArch64MIPeepholeOptPass() {
-> +  return new AArch64MIPeepholeOpt();
-> +}
-> diff --git a/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp b/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp
-> index 99bcb2f4649a..637f69af0365 100644
-> --- a/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp
-> +++ b/llvm/lib/Target/AArch64/AArch64TargetMachine.cpp
-> @@ -195,6 +195,7 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeAArch64Target() {
->    initializeAArch64DeadRegisterDefinitionsPass(*PR);
->    initializeAArch64ExpandPseudoPass(*PR);
->    initializeAArch64LoadStoreOptPass(*PR);
-> +  initializeAArch64MIPeepholeOptPass(*PR);
->    initializeAArch64SIMDInstrOptPass(*PR);
->    initializeAArch64O0PreLegalizerCombinerPass(*PR);
->    initializeAArch64PreLegalizerCombinerPass(*PR);
-> @@ -479,6 +480,7 @@ public:
->    bool addRegBankSelect() override;
->    void addPreGlobalInstructionSelect() override;
->    bool addGlobalInstructionSelect() override;
-> +  void addMachineSSAOptimization() override;
->    bool addILPOpts() override;
->    void addPreRegAlloc() override;
->    void addPostRegAlloc() override;
-> @@ -649,6 +651,14 @@ bool AArch64PassConfig::addGlobalInstructionSelect() {
->    return false;
->  }
->
-> +void AArch64PassConfig::addMachineSSAOptimization() {
-> +  // Run default MachineSSAOptimization first.
-> +  TargetPassConfig::addMachineSSAOptimization();
-> +
-> +  if (TM->getOptLevel() != CodeGenOpt::None)
-> +    addPass(createAArch64MIPeepholeOptPass());
-> +}
-> +
->  bool AArch64PassConfig::addILPOpts() {
->    if (EnableCondOpt)
->      addPass(createAArch64ConditionOptimizerPass());
-> diff --git a/llvm/lib/Target/AArch64/CMakeLists.txt b/llvm/lib/Target/AArch64/CMakeLists.txt
-> index a77a66bacc4c..aeedeb4eebac 100644
-> --- a/llvm/lib/Target/AArch64/CMakeLists.txt
-> +++ b/llvm/lib/Target/AArch64/CMakeLists.txt
-> @@ -66,6 +66,7 @@ add_llvm_target(AArch64CodeGen
->    AArch64LowerHomogeneousPrologEpilog.cpp
->    AArch64MachineFunctionInfo.cpp
->    AArch64MacroFusion.cpp
-> +  AArch64MIPeepholeOpt.cpp
->    AArch64MCInstLower.cpp
->    AArch64PromoteConstant.cpp
->    AArch64PBQPRegAlloc.cpp
-> diff --git a/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h b/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h
-> index c3e74757675b..876526093591 100644
-> --- a/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h
-> +++ b/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AddressingModes.h
-> @@ -13,6 +13,7 @@
->  #ifndef LLVM_LIB_TARGET_AARCH64_MCTARGETDESC_AARCH64ADDRESSINGMODES_H
->  #define LLVM_LIB_TARGET_AARCH64_MCTARGETDESC_AARCH64ADDRESSINGMODES_H
->
-> +#include "AArch64ExpandImm.h"
->  #include "llvm/ADT/APFloat.h"
->  #include "llvm/ADT/APInt.h"
->  #include "llvm/ADT/bit.h"
-> diff --git a/llvm/test/CodeGen/AArch64/O3-pipeline.ll b/llvm/test/CodeGen/AArch64/O3-pipeline.ll
-> index 1d6eca60838f..6796022a95e6 100644
-> --- a/llvm/test/CodeGen/AArch64/O3-pipeline.ll
-> +++ b/llvm/test/CodeGen/AArch64/O3-pipeline.ll
-> @@ -40,7 +40,7 @@
->  ; CHECK-NEXT:         Induction Variable Users
->  ; CHECK-NEXT:         Loop Strength Reduction
->  ; CHECK-NEXT:       Basic Alias Analysis (stateless AA impl)
-> -; CHECK-NEXT:         Function Alias Analysis Results
-> +; CHECK-NEXT:       Function Alias Analysis Results
->  ; CHECK-NEXT:       Merge contiguous icmps into a memcmp
->  ; CHECK-NEXT:       Natural Loop Information
->  ; CHECK-NEXT:       Lazy Branch Probability Analysis
-> @@ -131,6 +131,7 @@
->  ; CHECK-NEXT:       Machine code sinking
->  ; CHECK-NEXT:       Peephole Optimizations
->  ; CHECK-NEXT:       Remove dead machine instructions
-> +; CHECK-NEXT:       AArch64 MI Peephole Optimization pass
->  ; CHECK-NEXT:       AArch64 Dead register definitions
->  ; CHECK-NEXT:       Detect Dead Lanes
->  ; CHECK-NEXT:       Process Implicit Definitions
-> diff --git a/llvm/test/CodeGen/AArch64/aarch64-split-and-bitmask-immediate.ll b/llvm/test/CodeGen/AArch64/aarch64-split-and-bitmask-immediate.ll
-> new file mode 100644
-> index 000000000000..0b082e313396
-> --- /dev/null
-> +++ b/llvm/test/CodeGen/AArch64/aarch64-split-and-bitmask-immediate.ll
-> @@ -0,0 +1,245 @@
-> +; NOTE: Assertions have been autogenerated by utils/update_llc_test_checks.py
-> +; RUN: llc -mtriple=aarch64-none-linux-gnu < %s | FileCheck %s
-> +
-> +define i8 @test1(i32 %a) {
-> +; CHECK-LABEL: test1:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    and w8, w0, #0x3ffc00
-> +; CHECK-NEXT:    and w8, w8, #0xffe007ff
-> +; CHECK-NEXT:    cmp w8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i32 %a, 2098176
-> +  %cmp = icmp eq i32 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +; This constant should not be split because it can be handled by one mov.
-> +define i8 @test2(i32 %a) {
-> +; CHECK-LABEL: test2:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    mov w8, #135
-> +; CHECK-NEXT:    and w8, w0, w8
-> +; CHECK-NEXT:    cmp w8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i32 %a, 135
-> +  %cmp = icmp eq i32 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +; This constant should not be split because the split immediate is not valid
-> +; bitmask immediate.
-> +define i8 @test3(i32 %a) {
-> +; CHECK-LABEL: test3:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    mov w8, #1024
-> +; CHECK-NEXT:    movk w8, #33, lsl #16
-> +; CHECK-NEXT:    and w8, w0, w8
-> +; CHECK-NEXT:    cmp w8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i32 %a, 2163712
-> +  %cmp = icmp eq i32 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +define i8 @test4(i64 %a) {
-> +; CHECK-LABEL: test4:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    and x8, x0, #0x3ffc00
-> +; CHECK-NEXT:    and x8, x8, #0xffffffffffe007ff
-> +; CHECK-NEXT:    cmp x8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i64 %a, 2098176
-> +  %cmp = icmp eq i64 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +define i8 @test5(i64 %a) {
-> +; CHECK-LABEL: test5:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    and x8, x0, #0x3ffffc000
-> +; CHECK-NEXT:    and x8, x8, #0xfffffffe00007fff
-> +; CHECK-NEXT:    cmp x8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i64 %a, 8589950976
-> +  %cmp = icmp eq i64 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +; This constant should not be split because it can be handled by one mov.
-> +define i8 @test6(i64 %a) {
-> +; CHECK-LABEL: test6:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    mov w8, #135
-> +; CHECK-NEXT:    and x8, x0, x8
-> +; CHECK-NEXT:    cmp x8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i64 %a, 135
-> +  %cmp = icmp eq i64 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +; This constant should not be split because the split immediate is not valid
-> +; bitmask immediate.
-> +define i8 @test7(i64 %a) {
-> +; CHECK-LABEL: test7:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    mov w8, #1024
-> +; CHECK-NEXT:    movk w8, #33, lsl #16
-> +; CHECK-NEXT:    and x8, x0, x8
-> +; CHECK-NEXT:    cmp x8, #1024
-> +; CHECK-NEXT:    cset w0, eq
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %and = and i64 %a, 2163712
-> +  %cmp = icmp eq i64 %and, 1024
-> +  %conv = zext i1 %cmp to i8
-> +  ret i8 %conv
-> +}
-> +
-> +; The split bitmask immediates should be hoisted outside loop because they are
-> +; loop invariant.
-> +define void @test8(i64 %a, i64* noalias %src, i64* noalias %dst, i64 %n) {
-> +; CHECK-LABEL: test8:
-> +; CHECK:       // %bb.0: // %loop.ph
-> +; CHECK-NEXT:    and x9, x0, #0x3ffc00
-> +; CHECK-NEXT:    mov x8, xzr
-> +; CHECK-NEXT:    and x9, x9, #0xffffffffffe007ff
-> +; CHECK-NEXT:    b .LBB7_2
-> +; CHECK-NEXT:  .LBB7_1: // %for.inc
-> +; CHECK-NEXT:    // in Loop: Header=BB7_2 Depth=1
-> +; CHECK-NEXT:    add x8, x8, #1
-> +; CHECK-NEXT:    cmp x8, x3
-> +; CHECK-NEXT:    b.gt .LBB7_4
-> +; CHECK-NEXT:  .LBB7_2: // %loop
-> +; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
-> +; CHECK-NEXT:    cmp x8, x9
-> +; CHECK-NEXT:    b.hs .LBB7_1
-> +; CHECK-NEXT:  // %bb.3: // %if.then
-> +; CHECK-NEXT:    // in Loop: Header=BB7_2 Depth=1
-> +; CHECK-NEXT:    lsl x10, x8, #3
-> +; CHECK-NEXT:    ldr x11, [x1, x10]
-> +; CHECK-NEXT:    str x11, [x2, x10]
-> +; CHECK-NEXT:    b .LBB7_1
-> +; CHECK-NEXT:  .LBB7_4: // %exit
-> +; CHECK-NEXT:    ret
-> +loop.ph:
-> +  br label %loop
-> +
-> +loop:
-> +  %iv = phi i64 [ %inc, %for.inc ], [ 0, %loop.ph ]
-> +  %and = and i64 %a, 2098176
-> +  %cmp = icmp ult i64 %iv, %and
-> +  br i1 %cmp, label %if.then, label %if.else
-> +
-> +if.then:
-> +  %src.arrayidx = getelementptr inbounds i64, i64* %src, i64 %iv
-> +  %val = load i64, i64* %src.arrayidx
-> +  %dst.arrayidx = getelementptr inbounds i64, i64* %dst, i64 %iv
-> +  store i64 %val, i64* %dst.arrayidx
-> +  br label %for.inc
-> +
-> +if.else:
-> +  br label %for.inc
-> +
-> +for.inc:
-> +  %inc = add nuw nsw i64 %iv, 1
-> +  %cond = icmp sgt i64 %inc, %n
-> +  br i1 %cond, label %exit, label %loop
-> +
-> +exit:
-> +  ret void
-> +}
-> +
-> +; This constant should not be split because the `and` is not loop invariant.
-> +define i32 @test9(i32* nocapture %x, i32* nocapture readonly %y, i32 %n) {
-> +; CHECK-LABEL: test9:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    cmp w2, #1
-> +; CHECK-NEXT:    b.lt .LBB8_3
-> +; CHECK-NEXT:  // %bb.1: // %for.body.preheader
-> +; CHECK-NEXT:    mov w9, #1024
-> +; CHECK-NEXT:    mov w8, w2
-> +; CHECK-NEXT:    movk w9, #32, lsl #16
-> +; CHECK-NEXT:  .LBB8_2: // %for.body
-> +; CHECK-NEXT:    // =>This Inner Loop Header: Depth=1
-> +; CHECK-NEXT:    ldr w10, [x1], #4
-> +; CHECK-NEXT:    subs x8, x8, #1
-> +; CHECK-NEXT:    and w10, w10, w9
-> +; CHECK-NEXT:    str w10, [x0], #4
-> +; CHECK-NEXT:    b.ne .LBB8_2
-> +; CHECK-NEXT:  .LBB8_3: // %for.cond.cleanup
-> +; CHECK-NEXT:    mov w0, wzr
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %cmp8 = icmp sgt i32 %n, 0
-> +  br i1 %cmp8, label %for.body.preheader, label %for.cond.cleanup
-> +
-> +for.body.preheader:                               ; preds = %entry
-> +  %wide.trip.count = zext i32 %n to i64
-> +  br label %for.body
-> +
-> +for.cond.cleanup:                                 ; preds = %for.body, %entry
-> +  ret i32 0
-> +
-> +for.body:                                         ; preds = %for.body.preheader, %for.body
-> +  %indvars.iv = phi i64 [ 0, %for.body.preheader ], [ %indvars.iv.next, %for.body ]
-> +  %arrayidx = getelementptr inbounds i32, i32* %y, i64 %indvars.iv
-> +  %0 = load i32, i32* %arrayidx, align 4
-> +  %and = and i32 %0, 2098176
-> +  %arrayidx2 = getelementptr inbounds i32, i32* %x, i64 %indvars.iv
-> +  store i32 %and, i32* %arrayidx2, align 4
-> +  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-> +  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-> +  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body
-> +}
-> +
-> +; After instruction selection end, we can see the `and` and `or` share the
-> +; constant as below.
-> +;
-> +; %4:gpr32 = MOVi32imm 2098176
-> +; %5:gpr32 = ANDWrr killed %3:gpr32, %4:gpr32
-> +; STRWui killed %5:gpr32, %0:gpr64common, 0 :: (store (s32) into %ir.x, !tbaa !8)
-> +; %6:gpr32 = LDRWui %1:gpr64common, 0 :: (load (s32) from %ir.y, !tbaa !8)
-> +; %7:gpr32 = ORRWrr killed %6:gpr32, %4:gpr32
-> +;
-> +; In this case, the constant should not be split because it causes more
-> +; instructions.
-> +define void @test10(i32* nocapture %x, i32* nocapture readonly %y, i32* nocapture %z) {
-> +; CHECK-LABEL: test10:
-> +; CHECK:       // %bb.0: // %entry
-> +; CHECK-NEXT:    ldr w8, [x1]
-> +; CHECK-NEXT:    mov w9, #1024
-> +; CHECK-NEXT:    movk w9, #32, lsl #16
-> +; CHECK-NEXT:    and w8, w8, w9
-> +; CHECK-NEXT:    str w8, [x0]
-> +; CHECK-NEXT:    ldr w8, [x1]
-> +; CHECK-NEXT:    orr w8, w8, w9
-> +; CHECK-NEXT:    str w8, [x2]
-> +; CHECK-NEXT:    ret
-> +entry:
-> +  %0 = load i32, i32* %y, align 4
-> +  %and = and i32 %0, 2098176
-> +  store i32 %and, i32* %x, align 4
-> +  %1 = load i32, i32* %y, align 4
-> +  %or = or i32 %1, 2098176
-> +  store i32 %or, i32* %z, align 4
-> +  ret void
-> +}
-> diff --git a/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll b/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll
-> index 2e20ef67b2a2..3e30f45cfabb 100644
-> --- a/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll
-> +++ b/llvm/test/CodeGen/AArch64/unfold-masked-merge-scalar-constmask-innerouter.ll
-> @@ -245,10 +245,9 @@ define i32 @in_multiuse_B_constmask(i32 %x, i32 %y, i32 %z) nounwind {
->  define i32 @n0_badconstmask(i32 %x, i32 %y) {
->  ; CHECK-LABEL: n0_badconstmask:
->  ; CHECK:       // %bb.0:
-> -; CHECK-NEXT:    mov w9, #256
-> -; CHECK-NEXT:    movk w9, #65280, lsl #16
-> +; CHECK-NEXT:    and w9, w1, #0xffffff00
->  ; CHECK-NEXT:    and w8, w0, #0xffff00
-> -; CHECK-NEXT:    and w9, w1, w9
-> +; CHECK-NEXT:    and w9, w9, #0xff0001ff
->  ; CHECK-NEXT:    orr w0, w8, w9
->  ; CHECK-NEXT:    ret
->    %mx = and i32 %x, 16776960
-> </cut>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/ptrace.c:69:35: error: use of undeclared identifier 'task'
+           lockdep_assert_task_sighand_held(task);
+                                            ^
+   1 error generated.
+
+
+vim +/task +69 kernel/ptrace.c
+
+    66	
+    67	void ptrace_signal_wake_up(struct task_struct *t, bool resume)
+    68	{
+  > 69		lockdep_assert_task_sighand_held(task);
+    70	
+    71		if (resume)
+    72			t->ptrace &= ~PT_STOPPED_MASK;
+    73		signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
+    74	}
+    75	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+--3V7upXqbjpZ4EhLz
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
+
+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
+
+--3V7upXqbjpZ4EhLz--
