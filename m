@@ -1,46 +1,50 @@
 Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479CA72
-	for <llvm@lists.linux.dev>; Mon, 11 Oct 2021 23:24:52 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id z2-20020a254c02000000b005b68ef4fe24so25133008yba.11
-        for <llvm@lists.linux.dev>; Mon, 11 Oct 2021 16:24:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE9672
+	for <llvm@lists.linux.dev>; Mon, 11 Oct 2021 23:24:54 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id b197-20020a2534ce000000b005b71a4e189eso25302653yba.5
+        for <llvm@lists.linux.dev>; Mon, 11 Oct 2021 16:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=KXLwmwE4TrX9P6IfHZohm8oMSZRK5w3cuXTwrGX29F8=;
-        b=et1Sxb65m9+vwLlfkIKKA7Y1J6IaM8BqdoCZ7ieLpPXx6cJfvUiCeZkiBmh3fDhCE2
-         np7gIlRc/QDO3MpZCagM2OjOh8EGp7rct8ERiMkv806ee/7oCPXhMwoLzYzPo3QLc5XL
-         1ZG+E8DRnnw1a1yldfTyyUMG0mHug4CgkcgENBj5AUtd+dnpaGb/Q6m6SUmuLAe2I0ip
-         EnSwNmalP1m+kNGqj6b0tlZk4yMV80Eje2YbJpZcD869A8SvSgim5wCrcqPvo3dIhAnD
-         MOQv/+qxBHp7R+ZI1c/ECvewReMmJapvzey8kPxNEu3AR5AUp32a97D+OO22O0lBidKd
-         binA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=sRMGxf/QWkSIvOyrGEHw7zgVURL6a7pQ1XR3ZP8rEXw=;
+        b=nIuAoquaDI/sspmWGoKBMYKBsX//8qBhGRizTZ2/OrijGyzjqxxI/VzNQyWhrt2wOy
+         z8g6u8AleH0Te3HuTsgDF+qJA90zmPuA5UzViXa6m+yGkXqiXIh8lQ0nwUMhqsPItPSD
+         vhZZCr/DY2EHdQ7RkgnbDFVZf2mQ7U5wG22K6X5ZHkMcyxQ+ENNJZMPdPtIweR65TIXS
+         EX5xiWoCTcBSu5O85KuUu/XldqXgFZ634XASi6I8sPIdaUDrIZmeGXAVVHkLUqrhJkVd
+         LYsTueAMOYSxn/m2xwha2YxiiwZ92d67o8Tdj/Uf+6sOt705PsC1PqxIcUt/331edW+e
+         wipA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=KXLwmwE4TrX9P6IfHZohm8oMSZRK5w3cuXTwrGX29F8=;
-        b=C+rS8qp85G4Jc4kQIBbWTpM8o53roynSZXTDbl4qw+rjn1BlScYZZST/cOrxeyrPj9
-         YNRNJ+rgazmq9TcNCLqwYLU6vd/sRJ0EiRBPzsVR/l7vefXF5E/TjpYyNMxo7Hq/wD7i
-         TG+wVI8dfueY45mHF/6bDdhbZQUDCJWL/ZRCENsEEeZcPFOgtFHEe/4GYCpodmLD9da3
-         AuW2ML62bINvFLfWuhV7T+KAuv5AaN/0hbkzP8wtD1oNxq0LfBT7h3fGV4QjurqydJ9y
-         oPE6xdSmHAozX0kJkkOGHflfca8Y7x0pPJOLN/g56JdVXdGh02lBtsmk8ZuXj5Z3IbYT
-         iajw==
-X-Gm-Message-State: AOAM530Dt6fGEUvMlb6GcPB80HsT4HJE/Sp98A7z6nEQ3qVzxvVCMCV2
-	d7i53i6l7yl04/P1CryYkZOoxbUnkOxa
-X-Google-Smtp-Source: ABdhPJxjpmIG7Z9kRVv+wVHGTX+Bu5icxM6x4AUwcyjgIx3vrUdMnA5hCS/M6pFKkLWPh6kJO3qktAImSvTJ
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=sRMGxf/QWkSIvOyrGEHw7zgVURL6a7pQ1XR3ZP8rEXw=;
+        b=VE32uw8Hl3Ldlacej4d5dEiYagoIb9T8S/rVfiyGOgCIN+5aBo+mzlCOmBI+Vtf3qh
+         pVv82Z91f0Z5CyGg9Me4FsPtaYZHiUqypbOaKYLRsGl43aB6jEQTbIjMvP7ITnu8dMsT
+         T1pAbeswRCiIWnYUOruQULVSmnYE2BNCYtBMl8W+s5AKntcwXfNdEMIN9fntvgVomHQy
+         R9IR+zHp5zz/5E6S32rXiq8eXNp2TBsHbMWr24f1OyEco3vML7nPEsNsZtvpfrrxwoVZ
+         GQ/B3oNa9UW7CpLywEwbDXN3ZQB15kqx4YwSvfpwcZfV/FP2KpFtSAXdze1DiHuBdTr0
+         aVlw==
+X-Gm-Message-State: AOAM530jBPuu6cWup3q8XdvvYtxhed0QiQ4oRpvrS934BhPaMHyxLrej
+	XnVCX3Ip8HGckoswXK5FUHjBcfUC8u6b
+X-Google-Smtp-Source: ABdhPJw2/5rT3Msh74FHXo0z+T9ByKwujBrHptH+dNLegy9iGwKHXiILFzCByVPGFqvMG+qt28mRXoHX1haD
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2ad2:cb91:6fbd:a6f2])
- (user=irogers job=sendgmr) by 2002:a25:1ec6:: with SMTP id
- e189mr25691573ybe.150.1633994691230; Mon, 11 Oct 2021 16:24:51 -0700 (PDT)
-Date: Mon, 11 Oct 2021 16:24:45 -0700
-Message-Id: <20211011232446.250195-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:7383:: with SMTP id
+ o125mr24530968ybc.525.1633994693655; Mon, 11 Oct 2021 16:24:53 -0700 (PDT)
+Date: Mon, 11 Oct 2021 16:24:46 -0700
+In-Reply-To: <20211011232446.250195-1-irogers@google.com>
+Message-Id: <20211011232446.250195-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20211011232446.250195-1-irogers@google.com>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
-Subject: [PATCH 1/2] tools: Bump minimum LLVM C++ std to GNU++14
+Subject: [PATCH 2/2] perf clang: Fixes for more recent LLVM/clang
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -53,56 +57,63 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-LLVM 9 (current release is LLVM 13) moved the minimum C++ version to
-GNU++14. Bump the version numbers in the feature test and perf build.
+The parameters to two functions and the location of a variable have
+changed in more recent LLVM/clang releases.
+
+Tested with LLVM 6, 8, 9, 10 and 11.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/build/feature/Makefile | 6 +++---
- tools/perf/Makefile.config   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ tools/perf/util/c++/clang.cpp | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index d024b5204ba0..19f145a35a43 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -300,7 +300,7 @@ $(OUTPUT)test-jvmti-cmlr.bin:
- 	$(BUILD)
+diff --git a/tools/perf/util/c++/clang.cpp b/tools/perf/util/c++/clang.cpp
+index c8885dfa3667..756200cb80b1 100644
+--- a/tools/perf/util/c++/clang.cpp
++++ b/tools/perf/util/c++/clang.cpp
+@@ -44,7 +44,6 @@ createCompilerInvocation(llvm::opt::ArgStringList CFlags, StringRef& Path,
+ 		"-triple", "bpf-pc-linux",
+ 		"-fsyntax-only",
+ 		"-ferror-limit", "19",
+-		"-fmessage-length", "127",
+ 		"-O2",
+ 		"-nostdsysteminc",
+ 		"-nobuiltininc",
+@@ -55,7 +54,11 @@ createCompilerInvocation(llvm::opt::ArgStringList CFlags, StringRef& Path,
+ 		"-x", "c"};
  
- $(OUTPUT)test-llvm.bin:
--	$(BUILDXX) -std=gnu++11 				\
-+	$(BUILDXX) -std=gnu++14 				\
- 		-I$(shell $(LLVM_CONFIG) --includedir) 		\
- 		-L$(shell $(LLVM_CONFIG) --libdir)		\
- 		$(shell $(LLVM_CONFIG) --libs Core BPF)		\
-@@ -308,12 +308,12 @@ $(OUTPUT)test-llvm.bin:
- 		> $(@:.bin=.make.output) 2>&1
+ 	CCArgs.append(CFlags.begin(), CFlags.end());
+-	CompilerInvocation *CI = tooling::newInvocation(&Diags, CCArgs);
++	CompilerInvocation *CI = tooling::newInvocation(&Diags, CCArgs
++#if CLANG_VERSION_MAJOR >= 11
++                                                        ,/*BinaryName=*/nullptr
++#endif
++                                                        );
  
- $(OUTPUT)test-llvm-version.bin:
--	$(BUILDXX) -std=gnu++11 				\
-+	$(BUILDXX) -std=gnu++14					\
- 		-I$(shell $(LLVM_CONFIG) --includedir)		\
- 		> $(@:.bin=.make.output) 2>&1
+ 	FrontendOptions& Opts = CI->getFrontendOpts();
+ 	Opts.Inputs.clear();
+@@ -151,13 +154,16 @@ getBPFObjectFromModule(llvm::Module *Module)
  
- $(OUTPUT)test-clang.bin:
--	$(BUILDXX) -std=gnu++11 				\
-+	$(BUILDXX) -std=gnu++14					\
- 		-I$(shell $(LLVM_CONFIG) --includedir) 		\
- 		-L$(shell $(LLVM_CONFIG) --libdir)		\
- 		-Wl,--start-group -lclangBasic -lclangDriver	\
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 0ae2e3d8b832..86be3f6ec018 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -285,7 +285,7 @@ CORE_CFLAGS += -Wall
- CORE_CFLAGS += -Wextra
- CORE_CFLAGS += -std=gnu99
- 
--CXXFLAGS += -std=gnu++11 -fno-exceptions -fno-rtti
-+CXXFLAGS += -std=gnu++14 -fno-exceptions -fno-rtti
- CXXFLAGS += -Wall
- CXXFLAGS += -fno-omit-frame-pointer
- CXXFLAGS += -ggdb3
+ 	legacy::PassManager PM;
+ 	bool NotAdded;
+-#if CLANG_VERSION_MAJOR < 7
+-	NotAdded = TargetMachine->addPassesToEmitFile(PM, ostream,
+-						      TargetMachine::CGFT_ObjectFile);
++	NotAdded = TargetMachine->addPassesToEmitFile(PM, ostream
++#if CLANG_VERSION_MAJOR >= 7
++                                                      , /*DwoOut=*/nullptr
++#endif
++#if CLANG_VERSION_MAJOR < 10
++                                                      , TargetMachine::CGFT_ObjectFile
+ #else
+-	NotAdded = TargetMachine->addPassesToEmitFile(PM, ostream, nullptr,
+-						      TargetMachine::CGFT_ObjectFile);
++                                                      , llvm::CGFT_ObjectFile
+ #endif
++                                                      );
+ 	if (NotAdded) {
+ 		llvm::errs() << "TargetMachine can't emit a file of this type\n";
+ 		return std::unique_ptr<llvm::SmallVectorImpl<char>>(nullptr);
 -- 
 2.33.0.882.g93a45727a2-goog
 
