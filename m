@@ -1,49 +1,49 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745B92C83
-	for <llvm@lists.linux.dev>; Tue, 12 Oct 2021 03:06:24 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id r1so43415955ybo.10
-        for <llvm@lists.linux.dev>; Mon, 11 Oct 2021 20:06:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819262C83
+	for <llvm@lists.linux.dev>; Tue, 12 Oct 2021 03:09:13 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id z5so43493730ybj.2
+        for <llvm@lists.linux.dev>; Mon, 11 Oct 2021 20:09:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eJ0KAePC541aIFWPu+Qph3nd5pn2jLDyqAKx+t7Tp4o=;
-        b=ip3uRvIOdVNMESQOX2/a7CEt9Jag9Yczb/UVEk/hSMBBk2B/TBXKa85Yz3ZATtEuIi
-         okqzfUkd+xRuKb9BvEhRCJPrpZewaGE/gmB341grpZnJrOmLpPENegFykPASTaLYeWY5
-         Bu3I05v2rVeO2jWbx5IZY9M25R/zmZMXatdsZTauau8mz3u81R6plfqmw6Wue92ee88U
-         luUfVrKha5EJ20R7L5zsIjHvzY/UHRSzs4E38SvoGZB5VOTYeHSvCJblDefWjS4fWpg8
-         Pa9o0E8MOH1tMiBcHNKOX4WKqTeur/m8AQrjSdJ+CKkwP76LlBs1mY8qDynjTRL2dSSG
-         yrtQ==
+        bh=FTVshl9Jefo2BzQxtGM9kFLryo0edF9MOJ5E+vVxA44=;
+        b=efFH465LIdLBSe6pxeyXd6rpuBwhMRC7O641rjKon+zYzEi5zbCl6aXlyPw/kzRD2e
+         hxvl04IAP8Lu0xmEIuQ1Y28asASEfpDySl+jvc7b+sXSYgSIxyN3/50TvP50fjOYDyby
+         VQpu6oRd5fS7xFjzsN9pB0qHjFoZixL6UN3Dro8F0prUKfJUku4cuuPpEMV4Y5tsvhTJ
+         Yb0Uw6u4NXyR9qD8lSLLvqFk5Dz4TqSZQPR//vgcu3rf69JusHZmsVHWLln1Cj7+r9x0
+         wHDrZfrg5nQWhQ6Q6OTKuA66jB8rYEhjj7KXv0FW+8d3CyhCxSTmxFV5VWpUlYcTABEc
+         sBPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eJ0KAePC541aIFWPu+Qph3nd5pn2jLDyqAKx+t7Tp4o=;
-        b=txv8FU9FAZLhh1EULMymCEmIExPIUZQLgAWpxPhqw7jkUWNKhG0B6oFyW4G+ibu4Uq
-         eD1P8bU3h6qI3X7f2iyzrBIUQKMCQK5rB2ZS2+ZH44Ab38HKK9Th1xLMVJVOde2MLFV/
-         CrS583/Y8hOoT+PhzGQ9yDbgYPmWKpZV4tI11aD5kah/gfCXUBW7TeY0KUUqnd0KAA8A
-         MIjsMXSbJ9U//LXHns09nEU1c0rdXIHxuSfUpJlnGWGWDhzVF3m42Br7dNN3gkIywS7R
-         Nof7CNGu5yd9QOLfgDgI5TcHgybyoJXdBgbABHkchrXVfHNSma29o4OStmoJjTioS+u7
-         z7yA==
-X-Gm-Message-State: AOAM531+X+FThyu7CFVOU10DItcDS6U+Pv/bnvGnImTACUTZrD/fa/YP
-	lwFTFxhtI3XJUV8KtKcPruRyO4/PtNWfrLGro591CQ==
-X-Google-Smtp-Source: ABdhPJyCvPJnDReSx/9fAMemeVHUYBwuWOlOqJf3tf3/qsJ2Uy15pOKdfPd6dmnQpxo9o47ajP9U4QvYHvhbTXB2QNU=
-X-Received: by 2002:a25:3212:: with SMTP id y18mr24979104yby.308.1634007982533;
- Mon, 11 Oct 2021 20:06:22 -0700 (PDT)
+        bh=FTVshl9Jefo2BzQxtGM9kFLryo0edF9MOJ5E+vVxA44=;
+        b=LMQK4PswVizsOpcfsT4KQ1RjJO+myJMOMcIM1oLwhYezH00rqu7V3ZKwVFlaghFm7N
+         uuSWmEZ7QahB02wYTTuKxfW4lGnlPOQcVOvec5hukGE8bLXIftgX0kX8rz5By/eDRm/O
+         lpQeH+yQJhEOkLQTAodl4K21IcfojzPOqyIJwzWlVL3G66CKzovsW63skD4fIDfaI16z
+         wdQqxh2GfYP6B6hi3qd11kTV2qvMaHzevlnjE4NEa/EfLquWERGLxNb0OM07CBB1zDYT
+         zRrFl90u0ERySPucqSovrpwYwfnW5IZctzvmRnEOG+adcL/uJK7yrikAZqDInHqWZprI
+         16Mw==
+X-Gm-Message-State: AOAM531ApFLNmWLHC6j1EWsmI33BmEA8gCisSHTFoH55yeKr+OpTXExa
+	th0DhtuXWxqJtDDNKXXdRQ8IlJxDagJXcWqn4KlqYQ==
+X-Google-Smtp-Source: ABdhPJzJS9y19I8QsN2CIc+h2Q+qEVwU2WZQBTowP4Q1pR7aazPCRPw2H9xNl2hUVLv6e/ATtWp904GkhyIGzEVaBg4=
+X-Received: by 2002:a25:ba08:: with SMTP id t8mr27043351ybg.111.1634008152410;
+ Mon, 11 Oct 2021 20:09:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211012021321.291635-1-irogers@google.com> <20211012021321.291635-2-irogers@google.com>
-In-Reply-To: <20211012021321.291635-2-irogers@google.com>
+References: <20211012021321.291635-1-irogers@google.com>
+In-Reply-To: <20211012021321.291635-1-irogers@google.com>
 From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date: Mon, 11 Oct 2021 20:06:11 -0700
-Message-ID: <CAFP8O3KXocfMYhQBoBskg3VN0-xmUUEy2fA_SuzptWa1gAXbnQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] perf clang: Fixes for more recent LLVM/clang
+Date: Mon, 11 Oct 2021 20:09:01 -0700
+Message-ID: <CAFP8O3L_Oi916yOAuPB7MFpa3QoDQtreRbV7oNt2Yh6h1Coq9A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] tools: Bump minimum LLVM C++ std to GNU++14
 To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <Mark.Rutland@arm.com>, 
@@ -57,79 +57,10 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Mon, Oct 11, 2021 at 7:13 PM Ian Rogers <irogers@google.com> wrote:
 >
-> The parameters to two functions and the location of a variable have
-> changed in more recent LLVM/clang releases.
->
-> Remove the unneecessary -fmessage-length and -ferror-limit flags, the
-> former causes failures like:
->
-> 58: builtin clang support                                           :
-> 58.1: builtin clang compile C source to IR                          :
-> --- start ---
-> test child forked, pid 279307
-> error: unknown argument: '-fmessage-length'
-> 1 error generated.
-> test child finished with -1
->
-> Tested with LLVM 6, 8, 9, 10 and 11.
+> LLVM 9 (current release is LLVM 13) moved the minimum C++ version to
+> GNU++14. Bump the version numbers in the feature test and perf build.
 >
 > Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/c++/clang.cpp | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/perf/util/c++/clang.cpp b/tools/perf/util/c++/clang.cpp
-> index c8885dfa3667..df7b18fb6b6e 100644
-> --- a/tools/perf/util/c++/clang.cpp
-> +++ b/tools/perf/util/c++/clang.cpp
-> @@ -43,8 +43,6 @@ createCompilerInvocation(llvm::opt::ArgStringList CFlags, StringRef& Path,
->                 "-cc1",
->                 "-triple", "bpf-pc-linux",
->                 "-fsyntax-only",
-> -               "-ferror-limit", "19",
-> -               "-fmessage-length", "127",
->                 "-O2",
->                 "-nostdsysteminc",
->                 "-nobuiltininc",
-> @@ -55,7 +53,11 @@ createCompilerInvocation(llvm::opt::ArgStringList CFlags, StringRef& Path,
->                 "-x", "c"};
->
->         CCArgs.append(CFlags.begin(), CFlags.end());
-> -       CompilerInvocation *CI = tooling::newInvocation(&Diags, CCArgs);
-> +       CompilerInvocation *CI = tooling::newInvocation(&Diags, CCArgs
-> +#if CLANG_VERSION_MAJOR >= 11
-> +                                                        ,/*BinaryName=*/nullptr
-> +#endif
-> +                                                        );
->
->         FrontendOptions& Opts = CI->getFrontendOpts();
->         Opts.Inputs.clear();
-> @@ -151,13 +153,16 @@ getBPFObjectFromModule(llvm::Module *Module)
->
->         legacy::PassManager PM;
->         bool NotAdded;
-> -#if CLANG_VERSION_MAJOR < 7
-> -       NotAdded = TargetMachine->addPassesToEmitFile(PM, ostream,
-> -                                                     TargetMachine::CGFT_ObjectFile);
-> +       NotAdded = TargetMachine->addPassesToEmitFile(PM, ostream
-> +#if CLANG_VERSION_MAJOR >= 7
-> +                                                      , /*DwoOut=*/nullptr
-> +#endif
-> +#if CLANG_VERSION_MAJOR < 10
-> +                                                      , TargetMachine::CGFT_ObjectFile
->  #else
-> -       NotAdded = TargetMachine->addPassesToEmitFile(PM, ostream, nullptr,
-> -                                                     TargetMachine::CGFT_ObjectFile);
-> +                                                      , llvm::CGFT_ObjectFile
->  #endif
-> +                                                      );
->         if (NotAdded) {
->                 llvm::errs() << "TargetMachine can't emit a file of this type\n";
->                 return std::unique_ptr<llvm::SmallVectorImpl<char>>(nullptr);
-> --
-> 2.33.0.882.g93a45727a2-goog
->
 
-Thanks for the change:)
 
 Reviewed-by: Fangrui Song <maskray@google.com>
