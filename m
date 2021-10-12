@@ -1,56 +1,56 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C6D2C81
-	for <llvm@lists.linux.dev>; Tue, 12 Oct 2021 05:35:59 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="227332487"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DC72C83
+	for <llvm@lists.linux.dev>; Tue, 12 Oct 2021 06:41:22 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="227013639"
 X-IronPort-AV: E=Sophos;i="5.85,366,1624345200"; 
-   d="gz'50?scan'50,208,50";a="227332487"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 22:35:58 -0700
+   d="gz'50?scan'50,208,50";a="227013639"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 23:41:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,366,1624345200"; 
-   d="gz'50?scan'50,208,50";a="441697667"
+   d="gz'50?scan'50,208,50";a="526360226"
 Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Oct 2021 22:35:56 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 11 Oct 2021 23:41:18 -0700
 Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1maASB-00036a-Gz; Tue, 12 Oct 2021 05:35:55 +0000
-Date: Tue, 12 Oct 2021 13:18:21 +0800
+	id 1maBTS-00039q-5x; Tue, 12 Oct 2021 06:41:18 +0000
+Date: Tue, 12 Oct 2021 14:40:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:sched/core 17/47] kernel/sched/rt.c:1292:22: error: variable
- 'p' set but not used
-Message-ID: <202110121312.AAlEiy7c-lkp@intel.com>
+Subject: [tip:sched/core 19/47] kernel/sched/deadline.c:1486:27: error:
+ variable 'stats' set but not used
+Message-ID: <202110121407.sBOZwoxX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="azLHFNyN32YCQGCU"
+Content-Type: multipart/mixed; boundary="/04w6evG8XlLl3ft"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---azLHFNyN32YCQGCU
+--/04w6evG8XlLl3ft
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
 head:   b2d5b9cec60fecc72a13191c2c6c05acf60975a5
-commit: 57a5c2dafca8e3ce4f70e975a9c7727b66b5071f [17/47] sched/rt: Support schedstats for RT sched class
+commit: b5eb4a5f6521d58d5564b8746701bd67a92a2b11 [19/47] sched/dl: Support schedstats for deadline sched class
 config: hexagon-buildonly-randconfig-r002-20211012 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dcf39554dbea780d6cb7e12239451ba47a2668)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=57a5c2dafca8e3ce4f70e975a9c7727b66b5071f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=b5eb4a5f6521d58d5564b8746701bd67a92a2b11
         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
         git fetch --no-tags tip sched/core
-        git checkout 57a5c2dafca8e3ce4f70e975a9c7727b66b5071f
+        git checkout b5eb4a5f6521d58d5564b8746701bd67a92a2b11
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
 
@@ -59,58 +59,44 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   kernel/sched/rt.c:669:6: error: no previous prototype for function 'sched_rt_bandwidth_account' [-Werror,-Wmissing-prototypes]
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-        ^
-   kernel/sched/rt.c:669:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-   ^
-   static 
->> kernel/sched/rt.c:1292:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
-           struct task_struct *p = NULL;
-                               ^
-   kernel/sched/rt.c:1311:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
-           struct task_struct *p = NULL;
-                               ^
-   kernel/sched/rt.c:1341:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
-           struct task_struct *p = NULL;
-                               ^
-   4 errors generated.
+>> kernel/sched/deadline.c:1486:27: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
+           struct sched_statistics *stats;
+                                    ^
+   kernel/sched/deadline.c:1498:27: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
+           struct sched_statistics *stats;
+                                    ^
+   kernel/sched/deadline.c:1510:27: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
+           struct sched_statistics *stats;
+                                    ^
+   3 errors generated.
 
 
-vim +/p +1292 kernel/sched/rt.c
+vim +/stats +1486 kernel/sched/deadline.c
 
-  1287	
-  1288	static inline void
-  1289	update_stats_wait_start_rt(struct rt_rq *rt_rq, struct sched_rt_entity *rt_se)
-  1290	{
-  1291		struct sched_statistics *stats;
-> 1292		struct task_struct *p = NULL;
-  1293	
-  1294		if (!schedstat_enabled())
-  1295			return;
-  1296	
-  1297		if (rt_entity_is_task(rt_se))
-  1298			p = rt_task_of(rt_se);
-  1299	
-  1300		stats = __schedstats_from_rt_se(rt_se);
-  1301		if (!stats)
-  1302			return;
-  1303	
-  1304		__update_stats_wait_start(rq_of_rt_rq(rt_rq), p, stats);
-  1305	}
-  1306	
+  1482	
+  1483	static inline void
+  1484	update_stats_wait_start_dl(struct dl_rq *dl_rq, struct sched_dl_entity *dl_se)
+  1485	{
+> 1486		struct sched_statistics *stats;
+  1487	
+  1488		if (!schedstat_enabled())
+  1489			return;
+  1490	
+  1491		stats = __schedstats_from_dl_se(dl_se);
+  1492		__update_stats_wait_start(rq_of_dl_rq(dl_rq), dl_task_of(dl_se), stats);
+  1493	}
+  1494	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---azLHFNyN32YCQGCU
+--/04w6evG8XlLl3ft
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICIoTZWEAAy5jb25maWcAnDxbc9s2s+/9FZzmpZ352pDU1eeMHyASlBCRBAOAuviFo8hM
+H4sICLcnZWEAAy5jb25maWcAnDxbc9s2s+/9FZzmpZ352pDU1eeMHyASlBCRBAOAuviFo8hM
 6lPH9khyT/PvzwIkJYAEpczpTG1rd7FYLBZ7A5QPv3xw0Pvp9fvu9LTfPT//cL6VL+Vhdyof
 na9Pz+V/OyF1UiocHBLxJxDHTy/v/378q/x39+31xRn96Y3+dP847IfOsjy8lM9O8Pry9enb
 O3B4en355cMvAU0jMi+CoFhhxglNC4E34v7X/fPu5ZvzT3k4Ap3jDf90/3Sd3749nf7r40f4
@@ -746,4 +732,4 @@ n6vn3daYAl2tL9eHI+4fPGT47j/r/epZe9lNBpxrcruMP5fd01UgIyzdgIkH2SxnNhVWTgWy
 DDrgplnBqD7LF/C+KA2UJFb6B0ljyjsg5fB03rBFM/1gDpIoXptjk3AC0HuA3Bunhs5iHzKT
 BvqApryKve9zK04zClVX6TPauob5Hx8+7IjZOwIA
 
---azLHFNyN32YCQGCU--
+--/04w6evG8XlLl3ft--
