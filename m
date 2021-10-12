@@ -1,56 +1,56 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DCD2C83
-	for <llvm@lists.linux.dev>; Tue, 12 Oct 2021 03:58:14 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="224452619"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C6D2C81
+	for <llvm@lists.linux.dev>; Tue, 12 Oct 2021 05:35:59 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="227332487"
 X-IronPort-AV: E=Sophos;i="5.85,366,1624345200"; 
-   d="gz'50?scan'50,208,50";a="224452619"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 20:58:13 -0700
+   d="gz'50?scan'50,208,50";a="227332487"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 22:35:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,366,1624345200"; 
-   d="gz'50?scan'50,208,50";a="658910640"
+   d="gz'50?scan'50,208,50";a="441697667"
 Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Oct 2021 20:58:11 -0700
+  by orsmga003.jf.intel.com with ESMTP; 11 Oct 2021 22:35:56 -0700
 Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1ma8va-000347-JC; Tue, 12 Oct 2021 03:58:10 +0000
-Date: Tue, 12 Oct 2021 11:57:41 +0800
+	id 1maASB-00036a-Gz; Tue, 12 Oct 2021 05:35:55 +0000
+Date: Tue, 12 Oct 2021 13:18:21 +0800
 From: kernel test robot <lkp@intel.com>
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:sched/core 14/47] kernel/sched/fair.c:893:22: error: variable
+Subject: [tip:sched/core 17/47] kernel/sched/rt.c:1292:22: error: variable
  'p' set but not used
-Message-ID: <202110121132.N2z9JrD0-lkp@intel.com>
+Message-ID: <202110121312.AAlEiy7c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="2fHTh5uZTiUOsy+g"
+Content-Type: multipart/mixed; boundary="azLHFNyN32YCQGCU"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---2fHTh5uZTiUOsy+g
+--azLHFNyN32YCQGCU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
 head:   b2d5b9cec60fecc72a13191c2c6c05acf60975a5
-commit: 60f2415e19d3948641149ac6aca137a7be1d1952 [14/47] sched: Make schedstats helpers independent of fair sched class
+commit: 57a5c2dafca8e3ce4f70e975a9c7727b66b5071f [17/47] sched/rt: Support schedstats for RT sched class
 config: hexagon-buildonly-randconfig-r002-20211012 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dcf39554dbea780d6cb7e12239451ba47a2668)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=60f2415e19d3948641149ac6aca137a7be1d1952
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=57a5c2dafca8e3ce4f70e975a9c7727b66b5071f
         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
         git fetch --no-tags tip sched/core
-        git checkout 60f2415e19d3948641149ac6aca137a7be1d1952
+        git checkout 57a5c2dafca8e3ce4f70e975a9c7727b66b5071f
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
 
@@ -59,155 +59,58 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   kernel/sched/fair.c:860:28: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
-                   struct sched_statistics *stats;
-                                            ^
-   kernel/sched/fair.c:892:27: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
-           struct sched_statistics *stats;
-                                    ^
->> kernel/sched/fair.c:893:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
+   kernel/sched/rt.c:669:6: error: no previous prototype for function 'sched_rt_bandwidth_account' [-Werror,-Wmissing-prototypes]
+   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+        ^
+   kernel/sched/rt.c:669:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+   ^
+   static 
+>> kernel/sched/rt.c:1292:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
            struct task_struct *p = NULL;
                                ^
-   kernel/sched/fair.c:910:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
+   kernel/sched/rt.c:1311:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
            struct task_struct *p = NULL;
                                ^
-   kernel/sched/fair.c:909:27: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
-           struct sched_statistics *stats;
-                                    ^
->> kernel/sched/fair.c:936:22: error: variable 'tsk' set but not used [-Werror,-Wunused-but-set-variable]
-           struct task_struct *tsk = NULL;
+   kernel/sched/rt.c:1341:22: error: variable 'p' set but not used [-Werror,-Wunused-but-set-variable]
+           struct task_struct *p = NULL;
                                ^
-   kernel/sched/fair.c:935:27: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
-           struct sched_statistics *stats;
-                                    ^
-   kernel/sched/fair.c:4451:28: error: variable 'stats' set but not used [-Werror,-Wunused-but-set-variable]
-                   struct sched_statistics *stats;
-                                            ^
-   8 errors generated.
+   4 errors generated.
 
 
-vim +/p +893 kernel/sched/fair.c
+vim +/p +1292 kernel/sched/rt.c
 
-   840	
-   841	/*
-   842	 * Update the current task's runtime statistics.
-   843	 */
-   844	static void update_curr(struct cfs_rq *cfs_rq)
-   845	{
-   846		struct sched_entity *curr = cfs_rq->curr;
-   847		u64 now = rq_clock_task(rq_of(cfs_rq));
-   848		u64 delta_exec;
-   849	
-   850		if (unlikely(!curr))
-   851			return;
-   852	
-   853		delta_exec = now - curr->exec_start;
-   854		if (unlikely((s64)delta_exec <= 0))
-   855			return;
-   856	
-   857		curr->exec_start = now;
-   858	
-   859		if (schedstat_enabled()) {
- > 860			struct sched_statistics *stats;
-   861	
-   862			stats = __schedstats_from_se(curr);
-   863			__schedstat_set(stats->exec_max,
-   864					max(delta_exec, stats->exec_max));
-   865		}
-   866	
-   867		curr->sum_exec_runtime += delta_exec;
-   868		schedstat_add(cfs_rq->exec_clock, delta_exec);
-   869	
-   870		curr->vruntime += calc_delta_fair(delta_exec, curr);
-   871		update_min_vruntime(cfs_rq);
-   872	
-   873		if (entity_is_task(curr)) {
-   874			struct task_struct *curtask = task_of(curr);
-   875	
-   876			trace_sched_stat_runtime(curtask, delta_exec, curr->vruntime);
-   877			cgroup_account_cputime(curtask, delta_exec);
-   878			account_group_exec_runtime(curtask, delta_exec);
-   879		}
-   880	
-   881		account_cfs_rq_runtime(cfs_rq, delta_exec);
-   882	}
-   883	
-   884	static void update_curr_fair(struct rq *rq)
-   885	{
-   886		update_curr(cfs_rq_of(&rq->curr->se));
-   887	}
-   888	
-   889	static inline void
-   890	update_stats_wait_start_fair(struct cfs_rq *cfs_rq, struct sched_entity *se)
-   891	{
-   892		struct sched_statistics *stats;
- > 893		struct task_struct *p = NULL;
-   894	
-   895		if (!schedstat_enabled())
-   896			return;
-   897	
-   898		stats = __schedstats_from_se(se);
-   899	
-   900		if (entity_is_task(se))
-   901			p = task_of(se);
-   902	
-   903		__update_stats_wait_start(rq_of(cfs_rq), p, stats);
-   904	}
-   905	
-   906	static inline void
-   907	update_stats_wait_end_fair(struct cfs_rq *cfs_rq, struct sched_entity *se)
-   908	{
-   909		struct sched_statistics *stats;
-   910		struct task_struct *p = NULL;
-   911	
-   912		if (!schedstat_enabled())
-   913			return;
-   914	
-   915		stats = __schedstats_from_se(se);
-   916	
-   917		/*
-   918		 * When the sched_schedstat changes from 0 to 1, some sched se
-   919		 * maybe already in the runqueue, the se->statistics.wait_start
-   920		 * will be 0.So it will let the delta wrong. We need to avoid this
-   921		 * scenario.
-   922		 */
-   923		if (unlikely(!schedstat_val(stats->wait_start)))
-   924			return;
-   925	
-   926		if (entity_is_task(se))
-   927			p = task_of(se);
-   928	
-   929		__update_stats_wait_end(rq_of(cfs_rq), p, stats);
-   930	}
-   931	
-   932	static inline void
-   933	update_stats_enqueue_sleeper_fair(struct cfs_rq *cfs_rq, struct sched_entity *se)
-   934	{
-   935		struct sched_statistics *stats;
- > 936		struct task_struct *tsk = NULL;
-   937	
-   938		if (!schedstat_enabled())
-   939			return;
-   940	
-   941		stats = __schedstats_from_se(se);
-   942	
-   943		if (entity_is_task(se))
-   944			tsk = task_of(se);
-   945	
-   946		__update_stats_enqueue_sleeper(rq_of(cfs_rq), tsk, stats);
-   947	}
-   948	
+  1287	
+  1288	static inline void
+  1289	update_stats_wait_start_rt(struct rt_rq *rt_rq, struct sched_rt_entity *rt_se)
+  1290	{
+  1291		struct sched_statistics *stats;
+> 1292		struct task_struct *p = NULL;
+  1293	
+  1294		if (!schedstat_enabled())
+  1295			return;
+  1296	
+  1297		if (rt_entity_is_task(rt_se))
+  1298			p = rt_task_of(rt_se);
+  1299	
+  1300		stats = __schedstats_from_rt_se(rt_se);
+  1301		if (!stats)
+  1302			return;
+  1303	
+  1304		__update_stats_wait_start(rq_of_rt_rq(rt_rq), p, stats);
+  1305	}
+  1306	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---2fHTh5uZTiUOsy+g
+--azLHFNyN32YCQGCU
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICCwBZWEAAy5jb25maWcAnDxbc9s2s+/9FZzmpZ352pDU1eeMHyASlBCRBAOAuviFo8hM
+H4sICIoTZWEAAy5jb25maWcAnDxbc9s2s+/9FZzmpZ352pDU1eeMHyASlBCRBAOAuviFo8hM
 6lPH9khyT/PvzwIkJYAEpczpTG1rd7FYLBZ7A5QPv3xw0Pvp9fvu9LTfPT//cL6VL+Vhdyof
 na9Pz+V/OyF1UiocHBLxJxDHTy/v/378q/x39+31xRn96Y3+dP847IfOsjy8lM9O8Pry9enb
 O3B4en355cMvAU0jMi+CoFhhxglNC4E34v7X/fPu5ZvzT3k4Ap3jDf90/3Sd3749nf7r40f4
@@ -843,4 +746,4 @@ n6vn3daYAl2tL9eHI+4fPGT47j/r/epZe9lNBpxrcruMP5fd01UgIyzdgIkH2SxnNhVWTgWy
 DDrgplnBqD7LF/C+KA2UJFb6B0ljyjsg5fB03rBFM/1gDpIoXptjk3AC0HuA3Bunhs5iHzKT
 BvqApryKve9zK04zClVX6TPauob5Hx8+7IjZOwIA
 
---2fHTh5uZTiUOsy+g--
+--azLHFNyN32YCQGCU--
