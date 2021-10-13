@@ -1,89 +1,100 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC742C85
-	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 07:55:38 +0000 (UTC)
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MUY9w-1mAGmZ0kJE-00QX15 for <llvm@lists.linux.dev>; Wed, 13 Oct 2021
- 09:55:31 +0200
-Received: by mail-wr1-f45.google.com with SMTP id k7so5135881wrd.13
-        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 00:55:30 -0700 (PDT)
-X-Gm-Message-State: AOAM530++PrrY0rNyPe1boAmTg784DAvxN+A+TCVuBDmXk2xy1C3iqMv
-	yLmHTdYxXgkNP3oIbnlETB0QMmgf4DCvo8pyncY=
-X-Google-Smtp-Source: ABdhPJyiEJBpgNDpB6GmM5rJOFTTTfiFTaFUlnEWP59JJxhNZAk4i37kRw3Rf+g9OE/qnJqBSX5RUghnoccWBlIuMYo=
-X-Received: by 2002:a1c:2358:: with SMTP id j85mr11030180wmj.1.1634111730691;
- Wed, 13 Oct 2021 00:55:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E772C80
+	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 09:16:25 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10135"; a="214330811"
+X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
+   d="scan'208";a="214330811"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 02:16:25 -0700
+X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
+   d="scan'208";a="491378550"
+Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.115])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 02:16:22 -0700
+Date: Wed, 13 Oct 2021 17:16:57 +0800
+From: Philip Li <philip.li@intel.com>
+To: Yicong Yang <yangyicong@hisilicon.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Barry Song <baohua@kernel.org>,
+	Valentin Schneider <valentin.schneider@arm.com>
+Subject: Re: [kbuild-all] Re: [tip:sched/core 45/47]
+ kernel/sched/topology.c:23:20: error: unused function 'sched_debug'
+Message-ID: <YWakCfUA+MZULt2w@rli9-dbox>
+References: <202110130209.1XL2cTpW-lkp@intel.com>
+ <0538ccac-19eb-a184-6aef-1d11eefbae17@hisilicon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211012234606.91717-1-ndesaulniers@google.com> <20211012234606.91717-2-ndesaulniers@google.com>
-In-Reply-To: <20211012234606.91717-2-ndesaulniers@google.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 13 Oct 2021 09:55:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3UBEJ0Py2ycz=rHfgog8g3mCOeQOwO0Gmp-iz6Uxkapg@mail.gmail.com>
-Message-ID: <CAK8P3a3UBEJ0Py2ycz=rHfgog8g3mCOeQOwO0Gmp-iz6Uxkapg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] arm64: vdso32: drop the test for dmb ishld
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, llvm@lists.linux.dev, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Christian Biesinger <cbiesinger@google.com>, 
-	Simon Marchi <simon.marchi@polymtl.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VWlSdWEPEdqCoKhSqkL3Qv7YLlO/cjkaBOvUAxuD0seaU9A1OCY
- w6BqIvo+JZXtSWzxbFcZql0rcz4c3UQwfiSJbE6PDwQzhczc8UZh1jb9uTlBzls3b5k9ibQ
- nSdb99QrnK9OLTtWyvx7fFYdN3taKMX7W7OF1YPeLJSY993ODeTZarJzk1gHBdjUVamI6jP
- m483JxURZwuZoChqIDFng==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XVIcA5JuKrc=:iG8VrWI+t+i0szxnThcuwC
- N6Q1uuiBWjtfOsLdgY4d+QQ7rvgshpbBtQ9qwcEV4aFMkljcMTer0g9X0gMWpmoanZGzcNo6H
- XNH7LoOPrsMkcZH9MQRirtPxNPd9oDegTR5eIfCf32b0hgN6a1P5jmC3zhQj21ga8lP5UV13u
- b8We1GeNFPld7ViI3xCAQaYNJL6FnlEsDTa40lghzPrmChfCl0ZhyaVgIUZ6OEhJ3i+ENu/Ek
- N5DUuPLx9X2QtN0/9ofCjez8GBb9BmL0xwxCb7XXiQqH/ccjaHvmZfBTTJ+6NZGOJNOyT7pTy
- 1Sn0j5ej8hXE7ZdBXAcWucFdg6JCNOJ5YNgBagPlogdJci4SpMb0WjgwAwen45oANFA/xW797
- 3Ax+NjT2TUO4mVZRLyMm0lUkIpOAwCHMOpvNEgYrN1ZCNOe+PVGuBz7qLcNjEvouZaKk7WUu+
- 7eafsDu5SXCFLY/GcS196DfvmkMB01k43ryaniulUm1jiHV42CzFgXaAiYMEojGlMbvHS0ito
- WpEi6JaNdRRVgnBZ+R4lBOqvGiIAAHvnfF9+DiFMeCtg+BAXTqOyI1fn7HnJ5kTs0aDqxJ2cA
- EIVVmyMMIZH9xv2QyjAny4Pb8HK6ijIsZE8guKOKl02MjqRicCXyZMQTNIwQ8MW4fcPCOwVrJ
- 7CI+29C8OLaBTzfqp25PaAVnA9YcZ6ow2JsaZyYR1tWFQ/8cd+4hmomqS/eOxCnTIE6MLke2U
- MXw0DPkxxlZ0ew5Ui4CU9gvGwbUr4QXQmLJ9Mw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0538ccac-19eb-a184-6aef-1d11eefbae17@hisilicon.com>
 
-On Wed, Oct 13, 2021 at 1:46 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Binutils added support for this instruction in commit
-> e797f7e0b2bedc9328d4a9a0ebc63ca7a2dbbebc which shipped in 2.34 (just
-> missing the 2.33 release) but was cherry-picked into 2.33 in commit
-> 27a50d6755bae906bc73b4ec1a8b448467f0bea1. Thanks to Christian and Simon
-> for helping me with the patch archaeology.
->
-> According to Documentation/process/changes.rst, the minimum supported
-> version of binutils is 2.33. Since all supported versions of GAS support
-> this instruction, drop the assembler invocation, preprocessor
-> flags/guards, and the cross assembler macro that's now unused.
->
-> This also avoids a recursive self reference in a follow up cleanup
-> patch.
->
-> Cc: Christian Biesinger <cbiesinger@google.com>
-> Cc: Simon Marchi <simon.marchi@polymtl.ca>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Wed, Oct 13, 2021 at 05:02:42PM +0800, Yicong Yang wrote:
+> Hi,
+> 
+> On 2021/10/13 2:30, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+> > head:   b2d5b9cec60fecc72a13191c2c6c05acf60975a5
+> > commit: f43df9225fcad9b07a4ef4d0fe4c3ad2fb4ce82d [45/47] sched/topology: Remove unused numa_distance in cpu_attach_domain()
+> > config: hexagon-buildonly-randconfig-r004-20211012 (attached as .config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dcf39554dbea780d6cb7e12239451ba47a2668)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=f43df9225fcad9b07a4ef4d0fe4c3ad2fb4ce82d
+> >         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+> >         git fetch --no-tags tip sched/core
+> >         git checkout f43df9225fcad9b07a4ef4d0fe4c3ad2fb4ce82d
+> >         # save the attached .config to linux build tree
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >>> kernel/sched/topology.c:23:20: error: unused function 'sched_debug' [-Werror,-Wunused-function]
+> >    static inline bool sched_debug(void)
+> >                       ^
+> >    1 error generated.
+> > 
+> 
+> sched_debug() is unused if CONFIG_ENERGY_MODEL=n || CONFIG_CPU_FREQ_GOV_SCHEDUTIL=n and CONFIG_NUMA=n,
+> which is the case in the report. This is not introduced by this patch.
+> 
+> A __maybe_unused qualify for sched_debug() may fix this. Not sure we intends to do so.
+Hi Yicong, you may wait for Peter's input. 0-day CI is consulting Peter what the appropriate
+scope is to ignore the W=1 related warnings at
+https://lore.kernel.org/llvm/CALOAHbDkBn3LDsNvSXujMiQXrLHdRsfvJUqJv_eTh4s63osuTw@mail.gmail.com/T/#m516619d3b8b632e457522ef7827694f9b47c574c
 
-This change looks good, but I think we should do the same for the gcc
-version check:
+We will not reporting out such un-interested issues anymore per the input.
 
-> -#if __LINUX_ARM_ARCH__ >= 8 && defined(CONFIG_AS_DMB_ISHLD)
-> +#if __LINUX_ARM_ARCH__ >= 8
->  #define aarch32_smp_mb()       dmb(ish)
->  #define aarch32_smp_rmb()      dmb(ishld)
->  #define aarch32_smp_wmb()      dmb(ishst)
-
-gcc-4.8 already supported -march=armv8, and we require gcc-5.1 now, so both
-this #if/#else construct and the corresponding "cc32-option,-march=armv8-a"
-check should be obsolete now.
-
-       Arnd
+> 
+> > 
+> > vim +/sched_debug +23 kernel/sched/topology.c
+> > 
+> > f2cb13609d5397 Ingo Molnar    2017-02-01  22  
+> > f2cb13609d5397 Ingo Molnar    2017-02-01 @23  static inline bool sched_debug(void)
+> > f2cb13609d5397 Ingo Molnar    2017-02-01  24  {
+> > 9406415f46f612 Peter Zijlstra 2021-04-15  25  	return sched_debug_verbose;
+> > f2cb13609d5397 Ingo Molnar    2017-02-01  26  }
+> > f2cb13609d5397 Ingo Molnar    2017-02-01  27  
+> > 
+> > :::::: The code at line 23 was first introduced by commit
+> > :::::: f2cb13609d5397cdd747f3ed6fb651233851717d sched/topology: Split out scheduler topology code from core.c into topology.c
+> > 
+> > :::::: TO: Ingo Molnar <mingo@kernel.org>
+> > :::::: CC: Ingo Molnar <mingo@kernel.org>
+> > 
+> > ---
+> > 0-DAY CI Kernel Test Service, Intel Corporation
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > 
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
