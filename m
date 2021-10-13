@@ -1,39 +1,39 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBD22C87
-	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 19:04:09 +0000 (UTC)
-Received: by mail-pl1-f170.google.com with SMTP id 21so2454383plo.13
-        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 12:04:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10062C87
+	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 19:06:00 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id om14so2958435pjb.5
+        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 12:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=aGF0syKET/14pAZ283IwwssrcdQD4oceHIsj+/z6tks=;
-        b=LnqQnYl3SGc8N9da5oJ7HSa9JQluc0g0UMXaBb59l0VvGm3rZTsDEJ3cWkzZmxjid/
-         YJNnC+reIBHb27GLFgvmXO/GujmCskpdflq1rRdb/vMqb8PA26FHlXzR+mnQSz8fnRGI
-         UrA48mlhSXLYQxTJEcuJCIvV3bQ4XLqFKLR54=
+        bh=nXWn+C65G2sncjtbdtLGu+sNNu6Ws1SqzBL/4RC9QLU=;
+        b=erKHCPbwnNJ+dbqyPQbIehybLasan69a6yMxEWXzryT+WjIUFwYywkEcbu3sK2q+sy
+         B4xybss34Pz4s5MJQv6FtWcW/s4zV23O6TAK3lHCVve6FUWq6ON/yXJ7bVJmDYQv+KnY
+         mvgU1s3Cf/SkHLYm5h2XUwvQO6CkkSvIVSm7Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=aGF0syKET/14pAZ283IwwssrcdQD4oceHIsj+/z6tks=;
-        b=ciGdmQ7q9uhMjFz8FSGlcMm/36JxF8aBJmNpBASzFaRqF7YmIShjvYSUgOa2yuNnqc
-         8reiVt1Qit0YbpbgY+oii/Z2eWvk/tZYgZH7i5ThjdOpLmC9niYbEO69Dq1fsyxWZNJT
-         sRtiVWE2XJAtFalvosAcwd80+iqzxQpSoz0HMgcYTxWIwDDIR8xmvSJ5ZYvXkYOxrlz0
-         Xki5J2tlIm/cxci5eDpqYCBDNvQ4EsRGioov9rSkZtOrWZ76AZws4RUwbljGMjEOJ+mG
-         XptpGo4NszDvU94yOL3nq9UF3h0ghDBieOA88/G6y5uqekFZ06ywmAsA9yftoPvtDrBV
-         VbOw==
-X-Gm-Message-State: AOAM5301UIc3VG+iB7AJ3Vhu8c+14OmciEGjXYPDp6etQwAI/WlPG8MD
-	1D3GKt5wA0yYnIuaxtFfOW3jEQ==
-X-Google-Smtp-Source: ABdhPJx5pfyX8v7LhaYjRI5CoTPdMyHqAmlRIlZV4O0fS14bFrkrUzbhDoAM/N5JvBN2YmHRPA8MzQ==
-X-Received: by 2002:a17:90b:4d0b:: with SMTP id mw11mr1137541pjb.135.1634151848679;
-        Wed, 13 Oct 2021 12:04:08 -0700 (PDT)
+        bh=nXWn+C65G2sncjtbdtLGu+sNNu6Ws1SqzBL/4RC9QLU=;
+        b=pK9jQsS+sLAV5cLavhcktvHQ+a3771pddoq6MXS5KWmXX/urDq1pI4E8mEue24Z6+N
+         zMl+GnL1tCu1zDXLr4WiWLjDpwvLDCxt8W1bCgqn1DdDaunVqtJLIEJ0EKoV58uX52Vt
+         l/qW500cnPg7QxjuwQqKQJVztVIzXXNSCIdxtUrGc0wbCyqwoWFiETCCPx8vbsen9/Hb
+         yKqnbcNGuT+tb83a1djmxxHrV/TdZQLEC5M6vRsG2oGptvCXn7tEoq7Tipxb7Wk2OlkC
+         9zi2ZgVLBJZ4UH15W8JtJ7dLyeZSzF3Tx5lbK7eryEbOxVs2ylJLzGx5QX/wPewCtSMi
+         qc/w==
+X-Gm-Message-State: AOAM533zEC9uM/1gb7QSRSnLbqfObvlg84rdeBeH8Dn6hD2IOAE5Yr6a
+	/CAOpE0a4z550kcpdCT/ze3dJg==
+X-Google-Smtp-Source: ABdhPJxDuBX+/M7L1lKdmAL5VUL05XQ8QINY1cDE3k+ssDyXnVzf+flLTDS1Ptu7vFglJAdHNPg/Tw==
+X-Received: by 2002:a17:90a:708c:: with SMTP id g12mr15274111pjk.13.1634151960400;
+        Wed, 13 Oct 2021 12:06:00 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l4sm248494pga.71.2021.10.13.12.04.08
+        by smtp.gmail.com with ESMTPSA id o72sm235042pjo.50.2021.10.13.12.06.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 12:04:08 -0700 (PDT)
-Date: Wed, 13 Oct 2021 12:04:00 -0700
+        Wed, 13 Oct 2021 12:06:00 -0700 (PDT)
+Date: Wed, 13 Oct 2021 12:05:59 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -44,11 +44,10 @@ Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 06/15] ftrace: Use an opaque type for functions not
- callable from C
-Message-ID: <202110131203.2BA230B8@keescook>
+Subject: Re: [PATCH v5 10/15] x86/purgatory: Disable CFI
+Message-ID: <202110131204.9978A005FC@keescook>
 References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211013181658.1020262-7-samitolvanen@google.com>
+ <20211013181658.1020262-11-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,20 +56,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211013181658.1020262-7-samitolvanen@google.com>
+In-Reply-To: <20211013181658.1020262-11-samitolvanen@google.com>
 
-On Wed, Oct 13, 2021 at 11:16:49AM -0700, Sami Tolvanen wrote:
-> With CONFIG_CFI_CLANG, the compiler changes function references to
-> point to the CFI jump table. As ftrace_call, ftrace_regs_call, and
-> mcount_call are not called by C code, but are trampolines injected
-> as calls replacing the nops at the start of functions added by the
-> compiler, use DECLARE_NOT_CALLED_FROM_C to declare them.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+On Wed, Oct 13, 2021 at 11:16:53AM -0700, Sami Tolvanen wrote:
+> Disable CONFIG_CFI_CLANG for the stand-alone purgatory.ro.
 
-Looks right to me...
+If there's a v6, this commit log might do well to have a "why" added. I
+assume it'd be something like:
+
+... because purgatory is not running with a full kernel mapping with
+jump tables, etc...
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
+
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> ---
+>  arch/x86/purgatory/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 95ea17a9d20c..911954fec31c 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -55,6 +55,10 @@ ifdef CONFIG_RETPOLINE
+>  PURGATORY_CFLAGS_REMOVE		+= $(RETPOLINE_CFLAGS)
+>  endif
+>  
+> +ifdef CONFIG_CFI_CLANG
+> +PURGATORY_CFLAGS_REMOVE		+= $(CC_FLAGS_CFI)
+> +endif
+> +
+>  CFLAGS_REMOVE_purgatory.o	+= $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_purgatory.o		+= $(PURGATORY_CFLAGS)
+>  
+> -- 
+> 2.33.0.1079.g6e70778dc9-goog
+> 
 
 -- 
 Kees Cook
