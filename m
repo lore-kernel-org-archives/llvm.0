@@ -1,94 +1,108 @@
-Received: from mail-qt1-f201.google.com (mail-qt1-f201.google.com [209.85.160.201])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E5A72
-	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 18:17:37 +0000 (UTC)
-Received: by mail-qt1-f201.google.com with SMTP id 100-20020aed30ed000000b002a6b3dc6465so2682777qtf.13
-        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 11:17:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310202C87
+	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 18:35:38 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id x27so15685033lfa.9
+        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 11:35:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=odWUCzELK8O06v4rgAnqn7QfSrw6bcxGsZOkEiE3yxs=;
-        b=T8mfk6a/BVjhAIm+TTzj9BsOJLGtqn7Xmh6TnxguTLqc5eksMPiI1rRsouAKOAZZEv
-         9IZexIvnVbZIwtmssMcG4cUdKaEQK4iU7BoaedaOfRdSlfaCmRCCk9okijggE4F8VMIo
-         iyhu6MKyD0MAOFapZirwpCKCsp8VCuZ2s5BwOjxQhhAEQRaSEVl0cBQzQGlWNzcMujGd
-         h+Ji+J4E/uyxkjWTn+nroxa7yw+WIUlT286H0tkblGSlnVtIIughgHwoNOyjDqYArutp
-         uJye0tk9chLAQBr2hXgjiwWYlTVFnFjzh9vatF0kyYiDs+ikusjXkJFaeBxyH/ZZ5z0V
-         ewkw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rDZnrWeGoRepjCpc3OfdE7YBAKz9l8dGQzHDHMy8dnQ=;
+        b=oSzrrLlxsTaGxHPrpBBYUO/5vjshvULo7erMOdXFwdQT+zjQQthv7fbm5CKDFlstZz
+         d1u7g7byscGhtUM0UI2KJ7BQgB35rSea/uDhwxbQowcyDN+yTwYCUFaji+pbVBgpfNMW
+         yN1Qb74Tgew1fpYUM4NfBccjKTeioOd48UuKrkkeCrm58GJYb5f4Xb6eeGRddnOxtrlm
+         QHOdoKajbgqCa1a68KCnvqgCl1OEVjurDd9aafe6MCe5nmSB7HHKNNN43e8PfU16g43C
+         6Lh6BkN0wxX9xLKpF2RDTyyNyFMc9GHigBdRyc4IjxQbht0Vi9CSP1XQE7CPU0JfILfa
+         Bsbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=odWUCzELK8O06v4rgAnqn7QfSrw6bcxGsZOkEiE3yxs=;
-        b=DVyI5wJ2IvaCwla+iSz0Tt/GX7/UsDPJ5fw8cI0lnkWxm4HKW+MGrzh5qdgi4FO5HJ
-         SXxDJk09yZoFmW/QrA9Hahc4RNUsOkd3+IVnLR2MaGwAwc/dOT98DZ7zEcOUv+hU2tfJ
-         QhDUoSYwV6IVVy0NmbUHW14/qdnR8ZOzp34+6mUI2q1tHTXVfV336xYxkepaoJXdEDk1
-         +gTL9H2WiNFW8Q0ZhQ7MxOMbtnAZOj17sLm+AEYt9olLyaNs/rpLjryO+ccNjREe8VbJ
-         owYUv+/yVTG34lUiKlKK43Bp5MPRVJ74HaWVx624S/dY/MCnBD4SlI4IGu+yZ4+8Bpyt
-         AV7A==
-X-Gm-Message-State: AOAM533OB/fpHfRZNf016flWWMrvkSOOnw1CSUSQZ93s7BpPaOqtLW16
-	yrPcYd0+UKYGQzRmsj7AEF8UEeilDOli3Zp2DZQ=
-X-Google-Smtp-Source: ABdhPJzoBvz9uRB/5XtKrSVxidJedwzVIrcBFBa2Xmp+3T3pEjgWjxcC5FxihILY6d8dZXKASllMZp5d/IDEIRTFg/8=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:9ea6:6c27:1876:926c])
- (user=samitolvanen job=sendgmr) by 2002:ac8:5ac9:: with SMTP id
- d9mr1078571qtd.136.1634149056447; Wed, 13 Oct 2021 11:17:36 -0700 (PDT)
-Date: Wed, 13 Oct 2021 11:16:58 -0700
-In-Reply-To: <20211013181658.1020262-1-samitolvanen@google.com>
-Message-Id: <20211013181658.1020262-16-samitolvanen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rDZnrWeGoRepjCpc3OfdE7YBAKz9l8dGQzHDHMy8dnQ=;
+        b=74DFxktei3m+fcH4ZaadySn/8dc34c/arvSgqOe8Bl5rtiNcT4Cz4OB4nq8KBeu1OP
+         BRKlHjDeNXRVya5fD8584xzqa9Q5odyr6H55N8HCAsUeKrg7UbNplzkyPVGuqhv6gS3K
+         MMUvppEg1snXFKPBh6s807pf/bQdHMm8g3CqVCpxgi2JoFFH+cPTE+JYfoY9NPMd38ee
+         /uMR5MDt0nqmnpOIhPJ2aGzzyxuiTZQA3rcXNYQ1X1Z7gzSkcklRaKhEfm4UrCi9BTas
+         obGcrDZJSjXoXqk9nhQxFgKCV3xcBz+cEvngXCPFDpf1z0HU4/7aHuxRnZHipYMk/CpY
+         ZZ/Q==
+X-Gm-Message-State: AOAM530IAF4WdOpI7HXv4yX9GRXRwUSvnBasmmiZ5EA3qqOrND3q46+8
+	lLvVjtz6pNFvzX4qkJMukVYouez+u7awXR0ZVsXvjg==
+X-Google-Smtp-Source: ABdhPJzAgS8wHJY6I62EzOdlpG6Sg72jMybOxEQEvOVXJ89i5iNti04/Bk0r5R9a/na9HoO2A9r4MW+N1hLwSjz2nN8=
+X-Received: by 2002:a05:6512:1103:: with SMTP id l3mr611705lfg.550.1634150135927;
+ Wed, 13 Oct 2021 11:35:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20211013181658.1020262-1-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=864; h=from:subject;
- bh=0yCPcS9wePai6S+o7jrbmHmxOFPxYhJtUyM9GzzoYQQ=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBhZyKaXaEzVzl9BeZkACcM57288N9ZbVGe2BZJRDPU
- Dg0io0SJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYWcimgAKCRBMtfaEi7xW7j7KC/
- 0cVPke3fQulMZ2+Xd7Hy7IH1S8JKE4lOZ14lgY15tXviG/OPlovK/8knZaeX+9fpJluEu+X805OC9S
- RB9Mbe7PAvEkNZ6Wtc/I9OGTusZBobuUUjGGfap8/s0OiJA2zfUyP54CgTZ12Z7+F3BFt6kmSdihAx
- oySFFednh0yF/kOba641U3nLXqhI0kJdEDwnFI4VGyI5GmxOMq0P+mVDZpAXeu6k6NxllhDEfVfOvm
- 0RqjG15tpRa9o3LdldCMr7GDseLTw5M6CT2TF2QxG3H5/oKK9uz2CEpUtIKlG0RIP5yqMfD//q8Whs
- g5fviSHDDVj1SCrVMFrcuamfjQ3ETPl7qAaLNpMxLrwLxkI6RpvBLKGCfMCg6YPWNNHA4KkgyuZwpS
- yO04Vpf7/oKpl8qqa8GhsadQYiUIqGrfbaI2sR/UKedwHvk2TG00yjDXzyh1TeRTDMT4HuKd5SAqKJ
- mNL8WdNDtpbAzwMhrXNK3DAFjvNLS9TnVIFw7FpLjOlIA=
-X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v5 15/15] x86, build: Allow CONFIG_CFI_CLANG to be selected
-From: Sami Tolvanen <samitolvanen@google.com>
-To: x86@kernel.org
-Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Sami Tolvanen <samitolvanen@google.com>
+MIME-Version: 1.0
+References: <20210927123830.1278953-1-arnd@kernel.org>
+In-Reply-To: <20210927123830.1278953-1-arnd@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 13 Oct 2021 11:35:24 -0700
+Message-ID: <CAKwvOd=rFUfuTgK14y__3OQdgwzBCLp+ZVUUqsXfOmSCe1M8Mg@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] usb: gadget: avoid unusual inline assembly
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Felipe Balbi <balbi@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Select ARCH_SUPPORTS_CFI_CLANG to allow CFI to be enabled with
-Clang >= 13.
+On Mon, Sep 27, 2021 at 5:38 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> clang does not understand the "mrc%?" syntax:
+>
+> drivers/usb/gadget/udc/pxa25x_udc.c:2330:11: error: invalid % escape in i=
+nline assembly string
+>
+> I don't understand it either, but removing the %? here gets it to build.
+> This is probably wrong and someone else should do a proper patch.
+>
+> Any suggestions?
 
-Link: https://bugs.llvm.org/show_bug.cgi?id=51588
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
----
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+https://gcc.gnu.org/onlinedocs/gccint/Output-Template.html says:
+>> =E2=80=98%=E2=80=99 followed by a punctuation character specifies a subs=
+titution that does not use an operand. Only one case is standard: =E2=80=98=
+%%=E2=80=99 outputs a =E2=80=98%=E2=80=99 into the assembler code.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 47023166fb7b..1f310cc4e344 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -107,6 +107,7 @@ config X86
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
- 	select ARCH_SUPPORTS_LTO_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
-+	select ARCH_SUPPORTS_CFI_CLANG		if X86_64 && CLANG_VERSION >= 130000
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
--- 
-2.33.0.1079.g6e70778dc9-goog
+I don't think the intention was to have `mrc?` in the emitted
+assembler (is that even valid?), so it's not clear to me what this
+point of `%?` was. Patch LGTM.
 
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc=
+/pxa25x_udc.c
+> index a09ec1d826b2..52cdfd8212d6 100644
+> --- a/drivers/usb/gadget/udc/pxa25x_udc.c
+> +++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+> @@ -2325,7 +2325,7 @@ static int pxa25x_udc_probe(struct platform_device =
+*pdev)
+>         pr_info("%s: version %s\n", driver_name, DRIVER_VERSION);
+>
+>         /* insist on Intel/ARM/XScale */
+> -       asm("mrc%? p15, 0, %0, c0, c0" : "=3Dr" (chiprev));
+> +       asm("mrc p15, 0, %0, c0, c0" : "=3Dr" (chiprev));
+>         if ((chiprev & CP15R0_VENDOR_MASK) !=3D CP15R0_XSCALE_VALUE) {
+>                 pr_err("%s: not XScale!\n", driver_name);
+>                 return -ENODEV;
+> --
+> 2.29.2
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
