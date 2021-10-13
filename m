@@ -1,39 +1,39 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF562C87
-	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 19:02:16 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id y1so2462056plk.10
-        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 12:02:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0460B2C87
+	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 19:03:24 +0000 (UTC)
+Received: by mail-pj1-f47.google.com with SMTP id ls18so2964972pjb.3
+        for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 12:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=XYUZdSbtY3yILKq30armlw/nLFSTpxD7xzR0LPRYz80=;
-        b=gpYKK9FHVxBdFJtwWQViBwA6f8A8yxtHj5zqNEzFZ+S0843PtoWAyD5MADhc+CKcZ4
-         5ngK1kdS6dIScpdJWiiYbns6hn+I0/aa3zc8aYsrcaVwjDK/PyNeqgmgGZSw1ruKlLVJ
-         KmTGnrOq0PccZ2Svs/+X9fiN4LSaKncO8PW8U=
+        bh=iv6F8EdUVptzUcmUANbF0d3VY4H4nepm9NcMDwb+Q2M=;
+        b=QCqvZgQSjJeThpfGG6mDINdKSxpEJde0lHGEs529BoaLFmGKSSa9/BwOze1gFeBrkc
+         lLVjTB5wROe00bVWuz94F+yf4Q8zhyBUKuijtUfRhp8lL91hUJWMFemYgH97mMeJfU8D
+         HnOrgKGJr4OybKcAM1oP7lCM7jrqjiU6yWgkI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=XYUZdSbtY3yILKq30armlw/nLFSTpxD7xzR0LPRYz80=;
-        b=Kydwc0xnf2kM/amAAmuFnC+MV8ZCjCxtnZzD1lxSYbBlItExEBVN09BRmi78p8dSLi
-         Sf25vKY190FWQimgE5HNUOKEXbJ5h2kQhJv/DwjQsmOoTBzCC6IuM2K2NRZUHPHj96iE
-         /tW318Du0ELzbgJgJ2SDZpT1rjGVrMsUqsAlWeGgSFJbLXswGo14GR5Rsngdix06IXP2
-         vg0bA6XHl/7c4BsryWVzozyHGMDiPDWdOYCRUBWTH75SMQdZgkhAMg4bLFL+7BzFvhDb
-         HUhuLMluoVW7nIu22L20Gj3IX0Ksfv0COFOGb5y6tf454StCQTwjX9EPf9J48IG5QZZD
-         WoXw==
-X-Gm-Message-State: AOAM530U5n7s5cmwmxP5YD3NP08C8Xc22wkz112fbRFWP9/ZUsB44wZ2
-	NJs2Y4IM47SjZHzY9QFqY5chEQ==
-X-Google-Smtp-Source: ABdhPJzr8pB5JKBpq4Ks8L5I/+V7O+fqmjtmqNIRDwvNRhToQtzGptsraxsDs7uoU+If38Zs1gAazQ==
-X-Received: by 2002:a17:90a:1548:: with SMTP id y8mr15961214pja.151.1634151735724;
-        Wed, 13 Oct 2021 12:02:15 -0700 (PDT)
+        bh=iv6F8EdUVptzUcmUANbF0d3VY4H4nepm9NcMDwb+Q2M=;
+        b=0PSV1bj9hY5g8vzaT7xJuF8OlnAImhJrWb+vP2gQDMuG+uRnx4JGrSD3NoBwEXmK13
+         Z9GE9OQPUhVbjP2KWSUKdHmPuj7J2UxmOS005rRTbOYC29Ev1ktN4oSI0PabFE2Mp5nr
+         JsIhWxflgPmlDKVFN7iCMTYj29jq95Iu8dwbb5qkCI5Q0XvNZmQxqfIBxWsrMmzrOD/R
+         kMTOYntiNrkZA2Z55w5dGl6TwtBPZNsQXh5r6sWxDHHhSAneGDaFeL5JrtCLBwZoi/Ln
+         yEMy8fTeW49DRuTowoxW1WuLo615Z0xyKwbD7qclckopmXU1dugXzpF0piFU738OQ2tq
+         Mi2A==
+X-Gm-Message-State: AOAM531P0k92JbvZcQ3at4+rluAQg2KbsBHPTMSXY7cryCnjMfmzgwlJ
+	7giuBOLrgcARMum1TsaKZvsIkQ==
+X-Google-Smtp-Source: ABdhPJybFKFUEUtMWbN9X9Wd7+oHR82JGwqbytlB4hKD6IKyhNeTw4u55lNMXBn2h9uN5t6kBfV/0A==
+X-Received: by 2002:a17:902:c409:b0:13f:1a43:c5c with SMTP id k9-20020a170902c40900b0013f1a430c5cmr931113plk.40.1634151804483;
+        Wed, 13 Oct 2021 12:03:24 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d138sm251374pfd.74.2021.10.13.12.02.15
+        by smtp.gmail.com with ESMTPSA id i13sm7143151pjh.0.2021.10.13.12.03.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 12:02:15 -0700 (PDT)
-Date: Wed, 13 Oct 2021 12:02:14 -0700
+        Wed, 13 Oct 2021 12:03:24 -0700 (PDT)
+Date: Wed, 13 Oct 2021 12:03:23 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -44,10 +44,11 @@ Cc: x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 04/15] cfi: Add DEFINE_CFI_IMMEDIATE_RETURN_STUB
-Message-ID: <202110131200.5D551C2D@keescook>
+Subject: Re: [PATCH v5 05/15] tracepoint: Exclude tp_stub_func from CFI
+ checking
+Message-ID: <202110131203.78C3851CA9@keescook>
 References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211013181658.1020262-5-samitolvanen@google.com>
+ <20211013181658.1020262-6-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,35 +57,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211013181658.1020262-5-samitolvanen@google.com>
+In-Reply-To: <20211013181658.1020262-6-samitolvanen@google.com>
 
-On Wed, Oct 13, 2021 at 11:16:47AM -0700, Sami Tolvanen wrote:
-> This change introduces the DEFINE_CFI_IMMEDIATE_RETURN_STUB macro,
-> which defines a stub function that immediately returns and when
-> defined in the core kernel, always passes indirect call checking
-> with CONFIG_CFI_CLANG. Note that this macro should only be used when
-> a stub cannot be called using the correct function type.
+On Wed, Oct 13, 2021 at 11:16:48AM -0700, Sami Tolvanen wrote:
+> If allocate_probes fails, func_remove replaces the old function
+> with a pointer to tp_stub_func, which is called using a mismatching
+> function pointer that will always trip indirect call checks with
+> CONFIG_CFI_CLANG. Use DEFINE_CFI_IMMEDATE_RETURN_STUB to define
+> tp_stub_func to allow it to pass CFI checking.
 > 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-
-I remain a bit worried about this exception infrastructure, but it's the
-best way forward right now.
-
-One thought: add DEFINE_CFI_IMMEDIATE_RETURN_STUB (and maybe other
-things to watch closely) to MAINTAINERS:
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index abdcbcfef73d..2c9a24fd6a3c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4553,6 +4553,7 @@ B:	https://github.com/ClangBuiltLinux/linux/issues
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
- F:	include/linux/cfi.h
- F:	kernel/cfi.c
-+K:	\bDEFINE_CFI_IMMEDIATE_RETURN_STUB\b
- 
- CLEANCACHE API
- M:	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
