@@ -1,97 +1,80 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5772C80
-	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 09:19:47 +0000 (UTC)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HTmjF0TGGzVfmC;
-	Wed, 13 Oct 2021 17:01:05 +0800 (CST)
-Received: from dggema772-chm.china.huawei.com (10.1.198.214) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.8; Wed, 13 Oct 2021 17:02:42 +0800
-Received: from [10.67.102.169] (10.67.102.169) by
- dggema772-chm.china.huawei.com (10.1.198.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Wed, 13 Oct 2021 17:02:42 +0800
-CC: <yangyicong@hisilicon.com>, <llvm@lists.linux.dev>,
-	<kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-	Barry Song <baohua@kernel.org>, Valentin Schneider
-	<valentin.schneider@arm.com>
-Subject: Re: [tip:sched/core 45/47] kernel/sched/topology.c:23:20: error:
- unused function 'sched_debug'
-To: kernel test robot <lkp@intel.com>
-References: <202110130209.1XL2cTpW-lkp@intel.com>
-From: Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <0538ccac-19eb-a184-6aef-1d11eefbae17@hisilicon.com>
-Date: Wed, 13 Oct 2021 17:02:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CF572
+	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 12:03:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E007560EB4;
+	Wed, 13 Oct 2021 12:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1634126600;
+	bh=6Lpra3ez8JWIpg3SdW3vfWuYRu+xZGQ3by9f1A53ShY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TE077WFAvKOf+ldex8I6AHVm2qgh3cbckzUT+koRTwIjsEVpPaAJSCb9hDWVT3kGg
+	 N3pqSyHto9aPTY6jsNFiYrduG8CjwfYXLjRtOmjltNttVgW+YNea6MgbXHM5s1KZw8
+	 CXIQHzIA/7Q2QmKbnje49x5Io7JBxUvsqGdbXXSg=
+Date: Wed, 13 Oct 2021 14:03:18 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Felipe Balbi <balbi@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [RFC] usb: gadget: avoid unusual inline assembly
+Message-ID: <YWbLBot7RZoycGf3@kroah.com>
+References: <20210927123830.1278953-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202110130209.1XL2cTpW-lkp@intel.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggema772-chm.china.huawei.com (10.1.198.214)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210927123830.1278953-1-arnd@kernel.org>
 
-Hi,
-
-On 2021/10/13 2:30, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-> head:   b2d5b9cec60fecc72a13191c2c6c05acf60975a5
-> commit: f43df9225fcad9b07a4ef4d0fe4c3ad2fb4ce82d [45/47] sched/topology: Remove unused numa_distance in cpu_attach_domain()
-> config: hexagon-buildonly-randconfig-r004-20211012 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dcf39554dbea780d6cb7e12239451ba47a2668)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=f43df9225fcad9b07a4ef4d0fe4c3ad2fb4ce82d
->         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
->         git fetch --no-tags tip sched/core
->         git checkout f43df9225fcad9b07a4ef4d0fe4c3ad2fb4ce82d
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+On Mon, Sep 27, 2021 at 02:38:20PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> clang does not understand the "mrc%?" syntax:
 > 
-> All errors (new ones prefixed by >>):
+> drivers/usb/gadget/udc/pxa25x_udc.c:2330:11: error: invalid % escape in inline assembly string
 > 
->>> kernel/sched/topology.c:23:20: error: unused function 'sched_debug' [-Werror,-Wunused-function]
->    static inline bool sched_debug(void)
->                       ^
->    1 error generated.
+> I don't understand it either, but removing the %? here gets it to build.
+> This is probably wrong and someone else should do a proper patch.
 > 
-
-sched_debug() is unused if CONFIG_ENERGY_MODEL=n || CONFIG_CPU_FREQ_GOV_SCHEDUTIL=n and CONFIG_NUMA=n,
-which is the case in the report. This is not introduced by this patch.
-
-A __maybe_unused qualify for sched_debug() may fix this. Not sure we intends to do so.
-
+> Any suggestions?
 > 
-> vim +/sched_debug +23 kernel/sched/topology.c
-> 
-> f2cb13609d5397 Ingo Molnar    2017-02-01  22  
-> f2cb13609d5397 Ingo Molnar    2017-02-01 @23  static inline bool sched_debug(void)
-> f2cb13609d5397 Ingo Molnar    2017-02-01  24  {
-> 9406415f46f612 Peter Zijlstra 2021-04-15  25  	return sched_debug_verbose;
-> f2cb13609d5397 Ingo Molnar    2017-02-01  26  }
-> f2cb13609d5397 Ingo Molnar    2017-02-01  27  
-> 
-> :::::: The code at line 23 was first introduced by commit
-> :::::: f2cb13609d5397cdd747f3ed6fb651233851717d sched/topology: Split out scheduler topology code from core.c into topology.c
-> 
-> :::::: TO: Ingo Molnar <mingo@kernel.org>
-> :::::: CC: Ingo Molnar <mingo@kernel.org>
-> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+> index a09ec1d826b2..52cdfd8212d6 100644
+> --- a/drivers/usb/gadget/udc/pxa25x_udc.c
+> +++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+> @@ -2325,7 +2325,7 @@ static int pxa25x_udc_probe(struct platform_device *pdev)
+>  	pr_info("%s: version %s\n", driver_name, DRIVER_VERSION);
+>  
+>  	/* insist on Intel/ARM/XScale */
+> -	asm("mrc%? p15, 0, %0, c0, c0" : "=r" (chiprev));
+> +	asm("mrc p15, 0, %0, c0, c0" : "=r" (chiprev));
+>  	if ((chiprev & CP15R0_VENDOR_MASK) != CP15R0_XSCALE_VALUE) {
+>  		pr_err("%s: not XScale!\n", driver_name);
+>  		return -ENODEV;
+> -- 
+> 2.29.2
+> 
+
+Given that no one had any objections, I'll queue this up and see what
+breaks :)
+
+thanks,
+
+greg k-h
