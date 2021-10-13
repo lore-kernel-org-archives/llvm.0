@@ -1,45 +1,43 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EAA2C80
-	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 15:00:47 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A140610FC;
-	Wed, 13 Oct 2021 15:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9862C80
+	for <llvm@lists.linux.dev>; Wed, 13 Oct 2021 15:02:38 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F91860EBB;
+	Wed, 13 Oct 2021 15:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634137246;
-	bh=TXn+PgrUBav6KaMGnAdZqxm9Ab2ARAMDJbrPWj51RR8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uH+xXHDXWbUhHOEec9M/jt7uK3ZFMLiyfin3yoSSyCNGKwMk3n5Mhwhk8hrRTA0fS
-	 Lz8NVU0Qkg4B3coNp0/88166UT/z1T1iR/q1Tlfe3ILh7ZEmmABEM+1kiFOguN2BQA
-	 6iQGJXgL9n3MWFjUMZ4H/oWuYGlbmApquFRMLNp4SYQbwLiAc0g+wFwD0wiCet38JC
-	 ll+rET7lfmHxLYqkg/iZbrQnBMiOi5nSoMDt3Qnyszgdnbg0m8SVHDCSJj3WCnpOBf
-	 RITrDJiebwLyKLOF9PfW4iCUOPA0rgHfs1ZL5ZkjDIq5GFTPApZQbKkfN086I+k7Gi
-	 /0nUVOLmOzHHA==
+	s=k20201202; t=1634137357;
+	bh=y1Rpvv6y+NitR+8qwldmLDOxqBM7XyQANkxTD9N2zAo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Cibb7xA4JDTHogDnzQPZya8mgpOhMbe8JwTMUDzdrhPvKYcVZ16ruxdFIl63XRTt3
+	 QW8H+U9u29K6LGMvIcEuHl2zJeMEOWomnQ9rXiACdq6rIj4LpIEvowxcz762DkO6uL
+	 Gk97jNwxOmh4Ok9R9z1sdw5xRMp6bO3LzxO+gfxHgbHFDGfAgoG3j5EIhmrlZ8x95q
+	 3iXU4/VQ9XFzVvKAtpVSbj3pEB/9q0FVyDLrjGizAgXIPul2g1unwe94PsUR57m2LN
+	 k6+0q3Hsa84GrRsebIW9qTzjxOAn9++41KgE1QVcRd1ZGwggp6UPqVhugrt9K3C4FQ
+	 CAuQ0D7YTf2gA==
 From: Arnd Bergmann <arnd@kernel.org>
-To: linux-hardening@vger.kernel.org,
-	Kees Cook <keescook@chomium.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	kasan-dev@googlegroups.com
+To: Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Marco Elver <elver@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Maxim Mikityanskiy <maximmi@nvidia.com>,
+	Aya Levin <ayal@nvidia.com>,
+	Eran Ben Elisha <eranbe@nvidia.com>,
+	Vladyslav Tarasiuk <vladyslavt@nvidia.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 2/2] kasan: use fortified strings for hwaddress sanitizer
-Date: Wed, 13 Oct 2021 17:00:06 +0200
-Message-Id: <20211013150025.2875883-2-arnd@kernel.org>
+Subject: [PATCH] mlx5: allow larger xsk chunk_size
+Date: Wed, 13 Oct 2021 17:02:13 +0200
+Message-Id: <20211013150232.2942146-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211013150025.2875883-1-arnd@kernel.org>
-References: <20211013150025.2875883-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,56 +48,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-GCC has separate macros for -fsanitize=kernel-address and
--fsanitize=kernel-hwaddress, and the check in the arm64 string.h
-gets this wrong, which leads to string functions not getting
-fortified with gcc. The newly added tests find this:
+When building with 64KB pages, clang points out that xsk->chunk_size
+can never be PAGE_SIZE:
 
-warning: unsafe memchr() usage lacked '__read_overflow' warning in /git/arm-soc/lib/test_fortify/read_overflow-memchr.c
-warning: unsafe memchr_inv() usage lacked '__read_overflow' symbol in /git/arm-soc/lib/test_fortify/read_overflow-memchr_inv.c
-warning: unsafe memcmp() usage lacked '__read_overflow' warning in /git/arm-soc/lib/test_fortify/read_overflow-memcmp.c
-warning: unsafe memscan() usage lacked '__read_overflow' symbol in /git/arm-soc/lib/test_fortify/read_overflow-memscan.c
-warning: unsafe memcmp() usage lacked '__read_overflow2' warning in /git/arm-soc/lib/test_fortify/read_overflow2-memcmp.c
-warning: unsafe memcpy() usage lacked '__read_overflow2' symbol in /git/arm-soc/lib/test_fortify/read_overflow2-memcpy.c
-warning: unsafe memmove() usage lacked '__read_overflow2' symbol in /git/arm-soc/lib/test_fortify/read_overflow2-memmove.c
-warning: unsafe memcpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-memcpy.c
-warning: unsafe memmove() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-memmove.c
-warning: unsafe memset() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-memset.c
-warning: unsafe strcpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strcpy-lit.c
-warning: unsafe strcpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strcpy.c
-warning: unsafe strlcpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strlcpy-src.c
-warning: unsafe strlcpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strlcpy.c
-warning: unsafe strncpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strncpy-src.c
-warning: unsafe strncpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strncpy.c
-warning: unsafe strscpy() usage lacked '__write_overflow' symbol in /git/arm-soc/lib/test_fortify/write_overflow-strscpy.c
+drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+        if (xsk->chunk_size > PAGE_SIZE ||
+            ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
 
-Add a workaround to include/linux/compiler_types.h so we always
-define __SANITIZE_ADDRESS__ for either mode, as we already do
-for clang.
+I'm not familiar with the details of this code, but from a quick look
+I found that it gets assigned from a 32-bit variable that can be
+PAGE_SIZE, and that the layout of 'xsk' is not part of an ABI or
+a hardware structure, so extending the members to 32 bits as well
+should address both the behavior on 64KB page kernels, and the
+warning I saw.
 
+In older versions of this code, using PAGE_SIZE was the only
+possibility, so this would have never worked on 64KB page kernels,
+but the patch apparently did not address this case completely.
+
+Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- include/linux/compiler_types.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en/params.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index aad6f6408bfa..2f2776fffefe 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -178,6 +178,13 @@ struct ftrace_likely_data {
-  */
- #define noinline_for_stack noinline
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
+index 879ad46d754e..b4167350b6df 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
+@@ -7,8 +7,8 @@
+ #include "en.h"
  
-+/*
-+ * Treat __SANITIZE_HWADDRESS__ the same as __SANITIZE_ADDRESS__ in the kernel
-+ */
-+#ifdef __SANITIZE_HWADDRESS__
-+#define __SANITIZE_ADDRESS__
-+#endif
-+
- /*
-  * Sanitizer helper attributes: Because using __always_inline and
-  * __no_sanitize_* conflict, provide helper attributes that will either expand
+ struct mlx5e_xsk_param {
+-	u16 headroom;
+-	u16 chunk_size;
++	u32 headroom;
++	u32 chunk_size;
+ };
+ 
+ struct mlx5e_lro_param {
 -- 
 2.29.2
 
