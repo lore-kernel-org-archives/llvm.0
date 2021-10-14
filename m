@@ -1,68 +1,86 @@
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836B472
-	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 18:41:57 +0000 (UTC)
-Received: by mail-io1-f54.google.com with SMTP id p68so4933307iof.6
-        for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 11:41:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC3A72
+	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 18:47:03 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id m26so6251597pff.3
+        for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 11:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2vuxshsfHtLjbAbft8l5pvgP1W0cVnLR0zLA69xmTOI=;
-        b=by5P0yKP3zQWYD4728dibXaqmBM8xi7P6Mh5FmkBcWyhEogUgg3ItaH0WQ0Qw2i9X9
-         dX2vSCt/eV8t7U7kdbOsrilLeR5jPfMK4cXhDSldk/xKIYMprJl64WDCTcthiMj53MeO
-         HEay/Ca4RKv1VMcySvZT6Cov24skCbyF0UbBFyiHBxOUTBtmS3E5XJ5BZ0PS86gAEI5s
-         4f20fg41QbPOO5m+72cYY/MASLDKq9xL6A7E9IqVZJxsrCCwGpgLg+cODdGKzc1Q7JO9
-         +xYtCR4mqOMR/KCC7VuQC/L8JpT161BEozi+EE5A9miJbtgyh/6Pm4xaYisszNyPzSE9
-         A46Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=flE15Vag1x2qH6k6oFaTp0PZRJ1ZGZb8THhO62QsLjE=;
+        b=BeR9rE+h6oOZjaOHDA370v0suUCXLikBJQsw9Cy8vwaf1/MG0Ui7pXfraYG/Nyb0qd
+         iqaQ02SSXwqqNyFydlvvqyk1qE2NADJLiuipogiDTsBcouXv5GaZVVwijXEiHrpht0kN
+         02AqT5qkbHDgVntpqt7nKyIht9C8bmQJYVhdw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2vuxshsfHtLjbAbft8l5pvgP1W0cVnLR0zLA69xmTOI=;
-        b=oD4ipZ8kiKWBYM/pIkblhlKGGuP7TwD7dQyyi4/NN6yWeyFzgddmDCkO+7eMvOLNIb
-         C6/RzQ70mJHxWP9zZfGQnKoaw8jAjMqWI1l62fTBrPDq2Cz+q4sCWHriNK/ongeUzl0M
-         MMq1F4K7ebGjD0xXjdMsiWUIbjix8C0bMh1lVcf+cRvwUSSK5DNXm1e3WWBymsle5ueX
-         uTqWfua0oIZsmFraGSzg+R452QR36oktiGbb7Zj1NWkwtOyl9WOt6SWycsidG/UWqr2N
-         L5cjly+pJEGMROCZiQV3qzDXIZ+QxHk4j/7bdC6SHjziz0qNEBW5GpswxjQKIwoQCRFY
-         4gAA==
-X-Gm-Message-State: AOAM532rp67DKcVkM4JUSJfq1Qj7TUmX522bEsAGrw0Ho1He6VHPMcLm
-	OYKz1PEjCCcIOdsuGkrjfcI/tQYcWjNmGetftQo=
-X-Google-Smtp-Source: ABdhPJyLH2m3/G7uDqEmFfQiWoOEDf5lKmHYdpJ4vcqrnZL1K6nfo47X4ijAvGPq/rWWwBuh1AZEIypxE/oxExsVHqA=
-X-Received: by 2002:a5d:9d56:: with SMTP id k22mr454360iok.177.1634236916655;
- Thu, 14 Oct 2021 11:41:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=flE15Vag1x2qH6k6oFaTp0PZRJ1ZGZb8THhO62QsLjE=;
+        b=J+TBOpvaXH7Cf1YBa3DMLI/asPYY5Gaslw2oiXOByRE/gjw4KOQTbz9jVX4kCJIxhe
+         Xe+0Bbr9+l5FpervNFIlAfXbLQLPWCinWLDvf5Oy+bf7qs6WYHsghxsrd95yAEPFCpQC
+         0APz5W0rJny9k4cxQ0pVtIAj4v8Fu2WaZlcNcriB2TAHXnBYy/Qw51+SC5bWiUa7qSga
+         8dZOX1h3m0hbpp/3t+abR6bnqbIREogqYugB7HbSgk+bNYWtEE30dQu/7uo9i3pObns2
+         /qpzPUXEMg8DIoAUUXzjbRBOn5MKYBAHPI0uibTmSNDK3OzjsMNM8pCxQ3iMnGj9V+7a
+         XAIQ==
+X-Gm-Message-State: AOAM530lNoYqXoqvan/umJvy0mOoZOJpYkvlDlLrbLGyljn2dkl7nndp
+	x7NisFCTchpAY5Oy90QfSla3lA==
+X-Google-Smtp-Source: ABdhPJzYq661wv4AErhvhHm19916LjgZM0cmC1UFXDThhI7WtsP5/hjhJSDpBPLelZ054c+1Ggo7wA==
+X-Received: by 2002:a62:7dd0:0:b0:44c:b0b8:6eaa with SMTP id y199-20020a627dd0000000b0044cb0b86eaamr7036185pfc.73.1634237222778;
+        Thu, 14 Oct 2021 11:47:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o12sm2954984pgn.33.2021.10.14.11.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Oct 2021 11:47:02 -0700 (PDT)
+Date: Thu, 14 Oct 2021 11:47:01 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Sami Tolvanen <samitolvanen@google.com>, x86@kernel.org,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v5 09/15] x86: Use an opaque type for functions not
+ callable from C
+Message-ID: <202110141141.870A67E@keescook>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211013181658.1020262-10-samitolvanen@google.com>
+ <YWgSwmzPFrRbMC1P@zn.tnic>
+ <202110140904.41B5183E@keescook>
+ <YWhpbu/Y6V2p/zlY@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211014132331.GA4811@kernel.org> <YWhGQLHnA9BIVBpr@hirez.programming.kicks-ass.net>
- <CAKwvOdnkDUfRKzmLThQGW02Ew6x=KM0MQyHge7=kc673NYxo2g@mail.gmail.com> <CANiq72nt+8bCGAm8yhvTZfS64ovOi9_U=Gym7biUhdEsc3Neaw@mail.gmail.com>
-In-Reply-To: <CANiq72nt+8bCGAm8yhvTZfS64ovOi9_U=Gym7biUhdEsc3Neaw@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 14 Oct 2021 20:41:45 +0200
-Message-ID: <CANiq72=UVCmjr1tpSwcoOkid5tWZirKCnV17_Peqy-LBmEQHEg@mail.gmail.com>
-Subject: Re: [PATCH] compiler_types: mark __compiletime_assert failure as __noreturn
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YWhpbu/Y6V2p/zlY@zn.tnic>
 
-On Thu, Oct 14, 2021 at 8:33 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> That would be a nice to do, but I am not sure about introducing one
-> more macro about this... I think it would be simpler to submit patches
-> for moves into `static_assert` even if we have to "flip" the meaning.
+On Thu, Oct 14, 2021 at 07:31:26PM +0200, Borislav Petkov wrote:
+> On Thu, Oct 14, 2021 at 09:07:57AM -0700, Kees Cook wrote:
+> Looking at the changelog, DECLARE_ASM_FUNC_SYMBOL, makes a lot more
+> sense to me even if it doesn't specify the aspect that it is not called
+> by C but who cares - it is generic enough.
 
-Actually, what would be ideal is a compiler-backed lint that checks
-whether it could be an `static_assert`, perhaps in clang-tidy?
+Around we go. :) Josh[1] and Steven[2] explicitly disagreed with
+that name, leading to the current name[3]. Do you want it to be
+DECLARE_ASM_FUNC_SYMBOL() over those objections?
 
-It would also ensure things are kept clean.
+I'd really like to finish this shed -- I need to take the bikes in from
+the rain. :P
 
-Cheers,
-Miguel
+-Kees
+
+[1] https://lore.kernel.org/lkml/20211006032945.axlqh3vehgar6adr@treble/
+[2] https://lore.kernel.org/lkml/20211006101654.6a5be402@gandalf.local.home/
+[3] https://lore.kernel.org/lkml/CABCJKufCaOXOUF43a-PQshO8aEsMNhZ2EiyGMSOp9ZGn57G=pg@mail.gmail.com/
+
+-- 
+Kees Cook
