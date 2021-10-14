@@ -1,191 +1,82 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CBF2C80
-	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 17:53:20 +0000 (UTC)
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id 35E5661130;
-	Thu, 14 Oct 2021 17:53:19 +0000 (UTC)
-Date: Thu, 14 Oct 2021 13:53:17 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
- LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [gustavoars:for-next/cast-function 1/3]
- kernel/trace/ftrace.c:7029:6: error: no previous prototype for function
- 'arch_ftrace_ops_list_func'
-Message-ID: <20211014135317.0755987f@gandalf.local.home>
-In-Reply-To: <202110140709.ogqbzDcq-lkp@intel.com>
-References: <202110140709.ogqbzDcq-lkp@intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320ED2C80
+	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 18:06:50 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id z11so29347397lfj.4
+        for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 11:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nsRlgBJbQTA7BY0Fnmwq5m4pEEvG0cBSI6R143Kt50g=;
+        b=WHV2vCMXGD6ZEvIfni8By8V/L+NEVj2+siSM5i6u+m+m4A17VkxISTcczENL7HggIW
+         TsQGqR/AEE81Vj7fIIUQEtBL8pqP9Ix0GDfdKtzZ8o1/bQe0eD1VLhGODIpw2Jq4hNax
+         Q8Bvf1oqUvYqc5igH+QmEvrzuqFfdGsS0B0qJRgXZA9YD81Ci1am6yNTzRop5IcA8498
+         ohgRnARPE0aZDMYbAyiD0Dg84i3YCw1jEVx3eGvaOjRQHbQtP1uvn12BQ6ngMqBruA0p
+         wr++gQ/NF+pYW4KMY+M0Vx3qXUgmvERGya7NWl1VwPlYukhdz62g5fmNj20IpFQtlWoR
+         BQCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nsRlgBJbQTA7BY0Fnmwq5m4pEEvG0cBSI6R143Kt50g=;
+        b=fZro6k3x9VJUn6Ol5640qltqMoezoByHt6nJCp2Php3P+YZrhTgYjVSkVH/kS0MbHk
+         95tz4AwY4gYiiRcZEjUZoK/OL2FsHoyDO0bppS0LJXe3UCJ1gtaRKUYXWcsfkl41Ea8s
+         k87zNRNgYuDet1iF480YgzJdFnbMoHro7Fu35svQTmxuNJSK82GMWhvMo8vQtOxbuXLZ
+         +PZPy4vnpBF19N4O0ARSkkYwzAEdmwcqIlUwpG4NkozgjOUOBxvIOYnSRtJsTbeJE1kY
+         i0s3nK7ukZXP83Jwlzl8hd/ADwKSfIWkJorf2/d1T8yyyNGgjmg474u9doS+0L14yF36
+         rpJA==
+X-Gm-Message-State: AOAM530u4fY3P5sZK82/NCbk1g3XzV1tY7pLvFgBxysJ5kgQd4/g3ZVK
+	T6aBGs/BMfgFYPfKRDxkvTJOkQbg2nA5tiIZGEpn85ofkgg=
+X-Google-Smtp-Source: ABdhPJwETpROOF2rrrefiOfmhu3BX0ABuQ/67vQm8aEmvHnaIzANh2CeoTXlhoqCmEo5ip5J+Zo0EKES+Y5LLFtNL+I=
+X-Received: by 2002:a05:6512:b0c:: with SMTP id w12mr6667968lfu.240.1634234807558;
+ Thu, 14 Oct 2021 11:06:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211014150610.GA22151@kernel.org>
+In-Reply-To: <20211014150610.GA22151@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 14 Oct 2021 11:06:36 -0700
+Message-ID: <CAKwvOdmHPR-9wB-aD-8P=w74W7RKfvOL-VcDVy=8TWHGb_brfw@mail.gmail.com>
+Subject: Re: [PATCH] Compiler Attributes: remove GCC 5.1 mention
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 14 Oct 2021 07:33:21 +0800
-kernel test robot <lkp@intel.com> wrote:
+On Thu, Oct 14, 2021 at 8:06 AM Miguel Ojeda <ojeda@kernel.org> wrote:
+>
+> GCC 5.1 is now the minimum version.
+>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/cast-function
-> head:   eed09ebd6f47aeb92b3fe3b8d338b2a55e534928
-> commit: f9d45e65ef7f67bdb39c15d09bc6021f197d893e [1/3] ftrace: Fix -Wcast-function-type warnings on powerpc64
-> config: i386-buildonly-randconfig-r002-20211013 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a8c695542b2987eb9a203d5663a0740cb4725f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=f9d45e65ef7f67bdb39c15d09bc6021f197d893e
->         git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
->         git fetch --no-tags gustavoars for-next/cast-function
->         git checkout f9d45e65ef7f67bdb39c15d09bc6021f197d893e
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    kernel/trace/ftrace.c:297:5: error: no previous prototype for function '__register_ftrace_function' [-Werror,-Wmissing-prototypes]
->    int __register_ftrace_function(struct ftrace_ops *ops)
->        ^
->    kernel/trace/ftrace.c:297:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    int __register_ftrace_function(struct ftrace_ops *ops)
->    ^
->    static 
->    kernel/trace/ftrace.c:340:5: error: no previous prototype for function '__unregister_ftrace_function' [-Werror,-Wmissing-prototypes]
->    int __unregister_ftrace_function(struct ftrace_ops *ops)
->        ^
->    kernel/trace/ftrace.c:340:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    int __unregister_ftrace_function(struct ftrace_ops *ops)
->    ^
->    static 
->    kernel/trace/ftrace.c:579:5: error: no previous prototype for function 'ftrace_profile_pages_init' [-Werror,-Wmissing-prototypes]
->    int ftrace_profile_pages_init(struct ftrace_profile_stat *stat)
->        ^
->    kernel/trace/ftrace.c:579:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    int ftrace_profile_pages_init(struct ftrace_profile_stat *stat)
->    ^
->    static 
->    kernel/trace/ftrace.c:3871:15: error: no previous prototype for function 'arch_ftrace_match_adjust' [-Werror,-Wmissing-prototypes]
->    char * __weak arch_ftrace_match_adjust(char *str, const char *search)
->                  ^
->    kernel/trace/ftrace.c:3871:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    char * __weak arch_ftrace_match_adjust(char *str, const char *search)
->    ^
->    static 
-> >> kernel/trace/ftrace.c:7029:6: error: no previous prototype for function 'arch_ftrace_ops_list_func' [-Werror,-Wmissing-prototypes]  
->    void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
->         ^
->    kernel/trace/ftrace.c:7029:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
->    ^
->    static 
->    5 errors generated.
-> 
-> 
-> vim +/arch_ftrace_ops_list_func +7029 kernel/trace/ftrace.c
-> 
->   7011	
->   7012	/*
->   7013	 * Some archs only support passing ip and parent_ip. Even though
->   7014	 * the list function ignores the op parameter, we do not want any
->   7015	 * C side effects, where a function is called without the caller
->   7016	 * sending a third parameter.
->   7017	 * Archs are to support both the regs and ftrace_ops at the same time.
->   7018	 * If they support ftrace_ops, it is assumed they support regs.
->   7019	 * If call backs want to use regs, they must either check for regs
->   7020	 * being NULL, or CONFIG_DYNAMIC_FTRACE_WITH_REGS.
->   7021	 * Note, CONFIG_DYNAMIC_FTRACE_WITH_REGS expects a full regs to be saved.
->   7022	 * An architecture can pass partial regs with ftrace_ops and still
->   7023	 * set the ARCH_SUPPORTS_FTRACE_OPS.
->   7024	 *
->   7025	 * In vmlinux.lds.h, ftrace_ops_list_func() is defined to be
->   7026	 * arch_ftrace_ops_list_func.
->   7027	 */
->   7028	#if ARCH_SUPPORTS_FTRACE_OPS
-> > 7029	void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,  
->   7030				       struct ftrace_ops *op, struct ftrace_regs *fregs)
->   7031	{
->   7032		__ftrace_ops_list_func(ip, parent_ip, NULL, fregs);
->   7033	}
->   7034	#else
->   7035	void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip)
->   7036	{
->   7037		__ftrace_ops_list_func(ip, parent_ip, NULL, NULL);
->   7038	}
->   7039	#endif
->   7040	NOKPROBE_SYMBOL(arch_ftrace_ops_list_func);
->   7041	
-> 
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  include/linux/compiler_attributes.h | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e6ec63403965..87d1e773400c 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -104,7 +104,6 @@
+>  #define __deprecated
+>
+>  /*
+> - * Optional: only supported since gcc >= 5.1
+>   * Optional: not supported by clang
+>   * Optional: not supported by icc
+>   *
+> --
+> 2.33.1
+>
 
-This should fix this issue as well as some of the other ones reported on
-this commit.
 
-[ I'll be adding this update to my own version in my tree ]
-
--- Steve
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b86f52683b6f..8771c435f34b 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -178,7 +178,8 @@
- 			ftrace_ops_list_func = arch_ftrace_ops_list_func;
- #else
- # ifdef CONFIG_FUNCTION_TRACER
--#  define MCOUNT_REC()	ftrace_stub_graph = ftrace_stub;
-+#  define MCOUNT_REC()	ftrace_stub_graph = ftrace_stub;	\
-+			ftrace_ops_list_func = arch_ftrace_ops_list_func;
- # else
- #  define MCOUNT_REC()
- # endif
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 832e65f06754..871b51bec170 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -30,16 +30,25 @@
- #define ARCH_SUPPORTS_FTRACE_OPS 0
- #endif
- 
-+#ifdef CONFIG_FUNCTION_TRACER
-+struct ftrace_ops;
- /*
-  * If the arch's mcount caller does not support all of ftrace's
-  * features, then it must call an indirect function that
-  * does. Or at least does enough to prevent any unwelcome side effects.
-+ *
-+ * Also define the function prototype that these architectures use
-+ * to call the ftrace_ops_list_func().
-  */
- #if !ARCH_SUPPORTS_FTRACE_OPS
- # define FTRACE_FORCE_LIST_FUNC 1
-+void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip);
- #else
- # define FTRACE_FORCE_LIST_FUNC 0
-+void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
-+			       struct ftrace_ops *op, struct ftrace_regs *fregs);
- #endif
-+#endif /* CONFIG_FUNCTION_TRACER */
- 
- /* Main tracing buffer and events set up */
- #ifdef CONFIG_TRACING
-@@ -88,8 +97,6 @@ extern int
- ftrace_enable_sysctl(struct ctl_table *table, int write,
- 		     void *buffer, size_t *lenp, loff_t *ppos);
- 
--struct ftrace_ops;
--
- #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 
- struct ftrace_regs {
+-- 
+Thanks,
+~Nick Desaulniers
