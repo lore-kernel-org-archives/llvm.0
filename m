@@ -1,124 +1,131 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41E52C80
-	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 18:15:23 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id i24so29651790lfj.13
-        for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 11:15:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF88F2C80
+	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 18:24:47 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id h2so16676265ybi.13
+        for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 11:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nNs+G0jVD2dj+3QPCBepQC7w71O0qpj+2enPjKIhfHo=;
-        b=bb3x+Vj+uVIsxGXCp/tCicQgGOOTKP0OfRO57tDFOuoQtwrTfQsKCmS4Dn98dBUHnL
-         IsDY1cOB29uxQCGfA3SzIQojrPsGf2lvtFN2djaHlxgWSV1BPUlifpG4WoPVDJPfIvnH
-         2Sj/poRRd3zSkPly80whiTnHAWTBZGXnYuum9q4ZGl2kUj9N0hILg0xGyJOA5o0CQB7r
-         fKiJkRDoPsOnwJG2HT1vvNAK0pwDnQj3E54mNCNmEPRKnnzjxD/OB9ZeXoSfxYAhi0ec
-         vrhhQvq2n5KrZ3bNBNm4/w8HFP1m7PKB2UuGM9excovNE1ufpulANm00q110V3jOH43K
-         j1Zw==
+         :cc;
+        bh=C8dJU1kv1VM7X95hRm6lPC2IwDByNnl9bwU9uhM4nxw=;
+        b=sZeIpuAMkhj5amBTGEsg6yiFKwfHzX2qppNlcQ9aPn27Ja4WTtulCFvjLGY2k5ZmIJ
+         Fis/PERMABHDuARXWAR6Rtx9BL3si3vyCuvLg20KAdiGAb6tqQwdhcQjY//wAvykncfD
+         inWXc24R7k3dn1wclcPtHcqhnPgDDQeerS9qDfa4UcyesEws3M9nb74cNB93h1zzQ5Fa
+         0zI5C0tC6ePRnzfiEsZeSnzRwskFJQ/frHUwD1qbXtHprAzSNmH640M/cZgFRmn4hDOu
+         OzBv130y67SZ6z6LqOO5keAv1qo7O/hDcPofW1QYi0r6JaUj6ufL+x8vs6wg3qDfbDBE
+         NpTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nNs+G0jVD2dj+3QPCBepQC7w71O0qpj+2enPjKIhfHo=;
-        b=vau0hJ3EQsbl1331gnee9Xllc8LM3ujcLDqD3b5yNz6KyNL96si94DT6wtb+lnHUE8
-         hc92dqHhejAI6JpmAIeOKYbbCSEmYKBU4sLXFPl7jDWYgE4lvXBocace1He9dEhYtax4
-         AUBYm9FA/yNRVOcLVt9ufZTIo4q4SzU7xLKjiO8g25ClAO9d1UxhHnnQIpR7i58EW+fu
-         Y+3vfv7hIJJRQHjsKo690MQd2umtGzDln8S8c0dBixWzUb9CbfhbzKiGtc/soDHmLYum
-         BtdjoXcbCR857hOnndIrPu2PQajelQ4GnWXrHuWtZFRCtnUU7fnsl4eADzhD6Ktr+uAX
-         V/zQ==
-X-Gm-Message-State: AOAM531dHWxn3DjtDUNsYHNS/P8f8lMYY5xyBeMruPNUEeS9/ww/ptHc
-	hN97kWX67GqZTL7dPmd2ZKcQ/LT5cd60wsmYP2XG5w==
-X-Google-Smtp-Source: ABdhPJzw201p0Me8UoPJUf744ySbtQZUgFia2EVV686wg86DCCgGVrC7sAVDFcRLxkbXWJScchfCQIH9656aZEsjSLY=
-X-Received: by 2002:a2e:8695:: with SMTP id l21mr7244959lji.339.1634235321228;
- Thu, 14 Oct 2021 11:15:21 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=C8dJU1kv1VM7X95hRm6lPC2IwDByNnl9bwU9uhM4nxw=;
+        b=6qgiXgE/l56d/OMtppiWrhQeULMfoSRVa9q+pQrIFLKZ7W0CVgIu66JbT674bW43Sk
+         qmBN6DX5soPC/KhLBFW5uX/clIW9kAGIk9wmd6Cg0O91/rLrGsnmvo2/Q1bMui/6nag6
+         wKFrxk74YRq6qb8l4jqUsnGeEaDCo0lDRppi1rEDdXhnRB+6+lGitwlRCIp4Qvc4UQ18
+         6Pxg3Gz7/nAjrwzvY8zHQvTts0D/cIjNa0k10G5w5eyXik7b511mMes+nxfUwNGejZq+
+         OyX18OREMAARSKdez25cjcpo3/gBmhY1ivvAPzVxEVoTtkHA9Oxw5+UrJXW4P2X0FQhn
+         R2dg==
+X-Gm-Message-State: AOAM531SklQAj+cq72YtHgbKTTOLOz5quaEVSMN0KydYN2b/rzknPQUd
+	ewdNTT70M9CgyToZOFnzktGsIbrDR/L5fC/pz4IOww==
+X-Google-Smtp-Source: ABdhPJzYx7PYwLC/K9tQ3WLlgnCTWsSWzh8u4LsqbgMqD5Nla5Hq42lQeU4xMSATsMK78KmS/8oBwDCwrKHse325wDY=
+X-Received: by 2002:a25:5b8b:: with SMTP id p133mr7892860ybb.273.1634235886735;
+ Thu, 14 Oct 2021 11:24:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211014024424.528848-1-mpe@ellerman.id.au>
-In-Reply-To: <20211014024424.528848-1-mpe@ellerman.id.au>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 14 Oct 2021 11:15:09 -0700
-Message-ID: <CAKwvOdkcWCFEWxjwPcABA=6qWas+wuVcdDS=T1Oh-j81fYxxFg@mail.gmail.com>
-Subject: Re: [PATCH] powerpc/dcr: Use cmplwi instead of 3-argument cmpli
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211013181658.1020262-10-samitolvanen@google.com> <YWgSwmzPFrRbMC1P@zn.tnic>
+ <202110140904.41B5183E@keescook> <YWhpbu/Y6V2p/zlY@zn.tnic>
+In-Reply-To: <YWhpbu/Y6V2p/zlY@zn.tnic>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 14 Oct 2021 11:24:35 -0700
+Message-ID: <CABCJKueW+=DfzONAZb-XF=mWYH_S-BeNihZfGhidOGJO=WYmZw@mail.gmail.com>
+Subject: Re: [PATCH v5 09/15] x86: Use an opaque type for functions not
+ callable from C
+To: Borislav Petkov <bp@alien8.de>
+Cc: Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 13, 2021 at 7:44 PM Michael Ellerman <mpe@ellerman.id.au> wrote=
-:
+On Thu, Oct 14, 2021 at 10:31 AM Borislav Petkov <bp@alien8.de> wrote:
 >
-> In dcr-low.S we use cmpli with three arguments, instead of four
-> arguments as defined in the ISA:
+> On Thu, Oct 14, 2021 at 09:07:57AM -0700, Kees Cook wrote:
+> > I don't think it's a super common thing to add, so in this case, yes,
+> > I think doing it on a case-by-case basis will be fine.
 >
->         cmpli   cr0,r3,1024
+> You don't have a choice - if there's no automation which verifies
+> whether all the CFI annotation needed is there, people won't know what
+> to wrap in what macro.
 >
-> This appears to be a PPC440-ism, looking at the "PPC440x5 CPU Core
-> User=E2=80=99s Manual" it shows cmpli having no L field, but implied to b=
-e 0 due
-> to the core being 32-bit. It mentions that the ISA defines four
-> arguments and recommends using cmplwi.
+> > I'd _much_ prefer keeping the macro, as it explains what's going on,
+> > which doesn't require a comment at every "extern const u8 foo[]" usage.
 >
-> dcr-low.S is only built 32-bit, because it is only built when
-> DCR_NATIVE=3Dy, which is only selected by 40x and 44x. Looking at the
-> generated code (with gcc/gas) we see cmplwi as expected.
+> You don't have to - it is just an extern.
 >
-> Although gas is happy with the 3-argument version when building for
-> 32-bit, the LLVM assembler is not and errors out with:
+> > It serves as an annotation, etc.
 >
->   arch/powerpc/sysdev/dcr-low.S:27:10: error: invalid operand for instruc=
-tion
->    cmpli 0,%r3,1024; ...
->            ^
+> Oh, that I figured.
 >
-> Switching to the four argument version avoids any confusion when reading
-> the ISA, fixes the issue with the LLVM assembler, and also means the
-> code could be built 64-bit in future (though that's very unlikely).
+> > And, there's been a lot of discussion on the best way to do this, what
+> > to name it, etc.
+>
+> Looking at the changelog, DECLARE_ASM_FUNC_SYMBOL, makes a lot more
+> sense to me even if it doesn't specify the aspect that it is not called
+> by C but who cares - it is generic enough.
+>
+> > This looks to be the best option currently.
+>
+> Maybe because wrapping some random symbols in a obfuscating macro to
+> make the next tool happy, is simply the wrong thing to do. I know, I
+> know, clang CFI needs it because of magical reason X but that doesn't
+> make it any better. Someday soon we'll have to write a tutorial for
+> people submitting kernel patches explaining what annotation to add where
+> and why.
+>
+> Why can't clang be taught to ignore those symbols:
+>
+> clang -fsanitize=cfi -fsanitize-cfi-ignore-symbols=<list>
+>
+> ?
+>
+> Hmm, looking at https://clang.llvm.org/docs/ControlFlowIntegrity.html
+>
+> there *is* an ignore list:
+>
+> "Ignorelist
+>
+> A Sanitizer special case list can be used to relax CFI checks for
+> certain source files, functions and types using the src, fun and type
+> entity types. Specific CFI modes can be be specified using [section]
+> headers.
+>
+> ...
+>
+> # Ignore all functions with names containing MyFooBar.
+> fun:*MyFooBar*
+> ..."
+>
+>
+> So why aren't we doing that instead of those macros?
 
-Thank you Michael.  We've definitely run into a few cases where GAS
-allowed for various short-hand forms of various instructions (a fair
-amount of recent work was around 32b ARM and THUMB parity in LLVM).
-LLVM's assembler is mostly generated from a high level description of
-the instruction formats, so it's not always as flexible as a hand
-written parser would be. (There is a mix of hand written arch specific
-parsing, but most of the parser is arch agnostic, and all of the
-instruction descriptions are described in an LLVM specific high level
-language called tablegen which generates C++ that is used by the
-assembler, but also the disassembler, the compiler, and even the
-linker if need be).
+The ignorelist can be used to disable CFI checking in the listed
+functions, but the compiler still checks indirect calls made to these
+functions from elsewhere, and therefore, using an opaque type is still
+necessary to ensure the symbol address isn't replaced with a jump
+table address.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1419
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Anyway, I thought using a macro would make the code easier to
+understand. I'm happy to rename it to something that makes more sense,
+but also fine with switching to a simple extern u8[] if that's
+preferable.
 
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  arch/powerpc/sysdev/dcr-low.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/sysdev/dcr-low.S b/arch/powerpc/sysdev/dcr-low.=
-S
-> index efeeb1b885a1..329b9c4ae542 100644
-> --- a/arch/powerpc/sysdev/dcr-low.S
-> +++ b/arch/powerpc/sysdev/dcr-low.S
-> @@ -11,7 +11,7 @@
->  #include <asm/export.h>
->
->  #define DCR_ACCESS_PROLOG(table) \
-> -       cmpli   cr0,r3,1024;     \
-> +       cmplwi  cr0,r3,1024;     \
->         rlwinm  r3,r3,4,18,27;   \
->         lis     r5,table@h;      \
->         ori     r5,r5,table@l;   \
-> --
-> 2.25.1
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+Sami
