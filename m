@@ -1,83 +1,112 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EE62C80
-	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 17:26:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BD2261152;
-	Thu, 14 Oct 2021 17:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634232391;
-	bh=o0QsazVMagTZA1XmrDz3OQqKaBb0s1Tde3hbsP0uePk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jDJf4ujoCOZS0iYOctJNZQGY9RghDBt1PpXR1GZDqqR5AEThHfi3KSmGrD7fYEaC0
-	 oEK42B78SI3dGjnYnaaUWHSlsGNauW6LVwz/TIYxZFKYkKEfnelTBCcFfRQIWMkCuD
-	 KHD2m81AjgnXq9nqEf1I0kTQX4D3q1HdRixdreYt5gh4nXxJAol4B7jWiJoStgOmsE
-	 dEub2tOq9KlrnwGbblTYlnLPlwi9kmxvBtq4ev3SXfSwQBUV6p5xbuikiXmmAjRSxP
-	 monAKViPysgUYuREjDMb+qMcZWFmRGFNfmp1JAaPuno2QZ7/D4k4gDVsCZk8x51jEG
-	 yayl6XuJS98rw==
-Date: Thu, 14 Oct 2021 10:26:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CA72C80
+	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 17:31:34 +0000 (UTC)
+Received: from zn.tnic (p200300ec2f0c720076278dcac58b4415.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7200:7627:8dca:c58b:4415])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 827361EC0136;
+	Thu, 14 Oct 2021 19:31:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1634232686;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=DQftSPqAxAWNjuaFkjQxzK/R7rLUcHBb68ob6y37uAY=;
+	b=oAjh5oIbWL4Qps5tii3z9bWeNfIXuMC0QHYFueKGxd59UyW/fZ8YnGzPXV4s72lU0LuPcF
+	1PeAlpl6o1Qg0UBR1hXBa+cATJP38cNKvjDL+XUUMJOkaq5qJP97/+Zz+vko9NQ7yU26OS
+	82fmwfUbc+Fr1ZAeTMRvYwVSV6OwzZY=
+Date: Thu, 14 Oct 2021 19:31:26 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Kees Cook <keescook@chromium.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, x86@kernel.org,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH] compiler_types: mark __compiletime_assert failure as
- __noreturn
-Message-ID: <YWhoQ2lKeOx2U2e2@archlinux-ax161>
-References: <20211014132331.GA4811@kernel.org>
+Subject: Re: [PATCH v5 09/15] x86: Use an opaque type for functions not
+ callable from C
+Message-ID: <YWhpbu/Y6V2p/zlY@zn.tnic>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211013181658.1020262-10-samitolvanen@google.com>
+ <YWgSwmzPFrRbMC1P@zn.tnic>
+ <202110140904.41B5183E@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211014132331.GA4811@kernel.org>
+In-Reply-To: <202110140904.41B5183E@keescook>
 
-On Thu, Oct 14, 2021 at 03:23:31PM +0200, Miguel Ojeda wrote:
-> `__compiletime_assert` declares a fake `extern` function
-> which appears (to the compiler) to be called when the test fails.
-> 
-> Therefore, compilers may emit possibly-uninitialized warnings
-> in some cases, even if it will be an error anyway (for compilers
-> supporting the `error` attribute, e.g. GCC and Clang >= 14)
-> or a link failure (for those that do not, e.g. Clang < 14).
-> 
-> Annotating the fake function as `__noreturn` gives them
-> the information they need to avoid the warning,
-> e.g. see https://godbolt.org/z/x1v69jjYY.
-> 
-> Link: https://lore.kernel.org/llvm/202110100514.3h9CI4s0-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On Thu, Oct 14, 2021 at 09:07:57AM -0700, Kees Cook wrote:
+> I don't think it's a super common thing to add, so in this case, yes,
+> I think doing it on a case-by-case basis will be fine. 
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+You don't have a choice - if there's no automation which verifies
+whether all the CFI annotation needed is there, people won't know what
+to wrap in what macro.
 
-> ---
->  include/linux/compiler_types.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index b6ff83a714ca..ca1a66b8cd2f 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -298,7 +298,13 @@ struct ftrace_likely_data {
->  #ifdef __OPTIMIZE__
->  # define __compiletime_assert(condition, msg, prefix, suffix)		\
->  	do {								\
-> -		extern void prefix ## suffix(void) __compiletime_error(msg); \
-> +		/*							\
-> +		 * __noreturn is needed to give the compiler enough	\
-> +		 * information to avoid certain possibly-uninitialized	\
-> +		 * warnings (regardless of the build failing).		\
-> +		 */							\
-> +		__noreturn extern void prefix ## suffix(void)		\
-> +			__compiletime_error(msg);			\
->  		if (!(condition))					\
->  			prefix ## suffix();				\
->  	} while (0)
-> -- 
-> 2.33.1
-> 
+> I'd _much_ prefer keeping the macro, as it explains what's going on,
+> which doesn't require a comment at every "extern const u8 foo[]" usage.
+
+You don't have to - it is just an extern.
+
+> It serves as an annotation, etc.
+
+Oh, that I figured.
+
+> And, there's been a lot of discussion on the best way to do this, what
+> to name it, etc.
+
+Looking at the changelog, DECLARE_ASM_FUNC_SYMBOL, makes a lot more
+sense to me even if it doesn't specify the aspect that it is not called
+by C but who cares - it is generic enough.
+
+> This looks to be the best option currently.
+
+Maybe because wrapping some random symbols in a obfuscating macro to
+make the next tool happy, is simply the wrong thing to do. I know, I
+know, clang CFI needs it because of magical reason X but that doesn't
+make it any better. Someday soon we'll have to write a tutorial for
+people submitting kernel patches explaining what annotation to add where
+and why.
+
+Why can't clang be taught to ignore those symbols:
+
+clang -fsanitize=cfi -fsanitize-cfi-ignore-symbols=<list>
+
+?
+
+Hmm, looking at https://clang.llvm.org/docs/ControlFlowIntegrity.html
+
+there *is* an ignore list:
+
+"Ignorelist
+
+A Sanitizer special case list can be used to relax CFI checks for
+certain source files, functions and types using the src, fun and type
+entity types. Specific CFI modes can be be specified using [section]
+headers.
+
+...
+
+# Ignore all functions with names containing MyFooBar.
+fun:*MyFooBar*
+..."
+
+
+So why aren't we doing that instead of those macros?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
