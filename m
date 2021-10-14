@@ -1,40 +1,28 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA93329CA
-	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 15:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ueZtdAThR7VQ7jebI58tUryh7pa65ZnfSjE48EgKiy4=; b=nMLxSLd50z4fGg+iJk7Ev+BYQn
-	QslXFEFGwQbH06TtmGf/2+isY8resYnyeoEje0+Ln6UK8y/THzkX5r6Hz8tLvWGNy/YE0sivzm2mr
-	iQu+Vn2OD8CvqXv3PdsO6dokQh2NtekcO3bGpNAWg7usqhNIKsOMv7hSgAc9TpRzALz2ppBuOw06h
-	zvIctif9lt9ac9ipEiaeKttBHsgCs2VmWY6nf22NIXgh21r6qV/htGGUOrIFNTQGs7hWPEuONcHsQ
-	+NiztRhAv7+Jt6rPuf9XDsyn4Y1V5TGPzPa+c/q3Jvmpl0u6mu4AmYyYRAnxiq2weUA3Rcn6NJJS/
-	iuT8jRFA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mb2ES-008Pa2-NP; Thu, 14 Oct 2021 15:01:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA6CA30030B;
-	Thu, 14 Oct 2021 17:01:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9633A2CF42A2E; Thu, 14 Oct 2021 17:01:20 +0200 (CEST)
-Date: Thu, 14 Oct 2021 17:01:20 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] compiler_types: mark __compiletime_assert failure as
- __noreturn
-Message-ID: <YWhGQLHnA9BIVBpr@hirez.programming.kicks-ass.net>
-References: <20211014132331.GA4811@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E76168
+	for <llvm@lists.linux.dev>; Thu, 14 Oct 2021 15:06:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9CA5E600CC;
+	Thu, 14 Oct 2021 15:06:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1634223995;
+	bh=hFiS/lWJR0rZJ3gTMLH+dhCLmu92hT1dPGV0B7uQJEE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=QohxdhlQ4ZT2T0L/gSclIrvg6iUC5/miBAEFlmX7RJLkYZoTGrmpJaPkJ3noEG2FO
+	 B8E2I/fZPLUs8g72eBpsdL/9cIDnEeD62vurF7WQRDnlQTvu2ikLMGtLSA9KTL9f3t
+	 DPnmX3/ORj+zGHtqnSN+SFqjkNHy5E1cJgmc2XHs9XxRv5qp7LttElyxJ0ej37ATGA
+	 NrR1/i6VQ7u9Q/TwTvhKFpVUAh3GNZ5E4yldFqnWW/4FnfLgdvqfy5MoowFVby5SwR
+	 tmGZ0MjdvdHleV1eFmreuyjadwgqVv/fRC3ZFXHm/vVzWQYRDFKHRL2X7oanO2N3I4
+	 M6i7Eqvu+nXSA==
+Date: Thu, 14 Oct 2021 17:06:10 +0200
+From: Miguel Ojeda <ojeda@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>
+Subject: [PATCH] Compiler Attributes: remove GCC 5.1 mention
+Message-ID: <20211014150610.GA22151@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,47 +31,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211014132331.GA4811@kernel.org>
+User-Agent: elm/2
 
-On Thu, Oct 14, 2021 at 03:23:31PM +0200, Miguel Ojeda wrote:
-> `__compiletime_assert` declares a fake `extern` function
-> which appears (to the compiler) to be called when the test fails.
-> 
-> Therefore, compilers may emit possibly-uninitialized warnings
-> in some cases, even if it will be an error anyway (for compilers
-> supporting the `error` attribute, e.g. GCC and Clang >= 14)
-> or a link failure (for those that do not, e.g. Clang < 14).
-> 
-> Annotating the fake function as `__noreturn` gives them
-> the information they need to avoid the warning,
-> e.g. see https://godbolt.org/z/x1v69jjYY.
-> 
-> Link: https://lore.kernel.org/llvm/202110100514.3h9CI4s0-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  include/linux/compiler_types.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index b6ff83a714ca..ca1a66b8cd2f 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -298,7 +298,13 @@ struct ftrace_likely_data {
->  #ifdef __OPTIMIZE__
->  # define __compiletime_assert(condition, msg, prefix, suffix)		\
->  	do {								\
-> -		extern void prefix ## suffix(void) __compiletime_error(msg); \
-> +		/*							\
-> +		 * __noreturn is needed to give the compiler enough	\
-> +		 * information to avoid certain possibly-uninitialized	\
-> +		 * warnings (regardless of the build failing).		\
-> +		 */							\
-> +		__noreturn extern void prefix ## suffix(void)		\
-> +			__compiletime_error(msg);			\
->  		if (!(condition))					\
->  			prefix ## suffix();				\
->  	} while (0)
+GCC 5.1 is now the minimum version.
 
-Should we not convert this to _Static_assert, now that all supported
-compilers are of recent enough vintage to support that?
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+ include/linux/compiler_attributes.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index e6ec63403965..87d1e773400c 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -104,7 +104,6 @@
+ #define __deprecated
+ 
+ /*
+- * Optional: only supported since gcc >= 5.1
+  * Optional: not supported by clang
+  * Optional: not supported by icc
+  *
+-- 
+2.33.1
+
