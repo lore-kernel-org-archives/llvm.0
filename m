@@ -1,175 +1,107 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBC32C82
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 17:34:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 649ED61151;
-	Fri, 15 Oct 2021 17:34:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634319280;
-	bh=eDQnKq79Pn+tsR6e9shj0tLh3ap+B4EafzAtoTAIySU=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-	b=izjlETbHv6qGLz4DWk3ivH0ocwgzvmlVfvRjff3W3FKurciMi9CbUcEtqE1wEGxUo
-	 CK5ctY04cWtLYLZ3cAu2XtSz5scatEmKSFoOCQAsWEeDXluQxVNN20nFWyzUqK/BQ5
-	 C3odNOXmR2nZmLVAx7gCGuetgTyha/rvf1M6Ewg6m7TSHbFZ3nTsvDDxYaimYRND1+
-	 j9R/ISO42OksE/Q95sdYusi5qb0qig7m9w3oLptlJ9KV7Y3GuOohcrD64tsOnqdyVt
-	 tY5EGdj6ybrwA4rXd5MQqXv/a+p1MzMLUlzx8sXOMFkiHZSYBg8bxkz+76Ies5zKHQ
-	 6qkpfk3xeOCtA==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 50BF927C0054;
-	Fri, 15 Oct 2021 13:34:38 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute6.internal (MEProxy); Fri, 15 Oct 2021 13:34:38 -0400
-X-ME-Sender: <xms:rrtpYXW-J2-cIntHb9SswL8GQ_ntJZaAhE11if2AiTLVxsTIwsfonw>
-    <xme:rrtpYflR21qsbu-DeH_P43A9x0XGCehDbx2VEbsf08KQhwy-xThdAoAOc17ombm1A
-    0KXcfJbNs-B4oP0v3Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddugedguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedvleehjeejvefhuddtgeegffdtjedtffegveethedvgfejieev
-    ieeufeevuedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:rrtpYTb18zEF1W7CopzUfmN_6vKdperAWY6YVON0omUsg01U3IXNVA>
-    <xmx:rrtpYSVY2ZlqaixTUm6IpX4liWvBCb9dU70vPm9rRvHIAeWSOyK0Hg>
-    <xmx:rrtpYRmKG1scLCGUqudk-nPy1UD9ufHvj01WUNrxRGv-DJeqPoD7Gg>
-    <xmx:rrtpYafUzNwiS_sVtYSyTLPLpRyLqCrBeq1gNOfle6gSGxDDOFe0VGAoXQ8>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 23E1421E0066; Fri, 15 Oct 2021 13:34:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1345-g8441cd7852-fm-20211006.001-g8441cd78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97A52C82
+	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 17:46:39 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id x27so45169804lfu.5
+        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 10:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=G3liRWXWYS1s+kXeJAAKWiMsrJmxBJ1cDV26MMJDbes=;
+        b=TnW3ABm0OVJvzPER3UibMgD2tHUWx8hIodouprolo1pQ2KcV7bKQL0W76OF0nQEwqE
+         CS3avdCajvbDwFOzmCvQPcnST3AY2ZA/5G+9H2pleAT2YuPCvd4fuoawZVYTRA5cZzky
+         NxeAh/qHsMmAgiFUrOw3qxRPCXYMZRbNLKyjci1/8UHRom3LINvZy//ZR90Pqj40D5ng
+         wS98C3Aempy+c/KSaPERJlrPKcf6KVYJuFS4TDM6TsbFL4sVXVjbZOshphSqehtntNIa
+         U/JPGmgTOdvddKiYJ/HZlKbiOtYhavrEuetc1ZTDMC/BwmQESrsbJNQzJ+AgUx3vFr+n
+         f/tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G3liRWXWYS1s+kXeJAAKWiMsrJmxBJ1cDV26MMJDbes=;
+        b=SL/cTmYzaNBGQRW9dcTMPY7kx+LOvoJ0srANGw8FEcbyUa1lNGiTNLwM4fSpbBtz3F
+         BFYCueYCqagkgvcCbTL4YoY1iu24UZzVBr5cDNj9UbYRyaTpRLn9l+ieCfGzFXxIRD0o
+         mkd582krwwMxKv4Ec3RNd/M6L89sM0uVHjMEnetKKOM4F0zrsQMOlAwUXUJcZMQKuGAH
+         VbCfIOpaiUH3aChcD6j0JZyGc6X2qbAnvd0FGR4xDM69QzkDkXfh8L/RBun1w73FVzSe
+         kNfsPiL5l9DTKGs3UMnQcVZvY69G4eaJ9T+U5UzsdslxbI6nm7fO2jOqCL3znQ+KjWWI
+         enPw==
+X-Gm-Message-State: AOAM533hmuv0TFAYB4JokxiQa7p13YUMW45gziFwp7Pv6fFL8qP0aC4o
+	AQ7Grd5ZRcKQic88dnLSiAEdMUJuM8GOXgFbZkyJiA==
+X-Google-Smtp-Source: ABdhPJzy6SjwnBkv257ZaQikJimUQZzZ6gtTxUBcl0CKOc48sbCnffXN2ruUTxquuXfacw9kpNhJsKXPMQBRIts8KKk=
+X-Received: by 2002:a05:6512:398f:: with SMTP id j15mr11738210lfu.523.1634319997584;
+ Fri, 15 Oct 2021 10:46:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <1c8baf32-169e-4f53-9637-7e6383f20dfe@www.fastmail.com>
-In-Reply-To: 
- <CABCJKufhd3=6PR=WmteJBQ5xBnmvzQb7h3cJxDSJZjLHSSH22g@mail.gmail.com>
-References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211013181658.1020262-4-samitolvanen@google.com>
- <7377e6b9-7130-4c20-a0c8-16de4620c995@www.fastmail.com> <8735p25llh.ffs@tglx>
- <eda70a35-33a8-43b4-a839-65f2a1f91bb5@www.fastmail.com>
- <CABCJKufhd3=6PR=WmteJBQ5xBnmvzQb7h3cJxDSJZjLHSSH22g@mail.gmail.com>
-Date: Fri, 15 Oct 2021 10:34:16 -0700
-From: "Andy Lutomirski" <luto@kernel.org>
-To: "Sami Tolvanen" <samitolvanen@google.com>
-Cc: "Thomas Gleixner" <tglx@linutronix.de>,
- "the arch/x86 maintainers" <x86@kernel.org>,
- "Kees Cook" <keescook@chromium.org>, "Josh Poimboeuf" <jpoimboe@redhat.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Sedat Dilek" <sedat.dilek@gmail.com>,
- "Steven Rostedt" <rostedt@goodmis.org>, linux-hardening@vger.kernel.org,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v5 03/15] linkage: Add DECLARE_NOT_CALLED_FROM_C
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+References: <20211015085148.67943-1-pbonzini@redhat.com> <YWmuPOB6/rXWqXBH@archlinux-ax161>
+In-Reply-To: <YWmuPOB6/rXWqXBH@archlinux-ax161>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 15 Oct 2021 10:46:25 -0700
+Message-ID: <CAKwvOdmnHYRqGxgx+G-_nAMC4ViYxYtTX4JMZ8b3YdXCrj=5tw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: avoid warning with -Wbitwise-instead-of-logical
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	seanjc@google.com, torvic9@mailbox.org, Jim Mattson <jmattson@google.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-
-
-On Fri, Oct 15, 2021, at 9:47 AM, Sami Tolvanen wrote:
-> On Fri, Oct 15, 2021 at 9:22 AM Andy Lutomirski <luto@kernel.org> wrot=
-e:
->>
->>
->>
->> On Fri, Oct 15, 2021, at 8:55 AM, Thomas Gleixner wrote:
->> > On Thu, Oct 14 2021 at 19:51, Andy Lutomirski wrote:
->> >> On Wed, Oct 13, 2021, at 11:16 AM, Sami Tolvanen wrote:
->> >>>
->> >>> +/*
->> >>> + * Declares a function not callable from C using an opaque type.=
- Defined as
->> >>> + * an array to allow the address of the symbol to be taken witho=
-ut '&'.
->> >>> + */
->> >> I=E2=80=99m not convinced that taking the address without using & =
-is a
->> >> laudable goal.  The magical arrays-are-pointers-too behavior of C =
-is a
->> >> mistake, not a delightful simplification.
->> >
->> >>> +#ifndef DECLARE_NOT_CALLED_FROM_C
->> >>> +#define DECLARE_NOT_CALLED_FROM_C(sym) \
->> >>> +   extern const u8 sym[]
->> >>> +#endif
->> >>
->> >
->> >> The relevant property of these symbols isn=E2=80=99t that they=E2=80=
-=99re not called
->> >> from C.  The relevant thing is that they are just and not objects =
-of a
->> >> type that the programmer cares to tell the compiler about. (Or that
->> >> the compiler understands, for that matter. On a system with XO mem=
-ory
->> >> or if they=E2=80=99re in a funny section, dereferencing them may f=
-ail.)
->> >
->> > I agree.
->> >
->> >> So I think we should use incomplete structs, which can=E2=80=99t be
->> >> dereferenced and will therefore be less error prone.
->> >
->> > While being late to that bike shed painting party, I really have to=
- ask
->> > the question _why_ can't the compiler provide an annotation for the=
-se
->> > kind of things which:
->> >
->> >     1) Make the build fail when invoked directly
->> >
->> >     2) Tell CFI that this is _NOT_ something it can understand
->> >
->> > -void clear_page_erms(void *page);
->> > +void __bikeshedme clear_page_erms(void *page);
->> >
->> > That still tells me:
->> >
->> >     1) This is a function
->> >
->> >     2) It has a regular argument which is expected to be in RDI
->> >
->> > which even allows to do analyis of e.g. the alternative call which
->> > invokes that function.
->> >
->> > DECLARE_NOT_CALLED_FROM_C(clear_page_erms);
->> >
->> > loses these properties and IMO it's a tasteless hack.
->> >
->>
->>
->> Ah, but clear_page_erms is a different beast entirely as compared to,=
- say, the syscall entry. It *is* a C function.  So I see two ways to han=
-dle it:
->>
->> 1. Make it completely opaque.  Tglx doesn=E2=80=99t like it, and I ag=
-ree, but it would *work*.
->>
->> 2. Make it a correctly typed function. In clang CFI land, this may or=
- may not be =E2=80=9Ccanonical=E2=80=9D (or non canonical?).
+On Fri, Oct 15, 2021 at 9:37 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Technically speaking the clear_page_* declarations don't need to be
-> changed for CFI, they do work fine as is, but I included them in the
-> patch as they're not actually called from C code right now. But you're
-> right, we should use a proper function declarations for these. I'll
-> drop the changes to this file in the next version.
+> On Fri, Oct 15, 2021 at 04:51:48AM -0400, Paolo Bonzini wrote:
+> > This is a new warning in clang top-of-tree (will be clang 14):
+> >
+> > In file included from arch/x86/kvm/mmu/mmu.c:27:
+> > arch/x86/kvm/mmu/spte.h:318:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+> >         return __is_bad_mt_xwr(rsvd_check, spte) |
+> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >                                                  ||
+> > arch/x86/kvm/mmu/spte.h:318:9: note: cast one or both operands to int to silence this warning
+> >
+> > Reported-by: torvic9@mailbox.org
+> > Suggested-by: Jim Mattson <jmattson@google.com>
+> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-If you were to call (with a regular C function call using ()) clear_page=
-_erms, what happens?  IMO it should either work or fail to compile. Cras=
-hing is no good.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1474
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
 >
-> I wouldn't mind having a consensus on how to deal with exception
-> handlers etc. though. Should I still use opaque types for those?
+> > ---
+> >  arch/x86/kvm/mmu/spte.h | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> > index eb7b227fc6cf..32bc7268c9ea 100644
+> > --- a/arch/x86/kvm/mmu/spte.h
+> > +++ b/arch/x86/kvm/mmu/spte.h
+> > @@ -314,9 +314,12 @@ static __always_inline bool is_rsvd_spte(struct rsvd_bits_validate *rsvd_check,
+> >        * Use a bitwise-OR instead of a logical-OR to aggregate the reserved
+> >        * bits and EPT's invalid memtype/XWR checks to avoid an extra Jcc
+> >        * (this is extremely unlikely to be short-circuited as true).
+> > +      *
+> > +      * (int) avoids clang's "use of bitwise '|' with boolean operands"
+> > +      * warning.
+> >        */
+> > -     return __is_bad_mt_xwr(rsvd_check, spte) |
+> > -            __is_rsvd_bits_set(rsvd_check, spte, level);
+> > +     return (int)__is_bad_mt_xwr(rsvd_check, spte) |
+> > +            (int)__is_rsvd_bits_set(rsvd_check, spte, level);
+> >  }
+> >
+> >  static inline bool spte_can_locklessly_be_made_writable(u64 spte)
+> > --
+> > 2.27.0
+> >
+> >
 >
 
-Yes, as they are not C functions.
 
-> Sami
+-- 
+Thanks,
+~Nick Desaulniers
