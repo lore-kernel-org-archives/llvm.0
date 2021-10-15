@@ -1,110 +1,1519 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2882C81
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 15:17:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4AF8260EB4
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 15:17:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634311020;
-	bh=0P/nqlzCxPBNYjpNGvCgDjhUfvGhQ4sWoGMp6EBS3EQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QfIIeWcPiv3PwB/krvJVEO32ocEy2fGPpblJMrJsmTChX2GH6N6v0Fg4rjAzjLnbp
-	 aEtfIMNHHSfLdPkjGBg2idWqyxm5iUSclTAmnJPaBo60gucmoqlckcJqJGNIUr2Apa
-	 inWnaRnL0v9yW3+UQxiwtuCjzc1n3Zw6gE08/lsrAbV1WjRq/oyJCJMtP8vo1Bd+IS
-	 EM2qVtap060vWwLHLSb4tUFuqiNz8rrveP5HtWMF4/a0s5u3Jp5TZIoHZnyvQ7mVJ9
-	 R7H3o+zPzqBkYUdV85KJuW16JR9Ihrx9ZdQT9Sj49JSC2n+85aRua9Wk5U+wwcQyoX
-	 6LIqUnvh0BouQ==
-Received: by mail-wr1-f52.google.com with SMTP id m22so27290781wrb.0
-        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 08:17:00 -0700 (PDT)
-X-Gm-Message-State: AOAM530j8+nZa9r5PbF6lc4cFbRTmEZUm3q2jjZzTiGawDAi7HjXynZ4
-	8ntdSIjsaSv/dvagZvtZu2JQMbBrnRqmevEpW9M=
-X-Google-Smtp-Source: ABdhPJxEPK+TqBi5jntB9NZ2aiQ169wvUQqCk0nO/GYgvmQPSRyiZRUTCn36xHT9UsW2ewN4zNDGavkD+wcIhmpOVJQ=
-X-Received: by 2002:adf:b1c4:: with SMTP id r4mr15042210wra.428.1634311018725;
- Fri, 15 Oct 2021 08:16:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71CB2C81
+	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 15:18:19 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id om14so7396349pjb.5
+        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 08:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=XTXIVo5wPnT3+k50ClxQ6F7PGj2/naQMaC7Q3PCo6BM=;
+        b=bOkow6IGO7/t6g715ZKUz0gN+D210RBLNfqDYMqZesMxjH6MXl2+wHpW3KJ1i7fsSs
+         579kBaifH5+7T4X/LuljbRkYUyCsJ08LotnXNa2pSse8dGuQE5s/nV6qpSJykw3Qq4g2
+         IDz8REC0O5lulTmM/fKAbte0ZjfbGEUjL37IXqeecmns/Rr2aPcJw5vSMkSCSu5TZz1I
+         wO/Cg2swQMnPfsEJDLyvB29W5ZCH+aNJPGZ/54DBsOPC74IMHqsgzll1R8axaT3+PFyu
+         MxrXvN0xs8Zq9y2FEzAMcULlE4XcjxwB96EnAIeWKc2TmNj8nVCC900ajJ6hJPhn8riF
+         8GFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=XTXIVo5wPnT3+k50ClxQ6F7PGj2/naQMaC7Q3PCo6BM=;
+        b=ME9ULOC18MrPT5U/kmbZVtxVKcJynE8Fi23FXS6/5Rv2QtgVfumJWqsw2lu5Dy2a2Q
+         xRgeypiyIvEfsmvNrZVu9lS25vki+Qyzeqe6WjZF3BhKCHCFAWjC+8yCmclHuhqcNiv/
+         AMvj5bOq9vroYaN9wRBK7XBKjLMlOluVSBfuKbbFuM5m+KXQg0iKqIFW6poKojPTlA9n
+         0MNXuSvLuZx6HXbG9jZmGDpMUr7ba+2+t1Z2dOkfhIMhBPcXNViZzllQuqvdZLMBK+4y
+         ZzRnIjRTUQVgq+SROogKMECzqn3KeqlNmDRvsRhuYSVf3dBPBKj58svgcP+xiqz9v2IW
+         C7hw==
+X-Gm-Message-State: AOAM530qGyajEGyjxXDIyKT9lxXegi5zjLIq6UQTdEEOWFMfT0hdVn8p
+	qG1XtG3hLUH+2smNeVvR4p9CmJhVXL3rXiJV
+X-Google-Smtp-Source: ABdhPJwHJuPH875iIoHE7PdSWxD9wdaEdUbmlMpfePBUuSVu0RCPe8tcIlCsm779lWzn59KdPWwodw==
+X-Received: by 2002:a17:902:e748:b0:13f:205a:f93f with SMTP id p8-20020a170902e74800b0013f205af93fmr11533644plf.29.1634311098064;
+        Fri, 15 Oct 2021 08:18:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k1sm5097399pjj.54.2021.10.15.08.18.17
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Oct 2021 08:18:17 -0700 (PDT)
+Message-ID: <61699bb9.1c69fb81.e2f2e.fd55@mx.google.com>
+Date: Fri, 15 Oct 2021 08:18:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211013150232.2942146-1-arnd@kernel.org> <328f581e-7f1d-efc3-036c-66e729297e9c@gmail.com>
- <132eb082-c646-765b-7b32-8a9943d10d0e@nvidia.com>
-In-Reply-To: <132eb082-c646-765b-7b32-8a9943d10d0e@nvidia.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 15 Oct 2021 17:16:42 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0QR8a6vxp6r_RtN5QvwxR-umKy6Ye7VNyyt_1BS4yQ7Q@mail.gmail.com>
-Message-ID: <CAK8P3a0QR8a6vxp6r_RtN5QvwxR-umKy6Ye7VNyyt_1BS4yQ7Q@mail.gmail.com>
-Subject: Re: [PATCH] mlx5: allow larger xsk chunk_size
-To: Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc: Tariq Toukan <ttoukan.linux@gmail.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Aya Levin <ayal@nvidia.com>, 
-	Eran Ben Elisha <eranbe@nvidia.com>, Vladyslav Tarasiuk <vladyslavt@nvidia.com>, 
-	Jonathan Lemon <jonathan.lemon@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Networking <netdev@vger.kernel.org>, linux-rdma <linux-rdma@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20211015
+X-Kernelci-Report-Type: build
+Subject: next/master build: 162 builds: 21 failed, 141 passed, 14 errors,
+ 155 warnings (next-20211015)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, Oct 15, 2021 at 3:27 PM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
-> > On 10/13/2021 6:02 PM, Arnd Bergmann wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >>
-> >> When building with 64KB pages, clang points out that xsk->chunk_size
-> >> can never be PAGE_SIZE:
-> >>
-> >> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error:
-> >> result of comparison of constant 65536 with expression of type 'u16'
-> >> (aka 'unsigned short') is always false
-> >> [-Werror,-Wtautological-constant-out-of-range-compare]
-> >>          if (xsk->chunk_size > PAGE_SIZE ||
-> >>              ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-> >>
-> >> I'm not familiar with the details of this code, but from a quick look
-> >> I found that it gets assigned from a 32-bit variable that can be
-> >> PAGE_SIZE, and that the layout of 'xsk' is not part of an ABI or
-> >> a hardware structure, so extending the members to 32 bits as well
-> >> should address both the behavior on 64KB page kernels, and the
-> >> warning I saw.
->
-> This change is not enough to fix the behavior. mlx5e_xsk_is_pool_sane
-> checks that chunk_size <= 65535. Your patch just silences the warning,
-> but doesn't improve 64 KB page support.
->
-> While mlx5e_xsk_is_pool_sane is simply a sanity check, it's not enough
-> to remove it to support 64 KB pages. It will need careful review of
-> assumptions in data path, because many places use 16-bit values for
-> packet size and headroom, and it comes down to the hardware interface
-> (see mpwrq_get_cqe_byte_cnt - the hardware passes the incoming packet
-> size as a 16-bit value) and hardware limitations.
->
-> For example, MLX5_MPWQE_LOG_STRIDE_SZ_MAX is defined to 13 (Tariq, is it
-> a hardware limitation or just an arbitrary value?), which means the max
-> stride size in striding RQ is 2^13 = 8192, which will make the driver
-> fall back to legacy RQ (slower). We also need to check if legacy RQ
-> works fine with such large buffers, but so far I didn't find any reason
-> why not.
->
-> I genuinely think allocating 64 KB per packet is waste of memory, and
-> supporting it isn't very useful, as long as it's possible to use smaller
-> frame sizes, and given that it would be slower because of lack of
-> striding RQ support.
+next/master build: 162 builds: 21 failed, 141 passed, 14 errors, 155 warnin=
+gs (next-20211015)
 
-Fair enough. I wouldn't be concerned about wasting memory here,
-as 64KB pages are much more wasteful in other areas already, but
-if there are no possible upsides and making it work is hard, then
-we don't need to bother.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20211015/
 
-> It could be implemented as a feature for net-next, though, but only
-> after careful testing and expanding all relevant variables (the hardware
-> also uses a few bits as flags, so the max frame size will be smaller
-> than 2^32 anyway, but hopefully bigger than 2^16 if there are no other
-> limitations).
->
-> For net, I suggest to silence the warning in some other way (cast type
-> before comparing?)
+Tree: next
+Branch: master
+Git Describe: next-20211015
+Git Commit: 7c832d2f9b959e3181370c8b0dacaf9efe13fc05
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Ok, sending the trivial workaround as v2 now.
+Build Failures Detected:
 
-        Arnd
+arm64:
+    allmodconfig: (clang-13) FAIL
+
+arm:
+    allnoconfig: (clang-10) FAIL
+    aspeed_g5_defconfig: (clang-10) FAIL
+    multi_v7_defconfig: (clang-10) FAIL
+    am200epdkit_defconfig: (gcc-8) FAIL
+    badge4_defconfig: (gcc-8) FAIL
+    cerfcube_defconfig: (gcc-8) FAIL
+    corgi_defconfig: (gcc-8) FAIL
+    lart_defconfig: (gcc-8) FAIL
+    magician_defconfig: (gcc-8) FAIL
+    pcm027_defconfig: (gcc-8) FAIL
+    simpad_defconfig: (gcc-8) FAIL
+    socfpga_defconfig: (gcc-8) FAIL
+    viper_defconfig: (gcc-8) FAIL
+
+mips:
+    decstation_64_defconfig: (gcc-8) FAIL
+    ip27_defconfig: (gcc-8) FAIL
+    ip28_defconfig: (gcc-8) FAIL
+    lemote2f_defconfig: (gcc-8) FAIL
+    mtx1_defconfig: (gcc-8) FAIL
+    rt305x_defconfig: (gcc-8) FAIL
+
+x86_64:
+    x86_64_defconfig: (clang-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    tinyconfig (gcc-8): 1 warning
+
+arm64:
+    allmodconfig (clang-13): 1 error
+
+arm:
+    allnoconfig (clang-10): 1 error
+    am200epdkit_defconfig (gcc-8): 1 error
+    aspeed_g5_defconfig (clang-10): 2 errors
+    magician_defconfig (gcc-8): 1 error
+    multi_v7_defconfig (clang-10): 5 errors, 8 warnings
+    multi_v7_defconfig (clang-13): 10 warnings
+    socfpga_defconfig (gcc-8): 2 errors, 5 warnings
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 3 warnings
+    ar7_defconfig (gcc-8): 2 warnings
+    ath25_defconfig (gcc-8): 2 warnings
+    bcm63xx_defconfig (gcc-8): 1 warning
+    bigsur_defconfig (gcc-8): 6 warnings
+    bmips_be_defconfig (gcc-8): 1 warning
+    bmips_stb_defconfig (gcc-8): 1 warning
+    capcella_defconfig (gcc-8): 2 warnings
+    cavium_octeon_defconfig (gcc-8): 6 warnings
+    ci20_defconfig (gcc-8): 3 warnings
+    cu1000-neo_defconfig (gcc-8): 2 warnings
+    cu1830-neo_defconfig (gcc-8): 2 warnings
+    decstation_64_defconfig (gcc-8): 6 warnings
+    decstation_defconfig (gcc-8): 2 warnings
+    decstation_r4k_defconfig (gcc-8): 2 warnings
+    e55_defconfig (gcc-8): 2 warnings
+    fuloong2e_defconfig (gcc-8): 6 warnings
+    gpr_defconfig (gcc-8): 2 warnings
+    ip22_defconfig (gcc-8): 2 warnings
+    ip32_defconfig (gcc-8): 6 warnings
+    jmr3927_defconfig (gcc-8): 1 warning
+    lemote2f_defconfig (gcc-8): 6 warnings
+    loongson1b_defconfig (gcc-8): 2 warnings
+    loongson1c_defconfig (gcc-8): 2 warnings
+    loongson2k_defconfig (gcc-8): 6 warnings
+    loongson3_defconfig (gcc-8): 6 warnings
+    malta_defconfig (gcc-8): 2 warnings
+    malta_kvm_defconfig (gcc-8): 2 warnings
+    malta_qemu_32r6_defconfig (gcc-8): 2 warnings
+    maltaaprp_defconfig (gcc-8): 2 warnings
+    maltasmvp_defconfig (gcc-8): 2 warnings
+    maltaup_defconfig (gcc-8): 2 warnings
+    maltaup_xpa_defconfig (gcc-8): 2 warnings
+    mpc30x_defconfig (gcc-8): 2 warnings
+    mtx1_defconfig (gcc-8): 2 warnings
+    nlm_xlp_defconfig (gcc-8): 6 warnings
+    nlm_xlr_defconfig (gcc-8): 2 warnings
+    omega2p_defconfig (gcc-8): 1 warning
+    pic32mzda_defconfig (gcc-8): 2 warnings
+    qi_lb60_defconfig (gcc-8): 2 warnings
+    rb532_defconfig (gcc-8): 2 warnings
+    rbtx49xx_defconfig (gcc-8): 2 warnings
+    rt305x_defconfig (gcc-8): 2 warnings
+    sb1250_swarm_defconfig (gcc-8): 4 warnings
+    tb0226_defconfig (gcc-8): 2 warnings
+    vocore2_defconfig (gcc-8): 1 warning
+    workpad_defconfig (gcc-8): 2 warnings
+
+riscv:
+
+x86_64:
+    allnoconfig (clang-10): 3 warnings
+    x86_64_defconfig (clang-10): 1 error
+
+Errors summary:
+
+    2    arch/arm/kernel/entry-armv.S:504:4: error: invalid instruction, an=
+y one of the following would fix this:
+    2    arch/arm/kernel/entry-armv.S:500:4: error: invalid instruction, an=
+y one of the following would fix this:
+    2    api.c:(.text+0x4e4): undefined reference to `crypto_alg_tested'
+    1    drivers/misc/eeprom/eeprom_93xx46.c:424:1: error: redefinition of =
+'__mod_of__eeprom_93xx46_of_table_device_table'
+    1    drivers/mfd/altera-a10sr.c:159:1: error: type defaults to =E2=80=
+=98int=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-W=
+error=3Dimplicit-int]
+    1    drivers/mfd/altera-a10sr.c:153:1: error: type defaults to =E2=80=
+=98int=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-W=
+error=3Dimplicit-int]
+    1    clang: error: unsupported argument '-mimplicit-it=3Dalways' to opt=
+ion 'Wa,'
+    1    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemb=
+le to exactly 4 bytes
+    1    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+    1    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+    1    <instantiation>:2:2: error: unknown use of instruction mnemonic wi=
+thout a size suffix
+
+Warnings summary:
+
+    127  <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
+ted [-Wcpp]
+    14   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    4    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv7-a' [-Wunused-command-line-argument]
+    1    drivers/mfd/altera-a10sr.c:159:1: warning: parameter names (withou=
+t types) in function declaration
+    1    drivers/mfd/altera-a10sr.c:159:1: warning: data definition has no =
+type or storage class
+    1    drivers/mfd/altera-a10sr.c:153:1: warning: parameter names (withou=
+t types) in function declaration
+    1    drivers/mfd/altera-a10sr.c:153:1: warning: data definition has no =
+type or storage class
+    1    cc1: some warnings being treated as errors
+    1    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't f=
+ind starting instruction
+    1    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't f=
+ind starting instruction
+    1    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): =
+can't find starting instruction
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text+0x70373): Section mismatch in re=
+ference from the function __nodes_weight() to the variable .init.data:numa_=
+nodes_parsed
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/misc/eeprom/eeprom_93xx46.c:424:1: error: redefinition of '__mo=
+d_of__eeprom_93xx46_of_table_device_table'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): can't=
+ find starting instruction
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    clang: error: unsupported argument '-mimplicit-it=3Dalways' to option '=
+Wa,'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    api.c:(.text+0x4e4): undefined reference to `crypto_alg_tested'
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:500:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:504:4: error: invalid instruction, any one=
+ of the following would fix this:
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 6 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-13) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 6 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    api.c:(.text+0x4e4): undefined reference to `crypto_alg_tested'
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 FAIL, 5 errors, 8 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:500:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:504:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemble to=
+ exactly 4 bytes
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, =
+0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 FAIL, 2 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/mfd/altera-a10sr.c:153:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-Werror=
+=3Dimplicit-int]
+    drivers/mfd/altera-a10sr.c:159:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-Werror=
+=3Dimplicit-int]
+
+Warnings:
+    drivers/mfd/altera-a10sr.c:153:1: warning: data definition has no type =
+or storage class
+    drivers/mfd/altera-a10sr.c:153:1: warning: parameter names (without typ=
+es) in function declaration
+    drivers/mfd/altera-a10sr.c:159:1: warning: data definition has no type =
+or storage class
+    drivers/mfd/altera-a10sr.c:159:1: warning: parameter names (without typ=
+es) in function declaration
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mism=
+atches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text+0x70373): Section mismatch in referen=
+ce from the function __nodes_weight() to the variable .init.data:numa_nodes=
+_parsed
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---
+For more info write to <info@kernelci.org>
