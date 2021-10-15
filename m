@@ -1,107 +1,112 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97A52C82
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 17:46:39 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id x27so45169804lfu.5
-        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 10:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G3liRWXWYS1s+kXeJAAKWiMsrJmxBJ1cDV26MMJDbes=;
-        b=TnW3ABm0OVJvzPER3UibMgD2tHUWx8hIodouprolo1pQ2KcV7bKQL0W76OF0nQEwqE
-         CS3avdCajvbDwFOzmCvQPcnST3AY2ZA/5G+9H2pleAT2YuPCvd4fuoawZVYTRA5cZzky
-         NxeAh/qHsMmAgiFUrOw3qxRPCXYMZRbNLKyjci1/8UHRom3LINvZy//ZR90Pqj40D5ng
-         wS98C3Aempy+c/KSaPERJlrPKcf6KVYJuFS4TDM6TsbFL4sVXVjbZOshphSqehtntNIa
-         U/JPGmgTOdvddKiYJ/HZlKbiOtYhavrEuetc1ZTDMC/BwmQESrsbJNQzJ+AgUx3vFr+n
-         f/tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G3liRWXWYS1s+kXeJAAKWiMsrJmxBJ1cDV26MMJDbes=;
-        b=SL/cTmYzaNBGQRW9dcTMPY7kx+LOvoJ0srANGw8FEcbyUa1lNGiTNLwM4fSpbBtz3F
-         BFYCueYCqagkgvcCbTL4YoY1iu24UZzVBr5cDNj9UbYRyaTpRLn9l+ieCfGzFXxIRD0o
-         mkd582krwwMxKv4Ec3RNd/M6L89sM0uVHjMEnetKKOM4F0zrsQMOlAwUXUJcZMQKuGAH
-         VbCfIOpaiUH3aChcD6j0JZyGc6X2qbAnvd0FGR4xDM69QzkDkXfh8L/RBun1w73FVzSe
-         kNfsPiL5l9DTKGs3UMnQcVZvY69G4eaJ9T+U5UzsdslxbI6nm7fO2jOqCL3znQ+KjWWI
-         enPw==
-X-Gm-Message-State: AOAM533hmuv0TFAYB4JokxiQa7p13YUMW45gziFwp7Pv6fFL8qP0aC4o
-	AQ7Grd5ZRcKQic88dnLSiAEdMUJuM8GOXgFbZkyJiA==
-X-Google-Smtp-Source: ABdhPJzy6SjwnBkv257ZaQikJimUQZzZ6gtTxUBcl0CKOc48sbCnffXN2ruUTxquuXfacw9kpNhJsKXPMQBRIts8KKk=
-X-Received: by 2002:a05:6512:398f:: with SMTP id j15mr11738210lfu.523.1634319997584;
- Fri, 15 Oct 2021 10:46:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D5A2C82
+	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 17:57:32 +0000 (UTC)
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1634320650;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nJ0THKXxd/Bt+ZOJhojuTzHMSTcdTYp1X+BGRWm6h4g=;
+	b=AmJt9r5Wubqb7bqcK7HDmhMVd2IlIBGgmSCKDUp5K/5o5V6Uh/oRsuJPA9R+z3eKwJTuPj
+	cbr/jHp9zoRYrsH05O2ABxTbz/ygz9YHb2Ldy4/xiuCYkD+9/BpE48QjLMHEKjTbby/gXr
+	ZDqzXr8mnDn6+yf7dkpBrdEPRBzHpg7szyQL+VEwzWdV0kfMfeXLPZDPkW1xYDQLiXrT1k
+	g4ExYzVi/cyrGEcMw3QAErKB2sAdsdLUaKkra411yZ+B30sEqcRuaXEojh1k7wzOT1Ke/L
+	RM+BzrACLxY9/aN7DICkUA94TM70plzX4NiUXtv5+l6k8hn8gn25dzTbQ3DcwQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1634320650;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nJ0THKXxd/Bt+ZOJhojuTzHMSTcdTYp1X+BGRWm6h4g=;
+	b=Av/zrPQ98wmRxY7Yh8H4q2ZJOvvECSItHXiAM1Did8Vc8w8w8mFy8UkB5thu3zMMUloM0h
+	6LVOlDPSdTb2C4Dg==
+To: Andy Lutomirski <luto@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, the arch/x86 maintainers <x86@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Sedat
+ Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-hardening@vger.kernel.org, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 03/15] linkage: Add DECLARE_NOT_CALLED_FROM_C
+In-Reply-To: <8735p25llh.ffs@tglx>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211013181658.1020262-4-samitolvanen@google.com>
+ <7377e6b9-7130-4c20-a0c8-16de4620c995@www.fastmail.com>
+ <8735p25llh.ffs@tglx>
+Date: Fri, 15 Oct 2021 19:57:30 +0200
+Message-ID: <87zgra41dh.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211015085148.67943-1-pbonzini@redhat.com> <YWmuPOB6/rXWqXBH@archlinux-ax161>
-In-Reply-To: <YWmuPOB6/rXWqXBH@archlinux-ax161>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 15 Oct 2021 10:46:25 -0700
-Message-ID: <CAKwvOdmnHYRqGxgx+G-_nAMC4ViYxYtTX4JMZ8b3YdXCrj=5tw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: avoid warning with -Wbitwise-instead-of-logical
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	seanjc@google.com, torvic9@mailbox.org, Jim Mattson <jmattson@google.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Fri, Oct 15, 2021 at 9:37 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Fri, Oct 15 2021 at 17:55, Thomas Gleixner wrote:
+> On Thu, Oct 14 2021 at 19:51, Andy Lutomirski wrote:
+>> On Wed, Oct 13, 2021, at 11:16 AM, Sami Tolvanen wrote:
+> That still tells me:
 >
-> On Fri, Oct 15, 2021 at 04:51:48AM -0400, Paolo Bonzini wrote:
-> > This is a new warning in clang top-of-tree (will be clang 14):
-> >
-> > In file included from arch/x86/kvm/mmu/mmu.c:27:
-> > arch/x86/kvm/mmu/spte.h:318:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-> >         return __is_bad_mt_xwr(rsvd_check, spte) |
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >                                                  ||
-> > arch/x86/kvm/mmu/spte.h:318:9: note: cast one or both operands to int to silence this warning
-> >
-> > Reported-by: torvic9@mailbox.org
-> > Suggested-by: Jim Mattson <jmattson@google.com>
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>     1) This is a function
+>     
+>     2) It has a regular argument which is expected to be in RDI
 >
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1474
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-
+> which even allows to do analyis of e.g. the alternative call which
+> invokes that function.
 >
-> > ---
-> >  arch/x86/kvm/mmu/spte.h | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> > index eb7b227fc6cf..32bc7268c9ea 100644
-> > --- a/arch/x86/kvm/mmu/spte.h
-> > +++ b/arch/x86/kvm/mmu/spte.h
-> > @@ -314,9 +314,12 @@ static __always_inline bool is_rsvd_spte(struct rsvd_bits_validate *rsvd_check,
-> >        * Use a bitwise-OR instead of a logical-OR to aggregate the reserved
-> >        * bits and EPT's invalid memtype/XWR checks to avoid an extra Jcc
-> >        * (this is extremely unlikely to be short-circuited as true).
-> > +      *
-> > +      * (int) avoids clang's "use of bitwise '|' with boolean operands"
-> > +      * warning.
-> >        */
-> > -     return __is_bad_mt_xwr(rsvd_check, spte) |
-> > -            __is_rsvd_bits_set(rsvd_check, spte, level);
-> > +     return (int)__is_bad_mt_xwr(rsvd_check, spte) |
-> > +            (int)__is_rsvd_bits_set(rsvd_check, spte, level);
-> >  }
-> >
-> >  static inline bool spte_can_locklessly_be_made_writable(u64 spte)
-> > --
-> > 2.27.0
-> >
-> >
+> DECLARE_NOT_CALLED_FROM_C(clear_page_erms);
 >
+> loses these properties and IMO it's a tasteless hack.
 
+Look:
 
--- 
+SYSCALL_DEFINE2(set_robust_list, struct robust_list_head __user *, head,
+                size_t, len)
+
+Not beautiful, but it gives the information which is needed and it tells
+me clearly what this is about. While the above lumps everything together
+whatever it is.
+
+Having __bikeshedme would allow to do:
+
+   __hardware_call
+   __xenhv_call
+   __inline_asm_call
+
+or such, which clearly tells how the function should be used and it can
+even be validated by tooling.
+
+You could to that with macros as well, but thats not what you offered.
+
+Seriously, if you want to sell me that stuff, then you really should
+offer me something which has a value on its own and makes it palatable
+to me. That's not something new. See:
+
+  https://lore.kernel.org/lkml/alpine.LFD.2.00.1001251002430.3574@localhost.localdomain/
+
+That said, I still want to have a coherent technical explanation why the
+compiler people cannot come up with a sensible annotation for these
+things.
+
+I'm tired of this attitude, that they add features and then ask us to
+make our code more ugly.
+
+It's not a well hidden secret that the kernel uses these kind of
+constructs. So why on earth can't they be bothered to think about these
+things upfront and offer us something nice and useful?
+
 Thanks,
-~Nick Desaulniers
+
+        tglx
+
+
+
+
+
+
+
