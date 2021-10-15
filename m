@@ -1,56 +1,52 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D782C82
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 07:56:03 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id t9so37423840lfd.1
-        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 00:56:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D2E2C82
+	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 08:11:19 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id u21so35116794lff.8
+        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 01:11:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PPuRIwNEu3lQ7n00DIZZ0IEDneXxbqy0QPWov0TPJ18=;
-        b=L8oJ8X1bIATNS1p3u3vouYKH65VE2DR6h2LWNm7iTIOMl8180IJCUrIHQf/6g90Gu2
-         9VluYDwjPG3l1Pam3kWi3MywYUlDA+TIxHnncxK5juhRBCksbiIAhfzpXs4ZXIwD5L5Z
-         zFEEhjioY0ohlIxXA3LfL1QXx0NVGQgUQwJik=
+        bh=JRDPxtfCq50zpyNDk7SIx0iGGT8HaQBw5rSfPbd7iTQ=;
+        b=QNsjF+pJTWOMZhjw7rFcipU7+h2s5KpOHgBrwm6lH/lqGMk7OaZ2hTRTKef3yg0Py5
+         aRoWZeR6BPcNBmWvduX/SdxCL2fe7yZzctVtpd+8igSsQ9oQ9QeEn4vOtP9nNF0j3Tai
+         hYuIzFUkRVI4QOmnPsStgrRgLrxmQ6ob6x8cA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PPuRIwNEu3lQ7n00DIZZ0IEDneXxbqy0QPWov0TPJ18=;
-        b=bt37nrsiedJ7guYcHzqy/8mSzR7H98ZW53pKdXaYK/id3WVQMShsA58rgkyig4qX/R
-         ZYC5gVKQlbLEv/BSai9n51d2NBplW2FX4C8Gn8OlEDkdNrfYsOOdUkNdeoTafOTybOU7
-         nEbJ33fN7D+XmCaBJ2hGqeWyx/h1ZSh4O4Js0nGkzCsQDQTefXrXAibde76j+V0PrX9i
-         8nmIIGwjR64y/LZjnboh5lFjgdBMnyvitxTwSQMUf9SCoWfmPm01gmnTyy6HBYHQ4SPG
-         csmT6szZjKGwYzjIG/XDkJpIOu2zPGMWv/ua7e3kpXQDe90bddlhFht2b8c89Ns5yL38
-         6wfA==
-X-Gm-Message-State: AOAM531oy5EbVUkhQqS5vWmSyUnBJHGM/Kx+bXX5Mn2lFpVawUoidxAF
-	WzvHcfCn32432oDGVi3KRJKOgQ==
-X-Google-Smtp-Source: ABdhPJzdUtRux6WI2D2oEDRHfy11ixOE81eDxDr3iZieeFyjgZ3goRG48l7Ign83ZwlxQ3ExYNu+FQ==
-X-Received: by 2002:a2e:9c8d:: with SMTP id x13mr11362051lji.29.1634284561422;
-        Fri, 15 Oct 2021 00:56:01 -0700 (PDT)
+        bh=JRDPxtfCq50zpyNDk7SIx0iGGT8HaQBw5rSfPbd7iTQ=;
+        b=J3eFiCbZUcOgx/cWxUOd8W7JBCmJdD/qBtmiXsRESUstBS8YAeAeDFJn7QpyWBhUtZ
+         haWHZq3KG+Gl+PWRtqNbdhzqC3p4o2qXxTa6m1A1r28oJQovGjj3Yy+4aYR9j+7+WHgv
+         RxqxWCHrJaMVys2Et/O92dbxoYfwPJReotRk+rFb/yj4n/BH5eFShXPYF40/Nh13PLyJ
+         MdJVagRNvlRhCJuVC60MnJBiZwbxihN2+9ADBjoV6spyjcZhdbYhnub0+2CkAzBQxlU6
+         Uas+/vGBADbru2qkN81MNfEJhd9NMd7CgQ7HjJwnyMXcEnEGNYqsj/dJc4QZPS0ZPi3h
+         uHMw==
+X-Gm-Message-State: AOAM531yrzz10L671MhApFFERlIx6LYRYD+j7D6yrWrLhIihi6wHY/b+
+	621RQSdEVVbrAQ+M6prHGZDWtQ==
+X-Google-Smtp-Source: ABdhPJzQn7X944scb3wsOleSNv4N/ilxR7afsW+PZ7Qx7j1bzP8X26noc9+mXwwjYASdZLAcuR/gqQ==
+X-Received: by 2002:ac2:57db:: with SMTP id k27mr10179209lfo.674.1634285477914;
+        Fri, 15 Oct 2021 01:11:17 -0700 (PDT)
 Received: from [172.16.11.1] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id s10sm478462lji.50.2021.10.15.00.55.59
+        by smtp.gmail.com with ESMTPSA id m27sm437151lfc.178.2021.10.15.01.11.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Oct 2021 00:56:00 -0700 (PDT)
+        Fri, 15 Oct 2021 01:11:17 -0700 (PDT)
 Subject: Re: [PATCH] compiler_types: mark __compiletime_assert failure as
  __noreturn
 To: Nick Desaulniers <ndesaulniers@google.com>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>,
- linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Linus Torvalds <torvalds@linux-foundation.org>, Joe Perches <joe@perches.com>
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Linus Torvalds <torvalds@linux-foundation.org>
 References: <20211014132331.GA4811@kernel.org>
  <YWhGQLHnA9BIVBpr@hirez.programming.kicks-ass.net>
  <CAKwvOdnkDUfRKzmLThQGW02Ew6x=KM0MQyHge7=kc673NYxo2g@mail.gmail.com>
- <CANiq72nt+8bCGAm8yhvTZfS64ovOi9_U=Gym7biUhdEsc3Neaw@mail.gmail.com>
- <CANiq72=UVCmjr1tpSwcoOkid5tWZirKCnV17_Peqy-LBmEQHEg@mail.gmail.com>
- <CAKwvOdkSFhzSwo2hfFjXXHypC8eU+VBCnRVjvNima7qx85z65Q@mail.gmail.com>
 From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <e8d28845-3931-c122-f398-f3eaed9e659a@rasmusvillemoes.dk>
-Date: Fri, 15 Oct 2021 09:55:58 +0200
+Message-ID: <d1c957c4-a2df-935c-2992-3540f05fb110@rasmusvillemoes.dk>
+Date: Fri, 15 Oct 2021 10:11:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 Precedence: bulk
@@ -59,117 +55,30 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdkSFhzSwo2hfFjXXHypC8eU+VBCnRVjvNima7qx85z65Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdnkDUfRKzmLThQGW02Ew6x=KM0MQyHge7=kc673NYxo2g@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-On 14/10/2021 20.55, Nick Desaulniers wrote:
-> On Thu, Oct 14, 2021 at 11:41 AM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
+On 14/10/2021 19.48, Nick Desaulniers wrote:
+> On Thu, Oct 14, 2021 at 8:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >>
->> On Thu, Oct 14, 2021 at 8:33 PM Miguel Ojeda
->> <miguel.ojeda.sandonis@gmail.com> wrote:
->>>
->>> That would be a nice to do, but I am not sure about introducing one
->>> more macro about this... I think it would be simpler to submit patches
->>> for moves into `static_assert` even if we have to "flip" the meaning.
-> 
-> $ grep -r BUILD_BUG_ON | wc -l
-> 3405
-> 
->> Actually, what would be ideal is a compiler-backed lint that checks
->> whether it could be an `static_assert`, perhaps in clang-tidy?
-> 
-> Oh, that is a good idea.  There is one already for recommending the
-> use of static_assert instead of assert.  That's actually very nice.
 
-So I did
+> I'm not sure how worthwhile that yakshave would be, 
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index b6ff83a714ca..e212220216e8 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -295,12 +295,17 @@ struct ftrace_likely_data {
- # define __compiletime_object_size(obj) -1
- #endif
+A yakshave that would be worthwhile is to kill off the macro
+compiletime_assert() completely - three is a crowd. It sounds like it
+would be implemented in terms of _Static_assert, but it's actually
+__attribute__(error). We can fold the definition of compiletime_assert
+into BUILD_BUG_ON_MSG.
 
-+#include <linux/const.h>
-+
- #ifdef __OPTIMIZE__
- # define __compiletime_assert(condition, msg, prefix, suffix)          \
-        do {                                                            \
-                extern void prefix ## suffix(void)
-__compiletime_error(msg); \
-+               extern void prefix ## suffix ## ice(void)
-__compiletime_warning("Ice ice baby"); \
-                if (!(condition))                                       \
-                        prefix ## suffix();                             \
-+               if (__is_constexpr(condition))                          \
-+                       prefix ## suffix ## ice();                      \
-        } while (0)
- #else
- # define __compiletime_assert(condition, msg, prefix, suffix) do { }
-while (0)
+The users in rwonce.h should just be changed to static_assert, and then
+there are very few random users left, which can either be static_assert
+or BUILD_BUG_ON_MSG.
 
-and that throws a gazillion warnings. Picking one at random shows that
-container_of() has a BUILD_BUG_ON. So we could do
-
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 2776423a587e..0a1969b11619 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -492,9 +492,9 @@ static inline void ftrace_dump(enum ftrace_dump_mode
-oops_dump_mode) { }
-  */
- #define container_of(ptr, type, member) ({                             \
-        void *__mptr = (void *)(ptr);                                   \
--       BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
--                        !__same_type(*(ptr), void),                    \
--                        "pointer type mismatch in container_of()");    \
-+       static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-+                     __same_type(*(ptr), void),                        \
-+                     "pointer type mismatch in container_of()");       \
-        ((type *)(__mptr - offsetof(type, member))); })
-
- /**
-@@ -507,9 +507,9 @@ static inline void ftrace_dump(enum ftrace_dump_mode
-oops_dump_mode) { }
-  */
- #define container_of_safe(ptr, type, member) ({
-        \
-        void *__mptr = (void *)(ptr);                                   \
--       BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
--                        !__same_type(*(ptr), void),                    \
--                        "pointer type mismatch in container_of()");    \
-+       static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-+                     __same_type(*(ptr), void),                        \
-+                     "pointer type mismatch in container_of_safe()");  \
-        IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :                     \
-                ((type *)(__mptr - offsetof(type, member))); })
-
-[fixing the copy-pasto in container_of_safe while at it].
-
-Basically, all BUILD_BUG_ONs like that that do type checking are very
-obviously candidates for using static_assert instead (they very
-naturally go at the end of all the locally declared variables, so one
-won't hit the declaration-after-statement problem that can otherwise
-prevent using static_assert).
-
-> I was playing with trying to adapt clang-tidy's C++11 `auto` fixit to
-> work on GNU C code to automate the replacement of:
-> 
-> __typeof(x) y = (x);
-> 
-> with:
-> 
-> __auto_type y = (x);
-> 
-> in macros.  That's perhaps interesting, too.  Given the volume of code
-> in the kernel, I wouldn't waste time with one off patches;
-
-Well, for the kind of macros that are used _everywhere_ a few one-off
-patches might be in order. It's also interesting if one could measure
-any speedup from switching those core macros to static_assert.
+Why do we even have a no-op version if !__OPTIMIZE__? AFAIK there's no
+CONFIG_O0 option, and such a build wouldn't be interesting at all - it
+can't be expected to boot, and it would likely throw warnings left and
+right.
 
 Rasmus
