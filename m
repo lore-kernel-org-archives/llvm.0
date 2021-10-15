@@ -1,108 +1,110 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12E42C81
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 14:41:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5987761212
-	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 14:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2882C81
+	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 15:17:00 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4AF8260EB4
+	for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 15:17:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634308871;
-	bh=3XcFcSTdDuaBZvT4X6ivFNuNq8b+jyD0BZAbI/9zmJo=;
+	s=k20201202; t=1634311020;
+	bh=0P/nqlzCxPBNYjpNGvCgDjhUfvGhQ4sWoGMp6EBS3EQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=E7NCpliLQPe8kjkpVCfMyV0ROO90T85LPbn9DFKZD7elKoLCI2niGKgXA1bHbkJ4w
-	 RU50fd2IbHe1RHHQBYy6i20edABMMBhuXWql/tqGFrdksfwEQeEKaGd2bgtkckoTU3
-	 dwEWZO2vLX0hdMc+sH7GTBFTF0rM6uoLJJgxpMhvFoMybFw73RIM3DqM3gP/VmI+Bs
-	 NOxEhZx/XBAWJrHUCySX6p8/XRvB8DraVK6vcPzqU5N4ngcupzcg38xUqbgljYSGxQ
-	 WHy7C/mudOLwNadj+xIZKOFXahKdDDcZb0js2ZMF1GF/TOgzwIWDwOkG5Fo9c9dOm3
-	 sRO57c1umTh4w==
-Received: by mail-wm1-f50.google.com with SMTP id s198-20020a1ca9cf000000b0030d6986ea9fso2576210wme.1
-        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 07:41:11 -0700 (PDT)
-X-Gm-Message-State: AOAM5330qwsTbgyn2GyN5HvoK36D4M9I/j1+kn6ncJ2m+8CEYPfnqJzj
-	gI7/Np/6+LqqXnI3r0jtmsunKmz24MElUhVKk2E=
-X-Google-Smtp-Source: ABdhPJxo0VPgx+thRuW8p7bIln8etgLAM6ec5/6RcjdcBohlt3cutk7inHMaUeurJSLgK4LP4HIsUG6+tBxPUxch/ag=
-X-Received: by 2002:a1c:2358:: with SMTP id j85mr26313102wmj.1.1634308869706;
- Fri, 15 Oct 2021 07:41:09 -0700 (PDT)
+	b=QfIIeWcPiv3PwB/krvJVEO32ocEy2fGPpblJMrJsmTChX2GH6N6v0Fg4rjAzjLnbp
+	 aEtfIMNHHSfLdPkjGBg2idWqyxm5iUSclTAmnJPaBo60gucmoqlckcJqJGNIUr2Apa
+	 inWnaRnL0v9yW3+UQxiwtuCjzc1n3Zw6gE08/lsrAbV1WjRq/oyJCJMtP8vo1Bd+IS
+	 EM2qVtap060vWwLHLSb4tUFuqiNz8rrveP5HtWMF4/a0s5u3Jp5TZIoHZnyvQ7mVJ9
+	 R7H3o+zPzqBkYUdV85KJuW16JR9Ihrx9ZdQT9Sj49JSC2n+85aRua9Wk5U+wwcQyoX
+	 6LIqUnvh0BouQ==
+Received: by mail-wr1-f52.google.com with SMTP id m22so27290781wrb.0
+        for <llvm@lists.linux.dev>; Fri, 15 Oct 2021 08:17:00 -0700 (PDT)
+X-Gm-Message-State: AOAM530j8+nZa9r5PbF6lc4cFbRTmEZUm3q2jjZzTiGawDAi7HjXynZ4
+	8ntdSIjsaSv/dvagZvtZu2JQMbBrnRqmevEpW9M=
+X-Google-Smtp-Source: ABdhPJxEPK+TqBi5jntB9NZ2aiQ169wvUQqCk0nO/GYgvmQPSRyiZRUTCn36xHT9UsW2ewN4zNDGavkD+wcIhmpOVJQ=
+X-Received: by 2002:adf:b1c4:: with SMTP id r4mr15042210wra.428.1634311018725;
+ Fri, 15 Oct 2021 08:16:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211015083447.760448-1-arnd@kernel.org> <20211015095704.49a99859@gandalf.local.home>
-In-Reply-To: <20211015095704.49a99859@gandalf.local.home>
+References: <20211013150232.2942146-1-arnd@kernel.org> <328f581e-7f1d-efc3-036c-66e729297e9c@gmail.com>
+ <132eb082-c646-765b-7b32-8a9943d10d0e@nvidia.com>
+In-Reply-To: <132eb082-c646-765b-7b32-8a9943d10d0e@nvidia.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 15 Oct 2021 16:40:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1oTpirhdvYLNV=vw1pr6kZCkaHf=y-nuvHy8=9GOrO2A@mail.gmail.com>
-Message-ID: <CAK8P3a1oTpirhdvYLNV=vw1pr6kZCkaHf=y-nuvHy8=9GOrO2A@mail.gmail.com>
-Subject: Re: [PATCH] tracing: use %ps format string to print symbols
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Zanussi <zanussi@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+Date: Fri, 15 Oct 2021 17:16:42 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0QR8a6vxp6r_RtN5QvwxR-umKy6Ye7VNyyt_1BS4yQ7Q@mail.gmail.com>
+Message-ID: <CAK8P3a0QR8a6vxp6r_RtN5QvwxR-umKy6Ye7VNyyt_1BS4yQ7Q@mail.gmail.com>
+Subject: Re: [PATCH] mlx5: allow larger xsk chunk_size
+To: Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc: Tariq Toukan <ttoukan.linux@gmail.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Aya Levin <ayal@nvidia.com>, 
+	Eran Ben Elisha <eranbe@nvidia.com>, Vladyslav Tarasiuk <vladyslavt@nvidia.com>, 
+	Jonathan Lemon <jonathan.lemon@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Networking <netdev@vger.kernel.org>, linux-rdma <linux-rdma@vger.kernel.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 15, 2021 at 3:57 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Oct 15, 2021 at 3:27 PM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+> > On 10/13/2021 6:02 PM, Arnd Bergmann wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >>
+> >> When building with 64KB pages, clang points out that xsk->chunk_size
+> >> can never be PAGE_SIZE:
+> >>
+> >> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error:
+> >> result of comparison of constant 65536 with expression of type 'u16'
+> >> (aka 'unsigned short') is always false
+> >> [-Werror,-Wtautological-constant-out-of-range-compare]
+> >>          if (xsk->chunk_size > PAGE_SIZE ||
+> >>              ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+> >>
+> >> I'm not familiar with the details of this code, but from a quick look
+> >> I found that it gets assigned from a 32-bit variable that can be
+> >> PAGE_SIZE, and that the layout of 'xsk' is not part of an ABI or
+> >> a hardware structure, so extending the members to 32 bits as well
+> >> should address both the behavior on 64KB page kernels, and the
+> >> warning I saw.
 >
-> On Fri, 15 Oct 2021 10:34:31 +0200
-> Arnd Bergmann <arnd@kernel.org> wrote:
+> This change is not enough to fix the behavior. mlx5e_xsk_is_pool_sane
+> checks that chunk_size <= 65535. Your patch just silences the warning,
+> but doesn't improve 64 KB page support.
 >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > clang started warning about excessive stack usage in
-> > hist_trigger_print_key()
-> >
-> > kernel/trace/trace_events_hist.c:4723:13: error: stack frame size (1336) exceeds limit (1024) in function 'hist_trigger_print_key' [-Werror,-Wframe-larger-than]
-> >
-> > The problem is that there are two 512-byte arrays on the stack if
-> > hist_trigger_stacktrace_print() gets inlined. I don't think this has
-> > changed in the past five years, but something probably changed the
-> > inlining decisions made by the compiler, so the problem is now made
-> > more obvious.
+> While mlx5e_xsk_is_pool_sane is simply a sanity check, it's not enough
+> to remove it to support 64 KB pages. It will need careful review of
+> assumptions in data path, because many places use 16-bit values for
+> packet size and headroom, and it comes down to the hardware interface
+> (see mpwrq_get_cqe_byte_cnt - the hardware passes the incoming packet
+> size as a 16-bit value) and hardware limitations.
 >
-> Could we just add "noinline" attribute to that function?
-
-It would avoid the warning, but not reduce the overall stack
-usage. If that's good enough for you, I'm fine with that as well.
-
-> > @@ -4715,8 +4714,7 @@ static void hist_trigger_stacktrace_print(struct seq_file *m,
-> >                       return;
-> >
-> >               seq_printf(m, "%*c", 1 + spaces, ' ');
-> > -             sprint_symbol(str, stacktrace_entries[i]);
-> > -             seq_printf(m, "%s\n", str);
-> > +             seq_printf(m, "%pS\n", stacktrace_entries[i]);
-
-I just noticed this needs an extra cast to (void*) to avoid a warning
-with clang,
-not sure why I saw it build cleanly before.
-
-> > @@ -4747,14 +4744,12 @@ static void hist_trigger_print_key(struct seq_file *m,
-> >                       seq_printf(m, "%s: %llx", field_name, uval);
-> >               } else if (key_field->flags & HIST_FIELD_FL_SYM) {
-> >                       uval = *(u64 *)(key + key_field->offset);
-> > -                     sprint_symbol_no_offset(str, uval);
-> > -                     seq_printf(m, "%s: [%llx] %-45s", field_name,
-> > -                                uval, str);
-> > +                     seq_printf(m, "%s: [%llx] %-45ps", field_name,
-> > +                                uval, (void *)uval);
-> >               } else if (key_field->flags & HIST_FIELD_FL_SYM_OFFSET) {
-> >                       uval = *(u64 *)(key + key_field->offset);
-> > -                     sprint_symbol(str, uval);
-> > -                     seq_printf(m, "%s: [%llx] %-55s", field_name,
-> > -                                uval, str);
-> > +                     seq_printf(m, "%s: [%llx] %-55ps", field_name,
-> > +                                uval, (void *)uval);
+> For example, MLX5_MPWQE_LOG_STRIDE_SZ_MAX is defined to 13 (Tariq, is it
+> a hardware limitation or just an arbitrary value?), which means the max
+> stride size in striding RQ is 2^13 = 8192, which will make the driver
+> fall back to legacy RQ (slower). We also need to check if legacy RQ
+> works fine with such large buffers, but so far I didn't find any reason
+> why not.
 >
-> The above requires "Ps" not "ps".
+> I genuinely think allocating 64 KB per packet is waste of memory, and
+> supporting it isn't very useful, as long as it's possible to use smaller
+> frame sizes, and given that it would be slower because of lack of
+> striding RQ support.
 
-you mean "%-55pS", right?
+Fair enough. I wouldn't be concerned about wasting memory here,
+as 64KB pages are much more wasteful in other areas already, but
+if there are no possible upsides and making it work is hard, then
+we don't need to bother.
 
-> But other than that, I could test if this doesn't change the formatting and
-> functionality at all.
+> It could be implemented as a feature for net-next, though, but only
+> after careful testing and expanding all relevant variables (the hardware
+> also uses a few bits as flags, so the max frame size will be smaller
+> than 2^32 anyway, but hopefully bigger than 2^16 if there are no other
+> limitations).
+>
+> For net, I suggest to silence the warning in some other way (cast type
+> before comparing?)
 
-Ok, let me know if I should resend with the two small changes I mentioned,
-or if you want to just go with the 'noinline_for_stack' annotation.
+Ok, sending the trivial workaround as v2 now.
 
         Arnd
