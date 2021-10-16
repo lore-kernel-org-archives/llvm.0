@@ -1,128 +1,89 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [83.223.78.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A999F29CA
-	for <llvm@lists.linux.dev>; Sat, 16 Oct 2021 07:40:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DFCAC610D1;
-	Sat, 16 Oct 2021 07:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634370016;
-	bh=AjseRBNiL+8gW7D0eW+3auxbapp78QPhYDegRvMSpds=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EWmR281oJmrhXn3Um1HXBDaX4T/IhWlQryURWr96dqvu5GaJcBrR+qfLcZmZWFu7n
-	 rCslP3OueWmX6Le6s0Oeoqtr1S9KhTxuKMAYf5Mzk19Ioav09I5sf47ogzEXWiKNoP
-	 1W2qLt0icMBe7gPl6BxOfiZ0diVgSDM/69Ry7qQGplvFyCC9LmufkT8Kn0HOSvaDbe
-	 zQseUip8ZXHhzu4UrZspEa14skRuc3aQZzn8oyLx8OLUzKmmTDBqUfT3PSFxMACQST
-	 l5AaEV4ozK/hbm2ikt+Zf0rZWTYl7BBFqN1xLIOPXgI/nbo+MnfJLNFOjed5MWMlS/
-	 MzBM1m4S7MdOQ==
-Date: Sat, 16 Oct 2021 15:40:10 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [shawnguo:imx/drivers 10/12]
- drivers/soc/imx/imx8m-blk-ctrl.c:401:3: error: use of undeclared identifier
- 'IMX8MM_VPUBLK_PD_G1'
-Message-ID: <20211016074009.GA25810@dragon>
-References: <202110151646.C5aKbTIN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22982C82
+	for <llvm@lists.linux.dev>; Sat, 16 Oct 2021 08:21:21 +0000 (UTC)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+	by mailout2.hostsharing.net (Postfix) with ESMTPS id DC99C103C6A49;
+	Sat, 16 Oct 2021 10:13:50 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by h08.hostsharing.net (Postfix) with ESMTPSA id B1C6160CF58F;
+	Sat, 16 Oct 2021 10:13:50 +0200 (CEST)
+X-Mailbox-Line: From 7bc9f3ee15533d170bc412d6bcdd122632af169d Mon Sep 17 00:00:00 2001
+Message-Id: <7bc9f3ee15533d170bc412d6bcdd122632af169d.1634370995.git.lukas@wunner.de>
+In-Reply-To: <202110160632.WzahPgao-lkp@intel.com>
+References: <202110160632.WzahPgao-lkp@intel.com>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Sat, 16 Oct 2021 10:13:27 +0200
+Subject: [PATCH nf-next] netfilter: core: Fix clang warnings about unused
+ static inlines
+To: "Pablo Neira Ayuso" <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>
+Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-mm@kvack.org, Nathan Chancellor <natechancellor@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202110151646.C5aKbTIN-lkp@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Fri, Oct 15, 2021 at 04:10:51PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git imx/drivers
-> head:   72949f76565c9ea9f4231c977774a31d4713c386
-> commit: 2684ac05a8c4d2d5c49e6c11eb6206b30a284813 [10/12] soc: imx: add i.MX8M blk-ctrl driver
-> config: hexagon-randconfig-r045-20211014 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project acb3b187c4c88650a6a717a1bcb234d27d0d7f54)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git/commit/?id=2684ac05a8c4d2d5c49e6c11eb6206b30a284813
->         git remote add shawnguo https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git
->         git fetch --no-tags shawnguo imx/drivers
->         git checkout 2684ac05a8c4d2d5c49e6c11eb6206b30a284813
->         # save the attached .config to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+Unlike gcc, clang warns about unused static inlines that are not in an
+include file:
 
-The dependency goes via a different branch than imx/drivers, and
-for-next branch should be fine.
+  net/netfilter/core.c:344:20: error: unused function 'nf_ingress_hook' [-Werror,-Wunused-function]
+  static inline bool nf_ingress_hook(const struct nf_hook_ops *reg, int pf)
+                     ^
+  net/netfilter/core.c:353:20: error: unused function 'nf_egress_hook' [-Werror,-Wunused-function]
+  static inline bool nf_egress_hook(const struct nf_hook_ops *reg, int pf)
+                     ^
 
-Shawn
+According to commit 6863f5643dd7 ("kbuild: allow Clang to find unused
+static inline functions for W=1 build"), the proper resolution is to
+mark the affected functions as __maybe_unused.  An alternative approach
+would be to move them to include/linux/netfilter_netdev.h, but since
+Pablo didn't do that in commit ddcfa710d40b ("netfilter: add
+nf_ingress_hook() helper function"), I'm guessing __maybe_unused is
+preferred.
 
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/soc/imx/imx8m-blk-ctrl.c:401:3: error: use of undeclared identifier 'IMX8MM_VPUBLK_PD_G1'
->            [IMX8MM_VPUBLK_PD_G1] = {
->             ^
-> >> drivers/soc/imx/imx8m-blk-ctrl.c:409:3: error: use of undeclared identifier 'IMX8MM_VPUBLK_PD_G2'
->            [IMX8MM_VPUBLK_PD_G2] = {
->             ^
-> >> drivers/soc/imx/imx8m-blk-ctrl.c:417:3: error: use of undeclared identifier 'IMX8MM_VPUBLK_PD_H1'
->            [IMX8MM_VPUBLK_PD_H1] = {
->             ^
-> >> drivers/soc/imx/imx8m-blk-ctrl.c:431:17: error: invalid application of 'sizeof' to an incomplete type 'const struct imx8m_blk_ctrl_domain_data []'
->            .num_domains = ARRAY_SIZE(imx8mm_vpu_blk_ctl_domain_data),
->                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/kernel.h:44:32: note: expanded from macro 'ARRAY_SIZE'
->    #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
->                                   ^~~~~
->    4 errors generated.
-> 
-> 
-> vim +/IMX8MM_VPUBLK_PD_G1 +401 drivers/soc/imx/imx8m-blk-ctrl.c
-> 
->    399	
->    400	static const struct imx8m_blk_ctrl_domain_data imx8mm_vpu_blk_ctl_domain_data[] = {
->  > 401		[IMX8MM_VPUBLK_PD_G1] = {
->    402			.name = "vpublk-g1",
->    403			.clk_names = (const char *[]){ "g1", },
->    404			.num_clks = 1,
->    405			.gpc_name = "g1",
->    406			.rst_mask = BIT(1),
->    407			.clk_mask = BIT(1),
->    408		},
->  > 409		[IMX8MM_VPUBLK_PD_G2] = {
->    410			.name = "vpublk-g2",
->    411			.clk_names = (const char *[]){ "g2", },
->    412			.num_clks = 1,
->    413			.gpc_name = "g2",
->    414			.rst_mask = BIT(0),
->    415			.clk_mask = BIT(0),
->    416		},
->  > 417		[IMX8MM_VPUBLK_PD_H1] = {
->    418			.name = "vpublk-h1",
->    419			.clk_names = (const char *[]){ "h1", },
->    420			.num_clks = 1,
->    421			.gpc_name = "h1",
->    422			.rst_mask = BIT(2),
->    423			.clk_mask = BIT(2),
->    424		},
->    425	};
->    426	
->    427	static const struct imx8m_blk_ctrl_data imx8mm_vpu_blk_ctl_dev_data = {
->    428		.max_reg = 0x18,
->    429		.power_notifier_fn = imx8mm_vpu_power_notifier,
->    430		.domains = imx8mm_vpu_blk_ctl_domain_data,
->  > 431		.num_domains = ARRAY_SIZE(imx8mm_vpu_blk_ctl_domain_data),
->    432	};
->    433	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This fixes both the warning introduced by Pablo in v5.10 as well as the
+one recently introduced by myself with commit 42df6e1d221d ("netfilter:
+Introduce egress hook").
 
+Fixes: ddcfa710d40b ("netfilter: add nf_ingress_hook() helper function")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org # v5.10+
+---
+ net/netfilter/core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/net/netfilter/core.c b/net/netfilter/core.c
+index 3a32a813fcde..6dec9cd395f1 100644
+--- a/net/netfilter/core.c
++++ b/net/netfilter/core.c
+@@ -341,7 +341,8 @@ static int nf_ingress_check(struct net *net, const struct nf_hook_ops *reg,
+ 	return 0;
+ }
+ 
+-static inline bool nf_ingress_hook(const struct nf_hook_ops *reg, int pf)
++static inline bool __maybe_unused nf_ingress_hook(const struct nf_hook_ops *reg,
++						  int pf)
+ {
+ 	if ((pf == NFPROTO_NETDEV && reg->hooknum == NF_NETDEV_INGRESS) ||
+ 	    (pf == NFPROTO_INET && reg->hooknum == NF_INET_INGRESS))
+@@ -350,7 +351,8 @@ static inline bool nf_ingress_hook(const struct nf_hook_ops *reg, int pf)
+ 	return false;
+ }
+ 
+-static inline bool nf_egress_hook(const struct nf_hook_ops *reg, int pf)
++static inline bool __maybe_unused nf_egress_hook(const struct nf_hook_ops *reg,
++						 int pf)
+ {
+ 	return pf == NFPROTO_NETDEV && reg->hooknum == NF_NETDEV_EGRESS;
+ }
+-- 
+2.31.1
 
