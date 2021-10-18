@@ -1,126 +1,298 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9421529CA
-	for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 20:24:38 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id y26so2290914lfa.11
-        for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 13:24:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BE62C88
+	for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 20:34:44 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id n7so1964592ljp.5
+        for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 13:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=har/4/PWCEMpvFWOprxG/fUyVmDaaJDKHIOQGS8ro1Y=;
-        b=RC1Rv/7TptVAnpkImcwF4xhmo0n6qZszmDbsH02tz700VcnBX+keKWXyZLeDSNdQeg
-         QofqJbxydbk5MT1p9KQzLevm2K0uArGlXyBgW94Npszr4ggM4yxsxNsqHgPeIsA0yi1J
-         nZdFIma4dyZqhnveC+zuxxVnvmpz3I82nv26Yo/STGZzT5A/Z4RmKbYj3b/eH9zz+eal
-         i2WoC5O4wrSBwucaOpg2frFyjtNucQA1XObeUmSvVddELtsuI1kEqAzBMIwV4AP/l3Bx
-         N8FHIxAgUXqad6hmzoNxzcrDsv1CQI4KzKDGfRzn0SolIlxIdffWuwl+gwL9Au6VTxdX
-         xrFA==
+        bh=GmZE9aF4Ee2V9RKx7L1BSLdmyNjcvmYBt17tD4vGRiQ=;
+        b=fW/4xiFTZMVJcLXLME4J2ssqGuKqgTsuct3PZ1LjKrR/EaUnJjUrsKBG0UZoip93Sw
+         8oH4wS9BAjsT/sBQDXuWEt1vD36eO3cqd5rEY3zOFrh0ICjEya9BXpqqR4jTLkXzV8s9
+         kiDDTlh9ab3rNYrHnpvZxxYPpPoS4Tgp3ejkzUqN7hkdOSJC2O2uEgG6zKcVfkuGWCqW
+         DTpgKB82oYu2s6YMSN5OJnIXPY0lkIJyNGL9FYc2kdwHoOND8DBdcyuyGC8Mp5Nh2zwF
+         R4F+pN2AONWm6RwzeHEFP9nJhPaGbZVhdmFsdsdphAyxihqC+BQoB5/c8485tCVb7Io4
+         ElCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=har/4/PWCEMpvFWOprxG/fUyVmDaaJDKHIOQGS8ro1Y=;
-        b=edcUFcouCMuUyI6gihDHV5E4XOBYNUtvn7R0mp9teKfG8bgcVND8T7+2WeOEFDT3kJ
-         6l4fqtxYdPwOa0FHCurdDobmmTHjQTEXuqfQayXVs8ipStPE2/3HViwKNAtbLPzXaVlU
-         QjCcS+OLKy5d4jmZsHSYwBRmfnD+SxViwnFLHux6u0vlE4jsWItUv27zbPYgD/Zpt3Gb
-         BZhIO38FN5OFTXOQjR5rfYSfPgYKV58h+leHFdXYMCwCXctVAp7ZeBK5nInXSv+ev8ll
-         gpedwrRy+Wa3OQbo38cyc9hfwgBNFhPQ/d+95a3+oKMtI+S1oagbKelQgF2nRS8Jhcnq
-         gHqg==
-X-Gm-Message-State: AOAM531mLr+TB6ZQcrG4LVN2ryPM0gPO0UF/rPhjSxTpAfeEUPXxM3HC
-	ctrvrCcITDgkHu2nXoCLVTYZoWBS4cR+1vlg/sZTzAsy
-X-Google-Smtp-Source: ABdhPJzN5CnBieZu138lO+MKY18OyxyMgt6Xi8QmLZNGOYuis8q2+HoLn/+zrwQAVMqxgws+jp75ootjmnQtp4JKMDQ=
-X-Received: by 2002:a05:6512:4c7:: with SMTP id w7mr1953520lfq.444.1634588676542;
- Mon, 18 Oct 2021 13:24:36 -0700 (PDT)
+        bh=GmZE9aF4Ee2V9RKx7L1BSLdmyNjcvmYBt17tD4vGRiQ=;
+        b=bzUKwcQnV2c2oAwxudhRoWrW2G6uNaDc9ZigTGdphwLvyQGAadRuzPQ/rkQAjvjGne
+         dpe2VUzN7Xa9l5ETtimmRgS8r/qdFo+kvRK551pSTegrbSXTlhwqqIf3VYbZpCHC+p/o
+         0uRan2cLwkFfTjRKhKccOWQC8q4tXHm2x2JqmFZN+Cl8+ZSFgWXEzjlz9LH/NLZ7nTIg
+         oN/5YAmIUhu5FtJOwEBeze2uX0wDKJgp4g7VTPkrCS9/t51bsl22guiNrXiffNnjXocP
+         fcum7N5aDNq4yjLItAlxtguPiQ4VF/C5ry06/ymGCC51DfjD6mQc/yRaGVOJIJQBgyzX
+         Znsw==
+X-Gm-Message-State: AOAM5313VDILH1L0+iZM0iuCnoasbYhngFvj+g8A0fUMn1z8iujKRiDf
+	yhxGGG/BemX165VUMyxw5BP2oRn425fjvm9DiCD7Mg==
+X-Google-Smtp-Source: ABdhPJzGxoYb5C5LikKfBwzZ0PFeu0xlG+ZDDqi5/MVPAZGL4zV1l9n6lniwRP+2Vi1GwewWVa6Y/SHkzJsgOXO59TM=
+X-Received: by 2002:a2e:750e:: with SMTP id q14mr2124757ljc.338.1634589282793;
+ Mon, 18 Oct 2021 13:34:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211014215703.3705371-1-nathan@kernel.org>
-In-Reply-To: <20211014215703.3705371-1-nathan@kernel.org>
+References: <20211012234606.91717-1-ndesaulniers@google.com>
+ <20211012234606.91717-3-ndesaulniers@google.com> <CAK7LNASGRQqL4Qu7ZVOcrW8-oXm7xvB-m7yoMJHnCDR5-_jrDQ@mail.gmail.com>
+ <CAKwvOd=gDxwvBdtDrJmqo4yb2DoswHtcK6f2M+z4s-b1RK5DyQ@mail.gmail.com> <CAK7LNASwuz_i7hzNzmT8JVQTMbwt3JARSqh4PB_URcEfzzOq3g@mail.gmail.com>
+In-Reply-To: <CAK7LNASwuz_i7hzNzmT8JVQTMbwt3JARSqh4PB_URcEfzzOq3g@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 18 Oct 2021 13:24:25 -0700
-Message-ID: <CAKwvOd=gqDM=i=RRSgPEtkqYEDBod8C=FTf1SZ1V4U4KMLgGJA@mail.gmail.com>
-Subject: Re: [PATCH] staging: wlan-ng: Avoid bitwise vs logical OR warning in hfa384x_usb_throttlefn()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-staging@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Mon, 18 Oct 2021 13:34:31 -0700
+Message-ID: <CAKwvOdmmOuNW4u_iuh6DSVo4gfyXeZMF8Z=i6yFPJ3wOUZMLvw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] arm64: vdso32: lazily invoke COMPAT_CC
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, llvm@lists.linux.dev, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Lucas Henneman <henneman@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 14, 2021 at 2:57 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Sat, Oct 16, 2021 at 7:20 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> A new warning in clang points out a place in this file where a bitwise
-> OR is being used with boolean expressions:
+> On Fri, Oct 15, 2021 at 5:59 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Tue, Oct 12, 2021 at 8:03 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > On Wed, Oct 13, 2021 at 8:46 AM Nick Desaulniers
+> > > <ndesaulniers@google.com> wrote:
+> > > >
+> > > > When running the following command without arm-linux-gnueabi-gcc in
+> > > > one's $PATH, the following warning is observed:
+> > > >
+> > > > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make -j72 LLVM=1 mrproper
+> > > > make[1]: arm-linux-gnueabi-gcc: No such file or directory
+> > > >
+> > > > This is because KCONFIG is not run for mrproper, so CONFIG_CC_IS_CLANG
+> > > > is not set, and we end up eagerly evaluating various variables that try
+> > > > to invoke CC_COMPAT.
+> > > >
+> > > > This is a similar problem to what was observed in
+> > > > commit 3ec8a5b33dea ("kbuild: do not export LDFLAGS_vmlinux")
+> > > >
+> > > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > > Reported-by: Lucas Henneman <henneman@google.com>
+> > > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > >
+> > > There are two ways to fix it:
+> > >
+> > >   [1]: sink the error message to /dev/null
+> > >         (as in commit dc960bfeedb01cf832c5632ed1f3daed4416b142)
+> > >   [2]: use a recursively-expanded variable as you did.
+> > >
+> > >
+> > > "Simple variable (:=) vs recursive variable (=)" is a trade-off.
+> > >
+> > > Please be careful about the cost when you try the [2] approach.
+> > >
+> > >
+> > >
+> > > Simple variables are immediately expanded while parsing Makefile.
+> > > There are 7 call-sites for cc32-option, hence
+> > > the compiler is invoked 7 times for building vdso32,
+> > > 0 times for cleaning.
+> > > (Since 57fd251c789647552d32d2fc51bedd4f90d70f9f,
+> > > try-run is no-op for 'make clean').
+> > >
+> > >
+> > >
+> > >
+> > > Recursive variables are expanded every time they are used.
+> > >
+> > > IIUC, if_changed expands the command line 3 times.
+> > > There are 2 objects (note.o and vgettimeofday.o)
+> > > There are 7 call-sites for cc32-option.
+> > >
+> > > So, the compiler is invoked 42 (3 * 2 * 7) times
+> > > for building vdso32.
+> >
+> > With this patch applied:
+> > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
+> > clean defconfig
+> > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
+> > arch/arm64/kernel/vdso32/ V=1 | tr -s ' ' | cut -d ' ' -f 2 | grep
+> > clang | wc -l
+> > 55
+> > $ find arch/arm64/kernel/vdso32/ -name \*.o | xargs rm
+> > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
+> > arch/arm64/kernel/vdso32/ V=1 | tr -s ' ' | cut -d ' ' -f 2 | grep
+> > clang | wc -l
+> > 2
+> >
+> > Prior to this series:
+> > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
+> > clean defconfig
+> > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
+> > arch/arm64/kernel/vdso32/ V=1 | tr -s ' ' | cut -d ' ' -f 2 | grep
+> > clang | wc -l
+> > 55
+> > $ find arch/arm64/kernel/vdso32/ -name \*.o | xargs rm
+> > $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
+> > arch/arm64/kernel/vdso32/ V=1 | tr -s ' ' | cut -d ' ' -f 2 | grep
+> > clang | wc -l
+> > 2
+> >
+> > With patch 3 applied, we can drop CROSS_COMPILE_COMPAT, and we now get:
+> > $ ARCH=arm64 make LLVM=1 -j72 clean defconfig
+> > ARCH=arm64 make LLVM=1 -j72 arch/arm64/kernel/vdso32/ V=1 | tr -s ' '
+> > | cut -d ' ' -f 2 | grep clang | wc -l
+> > 44
+> > $ find arch/arm64/kernel/vdso32/ -name \*.o | xargs rm
+> > $ ARCH=arm64 make LLVM=1 -j72 arch/arm64/kernel/vdso32/ V=1 | tr -s '
+> > ' | cut -d ' ' -f 2 | grep clang | wc -l
+> > 2
+> >
+> > Please confirm; perhaps my pipeline missed some invocations? Or was
+> > there a different target you were referring to?
 >
-> In file included from drivers/staging/wlan-ng/prism2usb.c:2:
-> drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
->             ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
->             ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: note: cast one or both operands to int to silence this warning
-> 1 warning generated.
 >
-> The comment explains that short circuiting here is undesirable, as the
-> calls to test_and_{clear,set}_bit() need to happen for both sides of the
-> expression.
 >
-> Clang's suggestion would work to silence the warning but the readability
-> of the expression would suffer even more. To clean up the warning and
-> make the block more readable, use a variable for each side of the
-> bitwise expression.
+>
+>
+>
+> It is pointless to check the build commands.
+>
+> I am talking about how many times $(call cc32-option, ) is evaluated.
 
-Sure. Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Of course V=1 doesn't print the cc-option invocations! /s
 
 >
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1478
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/staging/wlan-ng/hfa384x_usb.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
 >
-> diff --git a/drivers/staging/wlan-ng/hfa384x_usb.c b/drivers/staging/wlan-ng/hfa384x_usb.c
-> index 59aa84d1837d..938e11a1a0b6 100644
-> --- a/drivers/staging/wlan-ng/hfa384x_usb.c
-> +++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-> @@ -3778,18 +3778,18 @@ static void hfa384x_usb_throttlefn(struct timer_list *t)
+> How about adding the following debug code?
 >
->         spin_lock_irqsave(&hw->ctlxq.lock, flags);
+> (Everytime cc32-option is evaluated, a file "dummy-cc32-option-<PID>"
+> is created)
 >
-> -       /*
-> -        * We need to check BOTH the RX and the TX throttle controls,
-> -        * so we use the bitwise OR instead of the logical OR.
-> -        */
->         pr_debug("flags=0x%lx\n", hw->usb_flags);
-> -       if (!hw->wlandev->hwremoved &&
-> -           ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
-> -             !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags)) |
-> -            (test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
-> -             !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags))
-> -           )) {
-> -               schedule_work(&hw->usb_work);
-> +       if (!hw->wlandev->hwremoved) {
-> +               bool rx_throttle = test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
-> +                                  !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags);
-> +               bool tx_throttle = test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
-> +                                  !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags);
-> +               /*
-> +                * We need to check BOTH the RX and the TX throttle controls,
-> +                * so we use the bitwise OR instead of the logical OR.
-> +                */
-> +               if (rx_throttle | tx_throttle)
-> +                       schedule_work(&hw->usb_work);
->         }
 >
->         spin_unlock_irqrestore(&hw->ctlxq.lock, flags);
 >
-> base-commit: 6ac113f741a7674e4268eea3eb13972732d83571
-> --
-> 2.33.1.637.gf443b226ca
+> diff --git a/arch/arm64/kernel/vdso32/Makefile
+> b/arch/arm64/kernel/vdso32/Makefile
+> index 89299a26638b..e40365f5bc38 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -26,9 +26,9 @@ LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)ld
+>  endif
 >
+>  cc32-option = $(call try-run,\
+> -        $(CC_COMPAT) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +        $(CC_COMPAT) $(1) -c -x c /dev/null -o "$$TMP"; touch
+> dummy-cc32-option-$$$$,$(1),$(2))
+>  cc32-disable-warning = $(call try-run,\
+> -       $(CC_COMPAT) -W$(strip $(1)) -c -x c /dev/null -o
+> "$$TMP",-Wno-$(strip $(1)))
+> +       $(CC_COMPAT) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP";
+> touch dummy-cc32-option-$$$$,-Wno-$(strip $(1)))
 
+heh, I usually add `($info $$VAR is [${VAR}]); \` debugging statements
+to these. Touching files is another neat trick.
 
+>
+>  # We cannot use the global flags to compile the vDSO files, the main reason
+>  # being that the 32-bit compiler may be older than the main (64-bit) compiler
+>
+>
+>
+>
+>
+> Without this patch:
+>
+> masahiro@grover:~/ref/linux$ rm dummy-cc32-*
+> masahiro@grover:~/ref/linux$ make -s LLVM=1 ARCH=arm64
+> CROSS_COMPILE_COMPAT=arm-linux-gnueabi- defconfig clean
+> arch/arm64/kernel/vdso32/ -j8
+> masahiro@grover:~/ref/linux$ ls -1 dummy-cc32-*
+> dummy-cc32-disable-warning-765530
+> dummy-cc32-option-765495
+> dummy-cc32-option-765500
+> dummy-cc32-option-765505
+> dummy-cc32-option-765510
+> dummy-cc32-option-765515
+> dummy-cc32-option-765520
+> dummy-cc32-option-765525
+>
+>
+>
+>
+> With this patch:
+>
+>
+>
+> masahiro@grover:~/ref/linux$ rm dummy-cc32-*
+> masahiro@grover:~/ref/linux$ make -s LLVM=1 ARCH=arm64
+> CROSS_COMPILE_COMPAT=arm-linux-gnueabi- defconfig clean
+> arch/arm64/kernel/vdso32/ -j8
+> masahiro@grover:~/ref/linux$ ls -1 dummy-cc32-*
+> dummy-cc32-disable-warning-768908
+> dummy-cc32-disable-warning-768949
+> dummy-cc32-disable-warning-768990
+> dummy-cc32-disable-warning-769035
+> dummy-cc32-disable-warning-769076
+> dummy-cc32-disable-warning-769117
+> dummy-cc32-option-768871
+> dummy-cc32-option-768878
+> dummy-cc32-option-768883
+> dummy-cc32-option-768888
+> dummy-cc32-option-768893
+> dummy-cc32-option-768898
+> dummy-cc32-option-768903
+> dummy-cc32-option-768914
+> dummy-cc32-option-768919
+> dummy-cc32-option-768924
+> dummy-cc32-option-768929
+> dummy-cc32-option-768934
+> dummy-cc32-option-768939
+> dummy-cc32-option-768944
+> dummy-cc32-option-768955
+> dummy-cc32-option-768960
+> dummy-cc32-option-768965
+> dummy-cc32-option-768970
+> dummy-cc32-option-768975
+> dummy-cc32-option-768980
+> dummy-cc32-option-768985
+> dummy-cc32-option-768998
+> dummy-cc32-option-769005
+> dummy-cc32-option-769010
+> dummy-cc32-option-769015
+> dummy-cc32-option-769020
+> dummy-cc32-option-769025
+> dummy-cc32-option-769030
+> dummy-cc32-option-769041
+> dummy-cc32-option-769046
+> dummy-cc32-option-769051
+> dummy-cc32-option-769056
+> dummy-cc32-option-769061
+> dummy-cc32-option-769066
+> dummy-cc32-option-769071
+> dummy-cc32-option-769082
+> dummy-cc32-option-769087
+> dummy-cc32-option-769092
+> dummy-cc32-option-769097
+> dummy-cc32-option-769102
+> dummy-cc32-option-769107
+> dummy-cc32-option-769112
+>
+>
+>
+>
+>
+>
+> The diff of  the number of expansions:
+>
+> cc32-option                        7    ->   42
+> cc32-disable-warning         1   ->    6
+
+Indeed, thanks for confirming.  An unfortunate dichotomy.  Surely
+there's another way to avoid cc-option+cc-disable-warning calls for
+the `clean` target?  I'll change to just redirecting errors to
+/dev/null with your Suggested-by tag, but this seems a bit of an
+unfortunate situation.
 -- 
 Thanks,
 ~Nick Desaulniers
