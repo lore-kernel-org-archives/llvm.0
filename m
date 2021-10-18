@@ -1,149 +1,267 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F36E2C89
-	for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 14:42:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0630261074;
-	Mon, 18 Oct 2021 14:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634568170;
-	bh=b0WcO9MLJWpHZ4FmInErqJ+VF0uqpa3q8Gmuc8BEwqg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=vMKSptpSWm3jG2Jbu4Mu98RM+UEjrg/gy5ej5svl6D1WBsABkJ1D+9sXvQH8Yfyy3
-	 Ys722y3ig5Z1mD7v/LsbJ78lpQSycqQuwcYDaaleVFGAd1GS3PYuaScpq0el5IV195
-	 nIMmTPaKenbFEEW7LElg2e/5trw0CO/U/j092mg7RQV0E0Rx8yiTUDJeZD946YSfPJ
-	 6K6x75XhYZkfv7ofpS9CjlNg7eYWBcFsOm8PlvSxEwaQ1+s1y35BFDJvgVMSWavHND
-	 GvCONDYtW7fA4Tc+VcmgQGjHnoJFAQpJJZndEaK31nrIpSkxHl20TupqjQ96PtHpB6
-	 zN7T3vgX5z5KA==
-Message-ID: <d4ad897585ddc815c188bbf0b3b8cec1cb40b7a4.camel@kernel.org>
-Subject: Re: [PATCH] [v2] tracing: use %ps format string to print symbols
-From: Tom Zanussi <zanussi@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ingo Molnar <mingo@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Namhyung Kim <namhyung@kernel.org>,  Jiapeng Chong
- <jiapeng.chong@linux.alibaba.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
- Qiujun Huang <hqjagain@gmail.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Date: Mon, 18 Oct 2021 09:42:47 -0500
-In-Reply-To: <20211018132538.2468989-1-arnd@kernel.org>
-References: <20211018132538.2468989-1-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27592C88
+	for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 16:15:05 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id r184so2510519ybc.10
+        for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 09:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=FMQbaJZ7mwSxi4K8SSY2GosUlzmaZ1Vf1hrlE9a5srE=;
+        b=hj6zBjrKAkwJAce3K+hntV5+EPNoro/zva45wgtvOnI3xBLbt9nFgbOXOL2PO1QiU+
+         H8aaVeS9n4IHZPLEQoq2p9Ggz5gNDPQzLI/i9RFJUCDFg0N9az9yFhDnswbKYvKEkt0B
+         lIHPTNQCITskwmStPFV43TNyvy+7xNLxKVfLmNVlU4YbpRV5cqfhWrDoE3gnAfDGhb0q
+         pTHCFmMACaGeiwaAKhwsbpt0g21u6rUbvuIJZoteZp5H6ecq0vn2jev5sByBNAIzTg9j
+         BnqdtwqRfvwW8Y7wkB3BKUzqky+uhVJ97KpUBZdY1edhTfjdw+ZWL40pycFwCzzCYqRY
+         Kh2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=FMQbaJZ7mwSxi4K8SSY2GosUlzmaZ1Vf1hrlE9a5srE=;
+        b=3ByrqjL5/wymGNQrXj/hG9UmTlFpPW1Y3W/NAHfV0HatLGefcNXzrA9W8u9kSmJzQ5
+         6TDrLgAe+M24/BNG+bk1OL/fJPLNau9BG7Tc8MN02hdIPc8VTCAwaVHPOzmx+f1Xjfox
+         JrmCpMVdIwRSSRHhFpieoZZzT4zq5zrLVErpWVuJR9X1Uk1huFuKF4jCRowH+guaWHdn
+         1c+nrE9KXrKIh2fx3qD5CEQ123QNVmTVbWxDXN70PvqHjeelXxzQTXYNtOVpMA9+jRcq
+         XnEULH9ZCa82xRO8YIAb+tUwA+fJn4f9G9OEAdMJtKuKGo9fMhcI0dtb6vDBmj7B8n1Y
+         yGvg==
+X-Gm-Message-State: AOAM532DxMt+ssqLBHENrvMhV36zwSfafNIdrszHYbvcRpKlk7DzD1eF
+	cGTiBhJjQpkdv8lC6c5ld46jQk54gmMx5Kk9uzgJHcHOF0Q=
+X-Google-Smtp-Source: ABdhPJxhjAMwYE5s/KO7x9BXonAE7mESh+5PbO5jV3kVt1EW6/A1BQQuAxaHIdyvBLcneiI3xVU8fbuSH1mSWQTIiHs=
+X-Received: by 2002:a25:d157:: with SMTP id i84mr30618682ybg.434.1634573704589;
+ Mon, 18 Oct 2021 09:15:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date: Mon, 18 Oct 2021 18:14:53 +0200
+Message-ID: <CAKXUXMyN-9JuK4Cg+5aUPWiL-0wnAJrvD4qZX3O5nCERou_j1w@mail.gmail.com>
+Subject: Some potentially uninitialized values in pid_list_refill_irq()
+To: Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arnd,
+Dear Steven,
 
-On Mon, 2021-10-18 at 15:25 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang started warning about excessive stack usage in
-> hist_trigger_print_key()
-> 
-> kernel/trace/trace_events_hist.c:4723:13: error: stack frame size
-> (1336) exceeds limit (1024) in function 'hist_trigger_print_key' [-
-> Werror,-Wframe-larger-than]
-> 
-> The problem is that there are two 512-byte arrays on the stack if
-> hist_trigger_stacktrace_print() gets inlined. I don't think this has
-> changed in the past five years, but something probably changed the
-> inlining decisions made by the compiler, so the problem is now made
-> more obvious.
-> 
-> Rather than printing the symbol names into separate buffers, it
-> seems we can simply use the special %ps format string modifier
-> to print the pointers symbolically and get rid of both buffers.
-> 
-> Marking hist_trigger_stacktrace_print() would be a simpler
-> way of avoiding the warning, but that would not address the
-> excessive stack usage.
-> 
-> Fixes: 69a0200c2e25 ("tracing: Add hist trigger support for
-> stacktraces as keys")
-> Link: 
-> https://lore.kernel.org/all/20211015095704.49a99859@gandalf.local.home/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> Changes in v2:
->  - Use %pS instead of %ps to include offset in third string
->  - add (void*) cast to avoid compile-time warnings
-> 
-> This is still only compile-tested to ensure that the warning
-> goes away, I have not validated what it does to the formatting.
+Commit 8d6e90983ade ("tracing: Create a sparse bitmask for pid
+filtering") in linux-next adds the new function pid_list_refill_irq().
+For this function, 'make clang-analyzer' reports potentially
+uninitialized values for lower and upper under certain branch
+conditions, see the full report below.
+
+As far as I understand the analyzer's report and the code at hand:
+
+if lower_count is zero (and upper_count is not), then lower_next is
+not assigned (because the while lower_count loop is not entered) and
+lower is pointing to an address with an uninitialized value and hence,
+the if (lower) conditional reads this uninitialized value.
+
+Analogously for upper_count:
+
+if upper_count is zero (and lower_count is not), then upper_count is
+not assigned (because the while upper_count loop is not entered) and
+upper is pointing to an address with an uninitialized value and hence,
+the if (upper) conditional reads this uninitialized value.
+
+I think this can be resolved by initializing upper and lower to point
+to an address carrying a zero; but I really fight understanding the
+whole pointer magic, you did :)
+
+Let me know if clang-analyzer found something buggy here or if the
+tool and I misunderstood the code; we are certainly interested.
 
 
-This looks fine to me, thanks for the patch!
+Lukas
 
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Tested-by: Tom Zanussi <zanussi@kernel.org>
+---
 
+./kernel/trace/pid_list.c:377:6: warning: Branch condition evaluates
+to a garbage value [clang-analyzer-core.uninitialized.Branch]
+        if (upper) {
+            ^~~~~
+./kernel/trace/pid_list.c:334:36: note: Left side of '&&' is false
+        struct trace_pid_list *pid_list = container_of(iwork, struct
+trace_pid_list,
+                                          ^
+./include/linux/container_of.h:19:61: note: expanded from macro 'container_of'
+        BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+                                                                   ^
+./kernel/trace/pid_list.c:334:36: note: Taking false branch
+        struct trace_pid_list *pid_list = container_of(iwork, struct
+trace_pid_list,
+                                          ^
+./include/linux/container_of.h:19:2: note: expanded from macro 'container_of'
+        BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+        ^
+./include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+#define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                    ^
+./include/linux/compiler_types.h:329:2: note: expanded from macro
+'compiletime_assert'
+        _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        ^
+./include/linux/compiler_types.h:317:2: note: expanded from macro
+'_compiletime_assert'
+        __compiletime_assert(condition, msg, prefix, suffix)
+        ^
+./include/linux/compiler_types.h:309:3: note: expanded from macro
+'__compiletime_assert'
+                if (!(condition))                                       \
+                ^
+./kernel/trace/pid_list.c:334:36: note: Loop condition is false.  Exiting loop
+        struct trace_pid_list *pid_list = container_of(iwork, struct
+trace_pid_list,
+                                          ^
+./include/linux/container_of.h:19:2: note: expanded from macro 'container_of'
+        BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+        ^
+./include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+#define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                    ^
+./include/linux/compiler_types.h:329:2: note: expanded from macro
+'compiletime_assert'
+        _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        ^
+./include/linux/compiler_types.h:317:2: note: expanded from macro
+'_compiletime_assert'
+        __compiletime_assert(condition, msg, prefix, suffix)
+        ^
+./include/linux/compiler_types.h:307:2: note: expanded from macro
+'__compiletime_assert'
+        do {                                                            \
+        ^
+./kernel/trace/pid_list.c:336:2: note: 'upper' declared without an initial value
+        union upper_chunk *upper;
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:351:6: note: Assuming 'upper_count' is > 0
+        if (upper_count <= 0 && lower_count <= 0)
+            ^~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:351:23: note: Left side of '&&' is false
+        if (upper_count <= 0 && lower_count <= 0)
+                             ^
+./kernel/trace/pid_list.c:354:2: note: Loop condition is true.
+Entering loop body
+        while (upper_count-- > 0) {
+        ^
+./kernel/trace/pid_list.c:358:7: note: Assuming 'chunk' is null
+                if (!chunk)
+                    ^~~~~~
+./kernel/trace/pid_list.c:358:3: note: Taking true branch
+                if (!chunk)
+                ^
+./kernel/trace/pid_list.c:359:4: note:  Execution continues on line 365
+                        break;
+                        ^
+./kernel/trace/pid_list.c:365:9: note: Assuming the condition is false
+        while (lower_count-- > 0) {
+               ^~~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:365:2: note: Loop condition is false.
+Execution continues on line 376
+        while (lower_count-- > 0) {
+        ^
+./kernel/trace/pid_list.c:377:6: note: Branch condition evaluates to a
+garbage value
+        if (upper) {
+            ^~~~~
 
-> ---
->  kernel/trace/trace_events_hist.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_hist.c
-> b/kernel/trace/trace_events_hist.c
-> index a6061a69aa84..d6d4362c273c 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -4706,7 +4706,6 @@ static void
-> hist_trigger_stacktrace_print(struct seq_file *m,
->  					  unsigned long
-> *stacktrace_entries,
->  					  unsigned int max_entries)
->  {
-> -	char str[KSYM_SYMBOL_LEN];
->  	unsigned int spaces = 8;
->  	unsigned int i;
->  
-> @@ -4715,8 +4714,7 @@ static void
-> hist_trigger_stacktrace_print(struct seq_file *m,
->  			return;
->  
->  		seq_printf(m, "%*c", 1 + spaces, ' ');
-> -		sprint_symbol(str, stacktrace_entries[i]);
-> -		seq_printf(m, "%s\n", str);
-> +		seq_printf(m, "%pS\n", (void*)stacktrace_entries[i]);
->  	}
->  }
->  
-> @@ -4726,7 +4724,6 @@ static void hist_trigger_print_key(struct
-> seq_file *m,
->  				   struct tracing_map_elt *elt)
->  {
->  	struct hist_field *key_field;
-> -	char str[KSYM_SYMBOL_LEN];
->  	bool multiline = false;
->  	const char *field_name;
->  	unsigned int i;
-> @@ -4747,14 +4744,12 @@ static void hist_trigger_print_key(struct
-> seq_file *m,
->  			seq_printf(m, "%s: %llx", field_name, uval);
->  		} else if (key_field->flags & HIST_FIELD_FL_SYM) {
->  			uval = *(u64 *)(key + key_field->offset);
-> -			sprint_symbol_no_offset(str, uval);
-> -			seq_printf(m, "%s: [%llx] %-45s", field_name,
-> -				   uval, str);
-> +			seq_printf(m, "%s: [%llx] %-45ps", field_name,
-> +				   uval, (void *)uval);
->  		} else if (key_field->flags & HIST_FIELD_FL_SYM_OFFSET)
-> {
->  			uval = *(u64 *)(key + key_field->offset);
-> -			sprint_symbol(str, uval);
-> -			seq_printf(m, "%s: [%llx] %-55s", field_name,
-> -				   uval, str);
-> +			seq_printf(m, "%s: [%llx] %-55pS", field_name,
-> +				   uval, (void *)uval);
->  		} else if (key_field->flags & HIST_FIELD_FL_EXECNAME) {
->  			struct hist_elt_data *elt_data = elt-
-> >private_data;
->  			char *comm;
-
+./kernel/trace/pid_list.c:382:6: warning: Branch condition evaluates
+to a garbage value [clang-analyzer-core.uninitialized.Branch]
+        if (lower) {
+            ^~~~~
+./kernel/trace/pid_list.c:334:36: note: Left side of '&&' is false
+        struct trace_pid_list *pid_list = container_of(iwork, struct
+trace_pid_list,
+                                          ^
+./include/linux/container_of.h:19:61: note: expanded from macro 'container_of'
+        BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+                                                                   ^
+./kernel/trace/pid_list.c:334:36: note: Taking false branch
+        struct trace_pid_list *pid_list = container_of(iwork, struct
+trace_pid_list,
+                                          ^
+./include/linux/container_of.h:19:2: note: expanded from macro 'container_of'
+        BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+        ^
+./include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+#define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                    ^
+./include/linux/compiler_types.h:329:2: note: expanded from macro
+'compiletime_assert'
+        _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        ^
+./include/linux/compiler_types.h:317:2: note: expanded from macro
+'_compiletime_assert'
+        __compiletime_assert(condition, msg, prefix, suffix)
+        ^
+./include/linux/compiler_types.h:309:3: note: expanded from macro
+'__compiletime_assert'
+                if (!(condition))                                       \
+                ^
+./kernel/trace/pid_list.c:334:36: note: Loop condition is false.  Exiting loop
+        struct trace_pid_list *pid_list = container_of(iwork, struct
+trace_pid_list,
+                                          ^
+./include/linux/container_of.h:19:2: note: expanded from macro 'container_of'
+        BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+        ^
+./include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+#define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                    ^
+./include/linux/compiler_types.h:329:2: note: expanded from macro
+'compiletime_assert'
+        _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        ^
+./include/linux/compiler_types.h:317:2: note: expanded from macro
+'_compiletime_assert'
+        __compiletime_assert(condition, msg, prefix, suffix)
+        ^
+./include/linux/compiler_types.h:307:2: note: expanded from macro
+'__compiletime_assert'
+        do {                                                            \
+        ^
+./kernel/trace/pid_list.c:337:2: note: 'lower' declared without an initial value
+        union lower_chunk *lower;
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:351:6: note: Assuming 'upper_count' is > 0
+        if (upper_count <= 0 && lower_count <= 0)
+            ^~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:351:23: note: Left side of '&&' is false
+        if (upper_count <= 0 && lower_count <= 0)
+                             ^
+./kernel/trace/pid_list.c:354:2: note: Loop condition is true.
+Entering loop body
+        while (upper_count-- > 0) {
+        ^
+./kernel/trace/pid_list.c:358:7: note: Assuming 'chunk' is non-null
+                if (!chunk)
+                    ^~~~~~
+./kernel/trace/pid_list.c:358:3: note: Taking false branch
+                if (!chunk)
+                ^
+./kernel/trace/pid_list.c:354:9: note: Assuming the condition is false
+        while (upper_count-- > 0) {
+               ^~~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:354:2: note: Loop condition is false.
+Execution continues on line 365
+        while (upper_count-- > 0) {
+        ^
+./kernel/trace/pid_list.c:365:9: note: Assuming the condition is false
+        while (lower_count-- > 0) {
+               ^~~~~~~~~~~~~~~~~
+./kernel/trace/pid_list.c:365:2: note: Loop condition is false.
+Execution continues on line 376
+        while (lower_count-- > 0) {
+        ^
+./kernel/trace/pid_list.c:377:6: note: 'upper' is non-null
+        if (upper) {
+            ^~~~~
+./kernel/trace/pid_list.c:377:2: note: Taking true branch
+        if (upper) {
+        ^
+./kernel/trace/pid_list.c:382:6: note: Branch condition evaluates to a
+garbage value
+        if (lower) {
+            ^~~~~
