@@ -1,96 +1,72 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110B42C89
-	for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 19:31:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C68BB6128B;
-	Mon, 18 Oct 2021 19:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634585477;
-	bh=kL+xvgtJucVN4cFRoEIBRAEL92uNVUroLxqy6YYCqFE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Zwf9r/8UZz6gNf2WZx2ZtEDDZxD6hhqa7tf+X5YVgqhSzDKboXg+OEL0sBsjy7HZh
-	 YxCy1HQaFDKXUEHEr5JNNIoZOrLjScbSXvdWkjiX7EHZzc2M7Wz741RgL4n6axrXT3
-	 RiyxwIETKFqOdBCqcoqHk2tPVYrSCYPZz4BHXL2LMf+Op5stL7WhmJxP0k8sVvkukh
-	 zoD6kI6BzDp2XNgim1i3Y5x68gj6KVRMdi6Vt4sceyxqcIZP8xatc8bwHuusX1xLtJ
-	 W5pLwJI5C1pQWBb+ymmst3p2WDsEyOMe/llZdbWY9SESUoJCYxIu55D4VPTwUXUMW8
-	 xJWZyMn/m8qXA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Simon Horman <simon.horman@corigine.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	oss-drivers@corigine.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] nfp: bpf: Fix bitwise vs. logical OR warning
-Date: Mon, 18 Oct 2021 12:31:01 -0700
-Message-Id: <20211018193101.2340261-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.33.1.637.gf443b226ca
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912DD29CA
+	for <llvm@lists.linux.dev>; Mon, 18 Oct 2021 19:31:24 +0000 (UTC)
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPSA id ECC3B60E90;
+	Mon, 18 Oct 2021 19:31:23 +0000 (UTC)
+Date: Mon, 18 Oct 2021 15:31:22 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc: llvm@lists.linux.dev, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>
+Subject: Re: Some potentially uninitialized values in pid_list_refill_irq()
+Message-ID: <20211018153122.2f667226@gandalf.local.home>
+In-Reply-To: <CAKXUXMyN-9JuK4Cg+5aUPWiL-0wnAJrvD4qZX3O5nCERou_j1w@mail.gmail.com>
+References: <CAKXUXMyN-9JuK4Cg+5aUPWiL-0wnAJrvD4qZX3O5nCERou_j1w@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-A new warning in clang points out two places in this driver where
-boolean expressions are being used with a bitwise OR instead of a
-logical one:
+On Mon, 18 Oct 2021 18:14:53 +0200
+Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:199:20: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-        reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                             ||
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:199:20: note: cast one or both operands to int to silence this warning
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:280:20: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-        reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                             ||
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:280:20: note: cast one or both operands to int to silence this warning
-2 errors generated.
+> Dear Steven,
+> 
+> Commit 8d6e90983ade ("tracing: Create a sparse bitmask for pid
+> filtering") in linux-next adds the new function pid_list_refill_irq().
+> For this function, 'make clang-analyzer' reports potentially
+> uninitialized values for lower and upper under certain branch
+> conditions, see the full report below.
+> 
+> As far as I understand the analyzer's report and the code at hand:
+> 
+> if lower_count is zero (and upper_count is not), then lower_next is
+> not assigned (because the while lower_count loop is not entered) and
+> lower is pointing to an address with an uninitialized value and hence,
+> the if (lower) conditional reads this uninitialized value.
+> 
+> Analogously for upper_count:
+> 
+> if upper_count is zero (and lower_count is not), then upper_count is
+> not assigned (because the while upper_count loop is not entered) and
+> upper is pointing to an address with an uninitialized value and hence,
+> the if (upper) conditional reads this uninitialized value.
+> 
+> I think this can be resolved by initializing upper and lower to point
+> to an address carrying a zero; but I really fight understanding the
+> whole pointer magic, you did :)
+> 
+> Let me know if clang-analyzer found something buggy here or if the
+> tool and I misunderstood the code; we are certainly interested.
+> 
 
-The motivation for the warning is that logical operations short circuit
-while bitwise operations do not. In this case, it does not seem like
-short circuiting is harmful so implement the suggested fix of changing
-to a logical operation to fix the warning.
+No, you are the third (or fourth) person to report this. I just haven't
+gotten around to pushing my fixes to linux-next, as my test boxes have been
+busy testing stuff for current 5.15-rc. And the fixes are still in the
+queue to be tested.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1479
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/ethernet/netronome/nfp/nfp_asm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I'll have that fixed in a couple of days at most.
 
-diff --git a/drivers/net/ethernet/netronome/nfp/nfp_asm.c b/drivers/net/ethernet/netronome/nfp/nfp_asm.c
-index 2643ea5948f4..154399c5453f 100644
---- a/drivers/net/ethernet/netronome/nfp/nfp_asm.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_asm.c
-@@ -196,7 +196,7 @@ int swreg_to_unrestricted(swreg dst, swreg lreg, swreg rreg,
- 	}
- 
- 	reg->dst_lmextn = swreg_lmextn(dst);
--	reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-+	reg->src_lmextn = swreg_lmextn(lreg) || swreg_lmextn(rreg);
- 
- 	return 0;
- }
-@@ -277,7 +277,7 @@ int swreg_to_restricted(swreg dst, swreg lreg, swreg rreg,
- 	}
- 
- 	reg->dst_lmextn = swreg_lmextn(dst);
--	reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-+	reg->src_lmextn = swreg_lmextn(lreg) || swreg_lmextn(rreg);
- 
- 	return 0;
- }
+Thanks,
 
-base-commit: 041c61488236a5a84789083e3d9f0a51139b6edf
--- 
-2.33.1.637.gf443b226ca
-
+-- Steve
