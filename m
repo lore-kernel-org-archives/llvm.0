@@ -1,37 +1,32 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E997C2C9A
-	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 17:35:43 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 68CA261354;
-	Tue, 19 Oct 2021 17:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17BA72
+	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 17:40:38 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C59E161355;
+	Tue, 19 Oct 2021 17:40:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634664943;
-	bh=q9xjKEzI1+duipt5OANPox9tf8qby25kRaIJ/mILN6M=;
+	s=k20201202; t=1634665238;
+	bh=CmkDVF4O9DMzn3vmYEeic/chg5gWAxEK0NpetX5xAgM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iI3BeSSwZceP6uTe+dwvRxuv0TYsXHFoJkjJSmjOH7QEZSFeqgsrnRACsHj2ore1A
-	 1pKadda1j2+32HgOnV2IXSgR0UtExzVuzCI1f4fT9ASUy1FeFG7Mgpdmrh0XroKoAa
-	 aj/Pv56K6mFvNwm2fqpRmMeFysHGswQiq/ly0pjVXW436cZXkBvJIWqPkBzl8ml1qv
-	 Jommkhrc2u6DvIJwEOIEtmwhupZzZJvd3oXeuRvh57DquOXheq+feg+A69iXck+f1X
-	 LuAOXkIVqjnDYg2vb3dC6aa2YspCSBUnlKTmxVKUq+yX5zX5zpCVAT8lV3K0xw+jQV
-	 bnh+qtp36xx/Q==
-Date: Tue, 19 Oct 2021 10:35:39 -0700
+	b=DBo0vktcw0U8GURxAuDOJliOjqa1JqTXkSp2AFYLzOzqq5aWyeBYAQWsXBUCMTTog
+	 Rjq9ISOlFMfpojsmXmhCr3eT0lfjvDRksstB2U5F1ypuvPbYsVoH1O/88CERD5JNel
+	 lw1VE0P+X1JgIBkXzp/4FhhUS/sOQ21mL5SpYP5HnSpLfjK6fswf6mpZ3mpFsBz08a
+	 CqgqQlY/RD687qQySBFS5NSlqQOArudqL3fqxP7v98TDorukMUGGD53u7lmrl14ZzM
+	 ifkbYKlmUKhAxJC0UTNlgVVVvtFNJ19Dm4qPqopFgGUOeo56Rt3HpnBlaHPOyZcdCj
+	 jis2eLJr7WQOA==
+Date: Tue, 19 Oct 2021 10:40:33 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, Tor Vic <torvic9@mailbox.org>,
-	=?iso-8859-1?Q?D=E1vid_Bolvansk=FD?= <david.bolvansky@gmail.com>
-Subject: Re: [PATCH] platform/x86: thinkpad_acpi: Fix bitwise vs. logical
- warning
-Message-ID: <YW8B6yMdnIJnFkHE@archlinux-ax161>
-References: <20211018182537.2316800-1-nathan@kernel.org>
- <CAKwvOdn4_DrgaZoAo-v7CbYurNUpfAK5tnzT023=WCDzkmYQVg@mail.gmail.com>
- <CAHk-=wi7hUsTTcmPfZCkUEw51Y3ayq3JJxzFsNgodsxxDyk9Ww@mail.gmail.com>
- <CAKwvOd=wGjd_L1703Y9Kngcr9-_wTvcRLToiydXYkR=S_9xWDw@mail.gmail.com>
- <CAHk-=wjwOnrHXDSqnmhiKujk=5XieJFvfnQwc2WKOKFwzcqvaA@mail.gmail.com>
- <YW5Q253s0Y+zYxdi@archlinux-ax161>
- <CAHk-=wi-UJAGo6uwYx8XKydSEsnQ33mW4t+kUnb+CNY+Oxobjg@mail.gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Colin Ian King <colin.king@canonical.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] regulator: lp872x: fix enum conversion warning
+Message-ID: <YW8DEXD1bjW73coE@archlinux-ax161>
+References: <20211019153851.509626-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,104 +35,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wi-UJAGo6uwYx8XKydSEsnQ33mW4t+kUnb+CNY+Oxobjg@mail.gmail.com>
+In-Reply-To: <20211019153851.509626-1-arnd@kernel.org>
 
-Trimming up the replies as we are not really talking about the x86
-platform drivers warning anymore.
-
-On Mon, Oct 18, 2021 at 08:27:02PM -1000, Linus Torvalds wrote:
-> On Mon, Oct 18, 2021 at 7:00 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > For what it's worth, the suggested fix is the '||' underneath the
-> > warning text:
-> >
-> > In file included from arch/x86/kvm/mmu/tdp_iter.c:5:
-> > arch/x86/kvm/mmu/spte.h:318:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-> >         return __is_bad_mt_xwr(rsvd_check, spte) |
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >                                                  ||
-> > arch/x86/kvm/mmu/spte.h:318:9: note: cast one or both operands to int to silence this warning
-> > 1 error generated.
+On Tue, Oct 19, 2021 at 05:38:43PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Hmm. That's not at all obvious.
-
-I agree, hence the question added to the warning.
-
-> The *much* bigger part is that
+> clang warns that the argument to devm_gpiod_get_optional()
+> is the wrong type:
 > 
->    note: cast one or both operands to int to silence this warning
+> drivers/regulator/lp872x.c:689:57: error: implicit conversion from enumeration type 'enum lp872x_dvs_state' to different enumeration type 'enum gpiod_flags' [-Werror,-Wenum-conversion]
+>         dvs->gpio = devm_gpiod_get_optional(lp->dev, "ti,dvs", pinstate);
+>                     ~~~~~~~~~~~~~~~~~~~~~~~                    ^~~~~~~~
 > 
-> which is what I'm complaining about. That note should die. It should
-> say "maybe you meant to use a logical or" or something like that.
+> The enum value is specifcally chosen to be the same here, but
+> the compiler only sees the mismatched types. This could be
+> worked around using another ?: expression, but it seems easiest
+> to replace the assignment with a macro.
 > 
-> > Perhaps that hint should also be added to the warning text, like:
-> >
-> > In file included from arch/x86/kvm/mmu/tdp_iter.c:5:
-> > arch/x86/kvm/mmu/spte.h:318:9: error: use of bitwise '|' with boolean operands; did you mean logical '||'? [-Werror,-Wbitwise-instead-of-logical]
-> >         return __is_bad_mt_xwr(rsvd_check, spte) |
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >                                                  ||
-> > arch/x86/kvm/mmu/spte.h:318:9: note: cast one or both operands to int to silence this warning
+> Fixes: 72bf80cf09c4 ("regulator: lp872x: replacing legacy gpio interface for gpiod")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+I sent basically the same patch but I also eliminated DSV_{LOW,HIGH}
+in favor of the GPIOD flags outright:
+
+https://lore.kernel.org/r/20211019004335.193492-1-nathan@kernel.org/
+
+Either one works so I do not really care which one gets merged.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  drivers/regulator/lp872x.c       | 6 +++---
+>  include/linux/regulator/lp872x.h | 8 +++-----
+>  2 files changed, 6 insertions(+), 8 deletions(-)
 > 
-> I don't understand why you seem to continue to ignore the "note"
-> message, which makes a completely crazy suggestion.
-
-Sorry, I was not intentionally ignoring the note. As far as I understand
-it, it is fairly common for clang to offer a fix up in case the answer
-to the question of "did you mean to do this?" is "no" but also offer a
-way to shut the warning up in case the answer is "yes, I know what I am
-doing", hence the note about casting.
-
-Changing to logical OR is not always the answer, as something like
-
-    int a, b, c;
-
-    changed = foo(&a) | foo(&b) | foo(&c);
-    if (changed)
-        bar(a, b, c);
-
-no longer works. It could be changed to
-
-    int a, b, c;
-
-    changed = foo(&a);
-    changed |= foo(&b);
-    changed |= foo(&c);
-    if (changed)
-        baz(a, b, c);
-
-to make it clearer to both humans and the compiler that every call to
-foo() needs to happen and the results are being aggregated. With that,
-perhaps the note could be changed to something like:
-
-note: separate expressions with '|=' to silence this warning
-
-Although, that would require that the expression was being assigned to a
-variable, rather than being returned or used in a loop like the KVM one
-or this other one that is seen in fs/namei.c on big endian ARM
-configurations with CONFIG_DCACHE_WORD_ACCESS because has_zero() returns
-bool instead of unsigned long on little endian architectures:
-
-fs/namei.c:2149:13: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        } while (!(has_zero(a, &adata, &constants) | has_zero(b, &bdata, &constants)));
-                  ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                   ||
-fs/namei.c:2149:13: note: cast one or both operands to int to silence this warning
-1 warning generated.
-
-Perhaps the note should just be eliminated entirely so that developers
-can be left to try and figure out a way to silence it on their own or
-just rework the code to use logical OR or not use boolean types, I do
-not know.
-
-There was some discussion upstream around how the warning should be
-silenced during the warning's creation. I have added the author of the
-warning, David, to this thread to see if he has any insights.
-
-David, you can see the start of this thread here and follow along with
-the threading at the bottom:
-
-https://lore.kernel.org/r/CAHk-=wi7hUsTTcmPfZCkUEw51Y3ayq3JJxzFsNgodsxxDyk9Ww@mail.gmail.com/
-
-Cheers,
-Nathan
+> diff --git a/drivers/regulator/lp872x.c b/drivers/regulator/lp872x.c
+> index 1dba5dbcd461..61412ebc8d8d 100644
+> --- a/drivers/regulator/lp872x.c
+> +++ b/drivers/regulator/lp872x.c
+> @@ -103,7 +103,7 @@ struct lp872x {
+>  	enum lp872x_id chipid;
+>  	struct lp872x_platform_data *pdata;
+>  	int num_regulators;
+> -	enum lp872x_dvs_state dvs_pin;
+> +	enum gpiod_flags dvs_pin;
+>  };
+>  
+>  /* LP8720/LP8725 shared voltage table for LDOs */
+> @@ -251,7 +251,7 @@ static int lp872x_regulator_enable_time(struct regulator_dev *rdev)
+>  static void lp872x_set_dvs(struct lp872x *lp, enum lp872x_dvs_sel dvs_sel,
+>  			struct gpio_desc *gpio)
+>  {
+> -	enum lp872x_dvs_state state;
+> +	enum gpiod_flags state;
+>  
+>  	state = dvs_sel == SEL_V1 ? DVS_HIGH : DVS_LOW;
+>  	gpiod_set_value(gpio, state);
+> @@ -675,7 +675,7 @@ static const struct regulator_desc lp8725_regulator_desc[] = {
+>  static int lp872x_init_dvs(struct lp872x *lp)
+>  {
+>  	struct lp872x_dvs *dvs = lp->pdata ? lp->pdata->dvs : NULL;
+> -	enum lp872x_dvs_state pinstate;
+> +	enum gpiod_flags pinstate;
+>  	u8 mask[] = { LP8720_EXT_DVS_M, LP8725_DVS1_M | LP8725_DVS2_M };
+>  	u8 default_dvs_mode[] = { LP8720_DEFAULT_DVS, LP8725_DEFAULT_DVS };
+>  
+> diff --git a/include/linux/regulator/lp872x.h b/include/linux/regulator/lp872x.h
+> index 8e7e0343c6e1..5b94fe38fc78 100644
+> --- a/include/linux/regulator/lp872x.h
+> +++ b/include/linux/regulator/lp872x.h
+> @@ -40,10 +40,8 @@ enum lp872x_regulator_id {
+>  	LP872X_ID_MAX,
+>  };
+>  
+> -enum lp872x_dvs_state {
+> -	DVS_LOW  = GPIOD_OUT_LOW,
+> -	DVS_HIGH = GPIOD_OUT_HIGH,
+> -};
+> +#define	DVS_LOW				GPIOD_OUT_LOW
+> +#define	DVS_HIGH			GPIOD_OUT_HIGH
+>  
+>  enum lp872x_dvs_sel {
+>  	SEL_V1,
+> @@ -59,7 +57,7 @@ enum lp872x_dvs_sel {
+>  struct lp872x_dvs {
+>  	struct gpio_desc *gpio;
+>  	enum lp872x_dvs_sel vsel;
+> -	enum lp872x_dvs_state init_state;
+> +	enum gpiod_flags init_state;
+>  };
+>  
+>  /**
+> -- 
+> 2.29.2
+> 
