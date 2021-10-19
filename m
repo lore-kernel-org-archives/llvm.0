@@ -1,34 +1,33 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2392C80
-	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 15:33:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A04D61074;
-	Tue, 19 Oct 2021 15:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1BC2C80
+	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 15:38:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 68CF1610A1;
+	Tue, 19 Oct 2021 15:38:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634657630;
-	bh=RtL/gh4DDkM66HqQ0ekOdnB5o/F9KGRq63IijpNAFls=;
+	s=k20201202; t=1634657935;
+	bh=o5ezVg7Hp4npuopz5xMP0kwyU75vnc6iAMnB1+AOcx8=;
 	h=From:To:Cc:Subject:Date:From;
-	b=idtrzyqCp1jsWhQcNSMBCdrHyBP8J1WygoINN45nZMcg7bWBEocJZQk1H11GFSESS
-	 ola9zlTctj5HEpBjJuscEhTshbxsTdxM8ny66Fch2pWLAfylulTLCOnyUoLtodBjEK
-	 SlSD8ht6dovACWvwaKBTqCHh8p//5I3jKUYUceP18S+L8jXalQ1RAgoRVhY+eRSyS6
-	 Bf8y9THRbaZJ67/J2ikj+YfsVBtfI4hxMpZZMkT6ijd20kxxzRwwyl73MvQ4pAxS89
-	 pdHjiquMouGeVsIO28e6cAbIwxnr4loOSgwmyPUmF8SE0Lc3PSeRx8XVdpT3EnUhLp
-	 wp3g65m4VmFKQ==
+	b=VZKQHSgjp5ceouIKTCzmunpW9pLq0U3OssQa6PEEVopkEQHUN9RewTEiDMK9dGYYw
+	 wWaKOgypCV9ndYGEFrSLqiHV2YDAiYFIcDBDLgLwaMhNYK2l4oL8zoa9YHIzNOetBz
+	 QBdWOFMW5tJaPHXcN7Lj8ES9mLGRIcFAWu+H7qKd9ksERXZRbBe1SpRdWFai4ylgH5
+	 LHrY+Fw3UYyrqPj2YUjTxF4m5tXlWRqKeNXaNsvVbiDmV2Z+dc3Cu/7DbJiypMVVZa
+	 K4Ttv/2ObuURdsu1DseF9ZfOxg1uVK8ZL30pO3Dx+Jai56pe3UJc5uGe548jaiufuW
+	 sbB2K3uFI8EKA==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Tom Zanussi <zanussi@kernel.org>,
+To: Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Colin Ian King <colin.king@canonical.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] [v3] tracing: use %ps format string to print symbols
-Date: Tue, 19 Oct 2021 17:33:13 +0200
-Message-Id: <20211019153337.294790-1-arnd@kernel.org>
+Subject: [PATCH] regulator: lp872x: fix enum conversion warning
+Date: Tue, 19 Oct 2021 17:38:43 +0200
+Message-Id: <20211019153851.509626-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -40,90 +39,82 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang started warning about excessive stack usage in
-hist_trigger_print_key()
+clang warns that the argument to devm_gpiod_get_optional()
+is the wrong type:
 
-kernel/trace/trace_events_hist.c:4723:13: error: stack frame size (1336) exceeds limit (1024) in function 'hist_trigger_print_key' [-Werror,-Wframe-larger-than]
+drivers/regulator/lp872x.c:689:57: error: implicit conversion from enumeration type 'enum lp872x_dvs_state' to different enumeration type 'enum gpiod_flags' [-Werror,-Wenum-conversion]
+        dvs->gpio = devm_gpiod_get_optional(lp->dev, "ti,dvs", pinstate);
+                    ~~~~~~~~~~~~~~~~~~~~~~~                    ^~~~~~~~
 
-The problem is that there are two 512-byte arrays on the stack if
-hist_trigger_stacktrace_print() gets inlined. I don't think this has
-changed in the past five years, but something probably changed the
-inlining decisions made by the compiler, so the problem is now made
-more obvious.
+The enum value is specifcally chosen to be the same here, but
+the compiler only sees the mismatched types. This could be
+worked around using another ?: expression, but it seems easiest
+to replace the assignment with a macro.
 
-Rather than printing the symbol names into separate buffers, it
-seems we can simply use the special %ps format string modifier
-to print the pointers symbolically and get rid of both buffers.
-
-Marking hist_trigger_stacktrace_print() would be a simpler
-way of avoiding the warning, but that would not address the
-excessive stack usage.
-
-Fixes: 69a0200c2e25 ("tracing: Add hist trigger support for stacktraces as keys")
-Link: https://lore.kernel.org/all/20211015095704.49a99859@gandalf.local.home/
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Tested-by: Tom Zanussi <zanussi@kernel.org>
+Fixes: 72bf80cf09c4 ("regulator: lp872x: replacing legacy gpio interface for gpiod")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Changes in v3:
- - Fix 32-bit cast warning
+ drivers/regulator/lp872x.c       | 6 +++---
+ include/linux/regulator/lp872x.h | 8 +++-----
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-Changes in v2:
- - Use %pS instead of %ps to include offset in third string
- - add (void*) cast to avoid compile-time warnings
----
- kernel/trace/trace_events_hist.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index f01e442716e2..632386b73fc3 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -4706,7 +4706,6 @@ static void hist_trigger_stacktrace_print(struct seq_file *m,
- 					  unsigned long *stacktrace_entries,
- 					  unsigned int max_entries)
+diff --git a/drivers/regulator/lp872x.c b/drivers/regulator/lp872x.c
+index 1dba5dbcd461..61412ebc8d8d 100644
+--- a/drivers/regulator/lp872x.c
++++ b/drivers/regulator/lp872x.c
+@@ -103,7 +103,7 @@ struct lp872x {
+ 	enum lp872x_id chipid;
+ 	struct lp872x_platform_data *pdata;
+ 	int num_regulators;
+-	enum lp872x_dvs_state dvs_pin;
++	enum gpiod_flags dvs_pin;
+ };
+ 
+ /* LP8720/LP8725 shared voltage table for LDOs */
+@@ -251,7 +251,7 @@ static int lp872x_regulator_enable_time(struct regulator_dev *rdev)
+ static void lp872x_set_dvs(struct lp872x *lp, enum lp872x_dvs_sel dvs_sel,
+ 			struct gpio_desc *gpio)
  {
--	char str[KSYM_SYMBOL_LEN];
- 	unsigned int spaces = 8;
- 	unsigned int i;
+-	enum lp872x_dvs_state state;
++	enum gpiod_flags state;
  
-@@ -4715,8 +4714,7 @@ static void hist_trigger_stacktrace_print(struct seq_file *m,
- 			return;
- 
- 		seq_printf(m, "%*c", 1 + spaces, ' ');
--		sprint_symbol(str, stacktrace_entries[i]);
--		seq_printf(m, "%s\n", str);
-+		seq_printf(m, "%pS\n", (void*)stacktrace_entries[i]);
- 	}
- }
- 
-@@ -4726,7 +4724,6 @@ static void hist_trigger_print_key(struct seq_file *m,
- 				   struct tracing_map_elt *elt)
+ 	state = dvs_sel == SEL_V1 ? DVS_HIGH : DVS_LOW;
+ 	gpiod_set_value(gpio, state);
+@@ -675,7 +675,7 @@ static const struct regulator_desc lp8725_regulator_desc[] = {
+ static int lp872x_init_dvs(struct lp872x *lp)
  {
- 	struct hist_field *key_field;
--	char str[KSYM_SYMBOL_LEN];
- 	bool multiline = false;
- 	const char *field_name;
- 	unsigned int i;
-@@ -4747,14 +4744,12 @@ static void hist_trigger_print_key(struct seq_file *m,
- 			seq_printf(m, "%s: %llx", field_name, uval);
- 		} else if (key_field->flags & HIST_FIELD_FL_SYM) {
- 			uval = *(u64 *)(key + key_field->offset);
--			sprint_symbol_no_offset(str, uval);
--			seq_printf(m, "%s: [%llx] %-45s", field_name,
--				   uval, str);
-+			seq_printf(m, "%s: [%llx] %-45ps", field_name,
-+				   uval, (void *)(uintptr_t)uval);
- 		} else if (key_field->flags & HIST_FIELD_FL_SYM_OFFSET) {
- 			uval = *(u64 *)(key + key_field->offset);
--			sprint_symbol(str, uval);
--			seq_printf(m, "%s: [%llx] %-55s", field_name,
--				   uval, str);
-+			seq_printf(m, "%s: [%llx] %-55pS", field_name,
-+				   uval, (void *)(uintptr_t)uval);
- 		} else if (key_field->flags & HIST_FIELD_FL_EXECNAME) {
- 			struct hist_elt_data *elt_data = elt->private_data;
- 			char *comm;
+ 	struct lp872x_dvs *dvs = lp->pdata ? lp->pdata->dvs : NULL;
+-	enum lp872x_dvs_state pinstate;
++	enum gpiod_flags pinstate;
+ 	u8 mask[] = { LP8720_EXT_DVS_M, LP8725_DVS1_M | LP8725_DVS2_M };
+ 	u8 default_dvs_mode[] = { LP8720_DEFAULT_DVS, LP8725_DEFAULT_DVS };
+ 
+diff --git a/include/linux/regulator/lp872x.h b/include/linux/regulator/lp872x.h
+index 8e7e0343c6e1..5b94fe38fc78 100644
+--- a/include/linux/regulator/lp872x.h
++++ b/include/linux/regulator/lp872x.h
+@@ -40,10 +40,8 @@ enum lp872x_regulator_id {
+ 	LP872X_ID_MAX,
+ };
+ 
+-enum lp872x_dvs_state {
+-	DVS_LOW  = GPIOD_OUT_LOW,
+-	DVS_HIGH = GPIOD_OUT_HIGH,
+-};
++#define	DVS_LOW				GPIOD_OUT_LOW
++#define	DVS_HIGH			GPIOD_OUT_HIGH
+ 
+ enum lp872x_dvs_sel {
+ 	SEL_V1,
+@@ -59,7 +57,7 @@ enum lp872x_dvs_sel {
+ struct lp872x_dvs {
+ 	struct gpio_desc *gpio;
+ 	enum lp872x_dvs_sel vsel;
+-	enum lp872x_dvs_state init_state;
++	enum gpiod_flags init_state;
+ };
+ 
+ /**
 -- 
 2.29.2
 
