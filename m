@@ -1,31 +1,34 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F78B2C8B
-	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 00:43:52 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B78E6103B;
-	Tue, 19 Oct 2021 00:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825632C80
+	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 01:42:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 41B2C61260;
+	Tue, 19 Oct 2021 01:42:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634604231;
-	bh=KRcaA+j1CSShmBtIgsG5VTNla29kY6brC8Flx7J25X4=;
+	s=k20201202; t=1634607738;
+	bh=D7YEQastTxFQdKRaYpytIqKQ/4otb+9xuoq/+a0xTe8=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ipSbIBXqM+Yr1wfoCecOZZnO9Qx7kse4aNnXoV0yV2hqXAwLS9sq3sSM7ITyNb7Rr
-	 Jd4zxtbC/qV+5dYHaF0LDGkaqGjxALt2G52fHXW0Balnk45v1a1lLLI2ZptDWavl5N
-	 9xBQK88Svs7Si5dRdlF6QlqSxp6O0IMoLlRNX1GENt9bK+DekZ9yrhMShnHJB8p0WP
-	 Ah114B7B3vSOv4rDOm7bEi1Wvgt3PNhLGEgez1MVU6xBox9NG3yOmuH+XPXPgTpvP2
-	 xzqDk5CLfSnhTj7biB+N02GgF7a80gZRQlhBP3BkC9MzA5ejfyOpI0elosRK6mBTp8
-	 tG7JQnlCWw6dA==
+	b=Q1vHyVjPA1YYlW/kk/Au08uMtZBfDh7TNX69DFvVdRf1xD0GS1vp3Oi9sy5fivxYj
+	 r5JrbeMLvihQ+uygHe8teqas18pTG0utLYcc+I7xgnlb2Wf4VO3WcpyONxS8N7Tbf4
+	 XDC1P44EmhjMkN0GAcpQLAa0G1cF/3FRCqh8sAvvKab+E3DbeQnVOW52mEKr7Vfj+1
+	 THhKyJTKesrfOEpOb9vZ/UmaqqgYfHC4xLwJmWhsdu2ssEvO9eoFBSjhCGdn7s16Dg
+	 IEYfImJoHV/Z8swOgD7zG9LOVN69KhavBUJtNXTCCWUlMzJ9BBMV3TItaED+Dab/Fz
+	 O+wHEroE2revA==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>
+To: Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
 Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
+	intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] regulator: lp872x: Remove lp872x_dvs_state
-Date: Mon, 18 Oct 2021 17:43:35 -0700
-Message-Id: <20211019004335.193492-1-nathan@kernel.org>
+Subject: [PATCH] ice: Fix clang -Wimplicit-fallthrough in ice_pull_qvec_from_rc()
+Date: Mon, 18 Oct 2021 18:42:03 -0700
+Message-Id: <20211019014203.1926130-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.33.1.637.gf443b226ca
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,119 +39,44 @@ MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 
-After this driver was converted to gpiod, clang started warning:
+Clang warns:
 
-vers/regulator/lp872x.c:689:57: error: implicit conversion from
-enumeration type 'enum lp872x_dvs_state' to different enumeration type
-'enum gpiod_flags' [-Werror,-Wenum-conversion]
-        dvs->gpio = devm_gpiod_get_optional(lp->dev, "ti,dvs", pinstate);
-                    ~~~~~~~~~~~~~~~~~~~~~~~                    ^~~~~~~~
+drivers/net/ethernet/intel/ice/ice_lib.c:1906:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+        default:
+        ^
+drivers/net/ethernet/intel/ice/ice_lib.c:1906:2: note: insert 'break;' to avoid fall-through
+        default:
+        ^
+        break;
 1 error generated.
 
-lp872x_dvs_state was updated to have values from gpiod_flags but this is
-not enough to avoid an implicit conversion warning from either GCC or
-clang (although GCC enables this warning under -Wextra instead of -Wall
-like clang so it is not seen under normal builds).
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return. Add the missing break to silence
+the warning.
 
-Eliminate lp872x_dvs_state in favor of using gpiod_flags everywhere so
-that there is no more warning about an implicit conversion.
-
-Fixes: 72bf80cf09c4 ("regulator: lp872x: replacing legacy gpio interface for gpiod")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1481
+Link: https://github.com/ClangBuiltLinux/linux/issues/1482
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/regulator/lp872x.c       | 14 +++++++-------
- include/linux/regulator/lp872x.h |  7 +------
- 2 files changed, 8 insertions(+), 13 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_lib.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/regulator/lp872x.c b/drivers/regulator/lp872x.c
-index 1dba5dbcd461..35d826fe9def 100644
---- a/drivers/regulator/lp872x.c
-+++ b/drivers/regulator/lp872x.c
-@@ -103,7 +103,7 @@ struct lp872x {
- 	enum lp872x_id chipid;
- 	struct lp872x_platform_data *pdata;
- 	int num_regulators;
--	enum lp872x_dvs_state dvs_pin;
-+	enum gpiod_flags dvs_pin;
- };
- 
- /* LP8720/LP8725 shared voltage table for LDOs */
-@@ -251,9 +251,9 @@ static int lp872x_regulator_enable_time(struct regulator_dev *rdev)
- static void lp872x_set_dvs(struct lp872x *lp, enum lp872x_dvs_sel dvs_sel,
- 			struct gpio_desc *gpio)
- {
--	enum lp872x_dvs_state state;
-+	enum gpiod_flags state;
- 
--	state = dvs_sel == SEL_V1 ? DVS_HIGH : DVS_LOW;
-+	state = dvs_sel == SEL_V1 ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
- 	gpiod_set_value(gpio, state);
- 	lp->dvs_pin = state;
- }
-@@ -269,7 +269,7 @@ static u8 lp872x_select_buck_vout_addr(struct lp872x *lp,
- 	switch (buck) {
- 	case LP8720_ID_BUCK:
- 		if (val & LP8720_EXT_DVS_M) {
--			addr = (lp->dvs_pin == DVS_HIGH) ?
-+			addr = (lp->dvs_pin == GPIOD_OUT_HIGH) ?
- 				LP8720_BUCK_VOUT1 : LP8720_BUCK_VOUT2;
- 		} else {
- 			if (lp872x_read_byte(lp, LP8720_ENABLE, &val))
-@@ -283,7 +283,7 @@ static u8 lp872x_select_buck_vout_addr(struct lp872x *lp,
- 		if (val & LP8725_DVS1_M)
- 			addr = LP8725_BUCK1_VOUT1;
- 		else
--			addr = (lp->dvs_pin == DVS_HIGH) ?
-+			addr = (lp->dvs_pin == GPIOD_OUT_HIGH) ?
- 				LP8725_BUCK1_VOUT1 : LP8725_BUCK1_VOUT2;
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index f981e77f72ad..03443c060507 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -1903,6 +1903,7 @@ static struct ice_q_vector *ice_pull_qvec_from_rc(struct ice_ring_container *rc)
+ 	case ICE_TX_CONTAINER:
+ 		if (rc->tx_ring)
+ 			return rc->tx_ring->q_vector;
++		break;
+ 	default:
  		break;
- 	case LP8725_ID_BUCK2:
-@@ -675,7 +675,7 @@ static const struct regulator_desc lp8725_regulator_desc[] = {
- static int lp872x_init_dvs(struct lp872x *lp)
- {
- 	struct lp872x_dvs *dvs = lp->pdata ? lp->pdata->dvs : NULL;
--	enum lp872x_dvs_state pinstate;
-+	enum gpiod_flags pinstate;
- 	u8 mask[] = { LP8720_EXT_DVS_M, LP8725_DVS1_M | LP8725_DVS2_M };
- 	u8 default_dvs_mode[] = { LP8720_DEFAULT_DVS, LP8725_DEFAULT_DVS };
- 
-@@ -841,7 +841,7 @@ static struct lp872x_platform_data
- 
- 	of_property_read_u8(np, "ti,dvs-vsel", (u8 *)&pdata->dvs->vsel);
- 	of_property_read_u8(np, "ti,dvs-state", &dvs_state);
--	pdata->dvs->init_state = dvs_state ? DVS_HIGH : DVS_LOW;
-+	pdata->dvs->init_state = dvs_state ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
- 
- 	if (of_get_child_count(np) == 0)
- 		goto out;
-diff --git a/include/linux/regulator/lp872x.h b/include/linux/regulator/lp872x.h
-index 8e7e0343c6e1..b62e45aa1dd3 100644
---- a/include/linux/regulator/lp872x.h
-+++ b/include/linux/regulator/lp872x.h
-@@ -40,11 +40,6 @@ enum lp872x_regulator_id {
- 	LP872X_ID_MAX,
- };
- 
--enum lp872x_dvs_state {
--	DVS_LOW  = GPIOD_OUT_LOW,
--	DVS_HIGH = GPIOD_OUT_HIGH,
--};
--
- enum lp872x_dvs_sel {
- 	SEL_V1,
- 	SEL_V2,
-@@ -59,7 +54,7 @@ enum lp872x_dvs_sel {
- struct lp872x_dvs {
- 	struct gpio_desc *gpio;
- 	enum lp872x_dvs_sel vsel;
--	enum lp872x_dvs_state init_state;
-+	enum gpiod_flags init_state;
- };
- 
- /**
+ 	}
 
-base-commit: 72bf80cf09c4693780ad93a31b48fa5a4e17a946
+base-commit: 939a6567f976efb8b3e6d601ce35eb56b17babd0
 -- 
 2.33.1.637.gf443b226ca
 
