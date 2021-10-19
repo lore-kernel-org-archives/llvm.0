@@ -1,84 +1,78 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547032C88
-	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 08:56:02 +0000 (UTC)
-Received: by mail-pf1-f182.google.com with SMTP id q19so17048463pfl.4
-        for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 01:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z+hK2vHxJimvuS81efjInRFCiVYH3H9sgxFrDD0JWWk=;
-        b=ilXuMmMjxCfm8EwaazyCuDXQAhRLCYsa62PksKURufiqHgMtB0axmghgn9h5UIhDYh
-         /a9ZKrUelqpZCWHQ6BHeL2rpAtZ6joWICUFXJzaglDwoWO8qt9hTGhdIfNpNc06xu+jy
-         /atpwJ85GD0fkGGRZ8Wo7zMxuuArQ9fOxbDdYPxCxIOhsJ6vQk/5+CepSLOvIT1qzGld
-         sdgRIn/n/OqKmgQGRRjX7/HYAbdGWHRsguwLscexF7hjtR2WBEjdZ2fC9WbhjreH2bqC
-         WiYx2ZbTKkHwS4Q0BbYU//9/n13cGaIFbbJ8PKjLIN0m8yDzKzMSSy1+72ejh7cJAm/x
-         f+Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z+hK2vHxJimvuS81efjInRFCiVYH3H9sgxFrDD0JWWk=;
-        b=brppRyES4wPqghmyV7QOfDuXBMw118rsDSjmrtxXpMPA2JuzEArcWQDmbxk8g0FBWq
-         FaGgkgUTkLjkVzVPYGFm485SdQnIgI++h290st5OOwgpCZhbI13g+6W9o0SfmviRZrEo
-         2uoGnFKJYPHBEdQS4DN0ItvfjgesyqfegVv1MurFB8PeYmjiOtoUA80SUrbgey47OJCE
-         H5ZCfD9v6qMm4Y5gYxlja5M+KaZ9PxCJaHGvmb8znPce7Sk2ujaSNK3OYrle6bGR7iUf
-         /BhwzbA48OUYX8nS2yb5WjJn/6zD9o5cMmCI5Es7XUEtKrfA2gvCYyQ3yVeQSvEglPex
-         xbfg==
-X-Gm-Message-State: AOAM531RcnRwntK6gf+7IBp1i1US8PY2VvcsDRYgpT/CmK7umySTilrP
-	2KaZb4K7qY1Lk4miZlHQcxGe1+mlmYmlOmZOn3g7DA==
-X-Google-Smtp-Source: ABdhPJzLk1SNj1n3SK6HBgdgAoTXiE+yyJUyl3dRSY5JSIqSCwC8qbwa0j0xt0TKR46UEgTn2ZygUFhs9fsDpoLLag0=
-X-Received: by 2002:a63:f84f:: with SMTP id v15mr28103028pgj.204.1634633761566;
- Tue, 19 Oct 2021 01:56:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BDD62C88
+	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 10:23:42 +0000 (UTC)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4HYTtZ6cjhz4x2Lp
+	for <llvm@lists.linux.dev>; Tue, 19 Oct 2021 10:07:02 +0000 (UTC)
+Authentication-Results: mail-4321.protonmail.ch;
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="kgnUhhOx"
+Date: Tue, 19 Oct 2021 10:06:32 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+	t=1634637998; bh=LOFsSQgEL4w+fS68cEWnarmWnUdXiUZe2VQW9yMhlYk=;
+	h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+	b=kgnUhhOx8j6ksT5RA6+ox2FUcgrA4VVcqOldtTlgDhhKSNfUVd498eXSm5hL82SQn
+	 Vm3wvVOK0PrS3vSnid7gZE6SBQBntl4WR/Omv6Cq4Idpv6TJUU+pgbBB1XGTN1MYiT
+	 hNIk4CI43LHFyiElLWwvfQYkg0hJLXQrHSuGtYE8cw9xFo58ByNHjnTL7Mhk3WzwyN
+	 08R/zkYS6jzfHnRjsWKuTL6BybGW+N7dAMV+Rd+b7FVIpJ8eXw0V4z3KeIxMpP+QAp
+	 nGqASZ2lfKwKJw1L75wTS8+Prb7EzGYyhsz+08EzUZjo0s3SkKNhwkJLmgWpd60aoP
+	 kHly93G10ZO4Q==
+To: Sami Tolvanen <samitolvanen@google.com>
+From: Alexander Lobakin <alobakin@pm.me>
+Cc: Alexander Lobakin <alobakin@pm.me>, x86@kernel.org, Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
+Message-ID: <20211019095947.89257-1-alobakin@pm.me>
+In-Reply-To: <20211013181658.1020262-1-samitolvanen@google.com>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202110172146.wMBY6qzo-lkp@intel.com> <eb2b58dc-3600-70d3-147a-c356d24feabd@intel.com>
-In-Reply-To: <eb2b58dc-3600-70d3-147a-c356d24feabd@intel.com>
-From: Tzung-Bi Shih <tzungbi@google.com>
-Date: Tue, 19 Oct 2021 16:55:50 +0800
-Message-ID: <CA+Px+wX5NgbA_0VcS9pJ_L5=_znTca6LtsLYbCsh3ksro_2qzA@mail.gmail.com>
-Subject: Re: [linux-next:master 4131/8410] drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c:133:18:
- warning: Value stored to 'pfb' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-To: kernel test robot <yujie.liu@intel.com>
-Cc: Yunfei Dong <Yunfei.Dong@mediatek.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Memory Management List <linux-mm@kvack.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
-	Alexandre Courbot <acourbot@chromium.org>, Hans Verkuil <hverkuil@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+	autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+	mailout.protonmail.ch
 
-On Tue, Oct 19, 2021 at 9:40 AM kernel test robot <yujie.liu@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   7c832d2f9b959e3181370c8b0dacaf9efe13fc05
-> commit: 8cdc3794b2e34b3ee11ddfccf4af3f64344a1a75 [4131/8410] media: mtk-vcodec: vdec: support stateless API
-> config: riscv-randconfig-c006-20211017 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 8ca4b3ef19fe82d7ad6a6e1515317dcc01b41515)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install riscv cross compiling tool for clang build
->          # apt-get install binutils-riscv64-linux-gnu
->          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8cdc3794b2e34b3ee11ddfccf4af3f64344a1a75
->          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->          git fetch --no-tags linux-next master
->          git checkout 8cdc3794b2e34b3ee11ddfccf4af3f64344a1a75
->          # save the attached .config to linux build tree
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
->
-> clang-analyzer warnings: (new ones prefixed by >>)
->
->  >> drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c:133:18: warning: Value stored to 'pfb' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
->             struct vdec_fb *pfb = &framebuf->frame_buffer;
->                             ^~~   ~~~~~~~~~~~~~~~~~~~~~~~
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 13 Oct 2021 11:16:43 -0700
 
-Proposed a fix:
-https://patchwork.linuxtv.org/project/linux-media/patch/20211019085244.1403-1-tzungbi@google.com/
+> This series adds support for Clang's Control-Flow Integrity (CFI)
+> checking to x86_64. With CFI, the compiler injects a runtime
+> check before each indirect function call to ensure the target is
+> a valid function with the correct static type. This restricts
+> possible call targets and makes it more difficult for an attacker
+> to exploit bugs that allow the modification of stored function
+> pointers. For more details, see:
+>
+>   https://clang.llvm.org/docs/ControlFlowIntegrity.html
+>
+> Note that v5 is based on tip/master. The first two patches contain
+> objtool support for CFI, the remaining patches change function
+> declarations to use opaque types, fix type mismatch issues that
+> confuse the compiler, and disable CFI where it can't be used.
+>
+> You can also pull this series from
+>
+>   https://github.com/samitolvanen/linux.git x86-cfi-v5
+
+Hi,
+
+I found [0] while was testing Peter's retpoline series, wanted to
+ask / double check if that is because I'm using ClangCFI for x86
+on unsupported Clang 12. It is fixed in 13 I suppose?
+
+[0] https://lore.kernel.org/all/20211019094038.80569-1-alobakin@pm.me
+
+Thanks,
+Al
+
