@@ -1,61 +1,60 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE6572
-	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 19:11:30 +0000 (UTC)
-Received: by mail-pl1-f181.google.com with SMTP id g5so16837987plg.1
-        for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 12:11:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B48972
+	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 19:12:48 +0000 (UTC)
+Received: by mail-pg1-f176.google.com with SMTP id c4so16331374pgv.11
+        for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 12:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=VT1ZnTWZw0jMkeN3fDOrnC1r/jUp1V3OZwD2nwImWMk=;
-        b=nre93T6MzHelf00EfakHYDHtu00QJEKItoSAkKHGP3gUTjHdigzheidpN0Cn+ghvKd
-         LKWv2/OIotRWfXs/WCG7an5/vs5KygZtizL39PVLhD9YZOfqaFwrzigVA2RIjTye4bHE
-         OWKNrjwp2iiSwr71nYKpU9JH0SPNhhNIbBfEw=
+        bh=CFUDLBWdmnPV44bi7dVx5A56FXXnHIGNsm6BfJl0RsI=;
+        b=JtQFBqmyuqUGLOJirZEnfOGRzSjyJfk76syhW8olBgTsaSJ1WrRnDKlU8xrvFkJEbB
+         YZO0dY/VKA9+YDBXn7kwblGNLtajGRhaUcQJVIjGCA+DbxnLTaesnzOROD4lAa6oBXO3
+         ABy/6N42oUMuboWXbEo0EIYQPT+5a/NVcybC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=VT1ZnTWZw0jMkeN3fDOrnC1r/jUp1V3OZwD2nwImWMk=;
-        b=YLMchIOWF1owIgnl4L4VbmDyiqIz3Y3A3bM4SOXAm+MqURXrWccM5zDeUzF4c9OzRr
-         3zSI4/czXHhN4I3eLust1GXtygCHNkdqO16b6nBu04qZpxoFkwXBIvQLv7bwNoWeB2ci
-         pwOAqznkYH9obkbVzgSYAUEFF7cKE1nHIA46ET/AY/futkjBPa64Q1eENZpP7hw8GxHR
-         XhXhqkleKSGQXT2EI4QjyrGrMM0odeC6mMxI+Gw/JytwSOrk/n2KZ6wzojZfkrMBzsfT
-         oDLkRQ8qRt1XO7XJn3/XRyBuMAx1V68yibUNHoBHOvIZCSng7m+ZxQpBJ6KaPf0WEZFK
-         5m8w==
-X-Gm-Message-State: AOAM530Aw0qCIfZ46Ol3hiVBkCcKDgs4cD0L9ipQIcuTJWAu4JBxuGzJ
-	qF4e/F479gppoQaFrA0WlyREikWOy7SyYA==
-X-Google-Smtp-Source: ABdhPJyVMN7MoPGQBIowKQmEG8vN3pK31aaAQUVHuBVZpxjnw8chkJkUkW744OD0Z5Ryu083zYUf6Q==
-X-Received: by 2002:a17:90a:e54d:: with SMTP id ei13mr950751pjb.65.1634757090342;
-        Wed, 20 Oct 2021 12:11:30 -0700 (PDT)
+        bh=CFUDLBWdmnPV44bi7dVx5A56FXXnHIGNsm6BfJl0RsI=;
+        b=3ExuU1vhUSNSkQ5rIoT5eaatq7B3Zup/su+c5w/iTT2R9UcX49vitCyyHMM8Y/8pR+
+         IMcf6x8sLRmQyadegWh2tfenrLmVxcCOehEcoWB7gRFyCJ/xmKJrjAWzlsIryPFMNAif
+         LUNkHGgxqNb6b0rfFLfJ7fIJ+/6fuVlK/GOMaHAqpPBND5tXEO077ximTBVhBNYSP7F4
+         8xzgc+ZtC21c7Eiv88YXt6zLstnzgvPvta48AH3VXHJWt5xBRZKEig5n+c6hiiBWXRb4
+         gZ4262f6X9R3RmNQ1b8focU1zeKX00yBEeh8B7f8RCriBtOwnTsr7P27I6RCrlIxZQ1e
+         AwcQ==
+X-Gm-Message-State: AOAM532z8bLxjLO/QmbyBpXzvi/85daa1+3irHCj1tpCZjpsfCwBesFh
+	7VqkynYl28DrpIH0MJdgH9OopeSKLYaBkw==
+X-Google-Smtp-Source: ABdhPJzl2+SAfUh6NkJ+DhCKOWmzKsU6GNvGxGf2XT0aJXU9P6UbVjWdBAkeh+PuF3DGKEHMZ/Xdaw==
+X-Received: by 2002:a63:4622:: with SMTP id t34mr814413pga.293.1634757167736;
+        Wed, 20 Oct 2021 12:12:47 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x13sm2869108pge.37.2021.10.20.12.11.29
+        by smtp.gmail.com with ESMTPSA id e9sm3758333pfv.189.2021.10.20.12.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 12:11:29 -0700 (PDT)
-Date: Wed, 20 Oct 2021 12:11:29 -0700
+        Wed, 20 Oct 2021 12:12:47 -0700 (PDT)
+Date: Wed, 20 Oct 2021 12:12:46 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Emese Revfy <re.emese@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Michal Marek <michal.lkml@markovi.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hardening@vger.kernel.org,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-	Dan Li <ashimida@linux.alibaba.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	James Morris <jmorris@namei.org>,
+	Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-hardening@vger.kernel.org,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>,
 	linux-security-module <linux-security-module@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 2/2] gcc-plugins: Remove cyc_complexity
-Message-ID: <202110201210.1F70546@keescook>
+	llvm@lists.linux.dev, Dan Li <ashimida@linux.alibaba.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] gcc-plugins: Explicitly document purpose and
+ deprecation schedule
+Message-ID: <202110201212.C155FE92@keescook>
 References: <20211020173554.38122-1-keescook@chromium.org>
- <20211020173554.38122-3-keescook@chromium.org>
- <CANiq72kveT40jX8GWjs1dy0o3YjowUGtGTddPb+da114sb+4iA@mail.gmail.com>
+ <20211020173554.38122-2-keescook@chromium.org>
+ <CANiq72kCQa7_3JkUqO2=mdj+P2zcjPYJUai0oip5DN7Aaq_ySQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,17 +63,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72kveT40jX8GWjs1dy0o3YjowUGtGTddPb+da114sb+4iA@mail.gmail.com>
+In-Reply-To: <CANiq72kCQa7_3JkUqO2=mdj+P2zcjPYJUai0oip5DN7Aaq_ySQ@mail.gmail.com>
 
-On Wed, Oct 20, 2021 at 07:48:55PM +0200, Miguel Ojeda wrote:
+On Wed, Oct 20, 2021 at 07:44:19PM +0200, Miguel Ojeda wrote:
 > On Wed, Oct 20, 2021 at 7:35 PM Kees Cook <keescook@chromium.org> wrote:
 > >
-> > - * Copyright 2011-2016 by Emese Revfy <re.emese@gmail.com>
+> > +Purpose
+> > +=======
 > 
-> Perhaps we should Cc this address to give them notice.
+> Sounds good to me.
+> 
+> >  config GCC_PLUGIN_SANCOV
+> >         bool
+> > +       # Plugin can be removed once the kernel only supports GCC 6.1.0+
+> 
+> Since we are just giving the major in the other cases below, I would
+> just say GCC 6+ here (the numbering scheme changed in GCC 5 already).
 
-Good point; I'm in the habit of that happening automatically as Emese
-was a co-maintainer of the gcc-plugins. Sorry for the oversight here.
+Sure; now updated.
+
+> Thanks for adding the versions, by the way -- this is useful long-term
+> and not always done for other things...
+
+Yeah, I always struggled to find when options were added to GCC, so I
+wanted this for my poor brain too. :)
 
 > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 
