@@ -1,96 +1,192 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77282C8F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D3F2C85
 	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 17:35:56 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id kk10so3006048pjb.1
+Received: by mail-pj1-f42.google.com with SMTP id gn3so3024926pjb.0
         for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 10:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZU0CzHjZqgy6QBSitXFMa80Tv4uRu9MQakGYwJwWt/U=;
-        b=c6/cMfcgmDu7wrlCQvkpDnTEMcB3eyHmy62eHknNhqrmqzlwOZwdWcXSX9tRwwE3op
-         fP2y06G96MaP2Ka2jb/Rn6u9NmzO7uLEN6qF27gCbesZmxDI2NHrgFQBks3jAUr/nZAu
-         JK4SGunKgL1rU6EcSiEGGAJZlSsVfQLBQ/tWM=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ws4j8gO4JntA0wlKwlmQrmrVOGmPKcOTbGQbFPeYxe8=;
+        b=SbblMPzMlPY8A4MSnv3l2Wo17xTLRkKnbJY1T9AlW16vMzYUT4nWpQKHzWojxD0zmD
+         XoRT6OhfgXgfV1c+OPJinKiJUviKMLxu/lh6trMG9rbv6gPZyRud3Dud8n5nD/cYt61f
+         8qfrMQBiYBwpJS1T6d3noRRz41Pc8/yRc4kGo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZU0CzHjZqgy6QBSitXFMa80Tv4uRu9MQakGYwJwWt/U=;
-        b=LZfvqHr8gvn6xc3Cu1hDnD9P3tq+cjtGsbrQcjz7SKYTdsHNPTfiSjZ4WoAMMS70Lu
-         IknnEC9QMMtoxn6fgpXfhRVNKsFxAKwarlr7nFHc3DrlaEbQnHo5tkvM4N0VrhpAgg9s
-         /MegnJTL+han6nhAy5Uj3q7QTziqepvRUHIoDi0EPkfaVcU6NaJC4HQTkQfznWF5Adi6
-         4npPxQ4hm/Pu9B6j+k6l1nS9XaN137vWPt00e/NKF13+arY2BrZT6U6TylWzF2PWRzGF
-         xvGk5UvcqqztP0/kEcEp3p4tT2OgInj1jSTSwvD9vAkLipumda0nlNqvavPdtLsV79fk
-         4b5g==
-X-Gm-Message-State: AOAM532s7I61jJIx3VFy/OV/QdDarykYx53Qgt041ldz1zt7QIf2oEsj
-	RrlO0WLoS9qi+Wsnj0Tg1Ncfeg==
-X-Google-Smtp-Source: ABdhPJwxjmhxwtVVhnG5Cb8sIy1txSJ6l+QOFPga02mOtLur2dPGRmtusTkXH+R+HEi53dWe8AXdEg==
-X-Received: by 2002:a17:90b:193:: with SMTP id t19mr379663pjs.95.1634751356548;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ws4j8gO4JntA0wlKwlmQrmrVOGmPKcOTbGQbFPeYxe8=;
+        b=OlzXF+5SuFHWk6deReVWrHh1P0nf4NgQ3VsFyAWk2rYbbzGdeZo2bwlzHYJ8gSJmNn
+         i71uEmMy1p6HqeXuavGqSKNlzaSL6PxVrdLlentOBRRwhItC6KU0qaLq/grIGn/uJ5tC
+         3P7vdJ9yoXi4bmncJb4vDbYyepg8OgV8f3VznRsMPMh+otfjlJUSMY9v5DpUtR2dA1/f
+         aTfBCrJajMJkMMldrw4xlymjfJZJlckxkZdk6N7hwxj0x05Mi92sGLlgl4YapjLbRL5O
+         kMxKltANb6SxJCgrWvD3u7vBBCtSwX5tjfP1CMa3lJuRPvMl4vIcs5Li0FusFI0RKMW3
+         zXgg==
+X-Gm-Message-State: AOAM531A+QEITLGfj2p8TjXxkQ4KWivB61cqdIeP/5t9m9JFrqTJZqY0
+	dCwkvJqueVO17xRxS0jinfRUxw==
+X-Google-Smtp-Source: ABdhPJx6T/k29TC03YiaucAFwr0Br6abF98oVDvUsim52qn/NPhaCpNs2adzvGgXzay2hOX7y0jVNQ==
+X-Received: by 2002:a17:90b:4c4a:: with SMTP id np10mr233234pjb.233.1634751356359;
         Wed, 20 Oct 2021 10:35:56 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id np17sm7409475pjb.7.2021.10.20.10.35.56
+        by smtp.gmail.com with ESMTPSA id i124sm3266217pfc.153.2021.10.20.10.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 20 Oct 2021 10:35:56 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Kees Cook <keescook@chromium.org>
-Cc: Dan Li <ashimida@linux.alibaba.com>,
-	ardb@kernel.org,
-	ojeda@kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Michal Marek <michal.lkml@markovi.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	linux-kbuild@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 0/2] gcc-plugins: Explicitly document purpose and deprecation schedule
-Date: Wed, 20 Oct 2021 10:35:52 -0700
-Message-Id: <20211020173554.38122-1-keescook@chromium.org>
+	llvm@lists.linux.dev,
+	Dan Li <ashimida@linux.alibaba.com>,
+	ardb@kernel.org,
+	ojeda@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] gcc-plugins: Explicitly document purpose and deprecation schedule
+Date: Wed, 20 Oct 2021 10:35:53 -0700
+Message-Id: <20211020173554.38122-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211020173554.38122-1-keescook@chromium.org>
+References: <20211020173554.38122-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=888; h=from:subject; bh=rdx4CuMikFQKdDYacNmYRAtQ562gbZptpLcWVVcwDAE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhcFN5/5kSB2NJMC2aEHhmi3yPJdBz+zDw+3m8KEeg m983EFKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYXBTeQAKCRCJcvTf3G3AJqwKD/ 9khEyOKqNaPmZpfVsYUuLt2y7ALxocah3HA2haUyFnlB81apI0SsajBZi6tgC082BM5qHGYqI8afAm Bg81+ba4xE49vEKcGRspCo6Ij9jeh3qQ6FcVd7dntdxA7LL0ekxsNoUAlA35Z3+OxIMf7TdJpJABf3 vFXZT7+1t+dLVniAlFofflTQm/XHHrtCQNR5fPXf2SODdkIf/x96d7bpN8i41dEskVhxkr5Kdv1qyZ tvn13GszbxhF2LXKCaMrFOR26zL+U10R3KIM/jJ6BeWrEXL9pnmJKwFubiRrM8KtcUZaE8w3er6AMe +Nh8V6KZYhrG1oDWiInARmtvNqXaxeegCVWj8OmwNgqAONjNd6W1hsb+8NFdpbA2zYplorO411l8rI 7HWi0FOrNKWCM1n3Y+JlXltxyhouc1ylTtAo0gWndrpaUnpBrkCato8gNL+9AQ602oIJGLhxLTfJwc tIq41BEDdUjXHnUp8r4mAl4H+GaEA5ob/aoZ0Eina3L58wnCbb4yKe8OmaF0y1qXxrxXUXKM89Hc6G cewD2LImYRLJ/oCcFEBnIRCu1GFnbcdlq5RY9gnCNfIQNQeutoZkLO7iYI2cB5sh/cBkGi99+RaxQ4 y76eOiibdFC6dmg0NuvgbQ1lLPH/6o/hseGJ49cqX6tC25gQpPQJawR5i2fA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4804; h=from:subject; bh=Kk2hDVQKDHU81p/hq2gHwgV4ExxhvGmxDL3o/9ljT8c=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhcFN5m7tUmu78WD8GEq7nnZOssuJVi1eV1tkp6m44 ECcS0E6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYXBTeQAKCRCJcvTf3G3AJjDfEA CG4zTatumYmooLLsrwZmk+APIY3n++Qt3f+4SACaWAkayQIe/8CR+Sc83nQEFXZPJwYBX66E5Jq72K XuPj98uHYA/nj55MwLSarOYeLKJI937+zb0ROuprJ5VyWAqSlOnOALL4wxKpSr/kNsXtgSlutct9bS eqwPzdnsY7YLng50ABUBwSWkPdmjmZlJpy9rpaCgOJ9eesgfB8J8SUY9At3crZXZU6tg0/HDb8MDly zQ308qV/hez5lb/H0+qkYrAhjydssyqvd7cObO8EAQzA29yS7TQIcAnU3/Rk1SNtUrGa8gJ9qDJNMP X5wE4Q5tTW1ttTwaVf0rnrnlPgJtDutpqyPTn9yK31lG/6BGuTDj7QS0vnvE8MQ/Lw8dEX/geDnJXN isrvLzJssEcui65dEnb+DXxYW/8Nq3sGJdMB4SJb1P+rvC1JDKpi0I5K/EcKe2QoG4s4ol4w+Aq5nW dubO68BLqUePSjF2m5X0pdbRbnbM+Fl0MTbPOmhUpeI0Hbat5H0citqCqLPWxQn3hpsbEYCr8Bb3nn l3JY539yxClVsZeChRYvzZ+XPbA0ql9AtQ3GynE6JAY2VejJjFSAHwXAM3a6sR7/dApqQyZDreMVBZ r0z/ASfvImyAno48Mxiic8p+hfy/E4p1gbB+eYpjcIVezmhm02Lhxup5H2Hw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-
-Hi,
 
 GCC plugins should only exist when some compiler feature needs to be
 proven but does not exist in either GCC nor Clang. For example, if a
 desired feature is already in Clang, it should be added to GCC upstream.
 Document this explicitly.
 
-I'll put this in -next unless there are objections. :)
+Additionally, mark the plugins with matching upstream GCC features as
+removable past their respective GCC versions.
 
-Thanks!
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-hardening@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ Documentation/kbuild/gcc-plugins.rst | 26 ++++++++++++++++++++++++++
+ scripts/gcc-plugins/Kconfig          |  4 ++--
+ security/Kconfig.hardening           |  9 ++++++---
+ 3 files changed, 34 insertions(+), 5 deletions(-)
 
--Kees
-
-
-Kees Cook (2):
-  gcc-plugins: Explicitly document purpose and deprecation schedule
-  gcc-plugins: Remove cyc_complexity
-
- Documentation/kbuild/gcc-plugins.rst        | 28 ++++++++-
- scripts/Makefile.gcc-plugins                |  2 -
- scripts/gcc-plugins/Kconfig                 | 20 +-----
- scripts/gcc-plugins/cyc_complexity_plugin.c | 69 ---------------------
- security/Kconfig.hardening                  |  9 ++-
- 5 files changed, 34 insertions(+), 94 deletions(-)
- delete mode 100644 scripts/gcc-plugins/cyc_complexity_plugin.c
-
+diff --git a/Documentation/kbuild/gcc-plugins.rst b/Documentation/kbuild/gcc-plugins.rst
+index 3349966f213d..4b28c7a4032f 100644
+--- a/Documentation/kbuild/gcc-plugins.rst
++++ b/Documentation/kbuild/gcc-plugins.rst
+@@ -32,6 +32,32 @@ This infrastructure was ported from grsecurity [6]_ and PaX [7]_.
+ .. [7] https://pax.grsecurity.net/
+ 
+ 
++Purpose
++=======
++
++GCC plugins are designed to provide a place to experiment with potential
++compiler features that are neither in GCC nor Clang upstream. Once
++their utility is proven, the goal is to upstream the feature into GCC
++(and Clang), and then to finally remove them from the kernel once the
++feature is available in all supported versions of GCC.
++
++Specifically, new plugins should implement only features that have no
++upstream compiler support (in either GCC or Clang).
++
++When a feature exists in Clang but not GCC, effort should be made to
++bring the feature to upstream GCC (rather than just as a kernel-specific
++GCC plugin), so the entire ecosystem can benefit from it.
++
++Similarly, even if a feature provided by a GCC plugin does *not* exist
++in Clang, but the feature is proven to be useful, effort should be spent
++to upstream the feature to GCC (and Clang).
++
++After a feature is available in upstream GCC, the plugin will be made
++unbuildable for the corresponding GCC version (and later). Once all
++kernel-supported versions of GCC provide the feature, the plugin will
++be removed from the kernel.
++
++
+ Files
+ =====
+ 
+diff --git a/scripts/gcc-plugins/Kconfig b/scripts/gcc-plugins/Kconfig
+index ab9eb4cbe33a..3f5d3580ec06 100644
+--- a/scripts/gcc-plugins/Kconfig
++++ b/scripts/gcc-plugins/Kconfig
+@@ -37,6 +37,8 @@ config GCC_PLUGIN_CYC_COMPLEXITY
+ 
+ config GCC_PLUGIN_SANCOV
+ 	bool
++	# Plugin can be removed once the kernel only supports GCC 6.1.0+
++	depends on !CC_HAS_SANCOV_TRACE_PC
+ 	help
+ 	  This plugin inserts a __sanitizer_cov_trace_pc() call at the start of
+ 	  basic blocks. It supports all gcc versions with plugin support (from
+@@ -83,8 +85,6 @@ config GCC_PLUGIN_RANDSTRUCT
+ 	  the existing seed and will be removed by a make mrproper or
+ 	  make distclean.
+ 
+-	  Note that the implementation requires gcc 4.7 or newer.
+-
+ 	  This plugin was ported from grsecurity/PaX. More information at:
+ 	   * https://grsecurity.net/
+ 	   * https://pax.grsecurity.net/
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index 90cbaff86e13..d30c6225de74 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -53,7 +53,8 @@ choice
+ 
+ 	config GCC_PLUGIN_STRUCTLEAK_USER
+ 		bool "zero-init structs marked for userspace (weak)"
+-		depends on GCC_PLUGINS
++		# Plugin can be removed once the kernel only supports GCC 12+
++		depends on GCC_PLUGINS && !CC_HAS_AUTO_VAR_INIT_ZERO
+ 		select GCC_PLUGIN_STRUCTLEAK
+ 		help
+ 		  Zero-initialize any structures on the stack containing
+@@ -64,7 +65,8 @@ choice
+ 
+ 	config GCC_PLUGIN_STRUCTLEAK_BYREF
+ 		bool "zero-init structs passed by reference (strong)"
+-		depends on GCC_PLUGINS
++		# Plugin can be removed once the kernel only supports GCC 12+
++		depends on GCC_PLUGINS && !CC_HAS_AUTO_VAR_INIT_ZERO
+ 		depends on !(KASAN && KASAN_STACK)
+ 		select GCC_PLUGIN_STRUCTLEAK
+ 		help
+@@ -82,7 +84,8 @@ choice
+ 
+ 	config GCC_PLUGIN_STRUCTLEAK_BYREF_ALL
+ 		bool "zero-init everything passed by reference (very strong)"
+-		depends on GCC_PLUGINS
++		# Plugin can be removed once the kernel only supports GCC 12+
++		depends on GCC_PLUGINS && !CC_HAS_AUTO_VAR_INIT_ZERO
+ 		depends on !(KASAN && KASAN_STACK)
+ 		select GCC_PLUGIN_STRUCTLEAK
+ 		help
 -- 
 2.30.2
 
