@@ -1,37 +1,36 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695622C85
-	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 17:45:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 38F77611C7;
-	Wed, 20 Oct 2021 17:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A042C85
+	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 17:49:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EDB2611EF;
+	Wed, 20 Oct 2021 17:49:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634751950;
-	bh=6FFtYVTMs5VxUoN/PJRKD1y8Z7V3rM+KFsxoD3doo5Y=;
+	s=k20201202; t=1634752145;
+	bh=qUkSqtT6ZXxe9PpUj77V4X8XVvE98U9OSWC6LuoHU9M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D1cmrXcBkVR8o69ab4FwSusT9UlwFA3kFQ5NISY7yh23A938955Vv4iM1kxtJKTAp
-	 f3flx6msgAUQkV/UE2BIsidAvOfTU8pPCihQd1X1iTRji3TlHj+U3mPExoyE2KdP2V
-	 neropzxmFFDzU/vAz24v+Pgo1677pfk+c0f4YilLX8olohHYZajB1TLh2BnCGus8AE
-	 mu7M48LyXIjHXxzY4LnmdQKd7jwRzMnqnf8yennPQjgamLtEOqiCjLQbRUaqNTUnwC
-	 sbCVA5z+zpf4rA2syfIibzx8nPVkTWJ7NvlSjyPVXC7tDSIULSeAsRHYPKDFFMp3ne
-	 Xj6xDgifIZ3qQ==
-Date: Wed, 20 Oct 2021 10:45:43 -0700
+	b=gPkLr9N7/5AHaiR9lFUn1UUT2uXMLTBvjJGr0Z2HCTpvX+IAlVhNNJfDWNERorWY3
+	 rNsPhKBBUU6bDKfhXkX8Opj+VPA9qzQ/+r7FZ5iLrrbm0ySzw9ErHl49r9qMV7LXjd
+	 he0u+pY26ooTJu5zzxpjmrhS1bjLlklDphPpdttbOdptU6fPmvr2NwME9p8dIOIF3O
+	 ukAvNFm/m7Wb1cYLP13hmNwV7KsDdAdRf/OyL9x6dP02rAhWaGHFog2l6ce+IrAxVB
+	 fSjtAcAyWdyLfyI2w9rkKl7OQbKZoAUwt6kvVq+CymAG/SGKXK8QEtbFtE/UFY8Ymn
+	 p5h9Rlhe+ItVQ==
+Date: Wed, 20 Oct 2021 10:48:59 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Kees Cook <keescook@chromium.org>
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Michal Marek <michal.lkml@markovi.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev, Dan Li <ashimida@linux.alibaba.com>,
-	ardb@kernel.org, ojeda@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] gcc-plugins: Explicitly document purpose and
- deprecation schedule
-Message-ID: <YXBVx+0YjoMtQ27T@archlinux-ax161>
+	Jonathan Corbet <corbet@lwn.net>, linux-hardening@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+	Dan Li <ashimida@linux.alibaba.com>, ardb@kernel.org,
+	ojeda@kernel.org, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/2] gcc-plugins: Remove cyc_complexity
+Message-ID: <YXBWi/bCQoddzXB6@archlinux-ax161>
 References: <20211020173554.38122-1-keescook@chromium.org>
- <20211020173554.38122-2-keescook@chromium.org>
+ <20211020173554.38122-3-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,142 +39,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211020173554.38122-2-keescook@chromium.org>
+In-Reply-To: <20211020173554.38122-3-keescook@chromium.org>
 
-On Wed, Oct 20, 2021 at 10:35:53AM -0700, Kees Cook wrote:
-> GCC plugins should only exist when some compiler feature needs to be
-> proven but does not exist in either GCC nor Clang. For example, if a
-> desired feature is already in Clang, it should be added to GCC upstream.
-> Document this explicitly.
-> 
-> Additionally, mark the plugins with matching upstream GCC features as
-> removable past their respective GCC versions.
+On Wed, Oct 20, 2021 at 10:35:54AM -0700, Kees Cook wrote:
+> This plugin has no impact on the resulting binary, is disabled
+> under COMPILE_TEST, and is not enabled on any builds I'm aware of.
+> Additionally, given the clarified purpose of GCC plugins in the kernel,
+> remove cyc_complexity.
 > 
 > Cc: Masahiro Yamada <masahiroy@kernel.org>
 > Cc: Michal Marek <michal.lkml@markovi.net>
 > Cc: Nick Desaulniers <ndesaulniers@google.com>
 > Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
 > Cc: linux-hardening@vger.kernel.org
 > Cc: linux-kbuild@vger.kernel.org
 > Cc: linux-doc@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Cc: llvm@lists.linux.dev
 > Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Seems reasonable to me.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 One comment below.
 
 > ---
->  Documentation/kbuild/gcc-plugins.rst | 26 ++++++++++++++++++++++++++
->  scripts/gcc-plugins/Kconfig          |  4 ++--
->  security/Kconfig.hardening           |  9 ++++++---
->  3 files changed, 34 insertions(+), 5 deletions(-)
+>  Documentation/kbuild/gcc-plugins.rst        |  2 -
+>  scripts/Makefile.gcc-plugins                |  2 -
+>  scripts/gcc-plugins/Kconfig                 | 16 -----
+>  scripts/gcc-plugins/cyc_complexity_plugin.c | 69 ---------------------
+>  4 files changed, 89 deletions(-)
+>  delete mode 100644 scripts/gcc-plugins/cyc_complexity_plugin.c
 > 
 > diff --git a/Documentation/kbuild/gcc-plugins.rst b/Documentation/kbuild/gcc-plugins.rst
-> index 3349966f213d..4b28c7a4032f 100644
+> index 4b28c7a4032f..0ba76719f1b9 100644
 > --- a/Documentation/kbuild/gcc-plugins.rst
 > +++ b/Documentation/kbuild/gcc-plugins.rst
-> @@ -32,6 +32,32 @@ This infrastructure was ported from grsecurity [6]_ and PaX [7]_.
->  .. [7] https://pax.grsecurity.net/
+> @@ -96,7 +96,6 @@ Enable the GCC plugin infrastructure and some plugin(s) you want to use
+>  in the kernel config::
 >  
+>  	CONFIG_GCC_PLUGINS=y
+> -	CONFIG_GCC_PLUGIN_CYC_COMPLEXITY=y
+>  	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
+>  	...
 >  
-> +Purpose
-> +=======
-> +
-> +GCC plugins are designed to provide a place to experiment with potential
-> +compiler features that are neither in GCC nor Clang upstream. Once
-> +their utility is proven, the goal is to upstream the feature into GCC
-> +(and Clang), and then to finally remove them from the kernel once the
-> +feature is available in all supported versions of GCC.
-> +
-> +Specifically, new plugins should implement only features that have no
-> +upstream compiler support (in either GCC or Clang).
-> +
-> +When a feature exists in Clang but not GCC, effort should be made to
-> +bring the feature to upstream GCC (rather than just as a kernel-specific
-> +GCC plugin), so the entire ecosystem can benefit from it.
-> +
-> +Similarly, even if a feature provided by a GCC plugin does *not* exist
-> +in Clang, but the feature is proven to be useful, effort should be spent
-> +to upstream the feature to GCC (and Clang).
-> +
-> +After a feature is available in upstream GCC, the plugin will be made
-> +unbuildable for the corresponding GCC version (and later). Once all
-> +kernel-supported versions of GCC provide the feature, the plugin will
-> +be removed from the kernel.
-> +
-> +
->  Files
->  =====
+
+There is a comment about the cyc_complexity plugin at the very end of
+this file that should also be removed it seems:
+
+"See the cyc_complexity_plugin.c (CONFIG_GCC_PLUGIN_CYC_COMPLEXITY) GCC plugin."
+
+> @@ -115,4 +114,3 @@ The GCC plugins are in scripts/gcc-plugins/. You need to put plugin source files
+>  right under scripts/gcc-plugins/. Creating subdirectories is not supported.
+>  It must be added to scripts/gcc-plugins/Makefile, scripts/Makefile.gcc-plugins
+>  and a relevant Kconfig file.
+> -See the cyc_complexity_plugin.c (CONFIG_GCC_PLUGIN_CYC_COMPLEXITY) GCC plugin.
+> diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
+> index 952e46876329..6583ecf2e674 100644
+> --- a/scripts/Makefile.gcc-plugins
+> +++ b/scripts/Makefile.gcc-plugins
+> @@ -1,7 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
 >  
+> -gcc-plugin-$(CONFIG_GCC_PLUGIN_CYC_COMPLEXITY)	+= cyc_complexity_plugin.so
+> -
+>  gcc-plugin-$(CONFIG_GCC_PLUGIN_LATENT_ENTROPY)	+= latent_entropy_plugin.so
+>  gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_LATENT_ENTROPY)		\
+>  		+= -DLATENT_ENTROPY_PLUGIN
 > diff --git a/scripts/gcc-plugins/Kconfig b/scripts/gcc-plugins/Kconfig
-> index ab9eb4cbe33a..3f5d3580ec06 100644
+> index 3f5d3580ec06..821a725a7f5c 100644
 > --- a/scripts/gcc-plugins/Kconfig
 > +++ b/scripts/gcc-plugins/Kconfig
-> @@ -37,6 +37,8 @@ config GCC_PLUGIN_CYC_COMPLEXITY
+> @@ -19,22 +19,6 @@ menuconfig GCC_PLUGINS
 >  
+>  if GCC_PLUGINS
+>  
+> -config GCC_PLUGIN_CYC_COMPLEXITY
+> -	bool "Compute the cyclomatic complexity of a function" if EXPERT
+> -	depends on !COMPILE_TEST	# too noisy
+> -	help
+> -	  The complexity M of a function's control flow graph is defined as:
+> -	   M = E - N + 2P
+> -	  where
+> -
+> -	  E = the number of edges
+> -	  N = the number of nodes
+> -	  P = the number of connected components (exit nodes).
+> -
+> -	  Enabling this plugin reports the complexity to stderr during the
+> -	  build. It mainly serves as a simple example of how to create a
+> -	  gcc plugin for the kernel.
+> -
 >  config GCC_PLUGIN_SANCOV
 >  	bool
-> +	# Plugin can be removed once the kernel only supports GCC 6.1.0+
-> +	depends on !CC_HAS_SANCOV_TRACE_PC
-
-This symbol is not user selectable and the one place that does select it
-only does so when !CC_HAS_SANCOV_TRACE_PC so this seems pointless to me.
-
-Keep the comment, ditch the depends?
-
->  	help
->  	  This plugin inserts a __sanitizer_cov_trace_pc() call at the start of
->  	  basic blocks. It supports all gcc versions with plugin support (from
-> @@ -83,8 +85,6 @@ config GCC_PLUGIN_RANDSTRUCT
->  	  the existing seed and will be removed by a make mrproper or
->  	  make distclean.
->  
-> -	  Note that the implementation requires gcc 4.7 or newer.
+>  	# Plugin can be removed once the kernel only supports GCC 6.1.0+
+> diff --git a/scripts/gcc-plugins/cyc_complexity_plugin.c b/scripts/gcc-plugins/cyc_complexity_plugin.c
+> deleted file mode 100644
+> index 73124c2b3edd..000000000000
+> --- a/scripts/gcc-plugins/cyc_complexity_plugin.c
+> +++ /dev/null
+> @@ -1,69 +0,0 @@
+> -/*
+> - * Copyright 2011-2016 by Emese Revfy <re.emese@gmail.com>
+> - * Licensed under the GPL v2, or (at your option) v3
+> - *
+> - * Homepage:
+> - * https://github.com/ephox-gcc-plugins/cyclomatic_complexity
+> - *
+> - * https://en.wikipedia.org/wiki/Cyclomatic_complexity
+> - * The complexity M is then defined as:
+> - * M = E - N + 2P
+> - * where
+> - *
+> - *  E = the number of edges of the graph
+> - *  N = the number of nodes of the graph
+> - *  P = the number of connected components (exit nodes).
+> - *
+> - * Usage (4.5 - 5):
+> - * $ make clean; make run
+> - */
 > -
->  	  This plugin was ported from grsecurity/PaX. More information at:
->  	   * https://grsecurity.net/
->  	   * https://pax.grsecurity.net/
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index 90cbaff86e13..d30c6225de74 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -53,7 +53,8 @@ choice
->  
->  	config GCC_PLUGIN_STRUCTLEAK_USER
->  		bool "zero-init structs marked for userspace (weak)"
-> -		depends on GCC_PLUGINS
-> +		# Plugin can be removed once the kernel only supports GCC 12+
-> +		depends on GCC_PLUGINS && !CC_HAS_AUTO_VAR_INIT_ZERO
->  		select GCC_PLUGIN_STRUCTLEAK
->  		help
->  		  Zero-initialize any structures on the stack containing
-> @@ -64,7 +65,8 @@ choice
->  
->  	config GCC_PLUGIN_STRUCTLEAK_BYREF
->  		bool "zero-init structs passed by reference (strong)"
-> -		depends on GCC_PLUGINS
-> +		# Plugin can be removed once the kernel only supports GCC 12+
-> +		depends on GCC_PLUGINS && !CC_HAS_AUTO_VAR_INIT_ZERO
->  		depends on !(KASAN && KASAN_STACK)
->  		select GCC_PLUGIN_STRUCTLEAK
->  		help
-> @@ -82,7 +84,8 @@ choice
->  
->  	config GCC_PLUGIN_STRUCTLEAK_BYREF_ALL
->  		bool "zero-init everything passed by reference (very strong)"
-> -		depends on GCC_PLUGINS
-> +		# Plugin can be removed once the kernel only supports GCC 12+
-> +		depends on GCC_PLUGINS && !CC_HAS_AUTO_VAR_INIT_ZERO
->  		depends on !(KASAN && KASAN_STACK)
->  		select GCC_PLUGIN_STRUCTLEAK
->  		help
+> -#include "gcc-common.h"
+> -
+> -__visible int plugin_is_GPL_compatible;
+> -
+> -static struct plugin_info cyc_complexity_plugin_info = {
+> -	.version	= "20160225",
+> -	.help		= "Cyclomatic Complexity\n",
+> -};
+> -
+> -static unsigned int cyc_complexity_execute(void)
+> -{
+> -	int complexity;
+> -	expanded_location xloc;
+> -
+> -	/* M = E - N + 2P */
+> -	complexity = n_edges_for_fn(cfun) - n_basic_blocks_for_fn(cfun) + 2;
+> -
+> -	xloc = expand_location(DECL_SOURCE_LOCATION(current_function_decl));
+> -	fprintf(stderr, "Cyclomatic Complexity %d %s:%s\n", complexity,
+> -		xloc.file, DECL_NAME_POINTER(current_function_decl));
+> -
+> -	return 0;
+> -}
+> -
+> -#define PASS_NAME cyc_complexity
+> -
+> -#define NO_GATE
+> -#define TODO_FLAGS_FINISH TODO_dump_func
+> -
+> -#include "gcc-generate-gimple-pass.h"
+> -
+> -__visible int plugin_init(struct plugin_name_args *plugin_info, struct plugin_gcc_version *version)
+> -{
+> -	const char * const plugin_name = plugin_info->base_name;
+> -
+> -	PASS_INFO(cyc_complexity, "ssa", 1, PASS_POS_INSERT_AFTER);
+> -
+> -	if (!plugin_default_version_check(version, &gcc_version)) {
+> -		error(G_("incompatible gcc/plugin versions"));
+> -		return 1;
+> -	}
+> -
+> -	register_callback(plugin_name, PLUGIN_INFO, NULL,
+> -				&cyc_complexity_plugin_info);
+> -	register_callback(plugin_name, PLUGIN_PASS_MANAGER_SETUP, NULL,
+> -				&cyc_complexity_pass_info);
+> -
+> -	return 0;
+> -}
 > -- 
 > 2.30.2
 > 
