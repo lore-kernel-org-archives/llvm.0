@@ -1,34 +1,38 @@
 Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463FE2C81
-	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 08:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22AE72
+	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 08:40:01 +0000 (UTC)
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-264-cXpa1CEUN6Sk8MILzfGu8g-1; Wed, 20 Oct 2021 09:14:44 +0100
-X-MC-Unique: cXpa1CEUN6Sk8MILzfGu8g-1
+ uk-mta-26-9od0xuhxN2eU-4dqV5Rppg-1; Wed, 20 Oct 2021 09:39:58 +0100
+X-MC-Unique: 9od0xuhxN2eU-4dqV5Rppg-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.23; Wed, 20 Oct 2021 09:14:42 +0100
+ Server (TLS) id 15.0.1497.23; Wed, 20 Oct 2021 09:39:56 +0100
 Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
  AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.023; Wed, 20 Oct 2021 09:14:42 +0100
+ 15.00.1497.023; Wed, 20 Oct 2021 09:39:56 +0100
 From: David Laight <David.Laight@ACULAB.COM>
-To: 'Nathan Chancellor' <nathan@kernel.org>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>,
-	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+To: 'Arnd Bergmann' <arnd@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>
+CC: Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	"Nick Desaulniers" <ndesaulniers@google.com>, Tariq Toukan
+	<tariqt@nvidia.com>, Maxim Mikityanskiy <maximmi@nvidia.com>, Aya Levin
+	<ayal@nvidia.com>, "Eran Ben Elisha" <eranbe@nvidia.com>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jonathan Lemon <jonathan.lemon@gmail.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] staging: wlan-ng: Avoid bitwise vs logical OR warning in
- hfa384x_usb_throttlefn()
-Thread-Topic: [PATCH] staging: wlan-ng: Avoid bitwise vs logical OR warning in
- hfa384x_usb_throttlefn()
-Thread-Index: AQHXwUZ2FnqdAiWt8EaCTgFmgVgUJ6vbkYrw
-Date: Wed, 20 Oct 2021 08:14:42 +0000
-Message-ID: <e1a8f7b746944ccaabe6b610e7922b54@AcuMS.aculab.com>
-References: <20211014215703.3705371-1-nathan@kernel.org>
-In-Reply-To: <20211014215703.3705371-1-nathan@kernel.org>
+Subject: RE: [PATCH] [v2] mlx5: stop warning for 64KB pages
+Thread-Topic: [PATCH] [v2] mlx5: stop warning for 64KB pages
+Thread-Index: AQHXwdhG9T7OOxgcJU2hLtnyJfvXJqvbl/VQ
+Date: Wed, 20 Oct 2021 08:39:56 +0000
+Message-ID: <b12bfefcace143bd9aed95213e1bd8f1@AcuMS.aculab.com>
+References: <20211015152056.2434853-1-arnd@kernel.org>
+In-Reply-To: <20211015152056.2434853-1-arnd@kernel.org>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -48,82 +52,60 @@ Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-From: Nathan Chancellor
-> Sent: 14 October 2021 22:57
+From: Arnd Bergmann
+> Sent: 15 October 2021 16:21
 >=20
-> A new warning in clang points out a place in this file where a bitwise
-> OR is being used with boolean expressions:
+> From: Arnd Bergmann <arnd@arndb.de>
 >=20
-> In file included from drivers/staging/wlan-ng/prism2usb.c:2:
-> drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: warning: use of bitwise '|'=
- with boolean operands [-
-> Wbitwise-instead-of-logical]
->             ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
->             ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: note: cast one or both oper=
-ands to int to silence this
-> warning
-> 1 warning generated.
+> When building with 64KB pages, clang points out that xsk->chunk_size
+> can never be PAGE_SIZE:
 >=20
-> The comment explains that short circuiting here is undesirable, as the
-> calls to test_and_{clear,set}_bit() need to happen for both sides of the
-> expression.
+> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: resu=
+lt of comparison of constant
+> 65536 with expression of type 'u16' (aka 'unsigned short') is always fals=
+e [-Werror,-Wtautological-
+> constant-out-of-range-compare]
+>         if (xsk->chunk_size > PAGE_SIZE ||
+>             ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
 >=20
-> Clang's suggestion would work to silence the warning but the readability
-> of the expression would suffer even more. To clean up the warning and
-> make the block more readable, use a variable for each side of the
-> bitwise expression.
+> In older versions of this code, using PAGE_SIZE was the only
+> possibility, so this would have never worked on 64KB page kernels,
+> but the patch apparently did not address this case completely.
 >=20
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1478
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> As Maxim Mikityanskiy suggested, 64KB chunks are really not all that
+> useful, so just shut up the warning by adding a cast.
+>=20
+> Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
+> Link: https://lore.kernel.org/netdev/20211013150232.2942146-1-arnd@kernel=
+.org/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/staging/wlan-ng/hfa384x_usb.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
+>  drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/staging/wlan-ng/hfa384x_usb.c b/drivers/staging/wlan=
--ng/hfa384x_usb.c
-> index 59aa84d1837d..938e11a1a0b6 100644
-> --- a/drivers/staging/wlan-ng/hfa384x_usb.c
-> +++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-> @@ -3778,18 +3778,18 @@ static void hfa384x_usb_throttlefn(struct timer_l=
-ist *t)
->=20
->  =09spin_lock_irqsave(&hw->ctlxq.lock, flags);
->=20
-> -=09/*
-> -=09 * We need to check BOTH the RX and the TX throttle controls,
-> -=09 * so we use the bitwise OR instead of the logical OR.
-> -=09 */
->  =09pr_debug("flags=3D0x%lx\n", hw->usb_flags);
-> -=09if (!hw->wlandev->hwremoved &&
-> -=09    ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
-> -=09      !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags)) |
-> -=09     (test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
-> -=09      !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags))
-> -=09    )) {
-> -=09=09schedule_work(&hw->usb_work);
-> +=09if (!hw->wlandev->hwremoved) {
-> +=09=09bool rx_throttle =3D test_and_clear_bit(THROTTLE_RX, &hw->usb_flag=
-s) &&
-> +=09=09=09=09   !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags);
-> +=09=09bool tx_throttle =3D test_and_clear_bit(THROTTLE_TX, &hw->usb_flag=
-s) &&
-> +=09=09=09=09   !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags);
-> +=09=09/*
-> +=09=09 * We need to check BOTH the RX and the TX throttle controls,
-> +=09=09 * so we use the bitwise OR instead of the logical OR.
-> +=09=09 */
-> +=09=09if (rx_throttle | tx_throttle)
-> +=09=09=09schedule_work(&hw->usb_work);
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> index 538bc2419bd8..228257010f32 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> @@ -15,8 +15,10 @@ bool mlx5e_validate_xsk_param(struct mlx5e_params *par=
+ams,
+>  =09=09=09      struct mlx5e_xsk_param *xsk,
+>  =09=09=09      struct mlx5_core_dev *mdev)
+>  {
+> -=09/* AF_XDP doesn't support frames larger than PAGE_SIZE. */
+> -=09if (xsk->chunk_size > PAGE_SIZE ||
+> +=09/* AF_XDP doesn't support frames larger than PAGE_SIZE,
+> +=09 * and xsk->chunk_size is limited to 65535 bytes.
+> +=09 */
+> +=09if ((size_t)xsk->chunk_size > PAGE_SIZE ||
+>  =09=09=09xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE)
+>  =09=09return false;
 
-Why not the slightly simpler:
-=09=09bool throttle =3D test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
-=09=09=09=09   !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags);
-=09=09throttle |=3D test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
-=09=09=09=09   !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags);
-=09=09if (throttle)
-=09=09=09schedule_work(&hw->usb_work);
-or with s/throttle/throttle_silly_compiler_warning/ :-)
+How much smaller does the kernel get if you change 'chunk_size' from
+_u16 to 'unsigned int'. ?
+Especially for a non-x86 build?
+Or is it a hardware constrained size??
 
 =09David
 
