@@ -1,24 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 348D12C81
-	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 07:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E342C81
+	for <llvm@lists.linux.dev>; Wed, 20 Oct 2021 07:52:03 +0000 (UTC)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E15A2F;
-	Wed, 20 Oct 2021 00:50:54 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9DCD2F;
+	Wed, 20 Oct 2021 00:52:02 -0700 (PDT)
 Received: from [192.168.1.131] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B0273F70D;
-	Wed, 20 Oct 2021 00:50:51 -0700 (PDT)
-Subject: Re: [PATCH v2 1/4] arm64: vdso32: drop the test for dmb ishld
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFC533F70D;
+	Wed, 20 Oct 2021 00:52:00 -0700 (PDT)
+Subject: Re: [PATCH v2 2/4] arm64: vdso32: drop test for -march=armv8-a
 To: Nick Desaulniers <ndesaulniers@google.com>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, Nathan Chancellor <nathan@kernel.org>,
- Christian Biesinger <cbiesinger@google.com>,
- Simon Marchi <simon.marchi@polymtl.ca>
+ Arnd Bergmann <arnd@arndb.de>
 References: <20211019223646.1146945-1-ndesaulniers@google.com>
- <20211019223646.1146945-2-ndesaulniers@google.com>
+ <20211019223646.1146945-3-ndesaulniers@google.com>
 From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <b38653db-15fe-71b0-9d0c-cbf54c6faf4e@arm.com>
-Date: Wed, 20 Oct 2021 09:51:18 +0200
+Message-ID: <fbb4936e-f4b5-47a3-ad3a-b139ab5e3f10@arm.com>
+Date: Wed, 20 Oct 2021 09:52:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 Precedence: bulk
@@ -27,7 +26,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20211019223646.1146945-2-ndesaulniers@google.com>
+In-Reply-To: <20211019223646.1146945-3-ndesaulniers@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -35,78 +34,61 @@ Content-Transfer-Encoding: 7bit
 
 
 On 10/20/21 12:36 AM, Nick Desaulniers wrote:
-> Binutils added support for this instruction in commit
-> e797f7e0b2bedc9328d4a9a0ebc63ca7a2dbbebc which shipped in 2.24 (just
-> missing the 2.33 release) but was cherry-picked into 2.23 in commit
-
-s/just missing the 2.33 release/just missing the 2.23 release/
-
-> 27a50d6755bae906bc73b4ec1a8b448467f0bea1. Thanks to Christian and Simon
-> for helping me with the patch archaeology.
+> As Arnd points out:
+>   gcc-4.8 already supported -march=armv8, and we require gcc-5.1 now, so
+>   both this #if/#else construct and the corresponding
+>   "cc32-option,-march=armv8-a" check should be obsolete now.
 > 
-> According to Documentation/process/changes.rst, the minimum supported
-> version of binutils is 2.23. Since all supported versions of GAS support
-> this instruction, drop the assembler invocation, preprocessor
-> flags/guards, and the cross assembler macro that's now unused.
-> 
-> This also avoids a recursive self reference in a follow up cleanup
-> patch.
-> 
-> Cc: Christian Biesinger <cbiesinger@google.com>
-> Cc: Simon Marchi <simon.marchi@polymtl.ca>
+> Link: https://lore.kernel.org/lkml/CAK8P3a3UBEJ0Py2ycz=rHfgog8g3mCOeQOwO0Gmp-iz6Uxkapg@mail.gmail.com/
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
 > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Otherwise:
-
 Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
 > ---
-> Changes v1 -> v2:
-> * Fix typos (2.33 -> 2.23, 2.34 -> 2.24) as per Christian.
-> 
->  arch/arm64/include/asm/vdso/compat_barrier.h | 2 +-
->  arch/arm64/kernel/vdso32/Makefile            | 8 --------
->  2 files changed, 1 insertion(+), 9 deletions(-)
+>  arch/arm64/include/asm/vdso/compat_barrier.h | 7 -------
+>  arch/arm64/kernel/vdso32/Makefile            | 8 +-------
+>  2 files changed, 1 insertion(+), 14 deletions(-)
 > 
 > diff --git a/arch/arm64/include/asm/vdso/compat_barrier.h b/arch/arm64/include/asm/vdso/compat_barrier.h
-> index 3fd8fd6d8fc2..fb60a88b5ed4 100644
+> index fb60a88b5ed4..3ac35f4a667c 100644
 > --- a/arch/arm64/include/asm/vdso/compat_barrier.h
 > +++ b/arch/arm64/include/asm/vdso/compat_barrier.h
-> @@ -20,7 +20,7 @@
+> @@ -20,16 +20,9 @@
 >  
 >  #define dmb(option) __asm__ __volatile__ ("dmb " #option : : : "memory")
 >  
-> -#if __LINUX_ARM_ARCH__ >= 8 && defined(CONFIG_AS_DMB_ISHLD)
-> +#if __LINUX_ARM_ARCH__ >= 8
+> -#if __LINUX_ARM_ARCH__ >= 8
 >  #define aarch32_smp_mb()	dmb(ish)
 >  #define aarch32_smp_rmb()	dmb(ishld)
 >  #define aarch32_smp_wmb()	dmb(ishst)
+> -#else
+> -#define aarch32_smp_mb()	dmb(ish)
+> -#define aarch32_smp_rmb()	aarch32_smp_mb()
+> -#define aarch32_smp_wmb()	dmb(ishst)
+> -#endif
+> -
+>  
+>  #undef smp_mb
+>  #undef smp_rmb
 > diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> index 3dba0c4f8f42..89299a26638b 100644
+> index 89299a26638b..1407516e041e 100644
 > --- a/arch/arm64/kernel/vdso32/Makefile
 > +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -29,8 +29,6 @@ cc32-option = $(call try-run,\
->          $(CC_COMPAT) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
->  cc32-disable-warning = $(call try-run,\
->  	$(CC_COMPAT) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
-> -cc32-as-instr = $(call try-run,\
-> -	printf "%b\n" "$(1)" | $(CC_COMPAT) $(VDSO_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
->  
->  # We cannot use the global flags to compile the vDSO files, the main reason
->  # being that the 32-bit compiler may be older than the main (64-bit) compiler
-> @@ -113,12 +111,6 @@ endif
->  VDSO_AFLAGS := $(VDSO_CAFLAGS)
->  VDSO_AFLAGS += -D__ASSEMBLY__
->  
-> -# Check for binutils support for dmb ishld
-> -dmbinstr := $(call cc32-as-instr,dmb ishld,-DCONFIG_AS_DMB_ISHLD=1)
-> -
-> -VDSO_CFLAGS += $(dmbinstr)
-> -VDSO_AFLAGS += $(dmbinstr)
-> -
+> @@ -65,13 +65,7 @@ endif
 >  # From arm vDSO Makefile
->  VDSO_LDFLAGS += -Bsymbolic --no-undefined -soname=linux-vdso.so.1
->  VDSO_LDFLAGS += -z max-page-size=4096 -z common-page-size=4096
+>  VDSO_CAFLAGS += -fPIC -fno-builtin -fno-stack-protector
+>  VDSO_CAFLAGS += -DDISABLE_BRANCH_PROFILING
+> -
+> -
+> -# Try to compile for ARMv8. If the compiler is too old and doesn't support it,
+> -# fall back to v7. There is no easy way to check for what architecture the code
+> -# is being compiled, so define a macro specifying that (see arch/arm/Makefile).
+> -VDSO_CAFLAGS += $(call cc32-option,-march=armv8-a -D__LINUX_ARM_ARCH__=8,\
+> -                                   -march=armv7-a -D__LINUX_ARM_ARCH__=7)
+> +VDSO_CAFLAGS += -march=armv8-a
+>  
+>  VDSO_CFLAGS := $(VDSO_CAFLAGS)
+>  VDSO_CFLAGS += -DENABLE_COMPAT_VDSO=1
 > 
 
 -- 
