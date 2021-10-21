@@ -1,63 +1,83 @@
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097162C81
-	for <llvm@lists.linux.dev>; Thu, 21 Oct 2021 12:40:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTPS id CCC9380EB;
-	Thu, 21 Oct 2021 12:34:47 +0000 (UTC)
-Date: Thu, 21 Oct 2021 15:34:13 +0300
-From: Tony Lindgren <tony@atomide.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [linux-next:master 8693/9489]
- drivers/mmc/host/sdhci-omap.c:1450:21: error: use of undeclared identifier
- 'sdhci_omap_runtime_suspend'; did you mean '__pm_runtime_suspend'?
-Message-ID: <YXFeRQ6S5wK+VO+K@atomide.com>
-References: <202110210056.QMBILm00-lkp@intel.com>
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE17E2C81
+	for <llvm@lists.linux.dev>; Thu, 21 Oct 2021 12:52:48 +0000 (UTC)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HZn1n73CVzbglW;
+	Thu, 21 Oct 2021 20:32:45 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Thu, 21 Oct 2021 20:37:20 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.98) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Thu, 21 Oct 2021 20:37:20 +0800
+From: Pu Lehui <pulehui@huawei.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, <pulehui@huawei.com>
+Subject: [PATCH bpf-next] samples: bpf: Suppress readelf stderr when probing for BTF support
+Date: Thu, 21 Oct 2021 20:39:13 +0800
+Message-ID: <20211021123913.48833-1-pulehui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202110210056.QMBILm00-lkp@intel.com>
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.98]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 
-* kernel test robot <lkp@intel.com> [211020 16:23]:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   51dba6e335ff9d1f6f50b5cacced8598956e1437
-> commit: f433e8aac6b94218394c6e7b80bb89e4e79c9549 [8693/9489] mmc: sdhci-omap: Implement PM runtime functions
-> config: riscv-randconfig-r042-20211020 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9660563950aaed54020bfdf0be07e7096a9553e4)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=f433e8aac6b94218394c6e7b80bb89e4e79c9549
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout f433e8aac6b94218394c6e7b80bb89e4e79c9549
->         # save the attached .config to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/mmc/host/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/mmc/host/sdhci-omap.c:1450:21: error: use of undeclared identifier 'sdhci_omap_runtime_suspend'; did you mean '__pm_runtime_suspend'?
->            SET_RUNTIME_PM_OPS(sdhci_omap_runtime_suspend,
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
->                               __pm_runtime_suspend
+When compiling bpf samples, the following warning appears:
 
-Hmm so seems like these should not be in the CONFIG_PM_SLEEP. Probably
-best to just use __maybe_unused here instead, I'll send a patch doing
-that if no objections.
+readelf: Error: Missing knowledge of 32-bit reloc types used in DWARF
+sections of machine number 247
+readelf: Warning: unable to apply unsupported reloc type 10 to section
+.debug_info
+readelf: Warning: unable to apply unsupported reloc type 1 to section
+.debug_info
+readelf: Warning: unable to apply unsupported reloc type 10 to section
+.debug_info
 
-Regards,
+Same problem was mentioned in commit 2f0921262ba9 ("selftests/bpf:
+suppress readelf stderr when probing for BTF support"), let's use
+readelf that supports btf.
 
-Tony
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ samples/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 2366242edb7c..a886dff1ba89 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -229,6 +229,7 @@ CLANG ?= clang
+ OPT ?= opt
+ LLVM_DIS ?= llvm-dis
+ LLVM_OBJCOPY ?= llvm-objcopy
++LLVM_READELF ?= llvm-readelf
+ BTF_PAHOLE ?= pahole
+ 
+ # Detect that we're cross compiling and use the cross compiler
+@@ -252,7 +253,7 @@ BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
+ BTF_OBJCOPY_PROBE := $(shell $(LLVM_OBJCOPY) --help 2>&1 | grep -i 'usage.*llvm')
+ BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
+ 			  $(CLANG) -target bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
+-			  readelf -S ./llvm_btf_verify.o | grep BTF; \
++			  $(LLVM_READELF) -S ./llvm_btf_verify.o | grep BTF; \
+ 			  /bin/rm -f ./llvm_btf_verify.o)
+ 
+ BPF_EXTRA_CFLAGS += -fno-stack-protector
+-- 
+2.17.1
+
