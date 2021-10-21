@@ -1,72 +1,59 @@
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6A42C98
-	for <llvm@lists.linux.dev>; Thu, 21 Oct 2021 22:05:09 +0000 (UTC)
-Received: from remote.user (localhost [127.0.0.1])
-	by rere.qmqm.pl (Postfix) with ESMTPSA id 4Hb1WD08yCz6R;
-	Thu, 21 Oct 2021 23:55:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-	t=1634853336; bh=6csxCuz1kr9C+uMndLSTwSrGXfiVLf7UG+RAN5kMi18=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZNLBtizdfizXmbnqRgyLuWVFJqh4sVO+KGwEmv64Cbgc4TuRtMyUuB4XffFLsKsNH
-	 cAq/rgWguqUErt3+nlha6LSQnDI+8FmyuBwmNErt3L+GOCpOzqkk7YkQznZikVHV/d
-	 DKDY09d2+kDgnDsCDYdCS0q6nGyJNielShyP05UZlnhfmQ8Omr0+alVbb1Kk0bnhwI
-	 Z5+/i0rj+FHVGI56fDYO+P5FPRKP7DxSPZ06KNRgbADjTgayBATPE0OKdMzAdYWyyS
-	 PzcSAPZs+aeB4Sub8MOTEAabVSxOAvq75jlyDYJbBWRB0soc4dpPem/c9bIVIDyyay
-	 dX2usiqf37C4g==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.3 at mail
-Date: Thu, 21 Oct 2021 23:55:34 +0200
-From: =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] soc/tegra: fuse: Fix bitwise vs. logical OR warning
-Message-ID: <YXHh1lVCzVnyTiZv@qmqm.qmqm.pl>
-References: <20211021214500.2388146-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A46972
+	for <llvm@lists.linux.dev>; Thu, 21 Oct 2021 22:48:45 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id n77so2936648iod.13
+        for <llvm@lists.linux.dev>; Thu, 21 Oct 2021 15:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vq4rv0bfOp4Mbz0vcICElRxaucBKkyl5l9ANfNhh4nM=;
+        b=iXF8clc3KDTdWuNG9VRHRHjfiXo0uQ+meIC9VdUXKeSh0xoLUE8k5pUqFfoDd9mCZ7
+         6wAu+igXTtOzIHFb9lyENr6cryoVMrHNb6x+ebk5GKmxN/WK57wegbe4JMAN8FeiW5nI
+         CKXpPFuakUFQtjMvO5Gi4n60XBCaFEWFvyzpRC3wp3IGqYfYORvWPnO3Uo/8iSzirci8
+         tgOh1xF6l4gXGgX74wlaIFLsYxnRIIo4Ji4QC8XZefxH/hDFOXNNVejPtLZvQ7k0RAVa
+         TClLD60MUwaDKGd9HXEVZLgjqh3fLb3K34464TvY30xg1ojcU28AdWOShrMNGN1HLEzo
+         RcaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vq4rv0bfOp4Mbz0vcICElRxaucBKkyl5l9ANfNhh4nM=;
+        b=sNzNyCYGbUCyhL6UgOBAiqUVhTP1nZaCzJ0kACPrd2yrc1Q54iO4LzopJy8SELeeAl
+         gy9SrUliEtyoQYjQr3M7D0reVPLhfOVBq8LwQDxoVHLlM7bQcOGu+HuNZdauXteWBi63
+         /FpWx6KAJ6mlu88/SfkatYD0Tl4MfL99NSGZ448BNum1eR3htjCxQX23w1e5wpzoziwV
+         NczgClEfOFm4lDJZfOvQhtKP4iHohFDA7S7/cRnNZVkXCW4fiapJearf/TTGFB8EvRGC
+         BBVMtQ5ofY9/qdNLS6zsSHjF8L2kr1oKtYDpyHx5WRALLzgdJ8VfKMYLY9DhbYQ7Jfhc
+         od9g==
+X-Gm-Message-State: AOAM533Xp+Gbn79g5lc72hDdnWMBz7wEbyeSOJ+2CxGVuyQehOmgnTOl
+	XpsqvB0Vs8zo+b7055e8z8SVnLAkN2HhXwLj0kE=
+X-Google-Smtp-Source: ABdhPJx8r7HjGQMYo+y0dlDjHb5Viagc9unNFdG3YpNQJOz8BqBN32PhELMI6RPyMl224IsyCmnW9y4nYNGLghFzQBM=
+X-Received: by 2002:a05:6638:45e:: with SMTP id r30mr5856110jap.133.1634856524728;
+ Thu, 21 Oct 2021 15:48:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211021214500.2388146-1-nathan@kernel.org>
+References: <20211014150610.GA22151@kernel.org>
+In-Reply-To: <20211014150610.GA22151@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 22 Oct 2021 00:48:33 +0200
+Message-ID: <CANiq72=702uKFJiW6KVxMfSxU4TR+DmsjKywMrs=_CV0CTkH3A@mail.gmail.com>
+Subject: Re: [PATCH] Compiler Attributes: remove GCC 5.1 mention
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 21, 2021 at 02:45:00PM -0700, Nathan Chancellor wrote:
-[...]
-> --- a/drivers/soc/tegra/fuse/speedo-tegra20.c
-> +++ b/drivers/soc/tegra/fuse/speedo-tegra20.c
-> @@ -69,7 +69,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
->  
->  	val = 0;
->  	for (i = CPU_SPEEDO_MSBIT; i >= CPU_SPEEDO_LSBIT; i--) {
-> -		reg = tegra_fuse_read_spare(i) |
-> +		reg = tegra_fuse_read_spare(i) ||
->  			tegra_fuse_read_spare(i + CPU_SPEEDO_REDUND_OFFS);
->  		val = (val << 1) | (reg & 0x1);
->  	}
-> @@ -84,7 +84,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
->  
->  	val = 0;
->  	for (i = SOC_SPEEDO_MSBIT; i >= SOC_SPEEDO_LSBIT; i--) {
-> -		reg = tegra_fuse_read_spare(i) |
-> +		reg = tegra_fuse_read_spare(i) ||
->  			tegra_fuse_read_spare(i + SOC_SPEEDO_REDUND_OFFS);
->  		val = (val << 1) | (reg & 0x1);
->  	}
+On Thu, Oct 14, 2021 at 5:06 PM Miguel Ojeda <ojeda@kernel.org> wrote:
+>
+> GCC 5.1 is now the minimum version.
 
-It does seem correct, but nevertheless the code looks suspicious. reg is
-already masked with 0x1 as far as I can tell, and there are other places
-which depend on this (like speedo-tegra210.c). Guessing from the use of
-tegra_fuse_read_spare() I would recommend changing its return type as it
-is returing a bit value, not necessarily semantically a boolean.
+Applying this.
 
-Best Regards
-Micha³ Miros³aw
+Cheers,
+Miguel
