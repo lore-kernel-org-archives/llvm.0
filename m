@@ -1,699 +1,3271 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A1472
-	for <llvm@lists.linux.dev>; Mon, 25 Oct 2021 16:38:15 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="210479230"
-X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; 
-   d="gz'50?scan'50,208,50";a="210479230"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 09:38:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; 
-   d="gz'50?scan'50,208,50";a="596548497"
-Received: from lkp-server01.sh.intel.com (HELO 0352ec6b4cf1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 Oct 2021 09:38:10 -0700
-Received: from kbuild by 0352ec6b4cf1 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mf2zC-00002g-60; Mon, 25 Oct 2021 16:38:10 +0000
-Date: Tue, 26 Oct 2021 00:37:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bharat Bhushan <bbhushan2@marvell.com>, will@kernel.org,
-	mark.rutland@arm.com, robh+dt@kernel.org, bbudiredla@marvell.com,
-	sgoutham@marvell.com, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Bharat Bhushan <bbhushan2@marvell.com>
-Subject: Re: [PATCH v5 2/4] perf/marvell: CN10k DDR performance monitor
- support
-Message-ID: <202110260025.iRmRCwpb-lkp@intel.com>
-References: <20211018042015.25151-3-bbhushan2@marvell.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD64572
+	for <llvm@lists.linux.dev>; Mon, 25 Oct 2021 17:48:43 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id s136so11698635pgs.4
+        for <llvm@lists.linux.dev>; Mon, 25 Oct 2021 10:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gEmQex8YsDQDZgenMP2LpFhDop0/VnUCxKqFAjwXkCU=;
+        b=V15BsM6AAIQb9LRKequBwrnnkAk5AXq1XmLS2MOI1vjZzpR7TlN79apEUwcDT1dCXH
+         xXJoZpZsrQ0Fi2a1xnbIbX6gd/dfuq5zzVWVXOMXZnNkJR9jfZapb85pigKKcuM0NUx9
+         3gpxD9tYlKzYumAjSRCA2XOffvIpz6rfEFqBQ2ee2ma8q5JX2FjSflFiBoRJOrXHAuUM
+         9R+FXUmoExaN3ku7WJ7gK0TRzMOgmc317xMLyestkDdNnMqs9AXWB9dplu0Nm0eqZHbV
+         cN96XmU7Z3oz9oylNXtxqmPbL7El21HRYDAQrt4SjU1JlHUrbu/b/5dX4mD95Eu+GyDH
+         KiHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gEmQex8YsDQDZgenMP2LpFhDop0/VnUCxKqFAjwXkCU=;
+        b=iSkE03gbQiGrvAlJJ3JPp0XCwrzcLb6lV8n+M88coutyJhT8M7LoQ7ZqVIKrup90es
+         hou/7rW6YoI6EYW8nHzNAhrXBlaAn0onMuxllSI4oWhUbQyBE+N4rLFdN+nJktZdcmum
+         vnXIGvZvqGU9lYNmFwYhtxlXE0Nwe9I7SQxsG6S++qCZCyHg2qCh+Cf3vKX+299WoqNq
+         geJNRVdXh2L3RGRtPeXSZjtV/yviPZJ4YsoNcl73UiFFSfIwY1Dwe0gR6PSlxXqlVPGj
+         4yIOHYAeX8r5nHqVBdWDVUWLAqUC52Elq1lbwTvndVV/pYQcBYB4GohvA/YNRTELeqjj
+         39Rw==
+X-Gm-Message-State: AOAM531YGjCVO2QiClQaUpNFevSSNpTFSC3MrDNL6yIdsghQJGrSSJ0G
+	F6GsFYswtuyV9MZ9BADSJxJAtzsCXC5nX4FX
+X-Google-Smtp-Source: ABdhPJwANXVAbcAIt+gGxg7N3mZWd6Z/rLLKx/OXJV2zYKH6GypdtYXYTkOJCZ7XRjp3lH9A4r2NaA==
+X-Received: by 2002:a63:8b41:: with SMTP id j62mr10401398pge.361.1635184121148;
+        Mon, 25 Oct 2021 10:48:41 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u11sm21029527pfg.2.2021.10.25.10.48.40
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 10:48:40 -0700 (PDT)
+Message-ID: <6176edf8.1c69fb81.d0233.5ee7@mx.google.com>
+Date: Mon, 25 Oct 2021 10:48:40 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="lrZ03NoBR/3+SXJZ"
-Content-Disposition: inline
-In-Reply-To: <20211018042015.25151-3-bbhushan2@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20211025
+X-Kernelci-Report-Type: build
+Subject: next/master build: 227 builds: 42 failed, 185 passed, 371 errors,
+ 213 warnings (next-20211025)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
+next/master build: 227 builds: 42 failed, 185 passed, 371 errors, 213 warni=
+ngs (next-20211025)
 
---lrZ03NoBR/3+SXJZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20211025/
 
-Hi Bharat,
+Tree: next
+Branch: master
+Git Describe: next-20211025
+Git Commit: 9ae1fbdeabd3b3f668ad0bcb47d64b3a9fb4f8fc
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Thank you for the patch! Yet something to improve:
+Build Failures Detected:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v5.15-rc6 next-20211025]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+arc:
+    haps_hs_defconfig: (gcc-10) FAIL
 
-url:    https://github.com/0day-ci/linux/commits/Bharat-Bhushan/cn10k-DDR-Performance-monitor-support/20211018-122220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: hexagon-randconfig-r045-20211025 (attached as .config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project a461fa64bb37cffd73f683c74f6b0780379fc2ca)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/c165c120469cac5c73b7a7e9d027c284eb09c6d1
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Bharat-Bhushan/cn10k-DDR-Performance-monitor-support/20211018-122220
-        git checkout c165c120469cac5c73b7a7e9d027c284eb09c6d1
-        # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+arm64:
+    allmodconfig: (clang-10) FAIL
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+arm:
+    allmodconfig: (clang-10) FAIL
+    allnoconfig: (clang-10) FAIL
+    aspeed_g5_defconfig: (clang-10) FAIL
+    multi_v5_defconfig: (clang-10) FAIL
+    multi_v7_defconfig: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
+    multi_v5_defconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
+    am200epdkit_defconfig: (gcc-10) FAIL
+    badge4_defconfig: (gcc-10) FAIL
+    cerfcube_defconfig: (gcc-10) FAIL
+    corgi_defconfig: (gcc-10) FAIL
+    imote2_defconfig: (gcc-10) FAIL
+    lart_defconfig: (gcc-10) FAIL
+    magician_defconfig: (gcc-10) FAIL
+    multi_v5_defconfig: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy: (gcc-10) FAIL
+    pcm027_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    simpad_defconfig: (gcc-10) FAIL
+    socfpga_defconfig: (gcc-10) FAIL
+    viper_defconfig: (gcc-10) FAIL
 
-All errors (new ones prefixed by >>):
+i386:
+    allmodconfig: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
 
->> drivers/perf/marvell_cn10k_ddr_pmu.c:352:9: error: implicit declaration of function 'readq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   val = readq_relaxed(pmu->base + reg);
-                         ^
->> drivers/perf/marvell_cn10k_ddr_pmu.c:359:3: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   writeq_relaxed(val, pmu->base + reg);
-                   ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:359:3: note: did you mean 'readq_relaxed'?
-   drivers/perf/marvell_cn10k_ddr_pmu.c:352:9: note: 'readq_relaxed' declared here
-                   val = readq_relaxed(pmu->base + reg);
-                         ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:361:9: error: implicit declaration of function 'readq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   val = readq_relaxed(pmu->base + DDRC_PERF_CNT_FREERUN_EN);
-                         ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:373:3: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   writeq_relaxed(val, pmu->base + DDRC_PERF_CNT_FREERUN_EN);
-                   ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:382:10: error: implicit declaration of function 'readq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   return readq_relaxed(pmu->base + DDRC_PERF_CNT_VALUE_RD_OP);
-                          ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:443:3: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   writeq_relaxed(val, pmu->base + reg_offset);
-                   ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:451:3: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-                   writeq_relaxed(val, pmu->base + DDRC_PERF_CNT_FREERUN_CTRL);
-                   ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:493:2: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-           writeq_relaxed(START_OP_CTRL_VAL_START, ddr_pmu->base +
-           ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:501:2: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-           writeq_relaxed(END_OP_CTRL_VAL_END, ddr_pmu->base +
-           ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:527:2: error: implicit declaration of function 'writeq_relaxed' [-Werror,-Wimplicit-function-declaration]
-           writeq_relaxed(OP_MODE_CTRL_VAL_MANNUAL, ddr_pmu->base +
-           ^
-   drivers/perf/marvell_cn10k_ddr_pmu.c:549:10: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                                 res->start);
-                                 ^~~~~~~~~~
-   drivers/perf/marvell_cn10k_ddr_pmu.c:557:50: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-           pr_info("CN10K DDR PMU Driver for ddrc@%llx\n", res->start);
-                                                  ~~~~     ^~~~~~~~~~
-                                                  %x
-   include/linux/printk.h:519:34: note: expanded from macro 'pr_info'
-           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-                                   ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings and 10 errors generated.
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    lemote2f_defconfig: (gcc-10) FAIL
+    mtx1_defconfig: (gcc-10) FAIL
+    rt305x_defconfig: (gcc-10) FAIL
+    xway_defconfig: (gcc-10) FAIL
 
+riscv:
+    nommu_virt_defconfig: (gcc-10) FAIL
 
-vim +/readq_relaxed +352 drivers/perf/marvell_cn10k_ddr_pmu.c
+x86_64:
+    allmodconfig: (clang-10) FAIL
+    x86_64_defconfig: (clang-10) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-   338	
-   339	static void cn10k_ddr_perf_counter_enable(struct cn10k_ddr_pmu *pmu,
-   340						  int counter, bool enable)
-   341	{
-   342		u32 reg;
-   343		u64 val;
-   344	
-   345		if (counter > DDRC_PERF_NUM_COUNTERS) {
-   346			pr_err("Error: unsupported counter %d\n", counter);
-   347			return;
-   348		}
-   349	
-   350		if (counter < DDRC_PERF_NUM_GEN_COUNTERS) {
-   351			reg = DDRC_PERF_CFG(counter);
- > 352			val = readq_relaxed(pmu->base + reg);
-   353	
-   354			if (enable)
-   355				val |= EVENT_ENABLE;
-   356			else
-   357				val &= ~EVENT_ENABLE;
-   358	
- > 359			writeq_relaxed(val, pmu->base + reg);
-   360		} else {
-   361			val = readq_relaxed(pmu->base + DDRC_PERF_CNT_FREERUN_EN);
-   362			if (enable) {
-   363				if (counter == DDRC_PERF_READ_COUNTER_IDX)
-   364					val |= DDRC_PERF_FREERUN_READ_EN;
-   365				else
-   366					val |= DDRC_PERF_FREERUN_WRITE_EN;
-   367			} else {
-   368				if (counter == DDRC_PERF_READ_COUNTER_IDX)
-   369					val &= ~DDRC_PERF_FREERUN_READ_EN;
-   370				else
-   371					val &= ~DDRC_PERF_FREERUN_WRITE_EN;
-   372			}
-   373			writeq_relaxed(val, pmu->base + DDRC_PERF_CNT_FREERUN_EN);
-   374		}
-   375	}
-   376	
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_defconfig (gcc-10): 2 errors, 1 warning
+    haps_hs_smp_defconfig+kselftest (gcc-10): 3 warnings
+    tinyconfig (gcc-10): 1 warning
+
+arm64:
+    allmodconfig (clang-10): 129 errors
+    allmodconfig (clang-13): 2 errors, 1 warning
+    allmodconfig (gcc-10): 1 error, 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-10): 129 errors
+
+arm:
+    allmodconfig (clang-10): 33 errors, 14 warnings
+    allmodconfig (gcc-10): 6 errors, 1 warning
+    allmodconfig (clang-13): 4 errors, 13 warnings
+    allnoconfig (clang-10): 1 error
+    am200epdkit_defconfig (gcc-10): 1 error
+    aspeed_g5_defconfig (clang-10): 2 errors
+    aspeed_g5_defconfig (clang-13): 10 warnings
+    magician_defconfig (gcc-10): 1 error
+    multi_v5_defconfig (clang-10): 3 errors
+    multi_v5_defconfig (gcc-10): 5 errors
+    multi_v5_defconfig (clang-13): 3 errors
+    multi_v7_defconfig (clang-10): 5 errors, 8 warnings
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 4 errors
+    rpc_defconfig (gcc-10): 4 errors
+    socfpga_defconfig (gcc-10): 2 errors, 5 warnings
+
+i386:
+    allmodconfig (clang-10): 10 errors, 1 warning
+    allmodconfig (clang-13): 13 errors, 1 warning
+
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+    32r2el_defconfig+kselftest (gcc-10): 4 warnings
+    ar7_defconfig (gcc-10): 2 warnings
+    ath25_defconfig (gcc-10): 2 warnings
+    ath79_defconfig (gcc-10): 2 warnings
+    bcm47xx_defconfig (gcc-10): 2 warnings
+    bcm63xx_defconfig (gcc-10): 1 warning
+    bigsur_defconfig (gcc-10): 6 warnings
+    bmips_be_defconfig (gcc-10): 1 warning
+    bmips_stb_defconfig (gcc-10): 1 warning
+    capcella_defconfig (gcc-10): 2 warnings
+    cavium_octeon_defconfig (gcc-10): 6 warnings
+    ci20_defconfig (gcc-10): 3 warnings
+    cobalt_defconfig (gcc-10): 2 warnings
+    cu1000-neo_defconfig (gcc-10): 2 warnings
+    cu1830-neo_defconfig (gcc-10): 2 warnings
+    db1xxx_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 1 error, 4 warnings
+    decstation_defconfig (gcc-10): 1 error, 2 warnings
+    decstation_r4k_defconfig (gcc-10): 1 error, 2 warnings
+    e55_defconfig (gcc-10): 2 warnings
+    fuloong2e_defconfig (gcc-10): 6 warnings
+    gcw0_defconfig (gcc-10): 2 warnings
+    gpr_defconfig (gcc-10): 2 warnings
+    ip22_defconfig (gcc-10): 2 warnings
+    ip32_defconfig (gcc-10): 6 warnings
+    jazz_defconfig (gcc-10): 2 warnings
+    jmr3927_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 6 warnings
+    loongson1b_defconfig (gcc-10): 2 warnings
+    loongson1c_defconfig (gcc-10): 2 warnings
+    loongson2k_defconfig (gcc-10): 6 warnings
+    loongson3_defconfig (gcc-10): 6 warnings
+    malta_defconfig (gcc-10): 2 warnings
+    malta_kvm_defconfig (gcc-10): 2 warnings
+    malta_qemu_32r6_defconfig (gcc-10): 2 warnings
+    maltaaprp_defconfig (gcc-10): 2 warnings
+    maltasmvp_defconfig (gcc-10): 2 warnings
+    maltasmvp_eva_defconfig (gcc-10): 2 warnings
+    maltaup_defconfig (gcc-10): 2 warnings
+    maltaup_xpa_defconfig (gcc-10): 2 warnings
+    mpc30x_defconfig (gcc-10): 2 warnings
+    mtx1_defconfig (gcc-10): 2 warnings
+    omega2p_defconfig (gcc-10): 1 warning
+    pic32mzda_defconfig (gcc-10): 2 warnings
+    qi_lb60_defconfig (gcc-10): 2 warnings
+    rb532_defconfig (gcc-10): 2 warnings
+    rbtx49xx_defconfig (gcc-10): 2 warnings
+    rm200_defconfig (gcc-10): 3 warnings
+    rs90_defconfig (gcc-10): 1 warning
+    rt305x_defconfig (gcc-10): 2 warnings
+    sb1250_swarm_defconfig (gcc-10): 4 warnings
+    tb0219_defconfig (gcc-10): 2 warnings
+    tb0226_defconfig (gcc-10): 2 warnings
+    tb0287_defconfig (gcc-10): 2 warnings
+    vocore2_defconfig (gcc-10): 1 warning
+    workpad_defconfig (gcc-10): 2 warnings
+    xway_defconfig (gcc-10): 2 errors, 4 warnings
+
+riscv:
+    nommu_virt_defconfig (gcc-10): 2 errors, 1 warning
+
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+    allmodconfig (clang-10): 1 error, 2 warnings
+    allnoconfig (clang-10): 3 warnings
+    x86_64_defconfig (clang-10): 1 error
+
+Errors summary:
+
+    3    drivers/net/fddi/defza.c:1383:20: error: passing argument 2 of =E2=
+=80=98dev_addr_set=E2=80=99 from incompatible pointer type [-Werror=3Dincom=
+patible-pointer-types]
+    3    drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used u=
+ninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitial=
+ized]
+    3    drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used u=
+ninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitial=
+ized]
+    3    arch/arm/kernel/entry-armv.S:506:4: error: invalid instruction, an=
+y one of the following would fix this:
+    3    arch/arm/kernel/entry-armv.S:502:4: error: invalid instruction, an=
+y one of the following would fix this:
+    2    ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+    2    ld.lld: error: undefined symbol: drm_atomic_helper_damage_iter_next
+    2    ld.lld: error: undefined symbol: drm_atomic_helper_damage_iter_init
+    2    drivers/mfd/altera-a10sr.c:159:1: error: type defaults to =E2=80=
+=98int=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-W=
+error=3Dimplicit-int]
+    2    drivers/mfd/altera-a10sr.c:153:1: error: type defaults to =E2=80=
+=98int=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-W=
+error=3Dimplicit-int]
+    2    arm-linux-gnueabihf-ld: /tmp/kci/linux/build/../drivers/gpu/drm/dr=
+m_fb_cma_helper.c:46: undefined reference to `drm_gem_fb_get_obj'
+    2    arm-linux-gnueabihf-gcc: error: unrecognized -march target: armv3m
+    2    arm-linux-gnueabihf-gcc: error: missing argument to =E2=80=98-marc=
+h=3D=E2=80=99
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocatio=
+n name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocatio=
+n name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocat=
+ion name
+    2    api.c:(.text+0x59c): undefined reference to `crypto_alg_tested'
+    2    <instantiation>:2:2: error: unknown use of instruction mnemonic wi=
+thout a size suffix
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    stm32-dma.c:(.text+0x10a8): undefined reference to `__aeabi_uldivm=
+od'
+    1    net/sched/sch_gred.c:310:13: error: stack frame size of 1212 bytes=
+ in function 'gred_offload' [-Werror,-Wframe-larger-than=3D]
+    1    net/sched/sch_gred.c:310:13: error: stack frame size (1212) exceed=
+s limit (1024) in function 'gred_offload' [-Werror,-Wframe-larger-than]
+    1    drivers/net/ethernet/lantiq_etop.c:673:8: error: implicit declarat=
+ion of function =E2=80=98device_property_read_u32=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    1    drivers/net/ethernet/lantiq_etop.c:265:55: error: =E2=80=98rx_burs=
+t_len=E2=80=99 undeclared (first use in this function)
+    1    drivers/mfd/altera-a10sr.c:159:21: error: a parameter list without=
+ types is only allowed in a function definition
+    1    drivers/mfd/altera-a10sr.c:159:1: error: parameter names (without =
+types) in function declaration [-Werror]
+    1    drivers/mfd/altera-a10sr.c:159:1: error: declaration specifier mis=
+sing, defaulting to 'int' [-Werror]
+    1    drivers/mfd/altera-a10sr.c:159:1: error: data definition has no ty=
+pe or storage class [-Werror]
+    1    drivers/mfd/altera-a10sr.c:153:21: error: a parameter list without=
+ types is only allowed in a function definition
+    1    drivers/mfd/altera-a10sr.c:153:1: error: parameter names (without =
+types) in function declaration [-Werror]
+    1    drivers/mfd/altera-a10sr.c:153:1: error: declaration specifier mis=
+sing, defaulting to 'int' [-Werror]
+    1    drivers/mfd/altera-a10sr.c:153:1: error: data definition has no ty=
+pe or storage class [-Werror]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size of 1292 bytes in function 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1372) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vb=
+a_31.c:3956:6: error: stack frame size (2108) exceeds limit (2048) in funct=
+ion 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1116) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size of 1212 bytes in function 'dml21_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1276) exceeds limit (1024) in funct=
+ion 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size of 1148 bytes in function 'DISPCLKD=
+PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
+[-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1196) exceeds limit (1024) in func=
+tion 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanc=
+eCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size of 1436 bytes in function 'dml20v2=
+_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in fun=
+ction 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larg=
+er-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size of 1196 bytes in function 'dml20v=
+2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
+culation' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1276) exceeds limit (1024) in fu=
+nction 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAnd=
+PerformanceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size of 1436 bytes in function 'dml20_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1612) exceeds limit (1024) in funct=
+ion 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size of 1196 bytes in function 'dml20_DI=
+SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
+tion' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1356) exceeds limit (1024) in func=
+tion 'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerf=
+ormanceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/firmware/arm_ffa/driver.c:180:6: error: unused variable =
+=E2=80=98compat_version=E2=80=99 [-Werror=3Dunused-variable]
+    1    drivers/block/virtio_blk.c:195:8: error: implicit declaration of f=
+unction =E2=80=98sg_alloc_table_chained=E2=80=99; did you mean =E2=80=98sg_=
+alloc_table=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+    1    drivers/block/virtio_blk.c:195:8: error: implicit declaration of f=
+unction 'sg_alloc_table_chained'; did you mean 'sg_alloc_table'? [-Werror=
+=3Dimplicit-function-declaration]
+    1    drivers/block/virtio_blk.c:182:3: error: implicit declaration of f=
+unction =E2=80=98sg_free_table_chained=E2=80=99 [-Werror=3Dimplicit-functio=
+n-declaration]
+    1    drivers/block/virtio_blk.c:182:3: error: implicit declaration of f=
+unction 'sg_free_table_chained' [-Werror=3Dimplicit-function-declaration]
+    1    clang: error: unsupported argument '-mimplicit-it=3Dalways' to opt=
+ion 'Wa,'
+    1    arm-linux-gnueabihf-ld: stm32-dma.c:(.text+0x1170): undefined refe=
+rence to `__aeabi_uldivmod'
+    1    arm-linux-gnueabihf-ld: stm32-dma.c:(.text+0x114c): undefined refe=
+rence to `__aeabi_uldivmod'
+    1    arm-linux-gnueabihf-ld: stm32-dma.c:(.text+0x10c8): undefined refe=
+rence to `__aeabi_uldivmod'
+    1    arm-linux-gnueabihf-ld: /tmp/kci/linux/build/../drivers/gpu/drm/dr=
+m_fb_cma_helper.c:135: undefined reference to `drm_atomic_helper_damage_ite=
+r_next'
+    1    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemb=
+le to exactly 4 bytes
+    1    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+    1    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+    1    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-bar=
+riers
+    1    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-bar=
+riers
+    1    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-bar=
+riers
+    1    arch/arm/mm/cache-v7.S:423:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:401:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:372:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:344:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:321:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:286:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:172:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+    1    arch/arm/mach-mvebu/coherency_ll.S:155:2: error: instruction requi=
+res: data-barriers
+    1    arch/arm/mach-mvebu/coherency_ll.S:128:2: error: instruction requi=
+res: data-barriers
+    1    arch/arm/mach-imx/suspend-imx6.S:315:2: error: instruction require=
+s: data-barriers
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_cma_helper.c:46: un=
+defined reference to `drm_gem_fb_get_obj'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_cma_helper.c:133: u=
+ndefined reference to `drm_atomic_helper_damage_iter_init'
+
+Warnings summary:
+
+    137  <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
+ted [-Wcpp]
+    30   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    9    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv7-a' [-Wunused-command-line-argument]
+    7    cc1: some warnings being treated as errors
+    4    clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    3    drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variabl=
+e 'i' to silence this warning
+    2    cc1: all warnings being treated as errors
+    2    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't f=
+ind starting instruction
+    2    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't f=
+ind starting instruction
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+    1    drivers/net/ethernet/lantiq_etop.c:284:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98wa=
+rn_unused_result=E2=80=99 [-Wunused-result]
+    1    drivers/net/ethernet/lantiq_etop.c:276:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98wa=
+rn_unused_result=E2=80=99 [-Wunused-result]
+    1    drivers/mfd/altera-a10sr.c:159:1: warning: parameter names (withou=
+t types) in function declaration
+    1    drivers/mfd/altera-a10sr.c:159:1: warning: data definition has no =
+type or storage class
+    1    drivers/mfd/altera-a10sr.c:153:1: warning: parameter names (withou=
+t types) in function declaration
+    1    drivers/mfd/altera-a10sr.c:153:1: warning: data definition has no =
+type or storage class
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv6k' [-Wunused-command-line-argument]
+    1    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv6' [-Wunused-command-line-argument]
+    1    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): =
+can't find starting instruction
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_m=
+ap' defined but not used [-Wunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_=
+map' defined but not used [-Wunused-const-variable=3D]
+
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2096c): Section misma=
+tch in reference from the function xbc_alloc_mem() to the function .init.te=
+xt:memblock_alloc_try_nid()
+    1    WARNING: modpost: vmlinux.o(.text+0x70353): Section mismatch in re=
+ference from the function __nodes_weight() to the variable .init.data:numa_=
+nodes_parsed
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-10) =E2=80=94 FAIL, 33 errors, 14 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:172:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:286:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:321:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:344:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:372:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:401:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:423:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+    arch/arm/mach-mvebu/coherency_ll.S:128:2: error: instruction requires: =
+data-barriers
+    arch/arm/mach-mvebu/coherency_ll.S:155:2: error: instruction requires: =
+data-barriers
+    arch/arm/kernel/entry-armv.S:502:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:506:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mach-imx/suspend-imx6.S:315:2: error: instruction requires: da=
+ta-barriers
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+k' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-10) =E2=80=94 FAIL, 10 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    net/sched/sch_gred.c:310:13: error: stack frame size of 1212 bytes in f=
+unction 'gred_offload' [-Werror,-Wframe-larger-than=3D]
+    drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used uninit=
+ialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninit=
+ialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size of 1292 bytes in function 'dml_rq_dlg_=
+get_dlg_params' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size of 1148 bytes in function 'DISPCLKDPPCLK=
+DCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wer=
+ror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size of 1212 bytes in function 'dml21_ModeSupp=
+ortAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size of 1196 bytes in function 'dml20_DISPCLK=
+DPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'=
+ [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size of 1436 bytes in function 'dml20_ModeSupp=
+ortAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size of 1196 bytes in function 'dml20v2_DIS=
+PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
+ion' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size of 1436 bytes in function 'dml20v2_Mode=
+SupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+
+Warnings:
+    drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i'=
+ to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-10) =E2=80=94 FAIL, 129 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocation n=
+ame
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
+
+Warnings:
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-13) =E2=80=94 FAIL, 13 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    net/sched/sch_gred.c:310:13: error: stack frame size (1212) exceeds lim=
+it (1024) in function 'gred_offload' [-Werror,-Wframe-larger-than]
+    drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used uninit=
+ialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninit=
+ialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1116) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1372) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1196) exceeds limit (1024) in function =
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalc=
+ulation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1276) exceeds limit (1024) in function '=
+dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1356) exceeds limit (1024) in function =
+'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.=
+c:3956:6: error: stack frame size (2108) exceeds limit (2048) in function '=
+dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1276) exceeds limit (1024) in functio=
+n 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerfo=
+rmanceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1612) exceeds limit (1024) in function '=
+dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in function=
+ 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-th=
+an]
+
+Warnings:
+    drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i'=
+ to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used uninit=
+ialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninit=
+ialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i'=
+ to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 6 errors, 1 warning, 0 section m=
+ismatches
+
+Errors:
+    drivers/mfd/altera-a10sr.c:153:1: error: data definition has no type or=
+ storage class [-Werror]
+    drivers/mfd/altera-a10sr.c:153:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-Werror=
+=3Dimplicit-int]
+    drivers/mfd/altera-a10sr.c:153:1: error: parameter names (without types=
+) in function declaration [-Werror]
+    drivers/mfd/altera-a10sr.c:159:1: error: data definition has no type or=
+ storage class [-Werror]
+    drivers/mfd/altera-a10sr.c:159:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-Werror=
+=3Dimplicit-int]
+    drivers/mfd/altera-a10sr.c:159:1: error: parameter names (without types=
+) in function declaration [-Werror]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-13) =E2=80=94 FAIL, 4 errors, 13 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/mfd/altera-a10sr.c:153:1: error: declaration specifier missing,=
+ defaulting to 'int' [-Werror]
+    drivers/mfd/altera-a10sr.c:153:21: error: a parameter list without type=
+s is only allowed in a function definition
+    drivers/mfd/altera-a10sr.c:159:1: error: declaration specifier missing,=
+ defaulting to 'int' [-Werror]
+    drivers/mfd/altera-a10sr.c:159:21: error: a parameter list without type=
+s is only allowed in a function definition
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
+mismatches
+
+Errors:
+    drivers/firmware/arm_ffa/driver.c:180:6: error: unused variable =E2=80=
+=98compat_version=E2=80=99 [-Werror=3Dunused-variable]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2096c): Section mismatch i=
+n reference from the function xbc_alloc_mem() to the function .init.text:me=
+mblock_alloc_try_nid()
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): can't=
+ find starting instruction
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    clang: error: unsupported argument '-mimplicit-it=3Dalways' to option '=
+Wa,'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    api.c:(.text+0x59c): undefined reference to `crypto_alg_tested'
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:502:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:506:4: error: invalid instruction, any one=
+ of the following would fix this:
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 4 warnings,=
+ 0 section mismatches
+
+Errors:
+    drivers/net/fddi/defza.c:1383:20: error: passing argument 2 of =E2=80=
+=98dev_addr_set=E2=80=99 from incompatible pointer type [-Werror=3Dincompat=
+ible-pointer-types]
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/net/fddi/defza.c:1383:20: error: passing argument 2 of =E2=80=
+=98dev_addr_set=E2=80=99 from incompatible pointer type [-Werror=3Dincompat=
+ible-pointer-types]
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 2 warnings=
+, 0 section mismatches
+
+Errors:
+    drivers/net/fddi/defza.c:1383:20: error: passing argument 2 of =E2=80=
+=98dev_addr_set=E2=80=99 from incompatible pointer type [-Werror=3Dincompat=
+ible-pointer-types]
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-10) =E2=80=94 FAIL, 129 =
+errors, 0 warnings, 0 section mismatches
+
+Errors:
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocation n=
+ame
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-13) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-13) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/block/virtio_blk.c:182:3: error: implicit declaration of functi=
+on 'sg_free_table_chained' [-Werror=3Dimplicit-function-declaration]
+    drivers/block/virtio_blk.c:195:8: error: implicit declaration of functi=
+on 'sg_alloc_table_chained'; did you mean 'sg_alloc_table'? [-Werror=3Dimpl=
+icit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 w=
+arnings, 0 section mismatches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' =
+defined but not used [-Wunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' d=
+efined but not used [-Wunused-const-variable=3D]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    api.c:(.text+0x59c): undefined reference to `crypto_alg_tested'
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
+0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+    ld.lld: error: undefined symbol: drm_atomic_helper_damage_iter_init
+    ld.lld: error: undefined symbol: drm_atomic_helper_damage_iter_next
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 5 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_cma_helper.c:46: undefin=
+ed reference to `drm_gem_fb_get_obj'
+    arm-linux-gnueabihf-ld: /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_=
+cma_helper.c:46: undefined reference to `drm_gem_fb_get_obj'
+    arm-linux-gnueabihf-ld: /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_=
+cma_helper.c:46: undefined reference to `drm_gem_fb_get_obj'
+    /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_cma_helper.c:133: undefi=
+ned reference to `drm_atomic_helper_damage_iter_init'
+    arm-linux-gnueabihf-ld: /tmp/kci/linux/build/../drivers/gpu/drm/drm_fb_=
+cma_helper.c:135: undefined reference to `drm_atomic_helper_damage_iter_nex=
+t'
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-13) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+    ld.lld: error: undefined symbol: drm_atomic_helper_damage_iter_init
+    ld.lld: error: undefined symbol: drm_atomic_helper_damage_iter_next
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 FAIL, 5 errors, 8 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:502:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:506:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemble to=
+ exactly 4 bytes
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 FAIL, 4 errors, 0 warnings, 0 section mismatches
+
+Errors:
+    stm32-dma.c:(.text+0x10a8): undefined reference to `__aeabi_uldivmod'
+    arm-linux-gnueabihf-ld: stm32-dma.c:(.text+0x10c8): undefined reference=
+ to `__aeabi_uldivmod'
+    arm-linux-gnueabihf-ld: stm32-dma.c:(.text+0x114c): undefined reference=
+ to `__aeabi_uldivmod'
+    arm-linux-gnueabihf-ld: stm32-dma.c:(.text+0x1170): undefined reference=
+ to `__aeabi_uldivmod'
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0=
+ section mismatches
+
+Errors:
+    drivers/block/virtio_blk.c:182:3: error: implicit declaration of functi=
+on =E2=80=98sg_free_table_chained=E2=80=99 [-Werror=3Dimplicit-function-dec=
+laration]
+    drivers/block/virtio_blk.c:195:8: error: implicit declaration of functi=
+on =E2=80=98sg_alloc_table_chained=E2=80=99; did you mean =E2=80=98sg_alloc=
+_table=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arm-linux-gnueabihf-gcc: error: unrecognized -march target: armv3m
+    arm-linux-gnueabihf-gcc: error: missing argument to =E2=80=98-march=3D=
+=E2=80=99
+    arm-linux-gnueabihf-gcc: error: unrecognized -march target: armv3m
+    arm-linux-gnueabihf-gcc: error: missing argument to =E2=80=98-march=3D=
+=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/mfd/altera-a10sr.c:153:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-Werror=
+=3Dimplicit-int]
+    drivers/mfd/altera-a10sr.c:159:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98MODULE_DEVICE_TABLE=E2=80=99 [-Werror=
+=3Dimplicit-int]
+
+Warnings:
+    drivers/mfd/altera-a10sr.c:153:1: warning: data definition has no type =
+or storage class
+    drivers/mfd/altera-a10sr.c:153:1: warning: parameter names (without typ=
+es) in function declaration
+    drivers/mfd/altera-a10sr.c:159:1: warning: data definition has no type =
+or storage class
+    drivers/mfd/altera-a10sr.c:159:1: warning: parameter names (without typ=
+es) in function declaration
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text+0x70353): Section mismatch in referen=
+ce from the function __nodes_weight() to the variable .init.data:numa_nodes=
+_parsed
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 4 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/net/ethernet/lantiq_etop.c:265:55: error: =E2=80=98rx_burst_len=
+=E2=80=99 undeclared (first use in this function)
+    drivers/net/ethernet/lantiq_etop.c:673:8: error: implicit declaration o=
+f function =E2=80=98device_property_read_u32=E2=80=99 [-Werror=3Dimplicit-f=
+unction-declaration]
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    drivers/net/ethernet/lantiq_etop.c:276:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98warn_un=
+used_result=E2=80=99 [-Wunused-result]
+    drivers/net/ethernet/lantiq_etop.c:284:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98warn_un=
+used_result=E2=80=99 [-Wunused-result]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
---lrZ03NoBR/3+SXJZ
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
-
-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
-EO0Z8/8Lbq1/8rexAQA=
-
---lrZ03NoBR/3+SXJZ--
+For more info write to <info@kernelci.org>
