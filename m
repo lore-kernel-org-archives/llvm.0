@@ -1,81 +1,107 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534DD2C8B
-	for <llvm@lists.linux.dev>; Mon, 25 Oct 2021 21:13:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9821D61076;
-	Mon, 25 Oct 2021 21:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AB42C9F
+	for <llvm@lists.linux.dev>; Mon, 25 Oct 2021 22:48:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B880B60527;
+	Mon, 25 Oct 2021 22:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635196390;
-	bh=c6x2a88MQiWLoeRudW1085kFp+7uZbDkUgE4fWXHX6Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V11DS4EhoXg/IP836OngKffoHlWvCmfDiYB+ZyodhbececGE+474cAzIoM2YE1ZB8
-	 QRymtDMVVMFaGmCFiaRfKII90IBhWZo1Uvk5Rq1ihjhVtHf/qXuiIP/jFMINQCFFmW
-	 S/hyRUg8H6Jq9Jis7Xf5TPCFHjjZA4ZYT6OB7Ax3uNfbK0n7yzGbrdGgBw82xmYkj8
-	 7RRVJSVvVl3xARpU0PReLY9pdqSirIsz5vTdaihbG9hM+HBAzdXPg8bYloX715t8Tp
-	 +3FSNs9Fwu9VfXqNenD52Ir6pwtaMRdOLYLWbdvyYjO5ByeZA7JpT5ZdEIgb5OSzI+
-	 SWPtMom0xD0iw==
+	s=k20201202; t=1635202094;
+	bh=qxxxMQVeFjZxLU1eZ0wh5jiPQCS3q60kDxRnCGPyqlY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q0idpKffK6mdHcszuV9oGH/vDtF5lVzYKSl6HscdNcbTj6I+DxYuKw2fqDYtucrHf
+	 PeECJHjxO09PD0qm1YqRa5yEjDV/kGxz8g0LeEfac83sG6li9Hdmmv8I26VG3hM4AR
+	 y0yWRmSoPwLXAzF/xkyf3JEoyPW5MrgIJqTqXr3JdYKHxV59jAuNSgvuGTT6LfUaSs
+	 RuVrE6ozM9wCd744GP6BHPWNJmzF1RgVD5T03LJlptBNSqhVcxs0YEA6vV5g6/NtWn
+	 o7T/FWsR5JgvV3/pnH+Jho1VA5aZCdwPbZGlFzrNsNjY7TcNlV49u3khlzDtsqeSVm
+	 a65SDCgoT0IpQ==
+Date: Mon, 25 Oct 2021 15:48:10 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] net: ax88796c: Remove pointless check in ax88796c_open()
-Date: Mon, 25 Oct 2021 14:12:39 -0700
-Message-Id: <20211025211238.178768-2-nathan@kernel.org>
-X-Mailer: git-send-email 2.33.1.637.gf443b226ca
-In-Reply-To: <20211025211238.178768-1-nathan@kernel.org>
-References: <20211025211238.178768-1-nathan@kernel.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc: dri-devel@lists.freedesktop.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] dma-buf: fix uninitialized variable usage in selftests
+Message-ID: <YXc0KlqXvm5W61ee@archlinux-ax161>
+References: <20211025072835.176805-1-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211025072835.176805-1-christian.koenig@amd.com>
 
-Clang warns:
+Hi Christian,
 
-drivers/net/ethernet/asix/ax88796c_main.c:851:24: error: address of
-array 'ax_local->phydev->advertising' will always evaluate to 'true'
-[-Werror,-Wpointer-bool-conversion]
-        if (ax_local->phydev->advertising &&
-            ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~ ~~
+On Mon, Oct 25, 2021 at 09:28:35AM +0200, Christian König wrote:
+> "i" can be used uninitialized in one of the error branches. Fix this.
+> 
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  drivers/dma-buf/st-dma-resv.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
+> index 6f3ba756da3e..bc2265807f6c 100644
+> --- a/drivers/dma-buf/st-dma-resv.c
+> +++ b/drivers/dma-buf/st-dma-resv.c
+> @@ -295,7 +295,7 @@ static int test_get_fences(void *arg, bool shared)
+>  		if (r) {
+>  			pr_err("Resv shared slot allocation failed\n");
+>  			dma_resv_unlock(&resv);
+> -			goto err_free;
+> +			goto err_fini;
+>  		}
+>  
+>  		dma_resv_add_shared_fence(&resv, f);
+> @@ -336,6 +336,7 @@ static int test_get_fences(void *arg, bool shared)
+>  	while (i--)
+>  		dma_fence_put(fences[i]);
+>  	kfree(fences);
+> +err_fini:
+>  	dma_resv_fini(&resv);
+>  	dma_fence_put(f);
+>  	return r;
+> -- 
+> 2.25.1
+> 
+> 
 
-advertising cannot be NULL here if ax_local is not NULL, which cannot
-happen due to the check in ax88796c_probe(). Remove the check.
+Thanks for the patch! This is not enough to fix all the warnings in this
+file:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1492
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/ethernet/asix/ax88796c_main.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+        if (r) {
+            ^
+drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
+        while (i--)
+               ^
+drivers/dma-buf/st-dma-resv.c:288:2: note: remove the 'if' if its condition is always false
+        if (r) {
+        ^~~~~~~~
+drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i' to silence this warning
+        int r, i;
+                ^
+                 = 0
+1 error generated.
 
-diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethernet/asix/ax88796c_main.c
-index cf0f96f93f3b..528a0c43540b 100644
---- a/drivers/net/ethernet/asix/ax88796c_main.c
-+++ b/drivers/net/ethernet/asix/ax88796c_main.c
-@@ -850,11 +850,10 @@ ax88796c_open(struct net_device *ndev)
- 	/* Setup flow-control configuration */
- 	phy_support_asym_pause(ax_local->phydev);
+This hunk resolves it for me. With that:
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
+index bc2265807f6c..e5d5c25eed53 100644
+--- a/drivers/dma-buf/st-dma-resv.c
++++ b/drivers/dma-buf/st-dma-resv.c
+@@ -287,7 +287,7 @@ static int test_get_fences(void *arg, bool shared)
+ 	r = dma_resv_lock(&resv, NULL);
+ 	if (r) {
+ 		pr_err("Resv locking failed\n");
+-		goto err_free;
++		goto err_fini;
+ 	}
  
--	if (ax_local->phydev->advertising &&
--	    (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
--			       ax_local->phydev->advertising) ||
--	     linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
--			       ax_local->phydev->advertising)))
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
-+			      ax_local->phydev->advertising) ||
-+	    linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
-+			      ax_local->phydev->advertising))
- 		fc |= AX_FC_ANEG;
- 
- 	fc |= linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
--- 
-2.33.1.637.gf443b226ca
-
+ 	if (shared) {
