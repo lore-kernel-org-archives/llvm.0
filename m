@@ -1,92 +1,77 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734732C81
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:25:24 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B744F610E5;
-	Tue, 26 Oct 2021 14:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FCB72
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 19:57:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF30960200;
+	Tue, 26 Oct 2021 19:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635258323;
-	bh=CCPB4RRkX6JYEDol0ilOJjnvgGwsxTWxj1m6hC9Unvg=;
+	s=k20201202; t=1635278235;
+	bh=agXhZXdORInKzk2eJULI7CqzZDwX5Xq3pOnCJ2/ScLg=;
 	h=From:To:Cc:Subject:Date:From;
-	b=FevFKkkahfcBvXUluNFV8XWL623aVtESiXqX5+x96qnnwfRJBZ/7DgzssX5MBy5VU
-	 SO9qRZiztot16VLlmrX5qYhPxNr9Ht2VTtI9VeA53kV3S7X3cM9NPti87IijfZzcMC
-	 8Ez4VSqWyhhWYgeo+toa3SCXy80tAPh11PSplvfJjHyiPIfz0S1a4ufPdDYIEKrcVm
-	 xOZ8qZoLOpHrP5BI5831gMUH9WipGyRqNm7nfAMD8VreZXjAmT3q9XkNVG7OuNCRN7
-	 +NSc7FNZzsW+jckAoZGdPMk4lziNnka1QUQeiMDTJw48CqLL/RET09ZmK65H2wcy+E
-	 DDLowRuKtETnw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rob Clark <robdclark@gmail.com>,
-	Sean Paul <sean@poorly.run>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Jessica Zhang <jesszhan@codeaurora.org>,
-	linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
+	b=SHPxH0PQ0kPedkeoP18C7vSPjzjwXLsPZhs01EXvNqrnSJkZLS95YCImQezOH2hd4
+	 Ob7rBaO9B3kI3L7uP8eMyAFB/2tAFYLvjFMT6KX+O8x6omZa7oKzAwBH5JY9Q29SyY
+	 VsH12efAmqs/mBxsaZppy+wrxLxKOAhw82RvvmF4QOlPaXeK5G2Jos46Fx3MtBZjUo
+	 Avn0clAwDhYpKTe5Z4zukX/lizpQ/ALbAE6gf9DKExAorb2NmdqlNmDLNp3cHyq8A/
+	 BBruMcwaTwrX6ZpoCNBZohTufZJ/qOMb00ftj4RFYRKiNs55ShucpEapXQTPkhUe/p
+	 6MJZwMFUEUcZQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
-	"kernelci.org bot" <bot@kernelci.org>
-Subject: [PATCH] drm/msm/dpu: Remove commit and its uses in dpu_crtc_set_crc_source()
-Date: Tue, 26 Oct 2021 07:24:36 -0700
-Message-Id: <20211026142435.3606413-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.33.1.637.gf443b226ca
+	Nick Desaulniers <ndesaulniers@google.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next] net: ax88796c: fix -Wpointer-bool-conversion warning
+Date: Tue, 26 Oct 2021 21:56:39 +0200
+Message-Id: <20211026195711.16152-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 
-Clang warns:
+From: Arnd Bergmann <arnd@arndb.de>
 
-drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:162:6: error: variable 'commit' is uninitialized when used here [-Werror,-Wuninitialized]
-        if (commit)
-            ^~~~~~
-drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:106:32: note: initialize the variable 'commit' to silence this warning
-        struct drm_crtc_commit *commit;
-                                      ^
-                                       = NULL
-1 error generated.
+ax_local->phydev->advertising is an array, not a pointer, so
+clang points out that checking for NULL is unnecessary:
 
-The assignment and use of commit in the main body of
-dpu_crtc_set_crc_source() were removed from v1 to v2 but the call to
-drm_crtc_commit_put() at the end was not. Do that now so there is no
-more warning.
+drivers/net/ethernet/asix/ax88796c_main.c:851:24: error: address of array 'ax_local->phydev->advertising' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+        if (ax_local->phydev->advertising &&
+            ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~ ~~
 
-Fixes: 78d9b458cc21 ("drm/msm/dpu: Add CRC support for DPU")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1493
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Fixes: a97c69ba4f30 ("net: ax88796c: ASIX AX88796C SPI Ethernet Adapter Driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/ethernet/asix/ax88796c_main.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 2523e829f485..967245b8cc02 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -103,7 +103,6 @@ static int dpu_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
- {
- 	enum dpu_crtc_crc_source source = dpu_crtc_parse_crc_source(src_name);
- 	enum dpu_crtc_crc_source current_source;
--	struct drm_crtc_commit *commit;
- 	struct dpu_crtc_state *crtc_state;
- 	struct drm_device *drm_dev = crtc->dev;
- 	struct dpu_crtc_mixer *m;
-@@ -159,8 +158,6 @@ static int dpu_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
+diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethernet/asix/ax88796c_main.c
+index cfc597f72e3d..846a04922561 100644
+--- a/drivers/net/ethernet/asix/ax88796c_main.c
++++ b/drivers/net/ethernet/asix/ax88796c_main.c
+@@ -848,11 +848,10 @@ ax88796c_open(struct net_device *ndev)
+ 	/* Setup flow-control configuration */
+ 	phy_support_asym_pause(ax_local->phydev);
  
+-	if (ax_local->phydev->advertising &&
+-	    (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
+-			       ax_local->phydev->advertising) ||
+-	     linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
+-			       ax_local->phydev->advertising)))
++	if (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
++			      ax_local->phydev->advertising) ||
++	    linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
++			      ax_local->phydev->advertising))
+ 		fc |= AX_FC_ANEG;
  
- cleanup:
--	if (commit)
--		drm_crtc_commit_put(commit);
- 	drm_modeset_unlock(&crtc->mutex);
- 
- 	return ret;
-
-base-commit: 00326bfa4e6363e4b0b8b019ecd2556fdda5ad1c
+ 	fc |= linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
 -- 
-2.33.1.637.gf443b226ca
+2.29.2
 
