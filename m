@@ -1,40 +1,40 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D26629CA
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:11:51 +0000 (UTC)
-Received: by mail-pj1-f45.google.com with SMTP id oa4so10220785pjb.2
-        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:11:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45A72CA8
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:11:56 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id f5so13212764pgc.12
+        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=v5Jn6J7/l0TaCmJa3oToQu6cLShq8Ci4O48ykDgquPE=;
-        b=FnMiD/yEd8r5STTgSNxpiErKAzGkF/Kko+aHtyxKURrP9GTpaI/otiknwLSlWcg8JA
-         LauRUtiGqflJco+vkSMWqZ+jIY2i543gFniL0JzBmJzAbf425b1bm0dvANz1aNk032YQ
-         +NxzBzKjW4bw81gjqFnYZ49UTRhAcHPylrZ8MVPeWIOSQTjW0FO2QVDWQwcPAgrPnmhP
-         61xdfdR+yD07+ofRM93/9fGpbOt13g2ubXNOVeoYCmuezdufEgE/gryZB+21nCg67V/v
-         KU60CwlRPCXxxnNMKoUyQFnoey+kXZ1Ox4MUQXGN4ozObwgmJKv9++tjvZQAcpOaM50a
-         FKAA==
+        bh=YJt0hdV4kzdXc6X1C3SE5PDn2rhPDieOGx+r2tKEjZE=;
+        b=HYeqwC260+v7LmqrfNhi8BodcmsCMqshSPxR4nFgNmstTkvQUcDqsmYoDqpRDnhe0P
+         N5R0YrW7+b3NDKIWHa43KY1ni03gfzLWU/cTAfs8NVoWpF4D6Al30KM7inCMqDpWPvf0
+         DPKX0XEJVC14/ygeP24nTEtaIOBeh8/lM21tGKocXH4AcL97bF/mWquqB80SClSkjoYz
+         S0bRkgzsifWRI9BNZ8KSTYLpiRnnmFb9IJz3OxLNxneUQre9GLLxSLXuHX3Dawmq5cuw
+         SVSEDZTP//P2wkdNj+EuuRCmQRMINpqX6Kvy9VAXW/4xAyYd7WiAgPq/mPiipksiKYJ5
+         AFSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=v5Jn6J7/l0TaCmJa3oToQu6cLShq8Ci4O48ykDgquPE=;
-        b=ZAFvn8eu0wIbwLD5KTenUr6+Jy14wZd2itWgwBuxOFGvpMPWwX4ifSUkiIDiO+8TZg
-         Rn/sXK6B7HUQWgvAUSC6RjsAeDU6hkgR2UeQRZuwITvZzIL0DYRhUolKMurmQ954iNZz
-         b+A6lRKfWha4VE4rifvAEjUDi7G+gDM5PMNQdxLbPQigousbhtrjEqWLhSRs5JAOJBcC
-         z3kqKGyEvtdX9hlCeI6iI0getgkBX5GkcqNufum8EFoTtnpcaSEQdJn5+NeD8+tbaFgN
-         NnmRT0s85tXUyncZzrsx2sgyw+uI9dVL4E0kQmdgCdOpErgn7pn0jEsDbYCChi2UzJ7Z
-         v2Zw==
-X-Gm-Message-State: AOAM531JKm/13icRmes+OsVhs+PcnUAV5Zc3WXf3yMVQXazU6dS/61oD
-	QgyIU06n8f3eDfryrJGAZj0=
-X-Google-Smtp-Source: ABdhPJySkA2o4FFhQYEyzwSUb7PH8O6xeB8p+lh9tMMoJ2WfjXksxtulja+sI2x6eUDSlRNcfIJnHw==
-X-Received: by 2002:a17:902:a5c2:b0:140:14bb:8efd with SMTP id t2-20020a170902a5c200b0014014bb8efdmr20876966plq.31.1635232311156;
-        Tue, 26 Oct 2021 00:11:51 -0700 (PDT)
+        bh=YJt0hdV4kzdXc6X1C3SE5PDn2rhPDieOGx+r2tKEjZE=;
+        b=GYIHicNhoaDuIdlrA14buCFM/i3gyL4Z5X1IUBqX+PFqdjdX2hfhjf3FUGFkLE63O4
+         x4dhLBz1UUJS63fAPGQN6tTzf603iqIOhs1oyn9SmtxgILMcP9edlz2G4udd/TOupx2W
+         R8KC4cT0UO101IdrPBeEUiKTqIpaLOJdwGDLPLsCVA/OXroL1VNDiw0/cvAc3YkSBLXM
+         KwbW+SN/Qg0Rfd8KIHaxh0JH25LymdEY73p3dPc0rIbOmnZlR79UcW5JLK4TZHDUHEm1
+         p4aY8Kmq5ulhdlp+IlmAgjVBNX4i3yLb1TTlX/PF0GgYMXVWtLg/MetCy54OG0HdmQxC
+         bewg==
+X-Gm-Message-State: AOAM5309HsQExDtcA9AT7U+WgY/pO8rvNeSci3+1jeYvq3z3/RPrC1Xr
+	FVszJKJysdxAk+ZE+/kkWrA=
+X-Google-Smtp-Source: ABdhPJyKVKyyzYptJNlN1szbfFlQqhI4CiYZWnN19Y5i6NZft9uz62l9xG7RV3OpWbGicirrwFhc4w==
+X-Received: by 2002:a05:6a00:c8a:b0:47b:ff6e:4cf3 with SMTP id a10-20020a056a000c8a00b0047bff6e4cf3mr7880068pfv.50.1635232316568;
+        Tue, 26 Oct 2021 00:11:56 -0700 (PDT)
 Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
-        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.46
+        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Oct 2021 00:11:50 -0700 (PDT)
+        Tue, 26 Oct 2021 00:11:56 -0700 (PDT)
 From: Dillon Min <dillon.minfei@gmail.com>
 To: mchehab@kernel.org,
 	mchehab+huawei@kernel.org,
@@ -60,9 +60,9 @@ Cc: patrice.chotard@foss.st.com,
 	lkp@intel.com,
 	kbuild-all@lists.01.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v7 04/10] ARM: dts: stm32: Enable DMA2D on STM32F469-DISCO board
-Date: Tue, 26 Oct 2021 15:11:16 +0800
-Message-Id: <1635232282-3992-5-git-send-email-dillon.minfei@gmail.com>
+Subject: [PATCH v7 05/10] media: v4l2-mem2mem: add v4l2_m2m_get_unmapped_area for no-mmu platform
+Date: Tue, 26 Oct 2021 15:11:17 +0800
+Message-Id: <1635232282-3992-6-git-send-email-dillon.minfei@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
 References: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
@@ -72,28 +72,67 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-Enable DMA2D on STM32F469-DISCO board.
+For platforms without MMU the m2m provides a helper method
+v4l2_m2m_get_unmapped_area(), The mmap() routines will call
+this to get a proposed address for the mapping.
+
+More detailed information about get_unmapped_area can be found in
+Documentation/nommu-mmap.txt
 
 Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
 ---
- arch/arm/boot/dts/stm32f469-disco.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 21 +++++++++++++++++++++
+ include/media/v4l2-mem2mem.h           |  5 +++++
+ 2 files changed, 26 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
-index 30905ce672a0..ba26a3375b0d 100644
---- a/arch/arm/boot/dts/stm32f469-disco.dts
-+++ b/arch/arm/boot/dts/stm32f469-disco.dts
-@@ -132,6 +132,10 @@
- 	clock-frequency = <8000000>;
- };
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index e7f4bf5bc8dd..e2654b422334 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -966,6 +966,27 @@ int v4l2_m2m_mmap(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ }
+ EXPORT_SYMBOL(v4l2_m2m_mmap);
  
-+&dma2d {
-+	status = "okay";
-+};
++#ifndef CONFIG_MMU
++unsigned long v4l2_m2m_get_unmapped_area(struct file *file, unsigned long addr,
++					 unsigned long len, unsigned long pgoff,
++					 unsigned long flags)
++{
++	struct v4l2_fh *fh = file->private_data;
++	unsigned long offset = pgoff << PAGE_SHIFT;
++	struct vb2_queue *vq;
 +
- &dsi {
- 	#address-cells = <1>;
- 	#size-cells = <0>;
++	if (offset < DST_QUEUE_OFF_BASE) {
++		vq = v4l2_m2m_get_src_vq(fh->m2m_ctx);
++	} else {
++		vq = v4l2_m2m_get_dst_vq(fh->m2m_ctx);
++		pgoff -= (DST_QUEUE_OFF_BASE >> PAGE_SHIFT);
++	}
++
++	return vb2_get_unmapped_area(vq, addr, len, pgoff, flags);
++}
++EXPORT_SYMBOL_GPL(v4l2_m2m_get_unmapped_area);
++#endif
++
+ #if defined(CONFIG_MEDIA_CONTROLLER)
+ void v4l2_m2m_unregister_media_controller(struct v4l2_m2m_dev *m2m_dev)
+ {
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index 5a91b548ecc0..fdbd5257e020 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -495,6 +495,11 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ int v4l2_m2m_mmap(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 		  struct vm_area_struct *vma);
+ 
++#ifndef CONFIG_MMU
++unsigned long v4l2_m2m_get_unmapped_area(struct file *file, unsigned long addr,
++					 unsigned long len, unsigned long pgoff,
++					 unsigned long flags);
++#endif
+ /**
+  * v4l2_m2m_init() - initialize per-driver m2m data
+  *
 -- 
 2.7.4
 
