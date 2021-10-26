@@ -1,72 +1,128 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1951C72
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 20:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xU4JYW+SGd/Y95RQ0MeB5uV9SkZbr+ZK8+zY2SI0BPI=; b=gXHGEsybTuDuZ4f5Zi9d+7JLfV
-	iks1F4dTG0BdQG4mJ3OhfCcHhf1H8wtTmpoV4FUjTUGjEKSlG06Yg1atCfre5w2lP3qWsHYvgph9G
-	gdjDa4RhbPmPiNjYAng3fEyuA+UL2fxKHjSjho+C4PA7NvFY+UK+vz9l1D8Z0POLeKfHGGlC32ZX2
-	aNXTY8qSlMfMr2bP6xL7rbT5yun+AsNKxGwyPEd6u8Bcd5k8SJRf7ZV1GroH5X85rW69fY2GnuQrf
-	SgIB9tFhfeHsW2WVE6ptEjR6HhmwxbFRj2+QewRzyTtdMRnXbJ8IxK+YSGjobZqRN+pwwC1ZnsvJf
-	NWGXANeg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mfSrt-00H8Ph-QF; Tue, 26 Oct 2021 20:16:52 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 48E92981FD5; Tue, 26 Oct 2021 22:16:22 +0200 (CEST)
-Date: Tue, 26 Oct 2021 22:16:22 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: x86@kernel.org, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, ardb@kernel.org, mark.rutland@arm.com
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <20211026201622.GG174703@worktop.programming.kicks-ass.net>
-References: <20211013181658.1020262-1-samitolvanen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE652CA4
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 21:04:59 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-59-nuyPE1CKP524lUkKQActcw-1; Tue, 26 Oct 2021 22:04:56 +0100
+X-MC-Unique: nuyPE1CKP524lUkKQActcw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.24; Tue, 26 Oct 2021 22:04:55 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.024; Tue, 26 Oct 2021 22:04:55 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Nathan Chancellor' <nathan@kernel.org>
+CC: 'Nick Terrell' <terrelln@fb.com>, Nick Desaulniers
+	<ndesaulniers@google.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH] lib: zstd: Add cast to silence clang's
+ -Wbitwise-instead-of-logical
+Thread-Topic: [PATCH] lib: zstd: Add cast to silence clang's
+ -Wbitwise-instead-of-logical
+Thread-Index: AQHXxrmhV8EJKX2UAE+nrwZQNmVvMavkgQmAgACZsECAACtYgIAAgqUg
+Date: Tue, 26 Oct 2021 21:04:55 +0000
+Message-ID: <2c664a6701b44050a0525b541292ce21@AcuMS.aculab.com>
+References: <20211021202353.2356400-1-nathan@kernel.org>
+ <4245BD7A-4B12-4172-B4EE-76A99C717C7D@fb.com>
+ <d21e97487ba3447194538ccf0e88ead9@AcuMS.aculab.com>
+ <YXgKgQMHQzvQgE4J@archlinux-ax161>
+In-Reply-To: <YXgKgQMHQzvQgE4J@archlinux-ax161>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211013181658.1020262-1-samitolvanen@google.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 13, 2021 at 11:16:43AM -0700, Sami Tolvanen wrote:
-> This series adds support for Clang's Control-Flow Integrity (CFI)
-> checking to x86_64. With CFI, the compiler injects a runtime
-> check before each indirect function call to ensure the target is
-> a valid function with the correct static type. This restricts
-> possible call targets and makes it more difficult for an attacker
-> to exploit bugs that allow the modification of stored function
-> pointers. For more details, see:
-> 
->   https://clang.llvm.org/docs/ControlFlowIntegrity.html
+From: Nathan Chancellor
+> Sent: 26 October 2021 15:03
+...
+> > Isn't enabling that warning completely stupid?
+> > The casts required to silence it could easily cause more problems
+> > - by hiding more important bugs. And seriously affect code readability.
+>=20
+> Which warning?
+>=20
+> -Wbitwise-instead-of-logical is included in clang's -Wall and I do not
+> think it should be disabled; this is the first instance of the warning
+> that has been silenced with a cast.
 
-So, if I understand this right, the compiler emits, for every function
-two things: 1) the actual funcion and 2) a jump-table entry.
+I'm not sure about that one.
+I have a feeling it will generate false positives for carefully optimised
+code more often that it finds anything where 'short circuiting' will
+be a real gain.
+Especially for values with are known to be either 0 or 1.
+=20
+> -Wshorten-64-to-32 will never be enabled for Linux but zstd is a
+> separate project that can be built for a variety of operating systems so
+> that has to be considered when developing changes for the kernel because
+> the kernel changes need to go upstream eventually if they touch core
+> zstd code, otherwise they will just get blown away on the next import.
+> Specifically, this warning was enabled on iOS:
+> https://github.com/facebook/zstd/pull/2062
 
-Then, every time the address of a function is taken, 2) is given instead
-of the expected 1), right?
+That one...
+If you are going to enable it, then you need a static inline function
+to convert u64 to u32, not a C cast.
 
-But how does this work with things like static_call(), which we give a
-function address (now a jump-table entry) and use that to write direct
-call instructions?
+I'm sure that it won't be long before the compiler writes start an
+'open season' on casts.
+They really are more dangerous than the warnings they are trying to remove.
 
-Should not this jump-table thingy get converted to an actual function
-address somewhere around arch_static_call_transform() ? This also seems
-relevant for arm64 (which already has CLANG_CFI supported) given:
+> > ...c
+> > > > index 05570ed5f8be..5105e59ac04a 100644
+> > > > --- a/lib/zstd/decompress/huf_decompress.c
+> > > > +++ b/lib/zstd/decompress/huf_decompress.c
+> > > > @@ -886,7 +886,7 @@ HUF_decompress4X2_usingDTable_internal_body(
+> > > >             HUF_DECODE_SYMBOLX2_0(op2, &bitD2);
+> > > >             HUF_DECODE_SYMBOLX2_0(op3, &bitD3);
+> > > >             HUF_DECODE_SYMBOLX2_0(op4, &bitD4);
+> > > > -            endSignal =3D (U32)LIKELY(
+> > > > +            endSignal =3D (U32)LIKELY((U32)
+> > > >                         (BIT_reloadDStreamFast(&bitD1) =3D=3D BIT_D=
+Stream_unfinished)
+> > > >                       & (BIT_reloadDStreamFast(&bitD2) =3D=3D BIT_D=
+Stream_unfinished)
+> > > >                       & (BIT_reloadDStreamFast(&bitD3) =3D=3D BIT_D=
+Stream_unfinished)
+> >
+> > Isn't that the same as:
+> > =09((BIT_reload() & BIT_reload() & BIT_reload()) =3D=3D BIT_DStream_unf=
+inished)
+> > which will generate much better code.
+> > Especially on cpu without 'seteq' instructions.
+>=20
+> I don't think so. Feel free to double check my math.
+>=20
+> BIT_reloadDStreamFast() can return either BIT_DStream_unfinished (0) or
+> BIT_DStream_overflow (3)....
 
-  https://lkml.kernel.org/r/20211025122102.46089-3-frederic@kernel.org
+Ah, I'd assumed that BIT_DStream_unfinished was non-zero.
+So you actually want:
+=09endSignal =3D !(BIT() | BIT() | BIT());
 
-Or am I still not understanding this CFI thing?
+Just kill the CaMeLs and unnecessary constants.
+Then the code becomes succint, easier to read/check etc.
+
+=09David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
