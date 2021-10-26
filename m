@@ -1,77 +1,76 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FCB72
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 19:57:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF30960200;
-	Tue, 26 Oct 2021 19:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DD772
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 19:59:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D275060200;
+	Tue, 26 Oct 2021 19:59:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635278235;
-	bh=agXhZXdORInKzk2eJULI7CqzZDwX5Xq3pOnCJ2/ScLg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SHPxH0PQ0kPedkeoP18C7vSPjzjwXLsPZhs01EXvNqrnSJkZLS95YCImQezOH2hd4
-	 Ob7rBaO9B3kI3L7uP8eMyAFB/2tAFYLvjFMT6KX+O8x6omZa7oKzAwBH5JY9Q29SyY
-	 VsH12efAmqs/mBxsaZppy+wrxLxKOAhw82RvvmF4QOlPaXeK5G2Jos46Fx3MtBZjUo
-	 Avn0clAwDhYpKTe5Z4zukX/lizpQ/ALbAE6gf9DKExAorb2NmdqlNmDLNp3cHyq8A/
-	 BBruMcwaTwrX6ZpoCNBZohTufZJ/qOMb00ftj4RFYRKiNs55ShucpEapXQTPkhUe/p
-	 6MJZwMFUEUcZQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH net-next] net: ax88796c: fix -Wpointer-bool-conversion warning
-Date: Tue, 26 Oct 2021 21:56:39 +0200
-Message-Id: <20211026195711.16152-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+	s=k20201202; t=1635278377;
+	bh=9yvP/Mku05mjwGEffiQM/MQYBBjQLlgIiuut1zNScQ4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tiwfrVTvvl3aAfbBbDgyVCiEkCR98YxUAyE5NH+74g/WvI8TOIY9FOUObBVlo53ky
+	 8LMgyWwHgYvAjrg7OdcrbCVHXfTxAyYYGzkDNvCMxlYU0dVCplcXtv5/WUqrLDSvY7
+	 uGJZhPivrX8x+i3gQQ+78k5c/W7ol/KjRZvXKn3qF9muBBDTfOKKIzT71PU2wV6+qX
+	 XDNgiWuT9KfxoIj08lSWxl7xhAzJo8YNaWgEa+DKnOGTHv5Qt/29Ah7/UHJpqW1riV
+	 lSOXENkpgbzm99m4f5nwOzs3SLyekJ38jHSinXwnw6hzmCu7uoVx3UtEMaRG/2h9tS
+	 DaaXaLkSyrd4Q==
+Date: Tue, 26 Oct 2021 12:59:35 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: =?UTF-8?B?xYF1a2Fzeg==?= Stelmach <l.stelmach@samsung.com>, "David S.
+ Miller" <davem@davemloft.net>, Arnd Bergmann <arnd@arndb.de>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next] net: ax88796c: fix -Wpointer-bool-conversion
+ warning
+Message-ID: <20211026125935.17caa7b0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211026195711.16152-1-arnd@kernel.org>
+References: <20211026195711.16152-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 26 Oct 2021 21:56:39 +0200 Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> ax_local->phydev->advertising is an array, not a pointer, so
+> clang points out that checking for NULL is unnecessary:
+> 
+> drivers/net/ethernet/asix/ax88796c_main.c:851:24: error: address of array 'ax_local->phydev->advertising' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+>         if (ax_local->phydev->advertising &&
+>             ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~ ~~
+> 
+> Fixes: a97c69ba4f30 ("net: ax88796c: ASIX AX88796C SPI Ethernet Adapter Driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/net/ethernet/asix/ax88796c_main.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethernet/asix/ax88796c_main.c
+> index cfc597f72e3d..846a04922561 100644
+> --- a/drivers/net/ethernet/asix/ax88796c_main.c
+> +++ b/drivers/net/ethernet/asix/ax88796c_main.c
+> @@ -848,11 +848,10 @@ ax88796c_open(struct net_device *ndev)
+>  	/* Setup flow-control configuration */
+>  	phy_support_asym_pause(ax_local->phydev);
+>  
+> -	if (ax_local->phydev->advertising &&
+> -	    (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
+> -			       ax_local->phydev->advertising) ||
+> -	     linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
+> -			       ax_local->phydev->advertising)))
+> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
+> +			      ax_local->phydev->advertising) ||
+> +	    linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
+> +			      ax_local->phydev->advertising))
+>  		fc |= AX_FC_ANEG;
+>  
+>  	fc |= linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
 
-ax_local->phydev->advertising is an array, not a pointer, so
-clang points out that checking for NULL is unnecessary:
-
-drivers/net/ethernet/asix/ax88796c_main.c:851:24: error: address of array 'ax_local->phydev->advertising' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
-        if (ax_local->phydev->advertising &&
-            ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~ ~~
-
-Fixes: a97c69ba4f30 ("net: ax88796c: ASIX AX88796C SPI Ethernet Adapter Driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/asix/ax88796c_main.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethernet/asix/ax88796c_main.c
-index cfc597f72e3d..846a04922561 100644
---- a/drivers/net/ethernet/asix/ax88796c_main.c
-+++ b/drivers/net/ethernet/asix/ax88796c_main.c
-@@ -848,11 +848,10 @@ ax88796c_open(struct net_device *ndev)
- 	/* Setup flow-control configuration */
- 	phy_support_asym_pause(ax_local->phydev);
- 
--	if (ax_local->phydev->advertising &&
--	    (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
--			       ax_local->phydev->advertising) ||
--	     linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
--			       ax_local->phydev->advertising)))
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
-+			      ax_local->phydev->advertising) ||
-+	    linkmode_test_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
-+			      ax_local->phydev->advertising))
- 		fc |= AX_FC_ANEG;
- 
- 	fc |= linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,
--- 
-2.29.2
-
+Same as 971f5c4079ed46a131ad3ac6e684ed056a7777da in net-next, thanks.
