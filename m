@@ -1,78 +1,92 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62682CA9
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:10:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5ED7C6108D;
-	Tue, 26 Oct 2021 14:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734732C81
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:25:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B744F610E5;
+	Tue, 26 Oct 2021 14:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635257408;
-	bh=i24Vsq0rl4VR7ulu+4emyK41oC5kvHnAgYQhbpX5tJI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=TXz1V03AxyGBtNt3TUiLWhnhAag7g7GSubDmQ4rIBgYsEDUHTEiuwR+WYyasrAOQq
-	 /BC1OcOwuphMgHRhjvguqg64t1v23SQESv01GEPfTbkjj2OWh0FixG2xSfg7kWbI+j
-	 BqrznNgcG6jCuphHphK60uzuZ9zZsW5sKLGfq52Y7fIw6BW8oQgLZYZTguYOpzTuGZ
-	 zalkeeN0JrlxJFLE75MEWkAeQ2OkMKjJZx8OgVqyeM176kJbn7qw8Y4wS8x80jRtCN
-	 I+Wv34D5uzL5ifx6V7c3MW79IpZfo2pYIGsRuNeEhlDbr8NeP3Aienv3c5bPHUfkno
-	 hMcA2if6mz/6g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 44585608FE;
-	Tue, 26 Oct 2021 14:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1635258323;
+	bh=CCPB4RRkX6JYEDol0ilOJjnvgGwsxTWxj1m6hC9Unvg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=FevFKkkahfcBvXUluNFV8XWL623aVtESiXqX5+x96qnnwfRJBZ/7DgzssX5MBy5VU
+	 SO9qRZiztot16VLlmrX5qYhPxNr9Ht2VTtI9VeA53kV3S7X3cM9NPti87IijfZzcMC
+	 8Ez4VSqWyhhWYgeo+toa3SCXy80tAPh11PSplvfJjHyiPIfz0S1a4ufPdDYIEKrcVm
+	 xOZ8qZoLOpHrP5BI5831gMUH9WipGyRqNm7nfAMD8VreZXjAmT3q9XkNVG7OuNCRN7
+	 +NSc7FNZzsW+jckAoZGdPMk4lziNnka1QUQeiMDTJw48CqLL/RET09ZmK65H2wcy+E
+	 DDLowRuKtETnw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rob Clark <robdclark@gmail.com>,
+	Sean Paul <sean@poorly.run>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Jessica Zhang <jesszhan@codeaurora.org>,
+	linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	"kernelci.org bot" <bot@kernelci.org>
+Subject: [PATCH] drm/msm/dpu: Remove commit and its uses in dpu_crtc_set_crc_source()
+Date: Tue, 26 Oct 2021 07:24:36 -0700
+Message-Id: <20211026142435.3606413-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.33.1.637.gf443b226ca
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2] net: ax88796c: Fix clang -Wimplicit-fallthrough in
- ax88796c_set_mac()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <163525740827.12899.14472352230591916919.git-patchwork-notify@kernel.org>
-Date: Tue, 26 Oct 2021 14:10:08 +0000
-References: <20211025211238.178768-1-nathan@kernel.org>
-In-Reply-To: <20211025211238.178768-1-nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: l.stelmach@samsung.com, davem@davemloft.net, kuba@kernel.org,
- ndesaulniers@google.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-Hello:
+Clang warns:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:162:6: error: variable 'commit' is uninitialized when used here [-Werror,-Wuninitialized]
+        if (commit)
+            ^~~~~~
+drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:106:32: note: initialize the variable 'commit' to silence this warning
+        struct drm_crtc_commit *commit;
+                                      ^
+                                       = NULL
+1 error generated.
 
-On Mon, 25 Oct 2021 14:12:38 -0700 you wrote:
-> Clang warns:
-> 
-> drivers/net/ethernet/asix/ax88796c_main.c:696:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->         case SPEED_10:
->         ^
-> drivers/net/ethernet/asix/ax88796c_main.c:696:2: note: insert 'break;' to avoid fall-through
->         case SPEED_10:
->         ^
->         break;
-> drivers/net/ethernet/asix/ax88796c_main.c:706:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->         case DUPLEX_HALF:
->         ^
-> drivers/net/ethernet/asix/ax88796c_main.c:706:2: note: insert 'break;' to avoid fall-through
->         case DUPLEX_HALF:
->         ^
->         break;
-> 
-> [...]
+The assignment and use of commit in the main body of
+dpu_crtc_set_crc_source() were removed from v1 to v2 but the call to
+drm_crtc_commit_put() at the end was not. Do that now so there is no
+more warning.
 
-Here is the summary with links:
-  - [1/2] net: ax88796c: Fix clang -Wimplicit-fallthrough in ax88796c_set_mac()
-    https://git.kernel.org/netdev/net-next/c/3c5548812a0c
-  - [2/2] net: ax88796c: Remove pointless check in ax88796c_open()
-    https://git.kernel.org/netdev/net-next/c/971f5c4079ed
+Fixes: 78d9b458cc21 ("drm/msm/dpu: Add CRC support for DPU")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1493
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-You are awesome, thank you!
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+index 2523e829f485..967245b8cc02 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+@@ -103,7 +103,6 @@ static int dpu_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
+ {
+ 	enum dpu_crtc_crc_source source = dpu_crtc_parse_crc_source(src_name);
+ 	enum dpu_crtc_crc_source current_source;
+-	struct drm_crtc_commit *commit;
+ 	struct dpu_crtc_state *crtc_state;
+ 	struct drm_device *drm_dev = crtc->dev;
+ 	struct dpu_crtc_mixer *m;
+@@ -159,8 +158,6 @@ static int dpu_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
+ 
+ 
+ cleanup:
+-	if (commit)
+-		drm_crtc_commit_put(commit);
+ 	drm_modeset_unlock(&crtc->mutex);
+ 
+ 	return ret;
+
+base-commit: 00326bfa4e6363e4b0b8b019ecd2556fdda5ad1c
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.33.1.637.gf443b226ca
 
