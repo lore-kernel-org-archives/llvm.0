@@ -1,116 +1,78 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E0B2C81
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:04:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C86960C41;
-	Tue, 26 Oct 2021 14:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62682CA9
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:10:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5ED7C6108D;
+	Tue, 26 Oct 2021 14:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635257045;
-	bh=fYdFs1PisYcKFzN6nRtvkLmTckm/NDSJLCk+ti392Ww=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mXG8+T/cQMFHz2x09oPHlhLJhgracMsXllil7jpAGNm37jTEggSQ0Ztv1l/lYpVOD
-	 4yaJbCSkRmUoIkugi192f74I93XiT8A4H0TeeaG6H8kCYjjvDPPlFZNCRN4aP4xROs
-	 rVpGprOeNASv0hwRb/TVSFctLrvbJn46AF/iVjWlurWhbbc5k7Cn+8IEkJRPlexUyR
-	 muwhqoPHSIKRKQ3wZz3UFmvtgQyjeXYVbd4uVFvAQfxhkx42FKMQmeMGmcPd9KxvdL
-	 H0EsnWhxRZJpCcktWb7uSPjIOubg+aBYUIRosyBBEuOE0923IODBggoWuHcwx1rGA8
-	 7VLJb4DOloeOw==
-Date: Tue, 26 Oct 2021 07:04:00 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] dma-buf: st: fix error handling in test_get_fences()
-Message-ID: <YXgK0HAe1+dEPvL1@archlinux-ax161>
-References: <20211026083448.3471055-1-arnd@kernel.org>
+	s=k20201202; t=1635257408;
+	bh=i24Vsq0rl4VR7ulu+4emyK41oC5kvHnAgYQhbpX5tJI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TXz1V03AxyGBtNt3TUiLWhnhAag7g7GSubDmQ4rIBgYsEDUHTEiuwR+WYyasrAOQq
+	 /BC1OcOwuphMgHRhjvguqg64t1v23SQESv01GEPfTbkjj2OWh0FixG2xSfg7kWbI+j
+	 BqrznNgcG6jCuphHphK60uzuZ9zZsW5sKLGfq52Y7fIw6BW8oQgLZYZTguYOpzTuGZ
+	 zalkeeN0JrlxJFLE75MEWkAeQ2OkMKjJZx8OgVqyeM176kJbn7qw8Y4wS8x80jRtCN
+	 I+Wv34D5uzL5ifx6V7c3MW79IpZfo2pYIGsRuNeEhlDbr8NeP3Aienv3c5bPHUfkno
+	 hMcA2if6mz/6g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 44585608FE;
+	Tue, 26 Oct 2021 14:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211026083448.3471055-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/2] net: ax88796c: Fix clang -Wimplicit-fallthrough in
+ ax88796c_set_mac()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <163525740827.12899.14472352230591916919.git-patchwork-notify@kernel.org>
+Date: Tue, 26 Oct 2021 14:10:08 +0000
+References: <20211025211238.178768-1-nathan@kernel.org>
+In-Reply-To: <20211025211238.178768-1-nathan@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: l.stelmach@samsung.com, davem@davemloft.net, kuba@kernel.org,
+ ndesaulniers@google.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-On Tue, Oct 26, 2021 at 10:34:37AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The new driver incorrectly unwinds after errors, as clang points out:
-> 
-> drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->                 if (r) {
->                     ^
-> drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
->         while (i--)
->                ^
-> drivers/dma-buf/st-dma-resv.c:295:3: note: remove the 'if' if its condition is always false
->                 if (r) {
->                 ^~~~~~~~
-> drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (r) {
->             ^
-> drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
->         while (i--)
->                ^
-> drivers/dma-buf/st-dma-resv.c:288:2: note: remove the 'if' if its condition is always false
->         if (r) {
->         ^~~~~~~~
-> drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i' to silence this warning
->         int r, i;
->                 ^
->                  = 0
-> 
-> Skip cleaning up the bits that have not been allocated at this point.
-> 
-> Fixes: 1d51775cd3f5 ("dma-buf: add dma_resv selftest v4")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hello:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> ---
-> I'm not familiar with these interfaces, so I'm just guessing where
-> we should jump after an error, please double-check and fix if necessary.
-> ---
->  drivers/dma-buf/st-dma-resv.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, 25 Oct 2021 14:12:38 -0700 you wrote:
+> Clang warns:
 > 
-> diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
-> index 6f3ba756da3e..bc32b3eedcb6 100644
-> --- a/drivers/dma-buf/st-dma-resv.c
-> +++ b/drivers/dma-buf/st-dma-resv.c
-> @@ -287,7 +287,7 @@ static int test_get_fences(void *arg, bool shared)
->  	r = dma_resv_lock(&resv, NULL);
->  	if (r) {
->  		pr_err("Resv locking failed\n");
-> -		goto err_free;
-> +		goto err_resv;
->  	}
->  
->  	if (shared) {
-> @@ -295,7 +295,7 @@ static int test_get_fences(void *arg, bool shared)
->  		if (r) {
->  			pr_err("Resv shared slot allocation failed\n");
->  			dma_resv_unlock(&resv);
-> -			goto err_free;
-> +			goto err_resv;
->  		}
->  
->  		dma_resv_add_shared_fence(&resv, f);
-> @@ -336,6 +336,7 @@ static int test_get_fences(void *arg, bool shared)
->  	while (i--)
->  		dma_fence_put(fences[i]);
->  	kfree(fences);
-> +err_resv:
->  	dma_resv_fini(&resv);
->  	dma_fence_put(f);
->  	return r;
-> -- 
-> 2.29.2
+> drivers/net/ethernet/asix/ax88796c_main.c:696:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>         case SPEED_10:
+>         ^
+> drivers/net/ethernet/asix/ax88796c_main.c:696:2: note: insert 'break;' to avoid fall-through
+>         case SPEED_10:
+>         ^
+>         break;
+> drivers/net/ethernet/asix/ax88796c_main.c:706:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>         case DUPLEX_HALF:
+>         ^
+> drivers/net/ethernet/asix/ax88796c_main.c:706:2: note: insert 'break;' to avoid fall-through
+>         case DUPLEX_HALF:
+>         ^
+>         break;
 > 
+> [...]
+
+Here is the summary with links:
+  - [1/2] net: ax88796c: Fix clang -Wimplicit-fallthrough in ax88796c_set_mac()
+    https://git.kernel.org/netdev/net-next/c/3c5548812a0c
+  - [2/2] net: ax88796c: Remove pointless check in ax88796c_open()
+    https://git.kernel.org/netdev/net-next/c/971f5c4079ed
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
