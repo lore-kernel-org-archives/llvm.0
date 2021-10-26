@@ -1,201 +1,266 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529E22CA8
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 10:55:57 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ja4ZZbvEvapjnMrvWLVlEGNBrEV3UkJBX9O5ODkMokkF8F0harBPZTeHTAygnoAJB2gZpx5MS97d9l5qRu2qIGnFTeN0ONCMedObjAIsczD1gKuuGAzFxs0Ts4cSW85n79fL2j+m16/4FR4Ra1lAnmqS3/6+VK1VMr9eJKq80zeDprnbTcxLAYFdZYnR/y1zrnN0QI3x5yPnm6HIEL0cDK2FtCye6rLDbogRw4LoUrv16XIll/Reb8zbg9sc5v2sR39GmEMFtUtgeovea976Zc11VnXiK70gahZFRxCfzU1I+Z8CG6zmt/pKxe8f0zhqhVjti+7uhuBKBvCHJasrDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HRkZ6p0OVu8VflWHz4Yo6TyKH+sSKcF+7wv5545bjgs=;
- b=g5hZSqa8eBl0f6x1FamVzln+68Rx61H5dJyfXLLQs9v5rk9YagHCLPa8j4BwGn9Hq/eEqLPlxr493itwCo/M61Mg6UlRpsu1JUWTD3zFc3NrLGZ+2dDbVpYmdOHZBQyPMu/SLfz+n9xzkFuRE4/aSc6TVefr2fkKapyqBvJ+37OQtz2mKqIIhtoE/1tKyw9qMYUh+KAtYFefQTCtB69wWXyT4GmS3TMXzRov4waysHFmaFgjoCh0kTi47QJnS5EvIM1Gl61PGEI9l7QraxRixWm5JZRj4fqjU1nXgbBV+uluWg2zuyFNzM4HCcBx1yWcHOseGuy/QuT2gqFp57W5Mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HRkZ6p0OVu8VflWHz4Yo6TyKH+sSKcF+7wv5545bjgs=;
- b=Y7RtBvZgWSNae33JsuX1cSY/j7NlnX62+JBR4CwBer0lzwhvm8WSquZKkQBxpuYbjbgqxhsBdxLtyDV0P1TSKIDDt7TQ1y3n7DkIIy4UD2akBPrVEUAW06vRaI7FQ92E9liw3swSllhaFtujPKPTuQcma695CaTaesfBjurMnw0=
-Authentication-Results: lists.linux.dev; dkim=none (message not signed)
- header.d=none;lists.linux.dev; dmarc=none action=none header.from=amd.com;
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14) by MW3PR12MB4570.namprd12.prod.outlook.com
- (2603:10b6:303:5f::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Tue, 26 Oct
- 2021 10:55:55 +0000
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::55c7:6fc9:b2b1:1e6a]) by MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::55c7:6fc9:b2b1:1e6a%10]) with mapi id 15.20.4628.020; Tue, 26 Oct
- 2021 10:55:55 +0000
-Subject: Re: [PATCH] dma-buf: st: fix error handling in test_get_fences()
-To: Arnd Bergmann <arnd@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
- Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20211026083448.3471055-1-arnd@kernel.org>
-From: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <52f6a48a-cd94-da21-2cda-300fd1f78a44@amd.com>
-Date: Tue, 26 Oct 2021 12:55:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-In-Reply-To: <20211026083448.3471055-1-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: AM5PR04CA0018.eurprd04.prod.outlook.com
- (2603:10a6:206:1::31) To MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD58A2CA8
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 11:33:36 +0000 (UTC)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CAA5F4027D
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 11:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1635248012;
+	bh=p/YSQVHQ2qVFgAnoHpMJgz8Z7UR53z+rl6CiCMg8icA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=rN0uXx2tAIuSsssBf651UUh0UYvlUROOV5XPTab3vdIWwFQ7n6whr6dn7+G9TvIXg
+	 bbP5DZR9F471bRWr0TF6BxJki/BUWxX6p6GSzsIAe3Kx1WAaDrQBlIh28Ss5ckLb1C
+	 h9eKqZcfCFNTuXrVCSsTrByi2mU5R4/JrBGmbM6P2+jEpd9tNDLJTB+1KWxFmLTcRJ
+	 PzBqSu26klnJC0llNOcfRbIJTJSS+Z54sDfhMgVLvbWL+vhs4DfBx8/xACdclaE0Jn
+	 TiDk6pfNbjVcJxyN3eLpELMCT1ykbywbMI47fYyfMxmIHCfV7gyEL59J4UnPjLdhEV
+	 MYrN9v9mlgdrg==
+Received: by mail-ed1-f71.google.com with SMTP id x13-20020a05640226cd00b003dd4720703bso6801880edd.8
+        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 04:33:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=p/YSQVHQ2qVFgAnoHpMJgz8Z7UR53z+rl6CiCMg8icA=;
+        b=VUbsywKALCOfzBkB7KANmd52gxN+0V/VJ1P2INSMUZSl9he7iB4OGpY8kq8gr5aw8X
+         /qz5dimYrWTVfS4tjcUM846hc0lWzjKHaSpCV6Uxup49oqDrLtt/krXp/M/KKY5NQMrf
+         CrCMPtoKlJyezpf8QGlFv1hUDuHBFkVoQ16B6l7jhVETJyQOs4g7rtiDmoU5yL4Oav97
+         wKyedZjFtWaJUzQDdJ9gtfDRLOeZ6t3Tnza8ieP49ezTMPtzAos/ltYJNSSiByFkchZr
+         11ELur4nG6J4Mp+JainOeHdpqA+YLX5ap0cixJ7KBxKLTJTduw7ot4PtjAgTX6R/vGF3
+         Cm+w==
+X-Gm-Message-State: AOAM530prbD5rchPZnpQoh8T+aptOL8WdoMu8pmfeHWEtdZMd1nMu74k
+	i7PLwvdyB9rxzkJM7Fbb1XlI3GI/mVJkBF1olIxHNuHaHg7LziiREiJzrsU17n4Q92dyDrB+HhV
+	9X0xP85S87tOT/9zj1GWqSrx3gkTAY/pjK7UFoVq+0vU6kxM=
+X-Received: by 2002:a17:907:3e0a:: with SMTP id hp10mr5178691ejc.156.1635248012166;
+        Tue, 26 Oct 2021 04:33:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwk9yh1otC2FcE4T7DFXV6h0+OXQXCBzAm5yVnfRbJ0//wWZH92fSunNBiBY+8wfJj6PEUCHJI5uenfImglgdM=
+X-Received: by 2002:a17:907:3e0a:: with SMTP id hp10mr5178648ejc.156.1635248011842;
+ Tue, 26 Oct 2021 04:33:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: from [IPv6:2a02:908:1252:fb60:4969:85a5:71fe:e4fa] (2a02:908:1252:fb60:4969:85a5:71fe:e4fa) by AM5PR04CA0018.eurprd04.prod.outlook.com (2603:10a6:206:1::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18 via Frontend Transport; Tue, 26 Oct 2021 10:55:52 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 114a9b08-ef83-401a-e35f-08d9986f2eec
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4570:
-X-Microsoft-Antispam-PRVS:
-	<MW3PR12MB4570C61A05EA26799A49D52183849@MW3PR12MB4570.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	HUoHRuHN7YKa1Y9NMAA2iqxVtWZPSI5ZsZgCtpms7llnHfHJ3eoYfuuYtjfyyPAYHZ2RJtPqFUCgR0OOlQPx6PEferWoglat91iwsvmsKOahsC4DU8C3chCG5u1p954Nq8c5eUF3ZFBsK1h+hVjFCCJH9Ncgt2i13lW50DozFM703VIAPvTxFMeH7BSRspiWa4o+flbVPYRrLNKrKU5ROHE5p9fJCtRHMVCiPGb8deX5l4SNH0NiUsfagJ4yQ6cezvC2ET37cRt+YgWygcT6njZ5i+PePaVNjDMbqrEYUXm95zymjY9TY9Qtwj+dTPA8HIe4lMWmVeXY57s1O8fYV9NIUTsPM97rN6VMGt2ulNelVVkLgzToDtnIgq7RRZ6uAYM1wTPLXi+z6aWBNRMreJ2RE79ubIAGytC2vlI+AzZwgPj6XsHOVNOuzH5pVi+nLYB7zVT5UsiUZPSjAHkRGiX6RJ9DI2gvGi6Rk/Vj8s2GUPS4dXMQxt6AupojlEXE61MVft9+uHCY+5a5DCG1ZF97+etj0Dt8lSYtmyCIP/GA1UFccvhg+tA/usPHpVnLuYaX9zb50fXmLKJNZkIx8BxKgvGr2CSKp70L0J4c0sTkM/9m8F0fOhBTuYGrP2/HklYR3moUH0ovkEsuEw6+ujum9tobKz1z14aKRXxXRMustCms/ankMLehMxrCQT8mptex+3HcT3KJVX12gygZsBM/zunkNpv4j4nRB+eYZYyea50uKozM7kjopQmOzPh0
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7416002)(66946007)(83380400001)(316002)(4326008)(8676002)(6486002)(508600001)(5660300002)(2906002)(66556008)(186003)(8936002)(86362001)(38100700002)(110136005)(36756003)(6666004)(31686004)(31696002)(2616005)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SE5oK3l4RXV0U3BtQUFsaCtldnZ3c0pxMHQzMzNDSTlJQXQ1WTd1WERNM3BH?=
- =?utf-8?B?Mm5jZWJ3MWF4QUhGQldrR0gzdFZ4cDFxRWdjYjY2YVZHVkdLaWFuWXh4dXVY?=
- =?utf-8?B?OXV0SnNqbDcwMGRaTnFxeHRyelFkQzY2b0dDVUhvcUlsSHFXTVFJeTE5bkk1?=
- =?utf-8?B?SFhoRVo4b3Y3ZDlKV3VISlpmdzBHaU9ZMmxrem9NU1MxTWV0dU1FVmJFb2pr?=
- =?utf-8?B?WG9aZHR4dEM2M0MwUzNzWmIrUGFSL1k3MWpsaXB4MGNMZWRrR2IvTTN4Q3Zy?=
- =?utf-8?B?OEpIZVFheWFycFY1SXhoaTVVS0phRUpVUzFYaFMwUUtNU2w4MmdoTUZ5enh1?=
- =?utf-8?B?dWw0YW1XWDBqbDJhT3RUb1habXV0eUhJdDAzMUE5MDZWVDQxRFExVUdyY1Qw?=
- =?utf-8?B?Q2I0NytIVjN1ZU5oOFBhWGJrLzdUODg3cjQ3SVBZcWxSV1RaU0RiNktnYUYy?=
- =?utf-8?B?RUk5eFB5VGJiQkRoRXFvR3FQN1dOdHB1UXJXb0tERk14d2VDNG9lQmlQdzl4?=
- =?utf-8?B?c2Q3eURrTFk5YW9EUWdKYkEzSnljOGh5TDhQRG4rZVppTUlHNFBsYnYweVFU?=
- =?utf-8?B?b1oyWHcrbGE0UVBReUcyMHhldDNKT25NUjRkYjllVFp2WTdmL1pWSTJHclBn?=
- =?utf-8?B?OHdCVXRPTUp0ZmhkeEdWckp4V1JXWGRhYk4vOER2cHVGS05kTXRRc25zSGp0?=
- =?utf-8?B?N0hyeVNxVk9FRjdOY1d1UjlwMktzVUJDMCthOFM5Vk5Ibk5sOHBLQkQvYUhJ?=
- =?utf-8?B?UWovUzFEVzVWOGNSNldubVlkUmNxUDBmdkxERGk2dFNyRWFoMXNtdmQyRDhP?=
- =?utf-8?B?ZDRUdzU0b3RNVTl4UGVFQU5sS2JoZWVJRTFJamVmSi9aRkV6elk0M0NjWERr?=
- =?utf-8?B?OTJIbm94NHRnMEJFWnJPUDVzckkrNUQxN202VitnbEUwRVVlN3BvZVprVVl0?=
- =?utf-8?B?NzRPUGtET05nVkdxMEJkS1VCSm4weGFaMzRlVW9UamkvKzFPYkZJS1dUWUJp?=
- =?utf-8?B?OFpOeVdDY0VNWXBoemxTTFdLRThyZHQ0blQwQ01qRkNwQXhYME56VHFMY1hV?=
- =?utf-8?B?UFlXNk5penVwaEFMOG5wZ1B0WTdhcDV2Tk0yTHkzNnpGcXd0WXlPU0JrN1Zw?=
- =?utf-8?B?SFJQVWdHZ0UrN0tkYVRGV1EyMXVvZEtuT1BUQ2NFSWZWY2RZeVdjVVh0dm1v?=
- =?utf-8?B?S2pWYUQ0d1Ziczh2cUUrZFc3cDZEUHdsYnhlaTRzN0kwcWxIZmE0MHBEOVpX?=
- =?utf-8?B?Vk5uZytFMG9TT1dGSk54aTZJQmxyeFVLbGVkMloySDZBWVMwSVVrZ1lDb3h0?=
- =?utf-8?B?bVJpWDhVWlNSWnBNKy9CQWRqUGxXQVJRS0VyVHRLci9oU2RxM0NQN2pBUDMx?=
- =?utf-8?B?YjN0TGJuRDBJNnhlTnRXTEhadi9yZU02Q2p6elYyYkdEMXpna0oxbWVONXBV?=
- =?utf-8?B?cWs1bmxyTXh1Z3RhQ2JsdEk2S2ZMRW9sSVZtUWIvSzdlZVEvZ3gvcFJJYnU5?=
- =?utf-8?B?dTdtbDQ4V21EOVdYM3d5dWRjdzVpWEVrU205Uno4TTNRZnZTMjNEQVRzRFFJ?=
- =?utf-8?B?elkzK3pudml2eitLN3k1Z1RDTm1JWWthbW1lN0VCSFB0THV5R3RwSjhWUGp3?=
- =?utf-8?B?MTFaY25hK2lNNHVLTVh6L2RUdTZpdW8zTldIeTBzZGFqa1V2NnVNSzRvemNm?=
- =?utf-8?B?NGVOeGgvREp0ZHk2M0taZU52SHZOaFBpWW5NbHRKQ3QvYTM0dGg4MTcrdTVa?=
- =?utf-8?B?OE9wVHVkN0FXM24zakprMUl4ZGRZTVdua1pKd0NTTUlVRUlNUFFEbzJJRU9N?=
- =?utf-8?B?SXdNSnpRaTcwWXUwbSttVGQzTzdpNE1EYmVPU2ZQWDlFejBTbW15MFFpZWlS?=
- =?utf-8?B?ckJSWGlacENPVEQ5MHFmSXZ0dGJDQ2Q3SW0yT3dua0hFUW1TdTZSbk00blRE?=
- =?utf-8?B?YWRabGVRUHJaUWtkV0NNNnQ3UEtNTU44MUcyS0hGWW5YVTdGMXFPc2FqMlpo?=
- =?utf-8?B?SkNHZE9xY3ZMSWl6bGwyNkZoZlhGOWdQV284ZFowaDExRWxzOExTUXVFTm9h?=
- =?utf-8?B?Nm5CNno5OFJuSW00ak1Wa0dYMlZCdkxoSmk0Z1N2Q012NnpZUWpXallUNFV5?=
- =?utf-8?B?WmFHcnZ6by83Q1RBekVyZlZTOHh0OXIydEVmcGxDeEtZelFUY0UvTzAyNGpy?=
- =?utf-8?Q?PMXIk3V6YvvN6BpI441zyKY=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 114a9b08-ef83-401a-e35f-08d9986f2eec
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2021 10:55:54.8732
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZTmjoxK5oy8VSX1xnElsDtC95Zvoi4PshM+1sZSiRKoI8pC/fu0qYsN/Cq8lK6eO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4570
+References: <YUyWYpDl2Dmegz0a@archlinux-ax161> <mhng-b5f8a6a0-c3e8-4d25-9daa-346fdc8a2e5e@palmerdabbelt-glaptop>
+ <YWhg8/UzjJsB51Gd@archlinux-ax161> <afeaea5f-70f2-330f-f032-fb0c8b5d0aa5@ghiti.fr>
+ <990a894c-1806-5ab2-775e-a6f2355c2299@ghiti.fr> <CA+zEjCt28iYQARQa=8Nsw8+_j0PuEee==gUqjKjasMo+w2Ohwg@mail.gmail.com>
+ <CACT4Y+YB8bjqxFfSrXKbfETXJAUxH=HR+kizC0T-AZLArY3A5A@mail.gmail.com>
+In-Reply-To: <CACT4Y+YB8bjqxFfSrXKbfETXJAUxH=HR+kizC0T-AZLArY3A5A@mail.gmail.com>
+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date: Tue, 26 Oct 2021 13:33:20 +0200
+Message-ID: <CA+zEjCtVYLdg3FQnnZjv+Bb-bn2mvj9BCZF787dbNNRHPvyZug@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Always respect CONFIG_KASAN_STACK
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: Alexandre ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, elver@google.com, akpm@linux-foundation.org, 
+	ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com, 
+	ndesaulniers@google.com, Arnd Bergmann <arnd@arndb.de>, kasan-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, Paul Walmsley <paul.walmsley@sifive.com>, 
+	aou@eecs.berkeley.edu, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Am 26.10.21 um 10:34 schrieb Arnd Bergmann:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Oct 26, 2021 at 6:48 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> The new driver incorrectly unwinds after errors, as clang points out:
+> On Tue, 26 Oct 2021 at 06:39, Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > Hi,
+> >
+> > On Fri, Oct 15, 2021 at 3:08 PM Alexandre ghiti <alex@ghiti.fr> wrote:
+> > >
+> > > On 10/14/21 8:31 PM, Alex Ghiti wrote:
+> > > > Hi Nathan,
+> > > >
+> > > > Le 14/10/2021 =C3=A0 18:55, Nathan Chancellor a =C3=A9crit :
+> > > >> On Fri, Oct 08, 2021 at 11:46:55AM -0700, Palmer Dabbelt wrote:
+> > > >>> On Thu, 23 Sep 2021 07:59:46 PDT (-0700), nathan@kernel.org wrote=
+:
+> > > >>>> On Thu, Sep 23, 2021 at 12:07:17PM +0200, Marco Elver wrote:
+> > > >>>>> On Wed, 22 Sept 2021 at 22:55, Nathan Chancellor
+> > > >>>>> <nathan@kernel.org> wrote:
+> > > >>>>>> Currently, the asan-stack parameter is only passed along if
+> > > >>>>>> CFLAGS_KASAN_SHADOW is not empty, which requires
+> > > >>>>>> KASAN_SHADOW_OFFSET to
+> > > >>>>>> be defined in Kconfig so that the value can be checked. In RIS=
+C-V's
+> > > >>>>>> case, KASAN_SHADOW_OFFSET is not defined in Kconfig, which mea=
+ns
+> > > >>>>>> that
+> > > >>>>>> asan-stack does not get disabled with clang even when
+> > > >>>>>> CONFIG_KASAN_STACK
+> > > >>>>>> is disabled, resulting in large stack warnings with allmodconf=
+ig:
+> > > >>>>>>
+> > > >>>>>> drivers/video/fbdev/omap2/omapfb/displays/panel-lgphilips-lb03=
+5q02.c:117:12:
+> > > >>>>>>
+> > > >>>>>> error: stack frame size (14400) exceeds limit (2048) in functi=
+on
+> > > >>>>>> 'lb035q02_connect' [-Werror,-Wframe-larger-than]
+> > > >>>>>> static int lb035q02_connect(struct omap_dss_device *dssdev)
+> > > >>>>>>             ^
+> > > >>>>>> 1 error generated.
+> > > >>>>>>
+> > > >>>>>> Ensure that the value of CONFIG_KASAN_STACK is always passed
+> > > >>>>>> along to
+> > > >>>>>> the compiler so that these warnings do not happen when
+> > > >>>>>> CONFIG_KASAN_STACK is disabled.
+> > > >>>>>>
+> > > >>>>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1453
+> > > >>>>>> References: 6baec880d7a5 ("kasan: turn off asan-stack for clan=
+g-8
+> > > >>>>>> and earlier")
+> > > >>>>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > >>>>>
+> > > >>>>> Reviewed-by: Marco Elver <elver@google.com>
+> > > >>>>
+> > > >>>> Thanks!
+> > > >>>>
+> > > >>>>> [ Which tree are you planning to take it through? ]
+> > > >>>>
+> > > >>>> Gah, I was intending for it to go through -mm, then I cc'd neith=
+er
+> > > >>>> Andrew nor linux-mm... :/ Andrew, do you want me to resend or ca=
+n you
+> > > >>>> grab it from LKML?
+> > > >>>
+> > > >>> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > > >>>
+> > > >>> (assuming you still want it through somewhere else)
+> > > >>
+> > > >> Thanks, it is now in mainline as commit 19532869feb9 ("kasan: alwa=
+ys
+> > > >> respect CONFIG_KASAN_STACK").
+> > > >>
+> > > >>>>> Note, arch/riscv/include/asm/kasan.h mentions KASAN_SHADOW_OFFS=
+ET in
+> > > >>>>> comment (copied from arm64). Did RISC-V just forget to copy ove=
+r the
+> > > >>>>> Kconfig option?
+> > > >>>>
+> > > >>>> I do see it defined in that file as well but you are right that
+> > > >>>> they did
+> > > >>>> not copy the Kconfig logic, even though it was present in the tr=
+ee
+> > > >>>> when
+> > > >>>> RISC-V KASAN was implemented. Perhaps they should so that they g=
+et
+> > > >>>> access to the other flags in the "else" branch?
+> > > >>>
+> > > >>> Ya, looks like we just screwed this up.  I'm seeing some warnings=
+ like
+> > > >>>
+> > > >>>     cc1: warning: =E2=80=98-fsanitize=3Dkernel-address=E2=80=99 w=
+ith stack protection
+> > > >>> is not supported without =E2=80=98-fasan-shadow-offset=3D=E2=80=
+=99 for this target
+> > > >>
+> > > >> Hmmm, I thought I did a GCC build with this change but I must not =
+have
+> > > >> :/
+> > > >>
+> > > >>> which is how I ended up here, I'm assuming that's what you're
+> > > >>> talking about
+> > > >>> here?  LMK if you were planning on sending along a fix or if you
+> > > >>> want me to
+> > > >>> go figure it out.
+> > > >>
+> > > >> I took a look at moving the logic into Kconfig like arm64 before s=
+ending
+> > > >> this change and I did not really understand it well enough to do s=
+o. I
+> > > >> think it would be best if you were able to do that so that nothing=
+ gets
+> > > >> messed up.
+> > > >>
+> > > >
+> > > > I'll do it tomorrow, I'm the last one who touched kasan on riscv :)
+> > > >
+> > >
+> > > Adding KASAN_SHADOW_OFFSET config makes kasan kernel fails to boot.
+> > > It receives a *write* fault at the beginning of a memblock_alloc
+> > > function while populating the kernel shadow memory: the trap address =
+is
+> > > in the kasan shadow virtual address range and this corresponds to a
+> > > kernel address in init_stack. The question is: how do I populate the
+> > > stack shadow mapping without using memblock API? It's weird, I don't
+> > > find anything on other architectures.
+> >
+> > @kasan: Any idea what we are doing wrong in riscv to encounter the
+> > above situation?
 >
-> drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->                  if (r) {
->                      ^
-> drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
->          while (i--)
->                 ^
-> drivers/dma-buf/st-dma-resv.c:295:3: note: remove the 'if' if its condition is always false
->                  if (r) {
->                  ^~~~~~~~
-> drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->          if (r) {
->              ^
-> drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
->          while (i--)
->                 ^
-> drivers/dma-buf/st-dma-resv.c:288:2: note: remove the 'if' if its condition is always false
->          if (r) {
->          ^~~~~~~~
-> drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i' to silence this warning
->          int r, i;
->                  ^
->                   = 0
+> Hi Alex, Palmer,
 >
-> Skip cleaning up the bits that have not been allocated at this point.
+> The patch changes the definition of the KASAN_SHADOW_OFFSET const.
+> Does it's value change as a result or not? Have you tried to print it
+> before/after?
+> If value does not change, then this is more mysterious. If it changes,
+> then there lots of possible explanations (points to unmapped region,
+> overlaps with something), but we need to know values before/after to
+
+So I debugged a bit more what happened here, and actually the culprit
+is the call to kasan_populate_early_shadow at the beginning of
+kasan_init which write-protects the access to kasan_early_shadow_page
+and hence the write fault later when using memblock. I don't see the
+point of this call anyway since we populate swapper_pg_dir in
+kasan_early_init and then we write-protect the access to
+kasan_early_shadow_page at the end of kasan_init.
+
+But that may not be ideal, so I'm open to a better suggestion than
+just removing the call to kasan_populate_early_shadow.
+
+Sorry I did not dig further before asking and thanks for your time,
+
+Alex
+
+> answer this.
 >
-> Fixes: 1d51775cd3f5 ("dma-buf: add dma_resv selftest v4")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-I already send out a patch to fix this up, but forgot to fix both gotos.
-
-Going to add my rb and using that one here instead.
-
-Thanks,
-Christian.
-
-> ---
-> I'm not familiar with these interfaces, so I'm just guessing where
-> we should jump after an error, please double-check and fix if necessary.
-> ---
->   drivers/dma-buf/st-dma-resv.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
-> index 6f3ba756da3e..bc32b3eedcb6 100644
-> --- a/drivers/dma-buf/st-dma-resv.c
-> +++ b/drivers/dma-buf/st-dma-resv.c
-> @@ -287,7 +287,7 @@ static int test_get_fences(void *arg, bool shared)
->   	r = dma_resv_lock(&resv, NULL);
->   	if (r) {
->   		pr_err("Resv locking failed\n");
-> -		goto err_free;
-> +		goto err_resv;
->   	}
->   
->   	if (shared) {
-> @@ -295,7 +295,7 @@ static int test_get_fences(void *arg, bool shared)
->   		if (r) {
->   			pr_err("Resv shared slot allocation failed\n");
->   			dma_resv_unlock(&resv);
-> -			goto err_free;
-> +			goto err_resv;
->   		}
->   
->   		dma_resv_add_shared_fence(&resv, f);
-> @@ -336,6 +336,7 @@ static int test_get_fences(void *arg, bool shared)
->   	while (i--)
->   		dma_fence_put(fences[i]);
->   	kfree(fences);
-> +err_resv:
->   	dma_resv_fini(&resv);
->   	dma_fence_put(f);
->   	return r;
-
+> > Thanks,
+> >
+> > Alex
+> >
+> > >
+> > > And just a short note: I have realized this will break with the sv48
+> > > patchset as we decide at runtime the address space width and the kasa=
+n
+> > > shadow start address is different between sv39 and sv48. I will have =
+to
+> > > do like x86 and move the kasan shadow start at the end of the address
+> > > space so that it is the same for both sv39 and sv48.
+> > >
+> > > Thanks,
+> > >
+> > > Alex
+> > >
+> > >
+> > > > Thanks,
+> > > >
+> > > > Alex
+> > > >
+> > > >> Cheers,
+> > > >> Nathan
+> > > >>
+> > > >> _______________________________________________
+> > > >> linux-riscv mailing list
+> > > >> linux-riscv@lists.infradead.org
+> > > >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > > >>
+> > > >
+> > > > _______________________________________________
+> > > > linux-riscv mailing list
+> > > > linux-riscv@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > >
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
