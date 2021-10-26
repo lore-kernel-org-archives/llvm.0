@@ -1,40 +1,40 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C46C2CAC
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:11:46 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id om14so10210215pjb.5
-        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:11:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D26629CA
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:11:51 +0000 (UTC)
+Received: by mail-pj1-f45.google.com with SMTP id oa4so10220785pjb.2
+        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uAZKiXpUPGIZiIsW4FDPovXA12YTx3ha3yV0CKfaMDE=;
-        b=CUgE6eOteFF7HVr9n4neEhnLkgWwntU317UnwgwGQNeK8VHUJLR03gpCSopKua+RFq
-         CcgGd7ON5Rlz86SdAAu5Tdnkp+dXUxFWzeUEtRdI4Y4Lcfp7V5FunND83X+0menFMsO4
-         QpLl6UKxwrYGIWrKMS+XIHucfCo/0gOh3vCZGJF1g9HRB1SO61Bfr6vX0LMVEfYhpOWK
-         hcX+eiFp2z1yiuf4gQFLX4Dkd6KvRHaIPqdHgRLW3PhTaPK0Qf+AFFnCYUukz5xx9PWn
-         RU79vv3Wtfjz5NXA6DJUhnegYPBAqnil73V7nN/OovPr1uQ1Mg00FGVFK8GAiiDybeSh
-         XDcg==
+        bh=v5Jn6J7/l0TaCmJa3oToQu6cLShq8Ci4O48ykDgquPE=;
+        b=FnMiD/yEd8r5STTgSNxpiErKAzGkF/Kko+aHtyxKURrP9GTpaI/otiknwLSlWcg8JA
+         LauRUtiGqflJco+vkSMWqZ+jIY2i543gFniL0JzBmJzAbf425b1bm0dvANz1aNk032YQ
+         +NxzBzKjW4bw81gjqFnYZ49UTRhAcHPylrZ8MVPeWIOSQTjW0FO2QVDWQwcPAgrPnmhP
+         61xdfdR+yD07+ofRM93/9fGpbOt13g2ubXNOVeoYCmuezdufEgE/gryZB+21nCg67V/v
+         KU60CwlRPCXxxnNMKoUyQFnoey+kXZ1Ox4MUQXGN4ozObwgmJKv9++tjvZQAcpOaM50a
+         FKAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=uAZKiXpUPGIZiIsW4FDPovXA12YTx3ha3yV0CKfaMDE=;
-        b=0gYNg3B2LP+a13mwoTfXZ51yXNaUY9OIsfdvy9afiXVHttQ9K2ANugY3hYJktC+PJm
-         KO10sT6pqHnl9KqPKZ6E6vjmWy0EgvZJOdYKG2ux5+KbYoz2UAVZjUe1FBRzoXM0g2o+
-         TolohWr3Bvk3RlKiB8XI9ocTvyUE8s2CXkIjHGQ0NswE5lq3i+kNbm1J9xDEUHjlAKkA
-         dEYiB9M6k4WRF/MucVqzmzxLLmmIy+ebJwHv2Ok1SchCY7g8lauIRFyBXlDe21sqgMZz
-         RcLeV+cx3idaXjlODcsTKHqDv6b+kwmAM0Uu19qbr71s0tH75nePTh2sJvunNz4Ts/IF
-         C+sA==
-X-Gm-Message-State: AOAM530WTLp+Qh9kqZcbZhO0ptrP/lfD3BP60usSQ1jar0mWIYbM8cQ7
-	8D/xabN+KQCBP/ne7GlsS3A=
-X-Google-Smtp-Source: ABdhPJzqsIsQlmS7qLGltRQKqFMpDdbkzivkAz1AEn1u3VBA1G79oSi6CKqd4i91UMbldo41UQALVA==
-X-Received: by 2002:a17:902:6bc8:b0:13f:8a54:1188 with SMTP id m8-20020a1709026bc800b0013f8a541188mr20653784plt.49.1635232305690;
-        Tue, 26 Oct 2021 00:11:45 -0700 (PDT)
+        bh=v5Jn6J7/l0TaCmJa3oToQu6cLShq8Ci4O48ykDgquPE=;
+        b=ZAFvn8eu0wIbwLD5KTenUr6+Jy14wZd2itWgwBuxOFGvpMPWwX4ifSUkiIDiO+8TZg
+         Rn/sXK6B7HUQWgvAUSC6RjsAeDU6hkgR2UeQRZuwITvZzIL0DYRhUolKMurmQ954iNZz
+         b+A6lRKfWha4VE4rifvAEjUDi7G+gDM5PMNQdxLbPQigousbhtrjEqWLhSRs5JAOJBcC
+         z3kqKGyEvtdX9hlCeI6iI0getgkBX5GkcqNufum8EFoTtnpcaSEQdJn5+NeD8+tbaFgN
+         NnmRT0s85tXUyncZzrsx2sgyw+uI9dVL4E0kQmdgCdOpErgn7pn0jEsDbYCChi2UzJ7Z
+         v2Zw==
+X-Gm-Message-State: AOAM531JKm/13icRmes+OsVhs+PcnUAV5Zc3WXf3yMVQXazU6dS/61oD
+	QgyIU06n8f3eDfryrJGAZj0=
+X-Google-Smtp-Source: ABdhPJySkA2o4FFhQYEyzwSUb7PH8O6xeB8p+lh9tMMoJ2WfjXksxtulja+sI2x6eUDSlRNcfIJnHw==
+X-Received: by 2002:a17:902:a5c2:b0:140:14bb:8efd with SMTP id t2-20020a170902a5c200b0014014bb8efdmr20876966plq.31.1635232311156;
+        Tue, 26 Oct 2021 00:11:51 -0700 (PDT)
 Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
-        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.40
+        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Oct 2021 00:11:45 -0700 (PDT)
+        Tue, 26 Oct 2021 00:11:50 -0700 (PDT)
 From: Dillon Min <dillon.minfei@gmail.com>
 To: mchehab@kernel.org,
 	mchehab+huawei@kernel.org,
@@ -60,9 +60,9 @@ Cc: patrice.chotard@foss.st.com,
 	lkp@intel.com,
 	kbuild-all@lists.01.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v7 03/10] ARM: dts: stm32: Add DMA2D support for STM32F429 series soc
-Date: Tue, 26 Oct 2021 15:11:15 +0800
-Message-Id: <1635232282-3992-4-git-send-email-dillon.minfei@gmail.com>
+Subject: [PATCH v7 04/10] ARM: dts: stm32: Enable DMA2D on STM32F469-DISCO board
+Date: Tue, 26 Oct 2021 15:11:16 +0800
+Message-Id: <1635232282-3992-5-git-send-email-dillon.minfei@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
 References: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
@@ -72,34 +72,28 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-Add DMA2D for STM32F429 series soc.
+Enable DMA2D on STM32F469-DISCO board.
 
 Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
 ---
- arch/arm/boot/dts/stm32f429.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/arm/boot/dts/stm32f469-disco.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32f429.dtsi b/arch/arm/boot/dts/stm32f429.dtsi
-index 8748d5850298..1d8be5e7c8b8 100644
---- a/arch/arm/boot/dts/stm32f429.dtsi
-+++ b/arch/arm/boot/dts/stm32f429.dtsi
-@@ -743,6 +743,16 @@
- 			st,mem2mem;
- 		};
+diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
+index 30905ce672a0..ba26a3375b0d 100644
+--- a/arch/arm/boot/dts/stm32f469-disco.dts
++++ b/arch/arm/boot/dts/stm32f469-disco.dts
+@@ -132,6 +132,10 @@
+ 	clock-frequency = <8000000>;
+ };
  
-+		dma2d: dma2d@4002b000 {
-+			compatible = "st,stm32-dma2d";
-+			reg = <0x4002b000 0xc00>;
-+			interrupts = <90>;
-+			resets = <&rcc STM32F4_AHB1_RESET(DMA2D)>;
-+			clocks = <&rcc 0 STM32F4_AHB1_CLOCK(DMA2D)>;
-+			clock-names = "dma2d";
-+			status = "disabled";
-+		};
++&dma2d {
++	status = "okay";
++};
 +
- 		mac: ethernet@40028000 {
- 			compatible = "st,stm32-dwmac", "snps,dwmac-3.50a";
- 			reg = <0x40028000 0x8000>;
+ &dsi {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
 -- 
 2.7.4
 
