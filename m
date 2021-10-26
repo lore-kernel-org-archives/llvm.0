@@ -1,33 +1,34 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0162C81
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:02:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 53D4260D07;
-	Tue, 26 Oct 2021 14:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E0B2C81
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:04:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C86960C41;
+	Tue, 26 Oct 2021 14:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635256966;
-	bh=jf046iBN2pgX9ep9EdmfiHHDhGaD9VLYXiqA222lDBE=;
+	s=k20201202; t=1635257045;
+	bh=fYdFs1PisYcKFzN6nRtvkLmTckm/NDSJLCk+ti392Ww=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pcYmtMmA+B6622uCVjok524Q7axWOqq/F+FL96MUvTsTW0dyHIQncKyWnjcI3cxRA
-	 TJOIcgvOAl38iiVftPP9TCymnjc+5rzfFD41prwn27/kvOQ53iZD6aqUcbNxbwgHmi
-	 11LMU4juimXbloLghA57nk2I45iBw5Yw1fed9Ah0MgNpxu0G4i4LEbSb5BFTbCZL51
-	 pTohkzjOHOfdZc8tcGyR2oZzxmCDYe18Lm57/e6LG4YiFM4KqefcyBgierFYfu3MuW
-	 u3sMdOJ8uYZSyBxGDYVVUcZsjdzBtiUd4w5UjBuTELmHALggvfyqbg2xPOBszQkluz
-	 Z8fxmnr00/SbA==
-Date: Tue, 26 Oct 2021 07:02:41 -0700
+	b=mXG8+T/cQMFHz2x09oPHlhLJhgracMsXllil7jpAGNm37jTEggSQ0Ztv1l/lYpVOD
+	 4yaJbCSkRmUoIkugi192f74I93XiT8A4H0TeeaG6H8kCYjjvDPPlFZNCRN4aP4xROs
+	 rVpGprOeNASv0hwRb/TVSFctLrvbJn46AF/iVjWlurWhbbc5k7Cn+8IEkJRPlexUyR
+	 muwhqoPHSIKRKQ3wZz3UFmvtgQyjeXYVbd4uVFvAQfxhkx42FKMQmeMGmcPd9KxvdL
+	 H0EsnWhxRZJpCcktWb7uSPjIOubg+aBYUIRosyBBEuOE0923IODBggoWuHcwx1rGA8
+	 7VLJb4DOloeOw==
+Date: Tue, 26 Oct 2021 07:04:00 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: David Laight <David.Laight@aculab.com>
-Cc: 'Nick Terrell' <terrelln@fb.com>,
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] lib: zstd: Add cast to silence clang's
- -Wbitwise-instead-of-logical
-Message-ID: <YXgKgQMHQzvQgE4J@archlinux-ax161>
-References: <20211021202353.2356400-1-nathan@kernel.org>
- <4245BD7A-4B12-4172-B4EE-76A99C717C7D@fb.com>
- <d21e97487ba3447194538ccf0e88ead9@AcuMS.aculab.com>
+	Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] dma-buf: st: fix error handling in test_get_fences()
+Message-ID: <YXgK0HAe1+dEPvL1@archlinux-ax161>
+References: <20211026083448.3471055-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,105 +37,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d21e97487ba3447194538ccf0e88ead9@AcuMS.aculab.com>
+In-Reply-To: <20211026083448.3471055-1-arnd@kernel.org>
 
-On Tue, Oct 26, 2021 at 10:34:31AM +0000, David Laight wrote:
-> From: Nick Terrell
-> > Sent: 26 October 2021 02:18
-> > 
-> > > On Oct 21, 2021, at 1:23 PM, Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > A new warning in clang warns that there is an instance where boolean
-> > > expressions are being used with bitwise operators instead of logical
-> > > ones:
-> > >
-> > > lib/zstd/decompress/huf_decompress.c:890:25: warning: use of bitwise '&' with boolean operands [-
-> > Wbitwise-instead-of-logical]
-> > >                        (BIT_reloadDStreamFast(&bitD1) == BIT_DStream_unfinished)
-> > >                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >
-> > > zstd does this frequently to help with performance, as logical operators
-> > > have branches whereas bitwise ones do not.
-> ...
-> > > The first U32 cast is to silence an instance of -Wshorten-64-to-32
-> > > because __builtin_expect() returns long so it cannot be moved.
+On Tue, Oct 26, 2021 at 10:34:37AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Isn't enabling that warning completely stupid?
-> The casts required to silence it could easily cause more problems
-> - by hiding more important bugs. And seriously affect code readability.
-
-Which warning?
-
--Wbitwise-instead-of-logical is included in clang's -Wall and I do not
-think it should be disabled; this is the first instance of the warning
-that has been silenced with a cast.
-
--Wshorten-64-to-32 will never be enabled for Linux but zstd is a
-separate project that can be built for a variety of operating systems so
-that has to be considered when developing changes for the kernel because
-the kernel changes need to go upstream eventually if they touch core
-zstd code, otherwise they will just get blown away on the next import.
-Specifically, this warning was enabled on iOS:
-https://github.com/facebook/zstd/pull/2062
-
-> ...c
-> > > index 05570ed5f8be..5105e59ac04a 100644
-> > > --- a/lib/zstd/decompress/huf_decompress.c
-> > > +++ b/lib/zstd/decompress/huf_decompress.c
-> > > @@ -886,7 +886,7 @@ HUF_decompress4X2_usingDTable_internal_body(
-> > >             HUF_DECODE_SYMBOLX2_0(op2, &bitD2);
-> > >             HUF_DECODE_SYMBOLX2_0(op3, &bitD3);
-> > >             HUF_DECODE_SYMBOLX2_0(op4, &bitD4);
-> > > -            endSignal = (U32)LIKELY(
-> > > +            endSignal = (U32)LIKELY((U32)
-> > >                         (BIT_reloadDStreamFast(&bitD1) == BIT_DStream_unfinished)
-> > >                       & (BIT_reloadDStreamFast(&bitD2) == BIT_DStream_unfinished)
-> > >                       & (BIT_reloadDStreamFast(&bitD3) == BIT_DStream_unfinished)
+> The new driver incorrectly unwinds after errors, as clang points out:
 > 
-> Isn't that the same as:
-> 	((BIT_reload() & BIT_reload() & BIT_reload()) == BIT_DStream_unfinished)
-> which will generate much better code.
-> Especially on cpu without 'seteq' instructions.
+> drivers/dma-buf/st-dma-resv.c:295:7: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>                 if (r) {
+>                     ^
+> drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
+>         while (i--)
+>                ^
+> drivers/dma-buf/st-dma-resv.c:295:3: note: remove the 'if' if its condition is always false
+>                 if (r) {
+>                 ^~~~~~~~
+> drivers/dma-buf/st-dma-resv.c:288:6: error: variable 'i' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>         if (r) {
+>             ^
+> drivers/dma-buf/st-dma-resv.c:336:9: note: uninitialized use occurs here
+>         while (i--)
+>                ^
+> drivers/dma-buf/st-dma-resv.c:288:2: note: remove the 'if' if its condition is always false
+>         if (r) {
+>         ^~~~~~~~
+> drivers/dma-buf/st-dma-resv.c:280:10: note: initialize the variable 'i' to silence this warning
+>         int r, i;
+>                 ^
+>                  = 0
+> 
+> Skip cleaning up the bits that have not been allocated at this point.
+> 
+> Fixes: 1d51775cd3f5 ("dma-buf: add dma_resv selftest v4")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I don't think so. Feel free to double check my math.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-BIT_reloadDStreamFast() can return either BIT_DStream_unfinished (0) or
-BIT_DStream_overflow (3). Let's say the second call returns
-BIT_DStream_overflow but the others return BIT_DStream_unfinished.
-
-Current code:
-
-(BIT_reloadDStreamFast(&bitD1) == BIT_DStream_unfinished) &
-(BIT_reloadDStreamFast(&bitD2) == BIT_DStream_unfinished) &
-(BIT_reloadDStreamFast(&bitD3) == BIT_DStream_unfinished)
-
-(BIT_DStream_unfinished == BIT_DStream_unfinished) &
-(BIT_DStream_overflow == BIT_DStream_unfinished) &
-(BIT_DStream_unfinished == BIT_DStream_unfinished)
-
-(1 & 0 & 1)
-
-Final result: 0
-
-Your suggestion:
-
-(BIT_reloadDStreamFast(&bitD1) &
- BIT_reloadDStreamFast(&bitD2) &
- BIT_reloadDStreamFast(&bitD3)) == BIT_DStream_unfinished
-
-(BIT_DStream_unfinished &
- BIT_DStream_overflow &
- BIT_DStream_unfinished) == BIT_DStream_unfinished
-
-(0 & 3 & 0) == 0
-
-(0) == 0
-
-Final result: 1
-
-Clang 13.0.0 and GCC 11.2.0 appear agree with me:
-
-https://godbolt.org/z/M78s1TTEx
-
-Cheers,
-Nathan
+> ---
+> I'm not familiar with these interfaces, so I'm just guessing where
+> we should jump after an error, please double-check and fix if necessary.
+> ---
+>  drivers/dma-buf/st-dma-resv.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
+> index 6f3ba756da3e..bc32b3eedcb6 100644
+> --- a/drivers/dma-buf/st-dma-resv.c
+> +++ b/drivers/dma-buf/st-dma-resv.c
+> @@ -287,7 +287,7 @@ static int test_get_fences(void *arg, bool shared)
+>  	r = dma_resv_lock(&resv, NULL);
+>  	if (r) {
+>  		pr_err("Resv locking failed\n");
+> -		goto err_free;
+> +		goto err_resv;
+>  	}
+>  
+>  	if (shared) {
+> @@ -295,7 +295,7 @@ static int test_get_fences(void *arg, bool shared)
+>  		if (r) {
+>  			pr_err("Resv shared slot allocation failed\n");
+>  			dma_resv_unlock(&resv);
+> -			goto err_free;
+> +			goto err_resv;
+>  		}
+>  
+>  		dma_resv_add_shared_fence(&resv, f);
+> @@ -336,6 +336,7 @@ static int test_get_fences(void *arg, bool shared)
+>  	while (i--)
+>  		dma_fence_put(fences[i]);
+>  	kfree(fences);
+> +err_resv:
+>  	dma_resv_fini(&resv);
+>  	dma_fence_put(f);
+>  	return r;
+> -- 
+> 2.29.2
+> 
