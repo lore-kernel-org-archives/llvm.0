@@ -1,40 +1,40 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45A72CA8
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:11:56 +0000 (UTC)
-Received: by mail-pg1-f178.google.com with SMTP id f5so13212764pgc.12
-        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:11:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF732CA8
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:12:02 +0000 (UTC)
+Received: by mail-pg1-f175.google.com with SMTP id m21so13233175pgu.13
+        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=YJt0hdV4kzdXc6X1C3SE5PDn2rhPDieOGx+r2tKEjZE=;
-        b=HYeqwC260+v7LmqrfNhi8BodcmsCMqshSPxR4nFgNmstTkvQUcDqsmYoDqpRDnhe0P
-         N5R0YrW7+b3NDKIWHa43KY1ni03gfzLWU/cTAfs8NVoWpF4D6Al30KM7inCMqDpWPvf0
-         DPKX0XEJVC14/ygeP24nTEtaIOBeh8/lM21tGKocXH4AcL97bF/mWquqB80SClSkjoYz
-         S0bRkgzsifWRI9BNZ8KSTYLpiRnnmFb9IJz3OxLNxneUQre9GLLxSLXuHX3Dawmq5cuw
-         SVSEDZTP//P2wkdNj+EuuRCmQRMINpqX6Kvy9VAXW/4xAyYd7WiAgPq/mPiipksiKYJ5
-         AFSA==
+        bh=dxEoE3z3QyUF2/I3A7I9pyjQJbuepmY3kvNx8IZRwGg=;
+        b=CmYoQgZTvVIPPzJ6zq3Z+6T3ttzskepfKoJmie5YHSHo1EIgCPN5WWc5Pe7SrNvjZh
+         pL9L6hwzUHWtejlW1+Hw3S5hRq7inotQQhYo8Wl9X7OohBCSyD4/LLTN6QXT6jfiuq5E
+         HoF6Iba+nHlEfh66Vo9yclfH0A3zvaCylQaAWnfS1LfeHf9SI2qEqRXB+ZM9WrmasQsz
+         ryE5SYt4b6hLc8l2OIpRlZ6Yc/nwGQs8RDhlH2orO7MrHV/bXKCSKNoAbgQPBDr+AbUQ
+         +SuVQdeW0ghsbt6Y6Ih9mN9S3ozEgS4NIUb+q570VtrqndR2Rg/Gkfr95KCaDHQA9rx0
+         cy+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=YJt0hdV4kzdXc6X1C3SE5PDn2rhPDieOGx+r2tKEjZE=;
-        b=GYIHicNhoaDuIdlrA14buCFM/i3gyL4Z5X1IUBqX+PFqdjdX2hfhjf3FUGFkLE63O4
-         x4dhLBz1UUJS63fAPGQN6tTzf603iqIOhs1oyn9SmtxgILMcP9edlz2G4udd/TOupx2W
-         R8KC4cT0UO101IdrPBeEUiKTqIpaLOJdwGDLPLsCVA/OXroL1VNDiw0/cvAc3YkSBLXM
-         KwbW+SN/Qg0Rfd8KIHaxh0JH25LymdEY73p3dPc0rIbOmnZlR79UcW5JLK4TZHDUHEm1
-         p4aY8Kmq5ulhdlp+IlmAgjVBNX4i3yLb1TTlX/PF0GgYMXVWtLg/MetCy54OG0HdmQxC
-         bewg==
-X-Gm-Message-State: AOAM5309HsQExDtcA9AT7U+WgY/pO8rvNeSci3+1jeYvq3z3/RPrC1Xr
-	FVszJKJysdxAk+ZE+/kkWrA=
-X-Google-Smtp-Source: ABdhPJyKVKyyzYptJNlN1szbfFlQqhI4CiYZWnN19Y5i6NZft9uz62l9xG7RV3OpWbGicirrwFhc4w==
-X-Received: by 2002:a05:6a00:c8a:b0:47b:ff6e:4cf3 with SMTP id a10-20020a056a000c8a00b0047bff6e4cf3mr7880068pfv.50.1635232316568;
-        Tue, 26 Oct 2021 00:11:56 -0700 (PDT)
+        bh=dxEoE3z3QyUF2/I3A7I9pyjQJbuepmY3kvNx8IZRwGg=;
+        b=oXhVrNEMtRSOvY6cwQayvfXb5EEgWH/2PoB+LO/ApO6gN991FSELnrqoNMBtJJzCGi
+         LmUH7a5RabdmVMBCqm4Oq8iTla9uyGra8XjECrMB63taMqR9adndHpeKaxl19SEmYvgl
+         svKEDRJJqbKzq1UYMWQeyFYf1K/h74fgwtDN0iyivE5d7zCBEOILCh3gIeQFoE3t2c6a
+         WG3XKViqHAB0AEe9Q0WG+AFHeUymFcoybK0VlI1wAD4wjHmKrLa7WCV1sNkWPVQJrisN
+         tF/5SA98aZZUu7Sscx8pOwM8w9ui75Gut0Gvzw6u+K42qpqiBfHuCgGIymLlBido1TYH
+         cskA==
+X-Gm-Message-State: AOAM533f7SS7JZLWRVuO2x9o+JWT/hLhy33JTDQVN5G7Ws1LtOGPIJbD
+	8uu4pTjxGoSuvjT6y6Q8DVw=
+X-Google-Smtp-Source: ABdhPJxl+nO2g7yQI971iTkXUajKfvqScKWHJ40sy8+37DVb/q4vd7Ytk8NPpyCTRi+OClxNXDttXA==
+X-Received: by 2002:aa7:914f:0:b0:44d:6f5e:f11a with SMTP id 15-20020aa7914f000000b0044d6f5ef11amr23157212pfi.10.1635232321984;
+        Tue, 26 Oct 2021 00:12:01 -0700 (PDT)
 Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
-        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.51
+        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.56
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Oct 2021 00:11:56 -0700 (PDT)
+        Tue, 26 Oct 2021 00:12:01 -0700 (PDT)
 From: Dillon Min <dillon.minfei@gmail.com>
 To: mchehab@kernel.org,
 	mchehab+huawei@kernel.org,
@@ -60,9 +60,9 @@ Cc: patrice.chotard@foss.st.com,
 	lkp@intel.com,
 	kbuild-all@lists.01.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v7 05/10] media: v4l2-mem2mem: add v4l2_m2m_get_unmapped_area for no-mmu platform
-Date: Tue, 26 Oct 2021 15:11:17 +0800
-Message-Id: <1635232282-3992-6-git-send-email-dillon.minfei@gmail.com>
+Subject: [PATCH v7 06/10] media: videobuf2: Fix the size printk format
+Date: Tue, 26 Oct 2021 15:11:18 +0800
+Message-Id: <1635232282-3992-7-git-send-email-dillon.minfei@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
 References: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
@@ -72,67 +72,42 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-For platforms without MMU the m2m provides a helper method
-v4l2_m2m_get_unmapped_area(), The mmap() routines will call
-this to get a proposed address for the mapping.
+Since the type of parameter size is unsigned long,
+it should printk by %lu, instead of %ld, fix it.
 
-More detailed information about get_unmapped_area can be found in
-Documentation/nommu-mmap.txt
+Fixes: 7952be9b6ece ("media: drivers/media/common/videobuf2: rename from videobuf")
 
 Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c | 21 +++++++++++++++++++++
- include/media/v4l2-mem2mem.h           |  5 +++++
- 2 files changed, 26 insertions(+)
+ drivers/media/common/videobuf2/videobuf2-dma-contig.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index e7f4bf5bc8dd..e2654b422334 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -966,6 +966,27 @@ int v4l2_m2m_mmap(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index b052a4e36961..7cd6648ccd26 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -257,7 +257,7 @@ static void *vb2_dc_alloc(struct vb2_buffer *vb,
+ 		ret = vb2_dc_alloc_coherent(buf);
+ 
+ 	if (ret) {
+-		dev_err(dev, "dma alloc of size %ld failed\n", size);
++		dev_err(dev, "dma alloc of size %lu failed\n", size);
+ 		kfree(buf);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+@@ -298,9 +298,9 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
+ 
+ 	vma->vm_ops->open(vma);
+ 
+-	pr_debug("%s: mapped dma addr 0x%08lx at 0x%08lx, size %ld\n",
+-		__func__, (unsigned long)buf->dma_addr, vma->vm_start,
+-		buf->size);
++	pr_debug("%s: mapped dma addr 0x%08lx at 0x%08lx, size %lu\n",
++		 __func__, (unsigned long)buf->dma_addr, vma->vm_start,
++		 buf->size);
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL(v4l2_m2m_mmap);
- 
-+#ifndef CONFIG_MMU
-+unsigned long v4l2_m2m_get_unmapped_area(struct file *file, unsigned long addr,
-+					 unsigned long len, unsigned long pgoff,
-+					 unsigned long flags)
-+{
-+	struct v4l2_fh *fh = file->private_data;
-+	unsigned long offset = pgoff << PAGE_SHIFT;
-+	struct vb2_queue *vq;
-+
-+	if (offset < DST_QUEUE_OFF_BASE) {
-+		vq = v4l2_m2m_get_src_vq(fh->m2m_ctx);
-+	} else {
-+		vq = v4l2_m2m_get_dst_vq(fh->m2m_ctx);
-+		pgoff -= (DST_QUEUE_OFF_BASE >> PAGE_SHIFT);
-+	}
-+
-+	return vb2_get_unmapped_area(vq, addr, len, pgoff, flags);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_get_unmapped_area);
-+#endif
-+
- #if defined(CONFIG_MEDIA_CONTROLLER)
- void v4l2_m2m_unregister_media_controller(struct v4l2_m2m_dev *m2m_dev)
- {
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index 5a91b548ecc0..fdbd5257e020 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -495,6 +495,11 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- int v4l2_m2m_mmap(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 		  struct vm_area_struct *vma);
- 
-+#ifndef CONFIG_MMU
-+unsigned long v4l2_m2m_get_unmapped_area(struct file *file, unsigned long addr,
-+					 unsigned long len, unsigned long pgoff,
-+					 unsigned long flags);
-+#endif
- /**
-  * v4l2_m2m_init() - initialize per-driver m2m data
-  *
 -- 
 2.7.4
 
