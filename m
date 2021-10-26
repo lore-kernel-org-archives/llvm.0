@@ -1,34 +1,33 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571222C81
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 13:35:53 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="209988139"
-X-IronPort-AV: E=Sophos;i="5.87,184,1631602800"; 
-   d="scan'208";a="209988139"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 06:35:52 -0700
-X-IronPort-AV: E=Sophos;i="5.87,184,1631602800"; 
-   d="scan'208";a="596931413"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 06:35:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1mfMby-0018Ep-CN;
-	Tue, 26 Oct 2021 16:35:30 +0300
-Date: Tue, 26 Oct 2021 16:35:30 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v2 1/2] serial: 8250_pci: Replace custom pci_match_id()
- implementation
-Message-ID: <YXgEIhCGXjDUNDU0@smile.fi.intel.com>
-References: <20211025124533.29977-1-andriy.shevchenko@linux.intel.com>
- <202110262029.9bqOz12y-lkp@intel.com>
- <YXgB5vt8+r/Tdo07@smile.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0162C81
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 14:02:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 53D4260D07;
+	Tue, 26 Oct 2021 14:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635256966;
+	bh=jf046iBN2pgX9ep9EdmfiHHDhGaD9VLYXiqA222lDBE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pcYmtMmA+B6622uCVjok524Q7axWOqq/F+FL96MUvTsTW0dyHIQncKyWnjcI3cxRA
+	 TJOIcgvOAl38iiVftPP9TCymnjc+5rzfFD41prwn27/kvOQ53iZD6aqUcbNxbwgHmi
+	 11LMU4juimXbloLghA57nk2I45iBw5Yw1fed9Ah0MgNpxu0G4i4LEbSb5BFTbCZL51
+	 pTohkzjOHOfdZc8tcGyR2oZzxmCDYe18Lm57/e6LG4YiFM4KqefcyBgierFYfu3MuW
+	 u3sMdOJ8uYZSyBxGDYVVUcZsjdzBtiUd4w5UjBuTELmHALggvfyqbg2xPOBszQkluz
+	 Z8fxmnr00/SbA==
+Date: Tue, 26 Oct 2021 07:02:41 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: David Laight <David.Laight@aculab.com>
+Cc: 'Nick Terrell' <terrelln@fb.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] lib: zstd: Add cast to silence clang's
+ -Wbitwise-instead-of-logical
+Message-ID: <YXgKgQMHQzvQgE4J@archlinux-ax161>
+References: <20211021202353.2356400-1-nathan@kernel.org>
+ <4245BD7A-4B12-4172-B4EE-76A99C717C7D@fb.com>
+ <d21e97487ba3447194538ccf0e88ead9@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,38 +36,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YXgB5vt8+r/Tdo07@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <d21e97487ba3447194538ccf0e88ead9@AcuMS.aculab.com>
 
-On Tue, Oct 26, 2021 at 04:25:58PM +0300, Andy Shevchenko wrote:
-> On Tue, Oct 26, 2021 at 08:45:48PM +0800, kernel test robot wrote:
-
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386
-
-> > >> drivers/tty/serial/8250/8250_pci.c:1268:6: warning: variable 'amcc' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >            if (match)
-> >                ^~~~~
-> >    drivers/tty/serial/8250/8250_pci.c:1273:6: note: uninitialized use occurs here
-> >            if (amcc) {
-> >                ^~~~
-> >    drivers/tty/serial/8250/8250_pci.c:1268:2: note: remove the 'if' if its condition is always true
-> >            if (match)
-> >            ^~~~~~~~~~
-> >    drivers/tty/serial/8250/8250_pci.c:1265:11: note: initialize the variable 'amcc' to silence this warning
-> >            bool amcc;
-> >                     ^
-> >                      = 0
+On Tue, Oct 26, 2021 at 10:34:31AM +0000, David Laight wrote:
+> From: Nick Terrell
+> > Sent: 26 October 2021 02:18
+> > 
+> > > On Oct 21, 2021, at 1:23 PM, Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > A new warning in clang warns that there is an instance where boolean
+> > > expressions are being used with bitwise operators instead of logical
+> > > ones:
+> > >
+> > > lib/zstd/decompress/huf_decompress.c:890:25: warning: use of bitwise '&' with boolean operands [-
+> > Wbitwise-instead-of-logical]
+> > >                        (BIT_reloadDStreamFast(&bitD1) == BIT_DStream_unfinished)
+> > >                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >
+> > > zstd does this frequently to help with performance, as logical operators
+> > > have branches whereas bitwise ones do not.
+> ...
+> > > The first U32 cast is to silence an instance of -Wshorten-64-to-32
+> > > because __builtin_expect() returns long so it cannot be moved.
 > 
-> Clang gives a right and wrong advice at the same time.
-> Thank you for the uninitialized case, but variable is boolean, what's 0 here?
+> Isn't enabling that warning completely stupid?
+> The casts required to silence it could easily cause more problems
+> - by hiding more important bugs. And seriously affect code readability.
+
+Which warning?
+
+-Wbitwise-instead-of-logical is included in clang's -Wall and I do not
+think it should be disabled; this is the first instance of the warning
+that has been silenced with a cast.
+
+-Wshorten-64-to-32 will never be enabled for Linux but zstd is a
+separate project that can be built for a variety of operating systems so
+that has to be considered when developing changes for the kernel because
+the kernel changes need to go upstream eventually if they touch core
+zstd code, otherwise they will just get blown away on the next import.
+Specifically, this warning was enabled on iOS:
+https://github.com/facebook/zstd/pull/2062
+
+> ...c
+> > > index 05570ed5f8be..5105e59ac04a 100644
+> > > --- a/lib/zstd/decompress/huf_decompress.c
+> > > +++ b/lib/zstd/decompress/huf_decompress.c
+> > > @@ -886,7 +886,7 @@ HUF_decompress4X2_usingDTable_internal_body(
+> > >             HUF_DECODE_SYMBOLX2_0(op2, &bitD2);
+> > >             HUF_DECODE_SYMBOLX2_0(op3, &bitD3);
+> > >             HUF_DECODE_SYMBOLX2_0(op4, &bitD4);
+> > > -            endSignal = (U32)LIKELY(
+> > > +            endSignal = (U32)LIKELY((U32)
+> > >                         (BIT_reloadDStreamFast(&bitD1) == BIT_DStream_unfinished)
+> > >                       & (BIT_reloadDStreamFast(&bitD2) == BIT_DStream_unfinished)
+> > >                       & (BIT_reloadDStreamFast(&bitD3) == BIT_DStream_unfinished)
 > 
-> I'll send a fix ASAP.
+> Isn't that the same as:
+> 	((BIT_reload() & BIT_reload() & BIT_reload()) == BIT_DStream_unfinished)
+> which will generate much better code.
+> Especially on cpu without 'seteq' instructions.
 
-Hmm... GCC haven't showed anything here.
-In any case, v3 has just been sent out.
+I don't think so. Feel free to double check my math.
 
--- 
-With Best Regards,
-Andy Shevchenko
+BIT_reloadDStreamFast() can return either BIT_DStream_unfinished (0) or
+BIT_DStream_overflow (3). Let's say the second call returns
+BIT_DStream_overflow but the others return BIT_DStream_unfinished.
 
+Current code:
 
+(BIT_reloadDStreamFast(&bitD1) == BIT_DStream_unfinished) &
+(BIT_reloadDStreamFast(&bitD2) == BIT_DStream_unfinished) &
+(BIT_reloadDStreamFast(&bitD3) == BIT_DStream_unfinished)
+
+(BIT_DStream_unfinished == BIT_DStream_unfinished) &
+(BIT_DStream_overflow == BIT_DStream_unfinished) &
+(BIT_DStream_unfinished == BIT_DStream_unfinished)
+
+(1 & 0 & 1)
+
+Final result: 0
+
+Your suggestion:
+
+(BIT_reloadDStreamFast(&bitD1) &
+ BIT_reloadDStreamFast(&bitD2) &
+ BIT_reloadDStreamFast(&bitD3)) == BIT_DStream_unfinished
+
+(BIT_DStream_unfinished &
+ BIT_DStream_overflow &
+ BIT_DStream_unfinished) == BIT_DStream_unfinished
+
+(0 & 3 & 0) == 0
+
+(0) == 0
+
+Final result: 1
+
+Clang 13.0.0 and GCC 11.2.0 appear agree with me:
+
+https://godbolt.org/z/M78s1TTEx
+
+Cheers,
+Nathan
