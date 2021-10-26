@@ -1,40 +1,40 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF732CA8
-	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:12:02 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id m21so13233175pgu.13
-        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:12:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7E22CA8
+	for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 07:12:07 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id y1-20020a17090a134100b001a27a7e9c8dso1073447pjf.3
+        for <llvm@lists.linux.dev>; Tue, 26 Oct 2021 00:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=dxEoE3z3QyUF2/I3A7I9pyjQJbuepmY3kvNx8IZRwGg=;
-        b=CmYoQgZTvVIPPzJ6zq3Z+6T3ttzskepfKoJmie5YHSHo1EIgCPN5WWc5Pe7SrNvjZh
-         pL9L6hwzUHWtejlW1+Hw3S5hRq7inotQQhYo8Wl9X7OohBCSyD4/LLTN6QXT6jfiuq5E
-         HoF6Iba+nHlEfh66Vo9yclfH0A3zvaCylQaAWnfS1LfeHf9SI2qEqRXB+ZM9WrmasQsz
-         ryE5SYt4b6hLc8l2OIpRlZ6Yc/nwGQs8RDhlH2orO7MrHV/bXKCSKNoAbgQPBDr+AbUQ
-         +SuVQdeW0ghsbt6Y6Ih9mN9S3ozEgS4NIUb+q570VtrqndR2Rg/Gkfr95KCaDHQA9rx0
-         cy+A==
+        bh=pcmEq5vv4/Zod2OeFqMFRTk1dpSjGR5ACaXGxWChEao=;
+        b=UROeYmwKyzBBptFZ2WM2sIvqfej1E24tNMxcO+fJbUuoHrtg/lP7jjI67OH+qdCK4c
+         2EX6FMwa7uegRS2RqUpww4jwphTv3ml7Ungd7Ij4XVp63cooOxW5qnW3tLyuLnL4Ujec
+         yQTW9BW+JoxLOLN3rYXVIFEeMznSxvuuCrfsVwkgbJCscGZIaOkCz3EXJPM0XoNyNhB5
+         wWzFJss7rNc1Nx1qv4ymI2cYLw47ggMMnOVtp1I/v4Wx8VSxQP/njbRy1wHnwUsLcKK1
+         4Y9AhoJBsGfjAxDCp94+ofWuBiouce9rBw3kpF2H/QE8vQSax6TWM9HPtsL/BuMIu2jj
+         ZFmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=dxEoE3z3QyUF2/I3A7I9pyjQJbuepmY3kvNx8IZRwGg=;
-        b=oXhVrNEMtRSOvY6cwQayvfXb5EEgWH/2PoB+LO/ApO6gN991FSELnrqoNMBtJJzCGi
-         LmUH7a5RabdmVMBCqm4Oq8iTla9uyGra8XjECrMB63taMqR9adndHpeKaxl19SEmYvgl
-         svKEDRJJqbKzq1UYMWQeyFYf1K/h74fgwtDN0iyivE5d7zCBEOILCh3gIeQFoE3t2c6a
-         WG3XKViqHAB0AEe9Q0WG+AFHeUymFcoybK0VlI1wAD4wjHmKrLa7WCV1sNkWPVQJrisN
-         tF/5SA98aZZUu7Sscx8pOwM8w9ui75Gut0Gvzw6u+K42qpqiBfHuCgGIymLlBido1TYH
-         cskA==
-X-Gm-Message-State: AOAM533f7SS7JZLWRVuO2x9o+JWT/hLhy33JTDQVN5G7Ws1LtOGPIJbD
-	8uu4pTjxGoSuvjT6y6Q8DVw=
-X-Google-Smtp-Source: ABdhPJxl+nO2g7yQI971iTkXUajKfvqScKWHJ40sy8+37DVb/q4vd7Ytk8NPpyCTRi+OClxNXDttXA==
-X-Received: by 2002:aa7:914f:0:b0:44d:6f5e:f11a with SMTP id 15-20020aa7914f000000b0044d6f5ef11amr23157212pfi.10.1635232321984;
-        Tue, 26 Oct 2021 00:12:01 -0700 (PDT)
+        bh=pcmEq5vv4/Zod2OeFqMFRTk1dpSjGR5ACaXGxWChEao=;
+        b=2XhZOnqUOaALVKDhapAoN21eVqc7V+Ts5ioRp3qmZlp6WeLldnjIDJY6l9TB0ZCZ84
+         35SEY7xpk1q655YZ5dLxITDB7zf1BZ/Z1DOIMOBOBEvQg8JrT8WyDllILpx+H+0WGbGo
+         eAoTezGd1WP1tkq+KBEZQBUjkmYzbflI/BAyiMir4sFG4KfWF92SbzWSWELBvHnwD636
+         PDddyHSwRWl/zqkwBNufleF05OVDNiERPXfOD+picJLDLu0s2HCoxSWWe6x444rsIeqd
+         RLNsqQSeZnJsBPljaeYKYO0H4E0PjVBktkWHGGzzFAk1PUuTavIUT152M3koWJR9I5fU
+         8L3g==
+X-Gm-Message-State: AOAM530oSc1DYAAG8CLIgcTBOJFtwpFleg7YIKjFdpOAKhwJzvV81p+X
+	ME2UYnAgv2Cx1stZknx8kOw=
+X-Google-Smtp-Source: ABdhPJziu59cIkiWnsyl37/UYoRpXfnGMq87xvUw1+ZM3AAuKyK6nSnS4JbZ8hGQuLkxHrsKU3d2lA==
+X-Received: by 2002:a17:90a:2bca:: with SMTP id n10mr27232652pje.241.1635232327365;
+        Tue, 26 Oct 2021 00:12:07 -0700 (PDT)
 Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
-        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.11.56
+        by smtp.gmail.com with ESMTPSA id l11sm23243367pjg.22.2021.10.26.00.12.02
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Oct 2021 00:12:01 -0700 (PDT)
+        Tue, 26 Oct 2021 00:12:07 -0700 (PDT)
 From: Dillon Min <dillon.minfei@gmail.com>
 To: mchehab@kernel.org,
 	mchehab+huawei@kernel.org,
@@ -60,9 +60,9 @@ Cc: patrice.chotard@foss.st.com,
 	lkp@intel.com,
 	kbuild-all@lists.01.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v7 06/10] media: videobuf2: Fix the size printk format
-Date: Tue, 26 Oct 2021 15:11:18 +0800
-Message-Id: <1635232282-3992-7-git-send-email-dillon.minfei@gmail.com>
+Subject: [PATCH v7 07/10] media: v4l2-ctrls: Add V4L2_CID_COLORFX_CBCR max setting
+Date: Tue, 26 Oct 2021 15:11:19 +0800
+Message-Id: <1635232282-3992-8-git-send-email-dillon.minfei@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
 References: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
@@ -72,42 +72,31 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-Since the type of parameter size is unsigned long,
-it should printk by %lu, instead of %ld, fix it.
-
-Fixes: 7952be9b6ece ("media: drivers/media/common/videobuf2: rename from videobuf")
+The max of V4L2_CID_COLORFX_CBCR is 0xffff, so add it to v4l2_ctrl_fill()
+to sure not beyond that.
 
 Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
 ---
- drivers/media/common/videobuf2/videobuf2-dma-contig.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index b052a4e36961..7cd6648ccd26 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -257,7 +257,7 @@ static void *vb2_dc_alloc(struct vb2_buffer *vb,
- 		ret = vb2_dc_alloc_coherent(buf);
- 
- 	if (ret) {
--		dev_err(dev, "dma alloc of size %ld failed\n", size);
-+		dev_err(dev, "dma alloc of size %lu failed\n", size);
- 		kfree(buf);
- 		return ERR_PTR(-ENOMEM);
- 	}
-@@ -298,9 +298,9 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
- 
- 	vma->vm_ops->open(vma);
- 
--	pr_debug("%s: mapped dma addr 0x%08lx at 0x%08lx, size %ld\n",
--		__func__, (unsigned long)buf->dma_addr, vma->vm_start,
--		buf->size);
-+	pr_debug("%s: mapped dma addr 0x%08lx at 0x%08lx, size %lu\n",
-+		 __func__, (unsigned long)buf->dma_addr, vma->vm_start,
-+		 buf->size);
- 
- 	return 0;
- }
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index ebe82b6ba6e6..0cb6c0f18b39 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1400,6 +1400,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 		/* Max is calculated as RGB888 that is 2^24 */
+ 		*max = 0xFFFFFF;
+ 		break;
++	case V4L2_CID_COLORFX_CBCR:
++		*type = V4L2_CTRL_TYPE_INTEGER;
++		*step = 1;
++		*min = 0;
++		*max = 0xffff;
++		break;
+ 	case V4L2_CID_FLASH_FAULT:
+ 	case V4L2_CID_JPEG_ACTIVE_MARKER:
+ 	case V4L2_CID_3A_LOCK:
 -- 
 2.7.4
 
