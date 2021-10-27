@@ -1,158 +1,103 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FF72C87
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 12:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=0z5NDzCtlOwHHhgAD3ly37TdTgkGBv/4gSMBHNMsdKY=; b=q9Q8ekM+UaM+xr6OfbQ3V1wXrr
-	modZ8Ej3QQc+Jk4aOob2UIx4RIYG40EUZKwOID49pYacuSnEpkempHjDuJrGB7D3rNFyZ1DcSJQ3X
-	FoPV3LReAWmlkS71Q8GxIKgDTsUpHcXMIEAFS8h3cd7UUCUU7u9Mys40x9v3DVaZLV74Bbpc6TDdH
-	qgOQSu7uFM2+MVLFczcLbfiAhH4GUxC7glAO7ORi338xrFnzjWiiOv3Koozc6AePu3fTSDfbALoIM
-	CqPrWAKbiaZpoEL2+DogKfJloLnyyfNX8MCJIB1jE6pJvsHgSTh64e5rpaxtfGaqm1tWm5gqiDlH0
-	adGZMw3g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mfhsL-00CYHg-K7; Wed, 27 Oct 2021 12:17:49 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0BB39981FD2; Wed, 27 Oct 2021 14:17:48 +0200 (CEST)
-Date: Wed, 27 Oct 2021 14:17:47 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc: paulmck@kernel.org, will@kernel.org, boqun.feng@gmail.com,
-	stern@rowland.harvard.edu, parri.andrea@gmail.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	elver@google.com, charalampos.mainas@gmail.com,
-	pramod.bhatotia@in.tum.de
-Subject: Re: Potentially Broken Address Dependency via test_bit() When
- Compiling With Clang
-Message-ID: <20211027121747.GI174703@worktop.programming.kicks-ass.net>
-References: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665552C87
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 12:22:40 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E982A6109E
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 12:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635337360;
+	bh=KrKaQqKbbs7fp0tX/5B2QBFkr3zbaPH6N//I03icq24=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ao9WbRSQAymJBRKUQbYazQ5RSOSI2vIb6XrGwWk0hPl4q51jMvh7TQ9cqCasKBzV/
+	 9xUtimn4Qz30W69d96vo+tln64ib8+OHRfWEadE0ZsUn5x7DEaQqKMpLpGmf3xZdKI
+	 7GYvEydp4YbyNWCdeJgWG3MNYCY4zRfJeX9NPBEdpBzYmGWHAItssW2FENkz0TnQoh
+	 cJ4+YSoxsgc7Gwfb2dz84CMXKN+9Zxyr/s9z5z0EDdNaDhheCc8w1Gw4mNAhUaIsk8
+	 e6F/nhIExzQt/4keODrgRI9kLEOA7GbDNLiXWQdtuMilGbaWhOQ8Qz4NSGWnGSk+9F
+	 hhoJ4bN0PzA1w==
+Received: by mail-ot1-f50.google.com with SMTP id t17-20020a056830083100b00553ced10177so3108064ots.1
+        for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 05:22:39 -0700 (PDT)
+X-Gm-Message-State: AOAM530QhpPbrK1MnMkeHFKCtFPW+Oh0/gXM5Lpqn7ezwsoSq7erdlWo
+	AfoghH11Bkf6UibRanR4ay1Bop01pIFIucElgaQ=
+X-Google-Smtp-Source: ABdhPJzVX/seCAE8zMFUTrmcCl1ksiUWfoUg3beE0jMfsnuGwfY2cGApv5OTKHT/FXGbFtKlxXNBzniBhk1jb7R49p4=
+X-Received: by 2002:a05:6830:1018:: with SMTP id a24mr25527047otp.112.1635337359227;
+ Wed, 27 Oct 2021 05:22:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211026201622.GG174703@worktop.programming.kicks-ass.net> <20211027120515.GC54628@C02TD0UTHF1T.local>
+In-Reply-To: <20211027120515.GC54628@C02TD0UTHF1T.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 27 Oct 2021 14:22:27 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+Message-ID: <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
-> Hi all,
-> 
-> For my bachelor thesis, I have been working on the infamous problem of 
-> potentially broken dependency orderings in the Linux kernel. I'm being 
-> advised by Marco Elver, Charalampos Mainas, Pramod Bhatotia (Cc'd).
+On Wed, 27 Oct 2021 at 14:05, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Tue, Oct 26, 2021 at 10:16:22PM +0200, Peter Zijlstra wrote:
+> > On Wed, Oct 13, 2021 at 11:16:43AM -0700, Sami Tolvanen wrote:
+> > > This series adds support for Clang's Control-Flow Integrity (CFI)
+> > > checking to x86_64. With CFI, the compiler injects a runtime
+> > > check before each indirect function call to ensure the target is
+> > > a valid function with the correct static type. This restricts
+> > > possible call targets and makes it more difficult for an attacker
+> > > to exploit bugs that allow the modification of stored function
+> > > pointers. For more details, see:
+> > >
+> > >   https://clang.llvm.org/docs/ControlFlowIntegrity.html
+> >
+> > So, if I understand this right, the compiler emits, for every function
+> > two things: 1) the actual funcion and 2) a jump-table entry.
+> >
+> > Then, every time the address of a function is taken, 2) is given instead
+> > of the expected 1), right?
+>
+> Yes, and we had to bodge around this with function_nocfi() to get the
+> actual function address.
+>
+> Really there should be a compiler intrinsic or attribute for this, given
+> the compiler has all the releveant information available. On arm64 we
+> had to us inine asm to generate the addres...
+>
+> Taking a step back, it'd be nicer if we didn't have the jump-table shim
+> at all, and had some SW landing pad (e.g. a NOP with some magic bytes)
+> in the callees that the caller could check for. Then function pointers
+> would remain callable in call cases, and we could explcitly add landing
+> pads to asm to protect those. I *think* that's what the grsecurity folk
+> do, but I could be mistaken.
+>
+> > But how does this work with things like static_call(), which we give a
+> > function address (now a jump-table entry) and use that to write direct
+> > call instructions?
+> >
+> > Should not this jump-table thingy get converted to an actual function
+> > address somewhere around arch_static_call_transform() ? This also seems
+> > relevant for arm64 (which already has CLANG_CFI supported) given:
+> >
+> >   https://lkml.kernel.org/r/20211025122102.46089-3-frederic@kernel.org
+>
+> Ugh, yeah, we'll need to do the function_nocfi() dance somewhere...
+>
 
-Nice! Great to see someone working on this!
+Sadly, that only works on symbol names, so we cannot use it to strip
+CFI-ness from void *func arguments passed into the static call API,
+unfortunately.
 
-> For context, see: 
-> https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> 
-> Our approach consists of two LLVM compiler passes which annotate 
-> dependencies in unoptimised intermediate representation (IR) and verify 
-> the annotated dependencies in optimised IR. ATM, the passes only 
-> recognise a subset of address dependencies - everything is still WIP ;-)
-> 
-> We have been cross-compiling with a slightly modified version of 
-> allyesconfig for arm64, and the passes have now found a case that we 
-> would like to share with LKML for feedback: an address dependency being 
-> broken (?) through compiler optimisations in 
-> fs/afs/addr_list.c::afs_iterate_addresses().
-> 
-> Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
-> 
-> > [...]
-> >   index = READ_ONCE(ac->alist->preferred);
-> >   if (test_bit(index, &set))
-> >     goto selected;
-> > [...]
-> 
-> where test_bit() expands to the following in 
-> include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
-> 
-> > static __always_inline int
-> > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
-> > {
-> >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> > }
-> > #define test_bit arch_test_bit
-> 
-> The address dependency gets preserved in unoptimised IR since the virtual register %33 transitively depends on %28:
-> 
-> > %28 = load volatile i8, i8* %preferred, align 2, !annotation !15
-> > store i8 %28, i8* %tmp21, align 1
-> > %29 = load i8, i8* %tmp21, align 1
-> > %conv23 = zext i8 %29 to i32
-> > store i32 %conv23, i32* %index, align 4
-> > %30 = load i32, i32* %index, align 4
-> > store i32 %30, i32* %nr.addr.i, align 4
-> > store i64* %set, i64** %addr.addr.i, align 8
-> > %31 = load i64*, i64** %addr.addr.i, align 8
-> > %32 = load i32, i32* %nr.addr.i, align 4
-> > %div.i = udiv i32 %32, 64
-> > %idxprom.i = zext i32 %div.i to i64
-> > %arrayidx.i = getelementptr i64, i64* %31, i64 %idxprom.i
-> > %33 = load volatile i64, i64* %arrayidx.i, align 8, !annotation !16
-> 
-> In optimised IR, there is no dependency between the two volatile loads 
-> anymore:
-> 
-> > %11 = load volatile i8, i8* %preferred, align 2, !annotation !19
-> > %conv25 = zext i8 %11 to i32
-> > %set.0. = load volatile i64, i64* %set, align 8
-> 
-> Now, since @nr traces back to the READ_ONCE() to @index, does this make 
-> the load from @addr in test_bit() address-dependent on that READ_ONCE()? 
-> Should the load from @addr therefore be ordered against the READ_ONCE()?
-
-I would personally not consider this a dependend load. The result
-depends on two loads, but there is no actual ordering between them.
-
-  r1 = *x
-  r2 = *y
-  b = 1 & (r1 >> r2);
-
-(more or less)
-
-A dependent load would be something where the address of the second load
-depends on the value of the first load, eg:
-
-  r1 = *x;
-  r2 = *(y + r1);
-
-typically derefencing or array accesses have this pattern. The canonical
-example being rcu_dereference(), and is the reason Paul Mckenney is
-arguing that pointers should carry dependecies; I'll let him refer to
-the many C language papers on this.
-
-Other examples, ones we're actually worried about the compiler breaking,
-are, for example, the array access as found in __ktime_get_fast_ns():
-
-	seq = READ_ONCE(tkf->seq);
-	tkr = tkf->base + (seq & 1);
-	now = tkr->...
-
-Here the dependency is on an integer (seq), and worse, only a single bit
-of it. If the compiler were this to transform into something like:
-
-	seq = READ_ONCE(tkf->seq)
-	if (seq & 1) {
-		// use tkf->base[1]
-	} else {
-		// use tkf->base[0]
-	}
-
-Then it would be broken, since the condition doesn't order the two loads
-and they can be re-ordered. Which in turn breaks the premise of the
-seqcount_latch construct -- see the comment that goes with
-raw_write_seqcount_latch() in seqlock.h.
-
-hth,
-
-~Peter
-
+Also, function_nocfi() seems broken in the sense that it relies on the
+symbol existing in the global namespace, which may not be true for
+function symbols with static linkage, as they can be optimized away
+entirely. I think the same might apply to function symbols with
+external linkage under LTO.
