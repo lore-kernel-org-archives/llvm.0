@@ -1,36 +1,50 @@
-Received: from mail-out1.informatik.tu-muenchen.de (mail-out1.in.tum.de [131.159.0.8])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805F72CA8
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 10:29:04 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-	by mail-out1.informatik.tu-muenchen.de (Postfix) with ESMTP id C77A12401CC;
-	Wed, 27 Oct 2021 12:19:51 +0200 (CEST)
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id C482F172; Wed, 27 Oct 2021 12:19:51 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id A18D216F;
-	Wed, 27 Oct 2021 12:19:51 +0200 (CEST)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 9E068B7;
-	Wed, 27 Oct 2021 12:19:51 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id 99BF84A046E; Wed, 27 Oct 2021 12:19:51 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id 836554A040D;
-	Wed, 27 Oct 2021 12:19:50 +0200 (CEST)
-	(Extended-Queue-bit tech_zfnoy@fff.in.tum.de)
-Date: Wed, 27 Oct 2021 12:19:48 +0200
-From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To: paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
-	boqun.feng@gmail.com, stern@rowland.harvard.edu,
-	parri.andrea@gmail.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: elver@google.com, charalampos.mainas@gmail.com,
-	pramod.bhatotia@in.tum.de
-Subject: Potentially Broken Address Dependency via test_bit() When Compiling
- With Clang
-Message-ID: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4662C87
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 10:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kjEt7cLdB7cPY697Uxk7dOM1bUF1hgkDJORd+L3Zemw=; b=EjvrI8xmrCQvizKIITT1kd5sfX
+	Cwh5JtTCAqtPJJENlQ9U04/4v8GsIXNQvHTW3qFvxwiccJAMJV50vqxuAjtELdXSD/BWkC9DGCeQu
+	5GjyaEsphuI6PG2zbE4fI3p0JZHAYsehpR2XfgzX5HIduZLhYsGphLQs+z1XPKTIouDXUfXfIx2LZ
+	hhIVSi1Sc8xcJMHcl9b5hxp6B7FpSzmYhUvJ8p9FDyLaI3AeWuO6j+To0Y2ZHLEYzEXZWhxI91SRU
+	KwSD/LJ1/7N1s4cBUGMFzrntaq83hbtPtk7PsBSszHjxg/j4Q1EY+iYYZd00cz7nxC0QpdGsgdR/A
+	xJxXMVlw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mffzm-00CX9d-Lr; Wed, 27 Oct 2021 10:17:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 50F2D30031A;
+	Wed, 27 Oct 2021 12:17:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 355282B41AF5C; Wed, 27 Oct 2021 12:17:21 +0200 (CEST)
+Date: Wed, 27 Oct 2021 12:17:21 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: David Laight <David.Laight@aculab.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"mark.rutland@arm.com" <mark.rutland@arm.com>
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
+Message-ID: <YXknMVcB1tWaPtoU@hirez.programming.kicks-ass.net>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211026201622.GG174703@worktop.programming.kicks-ass.net>
+ <7ebed28b73bb48cd9b69e9097f0aa613@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,72 +53,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <7ebed28b73bb48cd9b69e9097f0aa613@AcuMS.aculab.com>
 
-Hi all,
+On Wed, Oct 27, 2021 at 10:02:56AM +0000, David Laight wrote:
+> From: Peter Zijlstra
+> > Sent: 26 October 2021 21:16
+> > 
+> > On Wed, Oct 13, 2021 at 11:16:43AM -0700, Sami Tolvanen wrote:
+> > > This series adds support for Clang's Control-Flow Integrity (CFI)
+> > > checking to x86_64. With CFI, the compiler injects a runtime
+> > > check before each indirect function call to ensure the target is
+> > > a valid function with the correct static type. This restricts
+> > > possible call targets and makes it more difficult for an attacker
+> > > to exploit bugs that allow the modification of stored function
+> > > pointers. For more details, see:
+> > >
+> > >   https://clang.llvm.org/docs/ControlFlowIntegrity.html
+> > 
+> > So, if I understand this right, the compiler emits, for every function
+> > two things: 1) the actual funcion and 2) a jump-table entry.
+> > 
+> > Then, every time the address of a function is taken, 2) is given instead
+> > of the expected 1), right?
+> > 
+> > But how does this work with things like static_call(), which we give a
+> > function address (now a jump-table entry) and use that to write direct
+> > call instructions?
+> > 
+> > Should not this jump-table thingy get converted to an actual function
+> > address somewhere around arch_static_call_transform() ? This also seems
+> > relevant for arm64 (which already has CLANG_CFI supported) given:
+> > 
+> >   https://lkml.kernel.org/r/20211025122102.46089-3-frederic@kernel.org
+> > 
+> > Or am I still not understanding this CFI thing?
+> 
+> From what I remember the compiler adds code prior to every jump indirect
+> to check that the function address is in the list of valid functions
+> (with a suitable prototype - or some similar check).
 
-For my bachelor thesis, I have been working on the infamous problem of 
-potentially broken dependency orderings in the Linux kernel. I'm being 
-advised by Marco Elver, Charalampos Mainas, Pramod Bhatotia (Cc'd).
+It definitely mucks about with the address too; see here:
 
-For context, see: 
-https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+  https://lkml.kernel.org/r/YW6a67fGzM2AyHot@hirez.programming.kicks-ass.net
 
-Our approach consists of two LLVM compiler passes which annotate 
-dependencies in unoptimised intermediate representation (IR) and verify 
-the annotated dependencies in optimised IR. ATM, the passes only 
-recognise a subset of address dependencies - everything is still WIP ;-)
-
-We have been cross-compiling with a slightly modified version of 
-allyesconfig for arm64, and the passes have now found a case that we 
-would like to share with LKML for feedback: an address dependency being 
-broken (?) through compiler optimisations in 
-fs/afs/addr_list.c::afs_iterate_addresses().
-
-Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
-
-> [...]
->   index = READ_ONCE(ac->alist->preferred);
->   if (test_bit(index, &set))
->     goto selected;
-> [...]
-
-where test_bit() expands to the following in 
-include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
-
-> static __always_inline int
-> arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
-> {
->   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> }
-> #define test_bit arch_test_bit
-
-The address dependency gets preserved in unoptimised IR since the virtual register %33 transitively depends on %28:
-
-> %28 = load volatile i8, i8* %preferred, align 2, !annotation !15
-> store i8 %28, i8* %tmp21, align 1
-> %29 = load i8, i8* %tmp21, align 1
-> %conv23 = zext i8 %29 to i32
-> store i32 %conv23, i32* %index, align 4
-> %30 = load i32, i32* %index, align 4
-> store i32 %30, i32* %nr.addr.i, align 4
-> store i64* %set, i64** %addr.addr.i, align 8
-> %31 = load i64*, i64** %addr.addr.i, align 8
-> %32 = load i32, i32* %nr.addr.i, align 4
-> %div.i = udiv i32 %32, 64
-> %idxprom.i = zext i32 %div.i to i64
-> %arrayidx.i = getelementptr i64, i64* %31, i64 %idxprom.i
-> %33 = load volatile i64, i64* %arrayidx.i, align 8, !annotation !16
-
-In optimised IR, there is no dependency between the two volatile loads 
-anymore:
-
-> %11 = load volatile i8, i8* %preferred, align 2, !annotation !19
-> %conv25 = zext i8 %11 to i32
-> %set.0. = load volatile i64, i64* %set, align 8
-
-Now, since @nr traces back to the READ_ONCE() to @index, does this make 
-the load from @addr in test_bit() address-dependent on that READ_ONCE()? 
-Should the load from @addr therefore be ordered against the READ_ONCE()?
-
-Many thanks,
-Paul
+I'm thinking static_call() wants the real actual function address before
+it writes instructions.
