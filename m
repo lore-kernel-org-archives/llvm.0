@@ -1,117 +1,223 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF29B72
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 15:34:38 +0000 (UTC)
-Received: by mail-oi1-f177.google.com with SMTP id q124so3963320oig.3
-        for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 08:34:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C22972
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 15:50:29 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id i65so7489231ybb.2
+        for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 08:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=2kqOpDFNZWPONI45Sby6qnOsMGbi3VIWS2JFQhhdImo=;
-        b=GixmIbMGs686zqmSCHXywp2xoX2owfUVe6pBf4ojmha6g6G720NHuL8RcuXoLi/A8k
-         E+d5CRy0MRcasKm2Z1LjHWkASDn+oID3sWQ2O9Si08N68bsmuK3kkNrnPtwCd8r7gMFy
-         3EjEmieCs2+FvkzfJ/tHHGdjCXZUDLqSNqfo/bWXDx0z9jRM8R0R89WR0eBxg+y3ntdc
-         MJwtPpB8VdXOxAofBYTmplPxr2Lf3ihJDBTeRbb9QVpalkzUubklokKpHlBbVhV2ME39
-         chZhGb0tLL5u4dsxUmWUWfq0V4THBjzfiW+wNdUs/r8lyhv1TvACRkfmncKSqMOa/NTd
-         fp2Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xT3+nmu87OUZUlUqDOD62awQnojwMPGi3jG6yVIYB20=;
+        b=Q5LslJIP1WUECn+19rRJj5nPB6Bw+vkyE5RDu6YMSkOWj1yqa/r0xmS3A1hkwuQW4o
+         N0rir4ytbQGNZrYwQ8olQ86SR9M3AjkZavvc7zfuvQjyj46lk4YV/pmrZNHcSVzsh6kp
+         15QYxWKGONAT6kEVnPluF5lEzyZiXcI8dlV1CXqciS+NG+iTJxOnD3gPrOULCFVzQvDk
+         11Ew+fnTS1X6vbrkw9x1Dt4iwf5ZG5xXv7fUfn8iR7udBLczkl3G6KvjRAv0/9ajYEDG
+         zfYTawSOgY+RRpWN6rkRcFHmeqb59QVbejF6wxvI5dVBAQ3XJf+8uwqnYVSZR4aIzf7q
+         yiJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=2kqOpDFNZWPONI45Sby6qnOsMGbi3VIWS2JFQhhdImo=;
-        b=OgN+w5AhFwrSvhmVSkedEMcvWd55BRFN1vPuwQZkka+aqp/ATdiuAPiL1DQB+1DOjF
-         wwPapdrvBtlI5zqsQjdTiBd7omncfFEdDBSTjA43wG5tXlgH7OfavQHiT7yzxiX5O9Nm
-         6vBkYUBdd/XMkKp2Jg6ntO8A7h0s8lgQnwVCyz8/Oo7bXjp9M2r5hk+fkxUzdRUHxnDs
-         CUCMOuZYTv14R4WPx5hPrinaWt22g6IHVCKSEY2JWEbG+5Prm7j6jeDo+zJtfoobWSdB
-         YzOmJoqnBdDIA1VOkOII3vTh/6YpxFF1z9qxMLXRW/mXNHPAWj3svoEBOfTDFjDNavzB
-         6Gag==
-X-Gm-Message-State: AOAM531et9y/+9d6kHK0uiQ9BP75MKE16nwywfw1qF4yBhzAnZ1GkOdZ
-	C2klJuF/1H+R6wGaFsOt/eb5JA==
-X-Google-Smtp-Source: ABdhPJxHlUKQcq9gL8E1EMCWFzJ2GXhdqxww7BgyGokiGEaVW5k98shF8mFUbg4PxxKNkz+q+PsYvg==
-X-Received: by 2002:a05:6808:1287:: with SMTP id a7mr4104275oiw.45.1635348877700;
-        Wed, 27 Oct 2021 08:34:37 -0700 (PDT)
-Received: from fedora ([187.64.134.142])
-        by smtp.gmail.com with ESMTPSA id j7sm106300oon.13.2021.10.27.08.34.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 08:34:36 -0700 (PDT)
-Date: Wed, 27 Oct 2021 12:34:30 -0300
-From: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-To: sean@mess.org, u.kleine-koenig@pengutronix.de, lkp@intel.com,
-	mchehab@kernel.org, thierry.reding@gmail.com, lee.jones@linaro.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org
-Subject: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
-Message-ID: <YXlxhpZWf2mxJaMi@fedora>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xT3+nmu87OUZUlUqDOD62awQnojwMPGi3jG6yVIYB20=;
+        b=qlaP1rYFtx2fkLhEIQSt9/S7vFejFcG9ZEK4j68ol1nR4BcRYrlVpqYHsSy0s8uM7Z
+         ZRlcmvpiPrwprXEMhOqm+oGFl4Cgk222pMBasB2l/v9Lg4N0HUGsPl4Bw7lQZHUZsWDA
+         hZ0lgcHiShw4JPj2kFdEJUWUA0ZaeD2wly4SJXWQzIXER++dov7HcH7zy1SKAcvKQtKX
+         UC9aKL+9843SGzScJeRgPQOTx6q8bZpZJXvGvFSJEffDzIv3zspBvnRpl0L2VUmL5J7A
+         dM206AE/d+xw8CLot/XGqTw9f3Nv+gGcTMuMsGN0jrpyBQo4tahWUeptqjwrDWsvg0hY
+         U+6Q==
+X-Gm-Message-State: AOAM531+G7ekdZrWEYHq56FvsVJ8EiBXGqdzWIkpO17K0dVrXttBwhcV
+	EYLxiL/P14TP3+amXz6sa+wDdnWjNq32baDu2TCcaA==
+X-Google-Smtp-Source: ABdhPJwncYgYFBIOkxUnviwTtsfI9zj7enKWmTCleclo8t3495Q8kck0zJ2FZXeomTaXwjvQvdIiWEbHg5VhZsjTwFY=
+X-Received: by 2002:a25:bf81:: with SMTP id l1mr984264ybk.289.1635349828212;
+ Wed, 27 Oct 2021 08:50:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211026201622.GG174703@worktop.programming.kicks-ass.net>
+ <20211027120515.GC54628@C02TD0UTHF1T.local> <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+ <20211027124852.GK174703@worktop.programming.kicks-ass.net>
+ <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net> <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
+ <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net> <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
+In-Reply-To: <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 27 Oct 2021 08:50:17 -0700
+Message-ID: <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, X86 ML <x86@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Remove legacy PWM interface (pwm_config, pwm_enable, pwm_disable) and
-replace it for the atomic PWM API.
+On Wed, Oct 27, 2021 at 7:18 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 27 Oct 2021 at 16:03, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Wed, Oct 27, 2021 at 03:30:11PM +0200, Ard Biesheuvel wrote:
+> >
+> > > As far as I can tell from playing around with Clang, the stubs can
+> > > actually be executed directly,
+> >
+> > I had just finished reading the clang docs which suggest as much and was
+> > about to try what the compiler actually generates.
+> >
+> > > they just jumps to the actual function.
+> > > The compiler simply generates a jump table for each prototype that
+> > > appears in the code as the target of an indirect jump, and checks
+> > > whether the target appears in the list.
+> > >
+> > > E.g., the code below
+> > >
+> > > void foo(void) {}
+> > > void bar(int) {}
+> > > void baz(int) {}
+> > > void (* volatile fn1)(void) = foo;
+> > > void (* volatile fn2)(int) = bar;
+> > >
+> > > int main(int argc, char *argv[])
+> > > {
+> > >   fn1();
+> > >   fn2 = baz;
+> > >   fn2(-1);
+> > > }
+> > >
+> > > produces
+> > >
+> > > 0000000000400594 <foo.cfi>:
+> > >   400594: d65f03c0 ret
+> > >
+> > > 0000000000400598 <bar.cfi>:
+> > >   400598: d65f03c0 ret
+> > >
+> > > 000000000040059c <baz.cfi>:
+> > >   40059c: d65f03c0 ret
+> >
+> > Right, so these are the actual functions ^.
+> >
+> > > 00000000004005a0 <main>:
+> > >   4005a0: a9bf7bfd stp x29, x30, [sp, #-16]!
+> > >
+> > > // First indirect call
+> > >   4005a4: b0000088 adrp x8, 411000 <__libc_start_main@GLIBC_2.17>
+> > >   4005a8: f9401508 ldr x8, [x8, #40]
+> > >   4005ac: 90000009 adrp x9, 400000 <__abi_tag-0x278>
+> > >   4005b0: 91182129 add x9, x9, #0x608
+> > >   4005b4: 910003fd mov x29, sp
+> > >   4005b8: eb09011f cmp x8, x9
+> > >   4005bc: 54000241 b.ne 400604 <main+0x64>  // b.any
+> > >   4005c0: d63f0100 blr x8
+> >
+> > That's impenetrable to me, sorry.
+> >
+>
+> This loads the value of fn1 in x8, and takes the address of the jump
+> table in x9. Since it is only one entry long, it does a simple compare
+> to check whether x8 appears in the jump table, and branches to the BRK
+> at the end if they are different.
+>
+> > > // Assignment of fn2
+> > >   4005c4: 90000009 adrp x9, 400000 <__abi_tag-0x278>
+> > >   4005c8: b0000088 adrp x8, 411000 <__libc_start_main@GLIBC_2.17>
+> > >   4005cc: 91184129 add x9, x9, #0x610
+> > >   4005d0: f9001909 str x9, [x8, #48]
+> >
+> > I'm struggling here, x9 points to the branch at 400610, but then what?
+> >
+> > x8 is in .data somewhere?
+> >
+>
+> This takes the address of the jump table entry of 'baz' in x9, and
+> stores it in fn2 whose address is taken in x8.
+>
+>
+> > > // Second indirect call
+> > >   4005d4: f9401908 ldr x8, [x8, #48]
+> > >   4005d8: 90000009 adrp x9, 400000 <__abi_tag-0x278>
+> > >   4005dc: 91183129 add x9, x9, #0x60c
+> > >   4005e0: cb090109 sub x9, x8, x9
+> > >   4005e4: 93c90929 ror x9, x9, #2
+> > >   4005e8: f100053f cmp x9, #0x1
+> > >   4005ec: 540000c8 b.hi 400604 <main+0x64>  // b.pmore
+> > >   4005f0: 12800000 mov w0, #0xffffffff            // #-1
+> > >   4005f4: d63f0100 blr x8
+> > >
+> > >
+> > >   4005f8: 2a1f03e0 mov w0, wzr
+> > >   4005fc: a8c17bfd ldp x29, x30, [sp], #16
+> > >   400600: d65f03c0 ret
+> > >   400604: d4200020 brk #0x1
+> >
+> >
+> > > 0000000000400608 <__typeid__ZTSFvvE_global_addr>:
+> > >   400608: 17ffffe3 b 400594 <foo.cfi>
+> > >
+> > > 000000000040060c <__typeid__ZTSFviE_global_addr>:
+> > >   40060c: 17ffffe3 b 400598 <bar.cfi>
+> > >   400610: 17ffffe3 b 40059c <baz.cfi>
+> >
+> > And these are the stubs per type.
+> >
+> > > So it looks like taking the address is fine, although not optimal due
+> > > to the additional jump.
+> >
+> > Right.
+> >
+>
+> ... although it does seem that function_nocfi() doesn't actually work
+> as expected, given that we want the address of <func>.cfi and not the
+> address of the stub.
 
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
-Reported-by: kernel test robot <lkp@intel.com>
----
-V1 -> V2: Assign variables directly and simplify conditional statement
-V2 -> V3: Fix declaration of undeclared variables
-V3 -> V4: Fix DIV_ROUND_CLOSEST error with u64 variables
----
- drivers/media/rc/pwm-ir-tx.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+This is because the example wasn't compiled with
+-fno-sanitize-cfi-canonical-jump-tables, which we use in the kernel.
+With non-canonical jump tables, <func> continues to point to the
+function and <func>.cfi_jt points to the jump table, and therefore,
+function_nocfi() returns the raw function address.
 
-diff --git a/drivers/media/rc/pwm-ir-tx.c b/drivers/media/rc/pwm-ir-tx.c
-index 4bc28d2c9cc9..105a9c24f1e3 100644
---- a/drivers/media/rc/pwm-ir-tx.c
-+++ b/drivers/media/rc/pwm-ir-tx.c
-@@ -53,22 +53,21 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int *txbuf,
- {
- 	struct pwm_ir *pwm_ir = dev->priv;
- 	struct pwm_device *pwm = pwm_ir->pwm;
--	int i, duty, period;
-+	struct pwm_state state;
-+	int i;
- 	ktime_t edge;
- 	long delta;
- 
--	period = DIV_ROUND_CLOSEST(NSEC_PER_SEC, pwm_ir->carrier);
--	duty = DIV_ROUND_CLOSEST(pwm_ir->duty_cycle * period, 100);
-+	pwm_init_state(pwm, &state);
- 
--	pwm_config(pwm, duty, period);
-+	state.period = DIV_ROUND_CLOSEST(NSEC_PER_SEC, pwm_ir->carrier);
-+	pwm_set_relative_duty_cycle(&state, pwm_ir->duty_cycle, 100);
- 
- 	edge = ktime_get();
- 
- 	for (i = 0; i < count; i++) {
--		if (i % 2) // space
--			pwm_disable(pwm);
--		else
--			pwm_enable(pwm);
-+		state.enabled = !(i % 2);
-+		pwm_apply_state(pwm, &state);
- 
- 		edge = ktime_add_us(edge, txbuf[i]);
- 		delta = ktime_us_delta(edge, ktime_get());
-@@ -76,7 +75,8 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int *txbuf,
- 			usleep_range(delta, delta + 10);
- 	}
- 
--	pwm_disable(pwm);
-+	state.enabled = false;
-+	pwm_apply_state(pwm, &state);
- 
- 	return count;
- }
--- 
-2.31.1
+> > > We could fudge around that by checking the
+> > > opcode at the target of the call, or token paste ".cfi" after the
+> > > symbol name in the static_call_update() macro, but it doesn't like
+> > > like anything is terminally broken tbh.
+> >
+> > Agreed, since the jump table entries are actually executable it 'works'.
+> >
+> > I really don't like that extra jump though, so I think I really do want
+> > that nocfi_ptr() thing. And going by:
+> >
+> >   https://clang.llvm.org/docs/ControlFlowIntegrityDesign.html#forward-edge-cfi-for-indirect-function-calls
+> >
+> > and the above, that might be possible (on x86) with something like:
+> >
+> > /*
+> >  * Turns a Clang CFI jump-table entry into an actual function pointer.
+> >  * These jump-table entries are simply jmp.d32 instruction with their
+> >  * relative offset pointing to the actual function, therefore decode the
+> >  * instruction to find the real function.
+> >  */
+> > static __always_inline void *nocfi_ptr(void *func)
+> > {
+> >         union text_poke_insn insn = *(union text_poke_insn *)func;
+> >
+> >         return func + sizeof(insn) + insn.disp;
+> > }
+> >
+> > But really, that wants to be a compiler intrinsic.
+>
+> Agreed. We could easily do something similar on arm64, but I'd prefer
+> to avoid that too.
 
+I'll see what we can do. Note that the compiler built-in we previously
+discussed would have semantics similar to function_nocfi(). It would
+return the raw function address from a symbol name, but it wouldn't
+decode the address from an arbitrary pointer, so this would require
+something different.
+
+Sami
