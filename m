@@ -1,79 +1,90 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEE12C81
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 12:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=07scw71Qfs4SI4ir9McWtaQKp2wLsiaRGVZmK2PzJ8k=; b=K7i9raGDP7DMyO3RzzHOftf1y7
-	tfwaocRSisRWhzUVRSLRUdSlMyJEP9lCWDhEGEvWHzDqW68jgKutVNhzQFXv6nxMbI/bxGqCI9bZg
-	xRZxDbETguyVyOxmQBD/CbAychhPQf9HRTwrWky+5erfju+jTp1JPBlConAJlBcFUQzJngYIjyWNJ
-	aPbzg+buloRgfGWGUWUonZZeJXMGNZBJFYThPJsxa8vghmoi+M2MGC3LEtCEcS3vRbbXznJB59ot0
-	vSAyLdKZAZRI17yQCnLx2Ht+66HkapompInFKqzLGI0QOqATCn6iAf6PIQfszE7kGWMvmRHNZDPZS
-	HbMMmLyg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mfiKQ-00CYVg-IL; Wed, 27 Oct 2021 12:46:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 695C298629C; Wed, 27 Oct 2021 14:46:49 +0200 (CEST)
-Date: Wed, 27 Oct 2021 14:46:49 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, x86@kernel.org,
-	Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, ardb@kernel.org
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <20211027124649.GJ174703@worktop.programming.kicks-ass.net>
-References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211026201622.GG174703@worktop.programming.kicks-ass.net>
- <20211027120515.GC54628@C02TD0UTHF1T.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787072C81
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 12:49:02 +0000 (UTC)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+	id 00696C63A3; Wed, 27 Oct 2021 13:48:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+	t=1635338940; bh=e5phXM1J44gIrmBY104P/Z08rUN8SJnDxfNLQ7YhK9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fXwpmhdz1XnLnKj4zPrYJ6JGcQZJmmNFwe1OFjLEXDsEx2s/3vGxAHZq/7RD51477
+	 b6OfiEW3+eZH4+Y8TPyWzeFkwAah6q+oQEPwTYsfUUiwSpZv/1WNyv2RVsGrtFIc/Q
+	 PJASj0OOsIwi3mvZo2NNc+wcjrle60lGtMO8HvUOoKThrWLx9AQjQ2qv4U383oY28H
+	 b+OKnCFBAHHi3Tg+PF9KHUqXsuIATctW8QJiuHskKMQ6Mz43zTvMwckj/ZZZWOm1JU
+	 kytwA8tGjTZ85qy3/h5Ck2ppu8HN6LdSR2EaKGm371M3ytRmp/kjsuA5873mqPHE37
+	 hgYCFqUv88PYA==
+Date: Wed, 27 Oct 2021 13:48:59 +0100
+From: Sean Young <sean@mess.org>
+To: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	kernel test robot <lkp@intel.com>, mchehab@kernel.org,
+	thierry.reding@gmail.com, Lee Jones <lee.jones@linaro.org>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v3] media: rc: pwm-ir-tx: Switch to atomic PWM API
+Message-ID: <20211027124859.GA6320@gofer.mess.org>
+References: <YXU2i0FtAGDRCMSu@fedora>
+ <202110271450.Z8JPybLg-lkp@intel.com>
+ <20211027061552.bb4fczniqp6b7amh@pengutronix.de>
+ <20211027073204.GA3978@gofer.mess.org>
+ <CAH7FV3nb8K2qKgGZh-uMCk_BykWJ_sOb7K-jEhNjazYSiXdqbw@mail.gmail.com>
+ <CAH7FV3=7Y7Z0y+Mq5Ak12KDMiZpHQHXGixF_pcrnQkuqCO9kvQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211027120515.GC54628@C02TD0UTHF1T.local>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH7FV3=7Y7Z0y+Mq5Ak12KDMiZpHQHXGixF_pcrnQkuqCO9kvQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Oct 27, 2021 at 01:05:15PM +0100, Mark Rutland wrote:
-> On Tue, Oct 26, 2021 at 10:16:22PM +0200, Peter Zijlstra wrote:
-> > On Wed, Oct 13, 2021 at 11:16:43AM -0700, Sami Tolvanen wrote:
-> > > This series adds support for Clang's Control-Flow Integrity (CFI)
-> > > checking to x86_64. With CFI, the compiler injects a runtime
-> > > check before each indirect function call to ensure the target is
-> > > a valid function with the correct static type. This restricts
-> > > possible call targets and makes it more difficult for an attacker
-> > > to exploit bugs that allow the modification of stored function
-> > > pointers. For more details, see:
-> > > 
-> > >   https://clang.llvm.org/docs/ControlFlowIntegrity.html
-> > 
-> > So, if I understand this right, the compiler emits, for every function
-> > two things: 1) the actual funcion and 2) a jump-table entry.
-> > 
-> > Then, every time the address of a function is taken, 2) is given instead
-> > of the expected 1), right?
-> 
-> Yes, and we had to bodge around this with function_nocfi() to get the
-> actual function address.
+Hi Maíra,
 
-The patch set under consideration seems to have forgotten to provide one
-for x86 :/
+On Wed, Oct 27, 2021 at 09:43:47AM -0300, Maíra Canal wrote:
+> [resend it in Plain Text]
+> Thank you for the feedback! I appreciate that! I'm new at the kernel
+> and I got a little confused about how to send the new patch. Should I
+> send a v4 of this patch or just send a new patch fixing this issue?
+> I'm sorry about the question and thank you for your attention.
 
-> Really there should be a compiler intrinsic or attribute for this, given
-> the compiler has all the releveant information available. On arm64 we
-> had to us inine asm to generate the addres...
+Please send out a v4 with the problem fixed.
 
-Agreed, this *really* shouldn't be an arch asm hack trying to undo
-something the compiler did.
+Also top-posting is deprecated on linux mailing lists.
 
+Thanks,
+
+Sean
+
+> > Em qua., 27 de out. de 2021 às 04:32, Sean Young <sean@mess.org> escreveu:
+> >>
+> >> On Wed, Oct 27, 2021 at 08:15:52AM +0200, Uwe Kleine-König wrote:
+> >> > On Wed, Oct 27, 2021 at 02:07:19PM +0800, kernel test robot wrote:
+> >> > > If you fix the issue, kindly add following tag as appropriate
+> >> > > Reported-by: kernel test robot <lkp@intel.com>
+> >> > >
+> >> > > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> >> > >
+> >> > > >> ERROR: modpost: "__udivdi3" [drivers/media/rc/pwm-ir-tx.ko] undefined!
+> >> >
+> >> > This comes from the line:
+> >> >
+> >> >       state.duty_cycle = DIV_ROUND_CLOSEST(pwm_ir->duty_cycle * state.period, 100);
+> >> >
+> >> > where DIV_ROUND_CLOSEST expands to a normal division but state.period is
+> >> > a u64. So this should use DIV64_U64_ROUND_CLOSEST I guess.
+> >>
+> >> DIV64_U64_ROUND_CLOSEST is for dividing a u64 with a u64. We're dividing
+> >> by 100 here so this is not necessary.
+> >>
+> >> It should use DIV_ROUND_CLOSEST_ULL, however it might be nicer to use:
+> >>
+> >>         pwm_set_relative_duty_cycle(&state, pwm_ir->duty_cycle, 100);
+> >>
+> >> Thanks
+> >>
+> >> Sean
