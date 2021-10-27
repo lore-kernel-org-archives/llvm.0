@@ -1,101 +1,97 @@
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id D161572
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 14:34:02 +0000 (UTC)
-Received: (qmail 1320733 invoked by uid 1000); 27 Oct 2021 10:27:20 -0400
-Date: Wed, 27 Oct 2021 10:27:20 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc: paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
-  boqun.feng@gmail.com, parri.andrea@gmail.com, linux-kernel@vger.kernel.org,
-  llvm@lists.linux.dev, elver@google.com, charalampos.mainas@gmail.com,
-  pramod.bhatotia@in.tum.de
-Subject: Re: Potentially Broken Address Dependency via test_bit() When
- Compiling With Clang
-Message-ID: <20211027142720.GB1319606@rowland.harvard.edu>
-References: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A82172
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 14:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/Z1LSjjxATuKspxn0VwS+AddSpEQQEMWAwB+9QtWo/A=; b=OkNK9AR8pr9DWcIIViUg3PoK7z
+	ZN0B2w5boSWWwN6Pv2E3KJDa3jJmRoBxmD5N2OHm+fh3nbYsSC4m5xq6i0lYRXIcmtlHdD74xMx8d
+	zC+Cu707kT1SV28DvUjI8isbTV4AflPhaCA1TdxQEgEQSRMhao1X4IEpc8dlw56AGJaSQmL4SOl/N
+	NDE5rQddQjZdBy47v/LRWuw+f+Si9QvLNbzXPbenigugnR4niiVstnAlVj/OMAyxZI7bNKSV1um7E
+	GJwoV3OzVI5ahq+eM2nzdXE6spkSb60F8NqA1pm/rkkgmOwg2RmvwFg1LQLir/g/mY9FnGHGxeYnc
+	V4XvcUNg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mfk2p-0006rV-7L; Wed, 27 Oct 2021 14:36:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D41BF30018E;
+	Wed, 27 Oct 2021 16:36:45 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 8B7762BF47876; Wed, 27 Oct 2021 16:36:45 +0200 (CEST)
+Date: Wed, 27 Oct 2021 16:36:45 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
+Message-ID: <YXlj/WaCIz4Nr/Fv@hirez.programming.kicks-ass.net>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211026201622.GG174703@worktop.programming.kicks-ass.net>
+ <20211027120515.GC54628@C02TD0UTHF1T.local>
+ <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+ <20211027124852.GK174703@worktop.programming.kicks-ass.net>
+ <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
+ <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
+ <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net>
+ <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
 
-On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
-> Hi all,
-> 
-> For my bachelor thesis, I have been working on the infamous problem of 
-> potentially broken dependency orderings in the Linux kernel. I'm being 
-> advised by Marco Elver, Charalampos Mainas, Pramod Bhatotia (Cc'd).
-> 
-> For context, see: 
-> https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> 
-> Our approach consists of two LLVM compiler passes which annotate 
-> dependencies in unoptimised intermediate representation (IR) and verify 
-> the annotated dependencies in optimised IR. ATM, the passes only 
-> recognise a subset of address dependencies - everything is still WIP ;-)
-> 
-> We have been cross-compiling with a slightly modified version of 
-> allyesconfig for arm64, and the passes have now found a case that we 
-> would like to share with LKML for feedback: an address dependency being 
-> broken (?) through compiler optimisations in 
-> fs/afs/addr_list.c::afs_iterate_addresses().
-> 
-> Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
-> 
-> > [...]
-> >   index = READ_ONCE(ac->alist->preferred);
-> >   if (test_bit(index, &set))
-> >     goto selected;
-> > [...]
-> 
-> where test_bit() expands to the following in 
-> include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
-> 
-> > static __always_inline int
-> > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
+On Wed, Oct 27, 2021 at 04:18:17PM +0200, Ard Biesheuvel wrote:
+> On Wed, 27 Oct 2021 at 16:03, Peter Zijlstra <peterz@infradead.org> wrote:
+
+> > /*
+> >  * Turns a Clang CFI jump-table entry into an actual function pointer.
+> >  * These jump-table entries are simply jmp.d32 instruction with their
+> >  * relative offset pointing to the actual function, therefore decode the
+> >  * instruction to find the real function.
+> >  */
+> > static __always_inline void *nocfi_ptr(void *func)
 > > {
-> >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> >         union text_poke_insn insn = *(union text_poke_insn *)func;
+
+also, probably, for the paranoid amongst us:
+
+	if (WARN_ON_ONCE(insn.opcode != JMP32_INSN_OPCODE))
+		return func;
+
+> >         return func + sizeof(insn) + insn.disp;
 > > }
-> > #define test_bit arch_test_bit
+> >
+> > But really, that wants to be a compiler intrinsic.
 > 
-> The address dependency gets preserved in unoptimised IR since the virtual register %33 transitively depends on %28:
-> 
-> > %28 = load volatile i8, i8* %preferred, align 2, !annotation !15
-> > store i8 %28, i8* %tmp21, align 1
-> > %29 = load i8, i8* %tmp21, align 1
-> > %conv23 = zext i8 %29 to i32
-> > store i32 %conv23, i32* %index, align 4
-> > %30 = load i32, i32* %index, align 4
-> > store i32 %30, i32* %nr.addr.i, align 4
-> > store i64* %set, i64** %addr.addr.i, align 8
-> > %31 = load i64*, i64** %addr.addr.i, align 8
-> > %32 = load i32, i32* %nr.addr.i, align 4
-> > %div.i = udiv i32 %32, 64
-> > %idxprom.i = zext i32 %div.i to i64
-> > %arrayidx.i = getelementptr i64, i64* %31, i64 %idxprom.i
-> > %33 = load volatile i64, i64* %arrayidx.i, align 8, !annotation !16
-> 
-> In optimised IR, there is no dependency between the two volatile loads 
-> anymore:
-> 
-> > %11 = load volatile i8, i8* %preferred, align 2, !annotation !19
-> > %conv25 = zext i8 %11 to i32
-> > %set.0. = load volatile i64, i64* %set, align 8
-> 
-> Now, since @nr traces back to the READ_ONCE() to @index, does this make 
-> the load from @addr in test_bit() address-dependent on that READ_ONCE()? 
-> Should the load from @addr therefore be ordered against the READ_ONCE()?
+> Agreed. We could easily do something similar on arm64, but I'd prefer
+> to avoid that too.
 
-As others have pointed out, there really is an address dependency here 
-(although it's not a very useful one and the code doesn't rely on it).
+Right, because on x86 CET-IBT will force that entry to have a different
+form (and size), similar on arm64 with BTI.
 
-However, I can't follow the IR code.  Can you please explain in ordinary 
-English how the LLVM compiler manages to lose track of this dependency?
+I was thinking the compiler really should implicitly do this conversion
+when a function pointer is cast to an integer type. But barring that, we
+really need an intrinsic to perform this.
 
-Alan Stern
+Also, perhaps the compiler should admit it's doing dodgy crap and
+introduce the notion of address spaces and use the type system to
+separate these two forms.
