@@ -1,59 +1,27 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2172C9F
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 17:11:30 +0000 (UTC)
-Received: by mail-pj1-f41.google.com with SMTP id na16-20020a17090b4c1000b0019f5bb661f9so2617362pjb.0
-        for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 10:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SPqzlmEweI7r1mGXnYdr5XuSqmGXW0SkyZAuxP8LyMQ=;
-        b=TxzOqOdAm06wISQQDG9AUQtMp6CPyx+4EqB3sWwvACs6OPGjSg0kvIFotrs3f5Hr/g
-         36y0FvkG5ulwsPM+LeYfBGcFyNbRXJWvHyVi0cqnMkMIdWKizVF1QhDWJMEjCdnBnbJu
-         Qbar4HPvzJ08E92cM3uqXKFxfn33qSa2sqNMo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SPqzlmEweI7r1mGXnYdr5XuSqmGXW0SkyZAuxP8LyMQ=;
-        b=NzAMf3n148DtfyUDgD65R93jhDWq/u39TrbTwdW/Y6UHA1Ev093wZMweRBfvMWHn+f
-         V21rJuuhXqKU+3/Joc22tMnH21mqQtf4LoUw0UDyoTwQW3NTnvJztCoJgSu1HwVE4dCw
-         uoDxjz0dSn3bsyEU/taJ3Q/0grecwVpwZQmKeHHQAFnAitjYtGeSx6pnAF7grLFDONLG
-         InZvr+SQF8p8976hp4qNMgnypD+EkdEbIjtPf4r1J2h/9EcRVhJbfMc49OABq2Mr2ey6
-         PBiTlhlGZxb3llJVAYAhoxi51Irr1/1zJHkaOddRs1vKl/tHwQ1fg05Q5OsyqFtywTIT
-         tBFg==
-X-Gm-Message-State: AOAM530d/l8BnQGGQUEx3hJvOb3/oHvNOMy54EHSusVD4aaktNOpIjoe
-	hTN8gJ2bMYQtElIZ1Z1ozbpnFQ==
-X-Google-Smtp-Source: ABdhPJwgWDIYDf0NpCmMyVHgq1qs37SgEq9KpumyZm5ASVCwSt/ixYZxeJ6+qsDmxHYqkOsI+ohUzg==
-X-Received: by 2002:a17:90b:17d2:: with SMTP id me18mr6983821pjb.98.1635354689817;
-        Wed, 27 Oct 2021 10:11:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id lb5sm315185pjb.11.2021.10.27.10.11.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 10:11:29 -0700 (PDT)
-Date: Wed, 27 Oct 2021 10:11:28 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF192C9F
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 17:13:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A6042601FF;
+	Wed, 27 Oct 2021 17:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1635354835;
+	bh=5nFkFj3PXJI9L7kyUHgFHRHds1LU0rOzwg8GbYHqQUc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gpJp/TFHEcPkOE1H2svp5c74o3k34+JIcIdP41bW5qlGLlnIFGFIE2YEkzR1EKxa2
+	 Lu44iFjO9l8Yq0imBYViA9MQKJxcd6Fhyl632Ll2P19g79zmS8toGnysHyT9rzfDQu
+	 TJjTlKzS9h927I6S3uJilKTgz3iAs1dd7r7+aask=
+Date: Wed, 27 Oct 2021 19:13:53 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Fangrui Song <maskray@google.com>, stable@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <202110270939.F5C79CC@keescook>
-References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211026201622.GG174703@worktop.programming.kicks-ass.net>
- <20211027120515.GC54628@C02TD0UTHF1T.local>
- <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
- <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
+Subject: Re: Apply 091bb549f7722723b284f63ac665e2aedcf9dec9 to 4.19
+Message-ID: <YXmI0cqUcAD7nrVF@kroah.com>
+References: <YXl98bQRrJvVKdwC@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,119 +30,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
+In-Reply-To: <YXl98bQRrJvVKdwC@archlinux-ax161>
 
-On Wed, Oct 27, 2021 at 03:04:55PM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 27, 2021 at 02:48:52PM +0200, Peter Zijlstra wrote:
-> > On Wed, Oct 27, 2021 at 02:22:27PM +0200, Ard Biesheuvel wrote:
-> > > On Wed, 27 Oct 2021 at 14:05, Mark Rutland <mark.rutland@arm.com> wrote:
-> > 
-> > > > > Should not this jump-table thingy get converted to an actual function
-> > > > > address somewhere around arch_static_call_transform() ? This also seems
-> > > > > relevant for arm64 (which already has CLANG_CFI supported) given:
-> > > > >
-> > > > >   https://lkml.kernel.org/r/20211025122102.46089-3-frederic@kernel.org
-> > > >
-> > > > Ugh, yeah, we'll need to do the function_nocfi() dance somewhere...
-> > > >
-> > > 
-> > > Sadly, that only works on symbol names, so we cannot use it to strip
-> > > CFI-ness from void *func arguments passed into the static call API,
-> > > unfortunately.
-> > 
-> > Right, and while mostly static_call_update() is used, whcih is a macro
-> > and could possibly be used to wrap this, we very much rely on
-> > __static_call_update() also working without that wrapper and then we're
-> > up a creek without no paddles.
+On Wed, Oct 27, 2021 at 09:27:29AM -0700, Nathan Chancellor wrote:
+> Hi Greg and Sasha,
 > 
-> Specifically, we support code like:
+> Please apply commit 091bb549f772 ("ARM: 8819/1: Remove '-p' from
+> LDFLAGS") to 4.19 (and earlier if so desired). LLD 14 will remove the
+> '-p' flag [1] for reasons outlined in both the Linux and LLD commit,
+> which will cause our builds to break [2]. I have verified that it
+> applies cleanly back to 4.4, although we only build ARM kernels with LLD
+> on 4.19 and newer, so it is not strictly necessary there.
 > 
-> struct foo {
-> 	void (*func1)(args1);
-> 	void (*func2)(args2);
-> }
-> 
-> struct foo global_foo;
+> [1]: https://github.com/llvm/llvm-project/commit/815a1207bfe121c8dcf3804a4f4638e580f63519
+> [2]: https://github.com/ClangBuiltLinux/continuous-integration2/runs/4016787082?check_suite_focus=true
 
-And global_foo is intentionally non-const?
+Applied now, thanks!
 
-> 
-> ...
-> 
-> DEFINE_STATIC_CALL_NULL(func1, *global_foo.func1);
-> 
-> ...
-> 
-> __init foo_init()
-> {
-> 	// whatever code that fills out foo
-> 
-> 	static_call_update(func1, global_foo.func1);
-> }
-> 
-> ...
-> 
-> hot_function()
-> {
-> 	...
-> 	static_cal(func1)(args1);
-> 	...
-> }
-> 
-> cold_function()
-> {
-> 	...
-> 	global_foo->func1(args1);
-> 	...
-> }
-
-If global_foo is non-const, then the static call stuff is just an
-obfuscated indirect call. The attack CFI attempts to block is having
-a controlled write flaw turn into controlled execution. For example,
-in the above, an attacker would use a flaw that could aim a write to
-global_foo->func1, and then get the kernel to take an execution path
-that executes global_foo->func1 (i.e. through cold_function).
-
-If static_call_update() accepts an arbitrary function argument, then it
-needs to perform the same validation that is currently being injected
-at indirect call sites to avoid having static calls weaken CFI. If
-things are left alone, static calls will just insert a direct call to
-the jump table, and things "work" (with an extra jump), but nothing
-is actually protected (it just requires the attacker locate a more
-narrow set of kernel call flows that includes static_call_update). Any
-attacker write to global_foo->func1, followed by a static_call_update(),
-will create a direct call (with no CFI checking) to the attacker's
-destination. (It's likely harder to find the needed execution path to
-induce a static_call_update(), but that shouldn't stop us from trying
-to protect it.)
-
-Getting a "jump table to actual function" primitive only avoids the added
-jump -- all the CFI checking remains bypassed. If static call function
-address storage isn't const, for CFI to work as expected the update()
-routine will need to do the same checking that is done at indirect call
-sites when extracting the "real" function for writing into a direct call.
-(i.e. it will need to be function prototype aware, be able to find the
-real matching jump table and size, and verify the given function is
-actually in the table. Just dereferencing the jump table to find the
-address isn't a protection: the attacker just has to write to func1 with
-a pointer to an attacker-constructed jump table.)
-
-I think it's not unreasonable to solve this in phases, though. Given that
-static calls work with CFI as-is (albeit with an extra jump), and that
-static calls do offer some hardening of existing indirect call targets (by
-narrowing the execution path needed to actually bring the func1 value into
-the kernel execution flow), I don't see either feature blocking the other.
-
-Adding proper CFI function prototype checking to static calls seems
-like a security improvement with or without CFI, and a minor performance
-improvement under CFI.
-
-To avoid all of this, though, it'd be better if static calls only
-switched between one of a per-site const list of possible functions,
-which would make it a much tighter hand-rolled CFI system itself. :)
-(i.e. it would operate from a specific and short list of expected
-functions rather than the "best effort" approach of matching function
-prototypes as done by Clang CFI.)
-
--- 
-Kees Cook
+greg k-h
