@@ -1,229 +1,102 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+	(using TLSv1.2 with cipher AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC36072
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 15:55:28 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F431610C7
-	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 15:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635350128;
-	bh=YrSJF1WLDzUs07MzocSeTB/P/c338AvA4f+uEBWnzm8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Z3GI4v+mpdUhDOdlZ3OzazrcsmocuekxnOyLxea0AAgkWfjzAckM65ybR4PzJ7pt/
-	 2wl+h4hPjSmb71nhxomgjoC5h8cP8eEBPw8pFsUu/ILjd7yOnlpSfvqmsg8MBm2G3/
-	 nXOl7ZO+QRFssGSmWxknWEMy7SFDI98kVF0kKdxKH5EfaPDj7yfQ5HTh4H2Wn5WIaG
-	 3Lu4rMKuTP5qHXAkQ3qM8JReVjl+2NjqOmm9NUdl0Gng7nAmaEy5uBv/RMtkaoamVV
-	 vPAkbOI/PjsG5VOYkC5KXkiR0eH1t5zr3PQKdWrkj3yoWDxXfx3OFWAFC828JLsG9i
-	 VfmiaTk+SBVzw==
-Received: by mail-oi1-f181.google.com with SMTP id t4so4035652oie.5
-        for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 08:55:28 -0700 (PDT)
-X-Gm-Message-State: AOAM531pFwN5Mhvkgc4kzkiGB0aGYj1FjxmuUv2fe9WPEMPgStX03hZK
-	uRl1cC++NqOWeaGp5jpCF2QLdxcQAQPa0en+uBM=
-X-Google-Smtp-Source: ABdhPJy5pxg2RG1gpaABKEWnbWb7nWAhPccOt7NoJx2cikQcP6OLAos300DWPqdqZRhS8Yh5WIAd/jN4uISVdShcuuo=
-X-Received: by 2002:a54:448e:: with SMTP id v14mr4352588oiv.174.1635350127547;
- Wed, 27 Oct 2021 08:55:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6985C72
+	for <llvm@lists.linux.dev>; Wed, 27 Oct 2021 16:09:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1635350970; x=1666886970;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3wmHPIoqwW/AtqnUK9O2SRwIiFbLXNiIfQw/yk4RMCQ=;
+  b=OnEkgxt9J8BczaWpdOyrxvqsIemCLyCJiVOZkTFIiaGzdHFL+K2YOQG0
+   iH5eP+n8IdvxCLzavpkbmd4WAZVG4Ld2UlwbUggSthgKcos0tXqks/X+a
+   L1OrYewZKCqG/UXo1e5LMm7WhhKZwycn8PmBAd3keXKzr2TJBVb2UrZ0g
+   c=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Oct 2021 09:07:21 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 09:07:20 -0700
+Received: from [10.71.111.83] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Wed, 27 Oct 2021
+ 09:07:20 -0700
+Message-ID: <dd918b48-f733-7eb1-4e0e-6d360e199424@quicinc.com>
+Date: Wed, 27 Oct 2021 09:07:19 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211026201622.GG174703@worktop.programming.kicks-ass.net>
- <20211027120515.GC54628@C02TD0UTHF1T.local> <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
- <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net> <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
- <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net> <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
- <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
-In-Reply-To: <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 27 Oct 2021 17:55:15 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEojTj_5_wSfS+qJZycgKG8i8qK2uWRaHM3B0T4VQnDkQ@mail.gmail.com>
-Message-ID: <CAMj1kXEojTj_5_wSfS+qJZycgKG8i8qK2uWRaHM3B0T4VQnDkQ@mail.gmail.com>
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, X86 ML <x86@kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH] drm/msm/dpu: Remove commit and its uses in
+ dpu_crtc_set_crc_source()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Rob Clark <robdclark@gmail.com>,
+	Sean Paul <sean@poorly.run>
+CC: Nick Desaulniers <ndesaulniers@google.com>, Jessica Zhang
+	<jesszhan@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, kernelci.org bot
+	<bot@kernelci.org>
+References: <20211026142435.3606413-1-nathan@kernel.org>
+From: Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <20211026142435.3606413-1-nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 
-On Wed, 27 Oct 2021 at 17:50, Sami Tolvanen <samitolvanen@google.com> wrote:
+On 10/26/2021 7:24 AM, Nathan Chancellor wrote:
+> Clang warns:
 >
-> On Wed, Oct 27, 2021 at 7:18 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Wed, 27 Oct 2021 at 16:03, Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Wed, Oct 27, 2021 at 03:30:11PM +0200, Ard Biesheuvel wrote:
-> > >
-> > > > As far as I can tell from playing around with Clang, the stubs can
-> > > > actually be executed directly,
-> > >
-> > > I had just finished reading the clang docs which suggest as much and was
-> > > about to try what the compiler actually generates.
-> > >
-> > > > they just jumps to the actual function.
-> > > > The compiler simply generates a jump table for each prototype that
-> > > > appears in the code as the target of an indirect jump, and checks
-> > > > whether the target appears in the list.
-> > > >
-> > > > E.g., the code below
-> > > >
-> > > > void foo(void) {}
-> > > > void bar(int) {}
-> > > > void baz(int) {}
-> > > > void (* volatile fn1)(void) = foo;
-> > > > void (* volatile fn2)(int) = bar;
-> > > >
-> > > > int main(int argc, char *argv[])
-> > > > {
-> > > >   fn1();
-> > > >   fn2 = baz;
-> > > >   fn2(-1);
-> > > > }
-> > > >
-> > > > produces
-> > > >
-> > > > 0000000000400594 <foo.cfi>:
-> > > >   400594: d65f03c0 ret
-> > > >
-> > > > 0000000000400598 <bar.cfi>:
-> > > >   400598: d65f03c0 ret
-> > > >
-> > > > 000000000040059c <baz.cfi>:
-> > > >   40059c: d65f03c0 ret
-> > >
-> > > Right, so these are the actual functions ^.
-> > >
-> > > > 00000000004005a0 <main>:
-> > > >   4005a0: a9bf7bfd stp x29, x30, [sp, #-16]!
-> > > >
-> > > > // First indirect call
-> > > >   4005a4: b0000088 adrp x8, 411000 <__libc_start_main@GLIBC_2.17>
-> > > >   4005a8: f9401508 ldr x8, [x8, #40]
-> > > >   4005ac: 90000009 adrp x9, 400000 <__abi_tag-0x278>
-> > > >   4005b0: 91182129 add x9, x9, #0x608
-> > > >   4005b4: 910003fd mov x29, sp
-> > > >   4005b8: eb09011f cmp x8, x9
-> > > >   4005bc: 54000241 b.ne 400604 <main+0x64>  // b.any
-> > > >   4005c0: d63f0100 blr x8
-> > >
-> > > That's impenetrable to me, sorry.
-> > >
-> >
-> > This loads the value of fn1 in x8, and takes the address of the jump
-> > table in x9. Since it is only one entry long, it does a simple compare
-> > to check whether x8 appears in the jump table, and branches to the BRK
-> > at the end if they are different.
-> >
-> > > > // Assignment of fn2
-> > > >   4005c4: 90000009 adrp x9, 400000 <__abi_tag-0x278>
-> > > >   4005c8: b0000088 adrp x8, 411000 <__libc_start_main@GLIBC_2.17>
-> > > >   4005cc: 91184129 add x9, x9, #0x610
-> > > >   4005d0: f9001909 str x9, [x8, #48]
-> > >
-> > > I'm struggling here, x9 points to the branch at 400610, but then what?
-> > >
-> > > x8 is in .data somewhere?
-> > >
-> >
-> > This takes the address of the jump table entry of 'baz' in x9, and
-> > stores it in fn2 whose address is taken in x8.
-> >
-> >
-> > > > // Second indirect call
-> > > >   4005d4: f9401908 ldr x8, [x8, #48]
-> > > >   4005d8: 90000009 adrp x9, 400000 <__abi_tag-0x278>
-> > > >   4005dc: 91183129 add x9, x9, #0x60c
-> > > >   4005e0: cb090109 sub x9, x8, x9
-> > > >   4005e4: 93c90929 ror x9, x9, #2
-> > > >   4005e8: f100053f cmp x9, #0x1
-> > > >   4005ec: 540000c8 b.hi 400604 <main+0x64>  // b.pmore
-> > > >   4005f0: 12800000 mov w0, #0xffffffff            // #-1
-> > > >   4005f4: d63f0100 blr x8
-> > > >
-> > > >
-> > > >   4005f8: 2a1f03e0 mov w0, wzr
-> > > >   4005fc: a8c17bfd ldp x29, x30, [sp], #16
-> > > >   400600: d65f03c0 ret
-> > > >   400604: d4200020 brk #0x1
-> > >
-> > >
-> > > > 0000000000400608 <__typeid__ZTSFvvE_global_addr>:
-> > > >   400608: 17ffffe3 b 400594 <foo.cfi>
-> > > >
-> > > > 000000000040060c <__typeid__ZTSFviE_global_addr>:
-> > > >   40060c: 17ffffe3 b 400598 <bar.cfi>
-> > > >   400610: 17ffffe3 b 40059c <baz.cfi>
-> > >
-> > > And these are the stubs per type.
-> > >
-> > > > So it looks like taking the address is fine, although not optimal due
-> > > > to the additional jump.
-> > >
-> > > Right.
-> > >
-> >
-> > ... although it does seem that function_nocfi() doesn't actually work
-> > as expected, given that we want the address of <func>.cfi and not the
-> > address of the stub.
+> drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:162:6: error: variable 'commit' is uninitialized when used here [-Werror,-Wuninitialized]
+>          if (commit)
+>              ^~~~~~
+> drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:106:32: note: initialize the variable 'commit' to silence this warning
+>          struct drm_crtc_commit *commit;
+>                                        ^
+>                                         = NULL
+> 1 error generated.
 >
-> This is because the example wasn't compiled with
-> -fno-sanitize-cfi-canonical-jump-tables, which we use in the kernel.
-> With non-canonical jump tables, <func> continues to point to the
-> function and <func>.cfi_jt points to the jump table, and therefore,
-> function_nocfi() returns the raw function address.
+> The assignment and use of commit in the main body of
+> dpu_crtc_set_crc_source() were removed from v1 to v2 but the call to
+> drm_crtc_commit_put() at the end was not. Do that now so there is no
+> more warning.
 >
-
-Ah excellent. So that means that we don't need function_nocfi() at
-all, given that
-- statically allocated references (i.e., DEFINE_STATIC_CALL()) will
-refer to the function directly;
-- runtime assignments can decode the target of the *func pointer and
-strip off the initial branch.
-
-It would still be nice to have an intrinsic for that, or some variable
-attribute that signifies that assigning the address of a function to
-it will produce the actual function rather than the jump table entry.
-
-> > > > We could fudge around that by checking the
-> > > > opcode at the target of the call, or token paste ".cfi" after the
-> > > > symbol name in the static_call_update() macro, but it doesn't like
-> > > > like anything is terminally broken tbh.
-> > >
-> > > Agreed, since the jump table entries are actually executable it 'works'.
-> > >
-> > > I really don't like that extra jump though, so I think I really do want
-> > > that nocfi_ptr() thing. And going by:
-> > >
-> > >   https://clang.llvm.org/docs/ControlFlowIntegrityDesign.html#forward-edge-cfi-for-indirect-function-calls
-> > >
-> > > and the above, that might be possible (on x86) with something like:
-> > >
-> > > /*
-> > >  * Turns a Clang CFI jump-table entry into an actual function pointer.
-> > >  * These jump-table entries are simply jmp.d32 instruction with their
-> > >  * relative offset pointing to the actual function, therefore decode the
-> > >  * instruction to find the real function.
-> > >  */
-> > > static __always_inline void *nocfi_ptr(void *func)
-> > > {
-> > >         union text_poke_insn insn = *(union text_poke_insn *)func;
-> > >
-> > >         return func + sizeof(insn) + insn.disp;
-> > > }
-> > >
-> > > But really, that wants to be a compiler intrinsic.
-> >
-> > Agreed. We could easily do something similar on arm64, but I'd prefer
-> > to avoid that too.
+> Fixes: 78d9b458cc21 ("drm/msm/dpu: Add CRC support for DPU")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1493
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 3 ---
+>   1 file changed, 3 deletions(-)
 >
-> I'll see what we can do. Note that the compiler built-in we previously
-> discussed would have semantics similar to function_nocfi(). It would
-> return the raw function address from a symbol name, but it wouldn't
-> decode the address from an arbitrary pointer, so this would require
-> something different.
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index 2523e829f485..967245b8cc02 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -103,7 +103,6 @@ static int dpu_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
+>   {
+>   	enum dpu_crtc_crc_source source = dpu_crtc_parse_crc_source(src_name);
+>   	enum dpu_crtc_crc_source current_source;
+> -	struct drm_crtc_commit *commit;
+>   	struct dpu_crtc_state *crtc_state;
+>   	struct drm_device *drm_dev = crtc->dev;
+>   	struct dpu_crtc_mixer *m;
+> @@ -159,8 +158,6 @@ static int dpu_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
+>   
+>   
+>   cleanup:
+> -	if (commit)
+> -		drm_crtc_commit_put(commit);
+>   	drm_modeset_unlock(&crtc->mutex);
+>   
+>   	return ret;
 >
-> Sami
+> base-commit: 00326bfa4e6363e4b0b8b019ecd2556fdda5ad1c
