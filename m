@@ -1,48 +1,40 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F278772
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 20:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDD02C82
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 20:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ktbd+1DjEnN4yaWsYbMSKPidN4MBJBWV6jtj3Ser1Ds=; b=ISQyit89mNYojQ5T0+rvrFDDOz
-	3jSWTlUHFvaXwD3L46+5p//EjAgJtumEXek2uQNtbZLgPS5mEnJFvKw0Bn4AY9ZlwrjvJbZbT0hcM
-	huIZPBoxH1ZNgvnpbiRQX1W03VfEP1kIVGrH08XgBDjmHxiREyenA9T37IBetyteCNhVPZ0+w+qf8
-	ENv3kqStoefSqWIBCb7lF1Gdz5lITFNlSFyXWuL5zy2/m83Zona5m7DAvS27l76ETuKMV53d03UxE
-	Xb1JZtRCvSof9e9BpigYKNZJ1qteqGnABd7SaSQ+pxeh5mcYVGzoU56wu2qF8AGq8htRLYrH0eXVC
-	XNoEgb1Q==;
+	bh=+yeJaGMjpw5txw3rg0Sql825GO1+QZGA7oq2b7F7QJI=; b=CmoAAsex2+d4f+v5YN1td958tj
+	NfBgDnjHiuUK0RKf14mDZF+z5vL0zkSTpH3cV45NXf5XnyjAV3dBcPSXJYCTTQMSTO2NxUA95VbdP
+	Bu8vv0ng6/t3Dc4unPo4fnYTLL9BCLUZPjyJ/x33x8mZlTvbZkSF9Oy6+Bc4T1K7gRWA3uAo/Th09
+	va5tDiP+vwyBWFd2dUQruj25nGZ0Xyf2oSqjWgnYyTM4BYcjNaVPu995CQb8/blCVxrVBPiMbnI2i
+	HXoqPjLnktGfWpv6BW3eA0Wl7tJwxrN3vzgTU9kNJ4qRHp7jlOCnhj9YgRhxpmcr7cQjQzVohYfyz
+	VtQjmaQQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mgC1K-00CswS-Oo; Thu, 28 Oct 2021 20:29:07 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mgCKW-0012pN-1L; Thu, 28 Oct 2021 20:49:13 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A63D798629C; Thu, 28 Oct 2021 22:29:05 +0200 (CEST)
-Date: Thu, 28 Oct 2021 22:29:05 +0200
+	id 48F3798629C; Thu, 28 Oct 2021 22:48:55 +0200 (CEST)
+Date: Thu, 28 Oct 2021 22:48:55 +0200
 From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
+	Michal Marek <michal.lkml@markovi.net>, X86 ML <x86@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <20211028202905.GO174703@worktop.programming.kicks-ass.net>
-References: <20211026201622.GG174703@worktop.programming.kicks-ass.net>
- <20211027120515.GC54628@C02TD0UTHF1T.local>
- <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
- <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
- <202110270939.F5C79CC@keescook>
- <YXnC1jqwR2ZKfMdk@hirez.programming.kicks-ass.net>
- <202110271430.2A3980217@keescook>
- <YXqE82jQh4S79uVL@hirez.programming.kicks-ass.net>
- <202110280958.22E5F74@keescook>
+Subject: Re: [PATCH] kbuild: Support clang-$ver builds
+Message-ID: <20211028204855.GP174703@worktop.programming.kicks-ass.net>
+References: <YXqpFHeY26sEbort@hirez.programming.kicks-ass.net>
+ <CAK7LNATUpgfKJvjp0+8H6VfMLMio9+BCoyj00mAO8FcaVGCqjg@mail.gmail.com>
+ <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net>
+ <YXqyHhWGJfDkuxjP@hirez.programming.kicks-ass.net>
+ <YXq72/yPe76DhDLu@hirez.programming.kicks-ass.net>
+ <YXrhZoOgv5dtFMTs@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,137 +43,193 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202110280958.22E5F74@keescook>
+In-Reply-To: <YXrhZoOgv5dtFMTs@archlinux-ax161>
 
-On Thu, Oct 28, 2021 at 10:12:32AM -0700, Kees Cook wrote:
-> On Thu, Oct 28, 2021 at 01:09:39PM +0200, Peter Zijlstra wrote:
-> > On Wed, Oct 27, 2021 at 03:27:59PM -0700, Kees Cook wrote:
-> > 
-> > > Right -- though wouldn't just adding __ro_after_init do the same?
-> > > 
-> > > DEFINE_STATIC_CALL(static_call_name, func_a) __ro_after_init;
-> > 
-> > That breaks modules (and your jump_label patch doing the same is
-> > similarly broken).
+On Thu, Oct 28, 2021 at 10:44:06AM -0700, Nathan Chancellor wrote:
+
+> I like the first iteration of this idea most, as CC=clang does not
+> currently imply using all LLVM tools. There are some architectures that
+> work with CC=clang but not LLVM=1 so I am not sure we want that meaning
+> to change.
+
+Could such architecture set a CONFIG symbol to indicate they're
+handicapped and have that make the Makefile not use the full LLVM suite?
+
+> I do think this issue of Debian's different clang versions needs to be
+> resolved as more and more LLVM features are being developed and non-LLVM
+> or ClangBuiltLinux developers want to test these features and make sure
+> that they work properly. There are a few different options:
 > 
-> Well that's no fun. :) I'd like to understand this better so I can fix
-> it!
+> 1. Take Peter's first patch so that LLVM=1 and LLVM=-# can be used. The
+>    documentation should be updated to convey this change. The argument
+>    against doing this might be that Debian/Ubuntu/derivatives of either
+>    are special for using versioned suffixes and we do not want to add
+>    this to the build system but I think that might be short sighted.
+>    Peter's patch is not super complex nor does it change the status quo
+>    of LLVM=1.
+
+Also, I *greatly* appreciate having multiple versions of the compiler
+at hand. I really think debian does the right thing here and other
+distros are at a disadvantage.
+
+Note: also Segher's buildall script generates version suffixed GCC
+builds.
+
+> 2. Update the documentation to describe using the
 > 
-> > 
-> > When a module is loaded that uses the static_call(), it needs to
-> > register it's .static_call_sites range with the static_call_key which
-> > requires modifying it.
+>    $ PATH=/usr/lib/llvm-#/bin:$PATH make LLVM=1 ...
 > 
-> Reading static_call_add_module() leaves me with even more questions. ;)
+>    trick. This has been the preferred method for using different
+>    versions of LLVM but it has never been documented anywhere. This
+>    would allow us to keep the current build infrastructure while giving
+>    people clear instructions for how to handle different versions of
+>    clang. As Peter has noted, this would require people who are not
+>    familiar with building with LLVM to be constantly looking at the
+>    documentation to remember the command to invoke, whereas with
+>    LLVM=-#, it is easy to remember.
 
-Yes, that function is highly magical..
+Right, this is no more than a crude hack and is super unfriendly. It
+should never have been accepted.
 
-> It looks like module static calls need to write to kernel text? 
-
-No, they need to modify the static_call_key though.
-
-> I don't
-> understand. Is this when a module is using an non-module key for a call
-> site? And in that case, this happens:
+> 3. Explore recommending update-alternatives in the documentation or
+>    working with Debian to provide this automatically. As this is a
+>    Debian and derivatives only problem, a solution for it could come
+>    from the distribution itself. I found one post from a few years ago
+>    that talks about this but a command to use all LLVM tools from a
+>    particular version would be rather unweildy:
 > 
->                 key |= s_key & STATIC_CALL_SITE_FLAGS;
-> 
-> Where "key" is not in the module?
-> 
-> And the flags can be:
-> 
-> #define STATIC_CALL_SITE_TAIL 1UL       /* tail call */
-> #define STATIC_CALL_SITE_INIT 2UL       /* init section */
-> 
-> But aren't these per-site attributes? Why are they stored per-key?
+>    https://askubuntu.com/questions/791616/set-clang-3-8-as-default
 
-They are per site, but stored in the key pointer.
+I also don't really appreciate this, I don't want to change the system
+default 'clang' just to build a kernel. I might build the kernel with
+various different compilers consecutively to look at differences in code
+gen for example. Why should I not be able to build them concurrently?
 
-So static_call has (and jump_label is nearly identical):
+> Overall, I think I like #1 the best. It is not that much more
+> complicated than what we have now and it leaves it entirely up to the
+> user how they want to build and it is hard for them to shoot themselves
+> in the foot. I am open to other suggestions or arguments though :)
 
-struct static_call_site {
-	s32 addr;
-	s32 key;
-};
+So I've been doing kernel builds using:
 
-struct static_call_mod {
-	struct static_call_mod *next;
-	struct module *mod;
-	struct static_call_sutes *sites;
-};
+ $ make O=foo CC=gcc-$ver
 
-struct static_call_key {
-	void *func;
-	union {
-		unsigned long type;
-		struct static_call_mod *mods;
-		struct static_call_site *sites;
-	};
-};
+for *years*, and I really don't understand or appreciate why building a
+clang kernel needs to be so damn difficult. The whole: LLVM=1 thing is
+just wrong.
 
-__SCT_##name() tramplines		(no analog with jump_label)
+ $ make O=foo CC=clang-$ver
 
-.static_call_sites section
-.static_call_tramp_key section		(no analog with jump_label)
+*should* just work. This not working is a pain bug; people peddling
+crazy things like 2) above is just mind-boggling insane. Having a
+document explaining how to do an LLVM build should be a clue it's wrong.
 
-Where the key holds the current function pointer and a pointer to either
-an array of static_call_site or a pointer to a static_call_mod.
+So how about we do the below instead? Then the normal way of things will
+be:
 
-Now, a key observation is that all these data structures are word
-aligned, which means we have at least 2 lsb bits to play with. For
-static_call_key::{mods,sites} the LSB indicates which, 0:mods, 1:sites.
+ $ make CC=clang-12
 
-Then the .static_call_sites section is an array of struct
-static_call_site sorted by the static_call_key pointer.
+and it will all *just*work*. The incomplete LLVM archs can revert back
+to the old hybrid (clang+binutils) way of things by doing:
 
-The static_call_sites holds relative displacements, but represents:
+ $ make CC=clang LLVM=0
 
-	struct static_call_key *key;
-	unsigned long call_address;
+Which explicitly states, use clang but don't use the full llvm suite. Or
+they can do that CONFIG_LLVM_BROKEN (or whatever) to have them default
+to LLVM=0
 
-Now, since code (on x86) is variable length, there are no spare bits in
-the code address, but since static_call_key is aligned, we have spare
-bits. It is those bits we use to encode TAIL (Bit0) and INIT (Bit1).
+ifdef CONFIG_LLVM_BROKEN
+LLVM ?= 0
+endif
 
-If INIT, the address points to an __init section and we shouldn't try
-and touch if after those have been freed or bad stuff happens.
+in front of the CC magic in the below patch should take care of that.
 
-If TAIL, it's a tail-call and we get to write a jump instruction instead
-of a call instruction.
+(also, having all this gunk twice isn't useful)
 
-So, objtool builds .static_call_sites at built time, then at init (or
-module load) time we sort the array by static_call_key pointer, such
-that we get consequtive ranges per key. We iterate the array and every
-time the key pointer changes, we -- already having the key pointer --
-set key->sites to the first.
+---
+ Makefile                       |   26 ++++++++++++++++----------
+ tools/scripts/Makefile.include |   22 ++++++++++++++--------
+ 2 files changed, 30 insertions(+), 18 deletions(-)
 
-Now, kernel init of static_call happens *really* early and memory
-allocation doesn't work yet, which is why we have that {mods,sites}
-thing. Therefore, when the first module gets loaded, we need to allocate
-a struct static_call_mod for the kernel (mod==NULL) and transfer the
-sites pointer to it and change key to a mods pointer.
-
-So one possible solution would be to have a late init (but before RO),
-that, re-iterates the sites array and pre-allocates the kernel
-static_call_mod structure.  That way, static_call_key gets changed to a
-mods pointer and wouldn't ever need changing after that, only the
-static_call_mod (which isn't RO) gets changed when modules get
-added/deleted.
-
-The above is basically identical to jump_labels. However static_call()
-have one more trick:
-
-  EXPORT_STATIC_CALL_TRAMP()
-
-That exports the trampoline symbol, but not the static_call_key data
-structure. The result is that modules can use the static_call(), but
-cannot use static_call_update() because they cannot get at the key.
-
-In this case objtool cannot correctly put the static_call_key address in
-the static_call_site, what it does instead is store the trampoline
-address (there's a 1:1 relation between key and tramplines). And then we
-ues the .static_call_tramp_key section to find a mapping from trampoline
-to key and rewrite the site to be 'right'. All this happens before
-sorting it on key obv.
-
-Hope that clarifies things, instead of making it worse :-)
+--- a/Makefile
++++ b/Makefile
+@@ -423,9 +423,15 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
+ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+ 
++CC_BASE = $(shell echo $(CC) | cut -b "1-5")
++ifeq ($(shell test "$(CC_BASE)" = "clang"; echo $$?),0)
++LLVM ?= 1
++LLVM_SFX := $(shell echo $(CC) | cut -b "6-")
++endif
++
+ ifneq ($(LLVM),)
+-HOSTCC	= clang
+-HOSTCXX	= clang++
++HOSTCC	= clang$(LLVM_SFX)
++HOSTCXX	= clang++$(LLVM_SFX)
+ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+@@ -443,14 +449,14 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS)
+ # Make variables (CC, etc...)
+ CPP		= $(CC) -E
+ ifneq ($(LLVM),)
+-CC		= clang
+-LD		= ld.lld
+-AR		= llvm-ar
+-NM		= llvm-nm
+-OBJCOPY		= llvm-objcopy
+-OBJDUMP		= llvm-objdump
+-READELF		= llvm-readelf
+-STRIP		= llvm-strip
++CC		= clang$(LLVM_SFX)
++LD		= ld.lld$(LLVM_SFX)
++AR		= llvm-ar$(LLVM_SFX)
++NM		= llvm-nm$(LLVM_SFX)
++OBJCOPY		= llvm-objcopy$(LLVM_SFX)
++OBJDUMP		= llvm-objdump$(LLVM_SFX)
++READELF		= llvm-readelf$(LLVM_SFX)
++STRIP		= llvm-strip$(LLVM_SFX)
+ else
+ CC		= $(CROSS_COMPILE)gcc
+ LD		= $(CROSS_COMPILE)ld
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -51,12 +51,18 @@ define allow-override
+     $(eval $(1) = $(2)))
+ endef
+ 
++CC_BASE = $(shell echo $(CC) | cut -b "1-5")
++ifeq ($(shell test "$(CC_BASE)" = "clang"; echo $$?),0)
++LLVM ?= 1
++LLVM_SFX := $(shell echo $(CC) | cut -b "6-")
++endif
++
+ ifneq ($(LLVM),)
+-$(call allow-override,CC,clang)
+-$(call allow-override,AR,llvm-ar)
+-$(call allow-override,LD,ld.lld)
+-$(call allow-override,CXX,clang++)
+-$(call allow-override,STRIP,llvm-strip)
++$(call allow-override,CC,clang$(LLVM_SFX))
++$(call allow-override,AR,llvm-ar$(LLVM_SFX))
++$(call allow-override,LD,ld.lld$(LLVM_SFX))
++$(call allow-override,CXX,clang++$(LLVM_SFX))
++$(call allow-override,STRIP,llvm-strip$(LLVM_SFX))
+ else
+ # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
+ $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+@@ -69,9 +75,9 @@ endif
+ CC_NO_CLANG := $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang__"; echo $$?)
+ 
+ ifneq ($(LLVM),)
+-HOSTAR  ?= llvm-ar
+-HOSTCC  ?= clang
+-HOSTLD  ?= ld.lld
++HOSTAR  ?= llvm-ar$(LLVM_SFX)
++HOSTCC  ?= clang$(LLVM_SFX)
++HOSTLD  ?= ld.lld$(LLVM_SFX)
+ else
+ HOSTAR  ?= ar
+ HOSTCC  ?= gcc
