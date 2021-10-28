@@ -1,77 +1,121 @@
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23022C82
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 22:26:29 +0000 (UTC)
-Received: by mail-io1-f53.google.com with SMTP id d63so10188994iof.4
-        for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 15:26:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A45A2C87
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 23:28:09 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id f3so8795734lfu.12
+        for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 16:28:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=69slPYPdxoIP5E1pXozkkOSJJNlQJg/ZybGsQcAlQjU=;
-        b=ZvebgKH3pRDT+eHN8yyyqshk7Xwtu0s+RNmQNKAF4bGCFh8HihuoQwIeVuENvHdO95
-         K4pfwh4RoUL60H8qNDvbEG+LIbiwhhNCY6AB8N/i63ofgqTMFXz5RCgUwqZQt813ldX8
-         xl34jWj15whFLfTX5t4DCQ8y4p545xs63NbwFJlDgG2CyVMvsV+6DPaoKl7czrrymczA
-         TkUHOP80lNP15DfhPKvonioyjWR3HaLSrut5ke4tpWu3vINXuVvw27Jal3DQZ+tk+Gtt
-         hX0IEZtROh08TtZN4+4mGfm11giUEgwoWxwtDIbMMyyM2KZbz9hRdDivvc2guFYXj9Pj
-         N72Q==
+         :cc;
+        bh=v2NZVqDWdoVucsv8uhkHaXgoKbQvyvz0JI/8C3axFj0=;
+        b=RnCAwZVxy7QKt+LZUrPTZt2C46+fJhrIILG0woPvFNPB0ITXfELJIWLn+ekVwQeW6u
+         NCUfuuIOawzPAVWuS4eFW2z+Ey3R04FKVosZU3vLihK/dPK0PE8pd22bYLucsVQSCSfG
+         n8FlDzunt6v0xBsXM+bJYA3cC4SduIDEpYPYOj3TJy1wlbGERNyv7Y7x1VmlOXbA42AB
+         XqfHIlVO9v/aUkppqMqU2ILMDDmXLof3+lnI4neUiQ0QfcfGY8D8Bbi6WeXes7AKMw6/
+         Hbp3Cxr7TynW0ezKPi/rZ3ZcU7CSG+ad/tG/zjWZsv6InOUSwfYFG3r1bPvWowatc2Fd
+         FkWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=69slPYPdxoIP5E1pXozkkOSJJNlQJg/ZybGsQcAlQjU=;
-        b=zjPkwXZpvWZjYkJf8Z6X6Oo1Usb1mgDCl/XMYt25xoWejPtMBJqUS5DN9M4Y9te44s
-         4GRADmev8rUvJttBvuOE8dkUjvzUw5r3rvVoEe04IG9uI6HDKpOVF9MvDMKsjTR+ILHe
-         CbpSdnPu8l1c+JjwK4Gb9Lmk2HGedPHew8anC0cLaW33jxkc02B5FMSNQKA0QuUeIz1T
-         VaJSaHnoQDjt5X/Z01dvo/k4HxcdTMQ7y3CQFNrfiL64qlzkcBw9YStNJcR4afyal7Vt
-         uyAhk7fLaI/j5jc0xEaELkdG9j5LhEUbX477JF0uaqgoz4przvoZJkRZuqYqTKr3G3yy
-         VC7A==
-X-Gm-Message-State: AOAM530WS8CudcvBjBm5So5/daQoy4/JcoB8fZxy2MJqHHUzGo/PAkoX
-	Y1ABX4abJo1SPDglZAzVqYiMT4sNu2YlAlFHFxhRWA==
-X-Google-Smtp-Source: ABdhPJzNqekMMxyk/B5nOTuy7BzBzfXpYdqoOl1hZ7GQRZVBtPFvvGSBBp2ksLmDaN2z5nG15SHOxsvOfYayG4y1uoE=
-X-Received: by 2002:a05:6602:13d3:: with SMTP id o19mr4969665iov.18.1635459988715;
- Thu, 28 Oct 2021 15:26:28 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=v2NZVqDWdoVucsv8uhkHaXgoKbQvyvz0JI/8C3axFj0=;
+        b=cI57dC3z+b8w9w0ej0IJdEorZI0cKr15yE7Ontqu67vsEPYN6UmR13nHkjKejosYGn
+         8FzEKx5oPRrD3uRBW1g4z9QwquFlcKl2zL+00DeA5mjPL5rTtGERpCq6afBpHCLgy13D
+         Gvj4PFVQpvWLBuYBPruT6vmJM83wTCdqOi/lAbG11jhSAWqYClSMM3YHns1Lmgbhwph8
+         32g/B5zkSvSNLLb1AdyVxhpSkl9xYaG04elizepJ5HmNKjQVN6afGz2pOVg29oKgtSH7
+         d7R+EcIn6iWtmwgSq2bBZMHgvehjaPJDkUUig5DdPyQ1Mf5xVdib/fGpnxed+Y8d1aAf
+         LFTg==
+X-Gm-Message-State: AOAM533ZqRdzM+mBGXIihiUxvYHmTbJC8+FLB2vFzyojTSnNXuHuPpfU
+	CE17QzmKwmnA5wx5Bv9wL0pazZO+iH83Alw33B3bcQ==
+X-Google-Smtp-Source: ABdhPJxyPCMzLSMX6BMpvUfaQg/tFqyUsmyDB2tZULGDfZBfJ9oA5/75vCUWsEtI+hqFXwHppll/S/RkQLTZUTmyHkw=
+X-Received: by 2002:a05:6512:228a:: with SMTP id f10mr6932000lfu.489.1635463686807;
+ Thu, 28 Oct 2021 16:28:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211012021321.291635-1-irogers@google.com> <CAFP8O3L_Oi916yOAuPB7MFpa3QoDQtreRbV7oNt2Yh6h1Coq9A@mail.gmail.com>
-In-Reply-To: <CAFP8O3L_Oi916yOAuPB7MFpa3QoDQtreRbV7oNt2Yh6h1Coq9A@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 28 Oct 2021 15:26:16 -0700
-Message-ID: <CAP-5=fU_Zf4w2K-uEM40Wr0o-v6O+3vQTfEjAJu842HdyotZHw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] tools: Bump minimum LLVM C++ std to GNU++14
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Leo Yan <leo.yan@linaro.org>, Michael Petlan <mpetlan@redhat.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+References: <YXqpFHeY26sEbort@hirez.programming.kicks-ass.net>
+ <CAK7LNATUpgfKJvjp0+8H6VfMLMio9+BCoyj00mAO8FcaVGCqjg@mail.gmail.com>
+ <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net> <YXqyHhWGJfDkuxjP@hirez.programming.kicks-ass.net>
+ <YXq72/yPe76DhDLu@hirez.programming.kicks-ass.net> <YXrhZoOgv5dtFMTs@archlinux-ax161>
+ <20211028204855.GP174703@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211028204855.GP174703@worktop.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 28 Oct 2021 16:27:55 -0700
+Message-ID: <CAKwvOd=x9E=7WcCiieso-CDiiU-wMFcXL4W3V5j8dq7BL5QT+w@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Support clang-$ver builds
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Michal Marek <michal.lkml@markovi.net>, X86 ML <x86@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Arnaldo,
+On Thu, Oct 28, 2021 at 1:49 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Oct 28, 2021 at 10:44:06AM -0700, Nathan Chancellor wrote:
+>
+> > I like the first iteration of this idea most, as CC=clang does not
+> > currently imply using all LLVM tools. There are some architectures that
+> > work with CC=clang but not LLVM=1 so I am not sure we want that meaning
+> > to change.
+>
+> Could such architecture set a CONFIG symbol to indicate they're
+> handicapped and have that make the Makefile not use the full LLVM suite?
 
-Is there anything you'd like me to do extra for these two patches?
+At this point, it's just powerpc and s390 where the assembler in llvm
+needs more work. Every other arch we can compile we generally can
+generally link. (modulo some long tail configs).
 
+> > 2. Update the documentation to describe using the
+> >
+> >    $ PATH=/usr/lib/llvm-#/bin:$PATH make LLVM=1 ...
+> >
+> >    trick. This has been the preferred method for using different
+> >    versions of LLVM but it has never been documented anywhere. This
+> >    would allow us to keep the current build infrastructure while giving
+> >    people clear instructions for how to handle different versions of
+> >    clang. As Peter has noted, this would require people who are not
+> >    familiar with building with LLVM to be constantly looking at the
+> >    documentation to remember the command to invoke, whereas with
+> >    LLVM=-#, it is easy to remember.
+>
+> Right, this is no more than a crude hack and is super unfriendly. It
+> should never have been accepted.
+
+Lots of tools modify PATH in your `.bashrc` or `.zshrc` etc.  I don't
+see how that's any different, other than one off commands in which you
+actually intend to use a specific version.
+
+> So how about we do the below instead? Then the normal way of things will
+> be:
+>
+>  $ make CC=clang-12
+>
+> and it will all *just*work*. The incomplete LLVM archs can revert back
+> to the old hybrid (clang+binutils) way of things by doing:
+>
+>  $ make CC=clang LLVM=0
+>
+> Which explicitly states, use clang but don't use the full llvm suite. Or
+> they can do that CONFIG_LLVM_BROKEN (or whatever) to have them default
+> to LLVM=0
+>
+> ifdef CONFIG_LLVM_BROKEN
+> LLVM ?= 0
+> endif
+>
+> in front of the CC magic in the below patch should take care of that.
+
+I don't think setting CC should affect LD and friends (if you were
+suggesting that CC=clang-12 replace LLVM=1).  Like Nathan, I'm
+sympathetic and think that your first patch is probably closer to what
+I'd accept, but it needs to handle non-suffixed versions (looks like
+it should) and add this info to Documentations/kbuild/llvm.rst.
+-- 
 Thanks,
-Ian
-
-On Mon, Oct 11, 2021 at 8:09 PM F=C4=81ng-ru=C3=AC S=C3=B2ng <maskray@googl=
-e.com> wrote:
->
-> On Mon, Oct 11, 2021 at 7:13 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > LLVM 9 (current release is LLVM 13) moved the minimum C++ version to
-> > GNU++14. Bump the version numbers in the feature test and perf build.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
->
->
-> Reviewed-by: Fangrui Song <maskray@google.com>
+~Nick Desaulniers
