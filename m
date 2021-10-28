@@ -1,63 +1,36 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5F42C81
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 17:12:33 +0000 (UTC)
-Received: by mail-pj1-f54.google.com with SMTP id np13so5191927pjb.4
-        for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 10:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rO/KgEXipkEFOtV4OljWjPnSu+OCWKZ6S7e5cXWpGdM=;
-        b=E+RG2Kp0XaxbrDAcplrk34cq6KscFnOuOWhh/IkBSKWtdOinzE93sAQ1jQyxH/lA/4
-         Q2aT7OrT1pS4rg1kbOSuna2v1KXwjnCl8++TiRBHXYdzDrpAEXb3zsHCwUh7X1nb5N9m
-         hMyi0/Aky7uDavjOvj+pE5pxSTI6zOml2jflw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rO/KgEXipkEFOtV4OljWjPnSu+OCWKZ6S7e5cXWpGdM=;
-        b=Gf0m6j5oWVvlH5kmmtK1UXvWA+IYTOc2ie9ghmHHTyYXLHdB0hf7hNKtuI9YyZTH1c
-         ZDa66gRGHXjv/Fozbp5Y3wPydxPfpHBFgZA8lBUSPyKQy7GJLwL752FzanpeA0kGIhbP
-         JBuUCzUgw75zQaloWhubtjef7S/NKbNn5lYKDQfh3foCl3anO3Tbw2O1oLinmZnobkpI
-         wbs4rb/wGI5qnFw9Z/Rm1dZvmBHci9tZT1OMoHkEDphYdzsU4oUcd2wJ6oJ4wpjp0hVx
-         4uurIKwqYlyuO0g/iVRSdR3KdfTn4uXmoqTn8Xmb/oDEzX0N4NsASnsNP90oplrKoron
-         zBoQ==
-X-Gm-Message-State: AOAM532x4VehJhnl7hwNMcVjZQ3tnFoNmfamC5YLFGcXJW2eZGdp/h/i
-	E8fjOBcVObLb96i0MDhCT5SeHg==
-X-Google-Smtp-Source: ABdhPJz2IlT/T5zcy7GPPvlNfwi+mGi3/Sy+uWSNXOXjgOfRpr76rQQGzqDrofGNv/AmHNFYqJ+VWw==
-X-Received: by 2002:a17:90a:5b0c:: with SMTP id o12mr14075957pji.11.1635441153641;
-        Thu, 28 Oct 2021 10:12:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b14sm7799796pjo.44.2021.10.28.10.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 10:12:33 -0700 (PDT)
-Date: Thu, 28 Oct 2021 10:12:32 -0700
-From: Kees Cook <keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CD62C81
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 17:44:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A93660F38;
+	Thu, 28 Oct 2021 17:44:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635443051;
+	bh=0L2qrlxhpMUF7fTdRz7zfOLtpAuVLxVyftNL4daqgMM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Uaidu29HzagQtZy/rDOEXnhhBYuazWeFxUkwAZBdKASEYkA7RfBco4V9mGy2DOJ79
+	 l/eZTLVJur3foZrC9HbhB2bDVHwFy3vZ0Qrp3xQXlzUPi0lwEivPTXUkF4Zork2jF3
+	 bjTs5qJ6fzubzZj7Eozq7uDhuqZ/rW36l8DGEX/AV83sSr3TOlAzdcfQMhW0WPiImz
+	 BPvyR700KxhxR5DIy5Hsn1BwEajfvLgJyS35EWm1bPA5ypr559r9iNNiwxkNS/069O
+	 UnHBLeSqtkm3YgzLXUk3L2KQoPQbvVxMeD/VPKCXlTPP6t+bmtUi6/4ImGYUu2hU/g
+	 IhZehfEOUGFgQ==
+Date: Thu, 28 Oct 2021 10:44:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
+	Michal Marek <michal.lkml@markovi.net>, X86 ML <x86@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <202110280958.22E5F74@keescook>
-References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211026201622.GG174703@worktop.programming.kicks-ass.net>
- <20211027120515.GC54628@C02TD0UTHF1T.local>
- <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
- <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
- <202110270939.F5C79CC@keescook>
- <YXnC1jqwR2ZKfMdk@hirez.programming.kicks-ass.net>
- <202110271430.2A3980217@keescook>
- <YXqE82jQh4S79uVL@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH] kbuild: Support clang-$ver builds
+Message-ID: <YXrhZoOgv5dtFMTs@archlinux-ax161>
+References: <YXqpFHeY26sEbort@hirez.programming.kicks-ass.net>
+ <CAK7LNATUpgfKJvjp0+8H6VfMLMio9+BCoyj00mAO8FcaVGCqjg@mail.gmail.com>
+ <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net>
+ <YXqyHhWGJfDkuxjP@hirez.programming.kicks-ass.net>
+ <YXq72/yPe76DhDLu@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,51 +39,191 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YXqE82jQh4S79uVL@hirez.programming.kicks-ass.net>
+In-Reply-To: <YXq72/yPe76DhDLu@hirez.programming.kicks-ass.net>
 
-On Thu, Oct 28, 2021 at 01:09:39PM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 27, 2021 at 03:27:59PM -0700, Kees Cook wrote:
-> 
-> > Right -- though wouldn't just adding __ro_after_init do the same?
+On Thu, Oct 28, 2021 at 05:03:55PM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 28, 2021 at 04:22:22PM +0200, Peter Zijlstra wrote:
+> > On Thu, Oct 28, 2021 at 04:15:02PM +0200, Peter Zijlstra wrote:
+> > > On Thu, Oct 28, 2021 at 11:07:40PM +0900, Masahiro Yamada wrote:
+> > > > On Thu, Oct 28, 2021 at 10:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > Debian (and derived) distros ship their compilers as -$ver suffixed
+> > > > > binaries. For gcc it is sufficent to use:
+> > > > >
+> > > > >  $ make CC=gcc-12
+> > > > >
+> > > > > However, clang builds (esp. clang-lto) need a whole array of tools to be
+> > > > > exactly right, leading to unweildy stuff like:
+> > > > >
+> > > > >  $ make CC=clang-13 LD=ld.lld=14 AR=llvm-ar-13 NM=llvm-nm-13 OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM=1
+> > > > >
+> > > > > which is, quite franktly, totally insane and unusable. Instead use the
+> > > > > already mandatory LLVM variable to convey this, enabling one such as
+> > > > > myself to use:
+> > > > >
+> > > > >  $ make LLVM=-13
+> > > > >
+> > > > > This also lets one quickly test different clang versions.
+> > > > 
+> > > > 
+> > > > Please read the commit log of
+> > > > a0d1c951ef08ed24f35129267e3595d86f57f5d3
+> > > 
+> > > That's yuck, I like LLVM=-13 or LLVM=-12 much better to select between
+> > > compilers. Means I don't have to remember wth they live and or wreck
+> > > PATH.
 > > 
-> > DEFINE_STATIC_CALL(static_call_name, func_a) __ro_after_init;
+> > Even better, why not do something like:
+> > 
+> > if test "${CC:0:5}" == "clang"
+> > then
+> > 	LLVM=1
+> > 	LLVM_SFX=${CC:5}
+> > fi
+> > 
+> > Then we can simply use: make CC=clang-12 and have it all just work.
+> > 
 > 
-> That breaks modules (and your jump_label patch doing the same is
-> similarly broken).
+> Like so..
 
-Well that's no fun. :) I'd like to understand this better so I can fix
-it!
+I like the first iteration of this idea most, as CC=clang does not
+currently imply using all LLVM tools. There are some architectures that
+work with CC=clang but not LLVM=1 so I am not sure we want that meaning
+to change.
 
+I do think this issue of Debian's different clang versions needs to be
+resolved as more and more LLVM features are being developed and non-LLVM
+or ClangBuiltLinux developers want to test these features and make sure
+that they work properly. There are a few different options:
+
+1. Take Peter's first patch so that LLVM=1 and LLVM=-# can be used. The
+   documentation should be updated to convey this change. The argument
+   against doing this might be that Debian/Ubuntu/derivatives of either
+   are special for using versioned suffixes and we do not want to add
+   this to the build system but I think that might be short sighted.
+   Peter's patch is not super complex nor does it change the status quo
+   of LLVM=1.
+
+2. Update the documentation to describe using the
+
+   $ PATH=/usr/lib/llvm-#/bin:$PATH make LLVM=1 ...
+
+   trick. This has been the preferred method for using different
+   versions of LLVM but it has never been documented anywhere. This
+   would allow us to keep the current build infrastructure while giving
+   people clear instructions for how to handle different versions of
+   clang. As Peter has noted, this would require people who are not
+   familiar with building with LLVM to be constantly looking at the
+   documentation to remember the command to invoke, whereas with
+   LLVM=-#, it is easy to remember.
+
+3. Explore recommending update-alternatives in the documentation or
+   working with Debian to provide this automatically. As this is a
+   Debian and derivatives only problem, a solution for it could come
+   from the distribution itself. I found one post from a few years ago
+   that talks about this but a command to use all LLVM tools from a
+   particular version would be rather unweildy:
+
+   https://askubuntu.com/questions/791616/set-clang-3-8-as-default
+
+Overall, I think I like #1 the best. It is not that much more
+complicated than what we have now and it leaves it entirely up to the
+user how they want to build and it is hard for them to shoot themselves
+in the foot. I am open to other suggestions or arguments though :)
+
+Cheers,
+Nathan
+
+> ---
+>  Makefile                       | 26 ++++++++++++++++----------
+>  tools/scripts/Makefile.include | 22 ++++++++++++++--------
+>  2 files changed, 30 insertions(+), 18 deletions(-)
 > 
-> When a module is loaded that uses the static_call(), it needs to
-> register it's .static_call_sites range with the static_call_key which
-> requires modifying it.
-
-Reading static_call_add_module() leaves me with even more questions. ;)
-
-It looks like module static calls need to write to kernel text? I don't
-understand. Is this when a module is using an non-module key for a call
-site? And in that case, this happens:
-
-                key |= s_key & STATIC_CALL_SITE_FLAGS;
-
-Where "key" is not in the module?
-
-And the flags can be:
-
-#define STATIC_CALL_SITE_TAIL 1UL       /* tail call */
-#define STATIC_CALL_SITE_INIT 2UL       /* init section */
-
-But aren't these per-site attributes? Why are they stored per-key?
-
-                        if (!init && static_call_is_init(site))
-                                continue;
-
-			...
-
-                        arch_static_call_transform(site_addr, NULL, func,
-                                                   static_call_is_tail(site));
-
-
--- 
-Kees Cook
+> diff --git a/Makefile b/Makefile
+> index 30c7c81d0437..1d0d4494e01d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -423,9 +423,15 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_CFLAGS 2>/dev/null)
+>  HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+>  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+>  
+> +CC_BASE = $(shell echo $(CC) | cut -b "1-5")
+> +ifeq ($(shell test $(CC_BASE) = clang; echo $$?),0)
+> +LLVM := 1
+> +LLVM_SFX := $(shell echo $(CC) | cut -b "6-")
+> +endif
+> +
+>  ifneq ($(LLVM),)
+> -HOSTCC	= clang
+> -HOSTCXX	= clang++
+> +HOSTCC	= clang$(LLVM_SFX)
+> +HOSTCXX	= clang++$(LLVM_SFX)
+>  else
+>  HOSTCC	= gcc
+>  HOSTCXX	= g++
+> @@ -443,14 +449,14 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+>  # Make variables (CC, etc...)
+>  CPP		= $(CC) -E
+>  ifneq ($(LLVM),)
+> -CC		= clang
+> -LD		= ld.lld
+> -AR		= llvm-ar
+> -NM		= llvm-nm
+> -OBJCOPY		= llvm-objcopy
+> -OBJDUMP		= llvm-objdump
+> -READELF		= llvm-readelf
+> -STRIP		= llvm-strip
+> +CC		= clang$(LLVM_SFX)
+> +LD		= ld.lld$(LLVM_SFX)
+> +AR		= llvm-ar$(LLVM_SFX)
+> +NM		= llvm-nm$(LLVM_SFX)
+> +OBJCOPY		= llvm-objcopy$(LLVM_SFX)
+> +OBJDUMP		= llvm-objdump$(LLVM_SFX)
+> +READELF		= llvm-readelf$(LLVM_SFX)
+> +STRIP		= llvm-strip$(LLVM_SFX)
+>  else
+>  CC		= $(CROSS_COMPILE)gcc
+>  LD		= $(CROSS_COMPILE)ld
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index 071312f5eb92..94c41083a7c7 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -51,12 +51,18 @@ define allow-override
+>      $(eval $(1) = $(2)))
+>  endef
+>  
+> +CC_BASE = $(shell echo $(CC) | cut -b "1-5")
+> +ifeq ($(shell test $(CC_BASE) = clang; echo $$?),0)
+> +LLVM := 1
+> +LLVM_SFX := $(shell echo $(CC) | cut -b "6-")
+> +endif
+> +
+>  ifneq ($(LLVM),)
+> -$(call allow-override,CC,clang)
+> -$(call allow-override,AR,llvm-ar)
+> -$(call allow-override,LD,ld.lld)
+> -$(call allow-override,CXX,clang++)
+> -$(call allow-override,STRIP,llvm-strip)
+> +$(call allow-override,CC,clang$(LLVM_SFX))
+> +$(call allow-override,AR,llvm-ar$(LLVM_SFX))
+> +$(call allow-override,LD,ld.lld$(LLVM_SFX))
+> +$(call allow-override,CXX,clang++$(LLVM_SFX))
+> +$(call allow-override,STRIP,llvm-strip$(LLVM_SFX))
+>  else
+>  # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
+>  $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+> @@ -69,9 +75,9 @@ endif
+>  CC_NO_CLANG := $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang__"; echo $$?)
+>  
+>  ifneq ($(LLVM),)
+> -HOSTAR  ?= llvm-ar
+> -HOSTCC  ?= clang
+> -HOSTLD  ?= ld.lld
+> +HOSTAR  ?= llvm-ar$(LLVM_SFX)
+> +HOSTCC  ?= clang$(LLVM_SFX)
+> +HOSTLD  ?= ld.lld$(LLVM_SFX)
+>  else
+>  HOSTAR  ?= ar
+>  HOSTCC  ?= gcc
