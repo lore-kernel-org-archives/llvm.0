@@ -1,72 +1,221 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6462C81
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 11:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=N7GZ22gb+iGao7JNthfhMzqUFJ1nHCbCiKPouEv2QCE=; b=uNQphv4X1bK24WiK/EUb2sc1Ne
-	HL0dtPCjNqlc3UAfHG3D3Djn9F66Zh1WlD5+wgguWUHBmtdIRxW2TWe8cltP3lXclj/GKV7AtWIWI
-	7zJAsFhlpPsxGNzdZnSVjE6mUmBsl71qoFuektruFPCHZXqIXw2TAi+4AAf6CD26MgIN0YHEcEt9m
-	R+G/Zr2/CtzLdNxT93UGDUQ1dhF0gl+XmGIYEHJDJmzGnynEUqVEMe8e/jaDMmvB7Jn0f0iWlYZKC
-	ZR5qrUnGUc/r9lwPZdHLkv7+ODh93R9EG6a49w7nitY8fFFavnc2Abe4a6A7FR8GVaHzgis3hzQy9
-	dhF6OxFA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mg3Hx-000ilK-VV; Thu, 28 Oct 2021 11:10:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 92F8430022C;
-	Thu, 28 Oct 2021 13:09:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5622C20D903DE; Thu, 28 Oct 2021 13:09:39 +0200 (CEST)
-Date: Thu, 28 Oct 2021 13:09:39 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <YXqE82jQh4S79uVL@hirez.programming.kicks-ass.net>
-References: <20211013181658.1020262-1-samitolvanen@google.com>
- <20211026201622.GG174703@worktop.programming.kicks-ass.net>
- <20211027120515.GC54628@C02TD0UTHF1T.local>
- <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
- <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
- <202110270939.F5C79CC@keescook>
- <YXnC1jqwR2ZKfMdk@hirez.programming.kicks-ass.net>
- <202110271430.2A3980217@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2952C81
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 11:15:52 +0000 (UTC)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1mg3Nl-0006KA-0k; Thu, 28 Oct 2021 13:15:41 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1mg3Ng-0002Rz-44; Thu, 28 Oct 2021 13:15:36 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1mg3Ng-00041g-2p; Thu, 28 Oct 2021 13:15:36 +0200
+Date: Thu, 28 Oct 2021 13:15:35 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Sean Young <sean@mess.org>
+Cc: =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>, lkp@intel.com,
+	mchehab@kernel.org, thierry.reding@gmail.com, lee.jones@linaro.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
+Message-ID: <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
+References: <YXlxhpZWf2mxJaMi@fedora>
+ <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
+ <20211028091442.GA16514@gofer.mess.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gairqvahdkp57zyj"
 Content-Disposition: inline
-In-Reply-To: <202110271430.2A3980217@keescook>
+In-Reply-To: <20211028091442.GA16514@gofer.mess.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-On Wed, Oct 27, 2021 at 03:27:59PM -0700, Kees Cook wrote:
 
-> Right -- though wouldn't just adding __ro_after_init do the same?
-> 
-> DEFINE_STATIC_CALL(static_call_name, func_a) __ro_after_init;
+--gairqvahdkp57zyj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That breaks modules (and your jump_label patch doing the same is
-similarly broken).
+Hello Sean,
 
-When a module is loaded that uses the static_call(), it needs to
-register it's .static_call_sites range with the static_call_key which
-requires modifying it.
+On Thu, Oct 28, 2021 at 10:14:42AM +0100, Sean Young wrote:
+> On Thu, Oct 28, 2021 at 08:45:13AM +0200, Uwe Kleine-K=F6nig wrote:
+> > The conversion is right (I think),
+>=20
+> We still have the problem that the pwm drivers calculate the period
+> incorrectly by rounding down (except pwm-bcm2835). So the period is not
+> as good as it could be in most cases, but this driver can't do anything
+> about that.
+
+Yeah, some time ago I started coding a round_state function
+(wip at
+https://git.pengutronix.de/cgit/ukl/linux/commit/?h=3Dpwm-wip&id=3Dae348eb6=
+a55d6526f30ef4a49819197d9616391e)
+but this was pushed down on my todo-list by more important stuff.
+
+If you want to experiment with that ...
+
+> > note this could be optimized a bit
+> > further: state.period only depends on carrier which rarely changes, so
+> > the calculation could be done in pwm_ir_set_carrier(). Ditto for duty
+> > which only depends on state.period and pwm_ir->duty_cycle. (This is for
+> > a separate commit though.)
+>=20
+> I'm not sure what caching this is much of a win. The calculation is a few
+> instructions, so you're not winning in the way of speed. On the flip side
+> you use more memory since pwm_state has to be kmalloc() rather than exist=
+ing
+
+I tested a bit with this patch on top of Ma=EDra's:
+
+	diff --git a/drivers/media/rc/pwm-ir-tx.c b/drivers/media/rc/pwm-ir-tx.c
+	index 105a9c24f1e3..7585c21775bc 100644
+	--- a/drivers/media/rc/pwm-ir-tx.c
+	+++ b/drivers/media/rc/pwm-ir-tx.c
+	@@ -17,7 +17,7 @@
+	=20
+	 struct pwm_ir {
+		struct pwm_device *pwm;
+	-	unsigned int carrier;
+	+	struct pwm_state state;
+		unsigned int duty_cycle;
+	 };
+	=20
+	@@ -32,6 +32,7 @@ static int pwm_ir_set_duty_cycle(struct rc_dev *dev, u32=
+ duty_cycle)
+		struct pwm_ir *pwm_ir =3D dev->priv;
+	=20
+		pwm_ir->duty_cycle =3D duty_cycle;
+	+	pwm_set_relative_duty_cycle(&pwm_ir->state, pwm_ir->duty_cycle, 100);
+	=20
+		return 0;
+	 }
+	@@ -43,7 +44,8 @@ static int pwm_ir_set_carrier(struct rc_dev *dev, u32 ca=
+rrier)
+		if (!carrier)
+			return -EINVAL;
+	=20
+	-	pwm_ir->carrier =3D carrier;
+	+	pwm_ir->state.period =3D DIV_ROUND_CLOSEST(NSEC_PER_SEC, carrier);
+	+	pwm_set_relative_duty_cycle(&pwm_ir->state, pwm_ir->duty_cycle, 100);
+	=20
+		return 0;
+	 }
+	@@ -53,21 +55,15 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int =
+*txbuf,
+	 {
+		struct pwm_ir *pwm_ir =3D dev->priv;
+		struct pwm_device *pwm =3D pwm_ir->pwm;
+	-	struct pwm_state state;
+		int i;
+		ktime_t edge;
+		long delta;
+	=20
+	-	pwm_init_state(pwm, &state);
+	-
+	-	state.period =3D DIV_ROUND_CLOSEST(NSEC_PER_SEC, pwm_ir->carrier);
+	-	pwm_set_relative_duty_cycle(&state, pwm_ir->duty_cycle, 100);
+	-
+		edge =3D ktime_get();
+	=20
+		for (i =3D 0; i < count; i++) {
+	-		state.enabled =3D !(i % 2);
+	-		pwm_apply_state(pwm, &state);
+	+		pwm_ir->state.enabled =3D !(i % 2);
+	+		pwm_apply_state(pwm, &pwm_ir->state);
+	=20
+			edge =3D ktime_add_us(edge, txbuf[i]);
+			delta =3D ktime_us_delta(edge, ktime_get());
+	@@ -75,8 +71,8 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int *t=
+xbuf,
+				usleep_range(delta, delta + 10);
+		}
+	=20
+	-	state.enabled =3D false;
+	-	pwm_apply_state(pwm, &state);
+	+	pwm_ir->state.enabled =3D false;
+	+	pwm_apply_state(pwm, &pwm_ir->state);
+	=20
+		return count;
+	 }
+	@@ -95,8 +91,9 @@ static int pwm_ir_probe(struct platform_device *pdev)
+		if (IS_ERR(pwm_ir->pwm))
+			return PTR_ERR(pwm_ir->pwm);
+	=20
+	-	pwm_ir->carrier =3D 38000;
+	-	pwm_ir->duty_cycle =3D 50;
+	+	pwm_ir->state.duty_cycle =3D 50;
+	+	pwm_init_state(pwm_ir->pwm, &pwm_ir->state);
+	+	pwm_ir_set_carrier(rcdev, 38000);
+	=20
+		rcdev =3D devm_rc_allocate_device(&pdev->dev, RC_DRIVER_IR_RAW_TX);
+		if (!rcdev)
+
+bloat-o-meter reports (for an arm allmodconfig build)
+
+	add/remove: 0/0 grow/shrink: 3/1 up/down: 644/-396 (248)
+	Function                                     old     new   delta
+	pwm_ir_probe                                 372     676    +304
+	pwm_ir_set_carrier                           108     292    +184
+	pwm_ir_set_duty_cycle                         68     224    +156
+	pwm_ir_tx                                    908     512    -396
+	Total: Before=3D2302, After=3D2550, chg +10.77%
+
+struct pwm_ir increases from 12 bytes to 40 bytes.
+
+The stack space required by pwm_ir_tx decreases from 60 to 36
+
+I don't know exactly how kmalloc works internally. Maybe allocating a
+structure of size 40 bytes doesn't need more memory than a structure of
+size 12?
+
+I didn't check how runtimes change, but the size decrease of pwm_ir_tx()
+is nice and might save a bit of runtime.
+
+Probably it depends on your focus if this change is good for you or not.
+
+> just on the stack, and both ioctl handlers and the probe function need to
+> recalculate the period/duty cycle, so there is a slight increase in code =
+size.
+>=20
+> This change does not improve anything measurably and only increases code
+> complexity.
+
+You did measure?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gairqvahdkp57zyj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmF6hlQACgkQwfwUeK3K
+7AlKtwf9H5aw8l3EXGUcjZhfwd8EYuoy+PO1ri2AL13Q9N1wUHR7f+qJNX0ltBh1
+VFSdscpayWWZD5fcjWYZljPFemWuSN/2j4lw/gTCghoO0Wy6EbyNBX0cSFEcQdm4
+Q1RnsbmrJnHdn9U4CiaOxrHI8MwlsbIy5vebdzLBqUTgGAV/yPXhxJ1EOMj2HE3a
+xzfWBQJ8V6Mj57iZjWwluoGD4SkfxDQxTz815ZPeQ04E6W3eRDrBY102Ao8lJas7
+WR1zN5r2z+vrN0zHWdYmgojaqPw0HfRWWIWVVk9GdxjPkJ2HF8F0h5Se9CzLp9ib
+ekSOh4JKwrxxSo9GwN6tpNJc/yqHWg==
+=MAUv
+-----END PGP SIGNATURE-----
+
+--gairqvahdkp57zyj--
