@@ -1,104 +1,72 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CFE72;
-	Thu, 28 Oct 2021 09:25:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D2EC660E78;
-	Thu, 28 Oct 2021 09:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635413125;
-	bh=Y5mRnOfcpDHbrEcKPxOejw1RoXP9QeM+TxRILiKOfo0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pbmDGr6wOXPSBSdwgtUvZlsOLLxT5Ryzm7W5imGXKv/RDJG/gdBxA8lkpldGEG8rN
-	 T1lXwbiyM37gFySVp7kNCXXpRQYF7Nuyjjevmm5C7TY2dHjxtug96MWIXiO7uhk+Ug
-	 DpXZvmkeU1NZ/d5zSIbU+kxIffGSKMY5Er7LBQMOejALdrK21srwGlHG65HX+Ul6zb
-	 TKhKi5Y2DcHgP780spnrF0Utx3j1ZIvqGGfKALqSFPfBFSyu0riQG8UnXz6cSGVl8K
-	 PM1e764H8PFh3aMFLICnP6ohRwXjx2w62Ip/1xz8Sx2HGeFp/CTkbeFEmAXQ5Hq61a
-	 yur7LYkJL6wug==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-	(envelope-from <mchehab@kernel.org>)
-	id 1mg1f0-0004Nk-Oz; Thu, 28 Oct 2021 10:25:22 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: 
-Cc: linuxarm@huawei.com,
-	mauro.chehab@huawei.com,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6462C81
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 11:11:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=N7GZ22gb+iGao7JNthfhMzqUFJ1nHCbCiKPouEv2QCE=; b=uNQphv4X1bK24WiK/EUb2sc1Ne
+	HL0dtPCjNqlc3UAfHG3D3Djn9F66Zh1WlD5+wgguWUHBmtdIRxW2TWe8cltP3lXclj/GKV7AtWIWI
+	7zJAsFhlpPsxGNzdZnSVjE6mUmBsl71qoFuektruFPCHZXqIXw2TAi+4AAf6CD26MgIN0YHEcEt9m
+	R+G/Zr2/CtzLdNxT93UGDUQ1dhF0gl+XmGIYEHJDJmzGnynEUqVEMe8e/jaDMmvB7Jn0f0iWlYZKC
+	ZR5qrUnGUc/r9lwPZdHLkv7+ODh93R9EG6a49w7nitY8fFFavnc2Abe4a6A7FR8GVaHzgis3hzQy9
+	dhF6OxFA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mg3Hx-000ilK-VV; Thu, 28 Oct 2021 11:10:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 92F8430022C;
+	Thu, 28 Oct 2021 13:09:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5622C20D903DE; Thu, 28 Oct 2021 13:09:39 +0200 (CEST)
+Date: Thu, 28 Oct 2021 13:09:39 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: atomisp: get rid of two unused functions
-Date: Thu, 28 Oct 2021 10:25:21 +0100
-Message-Id: <320510b91925e0ebdb5fdaa1d4843dc470067440.1635413116.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
+Message-ID: <YXqE82jQh4S79uVL@hirez.programming.kicks-ass.net>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211026201622.GG174703@worktop.programming.kicks-ass.net>
+ <20211027120515.GC54628@C02TD0UTHF1T.local>
+ <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+ <20211027124852.GK174703@worktop.programming.kicks-ass.net>
+ <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
+ <202110270939.F5C79CC@keescook>
+ <YXnC1jqwR2ZKfMdk@hirez.programming.kicks-ass.net>
+ <202110271430.2A3980217@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202110271430.2A3980217@keescook>
 
-Those cause build to break with -Werror with clang-12:
+On Wed, Oct 27, 2021 at 03:27:59PM -0700, Kees Cook wrote:
 
-	drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c:121:24: error: unused function 'gdc_reg_load' [-Werror,-Wunused-function]
-	drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c:33:1: error: unused function 'sh_css_elems_bytes_from_info' [-Werror,-Wunused-function]
+> Right -- though wouldn't just adding __ro_after_init do the same?
+> 
+> DEFINE_STATIC_CALL(static_call_name, func_a) __ro_after_init;
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../media/atomisp/pci/hive_isp_css_common/host/gdc.c  | 11 -----------
- .../pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c     |  6 ------
- 2 files changed, 17 deletions(-)
+That breaks modules (and your jump_label patch doing the same is
+similarly broken).
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c
-index 8ed1cffc5384..25e082d6a94a 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c
-@@ -28,10 +28,6 @@ static inline void gdc_reg_store(
-     const unsigned int	reg,
-     const hrt_data		value);
- 
--static inline hrt_data gdc_reg_load(
--    const gdc_ID_t		ID,
--    const unsigned int	reg);
--
- #ifndef __INLINE_GDC__
- #include "gdc_private.h"
- #endif /* __INLINE_GDC__ */
-@@ -117,10 +113,3 @@ static inline void gdc_reg_store(
- 	ia_css_device_store_uint32(GDC_BASE[ID] + reg * sizeof(hrt_data), value);
- 	return;
- }
--
--static inline hrt_data gdc_reg_load(
--    const gdc_ID_t		ID,
--    const unsigned int	reg)
--{
--	return ia_css_device_load_uint32(GDC_BASE[ID] + reg * sizeof(hrt_data));
--}
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c
-index c505c94a7241..f741beb9ed8a 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c
-@@ -29,12 +29,6 @@ static const struct ia_css_raw_configuration default_config = {
- 	.pipe = (struct sh_css_sp_pipeline *)NULL,
- };
- 
--static inline unsigned
--sh_css_elems_bytes_from_info(unsigned int raw_bit_depth)
--{
--	return CEIL_DIV(raw_bit_depth, 8);
--}
--
- /* MW: These areMIPI / ISYS properties, not camera function properties */
- static enum sh_stream_format
- css2isp_stream_format(enum atomisp_input_format from) {
--- 
-2.31.1
-
+When a module is loaded that uses the static_call(), it needs to
+register it's .static_call_sites range with the static_call_key which
+requires modifying it.
