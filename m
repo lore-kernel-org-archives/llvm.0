@@ -1,206 +1,196 @@
-Received: from mail-qv1-f74.google.com (mail-qv1-f74.google.com [209.85.219.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D650A2C82
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 21:34:43 +0000 (UTC)
-Received: by mail-qv1-f74.google.com with SMTP id gi5-20020a056214248500b00382f7a7c7e6so6072868qvb.21
-        for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 14:34:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F362C82
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 21:52:42 +0000 (UTC)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19SKVVBE032294;
+	Thu, 28 Oct 2021 21:52:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=d++wGuqx9EqNfmNdZVfNgxQ2C95sFy6e0+EL2FAf5m8=;
+ b=feQCuZojijDjNs6vl/byaP6c7kBUuAiLTJTHFf/1AUREbg58RZSEgIoKypDSDARMweyf
+ GDLaJRrHVJYc/7mX2g7NLyzZpwULV8ZZdaytPc0lkUiU+2VlHHAOFwnKj6O/LWHlnqqo
+ yL8D1+kxmGG05lgKXc5GLjRIuwb8YSbbRLxpIB2KV1R7oiGS8/TtvXsA+px7k2VYUgob
+ YhLzbRvpovdBZv+ZSmF/EDmPI2W6hJoOJRcIwGC6lkXOyVft6VIvbhxg9JykeabIYHpT
+ qTHL6xWxqW5LCxWbp+MFZN5lo4KoUVTlgd+wNgb1gjLTrUOeXtfKFn5cdIU1Xg9uj6Bp Gw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+	by mx0b-00069f02.pphosted.com with ESMTP id 3byedanw69-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 Oct 2021 21:52:31 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+	by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19SLpcUd061358;
+	Thu, 28 Oct 2021 21:52:22 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
+	by aserp3020.oracle.com with ESMTP id 3bx4gf0qu0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 Oct 2021 21:52:22 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VkRi5a4gKNXL40aKjYgeelY5zU6Q+uv2IR4XYkZAKvuDqiEuXqHhIzy4ZjLkb2LwuNpRfFz9kMhV2g1w5ETYu0nyreZh6RuRrfEXZIvX6K4BU0xZpO1M++Drav4A8mZueQOZw/8zbnNRjQwQ608cyaH1jap35HbroCZ/cec3IpdYX/8GiX6UKmu4+eI8v1W6Umr9SnJaYxh578psJP3H8Yolx1nUPPi5ObR1x9hMyhpd6Nt7R/n6BcGvuxiTs8SEDw2olBZiPe9aDF0h5ouDZEesPOKnNB6EwBMVvzcZfXR+n9bsvyV8pXsGMqaWK0q0hQawmi9Hnxg8O/3s9Obj0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d++wGuqx9EqNfmNdZVfNgxQ2C95sFy6e0+EL2FAf5m8=;
+ b=FtJv7Rn4gk6rA4NEXXIYC3hrSNeGoGV2VKFlRCBydlyqJ1QQyzgfsVR/KArmKjherD2zfnPfel2LcSf9Egy4lKbZ8X5ca/Ff3arUf+ifFCUNNHnQz2BStY4Zia0xU/aRv63sD26x9+mwAGHeu/l+/F5zcbt1TeCmu8N42lXf5KQT2LSyJUnVcBrfkyu9CM/LxwpnooJQVCasP7yGfG++tAGbugnRrcZJvXLa7wqKrYNODaqvqB6eqXDRiI8qR/xTIU3fVmryKSqbqUShPCvqObQuS4qPtSWU89+wDIbLc7N7uNsxuyAUv4Qrz9z+PGt2UHEXfrELkz0nmz7s+49D3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=OQDQ2f8asb/XV/7FhL+X/OcXI4SOd7uK2NuQ9jXG82g=;
-        b=V15hpHIJKFlrONA4ck3gnpQxOMBmxXpg8zWdnO3bKmdnKpgyrKIHj1W414KzxnSJPO
-         0lm+gU7kc+/Di9iP1OoXUonyfWvhs5GwiJGUtRn93f6xrDmVs8lcP5qvjcUk3V4F/z6j
-         fqQNwFDljf0DCDeSXgXMrv2jWuATPlzNDOGL25BBCHbaeXuoqzbiqWPBGREC7HDOcnC5
-         seRzrXPCxC2nTg7t6nxjGZFIPIrzA/qp8MEckWw1qdVRR4L1SGj+cTgRfATNN3SlEBd5
-         ckK+PwMG+K55cFtpIJctHVt+M7ZoM8viL/34Iz6ILxmZo4DQQ4qooLpiv2O8f8c1c2Ke
-         Kr3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=OQDQ2f8asb/XV/7FhL+X/OcXI4SOd7uK2NuQ9jXG82g=;
-        b=F6NkSkPrJlRJQD7Ak5OeVVroYMDovaBOWJiOk1mz7/Ib1JQTexK8R1+W9FQgEamU8q
-         ZAUG410ZQ33W0D9wJeK9v1k+d7YxB6XXYWycb7/qTagHWMkvGYIiOo/MGaHTTI46uxIY
-         vs1aOkYkOq/7hlMpn+U6otpLOC0q4YE3muGIKktEJStmVycOUgo9ecYbSmr6wuh5foaE
-         UU1ivOoO+l5m3FjELDRCTkkourzbqldfErCF3oe5LAQeDuG5uDRMFMB2PnDFtRURRdro
-         RTR1RN1wHCsEdvYftsfTIMsQxvOtQafOgzEqOjP87k2bi6oX2db5y79DJhERItE2fnXr
-         rl1A==
-X-Gm-Message-State: AOAM5336zptAMfC0oaOwjaCf1AwsuSsByvE9yg+vpmWRpVUt2lZp5X03
-	AJJfaYeoD+mRxoPo6neHce+r3J5GfHw=
-X-Google-Smtp-Source: ABdhPJx/zJIBQjlkciiZyjU08oE/ufcsTYPRGQljhVBj9crj3Qsd0W2Wk/AaJbFCQkKyQ6KV6eihUIdUUec=
-X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:cbc8:1a0d:eab9:2274])
- (user=seanjc job=sendgmr) by 2002:a05:622a:1441:: with SMTP id
- v1mr7554345qtx.45.1635456882657; Thu, 28 Oct 2021 14:34:42 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Thu, 28 Oct 2021 14:34:08 -0700
-Message-Id: <20211028213408.2883933-1-seanjc@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d++wGuqx9EqNfmNdZVfNgxQ2C95sFy6e0+EL2FAf5m8=;
+ b=en4CH4vfHxx8e1Pni4EN5KJQLEaPLehhx0hiI125HQSQAKgg/8TYU0EHnZql/DNgqGVkcVUWGZXIMHNODGyYeZlwOT1HoSugq8WMX90/t5hUnhZuBPa1VcP5vNww/fNhBZ/oWgZC7w18fXbHeqzFC9iQx0LRlinRpvAhzHz6nlo=
+Authentication-Results: oracle.com; dkim=none (message not signed)
+ header.d=none;oracle.com; dmarc=none action=none header.from=oracle.com;
+Received: from SA2PR10MB4715.namprd10.prod.outlook.com (2603:10b6:806:fb::10)
+ by SN4PR10MB5606.namprd10.prod.outlook.com (2603:10b6:806:209::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15; Thu, 28 Oct
+ 2021 21:52:20 +0000
+Received: from SA2PR10MB4715.namprd10.prod.outlook.com
+ ([fe80::6887:4e61:85f3:a83c]) by SA2PR10MB4715.namprd10.prod.outlook.com
+ ([fe80::6887:4e61:85f3:a83c%7]) with mapi id 15.20.4649.015; Thu, 28 Oct 2021
+ 21:52:20 +0000
+From: Nick Alcock <nick.alcock@oracle.com>
+To: Nick Alcock <nick.alcock@oracle.com>, jeyu@kernel.org,
+        masahiroy@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, eugene.loh@oracle.com, kris.van.hees@oracle.com
+Subject: Re: [PATCH v5 6/7] kallsyms: add /proc/kallmodsyms
+References: <20211027174706.31010-7-nick.alcock@oracle.com>
+	<202110281914.lE4Jfz7P-lkp@intel.com>
+Emacs: or perhaps you'd prefer Russian Roulette, after all?
+Date: Thu, 28 Oct 2021 22:52:13 +0100
+In-Reply-To: <202110281914.lE4Jfz7P-lkp@intel.com> (kernel test robot's
+	message of "Thu, 28 Oct 2021 19:36:46 +0800")
+Message-ID: <878rycrf5e.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2.50 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0052.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:152::21) To SA2PR10MB4715.namprd10.prod.outlook.com
+ (2603:10b6:806:fb::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH] KVM: x86: Shove vp_bitmap handling down into sparse_set_to_vcpu_mask()
-From: Sean Christopherson <seanjc@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, 
-	Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Received: from loom (2001:8b0:1101:10::2) by LO4P123CA0052.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:152::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Thu, 28 Oct 2021 21:52:18 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8508f729-6473-49ba-d7eb-08d99a5d37a1
+X-MS-TrafficTypeDiagnostic: SN4PR10MB5606:
+X-Microsoft-Antispam-PRVS: 
+	<SN4PR10MB5606B0B24A902D6B6DE77ABB8B869@SN4PR10MB5606.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:240;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	DQ/8oZV+7nXS3ja4XYaNXI/9JcGsxDbueTosMjt8EQ6EN/C5IBEMsWIM3ef1icOupZxA+B/44hpxMPw8INIlwyp96S1I/BJMZJ97UUqbQ9Anx/bjMAHGPfxl7U0w/uHUKNGCuc8RSVYNsPPwiLU68zUzbrX6yoXE9oqJv2BvFmGFO3vIXCNsPX0bMykVsxJj9tqh/uDp+ibh1eac4gzkQvIN+9YeZUIuUVWQC529ioW4iHRjd2WeVHyEX7RUGSSgtVKCvKabKDTwLfNTHx6kQ0ybONSVj+CJPd0NV1A6DmxZWZkZiS9l0AeJyyu7h68JTPGS6oOrAjyM61lknVPIhaR44hll16tGCc/soLi5Zp13HTqGkNoP94eJ+s8W72pY35AWpsPyOrxHwx68jARdBvOrxkxXp+nTZUYbEMqjwX7DhlWPKjLclY3SRJOQjfc3AfjfH/XirR/AC94WuKS/yEzL5k0Fl++KSeF+WZFt9u5viWlA2VqcKB/hXuWzu8Ep44Ebb5ES3rZ+Mn5dMaPZDEdTHzY6Gd1Ls+qqst0BIDA1nJcqqlkRRyu+0zLlZbkFuAd2diGCHczpICHFEIzLYGx0gj0o0KRR5zbHd1vWxTYifr986gVjSaylddDU56QvNSfxQi1mbHU5E0EuO18EpQ==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66556008)(66476007)(2906002)(6496006)(508600001)(5660300002)(107886003)(66946007)(9686003)(316002)(186003)(36756003)(8936002)(52116002)(8676002)(86362001)(83380400001)(6486002)(38100700002)(44832011)(4326008)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?CbuLGPWubd/r2iRmf0qeFGIgSVq3jnK7BdZWqOIoIwoBmkRmUZxL+c6/zcey?=
+ =?us-ascii?Q?g+5dNjtQxX/dvZPMI0sWTZ0wQNwrikkW+2xddPskpTnj4utUmukFUE34t0ht?=
+ =?us-ascii?Q?5n9snDZtZsLr9n+a46ZqCPfEzeqv7crvWs/5z75vlZY+leJr8GW4MEKV91v7?=
+ =?us-ascii?Q?KN1zp5U0rA6xASQTJdDn4WI8Y0xm3VxZp/VATy/LlDeznY3snH2noLt09YWP?=
+ =?us-ascii?Q?r0UrGVxGzGfF3370Vv8BxwI6KsfPdKagDYSJJL5XtYLGfyZbBm1oimBUhwJ7?=
+ =?us-ascii?Q?/EsL4f/c7oBlPDAc2dnFUQYsn+8GnCYZBfUlB2BUEJYHTbSz9XLykh9YdFAz?=
+ =?us-ascii?Q?EGzvODWoBbxiBTshT60rYWiUpD820M0RAyLijhX5sri3aRxRSQ+JZwDufxHE?=
+ =?us-ascii?Q?MNX0FLQ4yOPs+Pz9iq51GJiYtIYFhYCFVRwdfgGawSVdSypL/5qGpV2J6Uzy?=
+ =?us-ascii?Q?6TguRV9V7KWochOuIXnOnGr23k0QComkHcoS1fqsZ66eU/VcnZNaqbk0kq/d?=
+ =?us-ascii?Q?Rq/44wNhZutYSI8MyRloCjqPYLGj7NtNqOM70VkyeVdzc7Ikc4XfSK1qYU3E?=
+ =?us-ascii?Q?5roNTi2/aMx7FObSgG3fzp9KOKNYrxIweLf7WQUHvJZALblxgioLjwo4b11d?=
+ =?us-ascii?Q?LA5JUawVmrUy7aenaFsPzCAr6NT7vwqnMM/cnJ+kTVpafKi3gDMJQh05ML03?=
+ =?us-ascii?Q?5XjgeAT3XVgtIGhII614jl4ySO3D83tjBZ0Z/b901/C96xE6Swu1yadM6qb2?=
+ =?us-ascii?Q?pz3WsEW079wGZ+eJeAapv3je6rLgqdDnmG/2NoG/Nw20lrTWZNLclLi8u42F?=
+ =?us-ascii?Q?vDgwajyexwMKLQYOhrFKPjk9MaQRJBf/Q/PNl/vVnObudiYOoAv5ow1w/6BQ?=
+ =?us-ascii?Q?XFQPNHXn2MWqb2XEBzo8NcKjuI0h8x94cXy3z388qbv7K5ufZ7J4bGtTczmL?=
+ =?us-ascii?Q?tbqwZhRxseSyY5JPTVyTcnFwFAo9NlfxgpANV7YP6BxP/qr0RUvqMVTTP8m5?=
+ =?us-ascii?Q?vPaWMug2Broic6/SHJlEWeu/pybWqFzFuO82IyB8dSc/7kaWIMmMaL7azrFj?=
+ =?us-ascii?Q?D1KS97HtBoYrT0Zjr3w9J2gC2YG2sK0h9uKqqUlf09/S2MMyYA4emycop5hn?=
+ =?us-ascii?Q?v7Wg38Q47yAnR0RIaCJ7kkb+2hnCLfr/RJgy1p9cr/6PU3O4H59t4U8EzDag?=
+ =?us-ascii?Q?FigFbnANR8JkFM42YlgYA5iTYUjUGvSxoHM0RoGG2cCkZdzQ/0iefZPDzjnI?=
+ =?us-ascii?Q?tgFfMULqjotYbMoGPqN7s8uOCcHN/8GvP4Z0h+OjwibE1RTJVXorKN3FS3OX?=
+ =?us-ascii?Q?G1bH3AqTYRidc06mHediuip9wR7C5O7ThXcWVx+29nQ4fzjzthLLTUTHp5i4?=
+ =?us-ascii?Q?zolIQgZbT1lfMe3C25UcdO42Q4vt8Skh3bY58rNP9Jj6+nFnXLF22Q/vwQJ+?=
+ =?us-ascii?Q?WSO6xm/oNDUS40pmJk/LuLGgzB/yL5Bu1i+ngC12H1tDaZydVPnFO+Oz/bU8?=
+ =?us-ascii?Q?6KIUDvfFfDPi1VlSU0Y9NPBeQKxY3a7cmPYIi0LUi7w3iBofxEO/JLlyrPmd?=
+ =?us-ascii?Q?y0zkgcrC5yX0kpn5fA1bfnx9h75aflB47KJS8BUnnl/WIAvkCd5bLutt2d2P?=
+ =?us-ascii?Q?SQlpDwMXqEUu61Ir9f6gz9ZjHQ02V96SF8Rjxy3xq6gQ?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8508f729-6473-49ba-d7eb-08d99a5d37a1
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4715.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 21:52:20.8363
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JAd7sLt32B85GSYgy0LYZPXpuDrLY6DvaHUC8Gql+BonUaQpHw7HGCmqwO6FoZeRCkEE0p4HF2OOHa0U8p1SNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5606
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10151 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ bulkscore=0 phishscore=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110280114
+X-Proofpoint-ORIG-GUID: 9cPEcEW13fDA7izW5u95ZhaNdu3uROZP
+X-Proofpoint-GUID: 9cPEcEW13fDA7izW5u95ZhaNdu3uROZP
 
-Move the vp_bitmap "allocation" that's need to handle mismatched vp_index
-values down into sparse_set_to_vcpu_mask() and drop __always_inline from
-said helper.  The vp_bitmap mess is a detail that's specific to the sparse
-translation and does not need to be exposed to the caller.
+For reference, and to be maximally pedantic:
 
-The underlying motivation is to fudge around a compilation warning/error
-when CONFIG_KASAN_STACK=y, which is selected (and can't be unselected) by
-CONFIG_KASAN=y when compiling with gcc (clang/LLVM is a stack hog in some
-cases so it's opt-in for clang).  KASAN_STACK adds a redzone around every
-stack variable, which pushes the Hyper-V functions over the default limit
-of 1024.  With CONFIG_KVM_WERROR=y, this breaks the build.  Shuffling which
-function is charged with vp_bitmap gets all functions below the default
-limit.
+On 28 Oct 2021, kernel test robot said:
 
-Regarding the __always_inline, prior to commit f21dd494506a ("KVM: x86:
-hyperv: optimize sparse VP set processing") the helper, then named
-hv_vcpu_in_sparse_set(), was a tiny bit of code that effectively boiled
-down to a handful of bit ops.  The __always_inline was understandable, if
-not justifiable.  Since the aforementioned change, sparse_set_to_vcpu_mask()
-is a chunky 350-450+ bytes of code without KASAN=y, and balloons to 1100+
-with KASAN=y.  In other words, it has no business being forcefully inlined.
+> Hi Nick,
+>
+> Thank you for the patch! Perhaps something to improve:
 
-Reported-by: Ajay Garg <ajaygargnsit@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
+Nope! This is a (very small) flaw in the !CONFIG_PROC_FS case in
+include/linux/proc_fs.h. (I don't think one can seriously call it a
+*bug*, as such.)
 
-Vitaly (and anyone with extensive KVM + Hyper-V knowledge), it would be
-really helpful to get better coverage in kvm-unit-tests.  There's a smoke
-test for this in selftests, but it's not really all that interesting.  It
-took me over an hour and a half just to get a Linux guest to hit the
-relevant flows.  Most of that was due to QEMU 5.1 bugs (doesn't advertise
-HYPERCALL MSR by default) and Linux guest stupidity (silently disables
-itself if said MSR isn't available), but it was really annoying to have to
-go digging through QEMU to figure out how to even enable features that are
-extensive/critical enough to warrant their own tests.
+It's not a problem in this patch.
 
-/wave to the clang folks for the pattern patch on the changelog ;-)
+> config: hexagon-randconfig-r041-20211027 (attached as .config)
 
- arch/x86/kvm/hyperv.c | 55 ++++++++++++++++++++++---------------------
- 1 file changed, 28 insertions(+), 27 deletions(-)
+This config includes: 
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 4f15c0165c05..80018cfab5c7 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1710,31 +1710,36 @@ int kvm_hv_get_msr_common(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata, bool host)
- 		return kvm_hv_get_msr(vcpu, msr, pdata, host);
- }
- 
--static __always_inline unsigned long *sparse_set_to_vcpu_mask(
--	struct kvm *kvm, u64 *sparse_banks, u64 valid_bank_mask,
--	u64 *vp_bitmap, unsigned long *vcpu_bitmap)
-+static void sparse_set_to_vcpu_mask(struct kvm *kvm, u64 *sparse_banks,
-+				    u64 valid_bank_mask, unsigned long *vcpu_mask)
- {
- 	struct kvm_hv *hv = to_kvm_hv(kvm);
-+	bool has_mismatch = atomic_read(&hv->num_mismatched_vp_indexes);
-+	u64 vp_bitmap[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
- 	struct kvm_vcpu *vcpu;
- 	int i, bank, sbank = 0;
-+	u64 *bitmap;
- 
--	memset(vp_bitmap, 0,
--	       KVM_HV_MAX_SPARSE_VCPU_SET_BITS * sizeof(*vp_bitmap));
-+	BUILD_BUG_ON(sizeof(vp_bitmap) >
-+		     sizeof(*vcpu_mask) * BITS_TO_LONGS(KVM_MAX_VCPUS));
-+
-+	/* If vp_index == vcpu_idx for all vCPUs, fill vcpu_mask directly. */
-+	if (likely(!has_mismatch))
-+		bitmap = (u64 *)vcpu_mask;
-+
-+	memset(bitmap, 0, sizeof(vp_bitmap));
- 	for_each_set_bit(bank, (unsigned long *)&valid_bank_mask,
- 			 KVM_HV_MAX_SPARSE_VCPU_SET_BITS)
--		vp_bitmap[bank] = sparse_banks[sbank++];
-+		bitmap[bank] = sparse_banks[sbank++];
- 
--	if (likely(!atomic_read(&hv->num_mismatched_vp_indexes))) {
--		/* for all vcpus vp_index == vcpu_idx */
--		return (unsigned long *)vp_bitmap;
--	}
-+	if (likely(!has_mismatch))
-+		return;
- 
--	bitmap_zero(vcpu_bitmap, KVM_MAX_VCPUS);
-+	bitmap_zero(vcpu_mask, KVM_MAX_VCPUS);
- 	kvm_for_each_vcpu(i, vcpu, kvm) {
- 		if (test_bit(kvm_hv_get_vpindex(vcpu), (unsigned long *)vp_bitmap))
--			__set_bit(i, vcpu_bitmap);
-+			__set_bit(i, vcpu_mask);
- 	}
--	return vcpu_bitmap;
- }
- 
- struct kvm_hv_hcall {
-@@ -1756,9 +1761,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
- 	struct kvm *kvm = vcpu->kvm;
- 	struct hv_tlb_flush_ex flush_ex;
- 	struct hv_tlb_flush flush;
--	u64 vp_bitmap[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
--	DECLARE_BITMAP(vcpu_bitmap, KVM_MAX_VCPUS);
--	unsigned long *vcpu_mask;
-+	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
- 	u64 valid_bank_mask;
- 	u64 sparse_banks[64];
- 	int sparse_banks_len;
-@@ -1842,11 +1845,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
- 	if (all_cpus) {
- 		kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH_GUEST);
- 	} else {
--		vcpu_mask = sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask,
--						    vp_bitmap, vcpu_bitmap);
-+		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
- 
--		kvm_make_vcpus_request_mask(kvm, KVM_REQ_TLB_FLUSH_GUEST,
--					    vcpu_mask);
-+		kvm_make_vcpus_request_mask(kvm, KVM_REQ_TLB_FLUSH_GUEST, vcpu_mask);
- 	}
- 
- ret_success:
-@@ -1879,9 +1880,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
- 	struct kvm *kvm = vcpu->kvm;
- 	struct hv_send_ipi_ex send_ipi_ex;
- 	struct hv_send_ipi send_ipi;
--	u64 vp_bitmap[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
--	DECLARE_BITMAP(vcpu_bitmap, KVM_MAX_VCPUS);
--	unsigned long *vcpu_mask;
-+	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
- 	unsigned long valid_bank_mask;
- 	u64 sparse_banks[64];
- 	int sparse_banks_len;
-@@ -1937,11 +1936,13 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
- 	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
- 		return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 
--	vcpu_mask = all_cpus ? NULL :
--		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask,
--					vp_bitmap, vcpu_bitmap);
-+	if (all_cpus) {
-+		kvm_send_ipi_to_many(kvm, vector, NULL);
-+	} else {
-+		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
- 
--	kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
-+		kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
-+	}
- 
- ret_success:
- 	return HV_STATUS_SUCCESS;
+# CONFIG_PROC_FS is not set
+
+> All warnings (new ones prefixed by >>):
+[unrelated warnings snipped]
+>    static 
+>    kernel/kallsyms.c:1054:30: warning: unused variable 'kallsyms_proc_ops' [-Wunused-const-variable]
+>    static const struct proc_ops kallsyms_proc_ops = {
+>                                 ^
+
+This warning already existed (and doubtless countless others just like
+it all over the tree in this configuration).  This is because
+proc_create(), in the !CONFIG_PROC_FS case, is a #define that just does
+nothing: so the compiler can see that none of its args are used, and
+will complain about those that have no other references. The proc_ops is
+almost certainly going to be one such.
+
+The new warning is just the same:
+
+>>> kernel/kallsyms.c:1062:30: warning: unused variable 'kallmodsyms_proc_ops' [-Wunused-const-variable]
+>    static const struct proc_ops kallmodsyms_proc_ops = {
+>                                 ^
+>    3 warnings generated.
+
+The kallmodsyms_proc_ops is obviously doing the same thing as
+kallsyms_proc_ops (because it has to), so it gets the same warning.
+
+Short of wrapping every single declaration of a proc_ops structure, and
+every call to proc_create, in #ifdef CONFIG_PROC_FS (which is obviously
+gross and exactly the thing the macro in proc_fs.h is intended to
+avoid), there is no way of fixing this warning on its own: it must be
+fixed in proc_fs.h. (Perhaps by making a bunch of those macros into
+functions with __attribute__((__unused__)) attached to appropriate
+args.)
+
 -- 
-2.33.0.1079.g6e70778dc9-goog
-
+NULL && (void)
