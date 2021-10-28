@@ -1,92 +1,94 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75992C83
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 14:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=PPSmLuVzoHR88dVTU6Qg/HVOwGDGjDCbEwYUDZUaDlA=; b=EWmPWlMidK03/7dQpQxxc/qwdO
-	QFoMaBSAyisgewIWeK58BjR12d/WSMKA1wwas528IOZsZX4b4com9WvWzq8Lg1jB+DhXn/KcO2czD
-	DFiHfPluAaQnFr/0Unq0KXCP2T0p4qbz8r/uAyD3nfS/9JuaJemHXeLl3STIYEM1CZK5jJvzsxkuN
-	HAl42zEMLvV9cNIPvsZI21dFrBY0Xhche5A3moxcI9Pc5rd+487f2PPXYLQQt+4JnCmZuRzlX5iv0
-	zjpbw8XSdI2BWODjnWpUg8Kd44B4wLlr7HGZjI79eWfFiO9YxkUsXCs8yJTFPdWkuGCDTGUwEBUxS
-	qeP0TeXw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mg6IR-00Cokj-0q; Thu, 28 Oct 2021 14:22:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A5B533001BF;
-	Thu, 28 Oct 2021 16:22:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8961E203BE477; Thu, 28 Oct 2021 16:22:22 +0200 (CEST)
-Date: Thu, 28 Oct 2021 16:22:22 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Michal Marek <michal.lkml@markovi.net>, X86 ML <x86@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: Support clang-$ver builds
-Message-ID: <YXqyHhWGJfDkuxjP@hirez.programming.kicks-ass.net>
-References: <YXqpFHeY26sEbort@hirez.programming.kicks-ass.net>
- <CAK7LNATUpgfKJvjp0+8H6VfMLMio9+BCoyj00mAO8FcaVGCqjg@mail.gmail.com>
- <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id B0F762C82
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 14:34:53 +0000 (UTC)
+Received: (qmail 1352277 invoked by uid 1000); 28 Oct 2021 10:34:46 -0400
+Date: Thu, 28 Oct 2021 10:34:46 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc: paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
+  boqun.feng@gmail.com, parri.andrea@gmail.com, linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev, elver@google.com, charalampos.mainas@gmail.com,
+  pramod.bhatotia@in.tum.de
+Subject: Re: Potentially Broken Address Dependency via test_bit() When
+ Compiling With Clang
+Message-ID: <20211028143446.GA1351384@rowland.harvard.edu>
+References: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
+ <20211027142720.GB1319606@rowland.harvard.edu>
+ <YXqZm6XTlMGDSpMT@Pauls-MacBook-Pro>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YXqZm6XTlMGDSpMT@Pauls-MacBook-Pro>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Oct 28, 2021 at 04:15:02PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 28, 2021 at 11:07:40PM +0900, Masahiro Yamada wrote:
-> > On Thu, Oct 28, 2021 at 10:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > Debian (and derived) distros ship their compilers as -$ver suffixed
-> > > binaries. For gcc it is sufficent to use:
-> > >
-> > >  $ make CC=gcc-12
-> > >
-> > > However, clang builds (esp. clang-lto) need a whole array of tools to be
-> > > exactly right, leading to unweildy stuff like:
-> > >
-> > >  $ make CC=clang-13 LD=ld.lld=14 AR=llvm-ar-13 NM=llvm-nm-13 OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM=1
-> > >
-> > > which is, quite franktly, totally insane and unusable. Instead use the
-> > > already mandatory LLVM variable to convey this, enabling one such as
-> > > myself to use:
-> > >
-> > >  $ make LLVM=-13
-> > >
-> > > This also lets one quickly test different clang versions.
+On Thu, Oct 28, 2021 at 02:37:47PM +0200, Paul Heidekrüger wrote:
+> On Wed, Oct 27, 2021 at 10:27:20AM -0400, Alan Stern wrote:
+> > On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
+
+> > > Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
+> > > 
+> > > > [...]
+> > > >   index = READ_ONCE(ac->alist->preferred);
+> > > >   if (test_bit(index, &set))
+> > > >     goto selected;
+> > > > [...]
+> > > 
+> > > where test_bit() expands to the following in 
+> > > include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
+> > > 
+> > > > static __always_inline int
+> > > > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
+> > > > {
+> > > >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> > > > }
+> > > > #define test_bit arch_test_bit
+
+> > However, I can't follow the IR code.  Can you please explain in ordinary 
+> > English how the LLVM compiler manages to lose track of this dependency?
 > > 
-> > 
-> > Please read the commit log of
-> > a0d1c951ef08ed24f35129267e3595d86f57f5d3
+> > Alan Stern
 > 
-> That's yuck, I like LLVM=-13 or LLVM=-12 much better to select between
-> compilers. Means I don't have to remember wth they live and or wreck
-> PATH.
+> Here's what we think might be going on:
+> - In 'arch_test_bit()', 'addr[BIT_WORD(nr)]' expands to 'addr[(nr) / 64]'.
+> - Since 'addr' points to an 'unsigned long', any other result than '0' for
+>   '(nr) / 64' would be out of bounds and therefore undefined.
+> - We assume LLVM is able to figure this out and use it to get rid of the
+>   address computation all together.
 
-Even better, why not do something like:
+Ah, that explains it.  Yes, when set is a single unsigned long (or an 
+array of length 1), the address dependency is only syntactic, not 
+semantic.  As a result, we should expect that compilers will sometimes 
+not preserve it.
 
-if test "${CC:0:5}" == "clang"
-then
-	LLVM=1
-	LLVM_SFX=${CC:5}
-fi
+The danger, of course, is that people relying on an ordering prescribed 
+by the LKMM may get fooled because (unbeknownst to them) the dependency 
+in question is not semantic.  It would be great if a static checker 
+could detect such things -- but this would require some way for us to 
+inform the checker about when the code does rely on a dependency 
+ordering.
 
-Then we can simply use: make CC=clang-12 and have it all just work.
+> We ran some experiments to see how optimisations behave when 'set' is in fact
+> an array and / or in global scope.
+> 
+> 1. Insert a 'barrier()' in 'arch_test_bit()' before the 'return':
+> The dependency gets broken.
+> 
+> 2. Make 'set' an 'unsigned long' array of size '42', keep local scope: 
+> The dependency gets preserved.
+> 
+> 3. Keep 'set' as 'unsigend long', move to global scope: 
+> The dependency gets preserved.
 
+That one's a little strange.  I don't see why the scope should make any 
+difference, so long as the compiler knows the actual type and length.
+
+> 4. Make 'set' an 'unsigned long' array of size '42', move to global scope: 
+> The dependency gets preserved.
+
+Alan
