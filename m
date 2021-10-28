@@ -1,69 +1,104 @@
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B6372
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 09:14:50 +0000 (UTC)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 992B6C63F8; Thu, 28 Oct 2021 10:14:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-	t=1635412482; bh=TcwYNZ9H69bImLZ0/fzU687Op74rMoUC94o75C/+mGk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l/o+pLpHf4DC/vWwSVZTNz1SUwcxoW/GrW6I7a8YFum1o3dbgllj+fwzIs6lt/TXN
-	 1FWhVesHP+QMAyuTkLu1M/zsKfKUr9WWdkqxOs6JStsTJq/myiWLHzi5opFPo+w623
-	 mF/P5Sqx8Y3R9qBxacNphGCs9Ct9MMsJZs/Lwt9U+WsUSIPVarw1FTjzI3wOApaGd3
-	 DFdfuNZZwzE+Me5jdP/Gx/ZJC/FJ5jiJO08nVf9GitDp5lQ0pqOJ7+11MJRdJwhCHa
-	 GPPKIteBr19d/GuNKtaU6PB40jrDjrZdtrKOYpvQN9pq31M0/kFCPBn0DsUqhrMkrU
-	 VkDSKQfkbzzIQ==
-Date: Thu, 28 Oct 2021 10:14:42 +0100
-From: Sean Young <sean@mess.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>, lkp@intel.com,
-	mchehab@kernel.org, thierry.reding@gmail.com, lee.jones@linaro.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
-Message-ID: <20211028091442.GA16514@gofer.mess.org>
-References: <YXlxhpZWf2mxJaMi@fedora>
- <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CFE72;
+	Thu, 28 Oct 2021 09:25:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D2EC660E78;
+	Thu, 28 Oct 2021 09:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635413125;
+	bh=Y5mRnOfcpDHbrEcKPxOejw1RoXP9QeM+TxRILiKOfo0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pbmDGr6wOXPSBSdwgtUvZlsOLLxT5Ryzm7W5imGXKv/RDJG/gdBxA8lkpldGEG8rN
+	 T1lXwbiyM37gFySVp7kNCXXpRQYF7Nuyjjevmm5C7TY2dHjxtug96MWIXiO7uhk+Ug
+	 DpXZvmkeU1NZ/d5zSIbU+kxIffGSKMY5Er7LBQMOejALdrK21srwGlHG65HX+Ul6zb
+	 TKhKi5Y2DcHgP780spnrF0Utx3j1ZIvqGGfKALqSFPfBFSyu0riQG8UnXz6cSGVl8K
+	 PM1e764H8PFh3aMFLICnP6ohRwXjx2w62Ip/1xz8Sx2HGeFp/CTkbeFEmAXQ5Hq61a
+	 yur7LYkJL6wug==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+	(envelope-from <mchehab@kernel.org>)
+	id 1mg1f0-0004Nk-Oz; Thu, 28 Oct 2021 10:25:22 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: 
+Cc: linuxarm@huawei.com,
+	mauro.chehab@huawei.com,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: [PATCH] media: atomisp: get rid of two unused functions
+Date: Thu, 28 Oct 2021 10:25:21 +0100
+Message-Id: <320510b91925e0ebdb5fdaa1d4843dc470067440.1635413116.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-On Thu, Oct 28, 2021 at 08:45:13AM +0200, Uwe Kleine-König wrote:
-> The conversion is right (I think),
+Those cause build to break with -Werror with clang-12:
 
-We still have the problem that the pwm drivers calculate the period
-incorrectly by rounding down (except pwm-bcm2835). So the period is not
-as good as it could be in most cases, but this driver can't do anything
-about that.
+	drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c:121:24: error: unused function 'gdc_reg_load' [-Werror,-Wunused-function]
+	drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c:33:1: error: unused function 'sh_css_elems_bytes_from_info' [-Werror,-Wunused-function]
 
-> note this could be optimized a bit
-> further: state.period only depends on carrier which rarely changes, so
-> the calculation could be done in pwm_ir_set_carrier(). Ditto for duty
-> which only depends on state.period and pwm_ir->duty_cycle. (This is for
-> a separate commit though.)
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../media/atomisp/pci/hive_isp_css_common/host/gdc.c  | 11 -----------
+ .../pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c     |  6 ------
+ 2 files changed, 17 deletions(-)
 
-I'm not sure what caching this is much of a win. The calculation is a few
-instructions, so you're not winning in the way of speed. On the flip side
-you use more memory since pwm_state has to be kmalloc() rather than existing
-just on the stack, and both ioctl handlers and the probe function need to
-recalculate the period/duty cycle, so there is a slight increase in code size.
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c
+index 8ed1cffc5384..25e082d6a94a 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/gdc.c
+@@ -28,10 +28,6 @@ static inline void gdc_reg_store(
+     const unsigned int	reg,
+     const hrt_data		value);
+ 
+-static inline hrt_data gdc_reg_load(
+-    const gdc_ID_t		ID,
+-    const unsigned int	reg);
+-
+ #ifndef __INLINE_GDC__
+ #include "gdc_private.h"
+ #endif /* __INLINE_GDC__ */
+@@ -117,10 +113,3 @@ static inline void gdc_reg_store(
+ 	ia_css_device_store_uint32(GDC_BASE[ID] + reg * sizeof(hrt_data), value);
+ 	return;
+ }
+-
+-static inline hrt_data gdc_reg_load(
+-    const gdc_ID_t		ID,
+-    const unsigned int	reg)
+-{
+-	return ia_css_device_load_uint32(GDC_BASE[ID] + reg * sizeof(hrt_data));
+-}
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c
+index c505c94a7241..f741beb9ed8a 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/raw/raw_1.0/ia_css_raw.host.c
+@@ -29,12 +29,6 @@ static const struct ia_css_raw_configuration default_config = {
+ 	.pipe = (struct sh_css_sp_pipeline *)NULL,
+ };
+ 
+-static inline unsigned
+-sh_css_elems_bytes_from_info(unsigned int raw_bit_depth)
+-{
+-	return CEIL_DIV(raw_bit_depth, 8);
+-}
+-
+ /* MW: These areMIPI / ISYS properties, not camera function properties */
+ static enum sh_stream_format
+ css2isp_stream_format(enum atomisp_input_format from) {
+-- 
+2.31.1
 
-This change does not improve anything measurably and only increases code
-complexity.
-
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-Thanks for your review.
-
-
-Sean
