@@ -1,30 +1,31 @@
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC5B2C82
-	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 06:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F482C82
+	for <llvm@lists.linux.dev>; Thu, 28 Oct 2021 06:45:22 +0000 (UTC)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1mfyy1-00078i-7l; Thu, 28 Oct 2021 08:32:49 +0200
+	id 1mfzA4-0008LQ-77; Thu, 28 Oct 2021 08:45:16 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1mfyxy-0001q6-J6; Thu, 28 Oct 2021 08:32:46 +0200
+	id 1mfzA2-0001rL-1N; Thu, 28 Oct 2021 08:45:14 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1mfyxy-000331-Ht; Thu, 28 Oct 2021 08:32:46 +0200
-Date: Thu, 28 Oct 2021 08:32:46 +0200
+	id 1mfzA2-000369-04; Thu, 28 Oct 2021 08:45:14 +0200
+Date: Thu, 28 Oct 2021 08:45:13 +0200
 From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>
-Cc: lee.jones@linaro.org, daniel.thompson@linaro.org, jingoohan1@gmail.com,
-	thierry.reding@gmail.com, lkp@intel.com, llvm@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+Cc: sean@mess.org, lkp@intel.com, mchehab@kernel.org,
+	thierry.reding@gmail.com, lee.jones@linaro.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v2] backlight: lp855x: Switch to atomic PWM API
-Message-ID: <20211028063246.p5mvij3653wg7nm4@pengutronix.de>
-References: <YXmeVPIroq96BXfm@fedora>
+Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
+Message-ID: <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
+References: <YXlxhpZWf2mxJaMi@fedora>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,92 +33,120 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mjgubidvytdfc23f"
+	protocol="application/pgp-signature"; boundary="mf4wlywlnibmr5pv"
 Content-Disposition: inline
-In-Reply-To: <YXmeVPIroq96BXfm@fedora>
+In-Reply-To: <YXlxhpZWf2mxJaMi@fedora>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: llvm@lists.linux.dev
 
 
---mjgubidvytdfc23f
+--mf4wlywlnibmr5pv
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 27, 2021 at 03:45:40PM -0300, Ma=EDra Canal wrote:
+On Wed, Oct 27, 2021 at 12:34:30PM -0300, Ma=EDra Canal wrote:
 > Remove legacy PWM interface (pwm_config, pwm_enable, pwm_disable) and
 > replace it for the atomic PWM API.
 >=20
 > Signed-off-by: Ma=EDra Canal <maira.canal@usp.br>
 > Reported-by: kernel test robot <lkp@intel.com>
+
+While it's true that he kernel robot told you about a problem in an
+earlier revision, adding the tag here is misleading, because in the end
+you only see the tag in the commit history, and there is suggests that
+the commit fixes something that was reported in the kernel tree before.
+
+For this reason I usually only add a thanks after the tripple dash.
+
+Also note this nitpick: Your S-o-b should always be the last thing.
+
 > ---
-> V1 -> V2: Initializing variable and simplyfing conditional loop
+> V1 -> V2: Assign variables directly and simplify conditional statement
+> V2 -> V3: Fix declaration of undeclared variables
+> V3 -> V4: Fix DIV_ROUND_CLOSEST error with u64 variables
 > ---
->  drivers/video/backlight/lp855x_bl.c | 23 +++++++++--------------
->  1 file changed, 9 insertions(+), 14 deletions(-)
+>  drivers/media/rc/pwm-ir-tx.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 >=20
-> diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backligh=
-t/lp855x_bl.c
-> index e94932c69f54..a895a8ca6d26 100644
-> --- a/drivers/video/backlight/lp855x_bl.c
-> +++ b/drivers/video/backlight/lp855x_bl.c
-> @@ -233,9 +233,8 @@ static int lp855x_configure(struct lp855x *lp)
-> =20
->  static void lp855x_pwm_ctrl(struct lp855x *lp, int br, int max_br)
+> diff --git a/drivers/media/rc/pwm-ir-tx.c b/drivers/media/rc/pwm-ir-tx.c
+> index 4bc28d2c9cc9..105a9c24f1e3 100644
+> --- a/drivers/media/rc/pwm-ir-tx.c
+> +++ b/drivers/media/rc/pwm-ir-tx.c
+> @@ -53,22 +53,21 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int=
+ *txbuf,
 >  {
-> -	unsigned int period =3D lp->pdata->period_ns;
-> -	unsigned int duty =3D br * period / max_br;
-> -	struct pwm_device *pwm;
-> +	struct pwm_device *pwm =3D NULL;
+>  	struct pwm_ir *pwm_ir =3D dev->priv;
+>  	struct pwm_device *pwm =3D pwm_ir->pwm;
+> -	int i, duty, period;
 > +	struct pwm_state state;
+> +	int i;
+>  	ktime_t edge;
+>  	long delta;
 > =20
->  	/* request pwm device with the consumer name */
->  	if (!lp->pwm) {
-> @@ -244,19 +243,15 @@ static void lp855x_pwm_ctrl(struct lp855x *lp, int =
-br, int max_br)
->  			return;
+> -	period =3D DIV_ROUND_CLOSEST(NSEC_PER_SEC, pwm_ir->carrier);
+> -	duty =3D DIV_ROUND_CLOSEST(pwm_ir->duty_cycle * period, 100);
+> +	pwm_init_state(pwm, &state);
 > =20
->  		lp->pwm =3D pwm;
-> -
-> -		/*
-> -		 * FIXME: pwm_apply_args() should be removed when switching to
-> -		 * the atomic PWM API.
-> -		 */
-> -		pwm_apply_args(pwm);
+> -	pwm_config(pwm, duty, period);
+> +	state.period =3D DIV_ROUND_CLOSEST(NSEC_PER_SEC, pwm_ir->carrier);
+> +	pwm_set_relative_duty_cycle(&state, pwm_ir->duty_cycle, 100);
+> =20
+>  	edge =3D ktime_get();
+> =20
+>  	for (i =3D 0; i < count; i++) {
+> -		if (i % 2) // space
+> -			pwm_disable(pwm);
+> -		else
+> -			pwm_enable(pwm);
+> +		state.enabled =3D !(i % 2);
+> +		pwm_apply_state(pwm, &state);
+> =20
+>  		edge =3D ktime_add_us(edge, txbuf[i]);
+>  		delta =3D ktime_us_delta(edge, ktime_get());
+> @@ -76,7 +75,8 @@ static int pwm_ir_tx(struct rc_dev *dev, unsigned int *=
+txbuf,
+>  			usleep_range(delta, delta + 10);
 >  	}
 > =20
-> -	pwm_config(lp->pwm, duty, period);
-> -	if (duty)
-> -		pwm_enable(lp->pwm);
-> -	else
-> -		pwm_disable(lp->pwm);
-> +	pwm_init_state(pwm, &state);
+> -	pwm_disable(pwm);
+> +	state.enabled =3D false;
+> +	pwm_apply_state(pwm, &state);
+> =20
+>  	return count;
+>  }
 
-This is broken. If lp->pwm is already set at function entry, pwm is
-NULL.
+The conversion is right (I think), note this could be optimized a bit
+further: state.period only depends on carrier which rarely changes, so
+the calculation could be done in pwm_ir_set_carrier(). Ditto for duty
+which only depends on state.period and pwm_ir->duty_cycle. (This is for
+a separate commit though.)
 
-Best regards
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Thanks
 Uwe
+
 
 --=20
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---mjgubidvytdfc23f
+--mf4wlywlnibmr5pv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmF6RAoACgkQwfwUeK3K
-7Anebgf9HGhfhTpcJqWOKkxvlVftY0zDg637KqLVbPRkC58by+y66DVocHuCj+jp
-TrtP5OyEmMYYdvSK1LA6lFuDjxje3mHlACG8TwZWrDyoWGkTtqP1o4dsuQ6QAJMk
-1qea6fyvPF9dKhlsHYKd8z3/Z7dDGoPTCY6fZlYhYMTsJtBJhCMdCgHyte+vvi0f
-AOiXy6xo6p2qLwUz3U+Pp13eu3Xjbw2CDr1XVxuSc+0qjvSPg3Xc6RQyi7nEscmA
-MDJCRq6bRkC5BF00b1D2Fxdz/dQvlJlCbIl4PA8lcmdLOQJLgvlXGHGvPIKOWhVr
-AfP46DAQVB192zi4YO2uegiRV45P2Q==
-=obWM
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmF6RvUACgkQwfwUeK3K
+7Anl9Af8CgvGM/ZHx9tafHzheQcFRngBZ+7mNWcXYkutj+S3XAQ/G/W9V+nS9RWc
+j5M9Q/st772Y1X0h7dT0YpUcYiLa2IYlAQlWijolrdFKzuXW7lDiAGDexmI3TAVO
+C/LaJQ4oHUgfr4wULkvQey3FgwXpE6asDxTk+eiIG1zLoADJ5ur38zpqpq1nrQNv
+jl4S3iBgO3BftndvCk0qPN3Ff16XgzjLFvzoXr81nxOJIHfUAmzjaZ8ctJbckN8f
+Qo3dY2KhxgCVJt7DuRytUIS6kYY5or4lh1udF+y0UiS0TiavLk0pvuwegYxJ6Ovq
+mOIZhjNjBObw03KqCaBga9+pU74N7A==
+=V5HL
 -----END PGP SIGNATURE-----
 
---mjgubidvytdfc23f--
+--mf4wlywlnibmr5pv--
