@@ -1,67 +1,80 @@
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9872C83
-	for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 12:08:41 +0000 (UTC)
-Received: by mail-il1-f181.google.com with SMTP id w10so10337036ilc.13
-        for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 05:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=S3e8pqbxO9kRMVq8vTunu1hvd4DX3hvFiOfDtzQfJiw=;
-        b=vDb11hdP7H142tuAwbW3fpRhtcsPF8+mDNWdkpY8XDnvO54fGT4iV2BLa1A2nTyboS
-         9YfOqV622Xaiww6i1aDyRsh1x4jvfyd8V3kOdmf7OFJ7Q9KR86zwKzVfaKSqmxxTCve8
-         FdT5PePhvMq0J/UvD+j5pvJECeiHON0NUCu+/ovOjNRAkK0Ns+GThHxybtl/xIu4PBKl
-         Bc1lXbseEXeud9gSkwXsCqIQGq/R1MkybMwALEelm4/LVOet5K53Oc+z32vZaoxfHq5S
-         H7vH1XN98l8vZFb4H/jAIAvaaUX/W579IFlqPoMAckwB0xdNZ60jtcK2Pt0EKPbntJz0
-         fjVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=S3e8pqbxO9kRMVq8vTunu1hvd4DX3hvFiOfDtzQfJiw=;
-        b=OwHCX7+/e28ltfbFJ6niI0s2mFq6Qm6lNOVSd9U9Z6uoC5D9evy6Y0NdArVUnPNMDo
-         22anjPdMLgqsvTKI8RPE9NwXyRoW6Wxy4xCGr7oCeZ5fvUVRfg5uzmnIZkghZQA8+DG1
-         xosPp/eIaFSRr/4xbh6oYvVxRMtHxwbI3vYCo67mGYGGlznQlVzHTa0/eIUQn9VO1MMy
-         oiBNX4ERI/karSL1KseC3rN7zV3VB3cmtS6A0YJ9N+3KA083QGGlh7xajfnsvhmxf8YV
-         OYJujYENXXTfoRfdoN8LWJetNPjtxmnPVJHnnGd41Fdzc3jNlmvoYdUoyOggAiimEkqd
-         LeSw==
-X-Gm-Message-State: AOAM531hBTOs3WJ2HpkyWR6vLKdyiVg75l9P1/DLgg1Mcxe6CpZ5G4Vu
-	hE9hznOONipCEu56FtOAipHyBMvOEZ3aZXRuqnZULg==
-X-Google-Smtp-Source: ABdhPJw7l9tTUHM1yjutTmZWrPVU1tYWmwCykIMHpGpIY9tktiGxDmCCtsSRhTXKzw5/yB3eWydyUujIuks7RoqM8kM=
-X-Received: by 2002:a05:6e02:1d9d:: with SMTP id h29mr4170466ila.29.1635509320573;
- Fri, 29 Oct 2021 05:08:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33E02C81
+	for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 12:54:07 +0000 (UTC)
+Received: from localhost (unknown [IPv6:2804:14c:124:8a08::1002])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: krisman)
+	by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D4CF31F458B9;
+	Fri, 29 Oct 2021 13:44:30 +0100 (BST)
+From: Gabriel Krisman Bertazi <krisman@collabora.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Jan Kara <jack@suse.cz>,  Amir Goldstein <amir73il@gmail.com>,  Arnd
+ Bergmann <arnd@arndb.de>,  Nathan Chancellor <nathan@kernel.org>,  Nick
+ Desaulniers <ndesaulniers@google.com>,  linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev
+Subject: Re: [PATCH] samples: fanotify: add CC_CAN_LINK dependency
+Organization: Collabora
+References: <20211029113403.848239-1-arnd@kernel.org>
+Date: Fri, 29 Oct 2021 09:44:25 -0300
+In-Reply-To: <20211029113403.848239-1-arnd@kernel.org> (Arnd Bergmann's
+	message of "Fri, 29 Oct 2021 13:33:35 +0200")
+Message-ID: <87tuh09f12.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YXlxhpZWf2mxJaMi@fedora> <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
- <20211028091442.GA16514@gofer.mess.org> <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
- <20211028122610.GA18767@gofer.mess.org> <20211028180516.t2tpfbzztm7s6cqm@pengutronix.de>
- <20211029071608.GA28997@gofer.mess.org> <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
- <20211029115412.GA32383@gofer.mess.org>
-In-Reply-To: <20211029115412.GA32383@gofer.mess.org>
-From: =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
-Date: Fri, 29 Oct 2021 09:08:29 -0300
-Message-ID: <CAH7FV3njgZ7sOnZZF88KZ2C4UwqxoodpUuLsnucvBxYXmaZo1Q@mail.gmail.com>
-Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
-To: Sean Young <sean@mess.org>
-Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	kernel test robot <lkp@intel.com>, mchehab@kernel.org, thierry.reding@gmail.com, 
-	Lee Jones <lee.jones@linaro.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pwm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-I would like to thank you guys for the attention and this interesting
-discussion. I'm looking for some work in the kernel and I would like
-to know if you guys have any suggestions for beginner tasks in this
-subsystem. I have solid knowledge in C programming, but I started in
-the kernel a couple of weeks ago. Anyway, thank you for all the
-feedback.
+Arnd Bergmann <arnd@kernel.org> writes:
 
-Ma=C3=ADra
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> When using a cross tools that only works for kernels, the
+> newn sample can end up with a link failure such as:
+>
+> /usr/bin/ld: unrecognised emulation mode: aarch64linux
+> Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+> clang: error: linker command failed with exit code 1 (use -v to see invocation)
+> make[5]: *** [/git/arm-soc/scripts/Makefile.userprogs:28: samples/fanotify/fs-monitor] Error 1
+>
+> Add a Kconfig dependency, similar to the one we use for
+> other samples.
+>
+> Fixes: 5451093081db ("samples: Add fs error monitoring example")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+
+Hi Arnd,
+
+This was reported by Guenter Roeck yesterday, I sent a patch for it
+here:
+
+https://lore.kernel.org/linux-fsdevel/87fsslasgz.fsf@collabora.com/
+
+
+> ---
+>  samples/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/samples/Kconfig b/samples/Kconfig
+> index 147a16dafaf8..83f12c1e9ca6 100644
+> --- a/samples/Kconfig
+> +++ b/samples/Kconfig
+> @@ -122,7 +122,7 @@ config SAMPLE_CONNECTOR
+>  
+>  config SAMPLE_FANOTIFY_ERROR
+>  	bool "Build fanotify error monitoring sample"
+> -	depends on FANOTIFY
+> +	depends on CC_CAN_LINK && FANOTIFY
+>  	help
+>  	  When enabled, this builds an example code that uses the
+>  	  FAN_FS_ERROR fanotify mechanism to monitor filesystem
+
+-- 
+Gabriel Krisman Bertazi
