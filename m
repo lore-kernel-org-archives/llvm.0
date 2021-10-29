@@ -1,63 +1,67 @@
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61F52C83
-	for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 11:54:21 +0000 (UTC)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 1493DC638B; Fri, 29 Oct 2021 12:54:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-	t=1635508453; bh=1ibxwqgBZhCbkK4nb0aNYAFKQRFLUuXXiDUrBdxYH+s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n9s6MW2Kc68g44HK8GwSp2AYpSNTNWxYIksaYr9fiqOOSv3DFrcBMwLEi77QBNchy
-	 HA2ZtAIjt+hw8Vg9rAGowMOrbTKQZf6r02m7Ow/Xpl/z2W6VFMgmDzK7cqqRo8dmBl
-	 EsgthhJ/+fGXuxpJdESnaz2T+rNZ8zuvtsdMuVfjSNo4cocQXT80abn6Nc3Sbm5c83
-	 wrzn6iCVBY0JukBkFH8v66awRXqcFBgMhukmqTpUv0XRNiocLUUN9Qxbw9PCMbFuNO
-	 orIcmolElUKprCSP5xWlejyXS93XmuIbBh3tbNXY5SVG6vShvAQgQE3W2oafxVkOUf
-	 0s3voRAdpvocg==
-Date: Fri, 29 Oct 2021 12:54:12 +0100
-From: Sean Young <sean@mess.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>, lkp@intel.com,
-	mchehab@kernel.org, thierry.reding@gmail.com, lee.jones@linaro.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
-Message-ID: <20211029115412.GA32383@gofer.mess.org>
-References: <YXlxhpZWf2mxJaMi@fedora>
- <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
- <20211028091442.GA16514@gofer.mess.org>
- <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
- <20211028122610.GA18767@gofer.mess.org>
- <20211028180516.t2tpfbzztm7s6cqm@pengutronix.de>
- <20211029071608.GA28997@gofer.mess.org>
- <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9872C83
+	for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 12:08:41 +0000 (UTC)
+Received: by mail-il1-f181.google.com with SMTP id w10so10337036ilc.13
+        for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 05:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=S3e8pqbxO9kRMVq8vTunu1hvd4DX3hvFiOfDtzQfJiw=;
+        b=vDb11hdP7H142tuAwbW3fpRhtcsPF8+mDNWdkpY8XDnvO54fGT4iV2BLa1A2nTyboS
+         9YfOqV622Xaiww6i1aDyRsh1x4jvfyd8V3kOdmf7OFJ7Q9KR86zwKzVfaKSqmxxTCve8
+         FdT5PePhvMq0J/UvD+j5pvJECeiHON0NUCu+/ovOjNRAkK0Ns+GThHxybtl/xIu4PBKl
+         Bc1lXbseEXeud9gSkwXsCqIQGq/R1MkybMwALEelm4/LVOet5K53Oc+z32vZaoxfHq5S
+         H7vH1XN98l8vZFb4H/jAIAvaaUX/W579IFlqPoMAckwB0xdNZ60jtcK2Pt0EKPbntJz0
+         fjVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=S3e8pqbxO9kRMVq8vTunu1hvd4DX3hvFiOfDtzQfJiw=;
+        b=OwHCX7+/e28ltfbFJ6niI0s2mFq6Qm6lNOVSd9U9Z6uoC5D9evy6Y0NdArVUnPNMDo
+         22anjPdMLgqsvTKI8RPE9NwXyRoW6Wxy4xCGr7oCeZ5fvUVRfg5uzmnIZkghZQA8+DG1
+         xosPp/eIaFSRr/4xbh6oYvVxRMtHxwbI3vYCo67mGYGGlznQlVzHTa0/eIUQn9VO1MMy
+         oiBNX4ERI/karSL1KseC3rN7zV3VB3cmtS6A0YJ9N+3KA083QGGlh7xajfnsvhmxf8YV
+         OYJujYENXXTfoRfdoN8LWJetNPjtxmnPVJHnnGd41Fdzc3jNlmvoYdUoyOggAiimEkqd
+         LeSw==
+X-Gm-Message-State: AOAM531hBTOs3WJ2HpkyWR6vLKdyiVg75l9P1/DLgg1Mcxe6CpZ5G4Vu
+	hE9hznOONipCEu56FtOAipHyBMvOEZ3aZXRuqnZULg==
+X-Google-Smtp-Source: ABdhPJw7l9tTUHM1yjutTmZWrPVU1tYWmwCykIMHpGpIY9tktiGxDmCCtsSRhTXKzw5/yB3eWydyUujIuks7RoqM8kM=
+X-Received: by 2002:a05:6e02:1d9d:: with SMTP id h29mr4170466ila.29.1635509320573;
+ Fri, 29 Oct 2021 05:08:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <YXlxhpZWf2mxJaMi@fedora> <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
+ <20211028091442.GA16514@gofer.mess.org> <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
+ <20211028122610.GA18767@gofer.mess.org> <20211028180516.t2tpfbzztm7s6cqm@pengutronix.de>
+ <20211029071608.GA28997@gofer.mess.org> <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
+ <20211029115412.GA32383@gofer.mess.org>
+In-Reply-To: <20211029115412.GA32383@gofer.mess.org>
+From: =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Date: Fri, 29 Oct 2021 09:08:29 -0300
+Message-ID: <CAH7FV3njgZ7sOnZZF88KZ2C4UwqxoodpUuLsnucvBxYXmaZo1Q@mail.gmail.com>
+Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
+To: Sean Young <sean@mess.org>
+Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	kernel test robot <lkp@intel.com>, mchehab@kernel.org, thierry.reding@gmail.com, 
+	Lee Jones <lee.jones@linaro.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pwm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 29, 2021 at 01:06:02PM +0200, Uwe Kleine-König wrote:
-> On Fri, Oct 29, 2021 at 08:16:08AM +0100, Sean Young wrote:
-> > This means with your changes, if the carrier and duty cycle are both set
-> > for each transmission, then we're doing more work. If only the carrier
-> > is set for each transmission, then there is no net gain/loss (I think),
-> > but the code size has increased.
-> 
-> OK, then I discard my patch.
-> 
-> While reading that I wondered if it makes sense to have a callback that
-> sets both carrier and duty cycle and then remove the other two.
+I would like to thank you guys for the attention and this interesting
+discussion. I'm looking for some work in the kernel and I would like
+to know if you guys have any suggestions for beginner tasks in this
+subsystem. I have solid knowledge in C programming, but I started in
+the kernel a couple of weeks ago. Anyway, thank you for all the
+feedback.
 
-There are separate lirc ioctls to set carrier and duty cycle, that's why
-there are separate callbacks.
-
-
-Sean
+Ma=C3=ADra
