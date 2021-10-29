@@ -1,130 +1,79 @@
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42C872
-	for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 15:18:34 +0000 (UTC)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1mgTe9-0005Hf-Pj; Fri, 29 Oct 2021 17:18:21 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1mgTe6-00063Y-Gs; Fri, 29 Oct 2021 17:18:18 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1mgTe6-0003Rp-Fd; Fri, 29 Oct 2021 17:18:18 +0200
-Date: Fri, 29 Oct 2021 17:18:15 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>
-Cc: Sean Young <sean@mess.org>, kernel test robot <lkp@intel.com>,
-	mchehab@kernel.org, thierry.reding@gmail.com,
-	Lee Jones <lee.jones@linaro.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
-Message-ID: <20211029151815.kn4ya7sk2bsrcrwo@pengutronix.de>
-References: <YXlxhpZWf2mxJaMi@fedora>
- <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
- <20211028091442.GA16514@gofer.mess.org>
- <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
- <20211028122610.GA18767@gofer.mess.org>
- <20211028180516.t2tpfbzztm7s6cqm@pengutronix.de>
- <20211029071608.GA28997@gofer.mess.org>
- <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
- <20211029115412.GA32383@gofer.mess.org>
- <CAH7FV3njgZ7sOnZZF88KZ2C4UwqxoodpUuLsnucvBxYXmaZo1Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D9172
+	for <llvm@lists.linux.dev>; Fri, 29 Oct 2021 15:43:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E1B861181;
+	Fri, 29 Oct 2021 15:43:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635522185;
+	bh=EKpljgVa5r5UmD2IEpypElISm7qojaXBWVSnqjIx8EI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DUE9p0WKnSWBxCzU791qowB58og7xeQNSE+jvOr1AKoxKnhkoir2yzs78lYIslDXB
+	 FkE/zSncUhI2lA2tKUexN3X3Q5AYvoam/0VqTPisHApFRfY6pSFASrjziUwf9cJw/J
+	 5EqV9PzRuXmjhWYvbpOSI2a+sC27jG+66ztNgD0SlLfEnCP9xi7yZw5bnkU7zq1yNk
+	 Zi0z7TpI3fQL3b2Xepxi1+kZRIozugkx+CwlqoEAJSOQXpXOELDKtHcvPADLl9vrx3
+	 pZay4F1IeCUQPTS7H2FclvL4K6vt+ZMEB97l1RFIB+DbfJHN4Pz1kak4gspPq3KprB
+	 AgktZwKqMjE0A==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Johannes Berg <johannes.berg@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Luca Coelho <luciano.coelho@intel.com>,
+	Kalle Valo <kvalo@codeaurora.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Yaara Baruch <yaara.baruch@intel.com>,
+	Matti Gottlieb <matti.gottlieb@intel.com>,
+	Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] iwlwifi: pcie: fix constant-conversion warning
+Date: Fri, 29 Oct 2021 17:42:29 +0200
+Message-Id: <20211029154253.3824677-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="whsgya2kubn3yddj"
-Content-Disposition: inline
-In-Reply-To: <CAH7FV3njgZ7sOnZZF88KZ2C4UwqxoodpUuLsnucvBxYXmaZo1Q@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+Content-Transfer-Encoding: 8bit
 
+From: Arnd Bergmann <arnd@arndb.de>
 
---whsgya2kubn3yddj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+clang points out a potential issue with integer overflow when
+the iwl_dev_info_table[] array is empty:
 
-Hello,
+drivers/net/wireless/intel/iwlwifi/pcie/drv.c:1344:42: error: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Werror,-Wconstant-conversion]
+        for (i = ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
+               ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
 
-On Fri, Oct 29, 2021 at 09:08:29AM -0300, Ma=EDra Canal wrote:
-> I would like to thank you guys for the attention and this interesting
-> discussion. I'm looking for some work in the kernel and I would like
-> to know if you guys have any suggestions for beginner tasks in this
-> subsystem. I have solid knowledge in C programming, but I started in
-> the kernel a couple of weeks ago. Anyway, thank you for all the
-> feedback.
+This is still harmless, as the loop correctly terminates, but adding
+an (int) cast makes that clearer to the compiler.
 
-If you want something mathematically demanding, you can pick up the
-patch I pointed out to Sean, I think I won't find the time in the near
-future to work on this.
+Fixes: 3f7320428fa4 ("iwlwifi: pcie: simplify iwl_pci_find_dev_info()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The background is that PWM drivers have to round most requests and there
-is no uniformity among drivers and so if a consumer (e.g. the pwm-ir
-driver) requests say 20000 ns, it will get 18000 from some drivers and
-maybe 25000 from others. So the idea is to have a function
-pwm_round_state that has fixed rounding rules such that a consumer can
-pick the best setting for their use-case.
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index c574f041f096..81e8f2fc4982 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -1341,7 +1341,7 @@ iwl_pci_find_dev_info(u16 device, u16 subsystem_device,
+ {
+ 	int i;
+ 
+-	for (i = ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
++	for (i = (int)ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
+ 		const struct iwl_dev_info *dev_info = &iwl_dev_info_table[i];
+ 
+ 		if (dev_info->device != (u16)IWL_CFG_ANY &&
+-- 
+2.29.2
 
-Something more mechanic in the PWM area is to convert drivers that still
-implement .config/.enable/.disable to .apply. See
-http://patchwork.ozlabs.org/project/linux-pwm/patch/20211029105617.210178-1=
--u.kleine-koenig@pengutronix.de/
-for an example. The well-known good template is pwm_apply_legacy() after
-applying
-http://patchwork.ozlabs.org/project/linux-pwm/list/?series=3D251456 .
-
-If you want something more global: The prototype of the remove callbacks
-for platform devices returns an int:
-
-	https://elixir.bootlin.com/linux/v5.15-rc7/source/include/linux/platform_d=
-evice.h#L206
-
-However the returned value is (nearly) ignored by the driver core:
-
-	https://elixir.bootlin.com/linux/v5.15-rc7/source/drivers/base/platform.c#=
-L1433
-
-The longterm goal is to change the prototype of .remove to return void.
-As a first step making all functions return 0 is a worthwile project.
-
-The same problem exists for several other buses, one patch I sent to
-work on this goal for i2c is:
-
-	https://lore.kernel.org/r/20211021105657.72572-1-u.kleine-koenig@pengutron=
-ix.de
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---whsgya2kubn3yddj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmF8ELQACgkQwfwUeK3K
-7AlCMQf/RVnL1UcvsIreO+vijfPhlLHR119QMz4m3LCKpkYMdv1MxstUHqJnRFRm
-Q0dN7kOeSnKJgi2jckQQOneVYABnB4vGHMuygSUFZSTXnrizUxRc94rMfk+wvGR4
-LbTqhpdi/3Tm/EPKKEZxyAqphA0iTETnLWmeNz34KozaK0IZ3NTlJWdyZh2axb3f
-r8+f2p33sPTCrzwOl0DkWfZ+EW4JCrLlGHcxDqZg61WMkwD1ujYd0meVBxsLA8aI
-xSLXYL3iHlyY7INCMFcKMQmYDBv6zbkChV6oUO906IbsHZ8/0a1yrWCelAD3Zjmv
-KKOC1V8M7kUBtHX0Aqk87HRaFSRBKQ==
-=0Is5
------END PGP SIGNATURE-----
-
---whsgya2kubn3yddj--
