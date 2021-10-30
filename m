@@ -1,22 +1,43 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7AF92C85
-	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 13:04:08 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B73B21FB;
-	Sat, 30 Oct 2021 06:04:02 -0700 (PDT)
-Received: from bogus (unknown [10.57.46.68])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7757C3F5A1;
-	Sat, 30 Oct 2021 06:04:01 -0700 (PDT)
-Date: Sat, 30 Oct 2021 14:03:58 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [sudeep-holla:v5.15/pcc_type3 15/16]
- drivers/acpi/pcc_opregion.c:30:2: error: implicit declaration of function
- 'acpi_ut_status_exit'
-Message-ID: <20211030130358.yvbw5lr5rfw5ysnh@bogus>
-References: <202110300935.QtWwtS7u-lkp@intel.com>
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444992C87
+	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 14:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ba2xFt3kXSmSTLD8SqkglhCszGSJjIidpOhGBZZRwqs=; b=KxNTFF6MESt7Owjy7Rsimcsszl
+	9FviqkuUnjHAEdEUcpb27yNW2R3RQl4BZ2BpEpgKnVGmCQgS43k8yyDkiEwOmJIXh9ny17Oqy49fk
+	PDzxT4IF3ecJyJ+aS8I9Pl95V3b/lHt+cppYj8q6WWrmZVghxldeDp6c0yugf64yb86maeZhY0XW6
+	M4ELbvaS5q42icbzRDk3cL6+bH2lFgfKSth6aBFEFmuvDPZNSdnDF8V0ZJ41dihgWJ3r1h5l6jHoC
+	2yuB27lUIfCxkj/34CUOzYY9V4KFnELO6o+846IGnZxokUITPIP03oyMWbD8H19o9GstbZWmtYv4X
+	f5ChCmVg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mgpQ1-002TG3-24; Sat, 30 Oct 2021 14:33:22 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C89129816BA; Sat, 30 Oct 2021 16:33:11 +0200 (CEST)
+Date: Sat, 30 Oct 2021 16:33:11 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>, X86 ML <x86@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: Support clang-$ver builds
+Message-ID: <20211030143311.GH174730@worktop.programming.kicks-ass.net>
+References: <YXqpFHeY26sEbort@hirez.programming.kicks-ass.net>
+ <CAK7LNATUpgfKJvjp0+8H6VfMLMio9+BCoyj00mAO8FcaVGCqjg@mail.gmail.com>
+ <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net>
+ <YXqyHhWGJfDkuxjP@hirez.programming.kicks-ass.net>
+ <YXq72/yPe76DhDLu@hirez.programming.kicks-ass.net>
+ <YXrhZoOgv5dtFMTs@archlinux-ax161>
+ <20211028204855.GP174703@worktop.programming.kicks-ass.net>
+ <CAKwvOd=x9E=7WcCiieso-CDiiU-wMFcXL4W3V5j8dq7BL5QT+w@mail.gmail.com>
+ <YXu2z6FQ6Z7qtjbk@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -25,34 +46,178 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202110300935.QtWwtS7u-lkp@intel.com>
+In-Reply-To: <YXu2z6FQ6Z7qtjbk@hirez.programming.kicks-ass.net>
 
-Hi all,
 
-On Sat, Oct 30, 2021 at 09:53:44AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git v5.15/pcc_type3
-> head:   e658e18863fdb31547d280d6446d97b986a66a6a
-> commit: 53fb88f932935375cd221ddbac3d9b7751718005 [15/16] ACPI: Add support for PCC opregion
-> config: i386-randconfig-c001-20211029 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5db7568a6a1fcb408eb8988abdaff2a225a8eb72)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/commit/?id=53fb88f932935375cd221ddbac3d9b7751718005
->         git remote add sudeep-holla https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git
->         git fetch --no-tags sudeep-holla v5.15/pcc_type3
->         git checkout 53fb88f932935375cd221ddbac3d9b7751718005
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
->
+Latestest greatness... :-)
 
-Please ignore this, a hack got pushed to the git repo by mistake.
+---
+Subject: kbuild: Fix clang/llvm build infra
 
--- 
-Regards,
-Sudeep
+Debian (and derived) distros ship their compilers as -$ver suffixed
+binaries. For gcc it is sufficent to use:
+
+ $ make CC=gcc-12
+
+However, clang builds (esp. clang-lto) need a whole array of tools to be
+exactly right, leading to unweildy stuff like:
+
+ $ make CC=clang-13 LD=ld.lld=14 AR=llvm-ar-13 NM=llvm-nm-13 OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM=1
+
+which is, quite franktly, totally insane and unusable. Instead make
+the CC variable DTRT, enabling one such as myself to use:
+
+ $ make CC=clang-13
+
+This also lets one quickly test different clang versions.
+Additionally, also support path based LLVM suites like:
+
+ $ make CC=/opt/llvm/bin/clang
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ Makefile                       |   45 +++++++++++++++++++++++++++---------
+ tools/scripts/Makefile.include |   50 ++++++++++++++++++++++++++++-------------
+ 2 files changed, 68 insertions(+), 27 deletions(-)
+
+--- a/Makefile
++++ b/Makefile
+@@ -423,9 +423,29 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
+ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+ 
+-ifneq ($(LLVM),)
+-HOSTCC	= clang
+-HOSTCXX	= clang++
++# powerpc and s390 don't yet work with LLVM as a whole
++ifeq ($(ARCH),powerpc)
++LLVM = 0
++endif
++ifeq ($(ARCH),s390)
++LLVM = 0
++endif
++
++# otherwise, if CC=clang, default to using LLVM to enable LTO
++CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
++CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
++ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
++LLVM ?= 1
++LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
++LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
++endif
++
++# if not set by now, do not use LLVM
++LLVM ?= 0
++
++ifneq ($(LLVM),0)
++HOSTCC	= $(LLVM_PFX)clang$(LLVM_SFX)
++HOSTCXX	= $(LLVM_PFX)clang++$(LLVM_SFX)
+ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+@@ -442,15 +462,15 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS)
+ 
+ # Make variables (CC, etc...)
+ CPP		= $(CC) -E
+-ifneq ($(LLVM),)
+-CC		= clang
+-LD		= ld.lld
+-AR		= llvm-ar
+-NM		= llvm-nm
+-OBJCOPY		= llvm-objcopy
+-OBJDUMP		= llvm-objdump
+-READELF		= llvm-readelf
+-STRIP		= llvm-strip
++ifneq ($(LLVM),0)
++CC		= $(LLVM_PFX)clang$(LLVM_SFX)
++LD		= $(LLVM_PFX)ld.lld$(LLVM_SFX)
++AR		= $(LLVM_PFX)llvm-ar$(LLVM_SFX)
++NM		= $(LLVM_PFX)llvm-nm$(LLVM_SFX)
++OBJCOPY		= $(LLVM_PFX)llvm-objcopy$(LLVM_SFX)
++OBJDUMP		= $(LLVM_PFX)llvm-objdump$(LLVM_SFX)
++READELF		= $(LLVM_PFX)llvm-readelf$(LLVM_SFX)
++STRIP		= $(LLVM_PFX)llvm-strip$(LLVM_SFX)
+ else
+ CC		= $(CROSS_COMPILE)gcc
+ LD		= $(CROSS_COMPILE)ld
+@@ -461,6 +481,7 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
+ READELF		= $(CROSS_COMPILE)readelf
+ STRIP		= $(CROSS_COMPILE)strip
+ endif
++
+ PAHOLE		= pahole
+ RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
+ LEX		= flex
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -51,12 +51,32 @@ define allow-override
+     $(eval $(1) = $(2)))
+ endef
+ 
+-ifneq ($(LLVM),)
+-$(call allow-override,CC,clang)
+-$(call allow-override,AR,llvm-ar)
+-$(call allow-override,LD,ld.lld)
+-$(call allow-override,CXX,clang++)
+-$(call allow-override,STRIP,llvm-strip)
++# powerpc and s390 don't yet work with LLVM as a whole
++ifeq ($(ARCH),powerpc)
++LLVM = 0
++endif
++ifeq ($(ARCH),s390)
++LLVM = 0
++endif
++
++# otherwise, if CC=clang, default to using LLVM to enable LTO
++CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
++CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
++ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
++LLVM ?= 1
++LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
++LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
++endif
++
++# if not set by now, do not use LLVM
++LLVM ?= 0
++
++ifneq ($(LLVM),0)
++$(call allow-override,CC,$(LLVM_PFX)clang$(LLVM_SFX))
++$(call allow-override,AR,$(LLVM_PFX)llvm-ar$(LLVM_SFX))
++$(call allow-override,LD,$(LLVM_PFX)ld.lld$(LLVM_SFX))
++$(call allow-override,CXX,$(LLVM_PFX)clang++$(LLVM_SFX))
++$(call allow-override,STRIP,$(LLVM_PFX)llvm-strip$(LLVM_SFX))
+ else
+ # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
+ $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+@@ -68,10 +88,10 @@ endif
+ 
+ CC_NO_CLANG := $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang__"; echo $$?)
+ 
+-ifneq ($(LLVM),)
+-HOSTAR  ?= llvm-ar
+-HOSTCC  ?= clang
+-HOSTLD  ?= ld.lld
++ifneq ($(LLVM),0)
++HOSTAR  ?= $(LLVM_PFX)llvm-ar$(LLVM_SFX)
++HOSTCC  ?= $(LLVM_PFX)clang$(LLVM_SFX)
++HOSTLD  ?= $(LLVM_PFX)ld.lld$(LLVM_SFX)
+ else
+ HOSTAR  ?= ar
+ HOSTCC  ?= gcc
+@@ -79,11 +99,11 @@ HOSTLD  ?= ld
+ endif
+ 
+ # Some tools require Clang, LLC and/or LLVM utils
+-CLANG		?= clang
+-LLC		?= llc
+-LLVM_CONFIG	?= llvm-config
+-LLVM_OBJCOPY	?= llvm-objcopy
+-LLVM_STRIP	?= llvm-strip
++CLANG		?= $(LLVM_PFX)clang$(LLVM_SFX)
++LLC		?= $(LLVM_PFX)llc$(LLVM_SFX)
++LLVM_CONFIG	?= $(LLVM_PFX)llvm-config$(LLVM_SFX)
++LLVM_OBJCOPY	?= $(LLVM_PFX)llvm-objcopy$(LLVM_SFX)
++LLVM_STRIP	?= $(LLVM_PFX)llvm-strip$(LLVM_SFX)
+ 
+ ifeq ($(CC_NO_CLANG), 1)
+ EXTRA_WARNINGS += -Wstrict-aliasing=3
