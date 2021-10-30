@@ -1,223 +1,104 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444992C87
-	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 14:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ba2xFt3kXSmSTLD8SqkglhCszGSJjIidpOhGBZZRwqs=; b=KxNTFF6MESt7Owjy7Rsimcsszl
-	9FviqkuUnjHAEdEUcpb27yNW2R3RQl4BZ2BpEpgKnVGmCQgS43k8yyDkiEwOmJIXh9ny17Oqy49fk
-	PDzxT4IF3ecJyJ+aS8I9Pl95V3b/lHt+cppYj8q6WWrmZVghxldeDp6c0yugf64yb86maeZhY0XW6
-	M4ELbvaS5q42icbzRDk3cL6+bH2lFgfKSth6aBFEFmuvDPZNSdnDF8V0ZJ41dihgWJ3r1h5l6jHoC
-	2yuB27lUIfCxkj/34CUOzYY9V4KFnELO6o+846IGnZxokUITPIP03oyMWbD8H19o9GstbZWmtYv4X
-	f5ChCmVg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mgpQ1-002TG3-24; Sat, 30 Oct 2021 14:33:22 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C89129816BA; Sat, 30 Oct 2021 16:33:11 +0200 (CEST)
-Date: Sat, 30 Oct 2021 16:33:11 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>, X86 ML <x86@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: Support clang-$ver builds
-Message-ID: <20211030143311.GH174730@worktop.programming.kicks-ass.net>
-References: <YXqpFHeY26sEbort@hirez.programming.kicks-ass.net>
- <CAK7LNATUpgfKJvjp0+8H6VfMLMio9+BCoyj00mAO8FcaVGCqjg@mail.gmail.com>
- <YXqwZq53WUiTeqI7@hirez.programming.kicks-ass.net>
- <YXqyHhWGJfDkuxjP@hirez.programming.kicks-ass.net>
- <YXq72/yPe76DhDLu@hirez.programming.kicks-ass.net>
- <YXrhZoOgv5dtFMTs@archlinux-ax161>
- <20211028204855.GP174703@worktop.programming.kicks-ass.net>
- <CAKwvOd=x9E=7WcCiieso-CDiiU-wMFcXL4W3V5j8dq7BL5QT+w@mail.gmail.com>
- <YXu2z6FQ6Z7qtjbk@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024CB2C81
+	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 17:20:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A7CE860FE7
+	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 17:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635614405;
+	bh=jisY5HPhWX9iNQ9+wevVVLZjayadNPZuYlW5MoiG98Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VLS2F/hwY4ACE8G5VxNmv/ZcNE4TA3tOCJ0WRP67bfs7a4X2VeNTtQkM7s4AOR0ea
+	 Ko2XuDREhsx/cCNW1glbdhgSLHjsbrBnQ51MdsgM4X7kEP670ufn+xyM5jwBtiBVZp
+	 v06gsaBb4DaAKNQWRDBhXk1F5ctd39dDC6H4uTrfTHOqGZIbE9WtsVIajxMt7MR8Wu
+	 i3gmZtTVDVOYmhEWrxlQMTNvyMkulPPGwB8BHHa9w7FfEFNRHrQpKHvmlVinC30GXW
+	 TUVLhGOmmsT0KAf42i2GuxatgrrsrSXdOalstr4fVNjwx7lQsYJgCIQD+CEX9tiidm
+	 XnetkDBCG5fFg==
+Received: by mail-oi1-f175.google.com with SMTP id o4so18195449oia.10
+        for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 10:20:05 -0700 (PDT)
+X-Gm-Message-State: AOAM533BE3HDZQL8B7/RDm5ZpcQTL7opKf7Bla39yO51JEF72bv2Qpuz
+	eAUtMN0gz6+27KIgIMNYhXsmh4V8CLJ+nND0jW0=
+X-Google-Smtp-Source: ABdhPJwtZmpRz7pXyzJlCu/rri6Dp4A9lMCXKN4um74twhwjGnzq1+v5jg1jRuWO09pxQ/9qsDQsE4K7HQd9AX55F2E=
+X-Received: by 2002:a05:6808:1805:: with SMTP id bh5mr18589992oib.47.1635614404947;
+ Sat, 30 Oct 2021 10:20:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXu2z6FQ6Z7qtjbk@hirez.programming.kicks-ass.net>
+References: <20211026201622.GG174703@worktop.programming.kicks-ass.net>
+ <20211027120515.GC54628@C02TD0UTHF1T.local> <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+ <20211027124852.GK174703@worktop.programming.kicks-ass.net>
+ <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net> <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
+ <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net> <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
+ <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
+ <20211029200324.GR174703@worktop.programming.kicks-ass.net> <20211030074758.GT174703@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211030074758.GT174703@worktop.programming.kicks-ass.net>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sat, 30 Oct 2021 19:19:53 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEJd5=3A_6Jhd4UU-TBGarnHo5+U76Zxxt7SzXsWp4CcA@mail.gmail.com>
+Message-ID: <CAMj1kXEJd5=3A_6Jhd4UU-TBGarnHo5+U76Zxxt7SzXsWp4CcA@mail.gmail.com>
+Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Mark Rutland <mark.rutland@arm.com>, 
+	X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+On Sat, 30 Oct 2021 at 09:49, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Oct 29, 2021 at 10:03:24PM +0200, Peter Zijlstra wrote:
+>
+> > So I had a bit of a peek at what clang generates:
+> >
+> >     3fa4:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        3fa7: R_X86_64_32S      __SCK__x86_pmu_handle_irq
+> >     3fab:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        3fae: R_X86_64_32S      __SCT__x86_pmu_handle_irq.cfi_jt
+> >     3fb2:       e8 00 00 00 00          call   3fb7 <init_hw_perf_events+0x1dc> 3fb3: R_X86_64_PLT32    __static_call_update-0x4
+> >
+> > So this then gives the trampoline jump table entry to
+> > __static_call_update(), with the result that it will rewrite the
+> > jump-table entry, not the trampoline!
+> >
+> > Now it so happens that the trampoline looks *exactly* like the
+> > jump-table entry (one jmp.d32 instruction), so in that regards it'll
+> > again 'work'.
+> >
+> > But this is all really, as in *really*, wrong. And I'm really sad I'm
+> > the one to have to discover this, even though I've mentioned
+> > static_call()s being tricky in previous reviews.
+>
+> The below makes the clang-cfi build properly sick:
+>
+> [    0.000000] trampoline signature fail
+> [    0.000000] ------------[ cut here ]------------
+> [    0.000000] kernel BUG at arch/x86/kernel/static_call.c:65!
+>
+> ---
+> Subject: static_call,x86: Robustify trampoline patching
+>
+> Add a few signature bytes after the static call trampoline and verify
+> those bytes match before patching the trampoline. This avoids patching
+> random other JMPs (such as CFI jump-table entries) instead.
+>
+> These bytes decode as:
+>
+>    d:   53                      push   %rbx
+>    e:   43 54                   rex.XB push %r12
+>
+> And happen to spell "SCT".
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Latestest greatness... :-)
+I just realized that arm64 has the exact same problem, which is not
+being addressed by my v5 of the static call support patch.
 
----
-Subject: kbuild: Fix clang/llvm build infra
-
-Debian (and derived) distros ship their compilers as -$ver suffixed
-binaries. For gcc it is sufficent to use:
-
- $ make CC=gcc-12
-
-However, clang builds (esp. clang-lto) need a whole array of tools to be
-exactly right, leading to unweildy stuff like:
-
- $ make CC=clang-13 LD=ld.lld=14 AR=llvm-ar-13 NM=llvm-nm-13 OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM=1
-
-which is, quite franktly, totally insane and unusable. Instead make
-the CC variable DTRT, enabling one such as myself to use:
-
- $ make CC=clang-13
-
-This also lets one quickly test different clang versions.
-Additionally, also support path based LLVM suites like:
-
- $ make CC=/opt/llvm/bin/clang
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- Makefile                       |   45 +++++++++++++++++++++++++++---------
- tools/scripts/Makefile.include |   50 ++++++++++++++++++++++++++++-------------
- 2 files changed, 68 insertions(+), 27 deletions(-)
-
---- a/Makefile
-+++ b/Makefile
-@@ -423,9 +423,29 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
- HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
- HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
- 
--ifneq ($(LLVM),)
--HOSTCC	= clang
--HOSTCXX	= clang++
-+# powerpc and s390 don't yet work with LLVM as a whole
-+ifeq ($(ARCH),powerpc)
-+LLVM = 0
-+endif
-+ifeq ($(ARCH),s390)
-+LLVM = 0
-+endif
-+
-+# otherwise, if CC=clang, default to using LLVM to enable LTO
-+CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
-+CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
-+ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
-+LLVM ?= 1
-+LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
-+LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
-+endif
-+
-+# if not set by now, do not use LLVM
-+LLVM ?= 0
-+
-+ifneq ($(LLVM),0)
-+HOSTCC	= $(LLVM_PFX)clang$(LLVM_SFX)
-+HOSTCXX	= $(LLVM_PFX)clang++$(LLVM_SFX)
- else
- HOSTCC	= gcc
- HOSTCXX	= g++
-@@ -442,15 +462,15 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS)
- 
- # Make variables (CC, etc...)
- CPP		= $(CC) -E
--ifneq ($(LLVM),)
--CC		= clang
--LD		= ld.lld
--AR		= llvm-ar
--NM		= llvm-nm
--OBJCOPY		= llvm-objcopy
--OBJDUMP		= llvm-objdump
--READELF		= llvm-readelf
--STRIP		= llvm-strip
-+ifneq ($(LLVM),0)
-+CC		= $(LLVM_PFX)clang$(LLVM_SFX)
-+LD		= $(LLVM_PFX)ld.lld$(LLVM_SFX)
-+AR		= $(LLVM_PFX)llvm-ar$(LLVM_SFX)
-+NM		= $(LLVM_PFX)llvm-nm$(LLVM_SFX)
-+OBJCOPY		= $(LLVM_PFX)llvm-objcopy$(LLVM_SFX)
-+OBJDUMP		= $(LLVM_PFX)llvm-objdump$(LLVM_SFX)
-+READELF		= $(LLVM_PFX)llvm-readelf$(LLVM_SFX)
-+STRIP		= $(LLVM_PFX)llvm-strip$(LLVM_SFX)
- else
- CC		= $(CROSS_COMPILE)gcc
- LD		= $(CROSS_COMPILE)ld
-@@ -461,6 +481,7 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
- READELF		= $(CROSS_COMPILE)readelf
- STRIP		= $(CROSS_COMPILE)strip
- endif
-+
- PAHOLE		= pahole
- RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
- LEX		= flex
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -51,12 +51,32 @@ define allow-override
-     $(eval $(1) = $(2)))
- endef
- 
--ifneq ($(LLVM),)
--$(call allow-override,CC,clang)
--$(call allow-override,AR,llvm-ar)
--$(call allow-override,LD,ld.lld)
--$(call allow-override,CXX,clang++)
--$(call allow-override,STRIP,llvm-strip)
-+# powerpc and s390 don't yet work with LLVM as a whole
-+ifeq ($(ARCH),powerpc)
-+LLVM = 0
-+endif
-+ifeq ($(ARCH),s390)
-+LLVM = 0
-+endif
-+
-+# otherwise, if CC=clang, default to using LLVM to enable LTO
-+CC_BASE := $(shell echo $(CC) | sed 's/.*\///')
-+CC_NAME := $(shell echo $(CC_BASE) | cut -b "1-5")
-+ifeq ($(shell test "$(CC_NAME)" = "clang"; echo $$?),0)
-+LLVM ?= 1
-+LLVM_PFX := $(shell echo $(CC) | sed 's/\(.*\/\)\?.*/\1/')
-+LLVM_SFX := $(shell echo $(CC_BASE) | cut -b "6-")
-+endif
-+
-+# if not set by now, do not use LLVM
-+LLVM ?= 0
-+
-+ifneq ($(LLVM),0)
-+$(call allow-override,CC,$(LLVM_PFX)clang$(LLVM_SFX))
-+$(call allow-override,AR,$(LLVM_PFX)llvm-ar$(LLVM_SFX))
-+$(call allow-override,LD,$(LLVM_PFX)ld.lld$(LLVM_SFX))
-+$(call allow-override,CXX,$(LLVM_PFX)clang++$(LLVM_SFX))
-+$(call allow-override,STRIP,$(LLVM_PFX)llvm-strip$(LLVM_SFX))
- else
- # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
- $(call allow-override,CC,$(CROSS_COMPILE)gcc)
-@@ -68,10 +88,10 @@ endif
- 
- CC_NO_CLANG := $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang__"; echo $$?)
- 
--ifneq ($(LLVM),)
--HOSTAR  ?= llvm-ar
--HOSTCC  ?= clang
--HOSTLD  ?= ld.lld
-+ifneq ($(LLVM),0)
-+HOSTAR  ?= $(LLVM_PFX)llvm-ar$(LLVM_SFX)
-+HOSTCC  ?= $(LLVM_PFX)clang$(LLVM_SFX)
-+HOSTLD  ?= $(LLVM_PFX)ld.lld$(LLVM_SFX)
- else
- HOSTAR  ?= ar
- HOSTCC  ?= gcc
-@@ -79,11 +99,11 @@ HOSTLD  ?= ld
- endif
- 
- # Some tools require Clang, LLC and/or LLVM utils
--CLANG		?= clang
--LLC		?= llc
--LLVM_CONFIG	?= llvm-config
--LLVM_OBJCOPY	?= llvm-objcopy
--LLVM_STRIP	?= llvm-strip
-+CLANG		?= $(LLVM_PFX)clang$(LLVM_SFX)
-+LLC		?= $(LLVM_PFX)llc$(LLVM_SFX)
-+LLVM_CONFIG	?= $(LLVM_PFX)llvm-config$(LLVM_SFX)
-+LLVM_OBJCOPY	?= $(LLVM_PFX)llvm-objcopy$(LLVM_SFX)
-+LLVM_STRIP	?= $(LLVM_PFX)llvm-strip$(LLVM_SFX)
- 
- ifeq ($(CC_NO_CLANG), 1)
- EXTRA_WARNINGS += -Wstrict-aliasing=3
+As it turns out, the v11 Clang that I have been testing with is broken
+wrt BTI landing pads, and omits them from the jump table entries.
+Clang 12+ adds them properly, which means that both the jump table
+entry and the static call trampoline may start with BTI C + direct
+branch, and we also need additional checks to disambiguate.
