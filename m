@@ -1,76 +1,115 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231F32C82
-	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 18:55:33 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3C5860FC3
-	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 18:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635620132;
-	bh=qtn9JW4jhxyuPAJNQ5NoqqWfwKbfafsp+GixB38x3i8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=O8FagHUZakbiUhExqOFAUdpYLah6tRqRSfskqQ7q4TCiiVaEiz6s9ZpTnQ3Jva8ks
-	 HACyto+ICAZMPH682d2LtBrv9oajQjoQ3LfF+MRiHpg+1tpxG5RtN4+/hP5KOx+Aq2
-	 zo0kIkSxXy9K910s3dU22MWz3/wnzos1Dllyc3dApI1Qcn+sbNQLtbBQp0oBvBOk0O
-	 2PSJBFuatdFtMmIUZoLvrcZC7p5fpJ1asidJT693OAHgHJwjui4Y7sIr067k64/EVt
-	 bVfzMXB9Scm8u7jSmFzExn+qpF1c5IefGcSEzxa6c7HqTmGp/al9FXWC3Xn1eX90yL
-	 Ik9RJl8vXbxgw==
-Received: by mail-oi1-f180.google.com with SMTP id o83so18502124oif.4
-        for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 11:55:32 -0700 (PDT)
-X-Gm-Message-State: AOAM533YmekN4CJ+V+XZqBCB/1G6flN7IbYI7zPM9isfL7nicK8wX7ne
-	AqgIbz291LP9r/fj+A+1EQM4EsuilB4e4AEux/U=
-X-Google-Smtp-Source: ABdhPJyTAT1X8xnCAWwkU+17oqm3OttK6VQk0EGhcp4oLGNhaGkj/SbzM2MBH85ZIZQ7uVeM3qTXNJZrANUvtOZcTo8=
-X-Received: by 2002:a05:6808:1805:: with SMTP id bh5mr18863439oib.47.1635620131981;
- Sat, 30 Oct 2021 11:55:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E7F2C82
+	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 19:08:08 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id 131so21749489ybc.7
+        for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 12:08:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CD2RlII1WVp7MOTRa0mnhnUU9/NjsujY0FdiDhkiMRE=;
+        b=qCPIOU9GxvfXvw4Mc7xnO0zT6yYKxzP06wsu9k2jfBIXScVg+Gxs6fIBAcHlQN0W2I
+         rpD5DKkZgZ5p1g3scnrPOtX14ePFwPafNmX5Un0wQ5Y1+3438LQOYwKRNoP7HapoEJrf
+         NnK7FOZGPnXclhkL6Hu2phBIrp9Ar6/+nlPhZjJH3wk1r3bITWiJbnWzInqmCadSY6dw
+         qfc3L3PtHfX1a66ZKnAueG5cDhofYtawaZxeUqfzCg3G0q/UmBbUVuSJPTkI0ZpmRcHb
+         Z8w0d9HY5hWtFj4zgGOkTCI9wUxi1vp9lf4jnLL+pV/HApMRaFYtdf6oNvUjvz17+uvL
+         5p0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CD2RlII1WVp7MOTRa0mnhnUU9/NjsujY0FdiDhkiMRE=;
+        b=IViTh5ZLDNM54SODzGc2TapguoIu+4KQPUsqoxCaI3lxI9zoKWmhygYftrfko5vsZ1
+         4nofDmTS4ZQtZD3S1YHv3p7FRtRoYAHCAzFbs0OX4wE2rPnQ/QOGzR9pkLuMe/drq9KG
+         Y+ounjHJ99GiMIJFYz4MCfsLqMWYrRFu9JqOEFKwD28G9EOBq5cA2YQgKc99+QzpeSgS
+         xZp3obE+viAXPpcJam7kHGP/Ud5jwiPDzjHMX9vyT1UNes1sJ/kgXld4yb7nbGLGB0rg
+         qRdUBmPKrWouHLxZ2Xa9IKL8JBuZ+ELH1FFCBjEhUlRGfFg4dlQOOu2FLpucQS46CZmj
+         L9EQ==
+X-Gm-Message-State: AOAM5316QHwydGBvpgROcVdUD0oQqKVHadKzgrwEeFlh8eMbZx+04EQj
+	3tUs+iiaZnmiTOeSUDfJyRURS5uMpdo/Xu9jVqfe0w==
+X-Google-Smtp-Source: ABdhPJwCorOhaxiBsJrc7khwbBYNrQ8KwuFb6kQY80aUD8a35DXRG6noMdVjde3oMFCxOrugnlKMPA0CbEY8fahkgVE=
+X-Received: by 2002:a25:2d66:: with SMTP id s38mr1787157ybe.527.1635620886905;
+ Sat, 30 Oct 2021 12:08:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+References: <20211013181658.1020262-1-samitolvanen@google.com>
+ <20211026201622.GG174703@worktop.programming.kicks-ass.net>
+ <20211027120515.GC54628@C02TD0UTHF1T.local> <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
  <20211027124852.GK174703@worktop.programming.kicks-ass.net>
  <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net> <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
  <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net> <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
- <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
- <20211029200324.GR174703@worktop.programming.kicks-ass.net>
- <20211030074758.GT174703@worktop.programming.kicks-ass.net>
- <CAMj1kXEJd5=3A_6Jhd4UU-TBGarnHo5+U76Zxxt7SzXsWp4CcA@mail.gmail.com> <20211030180249.GU174703@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211030180249.GU174703@worktop.programming.kicks-ass.net>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sat, 30 Oct 2021 20:55:20 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF4ZNAvdC8tP_H=v1Dn_Zcv=La11Ok43ceQOyb1Xo1jXQ@mail.gmail.com>
-Message-ID: <CAMj1kXF4ZNAvdC8tP_H=v1Dn_Zcv=La11Ok43ceQOyb1Xo1jXQ@mail.gmail.com>
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
+ <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com> <20211029200324.GR174703@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211029200324.GR174703@worktop.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Sat, 30 Oct 2021 12:07:56 -0700
+Message-ID: <CABCJKudsK9cLx90yAUVE07fTSqt605fmmK=tOU2zPgggz-M-QA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Mark Rutland <mark.rutland@arm.com>, 
-	X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
+Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>, X86 ML <x86@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 30 Oct 2021 at 20:03, Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, Oct 29, 2021 at 1:04 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Sat, Oct 30, 2021 at 07:19:53PM +0200, Ard Biesheuvel wrote:
-> > I just realized that arm64 has the exact same problem, which is not
-> > being addressed by my v5 of the static call support patch.
+> On Wed, Oct 27, 2021 at 08:50:17AM -0700, Sami Tolvanen wrote:
+> > On Wed, Oct 27, 2021 at 7:18 AM Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> Yeah, it would.
+> > > > /*
+> > > >  * Turns a Clang CFI jump-table entry into an actual function pointer.
+> > > >  * These jump-table entries are simply jmp.d32 instruction with their
+> > > >  * relative offset pointing to the actual function, therefore decode the
+> > > >  * instruction to find the real function.
+> > > >  */
+> > > > static __always_inline void *nocfi_ptr(void *func)
+> > > > {
+> > > >         union text_poke_insn insn = *(union text_poke_insn *)func;
+> > > >
+> > > >         return func + sizeof(insn) + insn.disp;
+> > > > }
+> > > >
+> > > > But really, that wants to be a compiler intrinsic.
+> > >
+> > > Agreed. We could easily do something similar on arm64, but I'd prefer
+> > > to avoid that too.
+> >
+> > I'll see what we can do. Note that the compiler built-in we previously
+> > discussed would have semantics similar to function_nocfi(). It would
+> > return the raw function address from a symbol name, but it wouldn't
+> > decode the address from an arbitrary pointer, so this would require
+> > something different.
 >
-> > As it turns out, the v11 Clang that I have been testing with is broken
-> > wrt BTI landing pads, and omits them from the jump table entries.
-> > Clang 12+ adds them properly, which means that both the jump table
-> > entry and the static call trampoline may start with BTI C + direct
-> > branch, and we also need additional checks to disambiguate.
+> So I had a bit of a peek at what clang generates:
 >
-> I'm not sure, why would the static_call trampoline need a BTI C ? The
-> whole point of static_call() is to be a direct call, we should never
-> have an indirect call to the trampoline, that would defeat the whole
-> purpose.
+>     3fa4:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        3fa7: R_X86_64_32S      __SCK__x86_pmu_handle_irq
+>     3fab:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        3fae: R_X86_64_32S      __SCT__x86_pmu_handle_irq.cfi_jt
+>     3fb2:       e8 00 00 00 00          call   3fb7 <init_hw_perf_events+0x1dc> 3fb3: R_X86_64_PLT32    __static_call_update-0x4
+>
+> So this then gives the trampoline jump table entry to
+> __static_call_update(), with the result that it will rewrite the
+> jump-table entry, not the trampoline!
+>
+> Now it so happens that the trampoline looks *exactly* like the
+> jump-table entry (one jmp.d32 instruction), so in that regards it'll
+> again 'work'.
 
-This might happen when the distance between the caller and the
-trampoline is more than 128 MB, in which case we emit a veneer that
-uses an indirect call as well. So we definitely need the landing pad
-in the trampoline.
+Ugh, good catch!
+
+> But this is all really, as in *really*, wrong. And I'm really sad I'm
+> the one to have to discover this, even though I've mentioned
+> static_call()s being tricky in previous reviews.
+
+My bad, I didn't realize Clang does this with a typeof(func)
+declaration. I'll make sure we have a reasonable fix for this before
+the next version.
+
+Sami
