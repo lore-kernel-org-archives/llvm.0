@@ -1,121 +1,74 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1BE2C82
-	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 08:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=OsAU1X/ym1O2wGNMWXfa64U4N11rGKkMYQvMe3I0gUI=; b=Znk8T7HkbjMxUm+OAnv03Ub4Fs
-	uevcDyelW6+m+1hwPFX+kz/FfOEvcvO/R1s6hxVQr6hbHCyinV2PKAIOphy2XUuGCGYCpBt04olIN
-	Mso9Ny7kq9tx6YRKpydNqUIz/nZyPu/TmdzWyXJmc2eveFDhQ/A/8K06JknYDtlrLcSQf35la5uVq
-	vo6ndIaYmMSzngZxwqKTb4PZPtcN6A5F2Zupxc2jDjn5urpfosjhlmd1J7ctewQBBTR1UFbZ076BY
-	ysTw/pnYu194JxL5IImt8C1uN6BR2MRWMTxtWFYjV1uRrNcXifNZv594C3SlGHNHEaPxq+QRyIhAR
-	DTNWbjLA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mgjXT-002JF8-L4; Sat, 30 Oct 2021 08:16:41 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 10A1B986244; Sat, 30 Oct 2021 10:16:31 +0200 (CEST)
-Date: Sat, 30 Oct 2021 10:16:31 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, joao@overdrivepizza.com
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
-Message-ID: <20211030081631.GF174730@worktop.programming.kicks-ass.net>
-References: <20211027120515.GC54628@C02TD0UTHF1T.local>
- <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
- <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
- <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
- <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net>
- <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
- <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
- <20211029200324.GR174703@worktop.programming.kicks-ass.net>
- <20211030074758.GT174703@worktop.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EB02C81
+	for <llvm@lists.linux.dev>; Sat, 30 Oct 2021 09:21:08 +0000 (UTC)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+	id 0A5FFC6398; Sat, 30 Oct 2021 10:21:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+	t=1635585666; bh=/XwIbqzaI1ZkAS9A2CztCzPHMUN0TjT18ogjpqMHCZE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ndr3m9V+p3zyw5/EijsnQrn07JdPitxSYikrHJ/QOeI4Pb8kaqKg0quOYWsRRH1Zv
+	 Si/DjgKbyOFZ1cugFSHdbwjCu8YNa1MwBsZ91yyxcZZcumtguczrnPNk54ovjjn35X
+	 uuq7/d4Ynf/vhL48O13f0Nt2Ei7h011aN3eZs2lMHzHyyhcS4UzMJfm+pRiwgPclj3
+	 6bbUq4vKVNfP/HcsQKgIxmltxtkzfra0OKgswZdymPhoetrnIdW6uhjfa3yinmlyEy
+	 uMHjGZlJaw2jbezMLAnW/OATK0VWsUOx+qowjTbkIm+mYyWFFQsJGyUzjE+y+1+fVo
+	 ENllqxcSphk6w==
+Date: Sat, 30 Oct 2021 10:21:05 +0100
+From: Sean Young <sean@mess.org>
+To: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	kernel test robot <lkp@intel.com>, mchehab@kernel.org,
+	thierry.reding@gmail.com, Lee Jones <lee.jones@linaro.org>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
+Message-ID: <20211030092105.GA12707@gofer.mess.org>
+References: <YXlxhpZWf2mxJaMi@fedora>
+ <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
+ <20211028091442.GA16514@gofer.mess.org>
+ <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
+ <20211028122610.GA18767@gofer.mess.org>
+ <20211028180516.t2tpfbzztm7s6cqm@pengutronix.de>
+ <20211029071608.GA28997@gofer.mess.org>
+ <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
+ <20211029115412.GA32383@gofer.mess.org>
+ <CAH7FV3njgZ7sOnZZF88KZ2C4UwqxoodpUuLsnucvBxYXmaZo1Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211030074758.GT174703@worktop.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH7FV3njgZ7sOnZZF88KZ2C4UwqxoodpUuLsnucvBxYXmaZo1Q@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Oct 30, 2021 at 09:47:58AM +0200, Peter Zijlstra wrote:
-> On Fri, Oct 29, 2021 at 10:03:24PM +0200, Peter Zijlstra wrote:
-> 
-> > So I had a bit of a peek at what clang generates:
-> > 
-> >     3fa4:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        3fa7: R_X86_64_32S      __SCK__x86_pmu_handle_irq
-> >     3fab:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        3fae: R_X86_64_32S      __SCT__x86_pmu_handle_irq.cfi_jt
-> >     3fb2:       e8 00 00 00 00          call   3fb7 <init_hw_perf_events+0x1dc> 3fb3: R_X86_64_PLT32    __static_call_update-0x4
-> > 
-> > So this then gives the trampoline jump table entry to
-> > __static_call_update(), with the result that it will rewrite the
-> > jump-table entry, not the trampoline!
-> > 
-> > Now it so happens that the trampoline looks *exactly* like the
-> > jump-table entry (one jmp.d32 instruction), so in that regards it'll
-> > again 'work'.
-> > 
-> > But this is all really, as in *really*, wrong. And I'm really sad I'm
-> > the one to have to discover this, even though I've mentioned
-> > static_call()s being tricky in previous reviews.
-> 
-> The below makes the clang-cfi build properly sick:
-> 
-> [    0.000000] trampoline signature fail
-> [    0.000000] ------------[ cut here ]------------
-> [    0.000000] kernel BUG at arch/x86/kernel/static_call.c:65!
+On Fri, Oct 29, 2021 at 09:08:29AM -0300, Maíra Canal wrote:
+> I would like to thank you guys for the attention and this interesting
+> discussion. I'm looking for some work in the kernel and I would like
+> to know if you guys have any suggestions for beginner tasks in this
+> subsystem. I have solid knowledge in C programming, but I started in
+> the kernel a couple of weeks ago. Anyway, thank you for all the
+> feedback.
 
-So fundamentally I think the whole notion that the address of a function
-is something different than 'the address of that function' is an *utter*
-fail.
+Thank you for your contributions.
 
-So things like FineIBT use a scheme where they pass a hash value along
-with the indirect call, which is veryfied at the other end. Can't we
-adjust it like:
+rc-core (drivers/media/rc) is in good shape and I don't know of any
+outstanding issues.
+
+There is a ton of work around dvb, but this requires actual dvb hardware
+to test.
+
+ - port drivers/media/usb/dvb-usb to drivers/media/usb/dvb-usb-v2
+ - Re-write dvb frontend without dvb_attach()
+ - Implement dma-buf for dvb
+
+Like I said, you'll need actual hardware to test against, and this is
+probably not beginner tasks.
 
 
-foo.cfi:
-	endbr
-	xorl $0xdeadbeef, %r10d
-	jz foo
-	ud2
-	nop	# make it an even 16 bytes
-foo:
-	# actual function text
-
-
-Then have the address of foo, be the address of foo, like any normal
-sane person would expect. Have direct calls to foo, go to foo, again, as
-expected.
-
-When doing an indirect call (to r11, as clang does), then, and only
-then, do:
-
-	movl $0xdeadbeef, %r10d
-	subq $0x10, %r11
-	call *%r11
-
-	# if the r11 lives, add:
-	addq $0x10, %r11
-
-
-Then only when caller and callee agree 0xdeadbeef is the password, does
-the indirect call go through.
-
-Why isn't this a suitable CFI scheme even without IBT?
-
+Sean
