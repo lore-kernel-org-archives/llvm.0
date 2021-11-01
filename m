@@ -1,458 +1,290 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82D32C86
-	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 20:57:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1635800263;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type;
-	bh=Vr+/XxZB59Wq2QMHwXkrRqSk2Jt/yOabvitaOygI2M0=;
-	b=JBjYNCJ7a7mu+QgBMTkBwXLIGu8rwJm4nZQD7Z355Y2W0esdvTboYQHvGJmbhujpfrnefK
-	7VdvVXayTk0ODUsHCbBWGnpFauIM4xShaY/S1cpfsS2RuSaVLMBs5V+4tAzRbmALtZmzgZ
-	R4hsBWcKwyzPmJlXNExtmXGHF304IE4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-545-Wq9ouA5aPW219JGP6rShZA-1; Mon, 01 Nov 2021 16:57:39 -0400
-X-MC-Unique: Wq9ouA5aPW219JGP6rShZA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C20238066EF
-	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 20:57:38 +0000 (UTC)
-Received: from [172.64.9.11] (unknown [10.30.33.187])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BA55210016F5;
-	Mon,  1 Nov 2021 20:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620492C86
+	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 21:03:44 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3485761175;
+	Mon,  1 Nov 2021 21:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635800624;
+	bh=uJFyUROA+bWziU3tdwADkXglHq9/LCHNcIBh81tjPuU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZFVGfvgjA6ncqccTWNjgkg+GHuNNcTX2LduvoGqGAtyzi4/8EaXBGc7e8m5Tjp3S4
+	 hgwMYtnOssL9T4wckjOOKHBbc51zUM2JOoKwctslLuV6vJMiI34FnR7yp5qv7ewRqX
+	 Fa5nuFqGStAz1+ImBEEoi+N/v8c6KFf3QSX2KuG0v2zbQl71+yr5xDq5ID1K+S9tS6
+	 Tq8fZaEG423bJWDFp2VdyUkgAKTCyYBMF7sFN2dCuza2hBXKXD7qmMoa7L87yH4XG1
+	 +cOm9scngxXwTPYa2eFK7jim/ACMg11ncvDIWT9WhnKzQTJleU93o2uH1cYexAfHkV
+	 o26k/0+weL7fw==
+Date: Mon, 1 Nov 2021 14:03:39 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "kernelci.org bot" <bot@kernelci.org>
+Cc: llvm@lists.linux.dev, kernelci@groups.io
+Subject: Re: next/master build: 230 builds: 25 failed, 205 passed, 449
+ errors, 236 warnings (next-20211101)
+Message-ID: <YYBWK21wi/J997sL@archlinux-ax161>
+References: <61800dfa.1c69fb81.4a3c4.4034@mx.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.15.0
- (mainline.kernel.org-clang, 037c50bf)
-Date: Mon, 01 Nov 2021 20:57:35 -0000
-Message-ID: <cki.FC11214509.95CMMJKOIT@redhat.com>
-X-Gitlab-Pipeline-ID: 399803479
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/399803479?=
-X-DataWarehouse-Checkout-IID: 23098
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/mixed; boundary="===============8171848551004790380=="
-
---===============8171848551004790380==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61800dfa.1c69fb81.4a3c4.4034@mx.google.com>
 
 Hello,
 
-We ran automated tests on a recent commit from this kernel tree:
+I will comment on the LLVM/clang errors.
 
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: 037c50bfbeb3 - Merge tag 'for-5.16-tag' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/kdave/linux
+On Mon, Nov 01, 2021 at 08:55:38AM -0700, kernelci.org bot wrote:
+>     3    clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
-The results of these automated tests are provided below.
+I believe this is fixed with
 
-    Overall result: FAILED (see details below)
-             Merge: OK
-           Compile: FAILED
- Selftests compile: FAILED
+https://lore.kernel.org/r/87fsslasgz.fsf@collabora.com/
 
-All kernel binaries, config files, and logs are available for download here=
-:
+which should now be picked up for -next:
 
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2021/11/01/399803479
+https://lore.kernel.org/r/20211101114222.GA21679@quack2.suse.cz/
 
-We attempted to compile the kernel for multiple architectures, but the comp=
-ile
-failed on one or more architectures:
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocation name
+>     3    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocation name
 
-           aarch64: FAILED (see build-aarch64.log.xz attachment)
-             s390x: FAILED (see build-s390x.log.xz attachment)
+This is a deficiency in LLVM 10's integrated assembler that was fixed by
 
-We hope that these logs can help you find the problem quickly. For the full
-detail on our testing procedures, please scroll to the bottom of this messa=
-ge.
+https://github.com/llvm/llvm-project/commit/34d77516b826f07e964fab364b02511ba6002209
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+in LLVM 11, according to my reverse bisect. This error was exposed in
+the kernel by changing the default value of LLVM_IAS in commit
+f12b034afeb3 ("scripts/Makefile.clang: default to LLVM_IAS=1"). There
+are a few different things we can explore for fixing this:
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+1. Bump the minimum required version of LLVM to 11.0.0.
+2. Explicitly pass LLVM_IAS=0 for clang-10 in KernelCI's make command.
+3. Change the default of LLVM_IAS for clang-10 in the kernel's source.
 
-Compile testing
----------------
+We have done number 2 in our own CI:
 
-We compiled the kernel for 5 architectures:
+https://github.com/ClangBuiltLinux/continuous-integration2/commit/e4bdcdd4682b8792b04083e58bb590f369f047db
 
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+Number 3 has some merits because it would benefit all CI systems. Number
+1 might be worth considering now that clang-11+ is available in most
+distros:
 
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
+Arch Linux: clang version 12.0.1
+Debian (buster): clang version 7.0.1-8+deb10u2
+Debian (bullseye): Debian clang version 11.0.1-2
+Debian (sid): Debian clang version 11.1.0-4
+Fedora (34): clang version 12.0.1 (Fedora 12.0.1-1.fc34)
+Fedora (rawhide): clang version 13.0.0 (Fedora 13.0.0-4.fc36)
+OpenSUSE (Leap 15.3): clang version 11.0.1
+OpenSUSE (Tumbleweed): clang version 13.0.0
+Ubuntu (18.04): clang version 6.0.0-1ubuntu2
+Ubuntu (20.04): clang version 10.0.0-4ubuntu1
+Ubuntu (21.10): Ubuntu clang version 13.0.0-2
 
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
+Every distribution that has a clang older than 11.0.0 has one older than
+10.0.1 so it already cannot build the kernel without building LLVM from
+source so not much should change.
 
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+>     3    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, any one of the following would fix this:
+>     3    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, any one of the following would fix this:
 
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+https://github.com/ClangBuiltLinux/linux/issues/909S
 
+This should be fixed in the same manner as the arm64 issue above.
 
-We built the following selftests:
+>     2    <instantiation>:2:2: error: unknown use of instruction mnemonic without a size suffix
 
-  x86_64:
-      net: OK
-      bpf: fail
-      seccomp: OK
-      lkdtm: OK
-      install and packaging: OK
+https://github.com/ClangBuiltLinux/linux/issues/1079
 
-You can find the full log (build-selftests.log) in the artifact storage abo=
-ve.
+This should be fixed in the same manner as the arm64 issue above.
 
+>     1    drivers/net/ethernet/mellanox/mlx5/core/en/tc/sample.c:635:34: error: variable 'esw' is uninitialized when used here [-Werror,-Wuninitialized]
 
---===============8171848551004790380==
-Content-Type: application/x-xz
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="build-s390x.log.xz"
-MIME-Version: 1.0
+Should be fixed in the next -next version:
 
-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
---===============8171848551004790380==
-Content-Type: application/x-xz
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="build-aarch64.log.xz"
-MIME-Version: 1.0
+https://lore.kernel.org/r/20211029205632.390403-2-saeed@kernel.org/
 
-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
---===============8171848551004790380==--
+>     1    clang: error: unsupported argument '-mimplicit-it=always' to option 'Wa,'
 
+Fixed in LLVM 13: https://github.com/ClangBuiltLinux/linux/issues/1270
+
+ARCH=arm does not build well with the integrated assembler until LLVM 13
+so KernelCI should pass LLVM_IAS=0 to make when building arm kernels
+prior to that version.
+
+>     1    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemble to exactly 4 bytes
+>     1    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+>     1    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+
+LLVM 12: https://github.com/ClangBuiltLinux/linux/issues/742
+
+Same fix as directly above.
+
+>     1    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+>     1    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+>     1    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:423:8: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:401:8: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:372:8: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:344:8: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:321:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:286:8: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+>     1    arch/arm/mm/cache-v7.S:172:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+>     1    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+>     1    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-barriers
+>     1    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+>     1    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+>     1    arch/arm/mach-mvebu/coherency_ll.S:155:2: error: instruction requires: data-barriers
+>     1    arch/arm/mach-mvebu/coherency_ll.S:128:2: error: instruction requires: data-barriers
+>     1    arch/arm/mach-imx/suspend-imx6.S:315:2: error: instruction requires: data-barriers
+>     1    :125:2: error: instruction requires: data-barriers
+
+LLVM 13: https://github.com/ClangBuiltLinux/linux/issues/1195
+
+Same fix as directly above.
+
+Cheers,
+Nathan
