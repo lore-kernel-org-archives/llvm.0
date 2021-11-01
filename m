@@ -1,119 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B962C82
-	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 13:37:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1635773835;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wgWA21RbnVHNJqYVTGhY7Yn3OnV0VV8UOaMkbZYsosU=;
-	b=FVzg9lAEDnPr4XaIsqBlDD7N0FQPYMc2FE31z3y882uvG29wqgwbql4uHAuMNE3IdWyfh0
-	gu/KvreexshaXE3ng+2ac3pD5kihTr33aJOyoXiRjFRdqI32N8OsckMxBV5VvwFxRU6zBy
-	NxgmlEl7Y9GLvbQmgG9boMOKfQnSAgo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-151-DKtAkwjeOgmby40eacLiow-1; Mon, 01 Nov 2021 09:37:11 -0400
-X-MC-Unique: DKtAkwjeOgmby40eacLiow-1
-Received: by mail-ed1-f72.google.com with SMTP id o22-20020a056402439600b003dd4f228451so15545668edc.16
-        for <llvm@lists.linux.dev>; Mon, 01 Nov 2021 06:37:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wgWA21RbnVHNJqYVTGhY7Yn3OnV0VV8UOaMkbZYsosU=;
-        b=mXOZ1PPRy8M5YW2cG9idPgtP4hvxAEeeyGwB1+HH/lkf4GNGvO4LvO96u5jVXxAbiP
-         BPMQB4afJfy8xqOLrnC2ItOZUzAXHDIQMXIIgqKAM9ajjULcqnpTagBIt1jB3lK0+PIP
-         NpAnjkuk64BXlzBXqr5U/X0Z0XEaFhEiZBgLez3FU2yY53ozGhYozcTt7bAgpm+WUc3w
-         TASnrY+xDu9C34yzG3Fd/2xCbcrbigErPAvpR3KUZI50xz46mH0qt41b0tjoBdg2F3Su
-         7CJDmr++UmPUGaannLQbI4Vb1WcrSqYhf8NXp9PJMNsgGa6GHOIC2vWGWl2XKPIVYfxh
-         Ou6Q==
-X-Gm-Message-State: AOAM533r0mgxn6XeBIPonYNjrum7uKkLxTnUdYM1OHj33rO61cP/yVUl
-	cz9djvHAf1apMn6DFsc9r+coXcQHk8VTl8CHM764HLCYVFudqUn4Q4e9aQCW9UWMkByMduX985q
-	HR+torLQhkEPDRw==
-X-Received: by 2002:a17:906:7d48:: with SMTP id l8mr27921156ejp.106.1635773830180;
-        Mon, 01 Nov 2021 06:37:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzWZv3U+QmniDANZEr4DQ+HnTJLnVf970DRUk1goa2HV9d2mYiMDrbyzv10yCoN4cuvXH5n9w==
-X-Received: by 2002:a17:906:7d48:: with SMTP id l8mr27921137ejp.106.1635773830030;
-        Mon, 01 Nov 2021 06:37:10 -0700 (PDT)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id b2sm8919031edv.73.2021.11.01.06.37.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 06:37:09 -0700 (PDT)
-Date: Mon, 1 Nov 2021 14:37:08 +0100
-From: Jiri Olsa <jolsa@redhat.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: Re: [rostedt-trace:for-next 58/100]
- samples/ftrace/ftrace-direct-multi.c:8:6: warning: no previous prototype for
- function 'my_direct_func'
-Message-ID: <YX/thIXtDzfhljX7@krava>
-References: <202111010507.F9ud1mUL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A902C82
+	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 14:14:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E64E5610FC
+	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 14:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1635776094;
+	bh=i69vRlYEfIEqtrl+56kW0o4fiFskwEwT/Wm556pV/oM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KY+EWlyJv/vVXqDNhN/kO3kGeR0AIHeiX0GgJa/ZlHHgoYYGtepeC0na+9ZWluf6P
+	 terwAgaFzocp1oDEiKvAA9xLMrUHfCBlrl2InIh/Jle8eqd0IF63ZQb3fIQF2phyxJ
+	 KVTQ3145KyJedZjHA/+GJix4sIiKh+2VYuuc9jL4Fi4738JHF/AKsBjIlsYW40C52e
+	 L0/jrZvTiBo7tU/vzZlacMjQ93EdJCliG9Hab2Ch/5JZIBangOsx5nAmTFHAKfcXVj
+	 FKtGApiEzUn3lB3w3aBgAxcaSlxwP82c+9r9LZSbvnnkqRDlI5yJaPRBMtmg5t3cVC
+	 ibWpldhmUc1qA==
+Received: by mail-oi1-f171.google.com with SMTP id x8so20805039oix.2
+        for <llvm@lists.linux.dev>; Mon, 01 Nov 2021 07:14:54 -0700 (PDT)
+X-Gm-Message-State: AOAM533iX69oSC/YdIADbNNAHwPuDj8quHBD52PqNTuofk5EAXsTIxOV
+	KbaKBuO00b/0HZrkh7Ph7eWEGcIMpTeW486OA48=
+X-Google-Smtp-Source: ABdhPJxLSJB/un808SgMnVnJc+5bVkIQUQ+PSw3wZX+rrDmm+PvlkbTWYeIRvgMkWXBM1JO4yDptbD0iYxlm6iOZZzw=
+X-Received: by 2002:a05:6808:4d9:: with SMTP id a25mr19986405oie.33.1635776094081;
+ Mon, 01 Nov 2021 07:14:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202111010507.F9ud1mUL-lkp@intel.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CAMj1kXEJd5=3A_6Jhd4UU-TBGarnHo5+U76Zxxt7SzXsWp4CcA@mail.gmail.com>
+ <20211030180249.GU174703@worktop.programming.kicks-ass.net>
+ <CAMj1kXF4ZNAvdC8tP_H=v1Dn_Zcv=La11Ok43ceQOyb1Xo1jXQ@mail.gmail.com>
+ <CAMj1kXEvemVOWf4M_0vsduN_kiCsGVmM92cE7KPMoNKViKp=RQ@mail.gmail.com>
+ <20211031163920.GV174703@worktop.programming.kicks-ass.net>
+ <CAMj1kXHk5vbrT49yRCivX3phrEkN6Xbb+g8WEmavL_d1iE0OxQ@mail.gmail.com>
+ <YX74Ch9/DtvYxzh/@hirez.programming.kicks-ass.net> <CAMj1kXG+MuGaG3BHk8pnE1MKVmRf5E+nRNoFMHxOA1y84eGikg@mail.gmail.com>
+ <YX8AQJqyB+H3PF1d@hirez.programming.kicks-ass.net> <CAMj1kXF3n-oQ1WP8=asb60K6UjSYOtz5RVhrcoCoNq3v7mZdQg@mail.gmail.com>
+ <20211101090155.GW174703@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211101090155.GW174703@worktop.programming.kicks-ass.net>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 1 Nov 2021 15:14:41 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
+Message-ID: <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
+Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Mark Rutland <mark.rutland@arm.com>, 
+	X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 01, 2021 at 05:46:26AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-> head:   93d76e4a0e0112b320c4f0e2a3930ad634628c58
-> commit: 5fae941b9a6f95773df644e7cf304bf199707876 [58/100] ftrace/samples: Add multi direct interface test module
-> config: x86_64-randconfig-r024-20211031 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82ed106567063ea269c6d5669278b733e173a42f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/commit/?id=5fae941b9a6f95773df644e7cf304bf199707876
->         git remote add rostedt-trace https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
->         git fetch --no-tags rostedt-trace for-next
->         git checkout 5fae941b9a6f95773df644e7cf304bf199707876
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> samples/ftrace/ftrace-direct-multi.c:8:6: warning: no previous prototype for function 'my_direct_func' [-Wmissing-prototypes]
->    void my_direct_func(unsigned long ip)
->         ^
->    samples/ftrace/ftrace-direct-multi.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void my_direct_func(unsigned long ip)
+On Mon, 1 Nov 2021 at 10:05, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Nov 01, 2021 at 12:36:18AM +0100, Ard Biesheuvel wrote:
+> > On Sun, 31 Oct 2021 at 21:45, Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Sun, Oct 31, 2021 at 09:21:56PM +0100, Ard Biesheuvel wrote:
+> > >
+> > > > That means we can support static calls on arm64 now without breaking
+> > > > Clang CFI, and work on a solution for the redundant jumps on a more
+> > > > relaxed schedule.
+> > >
+> > > Yes, arm64 has a 'problem' with having already merged the clang-cfi
+> > > stuff :/
+> > >
+> > > I'm hoping the x86 solution can be an alternative CFI scheme, I'm
+> > > starting to really hate this one. And I'm not at all convinced the
+> > > proposed scheme is the best possible scheme given the constraints of
+> > > kernel code. AFAICT it's a compromise made in userspace.
+> >
+> > Your scheme only works with IBT: the value of %r11 is under the
+> > adversary's control so it could just point it at 'foo+0x10' if it
+> > wants to call foo indirectly, and circumvent the check. So without IBT
+> > (or BTI), I think the check fundamentally belongs in the caller, not
+> > in the callee.
+>
+> How is that not true for the jump table approach? Like I showed earlier,
+> it is *trivial* to reconstruct the actual function pointer from a
+> jump-table entry pointer.
+>
 
-hum, that can actually be static.. I'll check
+That is not the point. The point is that Clang instruments every
+indirect call that it emits, to check whether the type of the jump
+table entry it is about to call matches the type of the caller. IOW,
+the indirect calls can only branch into jump tables, and all jump
+table entries in a table each branch to the start of some function of
+the same type.
 
-thanks,
-jirka
+So the only thing you could achieve by adding or subtracting a
+constant value from the indirect call address is either calling
+another function of the same type (if you are hitting another entry in
+the same table), or failing the CFI type check.
 
->    ^
->    static 
->    1 warning generated.
-> 
-> 
-> vim +/my_direct_func +8 samples/ftrace/ftrace-direct-multi.c
-> 
->      7	
->    > 8	void my_direct_func(unsigned long ip)
->      9	{
->     10		trace_printk("ip %lx\n", ip);
->     11	}
->     12	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Instrumenting the callee only needs something like BTI, and a
+consistent use of the landing pads to ensure that you cannot trivially
+omit the check by landing right after it.
 
+> In any case, I really want the discussion to start at square one, and
+> show/explain why any chosen CFI scheme is actually good for the kernel.
+> Just because clang happened to have implemented it, doesn't make it the
+> most suitable scheme for the kernel.
 
+Not disagreeing with that for x86, but again, we're already past that for arm64.
