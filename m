@@ -1,106 +1,109 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC7D2C82
+	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 14:23:12 +0000 (UTC)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 24D551FD29;
+	Mon,  1 Nov 2021 14:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1635776006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=why89enCaDF9WCGvUmo4lqZYsx6d3oL7d07jiR6kzCw=;
+	b=jyKFE3+w5uVSoDF4UlMIdQRMKhWD7cCYTM7cCcVQK69pDErIlUBOQOOwrom25doY2ozNNe
+	p+iTU24LKytJ0Cjh/6B5OJG5F4ZwiGU2XY7XKnO/mOeZxeKUqGVk87e9T15Fvq//DLPerE
+	V5h30KJEkFSWkhx8jBG76eyxr/jfTjA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1635776006;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=why89enCaDF9WCGvUmo4lqZYsx6d3oL7d07jiR6kzCw=;
+	b=etmjCrwHhXCD7+tVX4fR5kSsgPWBAUoxj4EyJryR+p28UyNDAIBX55RYf6csXeJupNpeNR
+	8OAyGNI0RMabvzBw==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A902C82
-	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 14:14:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E64E5610FC
-	for <llvm@lists.linux.dev>; Mon,  1 Nov 2021 14:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635776094;
-	bh=i69vRlYEfIEqtrl+56kW0o4fiFskwEwT/Wm556pV/oM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KY+EWlyJv/vVXqDNhN/kO3kGeR0AIHeiX0GgJa/ZlHHgoYYGtepeC0na+9ZWluf6P
-	 terwAgaFzocp1oDEiKvAA9xLMrUHfCBlrl2InIh/Jle8eqd0IF63ZQb3fIQF2phyxJ
-	 KVTQ3145KyJedZjHA/+GJix4sIiKh+2VYuuc9jL4Fi4738JHF/AKsBjIlsYW40C52e
-	 L0/jrZvTiBo7tU/vzZlacMjQ93EdJCliG9Hab2Ch/5JZIBangOsx5nAmTFHAKfcXVj
-	 FKtGApiEzUn3lB3w3aBgAxcaSlxwP82c+9r9LZSbvnnkqRDlI5yJaPRBMtmg5t3cVC
-	 ibWpldhmUc1qA==
-Received: by mail-oi1-f171.google.com with SMTP id x8so20805039oix.2
-        for <llvm@lists.linux.dev>; Mon, 01 Nov 2021 07:14:54 -0700 (PDT)
-X-Gm-Message-State: AOAM533iX69oSC/YdIADbNNAHwPuDj8quHBD52PqNTuofk5EAXsTIxOV
-	KbaKBuO00b/0HZrkh7Ph7eWEGcIMpTeW486OA48=
-X-Google-Smtp-Source: ABdhPJxLSJB/un808SgMnVnJc+5bVkIQUQ+PSw3wZX+rrDmm+PvlkbTWYeIRvgMkWXBM1JO4yDptbD0iYxlm6iOZZzw=
-X-Received: by 2002:a05:6808:4d9:: with SMTP id a25mr19986405oie.33.1635776094081;
- Mon, 01 Nov 2021 07:14:54 -0700 (PDT)
+	by relay2.suse.de (Postfix) with ESMTPS id 0AD23A3B81;
+	Mon,  1 Nov 2021 14:13:26 +0000 (UTC)
+Date: Mon, 1 Nov 2021 15:13:25 +0100 (CET)
+From: Jiri Kosina <jkosina@suse.cz>
+To: kernel test robot <lkp@intel.com>
+cc: Roderick Colenbrander <roderick@gaikai.com>, llvm@lists.linux.dev, 
+    kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [linux-next:master 11496/12841] ld.lld: error: undefined symbol:
+ led_mc_calc_color_components
+In-Reply-To: <202110300524.TH5Nas3k-lkp@intel.com>
+Message-ID: <nycvar.YFH.7.76.2111011513020.12554@cbobk.fhfr.pm>
+References: <202110300524.TH5Nas3k-lkp@intel.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAMj1kXEJd5=3A_6Jhd4UU-TBGarnHo5+U76Zxxt7SzXsWp4CcA@mail.gmail.com>
- <20211030180249.GU174703@worktop.programming.kicks-ass.net>
- <CAMj1kXF4ZNAvdC8tP_H=v1Dn_Zcv=La11Ok43ceQOyb1Xo1jXQ@mail.gmail.com>
- <CAMj1kXEvemVOWf4M_0vsduN_kiCsGVmM92cE7KPMoNKViKp=RQ@mail.gmail.com>
- <20211031163920.GV174703@worktop.programming.kicks-ass.net>
- <CAMj1kXHk5vbrT49yRCivX3phrEkN6Xbb+g8WEmavL_d1iE0OxQ@mail.gmail.com>
- <YX74Ch9/DtvYxzh/@hirez.programming.kicks-ass.net> <CAMj1kXG+MuGaG3BHk8pnE1MKVmRf5E+nRNoFMHxOA1y84eGikg@mail.gmail.com>
- <YX8AQJqyB+H3PF1d@hirez.programming.kicks-ass.net> <CAMj1kXF3n-oQ1WP8=asb60K6UjSYOtz5RVhrcoCoNq3v7mZdQg@mail.gmail.com>
- <20211101090155.GW174703@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211101090155.GW174703@worktop.programming.kicks-ass.net>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 1 Nov 2021 15:14:41 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
-Message-ID: <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Mark Rutland <mark.rutland@arm.com>, 
-	X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-On Mon, 1 Nov 2021 at 10:05, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Nov 01, 2021 at 12:36:18AM +0100, Ard Biesheuvel wrote:
-> > On Sun, 31 Oct 2021 at 21:45, Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Sun, Oct 31, 2021 at 09:21:56PM +0100, Ard Biesheuvel wrote:
-> > >
-> > > > That means we can support static calls on arm64 now without breaking
-> > > > Clang CFI, and work on a solution for the redundant jumps on a more
-> > > > relaxed schedule.
-> > >
-> > > Yes, arm64 has a 'problem' with having already merged the clang-cfi
-> > > stuff :/
-> > >
-> > > I'm hoping the x86 solution can be an alternative CFI scheme, I'm
-> > > starting to really hate this one. And I'm not at all convinced the
-> > > proposed scheme is the best possible scheme given the constraints of
-> > > kernel code. AFAICT it's a compromise made in userspace.
-> >
-> > Your scheme only works with IBT: the value of %r11 is under the
-> > adversary's control so it could just point it at 'foo+0x10' if it
-> > wants to call foo indirectly, and circumvent the check. So without IBT
-> > (or BTI), I think the check fundamentally belongs in the caller, not
-> > in the callee.
->
-> How is that not true for the jump table approach? Like I showed earlier,
-> it is *trivial* to reconstruct the actual function pointer from a
-> jump-table entry pointer.
->
+On Sat, 30 Oct 2021, kernel test robot wrote:
 
-That is not the point. The point is that Clang instruments every
-indirect call that it emits, to check whether the type of the jump
-table entry it is about to call matches the type of the caller. IOW,
-the indirect calls can only branch into jump tables, and all jump
-table entries in a table each branch to the start of some function of
-the same type.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   bdcc9f6a568275aed4cc32fd2312432d2ff1b704
+> commit: fc97b4d6a1a6d418fd4053fd7716eca746fdd163 [11496/12841] HID: playstation: expose DualSense lightbar through a multi-color LED.
+> config: hexagon-randconfig-r013-20211028 (attached as .config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5db7568a6a1fcb408eb8988abdaff2a225a8eb72)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=fc97b4d6a1a6d418fd4053fd7716eca746fdd163
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout fc97b4d6a1a6d418fd4053fd7716eca746fdd163
+>         # save the attached .config to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: devm_led_classdev_multicolor_register_ext
+>    >>> referenced by hid-playstation.c
+>    >>> hid/hid-playstation.o:(ps_lightbar_register) in archive drivers/built-in.a
+>    >>> referenced by hid-playstation.c
+>    >>> hid/hid-playstation.o:(ps_lightbar_register) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: led_mc_calc_color_components
+>    >>> referenced by hid-playstation.c
+>    >>> hid/hid-playstation.o:(dualsense_lightbar_set_brightness) in archive drivers/built-in.a
+>    >>> referenced by hid-playstation.c
+>    >>> hid/hid-playstation.o:(dualsense_lightbar_set_brightness) in archive drivers/built-in.a
 
-So the only thing you could achieve by adding or subtracting a
-constant value from the indirect call address is either calling
-another function of the same type (if you are hitting another entry in
-the same table), or failing the CFI type check.
+From: Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH] HID: playstation: require multicolor LED functionality
 
-Instrumenting the callee only needs something like BTI, and a
-consistent use of the landing pads to ensure that you cannot trivially
-omit the check by landing right after it.
+The driver requires multicolor LED support; express that in Kconfig.
 
-> In any case, I really want the discussion to start at square one, and
-> show/explain why any chosen CFI scheme is actually good for the kernel.
-> Just because clang happened to have implemented it, doesn't make it the
-> most suitable scheme for the kernel.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
+ drivers/hid/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Not disagreeing with that for x86, but again, we're already past that for arm64.
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 3c33bf572d6d..d78b1c1fb97e 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -868,6 +868,7 @@ config HID_PLANTRONICS
+ config HID_PLAYSTATION
+ 	tristate "PlayStation HID Driver"
+ 	depends on HID
++	depends on LEDS_CLASS_MULTICOLOR
+ 	select CRC32
+ 	select POWER_SUPPLY
+ 	help
+-- 
+Jiri Kosina
+SUSE Labs
