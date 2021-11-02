@@ -1,123 +1,223 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from newton.telenet-ops.be (newton.telenet-ops.be [195.130.132.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801B229CA
-	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 15:15:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Lji0Q0mKscbCR4s6xv/OULJVtCJGnkPpvCozvtfPKyM=; b=rQyjFmdABWfQuxVIFtBoZm6409
-	f7Q8mBnnIbnhARKu8AfsBA+4oU06whRCygb0Kmatd7/iZv1bYZsEWfsGsixFCGVYvb84ZDTeWPrCp
-	Q6jCl/jLsDBIJ0mcDOI6pJvQ8RlkyBRHWj8FjpOu/YcCrGs13flAN4Igvu4smCRzFdUkiQYzuSUb1
-	6es1pUMYkJOvoNjyCsH0ehnNGvmn8bAy43xYzwsGy3VH+5/D/uiBNNq0DomJQKUaKqwYD21X2okrq
-	VEuxt2Gfwz+P27cZgCnyOIvyi6YhiZE/m01nwh44rhuizmTlrOLtuZ0qOfiu//1K+/L7/4sth9g6M
-	5L7zz5Wg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mhvVb-00DluO-H2; Tue, 02 Nov 2021 15:15:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 989D1300366;
-	Tue,  2 Nov 2021 16:15:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7D7AA2D5FE2D6; Tue,  2 Nov 2021 16:15:30 +0100 (CET)
-Date: Tue, 2 Nov 2021 16:15:30 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Mark Rutland <mark.rutland@arm.com>, X86 ML <x86@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, joao@overdrivepizza.com
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
-Message-ID: <YYFWEnBb/UaZKGzz@hirez.programming.kicks-ass.net>
-References: <CAMj1kXEvemVOWf4M_0vsduN_kiCsGVmM92cE7KPMoNKViKp=RQ@mail.gmail.com>
- <20211031163920.GV174703@worktop.programming.kicks-ass.net>
- <CAMj1kXHk5vbrT49yRCivX3phrEkN6Xbb+g8WEmavL_d1iE0OxQ@mail.gmail.com>
- <YX74Ch9/DtvYxzh/@hirez.programming.kicks-ass.net>
- <CAMj1kXG+MuGaG3BHk8pnE1MKVmRf5E+nRNoFMHxOA1y84eGikg@mail.gmail.com>
- <YX8AQJqyB+H3PF1d@hirez.programming.kicks-ass.net>
- <CAMj1kXF3n-oQ1WP8=asb60K6UjSYOtz5RVhrcoCoNq3v7mZdQg@mail.gmail.com>
- <20211101090155.GW174703@worktop.programming.kicks-ass.net>
- <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
- <YYE1yPClPMHvyvIt@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FB42C85
+	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 15:48:06 +0000 (UTC)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+	by newton.telenet-ops.be (Postfix) with ESMTPS id 4HkDfZ3QKgzMqnfW
+	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 16:41:58 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:a1ae:b980:25da:18ce])
+	by michel.telenet-ops.be with bizsmtp
+	id DThp2600U4WmP4T06ThpKP; Tue, 02 Nov 2021 16:41:50 +0100
+Received: from geert (helo=localhost)
+	by ramsan.of.borg with local-esmtp (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1mhvv3-009mVx-EJ; Tue, 02 Nov 2021 16:41:49 +0100
+Date: Tue, 2 Nov 2021 16:41:49 +0100 (CET)
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To: Herbert Xu <herbert@gondor.apana.org.au>
+cc: Nathan Chancellor <nathan@kernel.org>, 
+    Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+    Vladis Dronov <vdronov@redhat.com>, Simo Sorce <ssorce@redhat.com>, 
+    Eric Biggers <ebiggers@kernel.org>, llvm@lists.linux.dev, 
+    kernel test robot <lkp@intel.com>, Damien Le Moal <damien.lemoal@wdc.com>, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: api - Do not create test larvals if manager is
+ disabled
+In-Reply-To: <20211019132802.GA14233@gondor.apana.org.au>
+Message-ID: <alpine.DEB.2.22.394.2111021636040.2330984@ramsan.of.borg>
+References: <20210913071251.GA15235@gondor.apana.org.au> <20210917002619.GA6407@gondor.apana.org.au> <YVNfqUVJ7w4Z3WXK@archlinux-ax161> <20211001055058.GA6081@gondor.apana.org.au> <YVdNFzs8HUQwHa54@archlinux-ax161> <20211003002801.GA5435@gondor.apana.org.au>
+ <YV0K+EbrAqDdw2vp@archlinux-ax161> <20211019132802.GA14233@gondor.apana.org.au>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YYE1yPClPMHvyvIt@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Tue, Nov 02, 2021 at 01:57:44PM +0100, Peter Zijlstra wrote:
+ 	Hi Herbert,
 
-> So how insane is something like this, have each function:
-> 
-> foo.cfi:
-> 	endbr64
-> 	xorl $0xdeadbeef, %r10d
-> 	jz foo
-> 	ud2
-> 	nop	# make it 16 bytes
-> foo:
-> 	# actual function text goes here
-> 
-> 
-> And for each hash have two thunks:
-> 
-> 
-> 	# arg: r11
-> 	# clobbers: r10, r11
-> __x86_indirect_cfi_deadbeef:
-> 	movl -9(%r11), %r10		# immediate in foo.cfi
-> 	xorl $0xdeadbeef, %r10		# our immediate
-> 	jz 1f
-> 	ud2
-> 1:	ALTERNATIVE_2	"jmp *%r11",
-> 			"jmp __x86_indirect_thunk_r11", X86_FEATURE_RETPOLINE
-> 			"lfence; jmp *%r11", X86_FEATURE_RETPOLINE_AMD
-> 
-> 
-> 
-> 	# arg: r11
-> 	# clobbers: r10, r11
-> __x86_indirect_ibt_deadbeef:
-> 	movl $0xdeadbeef, %r10
-> 	subq $0x10, %r11
-> 	ALTERNATIVE "", "lfence", X86_FEATURE_RETPOLINE
-> 	jmp *%r11
-> 
+On Tue, 19 Oct 2021, Herbert Xu wrote:
+> On Tue, Oct 05, 2021 at 07:33:28PM -0700, Nathan Chancellor wrote:
+>> I assume this is the diff you mean? This does not resolve the issue. My
+>> apologies if I am slow to respond, I am on vacation until the middle of
+>> next week.
+>
+> Sorry for the delay.  The kernel robot figured out the problem
+> for me.  It's the crypto_alg_tested call that causes api.c to
+> depend on algapi.c.  This call is only invoked in the case where
+> the crypto manager is turned off.  We could instead simply make
+> test larvals disappear in that case.
+>
+> ---8<---
+> The delayed boot-time testing patch created a dependency loop
+> between api.c and algapi.c because it added a crypto_alg_tested
+> call to the former when the crypto manager is disabled.
+>
+> We could instead avoid creating the test larvals if the crypto
+> manager is disabled.  This avoids the dependency loop as well
+> as saving some unnecessary work, albeit in a very unlikely case.
+>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: adad556efcdd ("crypto: api - Fix built-in testing dependency failures")
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-These two thunks could of course be one big alternative.
+Thanks for your patch, which is now commit cad439fc040efe5f
+("crypto: api - Do not create test larvals if manager is disabled").
 
-> And have the actual indirect callsite look like:
-> 
-> 	# r11 - &foo
-> 	ALTERNATIVE_2	"cs call __x86_indirect_thunk_r11",
-> 			"cs call __x86_indirect_cfi_deadbeef", X86_FEATURE_CFI
-> 			"cs call __x86_indirect_ibt_deadbeef", X86_FEATURE_IBT
+I have bisected a failure to mount the root file system on k210 to this
+commit.
 
-Also simplifying this.
+Dmesg before/after:
 
-> Although if the compiler were to emit:
-> 
-> 	cs call __x86_indirect_cfi_deadbeef
-> 
-> we could probaly fix it up from there.
-> 
-> 
-> Then we can at runtime decide between:
-> 
->   {!cfi, cfi, ibt} x {!retpoline, retpoline, retpoline-amd}
-> 
+      mmcblk0: mmc0:0000 SA04G 3.68 GiB
+      random: fast init done
+       mmcblk0: p1
+     -EXT4-fs (mmcblk0p1): mounted filesystem with ordered data mode. Opts: (null). Quota mode: disabled.
+     -VFS: Mounted root (ext4 filesystem) readonly on device 179:1.
+     +EXT4-fs (mmcblk0p1): Cannot load crc32c driver.
+     +VFS: Cannot open root device "mmcblk0p1" or unknown-block(179,1): error -80
+     +Please append a correct "root=" boot option; here are the available partitions:
+     +b300         3858432 mmcblk0
+     + driver: mmcblk
+     +  b301         3854336 mmcblk0p1 00000000-01
+
+> --- a/crypto/algapi.c
+> +++ b/crypto/algapi.c
+> @@ -216,6 +216,32 @@ void crypto_remove_spawns(struct crypto_alg *alg, struct list_head *list,
+> }
+> EXPORT_SYMBOL_GPL(crypto_remove_spawns);
+>
+> +static struct crypto_larval *crypto_alloc_test_larval(struct crypto_alg *alg)
+> +{
+> +	struct crypto_larval *larval;
+> +
+> +	if (!IS_ENABLED(CONFIG_CRYPTO_MANAGER))
+> +		return NULL;
+> +
+> +	larval = crypto_larval_alloc(alg->cra_name,
+> +				     alg->cra_flags | CRYPTO_ALG_TESTED, 0);
+> +	if (IS_ERR(larval))
+> +		return larval;
+> +
+> +	larval->adult = crypto_mod_get(alg);
+> +	if (!larval->adult) {
+> +		kfree(larval);
+> +		return ERR_PTR(-ENOENT);
+> +	}
+> +
+> +	refcount_set(&larval->alg.cra_refcnt, 1);
+> +	memcpy(larval->alg.cra_driver_name, alg->cra_driver_name,
+> +	       CRYPTO_MAX_ALG_NAME);
+> +	larval->alg.cra_priority = alg->cra_priority;
+> +
+> +	return larval;
+> +}
+> +
+> static struct crypto_larval *__crypto_register_alg(struct crypto_alg *alg)
+> {
+> 	struct crypto_alg *q;
+> @@ -250,31 +276,20 @@ static struct crypto_larval *__crypto_register_alg(struct crypto_alg *alg)
+> 			goto err;
+> 	}
+>
+> -	larval = crypto_larval_alloc(alg->cra_name,
+> -				     alg->cra_flags | CRYPTO_ALG_TESTED, 0);
+> +	larval = crypto_alloc_test_larval(alg);
+> 	if (IS_ERR(larval))
+> 		goto out;
+>
+> -	ret = -ENOENT;
+> -	larval->adult = crypto_mod_get(alg);
+> -	if (!larval->adult)
+> -		goto free_larval;
+> -
+> -	refcount_set(&larval->alg.cra_refcnt, 1);
+> -	memcpy(larval->alg.cra_driver_name, alg->cra_driver_name,
+> -	       CRYPTO_MAX_ALG_NAME);
+> -	larval->alg.cra_priority = alg->cra_priority;
+> -
+> 	list_add(&alg->cra_list, &crypto_alg_list);
+> -	list_add(&larval->alg.cra_list, &crypto_alg_list);
+> +
+> +	if (larval)
+> +		list_add(&larval->alg.cra_list, &crypto_alg_list);
+>
+> 	crypto_stats_init(alg);
+>
+> out:
+> 	return larval;
+>
+> -free_larval:
+> -	kfree(larval);
+> err:
+> 	larval = ERR_PTR(ret);
+> 	goto out;
+> @@ -403,10 +418,11 @@ int crypto_register_alg(struct crypto_alg *alg)
+> 	down_write(&crypto_alg_sem);
+> 	larval = __crypto_register_alg(alg);
+> 	test_started = static_key_enabled(&crypto_boot_test_finished);
+> -	larval->test_started = test_started;
+> +	if (!IS_ERR_OR_NULL(larval))
+> +		larval->test_started = test_started;
+> 	up_write(&crypto_alg_sem);
+>
+> -	if (IS_ERR(larval))
+> +	if (IS_ERR_OR_NULL(larval))
+> 		return PTR_ERR(larval);
+>
+> 	if (test_started)
+> @@ -616,8 +632,8 @@ int crypto_register_instance(struct crypto_template *tmpl,
+> 	larval = __crypto_register_alg(&inst->alg);
+> 	if (IS_ERR(larval))
+> 		goto unlock;
+> -
+> -	larval->test_started = true;
+> +	else if (larval)
+> +		larval->test_started = true;
+>
+> 	hlist_add_head(&inst->list, &tmpl->instances);
+> 	inst->tmpl = tmpl;
+> @@ -626,7 +642,7 @@ int crypto_register_instance(struct crypto_template *tmpl,
+> 	up_write(&crypto_alg_sem);
+>
+> 	err = PTR_ERR(larval);
+> -	if (IS_ERR(larval))
+> +	if (IS_ERR_OR_NULL(larval))
+> 		goto err;
+>
+> 	crypto_wait_for_test(larval);
+> diff --git a/crypto/api.c b/crypto/api.c
+> index ee5991fe11f8..cf0869dd130b 100644
+> --- a/crypto/api.c
+> +++ b/crypto/api.c
+> @@ -167,11 +167,8 @@ void crypto_wait_for_test(struct crypto_larval *larval)
+> 	int err;
+>
+> 	err = crypto_probing_notify(CRYPTO_MSG_ALG_REGISTER, larval->adult);
+> -	if (err != NOTIFY_STOP) {
+> -		if (WARN_ON(err != NOTIFY_DONE))
+> -			goto out;
+> -		crypto_alg_tested(larval->alg.cra_driver_name, 0);
+> -	}
+> +	if (WARN_ON_ONCE(err != NOTIFY_STOP))
+> +		goto out;
+>
+> 	err = wait_for_completion_killable(&larval->completion);
+> 	WARN_ON(err);
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
