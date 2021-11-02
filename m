@@ -1,103 +1,120 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail-out2.informatik.tu-muenchen.de (mail-out2.in.tum.de [131.159.0.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F168568
-	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 18:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=K0rz7LT+kgomD5KRNtzJy6G/J+BhWbgnVLi0ic650I0=; b=dJ9VibV9ZrIwDjTaMbTXmZwZJX
-	bQdjfemLebGdpEQOacA+0IGSYwxaZ2EEsxlDJoBA/7WGVPPvXM28251CmPRdMYAXDntAQNHhHO0qV
-	v/AZ3mS1k2WDG6fuSg4lrISg4c/IUw87Hr9DHet8l6dnXtycetIdmRuQ3dbe7aG2MIJsAKg8Ln/wf
-	Du1BBQbjLlOkUWucCwT04KkXyBGzzx/FlqeOdprJT4oNWi1klCNgmOcCmpXjuv6DpERZKM5fcoUJt
-	3oWDqrb1qRK9nZQLnZGbk05TaWcsdWVfoTW1vBCysM9Zo3gH79uPwio2TEtFo2kUGosnxE9/JPTiS
-	k3is7y+Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mhyKF-004g3M-IV; Tue, 02 Nov 2021 18:16:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C7A2630022C;
-	Tue,  2 Nov 2021 19:15:58 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B704E2D53269D; Tue,  2 Nov 2021 19:15:58 +0100 (CET)
-Date: Tue, 2 Nov 2021 19:15:58 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, X86 ML <x86@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, joao@overdrivepizza.com
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
-Message-ID: <YYGAXtequQDQeP0R@hirez.programming.kicks-ass.net>
-References: <20211027124852.GK174703@worktop.programming.kicks-ass.net>
- <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
- <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
- <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net>
- <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
- <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
- <20211029200324.GR174703@worktop.programming.kicks-ass.net>
- <20211030074758.GT174703@worktop.programming.kicks-ass.net>
- <20211030081631.GF174730@worktop.programming.kicks-ass.net>
- <202111021029.79D81E590@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850462C80
+	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 18:43:37 +0000 (UTC)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+	by mail-out2.informatik.tu-muenchen.de (Postfix) with ESMTP id 69C4A2400D6;
+	Tue,  2 Nov 2021 19:36:00 +0100 (CET)
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+	id 6736C466; Tue,  2 Nov 2021 19:36:00 +0100 (CET)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 460C645A;
+	Tue,  2 Nov 2021 19:36:00 +0100 (CET)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 43455451;
+	Tue,  2 Nov 2021 19:36:00 +0100 (CET)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+	id 4067A4A0620; Tue,  2 Nov 2021 19:36:00 +0100 (CET)
+Received: (Authenticated sender: heidekrp)
+	by mail.in.tum.de (Postfix) with ESMTPSA id ADD754A0115;
+	Tue,  2 Nov 2021 19:35:59 +0100 (CET)
+	(Extended-Queue-bit tech_cgasm@fff.in.tum.de)
+Date: Tue, 2 Nov 2021 19:35:57 +0100
+From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
+	boqun.feng@gmail.com, parri.andrea@gmail.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	elver@google.com, charalampos.mainas@gmail.com,
+	pramod.bhatotia@in.tum.de
+Subject: Re: Potentially Broken Address Dependency via test_bit() When
+ Compiling With Clang
+Message-ID: <YYGFDUR5dJ784P88@Pauls-MacBook-Pro>
+References: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
+ <20211027142720.GB1319606@rowland.harvard.edu>
+ <YXqZm6XTlMGDSpMT@Pauls-MacBook-Pro>
+ <20211028143446.GA1351384@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <202111021029.79D81E590@keescook>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211028143446.GA1351384@rowland.harvard.edu>
 
-On Tue, Nov 02, 2021 at 10:35:30AM -0700, Kees Cook wrote:
-> On Sat, Oct 30, 2021 at 10:16:31AM +0200, Peter Zijlstra wrote:
-> > foo.cfi:
-> > 	endbr
-> > 	xorl $0xdeadbeef, %r10d
-> > 	jz foo
-> > 	ud2
-> > 	nop	# make it an even 16 bytes
-> > foo:
-> > 	# actual function text
-> > 
-> > 
-> > Then have the address of foo, be the address of foo, like any normal
-> > sane person would expect. Have direct calls to foo, go to foo, again, as
-> > expected.
-> > 
-> > When doing an indirect call (to r11, as clang does), then, and only
-> > then, do:
-> > 
-> > 	movl $0xdeadbeef, %r10d
-> > 	subq $0x10, %r11
-> > 	call *%r11
-> > 
-> > 	# if the r11 lives, add:
-> > 	addq $0x10, %r11
-> > 
-> > 
-> > Then only when caller and callee agree 0xdeadbeef is the password, does
-> > the indirect call go through.
-> > 
-> > Why isn't this a suitable CFI scheme even without IBT?
+On Thu, Oct 28, 2021 at 10:34:46AM -0400, Alan Stern wrote:
+> On Thu, Oct 28, 2021 at 02:37:47PM +0200, Paul Heidekrüger wrote:
+> > On Wed, Oct 27, 2021 at 10:27:20AM -0400, Alan Stern wrote:
+> > > On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
 > 
-> The trouble is that the callee is doing the verification. There's no
-> protection against calling into a callee that doesn't perform a check
-> (e.g. BPF JIT, or otherwise constructed executable memory, etc). The
-> caller needs to do the verification that what they're calling into is
-> safe before it makes the call.
+> > > > Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
+> > > > 
+> > > > > [...]
+> > > > >   index = READ_ONCE(ac->alist->preferred);
+> > > > >   if (test_bit(index, &set))
+> > > > >     goto selected;
+> > > > > [...]
+> > > > 
+> > > > where test_bit() expands to the following in 
+> > > > include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
+> > > > 
+> > > > > static __always_inline int
+> > > > > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
+> > > > > {
+> > > > >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> > > > > }
+> > > > > #define test_bit arch_test_bit
+> 
+> > > However, I can't follow the IR code.  Can you please explain in ordinary 
+> > > English how the LLVM compiler manages to lose track of this dependency?
+> > > 
+> > > Alan Stern
+> > 
+> > Here's what we think might be going on:
+> > - In 'arch_test_bit()', 'addr[BIT_WORD(nr)]' expands to 'addr[(nr) / 64]'.
+> > - Since 'addr' points to an 'unsigned long', any other result than '0' for
+> >   '(nr) / 64' would be out of bounds and therefore undefined.
+> > - We assume LLVM is able to figure this out and use it to get rid of the
+> >   address computation all together.
+> 
+> Ah, that explains it.  Yes, when set is a single unsigned long (or an 
+> array of length 1), the address dependency is only syntactic, not 
+> semantic.  As a result, we should expect that compilers will sometimes 
+> not preserve it.
 
-Right, Ard said the same, see new crackpot scheme here:
+In LKMM's explanation.txt, lines 450 - 453 state:
 
-  https://lkml.kernel.org/r/YYE1yPClPMHvyvIt@hirez.programming.kicks-ass.net
+> A read event and another memory access event are linked by an address
+> dependency if the value obtained by the read affects the location
+> accessed by the other event.
+
+If we understand correctly, the ambiguity you're pointing out is that by
+looking at 'addr[BIT_WORD(nr)]', one could deduce an address dependency by
+seeing an array subscript operator, using a value which can be traced back to a
+'READ_ONCE()' (syntactic).
+
+However, since 'addr' points to an 'unsigned long', the 'READ_ONCE()' never
+affects the location accessed in 'arch_test_bit()' as the offset computed in
+the subscript operator can only be, as clang identified, '0' (semantic).
+
+> The danger, of course, is that people relying on an ordering prescribed
+> by the LKMM may get fooled because (unbeknownst to them) the dependency
+> in question is not semantic.
+
+Do you think this would warrant a change to LKMM's explanation.txt to make this
+more explicit?
+
+> It would be great if a static checker
+> could detect such things -- but this would require some way for us to
+> inform the checker about when the code does rely on a dependency
+> ordering.
+
+The compiler passes we're working on will hopefully be able to do exactly that,
+not taking into account the programmer's intent of course.
+
+Many thanks,
+Paul
