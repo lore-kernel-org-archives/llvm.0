@@ -1,40 +1,22 @@
-Received: from mail-out2.informatik.tu-muenchen.de (mail-out2.in.tum.de [131.159.0.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850462C80
-	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 18:43:37 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-	by mail-out2.informatik.tu-muenchen.de (Postfix) with ESMTP id 69C4A2400D6;
-	Tue,  2 Nov 2021 19:36:00 +0100 (CET)
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id 6736C466; Tue,  2 Nov 2021 19:36:00 +0100 (CET)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 460C645A;
-	Tue,  2 Nov 2021 19:36:00 +0100 (CET)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 43455451;
-	Tue,  2 Nov 2021 19:36:00 +0100 (CET)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id 4067A4A0620; Tue,  2 Nov 2021 19:36:00 +0100 (CET)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id ADD754A0115;
-	Tue,  2 Nov 2021 19:35:59 +0100 (CET)
-	(Extended-Queue-bit tech_cgasm@fff.in.tum.de)
-Date: Tue, 2 Nov 2021 19:35:57 +0100
-From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To: Alan Stern <stern@rowland.harvard.edu>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id BDEA02C80
+	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 19:01:44 +0000 (UTC)
+Received: (qmail 1498121 invoked by uid 1000); 2 Nov 2021 15:01:38 -0400
+Date: Tue, 2 Nov 2021 15:01:38 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
 Cc: paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
-	boqun.feng@gmail.com, parri.andrea@gmail.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	elver@google.com, charalampos.mainas@gmail.com,
-	pramod.bhatotia@in.tum.de
+  boqun.feng@gmail.com, parri.andrea@gmail.com, linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev, elver@google.com, charalampos.mainas@gmail.com,
+  pramod.bhatotia@in.tum.de
 Subject: Re: Potentially Broken Address Dependency via test_bit() When
  Compiling With Clang
-Message-ID: <YYGFDUR5dJ784P88@Pauls-MacBook-Pro>
+Message-ID: <20211102190138.GA1497378@rowland.harvard.edu>
 References: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
  <20211027142720.GB1319606@rowland.harvard.edu>
  <YXqZm6XTlMGDSpMT@Pauls-MacBook-Pro>
  <20211028143446.GA1351384@rowland.harvard.edu>
+ <YYGFDUR5dJ784P88@Pauls-MacBook-Pro>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,77 +26,96 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211028143446.GA1351384@rowland.harvard.edu>
+In-Reply-To: <YYGFDUR5dJ784P88@Pauls-MacBook-Pro>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Oct 28, 2021 at 10:34:46AM -0400, Alan Stern wrote:
-> On Thu, Oct 28, 2021 at 02:37:47PM +0200, Paul Heidekrüger wrote:
-> > On Wed, Oct 27, 2021 at 10:27:20AM -0400, Alan Stern wrote:
-> > > On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
-> 
-> > > > Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
-> > > > 
-> > > > > [...]
-> > > > >   index = READ_ONCE(ac->alist->preferred);
-> > > > >   if (test_bit(index, &set))
-> > > > >     goto selected;
-> > > > > [...]
-> > > > 
-> > > > where test_bit() expands to the following in 
-> > > > include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
-> > > > 
-> > > > > static __always_inline int
-> > > > > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
-> > > > > {
-> > > > >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> > > > > }
-> > > > > #define test_bit arch_test_bit
-> 
-> > > However, I can't follow the IR code.  Can you please explain in ordinary 
-> > > English how the LLVM compiler manages to lose track of this dependency?
-> > > 
-> > > Alan Stern
+On Tue, Nov 02, 2021 at 07:35:57PM +0100, Paul Heidekrüger wrote:
+> On Thu, Oct 28, 2021 at 10:34:46AM -0400, Alan Stern wrote:
+> > On Thu, Oct 28, 2021 at 02:37:47PM +0200, Paul Heidekrüger wrote:
+> > > On Wed, Oct 27, 2021 at 10:27:20AM -0400, Alan Stern wrote:
+> > > > On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
 > > 
-> > Here's what we think might be going on:
-> > - In 'arch_test_bit()', 'addr[BIT_WORD(nr)]' expands to 'addr[(nr) / 64]'.
-> > - Since 'addr' points to an 'unsigned long', any other result than '0' for
-> >   '(nr) / 64' would be out of bounds and therefore undefined.
-> > - We assume LLVM is able to figure this out and use it to get rid of the
-> >   address computation all together.
+> > > > > Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
+> > > > > 
+> > > > > > [...]
+> > > > > >   index = READ_ONCE(ac->alist->preferred);
+> > > > > >   if (test_bit(index, &set))
+> > > > > >     goto selected;
+> > > > > > [...]
+> > > > > 
+> > > > > where test_bit() expands to the following in 
+> > > > > include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
+> > > > > 
+> > > > > > static __always_inline int
+> > > > > > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
+> > > > > > {
+> > > > > >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> > > > > > }
+> > > > > > #define test_bit arch_test_bit
+> > 
+> > > > However, I can't follow the IR code.  Can you please explain in ordinary 
+> > > > English how the LLVM compiler manages to lose track of this dependency?
+> > > > 
+> > > > Alan Stern
+> > > 
+> > > Here's what we think might be going on:
+> > > - In 'arch_test_bit()', 'addr[BIT_WORD(nr)]' expands to 'addr[(nr) / 64]'.
+> > > - Since 'addr' points to an 'unsigned long', any other result than '0' for
+> > >   '(nr) / 64' would be out of bounds and therefore undefined.
+> > > - We assume LLVM is able to figure this out and use it to get rid of the
+> > >   address computation all together.
+> > 
+> > Ah, that explains it.  Yes, when set is a single unsigned long (or an 
+> > array of length 1), the address dependency is only syntactic, not 
+> > semantic.  As a result, we should expect that compilers will sometimes 
+> > not preserve it.
 > 
-> Ah, that explains it.  Yes, when set is a single unsigned long (or an 
-> array of length 1), the address dependency is only syntactic, not 
-> semantic.  As a result, we should expect that compilers will sometimes 
-> not preserve it.
+> In LKMM's explanation.txt, lines 450 - 453 state:
+> 
+> > A read event and another memory access event are linked by an address
+> > dependency if the value obtained by the read affects the location
+> > accessed by the other event.
+> 
+> If we understand correctly, the ambiguity you're pointing out is that by
+> looking at 'addr[BIT_WORD(nr)]', one could deduce an address dependency by
+> seeing an array subscript operator, using a value which can be traced back to a
+> 'READ_ONCE()' (syntactic).
 
-In LKMM's explanation.txt, lines 450 - 453 state:
+Exactly.  The syntax of the expression apparently indicates that the 
+address to be dereferenced depends on the value of nr.
 
-> A read event and another memory access event are linked by an address
-> dependency if the value obtained by the read affects the location
-> accessed by the other event.
+> However, since 'addr' points to an 'unsigned long', the 'READ_ONCE()' never
+> affects the location accessed in 'arch_test_bit()' as the offset computed in
+> the subscript operator can only be, as clang identified, '0' (semantic).
 
-If we understand correctly, the ambiguity you're pointing out is that by
-looking at 'addr[BIT_WORD(nr)]', one could deduce an address dependency by
-seeing an array subscript operator, using a value which can be traced back to a
-'READ_ONCE()' (syntactic).
+Again correct.  Although the address to be dereferenced may seem to 
+depend on nr, in fact it doesn't because in any valid execution nr must 
+not contain any value other than 0 (and the compiler knows this).
 
-However, since 'addr' points to an 'unsigned long', the 'READ_ONCE()' never
-affects the location accessed in 'arch_test_bit()' as the offset computed in
-the subscript operator can only be, as clang identified, '0' (semantic).
+> > The danger, of course, is that people relying on an ordering prescribed
+> > by the LKMM may get fooled because (unbeknownst to them) the dependency
+> > in question is not semantic.
+> 
+> Do you think this would warrant a change to LKMM's explanation.txt to make this
+> more explicit?
 
-> The danger, of course, is that people relying on an ordering prescribed
-> by the LKMM may get fooled because (unbeknownst to them) the dependency
-> in question is not semantic.
+It wouldn't hurt.  Note that explanation.txt does already include a 
+section talking about address dependencies from marked loads to plain 
+reads (line 2260 et seq).  It also talks about the possibility of the 
+compiler undermining the memory model in this regard (line 2308).
 
-Do you think this would warrant a change to LKMM's explanation.txt to make this
-more explicit?
+However, it doesn't mention the difference between syntactic and 
+semantic dependencies.  If you would like to submit a patch adding an 
+explicit description of this, please feel free to do so.
 
-> It would be great if a static checker
-> could detect such things -- but this would require some way for us to
-> inform the checker about when the code does rely on a dependency
-> ordering.
+> > It would be great if a static checker
+> > could detect such things -- but this would require some way for us to
+> > inform the checker about when the code does rely on a dependency
+> > ordering.
+> 
+> The compiler passes we're working on will hopefully be able to do exactly that,
+> not taking into account the programmer's intent of course.
 
-The compiler passes we're working on will hopefully be able to do exactly that,
-not taking into account the programmer's intent of course.
+Good luck!
 
-Many thanks,
-Paul
+Alan
