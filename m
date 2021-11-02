@@ -1,43 +1,44 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF1D68
-	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 17:26:31 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id a9so44967pgg.7
-        for <llvm@lists.linux.dev>; Tue, 02 Nov 2021 10:26:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5DD68
+	for <llvm@lists.linux.dev>; Tue,  2 Nov 2021 17:35:32 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id n8so6750497plf.4
+        for <llvm@lists.linux.dev>; Tue, 02 Nov 2021 10:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=myOqWBgPG0dYfqkI8IYrHgAqLHnpCmExkocszUv5gww=;
-        b=TKwPsswmiw8iIlN1erYAlJRZrSd5BMqlzwhXBspryv7/sxW7ziYzUFwoZX6v4eQ/Fd
-         PdZbQv7+JzzhecFEW5a2g9Evt9CAEYO++aysSRwuoeHh/z03VJxQzNSwYEbWAlMuPj+h
-         HRvYBwb9ss0Z7OgrkxA2LuKPm+MCxDPu7MB1I=
+        bh=O3RaY5lV5jwKKt/q1CRIChZ7HnFnQKYTu/U28LOt44c=;
+        b=aGoZgLwxU+YXDbNoh4xcc2s+7ia4/gVJFCf17LZ4V/0/7I0d+XW4fItrqE3pSMLgmb
+         OErb+j01QPgYhJfGCEZofXj5VA4IctPZwEIrGKxaDzlJrX4fLSFpFPtc909bi2Y5xvgi
+         fe8OJzPjBcMKf3Q+UEBSpVveX6RrE34Utt6tg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=myOqWBgPG0dYfqkI8IYrHgAqLHnpCmExkocszUv5gww=;
-        b=1ySpQEEQ7NxnCzfY5CC1O37jSYWCaAbtKdeexi8GXEkJsYGdtbeXyYtkybQ0I4n56d
-         fNAfmQxy7neaYwWCXuAZNdbPlAF14tmLxb3XrOGO052YyZm4xVgto9mH78Mk7v/vUelU
-         iMKdmiNZoI88hMwF56Lan307UewlbA6eh2tnEUkatgNdl7PmYw/2oPdUs7KuPCHIyHLG
-         u+ZgYSBv6SIjRF66RyQlCC0s7gC7vI6H+eWOqovFt/YfBNPhT9j1wLIR1N7xOMpTrFXO
-         ML+dBLuJEUgq6MT9VqokpjxjmaTKsQuJgBPZBx5eftbSTEqsdR071SPi5rPa4tRN0dE2
-         fuLg==
-X-Gm-Message-State: AOAM533HnjyCdlM5ECXVtGsF8oz7DybiJjV+Iej0CLSkRphnaqRSr4yv
-	+dw5m0gW0gE8u6b9PBGi1X+szQ==
-X-Google-Smtp-Source: ABdhPJwLYDZ3ZZw4s7Wt60qq+CXfv1queIcc4LvOeOnn7QGtFFd/es8sKHi4AlS4TSNX7iu1+FPp2Q==
-X-Received: by 2002:a63:4b58:: with SMTP id k24mr21454195pgl.326.1635873991315;
-        Tue, 02 Nov 2021 10:26:31 -0700 (PDT)
+        bh=O3RaY5lV5jwKKt/q1CRIChZ7HnFnQKYTu/U28LOt44c=;
+        b=rqfzhxOnWpjTsfPQjei8OPu9FKfqs0fJUgYmSe+gG5FLoGSjrkCslYUCwPtYyuD4CD
+         ooPAXfkOsmuP4sJpVCvEy9cb9YVSUHSHQLjWyJAi3buLrH7FadxwNACrEvBPOQmSNzMS
+         cIlZ4KIPxQo4D/ckOy+oYGCS0rAYasrB0HWPFZJ9C0DD0ijQCZtOMMBqgd/LMvvVxDRM
+         rmWKQOfwRBM6V1G1xU///CwKtwBkdmMpGUcY/mGM3c4Qq5Tt4KUZvDssyXe8oi0icWSh
+         yhndD4VXtdgFZP8qU62Z+dVvbMBSbktFu4QVvhk4s8OfVqc+0v0V68R/VWfem2/TB9WZ
+         rUsQ==
+X-Gm-Message-State: AOAM531/R6fONNghjInjRHkE3LJWQ72GNB8pD094ELdX5Wr7AUkYQ4rz
+	cYYqj4N5ItTMM7anqkC2iykl3g==
+X-Google-Smtp-Source: ABdhPJwK/3mwzawQkfDkbyqKFJyoCj1lB4WANIjaZOTexmG7DKz5GSJJ+LCAs7Vm8PpsCXOjkwixYg==
+X-Received: by 2002:a17:902:ea11:b0:141:c6c8:823a with SMTP id s17-20020a170902ea1100b00141c6c8823amr20593621plg.29.1635874531887;
+        Tue, 02 Nov 2021 10:35:31 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c8sm3078586pjr.38.2021.11.02.10.26.30
+        by smtp.gmail.com with ESMTPSA id 21sm2979010pjg.57.2021.11.02.10.35.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 10:26:30 -0700 (PDT)
-Date: Tue, 2 Nov 2021 10:26:29 -0700
+        Tue, 02 Nov 2021 10:35:31 -0700 (PDT)
+Date: Tue, 2 Nov 2021 10:35:30 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, X86 ML <x86@kernel.org>,
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, X86 ML <x86@kernel.org>,
 	Josh Poimboeuf <jpoimboe@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
@@ -45,19 +46,19 @@ Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/15] x86: Add support for Clang CFI
-Message-ID: <202111021023.0E5188EC60@keescook>
-References: <20211027120515.GC54628@C02TD0UTHF1T.local>
- <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+	llvm@lists.linux.dev, joao@overdrivepizza.com
+Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
+Message-ID: <202111021029.79D81E590@keescook>
+References: <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
  <20211027124852.GK174703@worktop.programming.kicks-ass.net>
  <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
- <202110270939.F5C79CC@keescook>
- <YXnC1jqwR2ZKfMdk@hirez.programming.kicks-ass.net>
- <202110271430.2A3980217@keescook>
- <YXqE82jQh4S79uVL@hirez.programming.kicks-ass.net>
- <202110280958.22E5F74@keescook>
- <20211028202905.GO174703@worktop.programming.kicks-ass.net>
+ <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
+ <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net>
+ <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
+ <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
+ <20211029200324.GR174703@worktop.programming.kicks-ass.net>
+ <20211030074758.GT174703@worktop.programming.kicks-ass.net>
+ <20211030081631.GF174730@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,28 +67,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211028202905.GO174703@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211030081631.GF174730@worktop.programming.kicks-ass.net>
 
-On Thu, Oct 28, 2021 at 10:29:05PM +0200, Peter Zijlstra wrote:
-> Now, since code (on x86) is variable length, there are no spare bits in
-> the code address, but since static_call_key is aligned, we have spare
-> bits. It is those bits we use to encode TAIL (Bit0) and INIT (Bit1).
+On Sat, Oct 30, 2021 at 10:16:31AM +0200, Peter Zijlstra wrote:
+> foo.cfi:
+> 	endbr
+> 	xorl $0xdeadbeef, %r10d
+> 	jz foo
+> 	ud2
+> 	nop	# make it an even 16 bytes
+> foo:
+> 	# actual function text
 > 
-> If INIT, the address points to an __init section and we shouldn't try
-> and touch if after those have been freed or bad stuff happens.
 > 
-> If TAIL, it's a tail-call and we get to write a jump instruction instead
-> of a call instruction.
+> Then have the address of foo, be the address of foo, like any normal
+> sane person would expect. Have direct calls to foo, go to foo, again, as
+> expected.
+> 
+> When doing an indirect call (to r11, as clang does), then, and only
+> then, do:
+> 
+> 	movl $0xdeadbeef, %r10d
+> 	subq $0x10, %r11
+> 	call *%r11
+> 
+> 	# if the r11 lives, add:
+> 	addq $0x10, %r11
+> 
+> 
+> Then only when caller and callee agree 0xdeadbeef is the password, does
+> the indirect call go through.
+> 
+> Why isn't this a suitable CFI scheme even without IBT?
 
-I think this is the part that I was missing: the information is about
-the _address_, but it's stored in the _key_'s low bits (regardless of
-the key's actual/masked key pointer).
-
-> [...]
-> Hope that clarifies things, instead of making it worse :-)
-
-It does help, yes, thanks! I will need to read it again and go follow
-along in the code, but yes, that helps explain it.
+The trouble is that the callee is doing the verification. There's no
+protection against calling into a callee that doesn't perform a check
+(e.g. BPF JIT, or otherwise constructed executable memory, etc). The
+caller needs to do the verification that what they're calling into is
+safe before it makes the call.
 
 -- 
 Kees Cook
