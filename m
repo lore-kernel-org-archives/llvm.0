@@ -1,87 +1,110 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03AB868
-	for <llvm@lists.linux.dev>; Wed,  3 Nov 2021 19:32:22 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0119D60E98;
-	Wed,  3 Nov 2021 19:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635967942;
-	bh=4qyxgIZ8GahpT4Sx5VxjvY6yAitch4aqfKANRfXfzMI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EKzUbtoGqYXQueNAw9ZofMWdyM20C6hoDsDrIihAbSiPwPBiAixcBRRgEW+61eaVs
-	 eDLg9Bnxx08k5drs1IIe6VTgd16lttUteHvP1KTcQz6AevIViqmgpqsd1VAkOhZVvh
-	 XMMPP1gjStSmb3Gn2GL9nnEIVNUMDF/qH4q9kYm+eq43WmaNB4fVS0yNtVyz2VmHud
-	 aPI1adU/N6rIUQhNP6WQUt9cZpbyX156mJDG7vlBM8qbQa0movjufKGwSLuNpz8oqk
-	 S7aoSwSj3Lf70aPD7Rd62uIqhDZuZ8ldy468agzN0Ree8DVkZy0rMxj3xsZJ9vv44x
-	 96etEcHyZSo3w==
-Message-ID: <b996958f-eb69-c96c-b978-944ac5151e9a@kernel.org>
-Date: Wed, 3 Nov 2021 12:32:20 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE51168
+	for <llvm@lists.linux.dev>; Wed,  3 Nov 2021 19:39:26 +0000 (UTC)
+Received: by mail-lf1-f48.google.com with SMTP id p16so7374483lfa.2
+        for <llvm@lists.linux.dev>; Wed, 03 Nov 2021 12:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xiozs0LD/qCiuH2g73QvKrjdH/BKsUzCKCin0QnJksg=;
+        b=yQoEgMpSMf/aD308JQxNV2TSpcdZ2eyGfazGExV5JJD22owh3+wplOV9roslUnr/U/
+         qAtH/xqGvWj9rZdmpOfh9qxolr/gvDgvipZTU1tKfMNMy3n8PgqeGGOC3xlHO6YpQfe+
+         ceHE6XgzMAV3Oj5bcXisPW4ufSE31kStQ7pk7R3Pop+7564SikViYZlWWfa+zJL4JFse
+         hqvdbWiu5I/yM6EYhwyUxQ1zd2gKXMOIRzFMU7YbKsn+A6VbMrPQyqtANTBTDnSRuFuQ
+         3P3Z7mJxPdcActQxk6KBokHsGIJDvbICkwyfMdg3gIREpruxytTuEjDUnNe915x7S9ti
+         Hhxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xiozs0LD/qCiuH2g73QvKrjdH/BKsUzCKCin0QnJksg=;
+        b=L7gzwo5gLoGS8H06N1ynp3iSZUWbUnD6rfvaahRs7Y99/YzUhRVQ80IF/4vEqM/HQW
+         t/RbEaGjwY+lKeF4ocd7pBN9DXnn6XrRArUdPEOswtgG8+yx2eCoHwnxsV3caQ55AAeD
+         fJYVRp2e0glySRCJggM6J6tMVoWH4t7Fj3l9co+HqOFLjS2NX02ndbbjkwr4+/NU2oJ1
+         tHSdYMRCbyW8F3W7D+LD6RgH4upKSSFKrYaZqLGqIDTerlE6xo0L64+ZSMRBf7b08YWl
+         jzAJ5enRpyeh8lLA5gFCeJmKTGdhFQxYhsaIAFTqnUvh+l+28rRjT2GHLXZQgstfcJf2
+         SX7w==
+X-Gm-Message-State: AOAM533kZ4b8eFUjPcF3Ht6QIESwv7GVfvvZh5LKj4FzC9SrEiDQx9eO
+	/Hzoy+zzJp93iWN65yseoYZLAA==
+X-Google-Smtp-Source: ABdhPJxNUwP/1QQ0wCtd7iQ2XVGvcervJ2nt/JeNr/HOI1oo1drI2yLew/dUwVURjwfyuDyDTYzgow==
+X-Received: by 2002:a05:6512:39c1:: with SMTP id k1mr43551899lfu.673.1635968364891;
+        Wed, 03 Nov 2021 12:39:24 -0700 (PDT)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id l26sm254559lfh.247.2021.11.03.12.39.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Nov 2021 12:39:24 -0700 (PDT)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: shuah@kernel.org
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Anders Roxell <anders.roxell@linaro.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] selftests: exec: unused command-line-argument '-pie'
+Date: Wed,  3 Nov 2021 20:39:09 +0100
+Message-Id: <20211103193909.3756095-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
-Content-Language: en-US
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Kees Cook <keescook@chromium.org>, Ard Biesheuvel <ardb@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Mark Rutland
- <mark.rutland@arm.com>, the arch/x86 maintainers <x86@kernel.org>,
- Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- linux-hardening@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-References: <CAMj1kXG+MuGaG3BHk8pnE1MKVmRf5E+nRNoFMHxOA1y84eGikg@mail.gmail.com>
- <YX8AQJqyB+H3PF1d@hirez.programming.kicks-ass.net>
- <CAMj1kXF3n-oQ1WP8=asb60K6UjSYOtz5RVhrcoCoNq3v7mZdQg@mail.gmail.com>
- <20211101090155.GW174703@worktop.programming.kicks-ass.net>
- <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
- <YYE1yPClPMHvyvIt@hirez.programming.kicks-ass.net>
- <202111021040.6570189A5@keescook>
- <90a14299-ce56-41d5-9df9-f625aae1ac70@www.fastmail.com>
- <202111021603.EDE5780FE@keescook>
- <bbde172b-2dae-fdc0-fbb5-edec6752c740@kernel.org>
- <20211103083559.GB174703@worktop.programming.kicks-ass.net>
-From: Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20211103083559.GB174703@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/3/21 01:35, Peter Zijlstra wrote:
-> On Tue, Nov 02, 2021 at 05:20:05PM -0700, Andy Lutomirski wrote:
->> I think that's a big mistake -- any sane ENDBR-using scheme would
->> really prefer that ENDBR to be right next to the actual function body,
->> and really any scheme would benefit due to better cache locality.
-> 
-> Agreed, IBT/BTI want the landing pad in front of the actual function.
-> 
->> But, more importantly, IMO any sane ENDBR-using scheme wants to
->> generate the indirect stub as part of code gen for the actual
->> function.
-> 
-> Sorta, I really want to be able to not have a landing pad for functions
-> whose address is never taken. At that point it doesn't matter if it gets
-> generated along with the function and then stripped/poisoned later, or
-> generated later.
+Building selftests/exec with clang, makes clang warn about the
+following:
 
-Stripping is conceptually straightforward even without LTO.
+clang -Wall -Wno-nonnull -D_GNU_SOURCE  -Wl,-z,max-page-size=0x200000 -pie -static load_address.c -o kselftest/exec/load_address_2097152
+clang: warning: argument unused during compilation: '-pie' [-Wunused-command-line-argument]
 
-foo.indirect:
-  ENDBR
-foo:
-  ...
+Commit 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
+tried to solve the issue, but when fixing the link error by adding '-static', the effect was that no pie binary was created, which makes the test case comletely pointless.
+The gcc documentation states:
 
-and the linker learns (using magic function sections?) that, if 
-foo.indirect is not referenced, then it should not be generated.  Or a 
-very straightforward walk over all the relocations in an object to 
-poison the unused .indirect entries could be done.  Making this work 
-with DSOs, EXPORT_SYMBOL, etc will be somewhat nontrivial, but not 
-impossible.
+'-pie'
+     Produce a dynamically linked position independent executable on
+     targets that support it.  For predictable results, you must also
+     specify the same set of options used for compilation ('-fpie',
+     '-fPIE', or model suboptions) when you specify this linker option.
 
---Andy
+Add '-fPIE' to CFLAGS.
+
+Cc: stable@vger.kernel.org # v5.10+
+Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ tools/testing/selftests/exec/Makefile | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index dd61118df66e..ed2c171ac083 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS = -Wall
++CFLAGS = -fPIE
++CFLAGS += -Wall
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
+ 
+@@ -28,8 +29,8 @@ $(OUTPUT)/execveat.denatured: $(OUTPUT)/execveat
+ 	cp $< $@
+ 	chmod -x $@
+ $(OUTPUT)/load_address_4096: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -pie -static $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -pie $< -o $@
+ $(OUTPUT)/load_address_2097152: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -pie -static $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -pie $< -o $@
+ $(OUTPUT)/load_address_16777216: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -pie -static $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -pie $< -o $@
+-- 
+2.33.0
+
