@@ -1,236 +1,165 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC1029CA
-	for <llvm@lists.linux.dev>; Wed,  3 Nov 2021 00:20:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 88466603E7;
-	Wed,  3 Nov 2021 00:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635898808;
-	bh=GQPsQyPs6Mu5jryMUJKqTVsYjo/EX8JiP4ABFefK08M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fuhvprYZDZZQ6o791EkmHyiJT3uLXWMjc7tc4Mnu6Bj4fPQwB2NZs1zXDh4XGjTxr
-	 0O1uD7JGAkIQIYAvrkxYF0oj7Ju3k4jeyaGAIWb2ON7SogfhwFSRWLN5H1w/B38AbG
-	 dlVqKOSSMomU+SN9qKVd75BA4LRXKuHAl/KvUIntCc11kEb3Y/m4WdT5jSWI+lLY92
-	 gF7tiYHVDzn/Exdb3XYg0hSFZFz9ag1qIOEpfZZh0bGSpgELGdqud7jD4E5WtPsUmW
-	 3WA18EZrMi+SNULyPDVgs2i+MEh3ZvtvbKS0jfXIXmcimYB6fHyNs1LKOCDukuuaFw
-	 s/mhEv2gL6R/A==
-Message-ID: <bbde172b-2dae-fdc0-fbb5-edec6752c740@kernel.org>
-Date: Tue, 2 Nov 2021 17:20:05 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527B12C80
+	for <llvm@lists.linux.dev>; Wed,  3 Nov 2021 02:31:14 +0000 (UTC)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A2LbONk021784;
+	Tue, 2 Nov 2021 19:30:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=e9iakA+09xQ/33b5FnWGjrBLiVaI2cv8zaHF1ZYTUw4=;
+ b=geHgn+e020bS6j7eJPvmXI5zt+5io+QBl/ZbAfkt/DGE/t9bm0QgLvsyabbhx+CjGsZn
+ clfAcFiLFzuDR8utCwqCecywuO0+sdQZXe8m4blHJwlkQN3xMzxjQrnO1dX7r0I30Gmu
+ VF3xm36jJLEAwC+CGwwQAwXoohX6dlIXpi8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com with ESMTP id 3c3ddbskep-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Tue, 02 Nov 2021 19:30:51 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Tue, 2 Nov 2021 19:30:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IQtFh/53oU+UnIp+pIoCLXOfPG2YR7MOWE87bjWFrv5THsV09amHqCYZ6w5jsFhhZ43LDlpQtzTttDo0pR0F1gkeCzNwBQJL6XPd1QTlARzOFAZQqvXOtwyfXJGYF5pXj0VMKR77ZExKG1tcMhte1xDbb263j9ffoFU+4wXcY1zqLY7LC/bMts8rDGdFglwajrFvqipPZkO/4dg9fPF3Q5rxoOv9U1Srl4hW21AEGoK7ktGxUIs3Mp6snAsDWLB9rzZHdYiIOXAi6sWcgiSs/yd9MCpRJXj56Zn0dVfInGwgF2+pVx5gU69TkrhlwRVksnVxoXMTunBaC4szN7W/Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e9iakA+09xQ/33b5FnWGjrBLiVaI2cv8zaHF1ZYTUw4=;
+ b=A/4doQ1WABuQFyB4iKac47efkazAr/f9K61V8ITBjo3pApuOR3wnvcb+ahP5urk+LHKiq+Oyk1vZB14eqQGVHHx4g3cdRReu1DBWQVoWtVAdIuu29KvmxIBAaxBMEHFEawFWyt1zlpR977OktiwCMGd6jweb50xfdnG2iPrfPUYfj7EsvQX1qnGhcUPkFmSlQO7CUnOJDKgc2RST9XcYkwa/yTgz2npIdVfIEiI7lU8pQzRco9Jildg2D0ZdglMB4AGX+3CNahk4YUxRyxKZB/wHDZKLztugE0YyL1lNtazYfGOls/G+iyJaD+TbiRGbWsgoGTv22LYLcZlY2iAteA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: huawei.com; dkim=none (message not signed)
+ header.d=none;huawei.com; dmarc=none action=none header.from=fb.com;
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA0PR15MB4014.namprd15.prod.outlook.com (2603:10b6:806:8e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Wed, 3 Nov
+ 2021 02:30:44 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::51ef:4b41:5aea:3f75]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::51ef:4b41:5aea:3f75%6]) with mapi id 15.20.4649.020; Wed, 3 Nov 2021
+ 02:30:44 +0000
+Message-ID: <e2aa81ef-2fd8-52c0-2b23-09addc3e4aa4@fb.com>
+Date: Tue, 2 Nov 2021 19:30:40 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH bpf-next] samples: bpf: Suppress readelf stderr when
+ probing for BTF support
+Content-Language: en-US
+To: Pu Lehui <pulehui@huawei.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20211021123913.48833-1-pulehui@huawei.com>
+From: Yonghong Song <yhs@fb.com>
+In-Reply-To: <20211021123913.48833-1-pulehui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CO2PR04CA0091.namprd04.prod.outlook.com
+ (2603:10b6:104:6::17) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Ard Biesheuvel <ardb@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Mark Rutland <mark.rutland@arm.com>,
- the arch/x86 maintainers <x86@kernel.org>,
- Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- linux-hardening@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-References: <CAMj1kXHk5vbrT49yRCivX3phrEkN6Xbb+g8WEmavL_d1iE0OxQ@mail.gmail.com>
- <YX74Ch9/DtvYxzh/@hirez.programming.kicks-ass.net>
- <CAMj1kXG+MuGaG3BHk8pnE1MKVmRf5E+nRNoFMHxOA1y84eGikg@mail.gmail.com>
- <YX8AQJqyB+H3PF1d@hirez.programming.kicks-ass.net>
- <CAMj1kXF3n-oQ1WP8=asb60K6UjSYOtz5RVhrcoCoNq3v7mZdQg@mail.gmail.com>
- <20211101090155.GW174703@worktop.programming.kicks-ass.net>
- <CAMj1kXGhRmdM3om289Q2-s1Pzfob3D2iSDMorzggfhSk1oj53A@mail.gmail.com>
- <YYE1yPClPMHvyvIt@hirez.programming.kicks-ass.net>
- <202111021040.6570189A5@keescook>
- <90a14299-ce56-41d5-9df9-f625aae1ac70@www.fastmail.com>
- <202111021603.EDE5780FE@keescook>
-From: Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <202111021603.EDE5780FE@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Received: from [IPV6:2620:10d:c085:21e8::198e] (2620:10d:c090:400::5:deca) by CO2PR04CA0091.namprd04.prod.outlook.com (2603:10b6:104:6::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14 via Frontend Transport; Wed, 3 Nov 2021 02:30:42 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b6fd0252-c40b-442e-be96-08d99e71efcc
+X-MS-TrafficTypeDiagnostic: SA0PR15MB4014:
+X-Microsoft-Antispam-PRVS: <SA0PR15MB401407AA887E4DFD899AC95ED38C9@SA0PR15MB4014.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:214;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NGh1iu5W/+wf/+mCho4yLXeBI3oHY1z4hbKDes42ONVsSk6XgMgbwU/LQQhg8C4FYOyOG8BWGnemhDg01RTyjt2+5vGzRBVeBW85VFD7X1ahBzrl/NeF6SEGQ1TyMUqszvyEYaBP0y7qLnhGPtYNxVNGradPJJhR1igrLMLzNhVvYJdn76n2WX3IBoA5zDG+r6dUfHbqQT09wG8mntgIKkt+9xcs7E9m/FsQmlmu5mQ3PoyMZtEXPfl5yKbKBBRrHSfCYtQMAEaT+a2hqxNRs96OkYo25Pm1Xpyc/T3d45SH+Kf7+cGSpdmdi+ls0YTO5spY8wwh0ZXxexWROMGh8p6zdAzSznJM1fQOXPl6TdRDXllIG15yE9luO3qWcE6++bmwhYjpWTEWPpPEdNr71LJtmdJ8xTY3BtxxD2K3UTfFix9hUHCW+/34yfnE26itgks77apD8YH+u4Owm5u8oeY3RbX7kUcW/GGiuXrEIQSQgB4l98rcv16DuqIrUBVu8Em+MgvjdbUppITAppge441jKzrwV7OuDqsz8Lz32V6s3L9hskSHU87g/rfTFl7TsqBuP5x7vkoIzeKt5g5rZgrI1aUQLllkhdpCv4zs51QoD8hJwBibkxPKHUP/4J7B6BYgP3dKZza45fC2V+aXievm3GsgyCMvTAuJC4CqUhr9hFYc/rJuThVo7Ub0TqST6dBVDttQe7/SAIZ8vYHPCnQw535VxBQqSP7absT5xalZ6xwob/TK4EoSSUPknXzY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(2616005)(921005)(66556008)(4326008)(52116002)(6486002)(38100700002)(31686004)(66476007)(66946007)(508600001)(53546011)(4744005)(8936002)(186003)(7416002)(86362001)(2906002)(316002)(83380400001)(5660300002)(36756003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnh6N3UzdlJMUEdQL1hZR2xlMFhUMTRXQXBZaGZxVnMzZlV0Nm5wTGhnSTNV?=
+ =?utf-8?B?bFV6VUVWU3krdHBqdENsamFTR1VyYjllQTYwb2dqNmR6MFo2d3Z3MnNqT1B6?=
+ =?utf-8?B?cXNZVW5NMHhCYUFlTFV5NGMvejIrQmJOZklIaVJ1ZHVTYklXdWdxQW81Z1dM?=
+ =?utf-8?B?cnlIYlhxdlRkbnpucW5PZit1b1NHblVWVmZjZ2VTVUhHVjM2bnRhYUkzY1dP?=
+ =?utf-8?B?R0cxYXpsOE5OMWFpQW9Ia0Vwc3hsWU5rMEhGVXdLbXhpcXRuZWJ3bDZpdEpa?=
+ =?utf-8?B?SkU2T0krR3hFb3NxYk1ab3VLcFlINHRmMExPcCtZZ1V6L0FZNmJ5Z2M5TjQ2?=
+ =?utf-8?B?VUVRZzRYLzRVc0JRZUZHN0VPWkNmRE91RU9XZmRseEhsWDgxeE1OcURlMkJw?=
+ =?utf-8?B?RTdhZC9UR3FQZHh2eVlJdmFXU2Z2VlBqNWtPUFR3dWZnTTJNSFpWQkk1SjNI?=
+ =?utf-8?B?ZURlcS9SR21wY2JSeVljdUl4TEpIQnplL3JHSzhKRkRwNlZEcm9NM2k3WGpG?=
+ =?utf-8?B?R2RCdUp0QXJDY3o0NDVaL3U0eDRkK0ViKzFYZEo0aFpuWUpKSGxJd0VsZTFk?=
+ =?utf-8?B?dWUzdi84K3ZCM2MzU0hOVjJHSTVHY1hEUytzZVlHV1hWbnRhNGtqMS9IQVkw?=
+ =?utf-8?B?OXdpeDJ1ckM2dThzRmNQY3dVVWt1NVMzVENiRnhrbEJjS1phVlk0TUlFcFRu?=
+ =?utf-8?B?VDdJWHhubFVWQzZ5djY5T3FnTGZ6U0tYcTRGelllOVFnR1JQblNhWThrRHYx?=
+ =?utf-8?B?YkFrM0lPditkckhKVXJ6NmlXK05veTdoSFBaZzRyK1dZdXRqbUlRREI1YWw5?=
+ =?utf-8?B?Q3hVMUU5NWl0VUpsbjFobzJBTDBnc1g2VDF0NE9zdDJtN0Jzc1JGSGswQ1pu?=
+ =?utf-8?B?MTRxT2NPNzhIRVBzWktIUDllRGswcVlNZlJhWU51czJQcXE3dTNRSy82dVVj?=
+ =?utf-8?B?dzU4RVZtdFNYT0xjTXhkcTdXNENVdUlLVnVvQlBVT2FhcjlmMnVKM25iRHZq?=
+ =?utf-8?B?dm5NYWJqNEFQRGNzalNMdVZPUzY0MHFRNXdEYm1EcXFGZ0tiN2FzWmoxL3NR?=
+ =?utf-8?B?YU8xdTVGaDhjbm9zeUNKcFNFRGhrc3NTdzFiY2g0bGRqZ3hCT1NQMnY5Qkcw?=
+ =?utf-8?B?NXBRL1FHbS83MXRTeStDeFozSU84R3lidUE2RU5samI4M0NlWGxXc1o5T2lD?=
+ =?utf-8?B?cTJGYXhZQzg3SW52RmJrRW1RQU9hMkkwQmJOV3dRMzRlSHFIRWxXWDM1d1VQ?=
+ =?utf-8?B?RzdsV2V4aGFjZEZXdkpWekJqaW1XNVZwNzV5cE5CME1GOGpYcmxEOVB2T3RP?=
+ =?utf-8?B?WlVCWGhOTUJQSEFjenZ1VVlPbHJNTUJpb2UxcFVyNCtDYmZ2R1lwYWxPZjJr?=
+ =?utf-8?B?a0NST09vV214Q3piMzZvdHdKVEpCMk9TU01VRmdkeUpKOXFhL0s2UEFSWnBV?=
+ =?utf-8?B?d2xadmJkRkNLNUtIN3VJSEpRR04wb3orTnU2aXM0ck4xZm11RWR0UHZlZkpi?=
+ =?utf-8?B?VExiSmlZYnFEaUhDQTVzNUdTVGVRN0k2UVA1eFQ4RmZZNlRTeGY4cElneURP?=
+ =?utf-8?B?OFllajdiZFNkdmpSSlQ5Q1JmR1FTckgwMFZnMnNLRmJjK0NMVndzZi9kemo3?=
+ =?utf-8?B?SE90RGk4cC9Ednk3S1JnVSt1c0YyTWRuNVBOTEZmU3BwajBqR21CNVN6MjZq?=
+ =?utf-8?B?eVY3aE1USE54NE8zUkpYUXhVR0dFWjdjV1ZuNnI5SGdaNWdOS0xtRU9xZE0x?=
+ =?utf-8?B?QkZFT3lnUW9VTHMrRTlKRXFQdHJjS25HVGtacDl0cmtBVUVSZTNuV3JYTzZH?=
+ =?utf-8?B?bkcvMk1mY2lyWHRpZWwwQkhTNHY1a3QraWZsYTRTOTB0U2EzdkRDM3Jicll5?=
+ =?utf-8?B?WXJuMVBreTd4NnBpNGEyQ2U5ckFsSlpyS1ZsM2VTUDFGUmpYSWRsMjhNRjRR?=
+ =?utf-8?B?ajgzVHpkU2lDbSt2NmpWcFZwTFVKOEV0bUtJQ0hvV3hlZXNCRDZ3VnppemtX?=
+ =?utf-8?B?c3hiWWhOZURnR0p1MVdNV3VuZ0FvelorR09CNEhqUFhyMkkzbVVhVUZvYTkr?=
+ =?utf-8?B?K0VlV2FBYmx1ZjM1cnM2T0RYcGlmUjFrb0JyRnRIM2VwNDNUMEROdWVLTElt?=
+ =?utf-8?B?VTB5amdQMmpZSExBZGV5SkNjUStXSXp5anpLR1piS3R1cjNiQ3U3MVdQODl0?=
+ =?utf-8?B?YVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6fd0252-c40b-442e-be96-08d99e71efcc
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2021 02:30:44.2870
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vBQDzDoY1A7gy6E7bMwVEGl85V+TOJitoRgfjSh/khbPZrqbjqLdZh8hCKpjbexy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB4014
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: FbsciHefN2KnCHse6HkesbPzITli76p6
+X-Proofpoint-ORIG-GUID: FbsciHefN2KnCHse6HkesbPzITli76p6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-02_13,2021-11-02_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=975 adultscore=0 clxscore=1011 priorityscore=1501 spamscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111030012
+X-FB-Internal: deliver
 
-On 11/2/21 16:13, Kees Cook wrote:
-> On Tue, Nov 02, 2021 at 02:02:38PM -0700, Andy Lutomirski wrote:
->>
->>
->> On Tue, Nov 2, 2021, at 11:10 AM, Kees Cook wrote:
->>> On Tue, Nov 02, 2021 at 01:57:44PM +0100, Peter Zijlstra wrote:
->>>> On Mon, Nov 01, 2021 at 03:14:41PM +0100, Ard Biesheuvel wrote:
->>>>> On Mon, 1 Nov 2021 at 10:05, Peter Zijlstra <peterz@infradead.org> wrote:
->>>>
->>>>>> How is that not true for the jump table approach? Like I showed earlier,
->>>>>> it is *trivial* to reconstruct the actual function pointer from a
->>>>>> jump-table entry pointer.
->>>>>>
->>>>>
->>>>> That is not the point. The point is that Clang instruments every
->>>>> indirect call that it emits, to check whether the type of the jump
->>>>> table entry it is about to call matches the type of the caller. IOW,
->>>>> the indirect calls can only branch into jump tables, and all jump
->>>>> table entries in a table each branch to the start of some function of
->>>>> the same type.
->>>>>
->>>>> So the only thing you could achieve by adding or subtracting a
->>>>> constant value from the indirect call address is either calling
->>>>> another function of the same type (if you are hitting another entry in
->>>>> the same table), or failing the CFI type check.
->>>>
->>>> Ah, I see, so the call-site needs to have a branch around the indirect
->>>> call instruction.
->>>>
->>>>> Instrumenting the callee only needs something like BTI, and a
->>>>> consistent use of the landing pads to ensure that you cannot trivially
->>>>> omit the check by landing right after it.
->>>>
->>>> That does bring up another point tho; how are we going to do a kernel
->>>> that's optimal for both software CFI and hardware aided CFI?
->>>>
->>>> All questions that need answering I think.
->>>
->>> I'm totally fine with designing a new CFI for a future option,
->>> but blocking the existing (working) one does not best serve our end
->>> users.
->>
->> I like security, but I also like building working systems, and I think
->> I disagree with you. There are a whole bunch of CFI schemes out there,
->> with varying hardware requirements, and they provide varying degrees
->> of fine grained protection and varying degrees of protection against
->> improper speculation.  We do not want to merge clang CFI just because
->> it’s “ready” and end up with a mess that makes it harder to support
->> other schemes in the kernel.
+
+
+On 10/21/21 5:39 AM, Pu Lehui wrote:
+> When compiling bpf samples, the following warning appears:
 > 
-> Right, and I see the difficulties here. And speaking to Peter's
-> observation that CFI "accidentally" worked with static_calls, I don't
-> see it that way: it worked because it was designed to be as "invisible"
-> as possible. It's just that at a certain point of extreme binary output
-> control, it becomes an issue and I think that's going to be true for
-> *any* CFI system: they each will have different design characteristics.
+> readelf: Error: Missing knowledge of 32-bit reloc types used in DWARF
+> sections of machine number 247
+> readelf: Warning: unable to apply unsupported reloc type 10 to section
+> .debug_info
+> readelf: Warning: unable to apply unsupported reloc type 1 to section
+> .debug_info
+> readelf: Warning: unable to apply unsupported reloc type 10 to section
+> .debug_info
 > 
-> One of the goals of the Clang CFI use in Linux was to make it as
-> minimally invasive as possible (and you can see this guiding Sami's
-> choices: e.g. he didn't go change all the opaque address uses to need a
-> "&" prefix added, etc). I think we're always going to have some
-> push/pull between the compiler's "general"ness and the kernel's
-> "specific"ness.
-
-The "&" thing was the wrong way around.  That part of CFI was Linux 
-being sloppy, and the & part is a straight-up improvement.  Improvements 
-can be invasive.  The problem with invasive code is when it invades 
-places it doesn't belong.
-
+> Same problem was mentioned in commit 2f0921262ba9 ("selftests/bpf:
+> suppress readelf stderr when probing for BTF support"), let's use
+> readelf that supports btf.
 > 
->> So, yes, a good CFI scheme needs caller-side protection, especially if
->> IBT isn’t in use.  But a good CFI scheme also needs to interoperate with
->> the rest of the kernel, and this whole “canonical” and symbol-based
->> lookup and static_call thing is nonsense.  I think we need a better
->> implementation, whether it uses intrinsics or little C helpers or
->> whatever.
-> 
-> I think we're very close already. Like I said, I think it's fine to nail
-> down some of these interoperability requirements; we've been doing it
-> all along. We got there with arm64, and it looks to me like we're almost
-> there on x86. There is this particular case with static_calls now, but I
-> don't think it's insurmountable.
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
-So fundamentally, I think there's a sort of type system issue here, and 
-it's more or less the same issue with IBT and with various fine-grained 
-refinements to IBT.  Using syntax more or like what's been floating 
-around this thread, the asm works like this:
-
-[possible magic here depending on the precise scheme]
-func.indirect:
-  ENDBR (if it's an IBT build)
-  [magic here?]
-
-  [in a jump table scheme, there's a jmp here and possibly a large or 
-negative gap.]
-
-func:
-  actual body
-
-The point being that there's the actual function body (where one should 
-*direct* jump to) and there's the address that goes in a C function 
-pointer.  Indirect calls/jumps go to (or pretend to go to, depending on 
-the scheme) func.indirect.
-
-While one can plausibly kludge up the static call patching (and who 
-knows what else -- eBPF, kprobes, mcount stuff, etc) using symbol-based 
-hackery, I think we actually just want a way to convert from a function 
-pointer to a function address.  It doesn't need to be fast, but it needs 
-to work.  And I think this can probably be mostly done in plain C based 
-on clang's implementation.  Ideally it would have a typecheck:
-
-unsigned long __cfi_decode_funcpointer(funcptr type);
-
-but that's not happening in plain C because I don't think there's a way 
-to get the magic metadata.  But I bet we could do:
-
-unsigned long __cfi_decode_funcpointer(funcptr val, funcptr ref)
-{
-   BUG_ON(ref and val aren't the same type);
-   read insn bytes at val;
-   return the jump target;
-}
-
-If this won't work with current clang, let's ask to get whatever basic 
-functionality is needed to enable it.
-
-<rambling>
-
-Sadly, in clang, this is wrapped up in the incomprehensible "canonical" 
-stuff.  I think that's a big mistake -- any sane ENDBR-using scheme 
-would really prefer that ENDBR to be right next to the actual function 
-body, and really any scheme would benefit due to better cache locality. 
-But, more importantly, IMO any sane ENDBR-using scheme wants to generate 
-the indirect stub as part of code gen for the actual function.  In an 
-IBT build, this really doesn't deserve to work:
-
-non-IBT C file generating:
-
-func:
-   ret
-
-IBT-aware C file:
-
-extern void func(void);
-ptr = func;
-
-clang has horrible magic to generate the indirect stub in the caller 
-translation unit, and I think that's solving a problem that doesn't 
-really need solving.  Sure, it's nifty, but it IMO should be opt-in, at 
-least in a world where everyone agrees to recompile for CFI.  (Sure, 
-using that hack for userspace IBT would be cute, and it would work.)
-
-There's another tradeoff, though: errors like this are possible:
-
-translation unit A:
-void func(int)
-{
-   [body here]
-}
-
-translation unit B:
-extern void func(char); /* wrong signature! */
-ptr = func;
-ptr();
-
-The callee-generates-the-stub model will not catch this.  The 
-caller-generates-the-stub model will.
-
-> 
-> Sure, and this is the kind of thing I mean: we had an awkward
-> implementation of a meaningful defense, and we improved on it. I think
-> it's important to be able to make these kinds of concessions to gain the
-> defensive features they provide. And yes, we can continue to improve it,
-> but in the meantime, we can stop entire classes of problems from
-> happening to our user base.
-> 
-
-In retrospect, we should have put our feet down with stack protector, 
-though.  The problem with it was gcc hardcoding things that shouldn't 
-have been hardcoded, and the gcc fixes were trivial.
+Acked-by: Yonghong Song <yhs@fb.com>
