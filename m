@@ -1,310 +1,749 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D9B2C98
-	for <llvm@lists.linux.dev>; Wed,  3 Nov 2021 17:46:57 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id g3so5173690ljm.8
-        for <llvm@lists.linux.dev>; Wed, 03 Nov 2021 10:46:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418E368
+	for <llvm@lists.linux.dev>; Wed,  3 Nov 2021 18:38:24 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id x27so7024295lfu.5
+        for <llvm@lists.linux.dev>; Wed, 03 Nov 2021 11:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fz5FHWrY83yI4/8MCcXGCruKU66Cq7FbRKs3mgk0opw=;
-        b=azkR5IKUw2xAIUmI9jtpM/gSAeK3bdX2JalJp6GY4/49nW/Y+et72Ld7RF3vi0TT2v
-         YtNJgsTEEqYRiEJu2gtNMkvEIYjhI3Ua0NU7TVnhG86icCcO+DotJVEw/aXwUkLol+cf
-         hVj56LrNBYBFSnlqrXF8wbFXaBqFoQcwaonwCnkoBpJ9WGDHH1MLpasyqwkTnCeIGHha
-         UpVknhITTF12pjkAAsHaaR0ohmZkB7MmAWAeXUK7H6y0m0/pZrK/v8yGUra0H8zGXuYm
-         ut8lOyOK4jx4xDbuTSzCNfqE3/A4an4gsX0qSs/oOvwr9zAeRn2Dr8z/mwPzoKYXzTaN
-         B56Q==
+        bh=YIihQMzapxTy6NnW0hBia9iOQ4EXccDghpYnj7BcWi8=;
+        b=pW1A+zbrP8xGhx4zL5oEcVfO9xRPEJ3i0uCXWzYxazCLeyqvZzYS04cTJwrYIGgvVR
+         j5czEZJ6ZrVDEcQvo49lWuWaqjA9nRKaU81zb4Wd9m1VZa0MZWAs3jyvPXSPYWyxsPMl
+         jN5tM21t4P3VgHd+QgpQZ0EPQLZjf080n4HuzV56YdcS6zv1N+70i7ZaU9dKuvXJPYF0
+         MbbWKzRUAZN2AgwxEJyImHYh203NeTVFG8lT5wgRf6c+BcUj+b26mxt/+VSdiTlFUVm0
+         2zSXT/IyRGqpJRmGAHX8Wx/gGdeRpaPcUILpYueYPIK8Mf9Qg9YKKNmXDU9AFxdSDa10
+         VUrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fz5FHWrY83yI4/8MCcXGCruKU66Cq7FbRKs3mgk0opw=;
-        b=dz3CfplZy4Btq9m2DxsFgrmBg5HElyroq6NiDykkpiBATXPfX7fgp68YlVJuLKs4Hq
-         qRsLY8QjQoPcjzqqt6ZqjDLsyQDlGX1SEQHt/qXdigXp8rv6YNslft1TbAUgLgtQ/rXW
-         kosYcyTL6T1oG4zqUNvCpkLOlpmz73+0iRT/3oWyahMAfdVsVaVGkkZ5wsZmHP7L5BHZ
-         4oKT3e83KMhiKxMizsqV0k67LINNz47pgFMDwsqEmznv41c5Id95/xeDOsZaWSyxf3e/
-         3j2jsSTvJrZacsN0YP1MfyHYeW/rvRlpGAb3e6+5ymTUZHMp0eeWCDPw8+OHdxcChw5n
-         aKVA==
-X-Gm-Message-State: AOAM530I/OIoalwPrfrJ7QdQ9VcUs1htdS/aJEEdhi3C/jhp5p8Sbu9N
-	fvY8Qsk4P1UcLjpFJmD4mB19zUkzGQ752Y4/I8pk9imIYug=
-X-Google-Smtp-Source: ABdhPJyae0AVEGwuJbzQdS4hy09TxGtKxz8fW5sKlEWPM7UZs0V6FWKzbBirXBdfSDYkI1U80y1cujSX3bJgJyUHV3E=
-X-Received: by 2002:a2e:8183:: with SMTP id e3mr14342103ljg.526.1635961615742;
- Wed, 03 Nov 2021 10:46:55 -0700 (PDT)
+        bh=YIihQMzapxTy6NnW0hBia9iOQ4EXccDghpYnj7BcWi8=;
+        b=s2DVlomZ1WAGZeuJpbBGEm2/oXrrTEv0GY998SFqV6lJ2ppFGZfm01ecyKuH0YrQh5
+         ygDslhD1YL3Bh8wTY8oZkKUkOC9wisWeyoebc9uQppMpN+mF65Bsfis2vPvWyhj9puMq
+         L0Tn4haEzpI9UiM7npGIbJJZFjrItxC2ocr/QwOpW9+5Bi5bNO1Tr3T4xmIehuMccH5H
+         +3uZTYF4DElUhJMwEKx9QZSMzMxEu0bXzPYOaGgOLF13Hmycp0KBcaOvwSwexEZV7clD
+         LqrcWEQaZUjhCkiKrm3ZwYG3/9WYpE/AW97WpHPtVK4VMmciTJDm/wMkIwLkBevkVUCM
+         WMCQ==
+X-Gm-Message-State: AOAM531TwWD85j9Hp0J4yf4Mrpql9x9f6Qi/cVc0rLRP8VAdOYAKLzzq
+	RqeDaesBc+zuoB0/ZMrjZVKCH/zEcFkA7IWwOY9pYQ==
+X-Google-Smtp-Source: ABdhPJx4awCVN9KREGMGULUP4DzoR6Q9mpfWPW9H5DiTLfcnS41Ndc6kmydLIaCepqati1bOe4ofzJ28eBUpEzyff58=
+X-Received: by 2002:a05:6512:150e:: with SMTP id bq14mr43867108lfb.444.1635964701541;
+ Wed, 03 Nov 2021 11:38:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <205626749.4145.1635943938669@jenkins.jenkins> <810882F1-8476-435A-8B32-272F4D9D78D5@linaro.org>
- <CAKwvOdnt5G5FLgW9ryycGScRHphkWkgU8=PciCrCfxQyZJ9LKg@mail.gmail.com> <3D7FC531-CCFF-44EC-AE18-C941E30D1C85@linaro.org>
-In-Reply-To: <3D7FC531-CCFF-44EC-AE18-C941E30D1C85@linaro.org>
+References: <20211103094752.1263442-1-anders.roxell@linaro.org>
+In-Reply-To: <20211103094752.1263442-1-anders.roxell@linaro.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 3 Nov 2021 10:46:43 -0700
-Message-ID: <CAKwvOdn7oW+ZO83-rFuGUMWBj10f=yZ=+O3ZTQ_afgQ6ossZOA@mail.gmail.com>
-Subject: Re: [TCWG CI] Regression caused by linux: arm64: vdso32: require
- CROSS_COMPILE_COMPAT for gcc+bfd
-To: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
-Cc: llvm@lists.linux.dev
+Date: Wed, 3 Nov 2021 11:38:09 -0700
+Message-ID: <CAKwvOdkq9k7ceyvnDWNN6m-vYOx41a6BBZwHy_0eDRfx5B4KnQ@mail.gmail.com>
+Subject: Re: [PATCHv2] selftests: kselftest.h: mark functions with 'noreturn'
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: shuah@kernel.org, fenghua.yu@intel.com, reinette.chatre@intel.com, 
+	john.stultz@linaro.org, tglx@linutronix.de, akpm@linux-foundation.org, 
+	nathan@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Nov 3, 2021 at 10:13 AM Maxim Kuvyrkov
-<maxim.kuvyrkov@linaro.org> wrote:
+On Wed, Nov 3, 2021 at 2:47 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> > On 3 Nov 2021, at 20:07, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Wed, Nov 3, 2021 at 5:59 AM Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org> wrote:
-> >>
-> >> Hi Nick,
-> >>
-> >> Is this known?
-> >
-> > News to me. Thanks for the report. This is when building with clang?
+> When building kselftests/capabilities the following warning shows up:
 >
-> Yes, clang mainline and latest release branch.  Only kernel defconfig seems to be affected.
+> clang -O2 -g -std=gnu99 -Wall    test_execve.c -lcap-ng -lrt -ldl -o test_execve
+> test_execve.c:121:13: warning: variable 'have_outer_privilege' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>         } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
+>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> test_execve.c:136:9: note: uninitialized use occurs here
+>         return have_outer_privilege;
+>                ^~~~~~~~~~~~~~~~~~~~
+> test_execve.c:121:9: note: remove the 'if' if its condition is always true
+>         } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
+>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> test_execve.c:94:27: note: initialize the variable 'have_outer_privilege' to silence this warning
+>         bool have_outer_privilege;
+>                                  ^
+>                                   = false
 >
-> > Do you have the make invocation for this test?
+> Rework so all the ksft_exit_*() functions have attribue
+> '__attribute__((noreturn))' so the compiler knows that there wont be
+> any return from the function. That said, without
+> '__attribute__((noreturn))' the compiler warns about the above issue
+> since it thinks that it will get back from the ksft_exit_skip()
+> function, which it wont.
+> Cleaning up the callers that rely on ksft_exit_*() return code, since
+> the functions ksft_exit_*() have never returned anything.
 >
-> The log is here:
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>  tools/testing/selftests/clone3/clone3.c              |  4 +++-
+>  .../testing/selftests/clone3/clone3_clear_sighand.c  |  2 +-
+>  tools/testing/selftests/clone3/clone3_set_tid.c      |  4 +++-
+>  tools/testing/selftests/ipc/msgque.c                 | 10 +++++-----
+>  tools/testing/selftests/kcmp/kcmp_test.c             |  2 +-
+>  tools/testing/selftests/kselftest.h                  | 12 ++++++------
+>  .../membarrier/membarrier_test_multi_thread.c        |  2 +-
+>  .../membarrier/membarrier_test_single_thread.c       |  2 +-
+>  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c    |  2 +-
+>  tools/testing/selftests/pidfd/pidfd_open_test.c      |  4 +++-
+>  tools/testing/selftests/pidfd/pidfd_poll_test.c      |  2 +-
+>  tools/testing/selftests/pidfd/pidfd_test.c           |  2 +-
+>  tools/testing/selftests/resctrl/resctrl_tests.c      |  6 +++---
+>  tools/testing/selftests/sync/sync_test.c             |  2 +-
+>  tools/testing/selftests/timers/adjtick.c             |  4 ++--
+>  tools/testing/selftests/timers/alarmtimer-suspend.c  |  4 ++--
+>  tools/testing/selftests/timers/change_skew.c         |  4 ++--
+>  tools/testing/selftests/timers/clocksource-switch.c  |  4 ++--
+>  tools/testing/selftests/timers/freq-step.c           |  4 ++--
+>  tools/testing/selftests/timers/inconsistency-check.c |  4 ++--
+>  tools/testing/selftests/timers/leap-a-day.c          | 10 +++++-----
+>  tools/testing/selftests/timers/leapcrash.c           |  4 ++--
+>  tools/testing/selftests/timers/mqueue-lat.c          |  4 ++--
+>  tools/testing/selftests/timers/nanosleep.c           |  4 ++--
+>  tools/testing/selftests/timers/nsleep-lat.c          |  4 ++--
+>  tools/testing/selftests/timers/posix_timers.c        | 12 ++++++------
+>  tools/testing/selftests/timers/raw_skew.c            |  6 +++---
+>  tools/testing/selftests/timers/set-2038.c            |  4 ++--
+>  tools/testing/selftests/timers/set-tai.c             |  4 ++--
+>  tools/testing/selftests/timers/set-timer-lat.c       |  4 ++--
+>  tools/testing/selftests/timers/set-tz.c              |  4 ++--
+>  tools/testing/selftests/timers/skew_consistency.c    |  4 ++--
+>  tools/testing/selftests/timers/threadtest.c          |  2 +-
+>  tools/testing/selftests/timers/valid-adjtimex.c      |  6 +++---
+>  tools/testing/selftests/vm/madv_populate.c           |  2 +-
+>  35 files changed, 80 insertions(+), 74 deletions(-)
 >
-> https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/build-3e6f8d1fa18457d54b20917bd9174d27daf09ab9/06-build_linux/
+> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+> index 42be3b925830..ede5da0c67b4 100644
+> --- a/tools/testing/selftests/clone3/clone3.c
+> +++ b/tools/testing/selftests/clone3/clone3.c
+> @@ -191,5 +191,7 @@ int main(int argc, char *argv[])
+>         test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
+>                         CLONE3_ARGS_NO_TEST);
 >
-> It seems that building aarch64 kernel with clang implies that clang can also build for aarch32 target:
-> ===
-> error: unable to create target: 'No available targets are compatible with triple "thumbv8-unknown-linux-gnueabi"'
-> ===
+> -       return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
+> +       if (ksft_get_fail_cnt())
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
+> index 47a8c0fc3676..dcd9448eaeec 100644
+> --- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
+> +++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
+> @@ -124,5 +124,5 @@ int main(int argc, char **argv)
 >
-> Which is not the case for our minimally-configured clang.
+>         test_clone3_clear_sighand();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
+> index 0229e9ebb995..a755fcd3af89 100644
+> --- a/tools/testing/selftests/clone3/clone3_set_tid.c
+> +++ b/tools/testing/selftests/clone3/clone3_set_tid.c
+> @@ -393,5 +393,7 @@ int main(int argc, char *argv[])
+>  out:
+>         ret = 0;
+>
+> -       return !ret ? ksft_exit_pass() : ksft_exit_fail();
+> +       if (ret)
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
 
-Ah, ok that makes sense. The kernel patch was written assuming
-backends weren't disabled in clang, but the error makes it look like
-arm-linux-gnueabi is not supported.
+This case is weird (pre-existing-ly) and looks broken.  The assignment
+to ret should probably occur _before_ the out: label.  Honestly, I'd
+remove the use of goto from this function and just call either
+ksft_exit_pass() or ksft_exit_fail().  Rest of the patch looks good.
+Thanks for sending. (I did not check that this is every case of
+`return ksft_exit_{pass|fail};`).
 
-We could adjust the kernel patch to test for that assumption.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-That said, since the purpose of the TCWG CI is to catch regressions,
-the "32b compat vdso" is actually very important to ensure we keep it
-buildable. It's one of the more complex parts of the arm64 kernel's
-build process, since for GCC it requires a whole other toolchain.
-It's critical for android that we build the 32b compat vdso for arm64.
-So it would be good to enable the ARM llvm target at the least to help
-us catch build breakage in this important part of the build.  I don't
-generally want to encourage from a kbuild perspective folks disabling
-default-on llvm backends; while they're generally orthogonal ARM vs
-Aarch64 is a little special.
-
+>  }
+> diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
+> index 656c43c24044..21dd6af76b21 100644
+> --- a/tools/testing/selftests/ipc/msgque.c
+> +++ b/tools/testing/selftests/ipc/msgque.c
+> @@ -198,13 +198,13 @@ int main(int argc, char **argv)
+>         struct msgque_data msgque;
 >
+>         if (getuid() != 0)
+> -               return ksft_exit_skip(
+> +               ksft_exit_skip(
+>                                 "Please run the test as root - Exiting.\n");
+>
+>         msgque.key = ftok(argv[0], 822155650);
+>         if (msgque.key == -1) {
+>                 printf("Can't make key: %d\n", -errno);
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>         }
+>
+>         msgque.msq_id = msgget(msgque.key, IPC_CREAT | IPC_EXCL | 0666);
+> @@ -243,13 +243,13 @@ int main(int argc, char **argv)
+>                 printf("Failed to test queue: %d\n", err);
+>                 goto err_out;
+>         }
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>
+>  err_destroy:
+>         if (msgctl(msgque.msq_id, IPC_RMID, NULL)) {
+>                 printf("Failed to destroy queue: %d\n", -errno);
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>         }
+>  err_out:
+> -       return ksft_exit_fail();
+> +       ksft_exit_fail();
+>  }
+> diff --git a/tools/testing/selftests/kcmp/kcmp_test.c b/tools/testing/selftests/kcmp/kcmp_test.c
+> index 6ea7b9f37a41..4e0776c044d1 100644
+> --- a/tools/testing/selftests/kcmp/kcmp_test.c
+> +++ b/tools/testing/selftests/kcmp/kcmp_test.c
+> @@ -162,5 +162,5 @@ int main(int argc, char **argv)
+>
+>         waitpid(pid2, &status, P_ALL);
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index 8d50483fe204..e47f634bf5c0 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -207,13 +207,13 @@ static inline void ksft_test_result_error(const char *msg, ...)
+>         va_end(args);
+>  }
+>
+> -static inline int ksft_exit_pass(void)
+> +static inline void __attribute__((noreturn)) ksft_exit_pass(void)
+>  {
+>         ksft_print_cnts();
+>         exit(KSFT_PASS);
+>  }
+>
+> -static inline int ksft_exit_fail(void)
+> +static inline void __attribute__((noreturn)) ksft_exit_fail(void)
+>  {
+>         ksft_print_cnts();
+>         exit(KSFT_FAIL);
+> @@ -231,7 +231,7 @@ static inline int ksft_exit_fail(void)
+>                 ksft_exit_fail();       \
+>         } while (0)
+>
+> -static inline int ksft_exit_fail_msg(const char *msg, ...)
+> +static inline void __attribute__((noreturn)) ksft_exit_fail_msg(const char *msg, ...)
+>  {
+>         int saved_errno = errno;
+>         va_list args;
+> @@ -246,19 +246,19 @@ static inline int ksft_exit_fail_msg(const char *msg, ...)
+>         exit(KSFT_FAIL);
+>  }
+>
+> -static inline int ksft_exit_xfail(void)
+> +static inline void __attribute__((noreturn)) ksft_exit_xfail(void)
+>  {
+>         ksft_print_cnts();
+>         exit(KSFT_XFAIL);
+>  }
+>
+> -static inline int ksft_exit_xpass(void)
+> +static inline void __attribute__((noreturn)) ksft_exit_xpass(void)
+>  {
+>         ksft_print_cnts();
+>         exit(KSFT_XPASS);
+>  }
+>
+> -static inline int ksft_exit_skip(const char *msg, ...)
+> +static inline void __attribute__((noreturn)) ksft_exit_skip(const char *msg, ...)
+>  {
+>         int saved_errno = errno;
+>         va_list args;
+> diff --git a/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c b/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
+> index ac5613e5b0eb..b055625e4eb5 100644
+> --- a/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
+> +++ b/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
+> @@ -69,5 +69,5 @@ int main(int argc, char **argv)
+>         /* Multi-threaded */
+>         test_mt_membarrier();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/membarrier/membarrier_test_single_thread.c b/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
+> index c1c963902854..daec48e0b6f2 100644
+> --- a/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
+> +++ b/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
+> @@ -20,5 +20,5 @@ int main(int argc, char **argv)
+>
+>         test_membarrier_success();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> index 22558524f71c..d6c5cfd1c4c6 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> @@ -292,5 +292,5 @@ int main(int argc, char **argv)
+>         test_pidfd_fdinfo_nspid();
+>         test_pidfd_dead_fdinfo();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/pidfd/pidfd_open_test.c b/tools/testing/selftests/pidfd/pidfd_open_test.c
+> index 8a59438ccc78..c62564c264b1 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_open_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_open_test.c
+> @@ -159,5 +159,7 @@ int main(int argc, char **argv)
+>         if (pidfd >= 0)
+>                 close(pidfd);
+>
+> -       return !ret ? ksft_exit_pass() : ksft_exit_fail();
+> +       if (ret)
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
+> index 610811275357..55d74a50358f 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_poll_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
+> @@ -112,5 +112,5 @@ int main(int argc, char **argv)
+>         }
+>
+>         ksft_test_result_pass("pidfd poll test: pass\n");
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+> index 529eb700ac26..4a4ab7e25796 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+> @@ -569,5 +569,5 @@ int main(int argc, char **argv)
+>         test_pidfd_send_signal_exited_fail();
+>         test_pidfd_send_signal_recycled_pid_fail();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> index 973f09a66e1e..e1cf5a73571b 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> @@ -205,7 +205,7 @@ int main(int argc, char **argv)
+>          * 2. We execute perf commands
+>          */
+>         if (geteuid() != 0)
+> -               return ksft_exit_fail_msg("Not running as root, abort testing.\n");
+> +               ksft_exit_fail_msg("Not running as root, abort testing.\n");
+>
+>         /* Detect AMD vendor */
+>         detect_amd();
+> @@ -235,7 +235,7 @@ int main(int argc, char **argv)
+>         sprintf(bm_type, "fill_buf");
+>
+>         if (!check_resctrlfs_support())
+> -               return ksft_exit_fail_msg("resctrl FS does not exist\n");
+> +               ksft_exit_fail_msg("resctrl FS does not exist\n");
+>
+>         filter_dmesg();
+>
+> @@ -255,5 +255,5 @@ int main(int argc, char **argv)
+>
+>         umount_resctrlfs();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/sync/sync_test.c b/tools/testing/selftests/sync/sync_test.c
+> index 414a617db993..aec7057696de 100644
+> --- a/tools/testing/selftests/sync/sync_test.c
+> +++ b/tools/testing/selftests/sync/sync_test.c
+> @@ -110,5 +110,5 @@ int main(void)
+>                                         err, ksft_test_num());
+>
+>         /* need this return to keep gcc happy */
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/adjtick.c b/tools/testing/selftests/timers/adjtick.c
+> index 54d8d87f36b3..594c59497015 100644
+> --- a/tools/testing/selftests/timers/adjtick.c
+> +++ b/tools/testing/selftests/timers/adjtick.c
+> @@ -205,7 +205,7 @@ int main(int argv, char **argc)
+>         adjtimex(&tx1);
+>
+>         if (err)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
+> index 4da09dbf83ba..9ac0c098b20f 100644
+> --- a/tools/testing/selftests/timers/alarmtimer-suspend.c
+> +++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
+> @@ -173,6 +173,6 @@ int main(void)
+>                 timer_delete(tm1);
+>         }
+>         if (final_ret)
+> -               return ksft_exit_fail();
+> -       return ksft_exit_pass();
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/change_skew.c b/tools/testing/selftests/timers/change_skew.c
+> index c4eab7124990..89c97c8b8e91 100644
+> --- a/tools/testing/selftests/timers/change_skew.c
+> +++ b/tools/testing/selftests/timers/change_skew.c
+> @@ -89,8 +89,8 @@ int main(int argv, char **argc)
+>
+>         if (ret) {
+>                 printf("[FAIL]");
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>         }
+>         printf("[OK]");
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+> index ef8eb3604595..ba4c7f66959b 100644
+> --- a/tools/testing/selftests/timers/clocksource-switch.c
+> +++ b/tools/testing/selftests/timers/clocksource-switch.c
+> @@ -163,6 +163,6 @@ int main(int argv, char **argc)
+>         change_clocksource(orig_clk);
+>
+>         if (status)
+> -               return ksft_exit_fail();
+> -       return ksft_exit_pass();
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/freq-step.c b/tools/testing/selftests/timers/freq-step.c
+> index 4b76450d78d1..73b636f89fdc 100644
+> --- a/tools/testing/selftests/timers/freq-step.c
+> +++ b/tools/testing/selftests/timers/freq-step.c
+> @@ -257,7 +257,7 @@ int main(int argc, char **argv)
+>         set_frequency(0.0);
+>
+>         if (fails)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
+> index 022d3ffe3fbf..71362be52dc8 100644
+> --- a/tools/testing/selftests/timers/inconsistency-check.c
+> +++ b/tools/testing/selftests/timers/inconsistency-check.c
+> @@ -186,8 +186,8 @@ int main(int argc, char *argv[])
+>                 if (!clock_gettime(clockid, &ts)) {
+>                         printf("Consistent %-30s ", clockstring(clockid));
+>                         if (consistency_test(clockid, runtime))
+> -                               return ksft_exit_fail();
+> +                               ksft_exit_fail();
+>                 }
+>         }
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/leap-a-day.c b/tools/testing/selftests/timers/leap-a-day.c
+> index 23eb398c8140..986abbdb1521 100644
+> --- a/tools/testing/selftests/timers/leap-a-day.c
+> +++ b/tools/testing/selftests/timers/leap-a-day.c
+> @@ -268,7 +268,7 @@ int main(int argc, char **argv)
+>                 if (ret < 0) {
+>                         printf("Error: Problem setting STA_INS/STA_DEL!: %s\n",
+>                                                         time_state_str(ret));
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>
+>                 /* Validate STA_INS was set */
+> @@ -277,7 +277,7 @@ int main(int argc, char **argv)
+>                 if (tx.status != STA_INS && tx.status != STA_DEL) {
+>                         printf("Error: STA_INS/STA_DEL not set!: %s\n",
+>                                                         time_state_str(ret));
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>
+>                 if (tai_time) {
+> @@ -295,7 +295,7 @@ int main(int argc, char **argv)
+>                 se.sigev_value.sival_int = 0;
+>                 if (timer_create(CLOCK_REALTIME, &se, &tm1) == -1) {
+>                         printf("Error: timer_create failed\n");
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>                 its1.it_value.tv_sec = next_leap;
+>                 its1.it_value.tv_nsec = 0;
+> @@ -366,7 +366,7 @@ int main(int argc, char **argv)
+>                 if (error_found) {
+>                         printf("Errors observed\n");
+>                         clear_time_state();
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>                 printf("\n");
+>                 if ((iterations != -1) && !(--iterations))
+> @@ -374,5 +374,5 @@ int main(int argc, char **argv)
+>         }
+>
+>         clear_time_state();
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/leapcrash.c b/tools/testing/selftests/timers/leapcrash.c
+> index f70802c5dd0d..8fd065eec904 100644
+> --- a/tools/testing/selftests/timers/leapcrash.c
+> +++ b/tools/testing/selftests/timers/leapcrash.c
+> @@ -87,7 +87,7 @@ int main(void)
+>                 tv.tv_usec = 0;
+>                 if (settimeofday(&tv, NULL)) {
+>                         printf("Error: You're likely not running with proper (ie: root) permissions\n");
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>                 tx.modes = 0;
+>                 adjtimex(&tx);
+> @@ -104,5 +104,5 @@ int main(void)
+>                 fflush(stdout);
+>         }
+>         printf("[OK]\n");
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/mqueue-lat.c b/tools/testing/selftests/timers/mqueue-lat.c
+> index 7916cf5cc6ff..f3179a605bba 100644
+> --- a/tools/testing/selftests/timers/mqueue-lat.c
+> +++ b/tools/testing/selftests/timers/mqueue-lat.c
+> @@ -107,8 +107,8 @@ int main(int argc, char **argv)
+>         ret = mqueue_lat_test();
+>         if (ret < 0) {
+>                 printf("[FAILED]\n");
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>         }
+>         printf("[OK]\n");
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
+> index 71b5441c2fd9..40ff3d710d66 100644
+> --- a/tools/testing/selftests/timers/nanosleep.c
+> +++ b/tools/testing/selftests/timers/nanosleep.c
+> @@ -153,7 +153,7 @@ int main(int argc, char **argv)
+>                         }
+>                         if (ret < 0) {
+>                                 printf("[FAILED]\n");
+> -                               return ksft_exit_fail();
+> +                               ksft_exit_fail();
+>                         }
+>                         length *= 100;
+>                 }
+> @@ -161,5 +161,5 @@ int main(int argc, char **argv)
+>  next:
+>                 ret = 0;
+>         }
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
+> index eb3e79ed7b4a..4c201a06cb94 100644
+> --- a/tools/testing/selftests/timers/nsleep-lat.c
+> +++ b/tools/testing/selftests/timers/nsleep-lat.c
+> @@ -172,9 +172,9 @@ int main(int argc, char **argv)
+>                 }
+>                 if (ret < 0) {
+>                         printf("[FAILED]\n");
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>                 printf("[OK]\n");
+>         }
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+> index 0ba500056e63..337424c5c987 100644
+> --- a/tools/testing/selftests/timers/posix_timers.c
+> +++ b/tools/testing/selftests/timers/posix_timers.c
+> @@ -194,16 +194,16 @@ int main(int argc, char **argv)
+>         printf("based timers if other threads run on the CPU...\n");
+>
+>         if (check_itimer(ITIMER_VIRTUAL) < 0)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+>         if (check_itimer(ITIMER_PROF) < 0)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+>         if (check_itimer(ITIMER_REAL) < 0)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+>         if (check_timer_create(CLOCK_THREAD_CPUTIME_ID) < 0)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+>         /*
+>          * It's unfortunately hard to reliably test a timer expiration
+> @@ -215,7 +215,7 @@ int main(int argc, char **argv)
+>          * find a better solution.
+>          */
+>         if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+> index b41d8dd0c40c..b58639a7d19d 100644
+> --- a/tools/testing/selftests/timers/raw_skew.c
+> +++ b/tools/testing/selftests/timers/raw_skew.c
+> @@ -138,11 +138,11 @@ int main(int argv, char **argc)
+>                 if (tx1.offset || tx2.offset ||
+>                     tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
+>                         printf("        [SKIP]\n");
+> -                       return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
+> +                       ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
+>                 }
+>                 printf("        [FAILED]\n");
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>         }
+>         printf("        [OK]\n");
+> -       return  ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/set-2038.c b/tools/testing/selftests/timers/set-2038.c
+> index 688cfd81b531..f7d978721b9e 100644
+> --- a/tools/testing/selftests/timers/set-2038.c
+> +++ b/tools/testing/selftests/timers/set-2038.c
+> @@ -128,6 +128,6 @@ int main(int argc, char *argv[])
+>         /* restore clock */
+>         settime(start);
+>         if (ret)
+> -               return ksft_exit_fail();
+> -       return ksft_exit_pass();
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/set-tai.c b/tools/testing/selftests/timers/set-tai.c
+> index 8c4179ee2ca2..5b67462efcd6 100644
+> --- a/tools/testing/selftests/timers/set-tai.c
+> +++ b/tools/testing/selftests/timers/set-tai.c
+> @@ -61,9 +61,9 @@ int main(int argc, char **argv)
+>                 ret = get_tai();
+>                 if (ret != i) {
+>                         printf("[FAILED] expected: %i got %i\n", i, ret);
+> -                       return ksft_exit_fail();
+> +                       ksft_exit_fail();
+>                 }
+>         }
+>         printf("[OK]\n");
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
+> index 50da45437daa..7ce240c89b21 100644
+> --- a/tools/testing/selftests/timers/set-timer-lat.c
+> +++ b/tools/testing/selftests/timers/set-timer-lat.c
+> @@ -278,6 +278,6 @@ int main(void)
+>                 ret |= do_timer_oneshot(clock_id, 0);
+>         }
+>         if (ret)
+> -               return ksft_exit_fail();
+> -       return ksft_exit_pass();
+> +               ksft_exit_fail();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/set-tz.c b/tools/testing/selftests/timers/set-tz.c
+> index 62bd33eb16f0..20daaf1782b7 100644
+> --- a/tools/testing/selftests/timers/set-tz.c
+> +++ b/tools/testing/selftests/timers/set-tz.c
+> @@ -102,9 +102,9 @@ int main(int argc, char **argv)
+>         printf("[OK]\n");
+>
+>         set_tz(min, dst);
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>
+>  err:
+>         set_tz(min, dst);
+> -       return ksft_exit_fail();
+> +       ksft_exit_fail();
+>  }
+> diff --git a/tools/testing/selftests/timers/skew_consistency.c b/tools/testing/selftests/timers/skew_consistency.c
+> index 8066be9aff11..bfeaac8d870d 100644
+> --- a/tools/testing/selftests/timers/skew_consistency.c
+> +++ b/tools/testing/selftests/timers/skew_consistency.c
+> @@ -70,8 +70,8 @@ int main(int argv, char **argc)
+>
+>         if (ret) {
+>                 printf("[FAILED]\n");
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>         }
+>         printf("[OK]\n");
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/threadtest.c b/tools/testing/selftests/timers/threadtest.c
+> index 80aed4bf06fb..76b38e41d9c7 100644
+> --- a/tools/testing/selftests/timers/threadtest.c
+> +++ b/tools/testing/selftests/timers/threadtest.c
+> @@ -189,5 +189,5 @@ int main(int argc, char **argv)
+>         /* die */
+>         if (ret)
+>                 ksft_exit_fail();
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
+> index 5397de708d3c..48804223eb4d 100644
+> --- a/tools/testing/selftests/timers/valid-adjtimex.c
+> +++ b/tools/testing/selftests/timers/valid-adjtimex.c
+> @@ -321,10 +321,10 @@ int validate_set_offset(void)
+>  int main(int argc, char **argv)
+>  {
+>         if (validate_freq())
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+>         if (validate_set_offset())
+> -               return ksft_exit_fail();
+> +               ksft_exit_fail();
+>
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
+> diff --git a/tools/testing/selftests/vm/madv_populate.c b/tools/testing/selftests/vm/madv_populate.c
+> index 3ee0e8275600..5f2f8ad32248 100644
+> --- a/tools/testing/selftests/vm/madv_populate.c
+> +++ b/tools/testing/selftests/vm/madv_populate.c
+> @@ -325,5 +325,5 @@ int main(int argc, char **argv)
+>         if (err)
+>                 ksft_exit_fail_msg("%d out of %d tests failed\n",
+>                                    err, ksft_test_num());
+> -       return ksft_exit_pass();
+> +       ksft_exit_pass();
+>  }
 > --
-> Maxim Kuvyrkov
-> https://www.linaro.org
->
->
-> >>
-> >> This was detected in linux-next a few days ago, but email notifications got lost.  Now this appears to have broken mainline.
-> >>
-> >> Regards,
-> >>
-> >> --
-> >> Maxim Kuvyrkov
-> >> https://www.linaro.org
-> >>
-> >>> On 3 Nov 2021, at 15:52, ci_notify@linaro.org wrote:
-> >>>
-> >>> [TCWG CI] Regression caused by linux: arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd:
-> >>> commit 3e6f8d1fa18457d54b20917bd9174d27daf09ab9
-> >>> Author: Nick Desaulniers <ndesaulniers@google.com>
-> >>>
-> >>>   arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd
-> >>>
-> >>> Results regressed to
-> >>> # reset_artifacts:
-> >>> -10
-> >>> # build_abe binutils:
-> >>> -9
-> >>> # build_llvm:
-> >>> -5
-> >>> # build_abe qemu:
-> >>> -2
-> >>> # linux_n_obj:
-> >>> 37
-> >>> # First few build errors in logs:
-> >>> # 00:01:21 error: unable to create target: 'No available targets are compatible with triple '
-> >>> # 00:01:21 make[1]: *** [arch/arm64/kernel/vdso32/note.o] Error 1
-> >>> # 00:01:21 error: unable to create target: 'No available targets are compatible with triple '
-> >>> # 00:01:21 make[1]: *** [arch/arm64/kernel/vdso32/vgettimeofday.o] Error 1
-> >>> # 00:01:21 make: *** [vdso_prepare] Error 2
-> >>>
-> >>> from
-> >>> # reset_artifacts:
-> >>> -10
-> >>> # build_abe binutils:
-> >>> -9
-> >>> # build_llvm:
-> >>> -5
-> >>> # build_abe qemu:
-> >>> -2
-> >>> # linux_n_obj:
-> >>> 7716
-> >>> # linux build successful:
-> >>> all
-> >>> # linux boot successful:
-> >>> boot
-> >>>
-> >>> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
-> >>>
-> >>> This commit has regressed these CI configurations:
-> >>> - tcwg_kernel/llvm-master-aarch64-next-defconfig
-> >>> - tcwg_kernel/llvm-release-aarch64-mainline-defconfig
-> >>> - tcwg_kernel/llvm-release-aarch64-next-defconfig
-> >>>
-> >>> First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/build-3e6f8d1fa18457d54b20917bd9174d27daf09ab9/
-> >>> Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/build-14831fad73f5ac30ac61760487d95a538e6ab3cb/
-> >>> Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/build-baseline/
-> >>> Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/
-> >>>
-> >>> Reproduce builds:
-> >>> <cut>
-> >>> mkdir investigate-linux-3e6f8d1fa18457d54b20917bd9174d27daf09ab9
-> >>> cd investigate-linux-3e6f8d1fa18457d54b20917bd9174d27daf09ab9
-> >>>
-> >>> # Fetch scripts
-> >>> git clone https://git.linaro.org/toolchain/jenkins-scripts
-> >>>
-> >>> # Fetch manifests and test.sh script
-> >>> mkdir -p artifacts/manifests
-> >>> curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/manifests/build-baseline.sh --fail
-> >>> curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/manifests/build-parameters.sh --fail
-> >>> curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-aarch64-mainline-defconfig/28/artifact/artifacts/test.sh --fail
-> >>> chmod +x artifacts/test.sh
-> >>>
-> >>> # Reproduce the baseline build (build all pre-requisites)
-> >>> ./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
-> >>>
-> >>> # Save baseline build state (which is then restored in artifacts/test.sh)
-> >>> mkdir -p ./bisect
-> >>> rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
-> >>>
-> >>> cd linux
-> >>>
-> >>> # Reproduce first_bad build
-> >>> git checkout --detach 3e6f8d1fa18457d54b20917bd9174d27daf09ab9
-> >>> ../artifacts/test.sh
-> >>>
-> >>> # Reproduce last_good build
-> >>> git checkout --detach 14831fad73f5ac30ac61760487d95a538e6ab3cb
-> >>> ../artifacts/test.sh
-> >>>
-> >>> cd ..
-> >>> </cut>
-> >>>
-> >>> Full commit (up to 1000 lines):
-> >>> <cut>
-> >>> commit 3e6f8d1fa18457d54b20917bd9174d27daf09ab9
-> >>> Author: Nick Desaulniers <ndesaulniers@google.com>
-> >>> Date:   Tue Oct 19 15:36:46 2021 -0700
-> >>>
-> >>>   arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd
-> >>>
-> >>>   Similar to
-> >>>   commit 231ad7f409f1 ("Makefile: infer --target from ARCH for CC=clang")
-> >>>   There really is no point in setting --target based on
-> >>>   $CROSS_COMPILE_COMPAT for clang when the integrated assembler is being
-> >>>   used, since
-> >>>   commit ef94340583ee ("arm64: vdso32: drop -no-integrated-as flag").
-> >>>
-> >>>   Allows COMPAT_VDSO to be selected without setting $CROSS_COMPILE_COMPAT
-> >>>   when using clang and lld together.
-> >>>
-> >>>   Before:
-> >>>   $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make -j72 LLVM=1 defconfig
-> >>>   $ grep CONFIG_COMPAT_VDSO .config
-> >>>   CONFIG_COMPAT_VDSO=y
-> >>>   $ ARCH=arm64 make -j72 LLVM=1 defconfig
-> >>>   $ grep CONFIG_COMPAT_VDSO .config
-> >>>   $
-> >>>
-> >>>   After:
-> >>>   $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make -j72 LLVM=1 defconfig
-> >>>   $ grep CONFIG_COMPAT_VDSO .config
-> >>>   CONFIG_COMPAT_VDSO=y
-> >>>   $ ARCH=arm64 make -j72 LLVM=1 defconfig
-> >>>   $ grep CONFIG_COMPAT_VDSO .config
-> >>>   CONFIG_COMPAT_VDSO=y
-> >>>
-> >>>   Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> >>>   Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> >>>   Tested-by: Nathan Chancellor <nathan@kernel.org>
-> >>>   Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> >>>   Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> >>>   Link: https://lore.kernel.org/r/20211019223646.1146945-5-ndesaulniers@google.com
-> >>>   Signed-off-by: Will Deacon <will@kernel.org>
-> >>> ---
-> >>> arch/arm64/Kconfig                |  3 ++-
-> >>> arch/arm64/kernel/vdso32/Makefile | 17 +++++------------
-> >>> 2 files changed, 7 insertions(+), 13 deletions(-)
-> >>>
-> >>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> >>> index 5c7ae4c3954b..f0f2c95aa4c8 100644
-> >>> --- a/arch/arm64/Kconfig
-> >>> +++ b/arch/arm64/Kconfig
-> >>> @@ -1264,7 +1264,8 @@ config KUSER_HELPERS
-> >>>
-> >>> config COMPAT_VDSO
-> >>>      bool "Enable vDSO for 32-bit applications"
-> >>> -     depends on !CPU_BIG_ENDIAN && "$(CROSS_COMPILE_COMPAT)" != ""
-> >>> +     depends on !CPU_BIG_ENDIAN
-> >>> +     depends on (CC_IS_CLANG && LD_IS_LLD) || "$(CROSS_COMPILE_COMPAT)" != ""
-> >>>      select GENERIC_COMPAT_VDSO
-> >>>      default y
-> >>>      help
-> >>> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> >>> index e478cebb9891..c8fec493a450 100644
-> >>> --- a/arch/arm64/kernel/vdso32/Makefile
-> >>> +++ b/arch/arm64/kernel/vdso32/Makefile
-> >>> @@ -10,18 +10,15 @@ include $(srctree)/lib/vdso/Makefile
-> >>>
-> >>> # Same as cc-*option, but using CC_COMPAT instead of CC
-> >>> ifeq ($(CONFIG_CC_IS_CLANG), y)
-> >>> -CC_COMPAT_CLANG_FLAGS := --target=$(notdir $(CROSS_COMPILE_COMPAT:%-=%))
-> >>> -
-> >>> CC_COMPAT ?= $(CC)
-> >>> -CC_COMPAT += $(CC_COMPAT_CLANG_FLAGS)
-> >>> -
-> >>> -ifneq ($(LLVM),)
-> >>> -LD_COMPAT ?= $(LD)
-> >>> +CC_COMPAT += --target=arm-linux-gnueabi
-> >>> else
-> >>> -LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)ld
-> >>> +CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
-> >>> endif
-> >>> +
-> >>> +ifeq ($(CONFIG_LD_IS_LLD), y)
-> >>> +LD_COMPAT ?= $(LD)
-> >>> else
-> >>> -CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
-> >>> LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)ld
-> >>> endif
-> >>>
-> >>> @@ -45,10 +42,6 @@ VDSO_CPPFLAGS += $(LINUXINCLUDE)
-> >>> # Common C and assembly flags
-> >>> # From top-level Makefile
-> >>> VDSO_CAFLAGS := $(VDSO_CPPFLAGS)
-> >>> -ifneq ($(shell $(CC_COMPAT) --version 2>&1 | head -n 1 | grep clang),)
-> >>> -VDSO_CAFLAGS += --target=$(notdir $(CROSS_COMPILE_COMPAT:%-=%))
-> >>> -endif
-> >>> -
-> >>> VDSO_CAFLAGS += $(call cc32-option,-fno-PIE)
-> >>> ifdef CONFIG_DEBUG_INFO
-> >>> VDSO_CAFLAGS += -g
-> >>> </cut>
-> >>
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
+> 2.33.0
 >
 
 
