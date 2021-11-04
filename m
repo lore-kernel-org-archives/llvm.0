@@ -1,42 +1,79 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CF72C85
-	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 13:36:29 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D3B5661183;
-	Thu,  4 Nov 2021 13:36:26 +0000 (UTC)
-Date: Thu, 4 Nov 2021 14:36:23 +0100
-From: Christian Brauner <christian.brauner@ubuntu.com>
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: christian@brauner.io, shuah@kernel.org, nathan@kernel.org,
-	ndesaulniers@google.com, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: clone3: clone3: add case CLONE3_ARGS_NO_TEST
-Message-ID: <20211104133623.dfey3ryavuelwygz@wittgenstein>
-References: <20211103201350.3866089-1-anders.roxell@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FE62C85
+	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 13:37:40 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 743CD604DC;
+	Thu,  4 Nov 2021 13:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1636033060;
+	bh=EKpljgVa5r5UmD2IEpypElISm7qojaXBWVSnqjIx8EI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Oq2pjjsCWrJdrsqVekgDZs8m9kH32LUoC8KYN9R+FDLbqcxOAlTL8Nwbr22LdspX7
+	 GxEqHb+dOFJnxoV5wKbGzGK71BTYy7Ty/bs5+tH5yAmuWRUPNb/pHtoquaMComxL66
+	 LaN86i4HmrqiAE3BOkMwHWTuNs0jt6JOvHTHjAMwSpNLswVSxtJtDrEyikzNfPD26g
+	 /f/rHYcgB+PzKnBe55SUu9ZeMKyTjdjnb9KOJQERdDaRVXrN778DzEoEmSWeQiZ9Ig
+	 tRydd0tHAbVjBnW3UXTECmHBssu/vI+CyMXj3Il1eW1wqu8Bp0Z3GLGJqyNmNHRRpS
+	 fkWZMtuL/RnEA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Luca Coelho <luciano.coelho@intel.com>,
+	Kalle Valo <kvalo@codeaurora.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Johannes Berg <johannes.berg@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Yaara Baruch <yaara.baruch@intel.com>,
+	Matti Gottlieb <matti.gottlieb@intel.com>,
+	Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] iwlwifi: pcie: fix constant-conversion warning
+Date: Thu,  4 Nov 2021 14:37:23 +0100
+Message-Id: <20211104133735.1223989-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211103201350.3866089-1-anders.roxell@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 03, 2021 at 09:13:50PM +0100, Anders Roxell wrote:
-> Building selftests/clone3 with clang warns about enumeration not handled
-> in switch case:
-> 
-> clone3.c:54:10: warning: enumeration value 'CLONE3_ARGS_NO_TEST' not handled in switch [-Wswitch]
->         switch (test_mode) {
->                 ^
-> 
-> Add the missing switch case with a comment.
-> 
-> Fixes: 17a810699c18 ("selftests: add tests for clone3()")
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
+From: Arnd Bergmann <arnd@arndb.de>
 
-Fine by me. Thanks!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+clang points out a potential issue with integer overflow when
+the iwl_dev_info_table[] array is empty:
+
+drivers/net/wireless/intel/iwlwifi/pcie/drv.c:1344:42: error: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Werror,-Wconstant-conversion]
+        for (i = ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
+               ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+
+This is still harmless, as the loop correctly terminates, but adding
+an (int) cast makes that clearer to the compiler.
+
+Fixes: 3f7320428fa4 ("iwlwifi: pcie: simplify iwl_pci_find_dev_info()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index c574f041f096..81e8f2fc4982 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -1341,7 +1341,7 @@ iwl_pci_find_dev_info(u16 device, u16 subsystem_device,
+ {
+ 	int i;
+ 
+-	for (i = ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
++	for (i = (int)ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
+ 		const struct iwl_dev_info *dev_info = &iwl_dev_info_table[i];
+ 
+ 		if (dev_info->device != (u16)IWL_CFG_ANY &&
+-- 
+2.29.2
+
