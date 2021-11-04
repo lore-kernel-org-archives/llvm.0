@@ -1,144 +1,113 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911722C8B
-	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 18:16:29 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C090961212;
-	Thu,  4 Nov 2021 18:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304992C8B
+	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 18:17:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7049C611EF;
+	Thu,  4 Nov 2021 18:17:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636049788;
-	bh=QL/vt13VBT2nYktJecGsab2Z/FC/8Q+Gig8XD3H3BAY=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=aVAPWVrtfPrCguD7ElyuH6yskogRdL0rbiFX0h7slaBb5fd7TIIx30/ltNp78fyJ5
-	 N8EFqqCDgC7fyz8adeAxWsREU1kvhdndOxEzqMIUxkDKO7rgO0B0kNKmAhGpIrbCPj
-	 6AwmWgCZYmDRXsjIGv90nnGXe8WDft5iuZxjfZOyOjQIBexFn1LuOWr8MowMPJbAQ9
-	 2cJVpvfZRDrNu+O44lm96SnH/ChKkMY9RrOd23PIZQGWNJYwJi2t91UIOOEvpHSjIR
-	 yFB1pLmpIZYiw8LpSqBb+4w72BzmjFkPHmNHiUNCT8lU/uhr1E4K3y4RRIVMJ2UdNV
-	 vMSMpV7wnPqbg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 873005C06CB; Thu,  4 Nov 2021 11:16:28 -0700 (PDT)
-Date: Thu, 4 Nov 2021 11:16:28 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-	will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-	parri.andrea@gmail.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, elver@google.com,
-	charalampos.mainas@gmail.com, pramod.bhatotia@in.tum.de
-Subject: Re: Potentially Broken Address Dependency via test_bit() When
- Compiling With Clang
-Message-ID: <20211104181628.GH641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YXknxGFjvaB46d/p@Pauls-MacBook-Pro>
- <20211027142720.GB1319606@rowland.harvard.edu>
- <YXqZm6XTlMGDSpMT@Pauls-MacBook-Pro>
- <20211028143446.GA1351384@rowland.harvard.edu>
- <YYGFDUR5dJ784P88@Pauls-MacBook-Pro>
- <20211102190138.GA1497378@rowland.harvard.edu>
+	s=k20201202; t=1636049870;
+	bh=djlRi7nW0gwt1k2eXBO/mi+25xkLWQXHOC7IyCRvmYc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kCZc8TY3SYQO/S1zR4mPl9Jx2pB0zzKZLb4MOhooqcrs3a5Yi53TfI5PYap+5DOd3
+	 Pg9zrDpl9Ra+UjDKbEo47A152NfoftGBCyf8raeJjpqSqPlSiKGS03g0uG2RwwinFZ
+	 gIlw7nQdNAw59z8Wdim5442VqMpakLQDB9y1fqR0BTvVjSwrxKlOzSAS+dvIkr2l55
+	 wKqZ0iXnENlmGa5HDDsF2+1LRx0AQgT0rd/LDfgJkgjKRxVHBW5fukYAlzIk16fAom
+	 zwEztjBU3shUqXKJ4+OQURi/wYTaQDL9N/D5ZoB9yxLHLNuWodfYDzN2kULTSsEuxf
+	 j7Kv2FkKB/alw==
+Date: Thu, 4 Nov 2021 11:17:46 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: stable@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Please apply 3d5e7a28b1ea2d603dea478e58e37ce75b9597ab to 5.15, 5.14,
+ and 5.10
+Message-ID: <YYQjyo/dKfDb/no3@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/mixed; boundary="NYgHrozRgQkI6Iup"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211102190138.GA1497378@rowland.harvard.edu>
 
-On Tue, Nov 02, 2021 at 03:01:38PM -0400, Alan Stern wrote:
-> On Tue, Nov 02, 2021 at 07:35:57PM +0100, Paul Heidekrüger wrote:
-> > On Thu, Oct 28, 2021 at 10:34:46AM -0400, Alan Stern wrote:
-> > > On Thu, Oct 28, 2021 at 02:37:47PM +0200, Paul Heidekrüger wrote:
-> > > > On Wed, Oct 27, 2021 at 10:27:20AM -0400, Alan Stern wrote:
-> > > > > On Wed, Oct 27, 2021 at 12:19:48PM +0200, Paul Heidekrüger wrote:
-> > > 
-> > > > > > Address dependency in source code, lines 373 - 375 in fs/afs/addr_list.c:
-> > > > > > 
-> > > > > > > [...]
-> > > > > > >   index = READ_ONCE(ac->alist->preferred);
-> > > > > > >   if (test_bit(index, &set))
-> > > > > > >     goto selected;
-> > > > > > > [...]
-> > > > > > 
-> > > > > > where test_bit() expands to the following in 
-> > > > > > include/asm-generic/bitops/non-atomic.h, lines 115 - 122:
-> > > > > > 
-> > > > > > > static __always_inline int
-> > > > > > > arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
-> > > > > > > {
-> > > > > > >   return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> > > > > > > }
-> > > > > > > #define test_bit arch_test_bit
-> > > 
-> > > > > However, I can't follow the IR code.  Can you please explain in ordinary 
-> > > > > English how the LLVM compiler manages to lose track of this dependency?
-> > > > > 
-> > > > > Alan Stern
-> > > > 
-> > > > Here's what we think might be going on:
-> > > > - In 'arch_test_bit()', 'addr[BIT_WORD(nr)]' expands to 'addr[(nr) / 64]'.
-> > > > - Since 'addr' points to an 'unsigned long', any other result than '0' for
-> > > >   '(nr) / 64' would be out of bounds and therefore undefined.
-> > > > - We assume LLVM is able to figure this out and use it to get rid of the
-> > > >   address computation all together.
-> > > 
-> > > Ah, that explains it.  Yes, when set is a single unsigned long (or an 
-> > > array of length 1), the address dependency is only syntactic, not 
-> > > semantic.  As a result, we should expect that compilers will sometimes 
-> > > not preserve it.
-> > 
-> > In LKMM's explanation.txt, lines 450 - 453 state:
-> > 
-> > > A read event and another memory access event are linked by an address
-> > > dependency if the value obtained by the read affects the location
-> > > accessed by the other event.
-> > 
-> > If we understand correctly, the ambiguity you're pointing out is that by
-> > looking at 'addr[BIT_WORD(nr)]', one could deduce an address dependency by
-> > seeing an array subscript operator, using a value which can be traced back to a
-> > 'READ_ONCE()' (syntactic).
-> 
-> Exactly.  The syntax of the expression apparently indicates that the 
-> address to be dereferenced depends on the value of nr.
-> 
-> > However, since 'addr' points to an 'unsigned long', the 'READ_ONCE()' never
-> > affects the location accessed in 'arch_test_bit()' as the offset computed in
-> > the subscript operator can only be, as clang identified, '0' (semantic).
-> 
-> Again correct.  Although the address to be dereferenced may seem to 
-> depend on nr, in fact it doesn't because in any valid execution nr must 
-> not contain any value other than 0 (and the compiler knows this).
-> 
-> > > The danger, of course, is that people relying on an ordering prescribed
-> > > by the LKMM may get fooled because (unbeknownst to them) the dependency
-> > > in question is not semantic.
-> > 
-> > Do you think this would warrant a change to LKMM's explanation.txt to make this
-> > more explicit?
-> 
-> It wouldn't hurt.  Note that explanation.txt does already include a 
-> section talking about address dependencies from marked loads to plain 
-> reads (line 2260 et seq).  It also talks about the possibility of the 
-> compiler undermining the memory model in this regard (line 2308).
-> 
-> However, it doesn't mention the difference between syntactic and 
-> semantic dependencies.  If you would like to submit a patch adding an 
-> explicit description of this, please feel free to do so.
-> 
-> > > It would be great if a static checker
-> > > could detect such things -- but this would require some way for us to
-> > > inform the checker about when the code does rely on a dependency
-> > > ordering.
-> > 
-> > The compiler passes we're working on will hopefully be able to do exactly that,
-> > not taking into account the programmer's intent of course.
-> 
-> Good luck!
 
-Most of the current proposals involve explicitly telling the compiler
-of the programmer's intent.  But if you can make something that is
-generally accepted, and that can figure out things on its own, that
-would be extremely cool!
+--NYgHrozRgQkI6Iup
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-							Thanx, Paul
+Hi Greg and Sasha,
+
+Please apply commit 3d5e7a28b1ea ("KVM: x86: avoid warning with
+-Wbitwise-instead-of-logical") to 5.10, 5.14, and 5.15, where it
+resolves a build error with tip of tree clang due to -Werror:
+
+arch/x86/kvm/mmu/mmu.c:3548:15: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+                reserved |= __is_bad_mt_xwr(rsvd_check, sptes[level - 1]) |
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                          ||
+arch/x86/kvm/mmu/mmu.c:3548:15: note: cast one or both operands to int to silence this warning
+1 error generated.
+
+It applies cleanly to 5.14 and 5.15 and I have attached a backport for
+5.10. I have added Paolo in case he has any objections to this.
+
+Cheers,
+Nathan
+
+--NYgHrozRgQkI6Iup
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-KVM-x86-avoid-warning-with-Wbitwise-instead-of-logic.patch"
+
+From e632639ddfc5e0a6a9f71c38ef840b6a0439b869 Mon Sep 17 00:00:00 2001
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Fri, 15 Oct 2021 04:50:01 -0400
+Subject: [PATCH 5.10] KVM: x86: avoid warning with
+ -Wbitwise-instead-of-logical
+
+commit 3d5e7a28b1ea2d603dea478e58e37ce75b9597ab upstream.
+
+This is a new warning in clang top-of-tree (will be clang 14):
+
+In file included from arch/x86/kvm/mmu/mmu.c:27:
+arch/x86/kvm/mmu/spte.h:318:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+        return __is_bad_mt_xwr(rsvd_check, spte) |
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                 ||
+arch/x86/kvm/mmu/spte.h:318:9: note: cast one or both operands to int to silence this warning
+
+The code is fine, but change it anyway to shut up this clever clogs
+of a compiler.
+
+Reported-by: torvic9@mailbox.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+[nathan: Backport to 5.10, which does not have 961f84457cd4]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/kvm/mmu/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 060d9a906535..770d18dc4650 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3545,7 +3545,7 @@ static bool get_mmio_spte(struct kvm_vcpu *vcpu, u64 addr, u64 *sptep)
+ 		 * reserved bit and EPT's invalid memtype/XWR checks to avoid
+ 		 * adding a Jcc in the loop.
+ 		 */
+-		reserved |= __is_bad_mt_xwr(rsvd_check, sptes[level - 1]) |
++		reserved |= __is_bad_mt_xwr(rsvd_check, sptes[level - 1]) ||
+ 			    __is_rsvd_bits_set(rsvd_check, sptes[level - 1],
+ 					       level);
+ 	}
+
+base-commit: 09df347cfd189774130f8ae8267324b97aaf868e
+-- 
+2.34.0.rc0
+
+
+--NYgHrozRgQkI6Iup--
