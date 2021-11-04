@@ -1,115 +1,86 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790B468
-	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 21:54:43 +0000 (UTC)
-Received: by mail-lj1-f169.google.com with SMTP id v23so11838570ljk.5
-        for <llvm@lists.linux.dev>; Thu, 04 Nov 2021 14:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hh+F7FtQ40kV8BIiTuy1XfTh1yXhREz8tGFu3uN9U6s=;
-        b=svLRA6PdtMaosokexHRNtyZkxc4Wj+ukUuS7t+WCkBB1nslSHGB6d+rzgyOaZurD3M
-         LUwjvKGk2YQeIK47UrHO6fmJoevT1S+VyOCI6PCy+kcIA7Lq82vdYFdUfaa50XGirmsT
-         l15Ft8m2dDDY/rPnKEhX5+CbwrusskZjnwuM4Y1oLgyln6bMpm7IPshOcx8F73BJkJU1
-         2cheHF2LvFf1qYCjpyN3RGWnWEnFanFJyZwvaTTLpYrqXpAruSzky7R+dqLueFc59ASa
-         Y1VDl8hU/ifhG7Px+W1tvv63jCzin5KE8UExXBYI4DPNOERGQEDw0iqjcZwq2BJL/nJA
-         TFhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hh+F7FtQ40kV8BIiTuy1XfTh1yXhREz8tGFu3uN9U6s=;
-        b=iddV25zsz/M2lJ3A/5y0aEhOjuSjrIwDmT4lFNq4s81mlz1k/DPck6bilLtdo7wzWD
-         5aRgibyAc1FruAE5wihn4mQN4kKwyACdhMfT2UrKBjNl+ZVdUsOxKKIGKtD7zUbdJstp
-         p/KesqETUNAAibRmrtIpqsOkQm72jN9YkAl5+nJGyN/ZY7m82ajioYGvLo5rw6bAuA8V
-         LT2Ne5Szad/aZDsfSfo1xiCJdbv+i+KbZ+klurX88zJ+6UCiwhDNRAMZP7zAs6wHngWs
-         W2ESSTkVrAV9B1tQsrbznNc9vXxfEy/VE/o/ADF/b3MOAMyn/umzJFgQBC5SiyzAuzw1
-         uN4g==
-X-Gm-Message-State: AOAM530X2mvgCYNdl+p7U2K2I+YR9sc9K+knBceXcCuHy3ixAahCm6CK
-	Ou6Utj1SCDAYY6iDhGQRuk3mYlruNI2R+edEXj/lcQ==
-X-Google-Smtp-Source: ABdhPJz13Ez8L482AtveMwJcjwaRKUPF+gqux9gEkm3m4tmpT9lXgvRN3nLtFVmBH7uJkjh48mjuVGZZaFn1N5U+wkU=
-X-Received: by 2002:a05:651c:889:: with SMTP id d9mr57030492ljq.198.1636062881296;
- Thu, 04 Nov 2021 14:54:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F51A68
+	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 21:59:35 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CCC4E61267;
+	Thu,  4 Nov 2021 21:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1636063175;
+	bh=dpz/Kq034PoEyMdh5IwG1YW0B9x+52MEt1VYusOTdWg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MEDhjRMWCrE9x1d4o9ANKrw8fpO/JMTKGQg/mSww83t7weUYScm8pmopyV5a86H47
+	 uZLwLUhBPpSYA0BiZlBRDh4MhPSD4g/xMoP0D2t2muOYjoOUH0e2SkpaUBtqxJQttM
+	 LwBW+5mBPWNXfVZTuhgxgKRg1O5N0NC+8l6o5OIWmg8dQNglkpmigiBxYQ5xCqOGxe
+	 Fk+Th/9GgoATO/VqyQ60oTCRsidnU9vSjm/tE0RA4TQ2W2WNvxCDLp5N2NYcIiyy6u
+	 juubWGcXBNgklrVHgVyuxPbi3EiOJcVvDQEMLJk+tEzAvIqR1TUnQEZGhVhFTUzfVa
+	 uJTUVr+GxeMng==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
+Date: Thu,  4 Nov 2021 14:59:23 -0700
+Message-Id: <20211104215923.719785-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.0.rc0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211104215047.663411-1-nathan@kernel.org>
-In-Reply-To: <20211104215047.663411-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 4 Nov 2021 14:54:28 -0700
-Message-ID: <CAKwvOdkkKse-EkKMgBBx83eKeG6iXJVhusVRfhrQTrbOrwMtKA@mail.gmail.com>
-Subject: Re: [PATCH] power: reset: ltc2952: Fix use of floating point literals
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 4, 2021 at 2:51 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> A new commit in LLVM causes an error on the use of 'long double' when
-> '-mno-x87' is used, which the kernel does through an alias,
-> '-mno-80387' (see the LLVM commit below for more details around why it
-> does this).
->
-> drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
->         data->wde_interval = 300L * 1E6L;
->                                   ^
-> drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
->         data->wde_interval = 300L * 1E6L;
->                            ^
-> drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
->         data->trigger_delay = ktime_set(2, 500L*1E6L);
->                                                ^
-> 3 errors generated.
->
-> This happens due to the use of a 'long double' literal. The 'E6' part of
-> '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> it to 'long double'.
->
-> There is no visible reason for floating point values in this driver, as
-> the values are only assigned to integer types. Use USEC_PER_SEC, which
-> is the same integer value as '1E6L', to avoid changing functionality but
-> fix the error.
->
-> Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+A new commit in LLVM causes an error on the use of 'long double' when
+'-mno-x87' is used, which the kernel does through an alias,
+'-mno-80387' (see the LLVM commit below for more details around why it
+does this).
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+ drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+                         delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
+                                             ^
+ drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
+ #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+                                 ^
+ 1 error generated.
 
-> ---
->  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
-> index fbb344353fe4..ebe3f2bed4c5 100644
-> --- a/drivers/power/reset/ltc2952-poweroff.c
-> +++ b/drivers/power/reset/ltc2952-poweroff.c
-> @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
->
->  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
->  {
-> -       data->wde_interval = 300L * 1E6L;
-> -       data->trigger_delay = ktime_set(2, 500L*1E6L);
-> +       data->wde_interval = 300L * USEC_PER_SEC;
-> +       data->trigger_delay = ktime_set(2, 500L * USEC_PER_SEC);
->
->         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
->
-> base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
-> --
-> 2.34.0.rc0
->
+This happens due to the use of a 'long double' literal. The 'E6' part of
+'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+it to 'long double'.
 
+There is no visible reason for a floating point value in this driver, as
+the value is only used as a parameter to a function that expects an
+integer type.  Use USEC_PER_SEC, which is the same integer value as
+'1E6L', to avoid changing functionality but fix the error.
 
+Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/usb/dwc2/hcd_queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+index 89a788326c56..bdf1927e1be1 100644
+--- a/drivers/usb/dwc2/hcd_queue.c
++++ b/drivers/usb/dwc2/hcd_queue.c
+@@ -59,7 +59,7 @@
+ #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
+ 
+ /* If we get a NAK, wait this long before retrying */
+-#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
++#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
+ 
+ /**
+  * dwc2_periodic_channel_available() - Checks that a channel is available for a
+
+base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
 -- 
-Thanks,
-~Nick Desaulniers
+2.34.0.rc0
+
