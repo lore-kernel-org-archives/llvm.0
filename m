@@ -1,59 +1,42 @@
-Received: from deadmen.hmeau.com (helcar.hmeau.com [216.24.177.18])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B2E2C85
-	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 13:30:59 +0000 (UTC)
-Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
-	by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
-	id 1micpP-00045L-9M; Thu, 04 Nov 2021 21:30:51 +0800
-Received: from herbert by gondobar with local (Exim 4.92)
-	(envelope-from <herbert@gondor.apana.org.au>)
-	id 1micpI-0002Ef-4i; Thu, 04 Nov 2021 21:30:44 +0800
-Date: Thu, 4 Nov 2021 21:30:44 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Damien Le Moal <Damien.LeMoal@wdc.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Vladis Dronov <vdronov@redhat.com>, Simo Sorce <ssorce@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	kernel test robot <lkp@intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] crypto: api - Do not create test larvals if manager is
- disabled
-Message-ID: <20211104133044.GA8563@gondor.apana.org.au>
-References: <20211001055058.GA6081@gondor.apana.org.au>
- <YVdNFzs8HUQwHa54@archlinux-ax161>
- <20211003002801.GA5435@gondor.apana.org.au>
- <YV0K+EbrAqDdw2vp@archlinux-ax161>
- <20211019132802.GA14233@gondor.apana.org.au>
- <alpine.DEB.2.22.394.2111021636040.2330984@ramsan.of.borg>
- <DM6PR04MB708155E447FD9A79AB89686DE78D9@DM6PR04MB7081.namprd04.prod.outlook.com>
- <CAMuHMdW1wLAt9Y=-GMMuk8HWE3UnRgKNMmD9fq34Rq8J7QyrzQ@mail.gmail.com>
- <20211104121612.GA8044@gondor.apana.org.au>
- <CAMuHMdWAAWWS+TgeN1AajHBS5w9-datMEeXqAN8RjxRd9bX63Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CF72C85
+	for <llvm@lists.linux.dev>; Thu,  4 Nov 2021 13:36:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D3B5661183;
+	Thu,  4 Nov 2021 13:36:26 +0000 (UTC)
+Date: Thu, 4 Nov 2021 14:36:23 +0100
+From: Christian Brauner <christian.brauner@ubuntu.com>
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: christian@brauner.io, shuah@kernel.org, nathan@kernel.org,
+	ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests: clone3: clone3: add case CLONE3_ARGS_NO_TEST
+Message-ID: <20211104133623.dfey3ryavuelwygz@wittgenstein>
+References: <20211103201350.3866089-1-anders.roxell@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdWAAWWS+TgeN1AajHBS5w9-datMEeXqAN8RjxRd9bX63Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211103201350.3866089-1-anders.roxell@linaro.org>
 
-On Thu, Nov 04, 2021 at 02:11:34PM +0100, Geert Uytterhoeven wrote:
->
-> My config is nommu_k210_sdcard_defconfig with the changes below:
+On Wed, Nov 03, 2021 at 09:13:50PM +0100, Anders Roxell wrote:
+> Building selftests/clone3 with clang warns about enumeration not handled
+> in switch case:
+> 
+> clone3.c:54:10: warning: enumeration value 'CLONE3_ARGS_NO_TEST' not handled in switch [-Wswitch]
+>         switch (test_mode) {
+>                 ^
+> 
+> Add the missing switch case with a comment.
+> 
+> Fixes: 17a810699c18 ("selftests: add tests for clone3()")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
 
-Could you send me the actual config? Just in case something weird
-happened during the kconfig process and options got flipped from
-their default values.
-
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Fine by me. Thanks!
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
