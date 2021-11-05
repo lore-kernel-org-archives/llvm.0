@@ -1,33 +1,58 @@
-Received: from metanate.com (dougal.metanate.com [90.155.101.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3979868
-	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 13:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description; bh=Bz8cdhZXbt7ZToRTPSoSmYiw1e6Kd14GIZdjGatloIw=; b=zM41P
-	+/C+xf1ELT2qg/fxigElKjTpMaNsB8GtPzYCWMNnz/nQ6LXTfvxS8IHTWXkDci7TPzv25M4uVsBAh
-	42aSZ/4QW6q2ALr/O2k4H2IxAsb1uzSXyjenG6LCKvmNZALKVvXVv8DnXfOUgBqB9pQSWtNTFEvWB
-	aSt+pw+lfZJSpJn4QAB+Cv/rdu5c+11yhGyDWhYNyL7+ND4EG2O1UGx05exjtCiFpeBa1ItiGKjro
-	mALuRN4lMd1unQMuP9dVL6/2WKXDxzushe9dtNngJ0amEhe/cnqn1nu8+uF800u7ZhcdG71vQ6YO5
-	xom+1Gzl9qRGxJ770Fpvcpbh7GxQg==;
-Received: from [81.174.171.191] (helo=donbot)
-	by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <john@metanate.com>)
-	id 1miyxl-0003RI-Pv; Fri, 05 Nov 2021 13:08:57 +0000
-Date: Fri, 5 Nov 2021 13:08:48 +0000
-From: John Keeping <john@metanate.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Minas Harutyunyan <hminas@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
-Message-ID: <YYUs4PME9QizsPTt@donbot>
-References: <20211104215923.719785-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCC868
+	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 13:37:10 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id b15so13894132edd.7
+        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 06:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hSoiWGmAid6Jcw8dbKeL1Gu/MkI3FecJPwAl3ahoMxo=;
+        b=mOlRxGG+AiBEx1fQXJNVPuhU0OERNEerkC7arcIh8ezYZQKnqvQQDMgd/A+506w33K
+         2W0C6YtKz7GXNLvw8B1ei5QaTQTb2icVFyg/OHQerAdOXRn7UHppZOjR5Tf4BczEaibD
+         xv4DseRHSL8NJm4rTwTdep+vJq/aKkx7A06Iy9cCMiYm7gC6R0vKWi36IadrsF/OPjL3
+         9inbLAEZWeqvN4O4nBcjWC0YSSydEY23qmoHki/8ZposSnvHRTXe32+XhwNKkZfhOr/B
+         nO0WIl9EenmPBuaZeVio6sWfCKllTXlgxHpZ3CUn227S3nRylXx+xp2/gqe56YJCfiVu
+         BLnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hSoiWGmAid6Jcw8dbKeL1Gu/MkI3FecJPwAl3ahoMxo=;
+        b=eBo1IrgPxgO+7WzHEni5kFnl+6UKyZVNQA9lvRZwbcOiI/PHjGeeEEJf46dfYB3zjY
+         dnZDa090tkkCfP1jqr3YVdBGkK+Ehe/CrvRYF/5VzWj5TfIl62F80wNhBU4SGZxClniF
+         yVGTawwB67FiXtJHeEbCx5PG/3dW087wzpkDJQSKamdYUNKcS8rgGlnwVgReUnaClBZe
+         41l6yG9CUH5xAAuPUj9bM4+gq6UIEpM9O7IOqGlNTm9OjgResu8UCDFod4kmQC0kTmAt
+         2jYmGTzQ7LSrZz3Cmnpi9wgvFV/1DFwBTp5YsyTofbMHaZI4LDAAwF0FdB2kLWpfDtyi
+         bVlg==
+X-Gm-Message-State: AOAM530m6enq3Z96qutuOsqwKtuWuGihGXw0a4pAYi0Pi91gh3WkrpwC
+	8OXIRDpaKKT9D/hxvN3KmpM=
+X-Google-Smtp-Source: ABdhPJwjb/sXYSPmkbBrmeK9+ELiIYipL0vIxC+DcGaeS7oDI+DsDo34LwjOShvmPLPNbLz7V3WroQ==
+X-Received: by 2002:a17:907:94c2:: with SMTP id dn2mr51961530ejc.312.1636119428637;
+        Fri, 05 Nov 2021 06:37:08 -0700 (PDT)
+Received: from skbuf ([188.25.175.102])
+        by smtp.gmail.com with ESMTPSA id hc10sm4085126ejc.99.2021.11.05.06.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Nov 2021 06:37:08 -0700 (PDT)
+Date: Fri, 5 Nov 2021 15:37:06 +0200
+From: Vladimir Oltean <olteanv@gmail.com>
+To: Martin Kaistra <martin.kaistra@linutronix.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, Richard Cochran <richardcochran@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	John Stultz <john.stultz@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>
+Subject: Re: [PATCH 6/7] net: dsa: b53: Add logic for TX timestamping
+Message-ID: <20211105133706.3dxnnxurwrxrqczs@skbuf>
+References: <20211104133204.19757-7-martin.kaistra@linutronix.de>
+ <202111051954.rPDqSaCq-lkp@intel.com>
+ <b99aa58c-26c0-768a-ebcd-f46cb49a2ca7@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,55 +61,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211104215923.719785-1-nathan@kernel.org>
-X-Authenticated: YES
+In-Reply-To: <b99aa58c-26c0-768a-ebcd-f46cb49a2ca7@linutronix.de>
 
-On Thu, Nov 04, 2021 at 02:59:23PM -0700, Nathan Chancellor wrote:
-> A new commit in LLVM causes an error on the use of 'long double' when
-> '-mno-x87' is used, which the kernel does through an alias,
-> '-mno-80387' (see the LLVM commit below for more details around why it
-> does this).
+On Fri, Nov 05, 2021 at 01:59:52PM +0100, Martin Kaistra wrote:
 > 
->  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
->                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
->                                              ^
->  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
->  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
->                                  ^
->  1 error generated.
 > 
-> This happens due to the use of a 'long double' literal. The 'E6' part of
-> '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> it to 'long double'.
+> Am 05.11.21 um 12:17 schrieb kernel test robot:
+> > Hi Martin,
+> > 
+> > Thank you for the patch! Yet something to improve:
+> > 
+> > [auto build test ERROR on net-next/master]
+> > [also build test ERROR on net/master linus/master next-20211105]
+> > [cannot apply to tip/timers/core v5.15]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+> > 
+> > url:    https://github.com/0day-ci/linux/commits/Martin-Kaistra/Add-PTP-support-for-BCM53128-switch/20211104-213538
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 84882cf72cd774cf16fd338bdbf00f69ac9f9194
+> > config: x86_64-randconfig-r033-20211105 (attached as .config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 847a6807332b13f43704327c2d30103ec0347c77)
+> > reproduce (this is a W=1 build):
+> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          # https://github.com/0day-ci/linux/commit/b484f272339c8b2fd87f5d3493849439003c0026
+> >          git remote add linux-review https://github.com/0day-ci/linux
+> >          git fetch --no-tags linux-review Martin-Kaistra/Add-PTP-support-for-BCM53128-switch/20211104-213538
+> >          git checkout b484f272339c8b2fd87f5d3493849439003c0026
+> >          # save the attached .config to linux build tree
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> > > > drivers/net/dsa/b53/b53_common.c:2304:20: error: incompatible function pointer types initializing 'void (*)(struct dsa_switch *, int, struct sk_buff *)' with an expression of type 'bool (struct dsa_switch *, int, struct sk_buff *)' (aka '_Bool (struct dsa_switch *, int, struct sk_buff *)') [-Werror,-Wincompatible-function-pointer-types]
+> >             .port_txtstamp          = b53_port_txtstamp,
+> >                                       ^~~~~~~~~~~~~~~~~
+> >     1 error generated.
+> > 
+> > 
 > 
-> There is no visible reason for a floating point value in this driver, as
-> the value is only used as a parameter to a function that expects an
-> integer type.  Use USEC_PER_SEC, which is the same integer value as
-> '1E6L', to avoid changing functionality but fix the error.
-> 
-> Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/usb/dwc2/hcd_queue.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-> index 89a788326c56..bdf1927e1be1 100644
-> --- a/drivers/usb/dwc2/hcd_queue.c
-> +++ b/drivers/usb/dwc2/hcd_queue.c
-> @@ -59,7 +59,7 @@
->  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
->  
->  /* If we get a NAK, wait this long before retrying */
-> -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-> +#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
+> oops, I will fix the signature of b53_port_txtstamp() for the
+> !CONFIG_B53_PTP case in v2.
 
-Using USEC_PER_SEC here seems quite weird.  This is used as:
-
-	delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
-
-so the units are nanoseconds.
-
-Maybe NSEC_PER_MSEC would better indicate the intent here?
+Can you please ensure that it also _works_ when CONFIG_B53_PTP is disabled?
+FYI I will not start reviewing this patch set until it compiles correctly.
+Thanks.
