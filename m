@@ -1,104 +1,88 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A5B2C96
-	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 20:47:49 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id p16so21145607lfa.2
-        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 13:47:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F34C2C96
+	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 20:51:11 +0000 (UTC)
+Received: by mail-lj1-f170.google.com with SMTP id j5so16953048lja.9
+        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 13:51:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OzIUMIfi4RPXj+onsD2EV5D7RTPP5SubsnRhKU4PVU0=;
-        b=STcanu/5UsqXYQCqH+MMlwnQs3HYtefRvaVpdBadT4nknJx7xsOWcuWJFSNqH8EGcc
-         TdVh2U9BG0Ll8NqyhIpXa0bN5nKoC87pay5tODOXNsMRNr0+IAHXgi/TUmPGeXabbWhP
-         3+W8acnoow1uISKEeiZY5onD9DQjC9h+hXYXVghf1fjciY0IGQOfm6jMRGtZoVz1yu6Y
-         L66uVvPlhxO7g8ZOu5c/gQpvqJqjFxaOKvKl8fq51HYnF6uUxqtiYwl48HXw4GxD2nb3
-         IHjr6/nVPUUamL9GA8ojWKkwzsmX8F5+tQaSQbZsmisDmmu8wUMRL82zKCy74IC2jYCj
-         oeDg==
+        bh=IsqXxMPAEyayuWYNn2cn31F1D2jcff0K1QvBSthWMBM=;
+        b=qOxV+6+MFUFLS2PS7gWTFOb+5OBR+cqySkvjy3obIuGHjHYU2+OPa1v0oH5ar3Momb
+         1SfH9k7CtbWT3EoxFjVodUnvjUC7Sbd62Yd+tv89a35AM2Q477zcUc+DozAS/Lv/mS1y
+         lPjneQGIlCtLwO6x6p+kHAIBo8KsK7JvzjcYBekIJDr5SvANWAhocb6d403cSVlvN9QE
+         q691o0BWYl49mrnOtyAlBN8sa2c4x1HZTJezZCORUEHVarGNWj+9TGwDAqPQlnBVwyA9
+         YMAgDh4A6AkxZeDLvFZC4h+oDYaqFL2h+lf/eYcRrNHxUzwl7RsJ5sTteaxm4LXmEV+V
+         PFTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OzIUMIfi4RPXj+onsD2EV5D7RTPP5SubsnRhKU4PVU0=;
-        b=MMHR4VYH0vPNxNLrzuGV8ZjMF/BwvVwNbo7TguW/iezejs+P/JKCP11eKA6BDYXqBw
-         3QFr2ovx5rGJo772MnsjMy31bCTLHPOVIlYdNLphr+7byFyi0QTSH75lmmJiETypHAf7
-         fTc+Ehp86CjzfxvujspMOAK9ri2NVP4cNKdpronloDqHI0f5lzx1PjIjUxpvR1ji2YYE
-         tBrOJuAiuxNEFmwt4Oue+xXC3VY7O1IUdC5TdFDoqBUup0xZbyVkooC0m6FmtTxEFwzj
-         j2kuK2Q2DVxeTjPLfswPyOzx3QUiCzGdmQNKkMxUhGqFwM3KTKfHlpzm6kljN5/6idAW
-         vIvg==
-X-Gm-Message-State: AOAM531GQFdR6EzqPirsvkrKBM0VgmfVp83rXl+YhttoOC3CaeQwa3Uq
-	wwvasC6ZMMqKFjVwl4zw7RVEdQhrNW5JwHjVYjs2Lw==
-X-Google-Smtp-Source: ABdhPJx6deQDCMojiHegS2mr4kysTeQUwWlnsyXo3BZVwZZ0CbYgJnSE8SDB61e07DBsybj27PrjCyFSpnlV/xbuQeU=
-X-Received: by 2002:a05:6512:228a:: with SMTP id f10mr56001997lfu.489.1636145267629;
- Fri, 05 Nov 2021 13:47:47 -0700 (PDT)
+        bh=IsqXxMPAEyayuWYNn2cn31F1D2jcff0K1QvBSthWMBM=;
+        b=xaV8Z5OjTPMU1zFLHvUCdz+r7W5UZ97XTpUO4qXY0PB6IRGT2cttWP0bfS6pDpALOn
+         OIJDK8aCQu4QNYSrQ5bnGujMfuwwHFh+xNEB0/MmcZTn6nNLe3Uexe9a2d4CXkcI5cBF
+         xoTUb884eSMyppvYiALBAd3wV+y0qDctubHewt8SJsEvizSIeN848EXd/9i3/L3Dw23q
+         HkoCkKgz+HIhbmlYz6v1vY88QgUTgY0EHR9ZF2T9nJ/5/MuQ9Yv1p1S+EX2uZyMTQKJs
+         DT0FvzjfKyEb2kXHuxxvrw9eTZ+FnPLIZ34kcRe1JY2d//BzZGK/aItuLKXMJJD+38id
+         0Wdw==
+X-Gm-Message-State: AOAM533Ax/oCy6wGJY6c6ZfH9lGTn/rFtX0nS7Y9G4CJ/MZm+O17yt9M
+	gjdOW+Ne65SXZ9PgKMxSna3AHvzv0x7XMa5tynrl8Q==
+X-Google-Smtp-Source: ABdhPJyscGR2faQ3WY30fi9rHtfREOCPhjZDAaOuuO8TE7pOhp1KBS3rpUKQlf4rPXLm+5TIIpFu3wdMSSP1pETACTo=
+X-Received: by 2002:a2e:750e:: with SMTP id q14mr64510854ljc.338.1636145469249;
+ Fri, 05 Nov 2021 13:51:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211105164511.3360473-1-anders.roxell@linaro.org>
-In-Reply-To: <20211105164511.3360473-1-anders.roxell@linaro.org>
+References: <20211105163137.3324344-1-anders.roxell@linaro.org>
+ <20211105163137.3324344-2-anders.roxell@linaro.org> <CAKwvOd=rRntVgYdqEeb=JAYo2iC-wVB3dkQWNvwdZdrYgt2s7Q@mail.gmail.com>
+ <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
+In-Reply-To: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 5 Nov 2021 13:47:35 -0700
-Message-ID: <CAKwvOdmj07NhhrLUqavJGHBgsBRrg6BvCFCzKbzt4wQJUv+M9A@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: tls: remove unused variable and code
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: davem@davemloft.net, kuba@kernel.org, shuah@kernel.org, nathan@kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Fri, 5 Nov 2021 13:50:58 -0700
+Message-ID: <CAKwvOdm=a7w0cQdynY2i5ST=xrfjzXVZcUniAoEyqC21oKPQsQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: timens: exec: use 'labs()' over 'abs()'
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Anders Roxell <anders.roxell@linaro.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Nov 5, 2021 at 9:45 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+On Fri, Nov 5, 2021 at 1:45 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> When building selftests/net with clang, the compiler warn about the
-> function abs() see below:
+> On Fri, Nov 5, 2021 at 9:35 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > On Fri, Nov 5, 2021 at 9:31 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+> > >
+> > > When building selftests/timens with clang, the compiler warn about the
+> > > function abs() see below:
+> > >
+> > > exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
+> > >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
+> > >                             ^
+> > > exec.c:33:8: note: use function 'labs' instead
+> > >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
+> > >                             ^~~
+> > >                             labs
+> >
+> > Careful.
+> >
+> > Isn't the tv_sec member of `struct timespec` a `time_t` which is 32b
+> > on 32b hosts and 64b on 64b hosts? If I'm recalling that correctly,
+> > then this patch results in a harmless (though unnecessary) sign
+> > extension for 32b targets. That should be fine, but someone like Arnd
+> > should triple check if my concern is valid or not.
 >
-> tls.c:657:15: warning: variable 'len_compared' set but not used [-Wunused-but-set-variable]
->         unsigned int len_compared = 0;
->                      ^
->
-> Rework to remove the unused variable and the for-loop where the variable
-> 'len_compared' was assinged.
->
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> It could actually be 'int', 'long' or 'long long' depending on the architecture
+> and C library. Maybe we need a temporary variable of type 'long long'
+> to hold the difference, and pass that to llabs()?
 
-Thanks for the patch. Hard to say what the original intent was here.
-
-Fixes: 7f657d5bf507 ("selftests: tls: add selftests for TLS sockets")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  tools/testing/selftests/net/tls.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index d3047e251fe9..e61fc4c32ba2 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-> @@ -654,7 +654,6 @@ TEST_F(tls, recvmsg_single_max)
->  TEST_F(tls, recvmsg_multiple)
->  {
->         unsigned int msg_iovlen = 1024;
-> -       unsigned int len_compared = 0;
->         struct iovec vec[1024];
->         char *iov_base[1024];
->         unsigned int iov_len = 16;
-> @@ -675,8 +674,6 @@ TEST_F(tls, recvmsg_multiple)
->         hdr.msg_iovlen = msg_iovlen;
->         hdr.msg_iov = vec;
->         EXPECT_NE(recvmsg(self->cfd, &hdr, 0), -1);
-> -       for (i = 0; i < msg_iovlen; i++)
-> -               len_compared += iov_len;
->
->         for (i = 0; i < msg_iovlen; i++)
->                 free(iov_base[i]);
-> --
-> 2.33.0
->
-
-
+Yeah, that SGTM. Thanks for the review!
 -- 
 Thanks,
 ~Nick Desaulniers
