@@ -1,67 +1,32 @@
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0154B2C9D
-	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 14:33:35 +0000 (UTC)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.nyi.internal (Postfix) with ESMTP id D3718580873;
-	Fri,  5 Nov 2021 10:33:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 05 Nov 2021 10:33:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=7vHGH5
-	fsWp+AmiltcS8fSgzVtFKPV6KtppB0gEokIww=; b=ZtwKF4f/OZwYUAfoIxksjl
-	eLsbDweOswOJhxqMcdKfCjt6sk0ObD3uMVNPUP7lRF/vwbmmhKs/Ddy5h2YtGITO
-	uW+evRjVm7z6TkBwiZKzXb8GrRW8kJe0sQVuIgJwUpq6YrZw8MvQkkW3rThe+Vv6
-	BEZvElSUfG61SmwPvtoND+ICMSA5Ac2VrrZgGkV7Du6cdlbbhdo92AdMnp6aw5zc
-	u9xyQ4iTuHSAiC6UdCuzLsuZHr8Kgtbqx3vdiFRKEFNJMryF7LDYyxA93vpJwlLh
-	Gdw3mDSEtxHUGdRMJvX63R5YxGpfmzxzLKGvFLF1yci26Xkd9sUbDvKlpXBNDWYA
-	==
-X-ME-Sender: <xms:vUCFYfe1oqMLVxtZh4uEd42AnTNQVpgE5N3blhaqxS4fudOHsuVhrg>
-    <xme:vUCFYVOAbRVtZf9ujPlJ8sM8igG0zuPyTOoCydW_Fpu99Pmq-TQ0EuPS_g81JT_NA
-    D4rZVVqJ5eeP34>
-X-ME-Received: <xmr:vUCFYYiNzr5m-2jGUAfKjOPsY91AaYrWYt9R0W571MhU-RraTA2zigTaC1A85ERs6PYQ8JOCDHAhQgK4mHnwxsZ6Xw6NfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrtdeigdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepkfguohcuufgt
-    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepgfejvefhvdegiedukeetudevgeeujeefffeffeetkeekueeuheejudeltdejuedu
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
-    hstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:vUCFYQ_fXX9PkOHvculQRZ68o5e2JDJ54IYOpSUOWs1P4dMVgXrdjQ>
-    <xmx:vUCFYbs3d3G7qUea5InpNwIrXV9I-d_zdc6BDs_V0FTBP87ZS8w7GQ>
-    <xmx:vUCFYfFYH3ccf4rW94Gv8Z8HLS0ezT_nOByD9L6_66eaghTJSVak6Q>
-    <xmx:vkCFYZLhdOKiPWfAFUYGC_pNzOVpkXJnO1cvfKB-qmhwqelA6_bZ9w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Nov 2021 10:33:32 -0400 (EDT)
-Date: Fri, 5 Nov 2021 16:33:29 +0200
-From: Ido Schimmel <idosch@idosch.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Damien Le Moal <Damien.LeMoal@wdc.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Vladis Dronov <vdronov@redhat.com>, Simo Sorce <ssorce@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	kernel test robot <lkp@intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: Re: crypto: api - Fix boot-up crash when crypto manager is disabled
-Message-ID: <YYVAuRaITKKvAhSp@shredder>
-References: <YV0K+EbrAqDdw2vp@archlinux-ax161>
- <20211019132802.GA14233@gondor.apana.org.au>
- <alpine.DEB.2.22.394.2111021636040.2330984@ramsan.of.borg>
- <DM6PR04MB708155E447FD9A79AB89686DE78D9@DM6PR04MB7081.namprd04.prod.outlook.com>
- <CAMuHMdW1wLAt9Y=-GMMuk8HWE3UnRgKNMmD9fq34Rq8J7QyrzQ@mail.gmail.com>
- <20211104121612.GA8044@gondor.apana.org.au>
- <CAMuHMdWAAWWS+TgeN1AajHBS5w9-datMEeXqAN8RjxRd9bX63Q@mail.gmail.com>
- <20211104133044.GA8563@gondor.apana.org.au>
- <YYP5ypSPOcP4WGCr@shredder>
- <20211105072608.GA13584@gondor.apana.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0A52C9D
+	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 14:56:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F0896120E;
+	Fri,  5 Nov 2021 14:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1636124185;
+	bh=o/e3Kg4XQetn+fV8ykmX1Wv4U8T/q0l5MdvRDWYx79g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n0VMZWrHUHHqJINgGjRtwz6b9NlqlkxOTYeTvEXgxgPF50k491UbCwZPePjrehBcY
+	 LvB7IQTZefNIDSJhpyXy80uuxPEQft2ho7QazhOOkExulyRntyQN+wMS8ExQPviMwi
+	 LLXK4WACNA+nM2IjZk4Xyfl6X6zMMpHGurq6C4pdiCij49ftRC9wi9SA59yAHKAYYi
+	 TO03gV5Df4Yso7q2bVju4clQdqP+Glim1OsCF97pv0HOsHcHuZkUkhC92qb24kkbUL
+	 ofQ0t20/JYa9BJGkrdRGrQRS00SQHOQQXApjWOmuzDmKl3Rzev7cEYu6kqyXJCTpZN
+	 /l1bp9mJl/VhA==
+Date: Fri, 5 Nov 2021 07:56:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: John Keeping <john@metanate.com>
+Cc: Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
+Message-ID: <YYVGEVass1f5El8C@archlinux-ax161>
+References: <20211104215923.719785-1-nathan@kernel.org>
+ <YYUs4PME9QizsPTt@donbot>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,27 +35,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211105072608.GA13584@gondor.apana.org.au>
+In-Reply-To: <YYUs4PME9QizsPTt@donbot>
 
-On Fri, Nov 05, 2021 at 03:26:08PM +0800, Herbert Xu wrote:
-> On Thu, Nov 04, 2021 at 05:18:34PM +0200, Ido Schimmel wrote:
-> >
-> > Attached my config. I can easily test patches.
+On Fri, Nov 05, 2021 at 01:08:48PM +0000, John Keeping wrote:
+> On Thu, Nov 04, 2021 at 02:59:23PM -0700, Nathan Chancellor wrote:
+> > A new commit in LLVM causes an error on the use of 'long double' when
+> > '-mno-x87' is used, which the kernel does through an alias,
+> > '-mno-80387' (see the LLVM commit below for more details around why it
+> > does this).
+> > 
+> >  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+> >                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
+> >                                              ^
+> >  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
+> >  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+> >                                  ^
+> >  1 error generated.
+> > 
+> > This happens due to the use of a 'long double' literal. The 'E6' part of
+> > '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+> > it to 'long double'.
+> > 
+> > There is no visible reason for a floating point value in this driver, as
+> > the value is only used as a parameter to a function that expects an
+> > integer type.  Use USEC_PER_SEC, which is the same integer value as
+> > '1E6L', to avoid changing functionality but fix the error.
+> > 
+> > Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+> > Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/usb/dwc2/hcd_queue.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+> > index 89a788326c56..bdf1927e1be1 100644
+> > --- a/drivers/usb/dwc2/hcd_queue.c
+> > +++ b/drivers/usb/dwc2/hcd_queue.c
+> > @@ -59,7 +59,7 @@
+> >  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
+> >  
+> >  /* If we get a NAK, wait this long before retrying */
+> > -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+> > +#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
 > 
-> Thanks!
+> Using USEC_PER_SEC here seems quite weird.  This is used as:
 > 
-> Could you all try this patch please?
+> 	delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
 > 
-> ---8<---
-> When the crypto manager is disabled, we need to explicitly set
-> the crypto algorithms' tested status so that they can be used.
+> so the units are nanoseconds.
 > 
-> Fixes: cad439fc040e ("crypto: api - Do not create test larvals if...")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reported-by: Ido Schimmel <idosch@idosch.org>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> Maybe NSEC_PER_MSEC would better indicate the intent here?
 
-Tested-by: Ido Schimmel <idosch@nvidia.com>
+Yes, that seems reasonable. I will send a v2.
 
-Thanks, Herbert!
+Cheers,
+Nathan
