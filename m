@@ -1,112 +1,88 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33CFF2C80
-	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 17:59:15 +0000 (UTC)
-Received: by mail-wr1-f53.google.com with SMTP id n29so3244271wra.11
-        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 10:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tGkFto0SREmSqUA5YI0n/LIXjjGKHRviX7CKssvc+BM=;
-        b=H3jiklJ/Y/eada1RvgM3UfPQsPX0by+cBlb6mu+HZpANjjDP2EAco1y7vZs0KY5Z3K
-         C8MdQ3+I5NEL9N/8IXXGyNI+uyZ82MNp7mVpaN4cTft5wEm0pU8+BSK0UHCLXzGllUnZ
-         noFTpfuPfo5PmpoXi87sKvb6OeEHMYA2hz+qo=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC8C2C80
+	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 18:00:26 +0000 (UTC)
+Received: by mail-vk1-f172.google.com with SMTP id t127so4971592vke.13
+        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 11:00:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tGkFto0SREmSqUA5YI0n/LIXjjGKHRviX7CKssvc+BM=;
-        b=0dJTCfEFNfxOP0Fo8PuQs5vyQCXCRrp74mOHLgl5bMf9uDv0M/V+b0FO0ked4pFqXe
-         0JRJCHVYQQ6EWW4+SBj74K6vYltGYp+qMJcBAfaZ5HK491bnaEPp515u80RtacEoCNxd
-         cLHJLSk0R+USAobqx4L/NTPHe8T84LDh8TvoO/DC3DRj99paCvZqocsrjIE4qq/8Ml7q
-         5I1fQx04C4B0ltpCfoFf3EbzuTa0E3x+c4qTwxAU2/IAQJvKB5PPNzjcniuj5/XcSDvs
-         nSXIIhuOzA44ihUVWn1HBofdrfisM+pnq+C/YXUZ58NFHsXdSg+JeDhCrRACPSGF+5jF
-         oP1Q==
-X-Gm-Message-State: AOAM5301YsIkbrODd8Um7ROXc5eXBUo/UW8ao/RJLXyJoB10oa7qCu2Q
-	cm99g7U9jW7U/RmBiNKWjyNqFA==
-X-Google-Smtp-Source: ABdhPJwNq7bzeIgDFzjtJqF6GB5todXBINJj4e6J3QfytVexB5YUgQf8SyXm53D1wok8LpIRuN/xuA==
-X-Received: by 2002:adf:f98c:: with SMTP id f12mr38342127wrr.184.1636135154166;
-        Fri, 05 Nov 2021 10:59:14 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n7sm8549638wro.68.2021.11.05.10.59.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Nov 2021 10:59:13 -0700 (PDT)
-Date: Fri, 5 Nov 2021 18:59:11 +0100
-From: Daniel Vetter <daniel@ffwll.ch>
-To: kernel test robot <lkp@intel.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	airlied@linux.ie, daniel@ffwll.ch, noralf@tronnes.org,
-	marcel@ziswiler.com, naresh.kamboju@linaro.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-aspeed@lists.ozlabs.org, linux-mips@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm: Remove CONFIG_DRM_KMS_CMA_HELPER option
-Message-ID: <YYVw70934dYhyGVZ@phenom.ffwll.local>
-References: <20211101081751.24613-3-tzimmermann@suse.de>
- <202111012344.tYv3YxkG-lkp@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=au20GLB/AwFB4ER6edB7mFBdjMKbP9KemXLMUAQRuws=;
+        b=USZvWXpImUPWQVoDuz5qj1PaYT2WvHKnNkJVkvcJsnzwZSIDlcPsyA/28OGyIw8oGq
+         4dkkiloGMUwUI8nIT1U4sxK8MWwT9rcTwX7w2ntjCeEjULVLZnvCdUPruUoLdMfVZ0Im
+         Cqa2pRmsGeIPXBtzuWQBJLoUj1ReHiPoaz6qHaVo6DF4B0sg6c97KHlajgBkXFtyHlv5
+         cv+jEHvsba0OHAk9xeJQAe7nwq808psYMePpNaIynLLfn+4lqDnARCtwlGec3biU1aSA
+         VIs9EQQNa+ANN2D4gIJL2culKIB0M0YkFyRamSXY07NZvcldjijzgp5er2sda8wlOMeA
+         JrAA==
+X-Gm-Message-State: AOAM5314m9jt/4mcTxN+rzy7rM6C3kf8bQ7La7uEM/qrfpFVrL8jHi4i
+	wYWprH64EisDyoGNa7aiaBEoWsvjxEXuwg==
+X-Google-Smtp-Source: ABdhPJz9r5fgpAHNFsQjgltqKNqM+X1pdf0JHKSoSKT94E8oa1JD1FNYsQHmVHisvC3Ufu+Meny/Pw==
+X-Received: by 2002:a05:6122:208c:: with SMTP id i12mr44515926vkd.5.1636135224523;
+        Fri, 05 Nov 2021 11:00:24 -0700 (PDT)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id i27sm1432099uab.8.2021.11.05.11.00.23
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Nov 2021 11:00:23 -0700 (PDT)
+Received: by mail-ua1-f51.google.com with SMTP id ay21so18511002uab.12
+        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 11:00:23 -0700 (PDT)
+X-Received: by 2002:ab0:15a1:: with SMTP id i30mr56283928uae.122.1636135223241;
+ Fri, 05 Nov 2021 11:00:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202111012344.tYv3YxkG-lkp@intel.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+References: <20211003002801.GA5435@gondor.apana.org.au> <YV0K+EbrAqDdw2vp@archlinux-ax161>
+ <20211019132802.GA14233@gondor.apana.org.au> <alpine.DEB.2.22.394.2111021636040.2330984@ramsan.of.borg>
+ <DM6PR04MB708155E447FD9A79AB89686DE78D9@DM6PR04MB7081.namprd04.prod.outlook.com>
+ <CAMuHMdW1wLAt9Y=-GMMuk8HWE3UnRgKNMmD9fq34Rq8J7QyrzQ@mail.gmail.com>
+ <20211104121612.GA8044@gondor.apana.org.au> <CAMuHMdWAAWWS+TgeN1AajHBS5w9-datMEeXqAN8RjxRd9bX63Q@mail.gmail.com>
+ <20211104133044.GA8563@gondor.apana.org.au> <YYP5ypSPOcP4WGCr@shredder> <20211105072608.GA13584@gondor.apana.org.au>
+In-Reply-To: <20211105072608.GA13584@gondor.apana.org.au>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 5 Nov 2021 19:00:12 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVg5X00xhsYOnC84md-dNADGGL3mT3qqn3925AJFmqbMw@mail.gmail.com>
+Message-ID: <CAMuHMdVg5X00xhsYOnC84md-dNADGGL3mT3qqn3925AJFmqbMw@mail.gmail.com>
+Subject: Re: crypto: api - Fix boot-up crash when crypto manager is disabled
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Ido Schimmel <idosch@idosch.org>, Damien Le Moal <Damien.LeMoal@wdc.com>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, Vladis Dronov <vdronov@redhat.com>, 
+	Simo Sorce <ssorce@redhat.com>, Eric Biggers <ebiggers@kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, kernel test robot <lkp@intel.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 01, 2021 at 11:59:15PM +0800, kernel test robot wrote:
-> Hi Thomas,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on next-20211029]
-> [cannot apply to drm/drm-next shawnguo/for-next pinchartl-media/drm/du/next v5.15 v5.15-rc7 v5.15-rc6 v5.15]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Thomas-Zimmermann/drm-Small-CMA-cleanups/20211101-161911
-> base:    bdcc9f6a568275aed4cc32fd2312432d2ff1b704
-> config: x86_64-randconfig-a004-20211101 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82ed106567063ea269c6d5669278b733e173a42f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/c3c7ec5f9ccd90e78f0f2d3143505db4060bbf17
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Thomas-Zimmermann/drm-Small-CMA-cleanups/20211101-161911
->         git checkout c3c7ec5f9ccd90e78f0f2d3143505db4060bbf17
->         # save the attached .config to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vmap from namespace DMA_BUF, but does not import it.
-> >> ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vunmap from namespace DMA_BUF, but does not import it.
+Hi Herbert,
 
-I guess this is simply because kbuild tests on top of linux-next, where
-the namespacing is a bit funny. We might need a fixup when we backmerge.
+On Fri, Nov 5, 2021 at 8:26 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> Could you all try this patch please?
+>
+> ---8<---
+> When the crypto manager is disabled, we need to explicitly set
+> the crypto algorithms' tested status so that they can be used.
+>
+> Fixes: cad439fc040e ("crypto: api - Do not create test larvals if...")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Reported-by: Ido Schimmel <idosch@idosch.org>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-Either way this looks like a good simplification to me, on the series:
+Thanks!
 
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Gr{oetje,eeting}s,
 
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
