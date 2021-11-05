@@ -1,153 +1,92 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8822C9B
-	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 12:21:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=PjIxPicrN868USbTKxSucpRSmbCgV7/yRn/TvvMlpO0=; b=j+E6AYC0M8Jw375g9QIbcUSMqb
-	VLw7L1E9JhvA+x83nb9fLTFp2DJFVc5JGy5zqO0gab9qhjmXIUi8GeCS/mNUHSf8256FQPpYyt9P+
-	U6v6y7LM1twFN6Ah3NK4M0AnV/Us7tyiOcKo6vmvRjgyInhKfEyPrd9ClehuFLULX7SKCG+hDKlhy
-	RcJB/YlxBQ4+Fy46UHaCkw1/Sa/SCOahp8K9N60GdLN9Gre1eKA06SOPrHzGZqiFPcAVzCXN3i1FK
-	dy9C+NeEAQ3fRMnb97Cs+SVYwDTV57tVK3R82vIryDDMZW/6Rt1Z9Dveauzyzo91OwCbIkzKLQQtx
-	ZWcWH5bQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1miyDu-00EL90-WD; Fri, 05 Nov 2021 12:21:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8AE023000DD;
-	Fri,  5 Nov 2021 13:21:33 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 416A720D9F97F; Fri,  5 Nov 2021 13:21:33 +0100 (CET)
-Date: Fri, 5 Nov 2021 13:21:33 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [peterz-queue:x86/wip.extable 1/22]
- drivers/crypto/ccree/cc_driver.c:117:18: warning: result of comparison of
- constant 18446744073709551615 with expression of type 'typeof
- (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0,
- signed char: (unsigned char)0, unsigned shor...
-Message-ID: <YYUhzUEbK4t5/hOC@hirez.programming.kicks-ass.net>
-References: <202111051833.sOedoq8J-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED08768
+	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 13:09:41 +0000 (UTC)
+Message-ID: <b99aa58c-26c0-768a-ebcd-f46cb49a2ca7@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1636117192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Tt5o439EKcfh3ZQ5+n6IZL0IrRh4yDJjQMdy5R1gLQc=;
+	b=OeS0IapgjDbHcFtcZwPngYGbJqpeeyDYfd5kwrcNhKEBL8TmmA7JHPfuL22Eiig//RJ4HD
+	1bEL8i/4YSRvzyAX0Zv7kVlfR6gH63eLeDBamv5NfP5t32HbqKw3bMzgpwq2OKVth2ADeP
+	4OTDN4wxWwKCbVYBxxSc86lYBDE2Isdnc3zXOM3P5HvNPz3O434U62vGoO0zdk0iCM7yhu
+	0YmSm6Kk/68RpxJS/+wMz+D3W4pn+CeLWJPKttt6jgfs2SVAXQjD7uI44IH+VMcZETUx+7
+	6LT7xQwdkGItXDUJrVi0fUml8OpNe242SDboYzShQN1Mmy4LGUQJnMxythIqHw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1636117192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Tt5o439EKcfh3ZQ5+n6IZL0IrRh4yDJjQMdy5R1gLQc=;
+	b=a8+Q0hKBJghc5SSObJGGin5Cp8FG8x/YOwqUC4fvt+0kQlUYsT8FBWk/BSYGryHA5HTM9h
+	Bc2rCj2AGzMxR8Ag==
+Date: Fri, 5 Nov 2021 13:59:52 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202111051833.sOedoq8J-lkp@intel.com>
+Subject: Re: [PATCH 6/7] net: dsa: b53: Add logic for TX timestamping
+Content-Language: de-DE
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Richard Cochran <richardcochran@gmail.com>,
+ Vladimir Oltean <olteanv@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+ John Stultz <john.stultz@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Stephen Boyd <sboyd@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>,
+ Andrew Lunn <andrew@lunn.ch>, Vivien Didelot <vivien.didelot@gmail.com>
+References: <20211104133204.19757-7-martin.kaistra@linutronix.de>
+ <202111051954.rPDqSaCq-lkp@intel.com>
+From: Martin Kaistra <martin.kaistra@linutronix.de>
+In-Reply-To: <202111051954.rPDqSaCq-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 05, 2021 at 06:17:44PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.extable
-> head:   a4d149db054a77aa35b04bb088f749cbb9a2edea
-> commit: 4b9e954553a4137f7504e068438851c27edc6b22 [1/22] bitfield.h: Fix "type of reg too small for mask" test
-> config: riscv-randconfig-r032-20211105 (attached as .config)
+
+
+Am 05.11.21 um 12:17 schrieb kernel test robot:
+> Hi Martin,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on net-next/master]
+> [also build test ERROR on net/master linus/master next-20211105]
+> [cannot apply to tip/timers/core v5.15]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Martin-Kaistra/Add-PTP-support-for-BCM53128-switch/20211104-213538
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 84882cf72cd774cf16fd338bdbf00f69ac9f9194
+> config: x86_64-randconfig-r033-20211105 (attached as .config)
 > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 847a6807332b13f43704327c2d30103ec0347c77)
 > reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=4b9e954553a4137f7504e068438851c27edc6b22
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue x86/wip.extable
->         git checkout 4b9e954553a4137f7504e068438851c27edc6b22
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/0day-ci/linux/commit/b484f272339c8b2fd87f5d3493849439003c0026
+>          git remote add linux-review https://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review Martin-Kaistra/Add-PTP-support-for-BCM53128-switch/20211104-213538
+>          git checkout b484f272339c8b2fd87f5d3493849439003c0026
+>          # save the attached .config to linux build tree
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64
 > 
 > If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
 > 
-> All warnings (new ones prefixed by >>):
+> All errors (new ones prefixed by >>):
 > 
-> >> drivers/crypto/ccree/cc_driver.c:117:18: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
->            cache_params |= FIELD_PREP(mask, val);
->                            ^~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:111:3: note: expanded from macro 'FIELD_PREP'
->                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:68:53: note: expanded from macro '__BF_FIELD_CHECK'
->                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
->                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
->    include/linux/compiler_types.h:322:22: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:310:23: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:302:9: note: expanded from macro '__compiletime_assert'
->                    if (!(condition))                                       \
->                          ^~~~~~~~~
+>>> drivers/net/dsa/b53/b53_common.c:2304:20: error: incompatible function pointer types initializing 'void (*)(struct dsa_switch *, int, struct sk_buff *)' with an expression of type 'bool (struct dsa_switch *, int, struct sk_buff *)' (aka '_Bool (struct dsa_switch *, int, struct sk_buff *)') [-Werror,-Wincompatible-function-pointer-types]
+>             .port_txtstamp          = b53_port_txtstamp,
+>                                       ^~~~~~~~~~~~~~~~~
+>     1 error generated.
+> 
+> 
 
-I'm confused here.. the code reads:
-
-
-#define __scalar_type_to_unsigned_cases(type)				\
-		unsigned type:	(unsigned type)0,			\
-		signed type:	(unsigned type)0
-
-#define __unsigned_scalar_typeof(x) typeof(				\
-		_Generic((x),						\
-			char:	(unsigned char)0,			\
-			__scalar_type_to_unsigned_cases(char),		\
-			__scalar_type_to_unsigned_cases(short),		\
-			__scalar_type_to_unsigned_cases(int),		\
-			__scalar_type_to_unsigned_cases(long),		\
-			__scalar_type_to_unsigned_cases(long long),	\
-			default: (x)))
-
-#define __bf_cast_unsigned(type, x)	((__unsigned_scalar_typeof(type))(x))
-
-#define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)			\
-	({								\
-		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
-				 _pfx "mask is not constant");		\
-		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
-		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
-				 ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
-				 _pfx "value too large for the field"); \
-		BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >	\
-				 __bf_cast_unsigned(_reg, ~0ull),	\
-				 _pfx "type of reg too small for mask"); \
-		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
-					      (1ULL << __bf_shf(_mask))); \
-	})
-
-#define FIELD_PREP(_mask, _val)						\
-	({								\
-		__BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");	\
-		((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);	\
-	})
-
-
-static void init_cc_cache_params(struct cc_drvdata *drvdata)
-{
-	struct device *dev = drvdata_to_dev(drvdata);
-	u32 cache_params, ace_const, val, mask;
-
-	...
-
-	mask = CC_GENMASK(CC_AXIM_CACHE_PARAMS_AWCACHE);	<-- *BOOM*
-	cache_params &= ~mask;
-	cache_params |= FIELD_PREP(mask, val);
-
-	...
-}
-
-So we're having "(unsigned int)mask > (unsigned long long)~0ull" as
-a compile time constant input to the BUILD_BUG_ON_MSG(), and clang-14 is
-now complaining it's a constant ?!?
-
-It is that by design.
+oops, I will fix the signature of b53_port_txtstamp() for the 
+!CONFIG_B53_PTP case in v2.
