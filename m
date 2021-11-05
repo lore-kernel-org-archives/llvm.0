@@ -1,32 +1,57 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AD468
-	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 13:25:55 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10158"; a="231739844"
-X-IronPort-AV: E=Sophos;i="5.87,211,1631602800"; 
-   d="scan'208";a="231739844"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 06:25:55 -0700
-X-IronPort-AV: E=Sophos;i="5.87,211,1631602800"; 
-   d="scan'208";a="600611503"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 06:25:52 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1mizDu-003nix-3L;
-	Fri, 05 Nov 2021 15:25:38 +0200
-Date: Fri, 5 Nov 2021 15:25:37 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [hnaz-mm:master 343/435] arch/riscv/lib/delay.c:77:3: error:
- implicit declaration of function 'cpu_relax'
-Message-ID: <YYUw0aoQEPb0tiDS@smile.fi.intel.com>
-References: <202111051510.ucX2TyQw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AB02C85
+	for <llvm@lists.linux.dev>; Fri,  5 Nov 2021 13:26:17 +0000 (UTC)
+Received: by mail-oi1-f170.google.com with SMTP id bn12so14559047oib.2
+        for <llvm@lists.linux.dev>; Fri, 05 Nov 2021 06:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=SS/+GawiHt4AKQM+4dzNVtQd4ve18Yf7ZbG8yygMuQ8=;
+        b=EIpAESqujtMyfMEh64OQ3A4jvZTIkxWetvJm4blYAyALH/1z9KT46AM0yJbk3EpYf4
+         Z1hxc8w98ugDN+dX8C5NTkAc7i7YlYpCgIMorJMMltqIcObvxOthb0THrAzMNhIrmbha
+         n5SnTqCKxjW6CjtcXV1dhOcGZc/YJDgvYM72VSRAzO9EPa4p64MDH8yagR8xy4apfNr6
+         VhUryQ5bcLzqEcLWEosrQnxmjl2FfJiR3ZN0KRl7mLo+tOrWWmuBaD90EFKWjN1voqHA
+         AaNzXqahv+3Wt8qoIK8bqdvDcKSZJqgMYk+EgLdpiFJ9NuxklutHxotoL4d5LUHYK+Q2
+         CZdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=SS/+GawiHt4AKQM+4dzNVtQd4ve18Yf7ZbG8yygMuQ8=;
+        b=blqrnkjFpJ4QQ0jh5UZLQ8PWia7C9f4Y4kXqb8opM04ATgst2LUMqMrsunTiZQRrvM
+         BrOUd1WsdRXs1Jasv60Q59wwBNqCT1Va0PSoTYyj33j2CNG1rsBwA0xGA2dlcBnJzlHA
+         Ldh1YWtmvGoQb4cQkZ2EwZl5JxUQ5ims068AwmdpNJ3H+layGApEO86wfD37oCEMAyTZ
+         kvT7DUd8VUTdBsB0bUHjO11ipJip3NsxzU/QpZkE5JUvrY+yn3xdiB52/etryTBGUChP
+         Z5/iUs8at39SgKLj7WEXi/Vbnn1FhW/naaanvE9DXgqUmO2bz4FLHbmcOQVyGZFmTzLM
+         Gkpw==
+X-Gm-Message-State: AOAM531nQ+TA8XI9aPARilGb9kaCc2tanzKGbxHKCHZbkzQWiF0d185J
+	KfniMRKcyqvtma9WqMpgz4M=
+X-Google-Smtp-Source: ABdhPJzQxYMD6ED3vyItTfr3+KH21wd2coF0sEr2XvgMNrjO1G5P6FF5lP/RNtLGITHR9T0jJ7B2EA==
+X-Received: by 2002:a05:6808:1483:: with SMTP id e3mr12400151oiw.83.1636118776298;
+        Fri, 05 Nov 2021 06:26:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m21sm2250944otp.75.2021.11.05.06.26.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Nov 2021 06:26:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 5 Nov 2021 06:26:14 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Ido Schimmel <idosch@idosch.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Damien Le Moal <Damien.LeMoal@wdc.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	Vladis Dronov <vdronov@redhat.com>, Simo Sorce <ssorce@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	kernel test robot <lkp@intel.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: crypto: api - Fix boot-up crash when crypto manager is disabled
+Message-ID: <20211105132614.GA2791625@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,35 +60,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202111051510.ucX2TyQw-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Nov 05, 2021 at 03:11:20PM +0800, kernel test robot wrote:
-> tree:   https://github.com/hnaz/linux-mm master
-> head:   b8280145cf2a894c873fdf91fb2af474c52ac6cc
-> commit: eaadd3a1784064254eb06b36fbd4b653f0228478 [343/435] include/linux/delay.h: replace kernel.h with the necessary inclusions
-> config: riscv-randconfig-r031-20211103 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 264d3b6d4e08401c5b50a85bd76e80b3461d77e6)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://github.com/hnaz/linux-mm/commit/eaadd3a1784064254eb06b36fbd4b653f0228478
->         git remote add hnaz-mm https://github.com/hnaz/linux-mm
->         git fetch --no-tags hnaz-mm master
->         git checkout eaadd3a1784064254eb06b36fbd4b653f0228478
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv
+On Fri, Nov 05, 2021 at 03:26:08PM +0800, Herbert Xu wrote:
+> On Thu, Nov 04, 2021 at 05:18:34PM +0200, Ido Schimmel wrote:
+> >
+> > Attached my config. I can easily test patches.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> Thanks!
+> 
+> Could you all try this patch please?
+> 
+> ---8<---
+> When the crypto manager is disabled, we need to explicitly set
+> the crypto algorithms' tested status so that they can be used.
+> 
+> Fixes: cad439fc040e ("crypto: api - Do not create test larvals if...")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Reported-by: Ido Schimmel <idosch@idosch.org>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-AFAIR the fix is pending to be squashed.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
+> diff --git a/crypto/algapi.c b/crypto/algapi.c
+> index d379fd91fb7b..a366cb3e8aa1 100644
+> --- a/crypto/algapi.c
+> +++ b/crypto/algapi.c
+> @@ -284,6 +284,8 @@ static struct crypto_larval *__crypto_register_alg(struct crypto_alg *alg)
+>  
+>  	if (larval)
+>  		list_add(&larval->alg.cra_list, &crypto_alg_list);
+> +	else
+> +		alg->cra_flags |= CRYPTO_ALG_TESTED;
+>  
+>  	crypto_stats_init(alg);
+>  
+> -- 
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
