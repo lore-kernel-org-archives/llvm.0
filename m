@@ -1,989 +1,2554 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1687F2C85
-	for <llvm@lists.linux.dev>; Sat,  6 Nov 2021 17:32:19 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10160"; a="218965251"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0892C85
+	for <llvm@lists.linux.dev>; Sat,  6 Nov 2021 17:42:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10160"; a="231905563"
 X-IronPort-AV: E=Sophos;i="5.87,214,1631602800"; 
-   d="gz'50?scan'50,208,50";a="218965251"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2021 10:32:19 -0700
+   d="gz'50?scan'50,208,50";a="231905563"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2021 10:42:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,214,1631602800"; 
-   d="gz'50?scan'50,208,50";a="580328131"
+   d="gz'50?scan'50,208,50";a="502383381"
 Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Nov 2021 10:32:16 -0700
+  by orsmga008.jf.intel.com with ESMTP; 06 Nov 2021 10:42:17 -0700
 Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mjPY8-0009Su-7V; Sat, 06 Nov 2021 17:32:16 +0000
-Date: Sun, 7 Nov 2021 01:31:49 +0800
+	id 1mjPho-0009T9-Ak; Sat, 06 Nov 2021 17:42:16 +0000
+Date: Sun, 7 Nov 2021 01:41:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
+To: Alex Deucher <alexander.deucher@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [vbabka:slab-struct_slab-v1r8 33/33] mm/slub.c:5274:16: error: no
- member named 'slabs' in 'struct slab'
-Message-ID: <202111070136.KoosIlBs-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3957:6:
+ warning: stack frame size (2520) exceeds limit (2048) in
+ 'dml31_ModeSupportAndSystemConfigurationFull'
+Message-ID: <202111070121.4xIDXkc5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="+HP7ph2BbKc20aGI"
+Content-Type: multipart/mixed; boundary="LQksG6bCIzRHxTLp"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---+HP7ph2BbKc20aGI
+--LQksG6bCIzRHxTLp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slab-struct_slab-v1r8
-head:   1992ba7f38390cfa8290baf300243b7cf3bb6b44
-commit: 1992ba7f38390cfa8290baf300243b7cf3bb6b44 [33/33] mm/sl*b: Differentiate struct slab fields by sl*b implementations
-config: i386-buildonly-randconfig-r004-20211105 (attached as .config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 627868263cd4d57c230b61904483a3dad9e1a1da)
+Hi Alex,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fe91c4725aeed35023ba4f7a1e1adfebb6878c23
+commit: 8fe44c080a53ac0ccbe88053a2e40f9acca33091 drm/amdgpu/display: fold DRM_AMD_DC_DCN3_1 into DRM_AMD_DC_DCN
+date:   5 months ago
+config: x86_64-randconfig-a003-20211004 (attached as .config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c0039de2953d15815448b4b3c3bafb45607781e0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/commit/?id=1992ba7f38390cfa8290baf300243b7cf3bb6b44
-        git remote add vbabka https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git
-        git fetch --no-tags vbabka slab-struct_slab-v1r8
-        git checkout 1992ba7f38390cfa8290baf300243b7cf3bb6b44
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fe44c080a53ac0ccbe88053a2e40f9acca33091
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8fe44c080a53ac0ccbe88053a2e40f9acca33091
         # save the attached .config to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/slub.c:5274:16: error: no member named 'slabs' in 'struct slab'
-                                           x = slab->slabs;
-                                               ~~~~  ^
-   mm/slub.c:5481:19: error: no member named 'slabs' in 'struct slab'
-                           slabs += slab->slabs;
-                                    ~~~~  ^
->> mm/slub.c:5482:21: error: no member named 'pobjects' in 'struct slab'; did you mean 'objects'?
-                           objects += slab->pobjects;
-                                            ^~~~~~~~
-                                            objects
-   mm/slab.h:49:13: note: 'objects' declared here
-                           unsigned objects:15;
-                                    ^
-   3 errors generated.
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3957:6: warning: stack frame size (2520) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+   void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        ^
+   1 warning generated.
 
 
-vim +5274 mm/slub.c
+vim +/dml31_ModeSupportAndSystemConfigurationFull +3957 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c
 
-81819f0fc8285a Christoph Lameter 2007-05-06  5230  
-62e5c4b4d63517 Cyrill Gorcunov   2008-03-02  5231  static ssize_t show_slab_objects(struct kmem_cache *s,
-81819f0fc8285a Christoph Lameter 2007-05-06  5232  				 char *buf, unsigned long flags)
-81819f0fc8285a Christoph Lameter 2007-05-06  5233  {
-81819f0fc8285a Christoph Lameter 2007-05-06  5234  	unsigned long total = 0;
-81819f0fc8285a Christoph Lameter 2007-05-06  5235  	int node;
-81819f0fc8285a Christoph Lameter 2007-05-06  5236  	int x;
-81819f0fc8285a Christoph Lameter 2007-05-06  5237  	unsigned long *nodes;
-bf16d19aabd8f5 Joe Perches       2020-12-14  5238  	int len = 0;
-81819f0fc8285a Christoph Lameter 2007-05-06  5239  
-6396bb221514d2 Kees Cook         2018-06-12  5240  	nodes = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
-62e5c4b4d63517 Cyrill Gorcunov   2008-03-02  5241  	if (!nodes)
-62e5c4b4d63517 Cyrill Gorcunov   2008-03-02  5242  		return -ENOMEM;
-81819f0fc8285a Christoph Lameter 2007-05-06  5243  
-205ab99dd103e3 Christoph Lameter 2008-04-14  5244  	if (flags & SO_CPU) {
-205ab99dd103e3 Christoph Lameter 2008-04-14  5245  		int cpu;
-205ab99dd103e3 Christoph Lameter 2008-04-14  5246  
-81819f0fc8285a Christoph Lameter 2007-05-06  5247  		for_each_possible_cpu(cpu) {
-d0e0ac9772f8ec Chen Gang         2013-07-15  5248  			struct kmem_cache_cpu *c = per_cpu_ptr(s->cpu_slab,
-d0e0ac9772f8ec Chen Gang         2013-07-15  5249  							       cpu);
-ec3ab083a7a004 Christoph Lameter 2012-05-09  5250  			int node;
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5251  			struct slab *slab;slab = READ_ONCE(c->slab);
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5252  			if (!slab)
-ec3ab083a7a004 Christoph Lameter 2012-05-09  5253  				continue;
-ec3ab083a7a004 Christoph Lameter 2012-05-09  5254  
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5255  			node = slab_nid(slab);
-205ab99dd103e3 Christoph Lameter 2008-04-14  5256  			if (flags & SO_TOTAL)
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5257  				x = slab->objects;
-205ab99dd103e3 Christoph Lameter 2008-04-14  5258  			else if (flags & SO_OBJECTS)
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5259  				x = slab->inuse;
-81819f0fc8285a Christoph Lameter 2007-05-06  5260  			else
-81819f0fc8285a Christoph Lameter 2007-05-06  5261  				x = 1;
-205ab99dd103e3 Christoph Lameter 2008-04-14  5262  
-81819f0fc8285a Christoph Lameter 2007-05-06  5263  			total += x;
-bc6697d8a506de Eric Dumazet      2011-11-22  5264  			nodes[node] += x;
-49e2258586b423 Christoph Lameter 2011-08-09  5265  
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5266  			slab = slub_percpu_partial_read_once(c);
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5267  			if (slab) {
-184d9494c1a4f5 Vlastimil Babka   2021-11-03  5268  				node = slab_nid(slab);
-8afb1474db4701 Li Zefan          2013-09-10  5269  				if (flags & SO_TOTAL)
-8afb1474db4701 Li Zefan          2013-09-10  5270  					WARN_ON_ONCE(1);
-8afb1474db4701 Li Zefan          2013-09-10  5271  				else if (flags & SO_OBJECTS)
-8afb1474db4701 Li Zefan          2013-09-10  5272  					WARN_ON_ONCE(1);
-8afb1474db4701 Li Zefan          2013-09-10  5273  				else
-184d9494c1a4f5 Vlastimil Babka   2021-11-03 @5274  					x = slab->slabs;
-49e2258586b423 Christoph Lameter 2011-08-09  5275  				total += x;
-bc6697d8a506de Eric Dumazet      2011-11-22  5276  				nodes[node] += x;
-49e2258586b423 Christoph Lameter 2011-08-09  5277  			}
-81819f0fc8285a Christoph Lameter 2007-05-06  5278  		}
-81819f0fc8285a Christoph Lameter 2007-05-06  5279  	}
-81819f0fc8285a Christoph Lameter 2007-05-06  5280  
-e4f8e513c3d353 Qian Cai          2019-10-14  5281  	/*
-e4f8e513c3d353 Qian Cai          2019-10-14  5282  	 * It is impossible to take "mem_hotplug_lock" here with "kernfs_mutex"
-e4f8e513c3d353 Qian Cai          2019-10-14  5283  	 * already held which will conflict with an existing lock order:
-e4f8e513c3d353 Qian Cai          2019-10-14  5284  	 *
-e4f8e513c3d353 Qian Cai          2019-10-14  5285  	 * mem_hotplug_lock->slab_mutex->kernfs_mutex
-e4f8e513c3d353 Qian Cai          2019-10-14  5286  	 *
-e4f8e513c3d353 Qian Cai          2019-10-14  5287  	 * We don't really need mem_hotplug_lock (to hold off
-e4f8e513c3d353 Qian Cai          2019-10-14  5288  	 * slab_mem_going_offline_callback) here because slab's memory hot
-e4f8e513c3d353 Qian Cai          2019-10-14  5289  	 * unplug code doesn't destroy the kmem_cache->node[] data.
-e4f8e513c3d353 Qian Cai          2019-10-14  5290  	 */
-e4f8e513c3d353 Qian Cai          2019-10-14  5291  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3956  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19 @3957  void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3958  {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3959  	struct vba_vars_st *v = &mode_lib->vba;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3960  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3961  	int i, j;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3962  	unsigned int k, m;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3963  	int ReorderingBytes;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3964  	int MinPrefetchMode = 0, MaxPrefetchMode = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3965  	bool NoChroma = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3966  	bool EnoughWritebackUnits = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3967  	bool P2IWith420 = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3968  	bool DSCOnlyIfNecessaryWithBPP = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3969  	bool DSC422NativeNotSupported = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3970  	double MaxTotalVActiveRDBandwidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3971  	bool ViewportExceedsSurface = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3972  	bool FMTBufferExceeded = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3973  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3974  	/*MODE SUPPORT, VOLTAGE STATE AND SOC CONFIGURATION*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3975  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3976  	CalculateMinAndMaxPrefetchMode(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3977  		mode_lib->vba.AllowDRAMSelfRefreshOrDRAMClockChangeInVblank,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3978  		&MinPrefetchMode, &MaxPrefetchMode);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3979  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3980  	/*Scale Ratio, taps Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3981  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3982  	v->ScaleRatioAndTapsSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3983  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3984  		if (v->ScalerEnabled[k] == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3985  				&& ((v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3986  						&& v->SourcePixelFormat[k] != dm_444_16 && v->SourcePixelFormat[k] != dm_mono_16
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3987  						&& v->SourcePixelFormat[k] != dm_mono_8 && v->SourcePixelFormat[k] != dm_rgbe
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3988  						&& v->SourcePixelFormat[k] != dm_rgbe_alpha) || v->HRatio[k] != 1.0 || v->htaps[k] != 1.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3989  						|| v->VRatio[k] != 1.0 || v->vtaps[k] != 1.0)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3990  			v->ScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3991  		} else if (v->vtaps[k] < 1.0 || v->vtaps[k] > 8.0 || v->htaps[k] < 1.0 || v->htaps[k] > 8.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3992  				|| (v->htaps[k] > 1.0 && (v->htaps[k] % 2) == 1) || v->HRatio[k] > v->MaxHSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3993  				|| v->VRatio[k] > v->MaxVSCLRatio || v->HRatio[k] > v->htaps[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3994  				|| v->VRatio[k] > v->vtaps[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3995  				|| (v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3996  						&& v->SourcePixelFormat[k] != dm_444_16 && v->SourcePixelFormat[k] != dm_mono_16
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3997  						&& v->SourcePixelFormat[k] != dm_mono_8 && v->SourcePixelFormat[k] != dm_rgbe
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3998  						&& (v->VTAPsChroma[k] < 1 || v->VTAPsChroma[k] > 8 || v->HTAPsChroma[k] < 1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3999  								|| v->HTAPsChroma[k] > 8 || (v->HTAPsChroma[k] > 1 && v->HTAPsChroma[k] % 2 == 1)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4000  								|| v->HRatioChroma[k] > v->MaxHSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4001  								|| v->VRatioChroma[k] > v->MaxVSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4002  								|| v->HRatioChroma[k] > v->HTAPsChroma[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4003  								|| v->VRatioChroma[k] > v->VTAPsChroma[k]))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4004  			v->ScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4005  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4006  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4007  	/*Source Format, Pixel Format and Scan Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4008  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4009  	v->SourceFormatPixelAndScanSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4010  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4011  		if ((v->SurfaceTiling[k] == dm_sw_linear && (!(v->SourceScan[k] != dm_vert) || v->DCCEnable[k] == true))
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4012  				|| ((v->SurfaceTiling[k] == dm_sw_64kb_d || v->SurfaceTiling[k] == dm_sw_64kb_d_t
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4013  						|| v->SurfaceTiling[k] == dm_sw_64kb_d_x) && !(v->SourcePixelFormat[k] == dm_444_64))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4014  			v->SourceFormatPixelAndScanSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4015  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4016  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4017  	/*Bandwidth Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4018  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4019  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4020  		CalculateBytePerPixelAnd256BBlockSizes(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4021  				v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4022  				v->SurfaceTiling[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4023  				&v->BytePerPixelY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4024  				&v->BytePerPixelC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4025  				&v->BytePerPixelInDETY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4026  				&v->BytePerPixelInDETC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4027  				&v->Read256BlockHeightY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4028  				&v->Read256BlockHeightC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4029  				&v->Read256BlockWidthY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4030  				&v->Read256BlockWidthC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4031  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4032  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4033  		if (v->SourceScan[k] != dm_vert) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4034  			v->SwathWidthYSingleDPP[k] = v->ViewportWidth[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4035  			v->SwathWidthCSingleDPP[k] = v->ViewportWidthChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4036  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4037  			v->SwathWidthYSingleDPP[k] = v->ViewportHeight[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4038  			v->SwathWidthCSingleDPP[k] = v->ViewportHeightChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4039  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4040  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4041  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4042  		v->ReadBandwidthLuma[k] = v->SwathWidthYSingleDPP[k] * dml_ceil(v->BytePerPixelInDETY[k], 1.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4043  				/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatio[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4044  		v->ReadBandwidthChroma[k] = v->SwathWidthYSingleDPP[k] / 2 * dml_ceil(v->BytePerPixelInDETC[k], 2.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4045  				/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatio[k] / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4046  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4047  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4048  		if (v->WritebackEnable[k] == true && v->WritebackPixelFormat[k] == dm_444_64) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4049  			v->WriteBandwidth[k] = v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4050  					/ (v->WritebackSourceHeight[k] * v->HTotal[k] / v->PixelClock[k]) * 8.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4051  		} else if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4052  			v->WriteBandwidth[k] = v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4053  					/ (v->WritebackSourceHeight[k] * v->HTotal[k] / v->PixelClock[k]) * 4.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4054  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4055  			v->WriteBandwidth[k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4056  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4057  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4058  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4059  	/*Writeback Latency support check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4060  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4061  	v->WritebackLatencySupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4062  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4063  		if (v->WritebackEnable[k] == true && (v->WriteBandwidth[k] > v->WritebackInterfaceBufferSize * 1024 / v->WritebackLatency)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4064  			v->WritebackLatencySupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4065  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4066  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4067  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4068  	/*Writeback Mode Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4069  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4070  	v->TotalNumberOfActiveWriteback = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4071  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4072  		if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4073  			v->TotalNumberOfActiveWriteback = v->TotalNumberOfActiveWriteback + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4074  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4075  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4076  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4077  	if (v->TotalNumberOfActiveWriteback > v->MaxNumWriteback) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4078  		EnoughWritebackUnits = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4079  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4080  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4081  	/*Writeback Scale Ratio and Taps Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4082  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4083  	v->WritebackScaleRatioAndTapsSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4084  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4085  		if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4086  			if (v->WritebackHRatio[k] > v->WritebackMaxHSCLRatio || v->WritebackVRatio[k] > v->WritebackMaxVSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4087  					|| v->WritebackHRatio[k] < v->WritebackMinHSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4088  					|| v->WritebackVRatio[k] < v->WritebackMinVSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4089  					|| v->WritebackHTaps[k] > v->WritebackMaxHSCLTaps
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4090  					|| v->WritebackVTaps[k] > v->WritebackMaxVSCLTaps
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4091  					|| v->WritebackHRatio[k] > v->WritebackHTaps[k] || v->WritebackVRatio[k] > v->WritebackVTaps[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4092  					|| (v->WritebackHTaps[k] > 2.0 && ((v->WritebackHTaps[k] % 2) == 1))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4093  				v->WritebackScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4094  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4095  			if (2.0 * v->WritebackDestinationWidth[k] * (v->WritebackVTaps[k] - 1) * 57 > v->WritebackLineBufferSize) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4096  				v->WritebackScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4097  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4098  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4099  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4100  	/*Maximum DISPCLK/DPPCLK Support check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4101  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4102  	v->WritebackRequiredDISPCLK = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4103  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4104  		if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4105  			v->WritebackRequiredDISPCLK = dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4106  					v->WritebackRequiredDISPCLK,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4107  					dml31_CalculateWriteBackDISPCLK(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4108  							v->WritebackPixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4109  							v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4110  							v->WritebackHRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4111  							v->WritebackVRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4112  							v->WritebackHTaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4113  							v->WritebackVTaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4114  							v->WritebackSourceWidth[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4115  							v->WritebackDestinationWidth[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4116  							v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4117  							v->WritebackLineBufferSize));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4118  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4119  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4120  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4121  		if (v->HRatio[k] > 1.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4122  			v->PSCL_FACTOR[k] = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4123  					v->MaxDCHUBToPSCLThroughput,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4124  					v->MaxPSCLToLBThroughput * v->HRatio[k] / dml_ceil(v->htaps[k] / 6.0, 1.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4125  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4126  			v->PSCL_FACTOR[k] = dml_min(v->MaxDCHUBToPSCLThroughput, v->MaxPSCLToLBThroughput);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4127  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4128  		if (v->BytePerPixelC[k] == 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4129  			v->PSCL_FACTOR_CHROMA[k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4130  			v->MinDPPCLKUsingSingleDPP[k] = v->PixelClock[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4131  					* dml_max3(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4132  							v->vtaps[k] / 6.0 * dml_min(1.0, v->HRatio[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4133  							v->HRatio[k] * v->VRatio[k] / v->PSCL_FACTOR[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4134  							1.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4135  			if ((v->htaps[k] > 6.0 || v->vtaps[k] > 6.0) && v->MinDPPCLKUsingSingleDPP[k] < 2.0 * v->PixelClock[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4136  				v->MinDPPCLKUsingSingleDPP[k] = 2.0 * v->PixelClock[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4137  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4138  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4139  			if (v->HRatioChroma[k] > 1.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4140  				v->PSCL_FACTOR_CHROMA[k] = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4141  						v->MaxDCHUBToPSCLThroughput,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4142  						v->MaxPSCLToLBThroughput * v->HRatioChroma[k] / dml_ceil(v->HTAPsChroma[k] / 6.0, 1.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4143  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4144  				v->PSCL_FACTOR_CHROMA[k] = dml_min(v->MaxDCHUBToPSCLThroughput, v->MaxPSCLToLBThroughput);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4145  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4146  			v->MinDPPCLKUsingSingleDPP[k] = v->PixelClock[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4147  					* dml_max5(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4148  							v->vtaps[k] / 6.0 * dml_min(1.0, v->HRatio[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4149  							v->HRatio[k] * v->VRatio[k] / v->PSCL_FACTOR[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4150  							v->VTAPsChroma[k] / 6.0 * dml_min(1.0, v->HRatioChroma[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4151  							v->HRatioChroma[k] * v->VRatioChroma[k] / v->PSCL_FACTOR_CHROMA[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4152  							1.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4153  			if ((v->htaps[k] > 6.0 || v->vtaps[k] > 6.0 || v->HTAPsChroma[k] > 6.0 || v->VTAPsChroma[k] > 6.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4154  					&& v->MinDPPCLKUsingSingleDPP[k] < 2.0 * v->PixelClock[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4155  				v->MinDPPCLKUsingSingleDPP[k] = 2.0 * v->PixelClock[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4156  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4157  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4158  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4159  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4160  		int MaximumSwathWidthSupportLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4161  		int MaximumSwathWidthSupportChroma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4162  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4163  		if (v->SurfaceTiling[k] == dm_sw_linear) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4164  			MaximumSwathWidthSupportLuma = 8192.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4165  		} else if (v->SourceScan[k] == dm_vert && v->BytePerPixelC[k] > 0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4166  			MaximumSwathWidthSupportLuma = 2880.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4167  		} else if (v->SourcePixelFormat[k] == dm_rgbe_alpha) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4168  			MaximumSwathWidthSupportLuma = 3840.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4169  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4170  			MaximumSwathWidthSupportLuma = 5760.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4171  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4172  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4173  		if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4174  			MaximumSwathWidthSupportChroma = MaximumSwathWidthSupportLuma / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4175  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4176  			MaximumSwathWidthSupportChroma = MaximumSwathWidthSupportLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4177  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4178  		v->MaximumSwathWidthInLineBufferLuma = v->LineBufferSize * dml_max(v->HRatio[k], 1.0) / v->LBBitPerPixel[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4179  				/ (v->vtaps[k] + dml_max(dml_ceil(v->VRatio[k], 1.0) - 2, 0.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4180  		if (v->BytePerPixelC[k] == 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4181  			v->MaximumSwathWidthInLineBufferChroma = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4182  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4183  			v->MaximumSwathWidthInLineBufferChroma = v->LineBufferSize * dml_max(v->HRatioChroma[k], 1.0) / v->LBBitPerPixel[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4184  					/ (v->VTAPsChroma[k] + dml_max(dml_ceil(v->VRatioChroma[k], 1.0) - 2, 0.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4185  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4186  		v->MaximumSwathWidthLuma[k] = dml_min(MaximumSwathWidthSupportLuma, v->MaximumSwathWidthInLineBufferLuma);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4187  		v->MaximumSwathWidthChroma[k] = dml_min(MaximumSwathWidthSupportChroma, v->MaximumSwathWidthInLineBufferChroma);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4188  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4189  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4190  	CalculateSwathAndDETConfiguration(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4191  			true,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4192  			v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4193  			v->DETBufferSizeInKByte[0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4194  			v->MaximumSwathWidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4195  			v->MaximumSwathWidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4196  			v->SourceScan,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4197  			v->SourcePixelFormat,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4198  			v->SurfaceTiling,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4199  			v->ViewportWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4200  			v->ViewportHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4201  			v->SurfaceWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4202  			v->SurfaceWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4203  			v->SurfaceHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4204  			v->SurfaceHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4205  			v->Read256BlockHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4206  			v->Read256BlockHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4207  			v->Read256BlockWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4208  			v->Read256BlockWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4209  			v->odm_combine_dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4210  			v->BlendingAndTiming,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4211  			v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4212  			v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4213  			v->BytePerPixelInDETY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4214  			v->BytePerPixelInDETC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4215  			v->HActive,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4216  			v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4217  			v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4218  			v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4219  			v->swath_width_luma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4220  			v->swath_width_chroma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4221  			v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4222  			v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4223  			v->SwathHeightYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4224  			v->SwathHeightCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4225  			v->DETBufferSizeYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4226  			v->DETBufferSizeCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4227  			v->SingleDPPViewportSizeSupportPerPlane,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4228  			&v->ViewportSizeSupport[0][0]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4229  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4230  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4231  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4232  			v->MaxDispclkRoundedDownToDFSGranularity = RoundToDFSGranularityDown(v->MaxDispclk[i], v->DISPCLKDPPCLKVCOSpeed);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4233  			v->MaxDppclkRoundedDownToDFSGranularity = RoundToDFSGranularityDown(v->MaxDppclk[i], v->DISPCLKDPPCLKVCOSpeed);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4234  			v->RequiredDISPCLK[i][j] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4235  			v->DISPCLK_DPPCLK_Support[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4236  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4237  				v->PlaneRequiredDISPCLKWithoutODMCombine = v->PixelClock[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4238  						* (1.0 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4239  				if ((v->PlaneRequiredDISPCLKWithoutODMCombine >= v->MaxDispclk[i]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4240  						&& v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4241  						&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4242  					v->PlaneRequiredDISPCLKWithoutODMCombine = v->PixelClock[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4243  							* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4244  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4245  				v->PlaneRequiredDISPCLKWithODMCombine2To1 = v->PixelClock[k] / 2 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4246  						* (1 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4247  				if ((v->PlaneRequiredDISPCLKWithODMCombine2To1 >= v->MaxDispclk[i]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4248  						&& v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4249  						&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4250  					v->PlaneRequiredDISPCLKWithODMCombine2To1 = v->PixelClock[k] / 2
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4251  							* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4252  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4253  				v->PlaneRequiredDISPCLKWithODMCombine4To1 = v->PixelClock[k] / 4 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4254  						* (1 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4255  				if ((v->PlaneRequiredDISPCLKWithODMCombine4To1 >= v->MaxDispclk[i]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4256  						&& v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4257  						&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4258  					v->PlaneRequiredDISPCLKWithODMCombine4To1 = v->PixelClock[k] / 4
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4259  							* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4260  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4261  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4262  				if (v->ODMCombinePolicy == dm_odm_combine_policy_none
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4263  						|| !(v->Output[k] == dm_dp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4264  						     v->Output[k] == dm_edp)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4265  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4266  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithoutODMCombine;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4267  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4268  					if (v->HActive[k] / 2 > DCN31_MAX_FMT_420_BUFFER_WIDTH)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4269  						FMTBufferExceeded = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4270  				} else if (v->ODMCombinePolicy == dm_odm_combine_policy_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4271  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4272  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4273  				} else if (v->ODMCombinePolicy == dm_odm_combine_policy_4to1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4274  						|| v->PlaneRequiredDISPCLKWithODMCombine2To1 > v->MaxDispclkRoundedDownToDFSGranularity) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4275  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_4to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4276  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine4To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4277  				} else if (v->PlaneRequiredDISPCLKWithoutODMCombine > v->MaxDispclkRoundedDownToDFSGranularity) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4278  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4279  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4280  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4281  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4282  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithoutODMCombine;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4283  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4284  				if (v->DSCEnabled[k] && v->HActive[k] > DCN31_MAX_DSC_IMAGE_WIDTH
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4285  						&& v->ODMCombineEnablePerState[i][k] != dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4286  					if (v->HActive[k] / 2 > DCN31_MAX_DSC_IMAGE_WIDTH) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4287  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_4to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4288  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine4To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4289  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4290  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4291  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4292  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4293  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4294  				if (v->OutputFormat[k] == dm_420 && v->HActive[k] > DCN31_MAX_FMT_420_BUFFER_WIDTH
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4295  						&& v->ODMCombineEnablePerState[i][k] != dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4296  					if (v->HActive[k] / 2 > DCN31_MAX_FMT_420_BUFFER_WIDTH) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4297  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_4to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4298  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine4To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4299  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4300  						if (v->HActive[k] / 4 > DCN31_MAX_FMT_420_BUFFER_WIDTH)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4301  							FMTBufferExceeded = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4302  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4303  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4304  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4305  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4306  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4307  				if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4308  					v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4309  					v->NoOfDPP[i][j][k] = 4;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4310  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 4;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4311  				} else if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4312  					v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4313  					v->NoOfDPP[i][j][k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4314  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4315  				} else if ((v->WhenToDoMPCCombine == dm_mpc_never
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4316  						|| (v->MinDPPCLKUsingSingleDPP[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4317  								<= v->MaxDppclkRoundedDownToDFSGranularity && v->SingleDPPViewportSizeSupportPerPlane[k] == true))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4318  					v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4319  					v->NoOfDPP[i][j][k] = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4320  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4321  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4322  					v->MPCCombine[i][j][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4323  					v->NoOfDPP[i][j][k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4324  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4325  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4326  				v->RequiredDISPCLK[i][j] = dml_max(v->RequiredDISPCLK[i][j], v->PlaneRequiredDISPCLK);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4327  				if ((v->MinDPPCLKUsingSingleDPP[k] / v->NoOfDPP[i][j][k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4328  						> v->MaxDppclkRoundedDownToDFSGranularity)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4329  						|| (v->PlaneRequiredDISPCLK > v->MaxDispclkRoundedDownToDFSGranularity)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4330  					v->DISPCLK_DPPCLK_Support[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4331  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4332  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4333  			v->TotalNumberOfActiveDPP[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4334  			v->TotalNumberOfSingleDPPPlanes[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4335  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4336  				v->TotalNumberOfActiveDPP[i][j] = v->TotalNumberOfActiveDPP[i][j] + v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4337  				if (v->NoOfDPP[i][j][k] == 1)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4338  					v->TotalNumberOfSingleDPPPlanes[i][j] = v->TotalNumberOfSingleDPPPlanes[i][j] + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4339  				if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4340  						|| v->SourcePixelFormat[k] == dm_420_12 || v->SourcePixelFormat[k] == dm_rgbe_alpha)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4341  					NoChroma = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4342  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4343  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4344  			// UPTO
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4345  			if (j == 1 && v->WhenToDoMPCCombine != dm_mpc_never
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4346  					&& !UnboundedRequest(v->UseUnboundedRequesting, v->TotalNumberOfActiveDPP[i][j], NoChroma, v->Output[0])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4347  				while (!(v->TotalNumberOfActiveDPP[i][j] >= v->MaxNumDPP || v->TotalNumberOfSingleDPPPlanes[i][j] == 0)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4348  					double BWOfNonSplitPlaneOfMaximumBandwidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4349  					unsigned int NumberOfNonSplitPlaneOfMaximumBandwidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4350  					BWOfNonSplitPlaneOfMaximumBandwidth = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4351  					NumberOfNonSplitPlaneOfMaximumBandwidth = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4352  					for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4353  						if (v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k] > BWOfNonSplitPlaneOfMaximumBandwidth
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4354  								&& v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_disabled && v->MPCCombine[i][j][k] == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4355  							BWOfNonSplitPlaneOfMaximumBandwidth = v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4356  							NumberOfNonSplitPlaneOfMaximumBandwidth = k;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4357  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4358  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4359  					v->MPCCombine[i][j][NumberOfNonSplitPlaneOfMaximumBandwidth] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4360  					v->NoOfDPP[i][j][NumberOfNonSplitPlaneOfMaximumBandwidth] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4361  					v->RequiredDPPCLK[i][j][NumberOfNonSplitPlaneOfMaximumBandwidth] =
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4362  							v->MinDPPCLKUsingSingleDPP[NumberOfNonSplitPlaneOfMaximumBandwidth]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4363  									* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100) / 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4364  					v->TotalNumberOfActiveDPP[i][j] = v->TotalNumberOfActiveDPP[i][j] + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4365  					v->TotalNumberOfSingleDPPPlanes[i][j] = v->TotalNumberOfSingleDPPPlanes[i][j] - 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4366  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4367  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4368  			if (v->TotalNumberOfActiveDPP[i][j] > v->MaxNumDPP) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4369  				v->RequiredDISPCLK[i][j] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4370  				v->DISPCLK_DPPCLK_Support[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4371  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4372  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4373  					if (v->SingleDPPViewportSizeSupportPerPlane[k] == false && v->WhenToDoMPCCombine != dm_mpc_never) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4374  						v->MPCCombine[i][j][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4375  						v->NoOfDPP[i][j][k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4376  						v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4377  								* (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4378  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4379  						v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4380  						v->NoOfDPP[i][j][k] = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4381  						v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4382  								* (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4383  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4384  					if (!(v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4385  							&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4386  						v->PlaneRequiredDISPCLK = v->PixelClock[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4387  								* (1.0 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4388  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4389  						v->PlaneRequiredDISPCLK = v->PixelClock[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4390  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4391  					v->RequiredDISPCLK[i][j] = dml_max(v->RequiredDISPCLK[i][j], v->PlaneRequiredDISPCLK);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4392  					if ((v->MinDPPCLKUsingSingleDPP[k] / v->NoOfDPP[i][j][k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4393  							> v->MaxDppclkRoundedDownToDFSGranularity)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4394  							|| (v->PlaneRequiredDISPCLK > v->MaxDispclkRoundedDownToDFSGranularity)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4395  						v->DISPCLK_DPPCLK_Support[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4396  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4397  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4398  				v->TotalNumberOfActiveDPP[i][j] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4399  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4400  					v->TotalNumberOfActiveDPP[i][j] = v->TotalNumberOfActiveDPP[i][j] + v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4401  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4402  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4403  			v->RequiredDISPCLK[i][j] = dml_max(v->RequiredDISPCLK[i][j], v->WritebackRequiredDISPCLK);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4404  			if (v->MaxDispclkRoundedDownToDFSGranularity < v->WritebackRequiredDISPCLK) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4405  				v->DISPCLK_DPPCLK_Support[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4406  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4407  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4408  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4409  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4410  	/*Total Available Pipes Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4411  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4412  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4413  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4414  			if (v->TotalNumberOfActiveDPP[i][j] <= v->MaxNumDPP) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4415  				v->TotalAvailablePipesSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4416  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4417  				v->TotalAvailablePipesSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4418  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4419  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4420  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4421  	/*Display IO and DSC Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4422  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4423  	v->NonsupportedDSCInputBPC = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4424  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4425  		if (!(v->DSCInputBitPerComponent[k] == 12.0 || v->DSCInputBitPerComponent[k] == 10.0 || v->DSCInputBitPerComponent[k] == 8.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4426  				|| v->DSCInputBitPerComponent[k] > v->MaximumDSCBitsPerComponent) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4427  			v->NonsupportedDSCInputBPC = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4428  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4429  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4430  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4431  	/*Number Of DSC Slices*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4432  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4433  		if (v->BlendingAndTiming[k] == k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4434  			if (v->PixelClockBackEnd[k] > 3200) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4435  				v->NumberOfDSCSlices[k] = dml_ceil(v->PixelClockBackEnd[k] / 400.0, 4.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4436  			} else if (v->PixelClockBackEnd[k] > 1360) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4437  				v->NumberOfDSCSlices[k] = 8;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4438  			} else if (v->PixelClockBackEnd[k] > 680) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4439  				v->NumberOfDSCSlices[k] = 4;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4440  			} else if (v->PixelClockBackEnd[k] > 340) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4441  				v->NumberOfDSCSlices[k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4442  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4443  				v->NumberOfDSCSlices[k] = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4444  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4445  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4446  			v->NumberOfDSCSlices[k] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4447  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4448  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4449  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4450  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4451  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4452  			v->RequiresDSC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4453  			v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4454  			if (v->BlendingAndTiming[k] == k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4455  				if (v->Output[k] == dm_hdmi) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4456  					v->RequiresDSC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4457  					v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4458  					v->OutputBppPerState[i][k] = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4459  							dml_min(600.0, v->PHYCLKPerState[i]) * 10,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4460  							3,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4461  							v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4462  							v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4463  							v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4464  							v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4465  							false,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4466  							v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4467  							v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4468  							v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4469  							v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4470  							v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4471  							v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4472  							v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4473  				} else if (v->Output[k] == dm_dp || v->Output[k] == dm_edp) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4474  					if (v->DSCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4475  						v->RequiresDSC[i][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4476  						v->LinkDSCEnable = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4477  						if (v->Output[k] == dm_dp) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4478  							v->RequiresFEC[i][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4479  						} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4480  							v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4481  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4482  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4483  						v->RequiresDSC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4484  						v->LinkDSCEnable = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4485  						v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4486  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4487  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4488  					v->Outbpp = BPP_INVALID;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4489  					if (v->PHYCLKPerState[i] >= 270.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4490  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4491  								(1.0 - v->Downspreading / 100.0) * 2700,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4492  								v->OutputLinkDPLanes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4493  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4494  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4495  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4496  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4497  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4498  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4499  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4500  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4501  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4502  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4503  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4504  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4505  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4506  						// TODO: Need some other way to handle this nonsense
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4507  						// v->OutputTypeAndRatePerState[i][k] = v->Output[k] & " HBR"
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4508  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4509  					if (v->Outbpp == BPP_INVALID && v->PHYCLKPerState[i] >= 540.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4510  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4511  								(1.0 - v->Downspreading / 100.0) * 5400,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4512  								v->OutputLinkDPLanes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4513  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4514  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4515  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4516  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4517  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4518  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4519  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4520  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4521  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4522  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4523  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4524  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4525  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4526  						// TODO: Need some other way to handle this nonsense
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4527  						// v->OutputTypeAndRatePerState[i][k] = v->Output[k] & " HBR2"
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4528  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4529  					if (v->Outbpp == BPP_INVALID && v->PHYCLKPerState[i] >= 810.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4530  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4531  								(1.0 - v->Downspreading / 100.0) * 8100,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4532  								v->OutputLinkDPLanes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4533  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4534  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4535  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4536  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4537  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4538  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4539  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4540  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4541  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4542  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4543  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4544  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4545  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4546  						// TODO: Need some other way to handle this nonsense
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4547  						// v->OutputTypeAndRatePerState[i][k] = v->Output[k] & " HBR3"
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4548  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4549  					if (v->Outbpp == BPP_INVALID && v->PHYCLKD18PerState[i] >= 10000.0 / 18) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4550  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4551  								(1.0 - v->Downspreading / 100.0) * 10000,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4552  								4,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4553  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4554  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4555  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4556  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4557  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4558  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4559  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4560  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4561  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4562  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4563  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4564  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4565  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4566  						//v->OutputTypeAndRatePerState[i][k] = v->Output[k] & "10x4";
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4567  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4568  					if (v->Outbpp == BPP_INVALID && v->PHYCLKD18PerState[i] >= 12000.0 / 18) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4569  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4570  								12000,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4571  								4,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4572  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4573  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4574  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4575  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4576  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4577  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4578  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4579  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4580  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4581  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4582  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4583  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4584  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4585  						//v->OutputTypeAndRatePerState[i][k] = v->Output[k] & "12x4";
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4586  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4587  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4588  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4589  				v->OutputBppPerState[i][k] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4590  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4591  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4592  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4593  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4594  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4595  		v->LinkCapacitySupport[i] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4596  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4597  			if (v->BlendingAndTiming[k] == k
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4598  					&& (v->Output[k] == dm_dp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4599  					    v->Output[k] == dm_edp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4600  					    v->Output[k] == dm_hdmi) && v->OutputBppPerState[i][k] == 0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4601  				v->LinkCapacitySupport[i] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4602  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4603  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4604  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4605  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4606  	// UPTO 2172
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4607  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4608  		if (v->BlendingAndTiming[k] == k
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4609  				&& (v->Output[k] == dm_dp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4610  				    v->Output[k] == dm_edp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4611  				    v->Output[k] == dm_hdmi)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4612  			if (v->OutputFormat[k] == dm_420 && v->Interlace[k] == 1 && v->ProgressiveToInterlaceUnitInOPP == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4613  				P2IWith420 = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4614  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4615  			if (v->DSCEnable[k] == true && v->OutputFormat[k] == dm_n422
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4616  					&& !v->DSC422NativeSupport) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4617  				DSC422NativeNotSupported = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4618  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4619  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4620  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4621  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4622  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4623  		v->ODMCombine4To1SupportCheckOK[i] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4624  		for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4625  			if (v->BlendingAndTiming[k] == k && v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4626  					&& (v->ODMCombine4To1Supported == false || v->Output[k] == dm_dp || v->Output[k] == dm_edp
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4627  							|| v->Output[k] == dm_hdmi)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4628  				v->ODMCombine4To1SupportCheckOK[i] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4629  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4630  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4631  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4632  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4633  	/* Skip dscclk validation: as long as dispclk is supported, dscclk is also implicitly supported */
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4634  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4635  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4636  		v->NotEnoughDSCUnits[i] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4637  		v->TotalDSCUnitsRequired = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4638  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4639  			if (v->RequiresDSC[i][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4640  				if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4641  					v->TotalDSCUnitsRequired = v->TotalDSCUnitsRequired + 4.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4642  				} else if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4643  					v->TotalDSCUnitsRequired = v->TotalDSCUnitsRequired + 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4644  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4645  					v->TotalDSCUnitsRequired = v->TotalDSCUnitsRequired + 1.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4646  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4647  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4648  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4649  		if (v->TotalDSCUnitsRequired > v->NumberOfDSC) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4650  			v->NotEnoughDSCUnits[i] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4651  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4652  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4653  	/*DSC Delay per state*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4654  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4655  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4656  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4657  			if (v->OutputBppPerState[i][k] == BPP_INVALID) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4658  				v->BPP = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4659  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4660  				v->BPP = v->OutputBppPerState[i][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4661  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4662  			if (v->RequiresDSC[i][k] == true && v->BPP != 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4663  				if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_disabled) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4664  					v->DSCDelayPerState[i][k] = dscceComputeDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4665  							v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4666  							v->BPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4667  							dml_ceil(1.0 * v->HActive[k] / v->NumberOfDSCSlices[k], 1.0),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4668  							v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4669  							v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4670  							v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4671  				} else if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4672  					v->DSCDelayPerState[i][k] = 2.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4673  							* (dscceComputeDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4674  									v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4675  									v->BPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4676  									dml_ceil(1.0 * v->HActive[k] / v->NumberOfDSCSlices[k], 1.0),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4677  									v->NumberOfDSCSlices[k] / 2,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4678  									v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4679  									v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4680  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4681  					v->DSCDelayPerState[i][k] = 4.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4682  							* (dscceComputeDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4683  									v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4684  									v->BPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4685  									dml_ceil(1.0 * v->HActive[k] / v->NumberOfDSCSlices[k], 1.0),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4686  									v->NumberOfDSCSlices[k] / 4,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4687  									v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4688  									v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4689  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4690  				v->DSCDelayPerState[i][k] = v->DSCDelayPerState[i][k] * v->PixelClock[k] / v->PixelClockBackEnd[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4691  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4692  				v->DSCDelayPerState[i][k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4693  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4694  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4695  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4696  			for (m = 0; m < v->NumberOfActivePlanes; m++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4697  				if (v->BlendingAndTiming[k] == m && v->RequiresDSC[i][m] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4698  					v->DSCDelayPerState[i][k] = v->DSCDelayPerState[i][m];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4699  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4700  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4701  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4702  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4703  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4704  	//Calculate Swath, DET Configuration, DCFCLKDeepSleep
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4705  	//
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4706  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4707  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4708  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4709  				v->RequiredDPPCLKThisState[k] = v->RequiredDPPCLK[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4710  				v->NoOfDPPThisState[k] = v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4711  				v->ODMCombineEnableThisState[k] = v->ODMCombineEnablePerState[i][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4712  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4713  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4714  			CalculateSwathAndDETConfiguration(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4715  					false,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4716  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4717  					v->DETBufferSizeInKByte[0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4718  					v->MaximumSwathWidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4719  					v->MaximumSwathWidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4720  					v->SourceScan,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4721  					v->SourcePixelFormat,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4722  					v->SurfaceTiling,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4723  					v->ViewportWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4724  					v->ViewportHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4725  					v->SurfaceWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4726  					v->SurfaceWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4727  					v->SurfaceHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4728  					v->SurfaceHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4729  					v->Read256BlockHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4730  					v->Read256BlockHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4731  					v->Read256BlockWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4732  					v->Read256BlockWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4733  					v->ODMCombineEnableThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4734  					v->BlendingAndTiming,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4735  					v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4736  					v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4737  					v->BytePerPixelInDETY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4738  					v->BytePerPixelInDETC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4739  					v->HActive,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4740  					v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4741  					v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4742  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4743  					v->swath_width_luma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4744  					v->swath_width_chroma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4745  					v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4746  					v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4747  					v->SwathHeightYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4748  					v->SwathHeightCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4749  					v->DETBufferSizeYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4750  					v->DETBufferSizeCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4751  					v->dummystring,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4752  					&v->ViewportSizeSupport[i][j]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4753  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4754  			CalculateDCFCLKDeepSleep(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4755  					mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4756  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4757  					v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4758  					v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4759  					v->VRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4760  					v->VRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4761  					v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4762  					v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4763  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4764  					v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4765  					v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4766  					v->PixelClock,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4767  					v->PSCL_FACTOR,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4768  					v->PSCL_FACTOR_CHROMA,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4769  					v->RequiredDPPCLKThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4770  					v->ReadBandwidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4771  					v->ReadBandwidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4772  					v->ReturnBusWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4773  					&v->ProjectedDCFCLKDeepSleep[i][j]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4774  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4775  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4776  				v->swath_width_luma_ub_all_states[i][j][k] = v->swath_width_luma_ub_this_state[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4777  				v->swath_width_chroma_ub_all_states[i][j][k] = v->swath_width_chroma_ub_this_state[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4778  				v->SwathWidthYAllStates[i][j][k] = v->SwathWidthYThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4779  				v->SwathWidthCAllStates[i][j][k] = v->SwathWidthCThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4780  				v->SwathHeightYAllStates[i][j][k] = v->SwathHeightYThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4781  				v->SwathHeightCAllStates[i][j][k] = v->SwathHeightCThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4782  				v->DETBufferSizeYAllStates[i][j][k] = v->DETBufferSizeYThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4783  				v->DETBufferSizeCAllStates[i][j][k] = v->DETBufferSizeCThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4784  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4785  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4786  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4787  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4788  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4789  		v->cursor_bw[k] = v->NumberOfCursors[k] * v->CursorWidth[k][0] * v->CursorBPP[k][0] / 8.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4790  				/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatio[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4791  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4792  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4793  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4794  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4795  			bool NotUrgentLatencyHiding[DC__NUM_DPP__MAX];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4796  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4797  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4798  				v->swath_width_luma_ub_this_state[k] = v->swath_width_luma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4799  				v->swath_width_chroma_ub_this_state[k] = v->swath_width_chroma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4800  				v->SwathWidthYThisState[k] = v->SwathWidthYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4801  				v->SwathWidthCThisState[k] = v->SwathWidthCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4802  				v->SwathHeightYThisState[k] = v->SwathHeightYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4803  				v->SwathHeightCThisState[k] = v->SwathHeightCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4804  				v->DETBufferSizeYThisState[k] = v->DETBufferSizeYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4805  				v->DETBufferSizeCThisState[k] = v->DETBufferSizeCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4806  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4807  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4808  			v->TotalNumberOfDCCActiveDPP[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4809  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4810  				if (v->DCCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4811  					v->TotalNumberOfDCCActiveDPP[i][j] = v->TotalNumberOfDCCActiveDPP[i][j] + v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4812  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4813  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4814  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4815  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4816  				if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4817  						|| v->SourcePixelFormat[k] == dm_420_12 || v->SourcePixelFormat[k] == dm_rgbe_alpha) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4818  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4819  					if ((v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4820  							&& v->SourceScan[k] != dm_vert) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4821  						v->PTEBufferSizeInRequestsForLuma = (v->PTEBufferSizeInRequestsLuma + v->PTEBufferSizeInRequestsChroma)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4822  								/ 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4823  						v->PTEBufferSizeInRequestsForChroma = v->PTEBufferSizeInRequestsForLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4824  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4825  						v->PTEBufferSizeInRequestsForLuma = v->PTEBufferSizeInRequestsLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4826  						v->PTEBufferSizeInRequestsForChroma = v->PTEBufferSizeInRequestsChroma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4827  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4828  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4829  					v->PDEAndMetaPTEBytesPerFrameC = CalculateVMAndRowBytes(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4830  							mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4831  							v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4832  							v->Read256BlockHeightC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4833  							v->Read256BlockWidthC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4834  							v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4835  							v->SurfaceTiling[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4836  							v->BytePerPixelC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4837  							v->SourceScan[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4838  							v->SwathWidthCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4839  							v->ViewportHeightChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4840  							v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4841  							v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4842  							v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4843  							v->GPUVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4844  							v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4845  							v->PTEBufferSizeInRequestsForChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4846  							v->PitchC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4847  							0.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4848  							&v->MacroTileWidthC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4849  							&v->MetaRowBytesC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4850  							&v->DPTEBytesPerRowC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4851  							&v->PTEBufferSizeNotExceededC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4852  							&v->dummyinteger7,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4853  							&v->dpte_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4854  							&v->dummyinteger28,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4855  							&v->dummyinteger26,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4856  							&v->dummyinteger23,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4857  							&v->meta_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4858  							&v->dummyinteger8,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4859  							&v->dummyinteger9,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4860  							&v->dummyinteger19,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4861  							&v->dummyinteger20,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4862  							&v->dummyinteger17,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4863  							&v->dummyinteger10,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4864  							&v->dummyinteger11);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4865  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4866  					v->PrefetchLinesC[i][j][k] = CalculatePrefetchSourceLines(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4867  							mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4868  							v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4869  							v->VTAPsChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4870  							v->Interlace[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4871  							v->ProgressiveToInterlaceUnitInOPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4872  							v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4873  							v->ViewportYStartC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4874  							&v->PrefillC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4875  							&v->MaxNumSwC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4876  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4877  					v->PTEBufferSizeInRequestsForLuma = v->PTEBufferSizeInRequestsLuma + v->PTEBufferSizeInRequestsChroma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4878  					v->PTEBufferSizeInRequestsForChroma = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4879  					v->PDEAndMetaPTEBytesPerFrameC = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4880  					v->MetaRowBytesC = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4881  					v->DPTEBytesPerRowC = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4882  					v->PrefetchLinesC[i][j][k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4883  					v->PTEBufferSizeNotExceededC[i][j][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4884  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4885  				v->PDEAndMetaPTEBytesPerFrameY = CalculateVMAndRowBytes(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4886  						mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4887  						v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4888  						v->Read256BlockHeightY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4889  						v->Read256BlockWidthY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4890  						v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4891  						v->SurfaceTiling[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4892  						v->BytePerPixelY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4893  						v->SourceScan[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4894  						v->SwathWidthYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4895  						v->ViewportHeight[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4896  						v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4897  						v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4898  						v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4899  						v->GPUVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4900  						v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4901  						v->PTEBufferSizeInRequestsForLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4902  						v->PitchY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4903  						v->DCCMetaPitchY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4904  						&v->MacroTileWidthY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4905  						&v->MetaRowBytesY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4906  						&v->DPTEBytesPerRowY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4907  						&v->PTEBufferSizeNotExceededY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4908  						&v->dummyinteger7,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4909  						&v->dpte_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4910  						&v->dummyinteger29,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4911  						&v->dummyinteger27,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4912  						&v->dummyinteger24,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4913  						&v->meta_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4914  						&v->dummyinteger25,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4915  						&v->dpte_group_bytes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4916  						&v->dummyinteger21,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4917  						&v->dummyinteger22,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4918  						&v->dummyinteger18,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4919  						&v->dummyinteger5,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4920  						&v->dummyinteger6);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4921  				v->PrefetchLinesY[i][j][k] = CalculatePrefetchSourceLines(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4922  						mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4923  						v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4924  						v->vtaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4925  						v->Interlace[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4926  						v->ProgressiveToInterlaceUnitInOPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4927  						v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4928  						v->ViewportYStartY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4929  						&v->PrefillY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4930  						&v->MaxNumSwY[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4931  				v->PDEAndMetaPTEBytesPerFrame[i][j][k] = v->PDEAndMetaPTEBytesPerFrameY + v->PDEAndMetaPTEBytesPerFrameC;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4932  				v->MetaRowBytes[i][j][k] = v->MetaRowBytesY + v->MetaRowBytesC;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4933  				v->DPTEBytesPerRow[i][j][k] = v->DPTEBytesPerRowY + v->DPTEBytesPerRowC;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4934  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4935  				CalculateRowBandwidth(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4936  						v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4937  						v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4938  						v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4939  						v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4940  						v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4941  						v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4942  						v->MetaRowBytesY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4943  						v->MetaRowBytesC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4944  						v->meta_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4945  						v->meta_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4946  						v->DPTEBytesPerRowY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4947  						v->DPTEBytesPerRowC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4948  						v->dpte_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4949  						v->dpte_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4950  						&v->meta_row_bandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4951  						&v->dpte_row_bandwidth[i][j][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4952  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4953  			v->UrgLatency[i] = CalculateUrgentLatency(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4954  					v->UrgentLatencyPixelDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4955  					v->UrgentLatencyPixelMixedWithVMData,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4956  					v->UrgentLatencyVMDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4957  					v->DoUrgentLatencyAdjustment,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4958  					v->UrgentLatencyAdjustmentFabricClockComponent,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4959  					v->UrgentLatencyAdjustmentFabricClockReference,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4960  					v->FabricClockPerState[i]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4961  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4962  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4963  				CalculateUrgentBurstFactor(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4964  						v->swath_width_luma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4965  						v->swath_width_chroma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4966  						v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4967  						v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4968  						v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4969  						v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4970  						v->CursorBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4971  						v->CursorWidth[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4972  						v->CursorBPP[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4973  						v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4974  						v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4975  						v->BytePerPixelInDETY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4976  						v->BytePerPixelInDETC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4977  						v->DETBufferSizeYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4978  						v->DETBufferSizeCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4979  						&v->UrgentBurstFactorCursor[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4980  						&v->UrgentBurstFactorLuma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4981  						&v->UrgentBurstFactorChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4982  						&NotUrgentLatencyHiding[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4983  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4984  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4985  			v->NotEnoughUrgentLatencyHidingA[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4986  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4987  				if (NotUrgentLatencyHiding[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4988  					v->NotEnoughUrgentLatencyHidingA[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4989  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4990  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4991  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4992  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4993  				v->VActivePixelBandwidth[i][j][k] = v->ReadBandwidthLuma[k] * v->UrgentBurstFactorLuma[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4994  						+ v->ReadBandwidthChroma[k] * v->UrgentBurstFactorChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4995  				v->VActiveCursorBandwidth[i][j][k] = v->cursor_bw[k] * v->UrgentBurstFactorCursor[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4996  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4997  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4998  			v->TotalVActivePixelBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4999  			v->TotalVActiveCursorBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5000  			v->TotalMetaRowBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5001  			v->TotalDPTERowBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5002  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5003  				v->TotalVActivePixelBandwidth[i][j] = v->TotalVActivePixelBandwidth[i][j] + v->VActivePixelBandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5004  				v->TotalVActiveCursorBandwidth[i][j] = v->TotalVActiveCursorBandwidth[i][j] + v->VActiveCursorBandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5005  				v->TotalMetaRowBandwidth[i][j] = v->TotalMetaRowBandwidth[i][j] + v->NoOfDPP[i][j][k] * v->meta_row_bandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5006  				v->TotalDPTERowBandwidth[i][j] = v->TotalDPTERowBandwidth[i][j] + v->NoOfDPP[i][j][k] * v->dpte_row_bandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5007  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5008  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5009  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5010  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5011  	//Calculate Return BW
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5012  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5013  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5014  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5015  				if (v->BlendingAndTiming[k] == k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5016  					if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5017  						v->WritebackDelayTime[k] = v->WritebackLatency
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5018  								+ CalculateWriteBackDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5019  										v->WritebackPixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5020  										v->WritebackHRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5021  										v->WritebackVRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5022  										v->WritebackVTaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5023  										v->WritebackDestinationWidth[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5024  										v->WritebackDestinationHeight[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5025  										v->WritebackSourceHeight[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5026  										v->HTotal[k]) / v->RequiredDISPCLK[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5027  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5028  						v->WritebackDelayTime[k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5029  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5030  					for (m = 0; m < v->NumberOfActivePlanes; m++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5031  						if (v->BlendingAndTiming[m] == k && v->WritebackEnable[m] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5032  							v->WritebackDelayTime[k] = dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5033  									v->WritebackDelayTime[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5034  									v->WritebackLatency
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5035  											+ CalculateWriteBackDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5036  													v->WritebackPixelFormat[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5037  													v->WritebackHRatio[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5038  													v->WritebackVRatio[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5039  													v->WritebackVTaps[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5040  													v->WritebackDestinationWidth[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5041  													v->WritebackDestinationHeight[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5042  													v->WritebackSourceHeight[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5043  													v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5044  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5045  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5046  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5047  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5048  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5049  				for (m = 0; m < v->NumberOfActivePlanes; m++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5050  					if (v->BlendingAndTiming[k] == m) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5051  						v->WritebackDelayTime[k] = v->WritebackDelayTime[m];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5052  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5053  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5054  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5055  			v->MaxMaxVStartup[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5056  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5057  				v->MaximumVStartup[i][j][k] =
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5058  						(v->Interlace[k] && !v->ProgressiveToInterlaceUnitInOPP) ?
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5059  								dml_floor((v->VTotal[k] - v->VActive[k]) / 2.0, 1.0) :
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5060  								v->VTotal[k] - v->VActive[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5061  										- dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5062  												1.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5063  												dml_ceil(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5064  														1.0 * v->WritebackDelayTime[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5065  																/ (v->HTotal[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5066  																		/ v->PixelClock[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5067  														1.0));
+5d9e7fe8ef9b1c Nikola Cornij       2021-06-07  5068  				if (v->MaximumVStartup[i][j][k] > 1023)
+5d9e7fe8ef9b1c Nikola Cornij       2021-06-07  5069  					v->MaximumVStartup[i][j][k] = 1023;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5070  				v->MaxMaxVStartup[i][j] = dml_max(v->MaxMaxVStartup[i][j], v->MaximumVStartup[i][j][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5071  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5072  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5073  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5074  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5075  	ReorderingBytes = v->NumberOfChannels
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5076  			* dml_max3(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5077  					v->UrgentOutOfOrderReturnPerChannelPixelDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5078  					v->UrgentOutOfOrderReturnPerChannelPixelMixedWithVMData,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5079  					v->UrgentOutOfOrderReturnPerChannelVMDataOnly);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5080  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5081  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5082  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5083  			v->DCFCLKState[i][j] = v->DCFCLKPerState[i];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5084  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5085  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5086  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5087  	if (v->UseMinimumRequiredDCFCLK == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5088  		UseMinimumDCFCLK(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5089  				mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5090  				v->MaxInterDCNTileRepeaters,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5091  				MaxPrefetchMode,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5092  				v->DRAMClockChangeLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5093  				v->SREnterPlusExitTime,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5094  				v->ReturnBusWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5095  				v->RoundTripPingLatencyCycles,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5096  				ReorderingBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5097  				v->PixelChunkSizeInKByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5098  				v->MetaChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5099  				v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5100  				v->GPUVMMaxPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5101  				v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5102  				v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5103  				v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5104  				v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5105  				v->DynamicMetadataVMEnabled,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5106  				v->ImmediateFlipRequirement,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5107  				v->ProgressiveToInterlaceUnitInOPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5108  				v->MaxAveragePercentOfIdealFabricAndSDPPortBWDisplayCanUseInNormalSystemOperation,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5109  				v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5110  				v->VTotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5111  				v->VActive,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5112  				v->DynamicMetadataTransmittedBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5113  				v->DynamicMetadataLinesBeforeActiveRequired,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5114  				v->Interlace,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5115  				v->RequiredDPPCLK,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5116  				v->RequiredDISPCLK,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5117  				v->UrgLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5118  				v->NoOfDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5119  				v->ProjectedDCFCLKDeepSleep,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5120  				v->MaximumVStartup,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5121  				v->TotalVActivePixelBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5122  				v->TotalVActiveCursorBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5123  				v->TotalMetaRowBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5124  				v->TotalDPTERowBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5125  				v->TotalNumberOfActiveDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5126  				v->TotalNumberOfDCCActiveDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5127  				v->dpte_group_bytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5128  				v->PrefetchLinesY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5129  				v->PrefetchLinesC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5130  				v->swath_width_luma_ub_all_states,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5131  				v->swath_width_chroma_ub_all_states,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5132  				v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5133  				v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5134  				v->HTotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5135  				v->PixelClock,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5136  				v->PDEAndMetaPTEBytesPerFrame,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5137  				v->DPTEBytesPerRow,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5138  				v->MetaRowBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5139  				v->DynamicMetadataEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5140  				v->VActivePixelBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5141  				v->VActiveCursorBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5142  				v->ReadBandwidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5143  				v->ReadBandwidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5144  				v->DCFCLKPerState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5145  				v->DCFCLKState);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5146  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5147  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5148  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5149  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5150  			double IdealFabricAndSDPPortBandwidthPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5151  					v->ReturnBusWidth * v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5152  					v->FabricClockPerState[i] * v->FabricDatapathToDCNDataReturn);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5153  			double IdealDRAMBandwidthPerState = v->DRAMSpeedPerState[i] * v->NumberOfChannels * v->DRAMChannelWidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5154  			double PixelDataOnlyReturnBWPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5155  					IdealFabricAndSDPPortBandwidthPerState * v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5156  					IdealDRAMBandwidthPerState * v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyPixelDataOnly / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5157  			double PixelMixedWithVMDataReturnBWPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5158  					IdealFabricAndSDPPortBandwidthPerState * v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5159  					IdealDRAMBandwidthPerState * v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyPixelMixedWithVMData / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5160  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5161  			if (v->HostVMEnable != true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5162  				v->ReturnBWPerState[i][j] = PixelDataOnlyReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5163  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5164  				v->ReturnBWPerState[i][j] = PixelMixedWithVMDataReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5165  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5166  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5167  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5168  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5169  	//Re-ordering Buffer Support Check
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5170  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5171  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5172  			if ((v->ROBBufferSizeInKByte - v->PixelChunkSizeInKByte) * 1024 / v->ReturnBWPerState[i][j]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5173  					> (v->RoundTripPingLatencyCycles + __DML_ARB_TO_RET_DELAY__) / v->DCFCLKState[i][j] + ReorderingBytes / v->ReturnBWPerState[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5174  				v->ROBSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5175  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5176  				v->ROBSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5177  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5178  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5179  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5180  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5181  	//Vertical Active BW support check
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5182  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5183  	MaxTotalVActiveRDBandwidth = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5184  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5185  		MaxTotalVActiveRDBandwidth = MaxTotalVActiveRDBandwidth + v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5186  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5187  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5188  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5189  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5190  			v->MaxTotalVerticalActiveAvailableBandwidth[i][j] = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5191  					dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5192  							v->ReturnBusWidth * v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5193  							v->FabricClockPerState[i] * v->FabricDatapathToDCNDataReturn)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5194  							* v->MaxAveragePercentOfIdealFabricAndSDPPortBWDisplayCanUseInNormalSystemOperation / 100,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5195  					v->DRAMSpeedPerState[i] * v->NumberOfChannels * v->DRAMChannelWidth
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5196  							* v->MaxAveragePercentOfIdealDRAMBWDisplayCanUseInNormalSystemOperation / 100);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5197  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5198  			if (MaxTotalVActiveRDBandwidth <= v->MaxTotalVerticalActiveAvailableBandwidth[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5199  				v->TotalVerticalActiveBandwidthSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5200  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5201  				v->TotalVerticalActiveBandwidthSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5202  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5203  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5204  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5205  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5206  	v->UrgentLatency = CalculateUrgentLatency(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5207  			v->UrgentLatencyPixelDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5208  			v->UrgentLatencyPixelMixedWithVMData,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5209  			v->UrgentLatencyVMDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5210  			v->DoUrgentLatencyAdjustment,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5211  			v->UrgentLatencyAdjustmentFabricClockComponent,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5212  			v->UrgentLatencyAdjustmentFabricClockReference,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5213  			v->FabricClock);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5214  	//Prefetch Check
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5215  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5216  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5217  			double VMDataOnlyReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5218  			double HostVMInefficiencyFactor = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5219  			int NextPrefetchModeState = MinPrefetchMode;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5220  			bool UnboundedRequestEnabledThisState = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5221  			int CompressedBufferSizeInkByteThisState = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5222  			double dummy;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5223  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5224  			v->TimeCalc = 24 / v->ProjectedDCFCLKDeepSleep[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5225  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5226  			v->BandwidthWithoutPrefetchSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5227  			if (v->TotalVActivePixelBandwidth[i][j] + v->TotalVActiveCursorBandwidth[i][j] + v->TotalMetaRowBandwidth[i][j]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5228  					+ v->TotalDPTERowBandwidth[i][j] > v->ReturnBWPerState[i][j] || v->NotEnoughUrgentLatencyHidingA[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5229  				v->BandwidthWithoutPrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5230  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5231  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5232  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5233  				v->NoOfDPPThisState[k] = v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5234  				v->swath_width_luma_ub_this_state[k] = v->swath_width_luma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5235  				v->swath_width_chroma_ub_this_state[k] = v->swath_width_chroma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5236  				v->SwathWidthYThisState[k] = v->SwathWidthYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5237  				v->SwathWidthCThisState[k] = v->SwathWidthCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5238  				v->SwathHeightYThisState[k] = v->SwathHeightYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5239  				v->SwathHeightCThisState[k] = v->SwathHeightCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5240  				v->DETBufferSizeYThisState[k] = v->DETBufferSizeYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5241  				v->DETBufferSizeCThisState[k] = v->DETBufferSizeCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5242  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5243  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5244  			VMDataOnlyReturnBWPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5245  					dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5246  							v->ReturnBusWidth * v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5247  							v->FabricClockPerState[i] * v->FabricDatapathToDCNDataReturn)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5248  							* v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5249  					v->DRAMSpeedPerState[i] * v->NumberOfChannels * v->DRAMChannelWidth
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5250  							* v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyVMDataOnly / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5251  			if (v->GPUVMEnable && v->HostVMEnable)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5252  				HostVMInefficiencyFactor = v->ReturnBWPerState[i][j] / VMDataOnlyReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5253  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5254  			v->ExtraLatency = CalculateExtraLatency(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5255  					v->RoundTripPingLatencyCycles,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5256  					ReorderingBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5257  					v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5258  					v->TotalNumberOfActiveDPP[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5259  					v->PixelChunkSizeInKByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5260  					v->TotalNumberOfDCCActiveDPP[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5261  					v->MetaChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5262  					v->ReturnBWPerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5263  					v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5264  					v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5265  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5266  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5267  					v->dpte_group_bytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5268  					HostVMInefficiencyFactor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5269  					v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5270  					v->HostVMMaxNonCachedPageTableLevels);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5271  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5272  			v->NextMaxVStartup = v->MaxMaxVStartup[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5273  			do {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5274  				v->PrefetchModePerState[i][j] = NextPrefetchModeState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5275  				v->MaxVStartup = v->NextMaxVStartup;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5276  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5277  				v->TWait = CalculateTWait(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5278  						v->PrefetchModePerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5279  						v->DRAMClockChangeLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5280  						v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5281  						v->SREnterPlusExitTime);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5282  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5283  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5284  					Pipe myPipe;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5285  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5286  					myPipe.DPPCLK = v->RequiredDPPCLK[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5287  					myPipe.DISPCLK = v->RequiredDISPCLK[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5288  					myPipe.PixelClock = v->PixelClock[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5289  					myPipe.DCFCLKDeepSleep = v->ProjectedDCFCLKDeepSleep[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5290  					myPipe.DPPPerPlane = v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5291  					myPipe.ScalerEnabled = v->ScalerEnabled[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5292  					myPipe.SourceScan = v->SourceScan[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5293  					myPipe.BlockWidth256BytesY = v->Read256BlockWidthY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5294  					myPipe.BlockHeight256BytesY = v->Read256BlockHeightY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5295  					myPipe.BlockWidth256BytesC = v->Read256BlockWidthC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5296  					myPipe.BlockHeight256BytesC = v->Read256BlockHeightC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5297  					myPipe.InterlaceEnable = v->Interlace[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5298  					myPipe.NumberOfCursors = v->NumberOfCursors[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5299  					myPipe.VBlank = v->VTotal[k] - v->VActive[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5300  					myPipe.HTotal = v->HTotal[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5301  					myPipe.DCCEnable = v->DCCEnable[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5302  					myPipe.ODMCombineIsEnabled = v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5303  							|| v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5304  					myPipe.SourcePixelFormat = v->SourcePixelFormat[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5305  					myPipe.BytePerPixelY = v->BytePerPixelY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5306  					myPipe.BytePerPixelC = v->BytePerPixelC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5307  					myPipe.ProgressiveToInterlaceUnitInOPP = v->ProgressiveToInterlaceUnitInOPP;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5308  					v->NoTimeForPrefetch[i][j][k] = CalculatePrefetchSchedule(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5309  							mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5310  							HostVMInefficiencyFactor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5311  							&myPipe,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5312  							v->DSCDelayPerState[i][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5313  							v->DPPCLKDelaySubtotal + v->DPPCLKDelayCNVCFormater,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5314  							v->DPPCLKDelaySCL,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5315  							v->DPPCLKDelaySCLLBOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5316  							v->DPPCLKDelayCNVCCursor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5317  							v->DISPCLKDelaySubtotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5318  							v->SwathWidthYThisState[k] / v->HRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5319  							v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5320  							v->MaxInterDCNTileRepeaters,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5321  							dml_min(v->MaxVStartup, v->MaximumVStartup[i][j][k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5322  							v->MaximumVStartup[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5323  							v->GPUVMMaxPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5324  							v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5325  							v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5326  							v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5327  							v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5328  							v->DynamicMetadataEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5329  							v->DynamicMetadataVMEnabled,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5330  							v->DynamicMetadataLinesBeforeActiveRequired[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5331  							v->DynamicMetadataTransmittedBytes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5332  							v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5333  							v->ExtraLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5334  							v->TimeCalc,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5335  							v->PDEAndMetaPTEBytesPerFrame[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5336  							v->MetaRowBytes[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5337  							v->DPTEBytesPerRow[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5338  							v->PrefetchLinesY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5339  							v->SwathWidthYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5340  							v->PrefillY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5341  							v->MaxNumSwY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5342  							v->PrefetchLinesC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5343  							v->SwathWidthCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5344  							v->PrefillC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5345  							v->MaxNumSwC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5346  							v->swath_width_luma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5347  							v->swath_width_chroma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5348  							v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5349  							v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5350  							v->TWait,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5351  							&v->DSTXAfterScaler[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5352  							&v->DSTYAfterScaler[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5353  							&v->LineTimesForPrefetch[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5354  							&v->PrefetchBW[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5355  							&v->LinesForMetaPTE[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5356  							&v->LinesForMetaAndDPTERow[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5357  							&v->VRatioPreY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5358  							&v->VRatioPreC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5359  							&v->RequiredPrefetchPixelDataBWLuma[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5360  							&v->RequiredPrefetchPixelDataBWChroma[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5361  							&v->NoTimeForDynamicMetadata[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5362  							&v->Tno_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5363  							&v->prefetch_vmrow_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5364  							&v->dummy7[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5365  							&v->dummy8[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5366  							&v->dummy13[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5367  							&v->VUpdateOffsetPix[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5368  							&v->VUpdateWidthPix[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5369  							&v->VReadyOffsetPix[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5370  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5371  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5372  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5373  					CalculateUrgentBurstFactor(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5374  							v->swath_width_luma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5375  							v->swath_width_chroma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5376  							v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5377  							v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5378  							v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5379  							v->UrgentLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5380  							v->CursorBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5381  							v->CursorWidth[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5382  							v->CursorBPP[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5383  							v->VRatioPreY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5384  							v->VRatioPreC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5385  							v->BytePerPixelInDETY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5386  							v->BytePerPixelInDETC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5387  							v->DETBufferSizeYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5388  							v->DETBufferSizeCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5389  							&v->UrgentBurstFactorCursorPre[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5390  							&v->UrgentBurstFactorLumaPre[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5391  							&v->UrgentBurstFactorChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5392  							&v->NotUrgentLatencyHidingPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5393  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5394  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5395  				v->MaximumReadBandwidthWithPrefetch = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5396  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5397  					v->cursor_bw_pre[k] = v->NumberOfCursors[k] * v->CursorWidth[k][0] * v->CursorBPP[k][0] / 8.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5398  							/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatioPreY[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5399  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5400  					v->MaximumReadBandwidthWithPrefetch =
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5401  							v->MaximumReadBandwidthWithPrefetch
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5402  									+ dml_max4(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5403  											v->VActivePixelBandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5404  											v->VActiveCursorBandwidth[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5405  													+ v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5406  															* (v->meta_row_bandwidth[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5407  																	+ v->dpte_row_bandwidth[i][j][k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5408  											v->NoOfDPP[i][j][k] * v->prefetch_vmrow_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5409  											v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5410  													* (v->RequiredPrefetchPixelDataBWLuma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5411  															* v->UrgentBurstFactorLumaPre[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5412  															+ v->RequiredPrefetchPixelDataBWChroma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5413  																	* v->UrgentBurstFactorChromaPre[k])
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5414  													+ v->cursor_bw_pre[k] * v->UrgentBurstFactorCursorPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5415  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5416  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5417  				v->NotEnoughUrgentLatencyHidingPre = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5418  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5419  					if (v->NotUrgentLatencyHidingPre[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5420  						v->NotEnoughUrgentLatencyHidingPre = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5421  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5422  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5423  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5424  				v->PrefetchSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5425  				if (v->BandwidthWithoutPrefetchSupported[i][j] == false || v->MaximumReadBandwidthWithPrefetch > v->ReturnBWPerState[i][j]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5426  						|| v->NotEnoughUrgentLatencyHidingPre == 1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5427  					v->PrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5428  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5429  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5430  					if (v->LineTimesForPrefetch[k] < 2.0 || v->LinesForMetaPTE[k] >= 32.0 || v->LinesForMetaAndDPTERow[k] >= 16.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5431  							|| v->NoTimeForPrefetch[i][j][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5432  						v->PrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5433  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5434  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5435  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5436  				v->DynamicMetadataSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5437  				for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5438  					if (v->NoTimeForDynamicMetadata[i][j][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5439  						v->DynamicMetadataSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5440  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5441  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5442  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5443  				v->VRatioInPrefetchSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5444  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5445  					if (v->VRatioPreY[i][j][k] > 4.0 || v->VRatioPreC[i][j][k] > 4.0 || v->NoTimeForPrefetch[i][j][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5446  						v->VRatioInPrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5447  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5448  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5449  				v->AnyLinesForVMOrRowTooLarge = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5450  				for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5451  					if (v->LinesForMetaAndDPTERow[k] >= 16 || v->LinesForMetaPTE[k] >= 32) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5452  						v->AnyLinesForVMOrRowTooLarge = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5453  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5454  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5455  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5456  				v->NextPrefetchMode = v->NextPrefetchMode + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5457  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5458  				if (v->PrefetchSupported[i][j] == true && v->VRatioInPrefetchSupported[i][j] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5459  					v->BandwidthAvailableForImmediateFlip = v->ReturnBWPerState[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5460  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5461  						v->BandwidthAvailableForImmediateFlip = v->BandwidthAvailableForImmediateFlip
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5462  								- dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5463  										v->VActivePixelBandwidth[i][j][k] + v->VActiveCursorBandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5464  										v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5465  												* (v->RequiredPrefetchPixelDataBWLuma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5466  														* v->UrgentBurstFactorLumaPre[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5467  														+ v->RequiredPrefetchPixelDataBWChroma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5468  																* v->UrgentBurstFactorChromaPre[k])
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5469  												+ v->cursor_bw_pre[k] * v->UrgentBurstFactorCursorPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5470  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5471  					v->TotImmediateFlipBytes = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5472  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5473  						v->TotImmediateFlipBytes = v->TotImmediateFlipBytes
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5474  								+ v->NoOfDPP[i][j][k] * v->PDEAndMetaPTEBytesPerFrame[i][j][k] + v->MetaRowBytes[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5475  								+ v->DPTEBytesPerRow[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5476  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5477  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5478  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5479  						CalculateFlipSchedule(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5480  								mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5481  								HostVMInefficiencyFactor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5482  								v->ExtraLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5483  								v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5484  								v->GPUVMMaxPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5485  								v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5486  								v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5487  								v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5488  								v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5489  								v->PDEAndMetaPTEBytesPerFrame[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5490  								v->MetaRowBytes[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5491  								v->DPTEBytesPerRow[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5492  								v->BandwidthAvailableForImmediateFlip,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5493  								v->TotImmediateFlipBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5494  								v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5495  								v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5496  								v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5497  								v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5498  								v->Tno_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5499  								v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5500  								v->dpte_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5501  								v->meta_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5502  								v->dpte_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5503  								v->meta_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5504  								&v->DestinationLinesToRequestVMInImmediateFlip[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5505  								&v->DestinationLinesToRequestRowInImmediateFlip[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5506  								&v->final_flip_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5507  								&v->ImmediateFlipSupportedForPipe[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5508  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5509  					v->total_dcn_read_bw_with_flip = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5510  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5511  						v->total_dcn_read_bw_with_flip = v->total_dcn_read_bw_with_flip
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5512  								+ dml_max3(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5513  										v->NoOfDPP[i][j][k] * v->prefetch_vmrow_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5514  										v->NoOfDPP[i][j][k] * v->final_flip_bw[k] + v->VActivePixelBandwidth[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5515  												+ v->VActiveCursorBandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5516  										v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5517  												* (v->final_flip_bw[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5518  														+ v->RequiredPrefetchPixelDataBWLuma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5519  																* v->UrgentBurstFactorLumaPre[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5520  														+ v->RequiredPrefetchPixelDataBWChroma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5521  																* v->UrgentBurstFactorChromaPre[k])
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5522  												+ v->cursor_bw_pre[k] * v->UrgentBurstFactorCursorPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5523  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5524  					v->ImmediateFlipSupportedForState[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5525  					if (v->total_dcn_read_bw_with_flip > v->ReturnBWPerState[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5526  						v->ImmediateFlipSupportedForState[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5527  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5528  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5529  						if (v->ImmediateFlipSupportedForPipe[k] == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5530  							v->ImmediateFlipSupportedForState[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5531  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5532  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5533  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5534  					v->ImmediateFlipSupportedForState[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5535  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5536  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5537  				if (v->MaxVStartup <= __DML_VBA_MIN_VSTARTUP__ || v->AnyLinesForVMOrRowTooLarge == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5538  					v->NextMaxVStartup = v->MaxMaxVStartup[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5539  					NextPrefetchModeState = NextPrefetchModeState + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5540  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5541  					v->NextMaxVStartup = v->NextMaxVStartup - 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5542  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5543  				v->NextPrefetchMode = v->NextPrefetchMode + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5544  			} while (!((v->PrefetchSupported[i][j] == true && v->DynamicMetadataSupported[i][j] == true && v->VRatioInPrefetchSupported[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5545  					&& ((v->HostVMEnable == false && v->ImmediateFlipRequirement != dm_immediate_flip_required)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5546  							|| v->ImmediateFlipSupportedForState[i][j] == true))
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5547  					|| (v->NextMaxVStartup == v->MaxMaxVStartup[i][j] && NextPrefetchModeState > MaxPrefetchMode)));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5548  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5549  			CalculateUnboundedRequestAndCompressedBufferSize(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5550  					v->DETBufferSizeInKByte[0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5551  					v->ConfigReturnBufferSizeInKByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5552  					v->UseUnboundedRequesting,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5553  					v->TotalNumberOfActiveDPP[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5554  					NoChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5555  					v->MaxNumDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5556  					v->CompressedBufferSegmentSizeInkByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5557  					v->Output,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5558  					&UnboundedRequestEnabledThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5559  					&CompressedBufferSizeInkByteThisState);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5560  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5561  			CalculateWatermarksAndDRAMSpeedChangeSupport(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5562  					mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5563  					v->PrefetchModePerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5564  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5565  					v->MaxLineBufferLines,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5566  					v->LineBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5567  					v->WritebackInterfaceBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5568  					v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5569  					v->ReturnBWPerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5570  					v->SynchronizedVBlank,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5571  					v->dpte_group_bytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5572  					v->MetaChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5573  					v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5574  					v->ExtraLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5575  					v->WritebackLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5576  					v->WritebackChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5577  					v->SOCCLKPerState[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5578  					v->DRAMClockChangeLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5579  					v->SRExitTime,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5580  					v->SREnterPlusExitTime,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5581  					v->SRExitZ8Time,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5582  					v->SREnterPlusExitZ8Time,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5583  					v->ProjectedDCFCLKDeepSleep[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5584  					v->DETBufferSizeYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5585  					v->DETBufferSizeCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5586  					v->SwathHeightYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5587  					v->SwathHeightCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5588  					v->LBBitPerPixel,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5589  					v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5590  					v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5591  					v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5592  					v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5593  					v->vtaps,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5594  					v->VTAPsChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5595  					v->VRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5596  					v->VRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5597  					v->HTotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5598  					v->PixelClock,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5599  					v->BlendingAndTiming,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5600  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5601  					v->BytePerPixelInDETY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5602  					v->BytePerPixelInDETC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5603  					v->DSTXAfterScaler,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5604  					v->DSTYAfterScaler,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5605  					v->WritebackEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5606  					v->WritebackPixelFormat,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5607  					v->WritebackDestinationWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5608  					v->WritebackDestinationHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5609  					v->WritebackSourceHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5610  					UnboundedRequestEnabledThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5611  					CompressedBufferSizeInkByteThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5612  					&v->DRAMClockChangeSupport[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5613  					&v->UrgentWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5614  					&v->WritebackUrgentWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5615  					&v->DRAMClockChangeWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5616  					&v->WritebackDRAMClockChangeWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5617  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5618  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5619  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5620  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5621  					&v->MinActiveDRAMClockChangeLatencySupported);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5622  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5623  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5624  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5625  	/*PTE Buffer Size Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5626  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5627  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5628  			v->PTEBufferSizeNotExceeded[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5629  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5630  				if (v->PTEBufferSizeNotExceededY[i][j][k] == false || v->PTEBufferSizeNotExceededC[i][j][k] == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5631  					v->PTEBufferSizeNotExceeded[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5632  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5633  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5634  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5635  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5636  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5637  	/*Cursor Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5638  	v->CursorSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5639  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5640  		if (v->CursorWidth[k][0] > 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5641  			if (v->CursorBPP[k][0] == 64 && v->Cursor64BppSupport == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5642  				v->CursorSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5643  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5644  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5645  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5646  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5647  	/*Valid Pitch Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5648  	v->PitchSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5649  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5650  		v->AlignedYPitch[k] = dml_ceil(dml_max(v->PitchY[k], v->SurfaceWidthY[k]), v->MacroTileWidthY[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5651  		if (v->DCCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5652  			v->AlignedDCCMetaPitchY[k] = dml_ceil(dml_max(v->DCCMetaPitchY[k], v->SurfaceWidthY[k]), 64.0 * v->Read256BlockWidthY[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5653  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5654  			v->AlignedDCCMetaPitchY[k] = v->DCCMetaPitchY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5655  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5656  		if (v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32 && v->SourcePixelFormat[k] != dm_444_16
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5657  				&& v->SourcePixelFormat[k] != dm_mono_16 && v->SourcePixelFormat[k] != dm_rgbe
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5658  				&& v->SourcePixelFormat[k] != dm_mono_8) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5659  			v->AlignedCPitch[k] = dml_ceil(dml_max(v->PitchC[k], v->SurfaceWidthC[k]), v->MacroTileWidthC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5660  			if (v->DCCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5661  				v->AlignedDCCMetaPitchC[k] = dml_ceil(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5662  						dml_max(v->DCCMetaPitchC[k], v->SurfaceWidthC[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5663  						64.0 * v->Read256BlockWidthC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5664  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5665  				v->AlignedDCCMetaPitchC[k] = v->DCCMetaPitchC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5666  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5667  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5668  			v->AlignedCPitch[k] = v->PitchC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5669  			v->AlignedDCCMetaPitchC[k] = v->DCCMetaPitchC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5670  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5671  		if (v->AlignedYPitch[k] > v->PitchY[k] || v->AlignedCPitch[k] > v->PitchC[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5672  				|| v->AlignedDCCMetaPitchY[k] > v->DCCMetaPitchY[k] || v->AlignedDCCMetaPitchC[k] > v->DCCMetaPitchC[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5673  			v->PitchSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5674  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5675  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5676  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5677  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5678  		if (v->ViewportWidth[k] > v->SurfaceWidthY[k] || v->ViewportHeight[k] > v->SurfaceHeightY[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5679  			ViewportExceedsSurface = true;
+28a0a14423b855 Wan Jiabing         2021-06-09  5680  			if (v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5681  					&& v->SourcePixelFormat[k] != dm_444_16 && v->SourcePixelFormat[k] != dm_444_8
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5682  					&& v->SourcePixelFormat[k] != dm_rgbe) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5683  				if (v->ViewportWidthChroma[k] > v->SurfaceWidthC[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5684  						|| v->ViewportHeightChroma[k] > v->SurfaceHeightC[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5685  					ViewportExceedsSurface = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5686  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5687  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5688  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5689  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5690  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5691  	/*Mode Support, Voltage State and SOC Configuration*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5692  	for (i = v->soc.num_states - 1; i >= 0; i--) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5693  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5694  			if (v->ScaleRatioAndTapsSupport == true && v->SourceFormatPixelAndScanSupport == true && v->ViewportSizeSupport[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5695  					&& v->LinkCapacitySupport[i] == true && !P2IWith420 && !DSCOnlyIfNecessaryWithBPP
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5696  					&& !DSC422NativeNotSupported && v->ODMCombine4To1SupportCheckOK[i] == true && v->NotEnoughDSCUnits[i] == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5697  					&& v->DTBCLKRequiredMoreThanSupported[i] == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5698  					&& v->ROBSupport[i][j] == true && v->DISPCLK_DPPCLK_Support[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5699  					&& v->TotalAvailablePipesSupport[i][j] == true && EnoughWritebackUnits == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5700  					&& v->WritebackLatencySupport == true && v->WritebackScaleRatioAndTapsSupport == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5701  					&& v->CursorSupport == true && v->PitchSupport == true && ViewportExceedsSurface == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5702  					&& v->PrefetchSupported[i][j] == true && v->DynamicMetadataSupported[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5703  					&& v->TotalVerticalActiveBandwidthSupport[i][j] == true && v->VRatioInPrefetchSupported[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5704  					&& v->PTEBufferSizeNotExceeded[i][j] == true && v->NonsupportedDSCInputBPC == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5705  					&& ((v->HostVMEnable == false && v->ImmediateFlipRequirement != dm_immediate_flip_required)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5706  							|| v->ImmediateFlipSupportedForState[i][j] == true)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5707  					&& FMTBufferExceeded == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5708  				v->ModeSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5709  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5710  				v->ModeSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5711  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5712  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5713  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5714  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5715  	{
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5716  		unsigned int MaximumMPCCombine = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5717  		for (i = v->soc.num_states; i >= 0; i--) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5718  			if (i == v->soc.num_states || v->ModeSupport[i][0] == true || v->ModeSupport[i][1] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5719  				v->VoltageLevel = i;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5720  				v->ModeIsSupported = v->ModeSupport[i][0] == true || v->ModeSupport[i][1] == true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5721  				if (v->ModeSupport[i][0] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5722  					MaximumMPCCombine = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5723  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5724  					MaximumMPCCombine = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5725  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5726  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5727  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5728  		v->ImmediateFlipSupport = v->ImmediateFlipSupportedForState[v->VoltageLevel][MaximumMPCCombine];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5729  		for (k = 0; k <= v->NumberOfActivePlanes - 1; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5730  			v->MPCCombineEnable[k] = v->MPCCombine[v->VoltageLevel][MaximumMPCCombine][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5731  			v->DPPPerPlane[k] = v->NoOfDPP[v->VoltageLevel][MaximumMPCCombine][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5732  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5733  		v->DCFCLK = v->DCFCLKState[v->VoltageLevel][MaximumMPCCombine];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5734  		v->DRAMSpeed = v->DRAMSpeedPerState[v->VoltageLevel];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5735  		v->FabricClock = v->FabricClockPerState[v->VoltageLevel];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5736  		v->SOCCLK = v->SOCCLKPerState[v->VoltageLevel];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5737  		v->ReturnBW = v->ReturnBWPerState[v->VoltageLevel][MaximumMPCCombine];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5738  		v->maxMpcComb = MaximumMPCCombine;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5739  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5740  }
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5741  
 
-:::::: The code at line 5274 was first introduced by commit
-:::::: 184d9494c1a4f53fc10a008317b03911a85597c3 mm/slub: mass conversion of struct page to struct slab by spatch
+:::::: The code at line 3957 was first introduced by commit
+:::::: 74458c081fcfb0423877e630de2746daefdb16e4 drm/amd/display: Add DCN3.1 DML calculation support
 
-:::::: TO: Vlastimil Babka <vbabka@suse.cz>
-:::::: CC: Vlastimil Babka <vbabka@suse.cz>
+:::::: TO: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---+HP7ph2BbKc20aGI
+--LQksG6bCIzRHxTLp
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-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
-pkayQ80CAA==
+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
+VLDs/z0CAA==
 
---+HP7ph2BbKc20aGI--
+--LQksG6bCIzRHxTLp--
