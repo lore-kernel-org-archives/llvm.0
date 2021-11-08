@@ -1,84 +1,79 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2BC2C80
-	for <llvm@lists.linux.dev>; Mon,  8 Nov 2021 12:35:09 +0000 (UTC)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92.3)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1mk3rW-0004Gr-Qi; Mon, 08 Nov 2021 13:34:58 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1mk3rW-000MVN-KI; Mon, 08 Nov 2021 13:34:58 +0100
-Subject: Re: [dborkman-bpf:pr/bpf-tstamp 3/3]
- drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c:2482:44: warning: shift
- count >= width of type
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Andy Shevchenko <andy.shevchenko@gmail.com>,
- kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89A02C96
+	for <llvm@lists.linux.dev>; Mon,  8 Nov 2021 16:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=JjeVTK+2GkBI0UCReLB90PqNbIgTpIsOIfrOXgVKgGU=; b=h9v8qKQFNF8m1EhXvqMzlq6S/w
+	QHtY/1ENrdUYR4A1lRNOqEws+yi5Z+Dr54+v0DayEcV5+tsVIesVcI/RCsIC4IXb6udWc80H92kYe
+	JUXK0AD7pu12MmcaPxVETsiBkSONm8bv+5BLHGFHQK7r+zSpbxKAnqczIyC/hAxvtTdFobXKc87KN
+	yUwly/oZ2ph3RmUKEoPnilgkPnxR3BvHKrl7eA1F3YQlGjdiXEYpsWuS41TudCbKDHMEsPxXd+RL8
+	UtFHpk+g5TYoyU+97K3s2EomVjYXZQnJE6wx9ZrCcq5Mc42zRqui1EGWb+dL664OUOalwwF1DY2WS
+	jb5RiAWQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mk7ra-00H0nj-1E; Mon, 08 Nov 2021 16:51:18 +0000
+Date: Mon, 8 Nov 2021 08:51:18 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <f98d886c-dc50-9c8b-c160-6e8ecd895cb0@wanadoo.fr>
- <7658171d-e551-cc94-b6b6-0c8bd13d00eb@wanadoo.fr>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2091d820-e95d-f3e1-722b-3b24f028f571@iogearbox.net>
-Date: Mon, 8 Nov 2021 13:34:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: Re: [mcgrof-next:20210916-firmware-builtin-v2 14/14]
+ drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin.gen.S:5:13:
+ error: Could not find incbin file
+ 'drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin'
+Message-ID: <YYlVhm0ybuirMI//@bombadil.infradead.org>
+References: <202111080124.Dyl8aeOd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <7658171d-e551-cc94-b6b6-0c8bd13d00eb@wanadoo.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26347/Mon Nov  8 10:19:39 2021)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202111080124.Dyl8aeOd-lkp@intel.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On 11/6/21 10:12 PM, Christophe JAILLET wrote:
-> (resend because of HTML issue reported by mailing list daemon)
-> Le 06/11/2021 à 19:42, Andy Shevchenko a écrit :
->> +Cc Christophe (can you look into this? It seems your code is involved)
->> On Sat, Nov 6, 2021 at 3:52 AM kernel test robot<lkp@intel.com>  wrote:
->>> tree:https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git  pr/bpf-tstamp
->>> head:   f7d619a946e981177777983af26e9e31163ffb38
->>> commit: f7d619a946e981177777983af26e9e31163ffb38 [3/3] net: skb clock bases
->>> config: i386-randconfig-a005-20210928 (attached as .config)
->>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project  dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
->>> reproduce (this is a W=1 build):
->>>          wgethttps://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross  -O ~/bin/make.cross
->>>          chmod +x ~/bin/make.cross
->>>          #https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git/commit/?id=f7d619a946e981177777983af26e9e31163ffb38
->>>          git remote add dborkman-bpfhttps://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git
->>>          git fetch --no-tags dborkman-bpf pr/bpf-tstamp
->>>          git checkout f7d619a946e981177777983af26e9e31163ffb38
->>>          # save the attached .config to linux build tree
->>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386
->>>
->>> If you fix the issue, kindly add following tag as appropriate
->>> Reported-by: kernel test robot<lkp@intel.com>
->>>
->>> All warnings (new ones prefixed by >>):
->>>
->>>     In file included from drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c:9:
->>>     In file included from drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe.h:22:
->>>     include/net/tcp.h:812:27: error: no member named 'skb_mstamp_ns' in 'struct sk_buff'
->>>             return tcp_ns_to_ts(skb->skb_mstamp_ns);
->>>                                 ~~~  ^
->>>     include/net/tcp.h:818:22: error: no member named 'skb_mstamp_ns' in 'struct sk_buff'
->>>             return div_u64(skb->skb_mstamp_ns, NSEC_PER_USEC);
->>>                            ~~~  ^
->>>     include/net/tcp.h:2367:8: error: no member named 'skb_mstamp_ns' in 'struct sk_buff'
->>>                     skb->skb_mstamp_ns += (u64)tp->tcp_tx_delay * NSEC_PER_USEC;
->>>                     ~~~  ^
+On Mon, Nov 08, 2021 at 01:37:31AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210916-firmware-builtin-v2
+> head:   f69194f4bcf5b301f2d169b2f036c0da4b642e53
+> commit: f69194f4bcf5b301f2d169b2f036c0da4b642e53 [14/14] test_firmware: add support for testing built-in firmware
+> config: arm-randconfig-r004-20210929 (attached as .config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=f69194f4bcf5b301f2d169b2f036c0da4b642e53
+>         git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+>         git fetch --no-tags mcgrof-next 20210916-firmware-builtin-v2
+>         git checkout f69194f4bcf5b301f2d169b2f036c0da4b642e53
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm 
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin.gen.S:5:13: error: Could not find incbin file 'drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin'
+>        .incbin "drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin"
+>                ^
 
-Please ignore these, it is just a local test branch from a private tree.
+I used the latest test branch:
 
-Thanks,
-Daniel
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20211020-firmware-builtin
+
+And I can't reproduce there, that build fails for another reason though:
+
+ld.lld: error: undefined symbol: _printk
+>>> referenced by io-acorn.o:(.text+0x38) in archive
+>>> arch/arm/mach-rpc/built-in.a
+make: *** [Makefile:1183: vmlinux] Error 1
+make: Target '__all' not remade because of errors.
+
+  Luis
