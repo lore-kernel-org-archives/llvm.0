@@ -1,43 +1,84 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B862C85
-	for <llvm@lists.linux.dev>; Mon,  8 Nov 2021 12:08:13 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B2442B;
-	Mon,  8 Nov 2021 04:00:27 -0800 (PST)
-Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 596BD3F7F5;
-	Mon,  8 Nov 2021 04:00:26 -0800 (PST)
-From: Valentin Schneider <valentin.schneider@arm.com>
-To: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH] sched: Tweak default dynamic preempt mode selection
-In-Reply-To: <202111061341.QdauxAuH-lkp@intel.com>
-References: <20211105104035.3112162-1-valentin.schneider@arm.com> <202111061341.QdauxAuH-lkp@intel.com>
-Date: Mon, 08 Nov 2021 12:00:17 +0000
-Message-ID: <878rxyeu26.mognet@arm.com>
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2BC2C80
+	for <llvm@lists.linux.dev>; Mon,  8 Nov 2021 12:35:09 +0000 (UTC)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92.3)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1mk3rW-0004Gr-Qi; Mon, 08 Nov 2021 13:34:58 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1mk3rW-000MVN-KI; Mon, 08 Nov 2021 13:34:58 +0100
+Subject: Re: [dborkman-bpf:pr/bpf-tstamp 3/3]
+ drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c:2482:44: warning: shift
+ count >= width of type
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>,
+ kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <f98d886c-dc50-9c8b-c160-6e8ecd895cb0@wanadoo.fr>
+ <7658171d-e551-cc94-b6b6-0c8bd13d00eb@wanadoo.fr>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2091d820-e95d-f3e1-722b-3b24f028f571@iogearbox.net>
+Date: Mon, 8 Nov 2021 13:34:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <7658171d-e551-cc94-b6b6-0c8bd13d00eb@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26347/Mon Nov  8 10:19:39 2021)
 
-On 06/11/21 13:05, kernel test robot wrote:
->    kernel/sched/core.c:3439:6: error: no previous prototype for function 'sched_set_stop_task' [-Werror,-Wmissing-prototypes]
->    void sched_set_stop_task(int cpu, struct task_struct *stop)
->         ^
->    kernel/sched/core.c:3439:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void sched_set_stop_task(int cpu, struct task_struct *stop)
->    ^
->    static
->>> kernel/sched/core.c:6576:2: error: use of undeclared identifier '__SCT__preempt_schedule'
->            static_call_update(preempt_schedule, __preempt_schedule_func);
->            ^
+On 11/6/21 10:12 PM, Christophe JAILLET wrote:
+> (resend because of HTML issue reported by mailing list daemon)
+> Le 06/11/2021 à 19:42, Andy Shevchenko a écrit :
+>> +Cc Christophe (can you look into this? It seems your code is involved)
+>> On Sat, Nov 6, 2021 at 3:52 AM kernel test robot<lkp@intel.com>  wrote:
+>>> tree:https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git  pr/bpf-tstamp
+>>> head:   f7d619a946e981177777983af26e9e31163ffb38
+>>> commit: f7d619a946e981177777983af26e9e31163ffb38 [3/3] net: skb clock bases
+>>> config: i386-randconfig-a005-20210928 (attached as .config)
+>>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project  dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+>>> reproduce (this is a W=1 build):
+>>>          wgethttps://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross  -O ~/bin/make.cross
+>>>          chmod +x ~/bin/make.cross
+>>>          #https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git/commit/?id=f7d619a946e981177777983af26e9e31163ffb38
+>>>          git remote add dborkman-bpfhttps://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git
+>>>          git fetch --no-tags dborkman-bpf pr/bpf-tstamp
+>>>          git checkout f7d619a946e981177777983af26e9e31163ffb38
+>>>          # save the attached .config to linux build tree
+>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot<lkp@intel.com>
+>>>
+>>> All warnings (new ones prefixed by >>):
+>>>
+>>>     In file included from drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe_main.c:9:
+>>>     In file included from drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe.h:22:
+>>>     include/net/tcp.h:812:27: error: no member named 'skb_mstamp_ns' in 'struct sk_buff'
+>>>             return tcp_ns_to_ts(skb->skb_mstamp_ns);
+>>>                                 ~~~  ^
+>>>     include/net/tcp.h:818:22: error: no member named 'skb_mstamp_ns' in 'struct sk_buff'
+>>>             return div_u64(skb->skb_mstamp_ns, NSEC_PER_USEC);
+>>>                            ~~~  ^
+>>>     include/net/tcp.h:2367:8: error: no member named 'skb_mstamp_ns' in 'struct sk_buff'
+>>>                     skb->skb_mstamp_ns += (u64)tp->tcp_tx_delay * NSEC_PER_USEC;
+>>>                     ~~~  ^
 
-Doh, I broke the
+Please ignore these, it is just a local test branch from a private tree.
 
-  PREEMPT_DYNAMIC
-    select PREEMPT
-
-thing - the above happens with PREEMPT_DYNAMIC && !PREEMPT. Lemme fix.
+Thanks,
+Daniel
