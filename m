@@ -1,90 +1,60 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299462C85
-	for <llvm@lists.linux.dev>; Mon,  8 Nov 2021 01:29:14 +0000 (UTC)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HnYPC527Hz1DJC4;
-	Mon,  8 Nov 2021 09:26:55 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Mon, 8 Nov 2021 09:29:06 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.15; Mon, 8 Nov 2021 09:29:05 +0800
-Message-ID: <2cf3f6a2-769a-7d68-b42f-3b74b58925fb@huawei.com>
-Date: Mon, 8 Nov 2021 09:29:05 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432F02C80
+	for <llvm@lists.linux.dev>; Mon,  8 Nov 2021 06:57:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5205F60041;
+	Mon,  8 Nov 2021 06:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1636354635;
+	bh=oXPkLG9UQMbQzEsjgMGmo5rrYLPdclwno9fWmRJctjM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Go/gI09zs0oo4A+YPy63Q9cK7ZQz7ocpXYguw6iDCBQ8ILfX08egRVUqba0FSp3FB
+	 6nlxff0D3Ek4MeS6SxEM89/oBw1gVMRE+7p9bu1LJaUQVVeGHseEtJuhrEbZ905yHd
+	 YXGn9VsUMpy1BdC/rCA5DUbD/y+SIyS3kPuRjsLE=
+Date: Mon, 8 Nov 2021 07:57:13 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>,
+	stable@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Please apply 3d5e7a28b1ea2d603dea478e58e37ce75b9597ab to 5.15,
+ 5.14, and 5.10
+Message-ID: <YYjKSQ4Axy44KNcs@kroah.com>
+References: <YYQjyo/dKfDb/no3@archlinux-ax161>
+ <c3757fc0-09fa-b0f1-7165-795e0363058d@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 2/2] amba: Move of_amba_device_decode_irq() into
- amba_probe()
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Russell King <linux@armlinux.org.uk>,
-	<saravanak@google.com>, <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
-References: <20211104095643.180429-3-wangkefeng.wang@huawei.com>
- <202111060042.JQjb9nZb-lkp@intel.com>
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <202111060042.JQjb9nZb-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3757fc0-09fa-b0f1-7165-795e0363058d@redhat.com>
 
-Thanks, will fix and resend after 5.16-rc1.
+On Fri, Nov 05, 2021 at 09:44:05AM +0100, Paolo Bonzini wrote:
+> On 11/4/21 19:17, Nathan Chancellor wrote:
+> > Hi Greg and Sasha,
+> > 
+> > Please apply commit 3d5e7a28b1ea ("KVM: x86: avoid warning with
+> > -Wbitwise-instead-of-logical") to 5.10, 5.14, and 5.15, where it
+> > resolves a build error with tip of tree clang due to -Werror:
+> > 
+> > arch/x86/kvm/mmu/mmu.c:3548:15: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+> >                  reserved |= __is_bad_mt_xwr(rsvd_check, sptes[level - 1]) |
+> >                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >                                                                            ||
+> > arch/x86/kvm/mmu/mmu.c:3548:15: note: cast one or both operands to int to silence this warning
+> > 1 error generated.
+> > 
+> > It applies cleanly to 5.14 and 5.15 and I have attached a backport for
+> > 5.10. I have added Paolo in case he has any objections to this.
+> 
+> No problem.
+> 
+> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
-On 2021/11/6 0:41, kernel test robot wrote:
-> Hi Kefeng,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on next-20211105]
-> [cannot apply to v5.15]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Kefeng-Wang/amba-some-cleanup/20211104-174611
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7ddb58cb0ecae8e8b6181d736a87667cc9ab8389
-> config: arm-randconfig-r034-20211104 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 847a6807332b13f43704327c2d30103ec0347c77)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install arm cross compiling tool for clang build
->          # apt-get install binutils-arm-linux-gnueabi
->          # https://github.com/0day-ci/linux/commit/e7bfc31724b5810d3dade0f2b83635fec6aef601
->          git remote add linux-review https://github.com/0day-ci/linux
->          git fetch --no-tags linux-review Kefeng-Wang/amba-some-cleanup/20211104-174611
->          git checkout e7bfc31724b5810d3dade0f2b83635fec6aef601
->          # save the attached .config to linux build tree
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> drivers/amba/bus.c:186:9: error: implicit declaration of function 'of_amba_device_decode_irq' [-Werror,-Wimplicit-function-declaration]
->                     ret = of_amba_device_decode_irq(dev);
->                           ^
->     drivers/amba/bus.c:375:12: error: static declaration of 'of_amba_device_decode_irq' follows non-static declaration
->     static int of_amba_device_decode_irq(struct amba_device *dev)
->                ^
->     drivers/amba/bus.c:186:9: note: previous implicit declaration is here
->                     ret = of_amba_device_decode_irq(dev);
->                           ^
->     2 errors generated.
-> 
+All now queued up, thanks.
+
+greg k-h
