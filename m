@@ -1,20 +1,20 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2912C96
-	for <llvm@lists.linux.dev>; Tue,  9 Nov 2021 01:06:28 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BEF6E61A0A;
-	Tue,  9 Nov 2021 01:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9D72C96
+	for <llvm@lists.linux.dev>; Tue,  9 Nov 2021 01:07:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DB1561284;
+	Tue,  9 Nov 2021 01:07:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636419987;
-	bh=n1IioQQzOH0POz7eaWR7ENdja0fn4A3UEsNKmpHT5UQ=;
+	s=k20201202; t=1636420073;
+	bh=fZXrAMowt1mPhO6b8vKZbcOJ66dxfQP3LqK1emOm2MI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q1joH7j/3x185sChkhoLgFowaIczOLA7StVThjAG9EZnwUz538nuR37wRcz6iEP0V
-	 apcT+HacTgF5FYNwepcTrO2EFzDMJOPZTb6ABDGMCZUu+UUBrwDPGU7clP0YqP5fzR
-	 8cWVzeiTB/foJ2PhkfMHkJ/6N0dnXGy6RWABZbHCicGKLYJ53PAXyDTB9VkRQNOK/U
-	 Z5QCoYG+sUqjJ42bmendONmvRmCKPH/Oglsu+t4Co1fXFJ0Me2JR7ukIgpqQXinzLO
-	 4afVmbOYu3ZT+XhjiU/GjAskYBkjjuA0N2DSBHvANuS39Vp/A0vTSf4zymkgGyXzqp
-	 BxvpfilsOMpQg==
+	b=eFFF5u50Swqb8NtLkN64ubK5qlNUCu5iXIce0ecHF6kUha/yDuzpiSfrtnrWoIBCj
+	 YYT8g4ZslL1ZNlThlf03e/YEndnBNx4ZHQ7babSe/Wux7ujd2A9HN5kQGJfSoxU55J
+	 EhdJoBYzEauX8r4LAnDLBrSzAlqx4P5LMP3FVyS77nAeP5kkWJ2nbEMVyLTXKaI7MY
+	 BXSgFtMHeb7v8U6T5N06rXk7darWiBuuVSblxg0018L5ifiNfZvYpXy+8QL6PZKL1d
+	 04LAcTpCM2g9v3bGtLpu1kMZucwukCYpi9MpKKejpjiQty0hIcZ1S1QJ799Og49W1L
+	 pBCuNiU6G0sbw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	nathan@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.19 38/47] ARM: clang: Do not rely on lr register for stacktrace
-Date: Mon,  8 Nov 2021 12:50:22 -0500
-Message-Id: <20211108175031.1190422-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 33/39] ARM: clang: Do not rely on lr register for stacktrace
+Date: Mon,  8 Nov 2021 20:06:43 -0500
+Message-Id: <20211109010649.1191041-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211108175031.1190422-1-sashal@kernel.org>
-References: <20211108175031.1190422-1-sashal@kernel.org>
+In-Reply-To: <20211109010649.1191041-1-sashal@kernel.org>
+References: <20211109010649.1191041-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/arch/arm/kernel/stacktrace.c b/arch/arm/kernel/stacktrace.c
-index d23ab9ec130a3..a452b859f485f 100644
+index ba9b9a77bcd2c..31af81d46aaed 100644
 --- a/arch/arm/kernel/stacktrace.c
 +++ b/arch/arm/kernel/stacktrace.c
-@@ -53,8 +53,7 @@ int notrace unwind_frame(struct stackframe *frame)
+@@ -52,8 +52,7 @@ int notrace unwind_frame(struct stackframe *frame)
  
  	frame->sp = frame->fp;
  	frame->fp = *(unsigned long *)(fp);
