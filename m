@@ -1,20 +1,20 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98602C96
-	for <llvm@lists.linux.dev>; Tue,  9 Nov 2021 01:09:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F77C61A65;
-	Tue,  9 Nov 2021 01:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FB62C96
+	for <llvm@lists.linux.dev>; Tue,  9 Nov 2021 01:10:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D729761406;
+	Tue,  9 Nov 2021 01:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636420146;
+	s=k20201202; t=1636420210;
 	bh=YU2DXVZ+7h37o9JM5RlfJzMMJWMvl2Iw7jDeJIdyAxc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZFK2vAYGwyo7ouQhiN9j8Al+WO2xlzOLBlazdC0ag9om7D5BIb1VAN2CXDtRGS1b2
-	 MJKhB399Oc45cgNwqdu2wtAC6IcOkJLV9QyqtlDovxEUGULNPJiDLQTUVMaUrm95W2
-	 ZYtmwgh/AlWOWxjoo91yU72gk+KGjU9YyqQqSCy4ga4UuXcA87S6yXDGpuoigdwu8J
-	 gAVqYCVhRoY57cYfnP3XjYs7P5QmIJkNS9CmF5s8H1fWOqROcGy94AC6/upQn8oL49
-	 Qzudmfmtv0re7m77lHoNA2ckvCaVPbUNGCZ7FH8JWyEY9bZYMBtsgMRWaEpmxqVNcS
-	 WJOAqk1+chY/g==
+	b=ifEafSvxUL2kJtIv2QDmxyPWW4d62XootW5yta7w+kyX3mRvm47AEJMxDSsZtQy0M
+	 leFfQN1R+9Hs/OZkX75QHzc8V1Oe+2tkLPRdWhCfrgEQzbcAIfk1pQMMPNs1moJ7C2
+	 GgxDdHsNVORJu32lSFIqXyqSMKG+NnndUa+GrWE+AGj+nb+Yc0w1KwkAgdmrns1kdB
+	 ZJ6N60AuWH9ymvCJrtYOZXwolpDJ76G3/9V/gB/X0yIY2wKmbBY+J4eD6UvBnMb5LL
+	 S8CrnJSUwcyBz1TyxVh5g/il505NSkSrnNS7BeE81WuOTVyn4FEOK3YQM26HQu4WNE
+	 TxrZWrmIt92LQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	nathan@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.9 29/33] ARM: clang: Do not rely on lr register for stacktrace
-Date: Mon,  8 Nov 2021 20:08:03 -0500
-Message-Id: <20211109010807.1191567-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 27/30] ARM: clang: Do not rely on lr register for stacktrace
+Date: Mon,  8 Nov 2021 20:09:15 -0500
+Message-Id: <20211109010918.1192063-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109010807.1191567-1-sashal@kernel.org>
-References: <20211109010807.1191567-1-sashal@kernel.org>
+In-Reply-To: <20211109010918.1192063-1-sashal@kernel.org>
+References: <20211109010918.1192063-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
