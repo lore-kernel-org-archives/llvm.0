@@ -1,123 +1,128 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE21272
-	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 19:54:32 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id z34so8624127lfu.8
-        for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 11:54:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E56372
+	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 20:09:53 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id p16so8785189lfa.2
+        for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 12:09:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=katFFdjF9yTSPvuIotc4HFJ7jS5Mn6dtEx4FmMbQPg4=;
-        b=MZggrA4RcGMosy2Ga4WoqLZPKaTXzyjlufmlT6zEByT/wd6dNIGqeBo6m+OmBXpvkW
-         75LLdFQAKIW61endN6N1cI/NTleNo3zmNI6/Ek7dm9QlKBdlqqkpqFaT25/nEzdzRI9R
-         3j9n2/NeRe6z3HGDU/Bz7jTTVkV9sw03FRnJ1HPXnrlVSRDn4957pXe/P/ShmmxFClfs
-         llGhO7Pk5YGvShrE8xNQZLdoBx4nfy/rNYoXHSf/d4raA4PWv0xWz78w8WuNnimtIJ9O
-         +ppgIW+LLk7WWRppk1MFW01/0f4dhWeu9eLwtVcBrwv6IU6U01l6kK4yYnFjbA0Gv5WY
-         KrCA==
+        bh=00x68YJ2x4xVsec0dOpuJh55/HKY/Kh+2U/BGdfsf1Q=;
+        b=cMqbSJKg3qxVw3peYwsclKf0J6UCOPkoa+aWA8rG5txwG0c4Y6hTlI8M8mG/UVj39j
+         ruueogZTvPJQD6/U+xIHXTYmwu9OSc69VrL57h2cGM0Ifu11QSEYpEwhSU45pbH3oXUM
+         SFvllwF1g7nkYdblB6zZOal3Vhy195Vv27OJwVrJM6EaGgv6BQD4rn4itkjb+FxiV/74
+         s2CCFRwq76gtLAc0QHdj3FsdHtrSYCvhyT+WJG2od4uLFnQhCFZtaQWRbGSv+WwAhwHu
+         WN44mBTo8aSZgA8q21MrtLXrpYnTHviFbQKaaqHTn+tcm/otuIU7U7kZVRa864HmB9iL
+         0lWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=katFFdjF9yTSPvuIotc4HFJ7jS5Mn6dtEx4FmMbQPg4=;
-        b=W0644IfBZF3drQqifrVtaDl65Bqvki7EbawzyPWJz72p+x8tUDCHXB+HqF9Bi1I/Tt
-         hvqvTI8A6TRs1RvI9RulfJVkZkciPL92qJmbhqIERZKRq+poUjCnItXGRlhuLAxSPSyI
-         i6Dl8iV4b+YwpgKtbO+weyVTbZOSjmV06FzCI+7+udVKJRdPxdY8Wr9FramEjdLZ5h4f
-         +6HAGJhhU6q2yBFileBK1jp15Y9Gl0Y2Evq0vsv9As20pmZ62D1jFfSZXZlJB/O3EJU6
-         z8fvroGb3N15LfAoM9njiiXW3ZeCxh9gioxxE0NycxeUhmSIdgWbslfdoGo5P1I4UNOo
-         OAgQ==
-X-Gm-Message-State: AOAM531E2DeXLJpHNtizen/mGg2G9dO6F3zwYjjn4LmM1NVVQ+l3xoTj
-	G0j27bQNSMyjr1KToT/JKIgg7PxC3NZMIRodUxjY8g==
-X-Google-Smtp-Source: ABdhPJzFULqa9FMP1hJDixPutwoqlYcQoSFD04OmuzaLunO5v81iEbAfcBW9bBSLNQCvOM2qF9EvJwkAWtQsVLBmPVk=
-X-Received: by 2002:a05:6512:150e:: with SMTP id bq14mr1600909lfb.444.1636574070576;
- Wed, 10 Nov 2021 11:54:30 -0800 (PST)
+        bh=00x68YJ2x4xVsec0dOpuJh55/HKY/Kh+2U/BGdfsf1Q=;
+        b=lbtxVMd/yAezQpEbzUxET1ajHzJj2mg7Y6mTs/OcXOuVjpNE6DW6aZLppQKj+WRBkD
+         9LiW2hRdloyQHGCBT1wto1zcYLxjvy1icsxwzVm4TLKFS7D6o352x1dqSlJ+T8Pm6nHo
+         YQPUPSpIqEGWQR70pB8lU2mE0p0mkhanb207Wy+s3iwnyIFx8h4/YtW7KaHKqZDwOs9S
+         qh3kh6SqhNXdG1RS71K1624bVhc3nGrmpVW8BHZq9aEHG2oXjVR1TGa/px+vJFqn1On6
+         s5aTHHzDxRV+HgqxeXXYqG4pLhZAbTZZGn/6QZn5OhLsK1Djn6C+jCSh0Hsu7ecGMGyy
+         OGkg==
+X-Gm-Message-State: AOAM533+JCMclN+0C0oofzgabcjSAwBcVgusCOp/8c6MG1rdCAru8F4n
+	LVNZC80zS9t4RsOUpYAn3WXKjdAswVRaQ6CVQ1t3Ag==
+X-Google-Smtp-Source: ABdhPJyT/wr//p2Nn+W3WcilQKAdqjpq4N7/38Ue/cFfN6ynx6DLK6GrO+vauBVcPHNm8RQI7TrE8+Qw3320smkxI50=
+X-Received: by 2002:a05:6512:3b9c:: with SMTP id g28mr1625162lfv.651.1636574991415;
+ Wed, 10 Nov 2021 12:09:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211107162641.324688-1-masahiroy@kernel.org> <20211107162641.324688-2-masahiroy@kernel.org>
- <CAKwvOdmCaXAMvouD7bsWqmgOUxQ9vpdt3LY7qWpzTVm-2gddEw@mail.gmail.com> <20211109000531.k23mgrfjn5tomevv@google.com>
-In-Reply-To: <20211109000531.k23mgrfjn5tomevv@google.com>
+References: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
+ <20211110180359.2338349-1-anders.roxell@linaro.org>
+In-Reply-To: <20211110180359.2338349-1-anders.roxell@linaro.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 10 Nov 2021 11:54:19 -0800
-Message-ID: <CAKwvOd=gD+Tn1BCHwtLztUuy6tBPqZxUyneddz3849pDqhP7dw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] x86/purgatory: remove -nostdlib compiler flag
-To: Fangrui Song <maskray@google.com>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>, clang-built-linux@googlegroups.com, 
-	Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+Date: Wed, 10 Nov 2021 12:09:40 -0800
+Message-ID: <CAKwvOdkoKvjecTfxbRwZ=BYirvy-Jq64pHtHuct8oWgExv1xPw@mail.gmail.com>
+Subject: Re: [PATCHv2] selftests: timens: exec: use 'labs()' over 'abs()'
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: shuah@kernel.org, nathan@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 8, 2021 at 4:05 PM 'Fangrui Song' via Clang Built Linux
-<clang-built-linux@googlegroups.com> wrote:
+On Wed, Nov 10, 2021 at 10:04 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> On 2021-11-08, Nick Desaulniers wrote:
-> >On Sun, Nov 7, 2021 at 8:27 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >>
-> >> The -nostdlib option requests the compiler to not use the standard
-> >> system startup files or libraries when linking. It is effective only
-> >> when $(CC) is used as a linker driver.
-> >
-> >Is that right? ld.lld recognizes --nostdlib and has --help text for it.
+> When building selftests/timens with clang, the compiler warn about the
+> function abs() see below:
 >
-> GCC/Clang driver -nostdlib != ld.bfd/ld.lld -nostdlib.
+> exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
+>                         if (abs(tst.tv_sec - now.tv_sec) > 5)
+>                             ^
+> exec.c:33:8: note: use function 'labs' instead
+>                         if (abs(tst.tv_sec - now.tv_sec) > 5)
+>                             ^~~
+>                             labs
 >
-> ld.lld -nostdlib just ignores SEARCH_DIR in a linker script.
-> I think ld.bfd's -nostdlib is more complex than that which also has
-> something to do with its internal linker script location.
-> Anyway, getting of the obscure ld -nostdlib is a good idea.
+> Rework to store the time difference in a 'long long' and pass that to
+> llabs(), since the variable can be an 'int', 'long' or 'long long'
+> depending on the architecture and C library.
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-Ok, I verified that the size of arch/x86/purgatory/purgatory.ro,
-arch/x86/entry/vdso/vdso64.so, and arch/x86/entry/vdso/vdso32.so don't
-change with this series. (ldd is not happy with the .so's regardless).
-
-I also suspect that the linker when invoked directly can't assuming
-it's linking object files created from C sources (ie. could have been
-assembler sources), so there's no reason to assume that the libc, C
-runtime, or compiler runtime would need to be linked against.
-
+Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+>  tools/testing/selftests/timens/exec.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 >
-> >>
-> >> $(LD) is directly used for linking purgatory.{ro,chk} here, hence
-> >> -nostdlib is unneeded.
-> >>
-> >> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> >> ---
-> >>
-> >>  arch/x86/purgatory/Makefile | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> >> index 95ea17a9d20c..ae53d54d7959 100644
-> >> --- a/arch/x86/purgatory/Makefile
-> >> +++ b/arch/x86/purgatory/Makefile
-> >> @@ -16,7 +16,7 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
-> >>
-> >>  # When linking purgatory.ro with -r unresolved symbols are not checked,
-> >>  # also link a purgatory.chk binary without -r to check for unresolved symbols.
-> >> -PURGATORY_LDFLAGS := -e purgatory_start -nostdlib -z nodefaultlib
-> >> +PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
-> >>  LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS)
-> >>  LDFLAGS_purgatory.chk := $(PURGATORY_LDFLAGS)
-> >>  targets += purgatory.ro purgatory.chk
-> >> --
-> >> 2.30.2
-> >
-> >--
-> >Thanks,
-> >~Nick Desaulniers
+> diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
+> index e40dc5be2f66..04439e6ac8a2 100644
+> --- a/tools/testing/selftests/timens/exec.c
+> +++ b/tools/testing/selftests/timens/exec.c
+> @@ -21,6 +21,7 @@
+>  int main(int argc, char *argv[])
+>  {
+>         struct timespec now, tst;
+> +       long long timediff;
+>         int status, i;
+>         pid_t pid;
 >
+> @@ -30,7 +31,8 @@ int main(int argc, char *argv[])
+>
+>                 for (i = 0; i < 2; i++) {
+>                         _gettime(CLOCK_MONOTONIC, &tst, i);
+> -                       if (abs(tst.tv_sec - now.tv_sec) > 5)
+> +                       timediff = tst.tv_sec - now.tv_sec;
+> +                       if (llabs(timediff) > 5)
+>                                 return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
+>                 }
+>                 return 0;
+> @@ -50,7 +52,8 @@ int main(int argc, char *argv[])
+>
+>         for (i = 0; i < 2; i++) {
+>                 _gettime(CLOCK_MONOTONIC, &tst, i);
+> -               if (abs(tst.tv_sec - now.tv_sec) > 5)
+> +               timediff = tst.tv_sec - now.tv_sec;
+> +               if (llabs(timediff) > 5)
+>                         return pr_fail("%ld %ld\n",
+>                                         now.tv_sec, tst.tv_sec);
+>         }
+> @@ -70,7 +73,8 @@ int main(int argc, char *argv[])
+>                 /* Check that a child process is in the new timens. */
+>                 for (i = 0; i < 2; i++) {
+>                         _gettime(CLOCK_MONOTONIC, &tst, i);
+> -                       if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
+> +                       timediff = tst.tv_sec - now.tv_sec - OFFSET;
+> +                       if (llabs(timediff) > 5)
+>                                 return pr_fail("%ld %ld\n",
+>                                                 now.tv_sec + OFFSET, tst.tv_sec);
+>                 }
 > --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20211109000531.k23mgrfjn5tomevv%40google.com.
-
+> 2.33.0
+>
 
 
 -- 
