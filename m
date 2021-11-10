@@ -1,144 +1,100 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791BA72
-	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 20:11:17 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id y26so8683338lfa.11
-        for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 12:11:17 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BC872
+	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 20:19:19 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id br15so5040067lfb.9
+        for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 12:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aIXih9GU4NqMypYA7Dr0jx2NlckxBXybX3o8wMySwgY=;
-        b=MQpfLdrsLMfMXyJmeTe28PO4JMQ8+aF4itutOZof98/e/JVNK5SVfuOuBrERPM5N8u
-         6mpxv0niiGe5BfL40P44TG06AHv5J623lJJyaJj6x5hsuofw47Ce+ZMABbD/82KtEioN
-         Xav9pRS6lItXHD1UvAGLhVAgb4+KIV8KA8cJvIYYNeNIkHn6lSltMwkpaVuCu/KvNjM2
-         SLBIyx8W75J4NJJFaWO9+/Z4fmTwFc1tmYO5beFns1XsnEq6mAlqSqS1fosYesOEpNa4
-         wmk9LwgBiKK0mfW7OjLIMVQrgkn9ZZDJh/vdtKfOdY9rdeLSz/gWYOo/1jON7VrjIAmJ
-         ogmQ==
+         :cc:content-transfer-encoding;
+        bh=sfkLEyAh2f0FnZgoyr5ZOnaxpuprPl9HQyaWcoACmR8=;
+        b=sqjWIl2uzMEK2g5GksLYcz/qLHpXgLzH13UQB3j1AUlei4YSIvbgoY5o/k2+vT7Wg+
+         VyCIULycAv3lK5CmoVpP+rVNfmeUqzrp7Wb32G8OzooVp1VJQhgghC3VbkRyp+Je7Emh
+         fjc8RFf0NZEGOOFa7AGURqpR+wFVOLhPvpVq+i/TQxQhd3MBY4Hasd5OuCVJWfUZEpce
+         TYvr/rZz2A347yMu2gkQEcknY6LmUYJTvR78OlfQUS6A1xFzVTV55SC0YkyoSpxPG3Gz
+         63RCKroXx6LgLISkyWb2bMemYWJcxVO+nxgTKx2Gov3SlpN+rgtdmkwrBJKg6Y8zrp0m
+         G6CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aIXih9GU4NqMypYA7Dr0jx2NlckxBXybX3o8wMySwgY=;
-        b=TPUWPtB+GrA1SUyJWoIg8JgZFkFnB0ZN67XkmyV36+Q4r2Lyk8foxF+2sxStE1fpvl
-         Zun+YK/XPhrwZBvsuVJdpOSse0blpaH0oEfPp1wCEkDjtf386GCwaoXcW91xGtyhy0VO
-         M9rQGGm2n/ddU05/jdNQbRdzoSp0dUZWwIhnCgLxinGGgbvelUPJhi6WX2MYEw/yt1+e
-         liDvWGf2FGL4utUCem37yI8ThbxxMFo5nusqeqtZw7etUDT5R+ThMwhsHcy1F+dwEegY
-         QtawJ1GVP57HPL5kD4L/mLfR+nh+W+1EkBe8DrD+zQ6Ddo16ToUNmNWkkAXV3/F4Vc/Z
-         ocKA==
-X-Gm-Message-State: AOAM531lr/ovFtx1LOwIoJA5owqXObj1sVTI2CGlm33FC+/feN6tnE1i
-	0+UAsaaGOZdmLId1J4sGtJWccWs3oipvWmrMX260PA==
-X-Google-Smtp-Source: ABdhPJy2Xe5owYl4nyUoytHp4HNepVE4HMcKJ3NX6Ap63uZwX3DgnXdFw7bQADviO7nj7SnQ/PcbHrb00w+GsF6cmxU=
-X-Received: by 2002:a05:6512:150e:: with SMTP id bq14mr1695406lfb.444.1636575075479;
- Wed, 10 Nov 2021 12:11:15 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sfkLEyAh2f0FnZgoyr5ZOnaxpuprPl9HQyaWcoACmR8=;
+        b=bNOEc0+tvRIroDBVyVqfucvzrIS796QB8Y1cHYDBmpHdg1oxVRdytEqgsqY85X5w8F
+         Q5fKuC744+UW8pixrUiv7Pxo93ow5Di3njbHq/+vNrrE2a6lRKFlWUS3WzaTETROxTqM
+         07C3KUcCGvWJQjhGB7xS0OqToKgLtnAs+1tU4L+6AORL/2wNlVTGrebipVEmBfRRApDa
+         hnchgUM17zohlXuO6rSQLOqCzlPQxG7maY7NxICsPQjOmPwExSr4yyW1mB1Cwahzexvj
+         x/Ae16YsNl3IxP8FRAEF5/BCNv0n7K96vAedvZZpD1CrpQ06JnGhAXqw66NVjpNH9JkN
+         igzw==
+X-Gm-Message-State: AOAM530bAgjUzxKsMkX6tl5HSsFUEVyYpMkhEzUczy6J2SHj++4nquUZ
+	YcFY8o0430vfz/VaxIcDWDG5vwWpaOqA01Ad6ITs1g==
+X-Google-Smtp-Source: ABdhPJxqn/www7tIhoKSEkqyNjE2zOFSoBeoIMJ138IF8vw8u0UOPO9GEH/e0CpTKJg2Xjx8Ov1vhkFgbm43fEr/eoY=
+X-Received: by 2002:ac2:4d19:: with SMTP id r25mr1658265lfi.82.1636575557693;
+ Wed, 10 Nov 2021 12:19:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
- <20211110180359.2338349-1-anders.roxell@linaro.org> <CAKwvOdkoKvjecTfxbRwZ=BYirvy-Jq64pHtHuct8oWgExv1xPw@mail.gmail.com>
-In-Reply-To: <CAKwvOdkoKvjecTfxbRwZ=BYirvy-Jq64pHtHuct8oWgExv1xPw@mail.gmail.com>
+References: <YYhY7GqlrcTZlzuA@fedora>
+In-Reply-To: <YYhY7GqlrcTZlzuA@fedora>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 10 Nov 2021 12:11:04 -0800
-Message-ID: <CAKwvOdnNKHJ++8vJS7WvaZX1aRZHk5uA7LP+S=ApSjRcU4QDkQ@mail.gmail.com>
-Subject: Re: [PATCHv2] selftests: timens: exec: use 'labs()' over 'abs()'
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: shuah@kernel.org, nathan@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 10 Nov 2021 12:19:06 -0800
+Message-ID: <CAKwvOd=SsrCy=aG_t2=58YFymR-j6Rp-Jxb_RDfFwX3Lfy8E2g@mail.gmail.com>
+Subject: Re: [PATCH] iommu/vt-d: Remove unused dma_to_mm_pfn function
+To: =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Cc: dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org, 
+	will@kernel.org, nathan@kernel.org, iommu@lists.linux-foundation.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 10, 2021 at 12:09 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Sun, Nov 7, 2021 at 2:53 PM Ma=C3=ADra Canal <maira.canal@usp.br> wrote:
 >
-> On Wed, Nov 10, 2021 at 10:04 AM Anders Roxell <anders.roxell@linaro.org> wrote:
-> >
-> > When building selftests/timens with clang, the compiler warn about the
-> > function abs() see below:
-> >
-> > exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
-> >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
-> >                             ^
-> > exec.c:33:8: note: use function 'labs' instead
-> >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
-> >                             ^~~
-> >                             labs
-> >
-> > Rework to store the time difference in a 'long long' and pass that to
-> > llabs(), since the variable can be an 'int', 'long' or 'long long'
-> > depending on the architecture and C library.
-> >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Remove dma_to_buf_pfn function, which is not used in the codebase.
 >
-> Thanks for the patch!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> This was pointed by clang with the following warning:
+>
+> drivers/iommu/intel/iommu.c:136:29: warning: unused function
+> 'dma_to_mm_pfn' [-Wunused-function]
+> static inline unsigned long dma_to_mm_pfn(unsigned long dma_pfn)
+>                             ^
 
-ah, gmail doesn't do a great job at showing the subject when a v2 is
-sent in-reply-to.  Should the oneline mention llabs rather than labs
-now?
+Thanks for the patch!
+Fixes: dd4e831960e4f ("intel-iommu: Change dma_set_pte_addr() to
+dma_set_pte_pfn()")
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 >
-> > ---
-> >  tools/testing/selftests/timens/exec.c | 10 +++++++---
-> >  1 file changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
-> > index e40dc5be2f66..04439e6ac8a2 100644
-> > --- a/tools/testing/selftests/timens/exec.c
-> > +++ b/tools/testing/selftests/timens/exec.c
-> > @@ -21,6 +21,7 @@
-> >  int main(int argc, char *argv[])
-> >  {
-> >         struct timespec now, tst;
-> > +       long long timediff;
-> >         int status, i;
-> >         pid_t pid;
-> >
-> > @@ -30,7 +31,8 @@ int main(int argc, char *argv[])
-> >
-> >                 for (i = 0; i < 2; i++) {
-> >                         _gettime(CLOCK_MONOTONIC, &tst, i);
-> > -                       if (abs(tst.tv_sec - now.tv_sec) > 5)
-> > +                       timediff = tst.tv_sec - now.tv_sec;
-> > +                       if (llabs(timediff) > 5)
-> >                                 return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
-> >                 }
-> >                 return 0;
-> > @@ -50,7 +52,8 @@ int main(int argc, char *argv[])
-> >
-> >         for (i = 0; i < 2; i++) {
-> >                 _gettime(CLOCK_MONOTONIC, &tst, i);
-> > -               if (abs(tst.tv_sec - now.tv_sec) > 5)
-> > +               timediff = tst.tv_sec - now.tv_sec;
-> > +               if (llabs(timediff) > 5)
-> >                         return pr_fail("%ld %ld\n",
-> >                                         now.tv_sec, tst.tv_sec);
-> >         }
-> > @@ -70,7 +73,8 @@ int main(int argc, char *argv[])
-> >                 /* Check that a child process is in the new timens. */
-> >                 for (i = 0; i < 2; i++) {
-> >                         _gettime(CLOCK_MONOTONIC, &tst, i);
-> > -                       if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
-> > +                       timediff = tst.tv_sec - now.tv_sec - OFFSET;
-> > +                       if (llabs(timediff) > 5)
-> >                                 return pr_fail("%ld %ld\n",
-> >                                                 now.tv_sec + OFFSET, tst.tv_sec);
-> >                 }
-> > --
-> > 2.33.0
-> >
+> Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
+> ---
+>  drivers/iommu/intel/iommu.c | 5 -----
+>  1 file changed, 5 deletions(-)
 >
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 0bde0c8b4126..35300b5b69f7 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -133,11 +133,6 @@ static inline unsigned long lvl_to_nr_pages(unsigned=
+ int lvl)
 >
+>  /* VT-d pages must always be _smaller_ than MM pages. Otherwise things
+>     are never going to work. */
+> -static inline unsigned long dma_to_mm_pfn(unsigned long dma_pfn)
+> -{
+> -       return dma_pfn >> (PAGE_SHIFT - VTD_PAGE_SHIFT);
+> -}
+> -
+>  static inline unsigned long mm_to_dma_pfn(unsigned long mm_pfn)
+>  {
+>         return mm_pfn << (PAGE_SHIFT - VTD_PAGE_SHIFT);
 > --
-> Thanks,
-> ~Nick Desaulniers
+> 2.31.1
+>
 
 
-
--- 
+--=20
 Thanks,
 ~Nick Desaulniers
