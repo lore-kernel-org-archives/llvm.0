@@ -1,85 +1,79 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CC22C85
-	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 21:39:55 +0000 (UTC)
-Received: by mail-lj1-f175.google.com with SMTP id u25so5244530ljo.12
-        for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 13:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9fhwG8JiKxShnSZ6QQTuDODf/U79N+SImDenfsND+wk=;
-        b=oUscIYcAOyGNfe6068weJD3o7F8eiMzWJsLWdyJHFlZkjw33u5QetZpv4QE+Mhla9O
-         8GpEs73hv+7Loye8oARnHeEIJcEswipTkyEy3noPdsFodzIQ+no4YZidLUFNbWMdoeIB
-         gkJrvz1KBAPbbzQ8mYtWRjJzMz4kcqqiEzV/hYqavmrOrvgkNdNYtraJLkLld6CHOfiq
-         EMhssthtLoIuiVgdCYXNfKHUAWX/uP6uqWcQmDQl+idQ6TT9YPc/FtTlyAh5mnZssFgb
-         rHtix1iiFGKrSvaAYhKv8R21On0pjmXxfWLnAY6WPfdvKRtgWgMOQv0u3xFItqU8Xt/a
-         zC5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9fhwG8JiKxShnSZ6QQTuDODf/U79N+SImDenfsND+wk=;
-        b=C6pxBfDQwhMPFGB/S71Ai4KeA0ixe7YtCDNiZur3Gh1hZvdK5nT9yx8EeN9Gf4jxFr
-         RXzx3U/TLZU+8DIFyFascxqMw/8JRsZC2OaNBSeTV23R8xIOCYuw8yYy7I74zpKx0FCP
-         hvx2e0+uzHLzgt3SIbdiUUb3X+O1GDV1CK/cRUS3DSr4RFaTgfQNud2ZsV8Kq5aSu2zS
-         cnjkW4ZTNqexO+PRkswx5GzgYhzmH9AGMYjh7naoooZ4u5+jJd10nPxboDsikf/7JJF6
-         v+kz7fZrzUpZuF2iZaGfMMt6HYqK5QEN94Lkx70LPktP260tAItZjhu32vZjFZowAUKI
-         yTZw==
-X-Gm-Message-State: AOAM5321fFk72zQcIet2hp9uhElnZAJa4jYXBKyUGqPAU1F+sqxAkeIA
-	WwZX2RaxZbr79T/WhdtXpmxljPdPAqSnUaiKwxyEow==
-X-Google-Smtp-Source: ABdhPJzUIhrOS4hmYH9FaPKnAudImegiTctFFSRfcQrJlee75A8HV4vHD3JDgxaGjvxmuKS9yUY/zPoQiH0ftQbO2FU=
-X-Received: by 2002:a2e:9a8c:: with SMTP id p12mr2167251lji.526.1636580393318;
- Wed, 10 Nov 2021 13:39:53 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604072C81
+	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 23:07:56 +0000 (UTC)
+From: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+	s=mail; t=1636585249;
+	bh=Y5o2gmy5NesHvtQl0fjBOlhMoxRkLPEq9aVwfTh8pyk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jqHRX+PBkna5H1Npx+9oR6XosmPgl5IR7nTtv/OYKI7qD8YWkuHEF3XGdxUMss95w
+	 DyOx2oQiXxJ/vbzbgQgbtc1A4jb3OTVEzihrShWt4zae6r03y/z8w/8uyfNiywS2HS
+	 mK+0ww91l68kpTIBJHwfX+yPOoZ3C3Q+66QJGnio=
+To: Nathan Chancellor <nathan@kernel.org>,
+	linux-input@vger.kernel.org,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+	Guenter Roeck <groeck@chromium.org>,
+	llvm@lists.linux.dev
+Subject: [PATCH 3/4] platform/chrome: chros_ec_ishtp: constify devicetable initializer
+Date: Thu, 11 Nov 2021 00:00:42 +0100
+Message-Id: <20211110230043.701167-3-linux@weissschuh.net>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <YYv22iWQ7yTfMNC5@archlinux-ax161>
+References: <YYv22iWQ7yTfMNC5@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211104133735.1223989-1-arnd@kernel.org> <CAKwvOd=vrUe7xWohkPZkfui2BM-uP2Q79v02NzTJs9XJJ1CTjw@mail.gmail.com>
-In-Reply-To: <CAKwvOd=vrUe7xWohkPZkfui2BM-uP2Q79v02NzTJs9XJJ1CTjw@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 10 Nov 2021 13:39:41 -0800
-Message-ID: <CAKwvOdm1zU8nhp-KVNDwQK6SfxzwZQgkWvPwpbzn_a-VzVbkXA@mail.gmail.com>
-Subject: Re: [PATCH] iwlwifi: pcie: fix constant-conversion warning
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Luca Coelho <luciano.coelho@intel.com>, Kalle Valo <kvalo@codeaurora.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Johannes Berg <johannes.berg@intel.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Yaara Baruch <yaara.baruch@intel.com>, 
-	Matti Gottlieb <matti.gottlieb@intel.com>, Emmanuel Grumbach <emmanuel.grumbach@intel.com>, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 10, 2021 at 1:38 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Thu, Nov 4, 2021 at 6:37 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > clang points out a potential issue with integer overflow when
-> > the iwl_dev_info_table[] array is empty:
-> >
-> > drivers/net/wireless/intel/iwlwifi/pcie/drv.c:1344:42: error: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Werror,-Wconstant-conversion]
-> >         for (i = ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
-> >                ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-> >
-> > This is still harmless, as the loop correctly terminates, but adding
-> > an (int) cast makes that clearer to the compiler.
-> >
-> > Fixes: 3f7320428fa4 ("iwlwifi: pcie: simplify iwl_pci_find_dev_info()")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Previously the compilation broke on clang and gcc < 8.1.0 with errors like
+"error: initializer element is not constant".
 
-Also, looks like 0day bot reported as well:
-https://lore.kernel.org/lkml/202111070825.gigxmmDq-lkp@intel.com/
+Fixes: facfe0a4fdce ("platform/chrome: chros_ec_ishtp: only load for matching devices")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/platform/chrome/cros_ec_ishtp.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Reported-by: kernel test robot <lkp@intel.com>
-
-
+diff --git a/drivers/platform/chrome/cros_ec_ishtp.c b/drivers/platform/chrome/cros_ec_ishtp.c
+index 8c17358e84c1..2e635fee854c 100644
+--- a/drivers/platform/chrome/cros_ec_ishtp.c
++++ b/drivers/platform/chrome/cros_ec_ishtp.c
+@@ -41,9 +41,9 @@ enum cros_ec_ish_channel {
+ #define ISHTP_SEND_TIMEOUT			(3 * HZ)
+ 
+ /* ISH Transport CrOS EC ISH client unique GUID */
+-static const guid_t cros_ish_guid =
+-	GUID_INIT(0x7b7154d0, 0x56f4, 0x4bdc,
+-		  0xb0, 0xd8, 0x9e, 0x7c, 0xda,	0xe0, 0xd6, 0xa0);
++#define CROS_ISH_GUID GUID_INIT(0x7b7154d0, 0x56f4, 0x4bdc, \
++		  0xb0, 0xd8, 0x9e, 0x7c, 0xda,	0xe0, 0xd6, 0xa0)
++static const guid_t cros_ish_guid = CROS_ISH_GUID;
+ 
+ struct header {
+ 	u8 channel;
+@@ -775,7 +775,7 @@ static struct ishtp_cl_driver	cros_ec_ishtp_driver = {
+ };
+ 
+ static const struct ishtp_device_id cros_ec_ishtp_id_table[] = {
+-	{ cros_ish_guid },
++	{ CROS_ISH_GUID },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(ishtp, cros_ec_ishtp_id_table);
 -- 
-Thanks,
-~Nick Desaulniers
+2.33.1
+
