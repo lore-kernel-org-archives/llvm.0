@@ -1,118 +1,127 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA06A2C82
-	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 16:44:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3601A61205;
-	Wed, 10 Nov 2021 16:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636562656;
-	bh=+KD0uJ2aB7eJaed+K7AZZWyM1PljfTbjc0UOLx5oQwI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GCuoIdz3rtrlenZb/iekEtbbVNoLUsF5Ph+BRZeFdlWQBTW83JegBac5JIZbzpG98
-	 6ftpT5J+cUO8WNdGhbbkwNAXULax0yQic2elPllzArXFmZAlcpxHfXzvlmYDKne+mC
-	 pP6pDZ5VvqXZlk0k9bpRMKs+UV4Ap7eItJFNAbJTjfDu5yXs/iOxVss4B2A6HbbBSi
-	 qjuVHu80iREW6lfVk3wzUXeNx4shH3kZlMc6C7s3YkH5YpW2ure4oTkrbe1WR4CiP2
-	 Lg844WNAkkzVaLEeDjLMOMJjgLSP737hdsyZb50zr9ApUA4J7EODueEppO2qprxjHs
-	 KO9Fgsl9YfT5w==
-Date: Wed, 10 Nov 2021 09:44:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Benson Leung <bleung@chromium.org>,
-	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-	Guenter Roeck <groeck@chromium.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH 5/6] platform/chrome: chros_ec_ishtp: only load for
- matching devices
-Message-ID: <YYv22iWQ7yTfMNC5@archlinux-ax161>
-References: <20211029152901.297939-1-linux@weissschuh.net>
- <20211029152901.297939-2-linux@weissschuh.net>
- <20211029152901.297939-3-linux@weissschuh.net>
- <20211029152901.297939-4-linux@weissschuh.net>
- <20211029152901.297939-5-linux@weissschuh.net>
- <20211029152901.297939-6-linux@weissschuh.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6762C82
+	for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 18:04:21 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id l22so7974693lfg.7
+        for <llvm@lists.linux.dev>; Wed, 10 Nov 2021 10:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LhaYpGZE0UbJvh6Nn3mP+o6sCA1NJHCl7ZX/I6n4rjw=;
+        b=y9IC1G868iVb+OHqDVfF2LTsG3gKZU6xHEChe8Z+2oWK8hUnasf7SIsinMOv/h5tgI
+         TsXk8W4ydBqn/W6pjBnQPpcViFhJZ996Dnprf/PDBPbpFU5/YjJJp+3JW8ZqJI6fd5T6
+         5XgAeELA/04uVUtsecW0lh94hmTOsBHWaFWXVnCnszBCU1+T+JKVc+TsCcpWCbPI5Gmi
+         JZ8IDKypGtAMT3iwwSBJnJ2ABOHRcqG+4q5MMKjDo54it1V3gVH9UaaadQJ9ppC6CtpV
+         UjnpRiPzoNH9Crh6vZGJVTf3vstfk1Id8DGccONhrw/Y26w4sJgEoj+mLGlPOgFWLeGR
+         j4ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LhaYpGZE0UbJvh6Nn3mP+o6sCA1NJHCl7ZX/I6n4rjw=;
+        b=noCC/koYjfZJheQ+GkZY/mgJdjPCEMQbEMmDtzpmeS1R3siBtLAFRWhDGr7acMzeCj
+         4B+NdtnFjPnXAciU/50iSam1LdD3ozz1jLF3FYrzDslsrQ+GEm+BbD4KnV0/9seCm9El
+         GdYf83NJ/cEsZQ9n+qKC25hQKFVp6h7ILmtS84DEy6B1HRyH8J0+qv3Hf6ya/0xn2NIY
+         2ttOUqOwHOeobrbaJPYcFVIssV4BB//jjJ1tJP5MX/K9QBhTynQ8qVwIzVGm8nwxMTRn
+         KRIp7fCeK0fV76KlFkY6p17fznKt3DwRY3/AF/9nJiP8PcUhc2dgqx3eYVaDY1awG948
+         RHGQ==
+X-Gm-Message-State: AOAM533Og0C6ZkMJ+7hIQTsS+a/IXsYlVSNDQZFqYWFAR+mh7GZPHMw6
+	9kMvWvNaZbrVYyuxFxZWP+x5CA==
+X-Google-Smtp-Source: ABdhPJxt6kFT7aaYzV2PxgSdguip72HDGxZwRYc1vD3JI8NzgMHgfVJWRaY7qs1AECSc9RTpJWT+dg==
+X-Received: by 2002:a05:6512:3b2a:: with SMTP id f42mr938801lfv.282.1636567459495;
+        Wed, 10 Nov 2021 10:04:19 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id h7sm53110lfu.253.2021.11.10.10.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 10:04:19 -0800 (PST)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: shuah@kernel.org
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCHv2] selftests: timens: exec: use 'labs()' over 'abs()'
+Date: Wed, 10 Nov 2021 19:03:59 +0100
+Message-Id: <20211110180359.2338349-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
+References: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211029152901.297939-6-linux@weissschuh.net>
 
-On Fri, Oct 29, 2021 at 05:29:00PM +0200, Thomas Weiﬂschuh wrote:
-> Previously it was loaded for all ISHTP devices.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> 
-> ---
-> 
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Rushikesh S Kadam <rushikesh.s.kadam@intel.com>
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Cc: linux-input@vger.kernel.org
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> ---
->  drivers/platform/chrome/cros_ec_ishtp.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/chrome/cros_ec_ishtp.c b/drivers/platform/chrome/cros_ec_ishtp.c
-> index 9d1e7e03628e..8c17358e84c1 100644
-> --- a/drivers/platform/chrome/cros_ec_ishtp.c
-> +++ b/drivers/platform/chrome/cros_ec_ishtp.c
-> @@ -774,6 +774,12 @@ static struct ishtp_cl_driver	cros_ec_ishtp_driver = {
->  	},
->  };
->  
-> +static const struct ishtp_device_id cros_ec_ishtp_id_table[] = {
-> +	{ cros_ish_guid },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(ishtp, cros_ec_ishtp_id_table);
-> +
->  static int __init cros_ec_ishtp_mod_init(void)
->  {
->  	return ishtp_cl_driver_register(&cros_ec_ishtp_driver, THIS_MODULE);
-> @@ -791,4 +797,3 @@ MODULE_DESCRIPTION("ChromeOS EC ISHTP Client Driver");
->  MODULE_AUTHOR("Rushikesh S Kadam <rushikesh.s.kadam@intel.com>");
->  
->  MODULE_LICENSE("GPL v2");
-> -MODULE_ALIAS("ishtp:*");
-> -- 
-> 2.33.1
-> 
-> 
+When building selftests/timens with clang, the compiler warn about the
+function abs() see below:
 
-This patch in -next as commit facfe0a4fdce ("platform/chrome:
-chros_ec_ishtp: only load for matching devices") and the following one
-as commit f155dfeaa4ee ("platform/x86: isthp_eclite: only load for
-matching devices") break clang and GCC prior to 8.1 (output from
-Debian's GCC 6.3.0 below):
+exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
+                        if (abs(tst.tv_sec - now.tv_sec) > 5)
+                            ^
+exec.c:33:8: note: use function 'labs' instead
+                        if (abs(tst.tv_sec - now.tv_sec) > 5)
+                            ^~~
+                            labs
 
-$ make -skj"$(nproc)" distclean allmodconfig drivers/platform/
-drivers/platform/chrome/cros_ec_ishtp.c:778:4: error: initializer element is not constant
-  { cros_ish_guid },
-    ^~~~~~~~~~~~~
-drivers/platform/chrome/cros_ec_ishtp.c:778:4: note: (near initialization for 'cros_ec_ishtp_id_table[0].guid')
-scripts/Makefile.build:288: recipe for target 'drivers/platform/chrome/cros_ec_ishtp.o' failed
-make[4]: *** [drivers/platform/chrome/cros_ec_ishtp.o] Error 1
-drivers/platform/x86/intel/ishtp_eclite.c:685:4: error: initializer element is not constant
-  { ecl_ishtp_guid },
-    ^~~~~~~~~~~~~~
-drivers/platform/x86/intel/ishtp_eclite.c:685:4: note: (near initialization for 'ecl_ishtp_id_table[0].guid')
+Rework to store the time difference in a 'long long' and pass that to
+llabs(), since the variable can be an 'int', 'long' or 'long long'
+depending on the architecture and C library.
 
-I am sure clang should be fixed to recognize this value as a compile
-time constant but the kernel supports GCC back to 5.1.0 so this should
-be fixed here as well.
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ tools/testing/selftests/timens/exec.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Cheers,
-Nathan
+diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
+index e40dc5be2f66..04439e6ac8a2 100644
+--- a/tools/testing/selftests/timens/exec.c
++++ b/tools/testing/selftests/timens/exec.c
+@@ -21,6 +21,7 @@
+ int main(int argc, char *argv[])
+ {
+ 	struct timespec now, tst;
++	long long timediff;
+ 	int status, i;
+ 	pid_t pid;
+ 
+@@ -30,7 +31,8 @@ int main(int argc, char *argv[])
+ 
+ 		for (i = 0; i < 2; i++) {
+ 			_gettime(CLOCK_MONOTONIC, &tst, i);
+-			if (abs(tst.tv_sec - now.tv_sec) > 5)
++			timediff = tst.tv_sec - now.tv_sec;
++			if (llabs(timediff) > 5)
+ 				return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
+ 		}
+ 		return 0;
+@@ -50,7 +52,8 @@ int main(int argc, char *argv[])
+ 
+ 	for (i = 0; i < 2; i++) {
+ 		_gettime(CLOCK_MONOTONIC, &tst, i);
+-		if (abs(tst.tv_sec - now.tv_sec) > 5)
++		timediff = tst.tv_sec - now.tv_sec;
++		if (llabs(timediff) > 5)
+ 			return pr_fail("%ld %ld\n",
+ 					now.tv_sec, tst.tv_sec);
+ 	}
+@@ -70,7 +73,8 @@ int main(int argc, char *argv[])
+ 		/* Check that a child process is in the new timens. */
+ 		for (i = 0; i < 2; i++) {
+ 			_gettime(CLOCK_MONOTONIC, &tst, i);
+-			if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
++			timediff = tst.tv_sec - now.tv_sec - OFFSET;
++			if (llabs(timediff) > 5)
+ 				return pr_fail("%ld %ld\n",
+ 						now.tv_sec + OFFSET, tst.tv_sec);
+ 		}
+-- 
+2.33.0
+
