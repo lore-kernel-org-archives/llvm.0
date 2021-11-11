@@ -1,47 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6162268
-	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 11:52:35 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10164"; a="256601997"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7097172
+	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 12:50:37 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10164"; a="232747769"
 X-IronPort-AV: E=Sophos;i="5.87,226,1631602800"; 
-   d="gz'50?scan'50,208,50";a="256601997"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 03:52:33 -0800
+   d="gz'50?scan'50,208,50";a="232747769"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 04:50:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,226,1631602800"; 
-   d="gz'50?scan'50,208,50";a="492517831"
+   d="gz'50?scan'50,208,50";a="602597759"
 Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 11 Nov 2021 03:52:31 -0800
+  by orsmga004.jf.intel.com with ESMTP; 11 Nov 2021 04:50:34 -0800
 Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1ml8d4-000GQ1-Ng; Thu, 11 Nov 2021 11:52:30 +0000
-Date: Thu, 11 Nov 2021 19:51:33 +0800
+	id 1ml9XG-000GVm-87; Thu, 11 Nov 2021 12:50:34 +0000
+Date: Thu, 11 Nov 2021 20:49:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [toke:xdp-queueing-01 2/9] net/core/filter.c:10033:15: error: use of
- undeclared identifier 'bpf_prog_test_run_dequeue'
-Message-ID: <202111111929.wx7QbqsU-lkp@intel.com>
+Subject: [toke:xdp-queueing-01 4/9] net/core/filter.c:4153:24: error:
+ implicit declaration of function 'pifo_map_dequeue'
+Message-ID: <202111112019.Rln4yjwp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="envbJBWh7q8WU6mo"
+Content-Type: multipart/mixed; boundary="qMm9M+Fa2AknHoGS"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---envbJBWh7q8WU6mo
+--qMm9M+Fa2AknHoGS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-01
 head:   7cdc645073a59261514e56e1a4c6d0dac1b24b32
-commit: 64155ff31b7e15635ccae5395cf57caa0834faba [2/9] xdp: add dequeue program type for getting packets from a PIFO
+commit: de44bbfd9cf981baab181c006dc363c5f412d94c [4/9] bpf: Add helpers to dequeue from a PIFO map
 config: riscv-buildonly-randconfig-r002-20211111 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 63ef0e17e28827eae53133b3467bdac7d9729318)
 reproduce (this is a W=1 build):
@@ -49,13 +49,12 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=64155ff31b7e15635ccae5395cf57caa0834faba
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=de44bbfd9cf981baab181c006dc363c5f412d94c
         git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
         git fetch --no-tags toke xdp-queueing-01
-        git checkout 64155ff31b7e15635ccae5395cf57caa0834faba
+        git checkout de44bbfd9cf981baab181c006dc363c5f412d94c
         # save the attached .config to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ drivers/gpu/drm/ net/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
@@ -65,30 +64,35 @@ All errors (new ones prefixed by >>):
    net/core/filter.c:3992:10: error: implicit declaration of function 'pifo_map_enqueue' [-Werror,-Wimplicit-function-declaration]
                            err = pifo_map_enqueue(map, xdp, ri->tgt_index);
                                  ^
->> net/core/filter.c:10033:15: error: use of undeclared identifier 'bpf_prog_test_run_dequeue'
+>> net/core/filter.c:4153:24: error: implicit declaration of function 'pifo_map_dequeue' [-Werror,-Wimplicit-function-declaration]
+           return (unsigned long)pifo_map_dequeue(map, flags);
+                                 ^
+   net/core/filter.c:10088:15: error: use of undeclared identifier 'bpf_prog_test_run_dequeue'
            .test_run               = bpf_prog_test_run_dequeue,
                                      ^
-   2 errors generated.
+   3 errors generated.
 
 
-vim +/bpf_prog_test_run_dequeue +10033 net/core/filter.c
+vim +/pifo_map_dequeue +4153 net/core/filter.c
 
- 10031	
- 10032	const struct bpf_prog_ops dequeue_prog_ops = {
- 10033		.test_run		= bpf_prog_test_run_dequeue,
- 10034	};
- 10035	
+  4149	
+  4150	BPF_CALL_3(bpf_packet_dequeue, struct dequeue_data *, ctx, struct bpf_map *, map,
+  4151		   u64, flags)
+  4152	{
+> 4153		return (unsigned long)pifo_map_dequeue(map, flags);
+  4154	}
+  4155	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---envbJBWh7q8WU6mo
+--qMm9M+Fa2AknHoGS
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICBEAjWEAAy5jb25maWcAnDxbc9s2s+/9FZx25kz7kMbXXM4ZP0AkKCEiCQYAJdkvHMVm
+H4sICDENjWEAAy5jb25maWcAnDxbc9s2s+/9FZx25kz7kMbXXM4ZP0AkKCEiCQYAJdkvHMVm
 Up3alkeW0+bff7sALwAIuj0nM4nN3cVtsdgrkF9++iUiL8f9w/a4u93e3/+IvjWPzWF7bO6i
 r7v75n+ihEcFVxFNmPodiLPd48vfbw+759vv0eXvp5e/n0TL5vDY3Efx/vHr7tsLtN3tH3/6
 5aeYFymb13Fcr6iQjBe1oht19fPt/fbxW/S9OTwDXXR68fsJ9PHrt93xv9++hX8fdofD/vD2
@@ -697,4 +701,4 @@ CCf9OovFYvNPIf8flGIGDKywBZobHkGPSCyUp3DQ1bTdJbAy5XDs/mytM15kK0J4cVwBcRrm
 855URrIYFTdrp7POAN/bZkHaAW7oMASsLVxRhhpGICutk95GhwLXi9u7QA7TI5W2RLNRHtYw
 mftn0fLHUWxn0R/M6Nga/wV8Ufe+1RsCAA==
 
---envbJBWh7q8WU6mo--
+--qMm9M+Fa2AknHoGS--
