@@ -1,95 +1,99 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB572C81
-	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 09:07:28 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10164"; a="233125090"
-X-IronPort-AV: E=Sophos;i="5.87,225,1631602800"; 
-   d="scan'208";a="233125090"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 01:07:14 -0800
-X-IronPort-AV: E=Sophos;i="5.87,225,1631602800"; 
-   d="scan'208";a="492471457"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.108]) ([10.255.28.108])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 01:07:10 -0800
-Subject: Re: [kbuild-all] Re: [mcgrof-next:20210916-firmware-builtin-v2 14/14]
- drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin.gen.S:5:13:
- error: Could not find incbin file
- 'drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin'
-To: Luis Chamberlain <mcgrof@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>
-References: <202111080124.Dyl8aeOd-lkp@intel.com>
- <YYlVhm0ybuirMI//@bombadil.infradead.org>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <a822ee1e-a9a2-7208-3d7d-61239c0da695@intel.com>
-Date: Thu, 11 Nov 2021 17:07:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743C42C81
+	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 09:10:19 +0000 (UTC)
+Date: Thu, 11 Nov 2021 10:10:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+	s=mail; t=1636621817;
+	bh=jR20svMKeNsXprIZydpXZd6rzkZgzz81Jni1kX7WXgY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wy27b7kTryB/DrGHNVEQgMnJtF092YEalLJYEi+EJzUSNp9X+W/KH7y47BJLP4m7D
+	 +MEX8jI0y7Tk5jjydOjSCi96TIJXKFd1vi8CKtCsWnCb9B0a1KrJVxOLDLpFxLXLTp
+	 gy71S1kFgMnDIL6xhS6ORwuhoi6n7X3YpSdpevcY=
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Nathan Chancellor <nathan@kernel.org>, linux-input@vger.kernel.org,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+	Guenter Roeck <groeck@chromium.org>, llvm@lists.linux.dev,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 1/4] HID: intel-ish-hid: fw-loader: constify devicetable
+ initializer
+Message-ID: <fa7795d5-0f53-4a8d-b55b-454c8cdfa710@t-8ch.de>
+References: <YYv22iWQ7yTfMNC5@archlinux-ax161>
+ <20211110230043.701167-1-linux@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YYlVhm0ybuirMI//@bombadil.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211110230043.701167-1-linux@weissschuh.net>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
 
+Hi,
 
-
-On 11/9/2021 12:51 AM, Luis Chamberlain wrote:
-> On Mon, Nov 08, 2021 at 01:37:31AM +0800, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210916-firmware-builtin-v2
->> head:   f69194f4bcf5b301f2d169b2f036c0da4b642e53
->> commit: f69194f4bcf5b301f2d169b2f036c0da4b642e53 [14/14] test_firmware: add support for testing built-in firmware
->> config: arm-randconfig-r004-20210929 (attached as .config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm cross compiling tool for clang build
->>          # apt-get install binutils-arm-linux-gnueabi
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=f69194f4bcf5b301f2d169b2f036c0da4b642e53
->>          git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
->>          git fetch --no-tags mcgrof-next 20210916-firmware-builtin-v2
->>          git checkout f69194f4bcf5b301f2d169b2f036c0da4b642e53
->>          # save the attached .config to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin.gen.S:5:13: error: Could not find incbin file 'drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin'
->>         .incbin "drivers/base/firmware_loader/test-builtin/test-builtin-firmware.bin"
->>                 ^
+On 2021-11-11 00:00+0100, Thomas Weißschuh wrote:
+> Previously the compilation broke on clang and gcc < 8.1.0 with errors like
+> "error: initializer element is not constant".
 > 
-> I used the latest test branch:
+> Fixes: 44e2a58cb880 ("HID: intel-ish-hid: fw-loader: only load for matching devices")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+>  drivers/hid/intel-ish-hid/ishtp-fw-loader.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20211020-firmware-builtin
+> diff --git a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+> index 945a9d0b68cd..26f376faf0e6 100644
+> --- a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+> +++ b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+> @@ -76,9 +76,9 @@ enum ish_loader_commands {
+>  #define LOADER_XFER_MODE_ISHTP			BIT(1)
+>  
+>  /* ISH Transport Loader client unique GUID */
+> -static const guid_t loader_ishtp_guid =
+> -	GUID_INIT(0xc804d06a, 0x55bd, 0x4ea7,
+> -		  0xad, 0xed, 0x1e, 0x31, 0x22, 0x8c, 0x76, 0xdc);
+> +#define ISHTP_GUID GUID_INIT(0xc804d06a, 0x55bd, 0x4ea7, \
+> +		  0xad, 0xed, 0x1e, 0x31, 0x22, 0x8c, 0x76, 0xdc)
+> +static const guid_t loader_ishtp_guid = ISHTP_GUID;
+>  
+>  #define FILENAME_SIZE				256
+>  
+> @@ -1064,7 +1064,7 @@ static struct ishtp_cl_driver	loader_ishtp_cl_driver = {
+>  };
+>  
+>  static const struct ishtp_device_id loader_ishtp_id_table[] = {
+> -	{ loader_ishtp_guid },
+> +	{ ISHTP_GUID },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(ishtp, loader_ishtp_id_table);
 > 
-> And I can't reproduce there, that build fails for another reason though:
+> base-commit: 64355db3caf6468dc711995239efe0cbcd7d0091
+> -- 
+> 2.33.1
+> 
 
-Hi Luis,
+Please drop this whole series and use the patch
+"HID: intel-ish-hid: fix module device-id handling"[0]
+from Arnd instead.
 
-Sorry for the inconvenience, the reproduce step is not accurate,
-we can be reproduced the error with "O=dir" option specified.
+It adds proper device table support to the ISHTP bus itself also preventing
+unused-variable warnings for the device table when the drivers are built-in.
 
-Best Regards,
-Rong Chen
+Thanks,
+Thomas
 
-> 
-> ld.lld: error: undefined symbol: _printk
->>>> referenced by io-acorn.o:(.text+0x38) in archive
->>>> arch/arm/mach-rpc/built-in.a
-> make: *** [Makefile:1183: vmlinux] Error 1
-> make: Target '__all' not remade because of errors.
-> 
->    Luis
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+[0] https://lore.kernel.org/lkml/20211111085842.2846422-1-arnd@kernel.org/
