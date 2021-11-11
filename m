@@ -1,117 +1,77 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5B72C82
-	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 16:01:27 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id s136so5530076pgs.4
-        for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 08:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7wfDHiPejbS6tDQijlCtZbth9NfDRjzLAZP+AtCVvZk=;
-        b=WJnf3KMp3asJehyM7Bx3fguusBmvh/1/FoyX09dTZhMVRf11bVdfg603H7tjOHf6NG
-         3ll0hA8q7lUgamTugnuygz6LAfiSsYtNLGX0C8Ux2HKznUe9+GIg3JO8QucK7KRFew1g
-         rQT0Y481E0ItBtfq29i4aXXk+7Y83b7tZ7FsRSyjKGoqcUDBiHBGMo3DAiVFwySpiniO
-         o7fD/422sV00SY3f3IkCJVklAoRpc1y1ztmfSkka1+6KMsr4jMkO76mAaDBV31PNqwOW
-         63kVJwud9VMjv+2gKe7oQ0I9vy79RqlkhxZEON6VpYcu5IPrC0rsjdIo31qg7IwXJTrw
-         oD4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7wfDHiPejbS6tDQijlCtZbth9NfDRjzLAZP+AtCVvZk=;
-        b=aMUZnSMTLTsJxDNnywI7srjW2m1BC9SEIR0jTUGA/gUzPUH6jcnjqZ+J9CuAKkpXPc
-         hsBwhBS9VoKj3EtffNYDcSK45WkF55wmTHUsxnt2q1Dc/koD9gXyQODYK4tVRndGv0OH
-         NGUHTnN5urcpLqVVUiwG1t40HFyo9iba5kJKMcHiwYg79bKMQMTmsCx0W8OxcHk/WDh3
-         VOVYYY3ml1hskOrszV7O29+MsTgf0jU2y93X0Qdx4qu+e5dCIVizF9C8ufPo9kN2jpV7
-         INtJ6E/QGwHGlYWEVke9VjEQ8/dA/yp6aFxpNpCYElltaKcQu5Rb0bkjoptMVPmAzdNX
-         5ElQ==
-X-Gm-Message-State: AOAM530jy9Y8AkseznFLWR6OOZaHyqlbsP6BEaSHz6dwdb3LRSNPpHT6
-	Ncz7l1hVTo/8N0P46xvCdV9dWg==
-X-Google-Smtp-Source: ABdhPJxBCA2agoApq1FTFonuazhl5sS5Hn1Z6aY/+CCKh/2B3iR7DCT0CJGRNC1UiIE2x80H7JSHow==
-X-Received: by 2002:a05:6a00:888:b0:44c:c00e:189c with SMTP id q8-20020a056a00088800b0044cc00e189cmr7439754pfj.79.1636646487541;
-        Thu, 11 Nov 2021 08:01:27 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id e14sm2636558pga.76.2021.11.11.08.01.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Nov 2021 08:01:27 -0800 (PST)
-Message-ID: <931f1038-d7ab-f236-8052-c5e5b9753b18@linaro.org>
-Date: Thu, 11 Nov 2021 08:01:26 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC9A2C81
+	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 16:25:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A3C246124C;
+	Thu, 11 Nov 2021 16:25:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1636647906;
+	bh=dw0x+LBQ552ApvZujaQIillgV6iC1yb5QQ5PK/digpQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=AQu3TUpVccJo4t7u3W3hOW69QX8iDiJz8OrLBhAO1QJQhPdKguQishmbKqVi6KrON
+	 y4Y1KdAToySCDwJx9OJe8PlwiVd8iH+62xubOBPXSX4/je/rqHZlzpwqUDKGGJOlBe
+	 JHrylfyQcRyOxdnTwLdaz4cDrFyiXV5nKWjAf4NHj3/Zdrk464+HTyk5p+abcqtEpH
+	 0QAFVoqJ6ikODrnzHA9r0CSTLyuEMKHkXiLqX9H8Dt0CAzgbM9DN6/KfakeV/fxgb1
+	 co0YrhJzDbDXLs/8QRANEXorz+wzMF9NoJJZ4drQ4H+AWxwdjD6deloua9TyTpidos
+	 Z9Jv8NfiG3S6g==
+Date: Thu, 11 Nov 2021 17:25:01 +0100 (CET)
+From: Jiri Kosina <jikos@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+    Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+    Benson Leung <bleung@chromium.org>, 
+    Sumesh K Naduvalath <sumesh.k.naduvalath@intel.com>, 
+    Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>, 
+    Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <groeck@chromium.org>, 
+    Lee Jones <lee.jones@linaro.org>, 
+    =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= <uwe@kleine-koenig.org>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] HID: intel-ish-hid: fix module device-id handling
+In-Reply-To: <20211111085842.2846422-1-arnd@kernel.org>
+Message-ID: <nycvar.YFH.7.76.2111111723190.12554@cbobk.fhfr.pm>
+References: <20211111085842.2846422-1-arnd@kernel.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] skbuff: suppress clang object-size-mismatch error
-Content-Language: en-US
-To: Marco Elver <elver@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexander Lobakin <alobakin@pm.me>, Willem de Bruijn <willemb@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Cong Wang <cong.wang@bytedance.com>,
- Kevin Hao <haokexin@gmail.com>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Kees Cook <keescook@chromium.org>, Eric Dumazet <edumazet@google.com>
-References: <20211111003519.1050494-1-tadeusz.struk@linaro.org>
- <CANpmjNNcVFmnBV-1Daauqk5ww8YRUVRtVs_SXVAPWG5CrFBVPg@mail.gmail.com>
- <c410f4a0-cc06-8ef8-3765-d99e29012acb@linaro.org>
- <CANpmjNNuWfauPoUxQ6BETrZ8JMjWgrAAhAEqEXW=5BNsfWfyDA@mail.gmail.com>
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <CANpmjNNuWfauPoUxQ6BETrZ8JMjWgrAAhAEqEXW=5BNsfWfyDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-On 11/11/21 07:52, Marco Elver wrote:
->> The other way to fix it would be to make the struct sk_buff_head
->> equal in size with struct sk_buff:
->>
->>    struct sk_buff_head {
->> -       /* These two members must be first. */
->> -       struct sk_buff  *next;
->> -       struct sk_buff  *prev;
->> +       union {
->> +               struct {
->> +                       /* These two members must be first. */
->> +                       struct sk_buff  *next;
->> +                       struct sk_buff  *prev;
->>
->> -       __u32           qlen;
->> -       spinlock_t      lock;
->> +                       __u32           qlen;
->> +                       spinlock_t      lock;
->> +               };
->> +               struct sk_buff  __prv;
->> +       };
->>    };
->>
->> but that's much more invasive, and I don't even have means to
->> quantify this in terms of final binary size and performance
->> impact. I think that would be a flat out no go.
->>
->>   From the other hand if you look at the __skb_queue functions
->> they don't do much and at all so there is no much room for
->> other issues really. I followed the suggestion in [1]:
->>
->> "if your function deliberately contains possible ..., you can
->>    use __attribute__((no_sanitize... "
-> That general advice might not be compatible with what the kernel
-> wants, especially since UBSAN_OBJECT_SIZE is normally disabled and I
-> think known to cause these issues in the kernel.
+On Thu, 11 Nov 2021, Arnd Bergmann wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I'll defer to maintainers to decide what would be the preferred way of
-> handling this.
+> A late addititon to the intel-ish-hid framework caused a build failure
+> with clang, and introduced an ABI to the module loader that stops working
+> if any driver ever needs to bind to more than one UUID:
+> 
+> drivers/hid/intel-ish-hid/ishtp-fw-loader.c:1067:4: error: initializer element is not a compile-time constant
+> 
+> Change the ishtp_device_id to have correct documentation and a driver_data
+> field like all the other ones, and change the drivers to use the ID table
+> as the primary identification in a way that works with all compilers
+> and avoids duplciating the identifiers.
+> 
+> Fixes: f155dfeaa4ee ("platform/x86: isthp_eclite: only load for matching devices")
+> Fixes: facfe0a4fdce ("platform/chrome: chros_ec_ishtp: only load for matching devices")
+> Fixes: 0d0cccc0fd83 ("HID: intel-ish-hid: hid-client: only load for matching devices")
+> Fixes: 44e2a58cb880 ("HID: intel-ish-hid: fw-loader: only load for matching devices")
+> Fixes: cb1a2c6847f7 ("HID: intel-ish-hid: use constants for modaliases")
+> Fixes: fa443bc3c1e4 ("HID: intel-ish-hid: add support for MODULE_DEVICE_TABLE()")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Sure, I would also like to know if there is a better way of fixing this.
-Thanks for your feedback.
+I have fixed the ecl_ishtp_cl_driver.id initialization and applied. Thanks 
+a lot for spotting and fixing this, Arnd.
 
 -- 
-Thanks,
-Tadeusz
+Jiri Kosina
+SUSE Labs
+
