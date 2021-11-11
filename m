@@ -1,42 +1,40 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC9A2C81
-	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 16:25:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A3C246124C;
-	Thu, 11 Nov 2021 16:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A79168
+	for <llvm@lists.linux.dev>; Thu, 11 Nov 2021 17:54:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E1E861264;
+	Thu, 11 Nov 2021 17:54:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636647906;
-	bh=dw0x+LBQ552ApvZujaQIillgV6iC1yb5QQ5PK/digpQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=AQu3TUpVccJo4t7u3W3hOW69QX8iDiJz8OrLBhAO1QJQhPdKguQishmbKqVi6KrON
-	 y4Y1KdAToySCDwJx9OJe8PlwiVd8iH+62xubOBPXSX4/je/rqHZlzpwqUDKGGJOlBe
-	 JHrylfyQcRyOxdnTwLdaz4cDrFyiXV5nKWjAf4NHj3/Zdrk464+HTyk5p+abcqtEpH
-	 0QAFVoqJ6ikODrnzHA9r0CSTLyuEMKHkXiLqX9H8Dt0CAzgbM9DN6/KfakeV/fxgb1
-	 co0YrhJzDbDXLs/8QRANEXorz+wzMF9NoJJZ4drQ4H+AWxwdjD6deloua9TyTpidos
-	 Z9Jv8NfiG3S6g==
-Date: Thu, 11 Nov 2021 17:25:01 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-    Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-    Benson Leung <bleung@chromium.org>, 
-    Sumesh K Naduvalath <sumesh.k.naduvalath@intel.com>, 
-    Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>, 
-    Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <groeck@chromium.org>, 
-    Lee Jones <lee.jones@linaro.org>, 
-    =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= <uwe@kleine-koenig.org>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] HID: intel-ish-hid: fix module device-id handling
-In-Reply-To: <20211111085842.2846422-1-arnd@kernel.org>
-Message-ID: <nycvar.YFH.7.76.2111111723190.12554@cbobk.fhfr.pm>
-References: <20211111085842.2846422-1-arnd@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	s=k20201202; t=1636653285;
+	bh=DUU8GP2n+HStKvETIJ/7AuTDQcxlcwedSQGVJMPuwuM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vNGc4spFYdim/6SVFMomtb8XVqxKbLzvPWSdfap6lywNHKv08GL3KCgadqN5zxMfx
+	 i3XQIZjbRCFDuUJBgkssQX4n3vESehvsP787DAiqfwGZBc2NMR6FOWkhJgcaEELjUF
+	 Thbrwk9YPNyYZiyyGigrulna2sB8zoLhfb7A1+LaAMlxMgdSyR1pcdJvcyaekWe/dW
+	 cL93i2Ptx1M4i+1sSgZ6PH61u5+7bnsyNsOpwFw+Ao7M6Bt3+gpoFy9WzJPLoUdrqt
+	 ekJY10+kehT2UictyH+2GqZ+e71K4UoaALvnlShyBFDhFiOsKB/JmpC5uuVxYXLjUG
+	 bn9IA0dZmuUUg==
+Date: Thu, 11 Nov 2021 09:54:44 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tadeusz Struk <tadeusz.struk@linaro.org>, "David S. Miller"
+ <davem@davemloft.net>
+Cc: Marco Elver <elver@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Jonathan Lemon
+ <jonathan.lemon@gmail.com>, Alexander Lobakin <alobakin@pm.me>, Willem de
+ Bruijn <willemb@google.com>, Paolo Abeni <pabeni@redhat.com>, Cong Wang
+ <cong.wang@bytedance.com>, Kevin Hao <haokexin@gmail.com>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Kees Cook
+ <keescook@chromium.org>, Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH] skbuff: suppress clang object-size-mismatch error
+Message-ID: <20211111095444.461b900e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <931f1038-d7ab-f236-8052-c5e5b9753b18@linaro.org>
+References: <20211111003519.1050494-1-tadeusz.struk@linaro.org>
+	<CANpmjNNcVFmnBV-1Daauqk5ww8YRUVRtVs_SXVAPWG5CrFBVPg@mail.gmail.com>
+	<c410f4a0-cc06-8ef8-3765-d99e29012acb@linaro.org>
+	<CANpmjNNuWfauPoUxQ6BETrZ8JMjWgrAAhAEqEXW=5BNsfWfyDA@mail.gmail.com>
+	<931f1038-d7ab-f236-8052-c5e5b9753b18@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,34 +42,24 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 11 Nov 2021, Arnd Bergmann wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 11 Nov 2021 08:01:26 -0800 Tadeusz Struk wrote:
+> > That general advice might not be compatible with what the kernel
+> > wants, especially since UBSAN_OBJECT_SIZE is normally disabled and I
+> > think known to cause these issues in the kernel.
+> > 
+> > I'll defer to maintainers to decide what would be the preferred way of
+> > handling this.  
 > 
-> A late addititon to the intel-ish-hid framework caused a build failure
-> with clang, and introduced an ABI to the module loader that stops working
-> if any driver ever needs to bind to more than one UUID:
-> 
-> drivers/hid/intel-ish-hid/ishtp-fw-loader.c:1067:4: error: initializer element is not a compile-time constant
-> 
-> Change the ishtp_device_id to have correct documentation and a driver_data
-> field like all the other ones, and change the drivers to use the ID table
-> as the primary identification in a way that works with all compilers
-> and avoids duplciating the identifiers.
-> 
-> Fixes: f155dfeaa4ee ("platform/x86: isthp_eclite: only load for matching devices")
-> Fixes: facfe0a4fdce ("platform/chrome: chros_ec_ishtp: only load for matching devices")
-> Fixes: 0d0cccc0fd83 ("HID: intel-ish-hid: hid-client: only load for matching devices")
-> Fixes: 44e2a58cb880 ("HID: intel-ish-hid: fw-loader: only load for matching devices")
-> Fixes: cb1a2c6847f7 ("HID: intel-ish-hid: use constants for modaliases")
-> Fixes: fa443bc3c1e4 ("HID: intel-ish-hid: add support for MODULE_DEVICE_TABLE()")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Sure, I would also like to know if there is a better way of fixing this.
+> Thanks for your feedback.
 
-I have fixed the ecl_ishtp_cl_driver.id initialization and applied. Thanks 
-a lot for spotting and fixing this, Arnd.
+I remember Dave was working thru the tree at some point to clean up all
+skb->next/skb->prev accesses so that we can switch over to using normal
+list helpers.
 
--- 
-Jiri Kosina
-SUSE Labs
+I'm not sure if that stalled due to lack of time or some fundamental
+problems.
 
+Seems like finishing that would let us clean up such misuses?
