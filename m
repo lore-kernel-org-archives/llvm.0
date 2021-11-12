@@ -1,47 +1,47 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5A972
-	for <llvm@lists.linux.dev>; Fri, 12 Nov 2021 16:52:57 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10166"; a="220052593"
-X-IronPort-AV: E=Sophos;i="5.87,229,1631602800"; 
-   d="gz'50?scan'50,208,50";a="220052593"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 08:52:56 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2ED82C80
+	for <llvm@lists.linux.dev>; Fri, 12 Nov 2021 18:41:11 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10166"; a="256904476"
+X-IronPort-AV: E=Sophos;i="5.87,230,1631602800"; 
+   d="gz'50?scan'50,208,50";a="256904476"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 10:41:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,229,1631602800"; 
-   d="gz'50?scan'50,208,50";a="670702222"
+X-IronPort-AV: E=Sophos;i="5.87,230,1631602800"; 
+   d="gz'50?scan'50,208,50";a="453238376"
 Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Nov 2021 08:52:53 -0800
+  by orsmga006.jf.intel.com with ESMTP; 12 Nov 2021 10:41:02 -0800
 Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mlZnJ-000Icd-6u; Fri, 12 Nov 2021 16:52:53 +0000
-Date: Sat, 13 Nov 2021 00:51:56 +0800
+	id 1mlbTx-000Ilg-QV; Fri, 12 Nov 2021 18:41:01 +0000
+Date: Sat, 13 Nov 2021 02:39:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Russell King <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [rmk-arm:zii 42/102] drivers/net/phy/phylink.c:322:10: error:
- enumeration value 'PHY_INTERFACE_MODE_MOCA' not handled in switch
-Message-ID: <202111130053.s2MS0xVA-lkp@intel.com>
+Subject: [rmk-arm:zii 88/102] drivers/net/dsa/mv88e6xxx/serdes-6352.c:116:6:
+ error: variable 'err' is used uninitialized whenever 'if' condition is false
+Message-ID: <202111130250.7ZCZ5xTp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MGYHOYXEY6WxJCY8"
+Content-Type: multipart/mixed; boundary="BXVAT5kNtrzKuDFl"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---MGYHOYXEY6WxJCY8
+--BXVAT5kNtrzKuDFl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
 head:   2f38af1897a020adf10ab01d8dc20ea8388b564d
-commit: 2dbb449e3e2fdf89a2495c29655bde644d42e59b [42/102] net: phylink: add generic validate implementation
+commit: b53990e2eebb53cba059843e3c6e93b3b0c10c59 [88/102] net: dsa: mv88e6xxx: convert 88e6352 to phylink_pcs *EXPERIMENTAL*
 config: arm-buildonly-randconfig-r002-20211112 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dddeeafb529e769cde87bd29ef6271ac6bfa5c)
 reproduce (this is a W=1 build):
@@ -51,7 +51,7 @@ reproduce (this is a W=1 build):
         # apt-get install binutils-arm-linux-gnueabi
         git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
         git fetch --no-tags rmk-arm zii
-        git checkout 2dbb449e3e2fdf89a2495c29655bde644d42e59b
+        git checkout b53990e2eebb53cba059843e3c6e93b3b0c10c59
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm 
 
@@ -60,114 +60,62 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/phy/phylink.c:322:10: error: enumeration value 'PHY_INTERFACE_MODE_MOCA' not handled in switch [-Werror,-Wswitch]
-           switch (interface) {
-                   ^~~~~~~~~
-   1 error generated.
+>> drivers/net/dsa/mv88e6xxx/serdes-6352.c:116:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+           if (oldpage >= 0)
+               ^~~~~~~~~~~~
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:120:53: note: uninitialized use occurs here
+           return marvell_c22_pcs_restore_page(mpcs, oldpage, err);
+                                                              ^~~
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:116:2: note: remove the 'if' if its condition is always true
+           if (oldpage >= 0)
+           ^~~~~~~~~~~~~~~~~
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:113:18: note: initialize the variable 'err' to silence this warning
+           int oldpage, err;
+                           ^
+                            = 0
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:189:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+           if (oldpage >= 0)
+               ^~~~~~~~~~~~
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:193:53: note: uninitialized use occurs here
+           return marvell_c22_pcs_restore_page(mpcs, oldpage, err);
+                                                              ^~~
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:189:2: note: remove the 'if' if its condition is always true
+           if (oldpage >= 0)
+           ^~~~~~~~~~~~~~~~~
+   drivers/net/dsa/mv88e6xxx/serdes-6352.c:182:23: note: initialize the variable 'err' to silence this warning
+           int oldpage, adv, err;
+                                ^
+                                 = 0
+   2 errors generated.
 
 
-vim +/PHY_INTERFACE_MODE_MOCA +322 drivers/net/phy/phylink.c
+vim +116 drivers/net/dsa/mv88e6xxx/serdes-6352.c
 
-   306	
-   307	/**
-   308	 * phylink_get_linkmodes() - get acceptable link modes
-   309	 * @linkmodes: ethtool linkmode mask (must be already initialised)
-   310	 * @interface: phy interface mode defined by &typedef phy_interface_t
-   311	 * @mac_capabilities: bitmask of MAC capabilities
-   312	 *
-   313	 * Set all possible pause, speed and duplex linkmodes in @linkmodes that
-   314	 * are supported by the @interface mode and @mac_capabilities. @linkmodes
-   315	 * must have been initialised previously.
-   316	 */
-   317	void phylink_get_linkmodes(unsigned long *linkmodes, phy_interface_t interface,
-   318				   unsigned long mac_capabilities)
-   319	{
-   320		unsigned long caps = MAC_SYM_PAUSE | MAC_ASYM_PAUSE;
-   321	
- > 322		switch (interface) {
-   323		case PHY_INTERFACE_MODE_USXGMII:
-   324			caps |= MAC_10000FD | MAC_5000FD | MAC_2500FD;
-   325			fallthrough;
-   326	
-   327		case PHY_INTERFACE_MODE_RGMII_TXID:
-   328		case PHY_INTERFACE_MODE_RGMII_RXID:
-   329		case PHY_INTERFACE_MODE_RGMII_ID:
-   330		case PHY_INTERFACE_MODE_RGMII:
-   331		case PHY_INTERFACE_MODE_QSGMII:
-   332		case PHY_INTERFACE_MODE_SGMII:
-   333		case PHY_INTERFACE_MODE_GMII:
-   334			caps |= MAC_1000HD | MAC_1000FD;
-   335			fallthrough;
-   336	
-   337		case PHY_INTERFACE_MODE_REVRMII:
-   338		case PHY_INTERFACE_MODE_RMII:
-   339		case PHY_INTERFACE_MODE_REVMII:
-   340		case PHY_INTERFACE_MODE_MII:
-   341			caps |= MAC_10HD | MAC_10FD;
-   342			fallthrough;
-   343	
-   344		case PHY_INTERFACE_MODE_100BASEX:
-   345			caps |= MAC_100HD | MAC_100FD;
-   346			break;
-   347	
-   348		case PHY_INTERFACE_MODE_TBI:
-   349		case PHY_INTERFACE_MODE_RTBI:
-   350		case PHY_INTERFACE_MODE_1000BASEX:
-   351			caps |= MAC_1000HD;
-   352			fallthrough;
-   353		case PHY_INTERFACE_MODE_TRGMII:
-   354			caps |= MAC_1000FD;
-   355			break;
-   356	
-   357		case PHY_INTERFACE_MODE_2500BASEX:
-   358			caps |= MAC_2500FD;
-   359			break;
-   360	
-   361		case PHY_INTERFACE_MODE_5GBASER:
-   362			caps |= MAC_5000FD;
-   363			break;
-   364	
-   365		case PHY_INTERFACE_MODE_XGMII:
-   366		case PHY_INTERFACE_MODE_RXAUI:
-   367		case PHY_INTERFACE_MODE_XAUI:
-   368		case PHY_INTERFACE_MODE_10GBASER:
-   369		case PHY_INTERFACE_MODE_10GKR:
-   370			caps |= MAC_10000FD;
-   371			break;
-   372	
-   373		case PHY_INTERFACE_MODE_25GBASER:
-   374			caps |= MAC_25000FD;
-   375			break;
-   376	
-   377		case PHY_INTERFACE_MODE_XLGMII:
-   378			caps |= MAC_40000FD;
-   379			break;
-   380	
-   381		case PHY_INTERFACE_MODE_INTERNAL:
-   382			caps |= ~0;
-   383			break;
-   384	
-   385		case PHY_INTERFACE_MODE_NA:
-   386		case PHY_INTERFACE_MODE_MAX:
-   387		case PHY_INTERFACE_MODE_SMII:
-   388			break;
-   389		}
-   390	
-   391		phylink_caps_to_linkmodes(linkmodes, caps & mac_capabilities);
-   392	}
-   393	EXPORT_SYMBOL_GPL(phylink_get_linkmodes);
-   394	
+   109	
+   110	static int marvell_c22_pcs_modify(struct marvell_c22_pcs *mpcs, u8 reg,
+   111					  u16 mask, u16 val)
+   112	{
+   113		int oldpage, err;
+   114	
+   115		oldpage = marvell_c22_pcs_set_fiber_page(mpcs);
+ > 116		if (oldpage >= 0)
+   117			err = __mdiobus_modify(mpcs->mdio.bus, mpcs->mdio.addr,
+   118					       reg, mask, val);
+   119	
+   120		return marvell_c22_pcs_restore_page(mpcs, oldpage, err);
+   121	}
+   122	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---MGYHOYXEY6WxJCY8
+--BXVAT5kNtrzKuDFl
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICEaYjmEAAy5jb25maWcAjDzLdts4svv+Cp30Zu5iOpYc28nc4wVIghJafAUAJdsbHllm
+H4sICCesjmEAAy5jb25maWcAjDzLdts4svv+Cp30Zu5iOpYc28nc4wVIghJafAUAJdsbHllm
 0r6jh0eWM52/v1UAHwAJ0ulFH6uqABQKhXqC+f233yfk7Xzcb87P281u93PyvTyUp825fJp8
 e96V/zsJ0kmSygkNmPwDiKPnw9vfHzen/eTqj+nVHxeTZXk6lLuJfzx8e/7+BiOfj4fffv/N
 T5OQzQvfL1aUC5YmhaR38vbDdrc5fJ/8KE+vQDeZfvrjAub4x/fn878+foT/759Pp+Pp4273
@@ -821,4 +769,4 @@ fZ8Dd8VajJt/t7K5kBnIesGuuZHwuoXK4uy0oQs+U2F03lxnBeWGqvcnzyIGs+3UocRSVO4d
 OJArqF25iqhCU4t7RYU3+vBJJ3KPtkgNIln5Pr7tCMiZqCqVEqiIGmBLgYgWLUvPhOapdA4J
 5zLj/+K/PqN2PgIA
 
---MGYHOYXEY6WxJCY8--
+--BXVAT5kNtrzKuDFl--
