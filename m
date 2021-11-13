@@ -1,57 +1,57 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD73F2C85
-	for <llvm@lists.linux.dev>; Sat, 13 Nov 2021 00:19:40 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10166"; a="213951499"
-X-IronPort-AV: E=Sophos;i="5.87,230,1631602800"; 
-   d="gz'50?scan'50,208,50";a="213951499"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 16:19:39 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383EB2C83
+	for <llvm@lists.linux.dev>; Sat, 13 Nov 2021 01:47:47 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10166"; a="294058080"
+X-IronPort-AV: E=Sophos;i="5.87,231,1631602800"; 
+   d="gz'50?scan'50,208,50";a="294058080"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 17:47:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,230,1631602800"; 
-   d="gz'50?scan'50,208,50";a="505086726"
+X-IronPort-AV: E=Sophos;i="5.87,231,1631602800"; 
+   d="gz'50?scan'50,208,50";a="493238476"
 Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 12 Nov 2021 16:19:37 -0800
+  by orsmga007.jf.intel.com with ESMTP; 12 Nov 2021 17:47:41 -0800
 Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mlglc-000JBo-Qb; Sat, 13 Nov 2021 00:19:36 +0000
-Date: Sat, 13 Nov 2021 08:18:45 +0800
+	id 1mli8q-000JIM-P4; Sat, 13 Nov 2021 01:47:40 +0000
+Date: Sat, 13 Nov 2021 09:47:10 +0800
 From: kernel test robot <lkp@intel.com>
 To: James Morse <james.morse@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.15 4/139]
- arch/x86/kernel/cpu/resctrl/core.c:417:6: warning: no previous prototype for
- function 'domain_free'
-Message-ID: <202111130836.zaKz2toq-lkp@intel.com>
+Subject: [morse:mpam/snapshot/v5.15 9/139]
+ arch/x86/kernel/cpu/resctrl/core.c:400:6: warning: no previous prototype for
+ function 'setup_default_ctrlval'
+Message-ID: <202111130902.eirM7D6Z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="u3/rZRmxL6MmkK24"
+Content-Type: multipart/mixed; boundary="azLHFNyN32YCQGCU"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 
---u3/rZRmxL6MmkK24
+--azLHFNyN32YCQGCU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.15
 head:   ce3629841262f725a5f3a327403fcaf0e604a85e
-commit: 7e1bcec5158ff703f38e7b7a2bc314795319fbc4 [4/139] x86/resctrl: Group struct rdt_hw_domain cleanup
+commit: c40ac46dd98eac3ed1ab60d72d54344a4ead0e92 [9/139] x86/resctrl: Remove architecture copy of mbps_val
 config: x86_64-buildonly-randconfig-r001-20211112 (attached as .config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dddeeafb529e769cde87bd29ef6271ac6bfa5c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=7e1bcec5158ff703f38e7b7a2bc314795319fbc4
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=c40ac46dd98eac3ed1ab60d72d54344a4ead0e92
         git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
         git fetch --no-tags morse mpam/snapshot/v5.15
-        git checkout 7e1bcec5158ff703f38e7b7a2bc314795319fbc4
+        git checkout c40ac46dd98eac3ed1ab60d72d54344a4ead0e92
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
 
@@ -60,37 +60,51 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/resctrl/core.c:417:6: warning: no previous prototype for function 'domain_free' [-Wmissing-prototypes]
+>> arch/x86/kernel/cpu/resctrl/core.c:400:6: warning: no previous prototype for function 'setup_default_ctrlval' [-Wmissing-prototypes]
+   void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+        ^
+   arch/x86/kernel/cpu/resctrl/core.c:400:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+   ^
+   static 
+   arch/x86/kernel/cpu/resctrl/core.c:414:6: warning: no previous prototype for function 'domain_free' [-Wmissing-prototypes]
    void domain_free(struct rdt_hw_domain *hw_dom)
         ^
-   arch/x86/kernel/cpu/resctrl/core.c:417:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   arch/x86/kernel/cpu/resctrl/core.c:414:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    void domain_free(struct rdt_hw_domain *hw_dom)
    ^
    static 
-   1 warning generated.
+   2 warnings generated.
 
 
-vim +/domain_free +417 arch/x86/kernel/cpu/resctrl/core.c
+vim +/setup_default_ctrlval +400 arch/x86/kernel/cpu/resctrl/core.c
 
-   416	
- > 417	void domain_free(struct rdt_hw_domain *hw_dom)
-   418	{
-   419		kfree(hw_dom->ctrl_val);
-   420		kfree(hw_dom->mbps_val);
-   421		kfree(hw_dom);
-   422	}
-   423	
+   399	
+ > 400	void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+   401	{
+   402		struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+   403		int i;
+   404	
+   405		/*
+   406		 * Initialize the Control MSRs to having no control.
+   407		 * For Cache Allocation: Set all bits in cbm
+   408		 * For Memory Allocation: Set b/w requested to 100%
+   409		 */
+   410		for (i = 0; i < hw_res->num_closid; i++, dc++)
+   411			*dc = r->default_ctrl;
+   412	}
+   413	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---u3/rZRmxL6MmkK24
+--azLHFNyN32YCQGCU
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICPj4jmEAAy5jb25maWcAlDzLdty2kvt8RR9nk7tIIsmy4swcLUAS7IabIGgAbLW04WlL
+H4sICD0Tj2EAAy5jb25maWcAlDzLdty2kvt8RR9nk7tIIsmy4swcLUAS7IabIGgAbLW04WlL
 LUdzZcm3JWXsv58qACQBEJQzXthmVeFdbxT6559+XpCX58cvu+e76939/ffF5/3D/rB73t8s
 bu/u9/+9KMSiFnpBC6Z/A+Lq7uHl2+/f3p91Z6eLd78dv/vtaLHeHx7294v88eH27vMLNL57
 fPjp559yUZds2eV5t6FSMVF3mm71+Zvr+93D58Xf+8MT0C2OT387gj5++Xz3/F+//w5/f7k7
@@ -855,4 +869,4 @@ yL7ufVGLKNmMtlzQLFDBQC9ONMyv1oYJzB2abGA7iNzpCrZx2CWMyuZNL9LzIht2VdJ9oTO0
 hxY1x1Bj5DKIplAAGxAftnIATejGls6y0xzvBL6RSiqFjcybrMdAP26ItBNlITUneW7UIIbq
 f9pNV2GTkAIA
 
---u3/rZRmxL6MmkK24--
+--azLHFNyN32YCQGCU--
