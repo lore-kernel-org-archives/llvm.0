@@ -1,31 +1,35 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E586329CA
-	for <llvm@lists.linux.dev>; Sun, 14 Nov 2021 21:25:58 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E964361073;
-	Sun, 14 Nov 2021 21:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C258B2C81
+	for <llvm@lists.linux.dev>; Sun, 14 Nov 2021 21:42:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 010CB6058D;
+	Sun, 14 Nov 2021 21:42:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636925158;
-	bh=2spCuxQ2K3w5slj51MhDystRvnTlw57S5B68mW15EH4=;
+	s=k20201202; t=1636926131;
+	bh=QpxOx2hlB8LK9k1Al6jjy8pp6tVeoOJsm14sAGQEYsc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eu0e7TsmbEXqaAdVV4okGHXQANWcGiGCwwplUSSacG/XCUO7tLEOhJdcsHVT7SSQ6
-	 MfktXA+0Nq6Q1caoiSysp3DGrphv3JFpDBs7H8vIIF1WuOVnC5MbQFSnETukvWwhLW
-	 9nhrgEzh1vAmPenKqewBlw4dZg2jj5O0LFOZ+OcA7h20KZQOzkNvFrZXl0oSdeltM2
-	 n19Sra6J27rDg3Vz/4WiDteC4GY844CH1+3LakI7TS9AOAzubBKxoudzFvhYkwixbq
-	 /fWvbfM1h5oAGMfTs2XxXq4+4NrpenqkJTdtZtAhDiJKx8HMMiGIX7AWgGmDwV9Hal
-	 l0lYQZ7gm2VPQ==
-Date: Sun, 14 Nov 2021 15:31:00 -0600
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH] kconfig: Add support for -Wimplicit-fallthrough
-Message-ID: <20211114213100.GA41124@embeddedor>
-References: <20211114005725.GA27075@embeddedor>
- <YZF9MY6rRLQwdTgM@archlinux-ax161>
+	b=Si4J9oT0AW9pz68sOQs2yWuLSNK1LdjLKVATZnbyEX7JquRebWCS95pGPq/fJ5q6w
+	 ++w48qv5y9SwLUabN7IRmIOIj0zVgh5phndvU76Y48C/004Rk78NPyaoJiawyNIa6x
+	 SEHxpqtiKMEERuumhxQ2ybbZ3cSyouhgvwcyGXCjQTY3p9NsMA5Wu7kgsfNUChOQmZ
+	 x5S/Z17aPyc3zQK/RlGQ0wZcm7Tk0xKfkyaXUEASIUCE2g46BJlJxqu0PRIRz1q0TC
+	 zvhzFOmyJMZXuAyqqHDF4NAnb3kw4osAcggPDg1Cd1wIzHRS5Mzb6SZ3R2tXsWsfvg
+	 J77xYKzuKwNxA==
+Date: Sun, 14 Nov 2021 14:42:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [arm-platforms:hack/m1-pmu 8/8]
+ drivers/perf/apple_m1_cpu_pmu.c:100:32: warning: initializer overrides prior
+ initialization of this subobject
+Message-ID: <YZGCrpVfY5xng4EC@archlinux-ax161>
+References: <202111141650.o5b2LSZU-lkp@intel.com>
+ <0b7463e699956abb0f8b0da7a9254500@kernel.org>
+ <CAMj1kXE5T4pWVBUPiZRqw1S122DHVQkZn9GwNHx2cr4=MfndeQ@mail.gmail.com>
+ <CANiq72nhQuRPgVMqDkr9OZqSLpT_2VVwkBaY97PbuqhbuNJnJg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,93 +38,22 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YZF9MY6rRLQwdTgM@archlinux-ax161>
+In-Reply-To: <CANiq72nhQuRPgVMqDkr9OZqSLpT_2VVwkBaY97PbuqhbuNJnJg@mail.gmail.com>
 
-On Sun, Nov 14, 2021 at 02:18:41PM -0700, Nathan Chancellor wrote:
-> On Sat, Nov 13, 2021 at 06:57:25PM -0600, Gustavo A. R. Silva wrote:
-> > Add Kconfig support for -Wimplicit-fallthrough for both GCC and Clang.
-> > 
-> > The compiler option is under configuration CC_IMPLICIT_FALLTHROUGH,
-> > which is enabled by default.
-> > 
-> > Special thanks to Nathan Chancellor who fixed the Clang bug[1][2]. This
-> > bugfix only appears in Clang 14.0.0, so older versions still contain
-> > the bug and -Wimplicit-fallthrough won't be enabled for them, for now.
-> > 
-> > This concludes a long journey and now we are finally getting rid
-> > of the unintentional fallthrough bug-class in the kernel, entirely. :)
-> > 
-> > [1] https://github.com/llvm/llvm-project/commit/9ed4a94d6451046a51ef393cd62f00710820a7e8
-> > [2] https://bugs.llvm.org/show_bug.cgi?id=51094
-> > 
-> > Link: https://github.com/KSPP/linux/issues/115
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/236
-> > Co-developed-by: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > Co-developed-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+On Sun, Nov 14, 2021 at 01:24:16PM +0100, Miguel Ojeda wrote:
+> On Sun, Nov 14, 2021 at 12:07 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > +KBUILD_CFLAGS += $(call cc-option, -Wno-initializer-overrides)
 > 
-> This appears to do the right thing with both clang-13 and clang-14.
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> I don't think we would need `cc-option`.
 
-Thanks, Nathan.
+-Winitializer-overrides is the clang version of the flag, as opposed to
+-Woverride-init for gcc. A compatibility flag was added in clang 8 so if
+this is changed to
 
---
-Gustavo
+KBUILD_CFLAGS += -Wno-override-init
 
-> 
-> It feels a little odd to have this in Kconfig but if it works and gets
-> the warning enabled, then so be it.
-> 
-> > ---
-> >  Makefile     | 6 +-----
-> >  init/Kconfig | 5 +++++
-> >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index 30c7c81d0437..f18a50daad00 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -786,7 +786,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
-> >  KBUILD_CFLAGS += $(stackp-flags-y)
-> >  
-> >  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
-> > -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y)
-> > +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-> >  
-> >  ifdef CONFIG_CC_IS_CLANG
-> >  KBUILD_CPPFLAGS += -Qunused-arguments
-> > @@ -798,10 +798,6 @@ KBUILD_CFLAGS += -Wno-gnu
-> >  KBUILD_CFLAGS += -mno-global-merge
-> >  else
-> >  
-> > -# Warn about unmarked fall-throughs in switch statement.
-> > -# Disabled for clang while comment to attribute conversion happens and
-> > -# https://github.com/ClangBuiltLinux/linux/issues/636 is discussed.
-> > -KBUILD_CFLAGS += $(call cc-option,-Wimplicit-fallthrough=5,)
-> >  # gcc inanely warns about local variables called 'main'
-> >  KBUILD_CFLAGS += -Wno-main
-> >  endif
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 11f8a845f259..b0582cd3e096 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -885,6 +885,11 @@ config ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-> >  config CC_HAS_INT128
-> >  	def_bool !$(cc-option,$(m64-flag) -D__SIZEOF_INT128__=0) && 64BIT
-> >  
-> > +config CC_IMPLICIT_FALLTHROUGH
-> > +	string
-> > +	default "-Wimplicit-fallthrough=5" if CC_IS_GCC
-> > +	default "-Wimplicit-fallthrough" if CC_IS_CLANG && $(cc-option,-Wunreachable-code-fallthrough)
-> > +
-> >  #
-> >  # For architectures that know their GCC __int128 support is sound
-> >  #
-> > -- 
-> > 2.27.0
-> > 
-> > 
+it should work for both compilers.
+
+Cheers,
+Nathan
