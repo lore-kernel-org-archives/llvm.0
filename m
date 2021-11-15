@@ -1,83 +1,88 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F752C80
-	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 13:07:40 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 8934A21A5A;
-	Mon, 15 Nov 2021 12:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1636981176; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dj+b9TzFtWSZEXv8wRzJx6fLOVSK62UITZzIdTTV6gw=;
-	b=2gFpRabP9s8dsJnS1A7v4cHkznUF1SdkTtUcOQ0lJJbwsuqvh4FUCxYe/C48cChEfLt/fp
-	TjfqJzw7hd+2aRD3d+ImhxW1YZhsjU7kAkYD6jCIGZBjjxjDIX4AdzpeCNgvg03+PaKDGN
-	PPtoBxCVLw1kYohGX6DtsQFlij7cuLQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1636981176;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dj+b9TzFtWSZEXv8wRzJx6fLOVSK62UITZzIdTTV6gw=;
-	b=YDPmQ2Ic8mYr1pHZxfbdF1zWOrBtnQNvOiC7mcIA9Y7GAfZahLjWprcjCIO0dldbQdJP4j
-	9ymTik0cLpBeSbBg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id 4697CA3B81;
-	Mon, 15 Nov 2021 12:59:36 +0000 (UTC)
-Date: Mon, 15 Nov 2021 13:59:36 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-cc: Peter Zijlstra <peterz@infradead.org>, 
-    David Laight <David.Laight@aculab.com>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, "x86@kernel.org" <x86@kernel.org>, 
-    "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-    "mark.rutland@arm.com" <mark.rutland@arm.com>, 
-    "dvyukov@google.com" <dvyukov@google.com>, 
-    "seanjc@google.com" <seanjc@google.com>, 
-    "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-    "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-    "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>, 
-    live-patching@vger.kernel.org
-Subject: Re: [PATCH 20/22] x86,word-at-a-time: Remove .fixup usage
-In-Reply-To: <20211113053500.jcnx5airbn7g763a@treble>
-Message-ID: <alpine.LSU.2.21.2111151353550.29981@pobox.suse.cz>
-References: <YYlshkTmf5zdvf1Q@hirez.programming.kicks-ass.net> <CAKwvOdkFZ4PSN0GGmKMmoCrcp7_VVNjau_b0sNRm3MuqVi8yow@mail.gmail.com> <YYov8SVHk/ZpFsUn@hirez.programming.kicks-ass.net> <CAKwvOdn8yrRopXyfd299=SwZS9TAPfPj4apYgdCnzPb20knhbg@mail.gmail.com>
- <20211109210736.GV174703@worktop.programming.kicks-ass.net> <f6dbe42651e84278b44e44ed7d0ed74f@AcuMS.aculab.com> <YYuogZ+2Dnjyj1ge@hirez.programming.kicks-ass.net> <2734a37ebed2432291345aaa8d9fd47e@AcuMS.aculab.com> <20211112015003.pefl656m3zmir6ov@treble>
- <YY408BW0phe9I1/o@hirez.programming.kicks-ass.net> <20211113053500.jcnx5airbn7g763a@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5B929CA
+	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 13:08:10 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="319644993"
+X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
+   d="scan'208";a="319644993"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 05:08:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
+   d="scan'208";a="535501157"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga001.jf.intel.com with ESMTP; 15 Nov 2021 05:08:05 -0800
+Received: from alobakin-mobl.ger.corp.intel.com (aglaza-mobl1.ger.corp.intel.com [10.213.5.121])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AFD82pd021961;
+	Mon, 15 Nov 2021 13:08:02 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH bpf] samples: bpf: fix build error due to -isystem removal
+Date: Mon, 15 Nov 2021 14:07:41 +0100
+Message-Id: <20211115130741.3584-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
-On Fri, 12 Nov 2021, Josh Poimboeuf wrote:
+Since recent Kbuild updates we no longer include files from compiler
+directories. However, samples/bpf/hbm_kern.h hasn't been tuned for
+this (LLVM 13):
 
-> If the child schedules out, and then the parent gets patched, things can
-> go off-script if the child later jumps back to the unpatched version of
-> the parent, and then for example the old parent tries to call another
-> patched function with a since-changed ABI.
+  CLANG-bpf  samples/bpf/hbm_out_kern.o
+In file included from samples/bpf/hbm_out_kern.c:55:
+samples/bpf/hbm_kern.h:12:10: fatal error: 'stddef.h' file not found
+         ^~~~~~~~~~
+1 error generated.
+  CLANG-bpf  samples/bpf/hbm_edt_kern.o
+In file included from samples/bpf/hbm_edt_kern.c:53:
+samples/bpf/hbm_kern.h:12:10: fatal error: 'stddef.h' file not found
+         ^~~~~~~~~~
+1 error generated.
 
-...
- 
-> I don't know about other patch creation tooling, but I'd imagine they
-> also need to know about .cold functions, unless they have that
-> optimization disabled.  Because the func and its .cold counterpart
-> always need to be patched together.
+It is enough to just drop both stdbool.h and stddef.h from includes
+to fix those.
 
-We, at SUSE, solve the issue differently... the new patched parent would 
-call that another patched function with a changed ABI statically in a live 
-patch. So in that example, .cold child would jump back to the unpatched 
-parent which would then call, also, the unpatched function.
+Fixes: 04e85bbf71c9 ("isystem: delete global -isystem compile option")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+---
+ samples/bpf/hbm_kern.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-The situation would change if we ever were to have some notion of global 
-consistency. Then it would be really fragile, so it is worth of improving 
-this, I think.
+diff --git a/samples/bpf/hbm_kern.h b/samples/bpf/hbm_kern.h
+index 722b3fadb467..1752a46a2b05 100644
+--- a/samples/bpf/hbm_kern.h
++++ b/samples/bpf/hbm_kern.h
+@@ -9,8 +9,6 @@
+  * Include file for sample Host Bandwidth Manager (HBM) BPF programs
+  */
+ #define KBUILD_MODNAME "foo"
+-#include <stddef.h>
+-#include <stdbool.h>
+ #include <uapi/linux/bpf.h>
+ #include <uapi/linux/if_ether.h>
+ #include <uapi/linux/if_packet.h>
+-- 
+2.33.1
 
-Miroslav
