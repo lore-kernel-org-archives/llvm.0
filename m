@@ -1,88 +1,104 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5B929CA
-	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 13:08:10 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="319644993"
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="319644993"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 05:08:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="535501157"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 15 Nov 2021 05:08:05 -0800
-Received: from alobakin-mobl.ger.corp.intel.com (aglaza-mobl1.ger.corp.intel.com [10.213.5.121])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AFD82pd021961;
-	Mon, 15 Nov 2021 13:08:02 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH bpf] samples: bpf: fix build error due to -isystem removal
-Date: Mon, 15 Nov 2021 14:07:41 +0100
-Message-Id: <20211115130741.3584-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B322C80
+	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 13:09:26 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id c32so43466512lfv.4
+        for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 05:09:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=g5lYCRdztAJ/tNA9EHXetSNsC/jaC9qtFRqYEhiyLhc=;
+        b=O+chpzPjiP8XKcxY8+0Fu68ASM4imghDVHWGNyZtJ5+gPrZ4tK7cz0jW+x4UdbS2Ja
+         oKdJlQfwHRgriJGGd144tvhtOzhec/bLVuS8h5weXjr925N/lX+ZFu7YAc+diEDi5zTy
+         REvQN3syJPiNbAmhBkuUg+yf/o8HtJdg+R2ds=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=g5lYCRdztAJ/tNA9EHXetSNsC/jaC9qtFRqYEhiyLhc=;
+        b=VU9IiKdHskf7OQdI6IhaWTGyqA34k3b9SvMyvndRyxWrkRXkgEZ1XXGjLpWsk4N5hP
+         5x54rfBedhM9NgsUBCJrOA5+O+4cgf0cXJgUuFJYXkDXn7ekla7zyz5BVW3bHDIFsNHg
+         oAkOO8wFQhNJqgZ+V9cOCHdygu8VFcAg0SnR1T/IBztgoCL+5CbRoupgY31J+NniGt7w
+         rKEt7iFH0g5qPrU+FBpqezORdyJ/R/FehL0IHMib80Kx1wyLyPzmqzQbmStX/x/dXTY3
+         i1Phxz1VL+THD7U15YCk8hMWZtEZiPCeONLGZpWxRptqo3VRp9iaWfpmf8EYlyD7zGHr
+         AqFw==
+X-Gm-Message-State: AOAM531KsElpp0BSUNk1wyJXKFXyxxJabr7P7GhdVrvYW3BXWpyVOScN
+	A650cQey0WanJDSvpr1ZovLILg==
+X-Google-Smtp-Source: ABdhPJwoLHLUq1UBckpkf1rqac8FXosa8RN7DMRBASeZDBEsIZQtkRNrhdZgHcUG1w3gXbQIWM6LtQ==
+X-Received: by 2002:a05:6512:39d3:: with SMTP id k19mr27702195lfu.81.1636981764529;
+        Mon, 15 Nov 2021 05:09:24 -0800 (PST)
+Received: from [172.16.11.1] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id k15sm1495966ljh.98.2021.11.15.05.09.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Nov 2021 05:09:23 -0800 (PST)
+Subject: Re: [PATCH] static_call,x86: Robustify trampoline patching
+To: Peter Zijlstra <peterz@infradead.org>,
+ Sami Tolvanen <samitolvanen@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ X86 ML <x86@kernel.org>, Kees Cook <keescook@chromium.org>,
+ Josh Poimboeuf <jpoimboe@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-hardening@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev, joao@overdrivepizza.com
+References: <20211027120515.GC54628@C02TD0UTHF1T.local>
+ <CAMj1kXEx10gC8eH7rV-GbZZj2M3uDue6HYsKb+A5J01zOxm_FA@mail.gmail.com>
+ <20211027124852.GK174703@worktop.programming.kicks-ass.net>
+ <YXlOd1lyKZKAcJfA@hirez.programming.kicks-ass.net>
+ <CAMj1kXHKh7wv6JqusVnoiQDMm7ApFq2ujzbfWmM9AzLKFehhAA@mail.gmail.com>
+ <YXlcMluaysPBF92J@hirez.programming.kicks-ass.net>
+ <CAMj1kXECTdDLVMk2JduU5mV2TR0Cv=hZ9QOpYRsRM1jfvvNikw@mail.gmail.com>
+ <CABCJKufpS4jJxHqk8=bd1JCNbKfmLDKBbjbhjrar2+YQJFiprg@mail.gmail.com>
+ <20211029200324.GR174703@worktop.programming.kicks-ass.net>
+ <20211030074758.GT174703@worktop.programming.kicks-ass.net>
+ <20211030081631.GF174730@worktop.programming.kicks-ass.net>
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <554c64df-14ca-2019-a54c-cdc4d84e71f8@rasmusvillemoes.dk>
+Date: Mon, 15 Nov 2021 14:09:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211030081631.GF174730@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Since recent Kbuild updates we no longer include files from compiler
-directories. However, samples/bpf/hbm_kern.h hasn't been tuned for
-this (LLVM 13):
+On 30/10/2021 10.16, Peter Zijlstra wrote:
+> On Sat, Oct 30, 2021 at 09:47:58AM +0200, Peter Zijlstra wrote:
 
-  CLANG-bpf  samples/bpf/hbm_out_kern.o
-In file included from samples/bpf/hbm_out_kern.c:55:
-samples/bpf/hbm_kern.h:12:10: fatal error: 'stddef.h' file not found
-         ^~~~~~~~~~
-1 error generated.
-  CLANG-bpf  samples/bpf/hbm_edt_kern.o
-In file included from samples/bpf/hbm_edt_kern.c:53:
-samples/bpf/hbm_kern.h:12:10: fatal error: 'stddef.h' file not found
-         ^~~~~~~~~~
-1 error generated.
+> So fundamentally I think the whole notion that the address of a function
+> is something different than 'the address of that function' is an *utter*
+> fail.
 
-It is enough to just drop both stdbool.h and stddef.h from includes
-to fix those.
+Agreed. IMHO, commits like 0a5b412891df, 981731129e0f should have been a
+big red flag saying "ok, perhaps we shall not mess with the semantics of
+function pointer comparisons". Yes yes, the commit log in cf68fffb66d6
+did dutifully say "This may break code that relies on comparing
+addresses passed from other components.".
 
-Fixes: 04e85bbf71c9 ("isystem: delete global -isystem compile option")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
----
- samples/bpf/hbm_kern.h | 2 --
- 1 file changed, 2 deletions(-)
+But it did not spell out that that for example means that i2c bus
+recovery now doesn't result in recovering the bus but instead in a NULL
+pointer deref and kernel panic: Some i2c drivers set ->recover_bus =
+i2c_generic_scl_recovery and provide ->sda_gpiod, ->scl_gpiod, then rely on
 
-diff --git a/samples/bpf/hbm_kern.h b/samples/bpf/hbm_kern.h
-index 722b3fadb467..1752a46a2b05 100644
---- a/samples/bpf/hbm_kern.h
-+++ b/samples/bpf/hbm_kern.h
-@@ -9,8 +9,6 @@
-  * Include file for sample Host Bandwidth Manager (HBM) BPF programs
-  */
- #define KBUILD_MODNAME "foo"
--#include <stddef.h>
--#include <stdbool.h>
- #include <uapi/linux/bpf.h>
- #include <uapi/linux/if_ether.h>
- #include <uapi/linux/if_packet.h>
--- 
-2.33.1
+if (bri->scl_gpiod && bri->recover_bus == i2c_generic_scl_recovery)
 
+in i2c-core-base.c causing ->get_scl/->set_scl to be filled in. That's
+of course broken with ->recover_bus pointing to the module's jump table,
+so when ->recover_bus is actually called, the bri->set_scl() call in
+i2c_generic_scl_recovery() is a NULL pointer deref. [I've tested that
+this actually happens on an imx8mp_evk board.]
+
+And who knows how much other code happens to rely on function pointer
+comparison working as specified in the C standard for correctness.
+
+Rasmus
