@@ -1,32 +1,37 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970CB72
-	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 00:29:59 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FA8A61183;
-	Mon, 15 Nov 2021 00:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84552C80
+	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 00:54:59 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EF5F60EFE;
+	Mon, 15 Nov 2021 00:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1636936199;
-	bh=Pd6pokHmhzIndABeIWSLkjqChNxZ/7m1n2tWPduBZ8Y=;
+	s=k20201202; t=1636937699;
+	bh=K/bDQvzEk6wg+vkCZMLcZAhWuWHVT9JW8G5cC3fuh8Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S9fEOufHanu7q3OgWaoTB197sifi+JR1CvKGk2zCOzbm7rB46Qm9lNZv31Z7T75NE
-	 VAHq0nJhZ4s+Tk9sAloe4+s880G8UOnC9CZWHp/+8R09QlKkQHjw1uv2inSAz3yznh
-	 2bODRbkZ1NKrt7JGTQtrczlCEbO42GZTYHegLo85wwmNbDMHBDovR5vxOQ6jJx6yY/
-	 jxwbP7yMkxBKaiwURua8C7dXGmiMXmROzXRVeAvN3m7X+DTM9qOhNQ7Pgkfl3lhbBC
-	 ZbS+/NIV3UwBSoDrmNWZNjj+f3Yvsd/pJhLofg5PbWiNhPPdH1raFO74suBhmw5yrw
-	 lS54Xeb927o8Q==
-Date: Sun, 14 Nov 2021 18:35:01 -0600
+	b=gtCzB7X6a3f9Kw2ckghQ7uTuEt4NmGkDM/PyQPnDIbLo8pyU4oVSxAWvXsSpU/51/
+	 rA3OqLRDftPWoqwr078BT9oGefoyVMS5g/2j+9q09y/+fzG7S77z2HBKf1Y81lDxas
+	 4iEIVqjHLaZK63lIJr4zenhJ4sT3phdOOwSPV5fGFd85FN+iBGfGVGhjsFSUdMXRKO
+	 PGlrH2X13X220Lf69NobCuBDBZtScBa/jdsFCFJALi1hhxGnuviwXl2EevB6QtAbYl
+	 ldYE0Wva72Ow3FS6OmFleoMcToWI572yYxvbl1cWVEyRyBtQk044X6jZOG58nkyCIe
+	 HSK7/44kvyISA==
+Date: Sun, 14 Nov 2021 19:00:01 -0600
 From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-hardening@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
 Subject: Re: [PATCH] kconfig: Add support for -Wimplicit-fallthrough
-Message-ID: <20211115003501.GA43686@embeddedor>
+Message-ID: <20211115010001.GA44147@embeddedor>
 References: <20211114005725.GA27075@embeddedor>
  <YZF9MY6rRLQwdTgM@archlinux-ax161>
  <YZGnL3nfA5876hX3@archlinux-ax161>
+ <20211115003501.GA43686@embeddedor>
+ <CAK7LNAQY4Y-wnY8wQOuHh5eyVdUBGGP58Uu2aZSe+zdxt7km-A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,124 +40,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YZGnL3nfA5876hX3@archlinux-ax161>
+In-Reply-To: <CAK7LNAQY4Y-wnY8wQOuHh5eyVdUBGGP58Uu2aZSe+zdxt7km-A@mail.gmail.com>
 
-On Sun, Nov 14, 2021 at 05:17:51PM -0700, Nathan Chancellor wrote:
-> On Sun, Nov 14, 2021 at 02:18:41PM -0700, Nathan Chancellor wrote:
-> > On Sat, Nov 13, 2021 at 06:57:25PM -0600, Gustavo A. R. Silva wrote:
-> > > Add Kconfig support for -Wimplicit-fallthrough for both GCC and Clang.
-> > > 
-> > > The compiler option is under configuration CC_IMPLICIT_FALLTHROUGH,
-> > > which is enabled by default.
-> > > 
-> > > Special thanks to Nathan Chancellor who fixed the Clang bug[1][2]. This
-> > > bugfix only appears in Clang 14.0.0, so older versions still contain
-> > > the bug and -Wimplicit-fallthrough won't be enabled for them, for now.
-> > > 
-> > > This concludes a long journey and now we are finally getting rid
-> > > of the unintentional fallthrough bug-class in the kernel, entirely. :)
-> > > 
-> > > [1] https://github.com/llvm/llvm-project/commit/9ed4a94d6451046a51ef393cd62f00710820a7e8
-> > > [2] https://bugs.llvm.org/show_bug.cgi?id=51094
-> > > 
-> > > Link: https://github.com/KSPP/linux/issues/115
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/236
-> > > Co-developed-by: Kees Cook <keescook@chromium.org>
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > Co-developed-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > 
-> > This appears to do the right thing with both clang-13 and clang-14.
+On Mon, Nov 15, 2021 at 09:44:40AM +0900, Masahiro Yamada wrote:
+> On Mon, Nov 15, 2021 at 9:30 AM Gustavo A. R. Silva
+> <gustavoars@kernel.org> wrote:
+> >
 > 
-> Now that I gave this a look for the GCC side, I think it is wrong.
+> Please use a subject prefix different than "kconfig:"
 > 
-> -Wimplicit-fallthrough=5 was under cc-option because it was only
-> available in GCC 7.x and newer so the build is now broken for GCC 5.x
-> and 6.x:
-> 
-> gcc: error: unrecognized command line option '-Wimplicit-fallthrough=5';
-> did you mean '-Wno-fallthrough'?
+> I want to see "kconfig:' only for changes in scripts/kconfig/.
 
-I'll send a patch for this right away. Thanks for the report, Nathan! :)
+How about kbuild for this case, instead?
 
+Thanks
 --
 Gustavo
 
-> 
-> I think this needs to be added (I can send a formal patch tomorrow
-> unless someone wants to beat me to it):
-> 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 036b750e8d8a..85882c317235 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -887,7 +887,7 @@ config CC_HAS_INT128
->  
->  config CC_IMPLICIT_FALLTHROUGH
->  	string
-> -	default "-Wimplicit-fallthrough=5" if CC_IS_GCC
-> +	default "-Wimplicit-fallthrough=5" if $(cc-option,-Wimplicit-fallthrough=5)
->  	default "-Wimplicit-fallthrough" if CC_IS_CLANG && $(cc-option,-Wunreachable-code-fallthrough)
->  
->  #
-> 
-> Cheers,
-> Nathan
-> 
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > 
-> > It feels a little odd to have this in Kconfig but if it works and gets
-> > the warning enabled, then so be it.
-> > 
-> > > ---
-> > >  Makefile     | 6 +-----
-> > >  init/Kconfig | 5 +++++
-> > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/Makefile b/Makefile
-> > > index 30c7c81d0437..f18a50daad00 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -786,7 +786,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
-> > >  KBUILD_CFLAGS += $(stackp-flags-y)
-> > >  
-> > >  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
-> > > -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y)
-> > > +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-> > >  
-> > >  ifdef CONFIG_CC_IS_CLANG
-> > >  KBUILD_CPPFLAGS += -Qunused-arguments
-> > > @@ -798,10 +798,6 @@ KBUILD_CFLAGS += -Wno-gnu
-> > >  KBUILD_CFLAGS += -mno-global-merge
-> > >  else
-> > >  
-> > > -# Warn about unmarked fall-throughs in switch statement.
-> > > -# Disabled for clang while comment to attribute conversion happens and
-> > > -# https://github.com/ClangBuiltLinux/linux/issues/636 is discussed.
-> > > -KBUILD_CFLAGS += $(call cc-option,-Wimplicit-fallthrough=5,)
-> > >  # gcc inanely warns about local variables called 'main'
-> > >  KBUILD_CFLAGS += -Wno-main
-> > >  endif
-> > > diff --git a/init/Kconfig b/init/Kconfig
-> > > index 11f8a845f259..b0582cd3e096 100644
-> > > --- a/init/Kconfig
-> > > +++ b/init/Kconfig
-> > > @@ -885,6 +885,11 @@ config ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-> > >  config CC_HAS_INT128
-> > >  	def_bool !$(cc-option,$(m64-flag) -D__SIZEOF_INT128__=0) && 64BIT
-> > >  
-> > > +config CC_IMPLICIT_FALLTHROUGH
-> > > +	string
-> > > +	default "-Wimplicit-fallthrough=5" if CC_IS_GCC
-> > > +	default "-Wimplicit-fallthrough" if CC_IS_CLANG && $(cc-option,-Wunreachable-code-fallthrough)
-> > > +
-> > >  #
-> > >  # For architectures that know their GCC __int128 support is sound
-> > >  #
-> > > -- 
-> > > 2.27.0
-> > > 
-> > > 
-> > 
