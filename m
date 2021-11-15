@@ -1,756 +1,689 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F6A72
-	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 18:45:54 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5005635DF;
-	Mon, 15 Nov 2021 18:45:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1637001953;
-	bh=PINb1g6LeQKCTzvTgnm0/JXa7AloU7ASkA1azLLp2EI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=unv/HJ+cY+kSFaNMqhi+J8XD7hHu57UUlwdt9DdeUR0bBgn2FVDIcWyGM0SKlk10S
-	 Y+z4gApEyLmC+vey1HKgxdlyZKT6aaPaPyEI2CNf1RUaSo8jEdvRm4bUCgsFI1vPKn
-	 JaY5S6JoAmNH0lnXvb3MecL1MCv0US5MGcwFy4mQ=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Harry Wentland <harry.wentland@amd.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	amd-gfx@lists.freedesktop.org,
-	Arnd Bergmann <arnd@kernel.org>,
-	Leo Li <sunpeng.li@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Xinhui Pan <Xinhui.Pan@amd.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	llvm@lists.linux.dev,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 350/917] drm/amd/display: Pass display_pipe_params_st as const in DML
-Date: Mon, 15 Nov 2021 17:57:25 +0100
-Message-Id: <20211115165440.617126769@linuxfoundation.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165428.722074685@linuxfoundation.org>
-References: <20211115165428.722074685@linuxfoundation.org>
-User-Agent: quilt/0.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8211572
+	for <llvm@lists.linux.dev>; Mon, 15 Nov 2021 19:21:50 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="230972137"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="gz'50?scan'50,208,50";a="230972137"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 11:21:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="gz'50?scan'50,208,50";a="494145101"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2021 11:21:47 -0800
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mmhY2-000Mug-H1; Mon, 15 Nov 2021 19:21:46 +0000
+Date: Tue, 16 Nov 2021 03:21:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: cgel.zte@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] fs:cifs: convert from atomic_t to refcount_t on
+ tlink->tl_count
+Message-ID: <202111160300.FE7GUYs0-lkp@intel.com>
+References: <20211112093051.9366-1-chi.minghao@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="HlL+5n6rz5pIUxbD"
+Content-Disposition: inline
+In-Reply-To: <20211112093051.9366-1-chi.minghao@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Harry Wentland <harry.wentland@amd.com>
 
-[ Upstream commit 22667e6ec6b2ce9ca706e9061660b059725d009c ]
+--HlL+5n6rz5pIUxbD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[Why]
-This neither needs to be on the stack nor passed by value
-to each function call. In fact, when building with clang
-it seems to break the Linux's default 1024 byte stack
-frame limit.
+Hi,
 
-[How]
-We can simply pass this as a const pointer.
+Thank you for the patch! Yet something to improve:
 
-This patch fixes these Coverity IDs
-Addresses-Coverity-ID: 1424031: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1423970: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1423941: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1451742: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1451887: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1454146: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1454152: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1454413: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1466144: ("Big parameter passed by value")
-Addresses-Coverity-ID: 1487237: ("Big parameter passed by value")
+[auto build test ERROR on cifs/for-next]
+[also build test ERROR on v5.16-rc1 next-20211115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Harry Wentland <harry.wentland@amd.com>
-Fixes: 3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Leo Li <sunpeng.li@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: Xinhui Pan <Xinhui.Pan@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: llvm@lists.linux.dev
-Acked-by: Christian König <christian.koenig@amd.com>
-Build-tested-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Leo Li <sunpeng.li@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/fs-cifs-convert-from-atomic_t-to-refcount_t-on-tlink-tl_count/20211112-173127
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+config: hexagon-randconfig-r041-20211115 (attached as .config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8d0f81fa94784bab585209f6cea84ea63a4a37ba
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/fs-cifs-convert-from-atomic_t-to-refcount_t-on-tlink-tl_count/20211112-173127
+        git checkout 8d0f81fa94784bab585209f6cea84ea63a4a37ba
+        # save the attached .config to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from fs/cifs/cifsacl.c:18:
+>> fs/cifs/cifsglob.h:1156:14: error: incompatible pointer types passing 'refcount_t *' (aka 'struct refcount_struct *') to parameter of type 'atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   atomic_inc(&tlink->tl_count);
+                              ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:179:22: note: passing argument to parameter 'v' here
+   atomic_inc(atomic_t *v)
+                        ^
+   1 error generated.
+--
+   In file included from fs/cifs/ioctl.c:17:
+>> fs/cifs/cifsglob.h:1156:14: error: incompatible pointer types passing 'refcount_t *' (aka 'struct refcount_struct *') to parameter of type 'atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   atomic_inc(&tlink->tl_count);
+                              ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:179:22: note: passing argument to parameter 'v' here
+   atomic_inc(atomic_t *v)
+                        ^
+   fs/cifs/ioctl.c:324:10: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
+           __u64   caps;
+                   ^
+   1 warning and 1 error generated.
+--
+   In file included from fs/cifs/connect.c:36:
+>> fs/cifs/cifsglob.h:1156:14: error: incompatible pointer types passing 'refcount_t *' (aka 'struct refcount_struct *') to parameter of type 'atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   atomic_inc(&tlink->tl_count);
+                              ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:179:22: note: passing argument to parameter 'v' here
+   atomic_inc(atomic_t *v)
+                        ^
+   fs/cifs/connect.c:3008:14: error: no member named 'fscache' in 'struct cifs_tcon'
+                   if (!tcon->fscache)
+                        ~~~~  ^
+>> fs/cifs/connect.c:4053:19: error: incompatible pointer types passing 'refcount_t *' (aka 'struct refcount_struct *') to parameter of type 'const atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                       atomic_read(&tlink->tl_count) != 0 ||
+                                   ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:25:29: note: passing argument to parameter 'v' here
+   atomic_read(const atomic_t *v)
+                               ^
+   3 errors generated.
+
+
+vim +1156 fs/cifs/cifsglob.h
+
+7ffec372458d16 Jeff Layton 2010-09-29  1151  
+13cfb7334eb6fd Jeff Layton 2010-09-29  1152  static inline struct tcon_link *
+13cfb7334eb6fd Jeff Layton 2010-09-29  1153  cifs_get_tlink(struct tcon_link *tlink)
+13cfb7334eb6fd Jeff Layton 2010-09-29  1154  {
+9d002df492b14c Jeff Layton 2010-10-06  1155  	if (tlink && !IS_ERR(tlink))
+9d002df492b14c Jeff Layton 2010-10-06 @1156  		atomic_inc(&tlink->tl_count);
+13cfb7334eb6fd Jeff Layton 2010-09-29  1157  	return tlink;
+13cfb7334eb6fd Jeff Layton 2010-09-29  1158  }
+13cfb7334eb6fd Jeff Layton 2010-09-29  1159  
+
 ---
- .../drm/amd/display/dc/dcn20/dcn20_resource.c |  2 +-
- .../dc/dml/dcn20/display_rq_dlg_calc_20.c     |  6 +-
- .../dc/dml/dcn20/display_rq_dlg_calc_20.h     |  4 +-
- .../dc/dml/dcn20/display_rq_dlg_calc_20v2.c   |  6 +-
- .../dc/dml/dcn20/display_rq_dlg_calc_20v2.h   |  4 +-
- .../dc/dml/dcn21/display_rq_dlg_calc_21.c     | 62 ++++++++--------
- .../dc/dml/dcn21/display_rq_dlg_calc_21.h     |  4 +-
- .../dc/dml/dcn30/display_rq_dlg_calc_30.c     | 72 +++++++++----------
- .../dc/dml/dcn30/display_rq_dlg_calc_30.h     |  4 +-
- .../dc/dml/dcn31/display_rq_dlg_calc_31.c     | 68 +++++++++---------
- .../dc/dml/dcn31/display_rq_dlg_calc_31.h     |  4 +-
- .../drm/amd/display/dc/dml/display_mode_lib.h |  4 +-
- 12 files changed, 120 insertions(+), 120 deletions(-)
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-index f2f258e70f9da..34a126816133e 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-@@ -3152,7 +3152,7 @@ void dcn20_calculate_dlg_params(
- 
- 		context->bw_ctx.dml.funcs.rq_dlg_get_rq_reg(&context->bw_ctx.dml,
- 				&context->res_ctx.pipe_ctx[i].rq_regs,
--				pipes[pipe_idx].pipe);
-+				&pipes[pipe_idx].pipe);
- 		pipe_idx++;
- 	}
- }
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.c
-index 2091dd8c252da..8c168f348a27f 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.c
-@@ -768,12 +768,12 @@ static void dml20_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib,
- 
- void dml20_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param)
-+		const display_pipe_params_st *pipe_param)
- {
- 	display_rq_params_st rq_param = {0};
- 
- 	memset(rq_regs, 0, sizeof(*rq_regs));
--	dml20_rq_dlg_get_rq_params(mode_lib, &rq_param, pipe_param.src);
-+	dml20_rq_dlg_get_rq_params(mode_lib, &rq_param, pipe_param->src);
- 	extract_rq_regs(mode_lib, rq_regs, rq_param);
- 
- 	print__rq_regs_st(mode_lib, *rq_regs);
-@@ -1549,7 +1549,7 @@ static void dml20_rq_dlg_get_dlg_params(struct display_mode_lib *mode_lib,
- void dml20_rq_dlg_get_dlg_reg(struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.h b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.h
-index d0b90947f5409..8b23867e97c18 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20.h
-@@ -43,7 +43,7 @@ struct display_mode_lib;
- void dml20_rq_dlg_get_rq_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param);
-+		const display_pipe_params_st *pipe_param);
- 
- 
- // Function: dml_rq_dlg_get_dlg_reg
-@@ -61,7 +61,7 @@ void dml20_rq_dlg_get_dlg_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c
-index 1a0c14e465faa..26ececfd40cdc 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c
-@@ -768,12 +768,12 @@ static void dml20v2_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib,
- 
- void dml20v2_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param)
-+		const display_pipe_params_st *pipe_param)
- {
- 	display_rq_params_st rq_param = {0};
- 
- 	memset(rq_regs, 0, sizeof(*rq_regs));
--	dml20v2_rq_dlg_get_rq_params(mode_lib, &rq_param, pipe_param.src);
-+	dml20v2_rq_dlg_get_rq_params(mode_lib, &rq_param, pipe_param->src);
- 	extract_rq_regs(mode_lib, rq_regs, rq_param);
- 
- 	print__rq_regs_st(mode_lib, *rq_regs);
-@@ -1550,7 +1550,7 @@ static void dml20v2_rq_dlg_get_dlg_params(struct display_mode_lib *mode_lib,
- void dml20v2_rq_dlg_get_dlg_reg(struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.h b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.h
-index 27cf8bed9376f..2b4e46ea1c3df 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_rq_dlg_calc_20v2.h
-@@ -43,7 +43,7 @@ struct display_mode_lib;
- void dml20v2_rq_dlg_get_rq_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param);
-+		const display_pipe_params_st *pipe_param);
- 
- 
- // Function: dml_rq_dlg_get_dlg_reg
-@@ -61,7 +61,7 @@ void dml20v2_rq_dlg_get_dlg_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.c
-index 287e31052b307..736978c4d40a1 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.c
-@@ -694,7 +694,7 @@ static void get_surf_rq_param(
- 		display_data_rq_sizing_params_st *rq_sizing_param,
- 		display_data_rq_dlg_params_st *rq_dlg_param,
- 		display_data_rq_misc_params_st *rq_misc_param,
--		const display_pipe_params_st pipe_param,
-+		const display_pipe_params_st *pipe_param,
- 		bool is_chroma)
- {
- 	bool mode_422 = false;
-@@ -706,30 +706,30 @@ static void get_surf_rq_param(
- 
- 	// FIXME check if ppe apply for both luma and chroma in 422 case
- 	if (is_chroma) {
--		vp_width = pipe_param.src.viewport_width_c / ppe;
--		vp_height = pipe_param.src.viewport_height_c;
--		data_pitch = pipe_param.src.data_pitch_c;
--		meta_pitch = pipe_param.src.meta_pitch_c;
-+		vp_width = pipe_param->src.viewport_width_c / ppe;
-+		vp_height = pipe_param->src.viewport_height_c;
-+		data_pitch = pipe_param->src.data_pitch_c;
-+		meta_pitch = pipe_param->src.meta_pitch_c;
- 	} else {
--		vp_width = pipe_param.src.viewport_width / ppe;
--		vp_height = pipe_param.src.viewport_height;
--		data_pitch = pipe_param.src.data_pitch;
--		meta_pitch = pipe_param.src.meta_pitch;
-+		vp_width = pipe_param->src.viewport_width / ppe;
-+		vp_height = pipe_param->src.viewport_height;
-+		data_pitch = pipe_param->src.data_pitch;
-+		meta_pitch = pipe_param->src.meta_pitch;
- 	}
- 
--	if (pipe_param.dest.odm_combine) {
-+	if (pipe_param->dest.odm_combine) {
- 		unsigned int access_dir;
- 		unsigned int full_src_vp_width;
- 		unsigned int hactive_half;
- 		unsigned int src_hactive_half;
--		access_dir = (pipe_param.src.source_scan == dm_vert); // vp access direction: horizontal or vertical accessed
--		hactive_half  = pipe_param.dest.hactive / 2;
-+		access_dir = (pipe_param->src.source_scan == dm_vert); // vp access direction: horizontal or vertical accessed
-+		hactive_half  = pipe_param->dest.hactive / 2;
- 		if (is_chroma) {
--			full_src_vp_width = pipe_param.scale_ratio_depth.hscl_ratio_c * pipe_param.dest.full_recout_width;
--			src_hactive_half  = pipe_param.scale_ratio_depth.hscl_ratio_c * hactive_half;
-+			full_src_vp_width = pipe_param->scale_ratio_depth.hscl_ratio_c * pipe_param->dest.full_recout_width;
-+			src_hactive_half  = pipe_param->scale_ratio_depth.hscl_ratio_c * hactive_half;
- 		} else {
--			full_src_vp_width = pipe_param.scale_ratio_depth.hscl_ratio * pipe_param.dest.full_recout_width;
--			src_hactive_half  = pipe_param.scale_ratio_depth.hscl_ratio * hactive_half;
-+			full_src_vp_width = pipe_param->scale_ratio_depth.hscl_ratio * pipe_param->dest.full_recout_width;
-+			src_hactive_half  = pipe_param->scale_ratio_depth.hscl_ratio * hactive_half;
- 		}
- 
- 		if (access_dir == 0) {
-@@ -754,7 +754,7 @@ static void get_surf_rq_param(
- 	rq_sizing_param->meta_chunk_bytes = 2048;
- 	rq_sizing_param->min_meta_chunk_bytes = 256;
- 
--	if (pipe_param.src.hostvm)
-+	if (pipe_param->src.hostvm)
- 		rq_sizing_param->mpte_group_bytes = 512;
- 	else
- 		rq_sizing_param->mpte_group_bytes = 2048;
-@@ -768,23 +768,23 @@ static void get_surf_rq_param(
- 			vp_height,
- 			data_pitch,
- 			meta_pitch,
--			pipe_param.src.source_format,
--			pipe_param.src.sw_mode,
--			pipe_param.src.macro_tile_size,
--			pipe_param.src.source_scan,
--			pipe_param.src.hostvm,
-+			pipe_param->src.source_format,
-+			pipe_param->src.sw_mode,
-+			pipe_param->src.macro_tile_size,
-+			pipe_param->src.source_scan,
-+			pipe_param->src.hostvm,
- 			is_chroma);
- }
- 
- static void dml_rq_dlg_get_rq_params(
- 		struct display_mode_lib *mode_lib,
- 		display_rq_params_st *rq_param,
--		const display_pipe_params_st pipe_param)
-+		const display_pipe_params_st *pipe_param)
- {
- 	// get param for luma surface
--	rq_param->yuv420 = pipe_param.src.source_format == dm_420_8
--			|| pipe_param.src.source_format == dm_420_10;
--	rq_param->yuv420_10bpc = pipe_param.src.source_format == dm_420_10;
-+	rq_param->yuv420 = pipe_param->src.source_format == dm_420_8
-+			|| pipe_param->src.source_format == dm_420_10;
-+	rq_param->yuv420_10bpc = pipe_param->src.source_format == dm_420_10;
- 
- 	get_surf_rq_param(
- 			mode_lib,
-@@ -794,7 +794,7 @@ static void dml_rq_dlg_get_rq_params(
- 			pipe_param,
- 			0);
- 
--	if (is_dual_plane((enum source_format_class) (pipe_param.src.source_format))) {
-+	if (is_dual_plane((enum source_format_class) (pipe_param->src.source_format))) {
- 		// get param for chroma surface
- 		get_surf_rq_param(
- 				mode_lib,
-@@ -806,14 +806,14 @@ static void dml_rq_dlg_get_rq_params(
- 	}
- 
- 	// calculate how to split the det buffer space between luma and chroma
--	handle_det_buf_split(mode_lib, rq_param, pipe_param.src);
-+	handle_det_buf_split(mode_lib, rq_param, pipe_param->src);
- 	print__rq_params_st(mode_lib, *rq_param);
- }
- 
- void dml21_rq_dlg_get_rq_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param)
-+		const display_pipe_params_st *pipe_param)
- {
- 	display_rq_params_st rq_param = {0};
- 
-@@ -1658,7 +1658,7 @@ void dml21_rq_dlg_get_dlg_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-@@ -1696,7 +1696,7 @@ void dml21_rq_dlg_get_dlg_reg(
- 	// system parameter calculation done
- 
- 	dml_print("DML_DLG: Calculation for pipe[%d] start\n\n", pipe_idx);
--	dml_rq_dlg_get_rq_params(mode_lib, &rq_param, e2e_pipe_param[pipe_idx].pipe);
-+	dml_rq_dlg_get_rq_params(mode_lib, &rq_param, &e2e_pipe_param[pipe_idx].pipe);
- 	dml_rq_dlg_get_dlg_params(
- 			mode_lib,
- 			e2e_pipe_param,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.h b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.h
-index e8f7785e3fc63..af6ad0ca9cf8a 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_rq_dlg_calc_21.h
-@@ -44,7 +44,7 @@ struct display_mode_lib;
- void dml21_rq_dlg_get_rq_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param);
-+		const display_pipe_params_st *pipe_param);
- 
- // Function: dml_rq_dlg_get_dlg_reg
- //   Calculate and return DLG and TTU register struct given the system setting
-@@ -61,7 +61,7 @@ void dml21_rq_dlg_get_dlg_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.c
-index 0d934fae1c3a6..2120e0941a095 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.c
-@@ -747,7 +747,7 @@ static void get_surf_rq_param(struct display_mode_lib *mode_lib,
- 	display_data_rq_sizing_params_st *rq_sizing_param,
- 	display_data_rq_dlg_params_st *rq_dlg_param,
- 	display_data_rq_misc_params_st *rq_misc_param,
--	const display_pipe_params_st pipe_param,
-+	const display_pipe_params_st *pipe_param,
- 	bool is_chroma,
- 	bool is_alpha)
- {
-@@ -761,32 +761,32 @@ static void get_surf_rq_param(struct display_mode_lib *mode_lib,
- 
- 	// FIXME check if ppe apply for both luma and chroma in 422 case
- 	if (is_chroma | is_alpha) {
--		vp_width = pipe_param.src.viewport_width_c / ppe;
--		vp_height = pipe_param.src.viewport_height_c;
--		data_pitch = pipe_param.src.data_pitch_c;
--		meta_pitch = pipe_param.src.meta_pitch_c;
--		surface_height = pipe_param.src.surface_height_y / 2.0;
-+		vp_width = pipe_param->src.viewport_width_c / ppe;
-+		vp_height = pipe_param->src.viewport_height_c;
-+		data_pitch = pipe_param->src.data_pitch_c;
-+		meta_pitch = pipe_param->src.meta_pitch_c;
-+		surface_height = pipe_param->src.surface_height_y / 2.0;
- 	} else {
--		vp_width = pipe_param.src.viewport_width / ppe;
--		vp_height = pipe_param.src.viewport_height;
--		data_pitch = pipe_param.src.data_pitch;
--		meta_pitch = pipe_param.src.meta_pitch;
--		surface_height = pipe_param.src.surface_height_y;
-+		vp_width = pipe_param->src.viewport_width / ppe;
-+		vp_height = pipe_param->src.viewport_height;
-+		data_pitch = pipe_param->src.data_pitch;
-+		meta_pitch = pipe_param->src.meta_pitch;
-+		surface_height = pipe_param->src.surface_height_y;
- 	}
- 
--	if (pipe_param.dest.odm_combine) {
-+	if (pipe_param->dest.odm_combine) {
- 		unsigned int access_dir = 0;
- 		unsigned int full_src_vp_width = 0;
- 		unsigned int hactive_odm = 0;
- 		unsigned int src_hactive_odm = 0;
--		access_dir = (pipe_param.src.source_scan == dm_vert); // vp access direction: horizontal or vertical accessed
--		hactive_odm  = pipe_param.dest.hactive / ((unsigned int)pipe_param.dest.odm_combine*2);
-+		access_dir = (pipe_param->src.source_scan == dm_vert); // vp access direction: horizontal or vertical accessed
-+		hactive_odm  = pipe_param->dest.hactive / ((unsigned int) pipe_param->dest.odm_combine*2);
- 		if (is_chroma) {
--			full_src_vp_width = pipe_param.scale_ratio_depth.hscl_ratio_c * pipe_param.dest.full_recout_width;
--			src_hactive_odm  = pipe_param.scale_ratio_depth.hscl_ratio_c * hactive_odm;
-+			full_src_vp_width = pipe_param->scale_ratio_depth.hscl_ratio_c * pipe_param->dest.full_recout_width;
-+			src_hactive_odm  = pipe_param->scale_ratio_depth.hscl_ratio_c * hactive_odm;
- 		} else {
--			full_src_vp_width = pipe_param.scale_ratio_depth.hscl_ratio * pipe_param.dest.full_recout_width;
--			src_hactive_odm  = pipe_param.scale_ratio_depth.hscl_ratio * hactive_odm;
-+			full_src_vp_width = pipe_param->scale_ratio_depth.hscl_ratio * pipe_param->dest.full_recout_width;
-+			src_hactive_odm  = pipe_param->scale_ratio_depth.hscl_ratio * hactive_odm;
- 		}
- 
- 		if (access_dir == 0) {
-@@ -815,7 +815,7 @@ static void get_surf_rq_param(struct display_mode_lib *mode_lib,
- 	rq_sizing_param->meta_chunk_bytes = 2048;
- 	rq_sizing_param->min_meta_chunk_bytes = 256;
- 
--	if (pipe_param.src.hostvm)
-+	if (pipe_param->src.hostvm)
- 		rq_sizing_param->mpte_group_bytes = 512;
- 	else
- 		rq_sizing_param->mpte_group_bytes = 2048;
-@@ -828,28 +828,28 @@ static void get_surf_rq_param(struct display_mode_lib *mode_lib,
- 		vp_height,
- 		data_pitch,
- 		meta_pitch,
--		pipe_param.src.source_format,
--		pipe_param.src.sw_mode,
--		pipe_param.src.macro_tile_size,
--		pipe_param.src.source_scan,
--		pipe_param.src.hostvm,
-+		pipe_param->src.source_format,
-+		pipe_param->src.sw_mode,
-+		pipe_param->src.macro_tile_size,
-+		pipe_param->src.source_scan,
-+		pipe_param->src.hostvm,
- 		is_chroma,
- 		surface_height);
- }
- 
- static void dml_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib,
- 	display_rq_params_st *rq_param,
--	const display_pipe_params_st pipe_param)
-+	const display_pipe_params_st *pipe_param)
- {
- 	// get param for luma surface
--	rq_param->yuv420 = pipe_param.src.source_format == dm_420_8
--	|| pipe_param.src.source_format == dm_420_10
--	|| pipe_param.src.source_format == dm_rgbe_alpha
--	|| pipe_param.src.source_format == dm_420_12;
-+	rq_param->yuv420 = pipe_param->src.source_format == dm_420_8
-+	|| pipe_param->src.source_format == dm_420_10
-+	|| pipe_param->src.source_format == dm_rgbe_alpha
-+	|| pipe_param->src.source_format == dm_420_12;
- 
--	rq_param->yuv420_10bpc = pipe_param.src.source_format == dm_420_10;
-+	rq_param->yuv420_10bpc = pipe_param->src.source_format == dm_420_10;
- 
--	rq_param->rgbe_alpha = (pipe_param.src.source_format == dm_rgbe_alpha)?1:0;
-+	rq_param->rgbe_alpha = (pipe_param->src.source_format == dm_rgbe_alpha)?1:0;
- 
- 	get_surf_rq_param(mode_lib,
- 		&(rq_param->sizing.rq_l),
-@@ -859,7 +859,7 @@ static void dml_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib,
- 		0,
- 		0);
- 
--	if (is_dual_plane((enum source_format_class)(pipe_param.src.source_format))) {
-+	if (is_dual_plane((enum source_format_class)(pipe_param->src.source_format))) {
- 		// get param for chroma surface
- 		get_surf_rq_param(mode_lib,
- 			&(rq_param->sizing.rq_c),
-@@ -871,13 +871,13 @@ static void dml_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib,
- 	}
- 
- 	// calculate how to split the det buffer space between luma and chroma
--	handle_det_buf_split(mode_lib, rq_param, pipe_param.src);
-+	handle_det_buf_split(mode_lib, rq_param, pipe_param->src);
- 	print__rq_params_st(mode_lib, *rq_param);
- }
- 
- void dml30_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- 	display_rq_regs_st *rq_regs,
--	const display_pipe_params_st pipe_param)
-+	const display_pipe_params_st *pipe_param)
- {
- 	display_rq_params_st rq_param = { 0 };
- 
-@@ -1831,7 +1831,7 @@ static void dml_rq_dlg_get_dlg_params(struct display_mode_lib *mode_lib,
- void dml30_rq_dlg_get_dlg_reg(struct display_mode_lib *mode_lib,
- 	display_dlg_regs_st *dlg_regs,
- 	display_ttu_regs_st *ttu_regs,
--	display_e2e_pipe_params_st *e2e_pipe_param,
-+	const display_e2e_pipe_params_st *e2e_pipe_param,
- 	const unsigned int num_pipes,
- 	const unsigned int pipe_idx,
- 	const bool cstate_en,
-@@ -1866,7 +1866,7 @@ void dml30_rq_dlg_get_dlg_reg(struct display_mode_lib *mode_lib,
- 	// system parameter calculation done
- 
- 	dml_print("DML_DLG: Calculation for pipe[%d] start\n\n", pipe_idx);
--	dml_rq_dlg_get_rq_params(mode_lib, &rq_param, e2e_pipe_param[pipe_idx].pipe);
-+	dml_rq_dlg_get_rq_params(mode_lib, &rq_param, &e2e_pipe_param[pipe_idx].pipe);
- 	dml_rq_dlg_get_dlg_params(mode_lib,
- 		e2e_pipe_param,
- 		num_pipes,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.h b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.h
-index c04965cceff35..625e41f8d5751 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_rq_dlg_calc_30.h
-@@ -41,7 +41,7 @@ struct display_mode_lib;
- //            See also: <display_rq_regs_st>
- void dml30_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param);
-+		const display_pipe_params_st *pipe_param);
- 
- // Function: dml_rq_dlg_get_dlg_reg
- //   Calculate and return DLG and TTU register struct given the system setting
-@@ -57,7 +57,7 @@ void dml30_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- void dml30_rq_dlg_get_dlg_reg(struct display_mode_lib             *mode_lib,
- 		display_dlg_regs_st          *dlg_regs,
- 		display_ttu_regs_st          *ttu_regs,
--		display_e2e_pipe_params_st   *e2e_pipe_param,
-+		const display_e2e_pipe_params_st   *e2e_pipe_param,
- 		const unsigned int            num_pipes,
- 		const unsigned int            pipe_idx,
- 		const bool                    cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c
-index c23905bc733ae..57bd4e3f8a823 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c
-@@ -738,7 +738,7 @@ static void get_surf_rq_param(
- 		display_data_rq_sizing_params_st *rq_sizing_param,
- 		display_data_rq_dlg_params_st *rq_dlg_param,
- 		display_data_rq_misc_params_st *rq_misc_param,
--		const display_pipe_params_st pipe_param,
-+		const display_pipe_params_st *pipe_param,
- 		bool is_chroma,
- 		bool is_alpha)
- {
-@@ -752,33 +752,33 @@ static void get_surf_rq_param(
- 
- 	// FIXME check if ppe apply for both luma and chroma in 422 case
- 	if (is_chroma | is_alpha) {
--		vp_width = pipe_param.src.viewport_width_c / ppe;
--		vp_height = pipe_param.src.viewport_height_c;
--		data_pitch = pipe_param.src.data_pitch_c;
--		meta_pitch = pipe_param.src.meta_pitch_c;
--		surface_height = pipe_param.src.surface_height_y / 2.0;
-+		vp_width = pipe_param->src.viewport_width_c / ppe;
-+		vp_height = pipe_param->src.viewport_height_c;
-+		data_pitch = pipe_param->src.data_pitch_c;
-+		meta_pitch = pipe_param->src.meta_pitch_c;
-+		surface_height = pipe_param->src.surface_height_y / 2.0;
- 	} else {
--		vp_width = pipe_param.src.viewport_width / ppe;
--		vp_height = pipe_param.src.viewport_height;
--		data_pitch = pipe_param.src.data_pitch;
--		meta_pitch = pipe_param.src.meta_pitch;
--		surface_height = pipe_param.src.surface_height_y;
-+		vp_width = pipe_param->src.viewport_width / ppe;
-+		vp_height = pipe_param->src.viewport_height;
-+		data_pitch = pipe_param->src.data_pitch;
-+		meta_pitch = pipe_param->src.meta_pitch;
-+		surface_height = pipe_param->src.surface_height_y;
- 	}
- 
--	if (pipe_param.dest.odm_combine) {
-+	if (pipe_param->dest.odm_combine) {
- 		unsigned int access_dir;
- 		unsigned int full_src_vp_width;
- 		unsigned int hactive_odm;
- 		unsigned int src_hactive_odm;
- 
--		access_dir = (pipe_param.src.source_scan == dm_vert); // vp access direction: horizontal or vertical accessed
--		hactive_odm = pipe_param.dest.hactive / ((unsigned int) pipe_param.dest.odm_combine * 2);
-+		access_dir = (pipe_param->src.source_scan == dm_vert); // vp access direction: horizontal or vertical accessed
-+		hactive_odm = pipe_param->dest.hactive / ((unsigned int) pipe_param->dest.odm_combine * 2);
- 		if (is_chroma) {
--			full_src_vp_width = pipe_param.scale_ratio_depth.hscl_ratio_c * pipe_param.dest.full_recout_width;
--			src_hactive_odm = pipe_param.scale_ratio_depth.hscl_ratio_c * hactive_odm;
-+			full_src_vp_width = pipe_param->scale_ratio_depth.hscl_ratio_c * pipe_param->dest.full_recout_width;
-+			src_hactive_odm = pipe_param->scale_ratio_depth.hscl_ratio_c * hactive_odm;
- 		} else {
--			full_src_vp_width = pipe_param.scale_ratio_depth.hscl_ratio * pipe_param.dest.full_recout_width;
--			src_hactive_odm = pipe_param.scale_ratio_depth.hscl_ratio * hactive_odm;
-+			full_src_vp_width = pipe_param->scale_ratio_depth.hscl_ratio * pipe_param->dest.full_recout_width;
-+			src_hactive_odm = pipe_param->scale_ratio_depth.hscl_ratio * hactive_odm;
- 		}
- 
- 		if (access_dir == 0) {
-@@ -808,7 +808,7 @@ static void get_surf_rq_param(
- 	rq_sizing_param->meta_chunk_bytes = 2048;
- 	rq_sizing_param->min_meta_chunk_bytes = 256;
- 
--	if (pipe_param.src.hostvm)
-+	if (pipe_param->src.hostvm)
- 		rq_sizing_param->mpte_group_bytes = 512;
- 	else
- 		rq_sizing_param->mpte_group_bytes = 2048;
-@@ -822,38 +822,38 @@ static void get_surf_rq_param(
- 			vp_height,
- 			data_pitch,
- 			meta_pitch,
--			pipe_param.src.source_format,
--			pipe_param.src.sw_mode,
--			pipe_param.src.macro_tile_size,
--			pipe_param.src.source_scan,
--			pipe_param.src.hostvm,
-+			pipe_param->src.source_format,
-+			pipe_param->src.sw_mode,
-+			pipe_param->src.macro_tile_size,
-+			pipe_param->src.source_scan,
-+			pipe_param->src.hostvm,
- 			is_chroma,
- 			surface_height);
- }
- 
--static void dml_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib, display_rq_params_st *rq_param, const display_pipe_params_st pipe_param)
-+static void dml_rq_dlg_get_rq_params(struct display_mode_lib *mode_lib, display_rq_params_st *rq_param, const display_pipe_params_st *pipe_param)
- {
- 	// get param for luma surface
--	rq_param->yuv420 = pipe_param.src.source_format == dm_420_8 || pipe_param.src.source_format == dm_420_10 || pipe_param.src.source_format == dm_rgbe_alpha
--			|| pipe_param.src.source_format == dm_420_12;
-+	rq_param->yuv420 = pipe_param->src.source_format == dm_420_8 || pipe_param->src.source_format == dm_420_10 || pipe_param->src.source_format == dm_rgbe_alpha
-+			|| pipe_param->src.source_format == dm_420_12;
- 
--	rq_param->yuv420_10bpc = pipe_param.src.source_format == dm_420_10;
-+	rq_param->yuv420_10bpc = pipe_param->src.source_format == dm_420_10;
- 
--	rq_param->rgbe_alpha = (pipe_param.src.source_format == dm_rgbe_alpha) ? 1 : 0;
-+	rq_param->rgbe_alpha = (pipe_param->src.source_format == dm_rgbe_alpha) ? 1 : 0;
- 
- 	get_surf_rq_param(mode_lib, &(rq_param->sizing.rq_l), &(rq_param->dlg.rq_l), &(rq_param->misc.rq_l), pipe_param, 0, 0);
- 
--	if (is_dual_plane((enum source_format_class) (pipe_param.src.source_format))) {
-+	if (is_dual_plane((enum source_format_class) (pipe_param->src.source_format))) {
- 		// get param for chroma surface
- 		get_surf_rq_param(mode_lib, &(rq_param->sizing.rq_c), &(rq_param->dlg.rq_c), &(rq_param->misc.rq_c), pipe_param, 1, rq_param->rgbe_alpha);
- 	}
- 
- 	// calculate how to split the det buffer space between luma and chroma
--	handle_det_buf_split(mode_lib, rq_param, pipe_param.src);
-+	handle_det_buf_split(mode_lib, rq_param, pipe_param->src);
- 	print__rq_params_st(mode_lib, *rq_param);
- }
- 
--void dml31_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib, display_rq_regs_st *rq_regs, const display_pipe_params_st pipe_param)
-+void dml31_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib, display_rq_regs_st *rq_regs, const display_pipe_params_st *pipe_param)
- {
- 	display_rq_params_st rq_param = {0};
- 
-@@ -1677,7 +1677,7 @@ void dml31_rq_dlg_get_dlg_reg(
- 		struct display_mode_lib *mode_lib,
- 		display_dlg_regs_st *dlg_regs,
- 		display_ttu_regs_st *ttu_regs,
--		display_e2e_pipe_params_st *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int num_pipes,
- 		const unsigned int pipe_idx,
- 		const bool cstate_en,
-@@ -1704,7 +1704,7 @@ void dml31_rq_dlg_get_dlg_reg(
- 	// system parameter calculation done
- 
- 	dml_print("DML_DLG: Calculation for pipe[%d] start\n\n", pipe_idx);
--	dml_rq_dlg_get_rq_params(mode_lib, &rq_param, e2e_pipe_param[pipe_idx].pipe);
-+	dml_rq_dlg_get_rq_params(mode_lib, &rq_param, &e2e_pipe_param[pipe_idx].pipe);
- 	dml_rq_dlg_get_dlg_params(
- 			mode_lib,
- 			e2e_pipe_param,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.h b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.h
-index adf8518f761f9..8ee991351699d 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.h
-@@ -41,7 +41,7 @@ struct display_mode_lib;
- //            See also: <display_rq_regs_st>
- void dml31_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param);
-+		const display_pipe_params_st *pipe_param);
- 
- // Function: dml_rq_dlg_get_dlg_reg
- //   Calculate and return DLG and TTU register struct given the system setting
-@@ -57,7 +57,7 @@ void dml31_rq_dlg_get_rq_reg(struct display_mode_lib *mode_lib,
- void dml31_rq_dlg_get_dlg_reg(struct display_mode_lib             *mode_lib,
- 		display_dlg_regs_st          *dlg_regs,
- 		display_ttu_regs_st          *ttu_regs,
--		display_e2e_pipe_params_st   *e2e_pipe_param,
-+		const display_e2e_pipe_params_st *e2e_pipe_param,
- 		const unsigned int            num_pipes,
- 		const unsigned int            pipe_idx,
- 		const bool                    cstate_en,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.h
-index d42a0aeca6be2..72b1957022aa2 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.h
-@@ -49,7 +49,7 @@ struct dml_funcs {
- 			struct display_mode_lib *mode_lib,
- 			display_dlg_regs_st *dlg_regs,
- 			display_ttu_regs_st *ttu_regs,
--			display_e2e_pipe_params_st *e2e_pipe_param,
-+			const display_e2e_pipe_params_st *e2e_pipe_param,
- 			const unsigned int num_pipes,
- 			const unsigned int pipe_idx,
- 			const bool cstate_en,
-@@ -60,7 +60,7 @@ struct dml_funcs {
- 	void (*rq_dlg_get_rq_reg)(
- 		struct display_mode_lib *mode_lib,
- 		display_rq_regs_st *rq_regs,
--		const display_pipe_params_st pipe_param);
-+		const display_pipe_params_st *pipe_param);
- 	void (*recalculate)(struct display_mode_lib *mode_lib);
- 	void (*validate)(struct display_mode_lib *mode_lib);
- };
--- 
-2.33.0
+--HlL+5n6rz5pIUxbD
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
 
+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
+d4y2/webLgUNI9wBAA==
 
-
+--HlL+5n6rz5pIUxbD--
