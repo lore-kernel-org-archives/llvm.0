@@ -1,82 +1,61 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C192C82
-	for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 15:45:20 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48FA661526;
-	Tue, 16 Nov 2021 15:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637077519;
-	bh=8TF7QOfF7+R14bacNbYtsjRF9nV+tpGDEihkxlTXlm0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Hl6K8FSpYKKvecJf34MpSSYi2EKo6dElx9+Ufh/iJ7utquAz/JOkv3/Nq4Bo/qPz2
-	 0Lsta+7Bscr1h2RBzBQYLPfhoW+elpJIu1JeQLh0VIPQcIN91C4ElcI6vrI+JSD8Cz
-	 NsLKCxbZ3c9szKOxu/xmuUbzO1TERecRAmPTsyXxIbI64fcRyea9oIhI3pDpVO3ty5
-	 TmgztPs3q1L91jB7Pc3ZX4V690En+3IKOsk1Qz5+9uhpgVJVhDNUWCC+6dHRK4f0t5
-	 nyBozvlfWBwvYM4ftEXb0GSkAJMhwFoyjlm7kL5hDv6pxN698zhzq+SfRynWUqZzLM
-	 yZO50VqO46/LA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] hwmon: (tmp401) Fix clang -Wimplicit-fallthrough in tmp401_is_visible()
-Date: Tue, 16 Nov 2021 08:44:39 -0700
-Message-Id: <20211116154438.1383290-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2002C82
+	for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 16:20:40 +0000 (UTC)
+Received: by mail-qt1-f170.google.com with SMTP id v22so14798717qtx.8
+        for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 08:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PXmP0iEL7NoEd9T/QMFkDnPKk7SG43uZ/gjP8ig4g0I=;
+        b=fYYCn5WqajmgSpCS+i0bFFrEDuaLC/vYuvzDB9cWr2onNeQ4H40cDI2419e14yCNaG
+         UUX43NJ3l/51FEp5vYOZxQ1GUdY4fsx2pXkpxFm/vJOAI7w7pOijTJlDhyh788djfUhx
+         99MIpBSyyUiQUSoyd5o9o5GWC8G9WDt2GH/SI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PXmP0iEL7NoEd9T/QMFkDnPKk7SG43uZ/gjP8ig4g0I=;
+        b=wVgxN55rGETHhlalbIylpVpPpHKoBX2rxNoD29a6Suyp6o8dzLHOB611nZMIXfE+y9
+         i7il42VtHMk9QttL1S5oBIlUhwzOza+1dizEvp8ahm8Y3J98GKa5pouuOTUSbZrePlC8
+         TwkmCjBGMzH1T7U7E3fQhhqHoc7OrF74lG0/0S3BmQhT8dKJDIvKS7rZbPix+vTlUlki
+         76ZLsNA+vhuXhfKSlFV46FPsnvigQWsnNTzxabK8ix8Zg3Ny+z/IoPgw8mqgnslnRhXD
+         1Md3MoRi1YT8h9kC7/et0qwuyjNqQzuuvxqtvj0LYQPpN1hL4JvVa4eIppKF9B/TwFIc
+         3Ong==
+X-Gm-Message-State: AOAM531NAdOu34SYuDgdxuM96t0L/DFiBSf/pk16FUXnIghrghu9nQIo
+	K5g31u0zazuepHr41AyddcZVG++SGmw9HOJoHDWP8g==
+X-Google-Smtp-Source: ABdhPJwueNRwd+7G2C49ZaZME9umYA5Wo/JEEnMIP9kE0dbhmQK6GrZ8S0pNOF0D+GLdi4RHsXBu7Bj2RjYtM2z77lg=
+X-Received: by 2002:ac8:615c:: with SMTP id d28mr8467623qtm.103.1637079639076;
+ Tue, 16 Nov 2021 08:20:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+References: <1636961881-17824-2-git-send-email-michael.chan@broadcom.com>
+ <202111160027.hFgVPM0z-lkp@intel.com> <20211116063943.7aa27c7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211116063943.7aa27c7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From: Michael Chan <michael.chan@broadcom.com>
+Date: Tue, 16 Nov 2021 08:20:27 -0800
+Message-ID: <CACKFLin4PGrs5yrUc+gqfZc5E9nTskcApg2GA5xYWA7OOzYDyA@mail.gmail.com>
+Subject: Re: [PATCH net 1/3] bnxt_en: extend RTNL to VF check in devlink driver_reinit
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, davem@davemloft.net, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, netdev@vger.kernel.org, edwin.peer@broadcom.com, 
+	gospo@broadcom.com, Leon Romanovsky <leon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Clang warns:
+On Tue, Nov 16, 2021 at 6:39 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 16 Nov 2021 00:30:34 +0800 kernel test robot wrote:
+> > >> drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c:445:48: error: no member named 'sriov_cfg' in 'struct bnxt'
+> >                    if (BNXT_PF(bp) && (bp->pf.active_vfs || bp->sriov_cfg)) {
+> >                                                             ~~  ^
+>
+> Hi Michael, is this a false positive? Is the fix coming?
 
-drivers/hwmon/tmp401.c:526:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-        default:
-        ^
-drivers/hwmon/tmp401.c:526:2: note: insert 'break;' to avoid fall-through
-        default:
-        ^
-        break;
-1 error generated.
-
-Clang is a little more pedantic than GCC, which does not warn when
-falling through to a case that is just break or return. Clang's version
-is more in line with the kernel's own stance in deprecated.rst, which
-states that all switch/case blocks must end in either break,
-fallthrough, continue, goto, or return. Add the missing break to silence
-the warning.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1505
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-Feel free to squash this into the offending commit.
-
- drivers/hwmon/tmp401.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index f7b6a2c4fbcf..b86d9df7105d 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -523,6 +523,7 @@ static umode_t tmp401_is_visible(const void *data, enum hwmon_sensor_types type,
- 		default:
- 			break;
- 		}
-+		break;
- 	default:
- 		break;
- 	}
-
-base-commit: 82b520da9134a594eb9816759ed66ba6ef44888e
--- 
-2.34.0
-
+It's a real error when CONFIG_BNXT_SRIOV is not enabled.  I'll send
+the fix later today.  Thanks.
