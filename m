@@ -1,50 +1,50 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5C672
-	for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 10:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0A272
+	for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 10:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1637058232;
+	s=mimecast20190719; t=1637058412;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=bqYiObSXGPXWR6NuE2CwM3ifjdym9ke+lZHPUSttryw=;
-	b=H4XJxjC/KWnJr4JkaDQ0Wqmv6YBkTjPhwZdWdBmZb4aBiUek6EPgY3zsqhlDczS/cOXFDu
-	zpNoxv+nt0lXMSHI1xOSlFuqwLMD/eRa6tmn3msIzrkVJgN/efKfJdso0ZmvTZ3qbpR52N
-	t72XDXMi8Frdr6O0LjH9BRxl59SwoJg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-604-z1FbLty2PBawR4B8T2SJ9A-1; Tue, 16 Nov 2021 05:23:51 -0500
-X-MC-Unique: z1FbLty2PBawR4B8T2SJ9A-1
-Received: by mail-ed1-f72.google.com with SMTP id q17-20020aa7da91000000b003e7c0641b9cso5133660eds.12
-        for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 02:23:50 -0800 (PST)
+	bh=zzfJFFs1yOAsVs8rA5VCSt3swVTOoJ3a9p/d2W4NYtA=;
+	b=UdvBfpUuRTYY4L09w7/7NLt7x3DPKdz8q2gZn1iGymsHdmsLplWkrmFp5cwrPMC5z4C38K
+	xRpp2+QWWS8WLu3G9yQU93TZLKlCARxXxq1n5tdD1Vddh48FwXKNS0r+/7QO+xUB69G8sc
+	HEcR925Ei8NXJTf8mhpm/WwWAQLZQa4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-177-MXhcohq6MP2t99TaV6c4LA-1; Tue, 16 Nov 2021 05:26:51 -0500
+X-MC-Unique: MXhcohq6MP2t99TaV6c4LA-1
+Received: by mail-ed1-f70.google.com with SMTP id v9-20020a50d849000000b003dcb31eabaaso16830398edj.13
+        for <llvm@lists.linux.dev>; Tue, 16 Nov 2021 02:26:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=bqYiObSXGPXWR6NuE2CwM3ifjdym9ke+lZHPUSttryw=;
-        b=IKf5kRt5hu4G98Zj7qro3rYWdKHYzjPMzfqZlGuZjMRVEw1e03lgdTv8Zt3LrYFRuQ
-         gUe97MQgYj9dOdHYUYjer7ryDl/ooXRCWYZsuXD2mLGcc5uHu4ZAM7XkvZsyVDccDLYE
-         xHCj4cNSYXzjYa7RK5qlcgsIydsROYtos459YeqOxHlDtaQDC9lA5Gewv4B5U/KWab8c
-         yKAXnLcxn2vuQ6F3mn7Av5STz1WBEgoE7Z5ZVnPmU6896Io1peO5P+uKKmFyn3qIe4YR
-         JUHMX/fC+pullI1SFkvn+jSFFmryO3snCzuNhxrNpwDaY+R7RHnqc3S5Qd7yE5Jw4ay9
-         Ybmg==
-X-Gm-Message-State: AOAM531UjorZiWYLXevXDR5q+sovHrnubFtEgv6bR9NyyqlYPJaHLGaP
-	voOizic7hAvDeuXn3PGjE2PF5e5eHEf3JiPoA1Jzteojtz7ZSLNvdNz4BLU0Yt2OSl5X9jEwuWH
-	+Z8kH80RsCWEm+A==
-X-Received: by 2002:a17:906:9744:: with SMTP id o4mr8528979ejy.322.1637058229887;
-        Tue, 16 Nov 2021 02:23:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzX2KsnJZSoQG+b+bHMUFGqmmSAeQqitIwEu9Qv5jNXoFwoM0aiQrM+WQxFLtuHfEHiAcyZMQ==
-X-Received: by 2002:a17:906:9744:: with SMTP id o4mr8528949ejy.322.1637058229701;
-        Tue, 16 Nov 2021 02:23:49 -0800 (PST)
+        bh=zzfJFFs1yOAsVs8rA5VCSt3swVTOoJ3a9p/d2W4NYtA=;
+        b=Pu31sJCmrtTLp37bGXXH+6PTwz4dfVjsGOi264inweB7LlRRkIcurpa4niBeyfrI4i
+         KXa+rLwuhrVIuocUoSb74lgyaZRfkW9m/5T2WnRFIR1kGqBIH7gC/j5q3aB3sWXlVbtV
+         LeytSGxzYYqt3BuqwB0RiDsQcuE9QGgEMRMG1LyDEQAVeXADWK5ZeVNrIxAqc3NI0J0d
+         vU413iaQrfgolP3Y3mWr5izP0eE0fYLplAiCTuuYXQfKm1kkkbhlh6i5AFzrHNA24r/T
+         NQ+Q+9+MJaPBS3PNd5qdMmb/pO3qvK4YhlOpfCmaic3ENnv2LtdHlLmkxpFdz5o//xWD
+         kJ7A==
+X-Gm-Message-State: AOAM532sElXYhrWXk4RskwkAN8icm8CYVDxU7b01MJClLvq5io0UE3si
+	GvRvC8fuqzzFucWI6PF9T4WpdriW8H0Xa8AG/bG2aESJmzhd+rnnPvSFO8Rj7nLKKvl6fMw1HwN
+	lVIwrh3R47tn/nQ==
+X-Received: by 2002:a05:6402:2753:: with SMTP id z19mr8678687edd.143.1637058409880;
+        Tue, 16 Nov 2021 02:26:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJze7G27h6q4hHPzijH2DQOjmRBhIvl8m2KOckBL3/bxl/7qDqMgG0oYB+v+0OuZPnwC8PE2gA==
+X-Received: by 2002:a05:6402:2753:: with SMTP id z19mr8678666edd.143.1637058409713;
+        Tue, 16 Nov 2021 02:26:49 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id f17sm5957609edf.21.2021.11.16.02.23.49
+        by smtp.gmail.com with ESMTPSA id hv17sm8177026ejc.66.2021.11.16.02.26.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Nov 2021 02:23:49 -0800 (PST)
-Message-ID: <0e8ed818-7f09-bc1f-f292-8b1a441df0b4@redhat.com>
-Date: Tue, 16 Nov 2021 11:23:48 +0100
+        Tue, 16 Nov 2021 02:26:49 -0800 (PST)
+Message-ID: <009706db-230a-1e49-0a42-447a0ff97fbb@redhat.com>
+Date: Tue, 16 Nov 2021 11:26:48 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,15 +53,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: drivers/platform/x86/thinkpad_acpi.c:918:30: error: unused
- variable 'dispatch_proc_ops'
-From: Hans de Goede <hdegoede@redhat.com>
+Subject: Re: drivers/platform/x86/thinkpad_acpi.c:4475:35: error: unused
+ variable 'fwbug_cards_ids'
 To: kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
  linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>
-References: <202111140045.CyDFTOZZ-lkp@intel.com>
- <5b2c4f59-deaf-a084-e9fa-d63ffa316452@redhat.com>
-In-Reply-To: <5b2c4f59-deaf-a084-e9fa-d63ffa316452@redhat.com>
+References: <202111141153.mtggZgGq-lkp@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202111141153.mtggZgGq-lkp@intel.com>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=hdegoede@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -72,99 +71,79 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-On 11/16/21 11:17, Hans de Goede wrote:
-> Hi,
+On 11/14/21 04:10, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   c8c109546a19613d323a319d0c921cb1f317e629
+> commit: fd96e35ea7b95f1e216277805be89d66e4ae962d platform/x86: thinkpad_acpi: Fix bitwise vs. logical warning
+> date:   4 weeks ago
+> config: i386-buildonly-randconfig-r005-20211114 (attached as .config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dddeeafb529e769cde87bd29ef6271ac6bfa5c)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd96e35ea7b95f1e216277805be89d66e4ae962d
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout fd96e35ea7b95f1e216277805be89d66e4ae962d
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
 > 
-> On 11/13/21 17:44, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   66f4beaa6c1d28161f534471484b2daa2de1dce0
->> commit: fd96e35ea7b95f1e216277805be89d66e4ae962d platform/x86: thinkpad_acpi: Fix bitwise vs. logical warning
->> date:   4 weeks ago
->> config: i386-buildonly-randconfig-r002-20211109 (attached as .config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 63ef0e17e28827eae53133b3467bdac7d9729318)
->> reproduce (this is a W=1 build):
->>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd96e35ea7b95f1e216277805be89d66e4ae962d
->>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>         git fetch --no-tags linus master
->>         git checkout fd96e35ea7b95f1e216277805be89d66e4ae962d
->>         # save the attached .config to linux build tree
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/platform/x86/thinkpad_acpi.c:918:30: error: unused variable 'dispatch_proc_ops' [-Werror,-Wunused-const-variable]
->>    static const struct proc_ops dispatch_proc_ops = {
->>                                 ^
->>    1 error generated.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> So this has absolutely nothing to do with the:
+> All errors (new ones prefixed by >>):
 > 
-> "platform/x86: thinkpad_acpi: Fix bitwise vs. logical warning"
-> 
-> commit, the problem is that:
-> 
-> 1. the .config does not have CONFIG_PROC_FS set; combined with:
-> 2. include/linux/proc_fs.h using a #define instead of a
->    static inline for proc_create_data() when this is the case
-> 3. This is a clang WERROR build
-> 
-> The thinkpad_acpi code cannot really function without procfs
-> support anyways (it will error out on probe if proc_create_data()
-> returns NULL) so I will shortly submit a fix adding a
-> depends on PROC_FS to fix this.
+>>> drivers/platform/x86/thinkpad_acpi.c:4475:35: error: unused variable 'fwbug_cards_ids' [-Werror,-Wunused-const-variable]
+>    static const struct pci_device_id fwbug_cards_ids[] __initconst = {
+>                                      ^
+>    1 error generated.
 
-Thinking more about this I'm going to fix this in a more generic
-way by changing the #define for proc_create_data() to a
-static inline, which should help other drivers in the same
-boat too.
+So this *again* has absolutely nothing to do with the:
+
+"platform/x86: thinkpad_acpi: Fix bitwise vs. logical warning"
+
+commit, the problem is that:
+
+1. the .config does not have CONFIG_PCI set; combined with:
+2. include/pci.h using a #define instead of a
+   static inline for pci_dev_present() when this is the case
+3. This is a clang WERROR build
+
+I'll submit a fix for 2. upstream which should also fix
+similar errors in a lot of other drivers.
+
+Again I must say that as a maintainer I'm unhappy about the amount
+of noise being generated by clang WERROR builds here though,
+is it really necessary for the kernel test robot to do builds
+of this type ?
 
 Regards,
 
 Hans
 
 
-
-> 
-> I must say that as a maintainer I'm unhappy about the amount
-> of noise being generated by clang WERROR builds here though,
-> is it really necessary for the kernel test robot to do builds
-> of this type ?
-> 
-> Regards,
-> 
-> Hans
 > 
 > 
+> vim +/fwbug_cards_ids +4475 drivers/platform/x86/thinkpad_acpi.c
 > 
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4474  
+> f7db839fccf087 Jiaxun Yang 2019-03-07 @4475  static const struct pci_device_id fwbug_cards_ids[] __initconst = {
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4476  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x24F3) },
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4477  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x24FD) },
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4478  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x2526) },
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4479  	{}
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4480  };
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4481  
+> f7db839fccf087 Jiaxun Yang 2019-03-07  4482  
 > 
+> :::::: The code at line 4475 was first introduced by commit
+> :::::: f7db839fccf087664e5587966220821289b6a9cb platform/x86: thinkpad_acpi: Disable Bluetooth for some machines
 > 
->>
->>
->> vim +/dispatch_proc_ops +918 drivers/platform/x86/thinkpad_acpi.c
->>
->> ^1da177e4c3f41 drivers/acpi/ibm_acpi.c              Linus Torvalds  2005-04-16  917  
->> 97a32539b9568b drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2020-02-03 @918  static const struct proc_ops dispatch_proc_ops = {
->> 97a32539b9568b drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2020-02-03  919  	.proc_open	= dispatch_proc_open,
->> 97a32539b9568b drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2020-02-03  920  	.proc_read	= seq_read,
->> 97a32539b9568b drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2020-02-03  921  	.proc_lseek	= seq_lseek,
->> 97a32539b9568b drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2020-02-03  922  	.proc_release	= single_release,
->> 97a32539b9568b drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2020-02-03  923  	.proc_write	= dispatch_proc_write,
->> 887965e6576a78 drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2009-12-15  924  };
->> 887965e6576a78 drivers/platform/x86/thinkpad_acpi.c Alexey Dobriyan 2009-12-15  925  
->>
->> :::::: The code at line 918 was first introduced by commit
->> :::::: 97a32539b9568bb653683349e5a76d02ff3c3e2c proc: convert everything to "struct proc_ops"
->>
->> :::::: TO: Alexey Dobriyan <adobriyan@gmail.com>
->> :::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->>
+> :::::: TO: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> :::::: CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
