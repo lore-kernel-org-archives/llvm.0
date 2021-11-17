@@ -1,94 +1,119 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AB12C81
-	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 15:00:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 305A461B29;
-	Wed, 17 Nov 2021 14:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637161200;
-	bh=Nj8svUNr2JXk6WJcNKA2SRbO/3PCnf8tggbypgBHxlc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EadyNSNWvAvtfkuXmCoEwdfQ7AYw24qgRypy6/2teI7JDLXsToAt9tBFGIWg4rr0c
-	 ZLm0dGaj2XC0M42NsMmyNPa+vQVchHtk7yN/YWVtG3cOof+tTP6r+GkAzXX9snvy4n
-	 pI42xvGi3yu33StA+p/9bpzh3ToUtf7ADs5BIEG463gL1yDLN5WwJqWn/2M3KeqbQ7
-	 uxtF8RO4gyedOPtN7nrcpwAIIfpyDOIl8DzRGgWo3nUI9VbYa0rzmNZlaLzNwWvKY5
-	 /UcpEeTj9j5JgBRpy6LV1iqz6Vm0NN4g7X510+xIHkhOUFd/g6yE/QtzZDoezmGq/v
-	 NLJ7nANTKzXhA==
-Date: Wed, 17 Nov 2021 07:59:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, ndesaulniers@google.com,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] soc/tegra: fuse: fix bitwice vs. logical warning
-Message-ID: <YZUY69vfq/RrVWMw@archlinux-ax161>
-References: <20211117142115.694316-1-anders.roxell@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A073A29CA
+	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 15:39:02 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id w1so13036744edc.6
+        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 07:39:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/TcUJQTDYWocWle3f9+mogG0dpTJDH1Ke5aeq+Kuctw=;
+        b=joPwOVbt1twtXo/4m3BpjAd0tmFyGp+4+AQ7dd3n37c7Fcg8XMqZbwCcm2lzNMKK0U
+         iFrBcyuCqSsEiN7nK0VnOyLs0FEbawStKzliiT1aSsl+FDLkeK2p+GmbIQy1yPkhKNIh
+         QFIfsanQg3QCCkRIOu3Mf/0tQVC0tVfHpix4n/p399+SBT1hTDO833ZiAZjlS3pbnpmC
+         1gTf4IuuU4yZd3WLQ4IiA4AB0+rK8v+57QR0qI02JZXflknZjDBoBlKAaFtdYte439Zg
+         Wno2xib9gbE/+xoo+HToxeUscFbz0XqARcOrBxG/eozBG/PUGsfVGY40vZ9gubHTaqCP
+         puJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/TcUJQTDYWocWle3f9+mogG0dpTJDH1Ke5aeq+Kuctw=;
+        b=okpgfA7D6eVvCI4imxzk/Xlkg8fuv+GnfUAWhA5KDlDMYh6xQayJzHvOuxhoB5sEIj
+         zbpZZ89UKYq6I7Ir5r186e/P0qOmrxikaHsy12tF7uEUgEcVnZYNQ1rtE9v0qj5OXahs
+         /G4aTCOkbnYWzQwsL8mO9sgEvOZLCGfi4b/uPTqxKCR+smhBH7oBJ/FAS9q1rK1ZIpv0
+         yvZp2dJjat4VpX4mSW01UVrnTFlBvQUwAs/+2XOYxS/9cPck8Il//hD7+5z+sTgi0oix
+         +xZhGriJ0sDl8mOH8S3LuGEedj14QtBAEelWpHy8zZfidsgf8oz+VS45534SQfSblVa5
+         LKhQ==
+X-Gm-Message-State: AOAM533PjLbhVyxjFEu5lJ+Y9d8S40mwejtf/j/qxOqygGRTp0KpjeNx
+	JbGjeJjyMaAZmyesEBzCUKbxRYYmLc/zaC/aze4HTg==
+X-Google-Smtp-Source: ABdhPJxbO9oM7lYebEc5d09CygmBuYbwNSeVKmi4BSitEspHl+XiObU1tYWWHIftk13/zbdiQ0us7Zx6BT6sQbCaRDU=
+X-Received: by 2002:a17:907:3c16:: with SMTP id gh22mr22098760ejc.344.1637163540895;
+ Wed, 17 Nov 2021 07:39:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211117142115.694316-1-anders.roxell@linaro.org>
+References: <20211117142115.694316-1-anders.roxell@linaro.org> <YZUY69vfq/RrVWMw@archlinux-ax161>
+In-Reply-To: <YZUY69vfq/RrVWMw@archlinux-ax161>
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Wed, 17 Nov 2021 16:38:50 +0100
+Message-ID: <CADYN=9J9L+nY1vMSnPGeam5+KSm-tH37_j1CYokp8etHOP1evA@mail.gmail.com>
+Subject: Re: [PATCH] soc/tegra: fuse: fix bitwice vs. logical warning
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, ndesaulniers@google.com, 
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Nov 17, 2021 at 03:21:15PM +0100, Anders Roxell wrote:
-> When building with clang-13 the compiler warns about:
-> 
-> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
->                 reg = tegra_fuse_read_spare(i) |
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
->                                                ||
-> 
-> This should be a logical OR so change it to fix the warning.
-> 
-> Fixes: 7e939de1b2bb ("soc/tegra: fuse: Unify Tegra20 and Tegra30 drivers")
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+On Wed, 17 Nov 2021 at 16:00, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Wed, Nov 17, 2021 at 03:21:15PM +0100, Anders Roxell wrote:
+> > When building with clang-13 the compiler warns about:
+> >
+> > drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+> >                 reg = tegra_fuse_read_spare(i) |
+> >                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> >                                                ||
+> >
+> > This should be a logical OR so change it to fix the warning.
+> >
+> > Fixes: 7e939de1b2bb ("soc/tegra: fuse: Unify Tegra20 and Tegra30 drivers")
+> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+>
+> I sent the same patch a couple of weeks ago (but it was right before the
+> merge window so I am sure nobody was really paying attention):
+>
+> https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kernel.org/
+>
+> I do not particularly care which one gets merged (although I think mine
+> explains the warning a little bit better).
 
-I sent the same patch a couple of weeks ago (but it was right before the
-merge window so I am sure nobody was really paying attention):
+I missed that, sorry.
+I agree I think your changlog explains the warning better.
 
-https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kernel.org/
+Cheers,
+Anders
 
-I do not particularly care which one gets merged (although I think mine
-explains the warning a little bit better).
-
-I am not sure your fixes tag is right, I would expect it to be:
-
-Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
-
-With that fixed:
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  drivers/soc/tegra/fuse/speedo-tegra20.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/tegra/fuse/speedo-tegra20.c b/drivers/soc/tegra/fuse/speedo-tegra20.c
-> index 2546bddbab93..4984246605ae 100644
-> --- a/drivers/soc/tegra/fuse/speedo-tegra20.c
-> +++ b/drivers/soc/tegra/fuse/speedo-tegra20.c
-> @@ -69,7 +69,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
->  
->  	val = 0;
->  	for (i = CPU_SPEEDO_MSBIT; i >= CPU_SPEEDO_LSBIT; i--) {
-> -		reg = tegra_fuse_read_spare(i) |
-> +		reg = tegra_fuse_read_spare(i) ||
->  			tegra_fuse_read_spare(i + CPU_SPEEDO_REDUND_OFFS);
->  		val = (val << 1) | (reg & 0x1);
->  	}
-> @@ -84,7 +84,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
->  
->  	val = 0;
->  	for (i = SOC_SPEEDO_MSBIT; i >= SOC_SPEEDO_LSBIT; i--) {
-> -		reg = tegra_fuse_read_spare(i) |
-> +		reg = tegra_fuse_read_spare(i) ||
->  			tegra_fuse_read_spare(i + SOC_SPEEDO_REDUND_OFFS);
->  		val = (val << 1) | (reg & 0x1);
->  	}
-> -- 
-> 2.33.0
-> 
+>
+> I am not sure your fixes tag is right, I would expect it to be:
+>
+> Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
+>
+> With that fixed:
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >  drivers/soc/tegra/fuse/speedo-tegra20.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/soc/tegra/fuse/speedo-tegra20.c b/drivers/soc/tegra/fuse/speedo-tegra20.c
+> > index 2546bddbab93..4984246605ae 100644
+> > --- a/drivers/soc/tegra/fuse/speedo-tegra20.c
+> > +++ b/drivers/soc/tegra/fuse/speedo-tegra20.c
+> > @@ -69,7 +69,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
+> >
+> >       val = 0;
+> >       for (i = CPU_SPEEDO_MSBIT; i >= CPU_SPEEDO_LSBIT; i--) {
+> > -             reg = tegra_fuse_read_spare(i) |
+> > +             reg = tegra_fuse_read_spare(i) ||
+> >                       tegra_fuse_read_spare(i + CPU_SPEEDO_REDUND_OFFS);
+> >               val = (val << 1) | (reg & 0x1);
+> >       }
+> > @@ -84,7 +84,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
+> >
+> >       val = 0;
+> >       for (i = SOC_SPEEDO_MSBIT; i >= SOC_SPEEDO_LSBIT; i--) {
+> > -             reg = tegra_fuse_read_spare(i) |
+> > +             reg = tegra_fuse_read_spare(i) ||
+> >                       tegra_fuse_read_spare(i + SOC_SPEEDO_REDUND_OFFS);
+> >               val = (val << 1) | (reg & 0x1);
+> >       }
+> > --
+> > 2.33.0
+> >
