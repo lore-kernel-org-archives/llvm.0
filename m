@@ -1,182 +1,99 @@
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BFE72
-	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 13:40:52 +0000 (UTC)
-Received: by mail-io1-f54.google.com with SMTP id e144so3188309iof.3
-        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 05:40:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A909A72
+	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 14:21:20 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id k37so9410053lfv.3
+        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 06:21:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qCt6qy0PLygDsEBj5XoN0OOqfk99vPiJYd4EvtFANg8=;
-        b=hxxK5JTld7JGHh+Z6IgyJwNqh6UaX6abKtiTviykUAMxpOMTP21JfV4nPu1r7QSpnO
-         O5ftsigrBFXmO66ZW2TYuPQE3le/uafjx1B44pBpLdyK/hOgxRZq/1UFUQ8D6I1OcXK1
-         rsnWsFSG88BBsccd9KQE9SZHtbrXFASbBXBDk=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z/asYRVVWrg/grLuo8zXbR+gZRKZzxwVDaGoh6UAG/o=;
+        b=wimL+JRML5IGeSealFKMZcxayi3pvkjJI/tzMcAtP/rIndg7ICyi4Yu4Qg3vbIcXnO
+         H6hz3fvy/1Cd9ZgKmmqmiCv75wi4m647NaA6Lqq1fH+BPstN8Bk9RY3Qjaojie6cZQIp
+         Q3YtO0eOZxRxTSlJHZmTrBzPr4uzgVmgVE0jIdh6ttV/k2ZjeePjhL7UWCQut1o7wfcW
+         Wn5dUUUUnBdRjI008WDNJ/gzXK8MCemg/p5sm2vsp0BEe5zpOecRDHB4ryO+iPxctttS
+         V9vBLyo3wVlG9wdhdEbp/zeadhiy3+LfMt4YabKFgHNFIWa4U3nQmDaj5GJYSzQyIDfv
+         pPxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qCt6qy0PLygDsEBj5XoN0OOqfk99vPiJYd4EvtFANg8=;
-        b=L+31mot8UHYscExjmkpncC3XDeGuAAwdA9GHEZOLl2+5r1XnfSSY/ius6j9s9mAdtq
-         pNKpXrvOv+ico3cslw3tiMP73V+lmp3T9xvc6itfxlICvjnn2g9t4yEiFDT/TLJ0HoBd
-         wwu2TfI2nVV+7MqjnujWqUlbJQmTz7lqMua06H3y1Tq5GU+TOH/fOaGtZ8SEcXNaD+hI
-         w5Bcru2wJlGN1pjAitqr3z4A6bRDDpiGx9HmVzVIGF0hVmvWzQ7UuthhguZq+82vMpUo
-         CwfHwnrzOzPFPyUylfQD4P16JbeoEqGelqtFqzGU6enIvYzS0GhvfEVLEWmD0ykwKKju
-         7+9w==
-X-Gm-Message-State: AOAM531N1sNg2AZljQiib3xnIT3zF4kyGjNbbziOW7G1FfHMGXiD/5R8
-	Z/hyH7qa50b61K7GOLcZ3WJMLA==
-X-Google-Smtp-Source: ABdhPJxqUdEDKL9+ldECLPBvDJjXluvjeI3mADSewcs06k6UnnqCV06klM3i8SDXUPMKvrlCY5VNqA==
-X-Received: by 2002:a05:6638:32aa:: with SMTP id f42mr12837237jav.115.1637156451841;
-        Wed, 17 Nov 2021 05:40:51 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id ay13sm7541196iob.37.2021.11.17.05.40.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Nov 2021 05:40:51 -0800 (PST)
-Subject: Re: [PATCHv2] selftests: kselftest.h: mark functions with 'noreturn'
-To: Anders Roxell <anders.roxell@linaro.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Shuah Khan <shuah@kernel.org>
-Cc: fenghua.yu@intel.com, reinette.chatre@intel.com, john.stultz@linaro.org,
- tglx@linutronix.de, akpm@linux-foundation.org, nathan@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20211103094752.1263442-1-anders.roxell@linaro.org>
- <CAKwvOdkq9k7ceyvnDWNN6m-vYOx41a6BBZwHy_0eDRfx5B4KnQ@mail.gmail.com>
- <CADYN=9+_UU9qZX56uahGXxz00iayqJLRAaQrRXh1CMXTvwSbAg@mail.gmail.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e00fb2ce-b931-c725-7506-027bab0a6c47@linuxfoundation.org>
-Date: Wed, 17 Nov 2021 06:40:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=Z/asYRVVWrg/grLuo8zXbR+gZRKZzxwVDaGoh6UAG/o=;
+        b=g+NVrJwRMMUUKQgkWBGXfLMJIdT/t+LH9chkhXFQO/17WZdrwUUI0UrIdkOVn3JROk
+         wyTmcj8AuGBammkYixdBCScbO+qoXbmtxmHKt/sCVInSMb3UfkI3nfmg7FbTW83J1tYi
+         XDsFI0pvnrzDRz0azNOlP2zrD7MaNoHlE+5LthxFhTzVmq49F6HLeGTnIGHuYhJfwgh+
+         5N0d332y1RJMHoAXhjQvTjWAyC7ZThE5O8WxjEKckBFo8ZTGIXa5aIm/dapiLPRUkwvv
+         8G6GGcaZHDIGACE3R9ZNKaY5dn/9ESHe6bjtPF39Ivo8/6K4tVZdpu7ZUe7ucAZVMmnb
+         sqMA==
+X-Gm-Message-State: AOAM531MuWmpah1s8Je8ulunhnZgXwso8nhqYnmWbAfeMd2tDzq8Ft0B
+	ZYmf/LJWmbG4TYegebpw+jTuRQ==
+X-Google-Smtp-Source: ABdhPJwkO8DIFD2Kf3FTpIODSrLT4YpxSReqGBI4fzQVGakSD94NhFi1Wv9HnXf0MXYn1eLLlG0LRg==
+X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr15087875lfv.523.1637158878488;
+        Wed, 17 Nov 2021 06:21:18 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id u7sm1165ljh.49.2021.11.17.06.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Nov 2021 06:21:18 -0800 (PST)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: thierry.reding@gmail.com,
+	jonathanh@nvidia.com
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] soc/tegra: fuse: fix bitwice vs. logical warning
+Date: Wed, 17 Nov 2021 15:21:15 +0100
+Message-Id: <20211117142115.694316-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CADYN=9+_UU9qZX56uahGXxz00iayqJLRAaQrRXh1CMXTvwSbAg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/17/21 4:01 AM, Anders Roxell wrote:
-> On Wed, 3 Nov 2021 at 19:38, Nick Desaulniers <ndesaulniers@google.com> wrote:
->>
->> On Wed, Nov 3, 2021 at 2:47 AM Anders Roxell <anders.roxell@linaro.org> wrote:
->>>
->>> When building kselftests/capabilities the following warning shows up:
->>>
->>> clang -O2 -g -std=gnu99 -Wall    test_execve.c -lcap-ng -lrt -ldl -o test_execve
->>> test_execve.c:121:13: warning: variable 'have_outer_privilege' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->>>          } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
->>>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> test_execve.c:136:9: note: uninitialized use occurs here
->>>          return have_outer_privilege;
->>>                 ^~~~~~~~~~~~~~~~~~~~
->>> test_execve.c:121:9: note: remove the 'if' if its condition is always true
->>>          } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
->>>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> test_execve.c:94:27: note: initialize the variable 'have_outer_privilege' to silence this warning
->>>          bool have_outer_privilege;
->>>                                   ^
->>>                                    = false
->>>
->>> Rework so all the ksft_exit_*() functions have attribue
->>> '__attribute__((noreturn))' so the compiler knows that there wont be
->>> any return from the function. That said, without
->>> '__attribute__((noreturn))' the compiler warns about the above issue
->>> since it thinks that it will get back from the ksft_exit_skip()
->>> function, which it wont.
->>> Cleaning up the callers that rely on ksft_exit_*() return code, since
->>> the functions ksft_exit_*() have never returned anything.
->>>
->>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
->>> ---
->>>   tools/testing/selftests/clone3/clone3.c              |  4 +++-
->>>   .../testing/selftests/clone3/clone3_clear_sighand.c  |  2 +-
->>>   tools/testing/selftests/clone3/clone3_set_tid.c      |  4 +++-
->>>   tools/testing/selftests/ipc/msgque.c                 | 10 +++++-----
->>>   tools/testing/selftests/kcmp/kcmp_test.c             |  2 +-
->>>   tools/testing/selftests/kselftest.h                  | 12 ++++++------
->>>   .../membarrier/membarrier_test_multi_thread.c        |  2 +-
->>>   .../membarrier/membarrier_test_single_thread.c       |  2 +-
->>>   tools/testing/selftests/pidfd/pidfd_fdinfo_test.c    |  2 +-
->>>   tools/testing/selftests/pidfd/pidfd_open_test.c      |  4 +++-
->>>   tools/testing/selftests/pidfd/pidfd_poll_test.c      |  2 +-
->>>   tools/testing/selftests/pidfd/pidfd_test.c           |  2 +-
->>>   tools/testing/selftests/resctrl/resctrl_tests.c      |  6 +++---
->>>   tools/testing/selftests/sync/sync_test.c             |  2 +-
->>>   tools/testing/selftests/timers/adjtick.c             |  4 ++--
->>>   tools/testing/selftests/timers/alarmtimer-suspend.c  |  4 ++--
->>>   tools/testing/selftests/timers/change_skew.c         |  4 ++--
->>>   tools/testing/selftests/timers/clocksource-switch.c  |  4 ++--
->>>   tools/testing/selftests/timers/freq-step.c           |  4 ++--
->>>   tools/testing/selftests/timers/inconsistency-check.c |  4 ++--
->>>   tools/testing/selftests/timers/leap-a-day.c          | 10 +++++-----
->>>   tools/testing/selftests/timers/leapcrash.c           |  4 ++--
->>>   tools/testing/selftests/timers/mqueue-lat.c          |  4 ++--
->>>   tools/testing/selftests/timers/nanosleep.c           |  4 ++--
->>>   tools/testing/selftests/timers/nsleep-lat.c          |  4 ++--
->>>   tools/testing/selftests/timers/posix_timers.c        | 12 ++++++------
->>>   tools/testing/selftests/timers/raw_skew.c            |  6 +++---
->>>   tools/testing/selftests/timers/set-2038.c            |  4 ++--
->>>   tools/testing/selftests/timers/set-tai.c             |  4 ++--
->>>   tools/testing/selftests/timers/set-timer-lat.c       |  4 ++--
->>>   tools/testing/selftests/timers/set-tz.c              |  4 ++--
->>>   tools/testing/selftests/timers/skew_consistency.c    |  4 ++--
->>>   tools/testing/selftests/timers/threadtest.c          |  2 +-
->>>   tools/testing/selftests/timers/valid-adjtimex.c      |  6 +++---
->>>   tools/testing/selftests/vm/madv_populate.c           |  2 +-
->>>   35 files changed, 80 insertions(+), 74 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
->>> index 42be3b925830..ede5da0c67b4 100644
->>> --- a/tools/testing/selftests/clone3/clone3.c
->>> +++ b/tools/testing/selftests/clone3/clone3.c
->>> @@ -191,5 +191,7 @@ int main(int argc, char *argv[])
->>>          test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
->>>                          CLONE3_ARGS_NO_TEST);
->>>
->>> -       return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
->>> +       if (ksft_get_fail_cnt())
->>> +               ksft_exit_fail();
->>> +       ksft_exit_pass();
->>>   }
->>> diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
->>> index 47a8c0fc3676..dcd9448eaeec 100644
->>> --- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
->>> +++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
->>> @@ -124,5 +124,5 @@ int main(int argc, char **argv)
->>>
->>>          test_clone3_clear_sighand();
->>>
->>> -       return ksft_exit_pass();
->>> +       ksft_exit_pass();
->>>   }
->>> diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
->>> index 0229e9ebb995..a755fcd3af89 100644
->>> --- a/tools/testing/selftests/clone3/clone3_set_tid.c
->>> +++ b/tools/testing/selftests/clone3/clone3_set_tid.c
->>> @@ -393,5 +393,7 @@ int main(int argc, char *argv[])
->>>   out:
->>>          ret = 0;
->>>
->>> -       return !ret ? ksft_exit_pass() : ksft_exit_fail();
->>> +       if (ret)
->>> +               ksft_exit_fail();
->>> +       ksft_exit_pass();
->>
->> This case is weird (pre-existing-ly) and looks broken.  The assignment
->> to ret should probably occur _before_ the out: label.  Honestly, I'd
->> remove the use of goto from this function and just call either
->> ksft_exit_pass() or ksft_exit_fail().
-> 
-> I can do that in a followup patch.
-> 
+When building with clang-13 the compiler warns about:
 
-Let's fold this change in. Please send me v3 with.
+drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+                reg = tegra_fuse_read_spare(i) |
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ||
 
-thanks,
--- Shuah
+This should be a logical OR so change it to fix the warning.
+
+Fixes: 7e939de1b2bb ("soc/tegra: fuse: Unify Tegra20 and Tegra30 drivers")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ drivers/soc/tegra/fuse/speedo-tegra20.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/soc/tegra/fuse/speedo-tegra20.c b/drivers/soc/tegra/fuse/speedo-tegra20.c
+index 2546bddbab93..4984246605ae 100644
+--- a/drivers/soc/tegra/fuse/speedo-tegra20.c
++++ b/drivers/soc/tegra/fuse/speedo-tegra20.c
+@@ -69,7 +69,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
+ 
+ 	val = 0;
+ 	for (i = CPU_SPEEDO_MSBIT; i >= CPU_SPEEDO_LSBIT; i--) {
+-		reg = tegra_fuse_read_spare(i) |
++		reg = tegra_fuse_read_spare(i) ||
+ 			tegra_fuse_read_spare(i + CPU_SPEEDO_REDUND_OFFS);
+ 		val = (val << 1) | (reg & 0x1);
+ 	}
+@@ -84,7 +84,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
+ 
+ 	val = 0;
+ 	for (i = SOC_SPEEDO_MSBIT; i >= SOC_SPEEDO_LSBIT; i--) {
+-		reg = tegra_fuse_read_spare(i) |
++		reg = tegra_fuse_read_spare(i) ||
+ 			tegra_fuse_read_spare(i + SOC_SPEEDO_REDUND_OFFS);
+ 		val = (val << 1) | (reg & 0x1);
+ 	}
+-- 
+2.33.0
+
