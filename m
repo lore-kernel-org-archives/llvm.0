@@ -1,1322 +1,296 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F4468
-	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 19:05:58 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10171"; a="257805253"
-X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
-   d="scan'208";a="257805253"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 11:05:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
-   d="scan'208";a="472843168"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 17 Nov 2021 11:05:53 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 42103198; Wed, 17 Nov 2021 21:05:56 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joe Perches <joe@perches.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] MAINTAINERS: Sort sections with parse-maintainers.pl help
-Date: Wed, 17 Nov 2021 21:05:53 +0200
-Message-Id: <20211117190553.36144-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3340268
+	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 19:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1637178493;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type;
+	bh=moCtX01Az/6rTKEwj/qEddRJo/UnXbR336Q3WPmOdjg=;
+	b=OuxUo7O6NcgrH3f/ipZ6RCGytGb96shfLti3hJE7Kc/K/RFXttEuiXLy8C8l176iWk3qm+
+	0398S25wIHRGmobduto0g89ZYhgB04Y4hmbAVfejdRzvP7RkZPWAGQxb0FmxbIkIlO12N1
+	4VafeU6/sOuANcp2W4oG4u80EVCT7Ww=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-CjUxmxf2PDCH39DPqY0yaw-1; Wed, 17 Nov 2021 14:48:09 -0500
+X-MC-Unique: CjUxmxf2PDCH39DPqY0yaw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5AD3C100C667
+	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 19:48:08 +0000 (UTC)
+Received: from [172.64.14.27] (unknown [10.30.34.236])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1ED9257CAA;
+	Wed, 17 Nov 2021 19:48:02 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: CKI Project <cki-project@redhat.com>
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.16.0-rc1
+ (mainline.kernel.org-clang, ee1703cd)
+Date: Wed, 17 Nov 2021 19:48:02 -0000
+Message-ID: <cki.7ZD2CJI3SSE0GTZIUR39@redhat.com>
+X-Gitlab-Pipeline-ID: 410926286
+X-Gitlab-Url: https://gitlab.com
+X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/410926286?=
+X-DataWarehouse-Checkout-IID: 24667
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/mixed; boundary="===============8975586236440306180=="
 
-Sort sections with parse-maintainers.pl help since quite a few
-got unsorted from the previous run.
+--===============8975586236440306180==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- MAINTAINERS | 710 ++++++++++++++++++++++++++--------------------------
- 1 file changed, 355 insertions(+), 355 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce8521..1154c83ee3c5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -967,11 +967,6 @@ F:	drivers/gpu/drm/amd/include/v9_structs.h
- F:	drivers/gpu/drm/amd/include/vi_structs.h
- F:	include/uapi/linux/kfd_ioctl.h
- 
--AMD SPI DRIVER
--M:	Sanjay R Mehta <sanju.mehta@amd.com>
--S:	Maintained
--F:	drivers/spi/spi-amd.c
--
- AMD MP2 I2C DRIVER
- M:	Elie Morisse <syniurge@gmail.com>
- M:	Nehal Shah <nehal-bakulchandra.shah@amd.com>
-@@ -1006,13 +1001,6 @@ M:	Tom Lendacky <thomas.lendacky@amd.com>
- S:	Supported
- F:	arch/arm64/boot/dts/amd/
- 
--AMD XGBE DRIVER
--M:	Tom Lendacky <thomas.lendacky@amd.com>
--L:	netdev@vger.kernel.org
--S:	Supported
--F:	arch/arm64/boot/dts/amd/amd-seattle-xgbe*.dtsi
--F:	drivers/net/ethernet/amd/xgbe/
--
- AMD SENSOR FUSION HUB DRIVER
- M:	Nehal Shah <nehal-bakulchandra.shah@amd.com>
- M:	Basavaraj Natikar <basavaraj.natikar@amd.com>
-@@ -1021,6 +1009,18 @@ S:	Maintained
- F:	Documentation/hid/amd-sfh*
- F:	drivers/hid/amd-sfh-hid/
- 
-+AMD SPI DRIVER
-+M:	Sanjay R Mehta <sanju.mehta@amd.com>
-+S:	Maintained
-+F:	drivers/spi/spi-amd.c
-+
-+AMD XGBE DRIVER
-+M:	Tom Lendacky <thomas.lendacky@amd.com>
-+L:	netdev@vger.kernel.org
-+S:	Supported
-+F:	arch/arm64/boot/dts/amd/amd-seattle-xgbe*.dtsi
-+F:	drivers/net/ethernet/amd/xgbe/
-+
- AMS AS73211 DRIVER
- M:	Christian Eggers <ceggers@arri.de>
- L:	linux-iio@vger.kernel.org
-@@ -1409,6 +1409,16 @@ S:	Maintained
- F:	drivers/net/arcnet/
- F:	include/uapi/linux/if_arcnet.h
- 
-+ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)
-+M:	Arnd Bergmann <arnd@arndb.de>
-+M:	Olof Johansson <olof@lixom.net>
-+M:	soc@kernel.org
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-+F:	arch/arm/boot/dts/Makefile
-+F:	arch/arm64/boot/dts/Makefile
-+
- ARM ARCHITECTED TIMER DRIVER
- M:	Mark Rutland <mark.rutland@arm.com>
- M:	Marc Zyngier <maz@kernel.org>
-@@ -1525,22 +1535,6 @@ S:	Odd Fixes
- F:	drivers/amba/
- F:	include/linux/amba/bus.h
- 
--ARM PRIMECELL PL35X NAND CONTROLLER DRIVER
--M:	Miquel Raynal <miquel.raynal@bootlin.com>
--M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
--L:	linux-mtd@lists.infradead.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml
--F:	drivers/mtd/nand/raw/pl35x-nand-controller.c
--
--ARM PRIMECELL PL35X SMC DRIVER
--M:	Miquel Raynal <miquel.raynal@bootlin.com>
--M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--F:	Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
--F:	drivers/memory/pl353-smc.c
--
- ARM PRIMECELL CLCD PL110 DRIVER
- M:	Russell King <linux@armlinux.org.uk>
- S:	Odd Fixes
-@@ -1558,6 +1552,22 @@ S:	Odd Fixes
- F:	drivers/mmc/host/mmci.*
- F:	include/linux/amba/mmci.h
- 
-+ARM PRIMECELL PL35X NAND CONTROLLER DRIVER
-+M:	Miquel Raynal <miquel.raynal@bootlin.com>
-+M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
-+L:	linux-mtd@lists.infradead.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml
-+F:	drivers/mtd/nand/raw/pl35x-nand-controller.c
-+
-+ARM PRIMECELL PL35X SMC DRIVER
-+M:	Miquel Raynal <miquel.raynal@bootlin.com>
-+M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
-+F:	drivers/memory/pl353-smc.c
-+
- ARM PRIMECELL SSP PL022 SPI DRIVER
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -1594,16 +1604,6 @@ F:	Documentation/devicetree/bindings/iommu/arm,smmu*
- F:	drivers/iommu/arm/
- F:	drivers/iommu/io-pgtable-arm*
- 
--ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)
--M:	Arnd Bergmann <arnd@arndb.de>
--M:	Olof Johansson <olof@lixom.net>
--M:	soc@kernel.org
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
--F:	arch/arm/boot/dts/Makefile
--F:	arch/arm64/boot/dts/Makefile
--
- ARM SUB-ARCHITECTURES
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
-@@ -2256,13 +2256,6 @@ F:	arch/arm64/boot/dts/microchip/
- F:	drivers/pinctrl/pinctrl-microchip-sgpio.c
- N:	sparx5
- 
--Microchip Timer Counter Block (TCB) Capture Driver
--M:	Kamel Bouhara <kamel.bouhara@bootlin.com>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--L:	linux-iio@vger.kernel.org
--S:	Maintained
--F:	drivers/counter/microchip-tcb-capture.c
--
- ARM/MIOA701 MACHINE SUPPORT
- M:	Robert Jarzmik <robert.jarzmik@free.fr>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -4095,29 +4088,6 @@ W:	https://github.com/Cascoda/ca8210-linux.git
- F:	Documentation/devicetree/bindings/net/ieee802154/ca8210.txt
- F:	drivers/net/ieee802154/ca8210.c
- 
--CANAAN/KENDRYTE K210 SOC FPIOA DRIVER
--M:	Damien Le Moal <damien.lemoal@wdc.com>
--L:	linux-riscv@lists.infradead.org
--L:	linux-gpio@vger.kernel.org (pinctrl driver)
--F:	Documentation/devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml
--F:	drivers/pinctrl/pinctrl-k210.c
--
--CANAAN/KENDRYTE K210 SOC RESET CONTROLLER DRIVER
--M:	Damien Le Moal <damien.lemoal@wdc.com>
--L:	linux-kernel@vger.kernel.org
--L:	linux-riscv@lists.infradead.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/reset/canaan,k210-rst.yaml
--F:	drivers/reset/reset-k210.c
--
--CANAAN/KENDRYTE K210 SOC SYSTEM CONTROLLER DRIVER
--M:	Damien Le Moal <damien.lemoal@wdc.com>
--L:	linux-riscv@lists.infradead.org
--S:	Maintained
--F:      Documentation/devicetree/bindings/mfd/canaan,k210-sysctl.yaml
--F:	drivers/soc/canaan/
--F:	include/soc/canaan/
--
- CACHEFILES: FS-CACHE BACKEND FOR CACHING ON MOUNTED FILESYSTEMS
- M:	David Howells <dhowells@redhat.com>
- L:	linux-cachefs@redhat.com (moderated for non-subscribers)
-@@ -4240,6 +4210,29 @@ F:	Documentation/networking/j1939.rst
- F:	include/uapi/linux/can/j1939.h
- F:	net/can/j1939/
- 
-+CANAAN/KENDRYTE K210 SOC FPIOA DRIVER
-+M:	Damien Le Moal <damien.lemoal@wdc.com>
-+L:	linux-riscv@lists.infradead.org
-+L:	linux-gpio@vger.kernel.org (pinctrl driver)
-+F:	Documentation/devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml
-+F:	drivers/pinctrl/pinctrl-k210.c
-+
-+CANAAN/KENDRYTE K210 SOC RESET CONTROLLER DRIVER
-+M:	Damien Le Moal <damien.lemoal@wdc.com>
-+L:	linux-kernel@vger.kernel.org
-+L:	linux-riscv@lists.infradead.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/reset/canaan,k210-rst.yaml
-+F:	drivers/reset/reset-k210.c
-+
-+CANAAN/KENDRYTE K210 SOC SYSTEM CONTROLLER DRIVER
-+M:	Damien Le Moal <damien.lemoal@wdc.com>
-+L:	linux-riscv@lists.infradead.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/canaan,k210-sysctl.yaml
-+F:	drivers/soc/canaan/
-+F:	include/soc/canaan/
-+
- CAPABILITIES
- M:	Serge Hallyn <serge@hallyn.com>
- L:	linux-security-module@vger.kernel.org
-@@ -4489,17 +4482,17 @@ F:	drivers/power/supply/cros_usbpd-charger.c
- N:	cros_ec
- N:	cros-ec
- 
--CHROMEOS EC USB TYPE-C DRIVER
--M:	Prashant Malani <pmalani@chromium.org>
--S:	Maintained
--F:	drivers/platform/chrome/cros_ec_typec.c
--
- CHROMEOS EC USB PD NOTIFY DRIVER
- M:	Prashant Malani <pmalani@chromium.org>
- S:	Maintained
- F:	drivers/platform/chrome/cros_usbpd_notify.c
- F:	include/linux/platform_data/cros_usbpd_notify.h
- 
-+CHROMEOS EC USB TYPE-C DRIVER
-+M:	Prashant Malani <pmalani@chromium.org>
-+S:	Maintained
-+F:	drivers/platform/chrome/cros_ec_typec.c
-+
- CHRONTEL CH7322 CEC DRIVER
- M:	Joe Tessler <jrt@google.com>
- L:	linux-media@vger.kernel.org
-@@ -4604,6 +4597,18 @@ M:	Nelson Escobar <neescoba@cisco.com>
- S:	Supported
- F:	drivers/infiniband/hw/usnic/
- 
-+CLANG CONTROL FLOW INTEGRITY SUPPORT
-+M:	Sami Tolvanen <samitolvanen@google.com>
-+M:	Kees Cook <keescook@chromium.org>
-+R:	Nathan Chancellor <nathan@kernel.org>
-+R:	Nick Desaulniers <ndesaulniers@google.com>
-+L:	llvm@lists.linux.dev
-+S:	Supported
-+B:	https://github.com/ClangBuiltLinux/linux/issues
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
-+F:	include/linux/cfi.h
-+F:	kernel/cfi.c
-+
- CLANG-FORMAT FILE
- M:	Miguel Ojeda <ojeda@kernel.org>
- S:	Maintained
-@@ -4623,18 +4628,6 @@ F:	scripts/Makefile.clang
- F:	scripts/clang-tools/
- K:	\b(?i:clang|llvm)\b
- 
--CLANG CONTROL FLOW INTEGRITY SUPPORT
--M:	Sami Tolvanen <samitolvanen@google.com>
--M:	Kees Cook <keescook@chromium.org>
--R:	Nathan Chancellor <nathan@kernel.org>
--R:	Nick Desaulniers <ndesaulniers@google.com>
--L:	llvm@lists.linux.dev
--S:	Supported
--B:	https://github.com/ClangBuiltLinux/linux/issues
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
--F:	include/linux/cfi.h
--F:	kernel/cfi.c
--
- CLEANCACHE API
- M:	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
- L:	linux-kernel@vger.kernel.org
-@@ -5117,6 +5110,13 @@ S:	Supported
- W:	http://www.chelsio.com
- F:	drivers/crypto/chelsio
- 
-+CXGB4 ETHERNET DRIVER (CXGB4)
-+M:	Raju Rangoju <rajur@chelsio.com>
-+L:	netdev@vger.kernel.org
-+S:	Supported
-+W:	http://www.chelsio.com
-+F:	drivers/net/ethernet/chelsio/cxgb4/
-+
- CXGB4 INLINE CRYPTO DRIVER
- M:	Ayush Sawal <ayush.sawal@chelsio.com>
- M:	Vinay Kumar Yadav <vinay.yadav@chelsio.com>
-@@ -5126,13 +5126,6 @@ S:	Supported
- W:	http://www.chelsio.com
- F:	drivers/net/ethernet/chelsio/inline_crypto/
- 
--CXGB4 ETHERNET DRIVER (CXGB4)
--M:	Raju Rangoju <rajur@chelsio.com>
--L:	netdev@vger.kernel.org
--S:	Supported
--W:	http://www.chelsio.com
--F:	drivers/net/ethernet/chelsio/cxgb4/
--
- CXGB4 ISCSI DRIVER (CXGB4I)
- M:	Karen Xie <kxie@chelsio.com>
- L:	linux-scsi@vger.kernel.org
-@@ -5188,16 +5181,6 @@ CYCLADES PC300 DRIVER
- S:	Orphan
- F:	drivers/net/wan/pc300*
- 
--CYPRESS_FIRMWARE MEDIA DRIVER
--M:	Antti Palosaari <crope@iki.fi>
--L:	linux-media@vger.kernel.org
--S:	Maintained
--W:	https://linuxtv.org
--W:	http://palosaari.fi/linux/
--Q:	http://patchwork.linuxtv.org/project/linux-media/list/
--T:	git git://linuxtv.org/anttip/media_tree.git
--F:	drivers/media/common/cypress_firmware*
--
- CYPRESS CY8CTMA140 TOUCHSCREEN DRIVER
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-input@vger.kernel.org
-@@ -5211,6 +5194,16 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/input/cypress-sf.yaml
- F:	drivers/input/keyboard/cypress-sf.c
- 
-+CYPRESS_FIRMWARE MEDIA DRIVER
-+M:	Antti Palosaari <crope@iki.fi>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+W:	https://linuxtv.org
-+W:	http://palosaari.fi/linux/
-+Q:	http://patchwork.linuxtv.org/project/linux-media/list/
-+T:	git git://linuxtv.org/anttip/media_tree.git
-+F:	drivers/media/common/cypress_firmware*
-+
- CYTTSP TOUCHSCREEN DRIVER
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-input@vger.kernel.org
-@@ -5381,14 +5374,12 @@ L:	Dell.Client.Kernel@dell.com
- S:	Maintained
- F:	drivers/platform/x86/dell/dell-wmi-descriptor.c
- 
--DELL WMI SYSMAN DRIVER
--M:	Divya Bharathi <divya.bharathi@dell.com>
--M:	Prasanth Ksr <prasanth.ksr@dell.com>
-+DELL WMI HARDWARE PRIVACY SUPPORT
-+M:	Perry Yuan <Perry.Yuan@dell.com>
- L:	Dell.Client.Kernel@dell.com
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
--F:	Documentation/ABI/testing/sysfs-class-firmware-attributes
--F:	drivers/platform/x86/dell/dell-wmi-sysman/
-+F:	drivers/platform/x86/dell/dell-wmi-privacy.c
- 
- DELL WMI NOTIFICATIONS DRIVER
- M:	Matthew Garrett <mjg59@srcf.ucam.org>
-@@ -5396,12 +5387,21 @@ M:	Pali Rohár <pali@kernel.org>
- S:	Maintained
- F:	drivers/platform/x86/dell/dell-wmi-base.c
- 
--DELL WMI HARDWARE PRIVACY SUPPORT
--M:	Perry Yuan <Perry.Yuan@dell.com>
-+DELL WMI SYSMAN DRIVER
-+M:	Divya Bharathi <divya.bharathi@dell.com>
-+M:	Prasanth Ksr <prasanth.ksr@dell.com>
- L:	Dell.Client.Kernel@dell.com
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
--F:	drivers/platform/x86/dell/dell-wmi-privacy.c
-+F:	Documentation/ABI/testing/sysfs-class-firmware-attributes
-+F:	drivers/platform/x86/dell/dell-wmi-sysman/
-+
-+DELTA DPS920AB PSU DRIVER
-+M:	Robert Marko <robert.marko@sartura.hr>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/dps920ab.rst
-+F:	drivers/hwmon/pmbus/dps920ab.c
- 
- DELTA ST MEDIA DRIVER
- M:	Hugues Fruchet <hugues.fruchet@foss.st.com>
-@@ -5411,13 +5411,6 @@ W:	https://linuxtv.org
- T:	git git://linuxtv.org/media_tree.git
- F:	drivers/media/platform/sti/delta
- 
--DELTA DPS920AB PSU DRIVER
--M:	Robert Marko <robert.marko@sartura.hr>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/dps920ab.rst
--F:	drivers/hwmon/pmbus/dps920ab.c
--
- DENALI NAND DRIVER
- L:	linux-mtd@lists.infradead.org
- S:	Orphan
-@@ -5430,13 +5423,6 @@ S:	Maintained
- F:	drivers/dma/dw-edma/
- F:	include/linux/dma/edma.h
- 
--DESIGNWARE XDATA IP DRIVER
--M:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
--L:	linux-pci@vger.kernel.org
--S:	Maintained
--F:	Documentation/misc-devices/dw-xdata-pcie.rst
--F:	drivers/misc/dw-xdata-pcie.c
--
- DESIGNWARE USB2 DRD IP DRIVER
- M:	Minas Harutyunyan <hminas@synopsys.com>
- L:	linux-usb@vger.kernel.org
-@@ -5451,6 +5437,13 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
- F:	drivers/usb/dwc3/
- 
-+DESIGNWARE XDATA IP DRIVER
-+M:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-+L:	linux-pci@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/misc-devices/dw-xdata-pcie.rst
-+F:	drivers/misc/dw-xdata-pcie.c
-+
- DEVANTECH SRF ULTRASONIC RANGER IIO DRIVER
- M:	Andreas Klinger <ak@it-klinger.de>
- L:	linux-iio@vger.kernel.org
-@@ -5680,6 +5673,12 @@ F:	include/linux/dma/
- F:	include/linux/dmaengine.h
- F:	include/linux/of_dma.h
- 
-+DMA MAPPING BENCHMARK
-+M:	Barry Song <song.bao.hua@hisilicon.com>
-+L:	iommu@lists.linux-foundation.org
-+F:	kernel/dma/map_benchmark.c
-+F:	tools/testing/selftests/dma/
-+
- DMA MAPPING HELPERS
- M:	Christoph Hellwig <hch@lst.de>
- M:	Marek Szyprowski <m.szyprowski@samsung.com>
-@@ -5694,12 +5693,6 @@ F:	include/linux/dma-mapping.h
- F:	include/linux/dma-map-ops.h
- F:	kernel/dma/
- 
--DMA MAPPING BENCHMARK
--M:	Barry Song <song.bao.hua@hisilicon.com>
--L:	iommu@lists.linux-foundation.org
--F:	kernel/dma/map_benchmark.c
--F:	tools/testing/selftests/dma/
--
- DMA-BUF HEAPS FRAMEWORK
- M:	Sumit Semwal <sumit.semwal@linaro.org>
- R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
-@@ -5981,6 +5974,14 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/himax,hx8357d.txt
- F:	drivers/gpu/drm/tiny/hx8357d.c
- 
-+DRM DRIVER FOR HYPERV SYNTHETIC VIDEO DEVICE
-+M:	Deepak Rawat <drawat.floss@gmail.com>
-+L:	linux-hyperv@vger.kernel.org
-+L:	dri-devel@lists.freedesktop.org
-+S:	Maintained
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	drivers/gpu/drm/hyperv
-+
- DRM DRIVER FOR ILITEK ILI9225 PANELS
- M:	David Lechner <david@lechnology.com>
- S:	Maintained
-@@ -6126,14 +6127,6 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
- F:	drivers/gpu/drm/panel/panel-samsung-s6d27a1.c
- 
--DRM DRIVER FOR SITRONIX ST7703 PANELS
--M:	Guido Günther <agx@sigxcpu.org>
--R:	Purism Kernel Team <kernel@puri.sm>
--R:	Ondrej Jirman <megous@megous.com>
--S:	Maintained
--F:	Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml
--F:	drivers/gpu/drm/panel/panel-sitronix-st7703.c
--
- DRM DRIVER FOR SAVAGE VIDEO CARDS
- S:	Orphan / Obsolete
- F:	drivers/gpu/drm/savage/
-@@ -6164,6 +6157,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
- F:	drivers/gpu/drm/panel/panel-sitronix-st7701.c
- 
-+DRM DRIVER FOR SITRONIX ST7703 PANELS
-+M:	Guido Günther <agx@sigxcpu.org>
-+R:	Purism Kernel Team <kernel@puri.sm>
-+R:	Ondrej Jirman <megous@megous.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml
-+F:	drivers/gpu/drm/panel/panel-sitronix-st7703.c
-+
- DRM DRIVER FOR SITRONIX ST7735R PANELS
- M:	David Lechner <david@lechnology.com>
- S:	Maintained
-@@ -6358,14 +6359,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/hisilicon/
- F:	drivers/gpu/drm/hisilicon/
- 
--DRM DRIVER FOR HYPERV SYNTHETIC VIDEO DEVICE
--M:	Deepak Rawat <drawat.floss@gmail.com>
--L:	linux-hyperv@vger.kernel.org
--L:	dri-devel@lists.freedesktop.org
--S:	Maintained
--T:	git git://anongit.freedesktop.org/drm/drm-misc
--F:	drivers/gpu/drm/hyperv
--
- DRM DRIVERS FOR LIMA
- M:	Qiang Yu <yuq825@gmail.com>
- L:	dri-devel@lists.freedesktop.org
-@@ -6513,6 +6506,14 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/xlnx/
- F:	drivers/gpu/drm/xlnx/
- 
-+DRM GPU SCHEDULER
-+M:	Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-+L:	dri-devel@lists.freedesktop.org
-+S:	Maintained
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	drivers/gpu/drm/scheduler/
-+F:	include/drm/gpu_scheduler.h
-+
- DRM PANEL DRIVERS
- M:	Thierry Reding <thierry.reding@gmail.com>
- R:	Sam Ravnborg <sam@ravnborg.org>
-@@ -6533,14 +6534,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	drivers/gpu/drm/ttm/
- F:	include/drm/ttm/
- 
--DRM GPU SCHEDULER
--M:	Andrey Grodzovsky <andrey.grodzovsky@amd.com>
--L:	dri-devel@lists.freedesktop.org
--S:	Maintained
--T:	git git://anongit.freedesktop.org/drm/drm-misc
--F:	drivers/gpu/drm/scheduler/
--F:	include/drm/gpu_scheduler.h
--
- DSBR100 USB FM RADIO DRIVER
- M:	Alexey Klimov <klimov.linux@gmail.com>
- L:	linux-media@vger.kernel.org
-@@ -6679,6 +6672,15 @@ F:	Documentation/networking/net_dim.rst
- F:	include/linux/dim.h
- F:	lib/dim/
- 
-+DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
-+M:	Daniel Lezcano <daniel.lezcano@kernel.org>
-+L:	linux-pm@vger.kernel.org
-+S:	Supported
-+B:	https://bugzilla.kernel.org
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-+F:	drivers/powercap/dtpm*
-+F:	include/linux/dtpm.h
-+
- DZ DECSTATION DZ11 SERIAL DRIVER
- M:	"Maciej W. Rozycki" <macro@orcam.me.uk>
- S:	Maintained
-@@ -7026,22 +7028,22 @@ W:	http://www.broadcom.com
- F:	drivers/infiniband/hw/ocrdma/
- F:	include/uapi/rdma/ocrdma-abi.h
- 
--EMULEX/BROADCOM LPFC FC/FCOE SCSI DRIVER
-+EMULEX/BROADCOM EFCT FC/FCOE SCSI TARGET DRIVER
- M:	James Smart <james.smart@broadcom.com>
--M:	Dick Kennedy <dick.kennedy@broadcom.com>
-+M:	Ram Vegesna <ram.vegesna@broadcom.com>
- L:	linux-scsi@vger.kernel.org
-+L:	target-devel@vger.kernel.org
- S:	Supported
- W:	http://www.broadcom.com
--F:	drivers/scsi/lpfc/
-+F:	drivers/scsi/elx/
- 
--EMULEX/BROADCOM EFCT FC/FCOE SCSI TARGET DRIVER
-+EMULEX/BROADCOM LPFC FC/FCOE SCSI DRIVER
- M:	James Smart <james.smart@broadcom.com>
--M:	Ram Vegesna <ram.vegesna@broadcom.com>
-+M:	Dick Kennedy <dick.kennedy@broadcom.com>
- L:	linux-scsi@vger.kernel.org
--L:	target-devel@vger.kernel.org
- S:	Supported
- W:	http://www.broadcom.com
--F:	drivers/scsi/elx/
-+F:	drivers/scsi/lpfc/
- 
- ENE CB710 FLASH CARD READER DRIVER
- M:	Michał Mirosław <mirq-linux@rere.qmqm.pl>
-@@ -8518,6 +8520,12 @@ W:	http://www.highpoint-tech.com
- F:	Documentation/scsi/hptiop.rst
- F:	drivers/scsi/hptiop.c
- 
-+HIKEY960 ONBOARD USB GPIO HUB DRIVER
-+M:	John Stultz <john.stultz@linaro.org>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	drivers/misc/hisi_hikey_usb.c
-+
- HIPPI
- M:	Jes Sorensen <jes@trained-monkey.org>
- L:	linux-hippi@sunsite.dk
-@@ -8588,12 +8596,6 @@ W:	http://www.hisilicon.com
- F:	Documentation/devicetree/bindings/net/hisilicon*.txt
- F:	drivers/net/ethernet/hisilicon/
- 
--HIKEY960 ONBOARD USB GPIO HUB DRIVER
--M:	John Stultz <john.stultz@linaro.org>
--L:	linux-kernel@vger.kernel.org
--S:	Maintained
--F:	drivers/misc/hisi_hikey_usb.c
--
- HISILICON PMU DRIVER
- M:	Shaokun Zhang <zhangshaokun@hisilicon.com>
- S:	Supported
-@@ -9619,18 +9621,18 @@ F:	Documentation/admin-guide/media/ipu3_rcb.svg
- F:	Documentation/userspace-api/media/v4l/pixfmt-meta-intel-ipu3.rst
- F:	drivers/staging/media/ipu3/
- 
--INTEL IXP4XX CRYPTO SUPPORT
--M:	Corentin Labbe <clabbe@baylibre.com>
--L:	linux-crypto@vger.kernel.org
--S:	Maintained
--F:	drivers/crypto/ixp4xx_crypto.c
--
- INTEL ISHTP ECLITE DRIVER
- M:	Sumesh K Naduvalath <sumesh.k.naduvalath@intel.com>
- L:	platform-driver-x86@vger.kernel.org
- S:	Supported
- F:	drivers/platform/x86/intel/ishtp_eclite.c
- 
-+INTEL IXP4XX CRYPTO SUPPORT
-+M:	Corentin Labbe <clabbe@baylibre.com>
-+L:	linux-crypto@vger.kernel.org
-+S:	Maintained
-+F:	drivers/crypto/ixp4xx_crypto.c
-+
- INTEL IXP4XX QMGR, NPE, ETHERNET and HSS SUPPORT
- M:	Krzysztof Halasa <khalasa@piap.pl>
- S:	Maintained
-@@ -9773,6 +9775,21 @@ S:	Maintained
- F:	arch/x86/include/asm/intel_scu_ipc.h
- F:	drivers/platform/x86/intel_scu_*
- 
-+INTEL SGX
-+M:	Jarkko Sakkinen <jarkko@kernel.org>
-+R:	Dave Hansen <dave.hansen@linux.intel.com>
-+L:	linux-sgx@vger.kernel.org
-+S:	Supported
-+Q:	https://patchwork.kernel.org/project/intel-sgx/list/
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
-+F:	Documentation/x86/sgx.rst
-+F:	arch/x86/entry/vdso/vsgx.S
-+F:	arch/x86/include/asm/sgx.h
-+F:	arch/x86/include/uapi/asm/sgx.h
-+F:	arch/x86/kernel/cpu/sgx/*
-+F:	tools/testing/selftests/sgx/*
-+K:	\bSGX_
-+
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
- S:	Maintained
-@@ -9867,21 +9884,6 @@ F:	Documentation/x86/intel_txt.rst
- F:	arch/x86/kernel/tboot.c
- F:	include/linux/tboot.h
- 
--INTEL SGX
--M:	Jarkko Sakkinen <jarkko@kernel.org>
--R:	Dave Hansen <dave.hansen@linux.intel.com>
--L:	linux-sgx@vger.kernel.org
--S:	Supported
--Q:	https://patchwork.kernel.org/project/intel-sgx/list/
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
--F:	Documentation/x86/sgx.rst
--F:	arch/x86/entry/vdso/vsgx.S
--F:	arch/x86/include/asm/sgx.h
--F:	arch/x86/include/uapi/asm/sgx.h
--F:	arch/x86/kernel/cpu/sgx/*
--F:	tools/testing/selftests/sgx/*
--K:	\bSGX_
--
- INTERCONNECT API
- M:	Georgi Djakov <djakov@kernel.org>
- L:	linux-pm@vger.kernel.org
-@@ -11287,6 +11289,12 @@ F:	drivers/mailbox/arm_mhuv2.c
- F:	include/linux/mailbox/arm_mhuv2_message.h
- F:	Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
- 
-+MAN-PAGES: MANUAL PAGES FOR LINUX -- Sections 2, 3, 4, 5, and 7
-+M:	Michael Kerrisk <mtk.manpages@gmail.com>
-+L:	linux-man@vger.kernel.org
-+S:	Maintained
-+W:	http://www.kernel.org/doc/man-pages
-+
- MANAGEMENT COMPONENT TRANSPORT PROTOCOL (MCTP)
- M:	Jeremy Kerr <jk@codeconstruct.com.au>
- M:	Matt Johnston <matt@codeconstruct.com.au>
-@@ -11299,12 +11307,6 @@ F:	include/net/mctpdevice.h
- F:	include/net/netns/mctp.h
- F:	net/mctp/
- 
--MAN-PAGES: MANUAL PAGES FOR LINUX -- Sections 2, 3, 4, 5, and 7
--M:	Michael Kerrisk <mtk.manpages@gmail.com>
--L:	linux-man@vger.kernel.org
--S:	Maintained
--W:	http://www.kernel.org/doc/man-pages
--
- MARDUK (CREATOR CI40) DEVICE TREE SUPPORT
- M:	Rahul Bedarkar <rahulbedarkar89@gmail.com>
- L:	linux-mips@vger.kernel.org
-@@ -11623,12 +11625,6 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/phy/mxl-gpy.c
- 
--MCBA MICROCHIP CAN BUS ANALYZER TOOL DRIVER
--R:	Yasushi SHOJI <yashi@spacecubics.com>
--L:	linux-can@vger.kernel.org
--S:	Maintained
--F:	drivers/net/can/usb/mcba_usb.c
--
- MCAN MMIO DEVICE DRIVER
- M:	Chandrasekar Ramakrishnan <rcsekar@samsung.com>
- L:	linux-can@vger.kernel.org
-@@ -11638,6 +11634,12 @@ F:	drivers/net/can/m_can/m_can.c
- F:	drivers/net/can/m_can/m_can.h
- F:	drivers/net/can/m_can/m_can_platform.c
- 
-+MCBA MICROCHIP CAN BUS ANALYZER TOOL DRIVER
-+R:	Yasushi SHOJI <yashi@spacecubics.com>
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/can/usb/mcba_usb.c
-+
- MCP2221A MICROCHIP USB-HID TO I2C BRIDGE DRIVER
- M:	Rishi Gupta <gupt21@gmail.com>
- L:	linux-i2c@vger.kernel.org
-@@ -12030,13 +12032,6 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/clock/mediatek,mt7621-sysc.yaml
- F:	drivers/clk/ralink/clk-mt7621.c
- 
--MEDIATEK MT7621/28/88 I2C DRIVER
--M:	Stefan Roese <sr@denx.de>
--L:	linux-i2c@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/i2c/i2c-mt7621.txt
--F:	drivers/i2c/busses/i2c-mt7621.c
--
- MEDIATEK MT7621 PCIE CONTROLLER DRIVER
- M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
- S:	Maintained
-@@ -12049,6 +12044,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml
- F:	drivers/phy/ralink/phy-mt7621-pci.c
- 
-+MEDIATEK MT7621/28/88 I2C DRIVER
-+M:	Stefan Roese <sr@denx.de>
-+L:	linux-i2c@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/i2c/i2c-mt7621.txt
-+F:	drivers/i2c/busses/i2c-mt7621.c
-+
- MEDIATEK NAND CONTROLLER DRIVER
- L:	linux-mtd@lists.infradead.org
- S:	Orphan
-@@ -12580,6 +12582,13 @@ S:	Supported
- F:	drivers/misc/atmel-ssc.c
- F:	include/linux/atmel-ssc.h
- 
-+Microchip Timer Counter Block (TCB) Capture Driver
-+M:	Kamel Bouhara <kamel.bouhara@bootlin.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	drivers/counter/microchip-tcb-capture.c
-+
- MICROCHIP USB251XB DRIVER
- M:	Richard Leitner <richard.leitner@skidata.com>
- L:	linux-usb@vger.kernel.org
-@@ -13680,13 +13689,6 @@ F:	drivers/iio/gyro/fxas21002c_core.c
- F:	drivers/iio/gyro/fxas21002c_i2c.c
- F:	drivers/iio/gyro/fxas21002c_spi.c
- 
--NXP i.MX CLOCK DRIVERS
--M:	Abel Vesa <abel.vesa@nxp.com>
--L:	linux-clk@vger.kernel.org
--L:	linux-imx@nxp.com
--S:	Maintained
--F:	drivers/clk/imx/
--
- NXP i.MX 8MQ DCSS DRIVER
- M:	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
- R:	Lucas Stach <l.stach@pengutronix.de>
-@@ -13702,6 +13704,21 @@ S:	Supported
- F:	Documentation/devicetree/bindings/iio/adc/nxp,imx8qxp-adc.yaml
- F:	drivers/iio/adc/imx8qxp-adc.c
- 
-+NXP i.MX 8QXP/8QM JPEG V4L2 DRIVER
-+M:	Mirela Rabulea <mirela.rabulea@nxp.com>
-+R:	NXP Linux Team <linux-imx@nxp.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml
-+F:	drivers/media/platform/imx-jpeg
-+
-+NXP i.MX CLOCK DRIVERS
-+M:	Abel Vesa <abel.vesa@nxp.com>
-+L:	linux-clk@vger.kernel.org
-+L:	linux-imx@nxp.com
-+S:	Maintained
-+F:	drivers/clk/imx/
-+
- NXP PF8100/PF8121A/PF8200 PMIC REGULATOR DEVICE DRIVER
- M:	Jagan Teki <jagan@amarulasolutions.com>
- S:	Maintained
-@@ -13739,19 +13756,12 @@ F:	include/drm/i2c/tda998x.h
- F:	include/dt-bindings/display/tda998x.h
- K:	"nxp,tda998x"
- 
--NXP TFA9879 DRIVER
--M:	Peter Rosin <peda@axentia.se>
--L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
--S:	Maintained
--F:	Documentation/devicetree/bindings/sound/tfa9879.txt
--F:	sound/soc/codecs/tfa9879*
--
--NXP/Goodix TFA989X (TFA1) DRIVER
--M:	Stephan Gerhold <stephan@gerhold.net>
-+NXP TFA9879 DRIVER
-+M:	Peter Rosin <peda@axentia.se>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Maintained
--F:	Documentation/devicetree/bindings/sound/nxp,tfa989x.yaml
--F:	sound/soc/codecs/tfa989x.c
-+F:	Documentation/devicetree/bindings/sound/tfa9879.txt
-+F:	sound/soc/codecs/tfa9879*
- 
- NXP-NCI NFC DRIVER
- R:	Charles Gorand <charles.gorand@effinnov.com>
-@@ -13760,13 +13770,12 @@ S:	Supported
- F:	Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml
- F:	drivers/nfc/nxp-nci
- 
--NXP i.MX 8QXP/8QM JPEG V4L2 DRIVER
--M:	Mirela Rabulea <mirela.rabulea@nxp.com>
--R:	NXP Linux Team <linux-imx@nxp.com>
--L:	linux-media@vger.kernel.org
-+NXP/Goodix TFA989X (TFA1) DRIVER
-+M:	Stephan Gerhold <stephan@gerhold.net>
-+L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml
--F:	drivers/media/platform/imx-jpeg
-+F:	Documentation/devicetree/bindings/sound/nxp,tfa989x.yaml
-+F:	sound/soc/codecs/tfa989x.c
- 
- NZXT-KRAKEN2 HARDWARE MONITORING DRIVER
- M:	Jonas Malaco <jonas@protocubo.io>
-@@ -14556,6 +14565,14 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	drivers/pci/controller/dwc/*layerscape*
- 
-+PCI DRIVER FOR FU740
-+M:	Paul Walmsley <paul.walmsley@sifive.com>
-+M:	Greentime Hu <greentime.hu@sifive.com>
-+L:	linux-pci@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-+F:	drivers/pci/controller/dwc/pcie-fu740.c
-+
- PCI DRIVER FOR GENERIC OF HOSTS
- M:	Will Deacon <will@kernel.org>
- L:	linux-pci@vger.kernel.org
-@@ -14574,14 +14591,6 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
- F:	drivers/pci/controller/dwc/*imx6*
- 
--PCI DRIVER FOR FU740
--M:	Paul Walmsley <paul.walmsley@sifive.com>
--M:	Greentime Hu <greentime.hu@sifive.com>
--L:	linux-pci@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
--F:	drivers/pci/controller/dwc/pcie-fu740.c
--
- PCI DRIVER FOR INTEL IXP4XX
- M:	Linus Walleij <linus.walleij@linaro.org>
- S:	Maintained
-@@ -14854,14 +14863,6 @@ L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
- F:	drivers/pci/controller/dwc/pcie-qcom.c
- 
--PCIE ENDPOINT DRIVER FOR QUALCOMM
--M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
--L:	linux-pci@vger.kernel.org
--L:	linux-arm-msm@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
--F:	drivers/pci/controller/dwc/pcie-qcom-ep.c
--
- PCIE DRIVER FOR ROCKCHIP
- M:	Shawn Lin <shawn.lin@rock-chips.com>
- L:	linux-pci@vger.kernel.org
-@@ -14883,6 +14884,14 @@ L:	linux-pci@vger.kernel.org
- S:	Maintained
- F:	drivers/pci/controller/dwc/*spear*
- 
-+PCIE ENDPOINT DRIVER FOR QUALCOMM
-+M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+L:	linux-pci@vger.kernel.org
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-+F:	drivers/pci/controller/dwc/pcie-qcom-ep.c
-+
- PCMCIA SUBSYSTEM
- M:	Dominik Brodowski <linux@dominikbrodowski.net>
- S:	Odd Fixes
-@@ -15142,13 +15151,6 @@ M:	Logan Gunthorpe <logang@deltatee.com>
- S:	Maintained
- F:	drivers/dma/plx_dma.c
- 
--PM6764TR DRIVER
--M:	Charles Hsu	<hsu.yungteng@gmail.com>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/hwmon/pm6764tr.rst
--F:	drivers/hwmon/pmbus/pm6764tr.c
--
- PM-GRAPH UTILITY
- M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
- L:	linux-pm@vger.kernel.org
-@@ -15158,6 +15160,13 @@ B:	https://bugzilla.kernel.org/buglist.cgi?component=pm-graph&product=Tools
- T:	git git://github.com/intel/pm-graph
- F:	tools/power/pm-graph
- 
-+PM6764TR DRIVER
-+M:	Charles Hsu	<hsu.yungteng@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/pm6764tr.rst
-+F:	drivers/hwmon/pmbus/pm6764tr.c
-+
- PMBUS HARDWARE MONITORING DRIVERS
- M:	Guenter Roeck <linux@roeck-us.net>
- L:	linux-hwmon@vger.kernel.org
-@@ -15238,15 +15247,6 @@ F:	include/linux/pm_*
- F:	include/linux/powercap.h
- F:	kernel/configs/nopm.config
- 
--DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
--M:	Daniel Lezcano <daniel.lezcano@kernel.org>
--L:	linux-pm@vger.kernel.org
--S:	Supported
--B:	https://bugzilla.kernel.org
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
--F:	drivers/powercap/dtpm*
--F:	include/linux/dtpm.h
--
- POWER STATE COORDINATION INTERFACE (PSCI)
- M:	Mark Rutland <mark.rutland@arm.com>
- M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-@@ -16261,12 +16261,6 @@ S:	Supported
- F:	Documentation/devicetree/bindings/i2c/renesas,riic.yaml
- F:	drivers/i2c/busses/i2c-riic.c
- 
--RENESAS USB PHY DRIVER
--M:	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
--L:	linux-renesas-soc@vger.kernel.org
--S:	Maintained
--F:	drivers/phy/renesas/phy-rcar-gen3-usb*.c
--
- RENESAS RZ/G2L A/D DRIVER
- M:	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
- L:	linux-iio@vger.kernel.org
-@@ -16275,6 +16269,12 @@ S:	Supported
- F:	Documentation/devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml
- F:	drivers/iio/adc/rzg2l_adc.c
- 
-+RENESAS USB PHY DRIVER
-+M:	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-+L:	linux-renesas-soc@vger.kernel.org
-+S:	Maintained
-+F:	drivers/phy/renesas/phy-rcar-gen3-usb*.c
-+
- RESET CONTROLLER FRAMEWORK
- M:	Philipp Zabel <p.zabel@pengutronix.de>
- S:	Maintained
-@@ -17105,6 +17105,15 @@ F:	block/sed*
- F:	include/linux/sed*
- F:	include/uapi/linux/sed*
- 
-+SECURE MONITOR CALL(SMC) CALLING CONVENTION (SMCCC)
-+M:	Mark Rutland <mark.rutland@arm.com>
-+M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Sudeep Holla <sudeep.holla@arm.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	drivers/firmware/smccc/
-+F:	include/linux/arm-smccc.h
-+
- SECURITY CONTACT
- M:	Security Officers <security@kernel.org>
- S:	Supported
-@@ -17512,15 +17521,6 @@ M:	Nicolas Pitre <nico@fluxnic.net>
- S:	Odd Fixes
- F:	drivers/net/ethernet/smsc/smc91x.*
- 
--SECURE MONITOR CALL(SMC) CALLING CONVENTION (SMCCC)
--M:	Mark Rutland <mark.rutland@arm.com>
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
--M:	Sudeep Holla <sudeep.holla@arm.com>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--F:	drivers/firmware/smccc/
--F:	include/linux/arm-smccc.h
--
- SMM665 HARDWARE MONITOR DRIVER
- M:	Guenter Roeck <linux@roeck-us.net>
- L:	linux-hwmon@vger.kernel.org
-@@ -18701,6 +18701,14 @@ M:	Thierry Reding <thierry.reding@gmail.com>
- S:	Supported
- F:	drivers/pwm/pwm-tegra.c
- 
-+TEGRA QUAD SPI DRIVER
-+M:	Thierry Reding <thierry.reding@gmail.com>
-+M:	Jonathan Hunter <jonathanh@nvidia.com>
-+M:	Sowjanya Komatineni <skomatineni@nvidia.com>
-+L:	linux-tegra@vger.kernel.org
-+S:	Maintained
-+F:	drivers/spi/spi-tegra210-quad.c
-+
- TEGRA SERIAL DRIVER
- M:	Laxman Dewangan <ldewangan@nvidia.com>
- S:	Supported
-@@ -18711,14 +18719,6 @@ M:	Laxman Dewangan <ldewangan@nvidia.com>
- S:	Supported
- F:	drivers/spi/spi-tegra*
- 
--TEGRA QUAD SPI DRIVER
--M:	Thierry Reding <thierry.reding@gmail.com>
--M:	Jonathan Hunter <jonathanh@nvidia.com>
--M:	Sowjanya Komatineni <skomatineni@nvidia.com>
--L:	linux-tegra@vger.kernel.org
--S:	Maintained
--F:	drivers/spi/spi-tegra210-quad.c
--
- TEGRA VIDEO DRIVER
- M:	Thierry Reding <thierry.reding@gmail.com>
- M:	Jonathan Hunter <jonathanh@nvidia.com>
-@@ -18767,13 +18767,6 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Maintained
- F:	sound/soc/ti/
- 
--TEXAS INSTRUMENTS' DAC7612 DAC DRIVER
--M:	Ricardo Ribalda <ribalda@kernel.org>
--L:	linux-iio@vger.kernel.org
--S:	Supported
--F:	Documentation/devicetree/bindings/iio/dac/ti,dac7612.yaml
--F:	drivers/iio/dac/ti-dac7612.c
--
- TEXAS INSTRUMENTS DMA DRIVERS
- M:	Peter Ujfalusi <peter.ujfalusi@gmail.com>
- L:	dmaengine@vger.kernel.org
-@@ -18787,6 +18780,22 @@ F:	include/linux/dma/k3-udma-glue.h
- F:	include/linux/dma/ti-cppi5.h
- F:	include/linux/dma/k3-psil.h
- 
-+TEXAS INSTRUMENTS TPS23861 PoE PSE DRIVER
-+M:	Robert Marko <robert.marko@sartura.hr>
-+M:	Luka Perkov <luka.perkov@sartura.hr>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-+F:	Documentation/hwmon/tps23861.rst
-+F:	drivers/hwmon/tps23861.c
-+
-+TEXAS INSTRUMENTS' DAC7612 DAC DRIVER
-+M:	Ricardo Ribalda <ribalda@kernel.org>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/iio/dac/ti,dac7612.yaml
-+F:	drivers/iio/dac/ti-dac7612.c
-+
- TEXAS INSTRUMENTS' SYSTEM CONTROL INTERFACE (TISCI) PROTOCOL DRIVER
- M:	Nishanth Menon <nm@ti.com>
- M:	Tero Kristo <kristo@kernel.org>
-@@ -18811,15 +18820,6 @@ F:	include/dt-bindings/soc/ti,sci_pm_domain.h
- F:	include/linux/soc/ti/ti_sci_inta_msi.h
- F:	include/linux/soc/ti/ti_sci_protocol.h
- 
--TEXAS INSTRUMENTS TPS23861 PoE PSE DRIVER
--M:	Robert Marko <robert.marko@sartura.hr>
--M:	Luka Perkov <luka.perkov@sartura.hr>
--L:	linux-hwmon@vger.kernel.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
--F:	Documentation/hwmon/tps23861.rst
--F:	drivers/hwmon/tps23861.c
--
- TEXAS INSTRUMENTS' TMP117 TEMPERATURE SENSOR DRIVER
- M:	Puranjay Mohan <puranjay12@gmail.com>
- L:	linux-iio@vger.kernel.org
-@@ -19719,6 +19719,13 @@ L:	linux-usb@vger.kernel.org
- S:	Supported
- F:	drivers/usb/class/usblp.c
- 
-+USB QMI WWAN NETWORK DRIVER
-+M:	Bjørn Mork <bjorn@mork.no>
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-class-net-qmi
-+F:	drivers/net/usb/qmi_wwan.c
-+
- USB RAW GADGET DRIVER
- R:	Andrey Konovalov <andreyknvl@gmail.com>
- L:	linux-usb@vger.kernel.org
-@@ -19727,13 +19734,6 @@ F:	Documentation/usb/raw-gadget.rst
- F:	drivers/usb/gadget/legacy/raw_gadget.c
- F:	include/uapi/linux/usb/raw_gadget.h
- 
--USB QMI WWAN NETWORK DRIVER
--M:	Bjørn Mork <bjorn@mork.no>
--L:	netdev@vger.kernel.org
--S:	Maintained
--F:	Documentation/ABI/testing/sysfs-class-net-qmi
--F:	drivers/net/usb/qmi_wwan.c
--
- USB RTL8150 DRIVER
- M:	Petko Manolov <petkan@nucleusys.com>
- L:	linux-usb@vger.kernel.org
-@@ -20049,6 +20049,14 @@ S:	Maintained
- F:	drivers/media/common/videobuf2/*
- F:	include/media/videobuf2-*
- 
-+VIDTV VIRTUAL DIGITAL TV DRIVER
-+M:	Daniel W. S. Almeida <dwlsalmeida@gmail.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+W:	https://linuxtv.org
-+T:	git git://linuxtv.org/media_tree.git
-+F:	drivers/media/test-drivers/vidtv/*
-+
- VIMC VIRTUAL MEDIA CONTROLLER DRIVER
- M:	Helen Koike <helen.koike@collabora.com>
- R:	Shuah Khan <skhan@linuxfoundation.org>
-@@ -20078,6 +20086,16 @@ F:	include/uapi/linux/virtio_vsock.h
- F:	net/vmw_vsock/virtio_transport.c
- F:	net/vmw_vsock/virtio_transport_common.c
- 
-+VIRTIO BALLOON
-+M:	"Michael S. Tsirkin" <mst@redhat.com>
-+M:	David Hildenbrand <david@redhat.com>
-+L:	virtualization@lists.linux-foundation.org
-+S:	Maintained
-+F:	drivers/virtio/virtio_balloon.c
-+F:	include/uapi/linux/virtio_balloon.h
-+F:	include/linux/balloon_compaction.h
-+F:	mm/balloon_compaction.c
-+
- VIRTIO BLOCK AND SCSI DRIVERS
- M:	"Michael S. Tsirkin" <mst@redhat.com>
- M:	Jason Wang <jasowang@redhat.com>
-@@ -20115,16 +20133,6 @@ F:	include/linux/virtio*.h
- F:	include/uapi/linux/virtio_*.h
- F:	tools/virtio/
- 
--VIRTIO BALLOON
--M:	"Michael S. Tsirkin" <mst@redhat.com>
--M:	David Hildenbrand <david@redhat.com>
--L:	virtualization@lists.linux-foundation.org
--S:	Maintained
--F:	drivers/virtio/virtio_balloon.c
--F:	include/uapi/linux/virtio_balloon.h
--F:	include/linux/balloon_compaction.h
--F:	mm/balloon_compaction.c
--
- VIRTIO CRYPTO DRIVER
- M:	Gonglei <arei.gonglei@huawei.com>
- L:	virtualization@lists.linux-foundation.org
-@@ -20186,6 +20194,15 @@ F:	drivers/vhost/
- F:	include/linux/vhost_iotlb.h
- F:	include/uapi/linux/vhost.h
- 
-+VIRTIO I2C DRIVER
-+M:	Conghui Chen <conghui.chen@intel.com>
-+M:	Viresh Kumar <viresh.kumar@linaro.org>
-+L:	linux-i2c@vger.kernel.org
-+L:	virtualization@lists.linux-foundation.org
-+S:	Maintained
-+F:	drivers/i2c/busses/i2c-virtio.c
-+F:	include/uapi/linux/virtio_i2c.h
-+
- VIRTIO INPUT DRIVER
- M:	Gerd Hoffmann <kraxel@redhat.com>
- S:	Maintained
-@@ -20207,6 +20224,13 @@ W:	https://virtio-mem.gitlab.io/
- F:	drivers/virtio/virtio_mem.c
- F:	include/uapi/linux/virtio_mem.h
- 
-+VIRTIO PMEM DRIVER
-+M:	Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-+L:	virtualization@lists.linux-foundation.org
-+S:	Maintained
-+F:	drivers/nvdimm/virtio_pmem.c
-+F:	drivers/nvdimm/nd_virtio.c
-+
- VIRTIO SOUND DRIVER
- M:	Anton Yakovlev <anton.yakovlev@opensynergy.com>
- M:	"Michael S. Tsirkin" <mst@redhat.com>
-@@ -20216,22 +20240,6 @@ S:	Maintained
- F:	include/uapi/linux/virtio_snd.h
- F:	sound/virtio/*
- 
--VIRTIO I2C DRIVER
--M:	Conghui Chen <conghui.chen@intel.com>
--M:	Viresh Kumar <viresh.kumar@linaro.org>
--L:	linux-i2c@vger.kernel.org
--L:	virtualization@lists.linux-foundation.org
--S:	Maintained
--F:	drivers/i2c/busses/i2c-virtio.c
--F:	include/uapi/linux/virtio_i2c.h
--
--VIRTIO PMEM DRIVER
--M:	Pankaj Gupta <pankaj.gupta.linux@gmail.com>
--L:	virtualization@lists.linux-foundation.org
--S:	Maintained
--F:	drivers/nvdimm/virtio_pmem.c
--F:	drivers/nvdimm/nd_virtio.c
--
- VIRTUAL BOX GUEST DEVICE DRIVER
- M:	Hans de Goede <hdegoede@redhat.com>
- M:	Arnd Bergmann <arnd@arndb.de>
-@@ -20261,14 +20269,6 @@ W:	https://linuxtv.org
- T:	git git://linuxtv.org/media_tree.git
- F:	drivers/media/test-drivers/vivid/*
- 
--VIDTV VIRTUAL DIGITAL TV DRIVER
--M:	Daniel W. S. Almeida <dwlsalmeida@gmail.com>
--L:	linux-media@vger.kernel.org
--S:	Maintained
--W:	https://linuxtv.org
--T:	git git://linuxtv.org/media_tree.git
--F:	drivers/media/test-drivers/vidtv/*
--
- VLYNQ BUS
- M:	Florian Fainelli <f.fainelli@gmail.com>
- L:	openwrt-devel@lists.openwrt.org (subscribers-only)
-@@ -20276,18 +20276,6 @@ S:	Maintained
- F:	drivers/vlynq/vlynq.c
- F:	include/linux/vlynq.h
- 
--VME SUBSYSTEM
--M:	Martyn Welch <martyn@welchs.me.uk>
--M:	Manohar Vanga <manohar.vanga@gmail.com>
--M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
--L:	linux-kernel@vger.kernel.org
--S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
--F:	Documentation/driver-api/vme.rst
--F:	drivers/staging/vme/
--F:	drivers/vme/
--F:	include/linux/vme*
--
- VM SOCKETS (AF_VSOCK)
- M:	Stefano Garzarella <sgarzare@redhat.com>
- L:	virtualization@lists.linux-foundation.org
-@@ -20301,6 +20289,18 @@ F:	include/uapi/linux/vsockmon.h
- F:	net/vmw_vsock/
- F:	tools/testing/vsock/
- 
-+VME SUBSYSTEM
-+M:	Martyn Welch <martyn@welchs.me.uk>
-+M:	Manohar Vanga <manohar.vanga@gmail.com>
-+M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-+F:	Documentation/driver-api/vme.rst
-+F:	drivers/staging/vme/
-+F:	drivers/vme/
-+F:	include/linux/vme*
-+
- VMWARE BALLOON DRIVER
- M:	Nadav Amit <namit@vmware.com>
- M:	"VMware, Inc." <pv-drivers@vmware.com>
--- 
-2.33.0
+
+Check out this report and any autotriaged failures in our web dashboard:
+    https://datawarehouse.cki-project.org/kcidb/checkouts/24667
+
+Hello,
+
+We ran automated tests on a recent commit from this kernel tree:
+
+       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git
+            Commit: ee1703cda8dc - Merge tag 'hyperv-fixes-signed-20211117'=
+ of git://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux
+
+The results of these automated tests are provided below.
+
+    Overall result: FAILED (see details below)
+             Merge: OK
+           Compile: FAILED
+ Selftests compile: OK
+
+All kernel binaries, config files, and logs are available for download here=
+:
+
+  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
+fix=3Ddatawarehouse-public/2021/11/17/410926286
+
+We attempted to compile the kernel for multiple architectures, but the comp=
+ile
+failed on one or more architectures:
+
+            x86_64: FAILED (see build-x86_64.log.xz attachment)
+
+We hope that these logs can help you find the problem quickly. For the full
+detail on our testing procedures, please scroll to the bottom of this messa=
+ge.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
+Compile testing
+---------------
+
+We compiled the kernel for 5 architectures:
+
+    aarch64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    ppc64le:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    s390x:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+
+
+--===============8975586236440306180==
+Content-Type: application/x-xz
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="build-x86_64.log.xz"
+MIME-Version: 1.0
+
+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
+--===============8975586236440306180==--
 
