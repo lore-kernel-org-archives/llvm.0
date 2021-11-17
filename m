@@ -1,94 +1,90 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0269772
-	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 21:40:42 +0000 (UTC)
-Received: by mail-oi1-f182.google.com with SMTP id q25so9573323oiw.0
-        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 13:40:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567F42C80
+	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 23:50:51 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id bi37so16522815lfb.5
+        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 15:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=80qrjaKuckfIxKf3DLVTv6a7iYoyD9Sd1U/A6GrtV40=;
-        b=AjM9ULmodQVC58Cu0Dno9jz4ysnFH2WEnIivupLTuRkk7hn0LPaYS477qAkjYt4T76
-         4L9um1lijnyvYCMUp3vkHhHEDwwL/1CjaDGhIxJcnnL+2upS7hXM90dXhFInZVc4fUTG
-         ZOwqBRuF+Js5dkKZXWrqx2eXCoY7ZJNxokKNSmIKfQKUma6a8m2ue84OLVluZsP0qKlQ
-         vIYnpkWXh70s1glTHAWmfwHfJwIUmkDDjM2dKUKeRnIEbSnMTK0WtHlJV0cuB4KAtI5t
-         qsIwC5bSbizogJ/rE5xWK/vJwUecbWTGUe64Q0bawFbMB1+1hZ5mf3M0zO8tDfQIhLtu
-         bQYA==
+        bh=6/cxy1v6pzyjdanivJDffUzvUHYSgGATroerbzvllHs=;
+        b=bkYq3kDo7bXXD0vLPsf4jCdNZ++vcWjPQ6Fgk0ICnOsI7b5oUTQum0xQanngAR523f
+         QYfcUPKdLzjV2X+Qx0Qx2HKfhc1+wnwWJR9QzOuF6voXMGIPmd59wSLxzpQRzQCAIgz1
+         B6zBbHAliAKNpdjaSWzNLWcFAeFuOOGId8O/YZDzpC2otZs37pgSb1ob+KWWlNrbRN5t
+         9KCjqq1MnGlShwpnfggWihqoVPv6cGNStPmOcSRlDjWQoNmkszKf03Md0xOBZ5wJyrW1
+         kmgbUKqeH6HZa4AKdYQygXJdsAWYNDJsv8YfIp08hjkQ0ZcsPF5uYp70/oPCCUpeHgxE
+         0y9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=80qrjaKuckfIxKf3DLVTv6a7iYoyD9Sd1U/A6GrtV40=;
-        b=HPegLiMHkC8H0APNGaE+XqZG/9f4OotEKpze4My5yt1zqTustpsWOEaX1LbHtEtg1l
-         bjOSmNr+dzvcRY5eGuci3SI/37XOm9jWdnSqB3kq4e34x8MXjMk6nnmhksg9Wo73XZVd
-         SuekuDnLPL4TTrA6lBayC2vOuje5N0d1v92Ps1tUti/G2MN9ajstULDsK/Z/b+tSmRBJ
-         3xeUqw4vgYV7tq0TLPoYfmGK0qcnZ9x9oBAcLK1yaKhuHdjnmHI+5Bgxx58To0iyjJyt
-         d8DMdwKQ0Vs6EdmORN0ywLANLpEDj7qsQXwgp9J112VhRaz17fKblgjZTuY+WIWiLe00
-         rNow==
-X-Gm-Message-State: AOAM531nQ6+nv4TQByoBEfA1pofRCGfmbYz1tKTTLpkh8i9+UZe7Lz9y
-	8J3AlS5ZbLQTuBdkAf0cWDP1bZ7cQh9RZeKidVA=
-X-Google-Smtp-Source: ABdhPJxrs7xTtPn1zFRtZ5i3FY/8UZ/DJotfsZ7+hYwxZMxL6ar5KwSQnPGsPX0qTiwORjQm6ItE+gRSOvERV7I704w=
-X-Received: by 2002:aca:3f87:: with SMTP id m129mr2809816oia.5.1637185242017;
- Wed, 17 Nov 2021 13:40:42 -0800 (PST)
+        bh=6/cxy1v6pzyjdanivJDffUzvUHYSgGATroerbzvllHs=;
+        b=V1R/YF5YgkyxiPDaIg8TmMaT8F4WLnp5w2Z40U1XFFjx76rA6YvRviVr0x3pdFGmTB
+         Hbs6Hmh9KFoUoHYkaphwM6obE2QiZYXooRGdLR4i6rCn3YmpfRWNbumzFrb+8BWIeRfS
+         sWSPG9kz1u8MHmJNNlQ/7TDqzb95s6uD1WKlwnikYElQpw/9eokigiE7n4p17/ZOFv7f
+         nwOls8Y4qNtJ93XOUXtvpppcpqykz8oqzuPLCPjGw0t97XKhBajV2CUsXJd+Pm3ANdMm
+         bMubST/uX8zgcN/zHUUPtSIGfskjscGqCf+sGQKOPjYUeG/TLR1A9WbdWaAit8262BSE
+         s2Xw==
+X-Gm-Message-State: AOAM532btU8tD5W4wzXodHqKliVo8a6qX35f82qzXdVd/Oqybnu87m6j
+	ntI1xlsjTnb/osfQtt2NG9G9CRa1qJLLAqSLckh8+hI8FH7IBw==
+X-Google-Smtp-Source: ABdhPJzAx52DBfH2VAZzEkNMsIBp50tAQe+QU3o7tewax9nQW5p9K/jgcxDoI5/gJGoF/zBh6pJgWQjahQAebcxBPec=
+X-Received: by 2002:a05:651c:292:: with SMTP id b18mr12238299ljo.220.1637193048799;
+ Wed, 17 Nov 2021 15:50:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1636963819-19726-1-git-send-email-yang.lee@linux.alibaba.com>
-In-Reply-To: <1636963819-19726-1-git-send-email-yang.lee@linux.alibaba.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Wed, 17 Nov 2021 16:40:31 -0500
-Message-ID: <CADnq5_O+h4J5hYrnODix4_bdMgyZMt-wcUsSWr6DGrWwUkJFog@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/amd/display: check top_pipe_to_program pointer
-To: Yang Li <yang.lee@linux.alibaba.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>, Dave Airlie <airlied@linux.ie>, llvm@lists.linux.dev, 
-	"Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>, LKML <linux-kernel@vger.kernel.org>, 
-	amd-gfx list <amd-gfx@lists.freedesktop.org>, "Leo (Sunpeng) Li" <sunpeng.li@amd.com>, 
-	Maling list - DRI developers <dri-devel@lists.freedesktop.org>, 
-	Christian Koenig <christian.koenig@amd.com>
+References: <CAKwvOdn8Gyj1cYhJYmC3oQ5dk8JCsJF=xZGWHAEBUhmWW8NOxg@mail.gmail.com>
+In-Reply-To: <CAKwvOdn8Gyj1cYhJYmC3oQ5dk8JCsJF=xZGWHAEBUhmWW8NOxg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 17 Nov 2021 15:50:37 -0800
+Message-ID: <CAKwvOdn8wwa8qu4CuPEvahJB3BAb1uB56Z+Smrrino8MCRUhDA@mail.gmail.com>
+Subject: Re: meeting notes Nov 17, 2021
+To: llvm@lists.linux.dev
+Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Applied.  Thanks!
+Also: https://github.com/ClangBuiltLinux/linux/issues/236
+-Wimplicit-fallthrough was enabled!
 
-On Mon, Nov 15, 2021 at 3:10 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
+On Wed, Nov 17, 2021 at 12:29 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> Clang static analysis reports this error
+> Nov 17, 2021
 >
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2870:7: warning:
-> Dereference of null pointer [clang-analyzer-core.NullDereference]
->                 if
-> (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
->                     ^
+> Note: I forgot to talk about DKMS support https://github.com/dell/dkms/pull/169
 >
-> top_pipe_to_program being NULL is caught as an error
-> But then it is used to report the error.
+> (Maz) CFI breakage
+> (Nathan) Long double literals
+> Time to upgrade to clang-11?
 >
-> So add a check before using it.
+> https://github.com/ClangBuiltLinux/misc-scripts
 >
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/core/dc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> (Nick) patch for armv6 hard thread pointer
+> (Nathan) linux-5.15.y CI coverage wired up
+> (Phoebe) -mno-fp-ret-in-387, -mskip-rax-setup
+> (Ulrich) commented on open s390 LLVM_IAS=1 bugs, Ilie sent a patch
+> (Anders) has been sending patches fixing warnings from the kselftests
+> Interesting thread: RFC: adding support to GCC for detecting trust boundaries
+> LLVM dev meeting
+> (Arnd) mentioned build time regression on IRC
+> Sami's x86_64 mainline CFI branch red
 >
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> index 39ad385..34382d0 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> @@ -2867,7 +2867,8 @@ static void commit_planes_for_stream(struct dc *dc,
->  #endif
+> https://git.kernel.org/linus/2105a92748e83e2e3ee6be539da959706bbb3898
 >
->         if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
-> -               if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
-> +               if (top_pipe_to_program &&
-> +                       top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
->                         if (should_use_dmub_lock(stream->link)) {
->                                 union dmub_hw_lock_flags hw_locks = { 0 };
->                                 struct dmub_hw_lock_inst_flags inst_flags = { 0 };
+> (Tom) BUILD_BUG -> _Static_assert and typeof(x) -> __auto_type clang-tidy
+>
+>
 > --
-> 1.8.3.1
->
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
