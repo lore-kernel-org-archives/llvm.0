@@ -1,119 +1,96 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A073A29CA
-	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 15:39:02 +0000 (UTC)
-Received: by mail-ed1-f44.google.com with SMTP id w1so13036744edc.6
-        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 07:39:02 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2C92C89
+	for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 17:48:27 +0000 (UTC)
+Received: by mail-ed1-f50.google.com with SMTP id g14so14708466edb.8
+        for <llvm@lists.linux.dev>; Wed, 17 Nov 2021 09:48:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/TcUJQTDYWocWle3f9+mogG0dpTJDH1Ke5aeq+Kuctw=;
-        b=joPwOVbt1twtXo/4m3BpjAd0tmFyGp+4+AQ7dd3n37c7Fcg8XMqZbwCcm2lzNMKK0U
-         iFrBcyuCqSsEiN7nK0VnOyLs0FEbawStKzliiT1aSsl+FDLkeK2p+GmbIQy1yPkhKNIh
-         QFIfsanQg3QCCkRIOu3Mf/0tQVC0tVfHpix4n/p399+SBT1hTDO833ZiAZjlS3pbnpmC
-         1gTf4IuuU4yZd3WLQ4IiA4AB0+rK8v+57QR0qI02JZXflknZjDBoBlKAaFtdYte439Zg
-         Wno2xib9gbE/+xoo+HToxeUscFbz0XqARcOrBxG/eozBG/PUGsfVGY40vZ9gubHTaqCP
-         puJw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yZjOXRFe4kBHeHpuMhDtkr/g9/szioJdpeaJnfZ4kbQ=;
+        b=F8R+uJ3fc4fFkn5jwhW2fdO+lATwUDuRWeIjB0BW6ubv0DQtKO6LzirZrw4DhgBYGg
+         2Z0baDB+gQctNSyPOOwgmm+V6+09YSTbwUFvmYssUJtz2EzYnwakqPvKb9IZm/o1wAgI
+         n99CDdOwMSpu/5fa2uz1Vl08Wf79RFNQrF74q2Yr+BQ2pvD2VyaQ/q0vErB5tab8W6Ng
+         RIbzWt3HFFeZBHhgtc18saTKKrmfaKk2qtGSZ8i/iEfePqSF135ZSjvae4ddlu17KC28
+         3cAf5VowCXr60ydlI7vqY7IvMjOlsBABjG8kPK3piT/u+iGfoFjxOIqVnDFZQPuinDsg
+         0DHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/TcUJQTDYWocWle3f9+mogG0dpTJDH1Ke5aeq+Kuctw=;
-        b=okpgfA7D6eVvCI4imxzk/Xlkg8fuv+GnfUAWhA5KDlDMYh6xQayJzHvOuxhoB5sEIj
-         zbpZZ89UKYq6I7Ir5r186e/P0qOmrxikaHsy12tF7uEUgEcVnZYNQ1rtE9v0qj5OXahs
-         /G4aTCOkbnYWzQwsL8mO9sgEvOZLCGfi4b/uPTqxKCR+smhBH7oBJ/FAS9q1rK1ZIpv0
-         yvZp2dJjat4VpX4mSW01UVrnTFlBvQUwAs/+2XOYxS/9cPck8Il//hD7+5z+sTgi0oix
-         +xZhGriJ0sDl8mOH8S3LuGEedj14QtBAEelWpHy8zZfidsgf8oz+VS45534SQfSblVa5
-         LKhQ==
-X-Gm-Message-State: AOAM533PjLbhVyxjFEu5lJ+Y9d8S40mwejtf/j/qxOqygGRTp0KpjeNx
-	JbGjeJjyMaAZmyesEBzCUKbxRYYmLc/zaC/aze4HTg==
-X-Google-Smtp-Source: ABdhPJxbO9oM7lYebEc5d09CygmBuYbwNSeVKmi4BSitEspHl+XiObU1tYWWHIftk13/zbdiQ0us7Zx6BT6sQbCaRDU=
-X-Received: by 2002:a17:907:3c16:: with SMTP id gh22mr22098760ejc.344.1637163540895;
- Wed, 17 Nov 2021 07:39:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yZjOXRFe4kBHeHpuMhDtkr/g9/szioJdpeaJnfZ4kbQ=;
+        b=wZXqT5JVOHAOjR/6myAp/ijNK/Lehric9bsMQvC5xI/j5j0UI8jPkC3HzDC+ZYKoHE
+         ZpiqTj5lW4ERV/tF3OmJ1aX71ms2oNnv9YXOViWgzT9AcnIGnGW3lQH48KY1LJ6TYjiF
+         Vy3um2AK/ziP12FHswcKjBZQOANDeZ4PNu3bKvXjR2Fk4eGzgnTz1qgTN3+wddBK57iM
+         c1qgyRN5fGMVIPo9Pn/o61nwfs8rNkaq1Ei9RCKybaTO3uZ8R9JPDJz2cjCps957Wp4l
+         /AO6NpPCKn0jsWeu4mG/68NpXU6eKTRXFNZopuNYdbkgKIfCwkHpRZU/1vw+K1Gc9gi9
+         eJLg==
+X-Gm-Message-State: AOAM532RNCSimUSbmqzQjLWxUkNBIn88BESoH+yTPOAdAoUdUXl4GJd2
+	CJATS7NaUPSWARG67HqOm3k=
+X-Google-Smtp-Source: ABdhPJw+qL1QPzZ5AdE2opgq04rudnPWXFWVMorBLzCbct64V52ZFe3zXCWxuEt5RIeKDZAlTdSpHA==
+X-Received: by 2002:a05:6402:1914:: with SMTP id e20mr762999edz.96.1637171306150;
+        Wed, 17 Nov 2021 09:48:26 -0800 (PST)
+Received: from localhost.localdomain ([82.78.89.185])
+        by smtp.gmail.com with ESMTPSA id go10sm253902ejc.115.2021.11.17.09.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Nov 2021 09:48:25 -0800 (PST)
+From: Ilie Halip <ilie.halip@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ilie Halip <ilie.halip@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@de.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Mete Durlu <meted@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] s390/test_unwind: use raw opcode instead of invalid instruction
+Date: Wed, 17 Nov 2021 19:48:21 +0200
+Message-Id: <20211117174822.3632412-1-ilie.halip@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211117142115.694316-1-anders.roxell@linaro.org> <YZUY69vfq/RrVWMw@archlinux-ax161>
-In-Reply-To: <YZUY69vfq/RrVWMw@archlinux-ax161>
-From: Anders Roxell <anders.roxell@linaro.org>
-Date: Wed, 17 Nov 2021 16:38:50 +0100
-Message-ID: <CADYN=9J9L+nY1vMSnPGeam5+KSm-tH37_j1CYokp8etHOP1evA@mail.gmail.com>
-Subject: Re: [PATCH] soc/tegra: fuse: fix bitwice vs. logical warning
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, ndesaulniers@google.com, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 17 Nov 2021 at 16:00, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Wed, Nov 17, 2021 at 03:21:15PM +0100, Anders Roxell wrote:
-> > When building with clang-13 the compiler warns about:
-> >
-> > drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-> >                 reg = tegra_fuse_read_spare(i) |
-> >                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >                                                ||
-> >
-> > This should be a logical OR so change it to fix the warning.
-> >
-> > Fixes: 7e939de1b2bb ("soc/tegra: fuse: Unify Tegra20 and Tegra30 drivers")
-> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
->
-> I sent the same patch a couple of weeks ago (but it was right before the
-> merge window so I am sure nobody was really paying attention):
->
-> https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kernel.org/
->
-> I do not particularly care which one gets merged (although I think mine
-> explains the warning a little bit better).
+Building with clang & LLVM_IAS=1 leads to an error:
+    arch/s390/lib/test_unwind.c:179:4: error: invalid register pair
+                        "       mvcl    %%r1,%%r1\n"
+                        ^
 
-I missed that, sorry.
-I agree I think your changlog explains the warning better.
+The test creates an invalid instruction that would trap at runtime, but the
+LLVM inline assembler tries to validate it at compile time too.
 
-Cheers,
-Anders
+Use the raw instruction opcode instead.
 
->
-> I am not sure your fixes tag is right, I would expect it to be:
->
-> Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
->
-> With that fixed:
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> > ---
-> >  drivers/soc/tegra/fuse/speedo-tegra20.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/soc/tegra/fuse/speedo-tegra20.c b/drivers/soc/tegra/fuse/speedo-tegra20.c
-> > index 2546bddbab93..4984246605ae 100644
-> > --- a/drivers/soc/tegra/fuse/speedo-tegra20.c
-> > +++ b/drivers/soc/tegra/fuse/speedo-tegra20.c
-> > @@ -69,7 +69,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
-> >
-> >       val = 0;
-> >       for (i = CPU_SPEEDO_MSBIT; i >= CPU_SPEEDO_LSBIT; i--) {
-> > -             reg = tegra_fuse_read_spare(i) |
-> > +             reg = tegra_fuse_read_spare(i) ||
-> >                       tegra_fuse_read_spare(i + CPU_SPEEDO_REDUND_OFFS);
-> >               val = (val << 1) | (reg & 0x1);
-> >       }
-> > @@ -84,7 +84,7 @@ void __init tegra20_init_speedo_data(struct tegra_sku_info *sku_info)
-> >
-> >       val = 0;
-> >       for (i = SOC_SPEEDO_MSBIT; i >= SOC_SPEEDO_LSBIT; i--) {
-> > -             reg = tegra_fuse_read_spare(i) |
-> > +             reg = tegra_fuse_read_spare(i) ||
-> >                       tegra_fuse_read_spare(i + SOC_SPEEDO_REDUND_OFFS);
-> >               val = (val << 1) | (reg & 0x1);
-> >       }
-> > --
-> > 2.33.0
-> >
+Link: https://github.com/ClangBuiltLinux/linux/issues/1421
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Ilie Halip <ilie.halip@gmail.com>
+---
+ arch/s390/lib/test_unwind.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
+index cfc5f5557c06..d342bc884b94 100644
+--- a/arch/s390/lib/test_unwind.c
++++ b/arch/s390/lib/test_unwind.c
+@@ -176,7 +176,7 @@ static noinline int unwindme_func4(struct unwindme *u)
+ 		 * trigger specification exception
+ 		 */
+ 		asm volatile(
+-			"	mvcl	%%r1,%%r1\n"
++			"	.insn e,0x0e11\n"	/* mvcl	%%r1,%%r1" */
+ 			"0:	nopr	%%r7\n"
+ 			EX_TABLE(0b, 0b)
+ 			:);
+-- 
+2.25.1
+
