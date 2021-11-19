@@ -1,129 +1,94 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9174B68
-	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 14:59:58 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B6FA61AA7;
-	Fri, 19 Nov 2021 14:59:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637333997;
-	bh=GshKi1N2lMhxm6kjrgjRizd8dlh/k0FDm8ct+O56+Mo=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=SyDOjgWX643f1kpu4+N5rWcIolMR2Thne/5krFtrjvLEC4UKLei+XrenmTqaneevi
-	 zy4BO2WJO/A4fvtxy5pXcOR15wIpJSOA0oGuZrfUL+prywJcFlX6mb5rcxfAxLXJh7
-	 GUsFN7GfuwHDq4iNcXSkeZlb7ORIyFduXZzzUZ+VHqmMOHdTzyO34EcGQw6y/QPw/p
-	 IE7jRvYbrmxaf20TZL38CfeLg8deM/eVPasWzgcjylyEVPLiN2OUUJ6mx+hC7lsjrT
-	 ppLLoThEiDeS9n4CM1WbY5C/dAqOxfulPQnOMDZGSJuqlkRPI2rnARbkEaq/BKjIpq
-	 NK6lRe4tUosdg==
-Date: Fri, 19 Nov 2021 15:59:54 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: kernel test robot <lkp@intel.com>
-cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-    linux-kernel@vger.kernel.org
-Subject: Re: drivers/hid/hid-nintendo.c:196:45: error: unused variable
- 'joycon_rumble_frequencies'
-In-Reply-To: <202111141514.s63tieIl-lkp@intel.com>
-Message-ID: <nycvar.YFH.7.76.2111191559350.16505@cbobk.fhfr.pm>
-References: <202111141514.s63tieIl-lkp@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCC268
+	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 15:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=CstLjnLmS+YYYhfEIDDOcPTXnFTE/q9KPnXHCQpNsfo=; b=ln71mTJeSJVi9JJd80Pft5PFw1
+	e6otlfjfahzr13myHbUoSnQMV2lfLyPKk0hvqLvlIXlYPC9PGT85qYbLAbQaVhYn95KyvPlcAGxHB
+	DBgrmTPv/+P16kQawT2O+tSPb9I/yc9kniLdTA06EOcOUGd+Ena+WCpwIASvb4WdGfgIfkUl0cVOE
+	JbfsYUCaJLpi5V718JQblg+TmTgS49MlRGWEcAbkYfkgNBDlSitNDmjYjxgVIDDTv8UrFk+OUeTjf
+	G9JQYhmkkdtkZWahLO831O2faw3yagjz2etdzh9gKZRt7Wi24V0gJM0JQdMFpiP26wZI9IsLEBi0N
+	pGeZieGA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mo5Xy-00Gvdo-H4; Fri, 19 Nov 2021 15:11:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B50330030B;
+	Fri, 19 Nov 2021 16:11:25 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 29DDB20D8DBBA; Fri, 19 Nov 2021 16:11:25 +0100 (CET)
+Date: Fri, 19 Nov 2021 16:11:25 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
+	"H.J. Lu" <hjl.tools@gmail.com>, llvm@lists.linux.dev,
+	linux-toolchains@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH] x86: Use -mindirect-branch-cs-prefix for RETPOLINE builds
+Message-ID: <YZe+nfVmA5wrIcv6@hirez.programming.kicks-ass.net>
+References: <20211118185421.GK174703@worktop.programming.kicks-ass.net>
+ <CAKwvOdkrN0tLMrEyx98JY6wGdwi0Be3Z8fbTQ3vNHckM4dmG8g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkrN0tLMrEyx98JY6wGdwi0Be3Z8fbTQ3vNHckM4dmG8g@mail.gmail.com>
 
-On Sun, 14 Nov 2021, kernel test robot wrote:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   c8c109546a19613d323a319d0c921cb1f317e629
-> commit: daf11ca2b9f45a1ac6f90af5a61ee4db915110b1 HID: nintendo: fix -Werror build
-> date:   13 days ago
-> config: i386-buildonly-randconfig-r003-20211114 (attached as .config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c3dddeeafb529e769cde87bd29ef6271ac6bfa5c)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=daf11ca2b9f45a1ac6f90af5a61ee4db915110b1
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout daf11ca2b9f45a1ac6f90af5a61ee4db915110b1
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
+On Thu, Nov 18, 2021 at 02:08:04PM -0800, Nick Desaulniers wrote:
+> On Thu, Nov 18, 2021 at 10:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> >
+> > In order to further enable commit:
+> >
+> >   bbe2df3f6b6d ("x86/alternative: Try inline spectre_v2=retpoline,amd")
+> >
+> > add the new GCC flag -mindirect-branch-cs-prefix:
+> >
+> >   https://gcc.gnu.org/g:2196a681d7810ad8b227bf983f38ba716620545e
+> >
+> > to RETPOLINE=y builds. This should allow fully inlining retpoline,amd
+> > for GCC builds.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> Do you mind adding the following link tags:
 > 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/hid/hid-nintendo.c:196:45: error: unused variable 'joycon_rumble_frequencies' [-Werror,-Wunused-const-variable]
->    static const struct joycon_rumble_freq_data joycon_rumble_frequencies[] = {
->                                                ^
-> >> drivers/hid/hid-nintendo.c:254:44: error: unused variable 'joycon_rumble_amplitudes' [-Werror,-Wunused-const-variable]
->    static const struct joycon_rumble_amp_data joycon_rumble_amplitudes[] = {
->                                               ^
-> >> drivers/hid/hid-nintendo.c:400:18: error: unused variable 'JC_RUMBLE_DFLT_LOW_FREQ' [-Werror,-Wunused-const-variable]
->    static const u16 JC_RUMBLE_DFLT_LOW_FREQ = 160;
->                     ^
-> >> drivers/hid/hid-nintendo.c:401:18: error: unused variable 'JC_RUMBLE_DFLT_HIGH_FREQ' [-Werror,-Wunused-const-variable]
->    static const u16 JC_RUMBLE_DFLT_HIGH_FREQ = 320;
->                     ^
-> >> drivers/hid/hid-nintendo.c:403:29: error: unused variable 'JC_RUMBLE_ZERO_AMP_PKT_CNT' [-Werror,-Wunused-const-variable]
->    static const unsigned short JC_RUMBLE_ZERO_AMP_PKT_CNT = 5;
->                                ^
->    5 errors generated.
+> Link: https://gcc.gnu.org/g:2196a681d7810ad8b227bf983f38ba716620545e
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102952
+> Link: https://bugs.llvm.org/show_bug.cgi?id=52323
 
-From: Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH] HID: nintendo: eliminate dead datastructures in !CONFIG_NINTENDO_FF case
+My scripts will strip that, they only like to have a Link to to the
+actual email as posted. I can put in the URLs, the first is already in
+the Changelog.
 
-The rumbling-related identifiers are never used in !CONFIG_NINTENDO_FF
-case, so let's hide them in order to avoid unused warnings.
+> If the feature would be helpful to implement in Clang, would you mind
+> keeping the cc-option, but moving the check outside of the `ifdef
+> CONFIG_CC_IS_GCC` block? That way, we don't need to revisit the
+> Makefile?
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
----
- drivers/hid/hid-nintendo.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+I was thinking that clang would want to name it differently to be
+consistent with their own retpoline flags, something like:
 
-diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-index 7e1d1127493e..b6a9a0f3966e 100644
---- a/drivers/hid/hid-nintendo.c
-+++ b/drivers/hid/hid-nintendo.c
-@@ -189,6 +189,7 @@ struct joycon_rumble_amp_data {
- 	u16 amp;
- };
- 
-+#if IS_ENABLED(CONFIG_NINTENDO_FF)
- /*
-  * These tables are from
-  * https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/blob/master/rumble_data_table.md
-@@ -289,6 +290,10 @@ static const struct joycon_rumble_amp_data joycon_rumble_amplitudes[] = {
- 	{ 0xc2, 0x8070,  940 }, { 0xc4, 0x0071,  960 }, { 0xc6, 0x8071,  981 },
- 	{ 0xc8, 0x0072, joycon_max_rumble_amp }
- };
-+static const u16 JC_RUMBLE_DFLT_LOW_FREQ = 160;
-+static const u16 JC_RUMBLE_DFLT_HIGH_FREQ = 320;
-+#endif /* IS_ENABLED(CONFIG_NINTENDO_FF) */
-+static const u16 JC_RUMBLE_PERIOD_MS = 50;
- 
- /* States for controller state machine */
- enum joycon_ctlr_state {
-@@ -397,9 +402,6 @@ struct joycon_input_report {
- #define JC_RUMBLE_DATA_SIZE	8
- #define JC_RUMBLE_QUEUE_SIZE	8
- 
--static const u16 JC_RUMBLE_DFLT_LOW_FREQ = 160;
--static const u16 JC_RUMBLE_DFLT_HIGH_FREQ = 320;
--static const u16 JC_RUMBLE_PERIOD_MS = 50;
- static const unsigned short JC_RUMBLE_ZERO_AMP_PKT_CNT = 5;
- 
- static const char * const joycon_player_led_names[] = {
--- 
-2.12.3
+  -mretpoline-cs-prefix
 
+> (Tangential: I wonder why RETPOLINE_CFLAGS aren't defined in
+> arch/x86/Makefile; they seem to be x86 specific at the moment).
 
--- 
-Jiri Kosina
-SUSE Labs
+Yeah, I think there was hoping that other archs would find it useful,
+but so far x86 is the only one having grown them things. I can move them
+I suppose. If ever another arch grows them we can reconsider.
 
+> With the above link tags, and with or without moving this outside the
+> gcc-specific guard:
+> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Thanks, let me repost as two patches.
