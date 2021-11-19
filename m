@@ -1,106 +1,107 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD2772
-	for <llvm@lists.linux.dev>; Thu, 18 Nov 2021 22:08:18 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id b1so32914551lfs.13
-        for <llvm@lists.linux.dev>; Thu, 18 Nov 2021 14:08:18 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77CB068
+	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 01:11:02 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id k37so35315030lfv.3
+        for <llvm@lists.linux.dev>; Thu, 18 Nov 2021 17:11:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XYg5uRA+tu1JqcQE8rlr/QJGe6qG9Ux78+pZZQSXsFM=;
-        b=pqcwefPtl2C39bPh39Zo+SthZ5QeY4Z0B7iPMHhCZiGqS0+a+IWsPsHHd2pELUPVaP
-         RzPQUggCQB8feReTKi9yP3Y0Lr7K4swjqErpSuLoXOfrm7JNrfNQBDzuv+66m7VFza3e
-         A0b1mtwuk2BFICkHr0xHPJxXFbICL9JYAytVha0+2kt+SIZEC9eB+vvXgd6rbP4mqJIL
-         oREe9BWspd1OCukaf8d68mciIecpbFAIcpt2sEsd4VgFDYWIwnbsRzzfQ695H/CC+YO4
-         qH04/mt6nGHaE1hZKbl2BxAPqQ0lc4DXhHLS73PMVVkX4v+D58k/RBmmADGzF2zRd0dy
-         /w2A==
+        bh=x50jM6pG1zOVTOkOckDcnqbrEYWJvq1YZ9GgThuybmM=;
+        b=LnFuJ6GGDFKUBGHDotmBDPpidrdMYO7qSi+dbFiGNHOZ1yH1kiSUv+OIy6u/UTv3rv
+         zyPxiEljS5zJlO38S5PNAVs16qHUHeDoXMrVuMVjjmgDx5YqOFVekYafSZ4YR3zf6Yga
+         Xr5T8h21knWiZ0bsZnJ3HPb2SR66tnPPRYvcvLNpPPiXcyIYCe9W0MEIoL28YIzyMUee
+         UY0gagpDJlyINCYnDEmJp/9p7tA3C0hp6PavO5ejhL4vWtJBTrxqLxdeQX9LgHN1CAjX
+         l8W8XZEzJVMoQnbGwEk2IfnKFu1unQufwi/PBIl0hZo9M8hKp8Dva+GqCJOOeo1+BXYC
+         qdgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XYg5uRA+tu1JqcQE8rlr/QJGe6qG9Ux78+pZZQSXsFM=;
-        b=mWxnoQF5KOBLR9yCGlW3ypJUfYve4hVm3tLi+a6qaBUUJs6j6+3kOfAMcv0UP/5v9X
-         jx8K+vHU6TOCjAZW4JjjIAmWcM/rVThPgCe9sYOlRA0m/WDTJccdyBMgVNjj7NYwMEgU
-         Q3lDDSl7rP9MgiFCkf7H+oW35Ml1WE24Y8r3HbqGnxRGJqqmDOmIMIQ21HPnoXCADtMZ
-         I/FrBzmPlHFwQGp0j81B+PZqsIEOz9ho2UUPKuf45CPPKjtwboOP7RLFSa0bybFByOdT
-         GOn+KKlrqyQwcn6o1xLS/ABCg/eR0/Cgc7AQg1EsK0c0NEQP2hR1dhObfXfVmfHBoKye
-         RhUA==
-X-Gm-Message-State: AOAM530iQR5h7Xtwtl2uosYa9N4U550TM05eOBhGAJ0ZMpkAqxdashcx
-	8RfOJbqeiN1AHMUIw2CEAdIywUhVmefEVbU8eTKQhQ==
-X-Google-Smtp-Source: ABdhPJw4l5qkRrzNZ0ISMkYnecapXw8Nfhqb+OjXZGolwknTDbYOtM2AUW4b+qX0d1MjvXR9nV0H6GZ7wEqyAv946KI=
-X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr26621791lfv.523.1637273296109;
- Thu, 18 Nov 2021 14:08:16 -0800 (PST)
+        bh=x50jM6pG1zOVTOkOckDcnqbrEYWJvq1YZ9GgThuybmM=;
+        b=MMwPc/6iMYIJQ0PufnaryRUjiuT9n2RHkJRxAK5dZ3oCoh+IxhaWvX7ybC2bQ4NQ/H
+         jYRqL0QUOFC4S7U8HPZAqRUa+MEORTCPw9NcWEOsUlSpFli87C0Ze3i/ioO4yDjkmh2j
+         oHlDhIrAInkKT+wLHtesuRrgZCui7GtiAHIrMLYnCGTSu+4b1P4rN7oBZtrK0UdRnQKe
+         GTVy5q7Ueyym4UXWgJDD623cb9hC6KSn/QjNenYbI/W4RsWojpsxBeqwecODr643iTaE
+         tNnmdzZQiQLIEgRDUJnQlFFRrCA02bFhU8VAVJ4DncXNAECqBt2WrHuhYq85Kj1G1BlS
+         DvrA==
+X-Gm-Message-State: AOAM530eqsCJapXpFlx1UFa38T8+mvrTxYmBSgsG9YkTXlbWYII2JaVG
+	9PVysjDcaOYkPo87d/ahAAeFdu44oZJHs40U/nhRUA==
+X-Google-Smtp-Source: ABdhPJzF60VCgIXOgoMT0JlxAr4h5sGo54t98q/f/v4/msXsJrdVT3pwUqhpV5SbV0W4z3FADWYSFJ+6mYSAM6KxLJk=
+X-Received: by 2002:a05:6512:3b9c:: with SMTP id g28mr28619869lfv.651.1637284260284;
+ Thu, 18 Nov 2021 17:11:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211118185421.GK174703@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211118185421.GK174703@worktop.programming.kicks-ass.net>
+References: <20211117174822.3632412-1-ilie.halip@gmail.com>
+In-Reply-To: <20211117174822.3632412-1-ilie.halip@gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 18 Nov 2021 14:08:04 -0800
-Message-ID: <CAKwvOdkrN0tLMrEyx98JY6wGdwi0Be3Z8fbTQ3vNHckM4dmG8g@mail.gmail.com>
-Subject: Re: [PATCH] x86: Use -mindirect-branch-cs-prefix for RETPOLINE builds
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	"H.J. Lu" <hjl.tools@gmail.com>, llvm@lists.linux.dev, 
-	linux-toolchains@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 18 Nov 2021 17:10:48 -0800
+Message-ID: <CAKwvOd=9tsHHhPBOx2ORZoJP09VsX5dRZn58qj3MzCc2vmVosg@mail.gmail.com>
+Subject: Re: [PATCH] s390/test_unwind: use raw opcode instead of invalid instruction
+To: Ilie Halip <ilie.halip@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Christian Borntraeger <borntraeger@de.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Mete Durlu <meted@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org, 
+	llvm@lists.linux.dev, Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 18, 2021 at 10:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, Nov 17, 2021 at 9:48 AM Ilie Halip <ilie.halip@gmail.com> wrote:
 >
+> Building with clang & LLVM_IAS=1 leads to an error:
+>     arch/s390/lib/test_unwind.c:179:4: error: invalid register pair
+>                         "       mvcl    %%r1,%%r1\n"
+>                         ^
 >
-> In order to further enable commit:
+> The test creates an invalid instruction that would trap at runtime, but the
+> LLVM inline assembler tries to validate it at compile time too.
 >
->   bbe2df3f6b6d ("x86/alternative: Try inline spectre_v2=retpoline,amd")
+> Use the raw instruction opcode instead.
 >
-> add the new GCC flag -mindirect-branch-cs-prefix:
->
->   https://gcc.gnu.org/g:2196a681d7810ad8b227bf983f38ba716620545e
->
-> to RETPOLINE=y builds. This should allow fully inlining retpoline,amd
-> for GCC builds.
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1421
+> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Ilie Halip <ilie.halip@gmail.com>
 
-Do you mind adding the following link tags:
+Ilie, thanks for the patch!
 
-Link: https://gcc.gnu.org/g:2196a681d7810ad8b227bf983f38ba716620545e
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102952
-Link: https://bugs.llvm.org/show_bug.cgi?id=52323
+So if I understand
+https://sourceware.org/binutils/docs/as/s390-Directives.html#s390-Directives
+https://sourceware.org/binutils/docs/as/s390-Formats.html
+that `e,` prefix is for 16B opcodes?
 
-If the feature would be helpful to implement in Clang, would you mind
-keeping the cc-option, but moving the check outside of the `ifdef
-CONFIG_CC_IS_GCC` block? That way, we don't need to revisit the
-Makefile?
+LGTM, thanks again.
+Suggested-by: Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-(Tangential: I wonder why RETPOLINE_CFLAGS aren't defined in
-arch/x86/Makefile; they seem to be x86 specific at the moment).
+I triple checked that GAS, clang, and GNU objdump are in agreement in
+terms of encoding here.
 
-With the above link tags, and with or without moving this outside the
-gcc-specific guard:
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/s390/lib/test_unwind.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/Makefile b/Makefile
-> index 9e12c14ea0fb..5fd5b5f091ae 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -690,6 +690,7 @@ endif
+> diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
+> index cfc5f5557c06..d342bc884b94 100644
+> --- a/arch/s390/lib/test_unwind.c
+> +++ b/arch/s390/lib/test_unwind.c
+> @@ -176,7 +176,7 @@ static noinline int unwindme_func4(struct unwindme *u)
+>                  * trigger specification exception
+>                  */
+>                 asm volatile(
+> -                       "       mvcl    %%r1,%%r1\n"
+> +                       "       .insn e,0x0e11\n"       /* mvcl %%r1,%%r1" */
+>                         "0:     nopr    %%r7\n"
+>                         EX_TABLE(0b, 0b)
+>                         :);
+> --
+> 2.25.1
 >
->  ifdef CONFIG_CC_IS_GCC
->  RETPOLINE_CFLAGS       := $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
-> +RETPOLINE_CFLAGS       += $(call cc-option,-mindirect-branch-cs-prefix)
->  RETPOLINE_VDSO_CFLAGS  := $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
->  endif
->  ifdef CONFIG_CC_IS_CLANG
-
 
 
 -- 
