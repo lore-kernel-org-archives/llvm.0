@@ -1,131 +1,101 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF472C80
-	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 10:57:17 +0000 (UTC)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ9g7Y7022038;
-	Fri, 19 Nov 2021 10:57:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=FTkd37bvrsQwuREjHlKhv+jlCN5TaReeRhqz+EmL6dI=;
- b=OscwhZ0RCEEi1Yzg0MqPbHPGLyiUuTmNa7p6dVQ0py/a5awtFcp5BMf07JTiOF5hKDxN
- xNiX5/vUr6ka2oYFPsvPF4uoU30ggZkkQRtYLDArzsDgVVEa4Or8SUkds8Knmaf5nQa/
- 3GUoejxR6Ho9twmK1c54n/Y7E5MN4Le1zM4ZF2kkfdEv+WfaYRFokIXCO95a/H3kjPez
- 4HVyF4BlA9g/YhhxrYe52GmxP2nkPkFAPl39c3KtqQ8hqfiPROAOkkrdjPAI27G796Nt
- xkZl1KFe+KQVtMqlKMynRDvXNBKTFuWRyBl9FN1mNqEttDaOyi8pSCKEOR5YRiAMNX+b 6Q== 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338EF2C80
+	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 11:09:32 +0000 (UTC)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ9i3TR005724;
+	Fri, 19 Nov 2021 11:09:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=DMGGL+ptrDkHqbY8K7wsnL5eoa1Z6LiRarwnFfhbyEQ=;
+ b=UmWy4BvtxMPzWhAZuiZygE3zGNr/96QrAoRbS5cCcTDj9TID/Q3v7U1zPAY7UN06/XZS
+ TCpFwQ8KLw+DI2ewlrLgqbPQOYzDPQmZrOgFBwyId1QmD/ms9ffhlBPASus+euumNAhC
+ W5fX+nBFs7PlZPb/5lfaM4wiq7XR+XkrzEa95hNR4irJ4pqLj6CJUVbMaPymGdgQxMOS
+ nr+Yo6mOoZgg3PxR7vmY+1p7exgn1nT+1h8Yv7B60bzmQlF1O9n8Au9hWVJVdy/+wAwv
+ ZoOPH04XcgnoYhboVE3peJr+MmWtM0f3ZDkzYXGWo1FCqvlm7yBYdt/GxTzTg4CqkfCA xQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3ce9h4h9u7-1
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3ce9hxsrbh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Nov 2021 10:57:15 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AJAo5go004692;
-	Fri, 19 Nov 2021 10:57:14 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3ce9h4h9tv-1
+	Fri, 19 Nov 2021 11:09:30 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AJB5aOK017787;
+	Fri, 19 Nov 2021 11:09:30 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3ce9hxsraw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Nov 2021 10:57:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-	by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AJAs2Cb003588;
-	Fri, 19 Nov 2021 10:57:12 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-	by ppma04ams.nl.ibm.com with ESMTP id 3ca50byn0t-1
+	Fri, 19 Nov 2021 11:09:30 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+	by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AJB7ha3010426;
+	Fri, 19 Nov 2021 11:09:27 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+	by ppma06fra.de.ibm.com with ESMTP id 3ca4mkwg0d-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Nov 2021 10:57:12 +0000
+	Fri, 19 Nov 2021 11:09:27 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AJAo4WG65208630
+	by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AJB2NSJ50856220
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 19 Nov 2021 10:50:04 GMT
+	Fri, 19 Nov 2021 11:02:23 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3CAB5A4062;
-	Fri, 19 Nov 2021 10:57:06 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 60DD4A4065;
+	Fri, 19 Nov 2021 11:09:22 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AC8B2A405C;
-	Fri, 19 Nov 2021 10:57:05 +0000 (GMT)
-Received: from [9.171.67.41] (unknown [9.171.67.41])
-	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Fri, 19 Nov 2021 10:57:05 +0000 (GMT)
-Message-ID: <658a63b5-2d18-2837-9639-75a14c959f73@de.ibm.com>
-Date: Fri, 19 Nov 2021 11:57:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] s390/test_unwind: use raw opcode instead of invalid
- instruction
-Content-Language: en-US
-To: Heiko Carstens <hca@linux.ibm.com>
+	by IMSVA (Postfix) with ESMTP id DA3BDA4066;
+	Fri, 19 Nov 2021 11:09:21 +0000 (GMT)
+Received: from osiris (unknown [9.145.50.239])
+	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+	Fri, 19 Nov 2021 11:09:21 +0000 (GMT)
+Date: Fri, 19 Nov 2021 12:09:20 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Christian Borntraeger <borntraeger@de.ibm.com>
 Cc: Nick Desaulniers <ndesaulniers@google.com>,
         Ilie Halip <ilie.halip@gmail.com>, linux-kernel@vger.kernel.org,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev
- <agordeev@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Mete Durlu <meted@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
         linux-s390@vger.kernel.org, llvm@lists.linux.dev,
         Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
+Subject: Re: [PATCH] s390/test_unwind: use raw opcode instead of invalid
+ instruction
+Message-ID: <YZeF4JjWIcTMtaaT@osiris>
 References: <20211117174822.3632412-1-ilie.halip@gmail.com>
  <CAKwvOd=9tsHHhPBOx2ORZoJP09VsX5dRZn58qj3MzCc2vmVosg@mail.gmail.com>
- <d9ec2704-f41c-eafa-1945-ce845d65be8a@de.ibm.com> <YZeCcSjh4yCzzDcH@osiris>
-From: Christian Borntraeger <borntraeger@de.ibm.com>
-In-Reply-To: <YZeCcSjh4yCzzDcH@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: si2gEz0Uu3-awDu1havmlS3Zs0WP9m6O
-X-Proofpoint-ORIG-GUID: KkwuKmdECFZeAMrA2NMS7BKZYO6qoMvS
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+ <d9ec2704-f41c-eafa-1945-ce845d65be8a@de.ibm.com>
+ <YZeCcSjh4yCzzDcH@osiris>
+ <658a63b5-2d18-2837-9639-75a14c959f73@de.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <658a63b5-2d18-2837-9639-75a14c959f73@de.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yXjN38N57id5v6xLCKgrJxhtcqyAIWLK
+X-Proofpoint-ORIG-GUID: Y8yjdJ5m2mzrHFDC_l0REOvIVXkdYtwH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 spamscore=0 impostorscore=0
- bulkscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111190058
+ definitions=2021-11-19_09,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 spamscore=0 mlxlogscore=821
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111190062
 
-
-
-Am 19.11.21 um 11:54 schrieb Heiko Carstens:
-> On Fri, Nov 19, 2021 at 10:39:15AM +0100, Christian Borntraeger wrote:
->>> So if I understand
->>> https://sourceware.org/binutils/docs/as/s390-Directives.html#s390-Directives
->>> https://sourceware.org/binutils/docs/as/s390-Formats.html
->>> that `e,` prefix is for 16B opcodes?
->>
->> e is an instruction format as specified by the architecture.
->> See http://publibfp.dhe.ibm.com/epubs/pdf/a227832c.pdf
->> without any parameters.
->> Normally RR would be the right thing for MVCL, but since
->> we try to build an invalid opcode without the assembler
->> noticing (ab)using e seem like a safer approach.
->>>
->>> LGTM, thanks again.
->>> Suggested-by: Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
->>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->>
->> added those and added my RB. applied to the s390 tree. Thanks
-> ..
->>>> diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
->>>> index cfc5f5557c06..d342bc884b94 100644
->>>> --- a/arch/s390/lib/test_unwind.c
->>>> +++ b/arch/s390/lib/test_unwind.c
->>>> @@ -176,7 +176,7 @@ static noinline int unwindme_func4(struct unwindme *u)
->>>>                    * trigger specification exception
->>>>                    */
->>>>                   asm volatile(
->>>> -                       "       mvcl    %%r1,%%r1\n"
->>>> +                       "       .insn e,0x0e11\n"       /* mvcl %%r1,%%r1" */
+On Fri, Nov 19, 2021 at 11:57:05AM +0100, Christian Borntraeger wrote:
+> > > > > -                       "       mvcl    %%r1,%%r1\n"
+> > > > > +                       "       .insn e,0x0e11\n"       /* mvcl %%r1,%%r1" */
+> > 
+> > Sorry, I disagree with this. As you said above rr would be the correct
+> > format for this instruction. If we go for the e format then we should
+> > also use an instruction with e format.
+> > Which in this case would simply be an illegal opcode, which would be
+> > sufficient for what this code is good for: ".insn e,0x0000".
 > 
-> Sorry, I disagree with this. As you said above rr would be the correct
-> format for this instruction. If we go for the e format then we should
-> also use an instruction with e format.
-> Which in this case would simply be an illegal opcode, which would be
-> sufficient for what this code is good for: ".insn e,0x0000".
+> Why not simply use .short then?
 
-Why not simply use .short then?
+.short bypasses all sanity checks while .insn does not, so I think
+that should be preferred. But I don't care too much.
