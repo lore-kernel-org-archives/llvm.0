@@ -1,49 +1,33 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C378F68
-	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 16:17:00 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id u11so8497826plf.3
-        for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 08:17:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=usWViYcCzWq+4eFNkCmatkBvFbU3RNEL7+YZbow3+zc=;
-        b=MTALUAwzUdnK0Z5b5lVgWJgU6FzCgTzqcFTHahFtZm7OPQApKlWTZNVObBcZdNSRnV
-         2Yse8yInV0FVgkF79OZMymK7DwbHqAXAwVQ7+uj+WXY+Z+pGBsUQYIT7JtusZLfJdEpF
-         a7OlTvBu+zbNncabs+9IIufXtLeXyIR23TjCc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=usWViYcCzWq+4eFNkCmatkBvFbU3RNEL7+YZbow3+zc=;
-        b=itGE3RK7Uh/ZTrGJaLejom12gHPlhLJMo63rdhY/LqGNO5jFa7bsw5WKyC3dxXtclF
-         9iZRNV+tdtCSuOukrS2yMLzppudYAYsI5jnhUVeYzduoSyAcbjYJRuZELaoD+EwCUEXM
-         iSUsKSBFbhTCAsTPvv2rO93UpJxsbMEJPLD0uDNlQbByiX/yH0hebHKq4FN6gKxVjkzq
-         lVnw6yc8mXgtS+nS+sI8OiXuf2YJ+kLAikxrtgc/rYiKBFzFtfKJjB6Adh4sYjfpY68R
-         QDB8dWvfSgkkn1H5Ilckn2CkXXLg5S2zgIoZzl9E9CzeARa5j+bkO1OXgk9z/1sfLNt5
-         rQ0w==
-X-Gm-Message-State: AOAM532ytI9Yu9Rstoy8PmyTw7f0hNMD/Vccy7J4H+eP+h0ORUR5huCD
-	vL6uD5Yl/rrIXSYNBRHigjOy5Q==
-X-Google-Smtp-Source: ABdhPJwDTwOHmvZNvmhYMtZtG/IekoV9obZXM4fOU/Lgx3Ml0lm+gtjzNOd7Y5hKxzPt0un1+dyuUw==
-X-Received: by 2002:a17:902:f24a:b0:141:c6fc:2e18 with SMTP id j10-20020a170902f24a00b00141c6fc2e18mr79310972plc.55.1637338620272;
-        Fri, 19 Nov 2021 08:17:00 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j6sm125497pfu.205.2021.11.19.08.16.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 08:16:59 -0800 (PST)
-Date: Fri, 19 Nov 2021 08:16:59 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, stable@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: Apply a52f8a59aef46b59753e583bf4b28fccb069ce64 to 5.15 through
- 4.19
-Message-ID: <202111190808.1DA0067@keescook>
-References: <YZKpVkYpYfYfHD50@archlinux-ax161>
- <YZeaCndfOGSZLHgX@kroah.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A64C2C82
+	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 17:20:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8635161A62;
+	Fri, 19 Nov 2021 17:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637342439;
+	bh=i0Y6VeAiAsytmvyrSJfjhoI0lF6Nb+gt32xiPfawQOU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ESAp7LAj58Rovc6ej0RoMsfAKteE+JFSiDRvqMst0ULOmILXlW47aKTqEPTtKU6ax
+	 wRkKd5kGnRd885ck1Q4jkYW2RZkCpttCs9tuPubUdU+zyFjue7d+CGp3kEgZU1GTrf
+	 3epuY5yhRtWZvGXF9HIqU4+6ANBn5ULOoTcyY98QFE1lyMdUc412oT6wrk6ZTPTy0g
+	 h3SBgE233ywAhsEcIfvWddrhVyjnr0WWXy77CIGFXo1lW7WpjcPfbJRKi71UfDjavJ
+	 /0Z0nn69yW3OPnurIPndLt5d9tXscN3xohjW6hFwqLIFVyoqKGgOaDWciyn4+rybtO
+	 vTTZXg67b4lWg==
+Date: Fri, 19 Nov 2021 10:20:35 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: kernel test robot <lkp@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [pinctrl-intel:review-andy 18/19]
+ drivers/pinctrl/pinctrl-zynqmp.c:825:13: warning: variable 'pin' is
+ uninitialized when used here
+Message-ID: <YZfc4wmvcQW9Kpcz@archlinux-ax161>
+References: <202111191618.SSj1gGvK-lkp@intel.com>
+ <YZdhYEVCgqh5MB3J@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,34 +36,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YZeaCndfOGSZLHgX@kroah.com>
+In-Reply-To: <YZdhYEVCgqh5MB3J@smile.fi.intel.com>
 
-On Fri, Nov 19, 2021 at 01:35:22PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Nov 15, 2021 at 11:39:18AM -0700, Nathan Chancellor wrote:
-> > Hi Greg and Sasha,
+On Fri, Nov 19, 2021 at 10:33:36AM +0200, Andy Shevchenko wrote:
+> On Fri, Nov 19, 2021 at 04:08:32PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel.git review-andy
+> > head:   c25441ca551164c56b34885df3d657e2ea4d623f
+> > commit: 9122cda6a325f80564f02b7899cc063009f5e1f9 [18/19] pinctrl: zynqmp: Unify pin naming
+> > config: arm64-buildonly-randconfig-r004-20211118 (attached as .config)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel.git/commit/?id=9122cda6a325f80564f02b7899cc063009f5e1f9
+> >         git remote add pinctrl-intel https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel.git
+> >         git fetch --no-tags pinctrl-intel review-andy
+> >         git checkout 9122cda6a325f80564f02b7899cc063009f5e1f9
+> >         # save the attached .config to linux build tree
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
 > > 
-> > There is a build error with newer versions of clang due to a broken
-> > FORTIFY_SOURCE implementation, which has never worked:
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
 > > 
-> > https://github.com/ClangBuiltLinux/linux/issues/1496
-> > https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/1457787760
+> > All warnings (new ones prefixed by >>):
 > > 
-> > Please apply upstream commit a52f8a59aef4 ("fortify: Explicitly disable
-> > Clang support") to 5.15 through 4.19 to resolve this. It should apply
-> > cleanly.
+> > >> drivers/pinctrl/pinctrl-zynqmp.c:825:13: warning: variable 'pin' is uninitialized when used here [-Wuninitialized]
+> >            if (IS_ERR(pin->name))
+> >                       ^~~
+> >    drivers/pinctrl/pinctrl-zynqmp.c:811:37: note: initialize the variable 'pin' to silence this warning
+> >            struct pinctrl_pin_desc *pins, *pin;
+> >                                               ^
+> >                                                = NULL
+> >    1 warning generated.
 > 
-> Hah!  Oh the Android people are going to _LOVE_ this one...
+> Utterly inappropriate suggestion by the compiler (it found an actual error,
+> though).
+> 
+> Can be Clang fixed, really?
 
-They (we) are already aware[1]. Fortify has always been broken under
-Clang, so really this doesn't change anything for Android builds. :P
+I reported this upstream: https://bugs.llvm.org/show_bug.cgi?id=52559
 
-But yes, one of many motivations of the recent memcpy and fortify work
-has been to get fortify fixed for Clang. Hopefully this will be all done
-by 5.17.
-
--Kees
-
-[1] https://github.com/KSPP/linux/issues/77
-
--- 
-Kees Cook
+Cheers,
+Nathan
