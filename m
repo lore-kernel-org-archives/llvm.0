@@ -1,112 +1,83 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4564672
-	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 14:12:14 +0000 (UTC)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJEBvYZ011289;
-	Fri, 19 Nov 2021 14:12:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pS0Yy1hic0zPF9YAURlsBeb1gS/RdKDvsx64M/QmQHM=;
- b=ZkjcLjpeQo9LIvc4mlIcGTmnFSPcMaTuLNRJR49ZOt9Iymxf+efROzIo+ZgkS+m8Qho5
- XX1opsWRfphNaRC1IAg2+SSGkNhQUV0UCk2npI+r77etPuqmB7z92zGIRJIwQ/zosrZn
- HIefOJuKxOkZtSwdPuio6I1uHEMUQipq16cw4OAEYTtLCVNjrAYZ3N5qRU6smmmIDU7c
- Jb/rBp+G5LNODHn3kykv9XTPTaOLb3qX6l8fux7pTd/MQBr3EfTLmvQ/UBY3fYPu96BB
- OzieMKl0H/OROgU1j5wWJ1zgjd/WztMZvQwj322Kn63ycN9rUCc8mgiOL/VhNC5LJI1T gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3cec681u4n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Nov 2021 14:12:12 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AJECC7a012365;
-	Fri, 19 Nov 2021 14:12:12 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3cec681u3v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Nov 2021 14:12:12 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-	by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AJE85I1005731;
-	Fri, 19 Nov 2021 14:12:09 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by ppma04ams.nl.ibm.com with ESMTP id 3ca50c1dad-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Nov 2021 14:12:09 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AJEC4C233030618
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 19 Nov 2021 14:12:04 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A4B68AE05F;
-	Fri, 19 Nov 2021 14:12:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1E3F5AE055;
-	Fri, 19 Nov 2021 14:12:04 +0000 (GMT)
-Received: from [9.171.67.41] (unknown [9.171.67.41])
-	by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Fri, 19 Nov 2021 14:12:04 +0000 (GMT)
-Message-ID: <fe1662f9-7cab-5f9f-882b-2b8ffa80992c@de.ibm.com>
-Date: Fri, 19 Nov 2021 15:12:03 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B0172
+	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 14:28:42 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1CD95619E3;
+	Fri, 19 Nov 2021 14:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1637332121;
+	bh=1zPtGrRf73UpcTrvCjdzZojjth0LO3Mk7zMhuvz4ttY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=va1+bO8BMaFAuBvkg7XFi6V0mSzsbdis7w0FY3zFzR2mkwA/XXNK8qRNhMeJc9BGS
+	 tdxh0ekdAw5HAKxIjRfWLtl+EO7xps70ONfsbDUOHPsA5MZmjTB2rbkXqlnAItW1e+
+	 VLfNoLzLzflGSOIMdrY+kVNjzfqba/Le5sH7Hbz4=
+Date: Fri, 19 Nov 2021 15:28:39 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>,
+	stable@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.10] scripts/lld-version.sh: Rewrite based on upstream
+ ld-version.sh
+Message-ID: <YZe0lxrHLICffsUC@kroah.com>
+References: <20211115164322.560965-1-nathan@kernel.org>
+ <CAKwvOdnXGSkh4VM9Frn_OHMvdMpaXAH9dVsap34mKv7PcurrZQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] s390/test_unwind: use raw opcode instead of invalid
- instruction
-Content-Language: en-US
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-        Ilie Halip <ilie.halip@gmail.com>, linux-kernel@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev
- <agordeev@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Mete Durlu <meted@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-        Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
-References: <20211117174822.3632412-1-ilie.halip@gmail.com>
- <CAKwvOd=9tsHHhPBOx2ORZoJP09VsX5dRZn58qj3MzCc2vmVosg@mail.gmail.com>
- <d9ec2704-f41c-eafa-1945-ce845d65be8a@de.ibm.com> <YZeCcSjh4yCzzDcH@osiris>
- <658a63b5-2d18-2837-9639-75a14c959f73@de.ibm.com> <YZeF4JjWIcTMtaaT@osiris>
-From: Christian Borntraeger <borntraeger@de.ibm.com>
-In-Reply-To: <YZeF4JjWIcTMtaaT@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6QS122JTGoagEZjrRNzdAxGxWI0CPm6H
-X-Proofpoint-ORIG-GUID: 0IUlFXRtSpr2nUdYvpzmWMahErC0m3O1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_09,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1015 spamscore=0 suspectscore=0 adultscore=0 priorityscore=1501
- mlxscore=0 phishscore=0 mlxlogscore=928 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111190078
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdnXGSkh4VM9Frn_OHMvdMpaXAH9dVsap34mKv7PcurrZQ@mail.gmail.com>
 
-
-
-Am 19.11.21 um 12:09 schrieb Heiko Carstens:
-> On Fri, Nov 19, 2021 at 11:57:05AM +0100, Christian Borntraeger wrote:
->>>>>> -                       "       mvcl    %%r1,%%r1\n"
->>>>>> +                       "       .insn e,0x0e11\n"       /* mvcl %%r1,%%r1" */
->>>
->>> Sorry, I disagree with this. As you said above rr would be the correct
->>> format for this instruction. If we go for the e format then we should
->>> also use an instruction with e format.
->>> Which in this case would simply be an illegal opcode, which would be
->>> sufficient for what this code is good for: ".insn e,0x0000".
->>
->> Why not simply use .short then?
+On Mon, Nov 15, 2021 at 09:50:01AM -0800, Nick Desaulniers wrote:
+> On Mon, Nov 15, 2021 at 8:46 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > This patch is for linux-5.10.y only.
+> >
+> > When scripts/lld-version.sh was initially written, it did not account
+> > for the LLD_VENDOR cmake flag, which changes the output of ld.lld's
+> > --version flag slightly.
+> >
+> > Without LLD_VENDOR:
+> >
+> > $ ld.lld --version
+> > LLD 14.0.0 (compatible with GNU linkers)
+> >
+> > With LLD_VENDOR:
+> >
+> > $ ld.lld --version
+> > Debian LLD 14.0.0 (compatible with GNU linkers)
+> >
+> > As a result, CONFIG_LLD_VERSION is messed up and configuration values
+> > that are dependent on it cannot be selected:
+> >
+> > scripts/lld-version.sh: 20: printf: LLD: expected numeric value
+> > scripts/lld-version.sh: 20: printf: LLD: expected numeric value
+> > scripts/lld-version.sh: 20: printf: LLD: expected numeric value
+> > init/Kconfig:52:warning: 'LLD_VERSION': number is invalid
+> > .config:11:warning: symbol value '00000' invalid for LLD_VERSION
+> > .config:8800:warning: override: CPU_BIG_ENDIAN changes choice state
+> >
+> > This was fixed upstream by commit 1f09af062556 ("kbuild: Fix
+> > ld-version.sh script if LLD was built with LLD_VENDOR") in 5.12 but that
+> > was done to ld-version.sh after it was massively rewritten in
+> > commit 02aff8592204 ("kbuild: check the minimum linker version in
+> > Kconfig").
+> >
+> > To avoid bringing in that change plus its prerequisites and fixes, just
+> > modify lld-version.sh to make it similar to the upstream ld-version.sh,
+> > which handles ld.lld with or without LLD_VENDOR and ld.bfd without any
+> > errors.
+> >
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> .short bypasses all sanity checks while .insn does not, so I think
-> that should be preferred. But I don't care too much.
+> Thanks for the fix.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Heiko,
-I am fine with ".insn e,0x0000" and the a changed comment that changes "specification exception" to "operation exception".
-Do you want Ilie to resend or simply fixup?
+Now queued up, thanks.
+
+greg k-h
