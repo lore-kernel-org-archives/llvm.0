@@ -1,52 +1,51 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC32472
-	for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 23:35:32 +0000 (UTC)
-Received: by mail-oi1-f181.google.com with SMTP id bf8so24717293oib.6
-        for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 15:35:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A7672
+	for <llvm@lists.linux.dev>; Sat, 20 Nov 2021 00:07:26 +0000 (UTC)
+Received: by mail-oi1-f173.google.com with SMTP id n66so24781350oia.9
+        for <llvm@lists.linux.dev>; Fri, 19 Nov 2021 16:07:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XRzO0YvFGAtk5YREG47xrVTYPSFw40hn1uKe/8jJr+k=;
-        b=ApZC2sLye9kxqGuPPP3rFlzbGoT4LoJhYKWVJAXC0aFTIRQNWKmpCp/ld3fNP9zQU1
-         c/fucWMqyWFKXfXOXrnHk8ML/iSWCIOoDn2OJn9EAHQPdftRyf1EiuM2OKsV7Mzdatm/
-         rEWWnx1qUxOgVjteffpcWfHsILng4QueB1tFk=
+        bh=RvyWEdLax12+25Tnfs7BcEBxdL4WVjlZUdT7aE0GddA=;
+        b=LBu+jgvmJe89ZGCaOz+Q+2if7rlFVtigKC9FTLl4QZKpQqcyhlMJFWf/8ugKsgE5xa
+         81FpIba0C6Nm6mfJ9bcaS2PD9J/8KpWWkoK4svY0xnqGnwdxF/3x2KsDOPiyVO3dNlS8
+         V6myj9JMwUkgJzJeP5GQkEwhcoFDG2uzAwV/A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=XRzO0YvFGAtk5YREG47xrVTYPSFw40hn1uKe/8jJr+k=;
-        b=UCgQYp+PWf+T0Uy+IArNZL6jwxA604sLYsuQgNPAwujKvGXA/iEK37AKbarzFeoZpO
-         YtGFmYNjU3KCJlClvkjPwmry2HwtKc1SJI16THBAaq6gait+yn42QIFkiNqu03n9YD8E
-         MTI1exbsQe3rb9OrwjUqOHFTV4GovxY6CsIOsdW2OAjNDmadhX6em715VXuRgVG8Synm
-         yPIhY86So1irZTvWe5TAbWbnchKtSFhOFB9Y99HoXP8baIN2RdG8qPbbR2LsRrfPngno
-         nFIpxGPYuA0XUaZZ2+bl0Qx1d8J7HBctamn/Bvjh5aC+YBaev0r+3Stv3B4WJKRSAA1K
-         6bzg==
-X-Gm-Message-State: AOAM530eNXIhPGO7WmmEgWrQ693M9SsHJiVvEgBeyMVnUuyxyjLizLng
-	Vh6ROZNM/lPxPa4IBLd/+kUe9g==
-X-Google-Smtp-Source: ABdhPJw67Npt7XkzT6Hjk/qatZCYLdRp17IOT0NWtd9/vmynrsOX2X4guiM/e1r1V1/iqrkJ5LsODw==
-X-Received: by 2002:aca:d05:: with SMTP id 5mr3476846oin.142.1637364931960;
-        Fri, 19 Nov 2021 15:35:31 -0800 (PST)
+        bh=RvyWEdLax12+25Tnfs7BcEBxdL4WVjlZUdT7aE0GddA=;
+        b=QZ5DjiKMrZ572ehnNlyJmPuU8uci6Ii/P2SkeXlUpSkQIEh0EG21iElO9qUu6n0XnW
+         lhjOiqpCx5F1wiyJpZIhYJr98btKQuqcGZMsYOeM6T75r5ButSwCZ2m2lzn44bYseqAZ
+         X02EEhyKIPZxzrFpQh1+hUWAgNZWPwdcWuDQQnolDT/UOqfXvLOv9XWMq/8Fdc0fLeQy
+         j+F+2JVCTqsqk03Rd0YdBdiJ62ycaIXtT2hiu0rSsL50gUkFySuzlPVdFPNWTO0ZNCJv
+         +PhYm2qTP+joEfATfHBBhV+9CkqQWB2DY1Ev03k7K4rVLoAOQTamdnApB7ikFvulswLk
+         PMWQ==
+X-Gm-Message-State: AOAM5316VUfHKnN4pR0QXCkyKW6e/JWZFaJ26h6dE+jdDxBu62m/nsKZ
+	r50EZehWpXPsjaqlKaX/BZm8OA==
+X-Google-Smtp-Source: ABdhPJztKGeV04+obdTEcOPE5iO5kUrpDipowiee/rOrvNzRzKar6xWuiwFlO6Ui4vqOtBg1e2YhSA==
+X-Received: by 2002:a05:6808:259:: with SMTP id m25mr3870444oie.40.1637366845298;
+        Fri, 19 Nov 2021 16:07:25 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c9sm271619oog.43.2021.11.19.15.35.28
+        by smtp.gmail.com with ESMTPSA id o6sm251911oou.41.2021.11.19.16.07.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 15:35:29 -0800 (PST)
-Subject: Re: [PATCH v3 1/2] selftests: kselftest.h: mark functions with
- 'noreturn'
-To: Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org
-Cc: fenghua.yu@intel.com, reinette.chatre@intel.com, john.stultz@linaro.org,
- tglx@linutronix.de, akpm@linux-foundation.org, nathan@kernel.org,
- ndesaulniers@google.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- christian@brauner.io, Shuah Khan <skhan@linuxfoundation.org>
-References: <CADYN=9+_UU9qZX56uahGXxz00iayqJLRAaQrRXh1CMXTvwSbAg@mail.gmail.com>
- <20211118095852.616256-1-anders.roxell@linaro.org>
+        Fri, 19 Nov 2021 16:07:24 -0800 (PST)
+Subject: Re: [PATCH] selftests: timers: use 'llabs()' over 'abs()'
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Anders Roxell <anders.roxell@linaro.org>
+Cc: shuah@kernel.org, tglx@linutronix.de, john.stultz@linaro.org,
+ nathan@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20211105163403.3330950-1-anders.roxell@linaro.org>
+ <CAKwvOdn0vEyj-EPJG0e39v-Vq+oLFptV0oXYfzfzuy=HPzSzOA@mail.gmail.com>
 From: Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <02a096ba-ed6e-4728-c6c1-1b6597ec062f@linuxfoundation.org>
-Date: Fri, 19 Nov 2021 16:35:28 -0700
+Message-ID: <59bd0880-475e-eb3b-6d2a-25589d5e3a8b@linuxfoundation.org>
+Date: Fri, 19 Nov 2021 17:07:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 Precedence: bulk
@@ -55,47 +54,46 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20211118095852.616256-1-anders.roxell@linaro.org>
+In-Reply-To: <CAKwvOdn0vEyj-EPJG0e39v-Vq+oLFptV0oXYfzfzuy=HPzSzOA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-On 11/18/21 2:58 AM, Anders Roxell wrote:
-> When building kselftests/capabilities the following warning shows up:
+On 11/5/21 2:44 PM, Nick Desaulniers wrote:
+> On Fri, Nov 5, 2021 at 9:34 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+>>
+>> When building selftests/timers with clang, the compiler warn about the
+>> function abs() see below:
+>>
+>> posix_timers.c:69:6: warning: absolute value function 'abs' given an argument of type 'long long' but has parameter of type 'int' which may cause truncation of value [-Wabsolute-value]
+>>          if (abs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
+>>              ^
+>> posix_timers.c:69:6: note: use function 'llabs' instead
+>>          if (abs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
+>>              ^~~
+>>              llabs
+>>
+>> The note indicates what to do, Rework to use the function 'llabs()'.
+>>
+>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > 
-> clang -O2 -g -std=gnu99 -Wall    test_execve.c -lcap-ng -lrt -ldl -o test_execve
-> test_execve.c:121:13: warning: variable 'have_outer_privilege' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->          } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> test_execve.c:136:9: note: uninitialized use occurs here
->          return have_outer_privilege;
->                 ^~~~~~~~~~~~~~~~~~~~
-> test_execve.c:121:9: note: remove the 'if' if its condition is always true
->          } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> test_execve.c:94:27: note: initialize the variable 'have_outer_privilege' to silence this warning
->          bool have_outer_privilege;
->                                   ^
->                                    = false
-> 
-> Rework so all the ksft_exit_*() functions have attribue
-> '__attribute__((noreturn))' so the compiler knows that there wont be
-
-won't be
-
-> any return from the function. That said, without
-> '__attribute__((noreturn))' the compiler warns about the above issue
-> since it thinks that it will get back from the ksft_exit_skip()
-> function, which it wont.
-> Cleaning up the callers that rely on ksft_exit_*() return code, since
-> the functions ksft_exit_*() have never returned anything.
-> 
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Thanks for the patch!
 > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
+> 
+> I wonder why tools/testing/selftests/timers/adjtick.c redefines llabs
+> when it already includes stdlib.h, and how that doesn't result in some
+> kind of compiler diagnostic.
+> 
 
-My commit script failed due to checkpatch warns. Run checkpatchp.l --strict
-to find the problems and send me v4
+Hmm. The define in /usr/include/stdlib.h is under #ifdef __USE_ISOC99
+Maybe be that explains the reason for the definitions in the other two
+timers file?
+
+Anders, I would like to understand this before I take this patch. I see
+you sent several patches to other tests as well. Would be useful at
+least understand why these defines exist.
 
 thanks,
 -- Shuah
+
+
