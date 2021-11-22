@@ -1,37 +1,38 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E091D2C83
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FEE860F6E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4992C87
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11C3E60F70;
 	Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1637573176;
-	bh=IFDTMmTh8HFMsvlLSyw8+5NpCNZ/IGPyxSr0OJMAc9A=;
+	bh=2TBPg9ri3q38X3YzSB4nmTwNdwJiq6mEQ0j1aWUitBY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IEBaaXQjSewfSfM8OxNh+rGrwuxaT6sGPUhT1L3laKny5POk+eehD/o6ZtgZ5x3BV
-	 j3E13u+Bj2rd4YdRPs5Mu/3KGzjq/b0J7vXUI6U0ti50sLcpJC2YFpr/doo0xigfk8
-	 lLUd8NSszW1T5YckppNIhuP4yq0i9mGWqV1MHY7aDkqYsTfRUEF565jT7GXFI+/+Ai
-	 wmSj7YHAouePOGcETcIwQIaVtbl+hGxwP6SQCgrpHsHTbooFcC7wqfZKTvFr7kicfb
-	 O/Kig92CXOxFFYv6xlthwBBHw2DcHJ2ZN3cNWozG8PZw1MYtQ5zSqXAQqo5MrRnqqz
-	 9R9VcSjtVUEpw==
+	b=B84vH1e1fzwmGhPur9mgGPea5csWUT52nXqaSWhd+uN/Z80YyNOFURB0k6flekuo+
+	 Z3Oq54nfUziyrdnZ3Tgf8sjf1+JD27YuIl2WTDZHKOi8y9QSJyOk0kJMWRbi1Xyaxa
+	 NjrcbpCOkQgO/PZqr/r0lMh2RteK4/J1QFaoZgMeaOyZCSRNnh/zdPs7GbV5DxjjHI
+	 pC8fuubG+oMECxzjUhtEoH7nBNjicpWiIZMiqSMAqhydCbbsSJgTjmXy/DbNiS31A+
+	 Hf9CgoZTaJP/Rh0L8tBnboMKara2JlmrHGLEwfKrHuB3gVuOe042xRrj6aB8T7CqYZ
+	 szvojkfHSinvQ==
 Received: by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mp5aX-003hiM-47; Mon, 22 Nov 2021 09:26:13 +0000
+	id 1mp5aX-003hib-6d; Mon, 22 Nov 2021 09:26:13 +0000
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 04/10] media: stb6100: mark a currently unused function as such
-Date: Mon, 22 Nov 2021 09:26:06 +0000
-Message-Id: <7c6019a794f8d009ce931197943fe4871cd6d6c3.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 09/10] media: omap3isp: mark isp_isr_dbg as __maybe_unused
+Date: Mon, 22 Nov 2021 09:26:11 +0000
+Message-Id: <4293d53b747388a65ea06382e2041ae6322ecd89.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -44,12 +45,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-The stb6100_normalise_regs() function is not used with current
-boards, but the driver says that some devices could need it.
-Ok, we could simply drop it, but as there's a macro to mark
-unused functions, use it.
-
-This should shut up a clang warning.
+This function is only used for debugging purposes. When DEBUG
+is disabled, it becomes unused, causing a clang warning with W=1.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -57,22 +54,23 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/stb6100.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/omap3isp/isp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/stb6100.c b/drivers/media/dvb-frontends/stb6100.c
-index d541d6613610..ea1d260e4d70 100644
---- a/drivers/media/dvb-frontends/stb6100.c
-+++ b/drivers/media/dvb-frontends/stb6100.c
-@@ -110,7 +110,7 @@ static const struct stb6100_regmask stb6100_template[] = {
- /*
-  * Currently unused. Some boards might need it in the future
-  */
--static inline void stb6100_normalise_regs(u8 regs[])
-+static __maybe_unused inline void stb6100_normalise_regs(u8 regs[])
- {
- 	int i;
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index 6de377ce281d..4c937f3f323e 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -476,7 +476,8 @@ void omap3isp_hist_dma_done(struct isp_device *isp)
+ 	}
+ }
  
+-static inline void isp_isr_dbg(struct isp_device *isp, u32 irqstatus)
++static inline void __maybe_unused isp_isr_dbg(struct isp_device *isp,
++					      u32 irqstatus)
+ {
+ 	static const char *name[] = {
+ 		"CSIA_IRQ",
 -- 
 2.33.1
 
