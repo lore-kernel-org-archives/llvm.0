@@ -1,41 +1,41 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E39C2C81
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 19:23:51 +0000 (UTC)
-Received: by mail-wm1-f45.google.com with SMTP id b184-20020a1c1bc1000000b0033140bf8dd5so680952wmb.5
-        for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 11:23:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E792C86
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 19:23:52 +0000 (UTC)
+Received: by mail-wm1-f47.google.com with SMTP id ay10-20020a05600c1e0a00b0033aa12cdd33so481173wmb.1
+        for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 11:23:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0vbsyyCPgwGcNnodUMG2F0UwivpAF3DhXaUta4p1GbE=;
-        b=gqsg4lwy4awKuATbyfW9UconAkvdcpubQ0Fg6ZJmn1jWl1+DAI158OphbI9/m3JF0T
-         lcaSMgr+c3E2AytYUiEnOLK0yv93QO2SiTJ9P5kK9fegBhN3bg732CU2eXs1xmF/tHPN
-         FzKi5NOVMEpyIo6ysMJ+KjaYqO+rGMxrUIBcd7lKTKx1U87FH9DFBbWkbrClKmfvQEIC
-         V+94I9tGizHddINl2+HparAL9qFvPJWt42xx2pBJrvdZYLv15kToIWv9qObJhuzVpvn+
-         Y/KRj/iDwxNqBP3jLj7U1L1irc4Zw0blvFqZ2/NhMrARULQAidKfnkP1fegzim7pB2eP
-         DL4g==
+        bh=20odS1sGlZOVOTVJ+h0ATXc3IjCp4ghIzYe7OtypAl4=;
+        b=Tn1lU0bD88IO+9yCRA6my8Iwn8DdSi2yjmwKm6kCVat9P4MZbf8fk8q1VWneE0TQMr
+         xnQSOZ+OGzgQUnaQRhJrBVw8vuNdWTbTKFLwx/nlO5xCaGq/zFUzcaPK9h51bWJxQ3ik
+         Per+P/IB5wRUmmxGrykwQfiRNOBPXSvqCf2mp0Pg+peiE5PtpEZCvU3IzL9SXBgoDSJT
+         9MjphdkIt/a4BQLYOUr3f4akQA/F2Zlwj5jXh+48xjNpBUj3LphtLWGQY7+K7piMHFmt
+         nk95BeGVt1G9J6C34OPzChTKQfutYPiyse4sOcDVW+7TmgMR8d6h5nhk55JdaisCqkwi
+         pgzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0vbsyyCPgwGcNnodUMG2F0UwivpAF3DhXaUta4p1GbE=;
-        b=5C76uV9UDzI3xbFQcsG/hAFv2zFE8C0hQATjeWuF4ryBNZmEbImNXvtWoUW8NIW4CI
-         UqfCxrZm/PKTalBU3l/xySqA15tBmo9F+Lr8DNC7S/fubx8OVoybGxGm5XWQ+qXrokQ9
-         ZGAS3fqu4vekCxB0Yee414FhH+Yq1gdjifp30bGihxY73aqy4B26Fk+td6KtU14h98hg
-         qipPWkG/3pI36D8vnEZFkKJRz6qP4qRDg50QCb+U9UIEYs+Dwl7NW0FMJAfff2VtGkzf
-         gfycxRvTNipKxrl2HTVoOSB5Vg/QGJZ+LEf8OI+nQ1A8JWiF/SYHeOjT7QKFysEb+qEp
-         Z86Q==
-X-Gm-Message-State: AOAM530lBeKbB3R9Ya0cajAuTVaGbtX+OaNxXTn+29zSde0O9VTtNZ/x
-	ACp3kq3ctdL9FbvzbhSpb/UNiw==
-X-Google-Smtp-Source: ABdhPJxhuBJuggVtgn8I/kW6Rm67LaXSe55bWuoQlgX9aTnz7EjNQo6U6VHbXsjwca6yIZWln3j7rg==
-X-Received: by 2002:a05:600c:224a:: with SMTP id a10mr32238695wmm.154.1637609029830;
-        Mon, 22 Nov 2021 11:23:49 -0800 (PST)
+        bh=20odS1sGlZOVOTVJ+h0ATXc3IjCp4ghIzYe7OtypAl4=;
+        b=6fKkSKIeHApqilC+c9a8ZS1IuGE2AHSFb6PZ/LTRJhegwmp2Lknu02RlPe569CNd61
+         KYIyKt2ucJxKBQlrya9cxoK0tRI7th4lv7pDUU9JtTYfZxzERFCk4EVyBjIXB+Wr83XU
+         KleQ11WTf4ZjACj/pC/gCR9vUCJ5x5FygfZKJKwaJ3OdhUmNNsv3D4YPwGssvYRQP5zd
+         F+QqqqO4SPzU1X/HCyJUkjw8hkVf54Vya3cVT52fK1HLSx2zN9+81qJ3RQngc7Gh5PMB
+         IzCUM+cqSH7p1h+gpLu+63EQ+/ZD9NGR9Zx1c2w+/Lcto6nX7j2CHlSmPStQL1I4FZj0
+         TrRw==
+X-Gm-Message-State: AOAM532lcFzY0Llyupi6yxwzsZWSXgRYKwmVTz9zwyh0CQTnV4EXDXSV
+	p3raif3vUH3Omg4bqMuqfvOYmQ==
+X-Google-Smtp-Source: ABdhPJwO+fR7TuysSgJw95qlWY88C/MS5DSdhnBIyjOi33oxzKHfxJ2yjFeNCmhCvb1o8azdpWmQhw==
+X-Received: by 2002:a05:600c:1e1c:: with SMTP id ay28mr33464993wmb.131.1637609030871;
+        Mon, 22 Nov 2021 11:23:50 -0800 (PST)
 Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
         by smtp.gmail.com with ESMTPSA id b188sm9916150wmd.45.2021.11.22.11.23.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Nov 2021 11:23:49 -0800 (PST)
+        Mon, 22 Nov 2021 11:23:50 -0800 (PST)
 From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -52,9 +52,9 @@ Cc: kafai@fb.com,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 4/6] bpftool: Enable cross-building with clang
-Date: Mon, 22 Nov 2021 19:20:18 +0000
-Message-Id: <20211122192019.1277299-5-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next 5/6] tools/runqslower: Enable cross-building with clang
+Date: Mon, 22 Nov 2021 19:20:19 +0000
+Message-Id: <20211122192019.1277299-6-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211122192019.1277299-1-jean-philippe@linaro.org>
 References: <20211122192019.1277299-1-jean-philippe@linaro.org>
@@ -68,65 +68,34 @@ Content-Transfer-Encoding: 8bit
 
 Cross-building using clang requires passing the "-target" flag rather
 than using the CROSS_COMPILE prefix. Makefile.include transforms
-CROSS_COMPILE into CLANG_CROSS_FLAGS, and adds that to CFLAGS. Filter
-out the cross flags for the bootstrap bpftool, and erase the
-CROSS_COMPILE flag for the bootstrap libbpf.
+CROSS_COMPILE into CLANG_CROSS_FLAGS. Add them to CFLAGS, and erase
+CROSS_COMPILE for the bpftool build, since it needs to be executed on
+the host.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/bpf/bpftool/Makefile | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ tools/bpf/runqslower/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 42eb8eee3d89..b0f3e17d981a 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -57,7 +57,7 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
- $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
- 		DESTDIR=$(LIBBPF_BOOTSTRAP_DESTDIR) prefix= \
--		ARCH= CC=$(HOSTCC) LD=$(HOSTLD) $@ install_headers
-+		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) $@ install_headers
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 8791d0e2762b..da6de16a3dfb 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -12,7 +12,7 @@ BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
+ BPF_DESTDIR := $(BPFOBJ_OUTPUT)
+ BPF_INCLUDE := $(BPF_DESTDIR)/include
+ INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
+-CFLAGS := -g -Wall
++CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
  
- $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
- 	$(call QUIET_INSTALL, $@)
-@@ -152,6 +152,9 @@ CFLAGS += -DHAVE_LIBBFD_SUPPORT
- SRCS += $(BFD_SRCS)
- endif
+ # Try to detect best kernel BTF source
+ KERNEL_REL := $(shell uname -r)
+@@ -88,4 +88,4 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(BPFOBJ_OU
  
-+HOST_CFLAGS = $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
-+		$(filter-out $(CLANG_CROSS_FLAGS),$(CFLAGS)))
-+
- BPFTOOL_BOOTSTRAP := $(BOOTSTRAP_OUTPUT)bpftool
- 
- BOOTSTRAP_OBJS = $(addprefix $(BOOTSTRAP_OUTPUT),main.o common.o json_writer.o gen.o btf.o xlated_dumper.o btf_dumper.o disasm.o)
-@@ -202,7 +205,7 @@ endif
- CFLAGS += $(if $(BUILD_BPF_SKELS),,-DBPFTOOL_WITHOUT_SKELETONS)
- 
- $(BOOTSTRAP_OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
--	$(QUIET_CC)$(HOSTCC) $(CFLAGS) -c -MMD $< -o $@
-+	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
- 
- $(OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
- 	$(QUIET_CC)$(CC) $(CFLAGS) -c -MMD $< -o $@
-@@ -213,15 +216,13 @@ ifneq ($(feature-zlib), 1)
- endif
- 
- $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
--	$(QUIET_LINK)$(HOSTCC) $(CFLAGS) $(LDFLAGS) $(BOOTSTRAP_OBJS) $(LIBS_BOOTSTRAP) -o $@
-+	$(QUIET_LINK)$(HOSTCC) $(HOST_CFLAGS) $(LDFLAGS) $(BOOTSTRAP_OBJS) $(LIBS_BOOTSTRAP) -o $@
- 
- $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
- 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
- 
- $(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
--	$(QUIET_CC)$(HOSTCC) \
--		$(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),$(CFLAGS)) \
--		-c -MMD $< -o $@
-+	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
- 
- $(OUTPUT)%.o: %.c
- 	$(QUIET_CC)$(CC) $(CFLAGS) -c -MMD $< -o $@
+ $(DEFAULT_BPFTOOL): $(BPFOBJ) | $(BPFTOOL_OUTPUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT)   \
+-		    CC=$(HOSTCC) LD=$(HOSTLD)
++		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)
 -- 
 2.33.1
 
