@@ -1,41 +1,41 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E792C86
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 19:23:52 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id ay10-20020a05600c1e0a00b0033aa12cdd33so481173wmb.1
-        for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 11:23:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E882C81
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 19:23:53 +0000 (UTC)
+Received: by mail-wm1-f48.google.com with SMTP id p18so16482931wmq.5
+        for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 11:23:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=20odS1sGlZOVOTVJ+h0ATXc3IjCp4ghIzYe7OtypAl4=;
-        b=Tn1lU0bD88IO+9yCRA6my8Iwn8DdSi2yjmwKm6kCVat9P4MZbf8fk8q1VWneE0TQMr
-         xnQSOZ+OGzgQUnaQRhJrBVw8vuNdWTbTKFLwx/nlO5xCaGq/zFUzcaPK9h51bWJxQ3ik
-         Per+P/IB5wRUmmxGrykwQfiRNOBPXSvqCf2mp0Pg+peiE5PtpEZCvU3IzL9SXBgoDSJT
-         9MjphdkIt/a4BQLYOUr3f4akQA/F2Zlwj5jXh+48xjNpBUj3LphtLWGQY7+K7piMHFmt
-         nk95BeGVt1G9J6C34OPzChTKQfutYPiyse4sOcDVW+7TmgMR8d6h5nhk55JdaisCqkwi
-         pgzQ==
+        bh=MueQ2379h1Uuijf7NqAb6HWoHYhn8omMshbqb9U40ok=;
+        b=vKmce3kDMZmUHh9EtAaylm0uTDuOHxU5YdLDjx/josn1ViJ21s1pxYrA/dggbwyKro
+         NP8IfrbaB62GmB+r6YEe21cIMdos9quzJtls8cHjPai79kA2n0cyer1/sjjAfFRRh18O
+         +ybc+sXph9F8kLdrR8JegSUYcjnz81dUALTw52G6rpjEzGk/sfhqy5jvnZZpICrS1OFA
+         IjFr7msRc1Z88s4Ks6ELKpOB+GwZaXSw+7PU2l6O3KxUXGjJz48633YvyzJ1TagyUwde
+         fLgwzDjziuhcFEeDf6N761QOw214lO+zBQ4OQhfEh/df0BW//34eDJGIwWaR8KVsgTVa
+         0k7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=20odS1sGlZOVOTVJ+h0ATXc3IjCp4ghIzYe7OtypAl4=;
-        b=6fKkSKIeHApqilC+c9a8ZS1IuGE2AHSFb6PZ/LTRJhegwmp2Lknu02RlPe569CNd61
-         KYIyKt2ucJxKBQlrya9cxoK0tRI7th4lv7pDUU9JtTYfZxzERFCk4EVyBjIXB+Wr83XU
-         KleQ11WTf4ZjACj/pC/gCR9vUCJ5x5FygfZKJKwaJ3OdhUmNNsv3D4YPwGssvYRQP5zd
-         F+QqqqO4SPzU1X/HCyJUkjw8hkVf54Vya3cVT52fK1HLSx2zN9+81qJ3RQngc7Gh5PMB
-         IzCUM+cqSH7p1h+gpLu+63EQ+/ZD9NGR9Zx1c2w+/Lcto6nX7j2CHlSmPStQL1I4FZj0
-         TrRw==
-X-Gm-Message-State: AOAM532lcFzY0Llyupi6yxwzsZWSXgRYKwmVTz9zwyh0CQTnV4EXDXSV
-	p3raif3vUH3Omg4bqMuqfvOYmQ==
-X-Google-Smtp-Source: ABdhPJwO+fR7TuysSgJw95qlWY88C/MS5DSdhnBIyjOi33oxzKHfxJ2yjFeNCmhCvb1o8azdpWmQhw==
-X-Received: by 2002:a05:600c:1e1c:: with SMTP id ay28mr33464993wmb.131.1637609030871;
-        Mon, 22 Nov 2021 11:23:50 -0800 (PST)
+        bh=MueQ2379h1Uuijf7NqAb6HWoHYhn8omMshbqb9U40ok=;
+        b=BZHW//iu//X08Eso8DyyAlRsIDrv8oau3YhIx3ZZkCnKiPyEsrM4hdQfZPoVteZlHK
+         B9YICd7rMKb3MHWkxol1eLdhqNzhTa05d20Y+w3O+r1hTnueJzY+7dXrFstCY1fd77pb
+         iWyNCsxQBnVyLL15OhZGkf3WFB9Hb3jVzYWvmTX8ODPCyCEwYqKMYu88/ahTC9Acy8jH
+         K6BlA41ZRRKACpc6j1NACjY8eV3J3ZgkmenbYgaukEXKrP/1jkhCnx9F5Z2z2Gh4vfpg
+         HKpr3kQGozkpFEUYLm2b36skHzura1rRDijlerASCIsdP+mjKRrK+3lpJoHlgSAWHjI/
+         mCAg==
+X-Gm-Message-State: AOAM533LTeuv4ly75VDePSAdBD8hr2viGPH4Y+v0mef3SWnL9xVu8E/r
+	ggouKE3A5Nn66/6GQmFA6WxaPg==
+X-Google-Smtp-Source: ABdhPJzXyUHo0yJWSCehK43dYuv912k1yCNST/t8EupwNz6wdrdT1eg1p3ZuLuOleoZjMgl73ipD3Q==
+X-Received: by 2002:a7b:cd93:: with SMTP id y19mr31898456wmj.190.1637609031784;
+        Mon, 22 Nov 2021 11:23:51 -0800 (PST)
 Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id b188sm9916150wmd.45.2021.11.22.11.23.49
+        by smtp.gmail.com with ESMTPSA id b188sm9916150wmd.45.2021.11.22.11.23.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Nov 2021 11:23:50 -0800 (PST)
+        Mon, 22 Nov 2021 11:23:51 -0800 (PST)
 From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -52,9 +52,9 @@ Cc: kafai@fb.com,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 5/6] tools/runqslower: Enable cross-building with clang
-Date: Mon, 22 Nov 2021 19:20:19 +0000
-Message-Id: <20211122192019.1277299-6-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: Enable cross-building with clang
+Date: Mon, 22 Nov 2021 19:20:20 +0000
+Message-Id: <20211122192019.1277299-7-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211122192019.1277299-1-jean-philippe@linaro.org>
 References: <20211122192019.1277299-1-jean-philippe@linaro.org>
@@ -66,36 +66,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cross-building using clang requires passing the "-target" flag rather
+Cross building using clang requires passing the "-target" flag rather
 than using the CROSS_COMPILE prefix. Makefile.include transforms
-CROSS_COMPILE into CLANG_CROSS_FLAGS. Add them to CFLAGS, and erase
-CROSS_COMPILE for the bpftool build, since it needs to be executed on
-the host.
+CROSS_COMPILE into CLANG_CROSS_FLAGS. Clear CROSS_COMPILE for bpftool
+and the host libbpf, and use the clang flags for urandom_read and bench.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/bpf/runqslower/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index 8791d0e2762b..da6de16a3dfb 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -12,7 +12,7 @@ BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
- BPF_DESTDIR := $(BPFOBJ_OUTPUT)
- BPF_INCLUDE := $(BPF_DESTDIR)/include
- INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
--CFLAGS := -g -Wall
-+CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 52383fe8ba42..6c678509e949 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -170,7 +170,7 @@ $(OUTPUT)/%:%.c
  
- # Try to detect best kernel BTF source
- KERNEL_REL := $(shell uname -r)
-@@ -88,4 +88,4 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(BPFOBJ_OU
+ $(OUTPUT)/urandom_read: urandom_read.c
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
++	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
  
- $(DEFAULT_BPFTOOL): $(BPFOBJ) | $(BPFTOOL_OUTPUT)
- 	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT)   \
--		    CC=$(HOSTCC) LD=$(HOSTLD)
-+		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)
+ $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
+ 	$(call msg,MOD,,$@)
+@@ -213,7 +213,7 @@ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+ 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
+ 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
+-		    CC=$(HOSTCC) LD=$(HOSTLD)				       \
++		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) 	       \
+ 		    EXTRA_CFLAGS='-g -O0'				       \
+ 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
+ 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
+@@ -244,7 +244,7 @@ $(HOST_BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
+ 		$(APIDIR)/linux/bpf.h					       \
+ 		| $(HOST_BUILD_DIR)/libbpf
+ 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR)                             \
+-		    EXTRA_CFLAGS='-g -O0'				       \
++		    EXTRA_CFLAGS='-g -O0' ARCH= CROSS_COMPILE=		       \
+ 		    OUTPUT=$(HOST_BUILD_DIR)/libbpf/ CC=$(HOSTCC) LD=$(HOSTLD) \
+ 		    DESTDIR=$(HOST_SCRATCH_DIR)/ prefix= all install_headers
+ endif
+@@ -542,7 +542,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(OUTPUT)/bench_ringbufs.o \
+ 		 $(OUTPUT)/bench_bloom_filter_map.o
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
++	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+ 
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
 -- 
 2.33.1
 
