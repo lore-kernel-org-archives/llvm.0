@@ -1,39 +1,38 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2272C8E
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1204460F93;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3542C88
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1574660F9D;
 	Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1637573176;
-	bh=dJPMNlK3b/bJuvSAkvT2aybug3z8MKZYIr2jaPmK8p4=;
+	bh=Y0sJyBiAG7Xsa4oXGwUV7fInLXuPV2ZMJEASScSGtXE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p4D3825Q6PZGHQdPE9aQn1qmp0gbwN4Rk0UTervPwm4V70Jt65Bm+kb/sH6XIV5/X
-	 emphTAtNwehfROg7TV2U3PPVslFSpZ2BlvVwbVYKPlECcwGxZnrLtNWMy7GxnRon3W
-	 LuF4aN+SCPH1dPaSShn4baW4TFcPkH6wV1TXJULGea2DwO2+KhhCB9shMTXBrffmly
-	 XI013kIBJABZ3e8IZD3Oo5xZCszplXAj5Eq7z594F6AXyXZebHBOW+xBNt2pF9EkrY
-	 6REQ6Fh0/UI/5dC1Dc7WZdJp88AYTk28bly/tbW8rfIfjVuOE5Dk8sq1L3a7KpZKRY
-	 IRcsUuX79vcmg==
+	b=Yt5P86luaCG3pw8pzDbNHkqyRxIMBVCFiNDf7XSuMIMBjO1oEuxhWTIF2Ve4z+tHh
+	 NMX/Ilw0EEVSBxEGhQygAiUiez6+m96DdQ63LJftqVLh9iCswXKtY8ryZgaXImTQYm
+	 83vv81ttPqujZzrswTPcVqJ9lYDHyVhSzQ2Bi3PzSCnKcLjwPjT5H0ilD15aj91g5n
+	 3dVZs4v8ca2wJ+ktijNxrGRWHb2+9KeUO5G4NaMpC6MIkqS3cp7OX0ZSsDMR0YQzou
+	 uF1JL3Y2auG+QVQ1J5+93gEMqmggx7B1EldVhVaMcID8lWyIrx6mZ6A4bnoHbFUqgT
+	 rsIdZeyglMVEA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mp5aX-003hiD-2e; Mon, 22 Nov 2021 09:26:13 +0000
+	id 1mp5aX-003hiJ-3f; Mon, 22 Nov 2021 09:26:13 +0000
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Andy Walls <awalls@md.metrocast.net>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 01/10] media: cx25821: drop duplicated i2c_slave_did_ack()
-Date: Mon, 22 Nov 2021 09:26:03 +0000
-Message-Id: <140dfc36fbd3b759a47e972774b362894f43911f.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 03/10] media: cx18: drop an unused macro
+Date: Mon, 22 Nov 2021 09:26:05 +0000
+Message-Id: <1f1517fafda598839a02e39968c5063ddcfa51fc.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -46,11 +45,10 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-This function is defined twice, one at cx25821-i2c and the other
-inside cx25821-core. It turns that only the first
-is actually used inside the code.
+The macro p_to_snd_cx18_card() is just a variant for container_of(),
+not actually used inside the code. So, drop it.
 
-This causes a clang warning.
+This address a clang warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -58,27 +56,26 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/pci/cx25821/cx25821-core.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/media/pci/cx18/cx18-alsa-main.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 40c10ca94def..3078a39f0b95 100644
---- a/drivers/media/pci/cx25821/cx25821-core.c
-+++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -337,13 +337,6 @@ static int cx25821_risc_decode(u32 risc)
- 	return incr[risc >> 28] ? incr[risc >> 28] : 1;
+diff --git a/drivers/media/pci/cx18/cx18-alsa-main.c b/drivers/media/pci/cx18/cx18-alsa-main.c
+index 9a82e68303b6..9dc361886284 100644
+--- a/drivers/media/pci/cx18/cx18-alsa-main.c
++++ b/drivers/media/pci/cx18/cx18-alsa-main.c
+@@ -51,12 +51,6 @@ struct snd_cx18_card *to_snd_cx18_card(struct v4l2_device *v4l2_dev)
+ 	return to_cx18(v4l2_dev)->alsa;
  }
  
--static inline int i2c_slave_did_ack(struct i2c_adapter *i2c_adap)
+-static inline
+-struct snd_cx18_card *p_to_snd_cx18_card(struct v4l2_device **v4l2_dev)
 -{
--	struct cx25821_i2c *bus = i2c_adap->algo_data;
--	struct cx25821_dev *dev = bus->dev;
--	return cx_read(bus->reg_stat) & 0x01;
+-	return container_of(v4l2_dev, struct snd_cx18_card, v4l2_dev);
 -}
 -
- static void cx25821_registers_init(struct cx25821_dev *dev)
+ static void snd_cx18_card_free(struct snd_cx18_card *cxsc)
  {
- 	u32 tmp;
+ 	if (cxsc == NULL)
 -- 
 2.33.1
 
