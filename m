@@ -1,130 +1,94 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B522C80
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 17:46:49 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 63D89218D9;
-	Mon, 22 Nov 2021 17:46:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1637603208; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IVyCpk3Enlbt6FlcDd28jnmXorqsQH3XWfqrWEWV2RQ=;
-	b=pv3Kg2WGahcnYOPDpoAePsmS/PpntbddIc9ju0hKOg9AtndhWdb+TGNSicv8VAaF0R4YnM
-	4RLlVCvUgsN1NQhFTqmK8oJp7NqtJvRU5c3ExiLc/IumE99XCpZlOf+gucq4ZqpS3nBg/X
-	aDiCBmwFS4gbasy/nX0rlD1ZbAvp3Q4=
-Received: from suse.cz (unknown [10.100.224.162])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D873F2C81
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 18:30:13 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1637605813; h=Date: Message-ID: Cc: To: References:
+ In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
+ Content-Type: Sender; bh=hS+cNZNvsc18vNvR+2V+IqRLIQR1if5Mbok+6txtYhw=;
+ b=MNkOqEai2JGepSpWrTniWCjldp/RI7o9edEkgn0rr+HMri7ey8fpVG/CHIGpTxgqEuJ4u17V
+ 7/pOgJ1K4EcEMUFHScaq7F8WoXvZxRRTmkMFPcklDeGCRjOs9cCsZ8UksrWTpdsUa25PPmi6
+ UjH0vi/92Ji4A0yFi5ruXzcrp+A=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGYzNyIsICJsbHZtQGxpc3RzLmxpbnV4LmRldiIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 619be1b386d0e4d888b79624 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Nov 2021 18:30:11
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+	id 21FABC43617; Mon, 22 Nov 2021 18:30:10 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+	MISSING_DATE,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from tykki.adurom.net (tynnyri.adurom.net [51.15.11.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id 2432DA3B85;
-	Mon, 22 Nov 2021 17:46:48 +0000 (UTC)
-Date: Mon, 22 Nov 2021 18:46:44 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: David Laight <David.Laight@aculab.com>,
-	'Peter Zijlstra' <peterz@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, "x86@kernel.org" <x86@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mark.rutland@arm.com" <mark.rutland@arm.com>,
-	"dvyukov@google.com" <dvyukov@google.com>,
-	"seanjc@google.com" <seanjc@google.com>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"mbenes@suse.cz" <mbenes@suse.cz>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH 20/22] x86,word-at-a-time: Remove .fixup usage
-Message-ID: <YZvXhAYjHrnc3/rv@alley>
-References: <20211108164711.mr2cqdcvedin2lvx@treble>
- <YYlshkTmf5zdvf1Q@hirez.programming.kicks-ass.net>
- <CAKwvOdkFZ4PSN0GGmKMmoCrcp7_VVNjau_b0sNRm3MuqVi8yow@mail.gmail.com>
- <YYov8SVHk/ZpFsUn@hirez.programming.kicks-ass.net>
- <CAKwvOdn8yrRopXyfd299=SwZS9TAPfPj4apYgdCnzPb20knhbg@mail.gmail.com>
- <20211109210736.GV174703@worktop.programming.kicks-ass.net>
- <f6dbe42651e84278b44e44ed7d0ed74f@AcuMS.aculab.com>
- <YYuogZ+2Dnjyj1ge@hirez.programming.kicks-ass.net>
- <2734a37ebed2432291345aaa8d9fd47e@AcuMS.aculab.com>
- <20211112015003.pefl656m3zmir6ov@treble>
+	(Authenticated sender: kvalo)
+	by smtp.codeaurora.org (Postfix) with ESMTPSA id D6910C4360C;
+	Mon, 22 Nov 2021 18:30:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org D6910C4360C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211112015003.pefl656m3zmir6ov@treble>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] [v2] iwlwifi: pcie: fix constant-conversion warning
+From: Kalle Valo <kvalo@codeaurora.org>
+In-Reply-To: <20211111073145.2504032-1-arnd@kernel.org>
+References: <20211111073145.2504032-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Luca Coelho <luciano.coelho@intel.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Johannes Berg <johannes.berg@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+ kernel test robot <lkp@intel.com>, Yaara Baruch <yaara.baruch@intel.com>,
+ Matti Gottlieb <matti.gottlieb@intel.com>,
+ Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163760580216.5904.8642934154284226912.kvalo@codeaurora.org>
+Date: Mon, 22 Nov 2021 18:30:10 +0000 (UTC)
 
-On Thu 2021-11-11 17:50:03, Josh Poimboeuf wrote:
-> On Wed, Nov 10, 2021 at 12:20:47PM +0000, David Laight wrote:
-> > > > Wouldn't moving part of a function to .text.cold (or .text.unlikely)
-> > > > generate the same problems with the stack backtrace code as the
-> > > > .text.fixup section you are removing had??
-> > > 
-> > > GCC can already split a function into func and func.cold today (or
-> > > worse: func, func.isra.N, func.cold, func.isra.N.cold etc..).
-> > > 
-> > > I'm assuming reliable unwind and livepatch know how to deal with this.
-> > 
-> > They'll have 'proper' function labels at the top - so backtrace
-> > stands a chance.
-> > Indeed you (probably) want it to output "func.irsa.n.cold" rather
-> > than just "func" to help show which copy it is in.  > 
-> > I guess that livepatch will need separate patches for each
-> > version of the function - which might be 'interesting' if
-> > all the copies actually need patching at the same time.
-> > You'd certainly want a warning if there seemed to be multiple
-> > copies of the function.
+Arnd Bergmann <arnd@kernel.org> wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Hm, I think there is actually a livepatch problem here.
+> clang points out a potential issue with integer overflow when
+> the iwl_dev_info_table[] array is empty:
 > 
-> If the .cold (aka "child") function actually had a fentry hook then we'd
-> be fine.  Then we could just patch both "parent" and "child" functions
-> at the same time.  We already have the ability to patch multiple
-> functions having dependent interface changes.
+> drivers/net/wireless/intel/iwlwifi/pcie/drv.c:1344:42: error: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Werror,-Wconstant-conversion]
+>         for (i = ARRAY_SIZE(iwl_dev_info_table) - 1; i >= 0; i--) {
+>                ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
 > 
-> But there's no fentry hook in the child, so we can only patch the
-> parent.
+> This is still harmless, as the loop correctly terminates, but adding
+> an extra range check makes that obvious to both readers and to the
+> compiler.
 > 
-> If the child schedules out, and then the parent gets patched, things can
-> go off-script if the child later jumps back to the unpatched version of
-> the parent, and then for example the old parent tries to call another
-> patched function with a since-changed ABI.
+> Fixes: 3f7320428fa4 ("iwlwifi: pcie: simplify iwl_pci_find_dev_info()")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Luca Coelho <luciano.coelho@intel.com>
 
-This thread seems to be motivation for the patchset
-https://lore.kernel.org/all/20211119090327.12811-1-mbenes@suse.cz/
-I am trying to understand the problem here, first. And I am
-a bit lost.
+Dropping v2 and taking v3 instead.
 
-How exactly is child called in the above scenario, please?
-How could parent get livepatched when child is sleeping?
+Patch set to Changes Requested.
 
-I imagine it the following way:
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20211111073145.2504032-1-arnd@kernel.org/
 
-    parent_func()
-       fentry
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-       /* some parent code */
-       jmp child
-	   /* child code */
-	   jmp back_to_parent
-       /* more parent code */
-       ret
-
-In the above example, parent_func() would be on stack and could not
-get livepatched even when the process is sleeping in the child code.
-
-The livepatching is done via ftrace. Only code with fentry could be
-livepatched. And code called via fentry must be visible on stack.
-
-
-Anyway, this looks to me like yet another compiler optimization where
-we need to livepatch the callers. The compiler might produce completely
-different optimizations for the new code. I do not see a reasonable
-way how to create compatible func, func.isra.N, func.cold,
-func.isra.N.cold variants.
-
-Best Regards,
-Petr
