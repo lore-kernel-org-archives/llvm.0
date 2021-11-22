@@ -1,111 +1,77 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C512C82
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 08:47:04 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id v138so47937202ybb.8
-        for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 00:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k7dFNlJV0aiK4eRfnLcjhzT0QcNW9OU+Syl2O1W9rtM=;
-        b=jveALE0mGgLPe3soMNH88c5rEXlhrV7EBCdkqjm33Gp8KySjWC150GQDLD9kL85aF3
-         XcvZ61D7oWAnz4+Jg8lrnoV+8AYaM9w6kwjlVDalJVtE/LF0WFE0IBiEIB8EPERV76XY
-         /obdbspS5CUrN+tngGjJOlxcNhDxKrNNQiRooau3HKBjV2TO6/3XxQZLcmp1DSYTvnX/
-         CoipyRH7c1kKg3dNjMe3KT9MLpC6QtvqH306ryiiHwZA+SJSTx7kVUGf/9HqkaWEziX3
-         8k9hPM3rwP8ZP5iGUle6RYYC7K2RlKrLsFVhq6YbbRVF7dZgysy7yESc0VX4hoB/zmll
-         H6OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k7dFNlJV0aiK4eRfnLcjhzT0QcNW9OU+Syl2O1W9rtM=;
-        b=Z/KObQwjJy+TJzrr93X9bX9kLDqEtlsZ7j6px5D6reEVyS/YvjfcIFFaimDTsYDiWf
-         Me8AUWKgk2N844h1J2hQx2Ee99wRuDZ1ejEHsGiaDXwM9EtZKbwSI4fxQsfZH6IoCv3a
-         F1KVJQteFfBeYZ32kblAtmNBfHU//31jfGCXlRXpHC4gSDZC2W1QBuv4Qhg3S0fXskko
-         oDm5GasIIjPYyKn23M+kzD9NUBQkIQ7JrFdzfdCtrnr2nwxrAkpAU6Yfx+ziakN67d3T
-         OM6JRWpVHxEZWupnvQCIFiIgMQVAQ9uLlFVNoH/SPmBr8qD1UCeHFOBibJN9TrutTxCH
-         6gQQ==
-X-Gm-Message-State: AOAM532ktEa2a/PisieeywK5svPgtLtHzEm7oT6D4SgQT0LFtuXpGksY
-	WSCf8/axWF7wn5VAHn15gQb1RlfDbt39Mpaep7I=
-X-Google-Smtp-Source: ABdhPJz9LYLMASit0aK9KFAkCvkJvAyq3Jjhdm/QzHUW7PTiMFuur7T93e5gGx6hEkzHPT6kg3pLL0+RIQ5nqf5cOnw=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr58492098ybe.422.1637570823634;
- Mon, 22 Nov 2021 00:47:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2992C83
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8C6760F22;
+	Mon, 22 Nov 2021 09:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637573176;
+	bh=SIQ0D8zMU4kb7RRNdo9eoFMTBqAbpXxk4Wy3vA4efh0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=I49ddTH4x+xPjVzthYILfPB/ThZ97LQKT8RLeeRWG8vNJkfziyXITMFUKtzKMADWw
+	 nRk/qvhEruFWLo+FJfZhsMP8Nlic+rKmYa/rmT1+rd0EXKUKGFlCqZAacTAyRXKprK
+	 dNvBYy06LsTt2d/xudtYRP3HZRM3R/t3HLet9BEh9kMqMT4LUxNPBqNvJnV25rec6K
+	 hv+3/WM8bkAbm+DTaLzE04JEKgsErwcoyV4LQ3u7ovYxe6BPuwCdtjyS/rx92F0/j5
+	 Vm23Wy4AybjaMkEW94xDj8i0/hrHMW7cwxLlHmhnGAaAi6S+gCZwoSOFmkTTVmtVl5
+	 8zHsmb9eVHH1A==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+	(envelope-from <mchehab@kernel.org>)
+	id 1mp5aX-003hiA-1T; Mon, 22 Nov 2021 09:26:13 +0000
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: 
+Cc: linuxarm@huawei.com,
+	mauro.chehab@huawei.com,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Andy Walls <awalls@md.metrocast.net>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 00/10] Address some clang W=1 warnings
+Date: Mon, 22 Nov 2021 09:26:02 +0000
+Message-Id: <cover.1637573097.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211121180155.9062-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUTLYn=14RzJORp1mn-TSwC1rk1BO_9L6TG4g9JhH27JA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUTLYn=14RzJORp1mn-TSwC1rk1BO_9L6TG4g9JhH27JA@mail.gmail.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Mon, 22 Nov 2021 08:46:37 +0000
-Message-ID: <CA+V-a8sGA4=oxwp87VonC6zdPYT5-BHmsVoV8L1ggTUV8m4ooA@mail.gmail.com>
-Subject: Re: [PATCH] memory: renesas-rpc-if: Silence clang warning
-To: Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Hi Geert,
+Clang is more pedantic than gcc with W=1. This is currently causing
+builder.linuxtv.org errors due to CONFIG_WERROR.
 
-Thank you for the review.
+Address some of those.
 
-On Mon, Nov 22, 2021 at 7:50 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Sun, Nov 21, 2021 at 7:05 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > This patch silences the following clang warning:
-> >
-> > | drivers/memory/renesas-rpc-if.c:253:14: warning: cast to smaller integer
-> > | type 'enum rpcif_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> > |           rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
-> > |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Fixes: b04cc0d912eb8 ("memory: renesas-rpc-if: Add support for RZ/G2L")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> > --- a/drivers/memory/renesas-rpc-if.c
-> > +++ b/drivers/memory/renesas-rpc-if.c
-> > @@ -250,7 +250,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
-> >                 return PTR_ERR(rpc->dirmap);
-> >         rpc->size = resource_size(res);
-> >
-> > -       rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
-> > +       rpc->type = (enum rpcif_type)(uintptr_t)of_device_get_match_data(dev);
->
-> While correct, the cast to "enum rpcif_type" is not stricly needed anymore.
->
-Agreed.
+Mauro Carvalho Chehab (10):
+  media: cx25821: drop duplicated i2c_slave_did_ack()
+  media: ivtv: drop an unused macro
+  media: cx18: drop an unused macro
+  media: stb6100: mark a currently unused function as such
+  media: mc: mark a debug function with __maybe_unused
+  media: dvb-core: dvb_frontend: address some clang warnings
+  media: cx25840: drop some unused inline functions
+  media: marvell-ccic: drop to_cam() unused function
+  media: omap3isp: mark isp_isr_dbg as __maybe_unused
+  media: omap3isp: avoid warnings at IS_OUT_OF_BOUNDS()
 
-@Krzysztof, let me know if you want me to resend the patch with the
-cast to "enum rpcif_type" dropped.
+ drivers/media/dvb-core/dvb_frontend.c         | 13 +++++-------
+ drivers/media/dvb-frontends/stb6100.c         |  2 +-
+ drivers/media/i2c/cx25840/cx25840-ir.c        | 20 -------------------
+ drivers/media/mc/mc-entity.c                  |  2 +-
+ drivers/media/pci/cx18/cx18-alsa-main.c       |  6 ------
+ drivers/media/pci/cx25821/cx25821-core.c      |  7 -------
+ drivers/media/pci/ivtv/ivtv-alsa-main.c       |  6 ------
+ .../media/platform/marvell-ccic/cafe-driver.c |  7 -------
+ drivers/media/platform/omap3isp/isp.c         |  3 ++-
+ drivers/media/platform/omap3isp/isph3a_af.c   |  2 +-
+ 10 files changed, 10 insertions(+), 58 deletions(-)
 
-Cheers,
-Prabhakar
+-- 
+2.33.1
 
-> >         rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-> >
-> >         return PTR_ERR_OR_ZERO(rpc->rstc);
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+
