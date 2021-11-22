@@ -1,40 +1,37 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688542C82
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB9D760F5A;
-	Mon, 22 Nov 2021 09:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E091D2C83
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 09:26:17 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FEE860F6E;
+	Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1637573176;
-	bh=uoub8lwyF2e3h3UBzOFi3xispO3LB4G9st/Fel8Wp50=;
+	bh=IFDTMmTh8HFMsvlLSyw8+5NpCNZ/IGPyxSr0OJMAc9A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pTX9d95MMRvuWjs/BaYuivPCoDz2i4E7nA8oQoApfB75GcCLrMNdRm/VHe7VqXVvJ
-	 +XSuzKH0Fy3BAXCqG0SduN3koTJJmbc4v9t8pdb3tERtJ6xsWFReLLUy3/WAEnhgsm
-	 eGFMWb1Ei7Mh02lmOsRGqZUkqypifcHrFfuUEeFAL2h6mPeP5XqL8/wOE5SpfSKIi7
-	 L4nBecV5EnaKJ2VpkH7qBp/HQZk6cTAqNptuhXupu2kHBpDybMSeH8jymmysMvKzec
-	 /lbxNSm0y9cjUePL2+7isJ5Vqa1WmvxTTRPxA+nNNHCnhLdzKqGCoTJohXGEuqNO3F
-	 w4sSgkkwEANdw==
+	b=IEBaaXQjSewfSfM8OxNh+rGrwuxaT6sGPUhT1L3laKny5POk+eehD/o6ZtgZ5x3BV
+	 j3E13u+Bj2rd4YdRPs5Mu/3KGzjq/b0J7vXUI6U0ti50sLcpJC2YFpr/doo0xigfk8
+	 lLUd8NSszW1T5YckppNIhuP4yq0i9mGWqV1MHY7aDkqYsTfRUEF565jT7GXFI+/+Ai
+	 wmSj7YHAouePOGcETcIwQIaVtbl+hGxwP6SQCgrpHsHTbooFcC7wqfZKTvFr7kicfb
+	 O/Kig92CXOxFFYv6xlthwBBHw2DcHJ2ZN3cNWozG8PZw1MYtQ5zSqXAQqo5MrRnqqz
+	 9R9VcSjtVUEpw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mp5aX-003hiS-58; Mon, 22 Nov 2021 09:26:13 +0000
+	id 1mp5aX-003hiM-47; Mon, 22 Nov 2021 09:26:13 +0000
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Lukas Middendorf <kernel@tuxforce.de>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 06/10] media: dvb-core: dvb_frontend: address some clang warnings
-Date: Mon, 22 Nov 2021 09:26:08 +0000
-Message-Id: <fe70cb9f32c41265de21129d26f1122e2849b842.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 04/10] media: stb6100: mark a currently unused function as such
+Date: Mon, 22 Nov 2021 09:26:06 +0000
+Message-Id: <7c6019a794f8d009ce931197943fe4871cd6d6c3.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -47,12 +44,12 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-The typecasts at the dvb-core generate clang warnings when W=1
-is enabled.
+The stb6100_normalise_regs() function is not used with current
+boards, but the driver says that some devices could need it.
+Ok, we could simply drop it, but as there's a macro to mark
+unused functions, use it.
 
-The warns are harmless, but they cause the build to break with
-CONFIG_WERROR, so do the cast on a way that it won't produce
-warnings anymore.
+This should shut up a clang warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -60,47 +57,22 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-core/dvb_frontend.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/media/dvb-frontends/stb6100.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index 8fc59f3cfb6c..48e735cdbe6b 100644
---- a/drivers/media/dvb-core/dvb_frontend.c
-+++ b/drivers/media/dvb-core/dvb_frontend.c
-@@ -2554,8 +2554,7 @@ static int dvb_frontend_handle_ioctl(struct file *file,
+diff --git a/drivers/media/dvb-frontends/stb6100.c b/drivers/media/dvb-frontends/stb6100.c
+index d541d6613610..ea1d260e4d70 100644
+--- a/drivers/media/dvb-frontends/stb6100.c
++++ b/drivers/media/dvb-frontends/stb6100.c
+@@ -110,7 +110,7 @@ static const struct stb6100_regmask stb6100_template[] = {
+ /*
+  * Currently unused. Some boards might need it in the future
+  */
+-static inline void stb6100_normalise_regs(u8 regs[])
++static __maybe_unused inline void stb6100_normalise_regs(u8 regs[])
+ {
+ 	int i;
  
- 	case FE_DISEQC_SEND_BURST:
- 		if (fe->ops.diseqc_send_burst) {
--			err = fe->ops.diseqc_send_burst(fe,
--						(enum fe_sec_mini_cmd)parg);
-+			err = fe->ops.diseqc_send_burst(fe, (long)parg);
- 			fepriv->state = FESTATE_DISEQC;
- 			fepriv->status = 0;
- 		}
-@@ -2563,9 +2562,8 @@ static int dvb_frontend_handle_ioctl(struct file *file,
- 
- 	case FE_SET_TONE:
- 		if (fe->ops.set_tone) {
--			err = fe->ops.set_tone(fe,
--					       (enum fe_sec_tone_mode)parg);
--			fepriv->tone = (enum fe_sec_tone_mode)parg;
-+			fepriv->tone = (long)parg;
-+			err = fe->ops.set_tone(fe, fepriv->tone);
- 			fepriv->state = FESTATE_DISEQC;
- 			fepriv->status = 0;
- 		}
-@@ -2573,9 +2571,8 @@ static int dvb_frontend_handle_ioctl(struct file *file,
- 
- 	case FE_SET_VOLTAGE:
- 		if (fe->ops.set_voltage) {
--			err = fe->ops.set_voltage(fe,
--						  (enum fe_sec_voltage)parg);
--			fepriv->voltage = (enum fe_sec_voltage)parg;
-+			fepriv->voltage = (long)parg;
-+			err = fe->ops.set_voltage(fe, fepriv->voltage);
- 			fepriv->state = FESTATE_DISEQC;
- 			fepriv->status = 0;
- 		}
 -- 
 2.33.1
 
