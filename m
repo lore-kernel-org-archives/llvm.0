@@ -1,95 +1,111 @@
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3287E2C86
-	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 07:50:39 +0000 (UTC)
-Received: by mail-ua1-f50.google.com with SMTP id ay21so34666555uab.12
-        for <llvm@lists.linux.dev>; Sun, 21 Nov 2021 23:50:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C512C82
+	for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 08:47:04 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id v138so47937202ybb.8
+        for <llvm@lists.linux.dev>; Mon, 22 Nov 2021 00:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k7dFNlJV0aiK4eRfnLcjhzT0QcNW9OU+Syl2O1W9rtM=;
+        b=jveALE0mGgLPe3soMNH88c5rEXlhrV7EBCdkqjm33Gp8KySjWC150GQDLD9kL85aF3
+         XcvZ61D7oWAnz4+Jg8lrnoV+8AYaM9w6kwjlVDalJVtE/LF0WFE0IBiEIB8EPERV76XY
+         /obdbspS5CUrN+tngGjJOlxcNhDxKrNNQiRooau3HKBjV2TO6/3XxQZLcmp1DSYTvnX/
+         CoipyRH7c1kKg3dNjMe3KT9MLpC6QtvqH306ryiiHwZA+SJSTx7kVUGf/9HqkaWEziX3
+         8k9hPM3rwP8ZP5iGUle6RYYC7K2RlKrLsFVhq6YbbRVF7dZgysy7yESc0VX4hoB/zmll
+         H6OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kT5Hh6yPK9g0/wKHmuficJ8QC8SNf9TRKWAOYqxbSfY=;
-        b=X52DdLP+iquS55FHacbg51207cni7ck3U1XSw8pqrOr3b9AAPvRx5y+bWDcYn7Uc2g
-         NX90kPfRZkByaCTPpkYdZ0run2lkIvIaRsw7ceG0f2KgjwWyHFIWJVKiDnl513O78Slm
-         119G0foiaWqk/77A5DkraBw5/MznVMmU4MlT02rp9LLaIQBkmPU2/SYOjKiuE5+9PAiP
-         bTZduJmu1hC8qfFrhHZgcGnh5QK9Wb+RlmT/o4fH6VL/lPhEXKL2RBQBjZbMTs0nmm3B
-         WBlFzWhv5jPfaCNQqtxlI95o/PkLvrDtCZ3DlhUrwG1I8XUKAdRbqlsoXzQgzwFkKNh3
-         Jikg==
-X-Gm-Message-State: AOAM5303OL7LGSs5oGDN4dhndoLZgz5rxkz3v7Qn9SwxgFQaqHAdMBKf
-	IzQGKoiBIgWxx5DDrOWLY6sgPG04qxjIBA==
-X-Google-Smtp-Source: ABdhPJxYjkC1lPCuOHxpY0h430bZRdvYypipP1JDyxkQjGmqX0CIAVx6k/gfqXIlILUvgo3G39Q7Vw==
-X-Received: by 2002:a05:6102:3911:: with SMTP id e17mr117036972vsu.40.1637567437919;
-        Sun, 21 Nov 2021 23:50:37 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id y24sm4346710uaq.17.2021.11.21.23.50.37
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Nov 2021 23:50:37 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id i6so34696610uae.6
-        for <llvm@lists.linux.dev>; Sun, 21 Nov 2021 23:50:37 -0800 (PST)
-X-Received: by 2002:a67:c38f:: with SMTP id s15mr127486612vsj.50.1637567437054;
- Sun, 21 Nov 2021 23:50:37 -0800 (PST)
+        bh=k7dFNlJV0aiK4eRfnLcjhzT0QcNW9OU+Syl2O1W9rtM=;
+        b=Z/KObQwjJy+TJzrr93X9bX9kLDqEtlsZ7j6px5D6reEVyS/YvjfcIFFaimDTsYDiWf
+         Me8AUWKgk2N844h1J2hQx2Ee99wRuDZ1ejEHsGiaDXwM9EtZKbwSI4fxQsfZH6IoCv3a
+         F1KVJQteFfBeYZ32kblAtmNBfHU//31jfGCXlRXpHC4gSDZC2W1QBuv4Qhg3S0fXskko
+         oDm5GasIIjPYyKn23M+kzD9NUBQkIQ7JrFdzfdCtrnr2nwxrAkpAU6Yfx+ziakN67d3T
+         OM6JRWpVHxEZWupnvQCIFiIgMQVAQ9uLlFVNoH/SPmBr8qD1UCeHFOBibJN9TrutTxCH
+         6gQQ==
+X-Gm-Message-State: AOAM532ktEa2a/PisieeywK5svPgtLtHzEm7oT6D4SgQT0LFtuXpGksY
+	WSCf8/axWF7wn5VAHn15gQb1RlfDbt39Mpaep7I=
+X-Google-Smtp-Source: ABdhPJz9LYLMASit0aK9KFAkCvkJvAyq3Jjhdm/QzHUW7PTiMFuur7T93e5gGx6hEkzHPT6kg3pLL0+RIQ5nqf5cOnw=
+X-Received: by 2002:a25:dc4d:: with SMTP id y74mr58492098ybe.422.1637570823634;
+ Mon, 22 Nov 2021 00:47:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211121180155.9062-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211121180155.9062-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 22 Nov 2021 08:50:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUTLYn=14RzJORp1mn-TSwC1rk1BO_9L6TG4g9JhH27JA@mail.gmail.com>
-Message-ID: <CAMuHMdUTLYn=14RzJORp1mn-TSwC1rk1BO_9L6TG4g9JhH27JA@mail.gmail.com>
+References: <20211121180155.9062-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUTLYn=14RzJORp1mn-TSwC1rk1BO_9L6TG4g9JhH27JA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUTLYn=14RzJORp1mn-TSwC1rk1BO_9L6TG4g9JhH27JA@mail.gmail.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Mon, 22 Nov 2021 08:46:37 +0000
+Message-ID: <CA+V-a8sGA4=oxwp87VonC6zdPYT5-BHmsVoV8L1ggTUV8m4ooA@mail.gmail.com>
 Subject: Re: [PATCH] memory: renesas-rpc-if: Silence clang warning
-To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, 
+To: Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Wolfram Sang <wsa+renesas@sang-engineering.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Prabhakar <prabhakar.csengg@gmail.com>
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Prabhakar,
+Hi Geert,
 
-On Sun, Nov 21, 2021 at 7:05 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> This patch silences the following clang warning:
+Thank you for the review.
+
+On Mon, Nov 22, 2021 at 7:50 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> | drivers/memory/renesas-rpc-if.c:253:14: warning: cast to smaller integer
-> | type 'enum rpcif_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> |           rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
-> |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Hi Prabhakar,
 >
-> Fixes: b04cc0d912eb8 ("memory: renesas-rpc-if: Add support for RZ/G2L")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/drivers/memory/renesas-rpc-if.c
-> +++ b/drivers/memory/renesas-rpc-if.c
-> @@ -250,7 +250,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
->                 return PTR_ERR(rpc->dirmap);
->         rpc->size = resource_size(res);
+> On Sun, Nov 21, 2021 at 7:05 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > This patch silences the following clang warning:
+> >
+> > | drivers/memory/renesas-rpc-if.c:253:14: warning: cast to smaller integer
+> > | type 'enum rpcif_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> > |           rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
+> > |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > Fixes: b04cc0d912eb8 ("memory: renesas-rpc-if: Add support for RZ/G2L")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> -       rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
-> +       rpc->type = (enum rpcif_type)(uintptr_t)of_device_get_match_data(dev);
-
-While correct, the cast to "enum rpcif_type" is not stricly needed anymore.
-
->         rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 >
->         return PTR_ERR_OR_ZERO(rpc->rstc);
+> > --- a/drivers/memory/renesas-rpc-if.c
+> > +++ b/drivers/memory/renesas-rpc-if.c
+> > @@ -250,7 +250,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+> >                 return PTR_ERR(rpc->dirmap);
+> >         rpc->size = resource_size(res);
+> >
+> > -       rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
+> > +       rpc->type = (enum rpcif_type)(uintptr_t)of_device_get_match_data(dev);
+>
+> While correct, the cast to "enum rpcif_type" is not stricly needed anymore.
+>
+Agreed.
 
-Gr{oetje,eeting}s,
+@Krzysztof, let me know if you want me to resend the patch with the
+cast to "enum rpcif_type" dropped.
 
-                        Geert
+Cheers,
+Prabhakar
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> >         rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> >
+> >         return PTR_ERR_OR_ZERO(rpc->rstc);
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
