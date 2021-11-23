@@ -1,100 +1,94 @@
-Received: from smtprelay.hostedemail.com (smtprelay0040.hostedemail.com [216.40.44.40])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E682C83
-	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 20:51:24 +0000 (UTC)
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-	by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 2B94A180812F2
-	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 18:21:48 +0000 (UTC)
-Received: from omf17.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-	by smtprelay04.hostedemail.com (Postfix) with ESMTP id DDE48180ABA19;
-	Tue, 23 Nov 2021 18:21:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 4B9A6E00036E;
-	Tue, 23 Nov 2021 18:21:38 +0000 (UTC)
-Message-ID: <81039009afd63eaac721201a961a4a39c3dd3990.camel@perches.com>
-Subject: Re: arch/mips/mm/tlbex.c:2243:3: warning: unannotated fall-through
- between switch labels
-From: Joe Perches <joe@perches.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, Kees Cook
-	 <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 23 Nov 2021 10:21:38 -0800
-In-Reply-To: <20211123181648.GA9405@embeddedor>
-References: <202111230719.OZDUHU4z-lkp@intel.com>
-	 <20211123005528.GA550759@embeddedor>
-	 <ea07a2f1e20503965c7c2eba7c0a7a4538457265.camel@perches.com>
-	 <20211123165057.GA7382@embeddedor>
-	 <b73d287a696c10279cd0c931840ce95b03876d58.camel@perches.com>
-	 <20211123175610.GA8713@embeddedor>
-	 <7b6e9af20d5e18315986c8e004a13c3840afb9ad.camel@perches.com>
-	 <20211123181648.GA9405@embeddedor>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB252C81
+	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 23:01:01 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="215863158"
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="215863158"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 15:01:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="456854084"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 23 Nov 2021 15:00:55 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mpemU-0002PQ-Sw; Tue, 23 Nov 2021 23:00:54 +0000
+Date: Wed, 24 Nov 2021 07:00:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Akhil R <akhilrajeev@nvidia.com>, dan.j.williams@intel.com,
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+	jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+	p.zabel@pengutronix.de, rgumasta@nvidia.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v13 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Message-ID: <202111240616.WWuSKq38-lkp@intel.com>
+References: <1637573292-13214-3-git-send-email-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.90
-X-Stat-Signature: h9n6b1947nir68rjqsf8auxbc86k4dwz
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 4B9A6E00036E
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19nBxGqF9wcEIJgQVzU1LGHjFE+SrgIrb4=
-X-HE-Tag: 1637691698-442365
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1637573292-13214-3-git-send-email-akhilrajeev@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 2021-11-23 at 12:16 -0600, Gustavo A. R. Silva wrote:
-> On Tue, Nov 23, 2021 at 09:59:58AM -0800, Joe Perches wrote:
-> > On Tue, 2021-11-23 at 11:56 -0600, Gustavo A. R. Silva wrote:
-> > > On Tue, Nov 23, 2021 at 09:25:17AM -0800, Joe Perches wrote:
-> > > > On Tue, 2021-11-23 at 10:50 -0600, Gustavo A. R. Silva wrote:
-> > > > > On Tue, Nov 23, 2021 at 12:52:30AM -0800, Joe Perches wrote:
-> > > > > > 
-> > > > > > Perhaps this would be better:
-> > > > > 
-> > > > > Feel free to send a proper patch.
-> > > > 
-> > > > I commented on your proposed patch.
-> > > 
-> > > And I reply giving you an option if you want to proceed.
-> > > 
-> > > > And I'd prefer you actually look at and improve the code instead
-> > > > of merely silencing warnings.
-> > > 
-> > > If this is a matter of preference then I should express my preferences, too.
-> > > So, I prefer to give you the opportunity of improving the code and not being
-> > > pedantic at the same time. :)
-> > 
-> > It appears to be difficult to give you suggestions on how to improve
-> > what you do.
-> 
-> No; that's appreciated.
-> What I suggest you to improve is how you communicate it,
+Hi Akhil,
 
-:)  Thanks.  I'll try.
+Thank you for the patch! Perhaps something to improve:
 
-> and to take into account a "Feel free to send a proper patch."
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on vkoul-dmaengine/next arm64/for-next/core v5.16-rc2 next-20211123]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I'm not much for sending actual patches as when I do I get accusations
-of being an excessively trivial patch submitter.
+url:    https://github.com/0day-ci/linux/commits/Akhil-R/Add-NVIDIA-Tegra-GPC-DMA-driver/20211122-173019
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: riscv-randconfig-c006-20211123 (https://download.01.org/0day-ci/archive/20211124/202111240616.WWuSKq38-lkp@intel.com/config.gz)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7707da9f914433ccc5718dd3431153d3b5bf485d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Akhil-R/Add-NVIDIA-Tegra-GPC-DMA-driver/20211122-173019
+        git checkout 7707da9f914433ccc5718dd3431153d3b5bf485d
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
-And I prefer to communicate in code where feasible rather than
-expand all the code into words.  But if you prefer:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The indentation used for the fallthrough addition in your patch is
-incorrect.
+All warnings (new ones prefixed by >>):
 
-In addition, the brace location in this code is poor.
-There is an unnecessary open and close brace around the default case.
-
-Please remove the unnecessary braces and move the default case to the
-more typical end-of-block location of the switch statement.
-
-I believe the diff I posted was more efficient than the text above.
-
-cheers, Joe
+>> drivers/dma/tegra186-gpc-dma.c:1264:21: warning: attribute declaration must precede definition [-Wignored-attributes]
+   static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops = {
+                       ^
+   include/linux/compiler_attributes.h:286:56: note: expanded from macro '__maybe_unused'
+   #define __maybe_unused                  __attribute__((__unused__))
+                                                          ^
+   include/linux/pm.h:277:8: note: previous definition is here
+   struct dev_pm_ops {
+          ^
+   1 warning generated.
 
 
+vim +1264 drivers/dma/tegra186-gpc-dma.c
+
+  1263	
+> 1264	static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops = {
+  1265		SET_LATE_SYSTEM_SLEEP_PM_OPS(tegra_dma_pm_suspend, tegra_dma_pm_resume)
+  1266	};
+  1267	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
