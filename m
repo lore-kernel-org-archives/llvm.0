@@ -1,95 +1,111 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtprelay.hostedemail.com (smtprelay0090.hostedemail.com [216.40.44.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AEF2C81
-	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 07:19:32 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="221849579"
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="221849579"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2021 23:19:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="674362260"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 22 Nov 2021 23:19:30 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mpQ5R-0001a6-RW; Tue, 23 Nov 2021 07:19:29 +0000
-Date: Tue, 23 Nov 2021 15:18:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F78872
+	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 08:52:38 +0000 (UTC)
+Received: from omf13.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+	by smtprelay04.hostedemail.com (Postfix) with ESMTP id 6ED59180FA623;
+	Tue, 23 Nov 2021 08:52:32 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 4EDB62000513;
+	Tue, 23 Nov 2021 08:52:30 +0000 (UTC)
+Message-ID: <ea07a2f1e20503965c7c2eba7c0a7a4538457265.camel@perches.com>
+Subject: Re: arch/mips/mm/tlbex.c:2243:3: warning: unannotated fall-through
+ between switch labels
+From: Joe Perches <joe@perches.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>, kernel test robot
+	 <lkp@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [tglx-devel:msi 18/91] drivers/pci/msi/legacy.c:54:5: warning: no
- previous prototype for function 'pci_msi_legacy_setup_msi_irqs'
-Message-ID: <202111231428.RmNJuNXe-lkp@intel.com>
+ linux-kernel@vger.kernel.org,  Kees Cook <keescook@chromium.org>, Nathan
+ Chancellor <nathan@kernel.org>
+Date: Tue, 23 Nov 2021 00:52:30 -0800
+In-Reply-To: <20211123005528.GA550759@embeddedor>
+References: <202111230719.OZDUHU4z-lkp@intel.com>
+	 <20211123005528.GA550759@embeddedor>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 496o9wecre354eosxah9tteecrm9b7yc
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 4EDB62000513
+X-Spam-Status: No, score=-1.87
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/XIT3tSsM1oxrqIB4tZmnKcw99lz8EyrU=
+X-HE-Tag: 1637657550-671117
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi
-head:   2d9ab27714e1576db18b1ee323eaae9886e16006
-commit: 5e32e214c6eeda4237b4fb01cd77c6c247465e0c [18/91] PCI/MSI: Split out irqdomain code
-config: mips-randconfig-r035-20211123 (https://download.01.org/0day-ci/archive/20211123/202111231428.RmNJuNXe-lkp@intel.com/config.gz)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=5e32e214c6eeda4237b4fb01cd77c6c247465e0c
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel msi
-        git checkout 5e32e214c6eeda4237b4fb01cd77c6c247465e0c
-        # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
+On Mon, 2021-11-22 at 18:55 -0600, Gustavo A. R. Silva wrote:
+> On Tue, Nov 23, 2021 at 07:51:33AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   136057256686de39cc3a07c2e39ef6bc43003ff6
+> > commit: dee2b702bcf067d7b6b62c18bdd060ff0810a800 kconfig: Add support for -Wimplicit-fallthrough
+> > date:   8 days ago
+> > config: mips-randconfig-r016-20211116 (attached as .config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mips-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dee2b702bcf067d7b6b62c18bdd060ff0810a800
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout dee2b702bcf067d7b6b62c18bdd060ff0810a800
+> >         # save the attached .config to linux build tree
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > > > arch/mips/mm/tlbex.c:2243:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+> >                    case CPU_CAVIUM_OCTEON:
+> >                    ^
+> >    arch/mips/mm/tlbex.c:2243:3: note: insert 'break;' to avoid fall-through
+> >                    case CPU_CAVIUM_OCTEON:
+> >                    ^
+> >                    break; 
+> 
+> I already have a patch for this here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?h=for-linus/kspp&id=cd3ed04e7fc365e4e581333c3ff69c8da6ca0e8b
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think that's very odd looking code because of the braces.
+And the fallthrough that you propose is odd as well.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/pci/msi/legacy.c:7:
-   include/linux/msi.h:391:65: warning: declaration of 'struct cpumask' will not be visible outside of this function [-Wvisibility]
-   int msi_domain_set_affinity(struct irq_data *data, const struct cpumask *mask,
-                                                                   ^
-   drivers/pci/msi/legacy.c:48:20: error: use of undeclared identifier 'entry'
-                           for (i = 0; i < entry->nvec_used; i++)
-                                           ^
->> drivers/pci/msi/legacy.c:54:5: warning: no previous prototype for function 'pci_msi_legacy_setup_msi_irqs' [-Wmissing-prototypes]
-   int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
-       ^
-   drivers/pci/msi/legacy.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
-   ^
-   static 
->> drivers/pci/msi/legacy.c:59:6: warning: no previous prototype for function 'pci_msi_legacy_teardown_msi_irqs' [-Wmissing-prototypes]
-   void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
-        ^
-   drivers/pci/msi/legacy.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
-   ^
-   static 
-   3 warnings and 1 error generated.
-
-
-vim +/pci_msi_legacy_setup_msi_irqs +54 drivers/pci/msi/legacy.c
-
-    53	
-  > 54	int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
-    55	{
-    56		return arch_setup_msi_irqs(dev, nvec, type);
-    57	}
-    58	
-  > 59	void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
-
+Perhaps this would be better:
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/mips/mm/tlbex.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index b131e6a773832..a873e343d3dc9 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -2236,15 +2236,14 @@ static void build_r4000_tlb_load_handler(void)
+ 		uasm_i_tlbr(&p);
+ 
+ 		switch (current_cpu_type()) {
+-		default:
+-			if (cpu_has_mips_r2_exec_hazard) {
+-				uasm_i_ehb(&p);
+-
+ 		case CPU_CAVIUM_OCTEON:
+ 		case CPU_CAVIUM_OCTEON_PLUS:
+ 		case CPU_CAVIUM_OCTEON2:
+-				break;
+-			}
++			break;
++		default:
++			if (cpu_has_mips_r2_exec_hazard)
++				uasm_i_ehb(&p);
++			break;
+ 		}
+ 
+ 		/* Examine  entrylo 0 or 1 based on ptr. */
+
