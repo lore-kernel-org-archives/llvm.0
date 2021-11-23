@@ -1,81 +1,63 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EF72C81
-	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 14:01:41 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="258894021"
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="258894021"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 06:01:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="597092585"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Nov 2021 06:01:39 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mpWMd-0001v4-48; Tue, 23 Nov 2021 14:01:39 +0000
-Date: Tue, 23 Nov 2021 22:00:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yajun Deng <yajun.deng@linux.dev>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org
-Subject: [net-next:master 20/31] net/ipv4/arp.c:1412:36: warning: unused
- variable 'arp_seq_ops'
-Message-ID: <202111232112.j3yZPaVD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC5D2C81
+	for <llvm@lists.linux.dev>; Tue, 23 Nov 2021 14:26:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 33BB860E54;
+	Tue, 23 Nov 2021 14:26:02 +0000 (UTC)
+Date: Tue, 23 Nov 2021 15:26:00 +0100
+From: Christian Brauner <christian.brauner@ubuntu.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+	christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
+Message-ID: <20211123142600.r5d52iwhbqhujiux@wittgenstein>
+References: <20211105162530.3307666-1-anders.roxell@linaro.org>
+ <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git master
-head:   2106efda785b55a8957efed9a52dfa28ee0d7280
-commit: e968b1b3e9b86c4751faea019a5d340fee9e9142 [20/31] arp: Remove #ifdef CONFIG_PROC_FS
-config: hexagon-buildonly-randconfig-r006-20211123 (https://download.01.org/0day-ci/archive/20211123/202111232112.j3yZPaVD-lkp@intel.com/config.gz)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 49e3838145dff1ec91c2e67a2cb562775c8d2a08)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/commit/?id=e968b1b3e9b86c4751faea019a5d340fee9e9142
-        git remote add net-next https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-        git fetch --no-tags net-next master
-        git checkout e968b1b3e9b86c4751faea019a5d340fee9e9142
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
+> On 11/5/21 10:25 AM, Anders Roxell wrote:
+> > When building selftests/cgroup: with clang the following error are seen:
+> > 
+> > clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
+> > clang: error: cannot specify -o when generating multiple output files
+> > make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
+> > 
+> > Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+> > since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+> > file lib.mk.
+> > 
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> > ---
+> >   tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
+> >   tools/testing/selftests/lib.mk          |  2 +-
+> >   2 files changed, 8 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+> > index 59e222460581..745fe25fa0b9 100644
+> > --- a/tools/testing/selftests/cgroup/Makefile
+> > +++ b/tools/testing/selftests/cgroup/Makefile
+> > @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
+> >   TEST_GEN_PROGS += test_freezer
+> >   TEST_GEN_PROGS += test_kill
+> > +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+> > +
+> 
+> This looks odd to me. Why are we introducing dependencies between tests?
+> clone3 includes in cgroup? Looks odd to me.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv4/arp.c:1412:36: warning: unused variable 'arp_seq_ops' [-Wunused-const-variable]
-   static const struct seq_operations arp_seq_ops = {
-                                      ^
-   1 warning generated.
-
-
-vim +/arp_seq_ops +1412 net/ipv4/arp.c
-
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1411  
-f690808e17925fc Stephen Hemminger 2007-03-12 @1412  static const struct seq_operations arp_seq_ops = {
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1413  	.start	= arp_seq_start,
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1414  	.next	= neigh_seq_next,
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1415  	.stop	= neigh_seq_stop,
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1416  	.show	= arp_seq_show,
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1417  };
-^1da177e4c3f415 Linus Torvalds    2005-04-16  1418  
-
-:::::: The code at line 1412 was first introduced by commit
-:::::: f690808e17925fc45217eb22e8670902ecee5c1b [NET]: make seq_operations const
-
-:::::: TO: Stephen Hemminger <shemminger@linux-foundation.org>
-:::::: CC: David S. Miller <davem@sunset.davemloft.net>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The cgroup tests need access to clone3() functionality in order to test
+CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
+tests. There are a few other tests that include the clone3 header.
