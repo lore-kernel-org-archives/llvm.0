@@ -1,41 +1,38 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CE42C86
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:13:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DB2761041;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2268
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:13:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B7186109E;
 	Wed, 24 Nov 2021 19:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1637781211;
-	bh=RRjOTqPDWgrKdDbYPjNhYCqM2YMTxtM8UhC2wV0Nr1E=;
+	bh=A9kzMO8wWtY/42/gi65g4Ok6WX2I/r/77pq5M1BvF/Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f4F0FRqIrWtYVY1BgJIUuNFzzvvViYbMzStnsu9jkMUHEnXoFor7p0IA3xIauPS0M
-	 2mpWl2oxq/3roJBk2iuG6/H0O2A2YXaCkmMgYEmsvIhzknVzf17E08ojciXzPe9N94
-	 sAQjzUkOsv8KrP0WJFJ9aZ9CRj3UvnyDy0KIukfK1qhna5B5b9DD3Vg/gDFjUKtsk0
-	 ITlXyZXTLDTKftotWbfvcxxZF5a1PFStdrMwIhsLvxuvYCsyFJLU0BgilhUdh6OYMo
-	 7e+x59vjMksqPeYZTrd8j6HoKrO7+3eaL6xNV6WjsqN8OVwXmnuC+TLdMNoJ29w3fT
-	 wNUtENa2OepLw==
+	b=nWzaRJfL/smkHVo1lgXZUiu5xpz7mynotbLWo/PC0Wbl9JL+CRb/0mIJHSsS7xBbg
+	 DXiPXy0mE31qaOGrOBgrk0SwhV61ECRNq3rTsKZalQAu/HK3legGwzJPAsdL5O9HWz
+	 3FYhOJRDTpLSkFgSjtszIDGayvnKYC9bTz+GC0wXPOl8FtOSIZvDmrPG9JIBCPw1yg
+	 R/4kLwRNVMTYiWvji71ZMa90WrCWvtQFXIFRhslo6EtAamR4eNgPC5ocRfHA46lZTm
+	 U7By8CLcsjI3NZNmyYWYN6MYYu2GW86wSI7nrqbVVTL4MNv4wTICFxcNv2VKojSAx4
+	 3ixkTWHj9e75Q==
 Received: by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mpxhs-004Q5P-Ig; Wed, 24 Nov 2021 20:13:24 +0100
+	id 1mpxhs-004Q5b-K6; Wed, 24 Nov 2021 20:13:24 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Andrey Utkin <andrey_utkin@fastmail.com>,
-	Anton Sviridenko <anton@corp.bluecherry.net>,
-	Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
-	Ismael Luceno <ismael@iodev.co.uk>,
+	Malcolm Priestley <tvboxspy@gmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 08/20] media: solo6x10: add _maybe_unused to currently unused functions
-Date: Wed, 24 Nov 2021 20:13:11 +0100
-Message-Id: <18daa194878d8815beef39d6fed2a838e1c2cb68.1637781097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 11/20] media: lmedm04: don't ignore errors when setting a filter
+Date: Wed, 24 Nov 2021 20:13:14 +0100
+Message-Id: <7da947b5433ecdd9cf1f2a50f4ae5cbc493dc844.1637781097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
 References: <cover.1637781097.git.mchehab+huawei@kernel.org>
@@ -48,13 +45,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-There are several unused helper macros there, meant to parse some
-fields.
-
-While there's not wrong with that, it generates clang warnings
-with W=1, causing build to break with CONFIG_WERROR.
-
-So, add __maybe_unused to fix such warnings.
+Solves a clang warning
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -62,58 +53,23 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
 
- drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/usb/dvb-usb-v2/lmedm04.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-index 0abcad4e84fa..85eaf5d00e9b 100644
---- a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-+++ b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-@@ -391,12 +391,12 @@ static int solo_send_desc(struct solo_enc_dev *solo_enc, int skip,
+diff --git a/drivers/media/usb/dvb-usb-v2/lmedm04.c b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+index fe4d886442a4..8a34e6c0d6a6 100644
+--- a/drivers/media/usb/dvb-usb-v2/lmedm04.c
++++ b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+@@ -423,6 +423,9 @@ static int lme2510_pid_filter_ctrl(struct dvb_usb_adapter *adap, int onoff)
+ 
+ 	mutex_unlock(&d->i2c_mutex);
+ 
++	if (ret)
++		return -EREMOTEIO;
++
+ 	return 0;
  }
  
- /* Extract values from VOP header - VE_STATUSxx */
--static inline int vop_interlaced(const vop_header *vh)
-+static inline __maybe_unused int vop_interlaced(const vop_header *vh)
- {
- 	return (__le32_to_cpu((*vh)[0]) >> 30) & 1;
- }
- 
--static inline u8 vop_channel(const vop_header *vh)
-+static inline __maybe_unused u8 vop_channel(const vop_header *vh)
- {
- 	return (__le32_to_cpu((*vh)[0]) >> 24) & 0x1F;
- }
-@@ -411,12 +411,12 @@ static inline u32 vop_mpeg_size(const vop_header *vh)
- 	return __le32_to_cpu((*vh)[0]) & 0xFFFFF;
- }
- 
--static inline u8 vop_hsize(const vop_header *vh)
-+static inline u8 __maybe_unused vop_hsize(const vop_header *vh)
- {
- 	return (__le32_to_cpu((*vh)[1]) >> 8) & 0xFF;
- }
- 
--static inline u8 vop_vsize(const vop_header *vh)
-+static inline u8 __maybe_unused vop_vsize(const vop_header *vh)
- {
- 	return __le32_to_cpu((*vh)[1]) & 0xFF;
- }
-@@ -436,12 +436,12 @@ static inline u32 vop_jpeg_size(const vop_header *vh)
- 	return __le32_to_cpu((*vh)[4]) & 0xFFFFF;
- }
- 
--static inline u32 vop_sec(const vop_header *vh)
-+static inline u32 __maybe_unused vop_sec(const vop_header *vh)
- {
- 	return __le32_to_cpu((*vh)[5]);
- }
- 
--static inline u32 vop_usec(const vop_header *vh)
-+static inline __maybe_unused u32 vop_usec(const vop_header *vh)
- {
- 	return __le32_to_cpu((*vh)[6]);
- }
 -- 
 2.33.1
 
