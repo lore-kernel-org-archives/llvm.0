@@ -1,23 +1,23 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C765B29CA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0691A2C81
 	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 794086101D;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 829E761039;
 	Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1637781206;
-	bh=oPubh2d4lwP9fKqCb4pNVElTBqmEvoM1817FlD5uu1Y=;
+	bh=zNh74PHZNRpkApXERz6a/nbbu/u11mAhtg08mS2Lb+I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=irJXrhhLIwRivfMQeCc7aAfVVCkb24cDUxA9Hj7NFCWbBnwunN9z3ASNrj9E6n3a9
-	 X13bRzxKuNGdJeN7+B7dSq3DNLtYHwgjFNz8HiUPJWE6+Vqu+/OCXS620D7fYXQpi3
-	 Wzv5FwxWn9gWdWVwY2YRH3giOK8umhhYXwDitIKdzXadq50/x6Y9Uz3C4ys7Netvsu
-	 ywPsOXmHr8ADYP6RvCMEB59d8IbAYgyjcfqdfizXZ2hhwvK6QdSjcHpfm2ccG6t3U3
-	 JQX0k6I2i0Lw9Y9JKJB5+Bg5ycfqi2+7iD+QskU1dCEbHvIoobjt3hk098W3DI+e15
-	 ffIjQ8sodAA1A==
+	b=ROselUXsmhTKBs4jHllOxwbPDtGt1cY8PmM0bRMLogAO0KdGzzq3RTz5EJIUQ7jn+
+	 48POq8k9ZpHkNssBC9arWp8lSRFtcjt3bJvEwu0uco+12XQMG80HdskBX13tYMjp17
+	 o4QcL9K1vaSTpBEXJPBDxO1QllLmNHVb3uGWvbcLNPZXX0OMX3ivEGIirXcPEwpn3C
+	 2tjzXyd9AKqo3GzzXzFXRWkzu1BZ4JsPQH5rQi21cdJVEaKUHXeo+xFiXN2Go57Z82
+	 dWH+3TacB6wZv0DsTnrtsgKgv4vZJr1oyZfz3dm53YdkJ32QhzYETGyLcqPMgl2Z3v
+	 8K542RTdP4Z9A==
 Received: by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mpxhs-004Q5C-Gm; Wed, 24 Nov 2021 20:13:24 +0100
+	id 1mpxhs-004Q56-Fn; Wed, 24 Nov 2021 20:13:24 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
@@ -29,9 +29,9 @@ Cc: linuxarm@huawei.com,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 04/20] media: drxd: drop offset var from DownloadMicrocode()
-Date: Wed, 24 Nov 2021 20:13:07 +0100
-Message-Id: <f4d081b88635e114d69cda30526fa04927be89d2.1637781097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 02/20] media: saa7134-go7007: get rid of to_state() function
+Date: Wed, 24 Nov 2021 20:13:05 +0100
+Message-Id: <0de4ecd59028848b24cfb57fcf0ac0480d6c7029.1637781097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
 References: <cover.1637781097.git.mchehab+huawei@kernel.org>
@@ -44,10 +44,15 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-The offset is not needed, and it is never used, as the pointer
-itself is already incremented.
+This is just an alias for container_of() and it is used only
+on a commented code. The commented code actually is an issue that
+require fixes, so, move the container_of() call to the commented
+code, and drop the unused function.
 
-So, drop it, in order to solve a W=1 clang warning.
+This way, a fix for the function could be added later without
+needing to re-add to_state() function.
+
+This fixes a clang W=1 warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -55,58 +60,34 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/drxd_hard.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/media/pci/saa7134/saa7134-go7007.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
-index a7eb81df88c2..9860cae65f1c 100644
---- a/drivers/media/dvb-frontends/drxd_hard.c
-+++ b/drivers/media/dvb-frontends/drxd_hard.c
-@@ -914,44 +914,36 @@ static int DownloadMicrocode(struct drxd_state *state,
- 	u32 Address;
- 	u16 nBlocks;
- 	u16 BlockSize;
--	u32 offset = 0;
- 	int i, status = 0;
+diff --git a/drivers/media/pci/saa7134/saa7134-go7007.c b/drivers/media/pci/saa7134/saa7134-go7007.c
+index f319edb39c0e..da83893ffee9 100644
+--- a/drivers/media/pci/saa7134/saa7134-go7007.c
++++ b/drivers/media/pci/saa7134/saa7134-go7007.c
+@@ -56,11 +56,6 @@ struct saa7134_go7007 {
+ 	dma_addr_t bottom_dma;
+ };
  
- 	pSrc = (u8 *) pMCImage;
- 	/* We're not using Flags */
- 	/* Flags = (pSrc[0] << 8) | pSrc[1]; */
- 	pSrc += sizeof(u16);
--	offset += sizeof(u16);
- 	nBlocks = (pSrc[0] << 8) | pSrc[1];
- 	pSrc += sizeof(u16);
--	offset += sizeof(u16);
+-static inline struct saa7134_go7007 *to_state(struct v4l2_subdev *sd)
+-{
+-	return container_of(sd, struct saa7134_go7007, sd);
+-}
+-
+ static const struct go7007_board_info board_voyager = {
+ 	.flags		 = 0,
+ 	.sensor_flags	 = GO7007_SENSOR_656 |
+@@ -385,7 +380,7 @@ MODULE_FIRMWARE("go7007/go7007tv.bin");
+ static int saa7134_go7007_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
+ {
+ #if 0
+-	struct saa7134_go7007 *saa = to_state(sd);
++	struct saa7134_go7007 *saa = container_of(sd, struct saa7134_go7007, sd);
+ 	struct saa7134_dev *dev = saa->dev;
  
- 	for (i = 0; i < nBlocks; i++) {
- 		Address = (pSrc[0] << 24) | (pSrc[1] << 16) |
- 		    (pSrc[2] << 8) | pSrc[3];
- 		pSrc += sizeof(u32);
--		offset += sizeof(u32);
- 
- 		BlockSize = ((pSrc[0] << 8) | pSrc[1]) * sizeof(u16);
- 		pSrc += sizeof(u16);
--		offset += sizeof(u16);
- 
- 		/* We're not using Flags */
- 		/* u16 Flags = (pSrc[0] << 8) | pSrc[1]; */
- 		pSrc += sizeof(u16);
--		offset += sizeof(u16);
- 
- 		/* We're not using BlockCRC */
- 		/* u16 BlockCRC = (pSrc[0] << 8) | pSrc[1]; */
- 		pSrc += sizeof(u16);
--		offset += sizeof(u16);
- 
- 		status = WriteBlock(state, Address, BlockSize,
- 				    pSrc, DRX_I2C_CLEARCRC);
- 		if (status < 0)
- 			break;
- 		pSrc += BlockSize;
--		offset += BlockSize;
- 	}
- 
- 	return status;
+ 	return saa7134_s_std_internal(dev, NULL, norm);
 -- 
 2.33.1
 
