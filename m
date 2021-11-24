@@ -1,94 +1,77 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D5768
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:24:36 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3008760F45;
-	Wed, 24 Nov 2021 19:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637781875;
-	bh=ubDVyjX2Vo52C6T2PtSywkFN1CZ0+cdakXsmN5iY0Mg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sbxkrw9Ih+aIhGSCa1xNAxISTcAj6Mn4RkIAjiHlb3HG/GI1asqhVfloeA07ESdBJ
-	 os5bD3+4S2LKaNHyqPaRCOicPRA6KEcbgQBtkLdLIiqSytU4402AmZKArQvGncsj9g
-	 2EBMlfEBTo/L3L5AiYLfz9rNQebg6dnxlFg+y6qUAoQE+4gbYI2ELcHDKEGNlLDD2c
-	 J0XPU77wVC3FgzyAotHXnP9xfQI162k0a6eBMpEBEI2/r3F9M+OFOZZYmj01OGs0XG
-	 Nh5nI70qWrpDfffcqarDAQ86dM449x0X0yvuPjHsvPUfOv09O+JoZYttsmkwRlI48y
-	 216ihFDsukr8w==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Vaibhav Hiremath <hvaibhav@ti.com>,
-	Stanimir Varbanov <svarbanov@mm-sol.com>,
-	Dominic Curran <dcurran@ti.com>,
-	David Cohen <dacohen@gmail.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] media: omap3isp: fix out-of-range warning
-Date: Wed, 24 Nov 2021 20:24:15 +0100
-Message-Id: <20211124192430.74541-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE2C68
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:29:28 +0000 (UTC)
+Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N95mL-1mbLRK2mPv-0167X3 for <llvm@lists.linux.dev>; Wed, 24 Nov 2021
+ 20:24:13 +0100
+Received: by mail-wm1-f47.google.com with SMTP id az34-20020a05600c602200b0033bf8662572so3001446wmb.0
+        for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 11:24:13 -0800 (PST)
+X-Gm-Message-State: AOAM533xKGD+/Ii7Wd8wzb3JSMDHjgn8iQoKvjbgs/tTgmbCfsjuPQld
+	gcPl4/Eze62wWNnNVyhwOgDDK9y5/MnInrlpVO4=
+X-Google-Smtp-Source: ABdhPJxU3XHzGkZdmjVLUlcDMysYVZXYBGK7dc18pfMdKQoniTree9ljP7IJbkiJjYrYSt/hozmOHO002j1Kgkumx8s=
+X-Received: by 2002:a1c:1c1:: with SMTP id 184mr18501034wmb.1.1637781853302;
+ Wed, 24 Nov 2021 11:24:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
+References: <cover.1637781097.git.mchehab+huawei@kernel.org>
+In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
 From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 24 Nov 2021 20:23:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1kQp4g6-59ui8ASBb-QYmwrtK5dh6L2PKjyXVV_VEGvw@mail.gmail.com>
+Message-ID: <CAK8P3a1kQp4g6-59ui8ASBb-QYmwrtK5dh6L2PKjyXVV_VEGvw@mail.gmail.com>
+Subject: Re: [PATCH 00/20] Solve the remaining issues with clang and W=1 on media
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Linuxarm <linuxarm@huawei.com>, Mauro Carvalho Chehab <mauro.chehab@huawei.com>, 
+	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, Andy Gross <agross@kernel.org>, 
+	Antti Palosaari <crope@iki.fi>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, Malcolm Priestley <tvboxspy@gmail.com>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Foss <robert.foss@linaro.org>, 
+	Todor Tomov <todor.too@gmail.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	linux-arm-msm <linux-arm-msm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Media Mailing List <linux-media@vger.kernel.org>, 
+	"moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:vEcR4C4y3/s6c8H8EK6/Mb23Sqxavfuq27L+UPXTHIKahBr6BRd
+ O1EdwEnQNzPJP+7dwxaJnWTR6ekmkt/22K0untNw3Ykr0SOL6gpw4d5Y66lze+/gCgdu1YS
+ WSiWWkbyl/iZdiKMydmF7JwIKCthN0ItM62f2kgsSgq0xRWvgQkyZa3VUDAJNWOoM0oOVl9
+ uGoKU7NQZefzS/TdaUk+Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Q98/yR7+tVs=:96+LP5cgV6BMfzVzMPkChZ
+ 6K9u6l4TvcT8Bc2VN+lcy6d9aMVfr5zbZFnfbPMHg4s9gHTEkXA43USCMa/wQ9XZCKVdN6ybd
+ 0t29jPcuHB+tpI2n4y4Rm4K8/FcL/XaY+piKCfJvchxEWvgMBPSJv5bNwxav8orIIvHhmKkpY
+ pFIuqJxj5aaSadUS1D+V84fioPheY86IyRg7k4l34ttELMc6hQP5rjebBPBqPt41x1kWmljLb
+ gI9jgwv/uJTvaijaw6BlqHWJ+B0omkCjjrcECekJFYvtakM9/lLfD4yrJDuQQb8JSp8hKOJu4
+ 8Vioibs4Gp4eX1TXgB8l+pheEmpDl3pAXAF5A7bADwCe0EPCI+O21lZManmyFJeE19htd66Yo
+ NKUfZrU8Z+cgg01aD2nMObMUQk4h5F5SjeOffsjWhljhizehN2lJmXKhuW6ebzq70Cs9s7Myx
+ Thl5cUKIbSXR7ZAULFzNoTZ8MmHv6AOPm1+a1y/YUcB8dYX/pzYI/X3bv63ypCbPTh9EjT0su
+ qrDCq8Tl4ZAznkfSkn4u27IqJ7s/Fxc5D8Jhz+ap/gC7rvCjed66xwyglayK8A+d/So7I4F20
+ M4JgTFC2uf/8oUDeycgZ2XD9UHheHe9GUQVdiiUWnrXQsWpofuR5qEhOBdjxglGmn7gLfKphh
+ ++zyec0RTcNAeZNXlpLa/rbhiB4N5czHkIdzM0Evt6VaHBBd9qUKaz57WZT+cqmIn8+FfgWWO
+ sUr4EqTeQt73+A9/Bu9juwW/8oNNmjEYwmkLTgWLA5ziRbJ6xHwCDZd9FFQN2hnQwHjtLdlmn
+ syJ/i0F044by80QwkruYZKWHNKqN/zh/cvn7P45iH3L3oXSb0E=
 
-clang points out that the 8-bit height/width values never exceed
-the range of that type when building with 'make W=1 LLVM=1':
+On Wed, Nov 24, 2021 at 8:13 PM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> Currently, using clang with W=1 and CONFIG_WERROR causes media to break.
+> This is reported by builder.linuxtv.org.
+>
+> This series solve the remaining issues.
 
-drivers/media/platform/omap3isp/isph3a_af.c:173:6: error: result of comparison of constant 256 with expression of type '__u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (IS_OUT_OF_BOUNDS(paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/platform/omap3isp/isph3a_af.c:24:33: note: expanded from macro 'IS_OUT_OF_BOUNDS'
-        (((value) < (min)) || ((value) > (max)))
-                               ~~~~~~~ ^ ~~~~~
-drivers/media/platform/omap3isp/isph3a_af.c:179:6: error: result of comparison of constant 256 with expression of type '__u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (IS_OUT_OF_BOUNDS(paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/platform/omap3isp/isph3a_af.c:24:33: note: expanded from macro 'IS_OUT_OF_BOUNDS'
-        (((value) < (min)) || ((value) > (max)))
-                               ~~~~~~~ ^ ~~~~~
+I looked through my randconfig tree and found one more that I had
+initially not sent
+as I wasn't sure whether we want to fix
+-Wtautological-constant-out-of-range-compare
+warnings. I'll send it now, as all warnings of that type in other
+drivers have been addressed.
 
-Add a cast to 32-bit to avoid the warning. Checking just the lower bounds
-would be sufficient as well, but it seems more consistent to use
-the IS_OUT_OF_BOUNDS() check for all members.
-
-Fixes: 68e342b3068c ("[media] omap3isp: Statistics")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/platform/omap3isp/isph3a_af.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/omap3isp/isph3a_af.c b/drivers/media/platform/omap3isp/isph3a_af.c
-index a65cfdfa9637..c544d9c812b0 100644
---- a/drivers/media/platform/omap3isp/isph3a_af.c
-+++ b/drivers/media/platform/omap3isp/isph3a_af.c
-@@ -170,13 +170,13 @@ static int h3a_af_validate_params(struct ispstat *af, void *new_conf)
- 			     OMAP3ISP_AF_PAXEL_VERTICAL_COUNT_MAX))
- 		return -EINVAL;
- 
--	if (IS_OUT_OF_BOUNDS(paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
-+	if (IS_OUT_OF_BOUNDS((u32)paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
- 			     OMAP3ISP_AF_PAXEL_HEIGHT_MAX) ||
- 	    paxel_cfg->height % 2)
- 		return -EINVAL;
- 
- 	/* Check width */
--	if (IS_OUT_OF_BOUNDS(paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
-+	if (IS_OUT_OF_BOUNDS((u32)paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
- 			     OMAP3ISP_AF_PAXEL_WIDTH_MAX) ||
- 	    paxel_cfg->width % 2)
- 		return -EINVAL;
--- 
-2.29.2
-
+        Arnd
