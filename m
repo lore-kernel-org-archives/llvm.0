@@ -1,297 +1,112 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A7768
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 18:38:19 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="215372342"
-X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
-   d="scan'208";a="215372342"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 10:37:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
-   d="scan'208";a="554336169"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Nov 2021 10:36:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mpx8c-0005CQ-Is; Wed, 24 Nov 2021 18:36:58 +0000
-Date: Thu, 25 Nov 2021 02:36:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Paul Turner <pjt@google.com>
-Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
-Message-ID: <202111250209.9dBNZjdP-lkp@intel.com>
-References: <20211122211327.5931-4-posk@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C765B29CA
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 794086101D;
+	Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637781206;
+	bh=oPubh2d4lwP9fKqCb4pNVElTBqmEvoM1817FlD5uu1Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=irJXrhhLIwRivfMQeCc7aAfVVCkb24cDUxA9Hj7NFCWbBnwunN9z3ASNrj9E6n3a9
+	 X13bRzxKuNGdJeN7+B7dSq3DNLtYHwgjFNz8HiUPJWE6+Vqu+/OCXS620D7fYXQpi3
+	 Wzv5FwxWn9gWdWVwY2YRH3giOK8umhhYXwDitIKdzXadq50/x6Y9Uz3C4ys7Netvsu
+	 ywPsOXmHr8ADYP6RvCMEB59d8IbAYgyjcfqdfizXZ2hhwvK6QdSjcHpfm2ccG6t3U3
+	 JQX0k6I2i0Lw9Y9JKJB5+Bg5ycfqi2+7iD+QskU1dCEbHvIoobjt3hk098W3DI+e15
+	 ffIjQ8sodAA1A==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+	(envelope-from <mchehab@kernel.org>)
+	id 1mpxhs-004Q5C-Gm; Wed, 24 Nov 2021 20:13:24 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: 
+Cc: linuxarm@huawei.com,
+	mauro.chehab@huawei.com,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 04/20] media: drxd: drop offset var from DownloadMicrocode()
+Date: Wed, 24 Nov 2021 20:13:07 +0100
+Message-Id: <f4d081b88635e114d69cda30526fa04927be89d2.1637781097.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
+References: <cover.1637781097.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211122211327.5931-4-posk@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Hi Peter,
+The offset is not needed, and it is never used, as the pointer
+itself is already incremented.
 
-Thank you for the patch! Perhaps something to improve:
+So, drop it, in order to solve a W=1 clang warning.
 
-[auto build test WARNING on cb0e52b7748737b2cf6481fdd9b920ce7e1ebbdf]
-
-url:    https://github.com/0day-ci/linux/commits/Peter-Oskolkov/sched-mm-x86-uaccess-implement-User-Managed-Concurrency-Groups/20211123-051525
-base:   cb0e52b7748737b2cf6481fdd9b920ce7e1ebbdf
-config: arm64-randconfig-r031-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250209.9dBNZjdP-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/942655474fa2cd59ea3d11a1cc03775dd79a508e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Peter-Oskolkov/sched-mm-x86-uaccess-implement-User-Managed-Concurrency-Groups/20211123-051525
-        git checkout 942655474fa2cd59ea3d11a1cc03775dd79a508e
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:34:1: note: expanded from here
-   __arm64_sys_recvmsg
-   ^
-   kernel/sys_ni.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:263:1: warning: no previous prototype for function '__arm64_sys_mremap' [-Wmissing-prototypes]
-   COND_SYSCALL(mremap);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:39:1: note: expanded from here
-   __arm64_sys_mremap
-   ^
-   kernel/sys_ni.c:263:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:266:1: warning: no previous prototype for function '__arm64_sys_add_key' [-Wmissing-prototypes]
-   COND_SYSCALL(add_key);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:40:1: note: expanded from here
-   __arm64_sys_add_key
-   ^
-   kernel/sys_ni.c:266:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:267:1: warning: no previous prototype for function '__arm64_sys_request_key' [-Wmissing-prototypes]
-   COND_SYSCALL(request_key);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:41:1: note: expanded from here
-   __arm64_sys_request_key
-   ^
-   kernel/sys_ni.c:267:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:268:1: warning: no previous prototype for function '__arm64_sys_keyctl' [-Wmissing-prototypes]
-   COND_SYSCALL(keyctl);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:42:1: note: expanded from here
-   __arm64_sys_keyctl
-   ^
-   kernel/sys_ni.c:268:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:272:1: warning: no previous prototype for function '__arm64_sys_landlock_create_ruleset' [-Wmissing-prototypes]
-   COND_SYSCALL(landlock_create_ruleset);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:47:1: note: expanded from here
-   __arm64_sys_landlock_create_ruleset
-   ^
-   kernel/sys_ni.c:272:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:273:1: warning: no previous prototype for function '__arm64_sys_landlock_add_rule' [-Wmissing-prototypes]
-   COND_SYSCALL(landlock_add_rule);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:48:1: note: expanded from here
-   __arm64_sys_landlock_add_rule
-   ^
-   kernel/sys_ni.c:273:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:274:1: warning: no previous prototype for function '__arm64_sys_landlock_restrict_self' [-Wmissing-prototypes]
-   COND_SYSCALL(landlock_restrict_self);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:49:1: note: expanded from here
-   __arm64_sys_landlock_restrict_self
-   ^
-   kernel/sys_ni.c:274:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
->> kernel/sys_ni.c:277:1: warning: no previous prototype for function '__arm64_sys_umcg_ctl' [-Wmissing-prototypes]
-   COND_SYSCALL(umcg_ctl);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:50:1: note: expanded from here
-   __arm64_sys_umcg_ctl
-   ^
-   kernel/sys_ni.c:277:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
->> kernel/sys_ni.c:278:1: warning: no previous prototype for function '__arm64_sys_umcg_wait' [-Wmissing-prototypes]
-   COND_SYSCALL(umcg_wait);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:51:1: note: expanded from here
-   __arm64_sys_umcg_wait
-   ^
-   kernel/sys_ni.c:278:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:283:1: warning: no previous prototype for function '__arm64_sys_fadvise64_64' [-Wmissing-prototypes]
-   COND_SYSCALL(fadvise64_64);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:52:1: note: expanded from here
-   __arm64_sys_fadvise64_64
-   ^
-   kernel/sys_ni.c:283:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:286:1: warning: no previous prototype for function '__arm64_sys_swapon' [-Wmissing-prototypes]
-   COND_SYSCALL(swapon);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:53:1: note: expanded from here
-   __arm64_sys_swapon
-   ^
-   kernel/sys_ni.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:287:1: warning: no previous prototype for function '__arm64_sys_swapoff' [-Wmissing-prototypes]
-   COND_SYSCALL(swapoff);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:54:1: note: expanded from here
-   __arm64_sys_swapoff
-   ^
-   kernel/sys_ni.c:287:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:288:1: warning: no previous prototype for function '__arm64_sys_mprotect' [-Wmissing-prototypes]
-   COND_SYSCALL(mprotect);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:55:1: note: expanded from here
-   __arm64_sys_mprotect
-   ^
-   kernel/sys_ni.c:288:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:289:1: warning: no previous prototype for function '__arm64_sys_msync' [-Wmissing-prototypes]
-   COND_SYSCALL(msync);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:56:1: note: expanded from here
-   __arm64_sys_msync
-   ^
-   kernel/sys_ni.c:289:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:290:1: warning: no previous prototype for function '__arm64_sys_mlock' [-Wmissing-prototypes]
-   COND_SYSCALL(mlock);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:57:1: note: expanded from here
-   __arm64_sys_mlock
-   ^
-   kernel/sys_ni.c:290:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                      ^
-   kernel/sys_ni.c:291:1: warning: no previous prototype for function '__arm64_sys_munlock' [-Wmissing-prototypes]
-   COND_SYSCALL(munlock);
-   ^
-   arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
-           asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
-                                  ^
-   <scratch space>:58:1: note: expanded from here
-   __arm64_sys_munlock
-   ^
-   kernel/sys_ni.c:291:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-
-
-vim +/__arm64_sys_umcg_ctl +277 kernel/sys_ni.c
-
-   275	
-   276	/* kernel/sched/umcg.c */
- > 277	COND_SYSCALL(umcg_ctl);
- > 278	COND_SYSCALL(umcg_wait);
-   279	
-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
+
+ drivers/media/dvb-frontends/drxd_hard.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
+index a7eb81df88c2..9860cae65f1c 100644
+--- a/drivers/media/dvb-frontends/drxd_hard.c
++++ b/drivers/media/dvb-frontends/drxd_hard.c
+@@ -914,44 +914,36 @@ static int DownloadMicrocode(struct drxd_state *state,
+ 	u32 Address;
+ 	u16 nBlocks;
+ 	u16 BlockSize;
+-	u32 offset = 0;
+ 	int i, status = 0;
+ 
+ 	pSrc = (u8 *) pMCImage;
+ 	/* We're not using Flags */
+ 	/* Flags = (pSrc[0] << 8) | pSrc[1]; */
+ 	pSrc += sizeof(u16);
+-	offset += sizeof(u16);
+ 	nBlocks = (pSrc[0] << 8) | pSrc[1];
+ 	pSrc += sizeof(u16);
+-	offset += sizeof(u16);
+ 
+ 	for (i = 0; i < nBlocks; i++) {
+ 		Address = (pSrc[0] << 24) | (pSrc[1] << 16) |
+ 		    (pSrc[2] << 8) | pSrc[3];
+ 		pSrc += sizeof(u32);
+-		offset += sizeof(u32);
+ 
+ 		BlockSize = ((pSrc[0] << 8) | pSrc[1]) * sizeof(u16);
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		/* We're not using Flags */
+ 		/* u16 Flags = (pSrc[0] << 8) | pSrc[1]; */
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		/* We're not using BlockCRC */
+ 		/* u16 BlockCRC = (pSrc[0] << 8) | pSrc[1]; */
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		status = WriteBlock(state, Address, BlockSize,
+ 				    pSrc, DRX_I2C_CLEARCRC);
+ 		if (status < 0)
+ 			break;
+ 		pSrc += BlockSize;
+-		offset += BlockSize;
+ 	}
+ 
+ 	return status;
+-- 
+2.33.1
+
