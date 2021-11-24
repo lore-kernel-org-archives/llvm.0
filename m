@@ -1,155 +1,77 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BFF68
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:18:02 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="234082300"
-X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
-   d="scan'208";a="234082300"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 11:18:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
-   d="scan'208";a="674973520"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2021 11:18:00 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mpxmJ-0005EY-7y; Wed, 24 Nov 2021 19:17:59 +0000
-Date: Thu, 25 Nov 2021 03:17:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ansuel Smith <ansuelsmth@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3051/3376] drivers/net/dsa/qca8k.c:2231:44:
- warning: overlapping comparisons always evaluate to true
-Message-ID: <202111250337.3sBzIJgK-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E9468
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:22:08 +0000 (UTC)
+Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MvaO8-1mWeVN0Zc6-00sh9c for <llvm@lists.linux.dev>; Wed, 24 Nov 2021
+ 20:22:07 +0100
+Received: by mail-wm1-f42.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so6420046wme.0
+        for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 11:22:07 -0800 (PST)
+X-Gm-Message-State: AOAM5333lXXTzSjevKM+GQIbveBUjA+otNfL1MGpAxPA2kCy5Q/c5run
+	YP0CPqFvzgiH5XcMcDn/GyD6IdcttWzKC+ZYA7Y=
+X-Google-Smtp-Source: ABdhPJyA967xXsVVOdLJdkVj5zYgmz3qs3/FxEAJIV2nNiYoRheYa4DjM+GWWKPY+38aCDJUPzvYqT2XNbgtE7c9kMM=
+X-Received: by 2002:a1c:770e:: with SMTP id t14mr17497596wmi.173.1637781726785;
+ Wed, 24 Nov 2021 11:22:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1637781097.git.mchehab+huawei@kernel.org> <63ecb865c4f2b81862f5e6ac0dea497d3e0baca3.1637781097.git.mchehab+huawei@kernel.org>
+In-Reply-To: <63ecb865c4f2b81862f5e6ac0dea497d3e0baca3.1637781097.git.mchehab+huawei@kernel.org>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 24 Nov 2021 20:21:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2ez6nEw4d+Mqa3XXAz0RFTZHunqqRj6sCt7Y_Eqqs0rw@mail.gmail.com>
+Message-ID: <CAK8P3a2ez6nEw4d+Mqa3XXAz0RFTZHunqqRj6sCt7Y_Eqqs0rw@mail.gmail.com>
+Subject: Re: [PATCH 18/20] media: mtk-mdp: address a clang warning
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Linuxarm <linuxarm@huawei.com>, Mauro Carvalho Chehab <mauro.chehab@huawei.com>, 
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>, Houlong Wei <houlong.wei@mediatek.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Minghsiu Tsai <minghsiu.tsai@mediatek.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Media Mailing List <linux-media@vger.kernel.org>, 
+	"moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Yl6Et6cfkAXJd3o3lE6rbakCsT+6fX4LYcX6Y6eZxyOzsKJ+0+M
+ rLKuNDLkTIUCBW21BhCT/S5/HhTXNguIrj02HCaWVdcbCxAVVq04mghccvlNOzNtxoYVqRt
+ lb7gSaDtvKcsryq68q9QWGyhSstZXLiREOK46rbqoi8OWigTEzcVALqRbQJHa+cPZs1PkoI
+ LCUYJHhfkpcvSUNbXr7uA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oAn1LtlhDOo=:33tadCV5JD7nfdZBhk9biF
+ HAo4VAp+Bn+BRAk08xFxOibXFskcBkL9swM+vmBXBOrHVWvaQID1H3oTmfyZxYopI4Ufsbs4Z
+ re35gFPtvVey4pBAt8bKEwGiiUD9n3Q74Du/6QZLQAErpJ0cldaRC+oou6WaALUsY4iaOZJiu
+ vMwEL+OWZoMOzghTGjDKLMzyx75iD7bS2jhqGlBI1FQ2yg5u2lU/idtk8eAToKuRG1Lx89qIg
+ qM7mzpsccWWyZR+CMsYPwCDBNzst0qENzue3ffkNZcV/ZbRP2iMMRxiQt2XGCnV0mE3uLpMWy
+ qv8/Ixy8O89/dTkcDCEdy7V5aW96wiWM8gLgLOKVx5+M3Aeu1WTdiTpsinTUAnouagdF7VY3o
+ OhvUEDDslf7W4MehHk/ESnSQmZ1piNY/OVx7wpjVP98930gmtF5hjk4ghsTEY1SqlPvre7pnu
+ prjyPl088DHWFf4iWLIU627PG0mBnTDFXynEtg6iRgopcaPeZsL6f2Zg+dOL29a9bF639Q+hv
+ lovUgFEOfHuG5HZ6ofKVIgdQ3J5G/VczqzGoVxt8PFWoczZK3Ldpu66rmM8JBTPgTEdfUPv/6
+ aIkhUd2QLX2sldY8GiYC63WNLh9ZkaLuKnyjVAJPs0XDLyZJujcRqoA+iFFsTow0gJ4aSTUKR
+ wQsw9ywd6Dq8R3Ddo8mnpz9G03DqyCtWYlE15gWFJ2axQsqpe1wyoR0p2/Ug8KQDpT5k=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4b74e088fef6ce8cc513f935ce236c38bdf5f67b
-commit: def975307c01191b6f0170048c3724b0ed3348af [3051/3376] net: dsa: qca8k: add LAG support
-config: x86_64-randconfig-a002-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250337.3sBzIJgK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=def975307c01191b6f0170048c3724b0ed3348af
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout def975307c01191b6f0170048c3724b0ed3348af
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
+On Wed, Nov 24, 2021 at 8:13 PM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> The typecasts at the dvb-core generate clang warnings when W=1
+> is enabled.
+>
+> Such warning is harmless, but it causes the build to break with
+> CONFIG_WERROR and W=1 with clang, so do the cast on a way that
+> it won't produce warnings anymore.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-All warnings (new ones prefixed by >>):
+>
+> -               comp_type = (enum mtk_mdp_comp_type)of_id->data;
+> +               comp_type = (long)of_id->data;
 
->> drivers/net/dsa/qca8k.c:2231:44: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
-           if (info->hash_type != NETDEV_LAG_HASH_L2 ||
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
->> drivers/net/dsa/qca8k.c:2252:3: warning: variable 'hash' is uninitialized when used here [-Wuninitialized]
-                   hash |= QCA8K_TRUNK_HASH_SIP_EN;
-                   ^~~~
-   drivers/net/dsa/qca8k.c:2246:10: note: initialize the variable 'hash' to silence this warning
-           u32 hash;
-                   ^
-                    = 0
-   2 warnings generated.
+I would generally use (uintptr_t) for this purpose, but the effect is the same.
 
-
-vim +2231 drivers/net/dsa/qca8k.c
-
-  2208	
-  2209	static bool
-  2210	qca8k_lag_can_offload(struct dsa_switch *ds,
-  2211			      struct net_device *lag,
-  2212			      struct netdev_lag_upper_info *info)
-  2213	{
-  2214		struct dsa_port *dp;
-  2215		int id, members = 0;
-  2216	
-  2217		id = dsa_lag_id(ds->dst, lag);
-  2218		if (id < 0 || id >= ds->num_lag_ids)
-  2219			return false;
-  2220	
-  2221		dsa_lag_foreach_port(dp, ds->dst, lag)
-  2222			/* Includes the port joining the LAG */
-  2223			members++;
-  2224	
-  2225		if (members > QCA8K_NUM_PORTS_FOR_LAG)
-  2226			return false;
-  2227	
-  2228		if (info->tx_type != NETDEV_LAG_TX_TYPE_HASH)
-  2229			return false;
-  2230	
-> 2231		if (info->hash_type != NETDEV_LAG_HASH_L2 ||
-  2232		    info->hash_type != NETDEV_LAG_HASH_L23)
-  2233			return false;
-  2234	
-  2235		return true;
-  2236	}
-  2237	
-  2238	static int
-  2239	qca8k_lag_setup_hash(struct dsa_switch *ds,
-  2240			     struct net_device *lag,
-  2241			     struct netdev_lag_upper_info *info)
-  2242	{
-  2243		struct qca8k_priv *priv = ds->priv;
-  2244		bool unique_lag = true;
-  2245		int i, id;
-  2246		u32 hash;
-  2247	
-  2248		id = dsa_lag_id(ds->dst, lag);
-  2249	
-  2250		switch (info->hash_type) {
-  2251		case NETDEV_LAG_HASH_L23:
-> 2252			hash |= QCA8K_TRUNK_HASH_SIP_EN;
-  2253			hash |= QCA8K_TRUNK_HASH_DIP_EN;
-  2254			fallthrough;
-  2255		case NETDEV_LAG_HASH_L2:
-  2256			hash |= QCA8K_TRUNK_HASH_SA_EN;
-  2257			hash |= QCA8K_TRUNK_HASH_DA_EN;
-  2258			break;
-  2259		default: /* We should NEVER reach this */
-  2260			return -EOPNOTSUPP;
-  2261		}
-  2262	
-  2263		/* Check if we are the unique configured LAG */
-  2264		dsa_lags_foreach_id(i, ds->dst)
-  2265			if (i != id && dsa_lag_dev(ds->dst, i)) {
-  2266				unique_lag = false;
-  2267				break;
-  2268			}
-  2269	
-  2270		/* Hash Mode is global. Make sure the same Hash Mode
-  2271		 * is set to all the 4 possible lag.
-  2272		 * If we are the unique LAG we can set whatever hash
-  2273		 * mode we want.
-  2274		 * To change hash mode it's needed to remove all LAG
-  2275		 * and change the mode with the latest.
-  2276		 */
-  2277		if (unique_lag) {
-  2278			priv->lag_hash_mode = hash;
-  2279		} else if (priv->lag_hash_mode != hash) {
-  2280			netdev_err(lag, "Error: Mismateched Hash Mode across different lag is not supported\n");
-  2281			return -EOPNOTSUPP;
-  2282		}
-  2283	
-  2284		return regmap_update_bits(priv->regmap, QCA8K_TRUNK_HASH_EN_CTRL,
-  2285					  QCA8K_TRUNK_HASH_MASK, hash);
-  2286	}
-  2287	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+        Arnd
