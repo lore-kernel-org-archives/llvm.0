@@ -1,79 +1,103 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E8A2C81
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 22:02:14 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="259278635"
-X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
-   d="scan'208";a="259278635"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 14:02:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
-   d="scan'208";a="497839054"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 24 Nov 2021 14:02:02 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mq0L4-0005Mt-8x; Wed, 24 Nov 2021 22:02:02 +0000
-Date: Thu, 25 Nov 2021 06:01:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mcgrof-next:20211124-sysctl-cleanups 20/41]
- include/linux/sysctl.h:228:30: error: unused function
- 'register_sysctl_mount_point'
-Message-ID: <202111250521.fMsBjd43-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5132C81
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 22:27:07 +0000 (UTC)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FB4290E;
+	Wed, 24 Nov 2021 23:26:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1637792818;
+	bh=MhpUrhVW+9QPh2Furlp0JZjdfxALMVDTKEaY5FshAys=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hUmZ+pWDZ5FtHXjmNnznCKybWeFSFPzvHPps2vGdP/FlVszrGZp8I8HxtB24JuZ4r
+	 i5vsJkyBfJcKZpod6HdLyBkSZD4b/vPUhSlK0bcyuQfATxLTyzuzi2/67o/Vg55y0A
+	 OPK3nwBV2eVFR1pMiIOzVedq4h7Ie0n89XA8vYik=
+Date: Thu, 25 Nov 2021 00:26:35 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Vaibhav Hiremath <hvaibhav@ti.com>,
+	Stanimir Varbanov <svarbanov@mm-sol.com>,
+	Dominic Curran <dcurran@ti.com>, David Cohen <dacohen@gmail.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] media: omap3isp: fix out-of-range warning
+Message-ID: <YZ68G09viJA/vkby@pendragon.ideasonboard.com>
+References: <20211124192430.74541-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211124192430.74541-1-arnd@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20211124-sysctl-cleanups
-head:   be58d35fd7e6bfac6e48e3188ab9f4d0b5ac4af7
-commit: 81e9e1fdc7a64b2745a2c11769eb3864121eedc0 [20/41] sysctl: add helper to register a sysctl mount point
-config: hexagon-randconfig-r005-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250521.fMsBjd43-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=81e9e1fdc7a64b2745a2c11769eb3864121eedc0
-        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-        git fetch --no-tags mcgrof-next 20211124-sysctl-cleanups
-        git checkout 81e9e1fdc7a64b2745a2c11769eb3864121eedc0
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
+Hi Arnd,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for the patch.
 
-All errors (new ones prefixed by >>):
+On Wed, Nov 24, 2021 at 08:24:15PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang points out that the 8-bit height/width values never exceed
+> the range of that type when building with 'make W=1 LLVM=1':
+> 
+> drivers/media/platform/omap3isp/isph3a_af.c:173:6: error: result of comparison of constant 256 with expression of type '__u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>         if (IS_OUT_OF_BOUNDS(paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/media/platform/omap3isp/isph3a_af.c:24:33: note: expanded from macro 'IS_OUT_OF_BOUNDS'
+>         (((value) < (min)) || ((value) > (max)))
+>                                ~~~~~~~ ^ ~~~~~
+> drivers/media/platform/omap3isp/isph3a_af.c:179:6: error: result of comparison of constant 256 with expression of type '__u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>         if (IS_OUT_OF_BOUNDS(paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/media/platform/omap3isp/isph3a_af.c:24:33: note: expanded from macro 'IS_OUT_OF_BOUNDS'
+>         (((value) < (min)) || ((value) > (max)))
+>                                ~~~~~~~ ^ ~~~~~
+> 
+> Add a cast to 32-bit to avoid the warning. Checking just the lower bounds
+> would be sufficient as well, but it seems more consistent to use
+> the IS_OUT_OF_BOUNDS() check for all members.
 
-   In file included from lib/test_bitops.c:9:
-   In file included from include/linux/module.h:17:
-   In file included from include/linux/kmod.h:9:
-   In file included from include/linux/umh.h:9:
->> include/linux/sysctl.h:228:30: error: unused function 'register_sysctl_mount_point' [-Werror,-Wunused-function]
-   static struct sysctl_header *register_sysctl_mount_point(const char *path)
-                                ^
-   1 error generated.
+Mauro has submitted a fix that handles the cast in the
+IS_OUT_OF_BOUNDS() macro, see
+https://lore.kernel.org/all/b70f819b11e024649f113be1158f34b24914a1ed.1637573097.git.mchehab+huawei@kernel.org/.
 
+> Fixes: 68e342b3068c ("[media] omap3isp: Statistics")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/media/platform/omap3isp/isph3a_af.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/omap3isp/isph3a_af.c b/drivers/media/platform/omap3isp/isph3a_af.c
+> index a65cfdfa9637..c544d9c812b0 100644
+> --- a/drivers/media/platform/omap3isp/isph3a_af.c
+> +++ b/drivers/media/platform/omap3isp/isph3a_af.c
+> @@ -170,13 +170,13 @@ static int h3a_af_validate_params(struct ispstat *af, void *new_conf)
+>  			     OMAP3ISP_AF_PAXEL_VERTICAL_COUNT_MAX))
+>  		return -EINVAL;
+>  
+> -	if (IS_OUT_OF_BOUNDS(paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
+> +	if (IS_OUT_OF_BOUNDS((u32)paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
+>  			     OMAP3ISP_AF_PAXEL_HEIGHT_MAX) ||
+>  	    paxel_cfg->height % 2)
+>  		return -EINVAL;
+>  
+>  	/* Check width */
+> -	if (IS_OUT_OF_BOUNDS(paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
+> +	if (IS_OUT_OF_BOUNDS((u32)paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
+>  			     OMAP3ISP_AF_PAXEL_WIDTH_MAX) ||
+>  	    paxel_cfg->width % 2)
+>  		return -EINVAL;
 
-vim +/register_sysctl_mount_point +228 include/linux/sysctl.h
+-- 
+Regards,
 
-   227	
- > 228	static struct sysctl_header *register_sysctl_mount_point(const char *path)
-   229	{
-   230		return NULL;
-   231	}
-   232	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Laurent Pinchart
