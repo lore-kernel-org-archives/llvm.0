@@ -1,32 +1,35 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EE22C81
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 00:14:06 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="234987169"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B025A68
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 01:35:27 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="259059490"
 X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="234987169"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 16:14:06 -0800
+   d="scan'208";a="259059490"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 17:35:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="597292446"
+   d="scan'208";a="474961393"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Nov 2021 16:14:02 -0800
+  by orsmga002.jf.intel.com with ESMTP; 23 Nov 2021 17:35:22 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mpfvG-0002mS-2i; Wed, 24 Nov 2021 00:14:02 +0000
-Date: Wed, 24 Nov 2021 08:13:00 +0800
+	id 1mphBx-00047J-M7; Wed, 24 Nov 2021 01:35:21 +0000
+Date: Wed, 24 Nov 2021 09:34:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Akira Kawata <akirakawata1@gmail.com>, akpm@linux-foundation.org,
-	adobriyan@gmail.com, viro@zeniv.linux.org.uk, keescook@chromium.org,
-	linux-fsdevel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, akirakawata1@gmail.com,
-	Eric Biederman <ebiederm@xmission.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-Message-ID: <202111240802.Wxm5q6aP-lkp@intel.com>
-References: <20211123073157.198689-1-akirakawata1@gmail.com>
+To: Lucas Tanure <tanureal@opensource.cirrus.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Mark Brown <broonie@kernel.org>,
+	Takashi Iwai <tiwai@suse.com>, Kailang Yang <kailang@realtek.com>,
+	Shuming Fan <shumingf@realtek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 02/11] ASoC: cs35l41: Convert tables to shared source code
+Message-ID: <202111240948.k3QkxADv-lkp@intel.com>
+References: <20211123163149.1530535-3-tanureal@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,30 +38,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123073157.198689-1-akirakawata1@gmail.com>
+In-Reply-To: <20211123163149.1530535-3-tanureal@opensource.cirrus.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Akira,
+Hi Lucas,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on kees/for-next/pstore linus/master v5.16-rc2 next-20211123]
+[auto build test WARNING on next-20211123]
+[cannot apply to broonie-sound/for-next tiwai-sound/for-next rafael-pm/linux-next linus/master v5.16-rc2 v5.16-rc1 v5.15 v5.16-rc2]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Akira-Kawata/fs-binfmt_elf-Fix-AT_PHDR-for-unusual-ELF-files/20211123-153459
-base:   https://github.com/hnaz/linux-mm master
-config: i386-randconfig-a012-20211123 (https://download.01.org/0day-ci/archive/20211124/202111240802.Wxm5q6aP-lkp@intel.com/config.gz)
+url:    https://github.com/0day-ci/linux/commits/Lucas-Tanure/Add-support-for-Legion-7-16ACHg6-laptop/20211124-003454
+base:    aacdecce8147c20b01f865b4e214bb8dbe8c4af1
+config: i386-randconfig-a016-20211123 (https://download.01.org/0day-ci/archive/20211124/202111240948.k3QkxADv-lkp@intel.com/config.gz)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 49e3838145dff1ec91c2e67a2cb562775c8d2a08)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/8e8533fa0fdbe61a557de9268ea7091a75aebe81
+        # https://github.com/0day-ci/linux/commit/0f636884a0db8bbfcdce788023de0013a4e17593
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Akira-Kawata/fs-binfmt_elf-Fix-AT_PHDR-for-unusual-ELF-files/20211123-153459
-        git checkout 8e8533fa0fdbe61a557de9268ea7091a75aebe81
+        git fetch --no-tags linux-review Lucas-Tanure/Add-support-for-Legion-7-16ACHg6-laptop/20211124-003454
+        git checkout 0f636884a0db8bbfcdce788023de0013a4e17593
         # save the config file to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
 
@@ -67,464 +70,317 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/binfmt_elf.c:825:16: warning: variable 'load_addr' set but not used [-Wunused-but-set-variable]
-           unsigned long load_addr = 0, load_bias = 0, phdr_addr = 0;
-                         ^
-   1 warning generated.
+>> sound/soc/codecs/cs35l41-lib.c:52:6: warning: no previous prototype for function 'cs35l41_readable_reg' [-Wmissing-prototypes]
+   bool cs35l41_readable_reg(struct device *dev, unsigned int reg)
+        ^
+   sound/soc/codecs/cs35l41-lib.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool cs35l41_readable_reg(struct device *dev, unsigned int reg)
+   ^
+   static 
+>> sound/soc/codecs/cs35l41-lib.c:336:6: warning: no previous prototype for function 'cs35l41_precious_reg' [-Wmissing-prototypes]
+   bool cs35l41_precious_reg(struct device *dev, unsigned int reg)
+        ^
+   sound/soc/codecs/cs35l41-lib.c:336:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool cs35l41_precious_reg(struct device *dev, unsigned int reg)
+   ^
+   static 
+>> sound/soc/codecs/cs35l41-lib.c:349:6: warning: no previous prototype for function 'cs35l41_volatile_reg' [-Wmissing-prototypes]
+   bool cs35l41_volatile_reg(struct device *dev, unsigned int reg)
+        ^
+   sound/soc/codecs/cs35l41-lib.c:349:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool cs35l41_volatile_reg(struct device *dev, unsigned int reg)
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +/load_addr +825 fs/binfmt_elf.c
+vim +/cs35l41_readable_reg +52 sound/soc/codecs/cs35l41-lib.c
 
-   821	
-   822	static int load_elf_binary(struct linux_binprm *bprm)
-   823	{
-   824		struct file *interpreter = NULL; /* to shut gcc up */
- > 825		unsigned long load_addr = 0, load_bias = 0, phdr_addr = 0;
-   826		int load_addr_set = 0;
-   827		unsigned long error;
-   828		struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
-   829		struct elf_phdr *elf_property_phdata = NULL;
-   830		unsigned long elf_bss, elf_brk;
-   831		int bss_prot = 0;
-   832		int retval, i;
-   833		unsigned long elf_entry;
-   834		unsigned long e_entry;
-   835		unsigned long interp_load_addr = 0;
-   836		unsigned long start_code, end_code, start_data, end_data;
-   837		unsigned long reloc_func_desc __maybe_unused = 0;
-   838		int executable_stack = EXSTACK_DEFAULT;
-   839		struct elfhdr *elf_ex = (struct elfhdr *)bprm->buf;
-   840		struct elfhdr *interp_elf_ex = NULL;
-   841		struct arch_elf_state arch_state = INIT_ARCH_ELF_STATE;
-   842		struct mm_struct *mm;
-   843		struct pt_regs *regs;
-   844	
-   845		retval = -ENOEXEC;
-   846		/* First of all, some simple consistency checks */
-   847		if (memcmp(elf_ex->e_ident, ELFMAG, SELFMAG) != 0)
-   848			goto out;
-   849	
-   850		if (elf_ex->e_type != ET_EXEC && elf_ex->e_type != ET_DYN)
-   851			goto out;
-   852		if (!elf_check_arch(elf_ex))
-   853			goto out;
-   854		if (elf_check_fdpic(elf_ex))
-   855			goto out;
-   856		if (!bprm->file->f_op->mmap)
-   857			goto out;
-   858	
-   859		elf_phdata = load_elf_phdrs(elf_ex, bprm->file);
-   860		if (!elf_phdata)
-   861			goto out;
-   862	
-   863		elf_ppnt = elf_phdata;
-   864		for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
-   865			char *elf_interpreter;
-   866	
-   867			if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
-   868				elf_property_phdata = elf_ppnt;
-   869				continue;
-   870			}
-   871	
-   872			if (elf_ppnt->p_type != PT_INTERP)
-   873				continue;
-   874	
-   875			/*
-   876			 * This is the program interpreter used for shared libraries -
-   877			 * for now assume that this is an a.out format binary.
-   878			 */
-   879			retval = -ENOEXEC;
-   880			if (elf_ppnt->p_filesz > PATH_MAX || elf_ppnt->p_filesz < 2)
-   881				goto out_free_ph;
-   882	
-   883			retval = -ENOMEM;
-   884			elf_interpreter = kmalloc(elf_ppnt->p_filesz, GFP_KERNEL);
-   885			if (!elf_interpreter)
-   886				goto out_free_ph;
-   887	
-   888			retval = elf_read(bprm->file, elf_interpreter, elf_ppnt->p_filesz,
-   889					  elf_ppnt->p_offset);
-   890			if (retval < 0)
-   891				goto out_free_interp;
-   892			/* make sure path is NULL terminated */
-   893			retval = -ENOEXEC;
-   894			if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0')
-   895				goto out_free_interp;
-   896	
-   897			interpreter = open_exec(elf_interpreter);
-   898			kfree(elf_interpreter);
-   899			retval = PTR_ERR(interpreter);
-   900			if (IS_ERR(interpreter))
-   901				goto out_free_ph;
-   902	
-   903			/*
-   904			 * If the binary is not readable then enforce mm->dumpable = 0
-   905			 * regardless of the interpreter's permissions.
-   906			 */
-   907			would_dump(bprm, interpreter);
-   908	
-   909			interp_elf_ex = kmalloc(sizeof(*interp_elf_ex), GFP_KERNEL);
-   910			if (!interp_elf_ex) {
-   911				retval = -ENOMEM;
-   912				goto out_free_ph;
-   913			}
-   914	
-   915			/* Get the exec headers */
-   916			retval = elf_read(interpreter, interp_elf_ex,
-   917					  sizeof(*interp_elf_ex), 0);
-   918			if (retval < 0)
-   919				goto out_free_dentry;
-   920	
-   921			break;
-   922	
-   923	out_free_interp:
-   924			kfree(elf_interpreter);
-   925			goto out_free_ph;
-   926		}
-   927	
-   928		elf_ppnt = elf_phdata;
-   929		for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++)
-   930			switch (elf_ppnt->p_type) {
-   931			case PT_GNU_STACK:
-   932				if (elf_ppnt->p_flags & PF_X)
-   933					executable_stack = EXSTACK_ENABLE_X;
-   934				else
-   935					executable_stack = EXSTACK_DISABLE_X;
-   936				break;
-   937	
-   938			case PT_LOPROC ... PT_HIPROC:
-   939				retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
-   940							  bprm->file, false,
-   941							  &arch_state);
-   942				if (retval)
-   943					goto out_free_dentry;
-   944				break;
-   945			}
-   946	
-   947		/* Some simple consistency checks for the interpreter */
-   948		if (interpreter) {
-   949			retval = -ELIBBAD;
-   950			/* Not an ELF interpreter */
-   951			if (memcmp(interp_elf_ex->e_ident, ELFMAG, SELFMAG) != 0)
-   952				goto out_free_dentry;
-   953			/* Verify the interpreter has a valid arch */
-   954			if (!elf_check_arch(interp_elf_ex) ||
-   955			    elf_check_fdpic(interp_elf_ex))
-   956				goto out_free_dentry;
-   957	
-   958			/* Load the interpreter program headers */
-   959			interp_elf_phdata = load_elf_phdrs(interp_elf_ex,
-   960							   interpreter);
-   961			if (!interp_elf_phdata)
-   962				goto out_free_dentry;
-   963	
-   964			/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
-   965			elf_property_phdata = NULL;
-   966			elf_ppnt = interp_elf_phdata;
-   967			for (i = 0; i < interp_elf_ex->e_phnum; i++, elf_ppnt++)
-   968				switch (elf_ppnt->p_type) {
-   969				case PT_GNU_PROPERTY:
-   970					elf_property_phdata = elf_ppnt;
-   971					break;
-   972	
-   973				case PT_LOPROC ... PT_HIPROC:
-   974					retval = arch_elf_pt_proc(interp_elf_ex,
-   975								  elf_ppnt, interpreter,
-   976								  true, &arch_state);
-   977					if (retval)
-   978						goto out_free_dentry;
-   979					break;
-   980				}
-   981		}
-   982	
-   983		retval = parse_elf_properties(interpreter ?: bprm->file,
-   984					      elf_property_phdata, &arch_state);
-   985		if (retval)
-   986			goto out_free_dentry;
-   987	
-   988		/*
-   989		 * Allow arch code to reject the ELF at this point, whilst it's
-   990		 * still possible to return an error to the code that invoked
-   991		 * the exec syscall.
-   992		 */
-   993		retval = arch_check_elf(elf_ex,
-   994					!!interpreter, interp_elf_ex,
-   995					&arch_state);
-   996		if (retval)
-   997			goto out_free_dentry;
-   998	
-   999		/* Flush all traces of the currently running executable */
-  1000		retval = begin_new_exec(bprm);
-  1001		if (retval)
-  1002			goto out_free_dentry;
-  1003	
-  1004		/* Do this immediately, since STACK_TOP as used in setup_arg_pages
-  1005		   may depend on the personality.  */
-  1006		SET_PERSONALITY2(*elf_ex, &arch_state);
-  1007		if (elf_read_implies_exec(*elf_ex, executable_stack))
-  1008			current->personality |= READ_IMPLIES_EXEC;
-  1009	
-  1010		if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-  1011			current->flags |= PF_RANDOMIZE;
-  1012	
-  1013		setup_new_exec(bprm);
-  1014	
-  1015		/* Do this so that we can load the interpreter, if need be.  We will
-  1016		   change some of these later */
-  1017		retval = setup_arg_pages(bprm, randomize_stack_top(STACK_TOP),
-  1018					 executable_stack);
-  1019		if (retval < 0)
-  1020			goto out_free_dentry;
-  1021		
-  1022		elf_bss = 0;
-  1023		elf_brk = 0;
-  1024	
-  1025		start_code = ~0UL;
-  1026		end_code = 0;
-  1027		start_data = 0;
-  1028		end_data = 0;
-  1029	
-  1030		/* Now we do a little grungy work by mmapping the ELF image into
-  1031		   the correct location in memory. */
-  1032		for(i = 0, elf_ppnt = elf_phdata;
-  1033		    i < elf_ex->e_phnum; i++, elf_ppnt++) {
-  1034			int elf_prot, elf_flags;
-  1035			unsigned long k, vaddr;
-  1036			unsigned long total_size = 0;
-  1037			unsigned long alignment;
-  1038	
-  1039			if (elf_ppnt->p_type != PT_LOAD)
-  1040				continue;
-  1041	
-  1042			if (unlikely (elf_brk > elf_bss)) {
-  1043				unsigned long nbyte;
-  1044		            
-  1045				/* There was a PT_LOAD segment with p_memsz > p_filesz
-  1046				   before this one. Map anonymous pages, if needed,
-  1047				   and clear the area.  */
-  1048				retval = set_brk(elf_bss + load_bias,
-  1049						 elf_brk + load_bias,
-  1050						 bss_prot);
-  1051				if (retval)
-  1052					goto out_free_dentry;
-  1053				nbyte = ELF_PAGEOFFSET(elf_bss);
-  1054				if (nbyte) {
-  1055					nbyte = ELF_MIN_ALIGN - nbyte;
-  1056					if (nbyte > elf_brk - elf_bss)
-  1057						nbyte = elf_brk - elf_bss;
-  1058					if (clear_user((void __user *)elf_bss +
-  1059								load_bias, nbyte)) {
-  1060						/*
-  1061						 * This bss-zeroing can fail if the ELF
-  1062						 * file specifies odd protections. So
-  1063						 * we don't check the return value
-  1064						 */
-  1065					}
-  1066				}
-  1067			}
-  1068	
-  1069			elf_prot = make_prot(elf_ppnt->p_flags, &arch_state,
-  1070					     !!interpreter, false);
-  1071	
-  1072			elf_flags = MAP_PRIVATE;
-  1073	
-  1074			vaddr = elf_ppnt->p_vaddr;
-  1075			/*
-  1076			 * The first time through the loop, load_addr_set is false:
-  1077			 * layout will be calculated. Once set, use MAP_FIXED since
-  1078			 * we know we've already safely mapped the entire region with
-  1079			 * MAP_FIXED_NOREPLACE in the once-per-binary logic following.
-  1080			 */
-  1081			if (load_addr_set) {
-  1082				elf_flags |= MAP_FIXED;
-  1083			} else if (elf_ex->e_type == ET_EXEC) {
-  1084				/*
-  1085				 * This logic is run once for the first LOAD Program
-  1086				 * Header for ET_EXEC binaries. No special handling
-  1087				 * is needed.
-  1088				 */
-  1089				elf_flags |= MAP_FIXED_NOREPLACE;
-  1090			} else if (elf_ex->e_type == ET_DYN) {
-  1091				/*
-  1092				 * This logic is run once for the first LOAD Program
-  1093				 * Header for ET_DYN binaries to calculate the
-  1094				 * randomization (load_bias) for all the LOAD
-  1095				 * Program Headers.
-  1096				 *
-  1097				 * There are effectively two types of ET_DYN
-  1098				 * binaries: programs (i.e. PIE: ET_DYN with INTERP)
-  1099				 * and loaders (ET_DYN without INTERP, since they
-  1100				 * _are_ the ELF interpreter). The loaders must
-  1101				 * be loaded away from programs since the program
-  1102				 * may otherwise collide with the loader (especially
-  1103				 * for ET_EXEC which does not have a randomized
-  1104				 * position). For example to handle invocations of
-  1105				 * "./ld.so someprog" to test out a new version of
-  1106				 * the loader, the subsequent program that the
-  1107				 * loader loads must avoid the loader itself, so
-  1108				 * they cannot share the same load range. Sufficient
-  1109				 * room for the brk must be allocated with the
-  1110				 * loader as well, since brk must be available with
-  1111				 * the loader.
-  1112				 *
-  1113				 * Therefore, programs are loaded offset from
-  1114				 * ELF_ET_DYN_BASE and loaders are loaded into the
-  1115				 * independently randomized mmap region (0 load_bias
-  1116				 * without MAP_FIXED nor MAP_FIXED_NOREPLACE).
-  1117				 */
-  1118				if (interpreter) {
-  1119					load_bias = ELF_ET_DYN_BASE;
-  1120					if (current->flags & PF_RANDOMIZE)
-  1121						load_bias += arch_mmap_rnd();
-  1122					alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
-  1123					if (alignment)
-  1124						load_bias &= ~(alignment - 1);
-  1125					elf_flags |= MAP_FIXED_NOREPLACE;
-  1126				} else
-  1127					load_bias = 0;
-  1128	
-  1129				/*
-  1130				 * Since load_bias is used for all subsequent loading
-  1131				 * calculations, we must lower it by the first vaddr
-  1132				 * so that the remaining calculations based on the
-  1133				 * ELF vaddrs will be correctly offset. The result
-  1134				 * is then page aligned.
-  1135				 */
-  1136				load_bias = ELF_PAGESTART(load_bias - vaddr);
-  1137			}
-  1138	
-  1139			/*
-  1140			 * Calculate the entire size of the ELF mapping (total_size).
-  1141			 * (Note that load_addr_set is set to true later once the
-  1142			 * initial mapping is performed.)
-  1143			 */
-  1144			if (!load_addr_set) {
-  1145				total_size = total_mapping_size(elf_phdata,
-  1146								elf_ex->e_phnum);
-  1147				if (!total_size) {
-  1148					retval = -EINVAL;
-  1149					goto out_free_dentry;
-  1150				}
-  1151			}
-  1152	
-  1153			error = elf_map(bprm->file, load_bias + vaddr, elf_ppnt,
-  1154					elf_prot, elf_flags, total_size);
-  1155			if (BAD_ADDR(error)) {
-  1156				retval = IS_ERR((void *)error) ?
-  1157					PTR_ERR((void*)error) : -EINVAL;
-  1158				goto out_free_dentry;
-  1159			}
-  1160	
-  1161			if (!load_addr_set) {
-  1162				load_addr_set = 1;
-  1163				load_addr = (elf_ppnt->p_vaddr - elf_ppnt->p_offset);
-  1164				if (elf_ex->e_type == ET_DYN) {
-  1165					load_bias += error -
-  1166					             ELF_PAGESTART(load_bias + vaddr);
-  1167					load_addr += load_bias;
-  1168					reloc_func_desc = load_bias;
-  1169				}
-  1170			}
-  1171	
-  1172			if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
-  1173			    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
-  1174				phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
-  1175					    elf_ppnt->p_vaddr;
-  1176			}
-  1177	
-  1178			k = elf_ppnt->p_vaddr;
-  1179			if ((elf_ppnt->p_flags & PF_X) && k < start_code)
-  1180				start_code = k;
-  1181			if (start_data < k)
-  1182				start_data = k;
-  1183	
-  1184			/*
-  1185			 * Check to see if the section's size will overflow the
-  1186			 * allowed task size. Note that p_filesz must always be
-  1187			 * <= p_memsz so it is only necessary to check p_memsz.
-  1188			 */
-  1189			if (BAD_ADDR(k) || elf_ppnt->p_filesz > elf_ppnt->p_memsz ||
-  1190			    elf_ppnt->p_memsz > TASK_SIZE ||
-  1191			    TASK_SIZE - elf_ppnt->p_memsz < k) {
-  1192				/* set_brk can never work. Avoid overflows. */
-  1193				retval = -EINVAL;
-  1194				goto out_free_dentry;
-  1195			}
-  1196	
-  1197			k = elf_ppnt->p_vaddr + elf_ppnt->p_filesz;
-  1198	
-  1199			if (k > elf_bss)
-  1200				elf_bss = k;
-  1201			if ((elf_ppnt->p_flags & PF_X) && end_code < k)
-  1202				end_code = k;
-  1203			if (end_data < k)
-  1204				end_data = k;
-  1205			k = elf_ppnt->p_vaddr + elf_ppnt->p_memsz;
-  1206			if (k > elf_brk) {
-  1207				bss_prot = elf_prot;
-  1208				elf_brk = k;
-  1209			}
-  1210		}
-  1211	
-  1212		e_entry = elf_ex->e_entry + load_bias;
-  1213		phdr_addr += load_bias;
-  1214		elf_bss += load_bias;
-  1215		elf_brk += load_bias;
-  1216		start_code += load_bias;
-  1217		end_code += load_bias;
-  1218		start_data += load_bias;
-  1219		end_data += load_bias;
-  1220	
-  1221		/* Calling set_brk effectively mmaps the pages that we need
-  1222		 * for the bss and break sections.  We must do this before
-  1223		 * mapping in the interpreter, to make sure it doesn't wind
-  1224		 * up getting placed where the bss needs to go.
-  1225		 */
-  1226		retval = set_brk(elf_bss, elf_brk, bss_prot);
-  1227		if (retval)
-  1228			goto out_free_dentry;
-  1229		if (likely(elf_bss != elf_brk) && unlikely(padzero(elf_bss))) {
-  1230			retval = -EFAULT; /* Nobody gets to see this, but.. */
-  1231			goto out_free_dentry;
-  1232		}
-  1233	
-  1234		if (interpreter) {
-  1235			elf_entry = load_elf_interp(interp_elf_ex,
-  1236						    interpreter,
-  1237						    load_bias, interp_elf_phdata,
-  1238						    &arch_state);
-  1239			if (!IS_ERR((void *)elf_entry)) {
-  1240				/*
-  1241				 * load_elf_interp() returns relocation
-  1242				 * adjustment
-  1243				 */
-  1244				interp_load_addr = elf_entry;
-  1245				elf_entry += interp_elf_ex->e_entry;
-  1246			}
-  1247			if (BAD_ADDR(elf_entry)) {
-  1248				retval = IS_ERR((void *)elf_entry) ?
-  1249						(int)elf_entry : -EINVAL;
-  1250				goto out_free_dentry;
-  1251			}
-  1252			reloc_func_desc = interp_load_addr;
-  1253	
-  1254			allow_write_access(interpreter);
-  1255			fput(interpreter);
-  1256	
-  1257			kfree(interp_elf_ex);
-  1258			kfree(interp_elf_phdata);
-  1259		} else {
-  1260			elf_entry = e_entry;
-  1261			if (BAD_ADDR(elf_entry)) {
-  1262				retval = -EINVAL;
-  1263				goto out_free_dentry;
-  1264			}
-  1265		}
-  1266	
-  1267		kfree(elf_phdata);
-  1268	
-  1269		set_binfmt(&elf_format);
-  1270	
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   51  
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  @52  bool cs35l41_readable_reg(struct device *dev, unsigned int reg)
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   53  {
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   54  	switch (reg) {
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   55  	case CS35L41_DEVID:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   56  	case CS35L41_REVID:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   57  	case CS35L41_FABID:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   58  	case CS35L41_RELID:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   59  	case CS35L41_OTPID:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   60  	case CS35L41_TEST_KEY_CTL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   61  	case CS35L41_USER_KEY_CTL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   62  	case CS35L41_OTP_CTRL0:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   63  	case CS35L41_OTP_CTRL3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   64  	case CS35L41_OTP_CTRL4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   65  	case CS35L41_OTP_CTRL5:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   66  	case CS35L41_OTP_CTRL6:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   67  	case CS35L41_OTP_CTRL7:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   68  	case CS35L41_OTP_CTRL8:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   69  	case CS35L41_PWR_CTRL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   70  	case CS35L41_PWR_CTRL2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   71  	case CS35L41_PWR_CTRL3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   72  	case CS35L41_CTRL_OVRRIDE:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   73  	case CS35L41_AMP_OUT_MUTE:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   74  	case CS35L41_PROTECT_REL_ERR_IGN:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   75  	case CS35L41_GPIO_PAD_CONTROL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   76  	case CS35L41_JTAG_CONTROL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   77  	case CS35L41_PLL_CLK_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   78  	case CS35L41_DSP_CLK_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   79  	case CS35L41_GLOBAL_CLK_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   80  	case CS35L41_DATA_FS_SEL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   81  	case CS35L41_MDSYNC_EN:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   82  	case CS35L41_MDSYNC_TX_ID:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   83  	case CS35L41_MDSYNC_PWR_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   84  	case CS35L41_MDSYNC_DATA_TX:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   85  	case CS35L41_MDSYNC_TX_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   86  	case CS35L41_MDSYNC_DATA_RX:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   87  	case CS35L41_MDSYNC_RX_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   88  	case CS35L41_MDSYNC_ERR_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   89  	case CS35L41_MDSYNC_SYNC_PTE2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   90  	case CS35L41_MDSYNC_SYNC_PTE3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   91  	case CS35L41_MDSYNC_SYNC_MSM_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   92  	case CS35L41_BSTCVRT_VCTRL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   93  	case CS35L41_BSTCVRT_VCTRL2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   94  	case CS35L41_BSTCVRT_PEAK_CUR:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   95  	case CS35L41_BSTCVRT_SFT_RAMP:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   96  	case CS35L41_BSTCVRT_COEFF:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   97  	case CS35L41_BSTCVRT_SLOPE_LBST:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   98  	case CS35L41_BSTCVRT_SW_FREQ:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07   99  	case CS35L41_BSTCVRT_DCM_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  100  	case CS35L41_BSTCVRT_DCM_MODE_FORCE:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  101  	case CS35L41_BSTCVRT_OVERVOLT_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  102  	case CS35L41_VI_VOL_POL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  103  	case CS35L41_DTEMP_WARN_THLD:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  104  	case CS35L41_DTEMP_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  105  	case CS35L41_DTEMP_EN:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  106  	case CS35L41_VPVBST_FS_SEL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  107  	case CS35L41_SP_ENABLES:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  108  	case CS35L41_SP_RATE_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  109  	case CS35L41_SP_FORMAT:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  110  	case CS35L41_SP_HIZ_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  111  	case CS35L41_SP_FRAME_TX_SLOT:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  112  	case CS35L41_SP_FRAME_RX_SLOT:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  113  	case CS35L41_SP_TX_WL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  114  	case CS35L41_SP_RX_WL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  115  	case CS35L41_DAC_PCM1_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  116  	case CS35L41_ASP_TX1_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  117  	case CS35L41_ASP_TX2_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  118  	case CS35L41_ASP_TX3_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  119  	case CS35L41_ASP_TX4_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  120  	case CS35L41_DSP1_RX1_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  121  	case CS35L41_DSP1_RX2_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  122  	case CS35L41_DSP1_RX3_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  123  	case CS35L41_DSP1_RX4_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  124  	case CS35L41_DSP1_RX5_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  125  	case CS35L41_DSP1_RX6_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  126  	case CS35L41_DSP1_RX7_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  127  	case CS35L41_DSP1_RX8_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  128  	case CS35L41_NGATE1_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  129  	case CS35L41_NGATE2_SRC:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  130  	case CS35L41_AMP_DIG_VOL_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  131  	case CS35L41_VPBR_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  132  	case CS35L41_VBBR_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  133  	case CS35L41_VPBR_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  134  	case CS35L41_VBBR_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  135  	case CS35L41_OVERTEMP_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  136  	case CS35L41_AMP_ERR_VOL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  137  	case CS35L41_VOL_STATUS_TO_DSP:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  138  	case CS35L41_CLASSH_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  139  	case CS35L41_WKFET_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  140  	case CS35L41_NG_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  141  	case CS35L41_AMP_GAIN_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  142  	case CS35L41_DAC_MSM_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  143  	case CS35L41_IRQ1_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  144  	case CS35L41_IRQ1_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  145  	case CS35L41_IRQ1_STATUS1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  146  	case CS35L41_IRQ1_STATUS2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  147  	case CS35L41_IRQ1_STATUS3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  148  	case CS35L41_IRQ1_STATUS4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  149  	case CS35L41_IRQ1_RAW_STATUS1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  150  	case CS35L41_IRQ1_RAW_STATUS2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  151  	case CS35L41_IRQ1_RAW_STATUS3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  152  	case CS35L41_IRQ1_RAW_STATUS4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  153  	case CS35L41_IRQ1_MASK1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  154  	case CS35L41_IRQ1_MASK2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  155  	case CS35L41_IRQ1_MASK3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  156  	case CS35L41_IRQ1_MASK4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  157  	case CS35L41_IRQ1_FRC1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  158  	case CS35L41_IRQ1_FRC2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  159  	case CS35L41_IRQ1_FRC3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  160  	case CS35L41_IRQ1_FRC4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  161  	case CS35L41_IRQ1_EDGE1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  162  	case CS35L41_IRQ1_EDGE4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  163  	case CS35L41_IRQ1_POL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  164  	case CS35L41_IRQ1_POL2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  165  	case CS35L41_IRQ1_POL3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  166  	case CS35L41_IRQ1_POL4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  167  	case CS35L41_IRQ1_DB3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  168  	case CS35L41_IRQ2_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  169  	case CS35L41_IRQ2_STATUS:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  170  	case CS35L41_IRQ2_STATUS1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  171  	case CS35L41_IRQ2_STATUS2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  172  	case CS35L41_IRQ2_STATUS3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  173  	case CS35L41_IRQ2_STATUS4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  174  	case CS35L41_IRQ2_RAW_STATUS1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  175  	case CS35L41_IRQ2_RAW_STATUS2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  176  	case CS35L41_IRQ2_RAW_STATUS3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  177  	case CS35L41_IRQ2_RAW_STATUS4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  178  	case CS35L41_IRQ2_MASK1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  179  	case CS35L41_IRQ2_MASK2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  180  	case CS35L41_IRQ2_MASK3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  181  	case CS35L41_IRQ2_MASK4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  182  	case CS35L41_IRQ2_FRC1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  183  	case CS35L41_IRQ2_FRC2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  184  	case CS35L41_IRQ2_FRC3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  185  	case CS35L41_IRQ2_FRC4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  186  	case CS35L41_IRQ2_EDGE1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  187  	case CS35L41_IRQ2_EDGE4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  188  	case CS35L41_IRQ2_POL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  189  	case CS35L41_IRQ2_POL2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  190  	case CS35L41_IRQ2_POL3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  191  	case CS35L41_IRQ2_POL4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  192  	case CS35L41_IRQ2_DB3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  193  	case CS35L41_GPIO_STATUS1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  194  	case CS35L41_GPIO1_CTRL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  195  	case CS35L41_GPIO2_CTRL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  196  	case CS35L41_MIXER_NGATE_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  197  	case CS35L41_MIXER_NGATE_CH1_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  198  	case CS35L41_MIXER_NGATE_CH2_CFG:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  199  	case CS35L41_DSP_MBOX_1 ... CS35L41_DSP_VIRT2_MBOX_8:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  200  	case CS35L41_CLOCK_DETECT_1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  201  	case CS35L41_DIE_STS1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  202  	case CS35L41_DIE_STS2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  203  	case CS35L41_TEMP_CAL1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  204  	case CS35L41_TEMP_CAL2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  205  	case CS35L41_DSP1_TIMESTAMP_COUNT:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  206  	case CS35L41_DSP1_SYS_ID:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  207  	case CS35L41_DSP1_SYS_VERSION:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  208  	case CS35L41_DSP1_SYS_CORE_ID:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  209  	case CS35L41_DSP1_SYS_AHB_ADDR:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  210  	case CS35L41_DSP1_SYS_XSRAM_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  211  	case CS35L41_DSP1_SYS_YSRAM_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  212  	case CS35L41_DSP1_SYS_PSRAM_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  213  	case CS35L41_DSP1_SYS_PM_BOOT_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  214  	case CS35L41_DSP1_SYS_FEATURES:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  215  	case CS35L41_DSP1_SYS_FIR_FILTERS:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  216  	case CS35L41_DSP1_SYS_LMS_FILTERS:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  217  	case CS35L41_DSP1_SYS_XM_BANK_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  218  	case CS35L41_DSP1_SYS_YM_BANK_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  219  	case CS35L41_DSP1_SYS_PM_BANK_SIZE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  220  	case CS35L41_DSP1_RX1_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  221  	case CS35L41_DSP1_RX2_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  222  	case CS35L41_DSP1_RX3_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  223  	case CS35L41_DSP1_RX4_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  224  	case CS35L41_DSP1_RX5_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  225  	case CS35L41_DSP1_RX6_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  226  	case CS35L41_DSP1_RX7_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  227  	case CS35L41_DSP1_RX8_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  228  	case CS35L41_DSP1_TX1_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  229  	case CS35L41_DSP1_TX2_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  230  	case CS35L41_DSP1_TX3_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  231  	case CS35L41_DSP1_TX4_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  232  	case CS35L41_DSP1_TX5_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  233  	case CS35L41_DSP1_TX6_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  234  	case CS35L41_DSP1_TX7_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  235  	case CS35L41_DSP1_TX8_RATE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  236  	case CS35L41_DSP1_SCRATCH1:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  237  	case CS35L41_DSP1_SCRATCH2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  238  	case CS35L41_DSP1_SCRATCH3:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  239  	case CS35L41_DSP1_SCRATCH4:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  240  	case CS35L41_DSP1_CCM_CORE_CTRL:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  241  	case CS35L41_DSP1_CCM_CLK_OVERRIDE:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  242  	case CS35L41_DSP1_XM_MSTR_EN:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  243  	case CS35L41_DSP1_XM_CORE_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  244  	case CS35L41_DSP1_XM_AHB_PACK_PL_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  245  	case CS35L41_DSP1_XM_AHB_UP_PL_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  246  	case CS35L41_DSP1_XM_ACCEL_PL0_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  247  	case CS35L41_DSP1_XM_NPL0_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  248  	case CS35L41_DSP1_YM_MSTR_EN:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  249  	case CS35L41_DSP1_YM_CORE_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  250  	case CS35L41_DSP1_YM_AHB_PACK_PL_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  251  	case CS35L41_DSP1_YM_AHB_UP_PL_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  252  	case CS35L41_DSP1_YM_ACCEL_PL0_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  253  	case CS35L41_DSP1_YM_NPL0_PRI:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  254  	case CS35L41_DSP1_MPU_XM_ACCESS0:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  255  	case CS35L41_DSP1_MPU_YM_ACCESS0:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  256  	case CS35L41_DSP1_MPU_WNDW_ACCESS0:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  257  	case CS35L41_DSP1_MPU_XREG_ACCESS0:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  258  	case CS35L41_DSP1_MPU_YREG_ACCESS0:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  259  	case CS35L41_DSP1_MPU_XM_ACCESS1:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  260  	case CS35L41_DSP1_MPU_YM_ACCESS1:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  261  	case CS35L41_DSP1_MPU_WNDW_ACCESS1:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  262  	case CS35L41_DSP1_MPU_XREG_ACCESS1:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  263  	case CS35L41_DSP1_MPU_YREG_ACCESS1:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  264  	case CS35L41_DSP1_MPU_XM_ACCESS2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  265  	case CS35L41_DSP1_MPU_YM_ACCESS2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  266  	case CS35L41_DSP1_MPU_WNDW_ACCESS2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  267  	case CS35L41_DSP1_MPU_XREG_ACCESS2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  268  	case CS35L41_DSP1_MPU_YREG_ACCESS2:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  269  	case CS35L41_DSP1_MPU_XM_ACCESS3:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  270  	case CS35L41_DSP1_MPU_YM_ACCESS3:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  271  	case CS35L41_DSP1_MPU_WNDW_ACCESS3:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  272  	case CS35L41_DSP1_MPU_XREG_ACCESS3:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  273  	case CS35L41_DSP1_MPU_YREG_ACCESS3:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  274  	case CS35L41_DSP1_MPU_XM_VIO_ADDR:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  275  	case CS35L41_DSP1_MPU_XM_VIO_STATUS:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  276  	case CS35L41_DSP1_MPU_YM_VIO_ADDR:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  277  	case CS35L41_DSP1_MPU_YM_VIO_STATUS:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  278  	case CS35L41_DSP1_MPU_PM_VIO_ADDR:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  279  	case CS35L41_DSP1_MPU_PM_VIO_STATUS:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  280  	case CS35L41_DSP1_MPU_LOCK_CONFIG:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  281  	case CS35L41_DSP1_MPU_WDT_RST_CTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  282  	case CS35L41_OTP_TRIM_1:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  283  	case CS35L41_OTP_TRIM_2:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  284  	case CS35L41_OTP_TRIM_3:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  285  	case CS35L41_OTP_TRIM_4:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  286  	case CS35L41_OTP_TRIM_5:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  287  	case CS35L41_OTP_TRIM_6:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  288  	case CS35L41_OTP_TRIM_7:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  289  	case CS35L41_OTP_TRIM_8:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  290  	case CS35L41_OTP_TRIM_9:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  291  	case CS35L41_OTP_TRIM_10:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  292  	case CS35L41_OTP_TRIM_11:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  293  	case CS35L41_OTP_TRIM_12:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  294  	case CS35L41_OTP_TRIM_13:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  295  	case CS35L41_OTP_TRIM_14:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  296  	case CS35L41_OTP_TRIM_15:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  297  	case CS35L41_OTP_TRIM_16:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  298  	case CS35L41_OTP_TRIM_17:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  299  	case CS35L41_OTP_TRIM_18:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  300  	case CS35L41_OTP_TRIM_19:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  301  	case CS35L41_OTP_TRIM_20:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  302  	case CS35L41_OTP_TRIM_21:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  303  	case CS35L41_OTP_TRIM_22:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  304  	case CS35L41_OTP_TRIM_23:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  305  	case CS35L41_OTP_TRIM_24:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  306  	case CS35L41_OTP_TRIM_25:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  307  	case CS35L41_OTP_TRIM_26:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  308  	case CS35L41_OTP_TRIM_27:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  309  	case CS35L41_OTP_TRIM_28:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  310  	case CS35L41_OTP_TRIM_29:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  311  	case CS35L41_OTP_TRIM_30:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  312  	case CS35L41_OTP_TRIM_31:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  313  	case CS35L41_OTP_TRIM_32:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  314  	case CS35L41_OTP_TRIM_33:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  315  	case CS35L41_OTP_TRIM_34:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  316  	case CS35L41_OTP_TRIM_35:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  317  	case CS35L41_OTP_TRIM_36:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  318  	case CS35L41_OTP_MEM0 ... CS35L41_OTP_MEM31:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  319  	case CS35L41_DSP1_XMEM_PACK_0 ... CS35L41_DSP1_XMEM_PACK_3068:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  320  	case CS35L41_DSP1_XMEM_UNPACK32_0 ... CS35L41_DSP1_XMEM_UNPACK32_2046:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  321  	case CS35L41_DSP1_XMEM_UNPACK24_0 ... CS35L41_DSP1_XMEM_UNPACK24_4093:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  322  	case CS35L41_DSP1_YMEM_PACK_0 ... CS35L41_DSP1_YMEM_PACK_1532:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  323  	case CS35L41_DSP1_YMEM_UNPACK32_0 ... CS35L41_DSP1_YMEM_UNPACK32_1022:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  324  	case CS35L41_DSP1_YMEM_UNPACK24_0 ... CS35L41_DSP1_YMEM_UNPACK24_2045:
+bae9e13fc55cbc sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-10-29  325  	case CS35L41_DSP1_PMEM_0 ... CS35L41_DSP1_PMEM_5114:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  326  	/*test regs*/
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  327  	case CS35L41_PLL_OVR:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  328  	case CS35L41_BST_TEST_DUTY:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  329  	case CS35L41_DIGPWM_IOCTRL:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  330  		return true;
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  331  	default:
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  332  		return false;
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  333  	}
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  334  }
+6450ef55905688 sound/soc/codecs/cs35l41-tables.c David Rhodes 2021-09-07  335  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
