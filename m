@@ -1,38 +1,38 @@
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C762C68
-	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 802686102A;
-	Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABE468
+	for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 19:13:31 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E5BF61053;
+	Wed, 24 Nov 2021 19:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637781206;
-	bh=minbWLEAqIe1znplAKAXLGbHWJ/vTNi2mDHC75qZtFY=;
+	s=k20201202; t=1637781211;
+	bh=g0AsuZ12k/WkxlcvsLFNmv8i+pWVEahe+94IcgxRpNA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NI0DboG7UY6oIeVWycluSUF00L7ZIS8mLogUvnivxCSH8vTkHCIQ8syIx+BeKGv4Y
-	 hpLBzFc5LmsIarHAhuGevxazWi9SYP1My2LWusbRn+BXLzg3bHaemj2laeEcxPoyS8
-	 a+MJ06f4XuG6K1rLIDcMbRTtzEacS0k7OQgrSDMg1pJ4/n0sfRpBK5iGON42PU79+7
-	 uBcy6KVu0/mEcHCWWi+3AkRJnSUiFYZn84L9EqqsaA70urQKuX47YA57Spnr0pwijv
-	 p0w8LOta+/cIiPhuoOW+e2riaBFK5+EOTW91dWljxyeJY7S50WO23ow3lR2Ko9sZfM
-	 bucELO4HRIjfg==
+	b=BfRhCP0KmFkhCfgS39ZOO6jGsw2Sm0SH//aSE6g6dEkTNIdSK+HyfIiN3vhM21fs+
+	 +FPntglC2f5vrm/ZYxmIspsIf6W8kNnLxWzQBcypuH4ziGl+rOdFTjfErjK3nfO5DH
+	 Ui+4Nai4fBqElDTXohgU6d9Thx3wEGuodn+XA6kJlSw4DRHlh6YwJ1KOvpf45Ehe+Y
+	 oNsMEDbXhZsmtUrI6jMXoLIj6CsVlU8XUKNowTgDTBLZ2MssBHyMAfdM3Fw5vh7tjL
+	 jeq6E+G4fRRxA8JFxHdq6GAlb237ne01HhkO/+DPDsC7nb+ZUkUsSngdMuAfmkt9Za
+	 oASCY8BF17jzg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mpxhs-004Q53-FM; Wed, 24 Nov 2021 20:13:24 +0100
+	id 1mpxhs-004Q5J-Hj; Wed, 24 Nov 2021 20:13:24 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Antti Palosaari <crope@iki.fi>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 01/20] media: adv7842: get rid of two unused functions
-Date: Wed, 24 Nov 2021 20:13:04 +0100
-Message-Id: <e97de1cfd545c5861634619112770cf0710a6241.1637781097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 06/20] media: m88ds3103: drop reg11 calculus from m88ds3103b_select_mclk()
+Date: Wed, 24 Nov 2021 20:13:09 +0100
+Message-Id: <9e528a0ce280d8ce99f9bfe1a725baafa6bf1408.1637781097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
 References: <cover.1637781097.git.mchehab+huawei@kernel.org>
@@ -45,9 +45,9 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Those functions just call a V4L2 core macro, and aren't used
-anywhere. Get rid of them, in order to avoid clang warnings with
-W=1.
+This vaklue is never used at the code. So, drop it.
+
+Solves a W=1 clang warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -55,35 +55,40 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
 
- drivers/media/i2c/adv7842.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/media/dvb-frontends/m88ds3103.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
-index 7f8acbdf0db4..9d6eed0f8281 100644
---- a/drivers/media/i2c/adv7842.c
-+++ b/drivers/media/i2c/adv7842.c
-@@ -256,21 +256,11 @@ static inline struct v4l2_subdev *to_sd(struct v4l2_ctrl *ctrl)
- 	return &container_of(ctrl->handler, struct adv7842_state, hdl)->sd;
- }
+diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
+index 02e8aa11e36e..bce0f42f3d19 100644
+--- a/drivers/media/dvb-frontends/m88ds3103.c
++++ b/drivers/media/dvb-frontends/m88ds3103.c
+@@ -451,7 +451,7 @@ static int m88ds3103b_select_mclk(struct m88ds3103_dev *dev)
  
--static inline unsigned hblanking(const struct v4l2_bt_timings *t)
--{
--	return V4L2_DV_BT_BLANKING_WIDTH(t);
--}
--
- static inline unsigned htotal(const struct v4l2_bt_timings *t)
+ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
  {
- 	return V4L2_DV_BT_FRAME_WIDTH(t);
- }
+-	u8 reg11 = 0x0A, reg15, reg16, reg1D, reg1E, reg1F, tmp;
++	u8 reg15, reg16, reg1D, reg1E, reg1F, tmp;
+ 	u8 sm, f0 = 0, f1 = 0, f2 = 0, f3 = 0;
+ 	u16 pll_div_fb, N;
+ 	u32 div;
+@@ -480,8 +480,6 @@ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
+ 	div /= mclk_khz;
  
--static inline unsigned vblanking(const struct v4l2_bt_timings *t)
--{
--	return V4L2_DV_BT_BLANKING_HEIGHT(t);
--}
+ 	if (dev->cfg->ts_mode == M88DS3103_TS_SERIAL) {
+-		reg11 |= 0x02;
 -
- static inline unsigned vtotal(const struct v4l2_bt_timings *t)
- {
- 	return V4L2_DV_BT_FRAME_HEIGHT(t);
+ 		if (div <= 32) {
+ 			N = 2;
+ 
+@@ -532,8 +530,6 @@ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
+ 		else if ((f3 < 8) && (f3 != 0))
+ 			f3 = 8;
+ 	} else {
+-		reg11 &= ~0x02;
+-
+ 		if (div <= 32) {
+ 			N = 2;
+ 
 -- 
 2.33.1
 
