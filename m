@@ -1,29 +1,30 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C05072
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 11:58:37 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="296307799"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F230772
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 12:08:39 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="216212139"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="296307799"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 03:58:36 -0800
+   d="scan'208";a="216212139"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 04:08:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="475621281"
+   d="scan'208";a="457845823"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2021 03:58:35 -0800
+  by orsmga006.jf.intel.com with ESMTP; 25 Nov 2021 04:08:35 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqDOc-0006JF-8C; Thu, 25 Nov 2021 11:58:34 +0000
-Date: Thu, 25 Nov 2021 19:57:32 +0800
+	id 1mqDYI-0006Jf-IR; Thu, 25 Nov 2021 12:08:34 +0000
+Date: Thu, 25 Nov 2021 20:07:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>
-Subject: drivers/bluetooth/hci_qca.c:1860:37: warning: unused variable
- 'qca_soc_data_wcn6750'
-Message-ID: <202111251945.DaHpCtny-lkp@intel.com>
+To: Jason Wang <jasowang@redhat.com>, mst@redhat.com,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] virtio-mmio: harden interrupt
+Message-ID: <202111252001.Z5tli1Np-lkp@intel.com>
+References: <20211125063034.12347-1-jasowang@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,68 +33,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211125063034.12347-1-jasowang@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Venkata,
+Hi Jason,
 
-FYI, the error/warning still remains.
+I love your patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f53fa508db098c9d372423a6dac31c8a5679cdf
-commit: d8f97da1b92d2fe89d51c673ecf80c4016119e5c Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750
-date:   5 months ago
-config: x86_64-buildonly-randconfig-r005-20211118 (https://download.01.org/0day-ci/archive/20211125/202111251945.DaHpCtny-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c46becf500df2a7fb4b4fce16178a036c344315a)
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc2 next-20211125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jason-Wang/virtio-mmio-harden-interrupt/20211125-143334
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5f53fa508db098c9d372423a6dac31c8a5679cdf
+config: mips-buildonly-randconfig-r003-20211125 (https://download.01.org/0day-ci/archive/20211125/202111252001.Z5tli1Np-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8f97da1b92d2fe89d51c673ecf80c4016119e5c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d8f97da1b92d2fe89d51c673ecf80c4016119e5c
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/e19a8a1a95bd891090863b2d6828b8dc55d3633f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jason-Wang/virtio-mmio-harden-interrupt/20211125-143334
+        git checkout e19a8a1a95bd891090863b2d6828b8dc55d3633f
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/bluetooth/hci_qca.c:1821:37: warning: unused variable 'qca_soc_data_wcn3990' [-Wunused-const-variable]
-   static const struct qca_device_data qca_soc_data_wcn3990 = {
-                                       ^
-   drivers/bluetooth/hci_qca.c:1832:37: warning: unused variable 'qca_soc_data_wcn3991' [-Wunused-const-variable]
-   static const struct qca_device_data qca_soc_data_wcn3991 = {
-                                       ^
-   drivers/bluetooth/hci_qca.c:1844:37: warning: unused variable 'qca_soc_data_wcn3998' [-Wunused-const-variable]
-   static const struct qca_device_data qca_soc_data_wcn3998 = {
-                                       ^
->> drivers/bluetooth/hci_qca.c:1860:37: warning: unused variable 'qca_soc_data_wcn6750' [-Wunused-const-variable]
-   static const struct qca_device_data qca_soc_data_wcn6750 = {
-                                       ^
-   4 warnings generated.
+>> drivers/virtio/virtio_mmio.c:105:6: warning: no previous prototype for function 'vm_disable_cbs' [-Wmissing-prototypes]
+   void vm_disable_cbs(struct virtio_device *vdev)
+        ^
+   drivers/virtio/virtio_mmio.c:105:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void vm_disable_cbs(struct virtio_device *vdev)
+   ^
+   static 
+>> drivers/virtio/virtio_mmio.c:121:6: warning: no previous prototype for function 'vm_enable_cbs' [-Wmissing-prototypes]
+   void vm_enable_cbs(struct virtio_device *vdev)
+        ^
+   drivers/virtio/virtio_mmio.c:121:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void vm_enable_cbs(struct virtio_device *vdev)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +/qca_soc_data_wcn6750 +1860 drivers/bluetooth/hci_qca.c
+vim +/vm_disable_cbs +105 drivers/virtio/virtio_mmio.c
 
-  1859	
-> 1860	static const struct qca_device_data qca_soc_data_wcn6750 = {
-  1861		.soc_type = QCA_WCN6750,
-  1862		.vregs = (struct qca_vreg []) {
-  1863			{ "vddio", 5000 },
-  1864			{ "vddaon", 26000 },
-  1865			{ "vddbtcxmx", 126000 },
-  1866			{ "vddrfacmn", 12500 },
-  1867			{ "vddrfa0p8", 102000 },
-  1868			{ "vddrfa1p7", 302000 },
-  1869			{ "vddrfa1p2", 257000 },
-  1870			{ "vddrfa2p2", 1700000 },
-  1871			{ "vddasd", 200 },
-  1872		},
-  1873		.num_vregs = 9,
-  1874		.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
-  1875	};
-  1876	
+   103	
+   104	/* disable irq handlers */
+ > 105	void vm_disable_cbs(struct virtio_device *vdev)
+   106	{
+   107		struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
+   108		int irq = platform_get_irq(vm_dev->pdev, 0);
+   109	
+   110		/*
+   111		 * The below synchronize() guarantees that any
+   112		 * interrupt for this line arriving after
+   113		 * synchronize_irq() has completed is guaranteed to see
+   114		 * intx_soft_enabled == false.
+   115		 */
+   116		WRITE_ONCE(vm_dev->intr_soft_enabled, false);
+   117		synchronize_irq(irq);
+   118	}
+   119	
+   120	/* enable irq handlers */
+ > 121	void vm_enable_cbs(struct virtio_device *vdev)
+   122	{
+   123		struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
+   124		int irq = platform_get_irq(vm_dev->pdev, 0);
+   125	
+   126		disable_irq(irq);
+   127		/*
+   128		 * The above disable_irq() provides TSO ordering and
+   129		 * as such promotes the below store to store-release.
+   130		 */
+   131		WRITE_ONCE(vm_dev->intr_soft_enabled, true);
+   132		enable_irq(irq);
+   133		return;
+   134	}
+   135	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
