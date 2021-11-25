@@ -1,87 +1,94 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F6872
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 10:31:35 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="235734544"
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="235734544"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 02:31:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="607527187"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 25 Nov 2021 02:31:33 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mqC2O-0006DM-80; Thu, 25 Nov 2021 10:31:32 +0000
-Date: Thu, 25 Nov 2021 18:30:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.15 119/139]
- arch/arm64/include/asm/mpam.h:110:6: warning: variable 'regval' set but not
- used
-Message-ID: <202111251807.ljdrXC4V-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4FB72
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 10:58:58 +0000 (UTC)
+Received: by mail-pj1-f54.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so7480773pjb.5
+        for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 02:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sCgAh/8By8wNIrpD9ZFYd1/D45MydwuRk8zcWPcXzGQ=;
+        b=cLqXpIgXjTlGOz1+IBYb8VUFp+uxcoeg2qgpXuYboMkZ9nEN2PIueIvHrVwRREeLmb
+         +MrF9p67VwUtwkCOKgMpKFHfMbgQKrRu3A4Ei5fZTDaW/5FP6BRBW4nGfIWSFpYZFNe8
+         0HSKyJrAk7bR75zNpuXPOvX7m7hC7BeqhRGcMfOrHH6huXvQNL5Az0dD8t07sD1vp6fW
+         DSs5Sa4z5eLSfVWXh6wJRcbwCy9qkbxFE/5DrfUZkwUbQAyBimFVikRyc2tPk4rfv6vB
+         IVnUrMjl/5tVH3g09/AQOnibornKoF23XfqUGYJTThaJBEa6V998JrI4MIc7OGUol2aZ
+         HDyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sCgAh/8By8wNIrpD9ZFYd1/D45MydwuRk8zcWPcXzGQ=;
+        b=AZRnaofMsaR/oPSmc4XmenxcxprfSgIgDHGWVD9ti+4sSlC8VDkHoQS5YFKWikY6Ci
+         LM0E8d992yc+a43JdZ9rA8NmQ7bzu8oeL4rMQtuav/XTZH/OBtCgfulAutKzM6EnDIIj
+         Md5SH9xSg/JKLlv2ORXrpE0MWqOiWXG14isPHYI6ZPA+sA0YdYSkBwN5bQCE4H2pIBZ2
+         CCMgrHgoNA+ke1SFzYrHZqVPj40dUg9nyWXD76qubRwAzCFsM3gjiwDnL5t+af2fFoM7
+         g1spJHx2AQ2Q1DY51/D/ZK0JitD1pM6NJzBhfqnobH5g1XIDsG5HXgjD2FGj+xBMXF5a
+         OCEg==
+X-Gm-Message-State: AOAM5323hPX7PjwpD5Dles6LZnXADRIUksShDt/mlV4QRk9TcE5w6Cv3
+	2pM995HIm/tIcny8nvrBiW+ULovnHYlFCYyJhZhk7A==
+X-Google-Smtp-Source: ABdhPJzEuWLGFxkRno8JHC5jNEyjXKuuqBAtEaEU9SYXKzgCatvz+aOmCp4g+jj8lAIvVYTHHBWYGkqPHzjzHeAWsL4=
+X-Received: by 2002:a17:90b:4a05:: with SMTP id kk5mr5895404pjb.232.1637837938076;
+ Thu, 25 Nov 2021 02:58:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1637781097.git.mchehab+huawei@kernel.org> <c33a6897f5a0803b3fde93fcf4ad652c0915db54.1637781097.git.mchehab+huawei@kernel.org>
+In-Reply-To: <c33a6897f5a0803b3fde93fcf4ad652c0915db54.1637781097.git.mchehab+huawei@kernel.org>
+From: Robert Foss <robert.foss@linaro.org>
+Date: Thu, 25 Nov 2021 11:58:45 +0100
+Message-ID: <CAG3jFyvHvNs93x29s9CoxwRJnpEo_VpyFvCcb6qOAOVpWUs+mA@mail.gmail.com>
+Subject: Re: [PATCH 17/20] media: qcom: camss: mark read reg function as __maybe_unused
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: linuxarm@huawei.com, mauro.chehab@huawei.com, 
+	Andy Gross <agross@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Todor Tomov <todor.too@gmail.com>, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.15
-head:   ce3629841262f725a5f3a327403fcaf0e604a85e
-commit: ec95ea0172936108af0216efb0e4f28402eaf1c6 [119/139] arm64: mpam: Add helpers to change a tasks and cpu mpam partid/pmg values
-config: arm64-randconfig-r012-20211115 (https://download.01.org/0day-ci/archive/20211125/202111251807.ljdrXC4V-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=ec95ea0172936108af0216efb0e4f28402eaf1c6
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.15
-        git checkout ec95ea0172936108af0216efb0e4f28402eaf1c6
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
+Thanks for submitting this Mauro.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, 24 Nov 2021 at 20:13, Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> Such function is currently unused, but could be needed in the
+> future. So, keep it, marking it as __maybe_unused, in order to
+> avoid a clang W=1 error.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
+>
+>  drivers/media/platform/qcom/camss/camss-vfe-170.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+> index 5c083d70d495..455ae1a819e6 100644
+> --- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
+> +++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+> @@ -191,7 +191,7 @@ static u32 vfe_hw_version(struct vfe_device *vfe)
+>         return hw_version;
+>  }
+>
+> -static inline void vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
+> +static inline void __maybe_unused vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
+>  {
+>         u32 bits = readl_relaxed(vfe->base + reg);
+>
+> --
+> 2.33.1
+>
 
-All warnings (new ones prefixed by >>):
+I've submitted a patch[1] for removing this function, with that patch
+applied, this patch is no longer needed.
 
-   In file included from arch/arm64/kernel/process.c:51:
->> arch/arm64/include/asm/mpam.h:110:6: warning: variable 'regval' set but not used [-Wunused-but-set-variable]
-           u64 regval;
-               ^
-   arch/arm64/include/asm/mpam.h:133:6: warning: variable 'regval' set but not used [-Wunused-but-set-variable]
-           u64 regval = mpam_get_regval(tsk);
-               ^
-   2 warnings generated.
-
-
-vim +/regval +110 arch/arm64/include/asm/mpam.h
-
-   105	
-   106	static inline void mpam_set_task_partid_pmg(struct task_struct *tsk,
-   107						    u16 partid_d, u16 partid_i,
-   108						    u8 pmg_d, u8 pmg_i)
-   109	{
- > 110		u64 regval;
-   111	
-   112		regval = FIELD_PREP(MPAM_SYSREG_PARTID_D, partid_d);
-   113		regval |= FIELD_PREP(MPAM_SYSREG_PARTID_I, partid_i);
-   114		regval |= FIELD_PREP(MPAM_SYSREG_PMG_D, pmg_d);
-   115		regval |= FIELD_PREP(MPAM_SYSREG_PMG_I, pmg_i);
-   116	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[1] https://lore.kernel.org/all/20211011121301.421410-1-robert.foss@linaro.org/
