@@ -1,30 +1,30 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AA82C83
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 18:44:50 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="298960435"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C3B2C83
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 19:07:51 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="233050208"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="298960435"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 10:44:49 -0800
+   d="scan'208";a="233050208"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 11:07:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="607638730"
+   d="scan'208";a="675337255"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 25 Nov 2021 10:44:48 -0800
+  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2021 11:07:48 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqJjj-0006nd-DG; Thu, 25 Nov 2021 18:44:47 +0000
-Date: Fri, 26 Nov 2021 02:44:31 +0800
+	id 1mqK5z-0006oh-Ob; Thu, 25 Nov 2021 19:07:47 +0000
+Date: Fri, 26 Nov 2021 03:07:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
+To: Florian Fainelli <f.fainelli@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:reserved-tags.v9 16/16]
- drivers/scsi/aacraid/linit.c:705:25: error: no member named 'request' in
- 'struct scsi_cmnd'
-Message-ID: <202111260218.7VLnGxAO-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: drivers/scsi/qedi/qedi_main.c:1540:13: warning: variable 'page' set
+ but not used
+Message-ID: <202111260317.6lzepIX6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,172 +35,146 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git reserved-tags.v9
-head:   b734f6a1dc097d72408e753b7d7022516d7174f4
-commit: b734f6a1dc097d72408e753b7d7022516d7174f4 [16/16] aacraid: use scsi_host_busy_iter() to traverse outstanding commands
-config: riscv-buildonly-randconfig-r002-20211125 (https://download.01.org/0day-ci/archive/20211126/202111260218.7VLnGxAO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0332d105b9ad7f1f0ffca7e78b71de8b3a48f158)
+Hi Florian,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5f53fa508db098c9d372423a6dac31c8a5679cdf
+commit: 1d987052e32f3554e84a296c4494551bc60f3877 MIPS: BMIPS: Enable PCI Kconfig
+date:   2 weeks ago
+config: mips-randconfig-c004-20211118 (https://download.01.org/0day-ci/archive/20211126/202111260317.6lzepIX6-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c46becf500df2a7fb4b4fce16178a036c344315a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=b734f6a1dc097d72408e753b7d7022516d7174f4
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel reserved-tags.v9
-        git checkout b734f6a1dc097d72408e753b7d7022516d7174f4
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1d987052e32f3554e84a296c4494551bc60f3877
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1d987052e32f3554e84a296c4494551bc60f3877
         # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/aacraid/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/scsi/aacraid/linit.c:705:25: error: no member named 'request' in 'struct scsi_cmnd'
-                   fib = &aac->fibs[cmd->request->tag];
-                                    ~~~  ^
-   drivers/scsi/aacraid/linit.c:772:26: error: no member named 'request' in 'struct scsi_cmnd'
-                           fib = &aac->fibs[cmd->request->tag];
-                                            ~~~  ^
-   drivers/scsi/aacraid/linit.c:786:26: error: no member named 'request' in 'struct scsi_cmnd'
-                           fib = &aac->fibs[cmd->request->tag];
-                                            ~~~  ^
-   drivers/scsi/aacraid/linit.c:1006:36: error: no member named 'request' in 'struct scsi_cmnd'
-           struct fib *fib = &aac->fibs[cmd->request->tag];
-                                        ~~~  ^
-   4 errors generated.
---
->> drivers/scsi/aacraid/commsup.c:1473:40: error: no member named 'request' in 'struct scsi_cmnd'
-           struct fib *fib = &aac->fibs[command->request->tag];
-                                        ~~~~~~~  ^
-   1 error generated.
+>> drivers/scsi/qedi/qedi_main.c:1540:13: warning: variable 'page' set but not used [-Wunused-but-set-variable]
+           dma_addr_t page;
+                      ^
+>> drivers/scsi/qedi/qedi_main.c:2092:10: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+                                 SYSFS_FLAG_FW_SEL_BOOT);
+                                 ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/qedi/qedi.h:361:32: note: expanded from macro 'SYSFS_FLAG_FW_SEL_BOOT'
+   #define SYSFS_FLAG_FW_SEL_BOOT 2
+                                  ^
+   drivers/scsi/qedi/qedi_main.c:2259:35: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+                   rc = snprintf(buf, 3, "%hhd\n", SYSFS_FLAG_FW_SEL_BOOT);
+                                          ~~~~     ^~~~~~~~~~~~~~~~~~~~~~
+                                          %d
+   drivers/scsi/qedi/qedi.h:361:32: note: expanded from macro 'SYSFS_FLAG_FW_SEL_BOOT'
+   #define SYSFS_FLAG_FW_SEL_BOOT 2
+                                  ^
+   3 warnings generated.
 
 
-vim +705 drivers/scsi/aacraid/linit.c
+vim +/page +1540 drivers/scsi/qedi/qedi_main.c
 
-   680	
-   681	static int aac_eh_abort(struct scsi_cmnd* cmd)
-   682	{
-   683		struct scsi_device * dev = cmd->device;
-   684		struct Scsi_Host * host = dev->host;
-   685		struct aac_dev * aac = (struct aac_dev *)host->hostdata;
-   686		struct fib *fib;
-   687		int count;
-   688		u32 bus, cid;
-   689		int ret = FAILED;
-   690	
-   691		if (aac_adapter_check_health(aac))
-   692			return ret;
-   693	
-   694		bus = aac_logical_to_phys(scmd_channel(cmd));
-   695		cid = scmd_id(cmd);
-   696		if (aac->hba_map[bus][cid].devtype == AAC_DEVTYPE_NATIVE_RAW) {
-   697			struct aac_hba_tm_req *tmf;
-   698			int status;
-   699			u64 address;
-   700	
-   701			pr_err("%s: Host adapter abort request (%d,%d,%d,%d)\n",
-   702			       AAC_DRIVERNAME, host->host_no,
-   703			       sdev_channel(dev), sdev_id(dev), (int)dev->lun);
-   704	
- > 705			fib = &aac->fibs[cmd->request->tag];
-   706			if (*(u8 *)fib->hw_fib_va != 0 &&
-   707			    (fib->flags & FIB_CONTEXT_FLAG_NATIVE_HBA) &&
-   708			    (fib->callback_data == cmd))
-   709				ret = SUCCESS;
-   710			if (ret == FAILED)
-   711				return ret;
-   712	
-   713			/* start a HBA_TMF_ABORT_TASK TMF request */
-   714			fib = aac_fib_alloc(aac, DMA_NONE);
-   715			if (!fib)
-   716				return ret;
-   717	
-   718			tmf = (struct aac_hba_tm_req *)fib->hw_fib_va;
-   719			memset(tmf, 0, sizeof(*tmf));
-   720			tmf->tmf = HBA_TMF_ABORT_TASK;
-   721			tmf->it_nexus = aac->hba_map[bus][cid].rmw_nexus;
-   722			tmf->lun[1] = cmd->device->lun;
-   723	
-   724			address = (u64)fib->hw_error_pa;
-   725			tmf->error_ptr_hi = cpu_to_le32((u32)(address >> 32));
-   726			tmf->error_ptr_lo = cpu_to_le32((u32)(address & 0xffffffff));
-   727			tmf->error_length = cpu_to_le32(FW_ERROR_BUFFER_SIZE);
-   728	
-   729			fib->hbacmd_size = sizeof(*tmf);
-   730			cmd->SCp.sent_command = 0;
-   731	
-   732			status = aac_hba_send(HBA_IU_TYPE_SCSI_TM_REQ, fib,
-   733					  (fib_callback) aac_hba_callback,
-   734					  (void *) cmd);
-   735			if (status != -EINPROGRESS) {
-   736				aac_fib_complete(fib);
-   737				aac_fib_free(fib);
-   738				return ret;
-   739			}
-   740			/* Wait up to 15 secs for completion */
-   741			for (count = 0; count < 15; ++count) {
-   742				if (cmd->SCp.sent_command) {
-   743					ret = SUCCESS;
-   744					break;
-   745				}
-   746				msleep(1000);
-   747			}
-   748	
-   749			if (ret != SUCCESS)
-   750				pr_err("%s: Host adapter abort request timed out\n",
-   751				AAC_DRIVERNAME);
-   752		} else {
-   753			pr_err(
-   754				"%s: Host adapter abort request.\n"
-   755				"%s: Outstanding commands on (%d,%d,%d,%d):\n",
-   756				AAC_DRIVERNAME, AAC_DRIVERNAME,
-   757				host->host_no, sdev_channel(dev), sdev_id(dev),
-   758				(int)dev->lun);
-   759			switch (cmd->cmnd[0]) {
-   760			case SERVICE_ACTION_IN_16:
-   761				if (!(aac->raw_io_interface) ||
-   762				    !(aac->raw_io_64) ||
-   763				    ((cmd->cmnd[1] & 0x1f) != SAI_READ_CAPACITY_16))
-   764					break;
-   765				fallthrough;
-   766			case INQUIRY:
-   767			case READ_CAPACITY:
-   768				/*
-   769				 * Mark associated FIB to not complete,
-   770				 * eh handler does this
-   771				 */
-   772				fib = &aac->fibs[cmd->request->tag];
-   773				if (fib->hw_fib_va->header.XferState &&
-   774				    (fib->flags & FIB_CONTEXT_FLAG) &&
-   775				    (fib->callback_data == cmd)) {
-   776					fib->flags |= FIB_CONTEXT_FLAG_TIMED_OUT;
-   777					cmd->SCp.phase = AAC_OWNER_ERROR_HANDLER;
-   778					ret = SUCCESS;
-   779				}
-   780				break;
-   781			case TEST_UNIT_READY:
-   782				/*
-   783				 * Mark associated FIB to not complete,
-   784				 * eh handler does this
-   785				 */
-   786				fib = &aac->fibs[cmd->request->tag];
-   787				if ((fib->hw_fib_va->header.XferState &
-   788				     cpu_to_le32(Async | NoResponseExpected)) &&
-   789				    (fib->flags & FIB_CONTEXT_FLAG) &&
-   790				    (fib->callback_data == cmd)) {
-   791					fib->flags |= FIB_CONTEXT_FLAG_TIMED_OUT;
-   792					cmd->SCp.phase = AAC_OWNER_ERROR_HANDLER;
-   793					ret = SUCCESS;
-   794				}
-   795				break;
-   796			}
-   797		}
-   798		return ret;
-   799	}
-   800	
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1534  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1535  static int qedi_alloc_bdq(struct qedi_ctx *qedi)
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1536  {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1537  	int i;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1538  	struct scsi_bd *pbl;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1539  	u64 *list;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01 @1540  	dma_addr_t page;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1541  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1542  	/* Alloc dma memory for BDQ buffers */
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1543  	for (i = 0; i < QEDI_BDQ_NUM; i++) {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1544  		qedi->bdq[i].buf_addr =
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1545  				dma_alloc_coherent(&qedi->pdev->dev,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1546  						   QEDI_BDQ_BUF_SIZE,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1547  						   &qedi->bdq[i].buf_dma,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1548  						   GFP_KERNEL);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1549  		if (!qedi->bdq[i].buf_addr) {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1550  			QEDI_ERR(&qedi->dbg_ctx,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1551  				 "Could not allocate BDQ buffer %d.\n", i);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1552  			return -ENOMEM;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1553  		}
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1554  	}
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1555  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1556  	/* Alloc dma memory for BDQ page buffer list */
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1557  	qedi->bdq_pbl_mem_size = QEDI_BDQ_NUM * sizeof(struct scsi_bd);
+fa97c51109867c Nilesh Javali    2018-11-21  1558  	qedi->bdq_pbl_mem_size = ALIGN(qedi->bdq_pbl_mem_size, QEDI_PAGE_SIZE);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1559  	qedi->rq_num_entries = qedi->bdq_pbl_mem_size / sizeof(struct scsi_bd);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1560  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1561  	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_CONN, "rq_num_entries = %d.\n",
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1562  		  qedi->rq_num_entries);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1563  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1564  	qedi->bdq_pbl = dma_alloc_coherent(&qedi->pdev->dev,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1565  					   qedi->bdq_pbl_mem_size,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1566  					   &qedi->bdq_pbl_dma, GFP_KERNEL);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1567  	if (!qedi->bdq_pbl) {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1568  		QEDI_ERR(&qedi->dbg_ctx, "Could not allocate BDQ PBL.\n");
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1569  		return -ENOMEM;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1570  	}
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1571  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1572  	/*
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1573  	 * Populate BDQ PBL with physical and virtual address of individual
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1574  	 * BDQ buffers
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1575  	 */
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1576  	pbl = (struct scsi_bd  *)qedi->bdq_pbl;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1577  	for (i = 0; i < QEDI_BDQ_NUM; i++) {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1578  		pbl->address.hi =
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1579  				cpu_to_le32(QEDI_U64_HI(qedi->bdq[i].buf_dma));
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1580  		pbl->address.lo =
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1581  				cpu_to_le32(QEDI_U64_LO(qedi->bdq[i].buf_dma));
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1582  		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_CONN,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1583  			  "pbl [0x%p] pbl->address hi [0x%llx] lo [0x%llx], idx [%d]\n",
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1584  			  pbl, pbl->address.hi, pbl->address.lo, i);
+da09091732aecc Tomer Tayar      2017-12-27  1585  		pbl->opaque.iscsi_opaque.reserved_zero[0] = 0;
+da09091732aecc Tomer Tayar      2017-12-27  1586  		pbl->opaque.iscsi_opaque.reserved_zero[1] = 0;
+da09091732aecc Tomer Tayar      2017-12-27  1587  		pbl->opaque.iscsi_opaque.reserved_zero[2] = 0;
+da09091732aecc Tomer Tayar      2017-12-27  1588  		pbl->opaque.iscsi_opaque.opaque = cpu_to_le16(i);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1589  		pbl++;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1590  	}
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1591  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1592  	/* Allocate list of PBL pages */
+750afb08ca7131 Luis Chamberlain 2019-01-04  1593  	qedi->bdq_pbl_list = dma_alloc_coherent(&qedi->pdev->dev,
+fa97c51109867c Nilesh Javali    2018-11-21  1594  						QEDI_PAGE_SIZE,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1595  						&qedi->bdq_pbl_list_dma,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1596  						GFP_KERNEL);
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1597  	if (!qedi->bdq_pbl_list) {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1598  		QEDI_ERR(&qedi->dbg_ctx,
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1599  			 "Could not allocate list of PBL pages.\n");
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1600  		return -ENOMEM;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1601  	}
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1602  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1603  	/*
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1604  	 * Now populate PBL list with pages that contain pointers to the
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1605  	 * individual buffers.
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1606  	 */
+fa97c51109867c Nilesh Javali    2018-11-21  1607  	qedi->bdq_pbl_list_num_entries = qedi->bdq_pbl_mem_size /
+fa97c51109867c Nilesh Javali    2018-11-21  1608  					 QEDI_PAGE_SIZE;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1609  	list = (u64 *)qedi->bdq_pbl_list;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1610  	page = qedi->bdq_pbl_list_dma;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1611  	for (i = 0; i < qedi->bdq_pbl_list_num_entries; i++) {
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1612  		*list = qedi->bdq_pbl_dma;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1613  		list++;
+fa97c51109867c Nilesh Javali    2018-11-21  1614  		page += QEDI_PAGE_SIZE;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1615  	}
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1616  
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1617  	return 0;
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1618  }
+ace7f46ba5fde7 Manish Rangankar 2016-12-01  1619  
+
+:::::: The code at line 1540 was first introduced by commit
+:::::: ace7f46ba5fde7273207c7122b0650ceb72510e0 scsi: qedi: Add QLogic FastLinQ offload iSCSI driver framework.
+
+:::::: TO: Manish Rangankar <manish.rangankar@cavium.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
