@@ -1,94 +1,174 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4FB72
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 10:58:58 +0000 (UTC)
-Received: by mail-pj1-f54.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so7480773pjb.5
-        for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 02:58:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sCgAh/8By8wNIrpD9ZFYd1/D45MydwuRk8zcWPcXzGQ=;
-        b=cLqXpIgXjTlGOz1+IBYb8VUFp+uxcoeg2qgpXuYboMkZ9nEN2PIueIvHrVwRREeLmb
-         +MrF9p67VwUtwkCOKgMpKFHfMbgQKrRu3A4Ei5fZTDaW/5FP6BRBW4nGfIWSFpYZFNe8
-         0HSKyJrAk7bR75zNpuXPOvX7m7hC7BeqhRGcMfOrHH6huXvQNL5Az0dD8t07sD1vp6fW
-         DSs5Sa4z5eLSfVWXh6wJRcbwCy9qkbxFE/5DrfUZkwUbQAyBimFVikRyc2tPk4rfv6vB
-         IVnUrMjl/5tVH3g09/AQOnibornKoF23XfqUGYJTThaJBEa6V998JrI4MIc7OGUol2aZ
-         HDyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sCgAh/8By8wNIrpD9ZFYd1/D45MydwuRk8zcWPcXzGQ=;
-        b=AZRnaofMsaR/oPSmc4XmenxcxprfSgIgDHGWVD9ti+4sSlC8VDkHoQS5YFKWikY6Ci
-         LM0E8d992yc+a43JdZ9rA8NmQ7bzu8oeL4rMQtuav/XTZH/OBtCgfulAutKzM6EnDIIj
-         Md5SH9xSg/JKLlv2ORXrpE0MWqOiWXG14isPHYI6ZPA+sA0YdYSkBwN5bQCE4H2pIBZ2
-         CCMgrHgoNA+ke1SFzYrHZqVPj40dUg9nyWXD76qubRwAzCFsM3gjiwDnL5t+af2fFoM7
-         g1spJHx2AQ2Q1DY51/D/ZK0JitD1pM6NJzBhfqnobH5g1XIDsG5HXgjD2FGj+xBMXF5a
-         OCEg==
-X-Gm-Message-State: AOAM5323hPX7PjwpD5Dles6LZnXADRIUksShDt/mlV4QRk9TcE5w6Cv3
-	2pM995HIm/tIcny8nvrBiW+ULovnHYlFCYyJhZhk7A==
-X-Google-Smtp-Source: ABdhPJzEuWLGFxkRno8JHC5jNEyjXKuuqBAtEaEU9SYXKzgCatvz+aOmCp4g+jj8lAIvVYTHHBWYGkqPHzjzHeAWsL4=
-X-Received: by 2002:a17:90b:4a05:: with SMTP id kk5mr5895404pjb.232.1637837938076;
- Thu, 25 Nov 2021 02:58:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA9E72
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 11:04:52 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="321730277"
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="321730277"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 03:04:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="598124425"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Nov 2021 03:04:33 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mqCYL-0006Fw-8I; Thu, 25 Nov 2021 11:04:33 +0000
+Date: Thu, 25 Nov 2021 19:04:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vladimir Divjak <vladimir.divjak@bmw.de>, viro@zeniv.linux.org.uk,
+	mcgrof@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+	will@kernel.org, yuzhao@google.com, hannes@cmpxchg.org,
+	fenghua.yu@intel.com, guro@fb.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] coredump-ptrace: Delayed delivery of SIGSTOP
+Message-ID: <202111251807.2qLJT4ab-lkp@intel.com>
+References: <20211115091540.3806073-1-vladimir.divjak@bmw.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1637781097.git.mchehab+huawei@kernel.org> <c33a6897f5a0803b3fde93fcf4ad652c0915db54.1637781097.git.mchehab+huawei@kernel.org>
-In-Reply-To: <c33a6897f5a0803b3fde93fcf4ad652c0915db54.1637781097.git.mchehab+huawei@kernel.org>
-From: Robert Foss <robert.foss@linaro.org>
-Date: Thu, 25 Nov 2021 11:58:45 +0100
-Message-ID: <CAG3jFyvHvNs93x29s9CoxwRJnpEo_VpyFvCcb6qOAOVpWUs+mA@mail.gmail.com>
-Subject: Re: [PATCH 17/20] media: qcom: camss: mark read reg function as __maybe_unused
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linuxarm@huawei.com, mauro.chehab@huawei.com, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Todor Tomov <todor.too@gmail.com>, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115091540.3806073-1-vladimir.divjak@bmw.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Thanks for submitting this Mauro.
+Hi Vladimir,
 
-On Wed, 24 Nov 2021 at 20:13, Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> Such function is currently unused, but could be needed in the
-> future. So, keep it, marking it as __maybe_unused, in order to
-> avoid a clang W=1 error.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
->
->  drivers/media/platform/qcom/camss/camss-vfe-170.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-> index 5c083d70d495..455ae1a819e6 100644
-> --- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-> +++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-> @@ -191,7 +191,7 @@ static u32 vfe_hw_version(struct vfe_device *vfe)
->         return hw_version;
->  }
->
-> -static inline void vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
-> +static inline void __maybe_unused vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
->  {
->         u32 bits = readl_relaxed(vfe->base + reg);
->
-> --
-> 2.33.1
->
+Thank you for the patch! Yet something to improve:
 
-I've submitted a patch[1] for removing this function, with that patch
-applied, this patch is no longer needed.
+[auto build test ERROR on v5.15]
+[cannot apply to linus/master v5.16-rc1 next-20211125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-[1] https://lore.kernel.org/all/20211011121301.421410-1-robert.foss@linaro.org/
+url:    https://github.com/0day-ci/linux/commits/Vladimir-Divjak/coredump-ptrace-Delayed-delivery-of-SIGSTOP/20211115-172727
+base:    8bb7eca972ad531c9b149c0a51ab43a417385813
+config: hexagon-randconfig-r045-20211115 (https://download.01.org/0day-ci/archive/20211125/202111251807.2qLJT4ab-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/919266a4390cf04729bf15eaf8324b627b4b347c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vladimir-Divjak/coredump-ptrace-Delayed-delivery-of-SIGSTOP/20211115-172727
+        git checkout 919266a4390cf04729bf15eaf8324b627b4b347c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/signal.c:1093:7: error: no member named 'state' in 'struct task_struct'
+                           t->state = TASK_TRACED;
+                           ~  ^
+   1 error generated.
+
+
+vim +1093 kernel/signal.c
+
+  1013	
+  1014	static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+  1015	{
+  1016		struct signal_struct *signal = p->signal;
+  1017		struct task_struct *t;
+  1018	
+  1019		/*
+  1020		 * Now find a thread we can wake up to take the signal off the queue.
+  1021		 *
+  1022		 * If the main thread wants the signal, it gets first crack.
+  1023		 * Probably the least surprising to the average bear.
+  1024		 */
+  1025		if (wants_signal(sig, p))
+  1026			t = p;
+  1027		else if ((type == PIDTYPE_PID) || thread_group_empty(p))
+  1028			/*
+  1029			 * There is just one thread and it does not need to be woken.
+  1030			 * It will dequeue unblocked signals before it runs again.
+  1031			 */
+  1032			return;
+  1033		else {
+  1034			/*
+  1035			 * Otherwise try to find a suitable thread.
+  1036			 */
+  1037			t = signal->curr_target;
+  1038			while (!wants_signal(sig, t)) {
+  1039				t = next_thread(t);
+  1040				if (t == signal->curr_target)
+  1041					/*
+  1042					 * No thread needs to be woken.
+  1043					 * Any eligible threads will see
+  1044					 * the signal in the queue soon.
+  1045					 */
+  1046					return;
+  1047			}
+  1048			signal->curr_target = t;
+  1049		}
+  1050	
+  1051		/*
+  1052		 * Found a killable thread.  If the signal will be fatal,
+  1053		 * then start taking the whole group down immediately.
+  1054		 */
+  1055		if (sig_fatal(p, sig) &&
+  1056		    !(signal->flags & SIGNAL_GROUP_EXIT) &&
+  1057		    !sigismember(&t->real_blocked, sig) &&
+  1058		    (sig == SIGKILL || !p->ptrace)) {
+  1059			/*
+  1060			 * This signal will be fatal to the whole group.
+  1061			 */
+  1062			if (!sig_kernel_coredump(sig)) {
+  1063				/*
+  1064				 * Start a group exit and wake everybody up.
+  1065				 * This way we don't have other threads
+  1066				 * running and doing things after a slower
+  1067				 * thread has the fatal signal pending.
+  1068				 */
+  1069				signal->flags = SIGNAL_GROUP_EXIT;
+  1070				signal->group_exit_code = sig;
+  1071				signal->group_stop_count = 0;
+  1072				t = p;
+  1073				do {
+  1074					task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
+  1075					sigaddset(&t->pending.signal, SIGKILL);
+  1076					signal_wake_up(t, 1);
+  1077				} while_each_thread(p, t);
+  1078				return;
+  1079			}
+  1080		}
+  1081	
+  1082		/*
+  1083		 * If the signal is completed for a process being core-dumped,
+  1084		 * and the signal is SIGSTOP, there is no point in waking up its tasks,
+  1085		 * as they are either dumping the core, or in uninterruptible state,
+  1086		 * so skip the wake up if core-dump is not yet completed.
+  1087		 * Instead, if the core-dump has been completed, see coredump_finish()
+  1088		 * set the task state directly to TASK_TRACED,
+  1089		 * allowing the coredump umh process to ptrace the dying process.
+  1090		 */
+  1091		if (unlikely(t->mm && t->mm->core_state) && sig == SIGSTOP) {
+  1092			if (t->mm->core_state->core_dumped)
+> 1093				t->state = TASK_TRACED;
+  1094	
+  1095			return;
+  1096		}
+  1097	
+  1098		/*
+  1099		 * The signal is already in the shared-pending queue.
+  1100		 * Tell the chosen thread to wake up and dequeue it.
+  1101		 */
+  1102		signal_wake_up(t, sig == SIGKILL);
+  1103		return;
+  1104	}
+  1105	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
