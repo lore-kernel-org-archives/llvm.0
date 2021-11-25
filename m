@@ -1,27 +1,29 @@
 Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7652D72
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 11:57:36 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="296307660"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C05072
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 11:58:37 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="296307799"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="296307660"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 03:57:35 -0800
+   d="scan'208";a="296307799"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 03:58:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="607551267"
+   d="scan'208";a="475621281"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 25 Nov 2021 03:57:35 -0800
+  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2021 03:58:35 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqDNe-0006J8-7i; Thu, 25 Nov 2021 11:57:34 +0000
-Date: Thu, 25 Nov 2021 19:57:29 +0800
+	id 1mqDOc-0006JF-8C; Thu, 25 Nov 2021 11:58:34 +0000
+Date: Thu, 25 Nov 2021 19:57:32 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [android-common:android-4.19-stable 1/23] crypto/blake2b_generic.o:
- warning: objtool: gelf_getehdr: invalid `Elf' handle
-Message-ID: <202111251907.brTWxUOr-lkp@intel.com>
+To: Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>
+Subject: drivers/bluetooth/hci_qca.c:1860:37: warning: unused variable
+ 'qca_soc_data_wcn6750'
+Message-ID: <202111251945.DaHpCtny-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,35 +34,66 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-TO: cros-kernel-buildreports@googlegroups.com
+Hi Venkata,
 
-tree:   https://android.googlesource.com/kernel/common android-4.19-stable
-head:   e9f2289a4bf1ec79a40d9f77e5acb882f2e871fa
-commit: e4c224108bce80f42b55f000c41841aa2fa8f963 [1/23] BACKPORT: crypto: blake2b - add blake2b generic implementation
-config: x86_64-randconfig-a012-20211102 (https://download.01.org/0day-ci/archive/20211125/202111251907.brTWxUOr-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 264d3b6d4e08401c5b50a85bd76e80b3461d77e6)
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5f53fa508db098c9d372423a6dac31c8a5679cdf
+commit: d8f97da1b92d2fe89d51c673ecf80c4016119e5c Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750
+date:   5 months ago
+config: x86_64-buildonly-randconfig-r005-20211118 (https://download.01.org/0day-ci/archive/20211125/202111251945.DaHpCtny-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c46becf500df2a7fb4b4fce16178a036c344315a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add android-common https://android.googlesource.com/kernel/common
-        git fetch --no-tags android-common android-4.19-stable
-        git checkout e4c224108bce80f42b55f000c41841aa2fa8f963
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8f97da1b92d2fe89d51c673ecf80c4016119e5c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d8f97da1b92d2fe89d51c673ecf80c4016119e5c
         # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> crypto/blake2b_generic.o: warning: objtool: gelf_getehdr: invalid `Elf' handle
+   drivers/bluetooth/hci_qca.c:1821:37: warning: unused variable 'qca_soc_data_wcn3990' [-Wunused-const-variable]
+   static const struct qca_device_data qca_soc_data_wcn3990 = {
+                                       ^
+   drivers/bluetooth/hci_qca.c:1832:37: warning: unused variable 'qca_soc_data_wcn3991' [-Wunused-const-variable]
+   static const struct qca_device_data qca_soc_data_wcn3991 = {
+                                       ^
+   drivers/bluetooth/hci_qca.c:1844:37: warning: unused variable 'qca_soc_data_wcn3998' [-Wunused-const-variable]
+   static const struct qca_device_data qca_soc_data_wcn3998 = {
+                                       ^
+>> drivers/bluetooth/hci_qca.c:1860:37: warning: unused variable 'qca_soc_data_wcn6750' [-Wunused-const-variable]
+   static const struct qca_device_data qca_soc_data_wcn6750 = {
+                                       ^
+   4 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for STACK_VALIDATION
-   Depends on HAVE_STACK_VALIDATION
-   Selected by
-   - UNWINDER_ORC && <choice> && X86_64
+
+vim +/qca_soc_data_wcn6750 +1860 drivers/bluetooth/hci_qca.c
+
+  1859	
+> 1860	static const struct qca_device_data qca_soc_data_wcn6750 = {
+  1861		.soc_type = QCA_WCN6750,
+  1862		.vregs = (struct qca_vreg []) {
+  1863			{ "vddio", 5000 },
+  1864			{ "vddaon", 26000 },
+  1865			{ "vddbtcxmx", 126000 },
+  1866			{ "vddrfacmn", 12500 },
+  1867			{ "vddrfa0p8", 102000 },
+  1868			{ "vddrfa1p7", 302000 },
+  1869			{ "vddrfa1p2", 257000 },
+  1870			{ "vddrfa2p2", 1700000 },
+  1871			{ "vddasd", 200 },
+  1872		},
+  1873		.num_vregs = 9,
+  1874		.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
+  1875	};
+  1876	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
