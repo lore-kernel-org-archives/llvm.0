@@ -1,30 +1,29 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659D42C80
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 16:47:47 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="321775266"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5880B2C80
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 16:58:47 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="233034670"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="321775266"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 08:47:46 -0800
+   d="scan'208";a="233034670"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 08:58:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="592060950"
+   d="scan'208";a="457918053"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Nov 2021 08:47:44 -0800
+  by orsmga006.jf.intel.com with ESMTP; 25 Nov 2021 08:58:45 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqHuR-0006f6-UG; Thu, 25 Nov 2021 16:47:43 +0000
-Date: Fri, 26 Nov 2021 00:47:22 +0800
+	id 1mqI56-0006fn-6j; Thu, 25 Nov 2021 16:58:44 +0000
+Date: Fri, 26 Nov 2021 00:57:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Dewar <alex.dewar90@gmail.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: drivers/pci/controller/dwc/pci-keystone.c:1127:34: warning: unused
- variable 'ks_pcie_of_match'
-Message-ID: <202111260033.s4hA7CmO-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:extron 24/26] ./usr/include/linux/cec.h:150:19:
+ error: unknown type name 'bool'
+Message-ID: <202111260058.vapJnwHD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,63 +34,31 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alex,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f53fa508db098c9d372423a6dac31c8a5679cdf
-commit: 476b70b4d1adff4465e9ff68021c52858555ac28 PCI: keystone: Enable compile-testing on !ARM
-date:   1 year ago
-config: x86_64-buildonly-randconfig-r004-20211118 (https://download.01.org/0day-ci/archive/20211126/202111260033.s4hA7CmO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c46becf500df2a7fb4b4fce16178a036c344315a)
+tree:   git://linuxtv.org/hverkuil/media_tree.git extron
+head:   14428d5edce10d71fd18564114989459dbc00ae8
+commit: b06e0fa1fd28ff51c1bfad1e1d9d0b977c64e986 [24/26] cec.h: add cec_msg_recv_is_tx_result() helper
+config: x86_64-randconfig-a014-20211123 (https://download.01.org/0day-ci/archive/20211126/202111260058.vapJnwHD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 49e3838145dff1ec91c2e67a2cb562775c8d2a08)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=476b70b4d1adff4465e9ff68021c52858555ac28
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 476b70b4d1adff4465e9ff68021c52858555ac28
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree extron
+        git checkout b06e0fa1fd28ff51c1bfad1e1d9d0b977c64e986
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pci-keystone.c:1127:34: warning: unused variable 'ks_pcie_of_match' [-Wunused-const-variable]
-   static const struct of_device_id ks_pcie_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/ks_pcie_of_match +1127 drivers/pci/controller/dwc/pci-keystone.c
-
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1126  
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25 @1127  static const struct of_device_id ks_pcie_of_match[] = {
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1128  	{
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1129  		.type = "pci",
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1130  		.data = &ks_pcie_rc_of_data,
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1131  		.compatible = "ti,keystone-pcie",
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1132  	},
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1133  	{
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1134  		.data = &ks_pcie_am654_rc_of_data,
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1135  		.compatible = "ti,am654-pcie-rc",
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1136  	},
-23284ad677a94f2 Kishon Vijay Abraham I 2019-03-25  1137  	{
-23284ad677a94f2 Kishon Vijay Abraham I 2019-03-25  1138  		.data = &ks_pcie_am654_ep_of_data,
-23284ad677a94f2 Kishon Vijay Abraham I 2019-03-25  1139  		.compatible = "ti,am654-pcie-ep",
-23284ad677a94f2 Kishon Vijay Abraham I 2019-03-25  1140  	},
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1141  	{ },
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1142  };
-18b0415bc802a8b Kishon Vijay Abraham I 2019-03-25  1143  
-
-:::::: The code at line 1127 was first introduced by commit
-:::::: 18b0415bc802a8bab5dedba5ae2757e83259e6ee PCI: keystone: Add support for PCIe RC in AM654x Platforms
-
-:::::: TO: Kishon Vijay Abraham I <kishon@ti.com>
-:::::: CC: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+   In file included from <built-in>:1:
+>> ./usr/include/linux/cec.h:150:19: error: unknown type name 'bool'
+   static __inline__ bool cec_msg_recv_is_tx_result(const struct cec_msg *msg)
+                     ^
+   1 error generated.
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
