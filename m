@@ -1,29 +1,30 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5880B2C80
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 16:58:47 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="233034670"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AA82C83
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 18:44:50 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="298960435"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="233034670"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 08:58:46 -0800
+   d="scan'208";a="298960435"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 10:44:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="457918053"
+   d="scan'208";a="607638730"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Nov 2021 08:58:45 -0800
+  by orsmga004.jf.intel.com with ESMTP; 25 Nov 2021 10:44:48 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqI56-0006fn-6j; Thu, 25 Nov 2021 16:58:44 +0000
-Date: Fri, 26 Nov 2021 00:57:47 +0800
+	id 1mqJjj-0006nd-DG; Thu, 25 Nov 2021 18:44:47 +0000
+Date: Fri, 26 Nov 2021 02:44:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
+To: Hannes Reinecke <hare@suse.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [hverkuil-media-tree:extron 24/26] ./usr/include/linux/cec.h:150:19:
- error: unknown type name 'bool'
-Message-ID: <202111260058.vapJnwHD-lkp@intel.com>
+Subject: [hare-scsi-devel:reserved-tags.v9 16/16]
+ drivers/scsi/aacraid/linit.c:705:25: error: no member named 'request' in
+ 'struct scsi_cmnd'
+Message-ID: <202111260218.7VLnGxAO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,31 +35,172 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git extron
-head:   14428d5edce10d71fd18564114989459dbc00ae8
-commit: b06e0fa1fd28ff51c1bfad1e1d9d0b977c64e986 [24/26] cec.h: add cec_msg_recv_is_tx_result() helper
-config: x86_64-randconfig-a014-20211123 (https://download.01.org/0day-ci/archive/20211126/202111260058.vapJnwHD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 49e3838145dff1ec91c2e67a2cb562775c8d2a08)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git reserved-tags.v9
+head:   b734f6a1dc097d72408e753b7d7022516d7174f4
+commit: b734f6a1dc097d72408e753b7d7022516d7174f4 [16/16] aacraid: use scsi_host_busy_iter() to traverse outstanding commands
+config: riscv-buildonly-randconfig-r002-20211125 (https://download.01.org/0day-ci/archive/20211126/202111260218.7VLnGxAO-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0332d105b9ad7f1f0ffca7e78b71de8b3a48f158)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree extron
-        git checkout b06e0fa1fd28ff51c1bfad1e1d9d0b977c64e986
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=b734f6a1dc097d72408e753b7d7022516d7174f4
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel reserved-tags.v9
+        git checkout b734f6a1dc097d72408e753b7d7022516d7174f4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/aacraid/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/cec.h:150:19: error: unknown type name 'bool'
-   static __inline__ bool cec_msg_recv_is_tx_result(const struct cec_msg *msg)
-                     ^
+>> drivers/scsi/aacraid/linit.c:705:25: error: no member named 'request' in 'struct scsi_cmnd'
+                   fib = &aac->fibs[cmd->request->tag];
+                                    ~~~  ^
+   drivers/scsi/aacraid/linit.c:772:26: error: no member named 'request' in 'struct scsi_cmnd'
+                           fib = &aac->fibs[cmd->request->tag];
+                                            ~~~  ^
+   drivers/scsi/aacraid/linit.c:786:26: error: no member named 'request' in 'struct scsi_cmnd'
+                           fib = &aac->fibs[cmd->request->tag];
+                                            ~~~  ^
+   drivers/scsi/aacraid/linit.c:1006:36: error: no member named 'request' in 'struct scsi_cmnd'
+           struct fib *fib = &aac->fibs[cmd->request->tag];
+                                        ~~~  ^
+   4 errors generated.
+--
+>> drivers/scsi/aacraid/commsup.c:1473:40: error: no member named 'request' in 'struct scsi_cmnd'
+           struct fib *fib = &aac->fibs[command->request->tag];
+                                        ~~~~~~~  ^
    1 error generated.
+
+
+vim +705 drivers/scsi/aacraid/linit.c
+
+   680	
+   681	static int aac_eh_abort(struct scsi_cmnd* cmd)
+   682	{
+   683		struct scsi_device * dev = cmd->device;
+   684		struct Scsi_Host * host = dev->host;
+   685		struct aac_dev * aac = (struct aac_dev *)host->hostdata;
+   686		struct fib *fib;
+   687		int count;
+   688		u32 bus, cid;
+   689		int ret = FAILED;
+   690	
+   691		if (aac_adapter_check_health(aac))
+   692			return ret;
+   693	
+   694		bus = aac_logical_to_phys(scmd_channel(cmd));
+   695		cid = scmd_id(cmd);
+   696		if (aac->hba_map[bus][cid].devtype == AAC_DEVTYPE_NATIVE_RAW) {
+   697			struct aac_hba_tm_req *tmf;
+   698			int status;
+   699			u64 address;
+   700	
+   701			pr_err("%s: Host adapter abort request (%d,%d,%d,%d)\n",
+   702			       AAC_DRIVERNAME, host->host_no,
+   703			       sdev_channel(dev), sdev_id(dev), (int)dev->lun);
+   704	
+ > 705			fib = &aac->fibs[cmd->request->tag];
+   706			if (*(u8 *)fib->hw_fib_va != 0 &&
+   707			    (fib->flags & FIB_CONTEXT_FLAG_NATIVE_HBA) &&
+   708			    (fib->callback_data == cmd))
+   709				ret = SUCCESS;
+   710			if (ret == FAILED)
+   711				return ret;
+   712	
+   713			/* start a HBA_TMF_ABORT_TASK TMF request */
+   714			fib = aac_fib_alloc(aac, DMA_NONE);
+   715			if (!fib)
+   716				return ret;
+   717	
+   718			tmf = (struct aac_hba_tm_req *)fib->hw_fib_va;
+   719			memset(tmf, 0, sizeof(*tmf));
+   720			tmf->tmf = HBA_TMF_ABORT_TASK;
+   721			tmf->it_nexus = aac->hba_map[bus][cid].rmw_nexus;
+   722			tmf->lun[1] = cmd->device->lun;
+   723	
+   724			address = (u64)fib->hw_error_pa;
+   725			tmf->error_ptr_hi = cpu_to_le32((u32)(address >> 32));
+   726			tmf->error_ptr_lo = cpu_to_le32((u32)(address & 0xffffffff));
+   727			tmf->error_length = cpu_to_le32(FW_ERROR_BUFFER_SIZE);
+   728	
+   729			fib->hbacmd_size = sizeof(*tmf);
+   730			cmd->SCp.sent_command = 0;
+   731	
+   732			status = aac_hba_send(HBA_IU_TYPE_SCSI_TM_REQ, fib,
+   733					  (fib_callback) aac_hba_callback,
+   734					  (void *) cmd);
+   735			if (status != -EINPROGRESS) {
+   736				aac_fib_complete(fib);
+   737				aac_fib_free(fib);
+   738				return ret;
+   739			}
+   740			/* Wait up to 15 secs for completion */
+   741			for (count = 0; count < 15; ++count) {
+   742				if (cmd->SCp.sent_command) {
+   743					ret = SUCCESS;
+   744					break;
+   745				}
+   746				msleep(1000);
+   747			}
+   748	
+   749			if (ret != SUCCESS)
+   750				pr_err("%s: Host adapter abort request timed out\n",
+   751				AAC_DRIVERNAME);
+   752		} else {
+   753			pr_err(
+   754				"%s: Host adapter abort request.\n"
+   755				"%s: Outstanding commands on (%d,%d,%d,%d):\n",
+   756				AAC_DRIVERNAME, AAC_DRIVERNAME,
+   757				host->host_no, sdev_channel(dev), sdev_id(dev),
+   758				(int)dev->lun);
+   759			switch (cmd->cmnd[0]) {
+   760			case SERVICE_ACTION_IN_16:
+   761				if (!(aac->raw_io_interface) ||
+   762				    !(aac->raw_io_64) ||
+   763				    ((cmd->cmnd[1] & 0x1f) != SAI_READ_CAPACITY_16))
+   764					break;
+   765				fallthrough;
+   766			case INQUIRY:
+   767			case READ_CAPACITY:
+   768				/*
+   769				 * Mark associated FIB to not complete,
+   770				 * eh handler does this
+   771				 */
+   772				fib = &aac->fibs[cmd->request->tag];
+   773				if (fib->hw_fib_va->header.XferState &&
+   774				    (fib->flags & FIB_CONTEXT_FLAG) &&
+   775				    (fib->callback_data == cmd)) {
+   776					fib->flags |= FIB_CONTEXT_FLAG_TIMED_OUT;
+   777					cmd->SCp.phase = AAC_OWNER_ERROR_HANDLER;
+   778					ret = SUCCESS;
+   779				}
+   780				break;
+   781			case TEST_UNIT_READY:
+   782				/*
+   783				 * Mark associated FIB to not complete,
+   784				 * eh handler does this
+   785				 */
+   786				fib = &aac->fibs[cmd->request->tag];
+   787				if ((fib->hw_fib_va->header.XferState &
+   788				     cpu_to_le32(Async | NoResponseExpected)) &&
+   789				    (fib->flags & FIB_CONTEXT_FLAG) &&
+   790				    (fib->callback_data == cmd)) {
+   791					fib->flags |= FIB_CONTEXT_FLAG_TIMED_OUT;
+   792					cmd->SCp.phase = AAC_OWNER_ERROR_HANDLER;
+   793					ret = SUCCESS;
+   794				}
+   795				break;
+   796			}
+   797		}
+   798		return ret;
+   799	}
+   800	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
