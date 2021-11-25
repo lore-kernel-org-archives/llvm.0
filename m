@@ -1,39 +1,30 @@
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3812C83
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 09:32:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 563B76108B;
-	Thu, 25 Nov 2021 09:32:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637832727;
-	bh=uvwK6xkBqc0Znk7K/Ky4+OAVTT2Tgux5Kci1XFX8G7s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A22aw7jpeZpx4drvuc79ExTAHz6VeHUzufIvszz7ZaVx6vozqrYdGuHHB4ir0DkuK
-	 4DosN3et1ryeH2sSo99GI46FHAMGrBjfPt0qtOD8B9VjSAsNRfJ1lLuEMyJyhlHoGv
-	 DiaytizYSHxweQu8nu9uC6rol+SgVSBSEjRjgUudS+4ouGtjQrdd8dEfOOvDI0M0tk
-	 Lwu8GSBC4nwXXs69WFKA9Kb21m1eFmHQxaZcig1TBhzh82FgRakL2sHa7/Okr2+Wwy
-	 DmKF7mojkI+nVpmahE4/oqR+93nJWRLIZT+N2quZ9UqaNezklRPtuBCcngVQgzq7Oj
-	 3e7fssOTS3ObQ==
-Date: Thu, 25 Nov 2021 15:02:02 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org,
-	ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-	dri-devel <dri-devel@lists.freedesktop.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	linux-mtd <linux-mtd@lists.infradead.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-spi <linux-spi@vger.kernel.org>,
-	Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH 07/11] dmaengine: qcom-adm: stop abusing slave_id config
-Message-ID: <YZ9YEim/hc0C4zz9@matsya>
-References: <20211115085403.360194-8-arnd@kernel.org>
- <202111251538.x6sJNCka-lkp@intel.com>
- <CAK8P3a17=OEtgkfRpzK8+-N37XqecSHP=WMZsu16Ef-WMp-1HQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F6872
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 10:31:35 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="235734544"
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="235734544"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 02:31:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="607527187"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 25 Nov 2021 02:31:33 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mqC2O-0006DM-80; Thu, 25 Nov 2021 10:31:32 +0000
+Date: Thu, 25 Nov 2021 18:30:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.15 119/139]
+ arch/arm64/include/asm/mpam.h:110:6: warning: variable 'regval' set but not
+ used
+Message-ID: <202111251807.ljdrXC4V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,59 +33,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a17=OEtgkfRpzK8+-N37XqecSHP=WMZsu16Ef-WMp-1HQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 25-11-21, 09:25, Arnd Bergmann wrote:
-> On Thu, Nov 25, 2021 at 8:57 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/dma/qcom/qcom_adm.c:712:18: warning: no previous prototype for function 'adm_dma_xlate' [-Wmissing-prototypes]
-> >    struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-> >                     ^
-> >    drivers/dma/qcom/qcom_adm.c:712:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> >    struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-> >    ^
-> >    static
-> >    1 warning generated.
-> 
-> I noticed this mistake slipped into v2 as well, the function needs to
-> be marked 'static'.
-> 
-> Vinod, let me know how you want me to address this. Should I just fold
-> the fix (see below)
-> and the final Acks into the patch and send an updated pull request, or
-> do a complete v3
-> submission?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.15
+head:   ce3629841262f725a5f3a327403fcaf0e604a85e
+commit: ec95ea0172936108af0216efb0e4f28402eaf1c6 [119/139] arm64: mpam: Add helpers to change a tasks and cpu mpam partid/pmg values
+config: arm64-randconfig-r012-20211115 (https://download.01.org/0day-ci/archive/20211125/202111251807.ljdrXC4V-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=ec95ea0172936108af0216efb0e4f28402eaf1c6
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.15
+        git checkout ec95ea0172936108af0216efb0e4f28402eaf1c6
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
 
-I can fold this while applying, the series lgtm, I will wait a day
-before applying...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks
+All warnings (new ones prefixed by >>):
 
-> 
->       Arnd
-> 
-> 8<---
-> diff --git a/drivers/dma/qcom/qcom_adm.c b/drivers/dma/qcom/qcom_adm.c
-> index bb338b303af6..65697bee4db0 100644
-> --- a/drivers/dma/qcom/qcom_adm.c
-> +++ b/drivers/dma/qcom/qcom_adm.c
-> @@ -709,8 +709,8 @@ static void adm_channel_init(struct adm_device
-> *adev, struct adm_chan *achan,
->   *
->   * Returns pointer to appropriate dma channel on success or NULL on error.
->   */
-> -struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-> -                              struct of_dma *ofdma)
-> +static struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-> +                                     struct of_dma *ofdma)
->  {
->         struct dma_device *dev = ofdma->of_dma_data;
->         struct dma_chan *chan, *candidate = NULL;
+   In file included from arch/arm64/kernel/process.c:51:
+>> arch/arm64/include/asm/mpam.h:110:6: warning: variable 'regval' set but not used [-Wunused-but-set-variable]
+           u64 regval;
+               ^
+   arch/arm64/include/asm/mpam.h:133:6: warning: variable 'regval' set but not used [-Wunused-but-set-variable]
+           u64 regval = mpam_get_regval(tsk);
+               ^
+   2 warnings generated.
 
--- 
-~Vinod
+
+vim +/regval +110 arch/arm64/include/asm/mpam.h
+
+   105	
+   106	static inline void mpam_set_task_partid_pmg(struct task_struct *tsk,
+   107						    u16 partid_d, u16 partid_i,
+   108						    u8 pmg_d, u8 pmg_i)
+   109	{
+ > 110		u64 regval;
+   111	
+   112		regval = FIELD_PREP(MPAM_SYSREG_PARTID_D, partid_d);
+   113		regval |= FIELD_PREP(MPAM_SYSREG_PARTID_I, partid_i);
+   114		regval |= FIELD_PREP(MPAM_SYSREG_PMG_D, pmg_d);
+   115		regval |= FIELD_PREP(MPAM_SYSREG_PMG_I, pmg_i);
+   116	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
