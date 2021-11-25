@@ -1,26 +1,32 @@
-Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E17E572
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 21:30:58 +0000 (UTC)
-Received: from pirotess (104.red-83-50-135.dynamicip.rima-tde.net [83.50.135.104])
-	by iodev.co.uk (Postfix) with ESMTPSA id 1B5966D0E4;
-	Thu, 25 Nov 2021 22:19:08 +0100 (CET)
-Date: Thu, 25 Nov 2021 22:18:51 +0100
-From: Ismael Luceno <ismael@iodev.co.uk>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linuxarm@huawei.com, mauro.chehab@huawei.com,
-	Andrey Utkin <andrey_utkin@fastmail.com>,
-	Anton Sviridenko <anton@corp.bluecherry.net>,
-	Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 08/20] media: solo6x10: add _maybe_unused to currently
- unused functions
-Message-ID: <YZ/9uzBfNF7U/jlY@pirotess>
-References: <cover.1637781097.git.mchehab+huawei@kernel.org>
- <18daa194878d8815beef39d6fed2a838e1c2cb68.1637781097.git.mchehab+huawei@kernel.org>
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A6972
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 21:41:54 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="233064112"
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="233064112"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 13:41:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="741374968"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Nov 2021 13:41:52 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mqMV6-0006xV-3S; Thu, 25 Nov 2021 21:41:52 +0000
+Date: Fri, 26 Nov 2021 05:41:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: WARNING: modpost: vmlinux.o(.text+0x5b811): Section mismatch in
+ reference from the function test_bit() to the variable
+ .init.data:numa_nodes_parsed
+Message-ID: <202111260506.fhLfHV1D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,77 +35,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <18daa194878d8815beef39d6fed2a838e1c2cb68.1637781097.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 24/Nov/2021 20:13, Mauro Carvalho Chehab wrote:
-> There are several unused helper macros there, meant to parse some
-> fields.
-> 
-> While there's not wrong with that, it generates clang warnings
-> with W=1, causing build to break with CONFIG_WERROR.
-> 
-> So, add __maybe_unused to fix such warnings.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
-> 
->  drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-> index 0abcad4e84fa..85eaf5d00e9b 100644
-> --- a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-> +++ b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-> @@ -391,12 +391,12 @@ static int solo_send_desc(struct solo_enc_dev *solo_enc, int skip,
->  }
->  
->  /* Extract values from VOP header - VE_STATUSxx */
-> -static inline int vop_interlaced(const vop_header *vh)
-> +static inline __maybe_unused int vop_interlaced(const vop_header *vh)
->  {
->  	return (__le32_to_cpu((*vh)[0]) >> 30) & 1;
->  }
->  
-> -static inline u8 vop_channel(const vop_header *vh)
-> +static inline __maybe_unused u8 vop_channel(const vop_header *vh)
->  {
->  	return (__le32_to_cpu((*vh)[0]) >> 24) & 0x1F;
->  }
-> @@ -411,12 +411,12 @@ static inline u32 vop_mpeg_size(const vop_header *vh)
->  	return __le32_to_cpu((*vh)[0]) & 0xFFFFF;
->  }
->  
-> -static inline u8 vop_hsize(const vop_header *vh)
-> +static inline u8 __maybe_unused vop_hsize(const vop_header *vh)
->  {
->  	return (__le32_to_cpu((*vh)[1]) >> 8) & 0xFF;
->  }
->  
-> -static inline u8 vop_vsize(const vop_header *vh)
-> +static inline u8 __maybe_unused vop_vsize(const vop_header *vh)
->  {
->  	return __le32_to_cpu((*vh)[1]) & 0xFF;
->  }
-> @@ -436,12 +436,12 @@ static inline u32 vop_jpeg_size(const vop_header *vh)
->  	return __le32_to_cpu((*vh)[4]) & 0xFFFFF;
->  }
->  
-> -static inline u32 vop_sec(const vop_header *vh)
-> +static inline u32 __maybe_unused vop_sec(const vop_header *vh)
->  {
->  	return __le32_to_cpu((*vh)[5]);
->  }
->  
-> -static inline u32 vop_usec(const vop_header *vh)
-> +static inline __maybe_unused u32 vop_usec(const vop_header *vh)
->  {
->  	return __le32_to_cpu((*vh)[6]);
->  }
-> -- 
-> 2.33.1
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b501b85957deb17f1fe0a861fee820255519d526
+commit: d0a3ac549f389c1511a4df0d7638536305205d20 ubsan: enable for all*config builds
+date:   12 months ago
+config: x86_64-buildonly-randconfig-r001-20211122 (https://download.01.org/0day-ci/archive/20211126/202111260506.fhLfHV1D-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d0a3ac549f389c1511a4df0d7638536305205d20
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d0a3ac549f389c1511a4df0d7638536305205d20
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Acked-by: Ismael Luceno <ismael@iodev.co.uk>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0x5b811): Section mismatch in reference from the function test_bit() to the variable .init.data:numa_nodes_parsed
+The function test_bit() references
+the variable __initdata numa_nodes_parsed.
+This is often because test_bit lacks a __initdata
+annotation or the annotation of numa_nodes_parsed is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x5b877): Section mismatch in reference from the function __next_node() to the variable .init.data:numa_nodes_parsed
+The function __next_node() references
+the variable __initdata numa_nodes_parsed.
+This is often because __next_node lacks a __initdata
+annotation or the annotation of numa_nodes_parsed is wrong.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
