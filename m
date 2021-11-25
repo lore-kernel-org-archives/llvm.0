@@ -1,125 +1,144 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F230772
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 12:08:39 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="216212139"
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="216212139"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 04:08:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="457845823"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Nov 2021 04:08:35 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mqDYI-0006Jf-IR; Thu, 25 Nov 2021 12:08:34 +0000
-Date: Thu, 25 Nov 2021 20:07:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Wang <jasowang@redhat.com>, mst@redhat.com,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] virtio-mmio: harden interrupt
-Message-ID: <202111252001.Z5tli1Np-lkp@intel.com>
-References: <20211125063034.12347-1-jasowang@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426EE68
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 15:44:16 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id y26so17247351lfa.11
+        for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 07:44:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zjdtC5GIxYnl5iuWdNGFM3Hr3h23E1k1oPnPZHzamQY=;
+        b=pqy2TW0bsBo5u1QZ2nCCwi5+QVw2p6auHI5QbjTULerGJrcj7TbW+iaStA4URJwIuO
+         fOn8rVo1e8/KRQFsav5cOZvzPKce06KSrbKMRm/+RX+FDZJOzIuJc1OLH4Yl07gOeuvh
+         etiGPY5mBWaBpxwbTUQ1cZdZFHSCq7OubyvvyIgyiDijd8tqenSY9FLFzC8HUmlJhb84
+         XQcTxgFjcSmXxgoBvC0x/r+0yJKvH2rtat9hVSwiQGoGt9MkPgUreADgdP6RMlTcgOnG
+         5SFw4ZHrD+rH5LN06xwLde1VDzIDzATJWkaGRZAtvXH63ufNzuBOxbottQltNiPsYkIm
+         yWjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zjdtC5GIxYnl5iuWdNGFM3Hr3h23E1k1oPnPZHzamQY=;
+        b=EJFxdNFjf+NFIC4IEuXy9Tknmgwg6KOluU+9chIdMhf/ualUIUEzecTrwCJSnFUzc8
+         HoCsm4XjyQjKSbvlns8cw9jAE1rIZHSh5EWWtsCgbBh5VkG4vUqzI5fL2MWYOYp2EKp8
+         mCRUQHDw9jNbqI/Embb9Y97kt912t/2Y55qP+3HsXIIA2JCXj8PEYISPxknKpwrSqrDB
+         /l1WaxN83WFTVqPToAP0YDBKelaY//rdsDwZPyoHdf9E1YVxRjXk3laKJpSJ3Of3ZMjQ
+         OrRqP8dMWT74wKeHJ2ArYuS5e1pIpRPWOBmwBaXcFTMr0DYXqHf4oLIHkg3GhxgzP33w
+         dykQ==
+X-Gm-Message-State: AOAM532aFoxVzOid9k1fc9/w+DyEZwmpxweAS3H06Vl06l4banHOyouL
+	4Kq38McoZESOp+kMvhHnk/AvUw==
+X-Google-Smtp-Source: ABdhPJyiWyvugY0ouHq1meoMZp+lYl8AA/jg9WpkSyn1m8R7vRBtv3L2hntYxgDFLYy/rL7jBtf4eg==
+X-Received: by 2002:a05:6512:3602:: with SMTP id f2mr24700962lfs.399.1637855054256;
+        Thu, 25 Nov 2021 07:44:14 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id x12sm261627ljc.121.2021.11.25.07.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Nov 2021 07:44:13 -0800 (PST)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: benh@kernel.crashing.org,
+	paulus@samba.org
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] powerpc: mm: radix_tlb: rearrange the if-else block
+Date: Thu, 25 Nov 2021 16:44:06 +0100
+Message-Id: <20211125154406.470082-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211125063034.12347-1-jasowang@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Jason,
+Clang warns:
 
-I love your patch! Perhaps something to improve:
+arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' is uninitialized when used here [-Werror,-Wuninitialized]
+                                __tlbiel_va_range(hstart, hend, pid,
+                                                  ^~~~~~
+arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the variable 'hstart' to silence this warning
+                unsigned long hstart, hend;
+                                    ^
+                                     = 0
+arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is uninitialized when used here [-Werror,-Wuninitialized]
+                                __tlbiel_va_range(hstart, hend, pid,
+                                                          ^~~~
+arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the variable 'hend' to silence this warning
+                unsigned long hstart, hend;
+                                          ^
+                                           = 0
+2 errors generated.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Rework the if-else to pull the 'IS_ENABLE(CONFIG_TRANSPARENT_HUGEPAGE)'
+check one level up, this will silent the warnings. That will also
+simplify the 'else' path. Clang is getting confused with these warnings,
+but the warnings is a false-positive.
 
-url:    https://github.com/0day-ci/linux/commits/Jason-Wang/virtio-mmio-harden-interrupt/20211125-143334
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5f53fa508db098c9d372423a6dac31c8a5679cdf
-config: mips-buildonly-randconfig-r003-20211125 (https://download.01.org/0day-ci/archive/20211125/202111252001.Z5tli1Np-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/e19a8a1a95bd891090863b2d6828b8dc55d3633f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jason-Wang/virtio-mmio-harden-interrupt/20211125-143334
-        git checkout e19a8a1a95bd891090863b2d6828b8dc55d3633f
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/virtio/virtio_mmio.c:105:6: warning: no previous prototype for function 'vm_disable_cbs' [-Wmissing-prototypes]
-   void vm_disable_cbs(struct virtio_device *vdev)
-        ^
-   drivers/virtio/virtio_mmio.c:105:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void vm_disable_cbs(struct virtio_device *vdev)
-   ^
-   static 
->> drivers/virtio/virtio_mmio.c:121:6: warning: no previous prototype for function 'vm_enable_cbs' [-Wmissing-prototypes]
-   void vm_enable_cbs(struct virtio_device *vdev)
-        ^
-   drivers/virtio/virtio_mmio.c:121:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void vm_enable_cbs(struct virtio_device *vdev)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/vm_disable_cbs +105 drivers/virtio/virtio_mmio.c
-
-   103	
-   104	/* disable irq handlers */
- > 105	void vm_disable_cbs(struct virtio_device *vdev)
-   106	{
-   107		struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
-   108		int irq = platform_get_irq(vm_dev->pdev, 0);
-   109	
-   110		/*
-   111		 * The below synchronize() guarantees that any
-   112		 * interrupt for this line arriving after
-   113		 * synchronize_irq() has completed is guaranteed to see
-   114		 * intx_soft_enabled == false.
-   115		 */
-   116		WRITE_ONCE(vm_dev->intr_soft_enabled, false);
-   117		synchronize_irq(irq);
-   118	}
-   119	
-   120	/* enable irq handlers */
- > 121	void vm_enable_cbs(struct virtio_device *vdev)
-   122	{
-   123		struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
-   124		int irq = platform_get_irq(vm_dev->pdev, 0);
-   125	
-   126		disable_irq(irq);
-   127		/*
-   128		 * The above disable_irq() provides TSO ordering and
-   129		 * as such promotes the below store to store-release.
-   130		 */
-   131		WRITE_ONCE(vm_dev->intr_soft_enabled, true);
-   132		enable_irq(irq);
-   133		return;
-   134	}
-   135	
-
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/powerpc/mm/book3s64/radix_tlb.c | 31 +++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
+
+diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+index 7724af19ed7e..e494a45ce1b4 100644
+--- a/arch/powerpc/mm/book3s64/radix_tlb.c
++++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+@@ -1170,16 +1170,14 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+ 				_tlbiel_pid_multicast(mm, pid, RIC_FLUSH_ALL);
+ 			}
+ 		}
+-	} else {
++	} else if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+ 		bool hflush = false;
+ 		unsigned long hstart, hend;
+ 
+-		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+-			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+-			hend = end & PMD_MASK;
+-			if (hstart < hend)
+-				hflush = true;
+-		}
++		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
++		hend = end & PMD_MASK;
++		if (hstart < hend)
++			hflush = true;
+ 
+ 		if (type == FLUSH_TYPE_LOCAL) {
+ 			asm volatile("ptesync": : :"memory");
+@@ -1207,6 +1205,25 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+ 				_tlbiel_va_range_multicast(mm,
+ 					hstart, hend, pid, PMD_SIZE, MMU_PAGE_2M, flush_pwc);
+ 		}
++	} else {
++
++		if (type == FLUSH_TYPE_LOCAL) {
++			asm volatile("ptesync" : : : "memory");
++			if (flush_pwc)
++				/* For PWC, only one flush is needed */
++				__tlbiel_pid(pid, 0, RIC_FLUSH_PWC);
++			__tlbiel_va_range(start, end, pid, page_size, mmu_virtual_psize);
++			ppc_after_tlbiel_barrier();
++		} else if (cputlb_use_tlbie()) {
++			asm volatile("ptesync" : : : "memory");
++			if (flush_pwc)
++				__tlbie_pid(pid, RIC_FLUSH_PWC);
++			__tlbie_va_range(start, end, pid, page_size, mmu_virtual_psize);
++			asm volatile("eieio; tlbsync; ptesync" : : : "memory");
++		} else {
++			_tlbiel_va_range_multicast(mm,
++					start, end, pid, page_size, mmu_virtual_psize, flush_pwc);
++		}
+ 	}
+ out:
+ 	preempt_enable();
+-- 
+2.33.0
+
