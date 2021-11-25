@@ -1,78 +1,61 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14DC2C80
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 06:44:27 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="259352381"
-X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
-   d="scan'208";a="259352381"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 22:44:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
-   d="scan'208";a="675128594"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2021 22:44:24 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mq8UZ-0005uP-Ra; Thu, 25 Nov 2021 06:44:23 +0000
-Date: Thu, 25 Nov 2021 14:44:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning:
- unused variable 'microchip_xisc_of_match'
-Message-ID: <202111251457.0RbiQSQs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2142C80
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 07:43:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA33F6109E
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 07:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637826197;
+	bh=5JmydjakFnLr1DXYN6HX8GSmUQA89caK93Xg2HhpGcc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Lo5Q88DYMszIwzEUP4xaWaHGk4thoYzc5zXWgjpJuOTUVXi1mPa8iX/67WsoBF7VX
+	 rD+xFR2liyM3yRAaTbAXGsOj47cCGJ+pmRW4xo3//I0BaJCRWB7Z/kA9Bg6qN82TTp
+	 AyNEbOE2BXH9BstgBxeYZFkKd5estm6tPwCv0ZhK5vFObG7HXzo9p2BkZTOqP06Ado
+	 D9rIbDKkqEiQCL6iTDt/xMw4g5anPMfwERqQRsWQdkDFjcXO12pCFH7xee6CupoAY/
+	 BgeUpmSYEn4QRRAuJK5p8WSv720GLXo7fAlnvaSQGonBLPRyg5X15OgHidOKf1WCNO
+	 bnEzHNLpF18uQ==
+Received: by mail-wr1-f48.google.com with SMTP id a9so9570493wrr.8
+        for <llvm@lists.linux.dev>; Wed, 24 Nov 2021 23:43:17 -0800 (PST)
+X-Gm-Message-State: AOAM532krD3w7PyEBTnkBbjyZLxQppwaVKfuAlKTpOMYf06Sy7f/F0EM
+	Vp4Y2ZWmIwPq/9bxQFqEs0fBclpQlGCkRt/+85c=
+X-Google-Smtp-Source: ABdhPJyuLBhKBRzn/KY8mhWpsA5nVPv2Qy5ZAD6+THS3UuR1IIWEOkVnw5icB8DlWWMQACCSb4V0WCkZu7KyR+FPEq4=
+X-Received: by 2002:adf:d091:: with SMTP id y17mr4508644wrh.418.1637826196259;
+ Wed, 24 Nov 2021 23:43:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211124192430.74541-1-arnd@kernel.org> <YZ68G09viJA/vkby@pendragon.ideasonboard.com>
+In-Reply-To: <YZ68G09viJA/vkby@pendragon.ideasonboard.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Thu, 25 Nov 2021 08:43:00 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2kEByuNJu9NMiD2m3v+K0acE-XwdevHGByi_82bko7Uw@mail.gmail.com>
+Message-ID: <CAK8P3a2kEByuNJu9NMiD2m3v+K0acE-XwdevHGByi_82bko7Uw@mail.gmail.com>
+Subject: Re: [PATCH] media: omap3isp: fix out-of-range warning
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Vaibhav Hiremath <hvaibhav@ti.com>, 
+	Stanimir Varbanov <svarbanov@mm-sol.com>, Dominic Curran <dcurran@ti.com>, David Cohen <dacohen@gmail.com>, 
+	Linux Media Mailing List <linux-media@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f53fa508db098c9d372423a6dac31c8a5679cdf
-commit: c9aa973884a163ecb6d5d4d3be9137058adcaf8c media: atmel: atmel-isc: add microchip-xisc driver
-date:   6 months ago
-config: x86_64-buildonly-randconfig-r001-20211118 (https://download.01.org/0day-ci/archive/20211125/202111251457.0RbiQSQs-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c46becf500df2a7fb4b4fce16178a036c344315a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c9aa973884a163ecb6d5d4d3be9137058adcaf8c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c9aa973884a163ecb6d5d4d3be9137058adcaf8c
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
+On Wed, Nov 24, 2021 at 11:26 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Wed, Nov 24, 2021 at 08:24:15PM +0100, Arnd Bergmann wrote:
+> >
+> > Add a cast to 32-bit to avoid the warning. Checking just the lower bounds
+> > would be sufficient as well, but it seems more consistent to use
+> > the IS_OUT_OF_BOUNDS() check for all members.
+>
+> Mauro has submitted a fix that handles the cast in the
+> IS_OUT_OF_BOUNDS() macro, see
+> https://lore.kernel.org/all/b70f819b11e024649f113be1158f34b24914a1ed.1637573097.git.mchehab+huawei@kernel.org/.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ok, thanks. I've marked my patch as 'Obsoleted' in patchwork now.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
-   static const struct of_device_id microchip_xisc_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
-
-   609	
- > 610	static const struct of_device_id microchip_xisc_of_match[] = {
-   611		{ .compatible = "microchip,sama7g5-isc" },
-   612		{ }
-   613	};
-   614	MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
-   615	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+      Arnd
