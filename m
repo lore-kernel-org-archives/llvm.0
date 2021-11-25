@@ -1,35 +1,52 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C290B2C80
+	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 08:18:12 +0000 (UTC)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+	by smtp-out1.suse.de (Postfix) with ESMTP id C084921B36;
+	Thu, 25 Nov 2021 08:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1637828290; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=e3lTvL7X/pLPkMChteUmxKRux3aIsQksbSl01FKz2GE=;
+	b=WDt3JM+g5EKhl7/+0IB6E9eEn4PIn/sOOufrX1Vr22rNIfKaxC7dyYvVUuCvMw4I+eAyf6
+	o6hesNFh9GKyC2w3eFFQ5uekDJfLeFgjZHokRr/yMjbhKrLLcl+AYzHxU8QesiqUqyYt04
+	t+LlRjmWOhh0CIybJAX82uTBBC4RsiU=
+Received: from suse.cz (unknown [10.100.216.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15A02C80
-	for <llvm@lists.linux.dev>; Thu, 25 Nov 2021 07:57:32 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="232960682"
-X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
-   d="scan'208";a="232960682"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 23:57:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
-   d="scan'208";a="741636594"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Nov 2021 23:57:28 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mq9dG-000607-RJ; Thu, 25 Nov 2021 07:57:26 +0000
-Date: Thu, 25 Nov 2021 15:57:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	linux-tegra@vger.kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>,
-	linux-mtd@lists.infradead.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-spi@vger.kernel.org, Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH 07/11] dmaengine: qcom-adm: stop abusing slave_id config
-Message-ID: <202111251538.x6sJNCka-lkp@intel.com>
-References: <20211115085403.360194-8-arnd@kernel.org>
+	by relay2.suse.de (Postfix) with ESMTPS id 8CF79A3B85;
+	Thu, 25 Nov 2021 08:18:10 +0000 (UTC)
+Date: Thu, 25 Nov 2021 09:18:09 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: David Laight <David.Laight@aculab.com>,
+	'Peter Zijlstra' <peterz@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, "x86@kernel.org" <x86@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mark.rutland@arm.com" <mark.rutland@arm.com>,
+	"dvyukov@google.com" <dvyukov@google.com>,
+	"seanjc@google.com" <seanjc@google.com>,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"mbenes@suse.cz" <mbenes@suse.cz>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH 20/22] x86,word-at-a-time: Remove .fixup usage
+Message-ID: <YZ9Gwclfit3pviA1@alley>
+References: <CAKwvOdkFZ4PSN0GGmKMmoCrcp7_VVNjau_b0sNRm3MuqVi8yow@mail.gmail.com>
+ <YYov8SVHk/ZpFsUn@hirez.programming.kicks-ass.net>
+ <CAKwvOdn8yrRopXyfd299=SwZS9TAPfPj4apYgdCnzPb20knhbg@mail.gmail.com>
+ <20211109210736.GV174703@worktop.programming.kicks-ass.net>
+ <f6dbe42651e84278b44e44ed7d0ed74f@AcuMS.aculab.com>
+ <YYuogZ+2Dnjyj1ge@hirez.programming.kicks-ass.net>
+ <2734a37ebed2432291345aaa8d9fd47e@AcuMS.aculab.com>
+ <20211112015003.pefl656m3zmir6ov@treble>
+ <YZvXhAYjHrnc3/rv@alley>
+ <20211124174213.mspehbgomdqarxea@treble>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,93 +55,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211115085403.360194-8-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211124174213.mspehbgomdqarxea@treble>
 
-Hi Arnd,
+On Wed 2021-11-24 09:42:13, Josh Poimboeuf wrote:
+> On Mon, Nov 22, 2021 at 06:46:44PM +0100, Petr Mladek wrote:
+> > On Thu 2021-11-11 17:50:03, Josh Poimboeuf wrote:
+> > > On Wed, Nov 10, 2021 at 12:20:47PM +0000, David Laight wrote:
+> > > > > > Wouldn't moving part of a function to .text.cold (or .text.unlikely)
+> > > > > > generate the same problems with the stack backtrace code as the
+> > > > > > .text.fixup section you are removing had??
+> > > > > 
+> > > > > GCC can already split a function into func and func.cold today (or
+> > > > > worse: func, func.isra.N, func.cold, func.isra.N.cold etc..).
+> > > > > 
+> > > > > I'm assuming reliable unwind and livepatch know how to deal with this.
+> > > > 
+> > > > They'll have 'proper' function labels at the top - so backtrace
+> > > > stands a chance.
+> > > > Indeed you (probably) want it to output "func.irsa.n.cold" rather
+> > > > than just "func" to help show which copy it is in.  > 
+> > > > I guess that livepatch will need separate patches for each
+> > > > version of the function - which might be 'interesting' if
+> > > > all the copies actually need patching at the same time.
+> > > > You'd certainly want a warning if there seemed to be multiple
+> > > > copies of the function.
+> > > 
+> > > Hm, I think there is actually a livepatch problem here.
+> > > 
+> > > If the .cold (aka "child") function actually had a fentry hook then we'd
+> > > be fine.  Then we could just patch both "parent" and "child" functions
+> > > at the same time.  We already have the ability to patch multiple
+> > > functions having dependent interface changes.
+> > > 
+> > > But there's no fentry hook in the child, so we can only patch the
+> > > parent.
+> > > 
+> > > If the child schedules out, and then the parent gets patched, things can
+> > > go off-script if the child later jumps back to the unpatched version of
+> > > the parent, and then for example the old parent tries to call another
+> > > patched function with a since-changed ABI.
+> > 
+> > This thread seems to be motivation for the patchset
+> > https://lore.kernel.org/all/20211119090327.12811-1-mbenes@suse.cz/
+> > I am trying to understand the problem here, first. And I am
+> > a bit lost.
+> > 
+> > How exactly is child called in the above scenario, please?
+> > How could parent get livepatched when child is sleeping?
+> > 
+> > I imagine it the following way:
+> > 
+> >     parent_func()
+> >        fentry
+> > 
+> >        /* some parent code */
+> >        jmp child
+> > 	   /* child code */
+> > 	   jmp back_to_parent
+> >        /* more parent code */
+> >        ret
+> 
+> Right.
+> 
+> > In the above example, parent_func() would be on stack and could not
+> > get livepatched even when the process is sleeping in the child code.
+> > 
+> > The livepatching is done via ftrace. Only code with fentry could be
+> > livepatched. And code called via fentry must be visible on stack.
+> 
+> How would parent_func() be on the stack?  If it jumps to the child then
+> it leaves no trace on the stack.
 
-I love your patch! Perhaps something to improve:
+Grr, sure. It was off-by-one error on my side. /o\
 
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on tiwai-sound/for-next staging/staging-testing linus/master v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks for explanation.
 
-url:    https://github.com/0day-ci/linux/commits/Arnd-Bergmann/dmaengine-kill-off-dma_slave_config-slave_id/20211115-165731
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: riscv-randconfig-r016-20211115 (https://download.01.org/0day-ci/archive/20211125/202111251538.x6sJNCka-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/f2e7f9ee67ce784864f75db39f20d1060c932279
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Arnd-Bergmann/dmaengine-kill-off-dma_slave_config-slave_id/20211115-165731
-        git checkout f2e7f9ee67ce784864f75db39f20d1060c932279
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/dma/qcom/qcom_adm.c:712:18: warning: no previous prototype for function 'adm_dma_xlate' [-Wmissing-prototypes]
-   struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-                    ^
-   drivers/dma/qcom/qcom_adm.c:712:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/adm_dma_xlate +712 drivers/dma/qcom/qcom_adm.c
-
-   700	
-   701	/**
-   702	 * adm_dma_xlate
-   703	 * @dma_spec:	pointer to DMA specifier as found in the device tree
-   704	 * @ofdma:	pointer to DMA controller data
-   705	 *
-   706	 * This can use either 1-cell or 2-cell formats, the first cell
-   707	 * identifies the slave device, while the optional second cell
-   708	 * contains the crci value.
-   709	 *
-   710	 * Returns pointer to appropriate dma channel on success or NULL on error.
-   711	 */
- > 712	struct dma_chan *adm_dma_xlate(struct of_phandle_args *dma_spec,
-   713				       struct of_dma *ofdma)
-   714	{
-   715		struct dma_device *dev = ofdma->of_dma_data;
-   716		struct dma_chan *chan, *candidate = NULL;
-   717		struct adm_chan *achan;
-   718	
-   719		if (!dev || dma_spec->args_count > 2)
-   720			return NULL;
-   721	
-   722		list_for_each_entry(chan, &dev->channels, device_node)
-   723			if (chan->chan_id == dma_spec->args[0]) {
-   724				candidate = chan;
-   725				break;
-   726			}
-   727	
-   728		if (!candidate)
-   729			return NULL;
-   730	
-   731		achan = to_adm_chan(candidate);
-   732		if (dma_spec->args_count == 2)
-   733			achan->crci = dma_spec->args[1];
-   734		else
-   735			achan->crci = 0;
-   736	
-   737		return dma_get_slave_channel(candidate);
-   738	}
-   739	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best Regards,
+Petr
