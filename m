@@ -1,28 +1,31 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B18E2C80
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 03:42:06 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="321836701"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8182C80
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 03:52:07 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="222828314"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="321836701"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 19:42:05 -0800
+   d="scan'208";a="222828314"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 19:52:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="675425189"
+   d="scan'208";a="475785786"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2021 19:42:04 -0800
+  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2021 19:52:04 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqS7f-0007QW-Nh; Fri, 26 Nov 2021 03:42:03 +0000
-Date: Fri, 26 Nov 2021 11:41:22 +0800
+	id 1mqSHL-0007R0-Sp; Fri, 26 Nov 2021 03:52:03 +0000
+Date: Fri, 26 Nov 2021 11:51:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Scally <djrscally@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 1/2] media: entity: Add support for ancillary links
-Message-ID: <202111261133.XqFnu5wF-lkp@intel.com>
-References: <20211126001603.41148-2-djrscally@gmail.com>
+To: Xin Hao <xhao@linux.alibaba.com>, sj@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, xhao@linux.alibaba.com,
+	akpm@linux-foundation.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V1 1/2] mm/damon/dbgfs: Modify Damon dbfs interface
+ dependency in Kconfig
+Message-ID: <202111261116.0jysSfsO-lkp@intel.com>
+References: <fbf27c39e8f23d12d5474b9b659d3d45f8dd38ca.1637429074.git.xhao@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,56 +34,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211126001603.41148-2-djrscally@gmail.com>
+In-Reply-To: <fbf27c39e8f23d12d5474b9b659d3d45f8dd38ca.1637429074.git.xhao@linux.alibaba.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Daniel,
+Hi Xin,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thank you for the patch! Yet something to improve:
 
-url:    https://github.com/0day-ci/linux/commits/Daniel-Scally/Introduce-ancillary-links/20211126-081931
-base:   git://linuxtv.org/media_tree.git master
-config: mips-buildonly-randconfig-r003-20211125 (https://download.01.org/0day-ci/archive/20211126/202111261133.XqFnu5wF-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0332d105b9ad7f1f0ffca7e78b71de8b3a48f158)
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/0day-ci/linux/commits/Xin-Hao/mm-damon-dbgfs-Modify-Damon-dbfs-interface-dependency-in-Kconfig/20211121-012819
+base:   https://github.com/hnaz/linux-mm master
+config: riscv-randconfig-c006-20211121 (https://download.01.org/0day-ci/archive/20211126/202111261116.0jysSfsO-lkp@intel.com/config)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/3770587c7546ff01080c99a552fa3fd486528b1d
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/496f4e2cc535ba7b71a6ff2b82840693d413ae02
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Daniel-Scally/Introduce-ancillary-links/20211126-081931
-        git checkout 3770587c7546ff01080c99a552fa3fd486528b1d
+        git fetch --no-tags linux-review Xin-Hao/mm-damon-dbgfs-Modify-Damon-dbfs-interface-dependency-in-Kconfig/20211121-012819
+        git checkout 496f4e2cc535ba7b71a6ff2b82840693d413ae02
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/mc/mc-entity.c:1058:6: warning: no previous prototype for function 'media_remove_ancillary_link' [-Wmissing-prototypes]
-   void media_remove_ancillary_link(struct media_link *link)
+>> mm/damon/dbgfs.c:409:3: error: implicit declaration of function 'damon_pa_set_primitives' [-Werror,-Wimplicit-function-declaration]
+                   damon_pa_set_primitives(ctx);
+                   ^
+   mm/damon/dbgfs.c:409:3: note: did you mean 'damon_va_set_primitives'?
+   include/linux/damon.h:476:6: note: 'damon_va_set_primitives' declared here
+   void damon_va_set_primitives(struct damon_ctx *ctx);
         ^
-   drivers/media/mc/mc-entity.c:1058:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void media_remove_ancillary_link(struct media_link *link)
-   ^
-   static 
-   drivers/media/mc/mc-entity.c:17:27: warning: unused function 'gobj_type' [-Wunused-function]
-   static inline const char *gobj_type(enum media_gobj_type type)
-                             ^
-   2 warnings generated.
+   1 error generated.
 
 
-vim +/media_remove_ancillary_link +1058 drivers/media/mc/mc-entity.c
+vim +/damon_pa_set_primitives +409 mm/damon/dbgfs.c
 
-  1057	
-> 1058	void media_remove_ancillary_link(struct media_link *link)
+4bc05954d00766 SeongJae Park 2021-09-07  353  
+4bc05954d00766 SeongJae Park 2021-09-07  354  static ssize_t dbgfs_target_ids_write(struct file *file,
+4bc05954d00766 SeongJae Park 2021-09-07  355  		const char __user *buf, size_t count, loff_t *ppos)
+4bc05954d00766 SeongJae Park 2021-09-07  356  {
+4bc05954d00766 SeongJae Park 2021-09-07  357  	struct damon_ctx *ctx = file->private_data;
+2ba00bca84ef3f SeongJae Park 2021-10-28  358  	bool id_is_pid = true;
+4bc05954d00766 SeongJae Park 2021-09-07  359  	char *kbuf, *nrs;
+4bc05954d00766 SeongJae Park 2021-09-07  360  	unsigned long *targets;
+4bc05954d00766 SeongJae Park 2021-09-07  361  	ssize_t nr_targets;
+4f521143b7d82a Rongwei Wang  2021-10-28  362  	ssize_t ret;
+4bc05954d00766 SeongJae Park 2021-09-07  363  	int i;
+4bc05954d00766 SeongJae Park 2021-09-07  364  
+4bc05954d00766 SeongJae Park 2021-09-07  365  	kbuf = user_input_str(buf, count, ppos);
+4bc05954d00766 SeongJae Park 2021-09-07  366  	if (IS_ERR(kbuf))
+4bc05954d00766 SeongJae Park 2021-09-07  367  		return PTR_ERR(kbuf);
+4bc05954d00766 SeongJae Park 2021-09-07  368  
+4bc05954d00766 SeongJae Park 2021-09-07  369  	nrs = kbuf;
+2ba00bca84ef3f SeongJae Park 2021-10-28  370  	if (!strncmp(kbuf, "paddr\n", count)) {
+2ba00bca84ef3f SeongJae Park 2021-10-28  371  		id_is_pid = false;
+2ba00bca84ef3f SeongJae Park 2021-10-28  372  		/* target id is meaningless here, but we set it just for fun */
+2ba00bca84ef3f SeongJae Park 2021-10-28  373  		scnprintf(kbuf, count, "42    ");
+2ba00bca84ef3f SeongJae Park 2021-10-28  374  	}
+4bc05954d00766 SeongJae Park 2021-09-07  375  
+4f521143b7d82a Rongwei Wang  2021-10-28  376  	targets = str_to_target_ids(nrs, count, &nr_targets);
+4bc05954d00766 SeongJae Park 2021-09-07  377  	if (!targets) {
+4bc05954d00766 SeongJae Park 2021-09-07  378  		ret = -ENOMEM;
+4bc05954d00766 SeongJae Park 2021-09-07  379  		goto out;
+4bc05954d00766 SeongJae Park 2021-09-07  380  	}
+4bc05954d00766 SeongJae Park 2021-09-07  381  
+2ba00bca84ef3f SeongJae Park 2021-10-28  382  	if (id_is_pid) {
+4bc05954d00766 SeongJae Park 2021-09-07  383  		for (i = 0; i < nr_targets; i++) {
+4bc05954d00766 SeongJae Park 2021-09-07  384  			targets[i] = (unsigned long)find_get_pid(
+4bc05954d00766 SeongJae Park 2021-09-07  385  					(int)targets[i]);
+4bc05954d00766 SeongJae Park 2021-09-07  386  			if (!targets[i]) {
+4bc05954d00766 SeongJae Park 2021-09-07  387  				dbgfs_put_pids(targets, i);
+4bc05954d00766 SeongJae Park 2021-09-07  388  				ret = -EINVAL;
+4bc05954d00766 SeongJae Park 2021-09-07  389  				goto free_targets_out;
+4bc05954d00766 SeongJae Park 2021-09-07  390  			}
+4bc05954d00766 SeongJae Park 2021-09-07  391  		}
+4bc05954d00766 SeongJae Park 2021-09-07  392  	}
+4bc05954d00766 SeongJae Park 2021-09-07  393  
+4bc05954d00766 SeongJae Park 2021-09-07  394  	mutex_lock(&ctx->kdamond_lock);
+4bc05954d00766 SeongJae Park 2021-09-07  395  	if (ctx->kdamond) {
+2ba00bca84ef3f SeongJae Park 2021-10-28  396  		if (id_is_pid)
+4bc05954d00766 SeongJae Park 2021-09-07  397  			dbgfs_put_pids(targets, nr_targets);
+4bc05954d00766 SeongJae Park 2021-09-07  398  		ret = -EBUSY;
+4bc05954d00766 SeongJae Park 2021-09-07  399  		goto unlock_out;
+4bc05954d00766 SeongJae Park 2021-09-07  400  	}
+4bc05954d00766 SeongJae Park 2021-09-07  401  
+2ba00bca84ef3f SeongJae Park 2021-10-28  402  	/* remove targets with previously-set primitive */
+2ba00bca84ef3f SeongJae Park 2021-10-28  403  	damon_set_targets(ctx, NULL, 0);
+2ba00bca84ef3f SeongJae Park 2021-10-28  404  
+2ba00bca84ef3f SeongJae Park 2021-10-28  405  	/* Configure the context for the address space type */
+2ba00bca84ef3f SeongJae Park 2021-10-28  406  	if (id_is_pid)
+2ba00bca84ef3f SeongJae Park 2021-10-28  407  		damon_va_set_primitives(ctx);
+2ba00bca84ef3f SeongJae Park 2021-10-28  408  	else
+2ba00bca84ef3f SeongJae Park 2021-10-28 @409  		damon_pa_set_primitives(ctx);
+2ba00bca84ef3f SeongJae Park 2021-10-28  410  
+4f521143b7d82a Rongwei Wang  2021-10-28  411  	ret = damon_set_targets(ctx, targets, nr_targets);
+4f521143b7d82a Rongwei Wang  2021-10-28  412  	if (ret) {
+2ba00bca84ef3f SeongJae Park 2021-10-28  413  		if (id_is_pid)
+4bc05954d00766 SeongJae Park 2021-09-07  414  			dbgfs_put_pids(targets, nr_targets);
+4f521143b7d82a Rongwei Wang  2021-10-28  415  	} else {
+4f521143b7d82a Rongwei Wang  2021-10-28  416  		ret = count;
+4bc05954d00766 SeongJae Park 2021-09-07  417  	}
+4bc05954d00766 SeongJae Park 2021-09-07  418  
+4bc05954d00766 SeongJae Park 2021-09-07  419  unlock_out:
+4bc05954d00766 SeongJae Park 2021-09-07  420  	mutex_unlock(&ctx->kdamond_lock);
+4bc05954d00766 SeongJae Park 2021-09-07  421  free_targets_out:
+4bc05954d00766 SeongJae Park 2021-09-07  422  	kfree(targets);
+4bc05954d00766 SeongJae Park 2021-09-07  423  out:
+4bc05954d00766 SeongJae Park 2021-09-07  424  	kfree(kbuf);
+4bc05954d00766 SeongJae Park 2021-09-07  425  	return ret;
+4bc05954d00766 SeongJae Park 2021-09-07  426  }
+4bc05954d00766 SeongJae Park 2021-09-07  427  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
