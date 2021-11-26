@@ -1,28 +1,34 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6397472
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 20:04:17 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235650437"
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="235650437"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 12:04:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="555632239"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Nov 2021 12:04:15 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mqhSA-0008Wl-3Z; Fri, 26 Nov 2021 20:04:14 +0000
-Date: Sat, 27 Nov 2021 04:04:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 11/12] nvmet-auth: Diffie-Hellman key exchange support
-Message-ID: <202111270313.t95s8nb5-lkp@intel.com>
-References: <20211123123801.73197-12-hare@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFCA72
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 20:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F809C9305B;
+	Fri, 26 Nov 2021 20:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637957613;
+	bh=As6YQdRPUOSbA++YjFQLZ510CZUaExtTy+DYXHuNFZg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ot1Bf3vDJJer/RtwDyH6wlJ26CQsT606MMQ5Du8efRwoXrvBR1O5lXcgEKSZBzY+Q
+	 +C55pCpnPtr6hdKVOkselV/esmzwGYvH6pqzu6sy+4yolJia8pL5bbGPztdzGK97u1
+	 wyD545DjhfUokbfAMMV4IzifNOXW1j3xopMzdMwe2iZLK2gDh8udrEFIrlO+qvFaWM
+	 Xrd2r/xmYIy4+PAuix1btdTOlddmPH4eXbaQ3Q+nUqzn7beYsHyjdkFC2vWzzkc4fU
+	 0cfd6DjsRvJFJNJtq3njX1z5Et+isriO6tqZn7/hbwt9In5sTMyes6GAdiX/BomWlx
+	 GrN6onewV6ILg==
+Date: Fri, 26 Nov 2021 13:13:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: linuxarm@huawei.com, mauro.chehab@huawei.com,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Kees Cook <keescook@chromium.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 09/20] media: si470x: fix printk warnings with clang
+Message-ID: <YaE/59FBhmdNL4OY@archlinux-ax161>
+References: <cover.1637781097.git.mchehab+huawei@kernel.org>
+ <d1282497070b1051d6b111fbfe752efea08deec2.1637781097.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,116 +37,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123123801.73197-12-hare@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <d1282497070b1051d6b111fbfe752efea08deec2.1637781097.git.mchehab+huawei@kernel.org>
 
-Hi Hannes,
+On Wed, Nov 24, 2021 at 08:13:12PM +0100, Mauro Carvalho Chehab wrote:
+> Clang doesn't like "%hu" on macros:
+> 
+> 	drivers/media/radio/si470x/radio-si470x-i2c.c:414:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
+> 	drivers/media/radio/si470x/radio-si470x-i2c.c:417:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
+> 
+> So, just replace them with "%u".
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-I love your patch! Perhaps something to improve:
+Maybe worth mentioning commit cbacb5ab0aa0 ("docs: printk-formats: Stop
+encouraging use of unnecessary %h[xudi] and %hh[xudi]")?
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on linus/master v5.16-rc2 next-20211126]
-[cannot apply to herbert-crypto-2.6/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-url:    https://github.com/0day-ci/linux/commits/Hannes-Reinecke/nvme-In-band-authentication-support/20211123-204008
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: i386-randconfig-r035-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270313.t95s8nb5-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/34bd34a0ee0dbaeeb36f3264e50be3a533491d97
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Hannes-Reinecke/nvme-In-band-authentication-support/20211123-204008
-        git checkout 34bd34a0ee0dbaeeb36f3264e50be3a533491d97
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvme/target/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/nvme/target/fabrics-cmd-auth.c:352:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                    req->sq->dhchap_tid, data->hl, ctrl->dh_keysize);
-                                                   ^~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
---
->> drivers/nvme/target/auth.c:490:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                           ctrl->cntlid, ctrl->dh_keysize, buf_size);
-                                         ^~~~~~~~~~~~~~~~
-   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                      ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +352 drivers/nvme/target/fabrics-cmd-auth.c
-
-   315	
-   316	static int nvmet_auth_challenge(struct nvmet_req *req, void *d, int al)
-   317	{
-   318		struct nvmf_auth_dhchap_challenge_data *data = d;
-   319		struct nvmet_ctrl *ctrl = req->sq->ctrl;
-   320		int ret = 0;
-   321		int hash_len = nvme_auth_hmac_hash_len(ctrl->shash_id);
-   322		int data_size = sizeof(*d) + hash_len;
-   323	
-   324		if (ctrl->dh_tfm)
-   325			data_size += ctrl->dh_keysize;
-   326		if (al < data_size) {
-   327			pr_debug("%s: buffer too small (al %d need %d)\n", __func__,
-   328				 al, data_size);
-   329			return -EINVAL;
-   330		}
-   331		memset(data, 0, data_size);
-   332		req->sq->dhchap_s1 = ctrl->dhchap_seqnum++;
-   333		data->auth_type = NVME_AUTH_DHCHAP_MESSAGES;
-   334		data->auth_id = NVME_AUTH_DHCHAP_MESSAGE_CHALLENGE;
-   335		data->t_id = cpu_to_le16(req->sq->dhchap_tid);
-   336		data->hashid = ctrl->shash_id;
-   337		data->hl = hash_len;
-   338		data->seqnum = cpu_to_le32(req->sq->dhchap_s1);
-   339		req->sq->dhchap_c1 = kmalloc(data->hl, GFP_KERNEL);
-   340		if (!req->sq->dhchap_c1)
-   341			return -ENOMEM;
-   342		get_random_bytes(req->sq->dhchap_c1, data->hl);
-   343		memcpy(data->cval, req->sq->dhchap_c1, data->hl);
-   344		if (ctrl->dh_tfm) {
-   345			data->dhgid = ctrl->dh_gid;
-   346			data->dhvlen = cpu_to_le32(ctrl->dh_keysize);
-   347			ret = nvmet_auth_ctrl_exponential(req, data->cval + data->hl,
-   348							  ctrl->dh_keysize);
-   349		}
-   350		pr_debug("%s: ctrl %d qid %d seq %d transaction %d hl %d dhvlen %lu\n",
-   351			 __func__, ctrl->cntlid, req->sq->qid, req->sq->dhchap_s1,
- > 352			 req->sq->dhchap_tid, data->hl, ctrl->dh_keysize);
-   353		return ret;
-   354	}
-   355	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
+> 
+>  drivers/media/radio/si470x/radio-si470x-i2c.c | 4 ++--
+>  drivers/media/radio/si470x/radio-si470x-usb.c | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+> index a972c0705ac7..7ea7c6326f53 100644
+> --- a/drivers/media/radio/si470x/radio-si470x-i2c.c
+> +++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+> @@ -410,10 +410,10 @@ static int si470x_i2c_probe(struct i2c_client *client)
+>  			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
+>  	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
+>  		dev_warn(&client->dev,
+> -			"This driver is known to work with firmware version %hu,\n",
+> +			"This driver is known to work with firmware version %u,\n",
+>  			RADIO_FW_VERSION);
+>  		dev_warn(&client->dev,
+> -			"but the device has firmware version %hu.\n",
+> +			"but the device has firmware version %u.\n",
+>  			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+>  		version_warning = 1;
+>  	}
+> diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
+> index 3f8634a46573..1e70e6971fe4 100644
+> --- a/drivers/media/radio/si470x/radio-si470x-usb.c
+> +++ b/drivers/media/radio/si470x/radio-si470x-usb.c
+> @@ -681,10 +681,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+>  			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
+>  	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
+>  		dev_warn(&intf->dev,
+> -			"This driver is known to work with firmware version %hu,\n",
+> +			"This driver is known to work with firmware version %u,\n",
+>  			RADIO_FW_VERSION);
+>  		dev_warn(&intf->dev,
+> -			"but the device has firmware version %hu.\n",
+> +			"but the device has firmware version %u.\n",
+>  			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+>  		version_warning = 1;
+>  	}
+> @@ -698,10 +698,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+>  			radio->software_version, radio->hardware_version);
+>  	if (radio->hardware_version < RADIO_HW_VERSION) {
+>  		dev_warn(&intf->dev,
+> -			"This driver is known to work with hardware version %hu,\n",
+> +			"This driver is known to work with hardware version %u,\n",
+>  			RADIO_HW_VERSION);
+>  		dev_warn(&intf->dev,
+> -			"but the device has hardware version %hu.\n",
+> +			"but the device has hardware version %u.\n",
+>  			radio->hardware_version);
+>  		version_warning = 1;
+>  	}
+> -- 
+> 2.33.1
+> 
+> 
