@@ -1,146 +1,219 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF4F2C80
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 14:28:08 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="234402991"
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="234402991"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 06:28:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="510657324"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 26 Nov 2021 06:28:05 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mqcCq-0008Ex-OY; Fri, 26 Nov 2021 14:28:04 +0000
-Date: Fri, 26 Nov 2021 22:27:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff LaBundy <jeff@labundy.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5245F2C81
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 14:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA948C93056;
+	Fri, 26 Nov 2021 14:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637937215;
+	bh=/oFikfPOlZbyO3XhVBjoIkXnbwk1TaPmDKbQnOtd3aE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TiZt/MRyW48c+ZAN9D/HAvEoUwRpA/u2ld4yqchvO7sLsO8DV8DoZtrPOZlXLmIsP
+	 Xe6rzYrstLJBwaH/p6kb+XrnSgnShrMphLq5s8mQSyL+bwt0mB4o1C/YGfqOoCk/2U
+	 QfGUTH1SSPGVTSKeqe8Xy24CvIFKjHENJfnJdK9JNYHgDJ/OAjOgANRW/paR1cxkyD
+	 SU4DyFxCk0mCdlMZmxQh3Lr4vwvfOnWGA5Il8gHTW43yWUbPbHzTZ1D9/Nx5Cl7DIT
+	 xxBqxdCB6OSu7YAw44fHhLQu5KKPNVodooLzS9fv6/B8sfsf40/HtJeOsZ7wGLnP+C
+	 xleRTEoKUaqSw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-crypto@vger.kernel.org,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
 	linux-kernel@vger.kernel.org,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: drivers/input/misc/iqs626a.c:1645:12: warning: stack frame size
- (2448) exceeds limit (2048) in 'iqs626_probe'
-Message-ID: <202111262250.Y0l0olCY-lkp@intel.com>
+	llvm@lists.linux.dev
+Subject: [PATCH] crypto: siphash - use _unaligned version by default
+Date: Fri, 26 Nov 2021 15:33:13 +0100
+Message-Id: <20211126143329.2689618-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Jeff,
+From: Arnd Bergmann <arnd@arndb.de>
 
-FYI, the error/warning still remains.
+On ARM v6 and later, we define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+because the ordinary load/store instructions (ldr, ldrh, ldrb) can
+tolerate any misalignment of the memory address. However, load/store
+double and load/store multiple instructions (ldrd, ldm) may still only
+be used on memory addresses that are 32-bit aligned, and so we have to
+use the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS macro with care, or we
+may end up with a severe performance hit due to alignment traps that
+require fixups by the kernel. Testing shows that this currently happens
+with clang-13 but not gcc-11. In theory, any compiler version can
+produce this bug or other problems, as we are dealing with undefined
+behavior in C99 even on architectures that support this in hardware,
+see also https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a4849f6000e29235a2707f22e39da6b897bb9543
-commit: f1d2809de97adc422967b6de59f0f6199769eb93 Input: Add support for Azoteq IQS626A
-date:   8 months ago
-config: mips-randconfig-r013-20211124 (https://download.01.org/0day-ci/archive/20211126/202111262250.Y0l0olCY-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1d2809de97adc422967b6de59f0f6199769eb93
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f1d2809de97adc422967b6de59f0f6199769eb93
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
+Fortunately, the get_unaligned() accessors do the right thing: when
+building for ARMv6 or later, the compiler will emit unaligned accesses
+using the ordinary load/store instructions (but avoid the ones that
+require 32-bit alignment). When building for older ARM, those accessors
+will emit the appropriate sequence of ldrb/mov/orr instructions. And on
+architectures that can truly tolerate any kind of misalignment, the
+get_unaligned() accessors resolve to the leXX_to_cpup accessors that
+operate on aligned addresses.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Since the compiler will in fact emit ldrd or ldm instructions when
+building this code for ARM v6 or later, the solution is to use the
+unaligned accessors unconditionally on architectures where this is
+known to be fast. The _aligned version of the hash function is
+however still needed to get the best performance on architectures
+that cannot do any unaligned access in hardware.
 
-All warnings (new ones prefixed by >>):
+This new version avoids the undefined behavior and should produce
+the fastest hash on all architectures we support.
 
->> drivers/input/misc/iqs626a.c:1645:12: warning: stack frame size (2448) exceeds limit (2048) in 'iqs626_probe' [-Wframe-larger-than]
-   static int iqs626_probe(struct i2c_client *client)
-              ^
-   1 warning generated.
-   Assembler messages:
-   Warning: a different -march was already specified, is now octeon
-
-
-vim +/iqs626_probe +1645 drivers/input/misc/iqs626a.c
-
-  1644	
-> 1645	static int iqs626_probe(struct i2c_client *client)
-  1646	{
-  1647		struct iqs626_ver_info ver_info;
-  1648		struct iqs626_private *iqs626;
-  1649		int error;
-  1650	
-  1651		iqs626 = devm_kzalloc(&client->dev, sizeof(*iqs626), GFP_KERNEL);
-  1652		if (!iqs626)
-  1653			return -ENOMEM;
-  1654	
-  1655		i2c_set_clientdata(client, iqs626);
-  1656		iqs626->client = client;
-  1657	
-  1658		iqs626->regmap = devm_regmap_init_i2c(client, &iqs626_regmap_config);
-  1659		if (IS_ERR(iqs626->regmap)) {
-  1660			error = PTR_ERR(iqs626->regmap);
-  1661			dev_err(&client->dev, "Failed to initialize register map: %d\n",
-  1662				error);
-  1663			return error;
-  1664		}
-  1665	
-  1666		init_completion(&iqs626->ati_done);
-  1667	
-  1668		error = regmap_raw_read(iqs626->regmap, IQS626_VER_INFO, &ver_info,
-  1669					sizeof(ver_info));
-  1670		if (error)
-  1671			return error;
-  1672	
-  1673		if (ver_info.prod_num != IQS626_VER_INFO_PROD_NUM) {
-  1674			dev_err(&client->dev, "Unrecognized product number: 0x%02X\n",
-  1675				ver_info.prod_num);
-  1676			return -EINVAL;
-  1677		}
-  1678	
-  1679		error = iqs626_parse_prop(iqs626);
-  1680		if (error)
-  1681			return error;
-  1682	
-  1683		error = iqs626_input_init(iqs626);
-  1684		if (error)
-  1685			return error;
-  1686	
-  1687		error = devm_request_threaded_irq(&client->dev, client->irq,
-  1688						  NULL, iqs626_irq, IRQF_ONESHOT,
-  1689						  client->name, iqs626);
-  1690		if (error) {
-  1691			dev_err(&client->dev, "Failed to request IRQ: %d\n", error);
-  1692			return error;
-  1693		}
-  1694	
-  1695		if (!wait_for_completion_timeout(&iqs626->ati_done,
-  1696						 msecs_to_jiffies(2000))) {
-  1697			dev_err(&client->dev, "Failed to complete ATI\n");
-  1698			return -ETIMEDOUT;
-  1699		}
-  1700	
-  1701		/*
-  1702		 * The keypad may include one or more switches and is not registered
-  1703		 * until ATI is complete and the initial switch states are read.
-  1704		 */
-  1705		error = input_register_device(iqs626->keypad);
-  1706		if (error)
-  1707			dev_err(&client->dev, "Failed to register keypad: %d\n", error);
-  1708	
-  1709		return error;
-  1710	}
-  1711	
-
+Link: https://lore.kernel.org/linux-arm-kernel/20181008211554.5355-4-ard.biesheuvel@linaro.org/
+Reported-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Fixes: 2c956a60778c ("siphash: add cryptographically secure PRF")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/siphash.h | 14 ++++----------
+ lib/siphash.c           | 12 ++++++------
+ 2 files changed, 10 insertions(+), 16 deletions(-)
+
+diff --git a/include/linux/siphash.h b/include/linux/siphash.h
+index bf21591a9e5e..0cda61855d90 100644
+--- a/include/linux/siphash.h
++++ b/include/linux/siphash.h
+@@ -27,9 +27,7 @@ static inline bool siphash_key_is_zero(const siphash_key_t *key)
+ }
+ 
+ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key);
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key);
+-#endif
+ 
+ u64 siphash_1u64(const u64 a, const siphash_key_t *key);
+ u64 siphash_2u64(const u64 a, const u64 b, const siphash_key_t *key);
+@@ -82,10 +80,9 @@ static inline u64 ___siphash_aligned(const __le64 *data, size_t len,
+ static inline u64 siphash(const void *data, size_t len,
+ 			  const siphash_key_t *key)
+ {
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (!IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    !IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
+ 		return __siphash_unaligned(data, len, key);
+-#endif
+ 	return ___siphash_aligned(data, len, key);
+ }
+ 
+@@ -96,10 +93,8 @@ typedef struct {
+ 
+ u32 __hsiphash_aligned(const void *data, size_t len,
+ 		       const hsiphash_key_t *key);
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key);
+-#endif
+ 
+ u32 hsiphash_1u32(const u32 a, const hsiphash_key_t *key);
+ u32 hsiphash_2u32(const u32 a, const u32 b, const hsiphash_key_t *key);
+@@ -135,10 +130,9 @@ static inline u32 ___hsiphash_aligned(const __le32 *data, size_t len,
+ static inline u32 hsiphash(const void *data, size_t len,
+ 			   const hsiphash_key_t *key)
+ {
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
+ 		return __hsiphash_unaligned(data, len, key);
+-#endif
+ 	return ___hsiphash_aligned(data, len, key);
+ }
+ 
+diff --git a/lib/siphash.c b/lib/siphash.c
+index a90112ee72a1..72b9068ab57b 100644
+--- a/lib/siphash.c
++++ b/lib/siphash.c
+@@ -49,6 +49,7 @@
+ 	SIPROUND; \
+ 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -80,8 +81,8 @@ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
+ 	POSTAMBLE
+ }
+ EXPORT_SYMBOL(__siphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -113,7 +114,6 @@ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
+ 	POSTAMBLE
+ }
+ EXPORT_SYMBOL(__siphash_unaligned);
+-#endif
+ 
+ /**
+  * siphash_1u64 - compute 64-bit siphash PRF value of a u64
+@@ -250,6 +250,7 @@ EXPORT_SYMBOL(siphash_3u32);
+ 	HSIPROUND; \
+ 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -280,8 +281,8 @@ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key)
+ {
+@@ -313,7 +314,6 @@ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_unaligned);
+-#endif
+ 
+ /**
+  * hsiphash_1u32 - compute 64-bit hsiphash PRF value of a u32
+@@ -418,6 +418,7 @@ EXPORT_SYMBOL(hsiphash_4u32);
+ 	HSIPROUND; \
+ 	return v1 ^ v3;
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u32));
+@@ -438,8 +439,8 @@ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key)
+ {
+@@ -461,7 +462,6 @@ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_unaligned);
+-#endif
+ 
+ /**
+  * hsiphash_1u32 - compute 32-bit hsiphash PRF value of a u32
+-- 
+2.29.2
+
