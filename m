@@ -1,30 +1,34 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A4C72
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 19:34:16 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="215732797"
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="215732797"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 11:34:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="498529446"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 11:34:13 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mqgz6-0008UZ-Sy; Fri, 26 Nov 2021 19:34:12 +0000
-Date: Sat, 27 Nov 2021 03:33:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tero Kristo <tero.kristo@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [t-kristo-pm:usi-5.16-rfc-v2-bpf 18/30] drivers/hid/hid-bpf.c:377:6:
- warning: variable 'parser' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202111270354.U7WXyzuZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACA972
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 19:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B266C9305E;
+	Fri, 26 Nov 2021 19:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1637955644;
+	bh=oG8oK2pVUUnHX6IJxtTQVBsz/ygOdYwME2YFP9YtwU4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jIxgUV3RtzzoC11+Zri1Dd1KbeT+w2ZJgAOlUAlpgFs73KzC+YGl7ZPBOzdy2rCiH
+	 H364zFlz5S+/e3lDSy06G9EypaAZU83hVgSASZl95AZ34keoUJUGyWJnu2RQlUYqjo
+	 VTuU8e5qBngyb4l1g136fWmL2RuKNEhcF/KOyj0nt6WWM4zrzoZjbCPJiu49sDSoUE
+	 Z2U3RK/JI44ovbH84p/DIbyCVvGvBOk+wnTzCrmt4YSdI26KZyGNwEfKqMgKwusTTx
+	 vMMbDj2TWzEQqKBhLacSAZU9WellgcIpukyaElgcK0XmClcVxqqHja5C95bLqNDW6c
+	 rnztxyUJ3glaQ==
+Date: Fri, 26 Nov 2021 12:40:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: linuxarm@huawei.com, mauro.chehab@huawei.com,
+	Antti Palosaari <crope@iki.fi>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 06/20] media: m88ds3103: drop reg11 calculus from
+ m88ds3103b_select_mclk()
+Message-ID: <YaE4Nkvp9NCfGItD@archlinux-ax161>
+References: <cover.1637781097.git.mchehab+huawei@kernel.org>
+ <9e528a0ce280d8ce99f9bfe1a725baafa6bf1408.1637781097.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,179 +37,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <9e528a0ce280d8ce99f9bfe1a725baafa6bf1408.1637781097.git.mchehab+huawei@kernel.org>
 
-tree:   https://github.com/t-kristo/linux-pm usi-5.16-rfc-v2-bpf
-head:   241207b4769fca049dfcc4dbde0bda92e4f67027
-commit: 940f889f9e4939d1e6701c5e52ed61c1c939ed73 [18/30] HID: bpf: compile fix for bpf_hid_foreach_rdesc_item
-config: hexagon-buildonly-randconfig-r002-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270354.U7WXyzuZ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/t-kristo/linux-pm/commit/940f889f9e4939d1e6701c5e52ed61c1c939ed73
-        git remote add t-kristo-pm https://github.com/t-kristo/linux-pm
-        git fetch --no-tags t-kristo-pm usi-5.16-rfc-v2-bpf
-        git checkout 940f889f9e4939d1e6701c5e52ed61c1c939ed73
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hid/
+On Wed, Nov 24, 2021 at 08:13:09PM +0100, Mauro Carvalho Chehab wrote:
+> This vaklue is never used at the code. So, drop it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+       ^ value
 
-All warnings (new ones prefixed by >>):
+> Solves a W=1 clang warning.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-   drivers/hid/hid-bpf.c:142:5: warning: no previous prototype for function 'hid_bpf_prog_detach' [-Wmissing-prototypes]
-   int hid_bpf_prog_detach(struct hid_device *hdev, struct bpf_prog *prog)
-       ^
-   drivers/hid/hid-bpf.c:142:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hid_bpf_prog_detach(struct hid_device *hdev, struct bpf_prog *prog)
-   ^
-   static 
-   drivers/hid/hid-bpf.c:230:24: warning: no previous prototype for function 'hid_bpf_add_report' [-Wmissing-prototypes]
-   struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
-                          ^
-   drivers/hid/hid-bpf.c:230:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
-   ^
-   static 
-   drivers/hid/hid-bpf.c:258:6: warning: no previous prototype for function 'hid_bpf_free_reports' [-Wmissing-prototypes]
-   void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
-        ^
-   drivers/hid/hid-bpf.c:258:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
-   ^
-   static 
-   drivers/hid/hid-bpf.c:322:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case HID_MAIN_ITEM_TAG_END_COLLECTION:
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/hid.h:96:42: note: expanded from macro 'HID_MAIN_ITEM_TAG_END_COLLECTION'
-   #define HID_MAIN_ITEM_TAG_END_COLLECTION        12
-                                                   ^~
-   drivers/hid/hid-bpf.c:339:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/hid/hid-bpf.c:319:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case HID_MAIN_ITEM_TAG_BEGIN_COLLECTION:
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/hid.h:95:44: note: expanded from macro 'HID_MAIN_ITEM_TAG_BEGIN_COLLECTION'
-   #define HID_MAIN_ITEM_TAG_BEGIN_COLLECTION      10
-                                                   ^~
-   drivers/hid/hid-bpf.c:339:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/hid/hid-bpf.c:312:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> drivers/hid/hid-bpf.c:377:6: warning: variable 'parser' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!parser_and_data) {
-               ^~~~~~~~~~~~~~~~
-   drivers/hid/hid-bpf.c:428:8: note: uninitialized use occurs here
-           kfree(parser->collection_stack);
-                 ^~~~~~
-   drivers/hid/hid-bpf.c:377:2: note: remove the 'if' if its condition is always false
-           if (!parser_and_data) {
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-bpf.c:356:27: note: initialize the variable 'parser' to silence this warning
-           struct hid_parser *parser;
-                                    ^
-                                     = NULL
-   6 warnings generated.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+I would expect GCC to warn about this as well.
 
-vim +377 drivers/hid/hid-bpf.c
-
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  351  
-940f889f9e4939 Tero Kristo        2021-11-25  352  BPF_CALL_4(bpf_hid_foreach_rdesc_item, void*, ctx, bpf_callback_t, callback_fn, void *, callback_ctx, u64, flags)
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  353  {
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  354  	struct hid_bpf_ctx *bpf_ctx = ctx;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  355  	struct hid_bpf_parser_and_data *parser_and_data;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  356  	struct hid_parser *parser;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  357  	struct hid_bpf_parser *callback_data;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  358  	struct hid_item item;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  359  	u8 *data_copy, *start, *end, *next;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  360  	u64 cur_index;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  361  	u64 ret = 0;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  362  	u32 num_elems = 0;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  363  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  364  	static int (*dispatch_type[])(struct hid_parser *parser,
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  365  				      struct hid_item *item) = {
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  366  		hid_bpf_parser_main,
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  367  		hid_parser_global,
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  368  		hid_parser_local,
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  369  		hid_parser_reserved
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  370  	};
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  371  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  372  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  373  	if (flags != 0)
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  374  		return -EINVAL;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  375  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  376  	parser_and_data = vzalloc(sizeof(*parser_and_data));
-db3fbbad76f810 Benjamin Tissoires 2021-10-13 @377  	if (!parser_and_data) {
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  378  		ret = -ENOMEM;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  379  		goto exit;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  380  	}
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  381  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  382  	parser = &parser_and_data->parser;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  383  	callback_data = &parser_and_data->callback_data;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  384  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  385  	parser->device = bpf_ctx->hdev;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  386  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  387  	data_copy = kmemdup(bpf_ctx->event.data, HID_BPF_MAX_BUFFER_SIZE, GFP_KERNEL);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  388  	if (!data_copy) {
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  389  		ret = -ENOMEM;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  390  		goto exit;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  391  	}
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  392  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  393  	start = data_copy;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  394  	end = start + bpf_ctx->event.size;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  395  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  396  	while((next = hid_rdesc_fetch_item(start, end, &item)) != NULL) {
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  397  		cur_index = start - data_copy;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  398  		num_elems++;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  399  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  400  		dispatch_type[item.type](parser, &item);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  401  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  402  		hid_bpf_store_bpf_parser(callback_data, &item, parser);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  403  
-940f889f9e4939 Tero Kristo        2021-11-25  404  		ret = callback_fn((u64)(long)ctx, (u64)(long)callback_data,
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  405  				  (u64)(long)&cur_index,
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  406  				  (u64)(long)callback_ctx, 0);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  407  		/* return value: 0 - continue, 1 - stop and return */
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  408  		if (ret)
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  409  			break;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  410  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  411  		/* Reset the local parser environment on main items */
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  412  		if (item.type == HID_ITEM_TYPE_MAIN)
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  413  			memset(&parser->local, 0, sizeof(parser->local));
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  414  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  415  		/* clear item content */
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  416  		memset(&item, 0, sizeof(item));
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  417  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  418  		start = next;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  419  	}
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  420  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  421  	hid_bpf_free_reports(parser_and_data);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  422  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  423  	kfree(data_copy);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  424  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  425  	ret = num_elems;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  426  
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  427   exit:
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  428  	kfree(parser->collection_stack);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  429  	vfree(parser_and_data);
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  430  	return ret;
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  431  }
-db3fbbad76f810 Benjamin Tissoires 2021-10-13  432  
-
-:::::: The code at line 377 was first introduced by commit
-:::::: db3fbbad76f810554bcb2c098f8c9beb02724702 HID: bpf: add a helper to parse a given report descriptor
-
-:::::: TO: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-:::::: CC: Tero Kristo <tero.kristo@linux.intel.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
+> 
+>  drivers/media/dvb-frontends/m88ds3103.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
+> index 02e8aa11e36e..bce0f42f3d19 100644
+> --- a/drivers/media/dvb-frontends/m88ds3103.c
+> +++ b/drivers/media/dvb-frontends/m88ds3103.c
+> @@ -451,7 +451,7 @@ static int m88ds3103b_select_mclk(struct m88ds3103_dev *dev)
+>  
+>  static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
+>  {
+> -	u8 reg11 = 0x0A, reg15, reg16, reg1D, reg1E, reg1F, tmp;
+> +	u8 reg15, reg16, reg1D, reg1E, reg1F, tmp;
+>  	u8 sm, f0 = 0, f1 = 0, f2 = 0, f3 = 0;
+>  	u16 pll_div_fb, N;
+>  	u32 div;
+> @@ -480,8 +480,6 @@ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
+>  	div /= mclk_khz;
+>  
+>  	if (dev->cfg->ts_mode == M88DS3103_TS_SERIAL) {
+> -		reg11 |= 0x02;
+> -
+>  		if (div <= 32) {
+>  			N = 2;
+>  
+> @@ -532,8 +530,6 @@ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
+>  		else if ((f3 < 8) && (f3 != 0))
+>  			f3 = 8;
+>  	} else {
+> -		reg11 &= ~0x02;
+> -
+>  		if (div <= 32) {
+>  			N = 2;
+>  
+> -- 
+> 2.33.1
+> 
+> 
