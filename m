@@ -1,27 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF7B2C81
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 15:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175F7C9305F
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 15:18:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637939892;
-	bh=KqLeMrkFcEUdBWWY9yYV30jYMt3Gtp2Y9CSAIt/EtuE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sjHwDtzSvrTgRRpHhwrx7gKq2r7mtdZYVYeWY8849BtrLMReLQ8P0J05Piagq7KOs
-	 o1+Sd4QdFwnX683gEr/SZI6f96x7ShEanwPo5Lb4p6m+RcH4oFH3GeC+zu4iYVnijE
-	 vPT0Wc+Bno3Als49CjwCU/Fh2sIpOlOagXu2MMtLaLvV9Yvqh0jB9p7y9SZJR6pFMy
-	 YLXWAZ2KrcZJDxegeOoV1vjYRQkQ0NCeJ7yluU4ZwlcQyiBT+ndE4jdFEBGEBeh+Vf
-	 rcV/T49sJCDQIYbbiJyNz9piESOsLSjAG3lX7MTD7OzgWOO2geo25nv9aLXwEZAPOH
-	 bpcGO6XfY8WJg==
-Received: by mail-wm1-f47.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so7026308wms.3
-        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 07:18:12 -0800 (PST)
-X-Gm-Message-State: AOAM533Q8srxxu3fQbKJBF4sq637wnztDUWU0Y8oBkVMVgmp+BKbnu3e
-	p0nDDX1qdNeDjBlq+QJDW6jD5fs1aO4DnNOGj2U=
-X-Google-Smtp-Source: ABdhPJzIbjg+Owk4hwlM6I0zZ86kIhnx52S92JKWkcDH00LeUrnkgXZJiSde8mO2+m3DNJxz2fCgVwqDq+nvLCgrMxk=
-X-Received: by 2002:a7b:c007:: with SMTP id c7mr16367114wmb.82.1637939890403;
- Fri, 26 Nov 2021 07:18:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCAC2C81
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 15:26:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ECE0C93056
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 15:26:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fH4FAr7a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1637940397;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ipM/TXyq3fa2xD6xL+IODfRBAa1n0lqHCOEC6lhGz2w=;
+	b=fH4FAr7ax00biFRspLsNjb0ze3JPDHFQiXw5nz3dCryky0GVjtS7odrrBG4SXFEnuMPupb
+	C2rBVxwhqhzGHZtfe1Vkui9Kv/3RpHXES00WTFF0HitxpBYX8DbwD7DlSx07p0XbnTXy7w
+	obXYs76FMoUXfcO17O5JJI58FIkJK9U=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id 0e4fc1b2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+	for <llvm@lists.linux.dev>;
+	Fri, 26 Nov 2021 15:26:37 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id x32so21080400ybi.12
+        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 07:26:36 -0800 (PST)
+X-Gm-Message-State: AOAM531VQTA6E6/oWwC9D/hV90g+YyCOGKffoxDR1wEIsyEjA4uWeBBE
+	jHkBN439Hf5jQ92D7bJrva6sMYK2/7JIuu1zJdM=
+X-Google-Smtp-Source: ABdhPJz1jC7tzRI2Jev0YFMgIakMjnOGUeXIERuvNVU50Dbr302WyOqELo2lVx6sJzZ8S49+xbTN3CiBb8Raeb2tmIk=
+X-Received: by 2002:a25:acd4:: with SMTP id x20mr16477398ybd.416.1637940395629;
+ Fri, 26 Nov 2021 07:26:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,13 +34,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20211126143329.2689618-1-arnd@kernel.org> <CAHmME9rotnZRzqeD43FJmSX6-i2CwvUVpXHrFkLGt+qVVdxK7A@mail.gmail.com>
-In-Reply-To: <CAHmME9rotnZRzqeD43FJmSX6-i2CwvUVpXHrFkLGt+qVVdxK7A@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 26 Nov 2021 16:17:54 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com>
-Message-ID: <CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com>
+ <CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Fri, 26 Nov 2021 10:26:09 -0500
+X-Gmail-Original-Message-ID: <CAHmME9q3ihG6OukcbhgkzwMUY7y+N3tKrGu2aRHjkgmAv4j=WQ@mail.gmail.com>
+Message-ID: <CAHmME9q3ihG6OukcbhgkzwMUY7y+N3tKrGu2aRHjkgmAv4j=WQ@mail.gmail.com>
 Subject: Re: [PATCH] crypto: siphash - use _unaligned version by default
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Arnd Bergmann <arnd@kernel.org>
 Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	"David S. Miller" <davem@davemloft.net>, 
@@ -43,76 +49,21 @@ Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, Arnd Bergmann <arn
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Nov 26, 2021 at 4:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Arnd,
->
-> It looks like Ard's old patch never got picked up so you're dusting it
-> off. It looks like you're doing two things here -- moving from an
-> ifndef to a much nicer IS_ENABLED, and changing the logic a bit. In
-> trying to understand the logic part, I changed this in my buffer:
+On Fri, Nov 26, 2021 at 10:18 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> I have not tested this specific patch on all platforms, but I did
+> extensive testing of the get_unaligned()/put_unaligned() helpers
+> in my rewrite earlier this year[1], making sure that these are NOPs
+> on all the important architectures, and that they prevent the use
+> of trapping ldrd/ldm instructions on ARMv6/ARMv7.
 
-I actually found the issue independently and came up with this patch
-before Ard pointed me to his patch, I mainly took the description of the
-problem from him, as his explanation was already well written.
+If you're confident that the codegen doesn't change for ARMv8 and
+x86{,_64}, then:
 
-> -#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-> -       if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
-> +       if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-> +           !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
->                 return __hsiphash_unaligned(data, len, key);
->         return ___hsiphash_aligned(data, len, key);
->
-> into this:
->
-> -       if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-> -           !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
-> +       if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-> +           !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
->                 return __hsiphash_unaligned(data, len, key);
->         return ___hsiphash_aligned(data, len, key);
->
-> This way I can actually think about what's happening here.
->
-> So with the old one, we use the faster aligned version if *either* the
-> CPU has efficient unaligned access OR the bytes are statically known
-> to be aligned. This seems sensible.
->
-> On the new one, we use the faster aligned version if *both* the bytes
-> are statically known to be aligned (ok) AND the CPU doesn't actually
-> support efficient unaligned accesses (?). This seems kind of weird.
+Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Yes, this is intentional. The point is that __hsiphash_unaligned() is
-the portable version that works with any alignment on any architecture,
-while __hsiphash_aligned() is either identical, or may only be called
-with aligned data. Passing an unaligned pointer into this function triggers
-undefined behavior in C99, which is how it broke on armv7, but in fact
-any compiler might optimize this function based on "knowing" that
-the lower address bits are zero.
+We should probably Cc stable@, right?
 
-> It also means that CPUs with fast aligned accesses wind up calling the
-> slower code path in some cases. Is your supposition that the compiler
-> will always optimize the slow codepath to the fast one if the CPU it's
-> compiling for supports that? Have you tested this on all platforms?
+I'm preparing a patchset for DaveM's stable tree today, and I can take
+this in that patchset.
 
-I have not tested this specific patch on all platforms, but I did
-extensive testing of the get_unaligned()/put_unaligned() helpers
-in my rewrite earlier this year[1], making sure that these are NOPs
-on all the important architectures, and that they prevent the use
-of trapping ldrd/ldm instructions on ARMv6/ARMv7.
-
-> Would it make sense to instead just fix clang-13? Or even to just get
-> rid of CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS for armv6 or undef
-> CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS for armv6 just in this file or
-> maybe less messy, split CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS into
-> two ifdefs that more sense for our usage?
-
-Clang is actually doing the right thing here, it may be considered a missed
-optimization that gcc uses two loads instead of a combined ldm or ldrd ;-)
-
-FWIW, the bug that we saw in the decompressor relying on data alignment on x86
-earlier this year only happened on gcc.
-
-      Arnd
-
-[1] https://lkml.org/lkml/2021/5/7/775
+Jason
