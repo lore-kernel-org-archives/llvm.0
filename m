@@ -1,30 +1,31 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2136368
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 12:29:01 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="234389298"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11A12C80
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 12:40:01 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="299062264"
 X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="234389298"
+   d="scan'208";a="299062264"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 04:29:00 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 04:40:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="457648785"
+   d="scan'208";a="457650719"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 26 Nov 2021 04:28:58 -0800
+  by orsmga003.jf.intel.com with ESMTP; 26 Nov 2021 04:39:58 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqaLZ-00085P-J0; Fri, 26 Nov 2021 12:28:57 +0000
-Date: Fri, 26 Nov 2021 20:28:45 +0800
+	id 1mqaWE-00086k-4x; Fri, 26 Nov 2021 12:39:58 +0000
+Date: Fri, 26 Nov 2021 20:39:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>
+To: Axel Rasmussen <axelrasmussen@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
- function 'kasan_tag_mismatch'
-Message-ID: <202111262016.vdEfdFNO-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/khugepaged.c:2181:13: warning: stack frame size (3808) exceeds
+ limit (2048) in 'khugepaged_do_scan'
+Message-ID: <202111262010.UBcefCrE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,47 +36,82 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Peter,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   a4849f6000e29235a2707f22e39da6b897bb9543
-commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
-date:   6 months ago
-config: arm64-randconfig-r003-20211116 (https://download.01.org/0day-ci/archive/20211126/202111262016.vdEfdFNO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+commit: 2b5067a8143e34aa3fa57a20fb8a3c40d905f942 mm: mmap_lock: add tracepoints around lock acquisition
+date:   12 months ago
+config: mips-randconfig-r013-20211124 (https://download.01.org/0day-ci/archive/20211126/202111262010.UBcefCrE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b5067a8143e34aa3fa57a20fb8a3c40d905f942
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        git checkout 2b5067a8143e34aa3fa57a20fb8a3c40d905f942
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-        ^
-   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-   ^
-   static 
+>> mm/khugepaged.c:2181:13: warning: stack frame size (3808) exceeds limit (2048) in 'khugepaged_do_scan' [-Wframe-larger-than]
+   static void khugepaged_do_scan(void)
+               ^
    1 warning generated.
+   Assembler messages:
+   Warning: a different -march was already specified, is now octeon
 
 
-vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+vim +/khugepaged_do_scan +2181 mm/khugepaged.c
 
-   210	
- > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2180  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26 @2181  static void khugepaged_do_scan(void)
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2182  {
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2183  	struct page *hpage = NULL;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2184  	unsigned int progress = 0, pass_through_head = 0;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2185  	unsigned int pages = khugepaged_pages_to_scan;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2186  	bool wait = true;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2187  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2188  	barrier(); /* write khugepaged_pages_to_scan to local stack */
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2189  
+a980df33e9351e Kirill A. Shutemov 2020-06-03  2190  	lru_add_drain_all();
+a980df33e9351e Kirill A. Shutemov 2020-06-03  2191  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2192  	while (progress < pages) {
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2193  		if (!khugepaged_prealloc_page(&hpage, &wait))
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2194  			break;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2195  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2196  		cond_resched();
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2197  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2198  		if (unlikely(kthread_should_stop() || try_to_freeze()))
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2199  			break;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2200  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2201  		spin_lock(&khugepaged_mm_lock);
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2202  		if (!khugepaged_scan.mm_slot)
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2203  			pass_through_head++;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2204  		if (khugepaged_has_work() &&
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2205  		    pass_through_head < 2)
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2206  			progress += khugepaged_scan_mm_slot(pages - progress,
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2207  							    &hpage);
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2208  		else
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2209  			progress = pages;
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2210  		spin_unlock(&khugepaged_mm_lock);
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2211  	}
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2212  
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2213  	if (!IS_ERR_OR_NULL(hpage))
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2214  		put_page(hpage);
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2215  }
+b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2216  
+
+:::::: The code at line 2181 was first introduced by commit
+:::::: b46e756f5e47031c67658ff036e5ffe27062fa43 thp: extract khugepaged from mm/huge_memory.c
+
+:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
