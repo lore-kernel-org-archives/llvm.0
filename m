@@ -1,76 +1,107 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D84F68
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 21:34:53 +0000 (UTC)
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92.3)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1mqiZC-0000Wj-Dz; Fri, 26 Nov 2021 22:15:34 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1mqiZC-000SZt-2A; Fri, 26 Nov 2021 22:15:34 +0100
-Subject: Re: [PATCH bpf-next 0/6] tools/bpf: Enable cross-building with clang
-To: Quentin Monnet <quentin@isovalent.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan <shuah@kernel.org>, nathan@kernel.org, ndesaulniers@google.com,
- Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- llvm@lists.linux.dev
-References: <20211122192019.1277299-1-jean-philippe@linaro.org>
- <CACdoK4JWJRH0VuStA2N+xziTsC5d_ewuWpQEO2aHhVbsWuAq0g@mail.gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2fc51beb-cf28-2896-8377-2f2442b4712b@iogearbox.net>
-Date: Fri, 26 Nov 2021 22:15:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B729868;
+	Fri, 26 Nov 2021 21:37:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="216426934"
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="216426934"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 13:37:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="675657553"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 26 Nov 2021 13:37:17 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mqiuC-0008cn-Ek; Fri, 26 Nov 2021 21:37:16 +0000
+Date: Sat, 27 Nov 2021 05:36:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cai Huoqing <caihuoqing@baidu.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] staging: zynpu: Add driver support for ARM(China)
+ ZHOUYI AI accelerator
+Message-ID: <202111270521.Fwtu770n-lkp@intel.com>
+References: <20211124084620.628-2-caihuoqing@baidu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CACdoK4JWJRH0VuStA2N+xziTsC5d_ewuWpQEO2aHhVbsWuAq0g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26365/Fri Nov 26 10:23:49 2021)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124084620.628-2-caihuoqing@baidu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 11/26/21 9:36 PM, Quentin Monnet wrote:
-> On Mon, 22 Nov 2021 at 19:23, Jean-Philippe Brucker
-> <jean-philippe@linaro.org> wrote:
->>
->> Add support for cross-building BPF tools and selftests with clang, by
->> passing LLVM=1 or CC=clang to make, as well as CROSS_COMPILE. A single
->> clang toolchain can generate binaries for multiple architectures, so
->> instead of having prefixes such as aarch64-linux-gnu-gcc, clang uses the
->> -target parameter: `clang -target aarch64-linux-gnu'.
->>
->> Patch 1 adds the parameter in Makefile.include so tools can easily
->> support this. Patch 2 prepares for the libbpf change from patch 3 (keep
->> building resolve_btfids's libbpf in the host arch, when cross-building
->> the kernel with clang). Patches 3-6 enable cross-building BPF tools with
->> clang.
-> 
-> The set looks good to me. I checked that the tools are still building
-> (without cross-compiling). I currently have issues building the
-> selftests on my setup, but they don't appear to be related to this
-> patchset.
-> 
-> Acked-by: Quentin Monnet <quentin@isovalent.com>
-> 
-> Note that on bpf-next, patch 5 (runqslower) has a conflict with
-> be79505caf3f ("tools/runqslower: Install libbpf headers when
-> building").
+Hi Cai,
 
-Jean-Philippe, please do one rebase spin for addressing the above.
+I love your patch! Perhaps something to improve:
 
-Thanks,
-Daniel
+[auto build test WARNING on staging/staging-testing]
+
+url:    https://github.com/0day-ci/linux/commits/Cai-Huoqing/staging-zynpu-Add-driver-support-for-ARM-China-ZHOUYI-AI-accelerator/20211124-164741
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 1189d2fb15a4b09b2e8dd01d60a0817d985d933d
+config: arm64-buildonly-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270521.Fwtu770n-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/95965c589ea2e279e082e3c9aa18c2ddd8494d64
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Cai-Huoqing/staging-zynpu-Add-driver-support-for-ARM-China-ZHOUYI-AI-accelerator/20211124-164741
+        git checkout 95965c589ea2e279e082e3c9aa18c2ddd8494d64
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iio/ drivers/irqchip/ drivers/spi/ drivers/staging/zynpu/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/staging/zynpu/zynpu_session.c:747:20: warning: no previous prototype for function 'zynpu_session_get_wait_queue' [-Wmissing-prototypes]
+   wait_queue_head_t *zynpu_session_get_wait_queue(struct zynpu_session *session, int uthread_id)
+                      ^
+   drivers/staging/zynpu/zynpu_session.c:747:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   wait_queue_head_t *zynpu_session_get_wait_queue(struct zynpu_session *session, int uthread_id)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/zynpu_session_get_wait_queue +747 drivers/staging/zynpu/zynpu_session.c
+
+   746	
+ > 747	wait_queue_head_t *zynpu_session_get_wait_queue(struct zynpu_session *session, int uthread_id)
+   748	{
+   749	    struct zynpu_thread_wait_queue *queue = NULL;
+   750	
+   751		if (!session) {
+   752			pr_err("invalid input session to be null!");
+   753			return NULL;
+   754		}
+   755	
+   756		/* LOCK */
+   757		spin_lock(&session->job_lock);
+   758		queue = get_thread_wait_queue_no_lock(session->wait_queue_head, uthread_id);
+   759		spin_unlock(&session->job_lock);
+   760		/* UNLOCK */
+   761	
+   762		if (queue)
+   763			return &queue->p_wait;
+   764	
+   765		return NULL;
+   766	}
+   767	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
