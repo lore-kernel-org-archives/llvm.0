@@ -1,30 +1,29 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B43672
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 06:44:20 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="296421583"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A7972
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 07:46:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="215650525"
 X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="296421583"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 22:44:19 -0800
+   d="scan'208";a="215650525"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 23:46:20 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="458085374"
+   d="scan'208";a="741944695"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Nov 2021 22:44:18 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 25 Nov 2021 23:46:19 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqUy1-0007iF-Bc; Fri, 26 Nov 2021 06:44:17 +0000
-Date: Fri, 26 Nov 2021 14:44:09 +0800
+	id 1mqVw2-0007mD-EF; Fri, 26 Nov 2021 07:46:18 +0000
+Date: Fri, 26 Nov 2021 15:45:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Douglas Anderson <dianders@chromium.org>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies
- type 'unsigned short' but the argument has type 'int'
-Message-ID: <202111261447.lxHTeAhi-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm:zii 143/161] drivers/net/dsa/qca8k.c:965:47: error: use of
+ undeclared identifier 'port'
+Message-ID: <202111261546.78a2l3tk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,111 +34,138 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Douglas,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a4849f6000e29235a2707f22e39da6b897bb9543
-commit: c1ed18c11bdb80eced208a61d40b1988f36a014f HID: i2c-hid: Introduce goodix-i2c-hid using i2c-hid core
-date:   10 months ago
-config: arm64-randconfig-r034-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261447.lxHTeAhi-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git zii
+head:   1c86335a03ee0102daaefede1fb25cdbb367b14c
+commit: 0d8c1cd8070d6743a8ea65e3b620c454d10a870f [143/161] net: dsa: qca8k: convert to use phylink_pcs
+config: x86_64-randconfig-a002-20211124 (https://download.01.org/0day-ci/archive/20211126/202111261546.78a2l3tk-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ed18c11bdb80eced208a61d40b1988f36a014f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c1ed18c11bdb80eced208a61d40b1988f36a014f
+        git remote add arm git://git.armlinux.org.uk/~rmk/linux-arm.git
+        git fetch --no-tags arm zii
+        git checkout 0d8c1cd8070d6743a8ea65e3b620c454d10a870f
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                           le16_to_cpu(hdesc->bcdVersion));
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
-           _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                 ~~~     ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
-   #define le16_to_cpu __le16_to_cpu
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:36:26: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/i2c-hid/i2c-hid-core.c:992:18: warning: format specifies type 'unsigned short' but the argument has type '__u32' (aka 'unsigned int') [-Wformat]
-                    client->name, hid->vendor, hid->product);
-                                  ^~~~~~~~~~~
-   drivers/hid/i2c-hid/i2c-hid-core.c:992:31: warning: format specifies type 'unsigned short' but the argument has type '__u32' (aka 'unsigned int') [-Wformat]
-                    client->name, hid->vendor, hid->product);
-                                               ^~~~~~~~~~~~
-   3 warnings generated.
+>> drivers/net/dsa/qca8k.c:965:47: error: use of undeclared identifier 'port'
+           ret = qca8k_read(priv, QCA8K_REG_PORT_STATUS(port), &reg);
+                                                        ^
+>> drivers/net/dsa/qca8k.c:1026:22: error: use of undeclared identifier 'ds'
+           if (dsa_is_cpu_port(ds, port)) {
+                               ^
+   drivers/net/dsa/qca8k.c:1026:26: error: use of undeclared identifier 'port'
+           if (dsa_is_cpu_port(ds, port)) {
+                                   ^
+>> drivers/net/dsa/qca8k.c:1030:13: error: use of undeclared identifier 'state'
+           } else if (state->interface == PHY_INTERFACE_MODE_SGMII) {
+                      ^
+   drivers/net/dsa/qca8k.c:1033:13: error: use of undeclared identifier 'state'
+           } else if (state->interface == PHY_INTERFACE_MODE_1000BASEX) {
+                      ^
+   drivers/net/dsa/qca8k.c:1281:11: warning: unused variable 'val' [-Wunused-variable]
+           u32 reg, val;
+                    ^
+   drivers/net/dsa/qca8k.c:1282:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret;
+               ^
+   2 warnings and 5 errors generated.
 
 
-vim +867 drivers/hid/i2c-hid/i2c-hid-core.c
+vim +/port +965 drivers/net/dsa/qca8k.c
 
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  836  
-0fe763c570ad27 drivers/hid/i2c-hid/i2c-hid.c      Greg Kroah-Hartman 2012-12-21  837  static int i2c_hid_fetch_hid_descriptor(struct i2c_hid *ihid)
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  838  {
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  839  	struct i2c_client *client = ihid->client;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  840  	struct i2c_hid_desc *hdesc = &ihid->hdesc;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  841  	unsigned int dsize;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  842  	int ret;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  843  
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  844  	/* i2c hid fetch using a fixed descriptor size (30 bytes) */
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  845  	if (i2c_hid_get_dmi_i2c_hid_desc_override(client->name)) {
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  846  		i2c_hid_dbg(ihid, "Using a HID descriptor override\n");
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  847  		ihid->hdesc =
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  848  			*i2c_hid_get_dmi_i2c_hid_desc_override(client->name);
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  849  	} else {
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  850  		i2c_hid_dbg(ihid, "Fetching the HID descriptor\n");
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  851  		ret = i2c_hid_command(client, &hid_descr_cmd,
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  852  				      ihid->hdesc_buffer,
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  853  				      sizeof(struct i2c_hid_desc));
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  854  		if (ret) {
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  855  			dev_err(&client->dev, "hid_descr_cmd failed\n");
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  856  			return -ENODEV;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  857  		}
-9ee3e06610fdb8 drivers/hid/i2c-hid/i2c-hid-core.c Julian Sax         2018-09-19  858  	}
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  859  
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  860  	/* Validate the length of HID descriptor, the 4 first bytes:
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  861  	 * bytes 0-1 -> length
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  862  	 * bytes 2-3 -> bcdVersion (has to be 1.00) */
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  863  	/* check bcdVersion == 1.0 */
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  864  	if (le16_to_cpu(hdesc->bcdVersion) != 0x0100) {
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  865  		dev_err(&client->dev,
-9972dcc29cd1fc drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-12-04  866  			"unexpected HID descriptor bcdVersion (0x%04hx)\n",
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12 @867  			le16_to_cpu(hdesc->bcdVersion));
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  868  		return -ENODEV;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  869  	}
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  870  
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  871  	/* Descriptor length should be 30 bytes as per the specification */
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  872  	dsize = le16_to_cpu(hdesc->wHIDDescLength);
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  873  	if (dsize != sizeof(struct i2c_hid_desc)) {
-f58b8487bcc898 drivers/hid/i2c-hid/i2c-hid.c      Archana Patni      2014-05-08  874  		dev_err(&client->dev, "weird size of HID descriptor (%u)\n",
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  875  			dsize);
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  876  		return -ENODEV;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  877  	}
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  878  	i2c_hid_dbg(ihid, "HID Descriptor: %*ph\n", dsize, ihid->hdesc_buffer);
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  879  	return 0;
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  880  }
-4a200c3b9a4024 drivers/hid/i2c-hid/i2c-hid.c      Benjamin Tissoires 2012-11-12  881  
-
-:::::: The code at line 867 was first introduced by commit
-:::::: 4a200c3b9a40242652b5734630bdd0bcf3aca75f HID: i2c-hid: introduce HID over i2c specification implementation
-
-:::::: TO: Benjamin Tissoires <benjamin.tissoires@gmail.com>
-:::::: CC: Jiri Kosina <jkosina@suse.cz>
+   957	
+   958	static void qca8k_pcs_get_state(struct phylink_pcs *pcs,
+   959					struct phylink_link_state *state)
+   960	{
+   961		struct qca8k_priv *priv = pcs_to_qca8k_pcs(pcs)->priv;
+   962		u32 reg;
+   963		int ret;
+   964	
+ > 965		ret = qca8k_read(priv, QCA8K_REG_PORT_STATUS(port), &reg);
+   966		if (ret < 0) {
+   967			state->link = false;
+   968			return;
+   969		}
+   970	
+   971		state->link = !!(reg & QCA8K_PORT_STATUS_LINK_UP);
+   972		state->an_complete = state->link;
+   973		state->an_enabled = !!(reg & QCA8K_PORT_STATUS_LINK_AUTO);
+   974		state->duplex = (reg & QCA8K_PORT_STATUS_DUPLEX) ? DUPLEX_FULL :
+   975								   DUPLEX_HALF;
+   976	
+   977		switch (reg & QCA8K_PORT_STATUS_SPEED) {
+   978		case QCA8K_PORT_STATUS_SPEED_10:
+   979			state->speed = SPEED_10;
+   980			break;
+   981		case QCA8K_PORT_STATUS_SPEED_100:
+   982			state->speed = SPEED_100;
+   983			break;
+   984		case QCA8K_PORT_STATUS_SPEED_1000:
+   985			state->speed = SPEED_1000;
+   986			break;
+   987		default:
+   988			state->speed = SPEED_UNKNOWN;
+   989			break;
+   990		}
+   991	
+   992		state->pause = MLO_PAUSE_NONE;
+   993		if (reg & QCA8K_PORT_STATUS_RXFLOW)
+   994			state->pause |= MLO_PAUSE_RX;
+   995		if (reg & QCA8K_PORT_STATUS_TXFLOW)
+   996			state->pause |= MLO_PAUSE_TX;
+   997	}
+   998	
+   999	static int qca8k_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+  1000				    phy_interface_t interface,
+  1001				    const unsigned long *advertising,
+  1002				    bool permit_pause_to_mac)
+  1003	{
+  1004		struct qca8k_priv *priv = pcs_to_qca8k_pcs(pcs)->priv;
+  1005		u32 val;
+  1006		int ret;
+  1007	
+  1008		/* Enable/disable SerDes auto-negotiation as necessary */
+  1009		ret = qca8k_read(priv, QCA8K_REG_PWS, &val);
+  1010		if (ret)
+  1011			return ret;
+  1012		if (phylink_autoneg_inband(mode))
+  1013			val &= ~QCA8K_PWS_SERDES_AEN_DIS;
+  1014		else
+  1015			val |= QCA8K_PWS_SERDES_AEN_DIS;
+  1016		qca8k_write(priv, QCA8K_REG_PWS, val);
+  1017	
+  1018		/* Configure the SGMII parameters */
+  1019		ret = qca8k_read(priv, QCA8K_REG_SGMII_CTRL, &val);
+  1020		if (ret)
+  1021			return ret;
+  1022	
+  1023		val |= QCA8K_SGMII_EN_PLL | QCA8K_SGMII_EN_RX |
+  1024		       QCA8K_SGMII_EN_TX | QCA8K_SGMII_EN_SD;
+  1025	
+> 1026		if (dsa_is_cpu_port(ds, port)) {
+  1027			/* CPU port, we're talking to the CPU MAC, be a PHY */
+  1028			val &= ~QCA8K_SGMII_MODE_CTRL_MASK;
+  1029			val |= QCA8K_SGMII_MODE_CTRL_PHY;
+> 1030		} else if (state->interface == PHY_INTERFACE_MODE_SGMII) {
+  1031			val &= ~QCA8K_SGMII_MODE_CTRL_MASK;
+  1032			val |= QCA8K_SGMII_MODE_CTRL_MAC;
+  1033		} else if (state->interface == PHY_INTERFACE_MODE_1000BASEX) {
+  1034			val &= ~QCA8K_SGMII_MODE_CTRL_MASK;
+  1035			val |= QCA8K_SGMII_MODE_CTRL_BASEX;
+  1036		}
+  1037	
+  1038		qca8k_write(priv, QCA8K_REG_SGMII_CTRL, val);
+  1039	
+  1040		return 0;
+  1041	}
+  1042	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
