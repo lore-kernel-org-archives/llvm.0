@@ -1,31 +1,32 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5FF68
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 20:45:18 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="215739350"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770F468
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 20:56:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="296517421"
 X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="215739350"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 12:45:18 -0800
+   d="scan'208";a="296517421"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 12:56:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="498542944"
+   d="scan'208";a="539369728"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 12:45:16 -0800
+  by orsmga001.jf.intel.com with ESMTP; 26 Nov 2021 12:56:16 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqi5r-0008a5-EX; Fri, 26 Nov 2021 20:45:15 +0000
-Date: Sat, 27 Nov 2021 04:45:02 +0800
+	id 1mqiGV-0008aY-M1; Fri, 26 Nov 2021 20:56:15 +0000
+Date: Sat, 27 Nov 2021 04:55:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
+To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 3/9]
- drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct
- pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof
- (((1UL) << 12)) *' (aka 'unsigned long *'))
-Message-ID: <202111270455.dyUYQ1BQ-lkp@intel.com>
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH net-next v2 2/2] bpf: let bpf_warn_invalid_xdp_action()
+ report more info
+Message-ID: <202111270414.XuXZgoE5-lkp@intel.com>
+References: <277a9483b38f9016bc78ce66707753681684fbd7.1637924200.git.pabeni@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,121 +35,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <277a9483b38f9016bc78ce66707753681684fbd7.1637924200.git.pabeni@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   20622aca716f08225b705a8c84a2beeb8c71decb
-commit: 3e99bfe1e6898207226254c9c3663804f72e4c75 [3/9] iommufd: Data structure to provide IOVA to PFN mapping
-config: i386-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270455.dyUYQ1BQ-lkp@intel.com/config)
+Hi Paolo,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Paolo-Abeni/bpf-do-not-WARN-in-bpf_warn_invalid_xdp_action/20211126-192252
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 35bf8c86eeb8ae609f61c43aeab3b530fedcf1b4
+config: riscv-randconfig-r036-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270414.XuXZgoE5-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/3e99bfe1e6898207226254c9c3663804f72e4c75
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout 3e99bfe1e6898207226254c9c3663804f72e4c75
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/afb829c16c3bd86f86b24c880601cea9e21c5d3e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Paolo-Abeni/bpf-do-not-WARN-in-bpf_warn_invalid_xdp_action/20211126-192252
+        git checkout afb829c16c3bd86f86b24c880601cea9e21c5d3e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/ net/mac80211/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
->> drivers/iommu/iommufd/io_pagetable.c:1156:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   drivers/iommu/iommufd/io_pagetable.c:1211:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   drivers/iommu/iommufd/io_pagetable.c:1212:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   4 warnings generated.
+>> net/core/filter.c:8190:50: warning: address of array 'dev->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+                        act, prog->aux->name, prog->aux->id, dev->name ? dev->name : "");
+                                                             ~~~~~^~~~ ~
+   include/linux/printk.h:608:42: note: expanded from macro 'pr_warn_once'
+           printk_once(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                                   ^~~~~~~~~~~
+   include/linux/printk.h:589:30: note: expanded from macro 'printk_once'
+           DO_ONCE_LITE(printk, fmt, ##__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/once_lite.h:11:32: note: expanded from macro 'DO_ONCE_LITE'
+           DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
+                                         ^~~~~~~~~~~
+   include/linux/once_lite.h:19:9: note: expanded from macro 'DO_ONCE_LITE_IF'
+                           func(__VA_ARGS__);                              \
+                                ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +1155 drivers/iommu/iommufd/io_pagetable.c
+vim +8190 net/core/filter.c
 
-  1131	
-  1132	/**
-  1133	* iopt_access_pages - Return a list of pages under the iova
-  1134	*
-  1135	* Reads @npages starting at iova and returns the struct page * pointers. These
-  1136	* can be kmap'd by the caller for CPU access.
-  1137	*
-  1138	* The caller must perform iopt_unaccess_pages() when done to balance this.
-  1139	*
-  1140	* CHECKME: callers that need a DMA mapping via a sgl should create another
-  1141	* interface to build the SGL efficiently)
-  1142	*/
-  1143	int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
-  1144			      size_t npages, struct page **out_pages, bool write)
-  1145	{
-  1146		unsigned long cur_iova;
-  1147		unsigned long iova_end;
-  1148		struct iopt_area *area;
-  1149		size_t length;
-  1150		int rc;
-  1151	
-  1152		down_read(&iopt->rwsem);
-  1153		if (!npages || iova % PAGE_SIZE)
-  1154			return -EINVAL;
-> 1155		if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-> 1156		    check_add_overflow(iova, length - 1, &iova_end))
-  1157			return -EOVERFLOW;
-  1158	
-  1159		cur_iova = iova;
-  1160		for (area = iopt_area_iter_first(iopt, iova, iova_end); area;
-  1161		     area = iopt_area_iter_next(area, iova, iova_end)) {
-  1162			unsigned long intr_start = max(iova, iopt_area_iova(area));
-  1163			unsigned long intr_end =
-  1164				min(iova_end, iopt_area_last_iova(area));
-  1165			size_t npages = (intr_end - intr_start + 1) / PAGE_SIZE;
-  1166	
-  1167			/* Need contiguous areas un the access */
-  1168			if (cur_iova != intr_start) {
-  1169				rc = -EINVAL;
-  1170				goto out_remove;
-  1171			}
-  1172	
-  1173			npages = (intr_end - intr_start + 1) / PAGE_SIZE;
-  1174			rc = iopt_pages_add_user(
-  1175				area->pages,
-  1176				(intr_start - iopt_area_iova(area)) / PAGE_SIZE, npages,
-  1177				out_pages + (intr_end - iopt_area_iova(area) + 1) /
-  1178						    PAGE_SIZE,
-  1179				write);
-  1180			if (rc)
-  1181				goto out_remove;
-  1182			cur_iova += npages * PAGE_SIZE;
-  1183			atomic_inc(&area->num_users);
-  1184		}
-  1185	
-  1186		up_read(&iopt->rwsem);
-  1187		return 0;
-  1188	
-  1189	out_remove:
-  1190		iopt_unaccess_pages(iopt, iova, (cur_iova - iova) / PAGE_SIZE);
-  1191		return rc;
-  1192	}
-  1193	
+  8183	
+  8184	void bpf_warn_invalid_xdp_action(struct net_device *dev, struct bpf_prog *prog, u32 act)
+  8185	{
+  8186		const u32 act_max = XDP_REDIRECT;
+  8187	
+  8188		pr_warn_once("%s XDP return value %u on prog %s (id %d) dev %s, expect packet loss!\n",
+  8189			     act > act_max ? "Illegal" : "Driver unsupported",
+> 8190			     act, prog->aux->name, prog->aux->id, dev->name ? dev->name : "");
+  8191	}
+  8192	EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
+  8193	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
