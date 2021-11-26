@@ -1,86 +1,155 @@
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB1268
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 20:36:36 +0000 (UTC)
-Received: by mail-vk1-f181.google.com with SMTP id b192so6710206vkf.3
-        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 12:36:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TFS0HFFa3DF2mBq7mbNDhAUEHsq6tdnEc4bL+Qa6DAo=;
-        b=sB677R+7siP73YQaUzij/Y16nHFk7kDMyLTPn2sUE/p+yn0lxsmOGgtqIlrWLPXq5l
-         E4SgtZ3lo7QEwSeqOZHXKiAefJFBZQMqOvzuCvlN7hdiLKne+ndjPfaeKqN+MjzS0x2t
-         wIkL6xSw+IMzVDyitDUWMmwt+dhKN4wxIAKEN26Zu3+n5ekdAijvZZRuLquOJlXCad9K
-         YbOu5oRYMn9BZ9R/ObE7VX3prABrTeUZPV7VEjsBA6unQeA57vqnRJTqaw6JnhSYFBP0
-         sJuQ1NkDaeUeEvxmxKPTx7AMo9Xy+vK0WuxnyuAcGeN65Wem+sQ43SHEJfu09qLcVmRm
-         lKrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TFS0HFFa3DF2mBq7mbNDhAUEHsq6tdnEc4bL+Qa6DAo=;
-        b=oa97UjfrZqs0Pad2+BKJ8TAzEV/So+yd2dJSxc3eoaL8g9sNiyFqaJZ0YzP83Zs03M
-         iNqLO3aXe/KcIDw4JjjCyLDMUAXbQCCBLV7fULc0gfIstT3ekEtduu0otKAUQNTempQ/
-         3p1KW+WtIqBU3IIK9JjxTkP+EIdFA8ospw/U5h89r8DyPKJdYRPII63Yu3xcz0mTtxxS
-         EIc9cCPKrxNDbwA92yHx5YseJS1Ka+1xPfZIf8Pge0U9oCAVUNIZJTPJpPSgbeT7hmRC
-         ew9S31IeKU+ljdXEQ3FpWtAhxjxfrHbKyrLjfbEC5e3yAIAA13I6QEQlAWUP0C+WRrNx
-         D4kQ==
-X-Gm-Message-State: AOAM5326dBBbs/2sw2zHqOdoY8wIbnTF4oA9O7mBWuz0OlS2qJoP9wvY
-	/QV5KRBq3w6mJcpjUicwO6KsGnU9pWzz7lr3otfxwg==
-X-Google-Smtp-Source: ABdhPJy1Ry9bvIoqLWKjyr7uxvRb9zSPZNweFHhl21DQUT21sbAa6ndli5VfyOGAXaIGih4UMJ0aEvqRdsVvHvKGdvQ=
-X-Received: by 2002:a05:6122:1813:: with SMTP id ay19mr22170144vkb.24.1637958995634;
- Fri, 26 Nov 2021 12:36:35 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5FF68
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 20:45:18 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="215739350"
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="215739350"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 12:45:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="498542944"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 12:45:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mqi5r-0008a5-EX; Fri, 26 Nov 2021 20:45:15 +0000
+Date: Sat, 27 Nov 2021 04:45:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:iommufd 3/9]
+ drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct
+ pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof
+ (((1UL) << 12)) *' (aka 'unsigned long *'))
+Message-ID: <202111270455.dyUYQ1BQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211122192019.1277299-1-jean-philippe@linaro.org>
-In-Reply-To: <20211122192019.1277299-1-jean-philippe@linaro.org>
-From: Quentin Monnet <quentin@isovalent.com>
-Date: Fri, 26 Nov 2021 20:36:24 +0000
-Message-ID: <CACdoK4JWJRH0VuStA2N+xziTsC5d_ewuWpQEO2aHhVbsWuAq0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/6] tools/bpf: Enable cross-building with clang
-To: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, nathan@kernel.org, 
-	ndesaulniers@google.com, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
-	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 22 Nov 2021 at 19:23, Jean-Philippe Brucker
-<jean-philippe@linaro.org> wrote:
->
-> Add support for cross-building BPF tools and selftests with clang, by
-> passing LLVM=1 or CC=clang to make, as well as CROSS_COMPILE. A single
-> clang toolchain can generate binaries for multiple architectures, so
-> instead of having prefixes such as aarch64-linux-gnu-gcc, clang uses the
-> -target parameter: `clang -target aarch64-linux-gnu'.
->
-> Patch 1 adds the parameter in Makefile.include so tools can easily
-> support this. Patch 2 prepares for the libbpf change from patch 3 (keep
-> building resolve_btfids's libbpf in the host arch, when cross-building
-> the kernel with clang). Patches 3-6 enable cross-building BPF tools with
-> clang.
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   20622aca716f08225b705a8c84a2beeb8c71decb
+commit: 3e99bfe1e6898207226254c9c3663804f72e4c75 [3/9] iommufd: Data structure to provide IOVA to PFN mapping
+config: i386-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270455.dyUYQ1BQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jgunthorpe/linux/commit/3e99bfe1e6898207226254c9c3663804f72e4c75
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout 3e99bfe1e6898207226254c9c3663804f72e4c75
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/ net/mac80211/
 
-The set looks good to me. I checked that the tools are still building
-(without cross-compiling). I currently have issues building the
-selftests on my setup, but they don't appear to be related to this
-patchset.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+All warnings (new ones prefixed by >>):
 
-Note that on bpf-next, patch 5 (runqslower) has a conflict with
-be79505caf3f ("tools/runqslower: Install libbpf headers when
-building").
+>> drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+>> drivers/iommu/iommufd/io_pagetable.c:1156:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+               check_add_overflow(iova, length - 1, &iova_end))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+   drivers/iommu/iommufd/io_pagetable.c:1211:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+   drivers/iommu/iommufd/io_pagetable.c:1212:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+               check_add_overflow(iova, length - 1, &iova_end))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+   4 warnings generated.
 
-Did you consider enabling cross-compiling for the BPF samples too? I'm
-asking because the build system is pretty similar to the BPF tools.
 
-Thanks,
-Quentin
+vim +1155 drivers/iommu/iommufd/io_pagetable.c
+
+  1131	
+  1132	/**
+  1133	* iopt_access_pages - Return a list of pages under the iova
+  1134	*
+  1135	* Reads @npages starting at iova and returns the struct page * pointers. These
+  1136	* can be kmap'd by the caller for CPU access.
+  1137	*
+  1138	* The caller must perform iopt_unaccess_pages() when done to balance this.
+  1139	*
+  1140	* CHECKME: callers that need a DMA mapping via a sgl should create another
+  1141	* interface to build the SGL efficiently)
+  1142	*/
+  1143	int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
+  1144			      size_t npages, struct page **out_pages, bool write)
+  1145	{
+  1146		unsigned long cur_iova;
+  1147		unsigned long iova_end;
+  1148		struct iopt_area *area;
+  1149		size_t length;
+  1150		int rc;
+  1151	
+  1152		down_read(&iopt->rwsem);
+  1153		if (!npages || iova % PAGE_SIZE)
+  1154			return -EINVAL;
+> 1155		if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
+> 1156		    check_add_overflow(iova, length - 1, &iova_end))
+  1157			return -EOVERFLOW;
+  1158	
+  1159		cur_iova = iova;
+  1160		for (area = iopt_area_iter_first(iopt, iova, iova_end); area;
+  1161		     area = iopt_area_iter_next(area, iova, iova_end)) {
+  1162			unsigned long intr_start = max(iova, iopt_area_iova(area));
+  1163			unsigned long intr_end =
+  1164				min(iova_end, iopt_area_last_iova(area));
+  1165			size_t npages = (intr_end - intr_start + 1) / PAGE_SIZE;
+  1166	
+  1167			/* Need contiguous areas un the access */
+  1168			if (cur_iova != intr_start) {
+  1169				rc = -EINVAL;
+  1170				goto out_remove;
+  1171			}
+  1172	
+  1173			npages = (intr_end - intr_start + 1) / PAGE_SIZE;
+  1174			rc = iopt_pages_add_user(
+  1175				area->pages,
+  1176				(intr_start - iopt_area_iova(area)) / PAGE_SIZE, npages,
+  1177				out_pages + (intr_end - iopt_area_iova(area) + 1) /
+  1178						    PAGE_SIZE,
+  1179				write);
+  1180			if (rc)
+  1181				goto out_remove;
+  1182			cur_iova += npages * PAGE_SIZE;
+  1183			atomic_inc(&area->num_users);
+  1184		}
+  1185	
+  1186		up_read(&iopt->rwsem);
+  1187		return 0;
+  1188	
+  1189	out_remove:
+  1190		iopt_unaccess_pages(iopt, iova, (cur_iova - iova) / PAGE_SIZE);
+  1191		return rc;
+  1192	}
+  1193	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
