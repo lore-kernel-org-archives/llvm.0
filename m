@@ -1,118 +1,80 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11A12C80
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 12:40:01 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="299062264"
-X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="299062264"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 04:40:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="457650719"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 26 Nov 2021 04:39:58 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mqaWE-00086k-4x; Fri, 26 Nov 2021 12:39:58 +0000
-Date: Fri, 26 Nov 2021 20:39:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Axel Rasmussen <axelrasmussen@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/khugepaged.c:2181:13: warning: stack frame size (3808) exceeds
- limit (2048) in 'khugepaged_do_scan'
-Message-ID: <202111262010.UBcefCrE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7812C80
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 13:59:47 +0000 (UTC)
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MqatK-1mCrAX47Rg-00mfUy for <llvm@lists.linux.dev>; Fri, 26 Nov 2021
+ 14:59:46 +0100
+Received: by mail-wm1-f49.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so10779976wmj.5
+        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 05:59:45 -0800 (PST)
+X-Gm-Message-State: AOAM531qi3U2h8qfL79aOTKFRCTgPZ9Tq704GpB4GuepbFB4TV4qafHW
+	0eN7gJJQL8dTHLEKHXM+uXGzi5wIC45QFMc0zaE=
+X-Google-Smtp-Source: ABdhPJwLo2gvIaV7a7BIVtCOjM0MfS2JQcBHF9YHLbK8BZai46KYcznJM7hhcadb89FUv1DDYSJlNeq22biIjPHaGvA=
+X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr15934623wmn.98.1637935185632;
+ Fri, 26 Nov 2021 05:59:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211125154406.470082-1-anders.roxell@linaro.org> <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
+In-Reply-To: <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 26 Nov 2021 14:59:29 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
+Message-ID: <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
+Subject: Re: [PATCH] powerpc: mm: radix_tlb: rearrange the if-else block
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Anders Roxell <anders.roxell@linaro.org>, 
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, 
+	Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:v+5riThGSZl64zUlaVdGhTmyDES+I4/qPWOCoo+k06CmtG332vU
+ ZHEdKhPhIpGrnyXwU4WLvU4iFqyH2kIl4YTbW+tqXXvVSDDrpY48XABdIzznOv9yUGDDlvV
+ ovzz3FDywafamvilo2HFZ1M+FjMw9GF3XVmGuYqQrUZlXGUnz+e4HPYPnEE8dxeZEqQ/FjV
+ 1wKlvocaFpIaB6MBMzBng==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IryqBhuadRo=:OpCJI5HW58P2VqQJbJEXd3
+ Yw6gS88vjLmvk8EELC07BVTc88VyhUAmxJSOfffNsbhkcaF5k1HlB5/tlZjDaP+p67hAH2SXT
+ xvPlisGQCyEcXm0jj/A9BH376bknMCtDO1cpExCaccTzZ4VxfZNElQ9h4rzS1vxQVwqL2pwgH
+ 4C5SmyDyAaWFzJ6Xhrri56RO001Kj5YBdiNl3/zPqlLe9bjE0+iadBxyVSHzjsPpj1zgP5atT
+ HlkRpIgBP1sRGOOHE+y9rbyRM1Jt92yfj8xxf5E/IlRHYIqgYqDkPAhQLc5nvf4GLK1aimAVt
+ j0T1NvRjx3+sSPDq8d2yZISrxeMMzQ1ShBGM1fenYY89Y26FvD1kiixJF1ulWIl5I5U2UAh8k
+ YYNPpDJONNnYgkOcpHgcKwu+AUAB2VoF6duEEdTiH7Vyye66QyGzp8ILu2UvL4uLAkZyAeQ/T
+ 1MBRW8fAmd3rPW5wLKa33CtOcll6IHin/WEVOs4bip3ECEDMljfjTGpM57Fr+ohPnBWaPDwFa
+ rKDF25BqqMiw5SRNVtajWXc+bRSOYVEXom1cYRV93Vb5M7i6kxw9Cq9AWVYbLLTkHWsfCuM7y
+ I2APgZPsLzqREel9xjSlfsBMIvgXz/Flyx5LKiJL7idzfRyoKhtV7LW9YYaJls3PQZH7f9q1A
+ 0G2nwIJtxN2jYWMro62l9Je8L9kT7bMt0sPMUHqtOzCK5v2D4ZYEIFHMt7l8ij4J5M2c=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a4849f6000e29235a2707f22e39da6b897bb9543
-commit: 2b5067a8143e34aa3fa57a20fb8a3c40d905f942 mm: mmap_lock: add tracepoints around lock acquisition
-date:   12 months ago
-config: mips-randconfig-r013-20211124 (https://download.01.org/0day-ci/archive/20211126/202111262010.UBcefCrE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b5067a8143e34aa3fa57a20fb8a3c40d905f942
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2b5067a8143e34aa3fa57a20fb8a3c40d905f942
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
+On Fri, Nov 26, 2021 at 2:43 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+> Le 25/11/2021 =C3=A0 16:44, Anders Roxell a =C3=A9crit :
+> Can't you fix CLANG instead :) ?
+>
+> Or just add an else to the IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) that
+> sets hstart and hend to 0 ?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+That doesn't sound any less risky than duplicating the code, it can lead to
+incorrect changes just as easily if a patch ends up actually flushing at th=
+e
+wrong address, and the compiler fails to complain because of the bogus
+initialization.
 
-All warnings (new ones prefixed by >>):
+> Or just put hstart and hend calculation outside the IS_ENABLED() ? After
+> all GCC should drop the calculation when not used.
 
->> mm/khugepaged.c:2181:13: warning: stack frame size (3808) exceeds limit (2048) in 'khugepaged_do_scan' [-Wframe-larger-than]
-   static void khugepaged_do_scan(void)
-               ^
-   1 warning generated.
-   Assembler messages:
-   Warning: a different -march was already specified, is now octeon
+I like this one. I'm still unsure how clang can get so confused about wheth=
+er
+the variables are initialized or not, usually it handles this much better t=
+han
+gcc. My best guess is that one of the memory clobbers makes it conclude
+that 'hflush' can be true when it gets written to by an inline asm.
 
-
-vim +/khugepaged_do_scan +2181 mm/khugepaged.c
-
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2180  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26 @2181  static void khugepaged_do_scan(void)
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2182  {
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2183  	struct page *hpage = NULL;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2184  	unsigned int progress = 0, pass_through_head = 0;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2185  	unsigned int pages = khugepaged_pages_to_scan;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2186  	bool wait = true;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2187  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2188  	barrier(); /* write khugepaged_pages_to_scan to local stack */
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2189  
-a980df33e9351e Kirill A. Shutemov 2020-06-03  2190  	lru_add_drain_all();
-a980df33e9351e Kirill A. Shutemov 2020-06-03  2191  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2192  	while (progress < pages) {
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2193  		if (!khugepaged_prealloc_page(&hpage, &wait))
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2194  			break;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2195  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2196  		cond_resched();
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2197  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2198  		if (unlikely(kthread_should_stop() || try_to_freeze()))
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2199  			break;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2200  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2201  		spin_lock(&khugepaged_mm_lock);
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2202  		if (!khugepaged_scan.mm_slot)
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2203  			pass_through_head++;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2204  		if (khugepaged_has_work() &&
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2205  		    pass_through_head < 2)
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2206  			progress += khugepaged_scan_mm_slot(pages - progress,
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2207  							    &hpage);
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2208  		else
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2209  			progress = pages;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2210  		spin_unlock(&khugepaged_mm_lock);
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2211  	}
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2212  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2213  	if (!IS_ERR_OR_NULL(hpage))
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2214  		put_page(hpage);
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2215  }
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  2216  
-
-:::::: The code at line 2181 was first introduced by commit
-:::::: b46e756f5e47031c67658ff036e5ffe27062fa43 thp: extract khugepaged from mm/huge_memory.c
-
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+        Arnd
