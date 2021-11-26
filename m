@@ -1,31 +1,30 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D46D2C82
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 06:24:20 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="321850833"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A592C83
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 06:44:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="233111454"
 X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="321850833"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 22:24:19 -0800
+   d="scan'208";a="233111454"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 22:44:20 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="475817045"
+   d="scan'208";a="539159617"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2021 22:24:16 -0800
+  by orsmga001.jf.intel.com with ESMTP; 25 Nov 2021 22:44:18 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqUed-0007f2-QC; Fri, 26 Nov 2021 06:24:15 +0000
-Date: Fri, 26 Nov 2021 14:23:35 +0800
+	id 1mqUy1-0007iN-Ck; Fri, 26 Nov 2021 06:44:17 +0000
+Date: Fri, 26 Nov 2021 14:44:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: cgel.zte@gmail.com, jiri@nvidia.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, davem@davemloft.net,
-	kuba@kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-	Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] devlink: use min() to make code cleaner
-Message-ID: <202111261406.iXRaBqLo-lkp@intel.com>
-References: <20211125071414.53147-1-lv.ruyi@zte.com.cn>
+To: Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, shr@fb.com
+Subject: Re: [PATCH v3 2/3] fs: split off vfs_getdents function of getdents64
+ syscall
+Message-ID: <202111261416.mniOvY08-lkp@intel.com>
+References: <20211125232549.3333746-3-shr@fb.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,101 +33,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211125071414.53147-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <20211125232549.3333746-3-shr@fb.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi,
+Hi Stefan,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test WARNING on de5de0813b7dbbb71fb5d677ed823505a0e685c5]
 
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/devlink-use-min-to-make-code-cleaner/20211125-151715
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5f53fa508db098c9d372423a6dac31c8a5679cdf
-config: riscv-buildonly-randconfig-r002-20211125 (https://download.01.org/0day-ci/archive/20211126/202111261406.iXRaBqLo-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Stefan-Roesch/io_uring-add-getdents64-support/20211126-072952
+base:   de5de0813b7dbbb71fb5d677ed823505a0e685c5
+config: mips-buildonly-randconfig-r003-20211125 (https://download.01.org/0day-ci/archive/20211126/202111261416.mniOvY08-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0332d105b9ad7f1f0ffca7e78b71de8b3a48f158)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/836e00794d541adc38bfd77e1714579f2223a231
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/018019be0b26997402fe7ba8367e5260ec2aa8c8
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/devlink-use-min-to-make-code-cleaner/20211125-151715
-        git checkout 836e00794d541adc38bfd77e1714579f2223a231
+        git fetch --no-tags linux-review Stefan-Roesch/io_uring-add-getdents64-support/20211126-072952
+        git checkout 018019be0b26997402fe7ba8367e5260ec2aa8c8
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=mips 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/core/devlink.c:5762:15: warning: comparison of distinct pointer types ('typeof (end_offset - curr_offset) *' (aka 'unsigned long long *') and 'typeof (256) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
-                   data_size = min(end_offset - curr_offset, DEVLINK_REGION_READ_CHUNK_SIZE);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/readdir.c:379:5: warning: no previous prototype for function 'vfs_getdents' [-Wmissing-prototypes]
+   int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
+       ^
+   fs/readdir.c:379:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
+   ^
+   static 
    1 warning generated.
 
 
-vim +5762 net/core/devlink.c
+vim +/vfs_getdents +379 fs/readdir.c
 
-  5737	
-  5738	static int devlink_nl_region_read_snapshot_fill(struct sk_buff *skb,
-  5739							struct devlink *devlink,
-  5740							struct devlink_region *region,
-  5741							struct nlattr **attrs,
-  5742							u64 start_offset,
-  5743							u64 end_offset,
-  5744							u64 *new_offset)
-  5745	{
-  5746		struct devlink_snapshot *snapshot;
-  5747		u64 curr_offset = start_offset;
-  5748		u32 snapshot_id;
-  5749		int err = 0;
-  5750	
-  5751		*new_offset = start_offset;
-  5752	
-  5753		snapshot_id = nla_get_u32(attrs[DEVLINK_ATTR_REGION_SNAPSHOT_ID]);
-  5754		snapshot = devlink_region_snapshot_get_by_id(region, snapshot_id);
-  5755		if (!snapshot)
-  5756			return -EINVAL;
-  5757	
-  5758		while (curr_offset < end_offset) {
-  5759			u32 data_size;
-  5760			u8 *data;
-  5761	
-> 5762			data_size = min(end_offset - curr_offset, DEVLINK_REGION_READ_CHUNK_SIZE);
-  5763	
-  5764			data = &snapshot->data[curr_offset];
-  5765			err = devlink_nl_cmd_region_read_chunk_fill(skb, devlink,
-  5766								    data, data_size,
-  5767								    curr_offset);
-  5768			if (err)
-  5769				break;
-  5770	
-  5771			curr_offset += data_size;
-  5772		}
-  5773		*new_offset = curr_offset;
-  5774	
-  5775		return err;
-  5776	}
-  5777	
+   370	
+   371	/**
+   372	 * vfs_getdents - getdents without fdget
+   373	 * @file    : pointer to file struct of directory
+   374	 * @dirent  : pointer to user directory structure
+   375	 * @count   : size of buffer
+   376	 * @ctx_pos : if file pos is used, pass -1,
+   377	 *            if ctx pos is used, pass ctx pos
+   378	 */
+ > 379	int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
+   380			 unsigned int count, s64 ctx_pos)
+   381	{
+   382		struct getdents_callback64 buf = {
+   383			.ctx.actor = filldir64,
+   384			.ctx.pos = ctx_pos,
+   385			.count = count,
+   386			.current_dir = dirent
+   387		};
+   388		int error;
+   389	
+   390		error = do_iterate_dir(file, &buf.ctx, ctx_pos < 0);
+   391		if (error >= 0)
+   392			error = buf.error;
+   393		if (buf.prev_reclen) {
+   394			struct linux_dirent64 __user * lastdirent;
+   395			typeof(lastdirent->d_off) d_off = buf.ctx.pos;
+   396	
+   397			lastdirent = (void __user *) buf.current_dir - buf.prev_reclen;
+   398			if (put_user(d_off, &lastdirent->d_off))
+   399				error = -EFAULT;
+   400			else
+   401				error = count - buf.count;
+   402		}
+   403	
+   404		return error;
+   405	}
+   406	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
