@@ -1,31 +1,30 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFCD68
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 01:35:03 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="259490191"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A887F68
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 01:56:03 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="222461562"
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="259490191"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 17:35:02 -0800
+   d="scan'208";a="222461562"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 17:56:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="475760400"
+   d="scan'208";a="539109456"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2021 17:35:00 -0800
+  by orsmga001.jf.intel.com with ESMTP; 25 Nov 2021 17:56:00 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqQ8h-0007EQ-H6; Fri, 26 Nov 2021 01:34:59 +0000
-Date: Fri, 26 Nov 2021 09:34:28 +0800
+	id 1mqQT2-0007GG-4g; Fri, 26 Nov 2021 01:56:00 +0000
+Date: Fri, 26 Nov 2021 09:55:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Williamson <alex.williamson@redhat.com>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Joerg Roedel <jroedel@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [linux-next:master 2984/3632] drivers/iommu/intel/iommu.c:1344:7:
- warning: variable 'level_pfn' is used uninitialized whenever 'if' condition
- is true
-Message-ID: <202111260939.DmjPLz34-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miroslav Benes <mbenes@suse.cz>
+Subject: kernel/module.c:4478:14: warning: variable 'exit' set but not used
+Message-ID: <202111260932.G88s9JDN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,103 +35,71 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f81e94e91878bded599cc60f2881cfd50991aeb9
-commit: edad96db58d2f0b666ddd0a3e0f179e586f5f66a [2984/3632] iommu/vt-d: Fix unmap_pages support
-config: x86_64-buildonly-randconfig-r004-20211126 (https://download.01.org/0day-ci/archive/20211126/202111260939.DmjPLz34-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0332d105b9ad7f1f0ffca7e78b71de8b3a48f158)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8ced7ca3570333998ad2088d5a6275701970e28e
+commit: 0d67e332e6df72f43eaa21228daa3a79e23093f3 module: fix clang CFI with MODULE_UNLOAD=n
+date:   8 weeks ago
+config: arm64-randconfig-r015-20211123 (https://download.01.org/0day-ci/archive/20211126/202111260932.G88s9JDN-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 49e3838145dff1ec91c2e67a2cb562775c8d2a08)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=edad96db58d2f0b666ddd0a3e0f179e586f5f66a
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout edad96db58d2f0b666ddd0a3e0f179e586f5f66a
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0d67e332e6df72f43eaa21228daa3a79e23093f3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0d67e332e6df72f43eaa21228daa3a79e23093f3
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iommu/intel/iommu.c:1344:7: warning: variable 'level_pfn' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (!dma_pte_present(pte))
-                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/intel/iommu.c:1369:9: note: uninitialized use occurs here
-                   pfn = level_pfn + level_size(level);
-                         ^~~~~~~~~
-   drivers/iommu/intel/iommu.c:1344:3: note: remove the 'if' if its condition is always false
-                   if (!dma_pte_present(pte))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/intel/iommu.c:1342:26: note: initialize the variable 'level_pfn' to silence this warning
-                   unsigned long level_pfn;
-                                          ^
-                                           = 0
-   drivers/iommu/intel/iommu.c:136:29: warning: unused function 'dma_to_mm_pfn' [-Wunused-function]
-   static inline unsigned long dma_to_mm_pfn(unsigned long dma_pfn)
-                               ^
-   2 warnings generated.
+>> kernel/module.c:4478:14: warning: variable 'exit' set but not used [-Wunused-but-set-variable]
+           exitcall_t *exit;
+                       ^
+   1 warning generated.
 
 
-vim +1344 drivers/iommu/intel/iommu.c
+vim +/exit +4478 kernel/module.c
 
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1329  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1330  static struct page *dma_pte_clear_level(struct dmar_domain *domain, int level,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1331  					struct dma_pte *pte, unsigned long pfn,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1332  					unsigned long start_pfn,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1333  					unsigned long last_pfn,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1334  					struct page *freelist)
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1335  {
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1336  	struct dma_pte *first_pte = NULL, *last_pte = NULL;
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1337  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1338  	pfn = max(start_pfn, pfn);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1339  	pte = &pte[pfn_level_offset(pfn, level)];
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1340  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1341  	do {
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1342  		unsigned long level_pfn;
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1343  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05 @1344  		if (!dma_pte_present(pte))
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1345  			goto next;
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1346  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1347  		level_pfn = pfn & level_mask(level);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1348  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1349  		/* If range covers entire pagetable, free it */
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1350  		if (start_pfn <= level_pfn &&
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1351  		    last_pfn >= level_pfn + level_size(level) - 1) {
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1352  			/* These suborbinate page tables are going away entirely. Don't
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1353  			   bother to clear them; we're just going to *free* them. */
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1354  			if (level > 1 && !dma_pte_superpage(pte))
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1355  				freelist = dma_pte_list_pagetables(domain, level - 1, pte, freelist);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1356  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1357  			dma_clear_pte(pte);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1358  			if (!first_pte)
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1359  				first_pte = pte;
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1360  			last_pte = pte;
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1361  		} else if (level > 1) {
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1362  			/* Recurse down into a level that isn't *entirely* obsolete */
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1363  			freelist = dma_pte_clear_level(domain, level - 1,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1364  						       phys_to_virt(dma_pte_addr(pte)),
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1365  						       level_pfn, start_pfn, last_pfn,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1366  						       freelist);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1367  		}
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1368  next:
-edad96db58d2f0b drivers/iommu/intel/iommu.c Alex Williamson 2021-11-22  1369  		pfn = level_pfn + level_size(level);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1370  	} while (!first_pte_in_page(++pte) && pfn <= last_pfn);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1371  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1372  	if (first_pte)
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1373  		domain_flush_cache(domain, first_pte,
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1374  				   (void *)++last_pte - (void *)first_pte);
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1375  
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1376  	return freelist;
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1377  }
-ea8ea460c9ace60 drivers/iommu/intel-iommu.c David Woodhouse 2014-03-05  1378  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  4473  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4474  static void cfi_init(struct module *mod)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4475  {
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4476  #ifdef CONFIG_CFI_CLANG
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4477  	initcall_t *init;
+cf68fffb66d60d Sami Tolvanen  2021-04-08 @4478  	exitcall_t *exit;
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4479  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4480  	rcu_read_lock_sched();
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4481  	mod->cfi_check = (cfi_check_fn)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4482  		find_kallsyms_symbol_value(mod, "__cfi_check");
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4483  	init = (initcall_t *)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4484  		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4485  	exit = (exitcall_t *)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4486  		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4487  	rcu_read_unlock_sched();
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4488  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4489  	/* Fix init/exit functions to point to the CFI jump table */
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4490  	if (init)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4491  		mod->init = *init;
+0d67e332e6df72 Arnd Bergmann  2021-09-27  4492  #ifdef CONFIG_MODULE_UNLOAD
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4493  	if (exit)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4494  		mod->exit = *exit;
+0d67e332e6df72 Arnd Bergmann  2021-09-27  4495  #endif
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4496  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4497  	cfi_module_add(mod, module_addr_min);
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4498  #endif
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4499  }
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4500  
 
-:::::: The code at line 1344 was first introduced by commit
-:::::: ea8ea460c9ace60bbb5ac6e5521d637d5c15293d iommu/vt-d: Clean up and fix page table clear/free behaviour
+:::::: The code at line 4478 was first introduced by commit
+:::::: cf68fffb66d60d96209446bfc4a15291dc5a5d41 add support for Clang CFI
 
-:::::: TO: David Woodhouse <David.Woodhouse@intel.com>
-:::::: CC: David Woodhouse <David.Woodhouse@intel.com>
+:::::: TO: Sami Tolvanen <samitolvanen@google.com>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
