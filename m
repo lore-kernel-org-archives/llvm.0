@@ -1,127 +1,94 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD25229CA
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 16:25:07 +0000 (UTC)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4J10TF2KRXz9sSM;
-	Fri, 26 Nov 2021 17:25:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gUCo4gl_1BVF; Fri, 26 Nov 2021 17:25:05 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4J10TF1RBWz9sSL;
-	Fri, 26 Nov 2021 17:25:05 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 214D88B781;
-	Fri, 26 Nov 2021 17:25:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id pKQRMnP2DWp8; Fri, 26 Nov 2021 17:25:05 +0100 (CET)
-Received: from [192.168.204.6] (unknown [192.168.204.6])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 565248B763;
-	Fri, 26 Nov 2021 17:25:04 +0100 (CET)
-Message-ID: <90ea33c6-2e93-ea19-3052-90e15979578f@csgroup.eu>
-Date: Fri, 26 Nov 2021 17:25:04 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F08D72
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 17:00:30 +0000 (UTC)
+Received: by mail-il1-f182.google.com with SMTP id j21so9664734ila.5
+        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 09:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tQtthRCNnYrfJcVMMnWDbVVhagpc5qS2XN1hQdvDB7I=;
+        b=yWHdl+l1h/mRXF3EF3cPuFDiDPXhK4MZqA0f5Yl75S2QiKo1WaTdZBePyIgsY77JwX
+         2+W8vBofz6cMKRtnz7QH4ec2Q3ok8ID1EA1U9g0L3+uCi4RPfyIRnHbwMj9ba1WBybAf
+         n2MCqc4WZZ39Jb+emMJOP2wWyE81FM5YpVCZu7JGl5JSeGOMEhxIHbBkgIxF7TPCjgGG
+         sXOyBnwhSD+9YjVRloTBdVEJEl8rlDc0sWnsv/OE+j07iDiq4Sb34Q3rArwS8s8xkpCe
+         6/H0ZF5UgdKqTQ1s/2FvvqjYPGcJEDariQnrnHXS1oyl53Mk7QCfv2H4GPjfGCpBtYA3
+         zvDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tQtthRCNnYrfJcVMMnWDbVVhagpc5qS2XN1hQdvDB7I=;
+        b=NgPSPf5wKZNMct6q4lNnFBVsAk1XdqlvE22eDr/88xG57rjJnAYJeWmK7dkiYtGMfQ
+         bTcVExlmdCFJxRN62jh2ST1cOrydH38iSB6fsDF2fums3zb5sfSNjPvO2yKmCKC4W9+C
+         ZxYjtd4/elOATSmLwPVXQ4C2juw3jqPdwI4w44JoSK39Pn2Fk3r3FzxUhCAoxg7bMWNC
+         vqd80G4IJj6PdhwS5R9PuSg4GyohybO2GA6q2TFZAIzcIboL61oJ0feeBTKBmvg2Zs7l
+         5XcjQCE7DQNqJsSebGMqWQ4nkP4OgcyZZ2A45A2vnT0FwRqqqBdsoRvWQ5mFEBzQu9ch
+         COLQ==
+X-Gm-Message-State: AOAM5318Ksge4lSxSLD8kz9WgQvelWIL+0Y2p4fcvhtOqU5ctEjpA4Dh
+	OVGbbmbteRA0MiZkUQi1zSzSRw==
+X-Google-Smtp-Source: ABdhPJzLiJVxgsef9VGHmpWZT7frZYjg0y8TnFVgfy3+K1aJ7l4YRfHKMVIv5jPWR/SOjefaOKnXQg==
+X-Received: by 2002:a05:6e02:1a47:: with SMTP id u7mr18310859ilv.258.1637946029295;
+        Fri, 26 Nov 2021 09:00:29 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id b3sm3745498ile.26.2021.11.26.09.00.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Nov 2021 09:00:28 -0800 (PST)
+Subject: Re: drivers/block/zram/zram_drv.c:1824:45: warning: unused variable
+ 'zram_wb_devops'
+To: kernel test robot <lkp@intel.com>, Christoph Hellwig <hch@lst.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+ Johannes Thumshirn <johannes.thumshirn@wdc.com>
+References: <202111261614.gCJMqcyh-lkp@intel.com>
+From: Jens Axboe <axboe@kernel.dk>
+Message-ID: <1761b548-0d05-a5b6-f5c6-8529f8e531a2@kernel.dk>
+Date: Fri, 26 Nov 2021 10:00:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] powerpc: mm: radix_tlb: rearrange the if-else block
-Content-Language: fr-FR
-To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Anders Roxell <anders.roxell@linaro.org>,
- Benjamin Herrenschmidt <benh@kernel.crashing.org>,
- Paul Mackerras <paulus@samba.org>, llvm@lists.linux.dev,
- Nick Desaulniers <ndesaulniers@google.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20211125154406.470082-1-anders.roxell@linaro.org>
- <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
- <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
- <YaEBTbjGyUBmISGK@archlinux-ax161>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <YaEBTbjGyUBmISGK@archlinux-ax161>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <202111261614.gCJMqcyh-lkp@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-
-
-Le 26/11/2021 à 16:46, Nathan Chancellor a écrit :
-> On Fri, Nov 26, 2021 at 02:59:29PM +0100, Arnd Bergmann wrote:
->> On Fri, Nov 26, 2021 at 2:43 PM Christophe Leroy
->> <christophe.leroy@csgroup.eu> wrote:
->>> Le 25/11/2021 à 16:44, Anders Roxell a écrit :
->>> Can't you fix CLANG instead :) ?
->>>
->>> Or just add an else to the IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) that
->>> sets hstart and hend to 0 ?
->>
->> That doesn't sound any less risky than duplicating the code, it can lead to
->> incorrect changes just as easily if a patch ends up actually flushing at the
->> wrong address, and the compiler fails to complain because of the bogus
->> initialization.
->>
->>> Or just put hstart and hend calculation outside the IS_ENABLED() ? After
->>> all GCC should drop the calculation when not used.
->>
->> I like this one. I'm still unsure how clang can get so confused about whether
->> the variables are initialized or not, usually it handles this much better than
->> gcc. My best guess is that one of the memory clobbers makes it conclude
->> that 'hflush' can be true when it gets written to by an inline asm.
+On 11/26/21 1:54 AM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   a4849f6000e29235a2707f22e39da6b897bb9543
+> commit: a8b456d01cd6b37191f14248f3e2bdbe5ce3a89e bdi: remove BDI_CAP_SYNCHRONOUS_IO
+> date:   1 year, 2 months ago
+> config: x86_64-buildonly-randconfig-r003-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261614.gCJMqcyh-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a8b456d01cd6b37191f14248f3e2bdbe5ce3a89e
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout a8b456d01cd6b37191f14248f3e2bdbe5ce3a89e
+>         # save the config file to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
 > 
-> As far as I am aware, clang's analysis does not evaluate variables when
-> generating a control flow graph and using that for static analysis:
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> https://godbolt.org/z/PdGxoq9j7
+> All warnings (new ones prefixed by >>):
 > 
-> Based on the control flow graph, it knows that hstart and hend are
-> uninitialized because IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) gets
-> expanded to 0 by the preprocessor but it does not seem like it can piece
-> together that hflush's value of false is only changed to true under the
-> now 'if (0) {' branch, meaning that all the calls to __tlbiel_va_range()
-> never get evaluated. That may or may not be easy to fix in clang but we
-> run into issues like this so infrequently.
-> 
-> At any rate, the below diff works for me.
-> 
-> Cheers,
-> Nathan
-> 
-> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
-> index 7724af19ed7e..156a631df976 100644
-> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
-> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
-> @@ -1174,12 +1174,10 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
->   		bool hflush = false;
->   		unsigned long hstart, hend;
->   
-> -		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
-> -			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
-> -			hend = end & PMD_MASK;
-> -			if (hstart < hend)
-> -				hflush = true;
-> -		}
-> +		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
-> +		hend = end & PMD_MASK;
-> +		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend)
-> +			hflush = true;
+>>> drivers/block/zram/zram_drv.c:1824:45: warning: unused variable 'zram_wb_devops' [-Wunused-const-variable]
+>    static const struct block_device_operations zram_wb_devops = {
+>                                                ^
+>    1 warning generated.
 
-Yes I like that much better.
+https://git.kernel.dk/cgit/linux-block/commit/?h=block-5.16&id=d422f40163087408b56290156ba233fc5ada53e4
 
-Maybe even better with
+-- 
+Jens Axboe
 
-	hflush = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend;
-
-(And remove default false value at declaration).
-
->   
->   		if (type == FLUSH_TYPE_LOCAL) {
->   			asm volatile("ptesync": : :"memory");
-> 
