@@ -1,94 +1,141 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F08D72
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 17:00:30 +0000 (UTC)
-Received: by mail-il1-f182.google.com with SMTP id j21so9664734ila.5
-        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 09:00:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tQtthRCNnYrfJcVMMnWDbVVhagpc5qS2XN1hQdvDB7I=;
-        b=yWHdl+l1h/mRXF3EF3cPuFDiDPXhK4MZqA0f5Yl75S2QiKo1WaTdZBePyIgsY77JwX
-         2+W8vBofz6cMKRtnz7QH4ec2Q3ok8ID1EA1U9g0L3+uCi4RPfyIRnHbwMj9ba1WBybAf
-         n2MCqc4WZZ39Jb+emMJOP2wWyE81FM5YpVCZu7JGl5JSeGOMEhxIHbBkgIxF7TPCjgGG
-         sXOyBnwhSD+9YjVRloTBdVEJEl8rlDc0sWnsv/OE+j07iDiq4Sb34Q3rArwS8s8xkpCe
-         6/H0ZF5UgdKqTQ1s/2FvvqjYPGcJEDariQnrnHXS1oyl53Mk7QCfv2H4GPjfGCpBtYA3
-         zvDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tQtthRCNnYrfJcVMMnWDbVVhagpc5qS2XN1hQdvDB7I=;
-        b=NgPSPf5wKZNMct6q4lNnFBVsAk1XdqlvE22eDr/88xG57rjJnAYJeWmK7dkiYtGMfQ
-         bTcVExlmdCFJxRN62jh2ST1cOrydH38iSB6fsDF2fums3zb5sfSNjPvO2yKmCKC4W9+C
-         ZxYjtd4/elOATSmLwPVXQ4C2juw3jqPdwI4w44JoSK39Pn2Fk3r3FzxUhCAoxg7bMWNC
-         vqd80G4IJj6PdhwS5R9PuSg4GyohybO2GA6q2TFZAIzcIboL61oJ0feeBTKBmvg2Zs7l
-         5XcjQCE7DQNqJsSebGMqWQ4nkP4OgcyZZ2A45A2vnT0FwRqqqBdsoRvWQ5mFEBzQu9ch
-         COLQ==
-X-Gm-Message-State: AOAM5318Ksge4lSxSLD8kz9WgQvelWIL+0Y2p4fcvhtOqU5ctEjpA4Dh
-	OVGbbmbteRA0MiZkUQi1zSzSRw==
-X-Google-Smtp-Source: ABdhPJzLiJVxgsef9VGHmpWZT7frZYjg0y8TnFVgfy3+K1aJ7l4YRfHKMVIv5jPWR/SOjefaOKnXQg==
-X-Received: by 2002:a05:6e02:1a47:: with SMTP id u7mr18310859ilv.258.1637946029295;
-        Fri, 26 Nov 2021 09:00:29 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id b3sm3745498ile.26.2021.11.26.09.00.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Nov 2021 09:00:28 -0800 (PST)
-Subject: Re: drivers/block/zram/zram_drv.c:1824:45: warning: unused variable
- 'zram_wb_devops'
-To: kernel test robot <lkp@intel.com>, Christoph Hellwig <hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE6B72
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 17:41:12 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="321929978"
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="321929978"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 09:41:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="498477862"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 09:41:09 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mqfDg-0008O7-Db; Fri, 26 Nov 2021 17:41:08 +0000
+Date: Sat, 27 Nov 2021 01:41:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Ertman <david.m.ertman@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>,
- Johannes Thumshirn <johannes.thumshirn@wdc.com>
-References: <202111261614.gCJMqcyh-lkp@intel.com>
-From: Jens Axboe <axboe@kernel.dk>
-Message-ID: <1761b548-0d05-a5b6-f5c6-8529f8e531a2@kernel.dk>
-Date: Fri, 26 Nov 2021 10:00:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	linux-kernel@vger.kernel.org,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
+Subject: drivers/net/ethernet/intel/ice/ice_dcb_nl.c:66:6: warning: variable
+ 'bwcfg' set but not used
+Message-ID: <202111270145.6iqJ5sdb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202111261614.gCJMqcyh-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 11/26/21 1:54 AM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   a4849f6000e29235a2707f22e39da6b897bb9543
-> commit: a8b456d01cd6b37191f14248f3e2bdbe5ce3a89e bdi: remove BDI_CAP_SYNCHRONOUS_IO
-> date:   1 year, 2 months ago
-> config: x86_64-buildonly-randconfig-r003-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261614.gCJMqcyh-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a8b456d01cd6b37191f14248f3e2bdbe5ce3a89e
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout a8b456d01cd6b37191f14248f3e2bdbe5ce3a89e
->         # save the config file to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/block/zram/zram_drv.c:1824:45: warning: unused variable 'zram_wb_devops' [-Wunused-const-variable]
->    static const struct block_device_operations zram_wb_devops = {
->                                                ^
->    1 warning generated.
+Hi Dave,
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=block-5.16&id=d422f40163087408b56290156ba233fc5ada53e4
+FYI, the error/warning still remains.
 
--- 
-Jens Axboe
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a4849f6000e29235a2707f22e39da6b897bb9543
+commit: 2a87bd73e50d1c71392c036b0b31c9b2418981d0 ice: Add DSCP support
+date:   8 weeks ago
+config: i386-randconfig-a003-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270145.6iqJ5sdb-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2a87bd73e50d1c71392c036b0b31c9b2418981d0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2a87bd73e50d1c71392c036b0b31c9b2418981d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/ice/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/intel/ice/ice_dcb_nl.c:66:6: warning: variable 'bwcfg' set but not used [-Wunused-but-set-variable]
+           int bwcfg = 0, bwrec = 0;
+               ^
+   1 warning generated.
+
+
+vim +/bwcfg +66 drivers/net/ethernet/intel/ice/ice_dcb_nl.c
+
+b94b013eb626952 Dave Ertman      2019-11-06   56  
+b94b013eb626952 Dave Ertman      2019-11-06   57  /**
+b94b013eb626952 Dave Ertman      2019-11-06   58   * ice_dcbnl_setets - set IEEE ETS configuration
+b94b013eb626952 Dave Ertman      2019-11-06   59   * @netdev: pointer to relevant netdev
+b94b013eb626952 Dave Ertman      2019-11-06   60   * @ets: struct to hold ETS configuration
+b94b013eb626952 Dave Ertman      2019-11-06   61   */
+b94b013eb626952 Dave Ertman      2019-11-06   62  static int ice_dcbnl_setets(struct net_device *netdev, struct ieee_ets *ets)
+b94b013eb626952 Dave Ertman      2019-11-06   63  {
+b94b013eb626952 Dave Ertman      2019-11-06   64  	struct ice_pf *pf = ice_netdev_to_pf(netdev);
+b94b013eb626952 Dave Ertman      2019-11-06   65  	struct ice_dcbx_cfg *new_cfg;
+b94b013eb626952 Dave Ertman      2019-11-06  @66  	int bwcfg = 0, bwrec = 0;
+2a87bd73e50d1c7 Dave Ertman      2021-08-06   67  	int err, i;
+b94b013eb626952 Dave Ertman      2019-11-06   68  
+b94b013eb626952 Dave Ertman      2019-11-06   69  	if ((pf->dcbx_cap & DCB_CAP_DCBX_LLD_MANAGED) ||
+b94b013eb626952 Dave Ertman      2019-11-06   70  	    !(pf->dcbx_cap & DCB_CAP_DCBX_VER_IEEE))
+b94b013eb626952 Dave Ertman      2019-11-06   71  		return -EINVAL;
+b94b013eb626952 Dave Ertman      2019-11-06   72  
+fc2d1165d4a424d Chinh T Cao      2020-11-20   73  	new_cfg = &pf->hw.port_info->qos_cfg.desired_dcbx_cfg;
+b94b013eb626952 Dave Ertman      2019-11-06   74  
+b94b013eb626952 Dave Ertman      2019-11-06   75  	mutex_lock(&pf->tc_mutex);
+b94b013eb626952 Dave Ertman      2019-11-06   76  
+b94b013eb626952 Dave Ertman      2019-11-06   77  	new_cfg->etscfg.willing = ets->willing;
+b94b013eb626952 Dave Ertman      2019-11-06   78  	new_cfg->etscfg.cbs = ets->cbs;
+b94b013eb626952 Dave Ertman      2019-11-06   79  	ice_for_each_traffic_class(i) {
+b94b013eb626952 Dave Ertman      2019-11-06   80  		new_cfg->etscfg.tcbwtable[i] = ets->tc_tx_bw[i];
+b94b013eb626952 Dave Ertman      2019-11-06   81  		bwcfg += ets->tc_tx_bw[i];
+b94b013eb626952 Dave Ertman      2019-11-06   82  		new_cfg->etscfg.tsatable[i] = ets->tc_tsa[i];
+2a87bd73e50d1c7 Dave Ertman      2021-08-06   83  		if (new_cfg->pfc_mode == ICE_QOS_MODE_VLAN) {
+2a87bd73e50d1c7 Dave Ertman      2021-08-06   84  			/* in DSCP mode up->tc mapping cannot change */
+b94b013eb626952 Dave Ertman      2019-11-06   85  			new_cfg->etscfg.prio_table[i] = ets->prio_tc[i];
+2a87bd73e50d1c7 Dave Ertman      2021-08-06   86  			new_cfg->etsrec.prio_table[i] = ets->reco_prio_tc[i];
+2a87bd73e50d1c7 Dave Ertman      2021-08-06   87  		}
+b94b013eb626952 Dave Ertman      2019-11-06   88  		new_cfg->etsrec.tcbwtable[i] = ets->tc_reco_bw[i];
+b94b013eb626952 Dave Ertman      2019-11-06   89  		bwrec += ets->tc_reco_bw[i];
+b94b013eb626952 Dave Ertman      2019-11-06   90  		new_cfg->etsrec.tsatable[i] = ets->tc_reco_tsa[i];
+b94b013eb626952 Dave Ertman      2019-11-06   91  	}
+b94b013eb626952 Dave Ertman      2019-11-06   92  
+a29a912d448dbc9 Avinash Dayanand 2020-02-13   93  	if (ice_dcb_bwchk(pf, new_cfg)) {
+a29a912d448dbc9 Avinash Dayanand 2020-02-13   94  		err = -EINVAL;
+a29a912d448dbc9 Avinash Dayanand 2020-02-13   95  		goto ets_out;
+a29a912d448dbc9 Avinash Dayanand 2020-02-13   96  	}
+a29a912d448dbc9 Avinash Dayanand 2020-02-13   97  
+2a87bd73e50d1c7 Dave Ertman      2021-08-06   98  	new_cfg->etscfg.maxtcs = pf->hw.func_caps.common_cap.maxtc;
+b94b013eb626952 Dave Ertman      2019-11-06   99  
+b94b013eb626952 Dave Ertman      2019-11-06  100  	if (!bwrec)
+b94b013eb626952 Dave Ertman      2019-11-06  101  		new_cfg->etsrec.tcbwtable[0] = 100;
+b94b013eb626952 Dave Ertman      2019-11-06  102  
+b94b013eb626952 Dave Ertman      2019-11-06  103  	err = ice_pf_dcb_cfg(pf, new_cfg, true);
+b94b013eb626952 Dave Ertman      2019-11-06  104  	/* return of zero indicates new cfg applied */
+b94b013eb626952 Dave Ertman      2019-11-06  105  	if (err == ICE_DCB_HW_CHG_RST)
+b94b013eb626952 Dave Ertman      2019-11-06  106  		ice_dcbnl_devreset(netdev);
+b94b013eb626952 Dave Ertman      2019-11-06  107  	if (err == ICE_DCB_NO_HW_CHG)
+b94b013eb626952 Dave Ertman      2019-11-06  108  		err = ICE_DCB_HW_CHG_RST;
+b94b013eb626952 Dave Ertman      2019-11-06  109  
+a29a912d448dbc9 Avinash Dayanand 2020-02-13  110  ets_out:
+b94b013eb626952 Dave Ertman      2019-11-06  111  	mutex_unlock(&pf->tc_mutex);
+b94b013eb626952 Dave Ertman      2019-11-06  112  	return err;
+b94b013eb626952 Dave Ertman      2019-11-06  113  }
+b94b013eb626952 Dave Ertman      2019-11-06  114  
+
+:::::: The code at line 66 was first introduced by commit
+:::::: b94b013eb6269526eeb3768101666ba6f526313e ice: Implement DCBNL support
+
+:::::: TO: Dave Ertman <david.m.ertman@intel.com>
+:::::: CC: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
