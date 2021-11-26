@@ -1,104 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AB12C81
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 15:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8C9C93056;
-	Fri, 26 Nov 2021 15:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637941587;
-	bh=b4Kjpba7B4xdXA8ajrnoUEksRT03kaVzqIxfFUFKJXo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LKZG9ESne8pWqAxsEJ+5ZAaDepKcPTxEnLNpkf26h/dHGDVxqRy8MZGaLybxpjiwk
-	 jvMQF2fyGTLzM1X9np+lB6lEoEav71s+JcOXkj69cT1CX0CfsAis+lpSTL+dFpkBY6
-	 VYO5Pqmf8z1ToJtsT+aB0TNqjFjvIzKiayn06F0PVKsjjMpqQUSYMcKqoZlKJZJKVF
-	 75Ab/iZg7aD0I7lbFnNRiusm3pj89RspCjLZGmjsQTAT36bF56gzajhzb+GtW5aaan
-	 WIJSZeNKiHCRmXQrOW+WXW5nDBUIBJb7LGGiVCTuMKNtAErKL5r6QEAUzDzZnLmh2N
-	 96VfjGqO4hq5g==
-Date: Fri, 26 Nov 2021 08:46:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc: mm: radix_tlb: rearrange the if-else block
-Message-ID: <YaEBTbjGyUBmISGK@archlinux-ax161>
-References: <20211125154406.470082-1-anders.roxell@linaro.org>
- <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
- <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD25229CA
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 16:25:07 +0000 (UTC)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4J10TF2KRXz9sSM;
+	Fri, 26 Nov 2021 17:25:05 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gUCo4gl_1BVF; Fri, 26 Nov 2021 17:25:05 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4J10TF1RBWz9sSL;
+	Fri, 26 Nov 2021 17:25:05 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 214D88B781;
+	Fri, 26 Nov 2021 17:25:05 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id pKQRMnP2DWp8; Fri, 26 Nov 2021 17:25:05 +0100 (CET)
+Received: from [192.168.204.6] (unknown [192.168.204.6])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 565248B763;
+	Fri, 26 Nov 2021 17:25:04 +0100 (CET)
+Message-ID: <90ea33c6-2e93-ea19-3052-90e15979578f@csgroup.eu>
+Date: Fri, 26 Nov 2021 17:25:04 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] powerpc: mm: radix_tlb: rearrange the if-else block
+Content-Language: fr-FR
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Anders Roxell <anders.roxell@linaro.org>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Paul Mackerras <paulus@samba.org>, llvm@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20211125154406.470082-1-anders.roxell@linaro.org>
+ <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
+ <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
+ <YaEBTbjGyUBmISGK@archlinux-ax161>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <YaEBTbjGyUBmISGK@archlinux-ax161>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
 
-On Fri, Nov 26, 2021 at 02:59:29PM +0100, Arnd Bergmann wrote:
-> On Fri, Nov 26, 2021 at 2:43 PM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
-> > Le 25/11/2021 � 16:44, Anders Roxell a �crit :
-> > Can't you fix CLANG instead :) ?
-> >
-> > Or just add an else to the IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) that
-> > sets hstart and hend to 0 ?
+
+
+Le 26/11/2021 à 16:46, Nathan Chancellor a écrit :
+> On Fri, Nov 26, 2021 at 02:59:29PM +0100, Arnd Bergmann wrote:
+>> On Fri, Nov 26, 2021 at 2:43 PM Christophe Leroy
+>> <christophe.leroy@csgroup.eu> wrote:
+>>> Le 25/11/2021 à 16:44, Anders Roxell a écrit :
+>>> Can't you fix CLANG instead :) ?
+>>>
+>>> Or just add an else to the IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) that
+>>> sets hstart and hend to 0 ?
+>>
+>> That doesn't sound any less risky than duplicating the code, it can lead to
+>> incorrect changes just as easily if a patch ends up actually flushing at the
+>> wrong address, and the compiler fails to complain because of the bogus
+>> initialization.
+>>
+>>> Or just put hstart and hend calculation outside the IS_ENABLED() ? After
+>>> all GCC should drop the calculation when not used.
+>>
+>> I like this one. I'm still unsure how clang can get so confused about whether
+>> the variables are initialized or not, usually it handles this much better than
+>> gcc. My best guess is that one of the memory clobbers makes it conclude
+>> that 'hflush' can be true when it gets written to by an inline asm.
 > 
-> That doesn't sound any less risky than duplicating the code, it can lead to
-> incorrect changes just as easily if a patch ends up actually flushing at the
-> wrong address, and the compiler fails to complain because of the bogus
-> initialization.
+> As far as I am aware, clang's analysis does not evaluate variables when
+> generating a control flow graph and using that for static analysis:
 > 
-> > Or just put hstart and hend calculation outside the IS_ENABLED() ? After
-> > all GCC should drop the calculation when not used.
+> https://godbolt.org/z/PdGxoq9j7
 > 
-> I like this one. I'm still unsure how clang can get so confused about whether
-> the variables are initialized or not, usually it handles this much better than
-> gcc. My best guess is that one of the memory clobbers makes it conclude
-> that 'hflush' can be true when it gets written to by an inline asm.
+> Based on the control flow graph, it knows that hstart and hend are
+> uninitialized because IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) gets
+> expanded to 0 by the preprocessor but it does not seem like it can piece
+> together that hflush's value of false is only changed to true under the
+> now 'if (0) {' branch, meaning that all the calls to __tlbiel_va_range()
+> never get evaluated. That may or may not be easy to fix in clang but we
+> run into issues like this so infrequently.
+> 
+> At any rate, the below diff works for me.
+> 
+> Cheers,
+> Nathan
+> 
+> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+> index 7724af19ed7e..156a631df976 100644
+> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
+> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+> @@ -1174,12 +1174,10 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+>   		bool hflush = false;
+>   		unsigned long hstart, hend;
+>   
+> -		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+> -			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+> -			hend = end & PMD_MASK;
+> -			if (hstart < hend)
+> -				hflush = true;
+> -		}
+> +		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+> +		hend = end & PMD_MASK;
+> +		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend)
+> +			hflush = true;
 
-As far as I am aware, clang's analysis does not evaluate variables when
-generating a control flow graph and using that for static analysis:
+Yes I like that much better.
 
-https://godbolt.org/z/PdGxoq9j7
+Maybe even better with
 
-Based on the control flow graph, it knows that hstart and hend are
-uninitialized because IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) gets
-expanded to 0 by the preprocessor but it does not seem like it can piece
-together that hflush's value of false is only changed to true under the
-now 'if (0) {' branch, meaning that all the calls to __tlbiel_va_range()
-never get evaluated. That may or may not be easy to fix in clang but we
-run into issues like this so infrequently.
+	hflush = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend;
 
-At any rate, the below diff works for me.
+(And remove default false value at declaration).
 
-Cheers,
-Nathan
-
-diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
-index 7724af19ed7e..156a631df976 100644
---- a/arch/powerpc/mm/book3s64/radix_tlb.c
-+++ b/arch/powerpc/mm/book3s64/radix_tlb.c
-@@ -1174,12 +1174,10 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
- 		bool hflush = false;
- 		unsigned long hstart, hend;
- 
--		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
--			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
--			hend = end & PMD_MASK;
--			if (hstart < hend)
--				hflush = true;
--		}
-+		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
-+		hend = end & PMD_MASK;
-+		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend)
-+			hflush = true;
- 
- 		if (type == FLUSH_TYPE_LOCAL) {
- 			asm volatile("ptesync": : :"memory");
+>   
+>   		if (type == FLUSH_TYPE_LOCAL) {
+>   			asm volatile("ptesync": : :"memory");
+> 
