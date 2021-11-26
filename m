@@ -1,80 +1,149 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7812C80
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 13:59:47 +0000 (UTC)
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MqatK-1mCrAX47Rg-00mfUy for <llvm@lists.linux.dev>; Fri, 26 Nov 2021
- 14:59:46 +0100
-Received: by mail-wm1-f49.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so10779976wmj.5
-        for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 05:59:45 -0800 (PST)
-X-Gm-Message-State: AOAM531qi3U2h8qfL79aOTKFRCTgPZ9Tq704GpB4GuepbFB4TV4qafHW
-	0eN7gJJQL8dTHLEKHXM+uXGzi5wIC45QFMc0zaE=
-X-Google-Smtp-Source: ABdhPJwLo2gvIaV7a7BIVtCOjM0MfS2JQcBHF9YHLbK8BZai46KYcznJM7hhcadb89FUv1DDYSJlNeq22biIjPHaGvA=
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr15934623wmn.98.1637935185632;
- Fri, 26 Nov 2021 05:59:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07402C80
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 14:20:12 +0000 (UTC)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4J0wth2H7kz9sSM;
+	Fri, 26 Nov 2021 14:43:24 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vK7OUS3ldOV2; Fri, 26 Nov 2021 14:43:24 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4J0wth1NLYz9sQv;
+	Fri, 26 Nov 2021 14:43:24 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1EE3A8B77D;
+	Fri, 26 Nov 2021 14:43:24 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id GsDpKo4Y4dVs; Fri, 26 Nov 2021 14:43:24 +0100 (CET)
+Received: from [192.168.204.6] (unknown [192.168.204.6])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 216EE8B763;
+	Fri, 26 Nov 2021 14:43:23 +0100 (CET)
+Message-ID: <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
+Date: Fri, 26 Nov 2021 14:43:22 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211125154406.470082-1-anders.roxell@linaro.org> <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
-In-Reply-To: <6b1e51a8-2f4d-2024-df90-a35c926d7a30@csgroup.eu>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Fri, 26 Nov 2021 14:59:29 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
-Message-ID: <CAK8P3a0n_n+PnfYmAdS9923yheLqYXRp8=65hKf9abLCRAX8ig@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
 Subject: Re: [PATCH] powerpc: mm: radix_tlb: rearrange the if-else block
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Anders Roxell <anders.roxell@linaro.org>, 
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, 
-	Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev, 
-	Nick Desaulniers <ndesaulniers@google.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:v+5riThGSZl64zUlaVdGhTmyDES+I4/qPWOCoo+k06CmtG332vU
- ZHEdKhPhIpGrnyXwU4WLvU4iFqyH2kIl4YTbW+tqXXvVSDDrpY48XABdIzznOv9yUGDDlvV
- ovzz3FDywafamvilo2HFZ1M+FjMw9GF3XVmGuYqQrUZlXGUnz+e4HPYPnEE8dxeZEqQ/FjV
- 1wKlvocaFpIaB6MBMzBng==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IryqBhuadRo=:OpCJI5HW58P2VqQJbJEXd3
- Yw6gS88vjLmvk8EELC07BVTc88VyhUAmxJSOfffNsbhkcaF5k1HlB5/tlZjDaP+p67hAH2SXT
- xvPlisGQCyEcXm0jj/A9BH376bknMCtDO1cpExCaccTzZ4VxfZNElQ9h4rzS1vxQVwqL2pwgH
- 4C5SmyDyAaWFzJ6Xhrri56RO001Kj5YBdiNl3/zPqlLe9bjE0+iadBxyVSHzjsPpj1zgP5atT
- HlkRpIgBP1sRGOOHE+y9rbyRM1Jt92yfj8xxf5E/IlRHYIqgYqDkPAhQLc5nvf4GLK1aimAVt
- j0T1NvRjx3+sSPDq8d2yZISrxeMMzQ1ShBGM1fenYY89Y26FvD1kiixJF1ulWIl5I5U2UAh8k
- YYNPpDJONNnYgkOcpHgcKwu+AUAB2VoF6duEEdTiH7Vyye66QyGzp8ILu2UvL4uLAkZyAeQ/T
- 1MBRW8fAmd3rPW5wLKa33CtOcll6IHin/WEVOs4bip3ECEDMljfjTGpM57Fr+ohPnBWaPDwFa
- rKDF25BqqMiw5SRNVtajWXc+bRSOYVEXom1cYRV93Vb5M7i6kxw9Cq9AWVYbLLTkHWsfCuM7y
- I2APgZPsLzqREel9xjSlfsBMIvgXz/Flyx5LKiJL7idzfRyoKhtV7LW9YYaJls3PQZH7f9q1A
- 0G2nwIJtxN2jYWMro62l9Je8L9kT7bMt0sPMUHqtOzCK5v2D4ZYEIFHMt7l8ij4J5M2c=
+Content-Language: fr-FR
+To: Anders Roxell <anders.roxell@linaro.org>, benh@kernel.crashing.org,
+ paulus@samba.org
+Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
+ ndesaulniers@google.com, linux-kernel@vger.kernel.org, nathan@kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+References: <20211125154406.470082-1-anders.roxell@linaro.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20211125154406.470082-1-anders.roxell@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 26, 2021 at 2:43 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 25/11/2021 =C3=A0 16:44, Anders Roxell a =C3=A9crit :
-> Can't you fix CLANG instead :) ?
->
-> Or just add an else to the IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) that
-> sets hstart and hend to 0 ?
 
-That doesn't sound any less risky than duplicating the code, it can lead to
-incorrect changes just as easily if a patch ends up actually flushing at th=
-e
-wrong address, and the compiler fails to complain because of the bogus
-initialization.
 
-> Or just put hstart and hend calculation outside the IS_ENABLED() ? After
-> all GCC should drop the calculation when not used.
+Le 25/11/2021 à 16:44, Anders Roxell a écrit :
+> Clang warns:
+> 
+> arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' is uninitialized when used here [-Werror,-Wuninitialized]
+>                                  __tlbiel_va_range(hstart, hend, pid,
+>                                                    ^~~~~~
+> arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the variable 'hstart' to silence this warning
+>                  unsigned long hstart, hend;
+>                                      ^
+>                                       = 0
+> arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is uninitialized when used here [-Werror,-Wuninitialized]
+>                                  __tlbiel_va_range(hstart, hend, pid,
+>                                                            ^~~~
+> arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the variable 'hend' to silence this warning
+>                  unsigned long hstart, hend;
+>                                            ^
+>                                             = 0
+> 2 errors generated.
+> 
+> Rework the if-else to pull the 'IS_ENABLE(CONFIG_TRANSPARENT_HUGEPAGE)'
+> check one level up, this will silent the warnings. That will also
+> simplify the 'else' path. Clang is getting confused with these warnings,
+> but the warnings is a false-positive.
 
-I like this one. I'm still unsure how clang can get so confused about wheth=
-er
-the variables are initialized or not, usually it handles this much better t=
-han
-gcc. My best guess is that one of the memory clobbers makes it conclude
-that 'hflush' can be true when it gets written to by an inline asm.
+But you are duplicating a significant part of the code by doing that, 
+and duplicated code generaly leads to bugs.
 
-        Arnd
+And we already have redundant stuff between FLUSH_TYPE_LOCAL leg and 
+cputlb_use_tlbie() leg.
+
+Can't you fix CLANG instead :) ?
+
+Or just add an else to the IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) that 
+sets hstart and hend to 0 ?
+
+Or just put hstart and hend calculation outside the IS_ENABLED() ? After 
+all GCC should drop the calculation when not used.
+
+
+> 
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>   arch/powerpc/mm/book3s64/radix_tlb.c | 31 +++++++++++++++++++++-------
+>   1 file changed, 24 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+> index 7724af19ed7e..e494a45ce1b4 100644
+> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
+> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+> @@ -1170,16 +1170,14 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+>   				_tlbiel_pid_multicast(mm, pid, RIC_FLUSH_ALL);
+>   			}
+>   		}
+> -	} else {
+> +	} else if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+>   		bool hflush = false;
+>   		unsigned long hstart, hend;
+>   
+> -		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+> -			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+> -			hend = end & PMD_MASK;
+> -			if (hstart < hend)
+> -				hflush = true;
+> -		}
+> +		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+> +		hend = end & PMD_MASK;
+> +		if (hstart < hend)
+> +			hflush = true;
+>   
+>   		if (type == FLUSH_TYPE_LOCAL) {
+>   			asm volatile("ptesync": : :"memory");
+> @@ -1207,6 +1205,25 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+>   				_tlbiel_va_range_multicast(mm,
+>   					hstart, hend, pid, PMD_SIZE, MMU_PAGE_2M, flush_pwc);
+>   		}
+> +	} else {
+> +
+> +		if (type == FLUSH_TYPE_LOCAL) {
+> +			asm volatile("ptesync" : : : "memory");
+> +			if (flush_pwc)
+> +				/* For PWC, only one flush is needed */
+> +				__tlbiel_pid(pid, 0, RIC_FLUSH_PWC);
+> +			__tlbiel_va_range(start, end, pid, page_size, mmu_virtual_psize);
+> +			ppc_after_tlbiel_barrier();
+> +		} else if (cputlb_use_tlbie()) {
+> +			asm volatile("ptesync" : : : "memory");
+> +			if (flush_pwc)
+> +				__tlbie_pid(pid, RIC_FLUSH_PWC);
+> +			__tlbie_va_range(start, end, pid, page_size, mmu_virtual_psize);
+> +			asm volatile("eieio; tlbsync; ptesync" : : : "memory");
+> +		} else {
+> +			_tlbiel_va_range_multicast(mm,
+> +					start, end, pid, page_size, mmu_virtual_psize, flush_pwc);
+> +		}
+>   	}
+>   out:
+>   	preempt_enable();
+> 
