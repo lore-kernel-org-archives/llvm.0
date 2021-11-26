@@ -1,31 +1,31 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2BC2C82
-	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 06:03:18 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="235436805"
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="235436805"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 22:03:16 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D46D2C82
+	for <llvm@lists.linux.dev>; Fri, 26 Nov 2021 06:24:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="321850833"
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="321850833"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 22:24:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="741453764"
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="475817045"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Nov 2021 22:03:14 -0800
+  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2021 22:24:16 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqUKI-0007b1-7L; Fri, 26 Nov 2021 06:03:14 +0000
-Date: Fri, 26 Nov 2021 14:02:57 +0800
+	id 1mqUed-0007f2-QC; Fri, 26 Nov 2021 06:24:15 +0000
+Date: Fri, 26 Nov 2021 14:23:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cai Huoqing <caihuoqing@baidu.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [linux-next:master 802/3632]
- drivers/gpu/drm/tidss/tidss_drv.c:91:32: warning: unused variable
- 'tidss_pm_ops'
-Message-ID: <202111261307.7r9SQ6bB-lkp@intel.com>
+To: cgel.zte@gmail.com, jiri@nvidia.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, davem@davemloft.net,
+	kuba@kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+	Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] devlink: use min() to make code cleaner
+Message-ID: <202111261406.iXRaBqLo-lkp@intel.com>
+References: <20211125071414.53147-1-lv.ruyi@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,22 +34,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211125071414.53147-1-lv.ruyi@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f81e94e91878bded599cc60f2881cfd50991aeb9
-commit: 6e120594631fdcfd83e5e0a1351730dae46d9d24 [802/3632] drm/tidss: Make use of the helper macro SET_RUNTIME_PM_OPS()
-config: riscv-randconfig-r011-20211115 (https://download.01.org/0day-ci/archive/20211126/202111261307.7r9SQ6bB-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+Hi,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc2 next-20211125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/devlink-use-min-to-make-code-cleaner/20211125-151715
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5f53fa508db098c9d372423a6dac31c8a5679cdf
+config: riscv-buildonly-randconfig-r002-20211125 (https://download.01.org/0day-ci/archive/20211126/202111261406.iXRaBqLo-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0332d105b9ad7f1f0ffca7e78b71de8b3a48f158)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6e120594631fdcfd83e5e0a1351730dae46d9d24
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 6e120594631fdcfd83e5e0a1351730dae46d9d24
+        # https://github.com/0day-ci/linux/commit/836e00794d541adc38bfd77e1714579f2223a231
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/devlink-use-min-to-make-code-cleaner/20211125-151715
+        git checkout 836e00794d541adc38bfd77e1714579f2223a231
         # save the config file to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
 
@@ -58,26 +68,67 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/tidss/tidss_drv.c:91:32: warning: unused variable 'tidss_pm_ops' [-Wunused-const-variable]
-   static const struct dev_pm_ops tidss_pm_ops = {
-                                  ^
+>> net/core/devlink.c:5762:15: warning: comparison of distinct pointer types ('typeof (end_offset - curr_offset) *' (aka 'unsigned long long *') and 'typeof (256) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                   data_size = min(end_offset - curr_offset, DEVLINK_REGION_READ_CHUNK_SIZE);
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/tidss_pm_ops +91 drivers/gpu/drm/tidss/tidss_drv.c
+vim +5762 net/core/devlink.c
 
-32a1795f57eecc3 Jyri Sarha  2019-11-08  90  
-32a1795f57eecc3 Jyri Sarha  2019-11-08 @91  static const struct dev_pm_ops tidss_pm_ops = {
-32a1795f57eecc3 Jyri Sarha  2019-11-08  92  	SET_SYSTEM_SLEEP_PM_OPS(tidss_suspend, tidss_resume)
-6e120594631fdcf Cai Huoqing 2021-09-07  93  	SET_RUNTIME_PM_OPS(tidss_pm_runtime_suspend, tidss_pm_runtime_resume, NULL)
-32a1795f57eecc3 Jyri Sarha  2019-11-08  94  };
-32a1795f57eecc3 Jyri Sarha  2019-11-08  95  
-
-:::::: The code at line 91 was first introduced by commit
-:::::: 32a1795f57eecc3974901760400618571c9d357f drm/tidss: New driver for TI Keystone platform Display SubSystem
-
-:::::: TO: Jyri Sarha <jsarha@ti.com>
-:::::: CC: Jyri Sarha <jsarha@ti.com>
+  5737	
+  5738	static int devlink_nl_region_read_snapshot_fill(struct sk_buff *skb,
+  5739							struct devlink *devlink,
+  5740							struct devlink_region *region,
+  5741							struct nlattr **attrs,
+  5742							u64 start_offset,
+  5743							u64 end_offset,
+  5744							u64 *new_offset)
+  5745	{
+  5746		struct devlink_snapshot *snapshot;
+  5747		u64 curr_offset = start_offset;
+  5748		u32 snapshot_id;
+  5749		int err = 0;
+  5750	
+  5751		*new_offset = start_offset;
+  5752	
+  5753		snapshot_id = nla_get_u32(attrs[DEVLINK_ATTR_REGION_SNAPSHOT_ID]);
+  5754		snapshot = devlink_region_snapshot_get_by_id(region, snapshot_id);
+  5755		if (!snapshot)
+  5756			return -EINVAL;
+  5757	
+  5758		while (curr_offset < end_offset) {
+  5759			u32 data_size;
+  5760			u8 *data;
+  5761	
+> 5762			data_size = min(end_offset - curr_offset, DEVLINK_REGION_READ_CHUNK_SIZE);
+  5763	
+  5764			data = &snapshot->data[curr_offset];
+  5765			err = devlink_nl_cmd_region_read_chunk_fill(skb, devlink,
+  5766								    data, data_size,
+  5767								    curr_offset);
+  5768			if (err)
+  5769				break;
+  5770	
+  5771			curr_offset += data_size;
+  5772		}
+  5773		*new_offset = curr_offset;
+  5774	
+  5775		return err;
+  5776	}
+  5777	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
