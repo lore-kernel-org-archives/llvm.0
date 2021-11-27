@@ -1,29 +1,29 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD50868
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 12:46:52 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="299160381"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3878F68
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 12:56:53 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="259666851"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="299160381"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 04:46:52 -0800
+   d="scan'208";a="259666851"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 04:56:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="457937767"
+   d="scan'208";a="458514770"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 27 Nov 2021 04:46:51 -0800
+  by orsmga006.jf.intel.com with ESMTP; 27 Nov 2021 04:56:51 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqx6Q-0009Vg-79; Sat, 27 Nov 2021 12:46:50 +0000
-Date: Sat, 27 Nov 2021 20:46:00 +0800
+	id 1mqxG6-0009X2-KG; Sat, 27 Nov 2021 12:56:50 +0000
+Date: Sat, 27 Nov 2021 20:56:22 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kenny Ho <Kenny.Ho@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC 1/4] cgroup, perf: Add ability to connect to perf
- cgroup from other cgroup controller
-Message-ID: <202111272015.KZlJ9xBN-lkp@intel.com>
-References: <20211118202840.1001787-2-Kenny.Ho@amd.com>
+Subject: Re: [PATCH RFC 2/4] bpf, perf: add ability to attach complete array
+ of bpf prog to perf event
+Message-ID: <202111272020.wypD6U2V-lkp@intel.com>
+References: <20211118202840.1001787-3-Kenny.Ho@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,7 +32,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211118202840.1001787-2-Kenny.Ho@amd.com>
+In-Reply-To: <20211118202840.1001787-3-Kenny.Ho@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 Hi Kenny,
@@ -47,44 +47,58 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Kenny-Ho/Add-ability-to-attach-bpf-programs-to-a-tracepoint-inside-a-cgroup/20211119-043050
 base:    8bb7eca972ad531c9b149c0a51ab43a417385813
-config: hexagon-randconfig-r041-20211118 (https://download.01.org/0day-ci/archive/20211127/202111272015.KZlJ9xBN-lkp@intel.com/config)
+config: hexagon-randconfig-r045-20211118 (https://download.01.org/0day-ci/archive/20211127/202111272020.wypD6U2V-lkp@intel.com/config)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6946ea4a7228dd06a9b6624702bcec1cfc7865ec
+        # https://github.com/0day-ci/linux/commit/9de19275a9d70c47811096791fae34fedbdeeb94
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Kenny-Ho/Add-ability-to-attach-bpf-programs-to-a-tracepoint-inside-a-cgroup/20211119-043050
-        git checkout 6946ea4a7228dd06a9b6624702bcec1cfc7865ec
+        git checkout 9de19275a9d70c47811096791fae34fedbdeeb94
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash ipc/ kernel/events/ kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/events/core.c:1095:21: warning: no previous prototype for function 'cgroup_tryget_perf_cgroup' [-Wmissing-prototypes]
-   struct perf_cgroup *cgroup_tryget_perf_cgroup(struct cgroup *cgrp)
-                       ^
-   kernel/events/core.c:1095:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct perf_cgroup *cgroup_tryget_perf_cgroup(struct cgroup *cgrp)
+   In file included from drivers/scsi/ufs/ufshcd.c:32:
+   In file included from include/trace/events/ufs.h:396:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:21:
+   include/linux/trace_events.h:747:1: error: cannot combine with previous 'int' declaration specifier
+   int perf_event_attach_bpf_prog_array(struct perf_event *event,
    ^
-   static 
-   kernel/events/core.c:1114:1: warning: unused function 'perf_cgroup_switch' [-Wunused-function]
-   perf_cgroup_switch(struct task_struct *task, struct task_struct *next)
-   ^
-   2 warnings generated.
+>> drivers/scsi/ufs/ufshcd.c:9415:44: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+                                                            ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 1 error generated.
 
 
-vim +/cgroup_tryget_perf_cgroup +1095 kernel/events/core.c
+vim +9415 drivers/scsi/ufs/ufshcd.c
 
-  1094	
-> 1095	struct perf_cgroup *cgroup_tryget_perf_cgroup(struct cgroup *cgrp)
-  1096	{
-  1097		return NULL;
-  1098	}
-  1099	
+47555a5c8a11a4 Yaniv Gardi  2015-10-28  9404  
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9405  /**
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9406   * ufshcd_set_dma_mask - Set dma mask based on the controller
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9407   *			 addressing capability
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9408   * @hba: per adapter instance
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9409   *
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9410   * Returns 0 for success, non-zero for failure
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9411   */
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9412  static int ufshcd_set_dma_mask(struct ufs_hba *hba)
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9413  {
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9414  	if (hba->capabilities & MASK_64_ADDRESSING_SUPPORT) {
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13 @9415  		if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9416  			return 0;
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9417  	}
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9418  	return dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(32));
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9419  }
+ca3d7bf9c646e9 Akinobu Mita 2014-07-13  9420  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
