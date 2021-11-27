@@ -1,30 +1,29 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D790E2C80
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 21:30:09 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="215810822"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9C52C80
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 21:51:09 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="234520296"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="215810822"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 13:30:09 -0800
+   d="scan'208";a="234520296"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 13:51:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="594062281"
+   d="scan'208";a="675860427"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Nov 2021 13:30:07 -0800
+  by orsmga005.jf.intel.com with ESMTP; 27 Nov 2021 13:51:07 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mr5Go-000A1Y-FB; Sat, 27 Nov 2021 21:30:06 +0000
-Date: Sun, 28 Nov 2021 05:29:19 +0800
+	id 1mr5b8-000A2n-Ps; Sat, 27 Nov 2021 21:51:06 +0000
+Date: Sun, 28 Nov 2021 05:50:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/memcontrol.c:2113:33: warning: unused function 'get_obj_stock'
-Message-ID: <202111280551.LXsWYt1T-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: drivers/thunderbolt/test.c:2209:13: warning: stack frame size
+ (10520) exceeds limit (8192) in 'tb_test_credit_alloc_all'
+Message-ID: <202111280505.Vvi3B3ru-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,98 +34,201 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
+Hi Mika,
+
+FYI, the error/warning still remains.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   86799cdfbcd2308cbad6c1dc983b81595b77b639
-commit: 559271146efc0bf125e6390191f683eab884e4a1 mm/memcg: optimize user context object stock access
-date:   5 months ago
-config: mips-randconfig-r022-20211122 (https://download.01.org/0day-ci/archive/20211128/202111280551.LXsWYt1T-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
+head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
+commit: bfa8f78e06ed0b495a5736380de0e7f833a5efbe thunderbolt: Add KUnit tests for credit allocation
+date:   6 months ago
+config: x86_64-randconfig-a006-20211128 (https://download.01.org/0day-ci/archive/20211128/202111280505.Vvi3B3ru-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=559271146efc0bf125e6390191f683eab884e4a1
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfa8f78e06ed0b495a5736380de0e7f833a5efbe
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 559271146efc0bf125e6390191f683eab884e4a1
+        git checkout bfa8f78e06ed0b495a5736380de0e7f833a5efbe
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thunderbolt/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   mm/memcontrol.c:789:20: warning: unused function 'mod_objcg_mlstate'
-   static inline void mod_objcg_mlstate(struct obj_cgroup
-   ^
-   mm/memcontrol.c:950:29: warning: unused function 'memcg_kmem_bypass'
-   static __always_inline bool memcg_kmem_bypass(void)
-   ^
->> mm/memcontrol.c:2113:33: warning: unused function 'get_obj_stock'
-   static inline struct obj_stock long
-   ^
->> mm/memcontrol.c:2129:20: warning: unused function 'put_obj_stock'
-   static inline void put_obj_stock(unsigned long flags)
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/atomic.h", .line = 153, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1 # atomic_add
-   addu $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-5162b558d8/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm net nr_bisected scripts security sound source usr virt
+>> drivers/thunderbolt/test.c:2209:13: warning: stack frame size (10520) exceeds limit (8192) in 'tb_test_credit_alloc_all' [-Wframe-larger-than]
+   static void tb_test_credit_alloc_all(struct kunit *test)
+               ^
+   1 warning generated.
 
 
-vim +/get_obj_stock +2113 mm/memcontrol.c
+vim +/tb_test_credit_alloc_all +2209 drivers/thunderbolt/test.c
 
-  2101	
-  2102	/*
-  2103	 * Most kmem_cache_alloc() calls are from user context. The irq disable/enable
-  2104	 * sequence used in this case to access content from object stock is slow.
-  2105	 * To optimize for user context access, there are now two object stocks for
-  2106	 * task context and interrupt context access respectively.
-  2107	 *
-  2108	 * The task context object stock can be accessed by disabling preemption only
-  2109	 * which is cheap in non-preempt kernel. The interrupt context object stock
-  2110	 * can only be accessed after disabling interrupt. User context code can
-  2111	 * access interrupt object stock, but not vice versa.
-  2112	 */
-> 2113	static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
-  2114	{
-  2115		struct memcg_stock_pcp *stock;
-  2116	
-  2117		if (likely(in_task())) {
-  2118			*pflags = 0UL;
-  2119			preempt_disable();
-  2120			stock = this_cpu_ptr(&memcg_stock);
-  2121			return &stock->task_obj;
-  2122		}
-  2123	
-  2124		local_irq_save(*pflags);
-  2125		stock = this_cpu_ptr(&memcg_stock);
-  2126		return &stock->irq_obj;
-  2127	}
-  2128	
-> 2129	static inline void put_obj_stock(unsigned long flags)
-  2130	{
-  2131		if (likely(in_task()))
-  2132			preempt_enable();
-  2133		else
-  2134			local_irq_restore(flags);
-  2135	}
-  2136	
+  2208	
+> 2209	static void tb_test_credit_alloc_all(struct kunit *test)
+  2210	{
+  2211		struct tb_port *up, *down, *in, *out, *nhi, *port;
+  2212		struct tb_tunnel *pcie_tunnel, *dp_tunnel1, *dp_tunnel2, *usb3_tunnel;
+  2213		struct tb_tunnel *dma_tunnel1, *dma_tunnel2;
+  2214		struct tb_switch *host, *dev;
+  2215		struct tb_path *path;
+  2216	
+  2217		/*
+  2218		 * Create PCIe, 2 x DP, USB 3.x and two DMA tunnels from host to
+  2219		 * device. Expectation is that all these can be established with
+  2220		 * the default credit allocation found in Intel hardware.
+  2221		 */
+  2222	
+  2223		host = alloc_host_usb4(test);
+  2224		dev = alloc_dev_usb4(test, host, 0x1, true);
+  2225	
+  2226		down = &host->ports[8];
+  2227		up = &dev->ports[9];
+  2228		pcie_tunnel = tb_tunnel_alloc_pci(NULL, up, down);
+  2229		KUNIT_ASSERT_TRUE(test, pcie_tunnel != NULL);
+  2230		KUNIT_ASSERT_EQ(test, pcie_tunnel->npaths, (size_t)2);
+  2231	
+  2232		path = pcie_tunnel->paths[0];
+  2233		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2234		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2235		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 7U);
+  2236		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2237		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 32U);
+  2238	
+  2239		path = pcie_tunnel->paths[1];
+  2240		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2241		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2242		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 7U);
+  2243		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2244		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 64U);
+  2245	
+  2246		in = &host->ports[5];
+  2247		out = &dev->ports[13];
+  2248	
+  2249		dp_tunnel1 = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
+  2250		KUNIT_ASSERT_TRUE(test, dp_tunnel1 != NULL);
+  2251		KUNIT_ASSERT_EQ(test, dp_tunnel1->npaths, (size_t)3);
+  2252	
+  2253		path = dp_tunnel1->paths[0];
+  2254		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2255		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 12U);
+  2256		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 0U);
+  2257		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 18U);
+  2258		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 0U);
+  2259	
+  2260		path = dp_tunnel1->paths[1];
+  2261		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2262		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2263		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 1U);
+  2264		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2265		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 1U);
+  2266	
+  2267		path = dp_tunnel1->paths[2];
+  2268		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2269		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2270		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 1U);
+  2271		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2272		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 1U);
+  2273	
+  2274		in = &host->ports[6];
+  2275		out = &dev->ports[14];
+  2276	
+  2277		dp_tunnel2 = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
+  2278		KUNIT_ASSERT_TRUE(test, dp_tunnel2 != NULL);
+  2279		KUNIT_ASSERT_EQ(test, dp_tunnel2->npaths, (size_t)3);
+  2280	
+  2281		path = dp_tunnel2->paths[0];
+  2282		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2283		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 12U);
+  2284		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 0U);
+  2285		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 18U);
+  2286		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 0U);
+  2287	
+  2288		path = dp_tunnel2->paths[1];
+  2289		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2290		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2291		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 1U);
+  2292		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2293		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 1U);
+  2294	
+  2295		path = dp_tunnel2->paths[2];
+  2296		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2297		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2298		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 1U);
+  2299		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2300		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 1U);
+  2301	
+  2302		down = &host->ports[12];
+  2303		up = &dev->ports[16];
+  2304		usb3_tunnel = tb_tunnel_alloc_usb3(NULL, up, down, 0, 0);
+  2305		KUNIT_ASSERT_TRUE(test, usb3_tunnel != NULL);
+  2306		KUNIT_ASSERT_EQ(test, usb3_tunnel->npaths, (size_t)2);
+  2307	
+  2308		path = usb3_tunnel->paths[0];
+  2309		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2310		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2311		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 7U);
+  2312		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2313		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 14U);
+  2314	
+  2315		path = usb3_tunnel->paths[1];
+  2316		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2317		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2318		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 7U);
+  2319		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2320		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 32U);
+  2321	
+  2322		nhi = &host->ports[7];
+  2323		port = &dev->ports[3];
+  2324	
+  2325		dma_tunnel1 = tb_tunnel_alloc_dma(NULL, nhi, port, 8, 1, 8, 1);
+  2326		KUNIT_ASSERT_TRUE(test, dma_tunnel1 != NULL);
+  2327		KUNIT_ASSERT_EQ(test, dma_tunnel1->npaths, (size_t)2);
+  2328	
+  2329		path = dma_tunnel1->paths[0];
+  2330		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2331		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2332		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 14U);
+  2333		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2334		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 14U);
+  2335	
+  2336		path = dma_tunnel1->paths[1];
+  2337		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2338		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2339		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 0U);
+  2340		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2341		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 14U);
+  2342	
+  2343		dma_tunnel2 = tb_tunnel_alloc_dma(NULL, nhi, port, 9, 2, 9, 2);
+  2344		KUNIT_ASSERT_TRUE(test, dma_tunnel2 != NULL);
+  2345		KUNIT_ASSERT_EQ(test, dma_tunnel2->npaths, (size_t)2);
+  2346	
+  2347		path = dma_tunnel2->paths[0];
+  2348		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2349		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2350		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 14U);
+  2351		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2352		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 1U);
+  2353	
+  2354		path = dma_tunnel2->paths[1];
+  2355		KUNIT_ASSERT_EQ(test, path->path_length, 2);
+  2356		KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
+  2357		KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 0U);
+  2358		KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
+  2359		KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 1U);
+  2360	
+  2361		tb_tunnel_free(dma_tunnel2);
+  2362		tb_tunnel_free(dma_tunnel1);
+  2363		tb_tunnel_free(usb3_tunnel);
+  2364		tb_tunnel_free(dp_tunnel2);
+  2365		tb_tunnel_free(dp_tunnel1);
+  2366		tb_tunnel_free(pcie_tunnel);
+  2367	}
+  2368	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
