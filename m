@@ -1,30 +1,29 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0243D2C80
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 10:53:49 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="234485320"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233FF2C80
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 11:44:51 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235994313"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="234485320"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 02:53:49 -0800
+   d="scan'208";a="235994313"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 03:44:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="675769121"
+   d="scan'208";a="510965686"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 27 Nov 2021 02:53:47 -0800
+  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2021 03:44:48 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqvL0-0009OG-PL; Sat, 27 Nov 2021 10:53:46 +0000
-Date: Sat, 27 Nov 2021 18:53:10 +0800
+	id 1mqw8N-0009RH-PM; Sat, 27 Nov 2021 11:44:47 +0000
+Date: Sat, 27 Nov 2021 19:44:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [tglx-devel:msi 93/101] drivers/soc/ti/ti_sci_inta_msi.c:116:60:
- warning: incompatible integer to pointer conversion passing 'int' to
- parameter of type 'struct msi_range *'
-Message-ID: <202111271856.wXc90TMb-lkp@intel.com>
+To: Ciara Loftus <ciara.loftus@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH bpf-next 3/8] xsk: handle XDP_REDIRECT_XSK and expose
+ xsk_rcv/flush
+Message-ID: <202111271955.w9AzLVNN-lkp@intel.com>
+References: <20211116073742.7941-4-ciara.loftus@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,75 +32,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211116073742.7941-4-ciara.loftus@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi
-head:   900894c6ddc1b5b5a8f0c99ca573619d996468b8
-commit: 46c1ea0c989ee963922a41cb88027994da48786c [93/101] genirq/msi: Add range argument to msi_domain_alloc/free_descs_locked()
-config: arm64-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271856.wXc90TMb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+Hi Ciara,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Ciara-Loftus/XDP_REDIRECT_XSK-and-Batched-AF_XDP-Rx/20211116-153952
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-randconfig-a004-20211116 (https://download.01.org/0day-ci/archive/20211127/202111271955.w9AzLVNN-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=46c1ea0c989ee963922a41cb88027994da48786c
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel msi
-        git checkout 46c1ea0c989ee963922a41cb88027994da48786c
+        # https://github.com/0day-ci/linux/commit/06daa8f48870f74b06ed02fe7f36b820c09844c9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ciara-Loftus/XDP_REDIRECT_XSK-and-Batched-AF_XDP-Rx/20211116-153952
+        git checkout 06daa8f48870f74b06ed02fe7f36b820c09844c9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/ti/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/soc/ti/ti_sci_inta_msi.c:116:60: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct msi_range *' [-Wint-conversion]
-           ret = msi_domain_alloc_irqs_descs_locked(msi_domain, dev, nvec);
-                                                                     ^~~~
-   include/linux/msi.h:506:106: note: passing argument to parameter 'range' here
-   int msi_domain_alloc_irqs_descs_locked(struct irq_domain *domain, struct device *dev,  struct msi_range *range);
-                                                                                                            ^
-   1 warning generated.
+>> net/core/dev.c:4883:5: error: expected expression
+                                   struct xdp_sock *xs =
+                                   ^
+>> net/core/dev.c:4886:27: error: use of undeclared identifier 'xs'
+                                   err = xsk_generic_rcv(xs, &xdp);
+                                                         ^
+   2 errors generated.
 
 
-vim +116 drivers/soc/ti/ti_sci_inta_msi.c
+vim +4883 net/core/dev.c
 
-49b323157bf1e7 Lokesh Vutla    2019-04-30   90  
-49b323157bf1e7 Lokesh Vutla    2019-04-30   91  int ti_sci_inta_msi_domain_alloc_irqs(struct device *dev,
-49b323157bf1e7 Lokesh Vutla    2019-04-30   92  				      struct ti_sci_resource *res)
-49b323157bf1e7 Lokesh Vutla    2019-04-30   93  {
-49b323157bf1e7 Lokesh Vutla    2019-04-30   94  	struct platform_device *pdev = to_platform_device(dev);
-49b323157bf1e7 Lokesh Vutla    2019-04-30   95  	struct irq_domain *msi_domain;
-49b323157bf1e7 Lokesh Vutla    2019-04-30   96  	int ret, nvec;
-49b323157bf1e7 Lokesh Vutla    2019-04-30   97  
-49b323157bf1e7 Lokesh Vutla    2019-04-30   98  	msi_domain = dev_get_msi_domain(dev);
-49b323157bf1e7 Lokesh Vutla    2019-04-30   99  	if (!msi_domain)
-49b323157bf1e7 Lokesh Vutla    2019-04-30  100  		return -EINVAL;
-49b323157bf1e7 Lokesh Vutla    2019-04-30  101  
-49b323157bf1e7 Lokesh Vutla    2019-04-30  102  	if (pdev->id < 0)
-49b323157bf1e7 Lokesh Vutla    2019-04-30  103  		return -ENODEV;
-49b323157bf1e7 Lokesh Vutla    2019-04-30  104  
-43736dc111781c Thomas Gleixner 2021-11-10  105  	ret = msi_setup_device_data(dev);
-43736dc111781c Thomas Gleixner 2021-11-10  106  	if (ret)
-43736dc111781c Thomas Gleixner 2021-11-10  107  		return ret;
-43736dc111781c Thomas Gleixner 2021-11-10  108  
-32e74ad753f574 Thomas Gleixner 2021-11-10  109  	msi_lock_descs(dev);
-49b323157bf1e7 Lokesh Vutla    2019-04-30  110  	nvec = ti_sci_inta_msi_alloc_descs(dev, res);
-32e74ad753f574 Thomas Gleixner 2021-11-10  111  	if (nvec <= 0) {
-32e74ad753f574 Thomas Gleixner 2021-11-10  112  		ret = nvec;
-32e74ad753f574 Thomas Gleixner 2021-11-10  113  		goto unlock;
-49b323157bf1e7 Lokesh Vutla    2019-04-30  114  	}
-49b323157bf1e7 Lokesh Vutla    2019-04-30  115  
-32e74ad753f574 Thomas Gleixner 2021-11-10 @116  	ret = msi_domain_alloc_irqs_descs_locked(msi_domain, dev, nvec);
-
-:::::: The code at line 116 was first introduced by commit
-:::::: 32e74ad753f5747e1f201dc462a05ad80e9389ce soc: ti: ti_sci_inta_msi: Rework MSI descriptor allocation
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+  4870	
+  4871	int do_xdp_generic(struct bpf_prog *xdp_prog, struct sk_buff *skb)
+  4872	{
+  4873		if (xdp_prog) {
+  4874			struct xdp_buff xdp;
+  4875			u32 act;
+  4876			int err;
+  4877	
+  4878			act = netif_receive_generic_xdp(skb, &xdp, xdp_prog);
+  4879			if (act != XDP_PASS) {
+  4880				switch (act) {
+  4881	#ifdef CONFIG_XDP_SOCKETS
+  4882				case XDP_REDIRECT_XSK:
+> 4883					struct xdp_sock *xs =
+  4884						READ_ONCE(skb->dev->_rx[xdp.rxq->queue_index].xsk);
+  4885	
+> 4886					err = xsk_generic_rcv(xs, &xdp);
+  4887					if (err)
+  4888						goto out_redir;
+  4889					consume_skb(skb);
+  4890					break;
+  4891	#endif
+  4892				case XDP_REDIRECT:
+  4893					err = xdp_do_generic_redirect(skb->dev, skb,
+  4894								      &xdp, xdp_prog);
+  4895					if (err)
+  4896						goto out_redir;
+  4897					break;
+  4898				case XDP_TX:
+  4899					generic_xdp_tx(skb, xdp_prog);
+  4900					break;
+  4901				}
+  4902				return XDP_DROP;
+  4903			}
+  4904		}
+  4905		return XDP_PASS;
+  4906	out_redir:
+  4907		kfree_skb(skb);
+  4908		return XDP_DROP;
+  4909	}
+  4910	EXPORT_SYMBOL_GPL(do_xdp_generic);
+  4911	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
