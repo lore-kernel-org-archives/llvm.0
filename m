@@ -1,30 +1,31 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F1C68
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 02:13:32 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="216442043"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4E668
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 02:43:34 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="296536565"
 X-IronPort-AV: E=Sophos;i="5.87,267,1631602800"; 
-   d="scan'208";a="216442043"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 18:13:31 -0800
+   d="scan'208";a="296536565"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 18:43:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,267,1631602800"; 
-   d="scan'208";a="498623509"
+   d="scan'208";a="675707630"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 18:13:30 -0800
+  by orsmga005.jf.intel.com with ESMTP; 26 Nov 2021 18:43:31 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqnDV-0008vc-Ht; Sat, 27 Nov 2021 02:13:29 +0000
-Date: Sat, 27 Nov 2021 10:12:31 +0800
+	id 1mqngY-0008xH-9s; Sat, 27 Nov 2021 02:43:30 +0000
+Date: Sat, 27 Nov 2021 10:43:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Palmer <daniel@0x0f.com>
+To: Muchun Song <songmuchun@bytedance.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 68/69]
- drivers/irqchip/irq-msc313-pm-wakeup.c:21:25: error: redefinition of
- 'field_mask' as different kind of symbol
-Message-ID: <202111271000.4rTe0TiV-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/memcontrol.c:1058:29: warning: unused function 'memcg_kmem_bypass'
+Message-ID: <202111271029.EeYluWMG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,171 +36,79 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   df6df62e60f3a32773b02a41e0d6a4e0f2b353b5
-commit: 294ac78fcc3c89b63c48a5f85d4352de0a73b078 [68/69] irqchip: MStar wakeup intc
-config: arm64-randconfig-r035-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271000.4rTe0TiV-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
+commit: b4e0b68fbd9d1fd7e31cbe8adca3ad6cf556e2ee mm: memcontrol: use obj_cgroup APIs to charge kmem pages
+date:   7 months ago
+config: mips-randconfig-r022-20211122 (https://download.01.org/0day-ci/archive/20211127/202111271029.EeYluWMG-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/linux-chenxing/linux/commit/294ac78fcc3c89b63c48a5f85d4352de0a73b078
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 294ac78fcc3c89b63c48a5f85d4352de0a73b078
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4e0b68fbd9d1fd7e31cbe8adca3ad6cf556e2ee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b4e0b68fbd9d1fd7e31cbe8adca3ad6cf556e2ee
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/irqchip/irq-msc313-pm-wakeup.c:21:25: error: redefinition of 'field_mask' as different kind of symbol
-   static struct reg_field field_mask = REG_FIELD(MSTAR_PMSLEEP_WAKEUPSOURCE, 0, 7);
-                           ^
-   include/linux/bitfield.h:122:28: note: previous definition is here
-   static __always_inline u64 field_mask(u64 field)
-                              ^
->> drivers/irqchip/irq-msc313-pm-wakeup.c:118:43: error: passing 'u64 (u64)' (aka 'unsigned long long (unsigned long long)') to parameter of incompatible type 'struct reg_field'
-           intc->mask = regmap_field_alloc(pmsleep, field_mask);
-                                                    ^~~~~~~~~~
-   include/linux/regmap.h:1265:20: note: passing argument to parameter 'reg_field' here
-                   struct reg_field reg_field);
-                                    ^
-   drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
-           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+>> mm/memcontrol.c:1058:29: warning: unused function 'memcg_kmem_bypass'
+   static __always_inline bool memcg_kmem_bypass(void)
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set noat
+   .set push
+   .set arch=r4000
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/cmpxchg.h", .line = 163, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $2 # __cmpxchg_asm
+   bne $0, ${3:z}, 2f
+   .set pop
+   move $$1, ${4:z}
+   .set arch=r4000
+   sc $$1, $1
+   beqz $$1, 1b
+   .set pop
+   2: .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/cmpxchg.h", .line = 163, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   '
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-5162b558d8/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm net nr_bisected scripts security sound source usr virt
 
 
-vim +/field_mask +21 drivers/irqchip/irq-msc313-pm-wakeup.c
+vim +/memcg_kmem_bypass +1058 mm/memcontrol.c
 
-    20	
-  > 21	static struct reg_field field_mask = REG_FIELD(MSTAR_PMSLEEP_WAKEUPSOURCE, 0, 7);
-    22	static struct reg_field field_type = REG_FIELD(MSTAR_PMSLEEP_REG24, 0, 7);
-    23	static struct reg_field field_status = REG_FIELD(MSTAR_PMSLEEP_WAKEINT_STATUS, 0, 7);
-    24	
-    25	struct msc313_sleep_intc {
-    26		struct regmap_field *mask;
-    27		struct regmap_field *type;
-    28		struct regmap_field *status;
-    29	};
-    30	
-    31	static void msc313_pm_wakeup_intc_mask_irq(struct irq_data *data)
-    32	{
-    33		struct msc313_sleep_intc *intc = irq_data_get_irq_chip_data(data);
-    34	
-    35		regmap_field_update_bits(intc->mask, 1 << data->hwirq, ~0);
-    36	}
-    37	
-    38	static void msc313_pm_wakeup_intc_unmask_irq(struct irq_data *data)
-    39	{
-    40		struct msc313_sleep_intc *intc = irq_data_get_irq_chip_data(data);
-    41	
-    42		regmap_field_update_bits(intc->mask, 1 << data->hwirq, 0);
-    43	}
-    44	
-    45	static void msc313_pm_wakeup_intc_irq_eoi(struct irq_data *data)
-    46	{
-    47	}
-    48	
-    49	static int msc313_pm_wakeup_intc_set_type_irq(struct irq_data *data,
-    50			unsigned int flow_type)
-    51	{
-    52		return 0;
-    53	}
-    54	
-    55	static struct irq_chip msc313_pm_wakeup_intc_chip = {
-    56		.name		= "PM-WAKEUP",
-    57		.irq_mask	= msc313_pm_wakeup_intc_mask_irq,
-    58		.irq_unmask	= msc313_pm_wakeup_intc_unmask_irq,
-    59		.irq_eoi	= msc313_pm_wakeup_intc_irq_eoi,
-    60		.irq_set_type	= msc313_pm_wakeup_intc_set_type_irq,
-    61	};
-    62	
-    63	static irqreturn_t msc313_pm_wakeup_intc_chainedhandler(int irq, void *data)
-    64	{
-    65		struct irq_domain *domain = data;
-    66		struct msc313_sleep_intc *intc = domain->host_data;
-    67		unsigned int hwirq, status;
-    68	
-    69		regmap_field_read(intc->status, &status);
-    70		printk("wakeupint %x\n", status);
-    71	
-    72		while (status) {
-    73			hwirq = __ffs(status);
-    74			generic_handle_domain_irq(domain, hwirq);
-    75			status &= ~BIT(hwirq);
-    76		}
-    77	
-    78		return IRQ_HANDLED;
-    79	}
-    80	
-    81	static int msc313_pm_wakeup_intc_domain_map(struct irq_domain *domain,
-    82			unsigned int irq, irq_hw_number_t hw)
-    83	{
-    84		struct msc313_sleep_intc *intc = domain->host_data;
-    85	
-    86		irq_set_chip_and_handler(irq, &msc313_pm_wakeup_intc_chip, handle_level_irq);
-    87		irq_set_chip_data(irq, intc);
-    88		irq_set_probe(irq);
-    89	
-    90		return 0;
-    91	}
-    92	
-    93	static const struct irq_domain_ops msc313_pm_wakeup_intc_domain_ops = {
-    94		.xlate = irq_domain_xlate_twocell,
-    95		.map = msc313_pm_wakeup_intc_domain_map,
-    96	};
-    97	
-    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
-    99					   struct device_node *parent)
-   100	{
-   101		int ret = 0, irq;
-   102		struct regmap *pmsleep;
-   103		struct msc313_sleep_intc *intc;
-   104		struct irq_domain *domain;
-   105	
-   106		irq = of_irq_get(node, 0);
-   107		if (irq <= 0)
-   108			return irq;
-   109	
-   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
-   111		if (IS_ERR(pmsleep))
-   112			return PTR_ERR(pmsleep);
-   113	
-   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
-   115		if (!intc)
-   116			return -ENOMEM;
-   117	
- > 118		intc->mask = regmap_field_alloc(pmsleep, field_mask);
-   119		intc->type = regmap_field_alloc(pmsleep, field_type);
-   120		intc->status = regmap_field_alloc(pmsleep, field_status);
-   121	
-   122		/* The masks survive deep sleep so clear them. */
-   123		regmap_field_write(intc->mask, ~0);
-   124	
-   125		domain = irq_domain_add_linear(node, NUM_IRQ,
-   126				&msc313_pm_wakeup_intc_domain_ops, intc);
-   127		if (!domain) {
-   128			ret = -ENOMEM;
-   129			goto out_free;
-   130		}
-   131	
-   132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
-   133					"pmsleep", domain);
-   134	
-   135		return 0;
-   136	
-   137	out_free:
-   138		kfree(intc);
-   139		return ret;
-   140	}
-   141	
+279c3393e2c1133 Roman Gushchin 2020-10-17  1057  
+4127c6504f25c4f Roman Gushchin 2020-10-17 @1058  static __always_inline bool memcg_kmem_bypass(void)
+4127c6504f25c4f Roman Gushchin 2020-10-17  1059  {
+4127c6504f25c4f Roman Gushchin 2020-10-17  1060  	/* Allow remote memcg charging from any context. */
+4127c6504f25c4f Roman Gushchin 2020-10-17  1061  	if (unlikely(active_memcg()))
+4127c6504f25c4f Roman Gushchin 2020-10-17  1062  		return false;
+4127c6504f25c4f Roman Gushchin 2020-10-17  1063  
+4127c6504f25c4f Roman Gushchin 2020-10-17  1064  	/* Memcg to charge can't be determined. */
+4127c6504f25c4f Roman Gushchin 2020-10-17  1065  	if (in_interrupt() || !current->mm || (current->flags & PF_KTHREAD))
+4127c6504f25c4f Roman Gushchin 2020-10-17  1066  		return true;
+4127c6504f25c4f Roman Gushchin 2020-10-17  1067  
+4127c6504f25c4f Roman Gushchin 2020-10-17  1068  	return false;
+4127c6504f25c4f Roman Gushchin 2020-10-17  1069  }
+4127c6504f25c4f Roman Gushchin 2020-10-17  1070  
+
+:::::: The code at line 1058 was first introduced by commit
+:::::: 4127c6504f25c4fcff52dc996efda2ef859dd661 mm: kmem: enable kernel memcg accounting from interrupt contexts
+
+:::::: TO: Roman Gushchin <guro@fb.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
