@@ -1,29 +1,30 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC8F2C80
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 20:59:08 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="296586336"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D790E2C80
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 21:30:09 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="215810822"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="296586336"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 12:59:07 -0800
+   d="scan'208";a="215810822"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 13:30:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="608245982"
+   d="scan'208";a="594062281"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 27 Nov 2021 12:59:06 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Nov 2021 13:30:07 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mr4mn-0009zV-T0; Sat, 27 Nov 2021 20:59:05 +0000
-Date: Sun, 28 Nov 2021 04:58:12 +0800
+	id 1mr5Go-000A1Y-FB; Sat, 27 Nov 2021 21:30:06 +0000
+Date: Sun, 28 Nov 2021 05:29:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+To: Waiman Long <longman@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [rostedt-trace:for-next 2/3] kernel/trace/trace_events.c:2681:25:
- warning: variable 'no_pid_list' set but not used
-Message-ID: <202111280401.qC0z99JB-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/memcontrol.c:2113:33: warning: unused function 'get_obj_stock'
+Message-ID: <202111280551.LXsWYt1T-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,68 +35,98 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-head:   a55f224ff5f238013de8762c4287117e47b86e22
-commit: 6cb206508b621a9a0a2c35b60540e399225c8243 [2/3] tracing: Check pid filtering when creating events
-config: hexagon-randconfig-r045-20211128 (https://download.01.org/0day-ci/archive/20211128/202111280401.qC0z99JB-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   86799cdfbcd2308cbad6c1dc983b81595b77b639
+commit: 559271146efc0bf125e6390191f683eab884e4a1 mm/memcg: optimize user context object stock access
+date:   5 months ago
+config: mips-randconfig-r022-20211122 (https://download.01.org/0day-ci/archive/20211128/202111280551.LXsWYt1T-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/commit/?id=6cb206508b621a9a0a2c35b60540e399225c8243
-        git remote add rostedt-trace https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-        git fetch --no-tags rostedt-trace for-next
-        git checkout 6cb206508b621a9a0a2c35b60540e399225c8243
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=559271146efc0bf125e6390191f683eab884e4a1
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 559271146efc0bf125e6390191f683eab884e4a1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/trace_events.c:2681:25: warning: variable 'no_pid_list' set but not used [-Wunused-but-set-variable]
-           struct trace_pid_list *no_pid_list;
-                                  ^
-   1 warning generated.
+   mm/memcontrol.c:789:20: warning: unused function 'mod_objcg_mlstate'
+   static inline void mod_objcg_mlstate(struct obj_cgroup
+   ^
+   mm/memcontrol.c:950:29: warning: unused function 'memcg_kmem_bypass'
+   static __always_inline bool memcg_kmem_bypass(void)
+   ^
+>> mm/memcontrol.c:2113:33: warning: unused function 'get_obj_stock'
+   static inline struct obj_stock long
+   ^
+>> mm/memcontrol.c:2129:20: warning: unused function 'put_obj_stock'
+   static inline void put_obj_stock(unsigned long flags)
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/atomic.h", .line = 153, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1 # atomic_add
+   addu $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-5162b558d8/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm net nr_bisected scripts security sound source usr virt
 
 
-vim +/no_pid_list +2681 kernel/trace/trace_events.c
+vim +/get_obj_stock +2113 mm/memcontrol.c
 
-  2676	
-  2677	static struct trace_event_file *
-  2678	trace_create_new_event(struct trace_event_call *call,
-  2679			       struct trace_array *tr)
-  2680	{
-> 2681		struct trace_pid_list *no_pid_list;
-  2682		struct trace_pid_list *pid_list;
-  2683		struct trace_event_file *file;
-  2684		unsigned int first;
-  2685	
-  2686		file = kmem_cache_alloc(file_cachep, GFP_TRACE);
-  2687		if (!file)
-  2688			return NULL;
-  2689	
-  2690		pid_list = rcu_dereference_protected(tr->filtered_pids,
-  2691						     lockdep_is_held(&event_mutex));
-  2692		no_pid_list = rcu_dereference_protected(tr->filtered_no_pids,
-  2693						     lockdep_is_held(&event_mutex));
-  2694	
-  2695		if (!trace_pid_list_first(pid_list, &first) ||
-  2696		    !trace_pid_list_first(pid_list, &first))
-  2697			file->flags |= EVENT_FILE_FL_PID_FILTER;
-  2698	
-  2699		file->event_call = call;
-  2700		file->tr = tr;
-  2701		atomic_set(&file->sm_ref, 0);
-  2702		atomic_set(&file->tm_ref, 0);
-  2703		INIT_LIST_HEAD(&file->triggers);
-  2704		list_add(&file->list, &tr->events);
-  2705	
-  2706		return file;
-  2707	}
-  2708	
+  2101	
+  2102	/*
+  2103	 * Most kmem_cache_alloc() calls are from user context. The irq disable/enable
+  2104	 * sequence used in this case to access content from object stock is slow.
+  2105	 * To optimize for user context access, there are now two object stocks for
+  2106	 * task context and interrupt context access respectively.
+  2107	 *
+  2108	 * The task context object stock can be accessed by disabling preemption only
+  2109	 * which is cheap in non-preempt kernel. The interrupt context object stock
+  2110	 * can only be accessed after disabling interrupt. User context code can
+  2111	 * access interrupt object stock, but not vice versa.
+  2112	 */
+> 2113	static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
+  2114	{
+  2115		struct memcg_stock_pcp *stock;
+  2116	
+  2117		if (likely(in_task())) {
+  2118			*pflags = 0UL;
+  2119			preempt_disable();
+  2120			stock = this_cpu_ptr(&memcg_stock);
+  2121			return &stock->task_obj;
+  2122		}
+  2123	
+  2124		local_irq_save(*pflags);
+  2125		stock = this_cpu_ptr(&memcg_stock);
+  2126		return &stock->irq_obj;
+  2127	}
+  2128	
+> 2129	static inline void put_obj_stock(unsigned long flags)
+  2130	{
+  2131		if (likely(in_task()))
+  2132			preempt_enable();
+  2133		else
+  2134			local_irq_restore(flags);
+  2135	}
+  2136	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
