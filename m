@@ -1,29 +1,30 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2F468
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 13:27:55 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="234491592"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF6968
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 13:57:56 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="233255756"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="234491592"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 05:27:54 -0800
+   d="scan'208";a="233255756"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 05:57:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="608117170"
+   d="scan'208";a="476149456"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 27 Nov 2021 05:27:52 -0800
+  by orsmga002.jf.intel.com with ESMTP; 27 Nov 2021 05:57:53 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqxk8-0009aO-8S; Sat, 27 Nov 2021 13:27:52 +0000
-Date: Sat, 27 Nov 2021 21:27:08 +0800
+	id 1mqyDA-0009bV-Ik; Sat, 27 Nov 2021 13:57:52 +0000
+Date: Sat, 27 Nov 2021 21:57:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [norov:bitmap-tmp 7/8] arch/x86/kernel/cpu/resctrl/rdtgroup.c:446:1:
- error: function definition is not allowed here
-Message-ID: <202111272119.P7YNVN8n-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: drivers/net/ethernet/chelsio/cxgb4/sge.c:814:28: warning: unused
+ function 'calc_tx_descs'
+Message-ID: <202111272116.77QvtsrM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,166 +35,66 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/norov/linux bitmap-tmp
-head:   75ee333c81c999b29a49810611fb160cec32217d
-commit: 29f49f10b3fbef5a88db0a7e370984297616f0fa [7/8] lib/cpumask: replace cpumask_weight with cpumask_{empty,gt,le,eq}
-config: i386-randconfig-a002-20211126 (https://download.01.org/0day-ci/archive/20211127/202111272119.P7YNVN8n-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
+commit: 198688edbf77c6fc0e65f5d062f810d83d090166 MIPS: Fix inline asm input/output type mismatch in checksum.h used with Clang
+date:   10 months ago
+config: mips-buildonly-randconfig-r003-20211127 (https://download.01.org/0day-ci/archive/20211127/202111272116.77QvtsrM-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/norov/linux/commit/29f49f10b3fbef5a88db0a7e370984297616f0fa
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bitmap-tmp
-        git checkout 29f49f10b3fbef5a88db0a7e370984297616f0fa
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=198688edbf77c6fc0e65f5d062f810d83d090166
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 198688edbf77c6fc0e65f5d062f810d83d090166
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/ethernet/chelsio/cxgb4/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/resctrl/rdtgroup.c:446:1: error: function definition is not allowed here
-   {
+>> drivers/net/ethernet/chelsio/cxgb4/sge.c:814:28: warning: unused function 'calc_tx_descs'
+   static inline unsigned int calc_tx_descs(const struct sk_buff
    ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:526:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:532:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:542:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:551:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:598:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:604:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:616:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:636:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:658:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:687:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:717:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:730:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:779:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:832:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:847:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:856:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:866:1: error: function definition is not allowed here
-   {
-   ^
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c:876:1: error: function definition is not allowed here
-   {
-   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x04 ) != -1)) 0x04 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 27, $); 0x04 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept (1 - (0x04 == 0x04)); sync 0x04; .endr; .set pop; .else; ; .endif'
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+   Target: mips64-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-5162b558d8/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch drivers include kernel nr_bisected scripts source usr
 
 
-vim +446 arch/x86/kernel/cpu/resctrl/rdtgroup.c
+vim +/calc_tx_descs +814 drivers/net/ethernet/chelsio/cxgb4/sge.c
 
-b09d981b3f3466 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  443  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  444  static ssize_t rdtgroup_cpus_write(struct kernfs_open_file *of,
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  445  				   char *buf, size_t nbytes, loff_t off)
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28 @446  {
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  447  	cpumask_var_t tmpmask, newmask, tmpmask1;
-b09d981b3f3466 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  448  	struct rdtgroup *rdtgrp;
-f410770293a1fb arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Fenghua Yu      2016-11-11  449  	int ret;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  450  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  451  	if (!buf)
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  452  		return -EINVAL;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  453  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  454  	if (!zalloc_cpumask_var(&tmpmask, GFP_KERNEL))
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  455  		return -ENOMEM;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  456  	if (!zalloc_cpumask_var(&newmask, GFP_KERNEL)) {
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  457  		free_cpumask_var(tmpmask);
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  458  		return -ENOMEM;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  459  	}
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  460  	if (!zalloc_cpumask_var(&tmpmask1, GFP_KERNEL)) {
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  461  		free_cpumask_var(tmpmask);
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  462  		free_cpumask_var(newmask);
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  463  		return -ENOMEM;
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  464  	}
-a2584e1d5a74e8 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Thomas Gleixner 2016-11-15  465  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  466  	rdtgrp = rdtgroup_kn_lock_live(of->kn);
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  467  	if (!rdtgrp) {
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  468  		ret = -ENOENT;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  469  		goto unlock;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  470  	}
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  471  
-c966dac8a5ede5 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Reinette Chatre 2018-06-22  472  	if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED ||
-c966dac8a5ede5 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Reinette Chatre 2018-06-22  473  	    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP) {
-c966dac8a5ede5 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Reinette Chatre 2018-06-22  474  		ret = -EINVAL;
-723f1a0dd8e26a arch/x86/kernel/cpu/resctrl/rdtgroup.c   Babu Moger      2018-11-21  475  		rdt_last_cmd_puts("Pseudo-locking in progress\n");
-c966dac8a5ede5 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Reinette Chatre 2018-06-22  476  		goto unlock;
-c966dac8a5ede5 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Reinette Chatre 2018-06-22  477  	}
-c966dac8a5ede5 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Reinette Chatre 2018-06-22  478  
-4ffa3c977b5da2 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Jiri Olsa       2017-04-10  479  	if (is_cpu_list(of))
-4ffa3c977b5da2 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Jiri Olsa       2017-04-10  480  		ret = cpulist_parse(buf, newmask);
-4ffa3c977b5da2 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Jiri Olsa       2017-04-10  481  	else
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  482  		ret = cpumask_parse(buf, newmask);
-4ffa3c977b5da2 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Jiri Olsa       2017-04-10  483  
-94457b36e8a502 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2017-09-25  484  	if (ret) {
-723f1a0dd8e26a arch/x86/kernel/cpu/resctrl/rdtgroup.c   Babu Moger      2018-11-21  485  		rdt_last_cmd_puts("Bad CPU list/mask\n");
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  486  		goto unlock;
-94457b36e8a502 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2017-09-25  487  	}
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  488  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  489  	/* check that user didn't specify any offline cpus */
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  490  	cpumask_andnot(tmpmask, newmask, cpu_online_mask);
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  491  	if (cpumask_weight(tmpmask)) {
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  492  		ret = -EINVAL;
-723f1a0dd8e26a arch/x86/kernel/cpu/resctrl/rdtgroup.c   Babu Moger      2018-11-21  493  		rdt_last_cmd_puts("Can only assign online CPUs\n");
-a2584e1d5a74e8 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Thomas Gleixner 2016-11-15  494  		goto unlock;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  495  	}
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  496  
-b09d981b3f3466 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  497  	if (rdtgrp->type == RDTCTRL_GROUP)
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  498  		ret = cpus_ctrl_write(rdtgrp, newmask, tmpmask, tmpmask1);
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  499  	else if (rdtgrp->type == RDTMON_GROUP)
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  500  		ret = cpus_mon_write(rdtgrp, newmask, tmpmask);
-b09d981b3f3466 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  501  	else
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  502  		ret = -EINVAL;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  503  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  504  unlock:
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  505  	rdtgroup_kn_unlock(of->kn);
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  506  	free_cpumask_var(tmpmask);
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  507  	free_cpumask_var(newmask);
-a9fcf8627dc010 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Vikas Shivappa  2017-07-25  508  	free_cpumask_var(tmpmask1);
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  509  
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  510  	return ret ?: nbytes;
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  511  }
-12e0110c11a460 arch/x86/kernel/cpu/intel_rdt_rdtgroup.c Tony Luck       2016-10-28  512  
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  805  
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  806  /**
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  807   *	calc_tx_descs - calculate the number of Tx descriptors for a packet
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  808   *	@skb: the packet
+29bbf5d7f5efe84 drivers/net/ethernet/chelsio/cxgb4/sge.c Rahul Lakkireddy     2020-06-24  809   *	@chip_ver: chip version
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  810   *
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  811   *	Returns the number of Tx descriptors needed for the given Ethernet
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  812   *	packet, including the needed WR and CPL headers.
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  813   */
+d0a1299c6bf7d80 drivers/net/ethernet/chelsio/cxgb4/sge.c Ganesh Goudar        2018-01-10 @814  static inline unsigned int calc_tx_descs(const struct sk_buff *skb,
+d0a1299c6bf7d80 drivers/net/ethernet/chelsio/cxgb4/sge.c Ganesh Goudar        2018-01-10  815  					 unsigned int chip_ver)
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  816  {
+d0a1299c6bf7d80 drivers/net/ethernet/chelsio/cxgb4/sge.c Ganesh Goudar        2018-01-10  817  	return flits_to_desc(calc_tx_flits(skb, chip_ver));
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  818  }
+fd3a47900b6f9fa drivers/net/cxgb4/sge.c                  Dimitris Michailidis 2010-04-01  819  
 
-:::::: The code at line 446 was first introduced by commit
-:::::: 12e0110c11a460b890ed7e1071198ced732152c9 x86/intel_rdt: Add cpus file
+:::::: The code at line 814 was first introduced by commit
+:::::: d0a1299c6bf7d80c8bb8e181f36a7c407a4cabca cxgb4: add support for vxlan segmentation offload
 
-:::::: TO: Tony Luck <tony.luck@intel.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+:::::: TO: Ganesh Goudar <ganeshgr@chelsio.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
