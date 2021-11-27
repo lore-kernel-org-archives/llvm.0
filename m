@@ -1,31 +1,30 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074A068
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 00:34:24 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235968558"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D822D68
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 01:25:25 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235971068"
 X-IronPort-AV: E=Sophos;i="5.87,267,1631602800"; 
-   d="scan'208";a="235968558"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 16:34:24 -0800
+   d="scan'208";a="235971068"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 17:25:25 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,267,1631602800"; 
-   d="scan'208";a="572454825"
+   d="scan'208";a="498613168"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Nov 2021 16:34:22 -0800
+  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 17:25:23 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqlfZ-0008pL-Nj; Sat, 27 Nov 2021 00:34:21 +0000
-Date: Sat, 27 Nov 2021 08:33:54 +0800
+	id 1mqmSw-0008rv-Mw; Sat, 27 Nov 2021 01:25:22 +0000
+Date: Sat, 27 Nov 2021 09:24:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
+To: Ayala Beker <ayala.beker@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 3/9]
- drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct
- pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL
- << 16)) *' (aka 'unsigned long *'))
-Message-ID: <202111270838.oY7LmFOc-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Luca Coelho <luciano.coelho@intel.com>
+Subject: [iwlwifi-next:mac80211-next 4/5] net/wireless/scan.c:1803:6: error:
+ use of undeclared identifier 'channel'
+Message-ID: <202111270902.oVy0Aumb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,251 +35,126 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   20622aca716f08225b705a8c84a2beeb8c71decb
-commit: 3e99bfe1e6898207226254c9c3663804f72e4c75 [3/9] iommufd: Data structure to provide IOVA to PFN mapping
-config: hexagon-randconfig-r004-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270838.oY7LmFOc-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git mac80211-next
+head:   690c735dc56561a2cf331dcded3eecdbad1edd7f
+commit: 8efcf18569753acc522e58966fedd773ad358ee3 [4/5] cfg80211: Use the HE operation IE to determine a 6GHz BSS channel
+config: arm-randconfig-r011-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270902.oVy0Aumb-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/3e99bfe1e6898207226254c9c3663804f72e4c75
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout 3e99bfe1e6898207226254c9c3663804f72e4c75
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git/commit/?id=8efcf18569753acc522e58966fedd773ad358ee3
+        git remote add iwlwifi-next https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git
+        git fetch --no-tags iwlwifi-next mac80211-next
+        git checkout 8efcf18569753acc522e58966fedd773ad358ee3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iommu/iommufd/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/wireless/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:1156:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:1156:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:1155:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:1156:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/iommu/iommufd/io_pagetable.c:1211:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/iommu/iommufd/io_pagetable.c:1212:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/iommu/iommufd/io_pagetable.c:1211:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   drivers/iommu/iommufd/io_pagetable.c:1212:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   drivers/iommu/iommufd/io_pagetable.c:1211:6: warning: comparison of distinct pointer types ('typeof (npages) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:84:15: note: expanded from macro 'check_mul_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/iommu/iommufd/io_pagetable.c:1212:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               check_add_overflow(iova, length - 1, &iova_end))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   12 warnings generated.
+>> net/wireless/scan.c:1803:6: error: use of undeclared identifier 'channel'
+           if (channel->band == NL80211_BAND_6GHZ) {
+               ^
+   net/wireless/scan.c:1815:12: error: use of undeclared identifier 'channel'
+                                   return channel;
+                                          ^
+>> net/wireless/scan.c:1817:4: error: use of undeclared identifier 'freq'
+                           freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
+                           ^
+   net/wireless/scan.c:1824:12: error: use of undeclared identifier 'freq'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                   ^
+   net/wireless/scan.c:1824:19: error: use of undeclared identifier 'channel'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                          ^
+   net/wireless/scan.c:1824:12: error: use of undeclared identifier 'freq'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                   ^
+   net/wireless/scan.c:1824:19: error: use of undeclared identifier 'channel'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                          ^
+   net/wireless/scan.c:1823:8: error: use of undeclared identifier 'freq'
+                           if (freq != channel->center_freq &&
+                               ^
+   net/wireless/scan.c:1823:16: error: use of undeclared identifier 'channel'
+                           if (freq != channel->center_freq &&
+                                       ^
+>> net/wireless/scan.c:1825:9: error: use of undeclared identifier 'ftype'; did you mean '_ctype'?
+                               (ftype != CFG80211_BSS_FTYPE_BEACON ||
+                                ^~~~~
+                                _ctype
+   include/linux/ctype.h:21:28: note: '_ctype' declared here
+   extern const unsigned char _ctype[];
+                              ^
+   10 errors generated.
 
 
-vim +1155 drivers/iommu/iommufd/io_pagetable.c
+vim +/channel +1803 net/wireless/scan.c
 
-  1131	
-  1132	/**
-  1133	* iopt_access_pages - Return a list of pages under the iova
-  1134	*
-  1135	* Reads @npages starting at iova and returns the struct page * pointers. These
-  1136	* can be kmap'd by the caller for CPU access.
-  1137	*
-  1138	* The caller must perform iopt_unaccess_pages() when done to balance this.
-  1139	*
-  1140	* CHECKME: callers that need a DMA mapping via a sgl should create another
-  1141	* interface to build the SGL efficiently)
-  1142	*/
-  1143	int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
-  1144			      size_t npages, struct page **out_pages, bool write)
-  1145	{
-  1146		unsigned long cur_iova;
-  1147		unsigned long iova_end;
-  1148		struct iopt_area *area;
-  1149		size_t length;
-  1150		int rc;
-  1151	
-  1152		down_read(&iopt->rwsem);
-  1153		if (!npages || iova % PAGE_SIZE)
-  1154			return -EINVAL;
-> 1155		if (check_mul_overflow(npages, PAGE_SIZE, &length) ||
-> 1156		    check_add_overflow(iova, length - 1, &iova_end))
-  1157			return -EOVERFLOW;
-  1158	
-  1159		cur_iova = iova;
-  1160		for (area = iopt_area_iter_first(iopt, iova, iova_end); area;
-  1161		     area = iopt_area_iter_next(area, iova, iova_end)) {
-  1162			unsigned long intr_start = max(iova, iopt_area_iova(area));
-  1163			unsigned long intr_end =
-  1164				min(iova_end, iopt_area_last_iova(area));
-  1165			size_t npages = (intr_end - intr_start + 1) / PAGE_SIZE;
-  1166	
-  1167			/* Need contiguous areas un the access */
-  1168			if (cur_iova != intr_start) {
-  1169				rc = -EINVAL;
-  1170				goto out_remove;
-  1171			}
-  1172	
-  1173			npages = (intr_end - intr_start + 1) / PAGE_SIZE;
-  1174			rc = iopt_pages_add_user(
-  1175				area->pages,
-  1176				(intr_start - iopt_area_iova(area)) / PAGE_SIZE, npages,
-  1177				out_pages + (intr_end - iopt_area_iova(area) + 1) /
-  1178						    PAGE_SIZE,
-  1179				write);
-  1180			if (rc)
-  1181				goto out_remove;
-  1182			cur_iova += npages * PAGE_SIZE;
-  1183			atomic_inc(&area->num_users);
-  1184		}
-  1185	
-  1186		up_read(&iopt->rwsem);
-  1187		return 0;
-  1188	
-  1189	out_remove:
-  1190		iopt_unaccess_pages(iopt, iova, (cur_iova - iova) / PAGE_SIZE);
-  1191		return rc;
-  1192	}
-  1193	
+  1796	
+  1797	int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
+  1798					    enum nl80211_band band)
+  1799	{
+  1800		const u8 *tmp;
+  1801		int channel_number = -1;
+  1802	
+> 1803		if (channel->band == NL80211_BAND_6GHZ) {
+  1804			const struct element *elem;
+  1805	
+  1806			elem = cfg80211_find_ext_elem(WLAN_EID_EXT_HE_OPERATION, ie,
+  1807						      ielen);
+  1808			if (elem && elem->datalen >= ieee80211_he_oper_size(&elem->data[1])) {
+  1809				struct ieee80211_he_operation *he_oper =
+  1810					(void *)(&elem->data[1]);
+  1811				const struct ieee80211_he_6ghz_oper *he_6ghz_oper;
+  1812	
+  1813				he_6ghz_oper = ieee80211_he_6ghz_oper(he_oper);
+  1814				if (!he_6ghz_oper)
+  1815					return channel;
+  1816	
+> 1817				freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
+  1818								      NL80211_BAND_6GHZ);
+  1819	
+  1820				/* duplicated beacon indication is relevant for beacons
+  1821				 * only
+  1822				 */
+  1823				if (freq != channel->center_freq &&
+  1824				    abs(freq - channel->center_freq) <= 80 &&
+> 1825				    (ftype != CFG80211_BSS_FTYPE_BEACON ||
+  1826				     he_6ghz_oper->control & IEEE80211_HE_6GHZ_OPER_CTRL_DUP_BEACON))
+  1827					channel_number = he_6ghz_oper->primary;
+  1828			}
+  1829		} else if (band == NL80211_BAND_S1GHZ) {
+  1830			tmp = cfg80211_find_ie(WLAN_EID_S1G_OPERATION, ie, ielen);
+  1831			if (tmp && tmp[1] >= sizeof(struct ieee80211_s1g_oper_ie)) {
+  1832				struct ieee80211_s1g_oper_ie *s1gop = (void *)(tmp + 2);
+  1833	
+  1834				channel_number = s1gop->primary_ch;
+  1835			}
+  1836		} else {
+  1837			tmp = cfg80211_find_ie(WLAN_EID_DS_PARAMS, ie, ielen);
+  1838			if (tmp && tmp[1] == 1) {
+  1839				channel_number = tmp[2];
+  1840			} else {
+  1841				tmp = cfg80211_find_ie(WLAN_EID_HT_OPERATION, ie, ielen);
+  1842				if (tmp && tmp[1] >= sizeof(struct ieee80211_ht_operation)) {
+  1843					struct ieee80211_ht_operation *htop = (void *)(tmp + 2);
+  1844	
+  1845					channel_number = htop->primary_chan;
+  1846				}
+  1847			}
+  1848		}
+  1849	
+  1850		return channel_number;
+  1851	}
+  1852	EXPORT_SYMBOL(cfg80211_get_ies_channel_number);
+  1853	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
