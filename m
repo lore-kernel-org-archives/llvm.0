@@ -1,30 +1,29 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052C02C80
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 12:15:51 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235693996"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD50868
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 12:46:52 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="299160381"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="235693996"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 04:15:51 -0800
+   d="scan'208";a="299160381"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 04:46:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="539497131"
+   d="scan'208";a="457937767"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 27 Nov 2021 04:15:49 -0800
+  by orsmga003.jf.intel.com with ESMTP; 27 Nov 2021 04:46:51 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqwcO-0009Tm-KQ; Sat, 27 Nov 2021 12:15:48 +0000
-Date: Sat, 27 Nov 2021 20:15:29 +0800
+	id 1mqx6Q-0009Vg-79; Sat, 27 Nov 2021 12:46:50 +0000
+Date: Sat, 27 Nov 2021 20:46:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/memcontrol.c:785:20: warning: unused function 'mod_objcg_mlstate'
-Message-ID: <202111272014.WOYNLUV6-lkp@intel.com>
+To: Kenny Ho <Kenny.Ho@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH RFC 1/4] cgroup, perf: Add ability to connect to perf
+ cgroup from other cgroup controller
+Message-ID: <202111272015.KZlJ9xBN-lkp@intel.com>
+References: <20211118202840.1001787-2-Kenny.Ho@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,73 +32,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211118202840.1001787-2-Kenny.Ho@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
-commit: 68ac5b3c8db2fda00af594eca4100aceaf927c0e mm/memcg: cache vmstat data in percpu memcg_stock_pcp
-date:   5 months ago
-config: mips-randconfig-r022-20211122 (https://download.01.org/0day-ci/archive/20211127/202111272014.WOYNLUV6-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c133fb321f7ca6083ce15b6aa5bf89de6600e649)
+Hi Kenny,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on v5.15]
+[also build test WARNING on next-20211126]
+[cannot apply to bpf-next/master bpf/master tip/perf/core v5.16-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Kenny-Ho/Add-ability-to-attach-bpf-programs-to-a-tracepoint-inside-a-cgroup/20211119-043050
+base:    8bb7eca972ad531c9b149c0a51ab43a417385813
+config: hexagon-randconfig-r041-20211118 (https://download.01.org/0day-ci/archive/20211127/202111272015.KZlJ9xBN-lkp@intel.com/config)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=68ac5b3c8db2fda00af594eca4100aceaf927c0e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 68ac5b3c8db2fda00af594eca4100aceaf927c0e
+        # https://github.com/0day-ci/linux/commit/6946ea4a7228dd06a9b6624702bcec1cfc7865ec
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kenny-Ho/Add-ability-to-attach-bpf-programs-to-a-tracepoint-inside-a-cgroup/20211119-043050
+        git checkout 6946ea4a7228dd06a9b6624702bcec1cfc7865ec
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash ipc/ kernel/events/ kernel/time/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/memcontrol.c:785:20: warning: unused function 'mod_objcg_mlstate'
-   static inline void mod_objcg_mlstate(struct obj_cgroup
+>> kernel/events/core.c:1095:21: warning: no previous prototype for function 'cgroup_tryget_perf_cgroup' [-Wmissing-prototypes]
+   struct perf_cgroup *cgroup_tryget_perf_cgroup(struct cgroup *cgrp)
+                       ^
+   kernel/events/core.c:1095:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct perf_cgroup *cgroup_tryget_perf_cgroup(struct cgroup *cgrp)
    ^
-   mm/memcontrol.c:946:29: warning: unused function 'memcg_kmem_bypass'
-   static __always_inline bool memcg_kmem_bypass(void)
+   static 
+   kernel/events/core.c:1114:1: warning: unused function 'perf_cgroup_switch' [-Wunused-function]
+   perf_cgroup_switch(struct task_struct *task, struct task_struct *next)
    ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/atomic.h", .line = 153, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1 # atomic_add
-   addu $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-5162b558d8/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm net nr_bisected scripts security sound source usr virt
+   2 warnings generated.
 
 
-vim +/mod_objcg_mlstate +785 mm/memcontrol.c
+vim +/cgroup_tryget_perf_cgroup +1095 kernel/events/core.c
 
-   784	
- > 785	static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
-   786					     struct pglist_data *pgdat,
-   787					     enum node_stat_item idx, int nr)
-   788	{
-   789		struct mem_cgroup *memcg;
-   790		struct lruvec *lruvec;
-   791	
-   792		rcu_read_lock();
-   793		memcg = obj_cgroup_memcg(objcg);
-   794		lruvec = mem_cgroup_lruvec(memcg, pgdat);
-   795		__mod_memcg_lruvec_state(lruvec, idx, nr);
-   796		rcu_read_unlock();
-   797	}
-   798	
+  1094	
+> 1095	struct perf_cgroup *cgroup_tryget_perf_cgroup(struct cgroup *cgrp)
+  1096	{
+  1097		return NULL;
+  1098	}
+  1099	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
