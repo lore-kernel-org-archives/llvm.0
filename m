@@ -1,29 +1,29 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C9D72
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 18:05:05 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="235594332"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC8F2C80
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 20:59:08 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="296586336"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="235594332"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 10:05:04 -0800
+   d="scan'208";a="296586336"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 12:59:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="458570673"
+   d="scan'208";a="608245982"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 27 Nov 2021 10:05:03 -0800
+  by orsmga004.jf.intel.com with ESMTP; 27 Nov 2021 12:59:06 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mr24M-0009qM-PW; Sat, 27 Nov 2021 18:05:02 +0000
-Date: Sun, 28 Nov 2021 02:04:49 +0800
+	id 1mr4mn-0009zV-T0; Sat, 27 Nov 2021 20:59:05 +0000
+Date: Sun, 28 Nov 2021 04:58:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Javier Martinez Canillas <javierm@redhat.com>
+To: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [drm-misc:for-linux-next 4/6] make[4]: *** No rule to make target
- 'drivers/gpu/drm/drm_nomodeset.o', needed by 'drivers/gpu/drm/built-in.a'.
-Message-ID: <202111280200.ZO66VwpH-lkp@intel.com>
+Subject: [rostedt-trace:for-next 2/3] kernel/trace/trace_events.c:2681:25:
+ warning: variable 'no_pid_list' set but not used
+Message-ID: <202111280401.qC0z99JB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,21 +34,18 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Javier,
-
-First bad commit (maybe != root cause):
-
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   db08490fc4b6695ada6c21e40343307f08d9620e
-commit: e9aeeba26a8de1f553305722d017022ae7e79280 [4/6] drm: Decouple nomodeset from CONFIG_VGA_CONSOLE
-config: hexagon-randconfig-r041-20211127 (https://download.01.org/0day-ci/archive/20211128/202111280200.ZO66VwpH-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+head:   a55f224ff5f238013de8762c4287117e47b86e22
+commit: 6cb206508b621a9a0a2c35b60540e399225c8243 [2/3] tracing: Check pid filtering when creating events
+config: hexagon-randconfig-r045-20211128 (https://download.01.org/0day-ci/archive/20211128/202111280401.qC0z99JB-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc for-linux-next
-        git checkout e9aeeba26a8de1f553305722d017022ae7e79280
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/commit/?id=6cb206508b621a9a0a2c35b60540e399225c8243
+        git remote add rostedt-trace https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+        git fetch --no-tags rostedt-trace for-next
+        git checkout 6cb206508b621a9a0a2c35b60540e399225c8243
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
@@ -56,10 +53,49 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> make[4]: *** No rule to make target 'drivers/gpu/drm/drm_nomodeset.o', needed by 'drivers/gpu/drm/built-in.a'.
-   make[4]: Target '__build' not remade because of errors.
+>> kernel/trace/trace_events.c:2681:25: warning: variable 'no_pid_list' set but not used [-Wunused-but-set-variable]
+           struct trace_pid_list *no_pid_list;
+                                  ^
+   1 warning generated.
+
+
+vim +/no_pid_list +2681 kernel/trace/trace_events.c
+
+  2676	
+  2677	static struct trace_event_file *
+  2678	trace_create_new_event(struct trace_event_call *call,
+  2679			       struct trace_array *tr)
+  2680	{
+> 2681		struct trace_pid_list *no_pid_list;
+  2682		struct trace_pid_list *pid_list;
+  2683		struct trace_event_file *file;
+  2684		unsigned int first;
+  2685	
+  2686		file = kmem_cache_alloc(file_cachep, GFP_TRACE);
+  2687		if (!file)
+  2688			return NULL;
+  2689	
+  2690		pid_list = rcu_dereference_protected(tr->filtered_pids,
+  2691						     lockdep_is_held(&event_mutex));
+  2692		no_pid_list = rcu_dereference_protected(tr->filtered_no_pids,
+  2693						     lockdep_is_held(&event_mutex));
+  2694	
+  2695		if (!trace_pid_list_first(pid_list, &first) ||
+  2696		    !trace_pid_list_first(pid_list, &first))
+  2697			file->flags |= EVENT_FILE_FL_PID_FILTER;
+  2698	
+  2699		file->event_call = call;
+  2700		file->tr = tr;
+  2701		atomic_set(&file->sm_ref, 0);
+  2702		atomic_set(&file->tm_ref, 0);
+  2703		INIT_LIST_HEAD(&file->triggers);
+  2704		list_add(&file->list, &tr->events);
+  2705	
+  2706		return file;
+  2707	}
+  2708	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
