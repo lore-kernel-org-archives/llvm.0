@@ -1,32 +1,29 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC9B2C82
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 15:09:58 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="234496784"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8532C82
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 15:20:00 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="233260050"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="234496784"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 07:09:57 -0800
+   d="scan'208";a="233260050"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 07:20:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="457956801"
+   d="scan'208";a="555885752"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 27 Nov 2021 07:09:55 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 27 Nov 2021 07:19:58 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqzKs-0009fo-0D; Sat, 27 Nov 2021 15:09:54 +0000
-Date: Sat, 27 Nov 2021 23:09:30 +0800
+	id 1mqzUc-0009gr-5B; Sat, 27 Nov 2021 15:19:58 +0000
+Date: Sat, 27 Nov 2021 23:19:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Beau Belgrave <beaub@linux.microsoft.com>, rostedt@goodmis.org,
-	mhiramat@kernel.org
+To: Anup Patel <anup.patel@wdc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	beaub@linux.microsoft.com
-Subject: Re: [PATCH v5 09/12] user_events: Optimize writing events by only
- copying data once
-Message-ID: <202111272346.r2ZhQ5KM-lkp@intel.com>
-References: <20211116005047.1808-10-beaub@linux.microsoft.com>
+	linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+	Alexander Graf <graf@amazon.com>
+Subject: ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
+Message-ID: <202111272308.yL7t5fOD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,104 +32,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211116005047.1808-10-beaub@linux.microsoft.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Beau,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on 67d4f6e3bf5dddced226fbf19704cdbbb0c98847]
-
-url:    https://github.com/0day-ci/linux/commits/Beau-Belgrave/user_events-Enable-user-processes-to-create-and-write-to-trace-events/20211116-090533
-base:   67d4f6e3bf5dddced226fbf19704cdbbb0c98847
-config: hexagon-randconfig-r031-20211116 (https://download.01.org/0day-ci/archive/20211127/202111272346.r2ZhQ5KM-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
+commit: fd7bb4a251dfc1da3496bf59a4793937c13e8c1f RISC-V: KVM: Implement VMID allocator
+date:   8 weeks ago
+config: riscv-randconfig-r033-20211126 (https://download.01.org/0day-ci/archive/20211127/202111272308.yL7t5fOD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5d08d02e133130c59d164c17756a0aa0abb5418c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Beau-Belgrave/user_events-Enable-user-processes-to-create-and-write-to-trace-events/20211116-090533
-        git checkout 5d08d02e133130c59d164c17756a0aa0abb5418c
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> kernel/trace/trace_events_user.c:563:22: warning: comparison of distinct pointer types ('typeof (i->count) *' (aka 'unsigned int *') and 'typeof ((1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                   size_t copy_size = min(i->count, MAX_BPF_COPY_SIZE);
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +563 kernel/trace/trace_events_user.c
-
-   537	
-   538	#ifdef CONFIG_PERF_EVENTS
-   539	static void user_event_bpf(struct user_event *user, struct iov_iter *i)
-   540	{
-   541		struct user_bpf_context context;
-   542		struct user_bpf_iter bpf_i;
-   543		char fast_data[MAX_STACK_BPF_DATA];
-   544		void *temp = NULL;
-   545	
-   546		if ((user->flags & FLAG_BPF_ITER) && iter_is_iovec(i)) {
-   547			/* Raw iterator */
-   548			context.data_type = USER_BPF_DATA_ITER;
-   549			context.data_len = i->count;
-   550			context.iter = &bpf_i;
-   551	
-   552			bpf_i.iov_offset = i->iov_offset;
-   553			bpf_i.iov = i->iov;
-   554			bpf_i.nr_segs = i->nr_segs;
-   555		} else if (i->nr_segs == 1 && iter_is_iovec(i)) {
-   556			/* Single buffer from user */
-   557			context.data_type = USER_BPF_DATA_USER;
-   558			context.data_len = i->count;
-   559			context.udata = i->iov->iov_base + i->iov_offset;
-   560		} else {
-   561			/* Multi buffer from user */
-   562			struct iov_iter copy = *i;
- > 563			size_t copy_size = min(i->count, MAX_BPF_COPY_SIZE);
-   564	
-   565			context.data_type = USER_BPF_DATA_KERNEL;
-   566			context.kdata = fast_data;
-   567	
-   568			if (unlikely(copy_size > sizeof(fast_data))) {
-   569				temp = kmalloc(copy_size, GFP_NOWAIT);
-   570	
-   571				if (temp)
-   572					context.kdata = temp;
-   573				else
-   574					copy_size = sizeof(fast_data);
-   575			}
-   576	
-   577			context.data_len = copy_nofault(context.kdata,
-   578							copy_size, &copy);
-   579		}
-   580	
-   581		trace_call_bpf(&user->call, &context);
-   582	
-   583		kfree(temp);
-   584	}
-   585	
+>> ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
