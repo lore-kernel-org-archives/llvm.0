@@ -1,29 +1,28 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233FF2C80
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 11:44:51 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235994313"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393CE2C80
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 11:54:50 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235692994"
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="235994313"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 03:44:50 -0800
+   d="scan'208";a="235692994"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 03:54:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
-   d="scan'208";a="510965686"
+   d="scan'208";a="457930186"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2021 03:44:48 -0800
+  by orsmga003.jf.intel.com with ESMTP; 27 Nov 2021 03:54:48 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqw8N-0009RH-PM; Sat, 27 Nov 2021 11:44:47 +0000
-Date: Sat, 27 Nov 2021 19:44:15 +0800
+	id 1mqwI3-0009Rs-VZ; Sat, 27 Nov 2021 11:54:47 +0000
+Date: Sat, 27 Nov 2021 19:54:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ciara Loftus <ciara.loftus@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH bpf-next 3/8] xsk: handle XDP_REDIRECT_XSK and expose
- xsk_rcv/flush
-Message-ID: <202111271955.w9AzLVNN-lkp@intel.com>
-References: <20211116073742.7941-4-ciara.loftus@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 899/3897]
+ drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.o: warning: objtool:
+ slpc_force_min_freq()+0x298: unreachable instruction
+Message-ID: <202111271942.5gvrTwYZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,87 +31,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211116073742.7941-4-ciara.loftus@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Ciara,
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Vinay Belgaumkar <vinay.belgaumkar@intel.com>
+CC: John Harrison <John.C.Harrison@Intel.com>
+CC: Ashutosh Dixit <ashutosh.dixit@intel.com>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/Ciara-Loftus/XDP_REDIRECT_XSK-and-Batched-AF_XDP-Rx/20211116-153952
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-randconfig-a004-20211116 (https://download.01.org/0day-ci/archive/20211127/202111271955.w9AzLVNN-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f30a24ed97b401416118756fa35fbe5d28f999e3
+commit: 5f1176b419f9468f05dabdc8352bfa9b15427377 [899/3897] drm/i915/guc/slpc: Check GuC status before freq boost
+config: x86_64-randconfig-a013-20211115 (https://download.01.org/0day-ci/archive/20211127/202111271942.5gvrTwYZ-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/06daa8f48870f74b06ed02fe7f36b820c09844c9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ciara-Loftus/XDP_REDIRECT_XSK-and-Batched-AF_XDP-Rx/20211116-153952
-        git checkout 06daa8f48870f74b06ed02fe7f36b820c09844c9
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5f1176b419f9468f05dabdc8352bfa9b15427377
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 5f1176b419f9468f05dabdc8352bfa9b15427377
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/core/dev.c:4883:5: error: expected expression
-                                   struct xdp_sock *xs =
-                                   ^
->> net/core/dev.c:4886:27: error: use of undeclared identifier 'xs'
-                                   err = xsk_generic_rcv(xs, &xdp);
-                                                         ^
-   2 errors generated.
-
-
-vim +4883 net/core/dev.c
-
-  4870	
-  4871	int do_xdp_generic(struct bpf_prog *xdp_prog, struct sk_buff *skb)
-  4872	{
-  4873		if (xdp_prog) {
-  4874			struct xdp_buff xdp;
-  4875			u32 act;
-  4876			int err;
-  4877	
-  4878			act = netif_receive_generic_xdp(skb, &xdp, xdp_prog);
-  4879			if (act != XDP_PASS) {
-  4880				switch (act) {
-  4881	#ifdef CONFIG_XDP_SOCKETS
-  4882				case XDP_REDIRECT_XSK:
-> 4883					struct xdp_sock *xs =
-  4884						READ_ONCE(skb->dev->_rx[xdp.rxq->queue_index].xsk);
-  4885	
-> 4886					err = xsk_generic_rcv(xs, &xdp);
-  4887					if (err)
-  4888						goto out_redir;
-  4889					consume_skb(skb);
-  4890					break;
-  4891	#endif
-  4892				case XDP_REDIRECT:
-  4893					err = xdp_do_generic_redirect(skb->dev, skb,
-  4894								      &xdp, xdp_prog);
-  4895					if (err)
-  4896						goto out_redir;
-  4897					break;
-  4898				case XDP_TX:
-  4899					generic_xdp_tx(skb, xdp_prog);
-  4900					break;
-  4901				}
-  4902				return XDP_DROP;
-  4903			}
-  4904		}
-  4905		return XDP_PASS;
-  4906	out_redir:
-  4907		kfree_skb(skb);
-  4908		return XDP_DROP;
-  4909	}
-  4910	EXPORT_SYMBOL_GPL(do_xdp_generic);
-  4911	
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.o: warning: objtool: slpc_force_min_freq()+0x298: unreachable instruction
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
