@@ -1,30 +1,30 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D822D68
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 01:25:25 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="235971068"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F1C68
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 02:13:32 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="216442043"
 X-IronPort-AV: E=Sophos;i="5.87,267,1631602800"; 
-   d="scan'208";a="235971068"
+   d="scan'208";a="216442043"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 17:25:25 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 18:13:31 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,267,1631602800"; 
-   d="scan'208";a="498613168"
+   d="scan'208";a="498623509"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 17:25:23 -0800
+  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 18:13:30 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqmSw-0008rv-Mw; Sat, 27 Nov 2021 01:25:22 +0000
-Date: Sat, 27 Nov 2021 09:24:47 +0800
+	id 1mqnDV-0008vc-Ht; Sat, 27 Nov 2021 02:13:29 +0000
+Date: Sat, 27 Nov 2021 10:12:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ayala Beker <ayala.beker@intel.com>
+To: Daniel Palmer <daniel@0x0f.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Luca Coelho <luciano.coelho@intel.com>
-Subject: [iwlwifi-next:mac80211-next 4/5] net/wireless/scan.c:1803:6: error:
- use of undeclared identifier 'channel'
-Message-ID: <202111270902.oVy0Aumb-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 68/69]
+ drivers/irqchip/irq-msc313-pm-wakeup.c:21:25: error: redefinition of
+ 'field_mask' as different kind of symbol
+Message-ID: <202111271000.4rTe0TiV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,126 +35,171 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git mac80211-next
-head:   690c735dc56561a2cf331dcded3eecdbad1edd7f
-commit: 8efcf18569753acc522e58966fedd773ad358ee3 [4/5] cfg80211: Use the HE operation IE to determine a 6GHz BSS channel
-config: arm-randconfig-r011-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270902.oVy0Aumb-lkp@intel.com/config)
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   df6df62e60f3a32773b02a41e0d6a4e0f2b353b5
+commit: 294ac78fcc3c89b63c48a5f85d4352de0a73b078 [68/69] irqchip: MStar wakeup intc
+config: arm64-randconfig-r035-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271000.4rTe0TiV-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git/commit/?id=8efcf18569753acc522e58966fedd773ad358ee3
-        git remote add iwlwifi-next https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git
-        git fetch --no-tags iwlwifi-next mac80211-next
-        git checkout 8efcf18569753acc522e58966fedd773ad358ee3
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/linux-chenxing/linux/commit/294ac78fcc3c89b63c48a5f85d4352de0a73b078
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 294ac78fcc3c89b63c48a5f85d4352de0a73b078
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/wireless/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> net/wireless/scan.c:1803:6: error: use of undeclared identifier 'channel'
-           if (channel->band == NL80211_BAND_6GHZ) {
-               ^
-   net/wireless/scan.c:1815:12: error: use of undeclared identifier 'channel'
-                                   return channel;
-                                          ^
->> net/wireless/scan.c:1817:4: error: use of undeclared identifier 'freq'
-                           freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
+>> drivers/irqchip/irq-msc313-pm-wakeup.c:21:25: error: redefinition of 'field_mask' as different kind of symbol
+   static struct reg_field field_mask = REG_FIELD(MSTAR_PMSLEEP_WAKEUPSOURCE, 0, 7);
                            ^
-   net/wireless/scan.c:1824:12: error: use of undeclared identifier 'freq'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                   ^
-   net/wireless/scan.c:1824:19: error: use of undeclared identifier 'channel'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                          ^
-   net/wireless/scan.c:1824:12: error: use of undeclared identifier 'freq'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                   ^
-   net/wireless/scan.c:1824:19: error: use of undeclared identifier 'channel'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                          ^
-   net/wireless/scan.c:1823:8: error: use of undeclared identifier 'freq'
-                           if (freq != channel->center_freq &&
-                               ^
-   net/wireless/scan.c:1823:16: error: use of undeclared identifier 'channel'
-                           if (freq != channel->center_freq &&
-                                       ^
->> net/wireless/scan.c:1825:9: error: use of undeclared identifier 'ftype'; did you mean '_ctype'?
-                               (ftype != CFG80211_BSS_FTYPE_BEACON ||
-                                ^~~~~
-                                _ctype
-   include/linux/ctype.h:21:28: note: '_ctype' declared here
-   extern const unsigned char _ctype[];
+   include/linux/bitfield.h:122:28: note: previous definition is here
+   static __always_inline u64 field_mask(u64 field)
                               ^
-   10 errors generated.
+>> drivers/irqchip/irq-msc313-pm-wakeup.c:118:43: error: passing 'u64 (u64)' (aka 'unsigned long long (unsigned long long)') to parameter of incompatible type 'struct reg_field'
+           intc->mask = regmap_field_alloc(pmsleep, field_mask);
+                                                    ^~~~~~~~~~
+   include/linux/regmap.h:1265:20: note: passing argument to parameter 'reg_field' here
+                   struct reg_field reg_field);
+                                    ^
+   drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +/channel +1803 net/wireless/scan.c
+vim +/field_mask +21 drivers/irqchip/irq-msc313-pm-wakeup.c
 
-  1796	
-  1797	int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
-  1798					    enum nl80211_band band)
-  1799	{
-  1800		const u8 *tmp;
-  1801		int channel_number = -1;
-  1802	
-> 1803		if (channel->band == NL80211_BAND_6GHZ) {
-  1804			const struct element *elem;
-  1805	
-  1806			elem = cfg80211_find_ext_elem(WLAN_EID_EXT_HE_OPERATION, ie,
-  1807						      ielen);
-  1808			if (elem && elem->datalen >= ieee80211_he_oper_size(&elem->data[1])) {
-  1809				struct ieee80211_he_operation *he_oper =
-  1810					(void *)(&elem->data[1]);
-  1811				const struct ieee80211_he_6ghz_oper *he_6ghz_oper;
-  1812	
-  1813				he_6ghz_oper = ieee80211_he_6ghz_oper(he_oper);
-  1814				if (!he_6ghz_oper)
-  1815					return channel;
-  1816	
-> 1817				freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
-  1818								      NL80211_BAND_6GHZ);
-  1819	
-  1820				/* duplicated beacon indication is relevant for beacons
-  1821				 * only
-  1822				 */
-  1823				if (freq != channel->center_freq &&
-  1824				    abs(freq - channel->center_freq) <= 80 &&
-> 1825				    (ftype != CFG80211_BSS_FTYPE_BEACON ||
-  1826				     he_6ghz_oper->control & IEEE80211_HE_6GHZ_OPER_CTRL_DUP_BEACON))
-  1827					channel_number = he_6ghz_oper->primary;
-  1828			}
-  1829		} else if (band == NL80211_BAND_S1GHZ) {
-  1830			tmp = cfg80211_find_ie(WLAN_EID_S1G_OPERATION, ie, ielen);
-  1831			if (tmp && tmp[1] >= sizeof(struct ieee80211_s1g_oper_ie)) {
-  1832				struct ieee80211_s1g_oper_ie *s1gop = (void *)(tmp + 2);
-  1833	
-  1834				channel_number = s1gop->primary_ch;
-  1835			}
-  1836		} else {
-  1837			tmp = cfg80211_find_ie(WLAN_EID_DS_PARAMS, ie, ielen);
-  1838			if (tmp && tmp[1] == 1) {
-  1839				channel_number = tmp[2];
-  1840			} else {
-  1841				tmp = cfg80211_find_ie(WLAN_EID_HT_OPERATION, ie, ielen);
-  1842				if (tmp && tmp[1] >= sizeof(struct ieee80211_ht_operation)) {
-  1843					struct ieee80211_ht_operation *htop = (void *)(tmp + 2);
-  1844	
-  1845					channel_number = htop->primary_chan;
-  1846				}
-  1847			}
-  1848		}
-  1849	
-  1850		return channel_number;
-  1851	}
-  1852	EXPORT_SYMBOL(cfg80211_get_ies_channel_number);
-  1853	
+    20	
+  > 21	static struct reg_field field_mask = REG_FIELD(MSTAR_PMSLEEP_WAKEUPSOURCE, 0, 7);
+    22	static struct reg_field field_type = REG_FIELD(MSTAR_PMSLEEP_REG24, 0, 7);
+    23	static struct reg_field field_status = REG_FIELD(MSTAR_PMSLEEP_WAKEINT_STATUS, 0, 7);
+    24	
+    25	struct msc313_sleep_intc {
+    26		struct regmap_field *mask;
+    27		struct regmap_field *type;
+    28		struct regmap_field *status;
+    29	};
+    30	
+    31	static void msc313_pm_wakeup_intc_mask_irq(struct irq_data *data)
+    32	{
+    33		struct msc313_sleep_intc *intc = irq_data_get_irq_chip_data(data);
+    34	
+    35		regmap_field_update_bits(intc->mask, 1 << data->hwirq, ~0);
+    36	}
+    37	
+    38	static void msc313_pm_wakeup_intc_unmask_irq(struct irq_data *data)
+    39	{
+    40		struct msc313_sleep_intc *intc = irq_data_get_irq_chip_data(data);
+    41	
+    42		regmap_field_update_bits(intc->mask, 1 << data->hwirq, 0);
+    43	}
+    44	
+    45	static void msc313_pm_wakeup_intc_irq_eoi(struct irq_data *data)
+    46	{
+    47	}
+    48	
+    49	static int msc313_pm_wakeup_intc_set_type_irq(struct irq_data *data,
+    50			unsigned int flow_type)
+    51	{
+    52		return 0;
+    53	}
+    54	
+    55	static struct irq_chip msc313_pm_wakeup_intc_chip = {
+    56		.name		= "PM-WAKEUP",
+    57		.irq_mask	= msc313_pm_wakeup_intc_mask_irq,
+    58		.irq_unmask	= msc313_pm_wakeup_intc_unmask_irq,
+    59		.irq_eoi	= msc313_pm_wakeup_intc_irq_eoi,
+    60		.irq_set_type	= msc313_pm_wakeup_intc_set_type_irq,
+    61	};
+    62	
+    63	static irqreturn_t msc313_pm_wakeup_intc_chainedhandler(int irq, void *data)
+    64	{
+    65		struct irq_domain *domain = data;
+    66		struct msc313_sleep_intc *intc = domain->host_data;
+    67		unsigned int hwirq, status;
+    68	
+    69		regmap_field_read(intc->status, &status);
+    70		printk("wakeupint %x\n", status);
+    71	
+    72		while (status) {
+    73			hwirq = __ffs(status);
+    74			generic_handle_domain_irq(domain, hwirq);
+    75			status &= ~BIT(hwirq);
+    76		}
+    77	
+    78		return IRQ_HANDLED;
+    79	}
+    80	
+    81	static int msc313_pm_wakeup_intc_domain_map(struct irq_domain *domain,
+    82			unsigned int irq, irq_hw_number_t hw)
+    83	{
+    84		struct msc313_sleep_intc *intc = domain->host_data;
+    85	
+    86		irq_set_chip_and_handler(irq, &msc313_pm_wakeup_intc_chip, handle_level_irq);
+    87		irq_set_chip_data(irq, intc);
+    88		irq_set_probe(irq);
+    89	
+    90		return 0;
+    91	}
+    92	
+    93	static const struct irq_domain_ops msc313_pm_wakeup_intc_domain_ops = {
+    94		.xlate = irq_domain_xlate_twocell,
+    95		.map = msc313_pm_wakeup_intc_domain_map,
+    96	};
+    97	
+    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
+    99					   struct device_node *parent)
+   100	{
+   101		int ret = 0, irq;
+   102		struct regmap *pmsleep;
+   103		struct msc313_sleep_intc *intc;
+   104		struct irq_domain *domain;
+   105	
+   106		irq = of_irq_get(node, 0);
+   107		if (irq <= 0)
+   108			return irq;
+   109	
+   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
+   111		if (IS_ERR(pmsleep))
+   112			return PTR_ERR(pmsleep);
+   113	
+   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
+   115		if (!intc)
+   116			return -ENOMEM;
+   117	
+ > 118		intc->mask = regmap_field_alloc(pmsleep, field_mask);
+   119		intc->type = regmap_field_alloc(pmsleep, field_type);
+   120		intc->status = regmap_field_alloc(pmsleep, field_status);
+   121	
+   122		/* The masks survive deep sleep so clear them. */
+   123		regmap_field_write(intc->mask, ~0);
+   124	
+   125		domain = irq_domain_add_linear(node, NUM_IRQ,
+   126				&msc313_pm_wakeup_intc_domain_ops, intc);
+   127		if (!domain) {
+   128			ret = -ENOMEM;
+   129			goto out_free;
+   130		}
+   131	
+   132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+   133					"pmsleep", domain);
+   134	
+   135		return 0;
+   136	
+   137	out_free:
+   138		kfree(intc);
+   139		return ret;
+   140	}
+   141	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
