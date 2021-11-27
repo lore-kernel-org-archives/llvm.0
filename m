@@ -1,32 +1,30 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DE62C81
-	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 08:41:49 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="222977400"
-X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
-   d="scan'208";a="222977400"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 00:41:48 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0243D2C80
+	for <llvm@lists.linux.dev>; Sat, 27 Nov 2021 10:53:49 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="234485320"
+X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
+   d="scan'208";a="234485320"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2021 02:53:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
-   d="scan'208";a="742704493"
+X-IronPort-AV: E=Sophos;i="5.87,269,1631602800"; 
+   d="scan'208";a="675769121"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Nov 2021 00:41:44 -0800
+  by orsmga005.jf.intel.com with ESMTP; 27 Nov 2021 02:53:47 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mqtHE-0009Gx-3k; Sat, 27 Nov 2021 08:41:44 +0000
-Date: Sat, 27 Nov 2021 16:41:19 +0800
+	id 1mqvL0-0009OG-PL; Sat, 27 Nov 2021 10:53:46 +0000
+Date: Sat, 27 Nov 2021 18:53:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alistair Francis <alistair.francis@opensource.wdc.com>,
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tglx@linutronix.de,
-	arnd@arndb.de, namhyung@kernel.org, peterz@infradead.org,
-	alistair23@gmail.com, jolsa@redhat.com, dave@stgolabs.net,
-	mingo@redhat.com, dvhart@infradead.org
-Subject: Re: [PATCH v3 3/6] uapi: futex: Add a futex syscall
-Message-ID: <202111271634.gZ4ePXuJ-lkp@intel.com>
-References: <20211126060024.3290177-3-alistair.francis@opensource.wdc.com>
+Subject: [tglx-devel:msi 93/101] drivers/soc/ti/ti_sci_inta_msi.c:116:60:
+ warning: incompatible integer to pointer conversion passing 'int' to
+ parameter of type 'struct msi_range *'
+Message-ID: <202111271856.wXc90TMb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,83 +33,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211126060024.3290177-3-alistair.francis@opensource.wdc.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alistair,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tip/locking/core]
-[also build test ERROR on linux/master soc/for-next linus/master v5.16-rc2 next-20211126]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Alistair-Francis/perf-bench-futex-Add-support-for-32-bit-systems-with-64-bit-time_t/20211126-140752
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 3297481d688a5cc2973ea58bd78e66b8639748b1
-config: x86_64-randconfig-a002-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271634.gZ4ePXuJ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi
+head:   900894c6ddc1b5b5a8f0c99ca573619d996468b8
+commit: 46c1ea0c989ee963922a41cb88027994da48786c [93/101] genirq/msi: Add range argument to msi_domain_alloc/free_descs_locked()
+config: arm64-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271856.wXc90TMb-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e6bfd30ff20551d613ea63d17bc9667179a593de
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alistair-Francis/perf-bench-futex-Add-support-for-32-bit-systems-with-64-bit-time_t/20211126-140752
-        git checkout e6bfd30ff20551d613ea63d17bc9667179a593de
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=46c1ea0c989ee963922a41cb88027994da48786c
+        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
+        git fetch --no-tags tglx-devel msi
+        git checkout 46c1ea0c989ee963922a41cb88027994da48786c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/ti/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/futex_syscall.h:30:16: warning: declaration of 'struct timespec' will not be visible outside of this function [-Wvisibility]
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
->> ./usr/include/linux/futex_syscall.h:42:12: error: invalid application of 'sizeof' to an incomplete type 'struct timespec'
-           if (sizeof(*timeout) == sizeof(struct __kernel_old_timespec))
-                     ^~~~~~~~~~
-   ./usr/include/linux/futex_syscall.h:30:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
->> ./usr/include/linux/futex_syscall.h:43:10: error: implicit declaration of function 'syscall' [-Werror,-Wimplicit-function-declaration]
-                   return syscall(__NR_futex, uaddr, op, val, timeout, uaddr2, val3);
-                          ^
->> ./usr/include/linux/futex_syscall.h:45:24: error: incomplete definition of type 'struct timespec'
-           if (timeout && timeout->tv_sec == (long)timeout->tv_sec) {
-                          ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:30:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:45:49: error: incomplete definition of type 'struct timespec'
-           if (timeout && timeout->tv_sec == (long)timeout->tv_sec) {
-                                                   ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:30:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:48:44: error: incomplete definition of type 'struct timespec'
-                   ts_old.tv_sec = (__kernel_long_t) timeout->tv_sec;
-                                                     ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:30:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:49:45: error: incomplete definition of type 'struct timespec'
-                   ts_old.tv_nsec = (__kernel_long_t) timeout->tv_nsec;
-                                                      ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:30:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:53:46: error: use of undeclared identifier 'NULL'
-                   return syscall(__NR_futex, uaddr, op, val, NULL, uaddr2, val3);
-                                                              ^
-   ./usr/include/linux/futex_syscall.h:82:9: error: implicit declaration of function 'syscall' [-Werror,-Wimplicit-function-declaration]
-           return syscall(__NR_futex, uaddr, op, val, nr_requeue, uaddr2, val3);
-                  ^
-   1 warning and 8 errors generated.
+>> drivers/soc/ti/ti_sci_inta_msi.c:116:60: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct msi_range *' [-Wint-conversion]
+           ret = msi_domain_alloc_irqs_descs_locked(msi_domain, dev, nvec);
+                                                                     ^~~~
+   include/linux/msi.h:506:106: note: passing argument to parameter 'range' here
+   int msi_domain_alloc_irqs_descs_locked(struct irq_domain *domain, struct device *dev,  struct msi_range *range);
+                                                                                                            ^
+   1 warning generated.
+
+
+vim +116 drivers/soc/ti/ti_sci_inta_msi.c
+
+49b323157bf1e7 Lokesh Vutla    2019-04-30   90  
+49b323157bf1e7 Lokesh Vutla    2019-04-30   91  int ti_sci_inta_msi_domain_alloc_irqs(struct device *dev,
+49b323157bf1e7 Lokesh Vutla    2019-04-30   92  				      struct ti_sci_resource *res)
+49b323157bf1e7 Lokesh Vutla    2019-04-30   93  {
+49b323157bf1e7 Lokesh Vutla    2019-04-30   94  	struct platform_device *pdev = to_platform_device(dev);
+49b323157bf1e7 Lokesh Vutla    2019-04-30   95  	struct irq_domain *msi_domain;
+49b323157bf1e7 Lokesh Vutla    2019-04-30   96  	int ret, nvec;
+49b323157bf1e7 Lokesh Vutla    2019-04-30   97  
+49b323157bf1e7 Lokesh Vutla    2019-04-30   98  	msi_domain = dev_get_msi_domain(dev);
+49b323157bf1e7 Lokesh Vutla    2019-04-30   99  	if (!msi_domain)
+49b323157bf1e7 Lokesh Vutla    2019-04-30  100  		return -EINVAL;
+49b323157bf1e7 Lokesh Vutla    2019-04-30  101  
+49b323157bf1e7 Lokesh Vutla    2019-04-30  102  	if (pdev->id < 0)
+49b323157bf1e7 Lokesh Vutla    2019-04-30  103  		return -ENODEV;
+49b323157bf1e7 Lokesh Vutla    2019-04-30  104  
+43736dc111781c Thomas Gleixner 2021-11-10  105  	ret = msi_setup_device_data(dev);
+43736dc111781c Thomas Gleixner 2021-11-10  106  	if (ret)
+43736dc111781c Thomas Gleixner 2021-11-10  107  		return ret;
+43736dc111781c Thomas Gleixner 2021-11-10  108  
+32e74ad753f574 Thomas Gleixner 2021-11-10  109  	msi_lock_descs(dev);
+49b323157bf1e7 Lokesh Vutla    2019-04-30  110  	nvec = ti_sci_inta_msi_alloc_descs(dev, res);
+32e74ad753f574 Thomas Gleixner 2021-11-10  111  	if (nvec <= 0) {
+32e74ad753f574 Thomas Gleixner 2021-11-10  112  		ret = nvec;
+32e74ad753f574 Thomas Gleixner 2021-11-10  113  		goto unlock;
+49b323157bf1e7 Lokesh Vutla    2019-04-30  114  	}
+49b323157bf1e7 Lokesh Vutla    2019-04-30  115  
+32e74ad753f574 Thomas Gleixner 2021-11-10 @116  	ret = msi_domain_alloc_irqs_descs_locked(msi_domain, dev, nvec);
+
+:::::: The code at line 116 was first introduced by commit
+:::::: 32e74ad753f5747e1f201dc462a05ad80e9389ce soc: ti: ti_sci_inta_msi: Rework MSI descriptor allocation
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
