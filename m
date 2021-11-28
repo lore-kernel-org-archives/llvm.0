@@ -1,32 +1,31 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B884172
-	for <llvm@lists.linux.dev>; Sun, 28 Nov 2021 19:18:38 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="236088754"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758B82C80
+	for <llvm@lists.linux.dev>; Sun, 28 Nov 2021 21:21:42 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="296666077"
 X-IronPort-AV: E=Sophos;i="5.87,271,1631602800"; 
-   d="scan'208";a="236088754"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 11:18:37 -0800
+   d="scan'208";a="296666077"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 13:21:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,271,1631602800"; 
-   d="scan'208";a="676086683"
+   d="scan'208";a="608465133"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 28 Nov 2021 11:18:36 -0800
+  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2021 13:21:40 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mrPh5-000B2H-DU; Sun, 28 Nov 2021 19:18:35 +0000
-Date: Mon, 29 Nov 2021 03:17:46 +0800
+	id 1mrRcB-000BAJ-BI; Sun, 28 Nov 2021 21:21:39 +0000
+Date: Mon, 29 Nov 2021 05:21:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Bert Vermeulen <bert@biot.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:for-next/kspp-misc-fixes 3/4]
- ./usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with
- variable sized type 'struct xt_entry_target' not at the end of a struct or
- class is a GNU extension
-Message-ID: <202111290333.fNQW2C1s-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Sander Vanheule <sander@svanheule.net>
+Subject: arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for
+ function 'vpe_alloc'
+Message-ID: <202111290501.4KhjVZ6G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,112 +36,159 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-misc-fixes
-head:   5c9a39a1ff78d32e645774c7eb213c831b51b1ee
-commit: fb29d640e9640985e307deaee123e83144305633 [3/4] treewide: Replace zero-length arrays with flexible-array members
-config: x86_64-randconfig-r036-20211128 (https://download.01.org/0day-ci/archive/20211129/202111290333.fNQW2C1s-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+Hi Bert,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9557e60b8c3521e43bf5f21db95b2b42d7c43ac9
+commit: 4042147a0cc6af5a400b5e12a7855e893dec01b4 MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system
+date:   10 months ago
+config: mips-randconfig-r024-20211128 (https://download.01.org/0day-ci/archive/20211129/202111290501.4KhjVZ6G-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=fb29d640e9640985e307deaee123e83144305633
-        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
-        git fetch --no-tags gustavoars for-next/kspp-misc-fixes
-        git checkout fb29d640e9640985e307deaee123e83144305633
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4042147a0cc6af5a400b5e12a7855e893dec01b4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4042147a0cc6af5a400b5e12a7855e893dec01b4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/netfilter_ipv6/ip6_tables.h:24:
->> ./usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct xt_entry_target target;
-                                  ^
-   ./usr/include/linux/netfilter/x_tables.h:71:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct xt_entry_target target;
-                                  ^
-   In file included from <built-in>:1:
->> ./usr/include/linux/netfilter_ipv6/ip6_tables.h:131:20: warning: field 'entry' with variable sized type 'struct ip6t_entry' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct ip6t_entry entry;
-                             ^
-   ./usr/include/linux/netfilter_ipv6/ip6_tables.h:136:20: warning: field 'entry' with variable sized type 'struct ip6t_entry' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct ip6t_entry entry;
-                             ^
+>> arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for function 'vpe_alloc' [-Wmissing-prototypes]
+   void *vpe_alloc(void)
+         ^
+   arch/mips/kernel/vpe-mt.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *vpe_alloc(void)
+   ^
+   static 
+>> arch/mips/kernel/vpe-mt.c:196:5: warning: no previous prototype for function 'vpe_start' [-Wmissing-prototypes]
+   int vpe_start(void *vpe, unsigned long start)
+       ^
+   arch/mips/kernel/vpe-mt.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vpe_start(void *vpe, unsigned long start)
+   ^
+   static 
+>> arch/mips/kernel/vpe-mt.c:206:5: warning: no previous prototype for function 'vpe_stop' [-Wmissing-prototypes]
+   int vpe_stop(void *vpe)
+       ^
+   arch/mips/kernel/vpe-mt.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vpe_stop(void *vpe)
+   ^
+   static 
+>> arch/mips/kernel/vpe-mt.c:227:5: warning: no previous prototype for function 'vpe_free' [-Wmissing-prototypes]
+   int vpe_free(void *vpe)
+       ^
+   arch/mips/kernel/vpe-mt.c:227:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vpe_free(void *vpe)
+   ^
+   static 
    4 warnings generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct ebt_entry_target target;
-                                   ^
-   1 warning generated.
---
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/netfilter_ipv4/ip_tables.h:24:
->> ./usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct xt_entry_target target;
-                                  ^
-   ./usr/include/linux/netfilter/x_tables.h:71:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct xt_entry_target target;
-                                  ^
-   2 warnings generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/seg6_hmac.h:12:17: warning: field 'tlvhdr' with variable sized type 'struct sr6_tlv' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct sr6_tlv tlvhdr;
-                          ^
-   1 warning generated.
---
-   In file included from <built-in>:1:
-   In file included from ./usr/include/rdma/mlx5-abi.h:39:
-   In file included from ./usr/include/rdma/ib_user_ioctl_verbs.h:38:
->> ./usr/include/rdma/ib_user_verbs.h:436:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct ib_uverbs_create_cq_resp base;
-                                           ^
->> ./usr/include/rdma/ib_user_verbs.h:644:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct ib_uverbs_create_qp_resp base;
-                                           ^
->> ./usr/include/rdma/ib_user_verbs.h:740:29: warning: field 'base' with variable sized type 'struct ib_uverbs_modify_qp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           struct ib_uverbs_modify_qp base;
-                                      ^
->> ./usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at ./usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at ./usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at ./usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at ./usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
->> ./usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-           union {
-           ^
-   14 warnings generated.
+
+
+vim +/vpe_alloc +178 arch/mips/kernel/vpe-mt.c
+
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  175  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  176  /* module wrapper entry points */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  177  /* give me a vpe */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @178  void *vpe_alloc(void)
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  179  {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  180  	int i;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  181  	struct vpe *v;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  182  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  183  	/* find a vpe */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  184  	for (i = 1; i < MAX_VPES; i++) {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  185  		v = get_vpe(i);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  186  		if (v != NULL) {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  187  			v->state = VPE_STATE_INUSE;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  188  			return v;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  189  		}
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  190  	}
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  191  	return NULL;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  192  }
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  193  EXPORT_SYMBOL(vpe_alloc);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  194  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  195  /* start running from here */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @196  int vpe_start(void *vpe, unsigned long start)
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  197  {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  198  	struct vpe *v = vpe;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  199  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  200  	v->__start = start;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  201  	return vpe_run(v);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  202  }
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  203  EXPORT_SYMBOL(vpe_start);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  204  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  205  /* halt it for now */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @206  int vpe_stop(void *vpe)
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  207  {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  208  	struct vpe *v = vpe;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  209  	struct tc *t;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  210  	unsigned int evpe_flags;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  211  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  212  	evpe_flags = dvpe();
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  213  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  214  	t = list_entry(v->tc.next, struct tc, tc);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  215  	if (t != NULL) {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  216  		settc(t->index);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  217  		write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() & ~VPECONF0_VPA);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  218  	}
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  219  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  220  	evpe(evpe_flags);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  221  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  222  	return 0;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  223  }
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  224  EXPORT_SYMBOL(vpe_stop);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  225  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  226  /* I've done with it thank you */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @227  int vpe_free(void *vpe)
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  228  {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  229  	struct vpe *v = vpe;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  230  	struct tc *t;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  231  	unsigned int evpe_flags;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  232  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  233  	t = list_entry(v->tc.next, struct tc, tc);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  234  	if (t == NULL)
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  235  		return -ENOEXEC;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  236  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  237  	evpe_flags = dvpe();
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  238  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  239  	/* Put MVPE's into 'configuration state' */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  240  	set_c0_mvpcontrol(MVPCONTROL_VPC);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  241  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  242  	settc(t->index);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  243  	write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() & ~VPECONF0_VPA);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  244  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  245  	/* halt the TC */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  246  	write_tc_c0_tchalt(TCHALT_H);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  247  	mips_ihb();
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  248  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  249  	/* mark the TC unallocated */
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  250  	write_tc_c0_tcstatus(read_tc_c0_tcstatus() & ~TCSTATUS_A);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  251  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  252  	v->state = VPE_STATE_UNUSED;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  253  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  254  	clear_c0_mvpcontrol(MVPCONTROL_VPC);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  255  	evpe(evpe_flags);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  256  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  257  	return 0;
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  258  }
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  259  EXPORT_SYMBOL(vpe_free);
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  260  
+
+:::::: The code at line 178 was first introduced by commit
+:::::: 1a2a6d7e8816ed2b2679a0c4f7ba4019cd31dd62 MIPS: APRP: Split VPE loader into separate files.
+
+:::::: TO: Deng-Cheng Zhu <dengcheng.zhu@imgtec.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
