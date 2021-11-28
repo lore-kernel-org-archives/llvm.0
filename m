@@ -1,31 +1,29 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758B82C80
-	for <llvm@lists.linux.dev>; Sun, 28 Nov 2021 21:21:42 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="296666077"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6692C80
+	for <llvm@lists.linux.dev>; Sun, 28 Nov 2021 22:22:43 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="259773115"
 X-IronPort-AV: E=Sophos;i="5.87,271,1631602800"; 
-   d="scan'208";a="296666077"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 13:21:41 -0800
+   d="scan'208";a="259773115"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 14:22:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,271,1631602800"; 
-   d="scan'208";a="608465133"
+   d="scan'208";a="511408926"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2021 13:21:40 -0800
+  by orsmga008.jf.intel.com with ESMTP; 28 Nov 2021 14:22:40 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mrRcB-000BAJ-BI; Sun, 28 Nov 2021 21:21:39 +0000
-Date: Mon, 29 Nov 2021 05:21:17 +0800
+	id 1mrSZE-000BCT-5Q; Sun, 28 Nov 2021 22:22:40 +0000
+Date: Mon, 29 Nov 2021 06:22:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bert Vermeulen <bert@biot.com>
+To: Yury Norov <yury.norov@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sander Vanheule <sander@svanheule.net>
-Subject: arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for
- function 'vpe_alloc'
-Message-ID: <202111290501.4KhjVZ6G-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [norov:bitmap_fast2 3/9] drivers/iio/adc/mxs-lradc-adc.c:563:2:
+ error: unterminated function-like macro invocation
+Message-ID: <202111290655.xr3sMLhM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,159 +34,76 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Bert,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9557e60b8c3521e43bf5f21db95b2b42d7c43ac9
-commit: 4042147a0cc6af5a400b5e12a7855e893dec01b4 MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system
-date:   10 months ago
-config: mips-randconfig-r024-20211128 (https://download.01.org/0day-ci/archive/20211129/202111290501.4KhjVZ6G-lkp@intel.com/config)
+tree:   https://github.com/norov/linux bitmap_fast2
+head:   2ba93e639da00fa6374a9942dc507f64d5cb6659
+commit: 46f86267bdcb14f620d5905e64cbe68dc712e028 [3/9] all: replace bitmap_weigth() with bitmap_{empty,full,eq,gt,le}
+config: hexagon-randconfig-r033-20211128 (https://download.01.org/0day-ci/archive/20211129/202111290655.xr3sMLhM-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4042147a0cc6af5a400b5e12a7855e893dec01b4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4042147a0cc6af5a400b5e12a7855e893dec01b4
+        # https://github.com/norov/linux/commit/46f86267bdcb14f620d5905e64cbe68dc712e028
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap_fast2
+        git checkout 46f86267bdcb14f620d5905e64cbe68dc712e028
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/adc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for function 'vpe_alloc' [-Wmissing-prototypes]
-   void *vpe_alloc(void)
-         ^
-   arch/mips/kernel/vpe-mt.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *vpe_alloc(void)
+>> drivers/iio/adc/mxs-lradc-adc.c:563:2: error: unterminated function-like macro invocation
+           if (bitmap_weight_gt(mask, LRADC_MAX_TOTAL_CHANS, LRADC_MAX_MAPPED_CHAN - rsvd_chans)
+           ^
+   include/linux/compiler.h:56:9: note: macro 'if' defined here
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+           ^
+>> drivers/iio/adc/mxs-lradc-adc.c:834:40: error: expected '}'
+   MODULE_ALIAS("platform:mxs-lradc-adc");
+                                          ^
+   drivers/iio/adc/mxs-lradc-adc.c:540:1: note: to match this '{'
+   {
    ^
-   static 
->> arch/mips/kernel/vpe-mt.c:196:5: warning: no previous prototype for function 'vpe_start' [-Wmissing-prototypes]
-   int vpe_start(void *vpe, unsigned long start)
-       ^
-   arch/mips/kernel/vpe-mt.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vpe_start(void *vpe, unsigned long start)
-   ^
-   static 
->> arch/mips/kernel/vpe-mt.c:206:5: warning: no previous prototype for function 'vpe_stop' [-Wmissing-prototypes]
-   int vpe_stop(void *vpe)
-       ^
-   arch/mips/kernel/vpe-mt.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vpe_stop(void *vpe)
-   ^
-   static 
->> arch/mips/kernel/vpe-mt.c:227:5: warning: no previous prototype for function 'vpe_free' [-Wmissing-prototypes]
-   int vpe_free(void *vpe)
-       ^
-   arch/mips/kernel/vpe-mt.c:227:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vpe_free(void *vpe)
-   ^
-   static 
-   4 warnings generated.
+   2 errors generated.
 
 
-vim +/vpe_alloc +178 arch/mips/kernel/vpe-mt.c
+vim +563 drivers/iio/adc/mxs-lradc-adc.c
 
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  175  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  176  /* module wrapper entry points */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  177  /* give me a vpe */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @178  void *vpe_alloc(void)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  179  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  180  	int i;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  181  	struct vpe *v;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  182  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  183  	/* find a vpe */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  184  	for (i = 1; i < MAX_VPES; i++) {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  185  		v = get_vpe(i);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  186  		if (v != NULL) {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  187  			v->state = VPE_STATE_INUSE;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  188  			return v;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  189  		}
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  190  	}
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  191  	return NULL;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  192  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  193  EXPORT_SYMBOL(vpe_alloc);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  194  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  195  /* start running from here */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @196  int vpe_start(void *vpe, unsigned long start)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  197  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  198  	struct vpe *v = vpe;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  199  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  200  	v->__start = start;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  201  	return vpe_run(v);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  202  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  203  EXPORT_SYMBOL(vpe_start);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  204  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  205  /* halt it for now */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @206  int vpe_stop(void *vpe)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  207  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  208  	struct vpe *v = vpe;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  209  	struct tc *t;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  210  	unsigned int evpe_flags;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  211  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  212  	evpe_flags = dvpe();
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  213  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  214  	t = list_entry(v->tc.next, struct tc, tc);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  215  	if (t != NULL) {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  216  		settc(t->index);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  217  		write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() & ~VPECONF0_VPA);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  218  	}
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  219  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  220  	evpe(evpe_flags);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  221  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  222  	return 0;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  223  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  224  EXPORT_SYMBOL(vpe_stop);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  225  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  226  /* I've done with it thank you */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @227  int vpe_free(void *vpe)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  228  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  229  	struct vpe *v = vpe;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  230  	struct tc *t;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  231  	unsigned int evpe_flags;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  232  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  233  	t = list_entry(v->tc.next, struct tc, tc);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  234  	if (t == NULL)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  235  		return -ENOEXEC;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  236  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  237  	evpe_flags = dvpe();
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  238  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  239  	/* Put MVPE's into 'configuration state' */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  240  	set_c0_mvpcontrol(MVPCONTROL_VPC);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  241  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  242  	settc(t->index);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  243  	write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() & ~VPECONF0_VPA);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  244  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  245  	/* halt the TC */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  246  	write_tc_c0_tchalt(TCHALT_H);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  247  	mips_ihb();
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  248  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  249  	/* mark the TC unallocated */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  250  	write_tc_c0_tcstatus(read_tc_c0_tcstatus() & ~TCSTATUS_A);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  251  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  252  	v->state = VPE_STATE_UNUSED;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  253  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  254  	clear_c0_mvpcontrol(MVPCONTROL_VPC);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  255  	evpe(evpe_flags);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  256  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  257  	return 0;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  258  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  259  EXPORT_SYMBOL(vpe_free);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  260  
-
-:::::: The code at line 178 was first introduced by commit
-:::::: 1a2a6d7e8816ed2b2679a0c4f7ba4019cd31dd62 MIPS: APRP: Split VPE loader into separate files.
-
-:::::: TO: Deng-Cheng Zhu <dengcheng.zhu@imgtec.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+   537	
+   538	static bool mxs_lradc_adc_validate_scan_mask(struct iio_dev *iio,
+   539						     const unsigned long *mask)
+   540	{
+   541		struct mxs_lradc_adc *adc = iio_priv(iio);
+   542		struct mxs_lradc *lradc = adc->lradc;
+   543		int rsvd_chans = 0;
+   544		unsigned long rsvd_mask = 0;
+   545	
+   546		if (lradc->use_touchbutton)
+   547			rsvd_mask |= CHAN_MASK_TOUCHBUTTON;
+   548		if (lradc->touchscreen_wire == MXS_LRADC_TOUCHSCREEN_4WIRE)
+   549			rsvd_mask |= CHAN_MASK_TOUCHSCREEN_4WIRE;
+   550		if (lradc->touchscreen_wire == MXS_LRADC_TOUCHSCREEN_5WIRE)
+   551			rsvd_mask |= CHAN_MASK_TOUCHSCREEN_5WIRE;
+   552	
+   553		if (lradc->use_touchbutton)
+   554			rsvd_chans++;
+   555		if (lradc->touchscreen_wire)
+   556			rsvd_chans += 2;
+   557	
+   558		/* Test for attempts to map channels with special mode of operation. */
+   559		if (bitmap_intersects(mask, &rsvd_mask, LRADC_MAX_TOTAL_CHANS))
+   560			return false;
+   561	
+   562		/* Test for attempts to map more channels then available slots. */
+ > 563		if (bitmap_weight_gt(mask, LRADC_MAX_TOTAL_CHANS, LRADC_MAX_MAPPED_CHAN - rsvd_chans)
+   564			return false;
+   565	
+   566		return true;
+   567	}
+   568	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
