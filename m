@@ -1,28 +1,35 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FD968
-	for <llvm@lists.linux.dev>; Sun, 28 Nov 2021 16:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=E57/ks2HGs6H7jXYSa+P6zad9x+HVZI0HOrMCTR+cpU=; b=h99b3l7eYRt/YlUZCDJb7RWI6J
-	IBRQz1mguwDt0ksQUwdl51jEojLvxnm0Agkfu2SbmM21xiKaSCw2B+ahwvvJCFIHxGrIN23VI4b8Q
-	KveG/q1C+QoOFuU4SDHELpcBBSAaIgBInkyLNHaMBG3TolVm20PbF9TnI2U9nQ2/ijZ4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1mrMLm-00EqTh-Gf; Sun, 28 Nov 2021 16:44:22 +0100
-Date: Sun, 28 Nov 2021 16:44:22 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: drivers/net/mdio/mdio-xgene.c:337:13: warning: cast to smaller
- integer type 'enum xgene_mdio_id' from 'const void *'
-Message-ID: <YaOj1j4MwxmrKNbY@lunn.ch>
-References: <202111280114.D7JHY3PG-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AF52C80
+	for <llvm@lists.linux.dev>; Sun, 28 Nov 2021 17:05:35 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10181"; a="322078668"
+X-IronPort-AV: E=Sophos;i="5.87,271,1631602800"; 
+   d="scan'208";a="322078668"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 09:05:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,271,1631602800"; 
+   d="scan'208";a="594277331"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Nov 2021 09:05:32 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mrNcK-000Atp-2K; Sun, 28 Nov 2021 17:05:32 +0000
+Date: Mon, 29 Nov 2021 01:04:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	M Chetan Kumar <m.chetan.kumar@intel.com>,
+	Intel Corporation <linuxwwan@intel.com>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: [PATCH RESEND net-next 5/5] net: wwan: core: make debugfs
+ optional
+Message-ID: <202111290026.HEuigppG-lkp@intel.com>
+References: <20211128125522.23357-6-ryazanov.s.a@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,46 +38,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202111280114.D7JHY3PG-lkp@intel.com>
+In-Reply-To: <20211128125522.23357-6-ryazanov.s.a@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Nov 28, 2021 at 01:54:33AM +0800, kernel test robot wrote:
-> Hi Andrew,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
-> commit: a9770eac511ad82390b9f4a3c1728e078c387ac7 net: mdio: Move MDIO drivers into a new subdirectory
-> date:   1 year, 3 months ago
-> config: arm64-randconfig-r032-20211118 (https://download.01.org/0day-ci/archive/20211128/202111280114.D7JHY3PG-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c46becf500df2a7fb4b4fce16178a036c344315a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a9770eac511ad82390b9f4a3c1728e078c387ac7
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout a9770eac511ad82390b9f4a3c1728e078c387ac7
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/zynqmp/ drivers/gpio/ drivers/gpu/drm/ drivers/net/mdio/ drivers/net/wireless/intel/ipw2x00/ drivers/net/wireless/intel/iwlwifi/mvm/ drivers/staging/rtl8188eu/ drivers/usb/gadget/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/net/mdio/mdio-xgene.c:337:13: warning: cast to smaller integer type 'enum xgene_mdio_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
->                    mdio_id = (enum xgene_mdio_id)of_id->data;
->                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
+Hi Sergey,
 
-There is no overflow in the current code. It is just an enum value of
-1 or 2 in of_id->data which goes via a void * and back.
+I love your patch! Perhaps something to improve:
 
-To remove the warning, a struct would need to be added, or maybe a
-mask applied if the compiler can follow that.
+[auto build test WARNING on net-next/master]
 
-	Andrew
+url:    https://github.com/0day-ci/linux/commits/Sergey-Ryazanov/WWAN-debugfs-tweaks/20211128-210031
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git d40ce48cb3a68b54be123a1f99157c5ac613e260
+config: i386-randconfig-a001-20211128 (https://download.01.org/0day-ci/archive/20211129/202111290026.HEuigppG-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/89654e5e973a53b8375f37395c03359c59b63a99
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sergey-Ryazanov/WWAN-debugfs-tweaks/20211128-210031
+        git checkout 89654e5e973a53b8375f37395c03359c59b63a99
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wwan/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wwan/wwan_core.c:171:14: warning: variable 'wwandev_name' set but not used [-Wunused-but-set-variable]
+           const char *wwandev_name;
+                       ^
+   1 warning generated.
+
+
+vim +/wwandev_name +171 drivers/net/wwan/wwan_core.c
+
+c4804670026b93f M Chetan Kumar  2021-11-20  162  
+9a44c1cc6388762 Loic Poulain    2021-04-16  163  /* This function allocates and registers a new WWAN device OR if a WWAN device
+9a44c1cc6388762 Loic Poulain    2021-04-16  164   * already exist for the given parent, it gets a reference and return it.
+9a44c1cc6388762 Loic Poulain    2021-04-16  165   * This function is not exported (for now), it is called indirectly via
+9a44c1cc6388762 Loic Poulain    2021-04-16  166   * wwan_create_port().
+9a44c1cc6388762 Loic Poulain    2021-04-16  167   */
+9a44c1cc6388762 Loic Poulain    2021-04-16  168  static struct wwan_device *wwan_create_dev(struct device *parent)
+9a44c1cc6388762 Loic Poulain    2021-04-16  169  {
+9a44c1cc6388762 Loic Poulain    2021-04-16  170  	struct wwan_device *wwandev;
+c4804670026b93f M Chetan Kumar  2021-11-20 @171  	const char *wwandev_name;
+9a44c1cc6388762 Loic Poulain    2021-04-16  172  	int err, id;
+9a44c1cc6388762 Loic Poulain    2021-04-16  173  
+9a44c1cc6388762 Loic Poulain    2021-04-16  174  	/* The 'find-alloc-register' operation must be protected against
+9a44c1cc6388762 Loic Poulain    2021-04-16  175  	 * concurrent execution, a WWAN device is possibly shared between
+9a44c1cc6388762 Loic Poulain    2021-04-16  176  	 * multiple callers or concurrently unregistered from wwan_remove_dev().
+9a44c1cc6388762 Loic Poulain    2021-04-16  177  	 */
+9a44c1cc6388762 Loic Poulain    2021-04-16  178  	mutex_lock(&wwan_register_lock);
+9a44c1cc6388762 Loic Poulain    2021-04-16  179  
+9a44c1cc6388762 Loic Poulain    2021-04-16  180  	/* If wwandev already exists, return it */
+9a44c1cc6388762 Loic Poulain    2021-04-16  181  	wwandev = wwan_dev_get_by_parent(parent);
+9a44c1cc6388762 Loic Poulain    2021-04-16  182  	if (!IS_ERR(wwandev))
+9a44c1cc6388762 Loic Poulain    2021-04-16  183  		goto done_unlock;
+9a44c1cc6388762 Loic Poulain    2021-04-16  184  
+9a44c1cc6388762 Loic Poulain    2021-04-16  185  	id = ida_alloc(&wwan_dev_ids, GFP_KERNEL);
+d9d5b8961284b00 Andy Shevchenko 2021-08-11  186  	if (id < 0) {
+d9d5b8961284b00 Andy Shevchenko 2021-08-11  187  		wwandev = ERR_PTR(id);
+9a44c1cc6388762 Loic Poulain    2021-04-16  188  		goto done_unlock;
+d9d5b8961284b00 Andy Shevchenko 2021-08-11  189  	}
+9a44c1cc6388762 Loic Poulain    2021-04-16  190  
+9a44c1cc6388762 Loic Poulain    2021-04-16  191  	wwandev = kzalloc(sizeof(*wwandev), GFP_KERNEL);
+9a44c1cc6388762 Loic Poulain    2021-04-16  192  	if (!wwandev) {
+d9d5b8961284b00 Andy Shevchenko 2021-08-11  193  		wwandev = ERR_PTR(-ENOMEM);
+9a44c1cc6388762 Loic Poulain    2021-04-16  194  		ida_free(&wwan_dev_ids, id);
+9a44c1cc6388762 Loic Poulain    2021-04-16  195  		goto done_unlock;
+9a44c1cc6388762 Loic Poulain    2021-04-16  196  	}
+9a44c1cc6388762 Loic Poulain    2021-04-16  197  
+9a44c1cc6388762 Loic Poulain    2021-04-16  198  	wwandev->dev.parent = parent;
+9a44c1cc6388762 Loic Poulain    2021-04-16  199  	wwandev->dev.class = wwan_class;
+9a44c1cc6388762 Loic Poulain    2021-04-16  200  	wwandev->dev.type = &wwan_dev_type;
+9a44c1cc6388762 Loic Poulain    2021-04-16  201  	wwandev->id = id;
+9a44c1cc6388762 Loic Poulain    2021-04-16  202  	dev_set_name(&wwandev->dev, "wwan%d", wwandev->id);
+9a44c1cc6388762 Loic Poulain    2021-04-16  203  
+9a44c1cc6388762 Loic Poulain    2021-04-16  204  	err = device_register(&wwandev->dev);
+9a44c1cc6388762 Loic Poulain    2021-04-16  205  	if (err) {
+9a44c1cc6388762 Loic Poulain    2021-04-16  206  		put_device(&wwandev->dev);
+d9d5b8961284b00 Andy Shevchenko 2021-08-11  207  		wwandev = ERR_PTR(err);
+d9d5b8961284b00 Andy Shevchenko 2021-08-11  208  		goto done_unlock;
+9a44c1cc6388762 Loic Poulain    2021-04-16  209  	}
+9a44c1cc6388762 Loic Poulain    2021-04-16  210  
+c4804670026b93f M Chetan Kumar  2021-11-20  211  	wwandev_name = kobject_name(&wwandev->dev.kobj);
+89654e5e973a53b Sergey Ryazanov 2021-11-28  212  #ifdef CONFIG_WWAN_DEBUGFS
+c4804670026b93f M Chetan Kumar  2021-11-20  213  	wwandev->debugfs_dir = debugfs_create_dir(wwandev_name,
+c4804670026b93f M Chetan Kumar  2021-11-20  214  						  wwan_debugfs_dir);
+89654e5e973a53b Sergey Ryazanov 2021-11-28  215  #endif
+c4804670026b93f M Chetan Kumar  2021-11-20  216  
+9a44c1cc6388762 Loic Poulain    2021-04-16  217  done_unlock:
+9a44c1cc6388762 Loic Poulain    2021-04-16  218  	mutex_unlock(&wwan_register_lock);
+9a44c1cc6388762 Loic Poulain    2021-04-16  219  
+9a44c1cc6388762 Loic Poulain    2021-04-16  220  	return wwandev;
+9a44c1cc6388762 Loic Poulain    2021-04-16  221  }
+9a44c1cc6388762 Loic Poulain    2021-04-16  222  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
