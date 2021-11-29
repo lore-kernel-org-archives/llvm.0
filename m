@@ -1,30 +1,29 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2EE29CA
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 20:12:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=03RItMg0M2HfikfUQJ2uQM/WPVH5m+4bpjbxZJ5j+s8=; b=3HEudj3w0x4FaRvV6GSN6VghFW
-	0ilwuhNDZZ0PNXqAFhUbGi5hr7xpnjH0KEnFNSJHXCEYxYsVG6KHgnn8jn8BUzBBWVh+GboRGLnjm
-	UX0rvhgY/hBHEtKLYGEj0OfWa3/FQUgnKc3JXsdxh69aFVVdWqfWEXM5LoY6BPNoIUhA6SpvgSFcq
-	eO/odnUC9AYOmITea5UuaL75Y9/pB49vzaL6YAvczYPqJPmJNXg0E3gcvIqwLTy+SRpIYz/ECThOS
-	s9288SDEqZgy82LHO6t+HCRXG/S4Qbg/78Kpsry4Acja4MUIff1ogy1/OyKGXoeA8aPSzE0twXr3L
-	hkF9eGhA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mrn0M-002H2F-VF; Mon, 29 Nov 2021 20:12:02 +0000
-Date: Mon, 29 Nov 2021 12:12:02 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Xiaoming Ni <nixiaoming@huawei.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mcgrof-next:20211124-sysctl-cleanups-v2 41/41]
- kernel/kprobes.c:2605:2: error: implicit declaration of function
- 'kprobe_sysctls_init'
-Message-ID: <YaU0EuR8neVB9hEX@bombadil.infradead.org>
-References: <202111271451.VDtFz59Q-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D05A68
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 21:24:28 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="296887412"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="296887412"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 13:24:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="476848144"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 29 Nov 2021 13:24:20 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mro8J-000CLx-RO; Mon, 29 Nov 2021 21:24:19 +0000
+Date: Tue, 30 Nov 2021 05:23:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH net] net: ipv6: make fib6_nh_init properly clean
+ after itself on error
+Message-ID: <202111300529.K2YL6F1D-lkp@intel.com>
+References: <20211129141151.490533-1-razor@blackwall.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,38 +32,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202111271451.VDtFz59Q-lkp@intel.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20211129141151.490533-1-razor@blackwall.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Nov 27, 2021 at 02:48:14PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20211124-sysctl-cleanups-v2
-> head:   c66aee3b7120f4a5f1d40cc9109dcf684643cc17
-> commit: c66aee3b7120f4a5f1d40cc9109dcf684643cc17 [41/41] kprobe: move sysctl_kprobes_optimization to kprobes.c
-> config: arm64-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271451.VDtFz59Q-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=c66aee3b7120f4a5f1d40cc9109dcf684643cc17
->         git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
->         git fetch --no-tags mcgrof-next 20211124-sysctl-cleanups-v2
->         git checkout c66aee3b7120f4a5f1d40cc9109dcf684643cc17
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/kprobes.c:2605:2: error: implicit declaration of function 'kprobe_sysctls_init' [-Werror,-Wimplicit-function-declaration]
->            kprobe_sysctls_init();
->            ^
->    1 error generated.
+Hi Nikolay,
 
-Fixed.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on net/master]
 
-  Luis
+url:    https://github.com/0day-ci/linux/commits/Nikolay-Aleksandrov/net-ipv6-make-fib6_nh_init-properly-clean-after-itself-on-error/20211130-001132
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 2191b1dfef7d45f44b5008d2148676d9f2c82874
+config: i386-randconfig-r002-20211128 (https://download.01.org/0day-ci/archive/20211130/202111300529.K2YL6F1D-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/2db1685345b4a1aecadba0a8197c79f5e49da8ec
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Nikolay-Aleksandrov/net-ipv6-make-fib6_nh_init-properly-clean-after-itself-on-error/20211130-001132
+        git checkout 2db1685345b4a1aecadba0a8197c79f5e49da8ec
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/ipv4/nexthop.c:2570:1: warning: unused label 'out' [-Wunused-label]
+   out:
+   ^~~~
+   1 warning generated.
+
+
+vim +/out +2570 net/ipv4/nexthop.c
+
+597cfe4fc3390a David Ahern         2019-05-24  2544  
+53010f991a9f5e David Ahern         2019-05-24  2545  static int nh_create_ipv6(struct net *net,  struct nexthop *nh,
+53010f991a9f5e David Ahern         2019-05-24  2546  			  struct nh_info *nhi, struct nh_config *cfg,
+53010f991a9f5e David Ahern         2019-05-24  2547  			  struct netlink_ext_ack *extack)
+53010f991a9f5e David Ahern         2019-05-24  2548  {
+53010f991a9f5e David Ahern         2019-05-24  2549  	struct fib6_nh *fib6_nh = &nhi->fib6_nh;
+53010f991a9f5e David Ahern         2019-05-24  2550  	struct fib6_config fib6_cfg = {
+53010f991a9f5e David Ahern         2019-05-24  2551  		.fc_table = l3mdev_fib_table(cfg->dev),
+53010f991a9f5e David Ahern         2019-05-24  2552  		.fc_ifindex = cfg->nh_ifindex,
+53010f991a9f5e David Ahern         2019-05-24  2553  		.fc_gateway = cfg->gw.ipv6,
+53010f991a9f5e David Ahern         2019-05-24  2554  		.fc_flags = cfg->nh_flags,
+9aca491e0dccf8 Ryoga Saito         2021-09-02  2555  		.fc_nlinfo = cfg->nlinfo,
+b513bd035f4044 David Ahern         2019-05-24  2556  		.fc_encap = cfg->nh_encap,
+b513bd035f4044 David Ahern         2019-05-24  2557  		.fc_encap_type = cfg->nh_encap_type,
+38428d68719c45 Roopa Prabhu        2020-05-21  2558  		.fc_is_fdb = cfg->nh_fdb,
+53010f991a9f5e David Ahern         2019-05-24  2559  	};
+6f43e5252833f3 Colin Ian King      2019-05-30  2560  	int err;
+53010f991a9f5e David Ahern         2019-05-24  2561  
+53010f991a9f5e David Ahern         2019-05-24  2562  	if (!ipv6_addr_any(&cfg->gw.ipv6))
+53010f991a9f5e David Ahern         2019-05-24  2563  		fib6_cfg.fc_flags |= RTF_GATEWAY;
+53010f991a9f5e David Ahern         2019-05-24  2564  
+53010f991a9f5e David Ahern         2019-05-24  2565  	/* sets nh_dev if successful */
+53010f991a9f5e David Ahern         2019-05-24  2566  	err = ipv6_stub->fib6_nh_init(net, fib6_nh, &fib6_cfg, GFP_KERNEL,
+53010f991a9f5e David Ahern         2019-05-24  2567  				      extack);
+2db1685345b4a1 Nikolay Aleksandrov 2021-11-29  2568  	if (!err)
+53010f991a9f5e David Ahern         2019-05-24  2569  		nh->nh_flags = fib6_nh->fib_nh_flags;
+1c743127cc54b1 Nikolay Aleksandrov 2021-11-23 @2570  out:
+53010f991a9f5e David Ahern         2019-05-24  2571  	return err;
+53010f991a9f5e David Ahern         2019-05-24  2572  }
+53010f991a9f5e David Ahern         2019-05-24  2573  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
