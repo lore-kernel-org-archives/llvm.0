@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBFA2C94
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D06C8CFC9;
-	Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF102C83
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD25C53FD0;
+	Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638179277;
-	bh=almiBRvaRIswDQ0M54jkBCu++okng5mXod3ZWHjA9zA=;
+	s=k20201202; t=1638179276;
+	bh=Dl4PsWpdjqElHMy7Xe1wnMBXy8V8aqd1CbbHT17BCQs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bYUkGbbarxNSXez5Q7KK4TvqK5ZftC5v/LITcTho7w9ecANgRfh/ILgp/V+XMgAzT
-	 D+RHjtYH6UqgatA4xQPft02ZryN6Iolqymom+tbCVNvIk5+LpfaueCGaPU7r4oMkSB
-	 5DG+DmX+vvide0RHSoqVwwhurxEbwAuclEjRZ6FnInFyF/iUmW0kN16OC/MXmrl1pQ
-	 zEXqrfIwGEd9nHYteyaJtKoGtmfhGVzUWqqbKwr9cZ49dlggryl6iFVsgp2CHuFGNr
-	 E7vv/yfqih4C/474Q99jWJ9jAIzFFJuXalNDW0OuHO2agUPdDUXht0TRhJ5z7dCzxJ
-	 2D23CV5HiRxqg==
+	b=XYOcXgDdgiySXP6eKKtxNnCx3F+qo8nNXnc3y8vqzZR4Ev+D+vBFHVqpyYfp3xxt7
+	 JcwFNrWTH2VWQHd79Adu2pPgVxcU/IbYvaUGIqtXCk5d61eHhC5Bc1ek+of+Yo5LvW
+	 zZLOxHvAfovhoR5r/TiHB/MnzSaPdwx5tvOEWldJfvty3WRi1AP5rNt3/q8/GNDlCL
+	 Ct0e/WAKDfBnTakiopIfBToqrsQFsNzPmRu8Mym7ZDpCHvLLV4ZMvoAjpH6YCwCZBA
+	 rHxdYVSPaI+m7S+C0GqKwoSfcLY8M4RmH71D6PbsAvvW8b4tcWt1UhA5ZR7KWFEBHD
+	 M+Zuu0fhnXInQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mrdGN-000RCA-4c; Mon, 29 Nov 2021 10:47:55 +0100
+	id 1mrdGM-000RB8-90; Mon, 29 Nov 2021 10:47:54 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
@@ -29,9 +29,9 @@ Cc: linuxarm@huawei.com,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 20/20] media: mxl5005s: drop some dead code
-Date: Mon, 29 Nov 2021 10:47:52 +0100
-Message-Id: <f7702322ec7fce557850e6a5acabc1c5d574ff33.1638179135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 04/20] media: drxd: drop offset var from DownloadMicrocode()
+Date: Mon, 29 Nov 2021 10:47:36 +0100
+Message-Id: <54a313c07f938258eba9038031b3bd4fb64712c0.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -44,11 +44,10 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-As reported by clang (with W=1), the ctrlVal var is never used.
+The offset is not needed, and it is never used, as the pointer
+itself is already incremented.
 
-Yet, there are even some loops to estimate it. As this is dead
-code, remove it. If ever needed, someone could revert this
-patch.
+So, drop it, in order to solve a W=1 clang warning.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
@@ -56,56 +55,58 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/tuners/mxl5005s.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ drivers/media/dvb-frontends/drxd_hard.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/media/tuners/mxl5005s.c b/drivers/media/tuners/mxl5005s.c
-index f6e82a8e7d37..ab4c43df9d18 100644
---- a/drivers/media/tuners/mxl5005s.c
-+++ b/drivers/media/tuners/mxl5005s.c
-@@ -3414,9 +3414,8 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
- 	u32 value, u16 controlGroup)
- {
- 	struct mxl5005s_state *state = fe->tuner_priv;
--	u16 i, j, k;
-+	u16 i, j;
- 	u32 highLimit;
--	u32 ctrlVal;
+diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
+index a7eb81df88c2..9860cae65f1c 100644
+--- a/drivers/media/dvb-frontends/drxd_hard.c
++++ b/drivers/media/dvb-frontends/drxd_hard.c
+@@ -914,44 +914,36 @@ static int DownloadMicrocode(struct drxd_state *state,
+ 	u32 Address;
+ 	u16 nBlocks;
+ 	u16 BlockSize;
+-	u32 offset = 0;
+ 	int i, status = 0;
  
- 	if (controlGroup == 1) /* Initial Control */ {
+ 	pSrc = (u8 *) pMCImage;
+ 	/* We're not using Flags */
+ 	/* Flags = (pSrc[0] << 8) | pSrc[1]; */
+ 	pSrc += sizeof(u16);
+-	offset += sizeof(u16);
+ 	nBlocks = (pSrc[0] << 8) | pSrc[1];
+ 	pSrc += sizeof(u16);
+-	offset += sizeof(u16);
  
-@@ -3432,9 +3431,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
- 							(u8)(state->Init_Ctrl[i].bit[j]),
- 							(u8)((value>>j) & 0x01));
- 					}
--					ctrlVal = 0;
--					for (k = 0; k < state->Init_Ctrl[i].size; k++)
--						ctrlVal += state->Init_Ctrl[i].val[k] * (1 << k);
- 				} else
- 					return -1;
- 			}
-@@ -3454,9 +3450,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
- 							(u8)(state->CH_Ctrl[i].bit[j]),
- 							(u8)((value>>j) & 0x01));
- 					}
--					ctrlVal = 0;
--					for (k = 0; k < state->CH_Ctrl[i].size; k++)
--						ctrlVal += state->CH_Ctrl[i].val[k] * (1 << k);
- 				} else
- 					return -1;
- 			}
-@@ -3477,11 +3470,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
- 							(u8)(state->MXL_Ctrl[i].bit[j]),
- 							(u8)((value>>j) & 0x01));
- 					}
--					ctrlVal = 0;
--					for (k = 0; k < state->MXL_Ctrl[i].size; k++)
--						ctrlVal += state->
--							MXL_Ctrl[i].val[k] *
--							(1 << k);
- 				} else
- 					return -1;
- 			}
+ 	for (i = 0; i < nBlocks; i++) {
+ 		Address = (pSrc[0] << 24) | (pSrc[1] << 16) |
+ 		    (pSrc[2] << 8) | pSrc[3];
+ 		pSrc += sizeof(u32);
+-		offset += sizeof(u32);
+ 
+ 		BlockSize = ((pSrc[0] << 8) | pSrc[1]) * sizeof(u16);
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		/* We're not using Flags */
+ 		/* u16 Flags = (pSrc[0] << 8) | pSrc[1]; */
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		/* We're not using BlockCRC */
+ 		/* u16 BlockCRC = (pSrc[0] << 8) | pSrc[1]; */
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		status = WriteBlock(state, Address, BlockSize,
+ 				    pSrc, DRX_I2C_CLEARCRC);
+ 		if (status < 0)
+ 			break;
+ 		pSrc += BlockSize;
+-		offset += BlockSize;
+ 	}
+ 
+ 	return status;
 -- 
 2.33.1
 
