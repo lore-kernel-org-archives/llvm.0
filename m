@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B68972
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 17:01:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4458AC53FCD;
-	Mon, 29 Nov 2021 17:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB09772
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 17:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF54C53FD0;
+	Mon, 29 Nov 2021 17:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638205276;
-	bh=0Weje5hoMUc5BJflAblG6alZb9thJPnAILV+D0mM5/M=;
+	s=k20201202; t=1638205281;
+	bh=5lvhSd/r5Bz+9HqEC9NczjkzGVk2pSL4AVcx7svZ7Ko=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AcRPkJjLruSaLIhcr860hu26QbKiSydWtBZqSZ0MviH67RHvYBh7xGEofAOg85lvg
-	 J0fZGbcsg4BJOsOCjIAzoYOexBui2LZUx0Yu+GRU5JPPll01pg8Cma1/EPiZgbBhz2
-	 qLxg4VqBhQ3FP+kfmkFiom2W+29AF0vzNEUeTkZ56uSM9ThQDw61qm5oOQl5Ul/2YO
-	 YZTmsq6YlKadFkahwwjMFB9fpqE9LCPjkAWECfnyidD8DTl30H31GU3UbnMA7KZBDO
-	 K5DdALey8T+RJr+DWBQU7QrAYLE4YttBwKTBsDk4ajf6KVUP6ksFgQDsvaI8xNR2jN
-	 lHWLEYNW4urzQ==
+	b=IvXcRnCIYhSoj4jJ4znxB57N5Y1WjY7FI0LEnnD0MzQBU6+PKQV+VjZocHm9vUlZR
+	 JyldbIHKDUgxbtIqxJWA0Q8MetGJfhQ0bbBmVD/CxwMUhkSL0w96dZSYhqh4+umk5d
+	 bYgvEZYYtWTXaXV/fQNoaddWFk3hIgkyozJPGP0LCDIIA0Xy7RP44HPFa+FqQKZ6X7
+	 33f4VqzkTnx2HLyhtp4I0vMQsD9jS7JUO3g+DOwSC8Nx/GGiiLhC2JDix73xFsLZFn
+	 HLZALfVERur0p1l3Bqp2sWr8UBgrdhBGiybdehFcgVCQwlCDSGw67PLjMhzaQtjJOm
+	 3zLSM5awteDsg==
 From: Nathan Chancellor <nathan@kernel.org>
 To: Nick Desaulniers <ndesaulniers@google.com>,
 	Kees Cook <keescook@chromium.org>,
@@ -33,9 +33,9 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kbuild@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH RFC 2/6] mm, slab: Remove compiler check in __kmalloc_index
-Date: Mon, 29 Nov 2021 09:57:59 -0700
-Message-Id: <20211129165803.470795-3-nathan@kernel.org>
+Subject: [PATCH RFC 3/6] arch/Kconfig: Remove CLANG_VERSION check in HAS_LTO_CLANG
+Date: Mon, 29 Nov 2021 09:58:00 -0700
+Message-Id: <20211129165803.470795-4-nathan@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
 References: <20211129165803.470795-1-nathan@kernel.org>
@@ -52,23 +52,23 @@ this check is always true, so it can be dropped.
 
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- include/linux/slab.h | 3 +--
+ arch/Kconfig | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 181045148b06..d3fb5ac71c24 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -411,8 +411,7 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
- 	if (size <=  16 * 1024 * 1024) return 24;
- 	if (size <=  32 * 1024 * 1024) return 25;
+diff --git a/arch/Kconfig b/arch/Kconfig
+index d3c4ab249e9c..86e071f693ce 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -648,8 +648,7 @@ config ARCH_SUPPORTS_LTO_CLANG_THIN
  
--	if ((IS_ENABLED(CONFIG_CC_IS_GCC) || CONFIG_CLANG_VERSION >= 110000)
--	    && !IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES) && size_is_constant)
-+	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES) && size_is_constant)
- 		BUILD_BUG_ON_MSG(1, "unexpected size in kmalloc_index()");
- 	else
- 		BUG();
+ config HAS_LTO_CLANG
+ 	def_bool y
+-	# Clang >= 11: https://github.com/ClangBuiltLinux/linux/issues/510
+-	depends on CC_IS_CLANG && CLANG_VERSION >= 110000 && LD_IS_LLD && AS_IS_LLVM
++	depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
+ 	depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
+ 	depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
+ 	depends on ARCH_SUPPORTS_LTO_CLANG
 -- 
 2.34.1
 
