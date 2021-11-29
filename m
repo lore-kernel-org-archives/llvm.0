@@ -1,44 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0178A2C82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBFA2C94
 	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20459C8CFC3;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D06C8CFC9;
 	Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1638179277;
-	bh=50op9YAtX0/PCCZuHHAdCtTsRwW2P9kyuSBk3Zk50fM=;
+	bh=almiBRvaRIswDQ0M54jkBCu++okng5mXod3ZWHjA9zA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Oki8XiQlbzy0bzjG3M7lzh+UspuiW0aj+E0AudObl3VBhss3bB8v3WrDKSjA8Ld/Z
-	 aNvZvy9NXWEZ3Adm2/S16ADKTH1MGJ3PC6UZc7aNlMTGOKozWz8oRSe1BSRomjbePZ
-	 PmWDVXyBr03dy2eDubT4kEY5bQScrvOPYF7METmZ1UoG+UUdII+3+P+7+Hg3AQN3su
-	 E9Oxf+G4F4WGNwWIZqKA5C3UqgPrzYlfhKZWRIfOi7SMS/agARzf9LvyiOQAgGbz9k
-	 bsn9vTwcQJn6uz23kO3ELjb6FLqKddPr7895vs/w7gv0CM5GWuyL6QABnjsTcxpaTr
-	 gyCnfSIRMC5Cw==
+	b=bYUkGbbarxNSXez5Q7KK4TvqK5ZftC5v/LITcTho7w9ecANgRfh/ILgp/V+XMgAzT
+	 D+RHjtYH6UqgatA4xQPft02ZryN6Iolqymom+tbCVNvIk5+LpfaueCGaPU7r4oMkSB
+	 5DG+DmX+vvide0RHSoqVwwhurxEbwAuclEjRZ6FnInFyF/iUmW0kN16OC/MXmrl1pQ
+	 zEXqrfIwGEd9nHYteyaJtKoGtmfhGVzUWqqbKwr9cZ49dlggryl6iFVsgp2CHuFGNr
+	 E7vv/yfqih4C/474Q99jWJ9jAIzFFJuXalNDW0OuHO2agUPdDUXht0TRhJ5z7dCzxJ
+	 2D23CV5HiRxqg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mrdGN-000RC2-0a; Mon, 29 Nov 2021 10:47:55 +0100
+	id 1mrdGN-000RCA-4c; Mon, 29 Nov 2021 10:47:55 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	llvm@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2 18/20] media: mtk-mdp: address a clang warning
-Date: Mon, 29 Nov 2021 10:47:50 +0100
-Message-Id: <c6e2bedaa593ba764d3cafbe7940005e6b0b594c.1638179135.git.mchehab+huawei@kernel.org>
+	llvm@lists.linux.dev
+Subject: [PATCH v2 20/20] media: mxl5005s: drop some dead code
+Date: Mon, 29 Nov 2021 10:47:52 +0100
+Message-Id: <f7702322ec7fce557850e6a5acabc1c5d574ff33.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -51,35 +44,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-The typecasts at the dvb-core generate clang warnings when W=1
-is enabled.
+As reported by clang (with W=1), the ctrlVal var is never used.
 
-Such warning is harmless, but it causes the build to break with
-CONFIG_WERROR and W=1 with clang, so do the cast on a way that
-it won't produce warnings anymore.
+Yet, there are even some loops to estimate it. As this is dead
+code, remove it. If ever needed, someone could revert this
+patch.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/mtk-mdp/mtk_mdp_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/tuners/mxl5005s.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-index 976aa1f4829b..3d38793aaa25 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-@@ -148,7 +148,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
- 			continue;
- 		}
+diff --git a/drivers/media/tuners/mxl5005s.c b/drivers/media/tuners/mxl5005s.c
+index f6e82a8e7d37..ab4c43df9d18 100644
+--- a/drivers/media/tuners/mxl5005s.c
++++ b/drivers/media/tuners/mxl5005s.c
+@@ -3414,9 +3414,8 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+ 	u32 value, u16 controlGroup)
+ {
+ 	struct mxl5005s_state *state = fe->tuner_priv;
+-	u16 i, j, k;
++	u16 i, j;
+ 	u32 highLimit;
+-	u32 ctrlVal;
  
--		comp_type = (enum mtk_mdp_comp_type)of_id->data;
-+		comp_type = (uintptr_t)of_id->data;
+ 	if (controlGroup == 1) /* Initial Control */ {
  
- 		comp = devm_kzalloc(dev, sizeof(*comp), GFP_KERNEL);
- 		if (!comp) {
+@@ -3432,9 +3431,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+ 							(u8)(state->Init_Ctrl[i].bit[j]),
+ 							(u8)((value>>j) & 0x01));
+ 					}
+-					ctrlVal = 0;
+-					for (k = 0; k < state->Init_Ctrl[i].size; k++)
+-						ctrlVal += state->Init_Ctrl[i].val[k] * (1 << k);
+ 				} else
+ 					return -1;
+ 			}
+@@ -3454,9 +3450,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+ 							(u8)(state->CH_Ctrl[i].bit[j]),
+ 							(u8)((value>>j) & 0x01));
+ 					}
+-					ctrlVal = 0;
+-					for (k = 0; k < state->CH_Ctrl[i].size; k++)
+-						ctrlVal += state->CH_Ctrl[i].val[k] * (1 << k);
+ 				} else
+ 					return -1;
+ 			}
+@@ -3477,11 +3470,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+ 							(u8)(state->MXL_Ctrl[i].bit[j]),
+ 							(u8)((value>>j) & 0x01));
+ 					}
+-					ctrlVal = 0;
+-					for (k = 0; k < state->MXL_Ctrl[i].size; k++)
+-						ctrlVal += state->
+-							MXL_Ctrl[i].val[k] *
+-							(1 << k);
+ 				} else
+ 					return -1;
+ 			}
 -- 
 2.33.1
 
