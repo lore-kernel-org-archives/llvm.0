@@ -1,77 +1,65 @@
-Received: from smtprelay.hostedemail.com (smtprelay0206.hostedemail.com [216.40.44.206])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1749672
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 10:26:22 +0000 (UTC)
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-	by smtpgrave04.hostedemail.com (Postfix) with ESMTP id E07D61817A4C2
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 10:10:23 +0000 (UTC)
-Received: from omf13.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-	by smtprelay07.hostedemail.com (Postfix) with ESMTP id C3336184AAAA2;
-	Mon, 29 Nov 2021 10:10:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 8B57F200052A;
-	Mon, 29 Nov 2021 10:10:08 +0000 (UTC)
-Message-ID: <a22c082a661df0b548511f282fcc519a11bb3340.camel@perches.com>
-Subject: Re: [PATCH v2 09/20] media: si470x: fix printk warnings with clang
-From: Joe Perches <joe@perches.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linuxarm@huawei.com, mauro.chehab@huawei.com, Hans Verkuil
- <hverkuil@xs4all.nl>, Kees Cook <keescook@chromium.org>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, llvm@lists.linux.dev
-Date: Mon, 29 Nov 2021 02:10:14 -0800
-In-Reply-To: <442df11dd08158df88e95a457175a65f20dc8369.1638179135.git.mchehab+huawei@kernel.org>
-References: <cover.1638179135.git.mchehab+huawei@kernel.org>
-	 <442df11dd08158df88e95a457175a65f20dc8369.1638179135.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB6D2C80
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 11:13:07 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="322178946"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="322178946"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 03:13:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="459108204"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2021 03:13:05 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mream-000Bqu-OP; Mon, 29 Nov 2021 11:13:04 +0000
+Date: Mon, 29 Nov 2021 19:13:02 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: arch/x86/kernel/alternative.o: warning: objtool:
+ apply_retpolines()+0x35: unreachable instruction
+Message-ID: <202111291954.4m2PDgAv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.60
-X-Stat-Signature: mirpimwbnqro13sr9bkhcgcm35ah8wdi
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 8B57F200052A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX191CtHozPREJeEXS5EE+p9wMyt++DJjFiw=
-X-HE-Tag: 1638180608-885365
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 2021-11-29 at 10:47 +0100, Mauro Carvalho Chehab wrote:
-> Clang doesn't like "%hu" on macros:
-> 
-> 	drivers/media/radio/si470x/radio-si470x-i2c.c:414:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
-> 	drivers/media/radio/si470x/radio-si470x-i2c.c:417:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
-> 
-> Besides that, changeset cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of unnecessary %h[xudi] and %hh[xudi]")
-> dropped recomendation of using %h.
-> 
-> So, just replace them with "%u".
+CC: linux-kernel@vger.kernel.org
+TO: Peter Zijlstra <peterz@infradead.org>
+CC: Borislav Petkov <bp@suse.de>
 
-And perhaps change these to single dev_warn calls instead of multiple calls.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d58071a8a76d779eedab38033ae4c821c30295a5
+commit: 7508500900814d14e2e085cdc4e28142721abbdf x86/alternative: Implement .retpoline_sites support
+date:   5 weeks ago
+config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211129/202111291954.4m2PDgAv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7508500900814d14e2e085cdc4e28142721abbdf
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7508500900814d14e2e085cdc4e28142721abbdf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ block// crypto// drivers/ fs// kernel// mm// net/ sound/
 
-> diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
-[]
-> @@ -410,10 +410,10 @@ static int si470x_i2c_probe(struct i2c_client *client)
->  			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
->  	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
->  		dev_warn(&client->dev,
-> -			"This driver is known to work with firmware version %hu,\n",
-> +			"This driver is known to work with firmware version %u,\n",
->  			RADIO_FW_VERSION);
->  		dev_warn(&client->dev,
-> -			"but the device has firmware version %hu.\n",
-> +			"but the device has firmware version %u.\n",
->  			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-		dev_warn(&client->dev,
-			"This driver is known to work with firmware version %u, but the device has firmware version %u\n",
-			RADIO_FW_VERSION, radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+All warnings (new ones prefixed by >>):
 
-etc...
+>> arch/x86/kernel/alternative.o: warning: objtool: apply_retpolines()+0x35: unreachable instruction
 
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
