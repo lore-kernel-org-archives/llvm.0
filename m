@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948FE2C81
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5453AC53FAD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08322C81
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA04DC58337;
 	Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1638179276;
-	bh=k/r/HEftU56EeEP2U5xn5dg4W7rEwcQiF7pmRR/y6tE=;
+	bh=8QgHuLKT09qwmU7NQkYtwYyeui5thGFxIHL/EEuGkxE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Njibk+EORllBjF9kVb+169wlt6RjTpgLm6rzZgdaZWthQrMe/1OaoW7ewzdKwgPlu
-	 wHSkuYANdXAJbqAnlFol+3opi3u4MiUBEqBdlUt6zlehYNNt1pJMVNOGqRs+6FvPx1
-	 F8ZDTeUstIRjUsQ9xdap3qdZCv7afdffharO+BwN7OBmhinaeWuBi5A9lshOiIOHwf
-	 K9FSjZIevwXHUHwrcz+8JNJs2bsqp0aW/QRpXPpaWnI5Wc3qnXVcj/fO2cZNQH3zfU
-	 iiCKmA02+wezuPwUzpcMCrAjfFviUWnYByV4o84F4bsX5qVkPOx2kP1Zn/G3ihTyFm
-	 wQDo3w7o3dOTw==
+	b=S7ahT9S5YPTyEDpkiGtURf/JblJkTElHtNQQgTsE/jzdWILAYm8YqCRFVrnFN4f1s
+	 hEHR6WZkY6MFaqUtv3qek5r+PUyIWSRDzy+eSsukzmN4F9+ojVD2E1RsR32YsOrVpz
+	 Zz9LLs+NCoIY6asg0namKX80m1G/621XUWU1kNqEj+KrpzL1LqrjQmAjoSMz8kDVUr
+	 MchQ3Hr/uI6G0XwGI2xr1ebotLxtSv5v7q29pLKFKw58+iPDQzqiqKHebiGEGmW/4j
+	 lyAilsxO/ZPVbJ5frPaCk6F65n7V1boZQ6Iqb3Pcjrpv5+5hdt/CPh6dqD935Gz6+I
+	 PQXhbw0NQepmA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mrdGM-000RAz-5t; Mon, 29 Nov 2021 10:47:54 +0100
+	id 1mrdGM-000RBa-JH; Mon, 29 Nov 2021 10:47:54 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Malcolm Priestley <tvboxspy@gmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 02/20] media: saa7134-go7007: get rid of to_state() function
-Date: Mon, 29 Nov 2021 10:47:34 +0100
-Message-Id: <8efe1d7c0023ce124fa9984095f5bc7198c71c82.1638179135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 11/20] media: lmedm04: don't ignore errors when setting a filter
+Date: Mon, 29 Nov 2021 10:47:43 +0100
+Message-Id: <be579271678245559c0b3fc940c34fbf596acd2b.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -44,15 +45,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-This is just an alias for container_of() and it is used only
-on a commented code. The commented code actually is an issue that
-require fixes, so, move the container_of() call to the commented
-code, and drop the unused function.
-
-This way, a fix for the function could be added later without
-needing to re-add to_state() function.
-
-This fixes a clang W=1 warning.
+Solves a clang warning.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
@@ -60,34 +53,23 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/pci/saa7134/saa7134-go7007.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/media/usb/dvb-usb-v2/lmedm04.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-go7007.c b/drivers/media/pci/saa7134/saa7134-go7007.c
-index f319edb39c0e..da83893ffee9 100644
---- a/drivers/media/pci/saa7134/saa7134-go7007.c
-+++ b/drivers/media/pci/saa7134/saa7134-go7007.c
-@@ -56,11 +56,6 @@ struct saa7134_go7007 {
- 	dma_addr_t bottom_dma;
- };
+diff --git a/drivers/media/usb/dvb-usb-v2/lmedm04.c b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+index fe4d886442a4..8a34e6c0d6a6 100644
+--- a/drivers/media/usb/dvb-usb-v2/lmedm04.c
++++ b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+@@ -423,6 +423,9 @@ static int lme2510_pid_filter_ctrl(struct dvb_usb_adapter *adap, int onoff)
  
--static inline struct saa7134_go7007 *to_state(struct v4l2_subdev *sd)
--{
--	return container_of(sd, struct saa7134_go7007, sd);
--}
--
- static const struct go7007_board_info board_voyager = {
- 	.flags		 = 0,
- 	.sensor_flags	 = GO7007_SENSOR_656 |
-@@ -385,7 +380,7 @@ MODULE_FIRMWARE("go7007/go7007tv.bin");
- static int saa7134_go7007_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
- {
- #if 0
--	struct saa7134_go7007 *saa = to_state(sd);
-+	struct saa7134_go7007 *saa = container_of(sd, struct saa7134_go7007, sd);
- 	struct saa7134_dev *dev = saa->dev;
+ 	mutex_unlock(&d->i2c_mutex);
  
- 	return saa7134_s_std_internal(dev, NULL, norm);
++	if (ret)
++		return -EREMOTEIO;
++
+ 	return 0;
+ }
+ 
 -- 
 2.33.1
 
