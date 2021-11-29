@@ -1,89 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9792C80
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 11:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31FDDC004E1;
-	Mon, 29 Nov 2021 11:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638186029;
-	bh=n+pTQw/BCa3IBVkxZCQt663ROWCmgz8ezH0i6qWNGJ4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MUD4HMSH5oEc0UmxxL2esec50P9hY3A0wpRvE8EdRyhUUvQeBC1GxLQccdT98YHpt
-	 UGbMctBp2jMceX0TMKrpL0AiYoXaVQrMURrOfg1xyr+P8zoNtrysYgC7x2TijGAt6l
-	 VKDaiBa+bRX9Vrh9IX1pjySo2u7ySDaj8MRa7tL07H69VHgrenZE9jJWFGtv3EnA9Z
-	 z5a7H9x3+X8WfuVnO7LhtY16B/S6URIMMbO098oXGfgEY+UUesl2QvY9fLxCvLnWqa
-	 4NmVrAZJgheBmbrB8DkVK3ZWYyXCzXqleA5R9rihpbpqUBX7XUa/ABbYQNNuiZoEHF
-	 pxMj0U2c0NVJg==
-Date: Mon, 29 Nov 2021 12:40:24 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Joe Perches <joe@perches.com>
-Cc: linuxarm@huawei.com, mauro.chehab@huawei.com, Hans Verkuil
- <hverkuil@xs4all.nl>, Kees Cook <keescook@chromium.org>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 09/20] media: si470x: fix printk warnings with clang
-Message-ID: <20211129124024.5cd16580@coco.lan>
-In-Reply-To: <a22c082a661df0b548511f282fcc519a11bb3340.camel@perches.com>
-References: <cover.1638179135.git.mchehab+huawei@kernel.org>
-	<442df11dd08158df88e95a457175a65f20dc8369.1638179135.git.mchehab+huawei@kernel.org>
-	<a22c082a661df0b548511f282fcc519a11bb3340.camel@perches.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B7468
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 12:45:11 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="223184389"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="223184389"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 04:45:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="459135935"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2021 04:45:09 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mrg1s-000Bwk-Fh; Mon, 29 Nov 2021 12:45:08 +0000
+Date: Mon, 29 Nov 2021 20:44:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yunus Bas <y.bas@phytec.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Andrej Picej <andrej.picej@norik.com>,
+	Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Subject: [groeck-staging:watchdog-next 25/28] ld.lld: error: undefined
+ symbol: i2c_smbus_write_byte_data
+Message-ID: <202111292002.XQbF71R5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Em Mon, 29 Nov 2021 02:10:14 -0800
-Joe Perches <joe@perches.com> escreveu:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+head:   293903b9dfe43520f01374dc1661be11d6838c49
+commit: 5ea29919c29413c984f4ba3e04a6679d306e7a6e [25/28] watchdog: da9063: use atomic safe i2c transfer in reset handler
+config: arm-randconfig-r014-20211128 (https://download.01.org/0day-ci/archive/20211129/202111292002.XQbF71R5-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=5ea29919c29413c984f4ba3e04a6679d306e7a6e
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging watchdog-next
+        git checkout 5ea29919c29413c984f4ba3e04a6679d306e7a6e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> On Mon, 2021-11-29 at 10:47 +0100, Mauro Carvalho Chehab wrote:
-> > Clang doesn't like "%hu" on macros:
-> > 
-> > 	drivers/media/radio/si470x/radio-si470x-i2c.c:414:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
-> > 	drivers/media/radio/si470x/radio-si470x-i2c.c:417:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
-> > 
-> > Besides that, changeset cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of unnecessary %h[xudi] and %hh[xudi]")
-> > dropped recomendation of using %h.
-> > 
-> > So, just replace them with "%u".  
-> 
-> And perhaps change these to single dev_warn calls instead of multiple calls.
-> 
-> > diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c  
-> []
-> > @@ -410,10 +410,10 @@ static int si470x_i2c_probe(struct i2c_client *client)
-> >  			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
-> >  	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
-> >  		dev_warn(&client->dev,
-> > -			"This driver is known to work with firmware version %hu,\n",
-> > +			"This driver is known to work with firmware version %u,\n",
-> >  			RADIO_FW_VERSION);
-> >  		dev_warn(&client->dev,
-> > -			"but the device has firmware version %hu.\n",
-> > +			"but the device has firmware version %u.\n",
-> >  			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);  
-> 
-> 		dev_warn(&client->dev,
-> 			"This driver is known to work with firmware version %u, but the device has firmware version %u\n",
-> 			RADIO_FW_VERSION, radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
-> 
-> etc...
-> 
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Good idea. As this will touch on other things, I'll submit it on a
-separate patch.
+All errors (new ones prefixed by >>):
 
-Regards,
-Mauro
+>> ld.lld: error: undefined symbol: i2c_smbus_write_byte_data
+   >>> referenced by da9063_wdt.c
+   >>>               watchdog/da9063_wdt.o:(da9063_wdt_restart) in archive drivers/built-in.a
 
-
-
-Thanks,
-Mauro
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
