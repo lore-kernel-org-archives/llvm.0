@@ -1,121 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD84572
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 16:35:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1638203752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z+0UH7faosVx15h46/+E0XlxJz/7Dmc273dgHrakKzk=;
-	b=SCrtFlgRH18bubuGaxfWSkSaDf6aSSH78RS+nIQPEIKne3k2bGKAtcSCHSZlG8wQPG7Opm
-	Ll3mBiHdiLD9BqBs2FuEZVD3n7rn0WFbFBsEZW8j6iJ0SWrQbAGwsOtumZZ0+fajPoZaPR
-	SbtR9FnE4f6VZg+b5/dlCVqRA5sYYgU=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-485-zGiLWHKQP2aYzhLnD3M8Fg-1; Mon, 29 Nov 2021 11:35:49 -0500
-X-MC-Unique: zGiLWHKQP2aYzhLnD3M8Fg-1
-Received: by mail-ot1-f69.google.com with SMTP id n13-20020a9d6f0d000000b00579e30aaa02so9206905otq.0
-        for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 08:35:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=z+0UH7faosVx15h46/+E0XlxJz/7Dmc273dgHrakKzk=;
-        b=ua9fqwwcqkl1DZ3utQAZX+DLdO3OSLbVwKhp54kElh+szLeM8WXx/KsV2tqMo/m+Wo
-         mwW1RxiPg4tkWjnVEgDOFeCGsedAXhI78XHrcNSdUAhqlkunB9CcPI4Nzg5fSYtXTJ5p
-         Q43WzNxHLLIbdLCIZnxznGgaxJZCBHEtNfMsN91RWcDKqv/kSquY7OrcEItRuYT48GXf
-         IZGbkhZMOAK9qJPXaJF/lmI5ayblxDqKBMpA/7MYuEiuKxDjG0uFrQmfxli+/m9a1Lxn
-         JE4WfO3vwdSATwHFLZpcewc2Y9egnSj1F2YxErKmESSk4ekuxfj/Q2n9P0yZ9DDFMmTD
-         bAvA==
-X-Gm-Message-State: AOAM532ToPSRud2AoE4A21ZJbHo7Us2GQ26da7ZD1M2Diq4ZN3i66bD1
-	c3zgulQEtaeikycWW/4AOit2IQwgfjlQ1tO8G1hPZEos+1vbvgL1wEYjSTjHpfhLQVtVdL+wTJy
-	ZoZbK9iVZfMVIWv1910xegGwNjO8zoAlYLyArSnIankbpqMt2KFgMDYYH0T4p
-X-Received: by 2002:a9d:12f2:: with SMTP id g105mr45667030otg.301.1638203748656;
-        Mon, 29 Nov 2021 08:35:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwS/EyfAXGDPdwrwrmhMPGzKG/buDJaP6G2uXiiEwETMILIBNk9kd7VMt0tC6GrUGvPKMhIuw==
-X-Received: by 2002:a9d:12f2:: with SMTP id g105mr45666930otg.301.1638203747840;
-        Mon, 29 Nov 2021 08:35:47 -0800 (PST)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id a16sm2710200otj.79.2021.11.29.08.35.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 08:35:47 -0800 (PST)
-Subject: Re: [PATCH] fpga: stratix10-soc: Do not use ret uninitialized in
- s10_probe()
-To: Nathan Chancellor <nathan@kernel.org>, Moritz Fischer <mdf@kernel.org>,
- Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Russ Weight <russell.h.weight@intel.com>,
- Dan Carpenter <dan.carpenter@oracle.com>, linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20211129161009.3625548-1-nathan@kernel.org>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <410b9067-588b-881e-da03-fa970ef576b1@redhat.com>
-Date: Mon, 29 Nov 2021 08:35:44 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6772
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 16:39:15 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="322242479"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="322242479"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 08:39:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="540046784"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 29 Nov 2021 08:39:13 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mrjgP-000C82-0e; Mon, 29 Nov 2021 16:39:13 +0000
+Date: Tue, 30 Nov 2021 00:39:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Valentin Schneider <valentin.schneider@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 1/2] sched/tracing: Don't re-read p->state when
+ emitting sched_switch event
+Message-ID: <202111300012.4hj0hPuG-lkp@intel.com>
+References: <20211129123601.2101873-2-valentin.schneider@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20211129161009.3625548-1-nathan@kernel.org>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129123601.2101873-2-valentin.schneider@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi Valentin,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on rostedt-trace/for-next]
+[also build test ERROR on tip/sched/core tip/master linux/master linus/master v5.16-rc3 next-20211129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Valentin-Schneider/sched-tracing-sched_switch-prev_state-reported-as-TASK_RUNNING-when-it-s-not/20211129-203943
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: hexagon-randconfig-r045-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300012.4hj0hPuG-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/9d9dc2f12e741a72aeb54b49ed491ea17d0863a9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Valentin-Schneider/sched-tracing-sched_switch-prev_state-reported-as-TASK_RUNNING-when-it-s-not/20211129-203943
+        git checkout 9d9dc2f12e741a72aeb54b49ed491ea17d0863a9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace_osnoise.c:1193:36: error: incompatible function pointer types passing 'void (void *, bool, struct task_struct *, struct task_struct *)' (aka 'void (void *, _Bool, struct task_struct *, struct task_struct *)') to parameter of type 'void (*)(void *, bool, unsigned int, struct task_struct *, struct task_struct *)' (aka 'void (*)(void *, _Bool, unsigned int, struct task_struct *, struct task_struct *)') [-Werror,-Wincompatible-function-pointer-types]
+           ret = register_trace_sched_switch(trace_sched_switch_callback, NULL);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/events/sched.h:222:1: note: passing argument to parameter 'probe' here
+   TRACE_EVENT(sched_switch,
+   ^
+   include/linux/tracepoint.h:553:2: note: expanded from macro 'TRACE_EVENT'
+           DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+           ^
+   include/linux/tracepoint.h:419:2: note: expanded from macro 'DECLARE_TRACE'
+           __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+           ^
+   include/linux/tracepoint.h:260:31: note: expanded from macro '__DECLARE_TRACE'
+           register_trace_##name(void (*probe)(data_proto), void *data)    \
+                                        ^
+   kernel/trace/trace_osnoise.c:1208:32: error: incompatible function pointer types passing 'void (void *, bool, struct task_struct *, struct task_struct *)' (aka 'void (void *, _Bool, struct task_struct *, struct task_struct *)') to parameter of type 'void (*)(void *, bool, unsigned int, struct task_struct *, struct task_struct *)' (aka 'void (*)(void *, _Bool, unsigned int, struct task_struct *, struct task_struct *)') [-Werror,-Wincompatible-function-pointer-types]
+           unregister_trace_sched_switch(trace_sched_switch_callback, NULL);
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/events/sched.h:222:1: note: passing argument to parameter 'probe' here
+   TRACE_EVENT(sched_switch,
+   ^
+   include/linux/tracepoint.h:553:2: note: expanded from macro 'TRACE_EVENT'
+           DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+           ^
+   include/linux/tracepoint.h:419:2: note: expanded from macro 'DECLARE_TRACE'
+           __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+           ^
+   include/linux/tracepoint.h:273:33: note: expanded from macro '__DECLARE_TRACE'
+           unregister_trace_##name(void (*probe)(data_proto), void *data)  \
+                                          ^
+   2 errors generated.
 
 
-On 11/29/21 8:10 AM, Nathan Chancellor wrote:
-> Clang warns:
->
-> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
->          return ret;
->                 ^~~
-> drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable 'ret' to silence this warning
->          int ret;
->                 ^
->                  = 0
+vim +1193 kernel/trace/trace_osnoise.c
 
-This line to contradicts what you did, to reduce confusion, remove the 
-'silence this warning line'
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1182  
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1183  /*
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1184   * hook_thread_events - Hook the insturmentation for thread noise
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1185   *
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1186   * Hook the osnoise tracer callbacks to handle the noise from other
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1187   * threads on the necessary kernel events.
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1188   */
+f7d9f6370e0064 Daniel Bristot de Oliveira 2021-06-28  1189  static int hook_thread_events(void)
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1190  {
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1191  	int ret;
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1192  
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22 @1193  	ret = register_trace_sched_switch(trace_sched_switch_callback, NULL);
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1194  	if (ret)
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1195  		return -EINVAL;
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1196  
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1197  	return 0;
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1198  }
+bce29ac9ce0bb0 Daniel Bristot de Oliveira 2021-06-22  1199  
 
-Change itself looks fine.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> 1 warning generated.
->
-> ret is only assigned in an error path now so just return 0 directly.
->
-> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/fpga/stratix10-soc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> index 737d14c6e0de..357cea58ec98 100644
-> --- a/drivers/fpga/stratix10-soc.c
-> +++ b/drivers/fpga/stratix10-soc.c
-> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
->   	}
->   
->   	platform_set_drvdata(pdev, mgr);
-> -	return ret;
-> +	return 0;
->   
->   probe_err:
->   	stratix10_svc_free_channel(priv->chan);
->
-> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
