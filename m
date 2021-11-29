@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF102C83
-	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD25C53FD0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA6A2C8B
+	for <llvm@lists.linux.dev>; Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0FEC5833B;
 	Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1638179276;
-	bh=Dl4PsWpdjqElHMy7Xe1wnMBXy8V8aqd1CbbHT17BCQs=;
+	bh=qLsXkKUqYgx/y5TYU+1VFJtNdFV5qBVzuVbWurIKgCw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XYOcXgDdgiySXP6eKKtxNnCx3F+qo8nNXnc3y8vqzZR4Ev+D+vBFHVqpyYfp3xxt7
-	 JcwFNrWTH2VWQHd79Adu2pPgVxcU/IbYvaUGIqtXCk5d61eHhC5Bc1ek+of+Yo5LvW
-	 zZLOxHvAfovhoR5r/TiHB/MnzSaPdwx5tvOEWldJfvty3WRi1AP5rNt3/q8/GNDlCL
-	 Ct0e/WAKDfBnTakiopIfBToqrsQFsNzPmRu8Mym7ZDpCHvLLV4ZMvoAjpH6YCwCZBA
-	 rHxdYVSPaI+m7S+C0GqKwoSfcLY8M4RmH71D6PbsAvvW8b4tcWt1UhA5ZR7KWFEBHD
-	 M+Zuu0fhnXInQ==
+	b=KbtrAZaJ0HUA0HsvUsfHoTlDWfeg93Ece5o26tcCNNmwlO0oVEbHoTNUH2p+VrhM0
+	 3HwLL4V/DY0XAIhcImSIjai9kl6XQ5WnCmIvG65I/RlWtkaJmSNE3jxNiF25zg2Hor
+	 JiCgVMXrqGFaUgRdMlMJbRfvvG48wmRj8B3I+j6vJl7BYwYs0XkL04hG5yPft8OXmW
+	 tpNTjqfBnISgyl1So++MI6Kmrj/iFu4AcgpJmyCcEUt60GV9OGEBpBp30SQ3fWP+Ee
+	 irkIqaZgbcLsGgD6VudykQjb4D2dV/Z51/rLYDGacjGXzZLmtWJYN86+pFSUZ/CzRt
+	 75TD2DbIUMuWg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
 	(envelope-from <mchehab@kernel.org>)
-	id 1mrdGM-000RB8-90; Mon, 29 Nov 2021 10:47:54 +0100
+	id 1mrdGM-000RBi-Md; Mon, 29 Nov 2021 10:47:54 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: linuxarm@huawei.com,
 	mauro.chehab@huawei.com,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 04/20] media: drxd: drop offset var from DownloadMicrocode()
-Date: Mon, 29 Nov 2021 10:47:36 +0100
-Message-Id: <54a313c07f938258eba9038031b3bd4fb64712c0.1638179135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 13/20] media: adv7604: mark unused functions as such
+Date: Mon, 29 Nov 2021 10:47:45 +0100
+Message-Id: <91b6e8c97de3608785a035eaef6d970aea7926ac.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -44,69 +45,104 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-The offset is not needed, and it is never used, as the pointer
-itself is already incremented.
+There are several unused helper macros there, meant to parse some
+fields. As those actually help to document the hardware, the
+better is to keep them.
 
-So, drop it, in order to solve a W=1 clang warning.
+However, it generates clang warnings with W=1, causing build to
+break with CONFIG_WERROR.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+So, add __always_unused to fix such warnings.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/drxd_hard.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/media/i2c/adv7604.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
-index a7eb81df88c2..9860cae65f1c 100644
---- a/drivers/media/dvb-frontends/drxd_hard.c
-+++ b/drivers/media/dvb-frontends/drxd_hard.c
-@@ -914,44 +914,36 @@ static int DownloadMicrocode(struct drxd_state *state,
- 	u32 Address;
- 	u16 nBlocks;
- 	u16 BlockSize;
--	u32 offset = 0;
- 	int i, status = 0;
+diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
+index 44768b59a6ff..a2fa408d2d9f 100644
+--- a/drivers/media/i2c/adv7604.c
++++ b/drivers/media/i2c/adv7604.c
+@@ -398,14 +398,14 @@ static inline int io_write_clr_set(struct v4l2_subdev *sd, u8 reg, u8 mask,
+ 	return io_write(sd, reg, (io_read(sd, reg) & ~mask) | val);
+ }
  
- 	pSrc = (u8 *) pMCImage;
- 	/* We're not using Flags */
- 	/* Flags = (pSrc[0] << 8) | pSrc[1]; */
- 	pSrc += sizeof(u16);
--	offset += sizeof(u16);
- 	nBlocks = (pSrc[0] << 8) | pSrc[1];
- 	pSrc += sizeof(u16);
--	offset += sizeof(u16);
+-static inline int avlink_read(struct v4l2_subdev *sd, u8 reg)
++static inline int __always_unused avlink_read(struct v4l2_subdev *sd, u8 reg)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
  
- 	for (i = 0; i < nBlocks; i++) {
- 		Address = (pSrc[0] << 24) | (pSrc[1] << 16) |
- 		    (pSrc[2] << 8) | pSrc[3];
- 		pSrc += sizeof(u32);
--		offset += sizeof(u32);
+ 	return adv76xx_read_check(state, ADV7604_PAGE_AVLINK, reg);
+ }
  
- 		BlockSize = ((pSrc[0] << 8) | pSrc[1]) * sizeof(u16);
- 		pSrc += sizeof(u16);
--		offset += sizeof(u16);
+-static inline int avlink_write(struct v4l2_subdev *sd, u8 reg, u8 val)
++static inline int __always_unused avlink_write(struct v4l2_subdev *sd, u8 reg, u8 val)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
  
- 		/* We're not using Flags */
- 		/* u16 Flags = (pSrc[0] << 8) | pSrc[1]; */
- 		pSrc += sizeof(u16);
--		offset += sizeof(u16);
+@@ -439,14 +439,14 @@ static inline int infoframe_read(struct v4l2_subdev *sd, u8 reg)
+ 	return adv76xx_read_check(state, ADV76XX_PAGE_INFOFRAME, reg);
+ }
  
- 		/* We're not using BlockCRC */
- 		/* u16 BlockCRC = (pSrc[0] << 8) | pSrc[1]; */
- 		pSrc += sizeof(u16);
--		offset += sizeof(u16);
+-static inline int infoframe_write(struct v4l2_subdev *sd, u8 reg, u8 val)
++static inline int __always_unused infoframe_write(struct v4l2_subdev *sd, u8 reg, u8 val)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
  
- 		status = WriteBlock(state, Address, BlockSize,
- 				    pSrc, DRX_I2C_CLEARCRC);
- 		if (status < 0)
- 			break;
- 		pSrc += BlockSize;
--		offset += BlockSize;
- 	}
+ 	return regmap_write(state->regmap[ADV76XX_PAGE_INFOFRAME], reg, val);
+ }
  
- 	return status;
+-static inline int afe_read(struct v4l2_subdev *sd, u8 reg)
++static inline int __always_unused afe_read(struct v4l2_subdev *sd, u8 reg)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
+ 
+@@ -479,14 +479,14 @@ static inline int rep_write_clr_set(struct v4l2_subdev *sd, u8 reg, u8 mask, u8
+ 	return rep_write(sd, reg, (rep_read(sd, reg) & ~mask) | val);
+ }
+ 
+-static inline int edid_read(struct v4l2_subdev *sd, u8 reg)
++static inline int __always_unused edid_read(struct v4l2_subdev *sd, u8 reg)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
+ 
+ 	return adv76xx_read_check(state, ADV76XX_PAGE_EDID, reg);
+ }
+ 
+-static inline int edid_write(struct v4l2_subdev *sd, u8 reg, u8 val)
++static inline int __always_unused edid_write(struct v4l2_subdev *sd, u8 reg, u8 val)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
+ 
+@@ -570,7 +570,7 @@ static inline int hdmi_write_clr_set(struct v4l2_subdev *sd, u8 reg, u8 mask, u8
+ 	return hdmi_write(sd, reg, (hdmi_read(sd, reg) & ~mask) | val);
+ }
+ 
+-static inline int test_write(struct v4l2_subdev *sd, u8 reg, u8 val)
++static inline int __always_unused test_write(struct v4l2_subdev *sd, u8 reg, u8 val)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
+ 
+@@ -601,14 +601,14 @@ static inline int cp_write_clr_set(struct v4l2_subdev *sd, u8 reg, u8 mask, u8 v
+ 	return cp_write(sd, reg, (cp_read(sd, reg) & ~mask) | val);
+ }
+ 
+-static inline int vdp_read(struct v4l2_subdev *sd, u8 reg)
++static inline int __always_unused vdp_read(struct v4l2_subdev *sd, u8 reg)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
+ 
+ 	return adv76xx_read_check(state, ADV7604_PAGE_VDP, reg);
+ }
+ 
+-static inline int vdp_write(struct v4l2_subdev *sd, u8 reg, u8 val)
++static inline int __always_unused vdp_write(struct v4l2_subdev *sd, u8 reg, u8 val)
+ {
+ 	struct adv76xx_state *state = to_state(sd);
+ 
 -- 
 2.33.1
 
