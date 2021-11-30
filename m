@@ -1,32 +1,32 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B482CA1
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:49:07 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="223175028"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C709B2CA2
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 19:00:09 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="233798995"
 X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="223175028"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 10:49:06 -0800
+   d="scan'208";a="233798995"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 11:00:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="744835039"
+   d="scan'208";a="477231734"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Nov 2021 10:49:04 -0800
+  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 11:00:05 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1ms8Bb-000Df9-NL; Tue, 30 Nov 2021 18:49:03 +0000
-Date: Wed, 1 Dec 2021 02:48:53 +0800
+	id 1ms8MH-000Dfl-31; Tue, 30 Nov 2021 19:00:05 +0000
+Date: Wed, 1 Dec 2021 02:59:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Xiaoming Ni <nixiaoming@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [linux-next:master 4264/4301] ERROR: modpost:
- "unregister_firmware_config_sysctl"
- [drivers/base/firmware_loader/firmware_class.ko] undefined!
-Message-ID: <202112010223.eu8GDIdL-lkp@intel.com>
+To: pandith.n@intel.com, djakov@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mgross@linux.intel.com,
+	furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+	lakshmi.bai.raja.subramanian@intel.com,
+	Pandith N <pandith.n@intel.com>
+Subject: Re: [PATCH V8 1/1] interconnect: intel: Add Keem Bay noc driver
+Message-ID: <202112010223.Pb0XZMHN-lkp@intel.com>
+References: <20211129154337.14398-1-pandith.n@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,31 +35,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211129154337.14398-1-pandith.n@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   34f255a1e91ab44ff8926cf8294ff9144e62e861
-commit: cf859436d0e2a12d7c3704ae09dfbf9aba14db38 [4264/4301] firmware_loader: move firmware sysctl to its own files
-config: x86_64-randconfig-r022-20211130 (https://download.01.org/0day-ci/archive/20211201/202112010223.eu8GDIdL-lkp@intel.com/config)
+Hi,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc3 next-20211130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d58071a8a76d779eedab38033ae4c821c30295a5
+config: i386-randconfig-c001-20211130 (https://download.01.org/0day-ci/archive/20211201/202112010223.Pb0XZMHN-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=cf859436d0e2a12d7c3704ae09dfbf9aba14db38
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout cf859436d0e2a12d7c3704ae09dfbf9aba14db38
+        # https://github.com/0day-ci/linux/commit/724e8829a62d4ae6908d011f927e0c3ae5b0a80c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
+        git checkout 724e8829a62d4ae6908d011f927e0c3ae5b0a80c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/interconnect/intel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "unregister_firmware_config_sysctl" [drivers/base/firmware_loader/firmware_class.ko] undefined!
->> ERROR: modpost: "register_firmware_config_sysctl" [drivers/base/firmware_loader/firmware_class.ko] undefined!
+>> drivers/interconnect/intel/keembay-bwmon.c:142: warning: expecting prototype for flexnoc_counterp_capture(). Prototype was for flexnoc_counter_capture() instead
+
+
+vim +142 drivers/interconnect/intel/keembay-bwmon.c
+
+   122	
+   123	/**
+   124	 * flexnoc_counterp_capture() - Capture the counter statistic values
+   125	 * @noc: NOC type to setup counters
+   126	 * @counter:  Counter number to capture statistics values for n and n+1
+   127	 * @value: statistics values read are returned in this address passed
+   128	 *
+   129	 * This function will return the statistics value of started counters.
+   130	 * When this function returns NOC_PROBE_COMPLETED, it is guaranteed that NOC
+   131	 * counters are idle and finished probing.
+   132	 * Algo : The values should not returned when counters are active/running.
+   133	 * Once the counter is frozen, the values are good to read. There is an
+   134	 * iteration logic implemented to check this. An maximum timeout config
+   135	 * is provided to for capture timeout - NOC_CAPTURE_TIMEOUT_MSEC
+   136	 *
+   137	 *  Returns NOC_PROBE_COMPLETED if the counters are stopped or
+   138	 *  NOC_PROBE_ERR_IN_PROGRESS if counters are still running
+   139	 */
+   140	enum noc_status flexnoc_counter_capture(enum noc_ss_type noc,
+   141						enum noc_counter counter, u32  *value)
+ > 142	{
+   143		unsigned long timeout;
+   144		u32 c0_0, c0_1;
+   145	
+   146		if (noc >= NOC_TYPE_MAX ||
+   147		    counter >= NOC_COUNTER_MAX  ||
+   148		    !value)
+   149			return NOC_PROBE_ERR_INVALID_ARGS;
+   150	
+   151		timeout = jiffies + msecs_to_jiffies(NOC_CAPTURE_TIMEOUT_MSEC);
+   152		do {
+   153			c0_0 = noc_readl((c_offset[counter] + C_VAL));
+   154			usleep_range(10000, 11000);
+   155			c0_1 = noc_readl((c_offset[counter] + C_VAL));
+   156			/* If mainctrl is zero , return error */
+   157			if (noc_readl(MAINCTL) == 0)
+   158				return NOC_PROBE_ERR_IN_PROGRESS;
+   159			/* If counters are zero, keep reading */
+   160			if (0 == c0_0 && 0 == c0_1) {
+   161				break;
+   162			} else if (c0_0 != c0_1) {
+   163				continue;
+   164			} else {
+   165				/* counters look good break the while */
+   166				break;
+   167			}
+   168		} while (time_before(jiffies, timeout));
+   169	
+   170		if (c0_0 != c0_1)
+   171			return NOC_PROBE_ERR_IN_PROGRESS;
+   172	
+   173		c0_0 = noc_readl((c_offset[counter] + C_VAL));
+   174		c0_1 = noc_readl((c_offset[counter + 1] + C_VAL));
+   175		*value = (c0_0 | (c0_1 << 16));
+   176	
+   177		return NOC_PROBE_COMPLETED;
+   178	}
+   179	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
