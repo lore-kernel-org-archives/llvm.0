@@ -1,171 +1,175 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810412C9D
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:19:48 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216887584"
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="216887584"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 03:19:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="540375411"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2021 03:19:46 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1ms1An-000DCt-Nm; Tue, 30 Nov 2021 11:19:45 +0000
-Date: Tue, 30 Nov 2021 19:18:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luca Coelho <luca@coelho.fi>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 04/16] cfg80211: Use the HE operation IE to determine a
- 6GHz BSS channel
-Message-ID: <202111301955.BdSRnKyU-lkp@intel.com>
-References: <iwlwifi.20211129152938.8efcf1856975.I130f678e4aa390973ab39d838bbfe7b2d54bff8e@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858BF2C9D
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:32:42 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3Kf10g6wz4xPv;
+	Tue, 30 Nov 2021 22:25:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1638271546;
+	bh=nKlZETLEBCIwqXXojFKIvNI8XaTBsA/rBsc8S8G5uMk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=OuN9dVkIZh85h3WdJCnej8pPVOYexe7HDrnaRr5zrtCRu1qh+4eEtIr5wSux3M/jI
+	 Ps+v8BZ4YieYIRVk03NzsWzjZBv2XVl5d+syfxPZ1TCP2Lc+3gnJK5Jt+T77aQoW1s
+	 YBXCmayRhuUDUv9qeaDlVbJXdCp+pjxb1Ry63zx5msmfqja1hcc6kgR6E2p5J2dTbB
+	 IJCZqzG6J+yz17JSEL8X9bJkd+7jeZW/Cv6EPTBLPJ7Xh6a/H0zz21PT4z0KGYgryc
+	 1bKLTAwC8vLVW1TnFOERG6rizMv5IKca/fmrzteaRJFDgOcZf5Yf6vFB3fgxYy+UAi
+	 owjdE0jS0CXhQ==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, kernel test robot
+ <lkp@intel.com>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul
+ Mackerras <paulus@samba.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+In-Reply-To: <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+ <202111300652.0yDBNvyJ-lkp@intel.com>
+ <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+Date: Tue, 30 Nov 2021 22:25:43 +1100
+Message-ID: <87a6hlq408.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <iwlwifi.20211129152938.8efcf1856975.I130f678e4aa390973ab39d838bbfe7b2d54bff8e@changeid>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Luca,
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit=C2=A0:
+>> Hi Christophe,
+>>=20
+>> I love your patch! Perhaps something to improve:
+>>=20
+>> [auto build test WARNING on powerpc/next]
+>> [also build test WARNING on v5.16-rc3 next-20211129]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch]
+>>=20
+>> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerp=
+c-inst-Refactor-___get_user_instr/20211130-015346
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.gi=
+t next
+>> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-c=
+i/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df0=
+8b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+>> reproduce (this is a W=3D1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
+bin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # install powerpc cross compiling tool for clang build
+>>          # apt-get install binutils-powerpc-linux-gnu
+>>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b=
+48bb69de1f325eee826
+>>          git remote add linux-review https://github.com/0day-ci/linux
+>>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-=
+Refactor-___get_user_instr/20211130-015346
+>>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
+W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc prepare
+>>=20
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>=20
+>> All warnings (new ones prefixed by >>):
+>>=20
+>>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+>>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
+>>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uni=
+nitialized when used here [-Wuninitialized]
+>>                     *inst =3D ppc_inst(val);
+>>                                      ^~~
+>>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'pp=
+c_inst'
+>>     #define ppc_inst(x) (x)
+>>                          ^
+>>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variabl=
+e 'val' to silence this warning
+>>             unsigned int val, suffix;
+>>                             ^
+>>                              =3D 0
+>
+> I can't understand what's wrong here.
+>
+> We have
+>
+> 	__get_kernel_nofault(&val, src, u32, Efault);
+> 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) =3D=3D OP_PREFIX) {
+> 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> 		*inst =3D ppc_inst_prefix(val, suffix);
+> 	} else {
+> 		*inst =3D ppc_inst(val);
+> 	}
+>
+> With
+>
+> #define __get_kernel_nofault(dst, src, type, err_label)			\
+> 	__get_user_size_goto(*((type *)(dst)),				\
+> 		(__force type __user *)(src), sizeof(type), err_label)
+>
+>
+> And
+>
+> #define __get_user_size_goto(x, ptr, size, label)				\
+> do {										\
+> 	BUILD_BUG_ON(size > sizeof(x));						\
+> 	switch (size) {								\
+> 	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
+> 	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
+> 	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
+> 	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
+> 	default: x =3D 0; BUILD_BUG();						\
+> 	}									\
+> } while (0)
+>
+> And
+>
+> #define __get_user_asm_goto(x, addr, label, op)			\
+> 	asm_volatile_goto(					\
+> 		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
+> 		EX_TABLE(1b, %l2)				\
+> 		: "=3Dr" (x)					\
+> 		: "m<>" (*addr)				\
+> 		:						\
+> 		: label)
+>
+>
+> I see no possibility, no alternative path where val wouldn't be set. The=
+=20
+> asm clearly has *addr as an output param so it is always set.
 
-Thank you for the patch! Yet something to improve:
+I guess clang can't convince itself of that?
 
-[auto build test ERROR on jberg-mac80211-next/master]
-[also build test ERROR on next-20211130]
-[cannot apply to jberg-mac80211/master linus/master v5.16-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>>     1 warning generated.
+>>     <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#war=
+nings]
+>>     #warning syscall futex_waitv not implemented
+>>      ^
+>>     1 warning generated.
+>>     arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported d=
+irective '.stabs'
+>>     .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_=
+x; _restgpr_31_x:
+>>            ^
+>>     arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported d=
+irective '.stabs'
+>>     .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32g=
+pr_31_x; _rest32gpr_31_x:
+>
+> How should we fix that ? Will clang support .stabs in the future ?
 
-url:    https://github.com/0day-ci/linux/commits/Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jberg/mac80211-next.git master
-config: riscv-randconfig-c006-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301955.BdSRnKyU-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/da233d0b8179f2db6b1f5e783da1c0b986cc8e96
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
-        git checkout da233d0b8179f2db6b1f5e783da1c0b986cc8e96
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/
+I think we should drop any stabs annotations / support. AFAICT none of
+the toolchains we support produce it anymore.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/wireless/scan.c:1801:6: error: use of undeclared identifier 'channel'
-           if (channel->band == NL80211_BAND_6GHZ) {
-               ^
-   net/wireless/scan.c:1813:12: error: use of undeclared identifier 'channel'
-                                   return channel;
-                                          ^
->> net/wireless/scan.c:1815:4: error: use of undeclared identifier 'freq'
-                           freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
-                           ^
-   net/wireless/scan.c:1822:12: error: use of undeclared identifier 'freq'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                   ^
-   net/wireless/scan.c:1822:19: error: use of undeclared identifier 'channel'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                          ^
-   net/wireless/scan.c:1822:12: error: use of undeclared identifier 'freq'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                   ^
-   net/wireless/scan.c:1822:19: error: use of undeclared identifier 'channel'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                          ^
-   net/wireless/scan.c:1821:8: error: use of undeclared identifier 'freq'
-                           if (freq != channel->center_freq &&
-                               ^
-   net/wireless/scan.c:1821:16: error: use of undeclared identifier 'channel'
-                           if (freq != channel->center_freq &&
-                                       ^
->> net/wireless/scan.c:1823:9: error: use of undeclared identifier 'ftype'; did you mean '_ctype'?
-                               (ftype != CFG80211_BSS_FTYPE_BEACON ||
-                                ^~~~~
-                                _ctype
-   include/linux/ctype.h:21:28: note: '_ctype' declared here
-   extern const unsigned char _ctype[];
-                              ^
-   10 errors generated.
-
-
-vim +/channel +1801 net/wireless/scan.c
-
-  1794	
-  1795	int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
-  1796					    enum nl80211_band band)
-  1797	{
-  1798		const u8 *tmp;
-  1799		int channel_number = -1;
-  1800	
-> 1801		if (channel->band == NL80211_BAND_6GHZ) {
-  1802			const struct element *elem;
-  1803	
-  1804			elem = cfg80211_find_ext_elem(WLAN_EID_EXT_HE_OPERATION, ie,
-  1805						      ielen);
-  1806			if (elem && elem->datalen >= ieee80211_he_oper_size(&elem->data[1])) {
-  1807				struct ieee80211_he_operation *he_oper =
-  1808					(void *)(&elem->data[1]);
-  1809				const struct ieee80211_he_6ghz_oper *he_6ghz_oper;
-  1810	
-  1811				he_6ghz_oper = ieee80211_he_6ghz_oper(he_oper);
-  1812				if (!he_6ghz_oper)
-  1813					return channel;
-  1814	
-> 1815				freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
-  1816								      NL80211_BAND_6GHZ);
-  1817	
-  1818				/* duplicated beacon indication is relevant for beacons
-  1819				 * only
-  1820				 */
-  1821				if (freq != channel->center_freq &&
-  1822				    abs(freq - channel->center_freq) <= 80 &&
-> 1823				    (ftype != CFG80211_BSS_FTYPE_BEACON ||
-  1824				     he_6ghz_oper->control & IEEE80211_HE_6GHZ_OPER_CTRL_DUP_BEACON))
-  1825					channel_number = he_6ghz_oper->primary;
-  1826			}
-  1827		} else if (band == NL80211_BAND_S1GHZ) {
-  1828			tmp = cfg80211_find_ie(WLAN_EID_S1G_OPERATION, ie, ielen);
-  1829			if (tmp && tmp[1] >= sizeof(struct ieee80211_s1g_oper_ie)) {
-  1830				struct ieee80211_s1g_oper_ie *s1gop = (void *)(tmp + 2);
-  1831	
-  1832				channel_number = s1gop->primary_ch;
-  1833			}
-  1834		} else {
-  1835			tmp = cfg80211_find_ie(WLAN_EID_DS_PARAMS, ie, ielen);
-  1836			if (tmp && tmp[1] == 1) {
-  1837				channel_number = tmp[2];
-  1838			} else {
-  1839				tmp = cfg80211_find_ie(WLAN_EID_HT_OPERATION, ie, ielen);
-  1840				if (tmp && tmp[1] >= sizeof(struct ieee80211_ht_operation)) {
-  1841					struct ieee80211_ht_operation *htop = (void *)(tmp + 2);
-  1842	
-  1843					channel_number = htop->primary_chan;
-  1844				}
-  1845			}
-  1846		}
-  1847	
-  1848		return channel_number;
-  1849	}
-  1850	EXPORT_SYMBOL(cfg80211_get_ies_channel_number);
-  1851	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+cheers
