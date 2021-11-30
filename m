@@ -1,41 +1,41 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-qv1-f74.google.com (mail-qv1-f74.google.com [209.85.219.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD272C9D
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:45:51 +0000 (UTC)
-Received: by mail-wm1-f73.google.com with SMTP id 201-20020a1c04d2000000b003335bf8075fso10324160wme.0
-        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 03:45:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCB72C9D
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:45:52 +0000 (UTC)
+Received: by mail-qv1-f74.google.com with SMTP id kc26-20020a056214411a00b003cabea18f69so27485415qvb.19
+        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 03:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TQFyZU0v42DaaTkISoD0OFzde9Hlzhfr9CYPS/61CiQ=;
-        b=UzkPOK44rKyoX0ydzg9d6O+jrGkdKn2U4Uh9I6GaB3gkQKhjEvJW6OswApZ/DpFhIs
-         MjWkd+FkuLnMui5ECel20ebBFkuRLa1f1neQ6VVz1S7yCh0IvJGlwo8aeF9bhgAZqyug
-         l2zCEvskzXpYTMvQpQGB0z4ARki5+15v+PWKTCRoN0cGTSZ65LPhGkDFa7K5dBSQtt1+
-         LiZoJY4ePdc7NQgpEjukKVvNVBinKAvWLDa3Mfnn9KnFectfd/m0Z+qn/ceEmQlEYCrQ
-         OGNEtLuGhqXgJgSt12TdFVVE+Mz8qn5rbzRLOK/zD3ItiiBRgqjdDcz7tWKq+w3BIhpz
-         +2gg==
+        bh=rzdCErYR7QVJMqQ7C8iOEn+pKBOJL+BpLP2uqDT2sRI=;
+        b=iiJU/NFxnkO4QpNuEziwm44ZddXcfbqTjJ27RND0XQcNYVVoxyYjAqEozptVgUXNwN
+         tUotgFLhO6hTdCXy/8o38iy2aym7FJT+LW4h57+kXk+ITZwaPtmf/ukrKduYHtwrNNVy
+         u6zRnFErKVJc5tA07nIb20yQJs/rjFgBkkJfiMGCJ0+/frkqjjvq7sB5Qlsbun/G1B3v
+         mpVqufLXr0RiWnvRXu2PZPDLndJRxYoHPg3pEXSdStYWib1eEQIROpsu8lv6/UvQvgN4
+         KcSqzQSZ9rtkXbOEAqLYcx/YblyNiiImRh54NndbnYSq+4cJ1Y/85RKTI5bPUsrRqqxr
+         ZZsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TQFyZU0v42DaaTkISoD0OFzde9Hlzhfr9CYPS/61CiQ=;
-        b=T60FTLQLTWv/skAsqILEhOJ8c4khMZaRX0tmnzMPK9ro8L/DGiNaxphjpBQNpIGhNL
-         +o8P0GV5zlB0bF85zPvu0VoNLuwNwbjUQ1ulAeHogXjz4+jQ+iRI1IJ8XPvjs255TTXc
-         /yCY3T2Wjk6zStb1Ff8DaqeWfvctxSmMtCGBaq0suJONvZ0V20ZMIaYGAKcW7LNZWn/8
-         FHkYbES2SOzP26lu///2SCeKPeS1XzJm6JKoqJsEyaUKJdHlkqPi7wea5ZFy6sdJeYWi
-         3EBz3/w2qkVJ7mwLeIP6FRcr8B925mUKOnwxSTg2QsEJZf1oRE3KWfAEK/s3GkE/wOu6
-         ITqQ==
-X-Gm-Message-State: AOAM530prlyodisr6KLNYKgt6PQoHRhbsIGe7u+lcRPjAsbJvTDP020N
-	G9R0hAWYQhkNsSLBt6DVkTF0Q+FLxA==
-X-Google-Smtp-Source: ABdhPJxb0DkHs7VvMvArdCvCQrK9MrDdf3hAA2QD7Q29GE02b72kjglRFvit2CdEhNhUNiK6zoXiTRV6/Q==
+        bh=rzdCErYR7QVJMqQ7C8iOEn+pKBOJL+BpLP2uqDT2sRI=;
+        b=mbc2vKb9HL54J9z5NQ1pkeLwrKU3BltY5mEwZYjbJsxsX5RHVxipqjkROR7fXVYd5T
+         pontATJzZw1nuM324snymFaPgJDMjwpoHwZrk83Q+AMgqHtu5vkGf5xNX+NTVSCY5Z6C
+         jk2H+k7r/Ud5zzq+XhO2OUyY/tV47vsXKiEac6/vxvRAa8PY94TXMqEZJoczHhUCbnSl
+         Dmb62DqDNfORp0NbphFl9xnY14zNROXjd2LuK5kHo5ZaggVEXXpK6sfrDm1LN4LZPRh1
+         JLrFoTLEJ0pGAM9+fE36COHTQUh8K3SvrMHLZutdrvMvZuNSBuXuwMejx8LVBf4Lr6uF
+         7xtw==
+X-Gm-Message-State: AOAM5308iRamJm6sTgzUkCgdKiTfw+jstG2TAaK/mjQrsQgdX62TUrZQ
+	lVDqFIyqmKBELoC/lA9VQMRXZ60uqw==
+X-Google-Smtp-Source: ABdhPJxS2DvHFjm5rRAa2Cv18Mr86xucn8I+904NmrEkNJGoQhVDVa+JTgno3MDa7PBFHMKHIzeyW8Gdjg==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:86b7:11e9:7797:99f0])
- (user=elver job=sendgmr) by 2002:a05:600c:19c8:: with SMTP id
- u8mr4203223wmq.155.1638272749477; Tue, 30 Nov 2021 03:45:49 -0800 (PST)
-Date: Tue, 30 Nov 2021 12:44:27 +0100
+ (user=elver job=sendgmr) by 2002:ac8:5c45:: with SMTP id j5mr51253786qtj.58.1638272751779;
+ Tue, 30 Nov 2021 03:45:51 -0800 (PST)
+Date: Tue, 30 Nov 2021 12:44:28 +0100
 In-Reply-To: <20211130114433.2580590-1-elver@google.com>
-Message-Id: <20211130114433.2580590-20-elver@google.com>
+Message-Id: <20211130114433.2580590-21-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20211130114433.2580590-1-elver@google.com>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 19/25] x86/qspinlock, kcsan: Instrument barrier of pv_queued_spin_unlock()
+Subject: [PATCH v3 20/25] mm, kcsan: Enable barrier instrumentation
 From: Marco Elver <elver@google.com>
 To: elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -57,31 +57,40 @@ Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>,
 	x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-If CONFIG_PARAVIRT_SPINLOCKS=y, queued_spin_unlock() is implemented
-using pv_queued_spin_unlock() which is entirely inline asm based. As
-such, we do not receive any KCSAN barrier instrumentation via regular
-atomic operations.
+Some memory management calls imply memory barriers that are required to
+avoid false positives. For example, without the correct instrumentation,
+we could observe data races of the following variant:
 
-Add the missing KCSAN barrier instrumentation for the
-CONFIG_PARAVIRT_SPINLOCKS case.
+                   T0           |           T1
+        ------------------------+------------------------
+                                |
+         *a = 42;    ---+       |
+         kfree(a);      |       |
+                        |       | b = kmalloc(..); // b == a
+          <reordered> <-+       | *b = 42;         // not a data race!
+                                |
+
+Therefore, instrument memory barriers in all allocator code currently
+not being instrumented in a default build.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- arch/x86/include/asm/qspinlock.h | 1 +
- 1 file changed, 1 insertion(+)
+ mm/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/include/asm/qspinlock.h b/arch/x86/include/asm/qspinlock.h
-index d86ab942219c..d87451df480b 100644
---- a/arch/x86/include/asm/qspinlock.h
-+++ b/arch/x86/include/asm/qspinlock.h
-@@ -53,6 +53,7 @@ static inline void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+diff --git a/mm/Makefile b/mm/Makefile
+index d6c0042e3aa0..7919cd7f13f2 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -15,6 +15,8 @@ KCSAN_SANITIZE_slab_common.o := n
+ KCSAN_SANITIZE_slab.o := n
+ KCSAN_SANITIZE_slub.o := n
+ KCSAN_SANITIZE_page_alloc.o := n
++# But enable explicit instrumentation for memory barriers.
++KCSAN_INSTRUMENT_BARRIERS := y
  
- static inline void queued_spin_unlock(struct qspinlock *lock)
- {
-+	kcsan_release();
- 	pv_queued_spin_unlock(lock);
- }
- 
+ # These files are disabled because they produce non-interesting and/or
+ # flaky coverage that is not a function of syscall inputs. E.g. slab is out of
 -- 
 2.34.0.rc2.393.gf8c9666880-goog
 
