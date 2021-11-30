@@ -1,29 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9C868
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 16:02:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA593C53FCD;
-	Tue, 30 Nov 2021 16:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DE868
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 16:15:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB047C53FC1;
+	Tue, 30 Nov 2021 16:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638288148;
-	bh=64RAz2CqUQ1QEHCt+L9O5W/tNpPu0BSBDbOZVhu3//Y=;
+	s=k20201202; t=1638288913;
+	bh=P8o3xJoZ9GulqCm3by9ySAYZOhiX00eAxdialhufxvY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eo6OHzOon1ZkbYjVdWvSMF4atPZg51dk2jL8vjgZwUJOap3OIWAd22H/bivVQ1H+h
-	 Sg+oNtPzIK9rBszlMfmb6COcL/NaDZ67jeeJW4g2eETHT6TvG4TK0odxIFmQM3s2kk
-	 UYtpuKZt1VfpaS6qwDQ8KaoMgzt92lMpuCLk6slO4xwnrJbZUWSC4hvUFslMAePDNZ
-	 BmAcnU2ephBRJYyCPilLDMbGFW1NNyFO+0xz7gZTeCWgCaKU+2W017QDG1VHuju61j
-	 aMm3+KRcgweDnCWNt0MAUB0VdZPQ+s7gHgb4owan8ZmYwRcrxBH4LggRjzkflqKwmv
-	 EFLDeM9Sfs6XQ==
-Date: Tue, 30 Nov 2021 09:02:24 -0700
+	b=OetwOYtBIbikZ7LhnB77SBsvM18Jm92Lg+sWp1Bvq5NVYWIn707PetzCzKVQF1gBH
+	 hNp2rvzS0GtDyA/Bx2OpdVp0YnKbr+LEQ2zKIXjGaHGVfTHD1CNhgpEYU5J9PMG+00
+	 IhCpzigsWUjK+JLVGt8LYCrs8x0B/a3b9CCnAQG4P6L7x38XQJ+PGJ+UkP6cuKfFtQ
+	 +w7m1GQzxL2JB1Iyi/KFgpyMccj7+60rXdqdDGz77eXCn910146xaAcM4AoJcraRc7
+	 1HbdNXcgXI29uQxAK6lwOENIPqHsaiCEzKVtpoMFZ7seIi08nc1OU1mWsQlaTVmu5o
+	 8Enk0P0netdMA==
+Date: Tue, 30 Nov 2021 09:15:06 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Finn Behrens <me@kloenk.dev>
-Cc: johannes@sipsolutions.net, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v5] nl80211: reset regdom when reloading regdb
-Message-ID: <YaZLEEj2pUU/DhZD@archlinux-ax161>
-References: <20210526112418.cdwkn7ed4twctimc@imap.mailbox.org>
- <YaIIZfxHgqc/UTA7@gimli.kloenk.dev>
+To: David Howells <dhowells@redhat.com>
+Cc: linux-cachefs@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+	Anna Schumaker <anna.schumaker@netapp.com>,
+	Steve French <sfrench@samba.org>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Omar Sandoval <osandov@osandov.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+	v9fs-developer@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 51/64] cachefiles: Implement the I/O routines
+Message-ID: <YaZOCk9zxApPattb@archlinux-ax161>
+References: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
+ <163819647945.215744.17827962047487125939.stgit@warthog.procyon.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,28 +43,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaIIZfxHgqc/UTA7@gimli.kloenk.dev>
+In-Reply-To: <163819647945.215744.17827962047487125939.stgit@warthog.procyon.org.uk>
 
-Hi Finn,
-
-On Sat, Nov 27, 2021 at 11:28:53AM +0100, Finn Behrens wrote:
-> this reloads the regdom when the regulatory db is reloaded.
-> Without this patch the user had to change the regulatoy domain to a
-> different, and then reset it to the one the user is in, to have the new
-> regulatory db take effect
+On Mon, Nov 29, 2021 at 02:34:39PM +0000, David Howells wrote:
+> Implement the I/O routines for cachefiles.  There are two sets of routines
+> here: preparation and actual I/O.
 > 
-> Signed-off-by: Finn Behrens <fin@nyantec.com>
+> Preparation for read involves looking to see whether there is data present,
+> and how much.  Netfslib tells us what it wants us to do and we have the
+> option of adjusting shrinking and telling it whether to read from the
+> cache, download from the server or simply clear a region.
+> 
+> Preparation for write involves checking for space and defending against
+> possibly running short of space, if necessary punching out a hole in the
+> file so that we don't leave old data in the cache if we update the
+> coherency information.
+> 
+> Then there's a read routine and a write routine.  They wait for the cookie
+> state to move to something appropriate and then start a potentially
+> asynchronous direct I/O operation upon it.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: linux-cachefs@redhat.com
 
-This patch as commit 1eda919126b4 ("nl80211: reset regdom when reloading
-regdb") in -next causes the following clang warning/error:
+This patch as commit 0443b01eccbb ("cachefiles: Implement the I/O
+routines") in -next causes the following clang warning/error:
 
-net/wireless/reg.c:1137:23: error: implicit conversion from enumeration type 'enum nl80211_user_reg_hint_type' to different enumeration type 'enum nl80211_reg_initiator' [-Werror,-Wenum-conversion]
-        request->initiator = NL80211_USER_REG_HINT_USER;
-                           ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~
+fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        if (pos == 0)
+            ^~~~~~~~
+fs/cachefiles/io.c:492:6: note: uninitialized use occurs here
+        if (ret < 0) {
+            ^~~
+fs/cachefiles/io.c:489:2: note: remove the 'if' if its condition is always true
+        if (pos == 0)
+        ^~~~~~~~~~~~~
+fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silence this warning
+        int ret;
+               ^
+                = 0
 1 error generated.
 
-Should that be NL80211_REGDOM_SET_BY_CORE (same value, 0) or something
-different?
+It is the same one that has been reported two other times over the past
+two months:
+
+https://lore.kernel.org/r/202110150048.HPNa2Mn7-lkp@intel.com/
+https://lore.kernel.org/r/202111070451.bsfAyznx-lkp@intel.com/
+
+Should ret just be initialized to zero or does it need to be set to
+something else if pos is not equal to zero at the end?
 
 Cheers,
 Nathan
