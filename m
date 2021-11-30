@@ -1,65 +1,83 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E2A2C82
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 22:04:36 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="260294382"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="260294382"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:04:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="459779942"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 14:04:28 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1msBEh-000DoY-Sp; Tue, 30 Nov 2021 22:04:27 +0000
-Date: Wed, 1 Dec 2021 06:03:28 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: block/blk-core.o: warning: objtool:
- trace_event_raw_event_block_rq_complete()+0x1e4: unreachable instruction
-Message-ID: <202112010503.lQAtgqif-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347F42C82
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 22:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CDE1C53FCC;
+	Tue, 30 Nov 2021 22:12:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638310368;
+	bh=sj+juij8tw8fLPSN/HlEtchRwvDaEZoWU3Wva1iHMa4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fZYPSmoDx9WNAQdony9+f8LbapGKHNkQ8z1MWlpBSBYZ5K1nFaR6IVeEBUBqznUvl
+	 R9CkI1ujjgwtn5r8CyYAC0Y+vf5x2Awoi1M8EojjD3navAjBnYrDpqB25p6djKzLZf
+	 ImeqKztcrHL4ONlQeuptJplxMG1I3jwPB663l4WFs1TBtRCDDgK/ExcB7vf+ao/O4Y
+	 Vus3YvkA9HnBO+0K8KcqnQY4QhMg/XLmlcdGWkUY3eh0YqNhFzHVdUrQWucsbcpd82
+	 RLt2yrOwMQ8u2TOTvmsXBF4fWsdtCnWExAAC1ebCgU9fJqsHLcisXrlI8QxAwe7UZb
+	 pJQVTkH7dAV1Q==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Dan Carpenter <dan.carpenter@oracle.com>,
+	linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Russ Weight <russell.h.weight@intel.com>,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in s10_probe()
+Date: Tue, 30 Nov 2021 15:11:24 -0700
+Message-Id: <20211130221123.3800420-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Christoph Hellwig <hch@lst.de>
-CC: Jens Axboe <axboe@kernel.dk>
+Clang warns:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f080815fdb3e3cff5a004ca83b3815ac17ef71b1
-commit: 8a7d267b4a2c71a5ff5dd9046abea7117c7d0ac2 block: don't call blk_status_to_errno in blk_update_request
-date:   6 weeks ago
-config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211201/202112010503.lQAtgqif-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a7d267b4a2c71a5ff5dd9046abea7117c7d0ac2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8a7d267b4a2c71a5ff5dd9046abea7117c7d0ac2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+        return ret;
+               ^~~
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ret is only assigned in an error path now so just return 0 directly.
 
-All warnings (new ones prefixed by >>):
-
->> block/blk-core.o: warning: objtool: trace_event_raw_event_block_rq_complete()+0x1e4: unreachable instruction
-
+Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1517
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
+
+* Drop clang's suggestion text (Tom).
+
+* Pick up Russ and Tom's review tags.
+
+ drivers/fpga/stratix10-soc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 737d14c6e0de..357cea58ec98 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	platform_set_drvdata(pdev, mgr);
+-	return ret;
++	return 0;
+ 
+ probe_err:
+ 	stratix10_svc_free_channel(priv->chan);
+
+base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
+-- 
+2.34.1
+
