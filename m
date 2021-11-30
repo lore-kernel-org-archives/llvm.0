@@ -1,40 +1,29 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DE868
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 16:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB047C53FC1;
-	Tue, 30 Nov 2021 16:15:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638288913;
-	bh=P8o3xJoZ9GulqCm3by9ySAYZOhiX00eAxdialhufxvY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OetwOYtBIbikZ7LhnB77SBsvM18Jm92Lg+sWp1Bvq5NVYWIn707PetzCzKVQF1gBH
-	 hNp2rvzS0GtDyA/Bx2OpdVp0YnKbr+LEQ2zKIXjGaHGVfTHD1CNhgpEYU5J9PMG+00
-	 IhCpzigsWUjK+JLVGt8LYCrs8x0B/a3b9CCnAQG4P6L7x38XQJ+PGJ+UkP6cuKfFtQ
-	 +w7m1GQzxL2JB1Iyi/KFgpyMccj7+60rXdqdDGz77eXCn910146xaAcM4AoJcraRc7
-	 1HbdNXcgXI29uQxAK6lwOENIPqHsaiCEzKVtpoMFZ7seIi08nc1OU1mWsQlaTVmu5o
-	 8Enk0P0netdMA==
-Date: Tue, 30 Nov 2021 09:15:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: linux-cachefs@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-	Anna Schumaker <anna.schumaker@netapp.com>,
-	Steve French <sfrench@samba.org>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Omar Sandoval <osandov@osandov.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-	v9fs-developer@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 51/64] cachefiles: Implement the I/O routines
-Message-ID: <YaZOCk9zxApPattb@archlinux-ax161>
-References: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
- <163819647945.215744.17827962047487125939.stgit@warthog.procyon.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF8768
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 16:17:06 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="299642931"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="299642931"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:16:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="499830081"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 30 Nov 2021 08:16:00 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1ms5nT-000DW2-Ji; Tue, 30 Nov 2021 16:15:59 +0000
+Date: Wed, 1 Dec 2021 00:15:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexey Avramov <hakavlad@inbox.lv>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+Message-ID: <202112010030.e6d9vIAL-lkp@intel.com>
+References: <20211130201652.2218636d@mail.inbox.lv>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,55 +32,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <163819647945.215744.17827962047487125939.stgit@warthog.procyon.org.uk>
+In-Reply-To: <20211130201652.2218636d@mail.inbox.lv>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Nov 29, 2021 at 02:34:39PM +0000, David Howells wrote:
-> Implement the I/O routines for cachefiles.  There are two sets of routines
-> here: preparation and actual I/O.
-> 
-> Preparation for read involves looking to see whether there is data present,
-> and how much.  Netfslib tells us what it wants us to do and we have the
-> option of adjusting shrinking and telling it whether to read from the
-> cache, download from the server or simply clear a region.
-> 
-> Preparation for write involves checking for space and defending against
-> possibly running short of space, if necessary punching out a hole in the
-> file so that we don't leave old data in the cache if we update the
-> coherency information.
-> 
-> Then there's a read routine and a write routine.  They wait for the cookie
-> state to move to something appropriate and then start a potentially
-> asynchronous direct I/O operation upon it.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
+Hi Alexey,
 
-This patch as commit 0443b01eccbb ("cachefiles: Implement the I/O
-routines") in -next causes the following clang warning/error:
+Thank you for the patch! Yet something to improve:
 
-fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        if (pos == 0)
-            ^~~~~~~~
-fs/cachefiles/io.c:492:6: note: uninitialized use occurs here
-        if (ret < 0) {
-            ^~~
-fs/cachefiles/io.c:489:2: note: remove the 'if' if its condition is always true
-        if (pos == 0)
-        ^~~~~~~~~~~~~
-fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silence this warning
-        int ret;
-               ^
-                = 0
-1 error generated.
+[auto build test ERROR on d58071a8a76d779eedab38033ae4c821c30295a5]
 
-It is the same one that has been reported two other times over the past
-two months:
+url:    https://github.com/0day-ci/linux/commits/Alexey-Avramov/mm-vmscan-add-sysctl-knobs-for-protecting-the-working-set/20211130-191905
+base:   d58071a8a76d779eedab38033ae4c821c30295a5
+config: hexagon-randconfig-r045-20211129 (https://download.01.org/0day-ci/archive/20211201/202112010030.e6d9vIAL-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/54324d9a29319c86d63a3bb17d401c90f547f9c1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alexey-Avramov/mm-vmscan-add-sysctl-knobs-for-protecting-the-working-set/20211130-191905
+        git checkout 54324d9a29319c86d63a3bb17d401c90f547f9c1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-https://lore.kernel.org/r/202110150048.HPNa2Mn7-lkp@intel.com/
-https://lore.kernel.org/r/202111070451.bsfAyznx-lkp@intel.com/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Should ret just be initialized to zero or does it need to be set to
-something else if pos is not equal to zero at the end?
+All errors (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> mm/vmscan.c:183:54: error: use of undeclared identifier 'CONFIG_ANON_MIN_KBYTES'
+   unsigned long sysctl_anon_min_kbytes __read_mostly = CONFIG_ANON_MIN_KBYTES;
+                                                        ^
+>> mm/vmscan.c:184:55: error: use of undeclared identifier 'CONFIG_CLEAN_LOW_KBYTES'
+   unsigned long sysctl_clean_low_kbytes __read_mostly = CONFIG_CLEAN_LOW_KBYTES;
+                                                         ^
+>> mm/vmscan.c:185:55: error: use of undeclared identifier 'CONFIG_CLEAN_MIN_KBYTES'
+   unsigned long sysctl_clean_min_kbytes __read_mostly = CONFIG_CLEAN_MIN_KBYTES;
+                                                         ^
+   3 errors generated.
+
+
+vim +/CONFIG_ANON_MIN_KBYTES +183 mm/vmscan.c
+
+   182	
+ > 183	unsigned long sysctl_anon_min_kbytes __read_mostly = CONFIG_ANON_MIN_KBYTES;
+ > 184	unsigned long sysctl_clean_low_kbytes __read_mostly = CONFIG_CLEAN_LOW_KBYTES;
+ > 185	unsigned long sysctl_clean_min_kbytes __read_mostly = CONFIG_CLEAN_MIN_KBYTES;
+   186	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
