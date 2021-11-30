@@ -1,189 +1,189 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DC82C80
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:12:23 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322523518"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="322523518"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 09:38:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="746804821"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Nov 2021 09:38:02 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1ms74r-000Dah-Or; Tue, 30 Nov 2021 17:38:01 +0000
-Date: Wed, 1 Dec 2021 01:36:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiaoming Ni <nixiaoming@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>
-Subject: [linux-stable-rc:linux-5.10.y 2101/2411]
- arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:89:12: error: no previous
- prototype for function 'mpc85xx_setup_pmc'
-Message-ID: <202112010112.YOpAIovm-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBC62C80
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB67BC53FCC;
+	Tue, 30 Nov 2021 18:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638296249;
+	bh=we0XXIEykccEkXZEaJhZNjX+PQK69G70xjfm//KyBgA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rigIwMrgMPCkepAryW1j2rkkbvPAjrSv7o5Rc+jAMdkurrFl33bZPO2BEl55yqpQD
+	 ylkFUhCN6RuZo0jTXSQluq10v/HjJjEuUs7TpgPR26Wwe9yRGKnFQgmwQU0ovCAXao
+	 DkiQffFoZvr6AeBnAcouF6YULvoqnhcKDLQdZlk4cTwhytra+kJBJ9Z8jUmbmDPnQi
+	 cwOCshj0WO3ycrLOBukz03c0ViQJbLNOayYfOON9xlJ/H/42HaADYVxq0iOmpgsUQR
+	 QRJSV7brQAzhFAVwPwKOe87CK+miGoK8rqkMxluAVorROSUoMmXrzevYFiclY8Gx6O
+	 d0hFSMOg4vauA==
+Date: Tue, 30 Nov 2021 11:17:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	kernel test robot <lkp@intel.com>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+Message-ID: <YaZqs2tPxMzhgkAW@archlinux-ax161>
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+ <202111300652.0yDBNvyJ-lkp@intel.com>
+ <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+ <87a6hlq408.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87a6hlq408.fsf@mpe.ellerman.id.au>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   cd4fd0597d3787df6c6771a7b41379d35a8f31b0
-commit: 1023355234ca441c7296a58e762b420eef88884e [2101/2411] powerpc/85xx: fix timebase sync issue when CONFIG_HOTPLUG_CPU=n
-config: powerpc64-randconfig-r014-20211129 (https://download.01.org/0day-ci/archive/20211201/202112010112.YOpAIovm-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc64 cross compiling tool for clang build
-        # apt-get install binutils-powerpc64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=1023355234ca441c7296a58e762b420eef88884e
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout 1023355234ca441c7296a58e762b420eef88884e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
+> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> > Le 29/11/2021 à 23:55, kernel test robot a écrit :
+> >> Hi Christophe,
+> >> 
+> >> I love your patch! Perhaps something to improve:
+> >> 
+> >> [auto build test WARNING on powerpc/next]
+> >> [also build test WARNING on v5.16-rc3 next-20211129]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch]
+> >> 
+> >> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> >> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
+> >> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+> >> reproduce (this is a W=1 build):
+> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          # install powerpc cross compiling tool for clang build
+> >>          # apt-get install binutils-powerpc-linux-gnu
+> >>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+> >>          git remote add linux-review https://github.com/0day-ci/linux
+> >>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+> >>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+> >>          # save the config file to linux build tree
+> >>          mkdir build_dir
+> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+> >> 
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >> 
+> >> All warnings (new ones prefixed by >>):
+> >> 
+> >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+> >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
+> >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+> >>                     *inst = ppc_inst(val);
+> >>                                      ^~~
+> >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'ppc_inst'
+> >>     #define ppc_inst(x) (x)
+> >>                          ^
+> >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variable 'val' to silence this warning
+> >>             unsigned int val, suffix;
+> >>                             ^
+> >>                              = 0
+> >
+> > I can't understand what's wrong here.
+> >
+> > We have
+> >
+> > 	__get_kernel_nofault(&val, src, u32, Efault);
+> > 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+> > 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> > 		*inst = ppc_inst_prefix(val, suffix);
+> > 	} else {
+> > 		*inst = ppc_inst(val);
+> > 	}
+> >
+> > With
+> >
+> > #define __get_kernel_nofault(dst, src, type, err_label)			\
+> > 	__get_user_size_goto(*((type *)(dst)),				\
+> > 		(__force type __user *)(src), sizeof(type), err_label)
+> >
+> >
+> > And
+> >
+> > #define __get_user_size_goto(x, ptr, size, label)				\
+> > do {										\
+> > 	BUILD_BUG_ON(size > sizeof(x));						\
+> > 	switch (size) {								\
+> > 	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
+> > 	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
+> > 	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
+> > 	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
+> > 	default: x = 0; BUILD_BUG();						\
+> > 	}									\
+> > } while (0)
+> >
+> > And
+> >
+> > #define __get_user_asm_goto(x, addr, label, op)			\
+> > 	asm_volatile_goto(					\
+> > 		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
+> > 		EX_TABLE(1b, %l2)				\
+> > 		: "=r" (x)					\
+> > 		: "m<>" (*addr)				\
+> > 		:						\
+> > 		: label)
+> >
+> >
+> > I see no possibility, no alternative path where val wouldn't be set. The 
+> > asm clearly has *addr as an output param so it is always set.
+> 
+> I guess clang can't convince itself of that?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+A simplified reproducer:
 
-Note: the linux-stable-rc/linux-5.10.y HEAD cd4fd0597d3787df6c6771a7b41379d35a8f31b0 builds fine.
-      It only hurts bisectability.
+$ cat test.c
+static inline int copy_inst_from_kernel_nofault(unsigned int *inst,
+                                                unsigned int *src)
+{
+        unsigned int val;
 
-All errors (new ones prefixed by >>):
+        asm goto("1: lwz %U1%X1 %0, %1   # get_user\n"
+                 ".section __ex_table,\"a\";"
+                 ".balign 4;"
+                 ".long (1b) - . ;"
+                 ".long (%l2) - . ;"
+                 ".previous"
+                 : "=r" (*(unsigned int *)(&val))
+                 : "m<>" (*(unsigned int *)(src))
+                 :
+                 : Efault);
 
-   ^
-   arch/powerpc/include/asm/io.h:522:62: note: expanded from macro '__do_outl'
-   #define __do_outl(val, port)    writel(val,(PCI_IO_ADDR)_IO_BASE+port);
-                                              ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:604:
-   arch/powerpc/include/asm/io-defs.h:43:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:55:1: note: expanded from here
-   __do_insb
-   ^
-   arch/powerpc/include/asm/io.h:541:56: note: expanded from macro '__do_insb'
-   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:604:
-   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:57:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:542:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:604:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:59:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:543:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:604:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:61:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:544:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:604:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:63:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:545:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:604:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:65:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:546:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:89:12: error: no previous prototype for function 'mpc85xx_setup_pmc' [-Werror,-Wmissing-prototypes]
-   int __init mpc85xx_setup_pmc(void)
-              ^
-   arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init mpc85xx_setup_pmc(void)
-   ^
-   static 
-   13 errors generated.
+        *inst = val;
+        return 0;
 
+Efault:
+        return -14; /* -EFAULT */
+}
 
-vim +/mpc85xx_setup_pmc +89 arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c
+$ clang --target=powerpc-linux-gnu -Wuninitialized -fsyntax-only test.c
+test.c:17:10: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+        *inst = val;
+                ^~~
+test.c:4:18: note: initialize the variable 'val' to silence this warning
+        unsigned int val;
+                        ^
+                         = 0
+1 warning generated.
 
-56f1ba28071946 chenhui zhao 2015-11-20  88  
-56f1ba28071946 chenhui zhao 2015-11-20 @89  int __init mpc85xx_setup_pmc(void)
+It certainly looks like there is something wrong with how clang is
+tracking the initialization of the variable because it looks to me like
+val is only used in the fallthrough path, which happens after it is
+initialized via lwz.  Perhaps something is wrong with the logic of
+https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issues are
+being migrated from Bugzilla to GitHub Issues right now so I cannot file
+this upstream at the moment).
 
-:::::: The code at line 89 was first introduced by commit
-:::::: 56f1ba280719469bffc870b6b2d935f3a3019ea4 powerpc/mpc85xx: refactor the PM operations
-
-:::::: TO: chenhui zhao <chenhui.zhao@freescale.com>
-:::::: CC: Scott Wood <oss@buserror.net>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
