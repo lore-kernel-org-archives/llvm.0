@@ -1,33 +1,33 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9990568
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 14:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD34C53FC1;
-	Tue, 30 Nov 2021 14:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638283191;
-	bh=cdF3rEKjcPHHtGWEfPp7Zo08qoyJECgToJN64AqSj4o=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=AnKgiGL7pA4B+u9k98Fffju4Q7RV7ujl1ZZsUXl7Gu38t6MdQr+TYa6vSITAM1mDx
-	 iZmho4aaOIwNm3KjbF02WmOMKWDSkKkulM5ukxAaqgsZ/0mDXrcYU13UWig8JfOltn
-	 YK1O3LYEACQ3hLnioGjli7rSeYY3Ru2NUaHkMP3Xv03dQh7fCYd3FB4h6rlY58evll
-	 SXPubiweQoOuXHE7Jl/ZzpF2pzFgDJwEmOH9sVodY8nM08tYpNAlSTJsKRDvo8ZorK
-	 QaiYG3U2AALdYxiyrk5BEgOhSnCxuII2J2u6VoN5BXCkqpn9fFU2x0t/QyyPaiJS6T
-	 XUM4bDTd3tcLQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 1C7FE5C00AC; Tue, 30 Nov 2021 06:39:51 -0800 (PST)
-Date: Tue, 30 Nov 2021 06:39:51 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C0168
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 14:42:56 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="260184726"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="260184726"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:42:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="595449490"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Nov 2021 06:42:53 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1ms4LM-000DQw-DF; Tue, 30 Nov 2021 14:42:52 +0000
+Date: Tue, 30 Nov 2021 22:42:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [frederic-dynticks:rcu/dev 120/125]
- kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier
- 'max_cswd_coarse_reads'
-Message-ID: <20211130143951.GP641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202111301537.pHj67CAh-lkp@intel.com>
+	Sagi Grimberg <sagi@grimberg.me>, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+	Keith Busch <kbusch@kernel.org>, Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH V2 1/5] blk-mq: remove hctx_lock and hctx_unlock
+Message-ID: <202111302217.rEsBycwv-lkp@intel.com>
+References: <20211130073752.3005936-2-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,124 +36,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202111301537.pHj67CAh-lkp@intel.com>
+In-Reply-To: <20211130073752.3005936-2-ming.lei@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Nov 30, 2021 at 04:04:36PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
-> head:   0a3f160b60a833f2ac5e68a0b3105005c69f185f
-> commit: 21285cc89332025a23fca4c50a9d132d1b4109b5 [120/125] squash! clocksource: Forgive repeated long-latency watchdog clocksource reads
-> config: x86_64-buildonly-randconfig-r001-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301537.pHj67CAh-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=21285cc89332025a23fca4c50a9d132d1b4109b5
->         git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
->         git fetch --no-tags frederic-dynticks rcu/dev
->         git checkout 21285cc89332025a23fca4c50a9d132d1b4109b5
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/time/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier 'max_cswd_coarse_reads'
->                    if (i != max_cswd_coarse_reads)
->                             ^
->    1 error generated.
+Hi Ming,
 
-This is due to me incompletely reverting patches from Waiman.  It will
-be fixed on the next rebase.
+Thank you for the patch! Perhaps something to improve:
 
-							Thanx, Paul
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on mkp-scsi/for-next v5.16-rc3 next-20211130]
+[cannot apply to linux-nvme/for-next hch-configfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> vim +/max_cswd_coarse_reads +149 kernel/time/clocksource-wdtest.c
-> 
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  102  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  103  /* Run the specified series of watchdog tests. */
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  104  static int wdtest_func(void *arg)
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  105  {
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  106  	unsigned long j1, j2;
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  107  	char *s1, *s2;
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  108  	int i;
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  109  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  110  	schedule_timeout_uninterruptible(holdoff * HZ);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  111  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  112  	/*
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  113  	 * Verify that jiffies-like clocksources get the manually
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  114  	 * specified uncertainty margin.
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  115  	 */
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  116  	pr_info("--- Verify jiffies-like uncertainty margin.\n");
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  117  	__clocksource_register(&clocksource_wdtest_jiffies);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  118  	WARN_ON_ONCE(clocksource_wdtest_jiffies.uncertainty_margin != TICK_NSEC);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  119  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  120  	j1 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  121  	schedule_timeout_uninterruptible(HZ);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  122  	j2 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  123  	WARN_ON_ONCE(j1 == j2);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  124  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  125  	clocksource_unregister(&clocksource_wdtest_jiffies);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  126  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  127  	/*
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  128  	 * Verify that tsc-like clocksources are assigned a reasonable
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  129  	 * uncertainty margin.
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  130  	 */
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  131  	pr_info("--- Verify tsc-like uncertainty margin.\n");
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  132  	clocksource_register_khz(&clocksource_wdtest_ktime, 1000 * 1000);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  133  	WARN_ON_ONCE(clocksource_wdtest_ktime.uncertainty_margin < NSEC_PER_USEC);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  134  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  135  	j1 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  136  	udelay(1);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  137  	j2 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  138  	pr_info("--- tsc-like times: %lu - %lu = %lu.\n", j2, j1, j2 - j1);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  139  	WARN_ON_ONCE(time_before(j2, j1 + NSEC_PER_USEC));
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  140  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  141  	/* Verify tsc-like stability with various numbers of errors injected. */
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  142  	for (i = 0; i <= max_cswd_read_retries + 1; i++) {
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  143  		if (i <= 1 && i < max_cswd_read_retries)
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  144  			s1 = "";
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  145  		else if (i <= max_cswd_read_retries)
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  146  			s1 = ", expect message";
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  147  		else
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  148  			s1 = ", expect coarse-grained clock skew check and re-initialization";
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22 @149  		if (i != max_cswd_coarse_reads)
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  150  			s2 = "";
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  151  		else if (!s1[0])
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  152  			s2 = ", expect splat";
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  153  		else
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  154  			s2 = " along with a splat";
-> 92b8b82aa04917 Paul E. McKenney 2021-10-22  155  		pr_info("--- Watchdog with %dx error injection, %lu retries%s%s.\n", i, max_cswd_read_retries, s1, s2);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  156  		WRITE_ONCE(wdtest_ktime_read_ndelays, i);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  157  		schedule_timeout_uninterruptible(2 * HZ);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  158  		WARN_ON_ONCE(READ_ONCE(wdtest_ktime_read_ndelays));
-> 83272afd00b829 Paul E. McKenney 2021-05-27  159  		WARN_ON_ONCE(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  160  		wdtest_ktime_clocksource_reset();
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  161  	}
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  162  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  163  	/* Verify tsc-like stability with clock-value-fuzz error injection. */
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  164  	pr_info("--- Watchdog clock-value-fuzz error injection, expect clock skew and per-CPU mismatches.\n");
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  165  	WRITE_ONCE(wdtest_ktime_read_fuzz, true);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  166  	schedule_timeout_uninterruptible(2 * HZ);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  167  	WARN_ON_ONCE(!(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE));
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  168  	clocksource_verify_percpu(&clocksource_wdtest_ktime);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  169  	WRITE_ONCE(wdtest_ktime_read_fuzz, false);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  170  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  171  	clocksource_unregister(&clocksource_wdtest_ktime);
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  172  
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  173  	pr_info("--- Done with test.\n");
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  174  	return 0;
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  175  }
-> 1253b9b87e42ab Paul E. McKenney 2021-05-27  176  
-> 
-> :::::: The code at line 149 was first introduced by commit
-> :::::: 92b8b82aa04917537136ad3f8e23f908573c4b73 torture: Test splatting for delay-ridden clocksources
-> 
-> :::::: TO: Paul E. McKenney <paulmck@kernel.org>
-> :::::: CC: Paul E. McKenney <paulmck@kernel.org>
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+url:    https://github.com/0day-ci/linux/commits/Ming-Lei/blk-mq-quiesce-improvement/20211130-154015
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: hexagon-randconfig-r045-20211129 (https://download.01.org/0day-ci/archive/20211130/202111302217.rEsBycwv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/4575a8b36e3a56fa87b1f77e0064fc2ec36ebb7c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ming-Lei/blk-mq-quiesce-improvement/20211130-154015
+        git checkout 4575a8b36e3a56fa87b1f77e0064fc2ec36ebb7c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> block/blk-mq.c:2482:2: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
+           blk_mq_run_dispatch_ops(hctx,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   block/blk-mq.c:1079:3: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                   ^
+   block/blk-mq.c:2483:3: note: '{' token is here
+                   {
+                   ^
+   block/blk-mq.c:1079:4: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                    ^~~~~~~~~~~~
+>> block/blk-mq.c:2489:3: warning: '}' and ')' tokens terminating statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
+                   }
+                   ^
+   block/blk-mq.c:1079:4: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                    ^~~~~~~~~~~~
+   block/blk-mq.c:2482:2: note: ')' token is here
+           blk_mq_run_dispatch_ops(hctx,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   block/blk-mq.c:1079:16: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                                ^
+>> block/blk-mq.c:2482:2: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
+           blk_mq_run_dispatch_ops(hctx,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   block/blk-mq.c:1086:3: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                   ^
+   block/blk-mq.c:2483:3: note: '{' token is here
+                   {
+                   ^
+   block/blk-mq.c:1086:4: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                    ^~~~~~~~~~~~
+>> block/blk-mq.c:2489:3: warning: '}' and ')' tokens terminating statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
+                   }
+                   ^
+   block/blk-mq.c:1086:4: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                    ^~~~~~~~~~~~
+   block/blk-mq.c:2482:2: note: ')' token is here
+           blk_mq_run_dispatch_ops(hctx,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   block/blk-mq.c:1086:16: note: expanded from macro 'blk_mq_run_dispatch_ops'
+                   (dispatch_ops);                                 \
+                                ^
+   4 warnings generated.
+
+
+vim +2482 block/blk-mq.c
+
+  2466	
+  2467	/**
+  2468	 * blk_mq_try_issue_directly - Try to send a request directly to device driver.
+  2469	 * @hctx: Pointer of the associated hardware queue.
+  2470	 * @rq: Pointer to request to be sent.
+  2471	 *
+  2472	 * If the device has enough resources to accept a new request now, send the
+  2473	 * request directly to device driver. Else, insert at hctx->dispatch queue, so
+  2474	 * we can try send it another time in the future. Requests inserted at this
+  2475	 * queue have higher priority.
+  2476	 */
+  2477	static void blk_mq_try_issue_directly(struct blk_mq_hw_ctx *hctx,
+  2478			struct request *rq)
+  2479	{
+  2480		blk_status_t ret;
+  2481	
+> 2482		blk_mq_run_dispatch_ops(hctx,
+  2483			{
+  2484			ret = __blk_mq_try_issue_directly(hctx, rq, false, true);
+  2485			if (ret == BLK_STS_RESOURCE || ret == BLK_STS_DEV_RESOURCE)
+  2486				blk_mq_request_bypass_insert(rq, false, true);
+  2487			else if (ret != BLK_STS_OK)
+  2488				blk_mq_end_request(rq, ret);
+> 2489			}
+  2490		);
+  2491	}
+  2492	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
