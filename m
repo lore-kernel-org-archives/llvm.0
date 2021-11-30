@@ -1,37 +1,37 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AB82CA1
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:39:08 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id w1so90976628edc.6
-        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 10:39:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083CC2CA1
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:44:52 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id x6so90420935edr.5
+        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 10:44:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=NDV7wbnsOut3zZJWCYtjzebltC2CtkBItML8cZiYM7w=;
-        b=XXUM330YnSumSwRMKxyBqSskM0KGfFpE3IRKNemxHJjM3p2zoTJChMKgmdmMXLZuor
-         UgenUrAiM5KCATc/c80pi36jRxI7YI6HuCcaUaZRjuMQ66rJr/ZdDdEKgqdNEbTi0Alb
-         SJcLCuEagKrnbOQaTKd9qy2aFvEF1HfbewJsucWgM54T75kq2B+zcF178+XUNiaXIFRw
-         4Vkzuyy7RW15WJ25gn13CL+pmSp+nWqhZ915h28RelAy2ZhYeCOIKd6ADEcEyb2m792a
-         s2YPS0MRvGE2LzHqcvFIEIFGse0wAwt35BqdGrK3ZfxQUga1z0WmsxnOVpVLtHkN7oVD
-         wWcA==
+        bh=sc7ICuBy+mhGXWIY44uQqPRlUbyWv7MrAGd+7Q6+8z8=;
+        b=nMQBSzyaj7uZfqA+LHkgME5EDexYl5Aot3D0qzGlJLxIflgptVQPbg2ervcZgfF2GX
+         2ef9Wq5N51v3fx9SwUAQZ9MtXtwfO3Lu3VIiV7e3xIWyrSzp0a+7MQekvge9nmmavlJr
+         x/7EWz1Cj2Af/TTTw7IIDzU7J5+gN8ZfxibKvJL4ptxc6PJV3SvJYGUXggT84sfowdCg
+         lsvtI3Q1bQ3/ZL+l6CY4mZJ9ecfrA0fSEYqcnLSLYDJpVqtktag9QVEBd0ZbHUcRdQOL
+         H9nXFS32+LeUdmD+01pAqXR5mAonOUZXFBpK68bAheYASlm6+GWUtTzafN9/fpqvOVAu
+         E82w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NDV7wbnsOut3zZJWCYtjzebltC2CtkBItML8cZiYM7w=;
-        b=K/fflQJkPM4XJ6vWuxWImqDX+vQhSvQSlU4r9uI/0iGswMfXamIO+fBd85LjVs1wRf
-         NpZ2z+2ZOu5cprHyPWz3LZHi9NC2f8BjkF7+Y6JETU4ccxBMjXAHrKTRyfv2I7ftcLai
-         z27cDTl8rymZ78xyK+oxg5fUCZUs4Cdvolz2PIqvgP7pitX4rlaMreJzYQ7iXmgmiky0
-         Tl6BdRx1rDKfimkjkwWWxbQnCmD+RrQNupSbKiUfX7TMKzjRABHFZUWrfkIjOtQSzUZU
-         dTSWltbGNE5/698g/M+vhSVE9Wk03N98C4gH3iIHkmfA34pbE+oUNYNWN36COKYjd2Xt
-         XtVA==
-X-Gm-Message-State: AOAM533ofiDGRPvaJK1DvoWl1/ZWhFJopsAa6kSf8k/3Hn+JjnOvx14j
-	rLNgweLN0FngjCJnJ/grizW6rikQPBDY1DDv7yqe
-X-Google-Smtp-Source: ABdhPJy1AdO0bCV2BiODMmFfpRrcD3ys8MgfZkMFGwYMmeNienGCD8ifZxMpPX11S+oqZKuFMBi1YH+9qLz1Xy2azbM=
-X-Received: by 2002:a05:6402:268d:: with SMTP id w13mr992416edd.257.1638297546881;
- Tue, 30 Nov 2021 10:39:06 -0800 (PST)
+        bh=sc7ICuBy+mhGXWIY44uQqPRlUbyWv7MrAGd+7Q6+8z8=;
+        b=Na/tT50Mq376iHgerB1sD39BO8TgzcnOTL73dUk5XPPJZsO9MiFo4xPae6ptq5rIMq
+         820vsc9bynJ5JEqhCc6hvlYRfks+itnrs7LiJgDiIeVA4MzD1NfDGe+6B5JYvsYd5K7o
+         +bg5XD2PrJ6HPz+IIVvvbSF9Aa0lQyFeh5k5Bm0N/G8tJey6RXLSDH+USH7CxjnqxX9A
+         ZmrdliuwojCzc7E9nR4Rdd+R9/LLam7Iba2vOJI/TuAAhuK786kuFbkptnh5TmTH/ydV
+         vI/CL1FzFy8zNleHGKfkpO8rmlorf0JjNy2beYhskd/pfDx2WHHr+DEW0QYPigEO1TlR
+         Mfhw==
+X-Gm-Message-State: AOAM5305KnEF7jWQTVbr5ocjXB09Dc91MCC9bWLfRHMnTmkrYgiwGhDL
+	K2xRS0j5s6aUMOd29BwwMfWyNft/2+5Fc/tBxbp1
+X-Google-Smtp-Source: ABdhPJy+UTGnLqC8KkY79o/83e+F30DrlYNo6ryih+sbOnzFI6+cdPglOCWNvHxNpX/9fG/dt1pgHpTffSIUGHZUtjw=
+X-Received: by 2002:a50:9e0f:: with SMTP id z15mr1105096ede.278.1638297891129;
+ Tue, 30 Nov 2021 10:44:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,11 +40,11 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
  <202111300652.0yDBNvyJ-lkp@intel.com> <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
- <87a6hlq408.fsf@mpe.ellerman.id.au> <YaZqs2tPxMzhgkAW@archlinux-ax161>
-In-Reply-To: <YaZqs2tPxMzhgkAW@archlinux-ax161>
+ <87a6hlq408.fsf@mpe.ellerman.id.au> <YaZqs2tPxMzhgkAW@archlinux-ax161> <CAGG=3QX4k6MZ1qkT+sVAroJeBpbZBnOJauM_uJsu2uV1vnVObQ@mail.gmail.com>
+In-Reply-To: <CAGG=3QX4k6MZ1qkT+sVAroJeBpbZBnOJauM_uJsu2uV1vnVObQ@mail.gmail.com>
 From: Bill Wendling <morbo@google.com>
-Date: Tue, 30 Nov 2021 10:38:55 -0800
-Message-ID: <CAGG=3QX4k6MZ1qkT+sVAroJeBpbZBnOJauM_uJsu2uV1vnVObQ@mail.gmail.com>
+Date: Tue, 30 Nov 2021 10:44:40 -0800
+Message-ID: <CAGG=3QVQ9bwWWyKDN3_C2B0v7H6iZ4ZpNybXGCqbzwWrPjuPrg@mail.gmail.com>
 Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise copy_inst_from_kernel_nofault()
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
@@ -55,182 +55,192 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@cs
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 30, 2021 at 10:17 AM Nathan Chancellor <nathan@kernel.org> wrot=
-e:
+On Tue, Nov 30, 2021 at 10:38 AM Bill Wendling <morbo@google.com> wrote:
 >
-> On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
-> > Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> > > Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit :
-> > >> Hi Christophe,
-> > >>
-> > >> I love your patch! Perhaps something to improve:
-> > >>
-> > >> [auto build test WARNING on powerpc/next]
-> > >> [also build test WARNING on v5.16-rc3 next-20211129]
-> > >> [If your patch is applied to the wrong git tree, kindly drop us a no=
-te.
-> > >> And when submitting patch, we suggest to use '--base' as documented =
-in
-> > >> https://git-scm.com/docs/git-format-patch]
-> > >>
-> > >> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/po=
-werpc-inst-Refactor-___get_user_instr/20211130-015346
-> > >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linu=
-x.git next
-> > >> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0d=
-ay-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
-> > >> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project=
- df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
-> > >> reproduce (this is a W=3D1 build):
-> > >>          wget https://raw.githubusercontent.com/intel/lkp-tests/mast=
-er/sbin/make.cross -O ~/bin/make.cross
-> > >>          chmod +x ~/bin/make.cross
-> > >>          # install powerpc cross compiling tool for clang build
-> > >>          # apt-get install binutils-powerpc-linux-gnu
-> > >>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4=
-df1b48bb69de1f325eee826
-> > >>          git remote add linux-review https://github.com/0day-ci/linu=
-x
-> > >>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-i=
-nst-Refactor-___get_user_instr/20211130-015346
-> > >>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
-> > >>          # save the config file to linux build tree
-> > >>          mkdir build_dir
-> > >>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc prepare
-> > >>
-> > >> If you fix the issue, kindly add following tag as appropriate
-> > >> Reported-by: kernel test robot <lkp@intel.com>
-> > >>
-> > >> All warnings (new ones prefixed by >>):
-> > >>
-> > >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
-> > >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
-> > >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is=
- uninitialized when used here [-Wuninitialized]
-> > >>                     *inst =3D ppc_inst(val);
-> > >>                                      ^~~
-> > >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro=
- 'ppc_inst'
-> > >>     #define ppc_inst(x) (x)
-> > >>                          ^
-> > >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the var=
-iable 'val' to silence this warning
-> > >>             unsigned int val, suffix;
-> > >>                             ^
-> > >>                              =3D 0
-> > >
-> > > I can't understand what's wrong here.
-> > >
-> > > We have
-> > >
-> > >     __get_kernel_nofault(&val, src, u32, Efault);
-> > >     if (IS_ENABLED(CONFIG_PPC64) && get_op(val) =3D=3D OP_PREFIX) {
-> > >             __get_kernel_nofault(&suffix, src + 1, u32, Efault);
-> > >             *inst =3D ppc_inst_prefix(val, suffix);
-> > >     } else {
-> > >             *inst =3D ppc_inst(val);
-> > >     }
-> > >
-> > > With
-> > >
-> > > #define __get_kernel_nofault(dst, src, type, err_label)              =
-       \
-> > >     __get_user_size_goto(*((type *)(dst)),                          \
-> > >             (__force type __user *)(src), sizeof(type), err_label)
-> > >
-> > >
-> > > And
-> > >
-> > > #define __get_user_size_goto(x, ptr, size, label)                    =
-       \
-> > > do {                                                                 =
-               \
-> > >     BUILD_BUG_ON(size > sizeof(x));                                  =
-       \
-> > >     switch (size) {                                                  =
-       \
-> > >     case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); b=
-reak;  \
-> > >     case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); =
-break; \
-> > >     case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); =
-break; \
-> > >     case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break=
-;      \
-> > >     default: x =3D 0; BUILD_BUG();                                   =
-         \
-> > >     }                                                                =
-       \
-> > > } while (0)
-> > >
-> > > And
-> > >
-> > > #define __get_user_asm_goto(x, addr, label, op)                     \
-> > >     asm_volatile_goto(                                      \
-> > >             "1:     "op"%U1%X1 %0, %1       # get_user\n"   \
-> > >             EX_TABLE(1b, %l2)                               \
-> > >             : "=3Dr" (x)                                      \
-> > >             : "m<>" (*addr)                         \
-> > >             :                                               \
-> > >             : label)
-> > >
-> > >
-> > > I see no possibility, no alternative path where val wouldn't be set. =
-The
-> > > asm clearly has *addr as an output param so it is always set.
+> On Tue, Nov 30, 2021 at 10:17 AM Nathan Chancellor <nathan@kernel.org> wr=
+ote:
 > >
-> > I guess clang can't convince itself of that?
+> > On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
+> > > Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> > > > Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit :
+> > > >> Hi Christophe,
+> > > >>
+> > > >> I love your patch! Perhaps something to improve:
+> > > >>
+> > > >> [auto build test WARNING on powerpc/next]
+> > > >> [also build test WARNING on v5.16-rc3 next-20211129]
+> > > >> [If your patch is applied to the wrong git tree, kindly drop us a =
+note.
+> > > >> And when submitting patch, we suggest to use '--base' as documente=
+d in
+> > > >> https://git-scm.com/docs/git-format-patch]
+> > > >>
+> > > >> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/=
+powerpc-inst-Refactor-___get_user_instr/20211130-015346
+> > > >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/li=
+nux.git next
+> > > >> config: powerpc-randconfig-r023-20211129 (https://download.01.org/=
+0day-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
+> > > >> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-proje=
+ct df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+> > > >> reproduce (this is a W=3D1 build):
+> > > >>          wget https://raw.githubusercontent.com/intel/lkp-tests/ma=
+ster/sbin/make.cross -O ~/bin/make.cross
+> > > >>          chmod +x ~/bin/make.cross
+> > > >>          # install powerpc cross compiling tool for clang build
+> > > >>          # apt-get install binutils-powerpc-linux-gnu
+> > > >>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7=
+e4df1b48bb69de1f325eee826
+> > > >>          git remote add linux-review https://github.com/0day-ci/li=
+nux
+> > > >>          git fetch --no-tags linux-review Christophe-Leroy/powerpc=
+-inst-Refactor-___get_user_instr/20211130-015346
+> > > >>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+> > > >>          # save the config file to linux build tree
+> > > >>          mkdir build_dir
+> > > >>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.=
+cross W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc prepare
+> > > >>
+> > > >> If you fix the issue, kindly add following tag as appropriate
+> > > >> Reported-by: kernel test robot <lkp@intel.com>
+> > > >>
+> > > >> All warnings (new ones prefixed by >>):
+> > > >>
+> > > >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+> > > >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:=
+7:
+> > > >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' =
+is uninitialized when used here [-Wuninitialized]
+> > > >>                     *inst =3D ppc_inst(val);
+> > > >>                                      ^~~
+> > > >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from mac=
+ro 'ppc_inst'
+> > > >>     #define ppc_inst(x) (x)
+> > > >>                          ^
+> > > >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the v=
+ariable 'val' to silence this warning
+> > > >>             unsigned int val, suffix;
+> > > >>                             ^
+> > > >>                              =3D 0
+> > > >
+> > > > I can't understand what's wrong here.
+> > > >
+> > > > We have
+> > > >
+> > > >     __get_kernel_nofault(&val, src, u32, Efault);
+> > > >     if (IS_ENABLED(CONFIG_PPC64) && get_op(val) =3D=3D OP_PREFIX) {
+> > > >             __get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> > > >             *inst =3D ppc_inst_prefix(val, suffix);
+> > > >     } else {
+> > > >             *inst =3D ppc_inst(val);
+> > > >     }
+> > > >
+> > > > With
+> > > >
+> > > > #define __get_kernel_nofault(dst, src, type, err_label)            =
+         \
+> > > >     __get_user_size_goto(*((type *)(dst)),                         =
+ \
+> > > >             (__force type __user *)(src), sizeof(type), err_label)
+> > > >
+> > > >
+> > > > And
+> > > >
+> > > > #define __get_user_size_goto(x, ptr, size, label)                  =
+         \
+> > > > do {                                                               =
+                 \
+> > > >     BUILD_BUG_ON(size > sizeof(x));                                =
+         \
+> > > >     switch (size) {                                                =
+         \
+> > > >     case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz");=
+ break;  \
+> > > >     case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz")=
+; break; \
+> > > >     case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz")=
+; break; \
+> > > >     case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  bre=
+ak;      \
+> > > >     default: x =3D 0; BUILD_BUG();                                 =
+           \
+> > > >     }                                                              =
+         \
+> > > > } while (0)
+> > > >
+> > > > And
+> > > >
+> > > > #define __get_user_asm_goto(x, addr, label, op)                    =
+ \
+> > > >     asm_volatile_goto(                                      \
+> > > >             "1:     "op"%U1%X1 %0, %1       # get_user\n"   \
+> > > >             EX_TABLE(1b, %l2)                               \
+> > > >             : "=3Dr" (x)                                      \
+> > > >             : "m<>" (*addr)                         \
+> > > >             :                                               \
+> > > >             : label)
+> > > >
+> > > >
+> > > > I see no possibility, no alternative path where val wouldn't be set=
+. The
+> > > > asm clearly has *addr as an output param so it is always set.
+> > >
+> > > I guess clang can't convince itself of that?
+> >
+> > A simplified reproducer:
+> >
+> > $ cat test.c
+> > static inline int copy_inst_from_kernel_nofault(unsigned int *inst,
+> >                                                 unsigned int *src)
+> > {
+> >         unsigned int val;
+> >
+> >         asm goto("1: lwz %U1%X1 %0, %1   # get_user\n"
+> >                  ".section __ex_table,\"a\";"
+> >                  ".balign 4;"
+> >                  ".long (1b) - . ;"
+> >                  ".long (%l2) - . ;"
+> >                  ".previous"
+> >                  : "=3Dr" (*(unsigned int *)(&val))
+> >                  : "m<>" (*(unsigned int *)(src))
+> >                  :
+> >                  : Efault);
+> >
+> >         *inst =3D val;
+> >         return 0;
+> >
+> > Efault:
+> >         return -14; /* -EFAULT */
+> > }
+> >
+> > $ clang --target=3Dpowerpc-linux-gnu -Wuninitialized -fsyntax-only test=
+.c
+> > test.c:17:10: warning: variable 'val' is uninitialized when used here [=
+-Wuninitialized]
+> >         *inst =3D val;
+> >                 ^~~
+> > test.c:4:18: note: initialize the variable 'val' to silence this warnin=
+g
+> >         unsigned int val;
+> >                         ^
+> >                          =3D 0
+> > 1 warning generated.
+> >
+> > It certainly looks like there is something wrong with how clang is
+> > tracking the initialization of the variable because it looks to me like
+> > val is only used in the fallthrough path, which happens after it is
+> > initialized via lwz.  Perhaps something is wrong with the logic of
+> > https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issues ar=
+e
+> > being migrated from Bugzilla to GitHub Issues right now so I cannot fil=
+e
+> > this upstream at the moment).
+> >
+> If I remove the casts of "val" the warning doesn't appear. I suspect
+> that when I wrote that patch I forgot to remove those when checking.
+> #include "Captain_Picard_facepalm.h"
 >
-> A simplified reproducer:
+> I'll look into it.
 >
-> $ cat test.c
-> static inline int copy_inst_from_kernel_nofault(unsigned int *inst,
->                                                 unsigned int *src)
-> {
->         unsigned int val;
->
->         asm goto("1: lwz %U1%X1 %0, %1   # get_user\n"
->                  ".section __ex_table,\"a\";"
->                  ".balign 4;"
->                  ".long (1b) - . ;"
->                  ".long (%l2) - . ;"
->                  ".previous"
->                  : "=3Dr" (*(unsigned int *)(&val))
->                  : "m<>" (*(unsigned int *)(src))
->                  :
->                  : Efault);
->
->         *inst =3D val;
->         return 0;
->
-> Efault:
->         return -14; /* -EFAULT */
-> }
->
-> $ clang --target=3Dpowerpc-linux-gnu -Wuninitialized -fsyntax-only test.c
-> test.c:17:10: warning: variable 'val' is uninitialized when used here [-W=
-uninitialized]
->         *inst =3D val;
->                 ^~~
-> test.c:4:18: note: initialize the variable 'val' to silence this warning
->         unsigned int val;
->                         ^
->                          =3D 0
-> 1 warning generated.
->
-> It certainly looks like there is something wrong with how clang is
-> tracking the initialization of the variable because it looks to me like
-> val is only used in the fallthrough path, which happens after it is
-> initialized via lwz.  Perhaps something is wrong with the logic of
-> https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issues are
-> being migrated from Bugzilla to GitHub Issues right now so I cannot file
-> this upstream at the moment).
->
-If I remove the casts of "val" the warning doesn't appear. I suspect
-that when I wrote that patch I forgot to remove those when checking.
-#include "Captain_Picard_facepalm.h"
-
-I'll look into it.
-
--bw
+Small retraction. It's the "*(<cast>)&val" that's the issue. (I.e. the "*&"=
+)
