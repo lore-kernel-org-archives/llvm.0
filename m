@@ -1,41 +1,41 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4F72C9D
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:45:46 +0000 (UTC)
-Received: by mail-wm1-f74.google.com with SMTP id c8-20020a7bc848000000b0033bf856f0easo13620977wml.1
-        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 03:45:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FB92C9D
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:45:48 +0000 (UTC)
+Received: by mail-ed1-f73.google.com with SMTP id bx28-20020a0564020b5c00b003e7c42443dbso16633329edb.15
+        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 03:45:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=JvNCvfwB/M304r5/BDcWOzh3dLnMrHum3apHlfxEx/4=;
-        b=HGTmGOZbV8BO8UVwawHP2qaUUIQR8l5KZLll/+rqQfeQwOOUV8mNOVjYuSRralZ5Aj
-         Twljfp8LxW2WknHiRqI9QoWbiqLagWNhyAuGUORzqavLTJN5zuDJkA6xswrqgI98Q+uE
-         sGDIjOsQo9WMuJw/ByUioVp1OJy74McWnV33/n/ke3sFX2NvSAiuq9skxWedjHC8nrai
-         PFaVXbEHKi7lgTq4v/bsg0Ngh7AzO5iLGy1cgulyhEEKXvYvFqiiN0vi/YfKe4jiq5uk
-         +dCCCqPcYM82viw2lZRJNNCNvZn4sNAzh4K9IyWAuaDW1a3v+W75mITtZVW93eEWrquG
-         Qiug==
+        bh=FxnGx7glVXa5fb5vt97IxdOcLQo6ydeIuX4RCBDcgdw=;
+        b=IuT8ETl+CUu5djE2Sc10KkM6Tnru1Bt8YznawbCvRm9Jgvp9dSU0yLe6+joi6N8O7z
+         AIQMX+OAPVIR41Cfns6ghKjzo+Oma52RXEvce97BWN8XleA4vFUT7GdZPuKFrpZGlHcF
+         6yYRNP/ViTSHKPJfti0Eaj1rJb2iVf9U20oiJZuzUw0D5yJerS3Bzu0/Hx+jtOL+x1E1
+         R2wPF1vj6a03NK0VTctonSiFDQ5cYmZGKeIfRYdvtl5e6D9EGeuanhZY7SdpfSTa6yMo
+         5PmPh+xd9A8VTGIvQ+j2BqV2x4NHt+irBixkDfvH2/M2xazm3E9FnFudLg/aEvPjG3A7
+         dYGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=JvNCvfwB/M304r5/BDcWOzh3dLnMrHum3apHlfxEx/4=;
-        b=S6k19DlYova9L4bioX24Cgm+z6itP+CIvnXxa3qahx0mW9jMo+lhkzoG6ZH6XcznEI
-         +hi/2GfyabFHccAugJdf9wEzg+gIkd8XLCkEqRHFqFXPhSGCbfdBGzO7RnWzWtGwrowX
-         rHY2TBS50bFHm0xzG9kH+dt1gcJpUFotJWozsnpkwtMMx3ZFeNtp1k3w1/MzpL8FQp4X
-         k5/0lE13VjwVDs2SvFj9Ho8A+rw2nijsR6iNilQomTiPnPMdC0gpCfN6dh0cnRjU1wi1
-         q745yj7utRzaNjkT5VYb0P/Yz3lxJK9WnWeTEZd7H/gFH4s5vHWBlaCdChvpt/dVq5nt
-         dJ3Q==
-X-Gm-Message-State: AOAM533ae+o7XgD83UugJD9I19B9yMEQlHbilcj71aAc/0Uft/IsLoLE
-	ZQLDZm77Ng8JdHEH13BM7qVGdrX+uw==
-X-Google-Smtp-Source: ABdhPJzSDzQegokGIwsGrKkVQ/IhdBWsBMMU4nwhK3bFeKxSJ75NPWkWR6nK52NPFK40FBPIH38r66gw+w==
+        bh=FxnGx7glVXa5fb5vt97IxdOcLQo6ydeIuX4RCBDcgdw=;
+        b=WtEz/nX6BgCJkc953ThiOW4kPKYdsdU3U2kwanj3DvJEv6TqJPx2pMtnQq8cFiLJ2Q
+         6tjHQVBxZximDMcnYRy03QvzVZ2oYOCWlTE0NuISg749IjhrlPDotzcDEwOc5c+t5G7V
+         aIZ5Pf55Jv85Ub2blTtkleRuxPUMz066ybiBz2iRZSZQin+gqgQChknc3ciFq90tYZk1
+         i8Yo6csnM14DrwMqqf8BIgAMYQLKxJKyYh8YDUOdxu9y/YKkTXvDNlPi+aIsYTvHlrZT
+         ZvXJ7V4xVdoKJWC7Yg5qkM+W4cfDU6XklIkccYThTcstsFZ3Gi+Ux0X24nJUdbs36KtU
+         A5ZQ==
+X-Gm-Message-State: AOAM533Wf34Wg/C+cRIpK9pQHQI/Dk8hyeq3FeW/u7ghpd7bEhYkGuO8
+	+DLblrF8oDby6/vfg637jYlqqaXIWQ==
+X-Google-Smtp-Source: ABdhPJxhBj5XWZjZdXBGffDMCoQxOuz6ni/khGb4YnRO6y4oi2+lwBW5Amf+ofP9vXsmezHPbLSJ3bZlIQ==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:86b7:11e9:7797:99f0])
- (user=elver job=sendgmr) by 2002:a05:600c:2e46:: with SMTP id
- q6mr4344091wmf.6.1638272744574; Tue, 30 Nov 2021 03:45:44 -0800 (PST)
-Date: Tue, 30 Nov 2021 12:44:25 +0100
+ (user=elver job=sendgmr) by 2002:a17:907:9720:: with SMTP id
+ jg32mr69349183ejc.304.1638272746945; Tue, 30 Nov 2021 03:45:46 -0800 (PST)
+Date: Tue, 30 Nov 2021 12:44:26 +0100
 In-Reply-To: <20211130114433.2580590-1-elver@google.com>
-Message-Id: <20211130114433.2580590-18-elver@google.com>
+Message-Id: <20211130114433.2580590-19-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,7 +44,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20211130114433.2580590-1-elver@google.com>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 17/25] asm-generic/bitops, kcsan: Add instrumentation for barriers
+Subject: [PATCH v3 18/25] x86/barriers, kcsan: Use generic instrumentation for
+ non-smp barriers
 From: Marco Elver <elver@google.com>
 To: elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -57,70 +58,43 @@ Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>,
 	x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Adds the required KCSAN instrumentation for barriers of atomic bitops.
+Prefix all barriers with __, now that asm-generic/barriers.h supports
+defining the final instrumented version of these barriers. The change is
+limited to barriers used by x86-64.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- include/asm-generic/bitops/instrumented-atomic.h | 3 +++
- include/asm-generic/bitops/instrumented-lock.h   | 3 +++
- 2 files changed, 6 insertions(+)
+ arch/x86/include/asm/barrier.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/include/asm-generic/bitops/instrumented-atomic.h b/include/asm-generic/bitops/instrumented-atomic.h
-index 81915dcd4b4e..c90192b1c755 100644
---- a/include/asm-generic/bitops/instrumented-atomic.h
-+++ b/include/asm-generic/bitops/instrumented-atomic.h
-@@ -67,6 +67,7 @@ static inline void change_bit(long nr, volatile unsigned long *addr)
-  */
- static inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
- {
-+	kcsan_mb();
- 	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
- 	return arch_test_and_set_bit(nr, addr);
- }
-@@ -80,6 +81,7 @@ static inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
-  */
- static inline bool test_and_clear_bit(long nr, volatile unsigned long *addr)
- {
-+	kcsan_mb();
- 	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
- 	return arch_test_and_clear_bit(nr, addr);
- }
-@@ -93,6 +95,7 @@ static inline bool test_and_clear_bit(long nr, volatile unsigned long *addr)
-  */
- static inline bool test_and_change_bit(long nr, volatile unsigned long *addr)
- {
-+	kcsan_mb();
- 	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
- 	return arch_test_and_change_bit(nr, addr);
- }
-diff --git a/include/asm-generic/bitops/instrumented-lock.h b/include/asm-generic/bitops/instrumented-lock.h
-index 75ef606f7145..eb64bd4f11f3 100644
---- a/include/asm-generic/bitops/instrumented-lock.h
-+++ b/include/asm-generic/bitops/instrumented-lock.h
-@@ -22,6 +22,7 @@
-  */
- static inline void clear_bit_unlock(long nr, volatile unsigned long *addr)
- {
-+	kcsan_release();
- 	instrument_atomic_write(addr + BIT_WORD(nr), sizeof(long));
- 	arch_clear_bit_unlock(nr, addr);
- }
-@@ -37,6 +38,7 @@ static inline void clear_bit_unlock(long nr, volatile unsigned long *addr)
-  */
- static inline void __clear_bit_unlock(long nr, volatile unsigned long *addr)
- {
-+	kcsan_release();
- 	instrument_write(addr + BIT_WORD(nr), sizeof(long));
- 	arch___clear_bit_unlock(nr, addr);
- }
-@@ -71,6 +73,7 @@ static inline bool test_and_set_bit_lock(long nr, volatile unsigned long *addr)
- static inline bool
- clear_bit_unlock_is_negative_byte(long nr, volatile unsigned long *addr)
- {
-+	kcsan_release();
- 	instrument_atomic_write(addr + BIT_WORD(nr), sizeof(long));
- 	return arch_clear_bit_unlock_is_negative_byte(nr, addr);
- }
+diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
+index 3ba772a69cc8..35389b2af88e 100644
+--- a/arch/x86/include/asm/barrier.h
++++ b/arch/x86/include/asm/barrier.h
+@@ -19,9 +19,9 @@
+ #define wmb() asm volatile(ALTERNATIVE("lock; addl $0,-4(%%esp)", "sfence", \
+ 				       X86_FEATURE_XMM2) ::: "memory", "cc")
+ #else
+-#define mb() 	asm volatile("mfence":::"memory")
+-#define rmb()	asm volatile("lfence":::"memory")
+-#define wmb()	asm volatile("sfence" ::: "memory")
++#define __mb()	asm volatile("mfence":::"memory")
++#define __rmb()	asm volatile("lfence":::"memory")
++#define __wmb()	asm volatile("sfence" ::: "memory")
+ #endif
+ 
+ /**
+@@ -51,8 +51,8 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
+ /* Prevent speculative execution past this barrier. */
+ #define barrier_nospec() alternative("", "lfence", X86_FEATURE_LFENCE_RDTSC)
+ 
+-#define dma_rmb()	barrier()
+-#define dma_wmb()	barrier()
++#define __dma_rmb()	barrier()
++#define __dma_wmb()	barrier()
+ 
+ #define __smp_mb()	asm volatile("lock; addl $0,-4(%%" _ASM_SP ")" ::: "memory", "cc")
+ 
 -- 
 2.34.0.rc2.393.gf8c9666880-goog
 
