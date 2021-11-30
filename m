@@ -1,83 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347F42C82
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 22:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CDE1C53FCC;
-	Tue, 30 Nov 2021 22:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638310368;
-	bh=sj+juij8tw8fLPSN/HlEtchRwvDaEZoWU3Wva1iHMa4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=fZYPSmoDx9WNAQdony9+f8LbapGKHNkQ8z1MWlpBSBYZ5K1nFaR6IVeEBUBqznUvl
-	 R9CkI1ujjgwtn5r8CyYAC0Y+vf5x2Awoi1M8EojjD3navAjBnYrDpqB25p6djKzLZf
-	 ImeqKztcrHL4ONlQeuptJplxMG1I3jwPB663l4WFs1TBtRCDDgK/ExcB7vf+ao/O4Y
-	 Vus3YvkA9HnBO+0K8KcqnQY4QhMg/XLmlcdGWkUY3eh0YqNhFzHVdUrQWucsbcpd82
-	 RLt2yrOwMQ8u2TOTvmsXBF4fWsdtCnWExAAC1ebCgU9fJqsHLcisXrlI8QxAwe7UZb
-	 pJQVTkH7dAV1Q==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Dan Carpenter <dan.carpenter@oracle.com>,
-	linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Russ Weight <russell.h.weight@intel.com>,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in s10_probe()
-Date: Tue, 30 Nov 2021 15:11:24 -0700
-Message-Id: <20211130221123.3800420-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4E92C82
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 22:24:31 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322573093"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="322573093"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:24:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="477288379"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 14:24:28 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1msBY4-000DpU-6q; Tue, 30 Nov 2021 22:24:28 +0000
+Date: Wed, 1 Dec 2021 06:23:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Blakey <paulb@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Oz Shlomo <ozsh@nvidia.com>
+Subject: [saeed:testing/mlx5-queue-next 597/628]
+ net/openvswitch/flow.c:915:19: warning: variable 'zone' is uninitialized
+ when used here
+Message-ID: <202112010637.b4mONzF9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Clang warns:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git testing/mlx5-queue-next
+head:   28c32f565d2be3795dfe2acd0c00b7dcda32645a
+commit: 0685a5cf41c932ac2392ebb9145cd002c5b687d0 [597/628] net: openvswitch: Fix matching zone id for invalid conns arriving from tc
+config: x86_64-randconfig-r022-20211130 (https://download.01.org/0day-ci/archive/20211201/202112010637.b4mONzF9-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=0685a5cf41c932ac2392ebb9145cd002c5b687d0
+        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+        git fetch --no-tags saeed testing/mlx5-queue-next
+        git checkout 0685a5cf41c932ac2392ebb9145cd002c5b687d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/openvswitch/
 
-drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-        return ret;
-               ^~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-ret is only assigned in an error path now so just return 0 directly.
+All warnings (new ones prefixed by >>):
 
-Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1517
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>> net/openvswitch/flow.c:915:19: warning: variable 'zone' is uninitialized when used here [-Wuninitialized]
+                           key->ct_zone = zone;
+                                          ^~~~
+   net/openvswitch/flow.c:864:10: note: initialize the variable 'zone' to silence this warning
+           u16 zone;
+                   ^
+                    = 0
+   1 warning generated.
+
+
+vim +/zone +915 net/openvswitch/flow.c
+
+   910	
+   911		err = key_extract(skb, key);
+   912		if (!err) {
+   913			ovs_ct_fill_key(skb, key, post_ct);   /* Must be after key_extract(). */
+   914			if (post_ct && !skb_get_nfct(skb))
+ > 915				key->ct_zone = zone;
+   916		}
+   917		return err;
+   918	}
+   919	
+
 ---
-
-v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
-
-* Drop clang's suggestion text (Tom).
-
-* Pick up Russ and Tom's review tags.
-
- drivers/fpga/stratix10-soc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-index 737d14c6e0de..357cea58ec98 100644
---- a/drivers/fpga/stratix10-soc.c
-+++ b/drivers/fpga/stratix10-soc.c
-@@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
- 	}
- 
- 	platform_set_drvdata(pdev, mgr);
--	return ret;
-+	return 0;
- 
- probe_err:
- 	stratix10_svc_free_channel(priv->chan);
-
-base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
