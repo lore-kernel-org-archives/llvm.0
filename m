@@ -1,169 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AFC2C82
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 13:12:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 990E3C53FC1
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 13:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9990568
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 14:39:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD34C53FC1;
+	Tue, 30 Nov 2021 14:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638277946;
-	bh=7Jp5scVEy5mI/G2kiMqwA+jZ6W9F59pkGVYXY6aCCqU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ebp0csiwXCfFkjkSH/kmmBzdS7Xpq5X43oB7pgouteHAOxHFAETknmbrGu8l4ezbV
-	 /JLTx8BPtfe5bQKJ6ht8DAmwhR6GmgBN7CgmmjWIwrUMxBLk9RObedAclI8/boa6PL
-	 84lF8aNxn8o3iWU2DmlpW++dwKh2gxnUOHCBoHgb/8FANBaK7ufnvkP8r0rRBsJvJm
-	 K9ZXFNmoYs/AVforritNuPLvGy/Dj8balwbTIW49w4byJ5YC7yw6KU2sivqalaVOyE
-	 CaGrg5djHWWD5/pl0IaSaLc/QD8yvX7RjY+VdR9agYqsZvQRGYmBchAmm+hGJJJ5Nv
-	 DCFZnKh1C6/rQ==
-Received: by mail-oo1-f45.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so6676326ood.9
-        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 05:12:26 -0800 (PST)
-X-Gm-Message-State: AOAM530BrpXvx75I5fE3jel9bIkcBR2d/Mh4nlwBItkFiTXAuYMu0hoN
-	q/6BjPBAaaIBCYmXeCw6Kzx+H/yMAX0wUHioyr8=
-X-Google-Smtp-Source: ABdhPJwAZ391NHSXEptRBPTPOpfcyKVJmW0+b+XHnPKjZQ/TvLVpV1LohJo16UbYFKDNPEPol8PoCmZJ7ZvVgIuvyWk=
-X-Received: by 2002:a4a:a641:: with SMTP id j1mr35370708oom.63.1638277945792;
- Tue, 30 Nov 2021 05:12:25 -0800 (PST)
+	s=k20201202; t=1638283191;
+	bh=cdF3rEKjcPHHtGWEfPp7Zo08qoyJECgToJN64AqSj4o=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=AnKgiGL7pA4B+u9k98Fffju4Q7RV7ujl1ZZsUXl7Gu38t6MdQr+TYa6vSITAM1mDx
+	 iZmho4aaOIwNm3KjbF02WmOMKWDSkKkulM5ukxAaqgsZ/0mDXrcYU13UWig8JfOltn
+	 YK1O3LYEACQ3hLnioGjli7rSeYY3Ru2NUaHkMP3Xv03dQh7fCYd3FB4h6rlY58evll
+	 SXPubiweQoOuXHE7Jl/ZzpF2pzFgDJwEmOH9sVodY8nM08tYpNAlSTJsKRDvo8ZorK
+	 QaiYG3U2AALdYxiyrk5BEgOhSnCxuII2J2u6VoN5BXCkqpn9fFU2x0t/QyyPaiJS6T
+	 XUM4bDTd3tcLQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 1C7FE5C00AC; Tue, 30 Nov 2021 06:39:51 -0800 (PST)
+Date: Tue, 30 Nov 2021 06:39:51 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [frederic-dynticks:rcu/dev 120/125]
+ kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier
+ 'max_cswd_coarse_reads'
+Message-ID: <20211130143951.GP641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202111301537.pHj67CAh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202111250918.ErFZktQF-lkp@intel.com>
-In-Reply-To: <202111250918.ErFZktQF-lkp@intel.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 30 Nov 2021 14:12:14 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com>
-Message-ID: <CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com>
-Subject: Re: [ardb:for-kernelci 25/25] arch/arm/kernel/traps.c:865:17:
- warning: no previous prototype for function 'handle_bad_stack'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202111301537.pHj67CAh-lkp@intel.com>
 
-On Thu, 25 Nov 2021 at 02:35, kernel test robot <lkp@intel.com> wrote:
->
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-> head:   5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
-> commit: 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1 [25/25] ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems
-> config: arm-randconfig-r024-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250918.ErFZktQF-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
+On Tue, Nov 30, 2021 at 04:04:36PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
+> head:   0a3f160b60a833f2ac5e68a0b3105005c69f185f
+> commit: 21285cc89332025a23fca4c50a9d132d1b4109b5 [120/125] squash! clocksource: Forgive repeated long-latency watchdog clocksource reads
+> config: x86_64-buildonly-randconfig-r001-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301537.pHj67CAh-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 > reproduce (this is a W=1 build):
 >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->         git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
->         git fetch --no-tags ardb for-kernelci
->         git checkout 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=21285cc89332025a23fca4c50a9d132d1b4109b5
+>         git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+>         git fetch --no-tags frederic-dynticks rcu/dev
+>         git checkout 21285cc89332025a23fca4c50a9d132d1b4109b5
 >         # save the config file to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm
->
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/time/
+> 
 > If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier 'max_cswd_coarse_reads'
+>                    if (i != max_cswd_coarse_reads)
+>                             ^
+>    1 error generated.
 
-This is yet another false positive. asmlinkage routines don't need a
-prototype because they are called from assembler. This is not going to
-get fixed, so please don't report this error anymore.
+This is due to me incompletely reverting patches from Waiman.  It will
+be fixed on the next rebase.
 
+							Thanx, Paul
 
-
->    arch/arm/kernel/traps.c:95:6: warning: no previous prototype for function 'dump_backtrace_stm' [-Wmissing-prototypes]
->    void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
->         ^
->    arch/arm/kernel/traps.c:95:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
->    ^
->    static
->    arch/arm/kernel/traps.c:446:17: warning: no previous prototype for function 'do_undefinstr' [-Wmissing-prototypes]
->    asmlinkage void do_undefinstr(struct pt_regs *regs)
->                    ^
->    arch/arm/kernel/traps.c:446:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage void do_undefinstr(struct pt_regs *regs)
->               ^
->               static
->    arch/arm/kernel/traps.c:511:39: warning: no previous prototype for function 'handle_fiq_as_nmi' [-Wmissing-prototypes]
->    asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
->                                          ^
->    arch/arm/kernel/traps.c:511:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
->               ^
->               static
->    arch/arm/kernel/traps.c:530:17: warning: no previous prototype for function 'bad_mode' [-Wmissing-prototypes]
->    asmlinkage void bad_mode(struct pt_regs *regs, int reason)
->                    ^
->    arch/arm/kernel/traps.c:530:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage void bad_mode(struct pt_regs *regs, int reason)
->               ^
->               static
->    arch/arm/kernel/traps.c:603:16: warning: no previous prototype for function 'arm_syscall' [-Wmissing-prototypes]
->    asmlinkage int arm_syscall(int no, struct pt_regs *regs)
->                   ^
->    arch/arm/kernel/traps.c:603:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage int arm_syscall(int no, struct pt_regs *regs)
->               ^
->               static
->    arch/arm/kernel/traps.c:729:1: warning: no previous prototype for function 'baddataabort' [-Wmissing-prototypes]
->    baddataabort(int code, unsigned long instr, struct pt_regs *regs)
->    ^
->    arch/arm/kernel/traps.c:728:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage void
->               ^
->               static
->    arch/arm/kernel/traps.c:769:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
->    asmlinkage void __div0(void)
->                    ^
->    arch/arm/kernel/traps.c:769:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage void __div0(void)
->               ^
->               static
-> >> arch/arm/kernel/traps.c:865:17: warning: no previous prototype for function 'handle_bad_stack' [-Wmissing-prototypes]
->    asmlinkage void handle_bad_stack(struct pt_regs *regs)
->                    ^
->    arch/arm/kernel/traps.c:865:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    asmlinkage void handle_bad_stack(struct pt_regs *regs)
->               ^
->               static
->    8 warnings generated.
->
->
-> vim +/handle_bad_stack +865 arch/arm/kernel/traps.c
->
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  864
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23 @865  asmlinkage void handle_bad_stack(struct pt_regs *regs)
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  866  {
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  867   unsigned long tsk_stk = (unsigned long)current->stack;
-> 5da04a8b705043 Ard Biesheuvel 2021-11-24  868  #ifdef CONFIG_IRQSTACKS
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  869   unsigned long irq_stk = (unsigned long)this_cpu_read(irq_stack_ptr);
-> 5da04a8b705043 Ard Biesheuvel 2021-11-24  870  #endif
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  871   unsigned long ovf_stk = (unsigned long)this_cpu_read(overflow_stack_ptr);
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  872
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  873   console_verbose();
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  874   pr_emerg("Insufficient stack space to handle exception!");
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  875
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  876   pr_emerg("Task stack:     [0x%08lx..0x%08lx]\n",
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  877            tsk_stk, tsk_stk + THREAD_SIZE);
-> 5da04a8b705043 Ard Biesheuvel 2021-11-24  878  #ifdef CONFIG_IRQSTACKS
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  879   pr_emerg("IRQ stack:      [0x%08lx..0x%08lx]\n",
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  880            irq_stk - THREAD_SIZE, irq_stk);
-> 5da04a8b705043 Ard Biesheuvel 2021-11-24  881  #endif
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  882   pr_emerg("Overflow stack: [0x%08lx..0x%08lx]\n",
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  883            ovf_stk - OVERFLOW_STACK_SIZE, ovf_stk);
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  884
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  885   die("kernel stack overflow", regs, 0);
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  886  }
-> adc7d753de62f2 Ard Biesheuvel 2021-09-23  887
->
-> :::::: The code at line 865 was first introduced by commit
-> :::::: adc7d753de62f220505f528106a6d618104302c5 ARM: implement support for vmap'ed stacks
->
-> :::::: TO: Ard Biesheuvel <ardb@kernel.org>
-> :::::: CC: Ard Biesheuvel <ardb@kernel.org>
->
+> vim +/max_cswd_coarse_reads +149 kernel/time/clocksource-wdtest.c
+> 
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  102  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  103  /* Run the specified series of watchdog tests. */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  104  static int wdtest_func(void *arg)
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  105  {
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  106  	unsigned long j1, j2;
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  107  	char *s1, *s2;
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  108  	int i;
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  109  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  110  	schedule_timeout_uninterruptible(holdoff * HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  111  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  112  	/*
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  113  	 * Verify that jiffies-like clocksources get the manually
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  114  	 * specified uncertainty margin.
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  115  	 */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  116  	pr_info("--- Verify jiffies-like uncertainty margin.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  117  	__clocksource_register(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  118  	WARN_ON_ONCE(clocksource_wdtest_jiffies.uncertainty_margin != TICK_NSEC);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  119  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  120  	j1 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  121  	schedule_timeout_uninterruptible(HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  122  	j2 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  123  	WARN_ON_ONCE(j1 == j2);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  124  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  125  	clocksource_unregister(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  126  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  127  	/*
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  128  	 * Verify that tsc-like clocksources are assigned a reasonable
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  129  	 * uncertainty margin.
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  130  	 */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  131  	pr_info("--- Verify tsc-like uncertainty margin.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  132  	clocksource_register_khz(&clocksource_wdtest_ktime, 1000 * 1000);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  133  	WARN_ON_ONCE(clocksource_wdtest_ktime.uncertainty_margin < NSEC_PER_USEC);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  134  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  135  	j1 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  136  	udelay(1);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  137  	j2 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  138  	pr_info("--- tsc-like times: %lu - %lu = %lu.\n", j2, j1, j2 - j1);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  139  	WARN_ON_ONCE(time_before(j2, j1 + NSEC_PER_USEC));
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  140  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  141  	/* Verify tsc-like stability with various numbers of errors injected. */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  142  	for (i = 0; i <= max_cswd_read_retries + 1; i++) {
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  143  		if (i <= 1 && i < max_cswd_read_retries)
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  144  			s1 = "";
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  145  		else if (i <= max_cswd_read_retries)
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  146  			s1 = ", expect message";
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  147  		else
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  148  			s1 = ", expect coarse-grained clock skew check and re-initialization";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22 @149  		if (i != max_cswd_coarse_reads)
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  150  			s2 = "";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  151  		else if (!s1[0])
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  152  			s2 = ", expect splat";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  153  		else
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  154  			s2 = " along with a splat";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  155  		pr_info("--- Watchdog with %dx error injection, %lu retries%s%s.\n", i, max_cswd_read_retries, s1, s2);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  156  		WRITE_ONCE(wdtest_ktime_read_ndelays, i);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  157  		schedule_timeout_uninterruptible(2 * HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  158  		WARN_ON_ONCE(READ_ONCE(wdtest_ktime_read_ndelays));
+> 83272afd00b829 Paul E. McKenney 2021-05-27  159  		WARN_ON_ONCE(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  160  		wdtest_ktime_clocksource_reset();
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  161  	}
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  162  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  163  	/* Verify tsc-like stability with clock-value-fuzz error injection. */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  164  	pr_info("--- Watchdog clock-value-fuzz error injection, expect clock skew and per-CPU mismatches.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  165  	WRITE_ONCE(wdtest_ktime_read_fuzz, true);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  166  	schedule_timeout_uninterruptible(2 * HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  167  	WARN_ON_ONCE(!(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE));
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  168  	clocksource_verify_percpu(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  169  	WRITE_ONCE(wdtest_ktime_read_fuzz, false);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  170  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  171  	clocksource_unregister(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  172  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  173  	pr_info("--- Done with test.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  174  	return 0;
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  175  }
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  176  
+> 
+> :::::: The code at line 149 was first introduced by commit
+> :::::: 92b8b82aa04917537136ad3f8e23f908573c4b73 torture: Test splatting for delay-ridden clocksources
+> 
+> :::::: TO: Paul E. McKenney <paulmck@kernel.org>
+> :::::: CC: Paul E. McKenney <paulmck@kernel.org>
+> 
 > ---
 > 0-DAY CI Kernel Test Service, Intel Corporation
 > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
