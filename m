@@ -1,66 +1,197 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA37A68
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 05:53:32 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223032481"
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="223032481"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 21:53:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="512030299"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 29 Nov 2021 21:53:31 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mrw54-000Cny-Jz; Tue, 30 Nov 2021 05:53:30 +0000
-Date: Tue, 30 Nov 2021 13:52:49 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: arch/x86/kernel/fpu/xstate.o: warning: objtool:
- fpstate_realloc()+0x225: unreachable instruction
-Message-ID: <202111301339.jlCm9Pd0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668D768
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 05:58:36 +0000 (UTC)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4J3BNM60LCz9sSS;
+	Tue, 30 Nov 2021 06:58:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VJnpcIrt215C; Tue, 30 Nov 2021 06:58:27 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4J3BNM4v9hz9sSP;
+	Tue, 30 Nov 2021 06:58:27 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 93DDE8B778;
+	Tue, 30 Nov 2021 06:58:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id HJlyjb9UKWoj; Tue, 30 Nov 2021 06:58:27 +0100 (CET)
+Received: from [192.168.232.93] (unknown [192.168.232.93])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 0AAA58B763;
+	Tue, 30 Nov 2021 06:58:27 +0100 (CET)
+Message-ID: <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+Date: Tue, 30 Nov 2021 06:58:26 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+Content-Language: fr-FR
+To: kernel test robot <lkp@intel.com>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Paul Mackerras <paulus@samba.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+ <202111300652.0yDBNvyJ-lkp@intel.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <202111300652.0yDBNvyJ-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: "Chang S. Bae" <chang.seok.bae@intel.com>
-CC: Borislav Petkov <bp@suse.de>
-CC: Thomas Gleixner <tglx@linutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d58071a8a76d779eedab38033ae4c821c30295a5
-commit: 2308ee57d93d896618dd65c996429c9d3e469fe0 x86/fpu/amx: Enable the AMX feature in 64-bit mode
-date:   5 weeks ago
-config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301339.jlCm9Pd0-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2308ee57d93d896618dd65c996429c9d3e469fe0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2308ee57d93d896618dd65c996429c9d3e469fe0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ block// crypto// drivers/ fs// kernel// mm// net/ sound/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Le 29/11/2021 à 23:55, kernel test robot a écrit :
+> Hi Christophe,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on powerpc/next]
+> [also build test WARNING on v5.16-rc3 next-20211129]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install powerpc cross compiling tool for clang build
+>          # apt-get install binutils-powerpc-linux-gnu
+>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+>          git remote add linux-review https://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
+>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+>                     *inst = ppc_inst(val);
+>                                      ^~~
+>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'ppc_inst'
+>     #define ppc_inst(x) (x)
+>                          ^
+>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variable 'val' to silence this warning
+>             unsigned int val, suffix;
+>                             ^
+>                              = 0
 
-All warnings (new ones prefixed by >>):
+I can't understand what's wrong here.
 
->> arch/x86/kernel/fpu/xstate.o: warning: objtool: fpstate_realloc()+0x225: unreachable instruction
+We have
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+	__get_kernel_nofault(&val, src, u32, Efault);
+	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+		*inst = ppc_inst_prefix(val, suffix);
+	} else {
+		*inst = ppc_inst(val);
+	}
+
+With
+
+#define __get_kernel_nofault(dst, src, type, err_label)			\
+	__get_user_size_goto(*((type *)(dst)),				\
+		(__force type __user *)(src), sizeof(type), err_label)
+
+
+And
+
+#define __get_user_size_goto(x, ptr, size, label)				\
+do {										\
+	BUILD_BUG_ON(size > sizeof(x));						\
+	switch (size) {								\
+	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
+	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
+	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
+	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
+	default: x = 0; BUILD_BUG();						\
+	}									\
+} while (0)
+
+And
+
+#define __get_user_asm_goto(x, addr, label, op)			\
+	asm_volatile_goto(					\
+		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
+		EX_TABLE(1b, %l2)				\
+		: "=r" (x)					\
+		: "m<>" (*addr)				\
+		:						\
+		: label)
+
+
+I see no possibility, no alternative path where val wouldn't be set. The 
+asm clearly has *addr as an output param so it is always set.
+
+>     1 warning generated.
+>     <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+>     #warning syscall futex_waitv not implemented
+>      ^
+>     1 warning generated.
+>     arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported directive '.stabs'
+>     .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; _restgpr_31_x:
+>            ^
+>     arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported directive '.stabs'
+>     .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32gpr_31_x; _rest32gpr_31_x:
+
+How should we fix that ? Will clang support .stabs in the future ?
+
+
+>            ^
+>     make[2]: *** [arch/powerpc/kernel/vdso32/Makefile:55: arch/powerpc/kernel/vdso32/gettimeofday.o] Error 1
+>     make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+>     make[1]: *** [arch/powerpc/Makefile:421: vdso_prepare] Error 2
+>     make[1]: Target 'prepare' not remade because of errors.
+>     make: *** [Makefile:219: __sub-make] Error 2
+>     make: Target 'prepare' not remade because of errors.
+> 
+> 
+> vim +/val +165 arch/powerpc/include/asm/inst.h
+> 
+>     152	
+>     153	static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
+>     154	{
+>     155		unsigned int val, suffix;
+>     156	
+>     157		if (unlikely(!is_kernel_addr((unsigned long)src)))
+>     158			return -ERANGE;
+>     159	
+>     160		__get_kernel_nofault(&val, src, u32, Efault);
+>     161		if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+>     162			__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+>     163			*inst = ppc_inst_prefix(val, suffix);
+>     164		} else {
+>   > 165			*inst = ppc_inst(val);
+>     166		}
+>     167		return 0;
+>     168	Efault:
+>     169		return -EFAULT;
+>     170	}
+>     171	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
