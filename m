@@ -1,41 +1,41 @@
-Received: from mail-qv1-f74.google.com (mail-qv1-f74.google.com [209.85.219.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCB72C9D
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:45:52 +0000 (UTC)
-Received: by mail-qv1-f74.google.com with SMTP id kc26-20020a056214411a00b003cabea18f69so27485415qvb.19
-        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 03:45:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386DB2C9D
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:45:56 +0000 (UTC)
+Received: by mail-wm1-f73.google.com with SMTP id 205-20020a1c00d6000000b003335d1384f1so13626361wma.3
+        for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 03:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=rzdCErYR7QVJMqQ7C8iOEn+pKBOJL+BpLP2uqDT2sRI=;
-        b=iiJU/NFxnkO4QpNuEziwm44ZddXcfbqTjJ27RND0XQcNYVVoxyYjAqEozptVgUXNwN
-         tUotgFLhO6hTdCXy/8o38iy2aym7FJT+LW4h57+kXk+ITZwaPtmf/ukrKduYHtwrNNVy
-         u6zRnFErKVJc5tA07nIb20yQJs/rjFgBkkJfiMGCJ0+/frkqjjvq7sB5Qlsbun/G1B3v
-         mpVqufLXr0RiWnvRXu2PZPDLndJRxYoHPg3pEXSdStYWib1eEQIROpsu8lv6/UvQvgN4
-         KcSqzQSZ9rtkXbOEAqLYcx/YblyNiiImRh54NndbnYSq+4cJ1Y/85RKTI5bPUsrRqqxr
-         ZZsA==
+        bh=SnYVQxLC6YSHg0QBspCa3KEICf+BvvptqJyS2cHTmDQ=;
+        b=YAPrqaSvFXPKIyChd2B9G/mC+V4Jc4D9Ysa+dt9+gyWoCPV+nRINqJd57Duo402ra3
+         fACCmxrugjWDUChLO48YEakWmtgKIBS2NenkgfzdEIUaFeOLMeRRLt3y3O0O8m42KVyP
+         EYZTlGjECGMCo3XeJTyzQ9huKYBCMEUzAAG6gZ+6TrfzQbi+hkq/C1sNW9Osl71l2q00
+         KnvJkh1XBMAWo2p+iVXz1ZScDqJ9cYV8qalOkG24HTG/65Ii8z7IiAdL8qvRMC2Opkvc
+         XOyIIRR2dMM8QMdcIa4mT34J5n4EmvIPm98FB4otkGxOdejNKSt9f8kvehv1Vt3mjuJX
+         t2wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=rzdCErYR7QVJMqQ7C8iOEn+pKBOJL+BpLP2uqDT2sRI=;
-        b=mbc2vKb9HL54J9z5NQ1pkeLwrKU3BltY5mEwZYjbJsxsX5RHVxipqjkROR7fXVYd5T
-         pontATJzZw1nuM324snymFaPgJDMjwpoHwZrk83Q+AMgqHtu5vkGf5xNX+NTVSCY5Z6C
-         jk2H+k7r/Ud5zzq+XhO2OUyY/tV47vsXKiEac6/vxvRAa8PY94TXMqEZJoczHhUCbnSl
-         Dmb62DqDNfORp0NbphFl9xnY14zNROXjd2LuK5kHo5ZaggVEXXpK6sfrDm1LN4LZPRh1
-         JLrFoTLEJ0pGAM9+fE36COHTQUh8K3SvrMHLZutdrvMvZuNSBuXuwMejx8LVBf4Lr6uF
-         7xtw==
-X-Gm-Message-State: AOAM5308iRamJm6sTgzUkCgdKiTfw+jstG2TAaK/mjQrsQgdX62TUrZQ
-	lVDqFIyqmKBELoC/lA9VQMRXZ60uqw==
-X-Google-Smtp-Source: ABdhPJxS2DvHFjm5rRAa2Cv18Mr86xucn8I+904NmrEkNJGoQhVDVa+JTgno3MDa7PBFHMKHIzeyW8Gdjg==
+        bh=SnYVQxLC6YSHg0QBspCa3KEICf+BvvptqJyS2cHTmDQ=;
+        b=AkTxbpko0+12BL996a7O5I5oh97ToLURGub4tVC0ua/GIGEz0q5HTjkg7VoHEFtubZ
+         v5mVbJu1FkxuLlUKfY9msktOb6BXHEB8SRySj5IZYUEOYnOG2TPD4VH+xjza4I+gNBLq
+         fwm+ZjexmAYyNt6InJS7YzNdcn48QtdCuw+6d64GuqHff4F0MuIgAIRiFB9Zzx8bbyCI
+         oIg1KXgccCMe9XEWs7Z8MKpxvs0W7Z89CZmzChuSK+rFO63P1VlUqwOEJWH2/DNrjLeF
+         LhTaCpKrSCCzhKytHneUW9gpB+YVjRUNNDlCXIBSaNLaqqnHK+QZO8dqtEkwcJ7mipwE
+         9bTg==
+X-Gm-Message-State: AOAM531lEHAdzWZV/e2PzZwnXYYQb8goQJv4/8eZwf7lMXuxKB0J6XmL
+	zYUL2el9Oj4jQdA4S98HYiMOGyFa2Q==
+X-Google-Smtp-Source: ABdhPJy3VXvdk8vo/XrXiDkU+BIk+TJTbB/pqh504ouz3u8/5fsbp+KQ9JgMbQcOudhStkssJotFYNwe1A==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:86b7:11e9:7797:99f0])
- (user=elver job=sendgmr) by 2002:ac8:5c45:: with SMTP id j5mr51253786qtj.58.1638272751779;
- Tue, 30 Nov 2021 03:45:51 -0800 (PST)
-Date: Tue, 30 Nov 2021 12:44:28 +0100
+ (user=elver job=sendgmr) by 2002:a05:600c:4f0b:: with SMTP id
+ l11mr626057wmq.0.1638272754116; Tue, 30 Nov 2021 03:45:54 -0800 (PST)
+Date: Tue, 30 Nov 2021 12:44:29 +0100
 In-Reply-To: <20211130114433.2580590-1-elver@google.com>
-Message-Id: <20211130114433.2580590-21-elver@google.com>
+Message-Id: <20211130114433.2580590-22-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20211130114433.2580590-1-elver@google.com>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 20/25] mm, kcsan: Enable barrier instrumentation
+Subject: [PATCH v3 21/25] sched, kcsan: Enable memory barrier instrumentation
 From: Marco Elver <elver@google.com>
 To: elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -57,40 +57,40 @@ Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>,
 	x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Some memory management calls imply memory barriers that are required to
-avoid false positives. For example, without the correct instrumentation,
-we could observe data races of the following variant:
+There's no fundamental reason to disable KCSAN for scheduler code,
+except for excessive noise and performance concerns (instrumenting
+scheduler code is usually a good way to stress test KCSAN itself).
 
-                   T0           |           T1
-        ------------------------+------------------------
-                                |
-         *a = 42;    ---+       |
-         kfree(a);      |       |
-                        |       | b = kmalloc(..); // b == a
-          <reordered> <-+       | *b = 42;         // not a data race!
-                                |
-
-Therefore, instrument memory barriers in all allocator code currently
-not being instrumented in a default build.
+However, several core sched functions imply memory barriers that are
+invisible to KCSAN without instrumentation, but are required to avoid
+false positives. Therefore, unconditionally enable instrumentation of
+memory barriers in scheduler code. Also update the comment to reflect
+this and be a bit more brief.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- mm/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/sched/Makefile | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/mm/Makefile b/mm/Makefile
-index d6c0042e3aa0..7919cd7f13f2 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -15,6 +15,8 @@ KCSAN_SANITIZE_slab_common.o := n
- KCSAN_SANITIZE_slab.o := n
- KCSAN_SANITIZE_slub.o := n
- KCSAN_SANITIZE_page_alloc.o := n
-+# But enable explicit instrumentation for memory barriers.
+diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
+index c7421f2d05e1..c83b37af155b 100644
+--- a/kernel/sched/Makefile
++++ b/kernel/sched/Makefile
+@@ -11,11 +11,10 @@ ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
+ # that is not a function of syscall inputs. E.g. involuntary context switches.
+ KCOV_INSTRUMENT := n
+ 
+-# There are numerous data races here, however, most of them are due to plain accesses.
+-# This would make it even harder for syzbot to find reproducers, because these
+-# bugs trigger without specific input. Disable by default, but should re-enable
+-# eventually.
++# Disable KCSAN to avoid excessive noise and performance degradation. To avoid
++# false positives ensure barriers implied by sched functions are instrumented.
+ KCSAN_SANITIZE := n
 +KCSAN_INSTRUMENT_BARRIERS := y
  
- # These files are disabled because they produce non-interesting and/or
- # flaky coverage that is not a function of syscall inputs. E.g. slab is out of
+ ifneq ($(CONFIG_SCHED_OMIT_FRAME_POINTER),y)
+ # According to Alan Modra <alan@linuxcare.com.au>, the -fno-omit-frame-pointer is
 -- 
 2.34.0.rc2.393.gf8c9666880-goog
 
