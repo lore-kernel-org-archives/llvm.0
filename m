@@ -1,28 +1,27 @@
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B922C82
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 22:04:34 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="260294381"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E2A2C82
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 22:04:36 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="260294382"
 X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="260294381"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
+   d="scan'208";a="260294382"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:04:30 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="677005676"
+   d="scan'208";a="459779942"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 30 Nov 2021 14:04:28 -0800
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 14:04:28 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1msBEh-000DoT-RX; Tue, 30 Nov 2021 22:04:27 +0000
-Date: Wed, 1 Dec 2021 06:03:30 +0800
+	id 1msBEh-000DoY-Sp; Tue, 30 Nov 2021 22:04:27 +0000
+Date: Wed, 1 Dec 2021 06:03:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC 01/20] ima: Add IMA namespace support
-Message-ID: <202112010525.S4t1mHyH-lkp@intel.com>
-References: <20211130160654.1418231-2-stefanb@linux.ibm.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: block/blk-core.o: warning: objtool:
+ trace_event_raw_event_block_rq_complete()+0x1e4: unreachable instruction
+Message-ID: <202112010503.lQAtgqif-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,52 +30,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211130160654.1418231-2-stefanb@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stefan,
+CC: linux-kernel@vger.kernel.org
+TO: Christoph Hellwig <hch@lst.de>
+CC: Jens Axboe <axboe@kernel.dk>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on zohar-integrity/next-integrity]
-[also build test WARNING on pcmoore-selinux/next linus/master v5.16-rc3 next-20211130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211201-001242
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-config: x86_64-randconfig-a001-20211128 (https://download.01.org/0day-ci/archive/20211201/202112010525.S4t1mHyH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f080815fdb3e3cff5a004ca83b3815ac17ef71b1
+commit: 8a7d267b4a2c71a5ff5dd9046abea7117c7d0ac2 block: don't call blk_status_to_errno in blk_update_request
+date:   6 weeks ago
+config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211201/202112010503.lQAtgqif-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/38ca49ebd9eb92c7975ca8d04ed1a4aa4959e96a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211201-001242
-        git checkout 38ca49ebd9eb92c7975ca8d04ed1a4aa4959e96a
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a7d267b4a2c71a5ff5dd9046abea7117c7d0ac2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8a7d267b4a2c71a5ff5dd9046abea7117c7d0ac2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash security/integrity/ima/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> security/integrity/ima/ima_ns.c:77:12: warning: no previous prototype for function 'imans_cache_init' [-Wmissing-prototypes]
-   int __init imans_cache_init(void)
-              ^
-   security/integrity/ima/ima_ns.c:77:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init imans_cache_init(void)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/imans_cache_init +77 security/integrity/ima/ima_ns.c
-
-    76	
-  > 77	int __init imans_cache_init(void)
+>> block/blk-core.o: warning: objtool: trace_event_raw_event_block_rq_complete()+0x1e4: unreachable instruction
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
