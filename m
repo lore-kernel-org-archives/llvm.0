@@ -1,30 +1,28 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D142C99
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 08:05:40 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="322408505"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE682C80
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 09:26:39 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="236408118"
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="322408505"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 00:05:36 -0800
+   d="scan'208";a="236408118"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 01:26:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="512072477"
+   d="scan'208";a="459529979"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2021 00:05:35 -0800
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 01:26:36 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mry8s-000CwX-GP; Tue, 30 Nov 2021 08:05:34 +0000
-Date: Tue, 30 Nov 2021 16:04:36 +0800
+	id 1mrzPI-000D20-50; Tue, 30 Nov 2021 09:26:36 +0000
+Date: Tue, 30 Nov 2021 17:26:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [frederic-dynticks:rcu/dev 120/125]
- kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier
- 'max_cswd_coarse_reads'
-Message-ID: <202111301537.pHj67CAh-lkp@intel.com>
+To: Luca Coelho <luca@coelho.fi>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 01/16] mac80211: add more HT/VHT/HE state logging
+Message-ID: <202111301728.gw8kkcVb-lkp@intel.com>
+References: <iwlwifi.20211129152938.9e81043f04f6.If197b45c5b31d2fbd254fa12c2d7c736f304d4ae@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,118 +31,242 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <iwlwifi.20211129152938.9e81043f04f6.If197b45c5b31d2fbd254fa12c2d7c736f304d4ae@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
-head:   0a3f160b60a833f2ac5e68a0b3105005c69f185f
-commit: 21285cc89332025a23fca4c50a9d132d1b4109b5 [120/125] squash! clocksource: Forgive repeated long-latency watchdog clocksource reads
-config: x86_64-buildonly-randconfig-r001-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301537.pHj67CAh-lkp@intel.com/config)
+Hi Luca,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on jberg-mac80211-next/master]
+[also build test ERROR on jberg-mac80211/master linus/master v5.16-rc3 next-20211130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jberg/mac80211-next.git master
+config: riscv-randconfig-c006-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301728.gw8kkcVb-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=21285cc89332025a23fca4c50a9d132d1b4109b5
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks rcu/dev
-        git checkout 21285cc89332025a23fca4c50a9d132d1b4109b5
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/8275a35cfbfc5c94966b49077447b828f24c14d5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
+        git checkout 8275a35cfbfc5c94966b49077447b828f24c14d5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier 'max_cswd_coarse_reads'
-                   if (i != max_cswd_coarse_reads)
-                            ^
+>> net/mac80211/mlme.c:5085:8: error: use of undeclared identifier 'vht_cap'; did you mean 'ht_cap'?
+                           if (vht_cap)
+                               ^~~~~~~
+                               ht_cap
+   net/mac80211/mlme.c:5011:33: note: 'ht_cap' declared here
+           const struct ieee80211_ht_cap *ht_cap = NULL;
+                                          ^
    1 error generated.
 
 
-vim +/max_cswd_coarse_reads +149 kernel/time/clocksource-wdtest.c
+vim +5085 net/mac80211/mlme.c
 
-1253b9b87e42ab Paul E. McKenney 2021-05-27  102  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  103  /* Run the specified series of watchdog tests. */
-1253b9b87e42ab Paul E. McKenney 2021-05-27  104  static int wdtest_func(void *arg)
-1253b9b87e42ab Paul E. McKenney 2021-05-27  105  {
-1253b9b87e42ab Paul E. McKenney 2021-05-27  106  	unsigned long j1, j2;
-92b8b82aa04917 Paul E. McKenney 2021-10-22  107  	char *s1, *s2;
-1253b9b87e42ab Paul E. McKenney 2021-05-27  108  	int i;
-1253b9b87e42ab Paul E. McKenney 2021-05-27  109  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  110  	schedule_timeout_uninterruptible(holdoff * HZ);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  111  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  112  	/*
-1253b9b87e42ab Paul E. McKenney 2021-05-27  113  	 * Verify that jiffies-like clocksources get the manually
-1253b9b87e42ab Paul E. McKenney 2021-05-27  114  	 * specified uncertainty margin.
-1253b9b87e42ab Paul E. McKenney 2021-05-27  115  	 */
-1253b9b87e42ab Paul E. McKenney 2021-05-27  116  	pr_info("--- Verify jiffies-like uncertainty margin.\n");
-1253b9b87e42ab Paul E. McKenney 2021-05-27  117  	__clocksource_register(&clocksource_wdtest_jiffies);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  118  	WARN_ON_ONCE(clocksource_wdtest_jiffies.uncertainty_margin != TICK_NSEC);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  119  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  120  	j1 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  121  	schedule_timeout_uninterruptible(HZ);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  122  	j2 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  123  	WARN_ON_ONCE(j1 == j2);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  124  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  125  	clocksource_unregister(&clocksource_wdtest_jiffies);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  126  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  127  	/*
-1253b9b87e42ab Paul E. McKenney 2021-05-27  128  	 * Verify that tsc-like clocksources are assigned a reasonable
-1253b9b87e42ab Paul E. McKenney 2021-05-27  129  	 * uncertainty margin.
-1253b9b87e42ab Paul E. McKenney 2021-05-27  130  	 */
-1253b9b87e42ab Paul E. McKenney 2021-05-27  131  	pr_info("--- Verify tsc-like uncertainty margin.\n");
-1253b9b87e42ab Paul E. McKenney 2021-05-27  132  	clocksource_register_khz(&clocksource_wdtest_ktime, 1000 * 1000);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  133  	WARN_ON_ONCE(clocksource_wdtest_ktime.uncertainty_margin < NSEC_PER_USEC);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  134  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  135  	j1 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  136  	udelay(1);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  137  	j2 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  138  	pr_info("--- tsc-like times: %lu - %lu = %lu.\n", j2, j1, j2 - j1);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  139  	WARN_ON_ONCE(time_before(j2, j1 + NSEC_PER_USEC));
-1253b9b87e42ab Paul E. McKenney 2021-05-27  140  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  141  	/* Verify tsc-like stability with various numbers of errors injected. */
-1253b9b87e42ab Paul E. McKenney 2021-05-27  142  	for (i = 0; i <= max_cswd_read_retries + 1; i++) {
-1253b9b87e42ab Paul E. McKenney 2021-05-27  143  		if (i <= 1 && i < max_cswd_read_retries)
-92b8b82aa04917 Paul E. McKenney 2021-10-22  144  			s1 = "";
-1253b9b87e42ab Paul E. McKenney 2021-05-27  145  		else if (i <= max_cswd_read_retries)
-92b8b82aa04917 Paul E. McKenney 2021-10-22  146  			s1 = ", expect message";
-1253b9b87e42ab Paul E. McKenney 2021-05-27  147  		else
-92b8b82aa04917 Paul E. McKenney 2021-10-22  148  			s1 = ", expect coarse-grained clock skew check and re-initialization";
-92b8b82aa04917 Paul E. McKenney 2021-10-22 @149  		if (i != max_cswd_coarse_reads)
-92b8b82aa04917 Paul E. McKenney 2021-10-22  150  			s2 = "";
-92b8b82aa04917 Paul E. McKenney 2021-10-22  151  		else if (!s1[0])
-92b8b82aa04917 Paul E. McKenney 2021-10-22  152  			s2 = ", expect splat";
-92b8b82aa04917 Paul E. McKenney 2021-10-22  153  		else
-92b8b82aa04917 Paul E. McKenney 2021-10-22  154  			s2 = " along with a splat";
-92b8b82aa04917 Paul E. McKenney 2021-10-22  155  		pr_info("--- Watchdog with %dx error injection, %lu retries%s%s.\n", i, max_cswd_read_retries, s1, s2);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  156  		WRITE_ONCE(wdtest_ktime_read_ndelays, i);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  157  		schedule_timeout_uninterruptible(2 * HZ);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  158  		WARN_ON_ONCE(READ_ONCE(wdtest_ktime_read_ndelays));
-83272afd00b829 Paul E. McKenney 2021-05-27  159  		WARN_ON_ONCE(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  160  		wdtest_ktime_clocksource_reset();
-1253b9b87e42ab Paul E. McKenney 2021-05-27  161  	}
-1253b9b87e42ab Paul E. McKenney 2021-05-27  162  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  163  	/* Verify tsc-like stability with clock-value-fuzz error injection. */
-1253b9b87e42ab Paul E. McKenney 2021-05-27  164  	pr_info("--- Watchdog clock-value-fuzz error injection, expect clock skew and per-CPU mismatches.\n");
-1253b9b87e42ab Paul E. McKenney 2021-05-27  165  	WRITE_ONCE(wdtest_ktime_read_fuzz, true);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  166  	schedule_timeout_uninterruptible(2 * HZ);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  167  	WARN_ON_ONCE(!(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE));
-1253b9b87e42ab Paul E. McKenney 2021-05-27  168  	clocksource_verify_percpu(&clocksource_wdtest_ktime);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  169  	WRITE_ONCE(wdtest_ktime_read_fuzz, false);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  170  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  171  	clocksource_unregister(&clocksource_wdtest_ktime);
-1253b9b87e42ab Paul E. McKenney 2021-05-27  172  
-1253b9b87e42ab Paul E. McKenney 2021-05-27  173  	pr_info("--- Done with test.\n");
-1253b9b87e42ab Paul E. McKenney 2021-05-27  174  	return 0;
-1253b9b87e42ab Paul E. McKenney 2021-05-27  175  }
-1253b9b87e42ab Paul E. McKenney 2021-05-27  176  
-
-:::::: The code at line 149 was first introduced by commit
-:::::: 92b8b82aa04917537136ad3f8e23f908573c4b73 torture: Test splatting for delay-ridden clocksources
-
-:::::: TO: Paul E. McKenney <paulmck@kernel.org>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+  5005	
+  5006	static int ieee80211_prep_channel(struct ieee80211_sub_if_data *sdata,
+  5007					  struct cfg80211_bss *cbss)
+  5008	{
+  5009		struct ieee80211_local *local = sdata->local;
+  5010		struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
+  5011		const struct ieee80211_ht_cap *ht_cap = NULL;
+  5012		const struct ieee80211_ht_operation *ht_oper = NULL;
+  5013		const struct ieee80211_vht_operation *vht_oper = NULL;
+  5014		const struct ieee80211_he_operation *he_oper = NULL;
+  5015		const struct ieee80211_s1g_oper_ie *s1g_oper = NULL;
+  5016		struct ieee80211_supported_band *sband;
+  5017		struct cfg80211_chan_def chandef;
+  5018		bool is_6ghz = cbss->channel->band == NL80211_BAND_6GHZ;
+  5019		bool is_5ghz = cbss->channel->band == NL80211_BAND_5GHZ;
+  5020		struct ieee80211_bss *bss = (void *)cbss->priv;
+  5021		struct ieee802_11_elems *elems;
+  5022		const struct cfg80211_bss_ies *ies;
+  5023		int ret;
+  5024		u32 i;
+  5025		bool have_80mhz;
+  5026	
+  5027		rcu_read_lock();
+  5028	
+  5029		ies = rcu_dereference(cbss->ies);
+  5030		elems = ieee802_11_parse_elems(ies->data, ies->len, false,
+  5031					       NULL, NULL);
+  5032		if (!elems) {
+  5033			rcu_read_unlock();
+  5034			return -ENOMEM;
+  5035		}
+  5036	
+  5037		sband = local->hw.wiphy->bands[cbss->channel->band];
+  5038	
+  5039		ifmgd->flags &= ~(IEEE80211_STA_DISABLE_40MHZ |
+  5040				  IEEE80211_STA_DISABLE_80P80MHZ |
+  5041				  IEEE80211_STA_DISABLE_160MHZ);
+  5042	
+  5043		/* disable HT/VHT/HE if we don't support them */
+  5044		if (!sband->ht_cap.ht_supported && !is_6ghz) {
+  5045			mlme_dbg(sdata, "HT not supported, disabling HT/VHT/HE\n");
+  5046			ifmgd->flags |= IEEE80211_STA_DISABLE_HT;
+  5047			ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
+  5048			ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
+  5049		}
+  5050	
+  5051		if (!sband->vht_cap.vht_supported && is_5ghz) {
+  5052			mlme_dbg(sdata, "VHT not supported, disabling VHT/HE\n");
+  5053			ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
+  5054			ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
+  5055		}
+  5056	
+  5057		if (!ieee80211_get_he_iftype_cap(sband,
+  5058						 ieee80211_vif_type_p2p(&sdata->vif))) {
+  5059			mlme_dbg(sdata, "HE not supported, disabling it\n");
+  5060			ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
+  5061		}
+  5062	
+  5063		if (!(ifmgd->flags & IEEE80211_STA_DISABLE_HT) && !is_6ghz) {
+  5064			ht_oper = elems->ht_operation;
+  5065			ht_cap = elems->ht_cap_elem;
+  5066	
+  5067			if (!ht_cap) {
+  5068				ifmgd->flags |= IEEE80211_STA_DISABLE_HT;
+  5069				ht_oper = NULL;
+  5070			}
+  5071		}
+  5072	
+  5073		if (!(ifmgd->flags & IEEE80211_STA_DISABLE_VHT) && !is_6ghz) {
+  5074			vht_oper = elems->vht_operation;
+  5075			if (vht_oper && !ht_oper) {
+  5076				vht_oper = NULL;
+  5077				sdata_info(sdata,
+  5078					   "AP advertised VHT without HT, disabling HT/VHT/HE\n");
+  5079				ifmgd->flags |= IEEE80211_STA_DISABLE_HT;
+  5080				ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
+  5081				ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
+  5082			}
+  5083	
+  5084			if (!elems->vht_cap_elem) {
+> 5085				if (vht_cap)
+  5086					sdata_info(sdata,
+  5087						   "bad VHT capabilities, disabling VHT\n");
+  5088				ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
+  5089				vht_oper = NULL;
+  5090			}
+  5091		}
+  5092	
+  5093		if (!(ifmgd->flags & IEEE80211_STA_DISABLE_HE)) {
+  5094			he_oper = elems->he_operation;
+  5095	
+  5096			if (is_6ghz) {
+  5097				struct ieee80211_bss_conf *bss_conf;
+  5098				u8 i, j = 0;
+  5099	
+  5100				bss_conf = &sdata->vif.bss_conf;
+  5101	
+  5102				if (elems->pwr_constr_elem)
+  5103					bss_conf->pwr_reduction = *elems->pwr_constr_elem;
+  5104	
+  5105				BUILD_BUG_ON(ARRAY_SIZE(bss_conf->tx_pwr_env) !=
+  5106					     ARRAY_SIZE(elems->tx_pwr_env));
+  5107	
+  5108				for (i = 0; i < elems->tx_pwr_env_num; i++) {
+  5109					if (elems->tx_pwr_env_len[i] >
+  5110					    sizeof(bss_conf->tx_pwr_env[j]))
+  5111						continue;
+  5112	
+  5113					bss_conf->tx_pwr_env_num++;
+  5114					memcpy(&bss_conf->tx_pwr_env[j], elems->tx_pwr_env[i],
+  5115					       elems->tx_pwr_env_len[i]);
+  5116					j++;
+  5117				}
+  5118			}
+  5119	
+  5120			if (!ieee80211_verify_sta_he_mcs_support(sdata, sband, he_oper))
+  5121				ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
+  5122		}
+  5123	
+  5124		/* Allow VHT if at least one channel on the sband supports 80 MHz */
+  5125		have_80mhz = false;
+  5126		for (i = 0; i < sband->n_channels; i++) {
+  5127			if (sband->channels[i].flags & (IEEE80211_CHAN_DISABLED |
+  5128							IEEE80211_CHAN_NO_80MHZ))
+  5129				continue;
+  5130	
+  5131			have_80mhz = true;
+  5132			break;
+  5133		}
+  5134	
+  5135		if (!have_80mhz) {
+  5136			sdata_info(sdata, "80 MHz not supported, disabling VHT\n");
+  5137			ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
+  5138		}
+  5139	
+  5140		if (sband->band == NL80211_BAND_S1GHZ) {
+  5141			s1g_oper = elems->s1g_oper;
+  5142			if (!s1g_oper)
+  5143				sdata_info(sdata,
+  5144					   "AP missing S1G operation element?\n");
+  5145		}
+  5146	
+  5147		ifmgd->flags |= ieee80211_determine_chantype(sdata, sband,
+  5148							     cbss->channel,
+  5149							     bss->vht_cap_info,
+  5150							     ht_oper, vht_oper, he_oper,
+  5151							     s1g_oper,
+  5152							     &chandef, false);
+  5153	
+  5154		sdata->needed_rx_chains = min(ieee80211_ht_vht_rx_chains(sdata, cbss),
+  5155					      local->rx_chains);
+  5156	
+  5157		rcu_read_unlock();
+  5158		/* the element data was RCU protected so no longer valid anyway */
+  5159		kfree(elems);
+  5160		elems = NULL;
+  5161	
+  5162		if (ifmgd->flags & IEEE80211_STA_DISABLE_HE && is_6ghz) {
+  5163			sdata_info(sdata, "Rejecting non-HE 6/7 GHz connection");
+  5164			return -EINVAL;
+  5165		}
+  5166	
+  5167		/* will change later if needed */
+  5168		sdata->smps_mode = IEEE80211_SMPS_OFF;
+  5169	
+  5170		mutex_lock(&local->mtx);
+  5171		/*
+  5172		 * If this fails (possibly due to channel context sharing
+  5173		 * on incompatible channels, e.g. 80+80 and 160 sharing the
+  5174		 * same control channel) try to use a smaller bandwidth.
+  5175		 */
+  5176		ret = ieee80211_vif_use_channel(sdata, &chandef,
+  5177						IEEE80211_CHANCTX_SHARED);
+  5178	
+  5179		/* don't downgrade for 5 and 10 MHz channels, though. */
+  5180		if (chandef.width == NL80211_CHAN_WIDTH_5 ||
+  5181		    chandef.width == NL80211_CHAN_WIDTH_10)
+  5182			goto out;
+  5183	
+  5184		while (ret && chandef.width != NL80211_CHAN_WIDTH_20_NOHT) {
+  5185			ifmgd->flags |= ieee80211_chandef_downgrade(&chandef);
+  5186			ret = ieee80211_vif_use_channel(sdata, &chandef,
+  5187							IEEE80211_CHANCTX_SHARED);
+  5188		}
+  5189	 out:
+  5190		mutex_unlock(&local->mtx);
+  5191		return ret;
+  5192	}
+  5193	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
