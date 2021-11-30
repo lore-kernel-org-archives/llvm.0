@@ -1,189 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBC62C80
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:17:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB67BC53FCC;
-	Tue, 30 Nov 2021 18:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9892CA1
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 18:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0FFCC53FCC;
+	Tue, 30 Nov 2021 18:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638296249;
-	bh=we0XXIEykccEkXZEaJhZNjX+PQK69G70xjfm//KyBgA=;
+	s=k20201202; t=1638297133;
+	bh=CL1JsLrNj91T3hCHEOM5FMzrebrCpdWGN18ObZv1xTQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rigIwMrgMPCkepAryW1j2rkkbvPAjrSv7o5Rc+jAMdkurrFl33bZPO2BEl55yqpQD
-	 ylkFUhCN6RuZo0jTXSQluq10v/HjJjEuUs7TpgPR26Wwe9yRGKnFQgmwQU0ovCAXao
-	 DkiQffFoZvr6AeBnAcouF6YULvoqnhcKDLQdZlk4cTwhytra+kJBJ9Z8jUmbmDPnQi
-	 cwOCshj0WO3ycrLOBukz03c0ViQJbLNOayYfOON9xlJ/H/42HaADYVxq0iOmpgsUQR
-	 QRJSV7brQAzhFAVwPwKOe87CK+miGoK8rqkMxluAVorROSUoMmXrzevYFiclY8Gx6O
-	 d0hFSMOg4vauA==
-Date: Tue, 30 Nov 2021 11:17:23 -0700
+	b=OQyxbDSpvzOaXQ8X+NNUkxy4HV70UxWQj7s8ogxPwUEvJrFUTTL1OiSwtjqKUO8wF
+	 aT0DJioso0azxmIZbJ/vjQhY73dzrlyu/uzLFAtZN1AKINQbDWALKjKQn/j4jVD1Jk
+	 99nvJ1PYRQ2LGa+DI+xgRlZRlTtKedmWVJgSPa/2Jje5usANY7LeB+RgreL06EMgjP
+	 ePXRTt53WbjkhPiFRLhQ5RPIrRvo1on+jcyePk+i6e+CXR7ss9892UGkD8vVubNVAl
+	 MVruczNirAqN4C542IGtqgIVYvEKblh9FY5RTypY6WSXxJKHP/FwVBqazhQkb4mc5z
+	 QsleeK5v8BPiA==
+Date: Tue, 30 Nov 2021 11:32:09 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	kernel test robot <lkp@intel.com>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
-Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
- copy_inst_from_kernel_nofault()
-Message-ID: <YaZqs2tPxMzhgkAW@archlinux-ax161>
-References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
- <202111300652.0yDBNvyJ-lkp@intel.com>
- <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
- <87a6hlq408.fsf@mpe.ellerman.id.au>
+To: Finn Behrens <me@kloenk.dev>
+Cc: johannes@sipsolutions.net, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v5] nl80211: reset regdom when reloading regdb
+Message-ID: <YaZuKYM5bfWe2Urn@archlinux-ax161>
+References: <20210526112418.cdwkn7ed4twctimc@imap.mailbox.org>
+ <YaIIZfxHgqc/UTA7@gimli.kloenk.dev>
+ <YaZLEEj2pUU/DhZD@archlinux-ax161>
+ <6BAD2771-7C01-408E-98BE-76A1CAF3A810@kloenk.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87a6hlq408.fsf@mpe.ellerman.id.au>
+In-Reply-To: <6BAD2771-7C01-408E-98BE-76A1CAF3A810@kloenk.dev>
 
-On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
-> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> > Le 29/11/2021 à 23:55, kernel test robot a écrit :
-> >> Hi Christophe,
+On Tue, Nov 30, 2021 at 05:50:58PM +0100, Finn Behrens wrote:
+> > On 30. Nov 2021, at 17:02, Nathan Chancellor <nathan@kernel.org> wrote:
+> > On Sat, Nov 27, 2021 at 11:28:53AM +0100, Finn Behrens wrote:
+> >> this reloads the regdom when the regulatory db is reloaded.
+> >> Without this patch the user had to change the regulatoy domain to a
+> >> different, and then reset it to the one the user is in, to have the new
+> >> regulatory db take effect
 > >> 
-> >> I love your patch! Perhaps something to improve:
-> >> 
-> >> [auto build test WARNING on powerpc/next]
-> >> [also build test WARNING on v5.16-rc3 next-20211129]
-> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> >> And when submitting patch, we suggest to use '--base' as documented in
-> >> https://git-scm.com/docs/git-format-patch]
-> >> 
-> >> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
-> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-> >> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
-> >> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
-> >> reproduce (this is a W=1 build):
-> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>          chmod +x ~/bin/make.cross
-> >>          # install powerpc cross compiling tool for clang build
-> >>          # apt-get install binutils-powerpc-linux-gnu
-> >>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b48bb69de1f325eee826
-> >>          git remote add linux-review https://github.com/0day-ci/linux
-> >>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
-> >>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
-> >>          # save the config file to linux build tree
-> >>          mkdir build_dir
-> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
-> >> 
-> >> If you fix the issue, kindly add following tag as appropriate
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> 
-> >> All warnings (new ones prefixed by >>):
-> >> 
-> >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
-> >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
-> >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-> >>                     *inst = ppc_inst(val);
-> >>                                      ^~~
-> >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'ppc_inst'
-> >>     #define ppc_inst(x) (x)
-> >>                          ^
-> >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variable 'val' to silence this warning
-> >>             unsigned int val, suffix;
-> >>                             ^
-> >>                              = 0
-> >
-> > I can't understand what's wrong here.
-> >
-> > We have
-> >
-> > 	__get_kernel_nofault(&val, src, u32, Efault);
-> > 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
-> > 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
-> > 		*inst = ppc_inst_prefix(val, suffix);
-> > 	} else {
-> > 		*inst = ppc_inst(val);
-> > 	}
-> >
-> > With
-> >
-> > #define __get_kernel_nofault(dst, src, type, err_label)			\
-> > 	__get_user_size_goto(*((type *)(dst)),				\
-> > 		(__force type __user *)(src), sizeof(type), err_label)
-> >
-> >
-> > And
-> >
-> > #define __get_user_size_goto(x, ptr, size, label)				\
-> > do {										\
-> > 	BUILD_BUG_ON(size > sizeof(x));						\
-> > 	switch (size) {								\
-> > 	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
-> > 	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
-> > 	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
-> > 	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
-> > 	default: x = 0; BUILD_BUG();						\
-> > 	}									\
-> > } while (0)
-> >
-> > And
-> >
-> > #define __get_user_asm_goto(x, addr, label, op)			\
-> > 	asm_volatile_goto(					\
-> > 		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
-> > 		EX_TABLE(1b, %l2)				\
-> > 		: "=r" (x)					\
-> > 		: "m<>" (*addr)				\
-> > 		:						\
-> > 		: label)
-> >
-> >
-> > I see no possibility, no alternative path where val wouldn't be set. The 
-> > asm clearly has *addr as an output param so it is always set.
+> >> Signed-off-by: Finn Behrens <fin@nyantec.com>
+> > 
+> > This patch as commit 1eda919126b4 ("nl80211: reset regdom when reloading
+> > regdb") in -next causes the following clang warning/error:
+> > 
+> > net/wireless/reg.c:1137:23: error: implicit conversion from enumeration type 'enum nl80211_user_reg_hint_type' to different enumeration type 'enum nl80211_reg_initiator' [-Werror,-Wenum-conversion]
+> >        request->initiator = NL80211_USER_REG_HINT_USER;
+> >                           ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 1 error generated.
+> > 
+> > Should that be NL80211_REGDOM_SET_BY_CORE (same value, 0) or something
+> > different?
 > 
-> I guess clang can't convince itself of that?
+> I think It should have been NL80211_REGDOM_SET_BY_USER, as the reload
+> flag check is currently implemented in the user hint function. But If
+> I see it correctly right now. We could remove the reload flag, and
+> NL80211_REGDOM_SET_BY_CORE should work as well. As the
+> reg_query_database function is called unconditionally there.
 
-A simplified reproducer:
+If you tested the current version of your patch and it worked fine, then
+it seems like you should just revert the addition of the reload flag and
+change
 
-$ cat test.c
-static inline int copy_inst_from_kernel_nofault(unsigned int *inst,
-                                                unsigned int *src)
-{
-        unsigned int val;
+request->initiator = NL80211_USER_REG_HINT_USER;
 
-        asm goto("1: lwz %U1%X1 %0, %1   # get_user\n"
-                 ".section __ex_table,\"a\";"
-                 ".balign 4;"
-                 ".long (1b) - . ;"
-                 ".long (%l2) - . ;"
-                 ".previous"
-                 : "=r" (*(unsigned int *)(&val))
-                 : "m<>" (*(unsigned int *)(src))
-                 :
-                 : Efault);
+to
 
-        *inst = val;
-        return 0;
+request->initiator = NL80211_REGDOM_SET_BY_CORE;
 
-Efault:
-        return -14; /* -EFAULT */
-}
-
-$ clang --target=powerpc-linux-gnu -Wuninitialized -fsyntax-only test.c
-test.c:17:10: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-        *inst = val;
-                ^~~
-test.c:4:18: note: initialize the variable 'val' to silence this warning
-        unsigned int val;
-                        ^
-                         = 0
-1 warning generated.
-
-It certainly looks like there is something wrong with how clang is
-tracking the initialization of the variable because it looks to me like
-val is only used in the fallthrough path, which happens after it is
-initialized via lwz.  Perhaps something is wrong with the logic of
-https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issues are
-being migrated from Bugzilla to GitHub Issues right now so I cannot file
-this upstream at the moment).
+given that is what is happening right now. The warning is basically
+pointing out that reg_process_hint() is calling reg_process_hint_core()
+instead of reg_process_hint_user() because NL80211_USER_REG_HINT_USER =
+NL80211_REGDOM_SET_BY_CORE = 0. Hopefully that makes sense.
 
 Cheers,
 Nathan
