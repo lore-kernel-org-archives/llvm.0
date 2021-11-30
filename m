@@ -1,28 +1,29 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE682C80
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 09:26:39 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="236408118"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810412C9D
+	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 11:19:48 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216887584"
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="236408118"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 01:26:38 -0800
+   d="scan'208";a="216887584"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 03:19:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="459529979"
+   d="scan'208";a="540375411"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 01:26:36 -0800
+  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2021 03:19:46 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mrzPI-000D20-50; Tue, 30 Nov 2021 09:26:36 +0000
-Date: Tue, 30 Nov 2021 17:26:13 +0800
+	id 1ms1An-000DCt-Nm; Tue, 30 Nov 2021 11:19:45 +0000
+Date: Tue, 30 Nov 2021 19:18:55 +0800
 From: kernel test robot <lkp@intel.com>
 To: Luca Coelho <luca@coelho.fi>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 01/16] mac80211: add more HT/VHT/HE state logging
-Message-ID: <202111301728.gw8kkcVb-lkp@intel.com>
-References: <iwlwifi.20211129152938.9e81043f04f6.If197b45c5b31d2fbd254fa12c2d7c736f304d4ae@changeid>
+Subject: Re: [PATCH 04/16] cfg80211: Use the HE operation IE to determine a
+ 6GHz BSS channel
+Message-ID: <202111301955.BdSRnKyU-lkp@intel.com>
+References: <iwlwifi.20211129152938.8efcf1856975.I130f678e4aa390973ab39d838bbfe7b2d54bff8e@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,32 +32,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <iwlwifi.20211129152938.9e81043f04f6.If197b45c5b31d2fbd254fa12c2d7c736f304d4ae@changeid>
+In-Reply-To: <iwlwifi.20211129152938.8efcf1856975.I130f678e4aa390973ab39d838bbfe7b2d54bff8e@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 Hi Luca,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
 [auto build test ERROR on jberg-mac80211-next/master]
-[also build test ERROR on jberg-mac80211/master linus/master v5.16-rc3 next-20211130]
+[also build test ERROR on next-20211130]
+[cannot apply to jberg-mac80211/master linus/master v5.16-rc3]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/jberg/mac80211-next.git master
-config: riscv-randconfig-c006-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301728.gw8kkcVb-lkp@intel.com/config)
+config: riscv-randconfig-c006-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301955.BdSRnKyU-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/8275a35cfbfc5c94966b49077447b828f24c14d5
+        # https://github.com/0day-ci/linux/commit/da233d0b8179f2db6b1f5e783da1c0b986cc8e96
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
-        git checkout 8275a35cfbfc5c94966b49077447b828f24c14d5
+        git checkout da233d0b8179f2db6b1f5e783da1c0b986cc8e96
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/
@@ -66,207 +68,103 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> net/mac80211/mlme.c:5085:8: error: use of undeclared identifier 'vht_cap'; did you mean 'ht_cap'?
-                           if (vht_cap)
-                               ^~~~~~~
-                               ht_cap
-   net/mac80211/mlme.c:5011:33: note: 'ht_cap' declared here
-           const struct ieee80211_ht_cap *ht_cap = NULL;
+>> net/wireless/scan.c:1801:6: error: use of undeclared identifier 'channel'
+           if (channel->band == NL80211_BAND_6GHZ) {
+               ^
+   net/wireless/scan.c:1813:12: error: use of undeclared identifier 'channel'
+                                   return channel;
                                           ^
-   1 error generated.
+>> net/wireless/scan.c:1815:4: error: use of undeclared identifier 'freq'
+                           freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
+                           ^
+   net/wireless/scan.c:1822:12: error: use of undeclared identifier 'freq'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                   ^
+   net/wireless/scan.c:1822:19: error: use of undeclared identifier 'channel'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                          ^
+   net/wireless/scan.c:1822:12: error: use of undeclared identifier 'freq'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                   ^
+   net/wireless/scan.c:1822:19: error: use of undeclared identifier 'channel'
+                               abs(freq - channel->center_freq) <= 80 &&
+                                          ^
+   net/wireless/scan.c:1821:8: error: use of undeclared identifier 'freq'
+                           if (freq != channel->center_freq &&
+                               ^
+   net/wireless/scan.c:1821:16: error: use of undeclared identifier 'channel'
+                           if (freq != channel->center_freq &&
+                                       ^
+>> net/wireless/scan.c:1823:9: error: use of undeclared identifier 'ftype'; did you mean '_ctype'?
+                               (ftype != CFG80211_BSS_FTYPE_BEACON ||
+                                ^~~~~
+                                _ctype
+   include/linux/ctype.h:21:28: note: '_ctype' declared here
+   extern const unsigned char _ctype[];
+                              ^
+   10 errors generated.
 
 
-vim +5085 net/mac80211/mlme.c
+vim +/channel +1801 net/wireless/scan.c
 
-  5005	
-  5006	static int ieee80211_prep_channel(struct ieee80211_sub_if_data *sdata,
-  5007					  struct cfg80211_bss *cbss)
-  5008	{
-  5009		struct ieee80211_local *local = sdata->local;
-  5010		struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
-  5011		const struct ieee80211_ht_cap *ht_cap = NULL;
-  5012		const struct ieee80211_ht_operation *ht_oper = NULL;
-  5013		const struct ieee80211_vht_operation *vht_oper = NULL;
-  5014		const struct ieee80211_he_operation *he_oper = NULL;
-  5015		const struct ieee80211_s1g_oper_ie *s1g_oper = NULL;
-  5016		struct ieee80211_supported_band *sband;
-  5017		struct cfg80211_chan_def chandef;
-  5018		bool is_6ghz = cbss->channel->band == NL80211_BAND_6GHZ;
-  5019		bool is_5ghz = cbss->channel->band == NL80211_BAND_5GHZ;
-  5020		struct ieee80211_bss *bss = (void *)cbss->priv;
-  5021		struct ieee802_11_elems *elems;
-  5022		const struct cfg80211_bss_ies *ies;
-  5023		int ret;
-  5024		u32 i;
-  5025		bool have_80mhz;
-  5026	
-  5027		rcu_read_lock();
-  5028	
-  5029		ies = rcu_dereference(cbss->ies);
-  5030		elems = ieee802_11_parse_elems(ies->data, ies->len, false,
-  5031					       NULL, NULL);
-  5032		if (!elems) {
-  5033			rcu_read_unlock();
-  5034			return -ENOMEM;
-  5035		}
-  5036	
-  5037		sband = local->hw.wiphy->bands[cbss->channel->band];
-  5038	
-  5039		ifmgd->flags &= ~(IEEE80211_STA_DISABLE_40MHZ |
-  5040				  IEEE80211_STA_DISABLE_80P80MHZ |
-  5041				  IEEE80211_STA_DISABLE_160MHZ);
-  5042	
-  5043		/* disable HT/VHT/HE if we don't support them */
-  5044		if (!sband->ht_cap.ht_supported && !is_6ghz) {
-  5045			mlme_dbg(sdata, "HT not supported, disabling HT/VHT/HE\n");
-  5046			ifmgd->flags |= IEEE80211_STA_DISABLE_HT;
-  5047			ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
-  5048			ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
-  5049		}
-  5050	
-  5051		if (!sband->vht_cap.vht_supported && is_5ghz) {
-  5052			mlme_dbg(sdata, "VHT not supported, disabling VHT/HE\n");
-  5053			ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
-  5054			ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
-  5055		}
-  5056	
-  5057		if (!ieee80211_get_he_iftype_cap(sband,
-  5058						 ieee80211_vif_type_p2p(&sdata->vif))) {
-  5059			mlme_dbg(sdata, "HE not supported, disabling it\n");
-  5060			ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
-  5061		}
-  5062	
-  5063		if (!(ifmgd->flags & IEEE80211_STA_DISABLE_HT) && !is_6ghz) {
-  5064			ht_oper = elems->ht_operation;
-  5065			ht_cap = elems->ht_cap_elem;
-  5066	
-  5067			if (!ht_cap) {
-  5068				ifmgd->flags |= IEEE80211_STA_DISABLE_HT;
-  5069				ht_oper = NULL;
-  5070			}
-  5071		}
-  5072	
-  5073		if (!(ifmgd->flags & IEEE80211_STA_DISABLE_VHT) && !is_6ghz) {
-  5074			vht_oper = elems->vht_operation;
-  5075			if (vht_oper && !ht_oper) {
-  5076				vht_oper = NULL;
-  5077				sdata_info(sdata,
-  5078					   "AP advertised VHT without HT, disabling HT/VHT/HE\n");
-  5079				ifmgd->flags |= IEEE80211_STA_DISABLE_HT;
-  5080				ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
-  5081				ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
-  5082			}
-  5083	
-  5084			if (!elems->vht_cap_elem) {
-> 5085				if (vht_cap)
-  5086					sdata_info(sdata,
-  5087						   "bad VHT capabilities, disabling VHT\n");
-  5088				ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
-  5089				vht_oper = NULL;
-  5090			}
-  5091		}
-  5092	
-  5093		if (!(ifmgd->flags & IEEE80211_STA_DISABLE_HE)) {
-  5094			he_oper = elems->he_operation;
-  5095	
-  5096			if (is_6ghz) {
-  5097				struct ieee80211_bss_conf *bss_conf;
-  5098				u8 i, j = 0;
-  5099	
-  5100				bss_conf = &sdata->vif.bss_conf;
-  5101	
-  5102				if (elems->pwr_constr_elem)
-  5103					bss_conf->pwr_reduction = *elems->pwr_constr_elem;
-  5104	
-  5105				BUILD_BUG_ON(ARRAY_SIZE(bss_conf->tx_pwr_env) !=
-  5106					     ARRAY_SIZE(elems->tx_pwr_env));
-  5107	
-  5108				for (i = 0; i < elems->tx_pwr_env_num; i++) {
-  5109					if (elems->tx_pwr_env_len[i] >
-  5110					    sizeof(bss_conf->tx_pwr_env[j]))
-  5111						continue;
-  5112	
-  5113					bss_conf->tx_pwr_env_num++;
-  5114					memcpy(&bss_conf->tx_pwr_env[j], elems->tx_pwr_env[i],
-  5115					       elems->tx_pwr_env_len[i]);
-  5116					j++;
-  5117				}
-  5118			}
-  5119	
-  5120			if (!ieee80211_verify_sta_he_mcs_support(sdata, sband, he_oper))
-  5121				ifmgd->flags |= IEEE80211_STA_DISABLE_HE;
-  5122		}
-  5123	
-  5124		/* Allow VHT if at least one channel on the sband supports 80 MHz */
-  5125		have_80mhz = false;
-  5126		for (i = 0; i < sband->n_channels; i++) {
-  5127			if (sband->channels[i].flags & (IEEE80211_CHAN_DISABLED |
-  5128							IEEE80211_CHAN_NO_80MHZ))
-  5129				continue;
-  5130	
-  5131			have_80mhz = true;
-  5132			break;
-  5133		}
-  5134	
-  5135		if (!have_80mhz) {
-  5136			sdata_info(sdata, "80 MHz not supported, disabling VHT\n");
-  5137			ifmgd->flags |= IEEE80211_STA_DISABLE_VHT;
-  5138		}
-  5139	
-  5140		if (sband->band == NL80211_BAND_S1GHZ) {
-  5141			s1g_oper = elems->s1g_oper;
-  5142			if (!s1g_oper)
-  5143				sdata_info(sdata,
-  5144					   "AP missing S1G operation element?\n");
-  5145		}
-  5146	
-  5147		ifmgd->flags |= ieee80211_determine_chantype(sdata, sband,
-  5148							     cbss->channel,
-  5149							     bss->vht_cap_info,
-  5150							     ht_oper, vht_oper, he_oper,
-  5151							     s1g_oper,
-  5152							     &chandef, false);
-  5153	
-  5154		sdata->needed_rx_chains = min(ieee80211_ht_vht_rx_chains(sdata, cbss),
-  5155					      local->rx_chains);
-  5156	
-  5157		rcu_read_unlock();
-  5158		/* the element data was RCU protected so no longer valid anyway */
-  5159		kfree(elems);
-  5160		elems = NULL;
-  5161	
-  5162		if (ifmgd->flags & IEEE80211_STA_DISABLE_HE && is_6ghz) {
-  5163			sdata_info(sdata, "Rejecting non-HE 6/7 GHz connection");
-  5164			return -EINVAL;
-  5165		}
-  5166	
-  5167		/* will change later if needed */
-  5168		sdata->smps_mode = IEEE80211_SMPS_OFF;
-  5169	
-  5170		mutex_lock(&local->mtx);
-  5171		/*
-  5172		 * If this fails (possibly due to channel context sharing
-  5173		 * on incompatible channels, e.g. 80+80 and 160 sharing the
-  5174		 * same control channel) try to use a smaller bandwidth.
-  5175		 */
-  5176		ret = ieee80211_vif_use_channel(sdata, &chandef,
-  5177						IEEE80211_CHANCTX_SHARED);
-  5178	
-  5179		/* don't downgrade for 5 and 10 MHz channels, though. */
-  5180		if (chandef.width == NL80211_CHAN_WIDTH_5 ||
-  5181		    chandef.width == NL80211_CHAN_WIDTH_10)
-  5182			goto out;
-  5183	
-  5184		while (ret && chandef.width != NL80211_CHAN_WIDTH_20_NOHT) {
-  5185			ifmgd->flags |= ieee80211_chandef_downgrade(&chandef);
-  5186			ret = ieee80211_vif_use_channel(sdata, &chandef,
-  5187							IEEE80211_CHANCTX_SHARED);
-  5188		}
-  5189	 out:
-  5190		mutex_unlock(&local->mtx);
-  5191		return ret;
-  5192	}
-  5193	
+  1794	
+  1795	int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
+  1796					    enum nl80211_band band)
+  1797	{
+  1798		const u8 *tmp;
+  1799		int channel_number = -1;
+  1800	
+> 1801		if (channel->band == NL80211_BAND_6GHZ) {
+  1802			const struct element *elem;
+  1803	
+  1804			elem = cfg80211_find_ext_elem(WLAN_EID_EXT_HE_OPERATION, ie,
+  1805						      ielen);
+  1806			if (elem && elem->datalen >= ieee80211_he_oper_size(&elem->data[1])) {
+  1807				struct ieee80211_he_operation *he_oper =
+  1808					(void *)(&elem->data[1]);
+  1809				const struct ieee80211_he_6ghz_oper *he_6ghz_oper;
+  1810	
+  1811				he_6ghz_oper = ieee80211_he_6ghz_oper(he_oper);
+  1812				if (!he_6ghz_oper)
+  1813					return channel;
+  1814	
+> 1815				freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
+  1816								      NL80211_BAND_6GHZ);
+  1817	
+  1818				/* duplicated beacon indication is relevant for beacons
+  1819				 * only
+  1820				 */
+  1821				if (freq != channel->center_freq &&
+  1822				    abs(freq - channel->center_freq) <= 80 &&
+> 1823				    (ftype != CFG80211_BSS_FTYPE_BEACON ||
+  1824				     he_6ghz_oper->control & IEEE80211_HE_6GHZ_OPER_CTRL_DUP_BEACON))
+  1825					channel_number = he_6ghz_oper->primary;
+  1826			}
+  1827		} else if (band == NL80211_BAND_S1GHZ) {
+  1828			tmp = cfg80211_find_ie(WLAN_EID_S1G_OPERATION, ie, ielen);
+  1829			if (tmp && tmp[1] >= sizeof(struct ieee80211_s1g_oper_ie)) {
+  1830				struct ieee80211_s1g_oper_ie *s1gop = (void *)(tmp + 2);
+  1831	
+  1832				channel_number = s1gop->primary_ch;
+  1833			}
+  1834		} else {
+  1835			tmp = cfg80211_find_ie(WLAN_EID_DS_PARAMS, ie, ielen);
+  1836			if (tmp && tmp[1] == 1) {
+  1837				channel_number = tmp[2];
+  1838			} else {
+  1839				tmp = cfg80211_find_ie(WLAN_EID_HT_OPERATION, ie, ielen);
+  1840				if (tmp && tmp[1] >= sizeof(struct ieee80211_ht_operation)) {
+  1841					struct ieee80211_ht_operation *htop = (void *)(tmp + 2);
+  1842	
+  1843					channel_number = htop->primary_chan;
+  1844				}
+  1845			}
+  1846		}
+  1847	
+  1848		return channel_number;
+  1849	}
+  1850	EXPORT_SYMBOL(cfg80211_get_ies_channel_number);
+  1851	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
