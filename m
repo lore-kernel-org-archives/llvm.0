@@ -1,56 +1,33 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3529F68
-	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 19:41:19 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id o4so25575181pfp.13
-        for <llvm@lists.linux.dev>; Wed, 01 Dec 2021 11:41:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N/c4XBzpAhfh2fxIk2nQwH9IJv2DHkpMOkPrtJqbaqM=;
-        b=dsiSvgd8t9Py/T3ZMYz6xVEjcpefT6ANJp1ZgG2dPTBQcClq6XSD22WnMaNmJ+3HSw
-         VL7WlY/6MsaGanSDA/J8kLW2Q6zo9mP3WubF9BCQb4xX/EJBjG7nsFuUDTQ8302491dR
-         8izBQ0e07WFR3Dkczk8Fqza/sytMMahJUbi0M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N/c4XBzpAhfh2fxIk2nQwH9IJv2DHkpMOkPrtJqbaqM=;
-        b=2LlnkPCsbgt9+iLzAjzqhPYB8ffOwqyrNB/l7DFE3jHriUw/T0Obqq4xIiUkAatSHz
-         MKzUMTRtSNRrsRSyC4WPMThe7c/cvd2iPLloVk8yja76Ha3I2PVmz/Lwb0Ri3k8rZALy
-         DmH+gOF3Nt7BNvjasfRWXfg4DueKjk6Wlv0NfUHYR2kNIvCL0M15XJFzeLrxIkrhr+Wz
-         HvkbJDpey92kcMMAQKls8SJLnxQMiQ6jWp4OOSmuy/XHT5vKUvUi3QQelA6JaykumXbA
-         V5lIhAhJzf/1XDXCIG4fms+ZwMmSaQSMuT/C8Esq/To0AQFW5zO8GxBk8SdJ73Btp5BR
-         vc1g==
-X-Gm-Message-State: AOAM532tUGktXeRVMEyeHEbz7iUSXveUNyKUC8Qt9Trx9VOymA68VHcf
-	UwMTLSAapppCOqPQo9hRcb5liQ==
-X-Google-Smtp-Source: ABdhPJwnrkf5VV8lOR8ofvTy2eEtkrOUbvs6jU3Ueml81H0PE/585+9TxwtaKPip2KS4chmI1tUn0g==
-X-Received: by 2002:a05:6a00:2ab:b0:49f:997e:23e2 with SMTP id q11-20020a056a0002ab00b0049f997e23e2mr8130898pfs.22.1638387678756;
-        Wed, 01 Dec 2021 11:41:18 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d2sm647466pfj.42.2021.12.01.11.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:41:18 -0800 (PST)
-Date: Wed, 1 Dec 2021 11:41:17 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Tom Stellard <tstellar@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
-	kernelci@groups.io, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
-Message-ID: <202112011140.DA93B3E@keescook>
-References: <20211129165803.470795-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A742C80
+	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 21:22:55 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260548308"
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="260548308"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 13:22:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="654944557"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2021 13:22:51 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1msX3y-000FP8-FG; Wed, 01 Dec 2021 21:22:50 +0000
+Date: Thu, 2 Dec 2021 05:22:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jan Kara <jack@suse.cz>, Paolo Valente <paolo.valente@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, fvogt@suse.de,
+	Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+	Jan Kara <jack@suse.cz>, stable@vger.kernel.org,
+	Fabian Vogt <fvogt@suse.com>
+Subject: Re: [PATCH] bfq: Fix use-after-free with cgroups
+Message-ID: <202112020559.l11FLFdN-lkp@intel.com>
+References: <20211201133439.3309-1-jack@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,32 +36,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
+In-Reply-To: <20211201133439.3309-1-jack@suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
-> This patch series raises the minimum supported version of LLVM to
-> 11.0.0.
-> 
-> Patch #1 outlines the issue, goes over the potential impact of the
-> change, and does the actual bump. Subsequent patches clean up the
-> various checks that are always true after the bump.
-> 
-> I have marked this revision as RFC to give various parties the option to
-> comment on this bump before it is done, namely KernelCI and Linaro's
-> LKFT, who are still testing clang-10. I have added some other folks to
-> CC that I know are testing with clang to see if this impacts them in any
-> way (as I would like to impact as few people as possible) but as far as
-> I am aware, most other CIs and developers are testing closer to tip of
-> tree. If that is not true, scream so that we can see what can be done
-> about that. If I missed anyone who is actively testing with clang,
-> please key them in and I will make sure to include them in future
-> revisions (if any are needed).
-> 
-> It probably makes sense for this series to live in -mm.
+Hi Jan,
 
-Sounds good to me. Thanks!
+I love your patch! Yet something to improve:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on v5.16-rc3 next-20211201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--- 
-Kees Cook
+url:    https://github.com/0day-ci/linux/commits/Jan-Kara/bfq-Fix-use-after-free-with-cgroups/20211201-213549
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: hexagon-randconfig-r045-20211128 (https://download.01.org/0day-ci/archive/20211202/202112020559.l11FLFdN-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/2154a2da8d69308aca6bb431da2d4d9e3e687daa
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jan-Kara/bfq-Fix-use-after-free-with-cgroups/20211201-213549
+        git checkout 2154a2da8d69308aca6bb431da2d4d9e3e687daa
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> block/bfq-iosched.c:5472:46: error: no member named 'children' in 'struct bfq_group'
+           hlist_add_head(&bfqq->children_node, &bfqg->children);
+                                                 ~~~~  ^
+   1 error generated.
+
+
+vim +5472 block/bfq-iosched.c
+
+  5460	
+  5461	static void bfq_init_bfqq(struct bfq_data *bfqd, struct bfq_group *bfqg,
+  5462				  struct bfq_queue *bfqq, struct bfq_io_cq *bic,
+  5463				  pid_t pid, int is_sync)
+  5464	{
+  5465		u64 now_ns = ktime_get_ns();
+  5466	
+  5467		RB_CLEAR_NODE(&bfqq->entity.rb_node);
+  5468		INIT_LIST_HEAD(&bfqq->fifo);
+  5469		INIT_HLIST_NODE(&bfqq->burst_list_node);
+  5470		INIT_HLIST_NODE(&bfqq->woken_list_node);
+  5471		INIT_HLIST_HEAD(&bfqq->woken_list);
+> 5472		hlist_add_head(&bfqq->children_node, &bfqg->children);
+  5473	
+  5474		bfqq->ref = 0;
+  5475		bfqq->bfqd = bfqd;
+  5476	
+  5477		if (bic)
+  5478			bfq_set_next_ioprio_data(bfqq, bic);
+  5479	
+  5480		if (is_sync) {
+  5481			/*
+  5482			 * No need to mark as has_short_ttime if in
+  5483			 * idle_class, because no device idling is performed
+  5484			 * for queues in idle class
+  5485			 */
+  5486			if (!bfq_class_idle(bfqq))
+  5487				/* tentatively mark as has_short_ttime */
+  5488				bfq_mark_bfqq_has_short_ttime(bfqq);
+  5489			bfq_mark_bfqq_sync(bfqq);
+  5490			bfq_mark_bfqq_just_created(bfqq);
+  5491		} else
+  5492			bfq_clear_bfqq_sync(bfqq);
+  5493	
+  5494		/* set end request to minus infinity from now */
+  5495		bfqq->ttime.last_end_request = now_ns + 1;
+  5496	
+  5497		bfqq->creation_time = jiffies;
+  5498	
+  5499		bfqq->io_start_time = now_ns;
+  5500	
+  5501		bfq_mark_bfqq_IO_bound(bfqq);
+  5502	
+  5503		bfqq->pid = pid;
+  5504	
+  5505		/* Tentative initial value to trade off between thr and lat */
+  5506		bfqq->max_budget = (2 * bfq_max_budget(bfqd)) / 3;
+  5507		bfqq->budget_timeout = bfq_smallest_from_now();
+  5508	
+  5509		bfqq->wr_coeff = 1;
+  5510		bfqq->last_wr_start_finish = jiffies;
+  5511		bfqq->wr_start_at_switch_to_srt = bfq_smallest_from_now();
+  5512		bfqq->split_time = bfq_smallest_from_now();
+  5513	
+  5514		/*
+  5515		 * To not forget the possibly high bandwidth consumed by a
+  5516		 * process/queue in the recent past,
+  5517		 * bfq_bfqq_softrt_next_start() returns a value at least equal
+  5518		 * to the current value of bfqq->soft_rt_next_start (see
+  5519		 * comments on bfq_bfqq_softrt_next_start).  Set
+  5520		 * soft_rt_next_start to now, to mean that bfqq has consumed
+  5521		 * no bandwidth so far.
+  5522		 */
+  5523		bfqq->soft_rt_next_start = jiffies;
+  5524	
+  5525		/* first request is almost certainly seeky */
+  5526		bfqq->seek_history = 1;
+  5527	}
+  5528	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
