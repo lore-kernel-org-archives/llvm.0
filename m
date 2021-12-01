@@ -1,30 +1,32 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE08C2C9D
-	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 06:15:11 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216409672"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C39C68
+	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 06:36:11 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="223274389"
 X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="216409672"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 22:15:10 -0800
+   d="scan'208";a="223274389"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 22:36:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="540695352"
+   d="scan'208";a="677146995"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2021 22:15:07 -0800
+  by orsmga005.jf.intel.com with ESMTP; 30 Nov 2021 22:36:08 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1msItX-000EML-45; Wed, 01 Dec 2021 06:15:07 +0000
-Date: Wed, 1 Dec 2021 14:14:49 +0800
+	id 1msJDr-000ENt-GT; Wed, 01 Dec 2021 06:36:07 +0000
+Date: Wed, 1 Dec 2021 14:35:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stephane Eranian <eranian@google.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, peterz@infradead.org,
-	kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
-	songliubraving@fb.com, mpe@ellerman.id.au, maddy@linux.ibm.com
-Subject: Re: [PATCH v3 08/13] ACPI: add perf low power callback
-Message-ID: <202112011412.acnD0wZ5-lkp@intel.com>
-References: <20211201010217.886919-9-eranian@google.com>
+To: Rob Barnes <robbarnes@google.com>, Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Rob Barnes <robbarnes@google.com>, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on
+ device property
+Message-ID: <202112011433.QeYkYJE1-lkp@intel.com>
+References: <20211130235918.2216110-1-robbarnes@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,126 +35,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201010217.886919-9-eranian@google.com>
+In-Reply-To: <20211130235918.2216110-1-robbarnes@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stephane,
+Hi Rob,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on tip/x86/core v5.16-rc3]
-[cannot apply to rafael-pm/linux-next next-20211130]
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on v5.16-rc3 next-20211201]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211201-090506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a9f4a6e92b3b319296fb078da2615f618f6cd80c
-config: x86_64-randconfig-a015-20211130 (https://download.01.org/0day-ci/archive/20211201/202112011412.acnD0wZ5-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Rob-Barnes/char-tpm-cr50-Set-TPM_FIRMWARE_POWER_MANAGED-based-on-device-property/20211201-080132
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 5d331b5922551637c586cdf5fdc1778910fc937f
+config: hexagon-randconfig-r041-20211128 (https://download.01.org/0day-ci/archive/20211201/202112011433.QeYkYJE1-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/a31c16e71754213d4b773816a5871b0df6945510
+        # https://github.com/0day-ci/linux/commit/4c5a69ab6ee4ba384abbbf714753053b5cd0de2c
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211201-090506
-        git checkout a31c16e71754213d4b773816a5871b0df6945510
+        git fetch --no-tags linux-review Rob-Barnes/char-tpm-cr50-Set-TPM_FIRMWARE_POWER_MANAGED-based-on-device-property/20211201-080132
+        git checkout 4c5a69ab6ee4ba384abbbf714753053b5cd0de2c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/char/tpm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/acpi/acpi_pad.c:168:4: error: implicit declaration of function 'perf_lopwr_cb' [-Werror,-Wimplicit-function-declaration]
-                           perf_lopwr_cb(true);
-                           ^
-   1 error generated.
+   In file included from drivers/char/tpm/tpm_tis_spi_cr50.c:18:
+   In file included from drivers/char/tpm/tpm_tis_core.h:22:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+>> drivers/char/tpm/tpm_tis_spi_cr50.c:319:45: error: use of undeclared identifier 'dev'
+           if (tpm_cr50_spi_is_firmware_power_managed(dev))
+                                                      ^
+   1 warning and 1 error generated.
 
 
-vim +/perf_lopwr_cb +168 drivers/acpi/acpi_pad.c
+vim +/dev +319 drivers/char/tpm/tpm_tis_spi_cr50.c
 
-   135	
-   136	static unsigned int idle_pct = 5; /* percentage */
-   137	static unsigned int round_robin_time = 1; /* second */
-   138	static int power_saving_thread(void *data)
-   139	{
-   140		int do_sleep;
-   141		unsigned int tsk_index = (unsigned long)data;
-   142		u64 last_jiffies = 0;
-   143	
-   144		sched_set_fifo_low(current);
-   145	
-   146		while (!kthread_should_stop()) {
-   147			unsigned long expire_time;
-   148	
-   149			/* round robin to cpus */
-   150			expire_time = last_jiffies + round_robin_time * HZ;
-   151			if (time_before(expire_time, jiffies)) {
-   152				last_jiffies = jiffies;
-   153				round_robin_cpu(tsk_index);
-   154			}
-   155	
-   156			do_sleep = 0;
-   157	
-   158			expire_time = jiffies + HZ * (100 - idle_pct) / 100;
-   159	
-   160			while (!need_resched()) {
-   161				if (tsc_detected_unstable && !tsc_marked_unstable) {
-   162					/* TSC could halt in idle, so notify users */
-   163					mark_tsc_unstable("TSC halts in idle");
-   164					tsc_marked_unstable = 1;
-   165				}
-   166				local_irq_disable();
-   167	
- > 168				perf_lopwr_cb(true);
-   169	
-   170				tick_broadcast_enable();
-   171				tick_broadcast_enter();
-   172				stop_critical_timings();
-   173	
-   174				mwait_idle_with_hints(power_saving_mwait_eax, 1);
-   175	
-   176				start_critical_timings();
-   177				tick_broadcast_exit();
-   178	
-   179				perf_lopwr_cb(false);
-   180	
-   181				local_irq_enable();
-   182	
-   183				if (time_before(expire_time, jiffies)) {
-   184					do_sleep = 1;
-   185					break;
-   186				}
-   187			}
-   188	
-   189			/*
-   190			 * current sched_rt has threshold for rt task running time.
-   191			 * When a rt task uses 95% CPU time, the rt thread will be
-   192			 * scheduled out for 5% CPU time to not starve other tasks. But
-   193			 * the mechanism only works when all CPUs have RT task running,
-   194			 * as if one CPU hasn't RT task, RT task from other CPUs will
-   195			 * borrow CPU time from this CPU and cause RT task use > 95%
-   196			 * CPU time. To make 'avoid starvation' work, takes a nap here.
-   197			 */
-   198			if (unlikely(do_sleep))
-   199				schedule_timeout_killable(HZ * idle_pct / 100);
-   200	
-   201			/* If an external event has set the need_resched flag, then
-   202			 * we need to deal with it, or this loop will continue to
-   203			 * spin without calling __mwait().
-   204			 */
-   205			if (unlikely(need_resched()))
-   206				schedule();
-   207		}
-   208	
-   209		exit_round_robin(tsk_index);
-   210		return 0;
-   211	}
-   212	
+   263	
+   264	int cr50_spi_probe(struct spi_device *spi)
+   265	{
+   266		struct tpm_tis_spi_phy *phy;
+   267		struct cr50_spi_phy *cr50_phy;
+   268		int ret;
+   269		struct tpm_chip *chip;
+   270	
+   271		cr50_phy = devm_kzalloc(&spi->dev, sizeof(*cr50_phy), GFP_KERNEL);
+   272		if (!cr50_phy)
+   273			return -ENOMEM;
+   274	
+   275		phy = &cr50_phy->spi_phy;
+   276		phy->flow_control = cr50_spi_flow_control;
+   277		phy->wake_after = jiffies;
+   278		init_completion(&phy->ready);
+   279	
+   280		cr50_phy->access_delay = CR50_NOIRQ_ACCESS_DELAY;
+   281		cr50_phy->last_access = jiffies;
+   282		mutex_init(&cr50_phy->time_track_mutex);
+   283	
+   284		if (spi->irq > 0) {
+   285			ret = devm_request_irq(&spi->dev, spi->irq,
+   286					       cr50_spi_irq_handler,
+   287					       IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+   288					       "cr50_spi", cr50_phy);
+   289			if (ret < 0) {
+   290				if (ret == -EPROBE_DEFER)
+   291					return ret;
+   292				dev_warn(&spi->dev, "Requesting IRQ %d failed: %d\n",
+   293					 spi->irq, ret);
+   294				/*
+   295				 * This is not fatal, the driver will fall back to
+   296				 * delays automatically, since ready will never
+   297				 * be completed without a registered irq handler.
+   298				 * So, just fall through.
+   299				 */
+   300			} else {
+   301				/*
+   302				 * IRQ requested, let's verify that it is actually
+   303				 * triggered, before relying on it.
+   304				 */
+   305				cr50_phy->irq_needs_confirmation = true;
+   306			}
+   307		} else {
+   308			dev_warn(&spi->dev,
+   309				 "No IRQ - will use delays between transactions.\n");
+   310		}
+   311	
+   312		ret = tpm_tis_spi_init(spi, phy, -1, &tpm_spi_cr50_phy_ops);
+   313		if (ret)
+   314			return ret;
+   315	
+   316		cr50_print_fw_version(&phy->priv);
+   317	
+   318		chip = dev_get_drvdata(&spi->dev);
+ > 319		if (tpm_cr50_spi_is_firmware_power_managed(dev))
+   320			chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
+   321	
+   322		return 0;
+   323	}
+   324	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
