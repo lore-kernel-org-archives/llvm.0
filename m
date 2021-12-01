@@ -1,33 +1,31 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B39529CA
-	for <llvm@lists.linux.dev>; Tue, 30 Nov 2021 23:53:02 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216359327"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C102968
+	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 00:55:41 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236173730"
 X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="216359327"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 15:53:00 -0800
+   d="scan'208";a="236173730"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 16:55:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="477314559"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 15:52:55 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1msCve-000DvS-Fp; Tue, 30 Nov 2021 23:52:54 +0000
-Date: Wed, 1 Dec 2021 07:52:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeya R <jeyr@codeaurora.org>, linux-arm-msm@vger.kernel.org,
-	srinivas.kandagatla@linaro.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jeya R <jeyr@codeaurora.org>, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, fastrpc.upstream@qti.qualcomm.com,
-	bkumar@qti.qualcomm.com, ekangupt@qti.qualcomm.com,
-	jeyr@qti.qualcomm.com
-Subject: Re: [PATCH 1/2] misc: fastrpc: Add fdlist implementation
-Message-ID: <202112010754.IfnGCvD7-lkp@intel.com>
-References: <1638277072-6459-3-git-send-email-jeyr@codeaurora.org>
+   d="scan'208";a="601749336"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Nov 2021 16:55:38 -0800
+Date: Wed, 1 Dec 2021 08:48:24 +0800
+From: Xu Yilun <yilun.xu@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Dan Carpenter <dan.carpenter@oracle.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Russ Weight <russell.h.weight@intel.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in
+ s10_probe()
+Message-ID: <20211201004824.GA336280@yilunxu-OptiPlex-7050>
+References: <20211130221123.3800420-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,92 +34,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638277072-6459-3-git-send-email-jeyr@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211130221123.3800420-1-nathan@kernel.org>
 
-Hi Jeya,
+On Tue, Nov 30, 2021 at 03:11:24PM -0700, Nathan Chancellor wrote:
+> Clang warns:
+> 
+> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+>         return ret;
+>                ^~~
+> 
+> ret is only assigned in an error path now so just return 0 directly.
+> 
+> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on v5.16-rc3 next-20211130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks,
+Yilun
 
-url:    https://github.com/0day-ci/linux/commits/Jeya-R/misc-fastrpc-Add-fdlist-implementation/20211130-215833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 5d331b5922551637c586cdf5fdc1778910fc937f
-config: hexagon-randconfig-r045-20211129 (https://download.01.org/0day-ci/archive/20211201/202112010754.IfnGCvD7-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d9eaed76074c94c9751c3a587ef2409fa7ce153e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jeya-R/misc-fastrpc-Add-fdlist-implementation/20211130-215833
-        git checkout d9eaed76074c94c9751c3a587ef2409fa7ce153e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/misc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/misc/fastrpc.c:923:25: error: use of undeclared identifier 'fl'
-                   if (!fastrpc_map_find(fl, (int)fdlist[i], &mmap))
-                                         ^
-   1 error generated.
-
-
-vim +/fl +923 drivers/misc/fastrpc.c
-
-   886	
-   887	static int fastrpc_put_args(struct fastrpc_invoke_ctx *ctx,
-   888				    u32 kernel)
-   889	{
-   890		struct fastrpc_remote_arg *rpra = ctx->rpra;
-   891		struct fastrpc_map *mmap = NULL;
-   892		struct fastrpc_invoke_buf *list;
-   893		struct fastrpc_phy_page *pages;
-   894		u64 *fdlist;
-   895		int i, inbufs, outbufs, handles;
-   896	
-   897		inbufs = REMOTE_SCALARS_INBUFS(ctx->sc);
-   898		outbufs = REMOTE_SCALARS_OUTBUFS(ctx->sc);
-   899		handles = REMOTE_SCALARS_INHANDLES(ctx->sc) + REMOTE_SCALARS_OUTHANDLES(ctx->sc);
-   900		list = ctx->buf->virt + ctx->nscalars * sizeof(*rpra);
-   901		pages = ctx->buf->virt + ctx->nscalars * (sizeof(*list) +
-   902			sizeof(*rpra));
-   903		fdlist = (uint64_t *)(pages + inbufs + outbufs + handles);
-   904	
-   905		for (i = inbufs; i < ctx->nbufs; ++i) {
-   906			if (!ctx->maps[i]) {
-   907				void *src = (void *)(uintptr_t)rpra[i].pv;
-   908				void *dst = (void *)(uintptr_t)ctx->args[i].ptr;
-   909				u64 len = rpra[i].len;
-   910	
-   911				if (!kernel) {
-   912					if (copy_to_user((void __user *)dst, src, len))
-   913						return -EFAULT;
-   914				} else {
-   915					memcpy(dst, src, len);
-   916				}
-   917			}
-   918		}
-   919	
-   920		for (i = 0; i < FASTRPC_MAX_FDLIST; i++) {
-   921			if (!fdlist[i])
-   922				break;
- > 923			if (!fastrpc_map_find(fl, (int)fdlist[i], &mmap))
-   924				fastrpc_map_put(mmap);
-   925		}
-   926	
-   927		return 0;
-   928	}
-   929	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> 
+> v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
+> 
+> * Drop clang's suggestion text (Tom).
+> 
+> * Pick up Russ and Tom's review tags.
+> 
+>  drivers/fpga/stratix10-soc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> index 737d14c6e0de..357cea58ec98 100644
+> --- a/drivers/fpga/stratix10-soc.c
+> +++ b/drivers/fpga/stratix10-soc.c
+> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	platform_set_drvdata(pdev, mgr);
+> -	return ret;
+> +	return 0;
+>  
+>  probe_err:
+>  	stratix10_svc_free_channel(priv->chan);
+> 
+> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
+> -- 
+> 2.34.1
