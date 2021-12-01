@@ -1,36 +1,56 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B771D2C9D
-	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 18:29:45 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236342433"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="236342433"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 10:29:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="654875247"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2021 10:29:41 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1msUMP-000FHP-2J; Wed, 01 Dec 2021 18:29:41 +0000
-Date: Thu, 2 Dec 2021 02:29:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sui Jingfeng <15330273260@189.cn>, Lucas Stach <l.stach@pengutronix.de>,
-	Russell King <linux+etnaviv@armlinux.org.uk>,
-	Christian Gmeiner <christian.gmeiner@gmail.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Rob Herring <robh+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-	Sam Ravnborg <sam@ravnborg.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 2/3] drm/etnaviv: add pci device driver support
-Message-ID: <202112020251.mDNRLVR1-lkp@intel.com>
-References: <20211201113502.3168-2-15330273260@189.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3529F68
+	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 19:41:19 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id o4so25575181pfp.13
+        for <llvm@lists.linux.dev>; Wed, 01 Dec 2021 11:41:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=N/c4XBzpAhfh2fxIk2nQwH9IJv2DHkpMOkPrtJqbaqM=;
+        b=dsiSvgd8t9Py/T3ZMYz6xVEjcpefT6ANJp1ZgG2dPTBQcClq6XSD22WnMaNmJ+3HSw
+         VL7WlY/6MsaGanSDA/J8kLW2Q6zo9mP3WubF9BCQb4xX/EJBjG7nsFuUDTQ8302491dR
+         8izBQ0e07WFR3Dkczk8Fqza/sytMMahJUbi0M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N/c4XBzpAhfh2fxIk2nQwH9IJv2DHkpMOkPrtJqbaqM=;
+        b=2LlnkPCsbgt9+iLzAjzqhPYB8ffOwqyrNB/l7DFE3jHriUw/T0Obqq4xIiUkAatSHz
+         MKzUMTRtSNRrsRSyC4WPMThe7c/cvd2iPLloVk8yja76Ha3I2PVmz/Lwb0Ri3k8rZALy
+         DmH+gOF3Nt7BNvjasfRWXfg4DueKjk6Wlv0NfUHYR2kNIvCL0M15XJFzeLrxIkrhr+Wz
+         HvkbJDpey92kcMMAQKls8SJLnxQMiQ6jWp4OOSmuy/XHT5vKUvUi3QQelA6JaykumXbA
+         V5lIhAhJzf/1XDXCIG4fms+ZwMmSaQSMuT/C8Esq/To0AQFW5zO8GxBk8SdJ73Btp5BR
+         vc1g==
+X-Gm-Message-State: AOAM532tUGktXeRVMEyeHEbz7iUSXveUNyKUC8Qt9Trx9VOymA68VHcf
+	UwMTLSAapppCOqPQo9hRcb5liQ==
+X-Google-Smtp-Source: ABdhPJwnrkf5VV8lOR8ofvTy2eEtkrOUbvs6jU3Ueml81H0PE/585+9TxwtaKPip2KS4chmI1tUn0g==
+X-Received: by 2002:a05:6a00:2ab:b0:49f:997e:23e2 with SMTP id q11-20020a056a0002ab00b0049f997e23e2mr8130898pfs.22.1638387678756;
+        Wed, 01 Dec 2021 11:41:18 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d2sm647466pfj.42.2021.12.01.11.41.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 11:41:18 -0800 (PST)
+Date: Wed, 1 Dec 2021 11:41:17 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Tom Stellard <tstellar@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+	kernelci@groups.io, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+Message-ID: <202112011140.DA93B3E@keescook>
+References: <20211129165803.470795-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,81 +59,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201113502.3168-2-15330273260@189.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
 
-Hi Sui,
+On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
+> This patch series raises the minimum supported version of LLVM to
+> 11.0.0.
+> 
+> Patch #1 outlines the issue, goes over the potential impact of the
+> change, and does the actual bump. Subsequent patches clean up the
+> various checks that are always true after the bump.
+> 
+> I have marked this revision as RFC to give various parties the option to
+> comment on this bump before it is done, namely KernelCI and Linaro's
+> LKFT, who are still testing clang-10. I have added some other folks to
+> CC that I know are testing with clang to see if this impacts them in any
+> way (as I would like to impact as few people as possible) but as far as
+> I am aware, most other CIs and developers are testing closer to tip of
+> tree. If that is not true, scream so that we can see what can be done
+> about that. If I missed anyone who is actively testing with clang,
+> please key them in and I will make sure to include them in future
+> revisions (if any are needed).
+> 
+> It probably makes sense for this series to live in -mm.
 
-Thank you for the patch! Perhaps something to improve:
+Sounds good to me. Thanks!
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on robh/for-next drm-intel/for-linux-next drm-tip/drm-tip linus/master v5.16-rc3 next-20211201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-url:    https://github.com/0day-ci/linux/commits/Sui-Jingfeng/dt-bindings-ls2k1000-add-gpu-device-node/20211201-193705
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: x86_64-randconfig-r013-20211201 (https://download.01.org/0day-ci/archive/20211202/202112020251.mDNRLVR1-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ad369e62739e40e48bb801a8d18ff3d9c6859b44
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sui-Jingfeng/dt-bindings-ls2k1000-add-gpu-device-node/20211201-193705
-        git checkout ad369e62739e40e48bb801a8d18ff3d9c6859b44
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/etnaviv/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/etnaviv/etnaviv_drv.c:741:1: warning: unused label 'unregister_platform_driver' [-Wunused-label]
-   unregister_platform_driver:
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/unregister_platform_driver +741 drivers/gpu/drm/etnaviv/etnaviv_drv.c
-
-ad369e62739e40 suijingfeng         2021-12-01  716  
-246774d17fc05a Lucas Stach         2018-01-24  717  	/*
-246774d17fc05a Lucas Stach         2018-01-24  718  	 * If the DT contains at least one available GPU device, instantiate
-246774d17fc05a Lucas Stach         2018-01-24  719  	 * the DRM platform device.
-246774d17fc05a Lucas Stach         2018-01-24  720  	 */
-246774d17fc05a Lucas Stach         2018-01-24  721  	for_each_compatible_node(np, NULL, "vivante,gc") {
-246774d17fc05a Lucas Stach         2018-01-24  722  		if (!of_device_is_available(np))
-246774d17fc05a Lucas Stach         2018-01-24  723  			continue;
-1a866306e0fbf3 Lucas Stach         2018-09-12  724  
-ad369e62739e40 suijingfeng         2021-12-01  725  		ret = etnaviv_create_platform_device("etnaviv", np);
-1a866306e0fbf3 Lucas Stach         2018-09-12  726  
-45a0faaba9c8c5 Fabio Estevam       2018-06-27  727  		of_node_put(np);
-1a866306e0fbf3 Lucas Stach         2018-09-12  728  
-ad369e62739e40 suijingfeng         2021-12-01  729  		if (ret)
-ad369e62739e40 suijingfeng         2021-12-01  730  			goto unregister_pci_driver;
-ad369e62739e40 suijingfeng         2021-12-01  731  
-246774d17fc05a Lucas Stach         2018-01-24  732  		break;
-246774d17fc05a Lucas Stach         2018-01-24  733  	}
-246774d17fc05a Lucas Stach         2018-01-24  734  
-45a0faaba9c8c5 Fabio Estevam       2018-06-27  735  	return 0;
-45a0faaba9c8c5 Fabio Estevam       2018-06-27  736  
-ad369e62739e40 suijingfeng         2021-12-01  737  unregister_pci_driver:
-ad369e62739e40 suijingfeng         2021-12-01  738  #ifdef CONFIG_DRM_ETNAVIV_PCI_DRIVER
-ad369e62739e40 suijingfeng         2021-12-01  739  	pci_unregister_driver(&etnaviv_pci_driver);
-ad369e62739e40 suijingfeng         2021-12-01  740  #endif
-45a0faaba9c8c5 Fabio Estevam       2018-06-27 @741  unregister_platform_driver:
-45a0faaba9c8c5 Fabio Estevam       2018-06-27  742  	platform_driver_unregister(&etnaviv_platform_driver);
-45a0faaba9c8c5 Fabio Estevam       2018-06-27  743  unregister_gpu_driver:
-45a0faaba9c8c5 Fabio Estevam       2018-06-27  744  	platform_driver_unregister(&etnaviv_gpu_driver);
-a8c21a5451d831 The etnaviv authors 2015-12-03  745  	return ret;
-a8c21a5451d831 The etnaviv authors 2015-12-03  746  }
-a8c21a5451d831 The etnaviv authors 2015-12-03  747  module_init(etnaviv_init);
-a8c21a5451d831 The etnaviv authors 2015-12-03  748  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook
