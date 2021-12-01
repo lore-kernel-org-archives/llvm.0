@@ -1,31 +1,30 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C102968
-	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 00:55:41 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236173730"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD93D68
+	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 01:25:00 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="297160554"
 X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="236173730"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 16:55:41 -0800
+   d="scan'208";a="297160554"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 17:24:59 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="601749336"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Nov 2021 16:55:38 -0800
-Date: Wed, 1 Dec 2021 08:48:24 +0800
-From: Xu Yilun <yilun.xu@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Dan Carpenter <dan.carpenter@oracle.com>,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Russ Weight <russell.h.weight@intel.com>,
-	Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in
- s10_probe()
-Message-ID: <20211201004824.GA336280@yilunxu-OptiPlex-7050>
-References: <20211130221123.3800420-1-nathan@kernel.org>
+   d="scan'208";a="459833528"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 17:24:57 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1msEMi-000E1p-Vo; Wed, 01 Dec 2021 01:24:56 +0000
+Date: Wed, 1 Dec 2021 09:24:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Blakey <paulb@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Oz Shlomo <ozsh@nvidia.com>
+Subject: [saeed:net-next 612/668] net/openvswitch/flow.c:915:19: warning:
+ variable 'zone' is uninitialized when used here
+Message-ID: <202112010929.w3wcdBWp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,53 +33,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211130221123.3800420-1-nathan@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Nov 30, 2021 at 03:11:24PM -0700, Nathan Chancellor wrote:
-> Clang warns:
-> 
-> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
->         return ret;
->                ^~~
-> 
-> ret is only assigned in an error path now so just return 0 directly.
-> 
-> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Tom Rix <trix@redhat.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git net-next
+head:   960dff4cc0bfc59cc7a168c8f1e1f58c93f6a10d
+commit: dff3da2f663fdac40a3d72b85ee3b5f89e88501f [612/668] net: openvswitch: Fix matching zone id for invalid conns arriving from tc
+config: x86_64-randconfig-r022-20211130 (https://download.01.org/0day-ci/archive/20211201/202112010929.w3wcdBWp-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=dff3da2f663fdac40a3d72b85ee3b5f89e88501f
+        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+        git fetch --no-tags saeed net-next
+        git checkout dff3da2f663fdac40a3d72b85ee3b5f89e88501f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/openvswitch/
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Yilun
+All warnings (new ones prefixed by >>):
 
-> ---
-> 
-> v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
-> 
-> * Drop clang's suggestion text (Tom).
-> 
-> * Pick up Russ and Tom's review tags.
-> 
->  drivers/fpga/stratix10-soc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> index 737d14c6e0de..357cea58ec98 100644
-> --- a/drivers/fpga/stratix10-soc.c
-> +++ b/drivers/fpga/stratix10-soc.c
-> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
->  	}
->  
->  	platform_set_drvdata(pdev, mgr);
-> -	return ret;
-> +	return 0;
->  
->  probe_err:
->  	stratix10_svc_free_channel(priv->chan);
-> 
-> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
-> -- 
-> 2.34.1
+>> net/openvswitch/flow.c:915:19: warning: variable 'zone' is uninitialized when used here [-Wuninitialized]
+                           key->ct_zone = zone;
+                                          ^~~~
+   net/openvswitch/flow.c:864:10: note: initialize the variable 'zone' to silence this warning
+           u16 zone;
+                   ^
+                    = 0
+   1 warning generated.
+
+
+vim +/zone +915 net/openvswitch/flow.c
+
+   910	
+   911		err = key_extract(skb, key);
+   912		if (!err) {
+   913			ovs_ct_fill_key(skb, key, post_ct);   /* Must be after key_extract(). */
+   914			if (post_ct && !skb_get_nfct(skb))
+ > 915				key->ct_zone = zone;
+   916		}
+   917		return err;
+   918	}
+   919	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
