@@ -1,33 +1,29 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A742C80
-	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 21:22:55 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260548308"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136A92C80
+	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 22:24:54 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="322818981"
 X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="260548308"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 13:22:53 -0800
+   d="scan'208";a="322818981"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:24:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="654944557"
+   d="scan'208";a="460206108"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2021 13:22:51 -0800
+  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2021 14:24:52 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1msX3y-000FP8-FG; Wed, 01 Dec 2021 21:22:50 +0000
-Date: Thu, 2 Dec 2021 05:22:28 +0800
+	id 1msY1z-000FT4-W4; Wed, 01 Dec 2021 22:24:51 +0000
+Date: Thu, 2 Dec 2021 06:23:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jan Kara <jack@suse.cz>, Paolo Valente <paolo.valente@linaro.org>
+To: Horatiu Vultur <horatiu.vultur@microchip.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, fvogt@suse.de,
-	Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-	Jan Kara <jack@suse.cz>, stable@vger.kernel.org,
-	Fabian Vogt <fvogt@suse.com>
-Subject: Re: [PATCH] bfq: Fix use-after-free with cgroups
-Message-ID: <202112020559.l11FLFdN-lkp@intel.com>
-References: <20211201133439.3309-1-jack@suse.cz>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 3692/4626] ERROR: modpost: "packing"
+ [drivers/net/ethernet/microchip/lan966x/lan966x-switch.ko] undefined!
+Message-ID: <202112020627.5BnQUeU6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,116 +32,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201133439.3309-1-jack@suse.cz>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Jan,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on v5.16-rc3 next-20211201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jan-Kara/bfq-Fix-use-after-free-with-cgroups/20211201-213549
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: hexagon-randconfig-r045-20211128 (https://download.01.org/0day-ci/archive/20211202/202112020559.l11FLFdN-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   048aeae86c3967f4c40666cd26f2c1eb73a4b805
+commit: d28d6d2e37d10d607f931d25c835a0bd94d370e3 [3692/4626] net: lan966x: add port module support
+config: i386-randconfig-a015-20211130 (https://download.01.org/0day-ci/archive/20211202/202112020627.5BnQUeU6-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/2154a2da8d69308aca6bb431da2d4d9e3e687daa
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jan-Kara/bfq-Fix-use-after-free-with-cgroups/20211201-213549
-        git checkout 2154a2da8d69308aca6bb431da2d4d9e3e687daa
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d28d6d2e37d10d607f931d25c835a0bd94d370e3
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d28d6d2e37d10d607f931d25c835a0bd94d370e3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> block/bfq-iosched.c:5472:46: error: no member named 'children' in 'struct bfq_group'
-           hlist_add_head(&bfqq->children_node, &bfqg->children);
-                                                 ~~~~  ^
-   1 error generated.
+ERROR: modpost: "spi_setup" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+ERROR: modpost: "__devm_regmap_init_spi" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+ERROR: modpost: "__spi_register_driver" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+>> ERROR: modpost: "packing" [drivers/net/ethernet/microchip/lan966x/lan966x-switch.ko] undefined!
 
-
-vim +5472 block/bfq-iosched.c
-
-  5460	
-  5461	static void bfq_init_bfqq(struct bfq_data *bfqd, struct bfq_group *bfqg,
-  5462				  struct bfq_queue *bfqq, struct bfq_io_cq *bic,
-  5463				  pid_t pid, int is_sync)
-  5464	{
-  5465		u64 now_ns = ktime_get_ns();
-  5466	
-  5467		RB_CLEAR_NODE(&bfqq->entity.rb_node);
-  5468		INIT_LIST_HEAD(&bfqq->fifo);
-  5469		INIT_HLIST_NODE(&bfqq->burst_list_node);
-  5470		INIT_HLIST_NODE(&bfqq->woken_list_node);
-  5471		INIT_HLIST_HEAD(&bfqq->woken_list);
-> 5472		hlist_add_head(&bfqq->children_node, &bfqg->children);
-  5473	
-  5474		bfqq->ref = 0;
-  5475		bfqq->bfqd = bfqd;
-  5476	
-  5477		if (bic)
-  5478			bfq_set_next_ioprio_data(bfqq, bic);
-  5479	
-  5480		if (is_sync) {
-  5481			/*
-  5482			 * No need to mark as has_short_ttime if in
-  5483			 * idle_class, because no device idling is performed
-  5484			 * for queues in idle class
-  5485			 */
-  5486			if (!bfq_class_idle(bfqq))
-  5487				/* tentatively mark as has_short_ttime */
-  5488				bfq_mark_bfqq_has_short_ttime(bfqq);
-  5489			bfq_mark_bfqq_sync(bfqq);
-  5490			bfq_mark_bfqq_just_created(bfqq);
-  5491		} else
-  5492			bfq_clear_bfqq_sync(bfqq);
-  5493	
-  5494		/* set end request to minus infinity from now */
-  5495		bfqq->ttime.last_end_request = now_ns + 1;
-  5496	
-  5497		bfqq->creation_time = jiffies;
-  5498	
-  5499		bfqq->io_start_time = now_ns;
-  5500	
-  5501		bfq_mark_bfqq_IO_bound(bfqq);
-  5502	
-  5503		bfqq->pid = pid;
-  5504	
-  5505		/* Tentative initial value to trade off between thr and lat */
-  5506		bfqq->max_budget = (2 * bfq_max_budget(bfqd)) / 3;
-  5507		bfqq->budget_timeout = bfq_smallest_from_now();
-  5508	
-  5509		bfqq->wr_coeff = 1;
-  5510		bfqq->last_wr_start_finish = jiffies;
-  5511		bfqq->wr_start_at_switch_to_srt = bfq_smallest_from_now();
-  5512		bfqq->split_time = bfq_smallest_from_now();
-  5513	
-  5514		/*
-  5515		 * To not forget the possibly high bandwidth consumed by a
-  5516		 * process/queue in the recent past,
-  5517		 * bfq_bfqq_softrt_next_start() returns a value at least equal
-  5518		 * to the current value of bfqq->soft_rt_next_start (see
-  5519		 * comments on bfq_bfqq_softrt_next_start).  Set
-  5520		 * soft_rt_next_start to now, to mean that bfqq has consumed
-  5521		 * no bandwidth so far.
-  5522		 */
-  5523		bfqq->soft_rt_next_start = jiffies;
-  5524	
-  5525		/* first request is almost certainly seeky */
-  5526		bfqq->seek_history = 1;
-  5527	}
-  5528	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_CS35L41_SPI
+   Depends on SOUND && !UML && SND && SND_SOC && SPI_MASTER
+   Selected by
+   - SND_SOC_AMD_VANGOGH_MACH && SOUND && !UML && SND && SND_SOC && SND_SOC_AMD_ACP5x && I2C
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
