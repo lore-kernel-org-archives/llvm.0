@@ -1,34 +1,35 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9C12C82
-	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 14:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E21C00446;
-	Thu,  2 Dec 2021 14:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638457153;
-	bh=2Nicqlk5acdh/oyplxOzIx5V4wwrXUEljmZvn/zboAc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZO+k/OkZcnLVSeutskTq2FpYG29dsxsUBd6PygD3UPMRhywSxYFV2JXDBpiqT4XR3
-	 qVXViwnbvYOPYGXzz5zO44CCpMnE8Fwajg4hGopuIrvbxwMvHCgnF5JQ54MrDFiIgA
-	 m7eYY27zg1zpgw2TKE4+H1flKZTh5f508Z3wHgFi1pPV6jaG5DcmLAuWwPsQUo8fq1
-	 ta80xOUzSL2GXMcZHZaxmJt4XNQkpOCiTR8WIY8U32D8bU+sUDL2muTgBSQWp6I5r+
-	 Y1MMlTv2NZIDvz7zmsmFcHsSgYw/09RnQUdMWILc/9DLukttD08P1548T94VWHHHdJ
-	 Y6M87r/8lpiew==
-Date: Thu, 2 Dec 2021 20:29:06 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linuxarm@huawei.com, mauro.chehab@huawei.com,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 15/20] media: imx290: mark read reg function as
- __always_unused
-Message-ID: <20211202145906.GA263467@thinkpad>
-References: <cover.1638179135.git.mchehab+huawei@kernel.org>
- <2471c2ecdf023fc3014d1ad544f2b0e9436fc9ff.1638179135.git.mchehab+huawei@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9444E2C82;
+	Thu,  2 Dec 2021 16:03:38 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223971608"
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="223971608"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 08:03:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="500794876"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 02 Dec 2021 08:03:34 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1msoYY-000GT3-8S; Thu, 02 Dec 2021 16:03:34 +0000
+Date: Fri, 3 Dec 2021 00:02:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mel Gorman <mgorman@suse.de>, Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
+	Alexey Avramov <hakavlad@inbox.lv>, Rik van Riel <riel@surriel.com>,
+	Mike Galbraith <efault@gmx.de>, Darrick Wong <djwong@kernel.org>,
+	regressions@lists.linux.dev,
+	Linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+Message-ID: <202112030001.HUiErCyK-lkp@intel.com>
+References: <20211202131842.9217-1-mgorman@techsingularity.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,42 +38,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2471c2ecdf023fc3014d1ad544f2b0e9436fc9ff.1638179135.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20211202131842.9217-1-mgorman@techsingularity.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mauro,
+Hi Mel,
 
-On Mon, Nov 29, 2021 at 10:47:47AM +0100, Mauro Carvalho Chehab wrote:
-> Such function is currently unused, but could be needed in the
-> future. So, keep it, marking it as __always_unused, in order to
-> avoid a clang W=1 error.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
-> 
-> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
-> 
->  drivers/media/i2c/imx290.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> index bf7a6c37ca5d..99f2a50d39a4 100644
-> --- a/drivers/media/i2c/imx290.c
-> +++ b/drivers/media/i2c/imx290.c
-> @@ -363,7 +363,7 @@ static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
->  	return container_of(_sd, struct imx290, sd);
->  }
->  
-> -static inline int imx290_read_reg(struct imx290 *imx290, u16 addr, u8 *value)
-> +static inline int __always_unused imx290_read_reg(struct imx290 *imx290, u16 addr, u8 *value)
+I love your patch! Perhaps something to improve:
 
-Can we drop this function instead?
+[auto build test WARNING on hnaz-mm/master]
 
-Thanks,
-Mani
+url:    https://github.com/0day-ci/linux/commits/Mel-Gorman/mm-vmscan-Reduce-throttling-due-to-a-failure-to-make-progress/20211202-212004
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-buildonly-randconfig-r001-20211202 (https://download.01.org/0day-ci/archive/20211203/202112030001.HUiErCyK-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/01dada07590ae9c69a9415ba9af96d5ae184d861
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Mel-Gorman/mm-vmscan-Reduce-throttling-due-to-a-failure-to-make-progress/20211202-212004
+        git checkout 01dada07590ae9c69a9415ba9af96d5ae184d861
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
->  {
->  	unsigned int regval;
->  	int ret;
-> -- 
-> 2.33.1
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/vmscan.c:1024:6: warning: no previous prototype for function 'skip_throttle_noprogress' [-Wmissing-prototypes]
+   bool skip_throttle_noprogress(pg_data_t *pgdat)
+        ^
+   mm/vmscan.c:1024:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool skip_throttle_noprogress(pg_data_t *pgdat)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/skip_throttle_noprogress +1024 mm/vmscan.c
+
+  1023	
+> 1024	bool skip_throttle_noprogress(pg_data_t *pgdat)
+  1025	{
+  1026		int reclaimable = 0, write_pending = 0;
+  1027		int i;
+  1028	
+  1029		/*
+  1030		 * If kswapd is disabled, reschedule if necessary but do not
+  1031		 * throttle as the system is likely near OOM.
+  1032		 */
+  1033		if (pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES)
+  1034			return true;
+  1035	
+  1036		/*
+  1037		 * If there are a lot of dirty/writeback pages then do not
+  1038		 * throttle as throttling will occur when the pages cycle
+  1039		 * towards the end of the LRU if still under writeback.
+  1040		 */
+  1041		for (i = 0; i < MAX_NR_ZONES; i++) {
+  1042			struct zone *zone = pgdat->node_zones + i;
+  1043	
+  1044			if (!populated_zone(zone))
+  1045				continue;
+  1046	
+  1047			reclaimable += zone_reclaimable_pages(zone);
+  1048			write_pending += zone_page_state_snapshot(zone,
+  1049							  NR_ZONE_WRITE_PENDING);
+  1050		}
+  1051		if (2 * write_pending <= reclaimable)
+  1052			return true;
+  1053	
+  1054		return false;
+  1055	}
+  1056	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
