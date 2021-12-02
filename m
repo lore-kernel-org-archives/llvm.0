@@ -1,99 +1,103 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184A62C82
-	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 00:26:25 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236818954"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA6E68
+	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 00:56:59 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="297394318"
 X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="236818954"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:25 -0800
+   d="scan'208";a="297394318"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:56:58 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="512941021"
-Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:23 -0800
-Message-ID: <35c655d9-8a29-8141-69a7-1dab0f974a98@intel.com>
-Date: Thu, 2 Dec 2021 08:26:21 +0800
+   d="scan'208";a="512249292"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Dec 2021 16:56:55 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1msaP9-000Faz-8m; Thu, 02 Dec 2021 00:56:55 +0000
+Date: Thu, 2 Dec 2021 08:56:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
+	matthew.auld@intel.com, tzimmermann@suse.de,
+	alexander.deucher@amd.com, christian.koenig@amd.com
+Subject: Re: [PATCH v4 1/6] drm: move the buddy allocator from i915 into
+ common drm
+Message-ID: <202112020812.Si0y9psY-lkp@intel.com>
+References: <20211201163938.133226-1-Arunpravin.PaneerSelvam@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format
- specifies type 'unsigned short' but the argument has type 'int'
-Content-Language: en-US
-To: Doug Anderson <dianders@chromium.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org,
- Benjamin Tissoires <benjamin.tissoires@redhat.com>
-References: <202111261447.lxHTeAhi-lkp@intel.com>
- <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
-From: Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211201163938.133226-1-Arunpravin.PaneerSelvam@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi Arunpravin,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on v5.16-rc3]
+[cannot apply to drm/drm-next drm-tip/drm-tip next-20211201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Arunpravin/drm-move-the-buddy-allocator-from-i915-into-common-drm/20211202-004327
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: x86_64-randconfig-a012-20211130 (https://download.01.org/0day-ci/archive/20211202/202112020812.Si0y9psY-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/afbc900c0399e8c6220abd729932e877e81f37c8
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Arunpravin/drm-move-the-buddy-allocator-from-i915-into-common-drm/20211202-004327
+        git checkout afbc900c0399e8c6220abd729932e877e81f37c8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/i915/intel_memory_region.c:242:
+>> drivers/gpu/drm/i915/selftests/intel_memory_region.c:23:10: fatal error: 'i915_buddy.h' file not found
+   #include "i915_buddy.h"
+            ^~~~~~~~~~~~~~
+   1 error generated.
 
 
-On 11/30/21 08:19, Doug Anderson wrote:
-> <Beep> <Boop> <Bop> (translates as "Hello Mr. Robot"),
->
-> On Thu, Nov 25, 2021 at 10:44 PM kernel test robot <lkp@intel.com> wrote:
->> Hi Douglas,
->>
->> First bad commit (maybe != root cause):
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   a4849f6000e29235a2707f22e39da6b897bb9543
->> commit: c1ed18c11bdb80eced208a61d40b1988f36a014f HID: i2c-hid: Introduce goodix-i2c-hid using i2c-hid core
->> date:   10 months ago
->> config: arm64-randconfig-r034-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261447.lxHTeAhi-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm64 cross compiling tool for clang build
->>          # apt-get install binutils-aarch64-linux-gnu
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ed18c11bdb80eced208a61d40b1988f36a014f
->>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>          git fetch --no-tags linus master
->>          git checkout c1ed18c11bdb80eced208a61d40b1988f36a014f
->>          # save the config file to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
->>                             le16_to_cpu(hdesc->bcdVersion));
->>                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>     include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
->>             _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
->>                                   ~~~     ^~~~~~~~~~~
->>     include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
->>     #define le16_to_cpu __le16_to_cpu
->>                         ^
->>     include/uapi/linux/byteorder/big_endian.h:36:26: note: expanded from macro '__le16_to_cpu'
->>     #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
->>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>     include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
->>             (__builtin_constant_p((__u16)(x)) ?     \
->>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> May I kindly point to the reply I gave to the same error last month
-> when you mailed it out?
->
-> https://lore.kernel.org/r/CAD=FV=WkUEkkkfGa+6QJSBvj8EgVrnGYYbd6RrC_5HdTue=mDw@mail.gmail.com/
->
+vim +23 drivers/gpu/drm/i915/selftests/intel_memory_region.c
 
-Hi Doug,
+232a6ebae419193 Matthew Auld     2019-10-08  14  
+340be48f2c5a3c0 Matthew Auld     2019-10-25  15  #include "gem/i915_gem_context.h"
+b908be543e44414 Matthew Auld     2019-10-25  16  #include "gem/i915_gem_lmem.h"
+232a6ebae419193 Matthew Auld     2019-10-08  17  #include "gem/i915_gem_region.h"
+340be48f2c5a3c0 Matthew Auld     2019-10-25  18  #include "gem/selftests/igt_gem_utils.h"
+232a6ebae419193 Matthew Auld     2019-10-08  19  #include "gem/selftests/mock_context.h"
+99919be74aa3753 Thomas Hellström 2021-06-17  20  #include "gt/intel_engine_pm.h"
+6804da20bb549e3 Chris Wilson     2019-10-27  21  #include "gt/intel_engine_user.h"
+b908be543e44414 Matthew Auld     2019-10-25  22  #include "gt/intel_gt.h"
+d53ec322dc7de32 Matthew Auld     2021-06-16 @23  #include "i915_buddy.h"
+99919be74aa3753 Thomas Hellström 2021-06-17  24  #include "gt/intel_migrate.h"
+ba12993c5228015 Matthew Auld     2020-01-29  25  #include "i915_memcpy.h"
+d53ec322dc7de32 Matthew Auld     2021-06-16  26  #include "i915_ttm_buddy_manager.h"
+01377a0d7e6648b Abdiel Janulgue  2019-10-25  27  #include "selftests/igt_flush_test.h"
+2f0b97ca0211863 Matthew Auld     2019-10-08  28  #include "selftests/i915_random.h"
+232a6ebae419193 Matthew Auld     2019-10-08  29  
 
-Thanks for the feedback, we have added the warnings to our ignore list.
-
-Best Regards,
-
-Rong Chen
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
