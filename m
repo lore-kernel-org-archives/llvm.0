@@ -1,29 +1,30 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D6A2C80
-	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 10:05:15 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="300065232"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E502C82
+	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 11:18:50 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223919353"
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="300065232"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:05:15 -0800
+   d="scan'208";a="223919353"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 03:18:31 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="477866074"
+   d="scan'208";a="460423673"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2021 02:05:13 -0800
+  by orsmga006.jf.intel.com with ESMTP; 02 Dec 2021 03:18:29 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1msixk-000G9p-N5; Thu, 02 Dec 2021 10:05:12 +0000
-Date: Thu, 2 Dec 2021 18:04:36 +0800
+	id 1msk6e-000GFH-Ta; Thu, 02 Dec 2021 11:18:28 +0000
+Date: Thu, 2 Dec 2021 19:18:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Huang Rui <ray.huang@amd.com>
+To: Tero Kristo <tero.kristo@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [rui:amd-pstate-dev-v5 6/22] include/acpi/processor.h:221:2: error:
- unknown type name 'phys_cpuid_t'
-Message-ID: <202112021843.Qk1Pq4hR-lkp@intel.com>
+Subject: [t-kristo-pm:usi-5.16-rfc-v3-bpf 17/24] drivers/hid/hid-bpf.c:376:6:
+ warning: variable 'parser' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202112021938.1gSUOhoI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,73 +35,176 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git amd-pstate-dev-v5
-head:   33ee93463b3b2fe05043d5be31bfb12475d7b142
-commit: 912ee85e7c162de04823c6b061d5a9a482556d91 [6/22] cpufreq: amd: introduce a new amd pstate driver to support future processors
-config: x86_64-buildonly-randconfig-r001-20211202 (https://download.01.org/0day-ci/archive/20211202/202112021843.Qk1Pq4hR-lkp@intel.com/config)
+tree:   https://github.com/t-kristo/linux-pm usi-5.16-rfc-v3-bpf
+head:   d0f251812c57f49830816624bec858500e4e14c2
+commit: e4c4cfe6fd7edf4bdd3bbd2e408759db9b02290e [17/24] HID: bpf: compile fix for bpf_hid_foreach_rdesc_item
+config: x86_64-randconfig-a001-20211202 (https://download.01.org/0day-ci/archive/20211202/202112021938.1gSUOhoI-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/commit/?id=912ee85e7c162de04823c6b061d5a9a482556d91
-        git remote add rui https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git
-        git fetch --no-tags rui amd-pstate-dev-v5
-        git checkout 912ee85e7c162de04823c6b061d5a9a482556d91
+        # https://github.com/t-kristo/linux-pm/commit/e4c4cfe6fd7edf4bdd3bbd2e408759db9b02290e
+        git remote add t-kristo-pm https://github.com/t-kristo/linux-pm
+        git fetch --no-tags t-kristo-pm usi-5.16-rfc-v3-bpf
+        git checkout e4c4cfe6fd7edf4bdd3bbd2e408759db9b02290e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/cpufreq/amd-pstate.c:27:
->> include/acpi/processor.h:221:2: error: unknown type name 'phys_cpuid_t'
-           phys_cpuid_t phys_id;   /* CPU hardware ID such as APIC ID for x86 */
-           ^
-   include/acpi/processor.h:350:1: error: unknown type name 'phys_cpuid_t'
-   phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
+   drivers/hid/hid-bpf.c:141:5: warning: no previous prototype for function 'hid_bpf_prog_detach' [-Wmissing-prototypes]
+   int hid_bpf_prog_detach(struct hid_device *hdev, struct bpf_prog *prog)
+       ^
+   drivers/hid/hid-bpf.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int hid_bpf_prog_detach(struct hid_device *hdev, struct bpf_prog *prog)
    ^
-   include/acpi/processor.h:351:1: error: unknown type name 'phys_cpuid_t'
-   phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
+   static 
+   drivers/hid/hid-bpf.c:229:24: warning: no previous prototype for function 'hid_bpf_add_report' [-Wmissing-prototypes]
+   struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
+                          ^
+   drivers/hid/hid-bpf.c:229:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
    ^
-   include/acpi/processor.h:352:20: error: unknown type name 'phys_cpuid_t'
-   int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
-                      ^
-   4 errors generated.
+   static 
+   drivers/hid/hid-bpf.c:257:6: warning: no previous prototype for function 'hid_bpf_free_reports' [-Wmissing-prototypes]
+   void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
+        ^
+   drivers/hid/hid-bpf.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
+   ^
+   static 
+   drivers/hid/hid-bpf.c:321:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case HID_MAIN_ITEM_TAG_END_COLLECTION:
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/hid.h:96:42: note: expanded from macro 'HID_MAIN_ITEM_TAG_END_COLLECTION'
+   #define HID_MAIN_ITEM_TAG_END_COLLECTION        12
+                                                   ^~
+   drivers/hid/hid-bpf.c:338:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/hid/hid-bpf.c:318:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case HID_MAIN_ITEM_TAG_BEGIN_COLLECTION:
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/hid.h:95:44: note: expanded from macro 'HID_MAIN_ITEM_TAG_BEGIN_COLLECTION'
+   #define HID_MAIN_ITEM_TAG_BEGIN_COLLECTION      10
+                                                   ^~
+   drivers/hid/hid-bpf.c:338:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/hid/hid-bpf.c:311:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> drivers/hid/hid-bpf.c:376:6: warning: variable 'parser' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!parser_and_data) {
+               ^~~~~~~~~~~~~~~~
+   drivers/hid/hid-bpf.c:427:8: note: uninitialized use occurs here
+           kfree(parser->collection_stack);
+                 ^~~~~~
+   drivers/hid/hid-bpf.c:376:2: note: remove the 'if' if its condition is always false
+           if (!parser_and_data) {
+           ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-bpf.c:355:27: note: initialize the variable 'parser' to silence this warning
+           struct hid_parser *parser;
+                                    ^
+                                     = NULL
+   6 warnings generated.
 
 
-vim +/phys_cpuid_t +221 include/acpi/processor.h
+vim +376 drivers/hid/hid-bpf.c
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  217  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  218  struct acpi_processor {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  219  	acpi_handle handle;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  220  	u32 acpi_id;
-828aef376d7a12 Catalin Marinas   2015-03-24 @221  	phys_cpuid_t phys_id;	/* CPU hardware ID such as APIC ID for x86 */
-af8f3f514d193e Hanjun Guo        2015-01-04  222  	u32 id;		/* CPU logical ID allocated by OS */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  223  	u32 pblk;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  224  	int performance_platform_limit;
-01854e697a77a4 Luming Yu         2007-05-26  225  	int throttling_platform_limit;
-ff55a9cebab024 Len Brown         2007-06-02  226  	/* 0 - states 0..n-th state available */
-01854e697a77a4 Luming Yu         2007-05-26  227  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  228  	struct acpi_processor_flags flags;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  229  	struct acpi_processor_power power;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  230  	struct acpi_processor_performance *performance;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  231  	struct acpi_processor_throttling throttling;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  232  	struct acpi_processor_limit limit;
-d9460fd227ed2c Zhang Rui         2008-01-17  233  	struct thermal_cooling_device *cdev;
-ac212b6980d8d5 Rafael J. Wysocki 2013-05-03  234  	struct device *dev; /* Processor device. */
-3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  235  	struct freq_qos_request perflib_req;
-3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  236  	struct freq_qos_request thermal_req;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  237  };
-^1da177e4c3f41 Linus Torvalds    2005-04-16  238  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  350  
+e4c4cfe6fd7edf4 Tero Kristo        2021-11-25  351  BPF_CALL_4(bpf_hid_foreach_rdesc_item, void*, ctx, bpf_callback_t, callback_fn, void *, callback_ctx, u64, flags)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  352  {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  353  	struct hid_bpf_ctx *bpf_ctx = ctx;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  354  	struct hid_bpf_parser_and_data *parser_and_data;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  355  	struct hid_parser *parser;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  356  	struct hid_bpf_parser *callback_data;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  357  	struct hid_item item;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  358  	u8 *data_copy, *start, *end, *next;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  359  	u64 cur_index;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  360  	u64 ret = 0;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  361  	u32 num_elems = 0;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  362  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  363  	static int (*dispatch_type[])(struct hid_parser *parser,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  364  				      struct hid_item *item) = {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  365  		hid_bpf_parser_main,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  366  		hid_parser_global,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  367  		hid_parser_local,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  368  		hid_parser_reserved
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  369  	};
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  370  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  371  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  372  	if (flags != 0)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  373  		return -EINVAL;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  374  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  375  	parser_and_data = vzalloc(sizeof(*parser_and_data));
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13 @376  	if (!parser_and_data) {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  377  		ret = -ENOMEM;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  378  		goto exit;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  379  	}
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  380  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  381  	parser = &parser_and_data->parser;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  382  	callback_data = &parser_and_data->callback_data;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  383  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  384  	parser->device = bpf_ctx->hdev;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  385  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  386  	data_copy = kmemdup(bpf_ctx->event.data, HID_BPF_MAX_BUFFER_SIZE, GFP_KERNEL);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  387  	if (!data_copy) {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  388  		ret = -ENOMEM;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  389  		goto exit;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  390  	}
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  391  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  392  	start = data_copy;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  393  	end = start + bpf_ctx->event.size;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  394  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  395  	while((next = hid_rdesc_fetch_item(start, end, &item)) != NULL) {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  396  		cur_index = start - data_copy;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  397  		num_elems++;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  398  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  399  		dispatch_type[item.type](parser, &item);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  400  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  401  		hid_bpf_store_bpf_parser(callback_data, &item, parser);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  402  
+e4c4cfe6fd7edf4 Tero Kristo        2021-11-25  403  		ret = callback_fn((u64)(long)ctx, (u64)(long)callback_data,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  404  				  (u64)(long)&cur_index,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  405  				  (u64)(long)callback_ctx, 0);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  406  		/* return value: 0 - continue, 1 - stop and return */
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  407  		if (ret)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  408  			break;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  409  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  410  		/* Reset the local parser environment on main items */
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  411  		if (item.type == HID_ITEM_TYPE_MAIN)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  412  			memset(&parser->local, 0, sizeof(parser->local));
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  413  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  414  		/* clear item content */
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  415  		memset(&item, 0, sizeof(item));
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  416  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  417  		start = next;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  418  	}
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  419  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  420  	hid_bpf_free_reports(parser_and_data);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  421  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  422  	kfree(data_copy);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  423  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  424  	ret = num_elems;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  425  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  426   exit:
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  427  	kfree(parser->collection_stack);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  428  	vfree(parser_and_data);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  429  	return ret;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  430  }
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  431  
 
-:::::: The code at line 221 was first introduced by commit
-:::::: 828aef376d7a129547bc4ebb949965040177e3da ACPI / processor: Introduce phys_cpuid_t for CPU hardware ID
+:::::: The code at line 376 was first introduced by commit
+:::::: db3fbbad76f810554bcb2c098f8c9beb02724702 HID: bpf: add a helper to parse a given report descriptor
 
-:::::: TO: Catalin Marinas <catalin.marinas@arm.com>
-:::::: CC: Will Deacon <will.deacon@arm.com>
+:::::: TO: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+:::::: CC: Tero Kristo <tero.kristo@linux.intel.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
