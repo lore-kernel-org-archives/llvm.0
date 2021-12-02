@@ -1,95 +1,92 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CC12CA4
-	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 22:33:36 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="323108389"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="323108389"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 14:33:24 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265802CA2
+	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 23:40:47 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="216890997"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="216890997"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:40:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="748394126"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Dec 2021 14:33:17 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B2MWmYf028552;
-	Thu, 2 Dec 2021 22:33:14 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: linux-hardening@vger.kernel.org, x86@kernel.org
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v8 14/14] maintainers: add MAINTAINERS entry for FG-KASLR
-Date: Thu,  2 Dec 2021 23:32:14 +0100
-Message-Id: <20211202223214.72888-15-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211202223214.72888-1-alexandr.lobakin@intel.com>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="459856321"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2021 15:40:44 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1msvgx-000Gmc-DS; Thu, 02 Dec 2021 23:40:43 +0000
+Date: Fri, 3 Dec 2021 07:40:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 16/17] drivers/scsi/ufs/ufshcd.c:1086:3:
+ warning: variable 'pending' is uninitialized when used here
+Message-ID: <202112030740.2OWuHbfI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Add an entry for FG-KASLR containing the maintainers, reviewers,
-public mailing lists, files and so on.
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   a4bec7f1327808f88f380bcfc67a0bf56ecc343f
+commit: 07dc2a50633fbd851626e61b6b214890bd411050 [16/17] scsi: ufs: Optimize the command queueing code
+config: hexagon-randconfig-r006-20211202 (https://download.01.org/0day-ci/archive/20211203/202112030740.2OWuHbfI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/07dc2a50633fbd851626e61b6b214890bd411050
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout 07dc2a50633fbd851626e61b6b214890bd411050
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/ufs/ufshcd.c:1086:3: warning: variable 'pending' is uninitialized when used here [-Wuninitialized]
+                   pending += sbitmap_weight(&sdev->budget_map);
+                   ^~~~~~~
+   drivers/scsi/ufs/ufshcd.c:1083:13: note: initialize the variable 'pending' to silence this warning
+           u32 pending;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +/pending +1086 drivers/scsi/ufs/ufshcd.c
+
+  1072	
+  1073	/*
+  1074	 * Determine the number of pending commands by counting the bits in the SCSI
+  1075	 * device budget maps. This approach has been selected because a bit is set in
+  1076	 * the budget map before scsi_host_queue_ready() checks the host_self_blocked
+  1077	 * flag. The host_self_blocked flag can be modified by calling
+  1078	 * scsi_block_requests() or scsi_unblock_requests().
+  1079	 */
+  1080	static u32 ufshcd_pending_cmds(struct ufs_hba *hba)
+  1081	{
+  1082		struct scsi_device *sdev;
+  1083		u32 pending;
+  1084	
+  1085		shost_for_each_device(sdev, hba->host)
+> 1086			pending += sbitmap_weight(&sdev->budget_map);
+  1087	
+  1088		return pending;
+  1089	}
+  1090	
+
 ---
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 360e9aa0205d..336cae4c08b4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7853,6 +7853,18 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/fujitsu-tablet.c
- 
-+FUNCTION-GRAINED KASLR (FG-KASLR)
-+M:	Alexander Lobakin <alexandr.lobakin@intel.com>
-+R:	Kristen Carlson Accardi <kristen@linux.intel.com>
-+R:	Kees Cook <keescook@chromium.org>
-+L:	linux-hardening@vger.kernel.org
-+S:	Supported
-+F:	Documentation/security/fgkaslr.rst
-+F:	arch/x86/boot/compressed/fgkaslr.c
-+F:	arch/x86/boot/compressed/utils.c
-+F:	arch/x86/boot/compressed/vmlinux.symbols
-+F:	scripts/generate_text_sections.pl
-+
- FUSE: FILESYSTEM IN USERSPACE
- M:	Miklos Szeredi <miklos@szeredi.hu>
- L:	linux-fsdevel@vger.kernel.org
--- 
-2.33.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
