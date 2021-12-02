@@ -1,71 +1,99 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136A92C80
-	for <llvm@lists.linux.dev>; Wed,  1 Dec 2021 22:24:54 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="322818981"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184A62C82
+	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 00:26:25 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236818954"
 X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="322818981"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:24:54 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="236818954"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:25 -0800
 X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="460206108"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2021 14:24:52 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1msY1z-000FT4-W4; Wed, 01 Dec 2021 22:24:51 +0000
-Date: Thu, 2 Dec 2021 06:23:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3692/4626] ERROR: modpost: "packing"
- [drivers/net/ethernet/microchip/lan966x/lan966x-switch.ko] undefined!
-Message-ID: <202112020627.5BnQUeU6-lkp@intel.com>
+   d="scan'208";a="512941021"
+Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:23 -0800
+Message-ID: <35c655d9-8a29-8141-69a7-1dab0f974a98@intel.com>
+Date: Thu, 2 Dec 2021 08:26:21 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format
+ specifies type 'unsigned short' but the argument has type 'int'
+Content-Language: en-US
+To: Doug Anderson <dianders@chromium.org>, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org,
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>
+References: <202111261447.lxHTeAhi-lkp@intel.com>
+ <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
+From: Rong Chen <rong.a.chen@intel.com>
+In-Reply-To: <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   048aeae86c3967f4c40666cd26f2c1eb73a4b805
-commit: d28d6d2e37d10d607f931d25c835a0bd94d370e3 [3692/4626] net: lan966x: add port module support
-config: i386-randconfig-a015-20211130 (https://download.01.org/0day-ci/archive/20211202/202112020627.5BnQUeU6-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d28d6d2e37d10d607f931d25c835a0bd94d370e3
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout d28d6d2e37d10d607f931d25c835a0bd94d370e3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 11/30/21 08:19, Doug Anderson wrote:
+> <Beep> <Boop> <Bop> (translates as "Hello Mr. Robot"),
+>
+> On Thu, Nov 25, 2021 at 10:44 PM kernel test robot <lkp@intel.com> wrote:
+>> Hi Douglas,
+>>
+>> First bad commit (maybe != root cause):
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   a4849f6000e29235a2707f22e39da6b897bb9543
+>> commit: c1ed18c11bdb80eced208a61d40b1988f36a014f HID: i2c-hid: Introduce goodix-i2c-hid using i2c-hid core
+>> date:   10 months ago
+>> config: arm64-randconfig-r034-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261447.lxHTeAhi-lkp@intel.com/config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # install arm64 cross compiling tool for clang build
+>>          # apt-get install binutils-aarch64-linux-gnu
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ed18c11bdb80eced208a61d40b1988f36a014f
+>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>          git fetch --no-tags linus master
+>>          git checkout c1ed18c11bdb80eced208a61d40b1988f36a014f
+>>          # save the config file to linux build tree
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+>>                             le16_to_cpu(hdesc->bcdVersion));
+>>                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>     include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
+>>             _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
+>>                                   ~~~     ^~~~~~~~~~~
+>>     include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
+>>     #define le16_to_cpu __le16_to_cpu
+>>                         ^
+>>     include/uapi/linux/byteorder/big_endian.h:36:26: note: expanded from macro '__le16_to_cpu'
+>>     #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>     include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+>>             (__builtin_constant_p((__u16)(x)) ?     \
+>>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> May I kindly point to the reply I gave to the same error last month
+> when you mailed it out?
+>
+> https://lore.kernel.org/r/CAD=FV=WkUEkkkfGa+6QJSBvj8EgVrnGYYbd6RrC_5HdTue=mDw@mail.gmail.com/
+>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Hi Doug,
 
-ERROR: modpost: "spi_setup" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
-ERROR: modpost: "__devm_regmap_init_spi" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
-ERROR: modpost: "__spi_register_driver" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
->> ERROR: modpost: "packing" [drivers/net/ethernet/microchip/lan966x/lan966x-switch.ko] undefined!
+Thanks for the feedback, we have added the warnings to our ignore list.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_CS35L41_SPI
-   Depends on SOUND && !UML && SND && SND_SOC && SPI_MASTER
-   Selected by
-   - SND_SOC_AMD_VANGOGH_MACH && SOUND && !UML && SND && SND_SOC && SND_SOC_AMD_ACP5x && I2C
+Best Regards,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Rong Chen
+
