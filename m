@@ -1,116 +1,205 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7475C2C80
-	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 21:59:45 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236788410"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F36F2C82
+	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 22:33:01 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="237083539"
 X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="236788410"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 13:59:44 -0800
+   d="scan'208";a="237083539"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 14:33:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="513388058"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 02 Dec 2021 13:59:42 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1msu7C-000Gih-0P; Thu, 02 Dec 2021 21:59:42 +0000
-Date: Fri, 3 Dec 2021 05:59:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Akhmat Karakotov <hmukos@yandex-team.ru>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v2 net-next 2/4] txhash: Add socket option to control
- TX hash rethink behavior
-Message-ID: <202112030521.vwMOWAw9-lkp@intel.com>
-References: <20211202164031.18134-3-hmukos@yandex-team.ru>
+   d="scan'208";a="576948096"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Dec 2021 14:32:52 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B2MWmYS028552;
+	Thu, 2 Dec 2021 22:32:50 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: linux-hardening@vger.kernel.org, x86@kernel.org
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH v8 01/14] x86: Makefile: Add build and config option for CONFIG_FG_KASLR
+Date: Thu,  2 Dec 2021 23:32:01 +0100
+Message-Id: <20211202223214.72888-2-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202164031.18134-3-hmukos@yandex-team.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Akhmat,
+From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on arnd-asm-generic/master]
-[cannot apply to net-next/master deller-parisc/for-next bpf-next/master bpf/master linus/master davem-sparc/master v5.16-rc3 next-20211202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Allow user to select CONFIG_FG_KASLR if dependencies are met. Change
+the make file to build with -ffunction-sections if CONFIG_FG_KASLR.
 
-url:    https://github.com/0day-ci/linux/commits/Akhmat-Karakotov/txhash-Make-rethinking-txhash-behavior-configurable-via-sysctl/20211203-014057
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-config: arm-buildonly-randconfig-r001-20211202 (https://download.01.org/0day-ci/archive/20211203/202112030521.vwMOWAw9-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/5a9ea3173f8cf5ee10364ba8150d0eb9d43d8cc2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Akhmat-Karakotov/txhash-Make-rethinking-txhash-behavior-configurable-via-sysctl/20211203-014057
-        git checkout 5a9ea3173f8cf5ee10364ba8150d0eb9d43d8cc2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/ipv4/
+While the only architecture that supports CONFIG_FG_KASLR does not
+currently enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION, make sure these
+2 features play nicely together for the future by ensuring that if
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is selected when used with
+CONFIG_FG_KASLR the function sections will not be consolidated back
+into .text. Thanks to Kees Cook for the dead code elimination changes.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv4/inet_connection_sock.c:1049:22: warning: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-           if (sk->sk_txrehash == SOCK_TXREHASH_DEFAULT)
-               ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +1049 net/ipv4/inet_connection_sock.c
-
-  1037	
-  1038	int inet_csk_listen_start(struct sock *sk, int backlog)
-  1039	{
-  1040		struct inet_connection_sock *icsk = inet_csk(sk);
-  1041		struct inet_sock *inet = inet_sk(sk);
-  1042		int err = -EADDRINUSE;
-  1043	
-  1044		reqsk_queue_alloc(&icsk->icsk_accept_queue);
-  1045	
-  1046		sk->sk_ack_backlog = 0;
-  1047		inet_csk_delack_init(sk);
-  1048	
-> 1049		if (sk->sk_txrehash == SOCK_TXREHASH_DEFAULT)
-  1050			sk->sk_txrehash = READ_ONCE(sock_net(sk)->core.sysctl_txrehash);
-  1051	
-  1052		/* There is race window here: we announce ourselves listening,
-  1053		 * but this transition is still not validated by get_port().
-  1054		 * It is OK, because this socket enters to hash table only
-  1055		 * after validation is complete.
-  1056		 */
-  1057		inet_sk_state_store(sk, TCP_LISTEN);
-  1058		if (!sk->sk_prot->get_port(sk, inet->inet_num)) {
-  1059			inet->inet_sport = htons(inet->inet_num);
-  1060	
-  1061			sk_dst_reset(sk);
-  1062			err = sk->sk_prot->hash(sk);
-  1063	
-  1064			if (likely(!err))
-  1065				return 0;
-  1066		}
-  1067	
-  1068		inet_sk_set_state(sk, TCP_CLOSE);
-  1069		return err;
-  1070	}
-  1071	EXPORT_SYMBOL_GPL(inet_csk_listen_start);
-  1072	
-
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Tony Luck <tony.luck@intel.com>
+[ alobakin:
+ - improve cflags management in the top Makefile
+ - move ARCH_HAS_FG_KASLR to the top arch/Kconfig
+ - add symtab_shndx to the list of known sections ]
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ Makefile                          | 13 ++++++++++++-
+ arch/Kconfig                      |  3 +++
+ include/asm-generic/vmlinux.lds.h | 20 ++++++++++++++++++--
+ init/Kconfig                      | 12 ++++++++++++
+ 4 files changed, 45 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 0a6ecc8bb2d2..a4d2eac5f81f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -882,8 +882,19 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
+ KBUILD_CFLAGS += -fno-inline-functions-called-once
+ endif
+ 
++# ClangLTO implies -ffunction-sections -fdata-sections, no need
++# to specify them manually and trigger a pointless full rebuild
++ifndef CONFIG_LTO_CLANG
++ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
++KBUILD_CFLAGS_KERNEL += -ffunction-sections
++endif
++
++ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
++KBUILD_CFLAGS_KERNEL += -fdata-sections
++endif
++endif # CONFIG_LTO_CLANG
++
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+-KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+ LDFLAGS_vmlinux += --gc-sections
+ endif
+ 
+diff --git a/arch/Kconfig b/arch/Kconfig
+index d3c4ab249e9c..602b67162e53 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1312,6 +1312,9 @@ config ARCH_HAS_PARANOID_L1D_FLUSH
+ config DYNAMIC_SIGFRAME
+ 	bool
+ 
++config ARCH_HAS_FG_KASLR
++	bool
++
+ source "kernel/gcov/Kconfig"
+ 
+ source "scripts/gcc-plugins/Kconfig"
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866bca69..96fbedcbf7c8 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -97,14 +97,12 @@
+  * sections to be brought in with rodata.
+  */
+ #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CLANG)
+-#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+ #define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
+ #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+ #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+ #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
+ #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
+ #else
+-#define TEXT_MAIN .text
+ #define DATA_MAIN .data
+ #define SDATA_MAIN .sdata
+ #define RODATA_MAIN .rodata
+@@ -112,6 +110,23 @@
+ #define SBSS_MAIN .sbss
+ #endif
+ 
++/*
++ * LTO_CLANG, LD_DEAD_CODE_DATA_ELIMINATION and FG_KASLR options enable
++ * -ffunction-sections, which produces separately named .text sections. In
++ * the case of CONFIG_FG_KASLR, they need to stay distict so they can be
++ * separately randomized. Without CONFIG_FG_KASLR, the separate .text
++ * sections can be collected back into a common section, which makes the
++ * resulting image slightly smaller
++ */
++#if (defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || \
++     defined(CONFIG_LTO_CLANG)) && !defined(CONFIG_FG_KASLR)
++#define TEXT_MAIN		.text .text.[0-9a-zA-Z_]*
++#elif defined(CONFIG_FG_KASLR)
++#define TEXT_MAIN		.text.__unused__
++#else
++#define TEXT_MAIN		.text
++#endif
++
+ /*
+  * GCC 4.5 and later have a 32 bytes section alignment for structures.
+  * Except GCC 4.9, that feels the need to align on 64 bytes.
+@@ -840,6 +855,7 @@
+ #define ELF_DETAILS							\
+ 		.comment 0 : { *(.comment) }				\
+ 		.symtab 0 : { *(.symtab) }				\
++		.symtab_shndx 0 : { *(.symtab_shndx) }			\
+ 		.strtab 0 : { *(.strtab) }				\
+ 		.shstrtab 0 : { *(.shstrtab) }
+ 
+diff --git a/init/Kconfig b/init/Kconfig
+index 4b7bac10c72d..5cb8f8230915 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2051,6 +2051,18 @@ config PROFILING
+ config TRACEPOINTS
+ 	bool
+ 
++config FG_KASLR
++	bool "Function Granular Kernel Address Space Layout Randomization"
++	depends on ARCH_HAS_FG_KASLR
++	help
++	  This option improves the randomness of the kernel text
++	  over basic Kernel Address Space Layout Randomization (KASLR)
++	  by reordering the kernel text at boot time. This feature
++	  uses information generated at compile time to re-layout the
++	  kernel text section at boot time at function level granularity.
++
++	  If unsure, say N.
++
+ endmenu		# General setup
+ 
+ source "arch/Kconfig"
+-- 
+2.33.1
+
