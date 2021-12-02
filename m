@@ -1,86 +1,96 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4844F68
-	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 08:03:32 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="297449335"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="297449335"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 00:03:31 -0800
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="597059742"
-Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 00:03:29 -0800
-Message-ID: <1eba3a99-9861-084d-34d8-9da060b1e6b3@intel.com>
-Date: Thu, 2 Dec 2021 16:03:27 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5A32C80
+	for <llvm@lists.linux.dev>; Thu,  2 Dec 2021 08:35:11 +0000 (UTC)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-03.nifty.com with ESMTP id 1B28Raui021857
+	for <llvm@lists.linux.dev>; Thu, 2 Dec 2021 17:27:36 +0900
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 1B28Qw8B018994
+	for <llvm@lists.linux.dev>; Thu, 2 Dec 2021 17:26:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 1B28Qw8B018994
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1638433619;
+	bh=/yQg01BYOJFXppdxBduRNih3r4B6OrrFie8TdUvWsH4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JXmvbWDwG9IKGlbZi3rbZ3DTGFqHrgLL6Wyi619NwvTKYg8SHvNOybbAxsGCdO5xu
+	 VbcVLiI7JlVuom+6954OzZVFHrAQQh7Q7TD8PIonFkZLHYzlRsyDyoW1Cq7Ii3YV3I
+	 a/aAQNHf7HDmnAqcUIJ9Ls+C3LZrzPL6OHxVVPyTlBfR4xBKOiKx30wsOTi2Zujxgf
+	 w6c/XhJ5i31O+1loPUWXpp85931taW/uJbfgZJKbCH/QqS8x3rD82cHMXE6Md/2ydt
+	 JfekgAj+MXdPlj3EW2wlizT7qgZgy8THxlcxRKRmU42qTVO+ObvwY/g34km16pYT9p
+	 b67OTJ/Qdxktg==
+X-Nifty-SrcIP: [209.85.210.178]
+Received: by mail-pf1-f178.google.com with SMTP id g19so27197328pfb.8
+        for <llvm@lists.linux.dev>; Thu, 02 Dec 2021 00:26:59 -0800 (PST)
+X-Gm-Message-State: AOAM532sZpiIxjNl9Hqb7JP4fSdRQtu4sI85O3IH+bKIFS6F05AH/wwI
+	XoFzQ70vRUyWJPRXIeMRq+A1vsYh2n6F3F1t2Ew=
+X-Google-Smtp-Source: ABdhPJxcPQ85vfjbSc2TTaMucoAVuXnzpKovoHhZYYdrtl4XmPNKKDlS6sEvhw15FBEyiNyupWGC01mqEQnCKEu0WzM=
+X-Received: by 2002:a65:50c6:: with SMTP id s6mr8754532pgp.352.1638433618425;
+ Thu, 02 Dec 2021 00:26:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [kbuild-all] Re: [ardb:for-kernelci 25/25]
- arch/arm/kernel/traps.c:865:17: warning: no previous prototype for function
- 'handle_bad_stack'
-Content-Language: en-US
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <202111250918.ErFZktQF-lkp@intel.com>
- <CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com>
- <a03e765d-c22a-3bd8-8d94-36966b91dc2c@intel.com>
- <CAMj1kXFKYX+XsojJGzYZryHht=CV-7-R+aNXaSO9zabunXYNqg@mail.gmail.com>
-From: Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <CAMj1kXFKYX+XsojJGzYZryHht=CV-7-R+aNXaSO9zabunXYNqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211129165803.470795-1-nathan@kernel.org> <202112011140.DA93B3E@keescook>
+In-Reply-To: <202112011140.DA93B3E@keescook>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 2 Dec 2021 17:26:21 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
+Message-ID: <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Tom Stellard <tstellar@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+        kernelci@groups.io, llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-
-
-On 12/2/21 15:53, Ard Biesheuvel wrote:
-> On Thu, 2 Dec 2021 at 08:34, Rong Chen <rong.a.chen@intel.com> wrote:
->>
->>
->> On 11/30/21 21:12, Ard Biesheuvel wrote:
->>> On Thu, 25 Nov 2021 at 02:35, kernel test robot <lkp@intel.com> wrote:
->>>> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
->>>> head:   5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->>>> commit: 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1 [25/25] ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems
->>>> config: arm-randconfig-r024-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250918.ErFZktQF-lkp@intel.com/config)
->>>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
->>>> reproduce (this is a W=1 build):
->>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>           chmod +x ~/bin/make.cross
->>>>           # install arm cross compiling tool for clang build
->>>>           # apt-get install binutils-arm-linux-gnueabi
->>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->>>>           git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
->>>>           git fetch --no-tags ardb for-kernelci
->>>>           git checkout 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->>>>           # save the config file to linux build tree
->>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm
->>>>
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All warnings (new ones prefixed by >>):
->>>>
->>> This is yet another false positive. asmlinkage routines don't need a
->>> prototype because they are called from assembler. This is not going to
->>> get fixed, so please don't report this error anymore.
->> Hi Ard,
->>
->> Sorry for the noise, we'll ignore the warnings in the future.
->>
-> Thanks! And if at all possible, please extend this to all routines
-> marked as asmlinkage?
+On Thu, Dec 2, 2021 at 4:41 AM Kees Cook <keescook@chromium.org> wrote:
 >
+> On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
+> > This patch series raises the minimum supported version of LLVM to
+> > 11.0.0.
+> >
+> > Patch #1 outlines the issue, goes over the potential impact of the
+> > change, and does the actual bump. Subsequent patches clean up the
+> > various checks that are always true after the bump.
+> >
+> > I have marked this revision as RFC to give various parties the option to
+> > comment on this bump before it is done, namely KernelCI and Linaro's
+> > LKFT, who are still testing clang-10. I have added some other folks to
+> > CC that I know are testing with clang to see if this impacts them in any
+> > way (as I would like to impact as few people as possible) but as far as
+> > I am aware, most other CIs and developers are testing closer to tip of
+> > tree. If that is not true, scream so that we can see what can be done
+> > about that. If I missed anyone who is actively testing with clang,
+> > please key them in and I will make sure to include them in future
+> > revisions (if any are needed).
+> >
+> > It probably makes sense for this series to live in -mm.
+>
+> Sounds good to me. Thanks!
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> --
+> Kees Cook
 
-got it, thanks for your reminding.
 
-Best Regards,
-Rong Chen
+Only positive feedback so far.
+
+All applied to linux-kbuild.
+
+
+-- 
+Best Regards
+Masahiro Yamada
