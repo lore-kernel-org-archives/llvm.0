@@ -1,79 +1,75 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6896168
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 09:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=KuDYRRXIU8uwGVnlVILD3XbuYJoxfOWwY4s5Uu98bYc=; b=RLPAF9o1UFaj2OysnGq6t8bq05
-	zhY9Ouqf05ano45hk2S9wDCd1l3VSirW2+ABM6hdlTHNarLsaIYylu0V/avfnYLD7UJ52VOax60TE
-	tIe9CwqODH/HBfFRYpr/HAENvEcsUB1bPGFBPTsl2nkMoHj3kGqtBByNfeY7E1PHYopreWwgPWoNY
-	7MDVXLcfpB7YetaZMXNTUW+ZRRLkL55A878GvAzQ2EKH2xTz/CWxj7v/p7MNcXfrcWF5plCDSLk1M
-	HqgPbUCFawjcG+b/du5eMf64uxDRkVd5J6/hP4qeDJuvOJbFImDuviq7L92IWJI1AUKF2Sc8IGouV
-	iQG5PaVw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mt5HE-0085k1-Ej; Fri, 03 Dec 2021 09:54:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 41EC230001C;
-	Fri,  3 Dec 2021 10:54:48 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2BC542B36B3A8; Fri,  3 Dec 2021 10:54:48 +0100 (CET)
-Date: Fri, 3 Dec 2021 10:54:48 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v8 06/14] FG-KASLR: use a scripted approach to handle
- .text.* sections
-Message-ID: <YanpaIwPMEQangH6@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-7-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B659F68
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 10:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8FDC58325
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 10:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638525827;
+	bh=HcsQFI/ghrlsmuk/HhzFJHGCOxuy3yHFeobr2h17U9s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IU5qXULyvMhg+VH4MemWiUQcN/UbSB/494YFo1EmGcJi5VmeeC4phaBSxcAuTQ9xm
+	 GzoZWX2pDdRYv5Ch1OzTgdbIwB7Z8ZJBG4DVQcFSQwvdwQarIynF8xY8spbo1m+t85
+	 dZXkePHw9BRbabIAmhC2rp9rzoz1vHQE78+Gd5yFscnR5wuoSoAAI9REg3MRkNxqsS
+	 nTh3q+dJQ3mubqu+yPtUT0MiEhKmVcS/Owr6vNIpXglHfEKFaC0t4cdZKmADFQtSiq
+	 okEMoWcekcimXP3J1Z56FDqKGSBQn/7XFSTgVNKH4fk4QIqGfpolYb+29ZZpaptSmP
+	 SPTS7fMcsBzjA==
+Received: by mail-ot1-f42.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so2466992otv.9
+        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 02:03:47 -0800 (PST)
+X-Gm-Message-State: AOAM532YFd+AyJAcLJpOtegyxoHDOdFDMTnJ5ua2TseqBg0+6YVP/pzA
+	FaxuOT3tgo1qCAeSjaqu9YPY2wChG1/cVekctek=
+X-Google-Smtp-Source: ABdhPJxR9VEqm0AT4UQPc+72aVvXsObFDjS9txhyoFYIN9Rbgb5Ua9D/d7h3dSeJFtgJ9r+Pt7HZC+DraWfxddQ0EHk=
+X-Received: by 2002:a05:6830:1445:: with SMTP id w5mr15871334otp.112.1638525826380;
+ Fri, 03 Dec 2021 02:03:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202223214.72888-7-alexandr.lobakin@intel.com>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-8-alexandr.lobakin@intel.com> <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 3 Dec 2021 11:03:35 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
+Message-ID: <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
+Subject: Re: [PATCH v8 07/14] kallsyms: Hide layout
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>, linux-hardening@vger.kernel.org, 
+	X86 ML <x86@kernel.org>, Jesse Brandeburg <jesse.brandeburg@intel.com>, 
+	Kristen Carlson Accardi <kristen@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Tony Luck <tony.luck@intel.com>, 
+	Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
+	kernel test robot <lkp@intel.com>, Miroslav Benes <mbenes@suse.cz>, 
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Marios Pomonis <pomonis@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Dec 02, 2021 at 11:32:06PM +0100, Alexander Lobakin wrote:
-> +#!/usr/bin/env perl
+On Fri, 3 Dec 2021 at 11:01, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Dec 02, 2021 at 11:32:07PM +0100, Alexander Lobakin wrote:
+> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> >
+> > This patch makes /proc/kallsyms display in a random order, rather
+> > than sorted by address in order to hide the newly randomized address
+> > layout.
+>
+> Is there a reason to not always do this? That is, why are we keeping two
+> copies of this code around? Less code is more better etc..
 
-> +		($name, $align) = $_ =~ /^\s*\[[\s0-9]*\]\s*(\.\S*)\s*[A-Z]*\s*[0-9a-f]{16}\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]{2}\s*[A-Z]{2}\s*[0-9]\s*[0-9]\s*([0-9]*)$/;
-> +		if (!($name =~ /^\.text\.[0-9a-zA-Z_]*((\.constprop|\.isra|\.part)\.[0-9])*(|\.[0-9cfi]*)$/)) {
++1.
 
-:-(
+IIRC I made the exact same point when this patch was sent out by
+Kristen a while ago.
