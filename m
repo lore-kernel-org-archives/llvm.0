@@ -1,165 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD7F68
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 15:51:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1DEC53FAD;
-	Fri,  3 Dec 2021 15:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638546671;
-	bh=vGP9h9M+lhHdW4WxmHWlKVgyayWG3b+7X0BPqkAv044=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A3CjN3sIImGyYV/stTqQmD1jYrx+zxyigD9Nrgyk3AeTu8CyQAuGVFLab/nccicSM
-	 lCOnGU6yoBpW38gg3LQdC03w5iQjHiBvrNR610uhnv71hLWMCDVTgytWiC949qXNma
-	 UrHlyiTXomEcGnsFAiu6xy3jblgHDBQl/AF5zVey2vmhtNBLjW39DAdxY05KIEf8F9
-	 Wu6+vG/AEP2VaFq0QENw18IzSw2Moc2AMPCPU90BaPeMcoarRyK/rPNDT48JvKK58p
-	 nTv/d4EmzfAwGIeqow3XeY6K1z89VVkhk/5IfSZpuyoiwQRf+qcETwY7CR0gqaoZbr
-	 qRYlm9ezAE7AA==
-Date: Fri, 3 Dec 2021 08:51:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Tom Stellard <tstellar@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
-	kernelci@groups.io, llvm@lists.linux.dev,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	glider@google.com
-Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
-Message-ID: <Yao86FeC2ybOobLO@archlinux-ax161>
-References: <20211129165803.470795-1-nathan@kernel.org>
- <202112011140.DA93B3E@keescook>
- <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
- <YaodyZzu0MTCJcvO@elver.google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACF768
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 16:07:33 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id x32so10604077ybi.12
+        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 08:07:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UGM7UBMu9hpWc2CpdHHwIO9PerlU890k24SrZiue448=;
+        b=N6sEXlj+o/uYovaKtOnHtS3iWp++ez1sdPFxvq0U0x9CPrKqNF7G4GyZWnRb6RC4LS
+         9daz1H/B9g2ugXoyyaijPGsjG90NK7HyHk10gzvQqhr6iv7iNhKOgjsP525OQ8z9DUZG
+         WiZ/B+Vx7/U7w41cTwM+S2POYpDeKa7VE1SEWKYiFQe38hFqoNgHlIAT1z2mWjOfmBZa
+         vDBnG4UXNGjtmZ2ou4KpRRzEkBUKhskIdVy0XuDvz+fUJbqAN7zexWcKgqLLQ6ru1b/x
+         bFf+QMKN2NEN+U/OlR8pThIz6diqVCR5DLt9E5J7nUNrvH1GfPURXqp2uIqEVyuecIRy
+         XIfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UGM7UBMu9hpWc2CpdHHwIO9PerlU890k24SrZiue448=;
+        b=jhaPa3WcjOnCLbOYo3J/uAdXLiBiq2CKdH5RDNcQonNxs8GCDbmNVoXAyEIaIqxmVz
+         NnFwY5ONv7MKWQwDU4/Ga4qv/qvdzcG5FU4qLj/mSLsEpK3KJVIxaKr5YxvUAkz45bu0
+         3YokslpJkBMI8rlKJnP+vequxZrvY2tOKrzhNLC5xo7N1Igx4HTDFq3gNJ4CmAn/9v6w
+         vcJy+ZnrG1fY93E0MnV1dR2xjcHJjI1AQaeiRNii7TmdOjvmnB+I95A4TSsGcmD2kb4o
+         Z9Y6ZA1gnOt55Q+lpC1qlMfIZlxSIPpir9piJb/7fvpZdEy81k9WUGvq4aSgKWwTnAB4
+         ADOQ==
+X-Gm-Message-State: AOAM53144JgsWrxSkyjIB6CzIuwbJ/ON/4deEYryhTjsoiQ5HtW7p0ey
+	F2ClM2XHHmZ6+zaYKXB1xY+QVwOr9gO2ViohNu3fwQ==
+X-Google-Smtp-Source: ABdhPJz6uNB4YJ0bQ7FWsAHlz+kuVJK0fVf6C9Ze629WR8+BmMgjr0LuKxp936uRsYd0I+7nFLi7jwf2FGYnWLmARdU=
+X-Received: by 2002:a25:b204:: with SMTP id i4mr23135408ybj.263.1638547651747;
+ Fri, 03 Dec 2021 08:07:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaodyZzu0MTCJcvO@elver.google.com>
+References: <20211203052908.7467-1-ben.dai@unisoc.com> <Yan7nD6U1I0m5uKY@FVFF77S0Q05N>
+In-Reply-To: <Yan7nD6U1I0m5uKY@FVFF77S0Q05N>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 3 Dec 2021 08:07:20 -0800
+Message-ID: <CABCJKuf__Lm7eJN8FqRRs1Ax3guX_WpD66Hahs5zzmSo5bbe7Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: fix the address of syscall in arch_syscall_addr if
+ CFI is enabled
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Ben Dai <ben.dai9703@gmail.com>, ndesaulniers@google.com, rostedt@goodmis.org, 
+	mingo@redhat.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Ben Dai <ben.dai@unisoc.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Peter Zijlstra <peter.zijlstra@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Dec 03, 2021 at 02:38:17PM +0100, Marco Elver wrote:
-> On Thu, Dec 02, 2021 at 05:26PM +0900, Masahiro Yamada wrote:
-> > On Thu, Dec 2, 2021 at 4:41 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
-> > > > This patch series raises the minimum supported version of LLVM to
-> > > > 11.0.0.
-> [...]
-> > Only positive feedback so far.
-> > 
-> > All applied to linux-kbuild.
-> 
-> Some of the "dynamic" checks for compiler support unfortunately aren't
-> as easily grepable -- as far as I can tell, we can also include the
-> below, which would save us 2 cc-option invocations for all clang builds.
-> 
-> And just in case:
-> 
-> Acked-by: Marco Elver <elver@google.com>
-> 
-> for the rest as well.
-> 
-> Thanks,
-> -- Marco
-> 
-> ------ >8 ------
-> 
-> From: Marco Elver <elver@google.com>
-> Date: Fri, 3 Dec 2021 14:18:44 +0100
-> Subject: [PATCH] Revert "ubsan, kcsan: Don't combine sanitizer with kcov on
->  clang"
-> 
-> This reverts commit ea91a1d45d19469001a4955583187b0d75915759.
-> 
-> The minimum Clang version is now 11.0, which fixed the UBSAN/KCSAN vs.
-> KCOV incompatibilities.
-> 
-> Link: https://bugs.llvm.org/show_bug.cgi?id=45831
-> Signed-off-by: Marco Elver <elver@google.com>
+On Fri, Dec 3, 2021 at 3:12 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> Hi Ben,
+>
+> Please Cc the arm64 maintainers for arm64 patches, you can find the relevant
+> folk in the MAINTAINERS file, and you can use the get_maintainer.pl script to
+> find them automatically (e.g. with `./scripts/get_maintainer.pl ${PATCH}` or
+> `./scripts/get_maintainer.pl -f ${FILE}`).
+>
+> For arm64 patches, you should also see LAKML
+> (linux-arm-kernel@lists.infradead.org).
+>
+> I've added Will and Catalin now, and Ard and Peter too since they've btoh been
+> fighting with things in this area.
+>
+> On Fri, Dec 03, 2021 at 01:29:08PM +0800, Ben Dai wrote:
+> > With CONFIG_CFI_CLANG, the addresses in sys_call_table[] actually point to
+> > jump instructions like "b __arm64_sys_*", and if CONFIG_LTO_CLANG_FULL is
+> > enabled, the compiler will not generate a symbol for each jump. It causes
+> > syscall tracer can't get symbol name in find_syscall_meta() and fail to
+> > initialize.
+> >
+> > To fix this problem, implement an strong definition of arch_syscall_addr()
+> > to get the actual addresses of system calls.
+> >
+> > Signed-off-by: Ben Dai <ben.dai@unisoc.com>
 
-Thanks!
+I don't think this is the correct solution. I believe Nick fixed the
+issue with missing symbols in https://reviews.llvm.org/D107934, so we
+should probably just require a newer compiler version here.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  arch/arm64/kernel/syscall.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >
+> > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> > index 50a0f1a38e84..2b911603966b 100644
+> > --- a/arch/arm64/kernel/syscall.c
+> > +++ b/arch/arm64/kernel/syscall.c
+> > @@ -12,6 +12,8 @@
+> >  #include <asm/debug-monitors.h>
+> >  #include <asm/exception.h>
+> >  #include <asm/fpsimd.h>
+> > +#include <asm/insn.h>
+> > +#include <asm/patching.h>
+> >  #include <asm/syscall.h>
+> >  #include <asm/thread_info.h>
+> >  #include <asm/unistd.h>
+> > @@ -19,6 +21,25 @@
+> >  long compat_arm_syscall(struct pt_regs *regs, int scno);
+> >  long sys_ni_syscall(void);
+> >
+> > +#ifdef CONFIG_CFI_CLANG
+> > +unsigned long __init arch_syscall_addr(int nr)
+> > +{
+> > +     u32 insn;
+> > +     unsigned long addr = (unsigned long)sys_call_table[nr];
+> > +
+> > +     /*
+> > +      * Clang's CFI will replace the address of each system call function
+> > +      * with the address of a jump table entry. In this case, the jump
+> > +      * target address is the actual address of the system call.
+> > +      */
+> > +     aarch64_insn_read((void *)addr, &insn);
+> > +     if (likely(aarch64_insn_is_b(insn)))
+> > +             addr += aarch64_get_branch_offset(insn);
+>
+> The problemn is not your fault, but I absolutely hate this, because we're
+> bodging around the compiler having broken stuff for us in the first place.
+> We've been encountering more of these cases over time, and had we been aware of
+> them to begin with we'd have strongly pushed back on marging the CFI patches
+> until the compiler offered a better solution.
+>
+> My view is that the current clang CFI scheme is broken by design here, and we
+> should mark tracing as incompatible with it for now, and work with the compiler
+> folk to get a scheme that actually works, rather than trying to bodge around
+> it.
 
-> ---
->  lib/Kconfig.kcsan | 11 -----------
->  lib/Kconfig.ubsan | 12 ------------
->  2 files changed, 23 deletions(-)
-> 
-> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> index e0a93ffdef30..b81454b2a0d0 100644
-> --- a/lib/Kconfig.kcsan
-> +++ b/lib/Kconfig.kcsan
-> @@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
->  	  For the list of compilers that support KCSAN, please see
->  	  <file:Documentation/dev-tools/kcsan.rst>.
->  
-> -config KCSAN_KCOV_BROKEN
-> -	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
-> -	depends on CC_IS_CLANG
-> -	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
-> -	help
-> -	  Some versions of clang support either KCSAN and KCOV but not the
-> -	  combination of the two.
-> -	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
-> -	  in newer releases.
-> -
->  menuconfig KCSAN
->  	bool "KCSAN: dynamic data race detector"
->  	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
->  	depends on DEBUG_KERNEL && !KASAN
-> -	depends on !KCSAN_KCOV_BROKEN
->  	select STACKTRACE
->  	help
->  	  The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index e5372a13511d..31f38e7fe948 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -27,16 +27,6 @@ config UBSAN_TRAP
->  	  the system. For some system builders this is an acceptable
->  	  trade-off.
->  
-> -config UBSAN_KCOV_BROKEN
-> -	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
-> -	depends on CC_IS_CLANG
-> -	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=bounds -fsanitize-coverage=trace-pc)
-> -	help
-> -	  Some versions of clang support either UBSAN or KCOV but not the
-> -	  combination of the two.
-> -	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
-> -	  in newer releases.
-> -
->  config CC_HAS_UBSAN_BOUNDS
->  	def_bool $(cc-option,-fsanitize=bounds)
->  
-> @@ -46,7 +36,6 @@ config CC_HAS_UBSAN_ARRAY_BOUNDS
->  config UBSAN_BOUNDS
->  	bool "Perform array index bounds checking"
->  	default UBSAN
-> -	depends on !UBSAN_KCOV_BROKEN
->  	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
->  	help
->  	  This option enables detection of directly indexed out of bounds
-> @@ -72,7 +61,6 @@ config UBSAN_ARRAY_BOUNDS
->  config UBSAN_LOCAL_BOUNDS
->  	bool "Perform array local bounds checking"
->  	depends on UBSAN_TRAP
-> -	depends on !UBSAN_KCOV_BROKEN
->  	depends on $(cc-option,-fsanitize=local-bounds)
->  	help
->  	  This option enables -fsanitize=local-bounds which traps when an
-> -- 
-> 2.34.0.384.gca35af8252-goog
-> 
+We are actively fixing compiler issues when they're discovered. In the
+meanwhile, Android uses both CFI and tracing without any major issues,
+so I don't see why we should mark the combination broken.
+
+Sami
