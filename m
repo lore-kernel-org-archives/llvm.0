@@ -1,36 +1,30 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9979B2C9D
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 22:58:28 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="234579779"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4DE2C9D
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 23:40:28 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="236888649"
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="234579779"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 14:58:27 -0800
+   d="scan'208";a="236888649"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 15:40:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="501359484"
+   d="scan'208";a="603757862"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2021 14:58:25 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 03 Dec 2021 15:40:26 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mtHVY-000IA0-Fc; Fri, 03 Dec 2021 22:58:24 +0000
-Date: Sat, 4 Dec 2021 06:58:12 +0800
+	id 1mtIAD-000ICp-Co; Fri, 03 Dec 2021 23:40:25 +0000
+Date: Sat, 4 Dec 2021 07:39:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-scsi@vger.kernel.org
+To: Mark Rutland <mark.rutland@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ketan Mukadam <ketan.mukadam@broadcom.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
-	Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2 REPOST] scsi: be2iscsi: Replace irq_poll with threaded
- IRQ handler.
-Message-ID: <202112040653.cszvYjJj-lkp@intel.com>
-References: <20211202200556.qz7cjuktgxoum2u2@linutronix.de>
+	linux-kernel@vger.kernel.org
+Subject: [mark:arm64/preempt-dynamic-static-key 6/6]
+ kernel/locking/locktorture.c:122:3: error: implicit declaration of function
+ 'preempt_schedule'
+Message-ID: <202112040752.yaWl1AdY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,89 +33,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202200556.qz7cjuktgxoum2u2@linutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Sebastian,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next v5.16-rc3 next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Sebastian-Andrzej-Siewior/scsi-be2iscsi-Replace-irq_poll-with-threaded-IRQ-handler/20211203-040851
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: riscv-buildonly-randconfig-r002-20211203 (https://download.01.org/0day-ci/archive/20211204/202112040653.cszvYjJj-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/preempt-dynamic-static-key
+head:   d8d8c0b10c8545aedf353b146905a1e61e3176f5
+commit: d8d8c0b10c8545aedf353b146905a1e61e3176f5 [6/6] arm64: support PREEMPT_DYNAMIC
+config: arm64-randconfig-r015-20211203 (https://download.01.org/0day-ci/archive/20211204/202112040752.yaWl1AdY-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d30fcadf07ee552f20156ea90be2fdb54cb9cb08)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/46ae6b75188a7c555a80135814182b82a0fad7c8
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sebastian-Andrzej-Siewior/scsi-be2iscsi-Replace-irq_poll-with-threaded-IRQ-handler/20211203-040851
-        git checkout 46ae6b75188a7c555a80135814182b82a0fad7c8
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=d8d8c0b10c8545aedf353b146905a1e61e3176f5
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/preempt-dynamic-static-key
+        git checkout d8d8c0b10c8545aedf353b146905a1e61e3176f5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ata/ drivers/infiniband/sw/rxe/ drivers/scsi/be2iscsi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/locking/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/scsi/be2iscsi/be_main.c:5392:33: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-                   pbe_eq = &phwi_context->be_eq[i];
-                                                 ^
-   drivers/scsi/be2iscsi/be_main.c:5377:16: note: initialize the variable 'i' to silence this warning
-           unsigned int i;
-                         ^
-                          = 0
-   1 warning generated.
+>> kernel/locking/locktorture.c:122:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* Allow test to be preempted. */
+                   ^
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   kernel/locking/locktorture.c:122:3: note: did you mean 'preempt_schedule_irq'?
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   include/linux/sched.h:291:17: note: 'preempt_schedule_irq' declared here
+   asmlinkage void preempt_schedule_irq(void);
+                   ^
+   kernel/locking/locktorture.c:170:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* Allow test to be preempted. */
+                   ^
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   kernel/locking/locktorture.c:349:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* Allow test to be preempted. */
+                   ^
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   kernel/locking/locktorture.c:524:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* Allow test to be preempted. */
+                   ^
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   kernel/locking/locktorture.c:564:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* Allow test to be preempted. */
+                   ^
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   kernel/locking/locktorture.c:591:3: error: implicit declaration of function 'preempt_schedule' [-Werror,-Wimplicit-function-declaration]
+                   torture_preempt_schedule();  /* Allow test to be preempted. */
+                   ^
+   include/linux/torture.h:126:36: note: expanded from macro 'torture_preempt_schedule'
+   #define torture_preempt_schedule() preempt_schedule()
+                                      ^
+   6 errors generated.
 
 
-vim +/i +5392 drivers/scsi/be2iscsi/be_main.c
+vim +/preempt_schedule +122 kernel/locking/locktorture.c
 
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5363  
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5364  /*
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5365   * beiscsi_disable_port()- Disable port and cleanup driver resources.
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5366   * This is called in HBA error handling and driver removal.
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5367   * @phba: Instance Priv structure
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5368   * @unload: indicate driver is unloading
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5369   *
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5370   * Free the OS and HW resources held by the driver
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5371   **/
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5372  static void beiscsi_disable_port(struct beiscsi_hba *phba, int unload)
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5373  {
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5374  	struct hwi_context_memory *phwi_context;
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5375  	struct hwi_controller *phwi_ctrlr;
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5376  	struct be_eq_obj *pbe_eq;
-831488669a334e Christoph Hellwig 2017-01-13  5377  	unsigned int i;
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5378  
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5379  	if (!test_and_clear_bit(BEISCSI_HBA_ONLINE, &phba->state))
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5380  		return;
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5381  
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5382  	phwi_ctrlr = phba->phwi_ctrlr;
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5383  	phwi_context = phwi_ctrlr->phwi_ctxt;
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5384  	hwi_disable_intr(phba);
-45371aa398c647 Jitendra Bhivare  2017-10-10  5385  	beiscsi_free_irqs(phba);
-831488669a334e Christoph Hellwig 2017-01-13  5386  	pci_free_irq_vectors(phba->pcidev);
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5387  
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5388  	cancel_delayed_work_sync(&phba->eqd_update);
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5389  	cancel_work_sync(&phba->boot_work);
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5390  	/* WQ might be running cancel queued mcc_work if we are not exiting */
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5391  	if (!unload && beiscsi_hba_in_error(phba)) {
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19 @5392  		pbe_eq = &phwi_context->be_eq[i];
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5393  		cancel_work_sync(&pbe_eq->mcc_work);
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5394  	}
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5395  	hwi_cleanup_port(phba);
-dd940972f36779 Jitendra Bhivare  2016-12-13  5396  	beiscsi_cleanup_port(phba);
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5397  }
-d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5398  
+e086481baf9d04 Paul E. McKenney 2014-02-11  112  
+e086481baf9d04 Paul E. McKenney 2014-02-11  113  static void torture_lock_busted_write_delay(struct torture_random_state *trsp)
+e086481baf9d04 Paul E. McKenney 2014-02-11  114  {
+61d49d2f9888ac Paul E. McKenney 2015-04-01  115  	const unsigned long longdelay_ms = 100;
+e086481baf9d04 Paul E. McKenney 2014-02-11  116  
+e086481baf9d04 Paul E. McKenney 2014-02-11  117  	/* We want a long delay occasionally to force massive contention.  */
+e086481baf9d04 Paul E. McKenney 2014-02-11  118  	if (!(torture_random(trsp) %
+61d49d2f9888ac Paul E. McKenney 2015-04-01  119  	      (cxt.nrealwriters_stress * 2000 * longdelay_ms)))
+61d49d2f9888ac Paul E. McKenney 2015-04-01  120  		mdelay(longdelay_ms);
+630952c22b04ad Davidlohr Bueso  2014-09-11  121  	if (!(torture_random(trsp) % (cxt.nrealwriters_stress * 20000)))
+cc1321c96f8555 Paul E. McKenney 2017-10-16 @122  		torture_preempt_schedule();  /* Allow test to be preempted. */
+e086481baf9d04 Paul E. McKenney 2014-02-11  123  }
+e086481baf9d04 Paul E. McKenney 2014-02-11  124  
+
+:::::: The code at line 122 was first introduced by commit
+:::::: cc1321c96f855525fbd847fec130f000daa1bb1f torture: Reduce #ifdefs for preempt_schedule()
+
+:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
