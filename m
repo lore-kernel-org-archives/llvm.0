@@ -1,79 +1,79 @@
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C6F2C9E
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 14:15:06 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="223852169"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7452C9E
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 14:15:24 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="223852223"
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="223852169"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:15:06 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="223852223"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:15:24 -0800
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="561730699"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Dec 2021 06:14:57 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3EEtKR008897;
-	Fri, 3 Dec 2021 14:14:55 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v8 08/14] livepatch: only match unique symbols when using FG-KASLR
-Date: Fri,  3 Dec 2021 15:14:35 +0100
-Message-Id: <20211203141435.82565-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-9-alexandr.lobakin@intel.com> <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
+   d="scan'208";a="610414696"
+Received: from eliteleevi.tm.intel.com ([10.237.54.20])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:15:22 -0800
+Date: Fri, 3 Dec 2021 16:07:43 +0200 (EET)
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+X-X-Sender: kvehmane@eliteleevi.tm.intel.com
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+cc: kernel test robot <lkp@intel.com>, Hui Wang <hui.wang@canonical.com>, 
+    "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." <alsa-devel@alsa-project.org>, 
+    kbuild-all@lists.01.org, Kai Vehmanen <kai.vehmanen@linux.intel.com>, 
+    llvm@lists.linux.dev, Linux Memory Management List <linux-mm@kvack.org>, 
+    Mark Brown <broonie@kernel.org>, Bard Liao <bard.liao@intel.com>
+Subject: Re: [linux-next:master 3956/5128] sound/soc/sof/intel/hda-codec.c:132:35:
+ error: use of undeclared identifier 'CODEC_PROBE_RETRIES'
+In-Reply-To: <a93302d2-d76f-95a2-2a7c-bcf34db7bfd6@linux.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2112031605380.3554566@eliteleevi.tm.intel.com>
+References: <202112031943.Twg19fWT-lkp@intel.com> <a93302d2-d76f-95a2-2a7c-bcf34db7bfd6@linux.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 3 Dec 2021 11:05:54 +0100
+Hey,
 
-> On Thu, Dec 02, 2021 at 11:32:08PM +0100, Alexander Lobakin wrote:
-> > If any type of function granular randomization is enabled, the sympos
-> > algorithm will fail, as it will be impossible to resolve symbols when
-> > there are duplicates using the previous symbol position.
-> > 
-> > We could override sympos to 0, but make it more clear to the user
-> > and bail out if the symbol is not unique.
+
+On Fri, 3 Dec 2021, Pierre-Louis Bossart wrote:
+
+> >    127		do {
+> >    128			mutex_lock(&hbus->core.cmd_mutex);
+> >    129			snd_hdac_bus_send_cmd(&hbus->core, hda_cmd);
+> >    130			snd_hdac_bus_get_response(&hbus->core, address, &resp);
+> >    131			mutex_unlock(&hbus->core.cmd_mutex);
+> >  > 132		} while (resp == -1 && retry++ < CODEC_PROBE_RETRIES);
 > 
-> Since we're going lots of horrendous things already, why can't we fix
-> this duplicate nonsense too?
+> Indeed, something's not right here.
+> 
+> CODEC_PROBE_RETRIES is defined conditionally
+> 
+> #if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA_AUDIO_CODEC)
+> #define IDISP_VID_INTEL	0x80860000
+> #define CODEC_PROBE_RETRIES 3
+> 
+> but it's used unconditionally.
 
-Oh, I see a ton of code duplication here in Kristen's code as well.
-I'll address it.
+yup, the definition needs to be moved out.
 
-Al
+> We could define this constant unconditionally as a quick fix, but this
+> compilation problem might expose a larger problem.
+> 
+> Kai, I wonder if this is code from lines 120 to 139 that we didn't
+> update when we moved to support HDMI with the generic HDaudio parts? I
+> don't see why we could even try to send a command on the bus is there's
+> no audio codec support?
+> 
+> hda_codec_use_common_hdmi should be the default assumption now, I don't
+> think we support the old solution, do we?
+
+We do still support the hdac-hdmi as well, albeit only for select old
+hardware to maintain backwards compatibility.
+
+I'll send the quick fix.
+
+Br, Kai
