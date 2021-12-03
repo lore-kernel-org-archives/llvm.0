@@ -1,78 +1,97 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDE568
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 03:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=QcwFxPn9nE8J9gnpBF33bqWSPwkn/afutb7ps1YKtnY=; b=pcnJRkhlBE9fK3RH27u57l3bOr
-	Vftkv38HJYFmL4uaosFQnONcmimpmYeoskhOGX9fqUkCG6QPN/YCTtOg+eNmr6TLtN2VQwTZELfSr
-	Oi2d+JWYJCXE1KHFINcz7fUULWvpamiNplui4ff2QHOe+5d6D1GcFRYtbGYRO+i2l+q9GYuCFEep+
-	F0eU1DMNi3G4N0DQhi1qRDwfow02y7uJDNFHl0W/sfJEOzBj6ro/19yx+rkabY+ocHvYQboiMVYvl
-	IXnMjWFAC4H2iSwUz2A9TuUnD+rlxfOhy679QI9AwGA1OTGSLU7SSEmBlME4cFfPBolFWaClEnpqx
-	K3u4oCLg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1msyq5-006jXW-NI; Fri, 03 Dec 2021 03:02:22 +0000
-Message-ID: <dd215074-38bc-5011-3e52-78858e9e2ea6@infradead.org>
-Date: Thu, 2 Dec 2021 19:02:16 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF5568
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 04:10:15 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id v23so1353556pjr.5
+        for <llvm@lists.linux.dev>; Thu, 02 Dec 2021 20:10:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5dUl5HdkR0eg9y5QTrryCRoApnzLb7oQF9XjkHY42JI=;
+        b=gV83zBXLDdulSwlhGdpvCYxjVPsqVxPWBOWWWdiBlAUASMrjWNDi8E7pagHnSGaM8o
+         igAT9MKPPxVf3T4qFkJ6GoB5LPpdv6rlZVhUTbcBpTTt/lv9AfpGCNAJLm+FQjqiHBTN
+         Tl4gFuHsfZeboRSlxPOLycOh812lrNzpEmn1CnslopYbiscMM0rR5pb8fOSmb1xyI8yo
+         UQ239LvpXEEoRc4TSIK04iIXlLIqOVoexHDK8rdZSJILc8WhPBfCBrPGFPM6Gfy6ZCJS
+         wyrfi5ESV9x/Qt3Og97+DN4911o/bJFRGi4ZweJFbF1rb2iHB7KejToMze6WzC2LGOGy
+         ypog==
+X-Gm-Message-State: AOAM533lnrKP2RpbHu4JGgOZs6IAtFFhPeA9aNPtIxshOfhqE2Fxpd7C
+	FC+tqhKEpVXPFovB5b28Nmo=
+X-Google-Smtp-Source: ABdhPJxOeK4PB48yR/W31gTuD6Tzw65ltOta9S3mIcP+awksWAaaFA/W1yPncC3RXIPSPnxYeosDXA==
+X-Received: by 2002:a17:90a:fd8c:: with SMTP id cx12mr11004583pjb.11.1638504614892;
+        Thu, 02 Dec 2021 20:10:14 -0800 (PST)
+Received: from localhost ([2601:647:5b00:ece0:aab:34ff:52ca:a7a5])
+        by smtp.gmail.com with ESMTPSA id mi14sm3809367pjb.6.2021.12.02.20.10.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 20:10:14 -0800 (PST)
+Date: Thu, 2 Dec 2021 20:10:13 -0800
+From: Moritz Fischer <mdf@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Dan Carpenter <dan.carpenter@oracle.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Russ Weight <russell.h.weight@intel.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in
+ s10_probe()
+Message-ID: <YamYpQfrGcfuOBsa@epycbox.lan>
+References: <20211130221123.3800420-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH -next] fpga: region: fix kernel-doc
-Content-Language: en-US
-To: Yang Li <yang.lee@linux.alibaba.com>, mdf@kernel.org
-Cc: hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com, nathan@kernel.org,
- ndesaulniers@google.com, linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <1638499487-74388-1-git-send-email-yang.lee@linux.alibaba.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1638499487-74388-1-git-send-email-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130221123.3800420-1-nathan@kernel.org>
 
-Hi--
-
-On 12/2/21 18:44, Yang Li wrote:
-> Fix function name in of-fpga-region.c kernel-doc comment
-> to remove a warning found by clang(make W=1 LLVM=1).
-
-The patch below looks good, but the commit message about
-"found by clang" is not correct. Using 'make W=1' causes
-scripts/kernel-doc to run, and this warning message is from kernel-doc,
-not from clang.
-
-> drivers/fpga/of-fpga-region.c:451: warning: expecting prototype for
-> fpga_region_init(). Prototype was for of_fpga_region_init() instead.
+On Tue, Nov 30, 2021 at 03:11:24PM -0700, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+>         return ret;
+>                ^~~
+> 
+> ret is only assigned in an error path now so just return 0 directly.
+> 
+> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->  drivers/fpga/of-fpga-region.c | 2 +-
+> 
+> v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
+> 
+> * Drop clang's suggestion text (Tom).
+> 
+> * Pick up Russ and Tom's review tags.
+> 
+>  drivers/fpga/stratix10-soc.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-> index 9c662db..50b8305 100644
-> --- a/drivers/fpga/of-fpga-region.c
-> +++ b/drivers/fpga/of-fpga-region.c
-> @@ -444,7 +444,7 @@ static int of_fpga_region_remove(struct platform_device *pdev)
->  };
+> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> index 737d14c6e0de..357cea58ec98 100644
+> --- a/drivers/fpga/stratix10-soc.c
+> +++ b/drivers/fpga/stratix10-soc.c
+> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
+>  	}
 >  
->  /**
-> - * fpga_region_init - init function for fpga_region class
-> + * of_fpga_region_init - init function for fpga_region class
->   * Creates the fpga_region class and registers a reconfig notifier.
->   */
->  static int __init of_fpga_region_init(void)
+>  	platform_set_drvdata(pdev, mgr);
+> -	return ret;
+> +	return 0;
+>  
+>  probe_err:
+>  	stratix10_svc_free_channel(priv->chan);
 > 
+> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
+> -- 
+> 2.34.1
+> 
+Applied to for-next,
 
-thanks.
--- 
-~Randy
+Thanks
