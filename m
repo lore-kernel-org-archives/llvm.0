@@ -1,44 +1,35 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5D568
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D79AC53FCB;
-	Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638565737;
-	bh=BlTRvCdOzdAHgLT03YhsdUB2IyQJNEwbQ4P+5iYkKTE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=ur99wvPABOPqzeGjz2Doyg7rgvFw/Y7v7zGc+pOIb5dCTfLBIKMG0NTijfXG0V6Pv
-	 img0MSBLke7jIIoZ9NfWc1wv2YbS06NtG0GmVnFrf0qOpSiHzbD7X7rKqMl+KE+lLV
-	 yvwwOLGZ1f4Qs9hDWGjPED4ENdi2F+OaBDLrVey8bEmIAqg3W/OfiLnVPfaVjh/hP9
-	 CN5vgcKaQ7gBWfBkdtS4UeP8QYTNxelHnpeP2kG1mrnN9qMlxe2hATX7gqJG8ukELp
-	 m+NSTPZgnM/Fe+j8k+Yn7R81z5iWSg/gaDp07URVsMck0vqao25NzhtSuwnazBW+lM
-	 6UYR5q7ShG9nA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id DB1665C1108; Fri,  3 Dec 2021 13:08:56 -0800 (PST)
-Date: Fri, 3 Dec 2021 13:08:56 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: Alexander Potapenko <glider@google.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Borislav Petkov <bp@alien8.de>,
-	Dmitry Vyukov <dvyukov@google.com>, Ingo Molnar <mingo@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-Message-ID: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com>
- <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC5868
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 21:26:36 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="236873684"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="236873684"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 13:26:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="577615485"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Dec 2021 13:26:22 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mtG4U-000I3I-4H; Fri, 03 Dec 2021 21:26:22 +0000
+Date: Sat, 4 Dec 2021 05:25:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Gonda <pgonda@google.com>, thomas.lendacky@amd.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	David Rientjes <rientjes@google.com>,
+	Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Joerg Roedel <jroedel@suse.de>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	John Allen <john.allen@amd.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH V5 5/5] crypto: ccp - Add SEV_INIT_EX support
+Message-ID: <202112040513.JRZWd1LU-lkp@intel.com>
+References: <20211203144642.3460447-6-pgonda@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,70 +38,182 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20211203144642.3460447-6-pgonda@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 03, 2021 at 08:50:20AM -0800, Paul E. McKenney wrote:
-> On Fri, Dec 03, 2021 at 09:56:45AM +0100, Marco Elver wrote:
-> > On Tue, Nov 30, 2021 at 12:44PM +0100, Marco Elver wrote:
-> > [...]
-> > > v3:
-> > > * Remove kcsan_noinstr hackery, since we now try to avoid adding any
-> > >   instrumentation to .noinstr.text in the first place.
-> > [...]
-> > 
-> > I missed some cleanups after changes from v2 to v3 -- the below cleanup
-> > is missing.
-> > 
-> > Full replacement patch attached.
-> 
-> I pulled this into -rcu with the other patches from your v3 post, thank
-> you all!
+Hi Peter,
 
-A few quick tests located the following:
+I love your patch! Perhaps something to improve:
 
-[    0.635383] INFO: trying to register non-static key.
-[    0.635804] The code is fine but needs lockdep annotation, or maybe
-[    0.636194] you didn't initialize this object before use?
-[    0.636194] turning off the locking correctness validator.
-[    0.636194] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
-[    0.636194] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[    0.636194] Call Trace:
-[    0.636194]  <TASK>
-[    0.636194]  dump_stack_lvl+0x88/0xd8
-[    0.636194]  dump_stack+0x15/0x1b
-[    0.636194]  register_lock_class+0x6b3/0x840
-[    0.636194]  ? __this_cpu_preempt_check+0x1d/0x30
-[    0.636194]  __lock_acquire+0x81/0xee0
-[    0.636194]  ? lock_is_held_type+0xf1/0x160
-[    0.636194]  lock_acquire+0xce/0x230
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  ? lock_is_held_type+0xf1/0x160
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  _raw_spin_lock+0x36/0x50
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  ? kcsan_init+0xf/0x80
-[    0.636194]  test_barrier+0x490/0x14c7
-[    0.636194]  ? kcsan_debugfs_init+0x1f/0x1f
-[    0.636194]  kcsan_selftest+0x47/0xa0
-[    0.636194]  do_one_initcall+0x104/0x230
-[    0.636194]  ? rcu_read_lock_sched_held+0x5b/0xc0
-[    0.636194]  ? kernel_init+0x1c/0x200
-[    0.636194]  do_initcall_level+0xa5/0xb6
-[    0.636194]  do_initcalls+0x66/0x95
-[    0.636194]  do_basic_setup+0x1d/0x23
-[    0.636194]  kernel_init_freeable+0x254/0x2ed
-[    0.636194]  ? rest_init+0x290/0x290
-[    0.636194]  kernel_init+0x1c/0x200
-[    0.636194]  ? rest_init+0x290/0x290
-[    0.636194]  ret_from_fork+0x22/0x30
-[    0.636194]  </TASK>
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master kvm/queue linus/master v5.16-rc3 next-20211203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-When running without the new patch series, this splat does not appear.
+url:    https://github.com/0day-ci/linux/commits/Peter-Gonda/Add-SEV_INIT_EX-support/20211203-224846
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: x86_64-randconfig-c007-20211203 (https://download.01.org/0day-ci/archive/20211204/202112040513.JRZWd1LU-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d30fcadf07ee552f20156ea90be2fdb54cb9cb08)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/32a279c228e30c47be88442fe20f890203854d9c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Peter-Gonda/Add-SEV_INIT_EX-support/20211203-224846
+        git checkout 32a279c228e30c47be88442fe20f890203854d9c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/crypto/ccp/
 
-Do I need a toolchain upgrade?  I see the Clang 14.0 in the cover letter,
-but that seems to apply only to non-x86 architectures.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-$ clang-11 -v
-Ubuntu clang version 11.1.0-++20210805102428+1fdec59bffc1-1~exp1~20210805203044.169
+All warnings (new ones prefixed by >>):
 
-							Thanx, Paul
+   drivers/crypto/ccp/sev-dev.c:179:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
+           lockdep_assert_held(sev_cmd_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                               ^
+   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/crypto/ccp/sev-dev.c:179:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
+           lockdep_assert_held(sev_cmd_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                        ^
+   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/crypto/ccp/sev-dev.c:215:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
+           lockdep_assert_held(sev_cmd_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                               ^
+   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/crypto/ccp/sev-dev.c:215:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
+           lockdep_assert_held(sev_cmd_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                        ^
+   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+>> drivers/crypto/ccp/sev-dev.c:224:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                           PTR_ERR(fp));
+                           ^~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/crypto/ccp/sev-dev.c:244:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
+           lockdep_assert_held(sev_cmd_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                               ^
+   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/crypto/ccp/sev-dev.c:244:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
+           lockdep_assert_held(sev_cmd_mutex);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                        ^
+   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/crypto/ccp/sev-dev.c:1250:15: warning: unused variable 'tmr_page' [-Wunused-variable]
+           struct page *tmr_page;
+                        ^
+   2 warnings and 6 errors generated.
+
+
+vim +224 drivers/crypto/ccp/sev-dev.c
+
+   207	
+   208	static void sev_write_init_ex_file(void)
+   209	{
+   210		struct sev_device *sev = psp_master->sev_data;
+   211		struct file *fp;
+   212		loff_t offset = 0;
+   213		ssize_t nwrite;
+   214	
+   215		lockdep_assert_held(sev_cmd_mutex);
+   216	
+   217		if (!sev_init_ex_buffer)
+   218			return;
+   219	
+   220		fp = filp_open(init_ex_path, O_CREAT | O_WRONLY, 0600);
+   221		if (IS_ERR(fp)) {
+   222			dev_err(sev->dev,
+   223				"SEV: could not open file for write, error %d\n",
+ > 224				PTR_ERR(fp));
+   225			return;
+   226		}
+   227	
+   228		nwrite = kernel_write(fp, sev_init_ex_buffer, NV_LENGTH, &offset);
+   229		vfs_fsync(fp, 0);
+   230		filp_close(fp, NULL);
+   231	
+   232		if (nwrite != NV_LENGTH) {
+   233			dev_err(sev->dev,
+   234				"SEV: failed to write %u bytes to non volatile memory area, ret %ld\n",
+   235				NV_LENGTH, nwrite);
+   236			return;
+   237		}
+   238	
+   239		dev_dbg(sev->dev, "SEV: write successful to NV file\n");
+   240	}
+   241	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
