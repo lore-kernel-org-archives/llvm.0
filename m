@@ -1,25 +1,33 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0A52C9D
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 11:12:39 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 941BF1396;
-	Fri,  3 Dec 2021 03:12:33 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.66.214])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A8E103F5A1;
-	Fri,  3 Dec 2021 03:12:31 -0800 (PST)
-Date: Fri, 3 Dec 2021 11:12:28 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Ben Dai <ben.dai9703@gmail.com>
-Cc: samitolvanen@google.com, ndesaulniers@google.com, rostedt@goodmis.org,
-	mingo@redhat.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Ben Dai <ben.dai@unisoc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Peter Zijlstra <peter.zijlstra@arm.com>
-Subject: Re: [PATCH] arm64: fix the address of syscall in arch_syscall_addr
- if CFI is enabled
-Message-ID: <Yan7nD6U1I0m5uKY@FVFF77S0Q05N>
-References: <20211203052908.7467-1-ben.dai@unisoc.com>
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F32B2C9D
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 11:26:11 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236770708"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="236770708"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 03:26:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="597926254"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Dec 2021 03:26:08 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mt6hb-000HVx-Hz; Fri, 03 Dec 2021 11:26:07 +0000
+Date: Fri, 3 Dec 2021 19:25:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hui Wang <hui.wang@canonical.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>, Bard Liao <bard.liao@intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Subject: [linux-next:master 3956/5128]
+ sound/soc/sof/intel/hda-codec.c:132:35: error: use of undeclared identifier
+ 'CODEC_PROBE_RETRIES'
+Message-ID: <202112031943.Twg19fWT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -28,78 +36,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203052908.7467-1-ben.dai@unisoc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Ben,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7afeac307a9561e3a93682c1e7eb22f918aa1187
+commit: 046aede2f847676f93a2ea4f48b77909c51dba40 [3956/5128] ASoC: SOF: Intel: Retry codec probing if it fails
+config: i386-randconfig-r033-20211202 (https://download.01.org/0day-ci/archive/20211203/202112031943.Twg19fWT-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=046aede2f847676f93a2ea4f48b77909c51dba40
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 046aede2f847676f93a2ea4f48b77909c51dba40
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Please Cc the arm64 maintainers for arm64 patches, you can find the relevant
-folk in the MAINTAINERS file, and you can use the get_maintainer.pl script to
-find them automatically (e.g. with `./scripts/get_maintainer.pl ${PATCH}` or
-`./scripts/get_maintainer.pl -f ${FILE}`).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For arm64 patches, you should also see LAKML
-(linux-arm-kernel@lists.infradead.org).
+All errors (new ones prefixed by >>):
 
-I've added Will and Catalin now, and Ard and Peter too since they've btoh been
-fighting with things in this area.
+>> sound/soc/sof/intel/hda-codec.c:132:35: error: use of undeclared identifier 'CODEC_PROBE_RETRIES'
+           } while (resp == -1 && retry++ < CODEC_PROBE_RETRIES);
+                                            ^
+   1 error generated.
 
-On Fri, Dec 03, 2021 at 01:29:08PM +0800, Ben Dai wrote:
-> With CONFIG_CFI_CLANG, the addresses in sys_call_table[] actually point to
-> jump instructions like "b __arm64_sys_*", and if CONFIG_LTO_CLANG_FULL is
-> enabled, the compiler will not generate a symbol for each jump. It causes
-> syscall tracer can't get symbol name in find_syscall_meta() and fail to
-> initialize.
-> 
-> To fix this problem, implement an strong definition of arch_syscall_addr()
-> to get the actual addresses of system calls.
-> 
-> Signed-off-by: Ben Dai <ben.dai@unisoc.com>
-> ---
->  arch/arm64/kernel/syscall.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> index 50a0f1a38e84..2b911603966b 100644
-> --- a/arch/arm64/kernel/syscall.c
-> +++ b/arch/arm64/kernel/syscall.c
-> @@ -12,6 +12,8 @@
->  #include <asm/debug-monitors.h>
->  #include <asm/exception.h>
->  #include <asm/fpsimd.h>
-> +#include <asm/insn.h>
-> +#include <asm/patching.h>
->  #include <asm/syscall.h>
->  #include <asm/thread_info.h>
->  #include <asm/unistd.h>
-> @@ -19,6 +21,25 @@
->  long compat_arm_syscall(struct pt_regs *regs, int scno);
->  long sys_ni_syscall(void);
->  
-> +#ifdef CONFIG_CFI_CLANG
-> +unsigned long __init arch_syscall_addr(int nr)
-> +{
-> +	u32 insn;
-> +	unsigned long addr = (unsigned long)sys_call_table[nr];
-> +
-> +	/*
-> +	 * Clang's CFI will replace the address of each system call function
-> +	 * with the address of a jump table entry. In this case, the jump
-> +	 * target address is the actual address of the system call.
-> +	 */
-> +	aarch64_insn_read((void *)addr, &insn);
-> +	if (likely(aarch64_insn_is_b(insn)))
-> +		addr += aarch64_get_branch_offset(insn);
 
-The problemn is not your fault, but I absolutely hate this, because we're
-bodging around the compiler having broken stuff for us in the first place.
-We've been encountering more of these cases over time, and had we been aware of
-them to begin with we'd have strongly pushed back on marging the CFI patches
-until the compiler offered a better solution.
+vim +/CODEC_PROBE_RETRIES +132 sound/soc/sof/intel/hda-codec.c
 
-My view is that the current clang CFI scheme is broken by design here, and we
-should mark tracing as incompatible with it for now, and work with the compiler
-folk to get a scheme that actually works, rather than trying to bodge around
-it.
+   110	
+   111	/* probe individual codec */
+   112	static int hda_codec_probe(struct snd_sof_dev *sdev, int address,
+   113				   bool hda_codec_use_common_hdmi)
+   114	{
+   115	#if IS_ENABLED(CONFIG_SND_SOC_SOF_HDA_AUDIO_CODEC)
+   116		struct hdac_hda_priv *hda_priv;
+   117		struct hda_codec *codec;
+   118		int type = HDA_DEV_LEGACY;
+   119	#endif
+   120		struct hda_bus *hbus = sof_to_hbus(sdev);
+   121		struct hdac_device *hdev;
+   122		u32 hda_cmd = (address << 28) | (AC_NODE_ROOT << 20) |
+   123			(AC_VERB_PARAMETERS << 8) | AC_PAR_VENDOR_ID;
+   124		u32 resp = -1;
+   125		int ret, retry = 0;
+   126	
+   127		do {
+   128			mutex_lock(&hbus->core.cmd_mutex);
+   129			snd_hdac_bus_send_cmd(&hbus->core, hda_cmd);
+   130			snd_hdac_bus_get_response(&hbus->core, address, &resp);
+   131			mutex_unlock(&hbus->core.cmd_mutex);
+ > 132		} while (resp == -1 && retry++ < CODEC_PROBE_RETRIES);
+   133	
+   134		if (resp == -1)
+   135			return -EIO;
+   136		dev_dbg(sdev->dev, "HDA codec #%d probed OK: response: %x\n",
+   137			address, resp);
+   138	
 
-Thanks,
-Mark.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
