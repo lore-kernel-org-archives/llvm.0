@@ -1,130 +1,123 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACBC2C9E
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 14:19:13 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236918500"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3108368
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 14:42:10 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="237207836"
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="236918500"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:19:13 -0800
+   d="scan'208";a="237207836"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:42:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="678105847"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 03 Dec 2021 06:19:11 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mt9P4-000HfQ-SI; Fri, 03 Dec 2021 14:19:10 +0000
-Date: Fri, 3 Dec 2021 22:18:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:asahi 55/56] drivers/pci/controller/pcie-apple.c:537:11:
- error: implicit declaration of function 'FIELD_PREP'
-Message-ID: <202112032209.qdsH6oP3-lkp@intel.com>
+   d="scan'208";a="501211753"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2021 06:41:59 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3EfuSp016541;
+	Fri, 3 Dec 2021 14:41:56 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v8 00/14] Function Granular KASLR
+Date: Fri,  3 Dec 2021 15:41:36 +0100
+Message-Id: <20211203144136.82915-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <YanzpvmaX1JWYf9t@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <YanzpvmaX1JWYf9t@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   69711d887d3f10a4f7dd6fd648bfff63ff66ba18
-commit: 1dcce995852337e04880b91baef1994681d62f9c [55/56] PCI: apple: Configure link speeds properly
-config: riscv-randconfig-r024-20211203 (https://download.01.org/0day-ci/archive/20211203/202112032209.qdsH6oP3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1e328b06c15273edf4a40a27ca24931b5efb3a87)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/1dcce995852337e04880b91baef1994681d62f9c
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout 1dcce995852337e04880b91baef1994681d62f9c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Fri, 3 Dec 2021 11:38:30 +0100
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Thu, Dec 02, 2021 at 11:32:00PM +0100, Alexander Lobakin wrote:
+> 
+> > feat        make -j65 boot    vmlinux.o vmlinux  bzImage  bogoops/s
+> > Relocatable 4m38.478s 24.440s 72014208  58579520  9396192 57640.39
+> > KASLR       4m39.344s 24.204s 72020624  87805776  9740352 57393.80
+> > FG-K 16 fps 6m16.493s 25.429s 83759856  87194160 10885632 57784.76
+> > FG-K 8 fps  6m20.190s 25.094s 83759856  88741328 10985248 56625.84
+> > FG-K 1 fps  7m09.611s 25.922s 83759856  95681128 11352192 56953.99
+> 
+> :sadface: so at best it makes my kernel compiles ~50% slower. Who would
+> ever consider doing that? It's like retpolines weren't bad enough; lets
+> heap on the fail?
 
-All errors (new ones prefixed by >>):
+I was waiting for that :D
 
-   In file included from drivers/pci/controller/pcie-apple.c:23:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:36:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/pci/controller/pcie-apple.c:23:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/pci/controller/pcie-apple.c:23:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/pci/controller/pcie-apple.c:537:11: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           ctrl2 |= FIELD_PREP(PCI_EXP_LNKCTL2_TLS, max_gen);
-                    ^
-   7 warnings and 1 error generated.
+I know it's horrible for now, but there are some points to consider:
+ - folks who are placing hardening over everything don't mind
+   compile times most likely;
+ - linkers choking on huge LD scripts is actually a bug in their
+   code. They process 40k sections as orphans (without a generated
+   LD script) for a split second, so they're likely able to do the
+   same with it. Our position here is that after FG-KASLR landing
+   we'll report it and probably look into linkers' code to see if
+   that can be addressed (Kees et al are on this AFAIU);
+ - ClangLTO (at least "Fat", not sure about Thin as I didn't used
+   it) thinks on vmlinux.o for ~5 minutes on 8-core Skylake. Still,
+   it is here in mainline and is widely (relatively) used.
+   I know FG-KASLR stuff is way more exotic, but anyways.
+ - And the last one: I wouldn't consider FG-KASLR production ready
+   as Kees would like to see it. Apart from compilation time, you
+   get random performance {in,de}creases here-and-there all over
+   the kernel and modules you can't predict at all.
+   I guess it would become better later on when/if we introduce
+   profiling-based function placement (there are some discussions
+   around that and one related article is referred in the orig
+   cover letter), but dunno for now.
+   There's one issue in the current code as well -- PTI switching
+   code is in .entry.text which doesn't currently get randomized.
+   So it can probably be hunted using gadget collectors I guess?
 
+Ok, so here's a summary of TODOs (not including sadfaces
+unfortunately):
+ * generate vmlinux.symbols and the corresponding variables
+   on-the-go;
+ * unify comparison and adjustment functions, probably reuse
+   some of the already existing ones;
+ * don't introduce new macros in linkage.h, just use fancy
+   'section == .text' to decide in-place;
+ * change new macros' names (those which shouldn' be wiped out)
+   to make them more consistent;
+ * look over for several code dups.
 
-vim +/FIELD_PREP +537 drivers/pci/controller/pcie-apple.c
+Am I missing anything else?
 
-   523	
-   524	static int apple_pcie_link_configure_max_speed(struct apple_pcie_port *port)
-   525	{
-   526		int max_gen;
-   527		u32 ctrl2;
-   528	
-   529		max_gen = of_pci_get_max_link_speed(port->np);
-   530		if (max_gen < 0) {
-   531			dev_err(port->pcie->dev, "max link speed not specified\n");
-   532			return max_gen;
-   533		}
-   534	
-   535		ctrl2 = readw_relaxed(bridge_reg(port, PCIE_CAP_BASE + PCI_EXP_LNKCTL2));
-   536		ctrl2 &= ~PCI_EXP_LNKCTL2_TLS;
- > 537		ctrl2 |= FIELD_PREP(PCI_EXP_LNKCTL2_TLS, max_gen);
-   538		writew_relaxed(ctrl2, bridge_reg(port, PCIE_CAP_BASE + PCI_EXP_LNKCTL2));
-   539	
-   540		return 0;
-   541	}
-   542	
+One more quest, what could I do with this infinitely long regexp
+in gen_text_sections.pl script? Just try to wrap over or it can
+be simplified somehow?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Al
