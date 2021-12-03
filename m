@@ -1,66 +1,62 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516732CA2
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 19:54:22 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="217734110"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A72129CA
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 19:55:35 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="223918216"
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="217734110"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 11:54:21 -0800
+   d="scan'208";a="223918216"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 11:55:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="746809997"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Dec 2021 11:54:20 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mtEdP-000HzB-UE; Fri, 03 Dec 2021 19:54:19 +0000
-Date: Sat, 4 Dec 2021 03:54:00 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [peterz-queue:x86/wip.extable 7/23] ld.lld: error: <inline
- asm>:25:2: macro 'extable_type_reg' is already defined
-Message-ID: <202112040357.XMRvR7lC-lkp@intel.com>
+   d="scan'208";a="541730881"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga001.jf.intel.com with ESMTP; 03 Dec 2021 11:55:31 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3JtUVL022961;
+	Fri, 3 Dec 2021 19:55:30 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH bpf 0/2] samples: bpf: fix build issues with Clang/LLVM
+Date: Fri,  3 Dec 2021 20:50:02 +0100
+Message-Id: <20211203195004.5803-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: Josh Poimboeuf <jpoimboe@redhat.com>
+Samples, at least XDP ones, can be built only with the compiler used
+to build the kernel itself.
+However, XDP sample infra introduced in Aug'21 was probably tested
+with GCC/Binutils only as it's not really compilable for now with
+Clang/LLVM.
+These two are trivial fixes addressing this.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.extable
-head:   a6523800c05b6fcef2dc3629416b17a3924daef8
-commit: e387d7349e3ea957ddc5315e4ae5dfbbe1c8af92 [7/23] x86/extable: Extend extable functionality
-config: i386-randconfig-a015-20211203 (https://download.01.org/0day-ci/archive/20211204/202112040357.XMRvR7lC-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1e328b06c15273edf4a40a27ca24931b5efb3a87)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=e387d7349e3ea957ddc5315e4ae5dfbbe1c8af92
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.extable
-        git checkout e387d7349e3ea957ddc5315e4ae5dfbbe1c8af92
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Alexander Lobakin (2):
+  samples: bpf: fix xdp_sample_user.o linking with Clang
+  samples: bpf: fix 'unknown warning group' build warning on Clang
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ samples/bpf/Makefile          | 5 +++++
+ samples/bpf/Makefile.target   | 2 +-
+ samples/bpf/xdp_sample_user.h | 2 ++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>):
+-- 
+2.33.1
 
->> ld.lld: error: <inline asm>:25:2: macro 'extable_type_reg' is already defined
-   .macro extable_type_reg type:req reg:req
-   ^
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
