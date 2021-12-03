@@ -1,138 +1,261 @@
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACF768
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 16:07:33 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id x32so10604077ybi.12
-        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 08:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UGM7UBMu9hpWc2CpdHHwIO9PerlU890k24SrZiue448=;
-        b=N6sEXlj+o/uYovaKtOnHtS3iWp++ez1sdPFxvq0U0x9CPrKqNF7G4GyZWnRb6RC4LS
-         9daz1H/B9g2ugXoyyaijPGsjG90NK7HyHk10gzvQqhr6iv7iNhKOgjsP525OQ8z9DUZG
-         WiZ/B+Vx7/U7w41cTwM+S2POYpDeKa7VE1SEWKYiFQe38hFqoNgHlIAT1z2mWjOfmBZa
-         vDBnG4UXNGjtmZ2ou4KpRRzEkBUKhskIdVy0XuDvz+fUJbqAN7zexWcKgqLLQ6ru1b/x
-         bFf+QMKN2NEN+U/OlR8pThIz6diqVCR5DLt9E5J7nUNrvH1GfPURXqp2uIqEVyuecIRy
-         XIfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UGM7UBMu9hpWc2CpdHHwIO9PerlU890k24SrZiue448=;
-        b=jhaPa3WcjOnCLbOYo3J/uAdXLiBiq2CKdH5RDNcQonNxs8GCDbmNVoXAyEIaIqxmVz
-         NnFwY5ONv7MKWQwDU4/Ga4qv/qvdzcG5FU4qLj/mSLsEpK3KJVIxaKr5YxvUAkz45bu0
-         3YokslpJkBMI8rlKJnP+vequxZrvY2tOKrzhNLC5xo7N1Igx4HTDFq3gNJ4CmAn/9v6w
-         vcJy+ZnrG1fY93E0MnV1dR2xjcHJjI1AQaeiRNii7TmdOjvmnB+I95A4TSsGcmD2kb4o
-         Z9Y6ZA1gnOt55Q+lpC1qlMfIZlxSIPpir9piJb/7fvpZdEy81k9WUGvq4aSgKWwTnAB4
-         ADOQ==
-X-Gm-Message-State: AOAM53144JgsWrxSkyjIB6CzIuwbJ/ON/4deEYryhTjsoiQ5HtW7p0ey
-	F2ClM2XHHmZ6+zaYKXB1xY+QVwOr9gO2ViohNu3fwQ==
-X-Google-Smtp-Source: ABdhPJz6uNB4YJ0bQ7FWsAHlz+kuVJK0fVf6C9Ze629WR8+BmMgjr0LuKxp936uRsYd0I+7nFLi7jwf2FGYnWLmARdU=
-X-Received: by 2002:a25:b204:: with SMTP id i4mr23135408ybj.263.1638547651747;
- Fri, 03 Dec 2021 08:07:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ABF68
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 16:14:23 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="300385395"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="300385395"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 08:10:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="561760484"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Dec 2021 08:10:15 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mtB8Y-000Hla-J3; Fri, 03 Dec 2021 16:10:14 +0000
+Date: Sat, 4 Dec 2021 00:09:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shyam Prasad N <sprasad@microsoft.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Steve French <stfrench@microsoft.com>,
+	"Paulo Alcantara (SUSE)" <pc@cjr.nz>
+Subject: [linux-next:master 4708/5128] fs/cifs/connect.c:1566:12: error: no
+ member named 'fscache' in 'struct TCP_Server_Info'
+Message-ID: <202112040002.zM4QXUGg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211203052908.7467-1-ben.dai@unisoc.com> <Yan7nD6U1I0m5uKY@FVFF77S0Q05N>
-In-Reply-To: <Yan7nD6U1I0m5uKY@FVFF77S0Q05N>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 3 Dec 2021 08:07:20 -0800
-Message-ID: <CABCJKuf__Lm7eJN8FqRRs1Ax3guX_WpD66Hahs5zzmSo5bbe7Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: fix the address of syscall in arch_syscall_addr if
- CFI is enabled
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Ben Dai <ben.dai9703@gmail.com>, ndesaulniers@google.com, rostedt@goodmis.org, 
-	mingo@redhat.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Ben Dai <ben.dai@unisoc.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Peter Zijlstra <peter.zijlstra@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 3, 2021 at 3:12 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Ben,
->
-> Please Cc the arm64 maintainers for arm64 patches, you can find the relevant
-> folk in the MAINTAINERS file, and you can use the get_maintainer.pl script to
-> find them automatically (e.g. with `./scripts/get_maintainer.pl ${PATCH}` or
-> `./scripts/get_maintainer.pl -f ${FILE}`).
->
-> For arm64 patches, you should also see LAKML
-> (linux-arm-kernel@lists.infradead.org).
->
-> I've added Will and Catalin now, and Ard and Peter too since they've btoh been
-> fighting with things in this area.
->
-> On Fri, Dec 03, 2021 at 01:29:08PM +0800, Ben Dai wrote:
-> > With CONFIG_CFI_CLANG, the addresses in sys_call_table[] actually point to
-> > jump instructions like "b __arm64_sys_*", and if CONFIG_LTO_CLANG_FULL is
-> > enabled, the compiler will not generate a symbol for each jump. It causes
-> > syscall tracer can't get symbol name in find_syscall_meta() and fail to
-> > initialize.
-> >
-> > To fix this problem, implement an strong definition of arch_syscall_addr()
-> > to get the actual addresses of system calls.
-> >
-> > Signed-off-by: Ben Dai <ben.dai@unisoc.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7afeac307a9561e3a93682c1e7eb22f918aa1187
+commit: c148f8eb032ffcbbb33b3c1aa1dd68ba97214562 [4708/5128] cifs: add server conn_id to fscache client cookie
+config: hexagon-buildonly-randconfig-r006-20211202 (https://download.01.org/0day-ci/archive/20211204/202112040002.zM4QXUGg-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c148f8eb032ffcbbb33b3c1aa1dd68ba97214562
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout c148f8eb032ffcbbb33b3c1aa1dd68ba97214562
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-I don't think this is the correct solution. I believe Nick fixed the
-issue with missing symbols in https://reviews.llvm.org/D107934, so we
-should probably just require a newer compiler version here.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > ---
-> >  arch/arm64/kernel/syscall.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> > index 50a0f1a38e84..2b911603966b 100644
-> > --- a/arch/arm64/kernel/syscall.c
-> > +++ b/arch/arm64/kernel/syscall.c
-> > @@ -12,6 +12,8 @@
-> >  #include <asm/debug-monitors.h>
-> >  #include <asm/exception.h>
-> >  #include <asm/fpsimd.h>
-> > +#include <asm/insn.h>
-> > +#include <asm/patching.h>
-> >  #include <asm/syscall.h>
-> >  #include <asm/thread_info.h>
-> >  #include <asm/unistd.h>
-> > @@ -19,6 +21,25 @@
-> >  long compat_arm_syscall(struct pt_regs *regs, int scno);
-> >  long sys_ni_syscall(void);
-> >
-> > +#ifdef CONFIG_CFI_CLANG
-> > +unsigned long __init arch_syscall_addr(int nr)
-> > +{
-> > +     u32 insn;
-> > +     unsigned long addr = (unsigned long)sys_call_table[nr];
-> > +
-> > +     /*
-> > +      * Clang's CFI will replace the address of each system call function
-> > +      * with the address of a jump table entry. In this case, the jump
-> > +      * target address is the actual address of the system call.
-> > +      */
-> > +     aarch64_insn_read((void *)addr, &insn);
-> > +     if (likely(aarch64_insn_is_b(insn)))
-> > +             addr += aarch64_get_branch_offset(insn);
->
-> The problemn is not your fault, but I absolutely hate this, because we're
-> bodging around the compiler having broken stuff for us in the first place.
-> We've been encountering more of these cases over time, and had we been aware of
-> them to begin with we'd have strongly pushed back on marging the CFI patches
-> until the compiler offered a better solution.
->
-> My view is that the current clang CFI scheme is broken by design here, and we
-> should mark tracing as incompatible with it for now, and work with the compiler
-> folk to get a scheme that actually works, rather than trying to bodge around
-> it.
+Note: the linux-next/master HEAD 7afeac307a9561e3a93682c1e7eb22f918aa1187 builds fine.
+      It may have been fixed somewhere.
 
-We are actively fixing compiler issues when they're discovered. In the
-meanwhile, Android uses both CFI and tracing without any major issues,
-so I don't see why we should mark the combination broken.
+All errors (new ones prefixed by >>):
 
-Sami
+>> fs/cifs/connect.c:1566:12: error: no member named 'fscache' in 'struct TCP_Server_Info'
+                   tcp_ses->fscache = tcp_ses->primary_server->fscache;
+                   ~~~~~~~  ^
+   fs/cifs/connect.c:1566:47: error: no member named 'fscache' in 'struct TCP_Server_Info'
+                   tcp_ses->fscache = tcp_ses->primary_server->fscache;
+                                      ~~~~~~~~~~~~~~~~~~~~~~~  ^
+   2 errors generated.
+
+
+vim +1566 fs/cifs/connect.c
+
+  1412	
+  1413	struct TCP_Server_Info *
+  1414	cifs_get_tcp_session(struct smb3_fs_context *ctx,
+  1415			     struct TCP_Server_Info *primary_server)
+  1416	{
+  1417		struct TCP_Server_Info *tcp_ses = NULL;
+  1418		int rc;
+  1419	
+  1420		cifs_dbg(FYI, "UNC: %s\n", ctx->UNC);
+  1421	
+  1422		/* see if we already have a matching tcp_ses */
+  1423		tcp_ses = cifs_find_tcp_session(ctx);
+  1424		if (tcp_ses)
+  1425			return tcp_ses;
+  1426	
+  1427		tcp_ses = kzalloc(sizeof(struct TCP_Server_Info), GFP_KERNEL);
+  1428		if (!tcp_ses) {
+  1429			rc = -ENOMEM;
+  1430			goto out_err;
+  1431		}
+  1432	
+  1433		tcp_ses->hostname = kstrdup(ctx->server_hostname, GFP_KERNEL);
+  1434		if (!tcp_ses->hostname) {
+  1435			rc = -ENOMEM;
+  1436			goto out_err;
+  1437		}
+  1438	
+  1439		if (ctx->nosharesock)
+  1440			tcp_ses->nosharesock = true;
+  1441	
+  1442		tcp_ses->ops = ctx->ops;
+  1443		tcp_ses->vals = ctx->vals;
+  1444		cifs_set_net_ns(tcp_ses, get_net(current->nsproxy->net_ns));
+  1445	
+  1446		tcp_ses->conn_id = atomic_inc_return(&tcpSesNextId);
+  1447		tcp_ses->noblockcnt = ctx->rootfs;
+  1448		tcp_ses->noblocksnd = ctx->noblocksnd || ctx->rootfs;
+  1449		tcp_ses->noautotune = ctx->noautotune;
+  1450		tcp_ses->tcp_nodelay = ctx->sockopt_tcp_nodelay;
+  1451		tcp_ses->rdma = ctx->rdma;
+  1452		tcp_ses->in_flight = 0;
+  1453		tcp_ses->max_in_flight = 0;
+  1454		tcp_ses->credits = 1;
+  1455		if (primary_server) {
+  1456			spin_lock(&cifs_tcp_ses_lock);
+  1457			++primary_server->srv_count;
+  1458			tcp_ses->primary_server = primary_server;
+  1459			spin_unlock(&cifs_tcp_ses_lock);
+  1460		}
+  1461		init_waitqueue_head(&tcp_ses->response_q);
+  1462		init_waitqueue_head(&tcp_ses->request_q);
+  1463		INIT_LIST_HEAD(&tcp_ses->pending_mid_q);
+  1464		mutex_init(&tcp_ses->srv_mutex);
+  1465		memcpy(tcp_ses->workstation_RFC1001_name,
+  1466			ctx->source_rfc1001_name, RFC1001_NAME_LEN_WITH_NULL);
+  1467		memcpy(tcp_ses->server_RFC1001_name,
+  1468			ctx->target_rfc1001_name, RFC1001_NAME_LEN_WITH_NULL);
+  1469		tcp_ses->session_estab = false;
+  1470		tcp_ses->sequence_number = 0;
+  1471		tcp_ses->reconnect_instance = 1;
+  1472		tcp_ses->lstrp = jiffies;
+  1473		tcp_ses->compress_algorithm = cpu_to_le16(ctx->compression);
+  1474		spin_lock_init(&tcp_ses->req_lock);
+  1475		INIT_LIST_HEAD(&tcp_ses->tcp_ses_list);
+  1476		INIT_LIST_HEAD(&tcp_ses->smb_ses_list);
+  1477		INIT_DELAYED_WORK(&tcp_ses->echo, cifs_echo_request);
+  1478		INIT_DELAYED_WORK(&tcp_ses->resolve, cifs_resolve_server);
+  1479		INIT_DELAYED_WORK(&tcp_ses->reconnect, smb2_reconnect_server);
+  1480		mutex_init(&tcp_ses->reconnect_mutex);
+  1481	#ifdef CONFIG_CIFS_DFS_UPCALL
+  1482		mutex_init(&tcp_ses->refpath_lock);
+  1483	#endif
+  1484		memcpy(&tcp_ses->srcaddr, &ctx->srcaddr,
+  1485		       sizeof(tcp_ses->srcaddr));
+  1486		memcpy(&tcp_ses->dstaddr, &ctx->dstaddr,
+  1487			sizeof(tcp_ses->dstaddr));
+  1488		if (ctx->use_client_guid)
+  1489			memcpy(tcp_ses->client_guid, ctx->client_guid,
+  1490			       SMB2_CLIENT_GUID_SIZE);
+  1491		else
+  1492			generate_random_uuid(tcp_ses->client_guid);
+  1493		/*
+  1494		 * at this point we are the only ones with the pointer
+  1495		 * to the struct since the kernel thread not created yet
+  1496		 * no need to spinlock this init of tcpStatus or srv_count
+  1497		 */
+  1498		tcp_ses->tcpStatus = CifsNew;
+  1499		++tcp_ses->srv_count;
+  1500	
+  1501		if (ctx->echo_interval >= SMB_ECHO_INTERVAL_MIN &&
+  1502			ctx->echo_interval <= SMB_ECHO_INTERVAL_MAX)
+  1503			tcp_ses->echo_interval = ctx->echo_interval * HZ;
+  1504		else
+  1505			tcp_ses->echo_interval = SMB_ECHO_INTERVAL_DEFAULT * HZ;
+  1506		if (tcp_ses->rdma) {
+  1507	#ifndef CONFIG_CIFS_SMB_DIRECT
+  1508			cifs_dbg(VFS, "CONFIG_CIFS_SMB_DIRECT is not enabled\n");
+  1509			rc = -ENOENT;
+  1510			goto out_err_crypto_release;
+  1511	#endif
+  1512			tcp_ses->smbd_conn = smbd_get_connection(
+  1513				tcp_ses, (struct sockaddr *)&ctx->dstaddr);
+  1514			if (tcp_ses->smbd_conn) {
+  1515				cifs_dbg(VFS, "RDMA transport established\n");
+  1516				rc = 0;
+  1517				goto smbd_connected;
+  1518			} else {
+  1519				rc = -ENOENT;
+  1520				goto out_err_crypto_release;
+  1521			}
+  1522		}
+  1523		rc = ip_connect(tcp_ses);
+  1524		if (rc < 0) {
+  1525			cifs_dbg(VFS, "Error connecting to socket. Aborting operation.\n");
+  1526			goto out_err_crypto_release;
+  1527		}
+  1528	smbd_connected:
+  1529		/*
+  1530		 * since we're in a cifs function already, we know that
+  1531		 * this will succeed. No need for try_module_get().
+  1532		 */
+  1533		__module_get(THIS_MODULE);
+  1534		tcp_ses->tsk = kthread_run(cifs_demultiplex_thread,
+  1535					  tcp_ses, "cifsd");
+  1536		if (IS_ERR(tcp_ses->tsk)) {
+  1537			rc = PTR_ERR(tcp_ses->tsk);
+  1538			cifs_dbg(VFS, "error %d create cifsd thread\n", rc);
+  1539			module_put(THIS_MODULE);
+  1540			goto out_err_crypto_release;
+  1541		}
+  1542		tcp_ses->min_offload = ctx->min_offload;
+  1543		/*
+  1544		 * at this point we are the only ones with the pointer
+  1545		 * to the struct since the kernel thread not created yet
+  1546		 * no need to spinlock this update of tcpStatus
+  1547		 */
+  1548		tcp_ses->tcpStatus = CifsNeedNegotiate;
+  1549	
+  1550		if ((ctx->max_credits < 20) || (ctx->max_credits > 60000))
+  1551			tcp_ses->max_credits = SMB2_MAX_CREDITS_AVAILABLE;
+  1552		else
+  1553			tcp_ses->max_credits = ctx->max_credits;
+  1554	
+  1555		tcp_ses->nr_targets = 1;
+  1556		tcp_ses->ignore_signature = ctx->ignore_signature;
+  1557		/* thread spawned, put it on the list */
+  1558		spin_lock(&cifs_tcp_ses_lock);
+  1559		list_add(&tcp_ses->tcp_ses_list, &cifs_tcp_ses_list);
+  1560		spin_unlock(&cifs_tcp_ses_lock);
+  1561	
+  1562		/* fscache server cookies are based on primary channel only */
+  1563		if (!CIFS_SERVER_IS_CHAN(tcp_ses))
+  1564			cifs_fscache_get_client_cookie(tcp_ses);
+  1565		else
+> 1566			tcp_ses->fscache = tcp_ses->primary_server->fscache;
+  1567	
+  1568		/* queue echo request delayed work */
+  1569		queue_delayed_work(cifsiod_wq, &tcp_ses->echo, tcp_ses->echo_interval);
+  1570	
+  1571		/* queue dns resolution delayed work */
+  1572		cifs_dbg(FYI, "%s: next dns resolution scheduled for %d seconds in the future\n",
+  1573			 __func__, SMB_DNS_RESOLVE_INTERVAL_DEFAULT);
+  1574	
+  1575		queue_delayed_work(cifsiod_wq, &tcp_ses->resolve, (SMB_DNS_RESOLVE_INTERVAL_DEFAULT * HZ));
+  1576	
+  1577		return tcp_ses;
+  1578	
+  1579	out_err_crypto_release:
+  1580		cifs_crypto_secmech_release(tcp_ses);
+  1581	
+  1582		put_net(cifs_net_ns(tcp_ses));
+  1583	
+  1584	out_err:
+  1585		if (tcp_ses) {
+  1586			if (CIFS_SERVER_IS_CHAN(tcp_ses))
+  1587				cifs_put_tcp_session(tcp_ses->primary_server, false);
+  1588			kfree(tcp_ses->hostname);
+  1589			if (tcp_ses->ssocket)
+  1590				sock_release(tcp_ses->ssocket);
+  1591			kfree(tcp_ses);
+  1592		}
+  1593		return ERR_PTR(rc);
+  1594	}
+  1595	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
