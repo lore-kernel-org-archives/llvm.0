@@ -1,28 +1,64 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787862C9D
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 11:05:09 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236895538"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="236895538"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 03:05:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="541592388"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 03 Dec 2021 03:05:07 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mt6NG-000HTW-MK; Fri, 03 Dec 2021 11:05:06 +0000
-Date: Fri, 3 Dec 2021 19:04:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
-Message-ID: <202112031932.qCorYl4u-lkp@intel.com>
-References: <20211203023118.1447229-20-stefanb@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEB62C9D
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 11:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7VzeHH1mGZBLhu927mmWIPghqzXBo4WrF6VXfhzX2rk=; b=ipHVDH3frt8hI7ZeH4FeS34Kbj
+	XFExnPypxIUKN5Zbk/3+PhFyAZoDb4/uITSCH6cWhHhDfTMdUHrD+hsd+QeNE2DGORoLvkEu091TA
+	kEIoolbLbGov+1Qj3BIcapiXb/jAK1yOPbNyjt1k43vGHDhIJRTwqLUOSY0J+Hwgq1OLCGMJB3Gnk
+	k2vkUh4jAoQcxXJafxr1YbAsTsK5ANXWXkrcuBp6Bvx2yxo1iHKA1T4Xmapd88IIUYIiQmSDLMVA1
+	4We6mQ9eUPlrwRJJRI7V9IDvXmdQMawGAE7aN9NzaSWx2WzJN9uoeWjhVGTaiNEX1DYwTQbiNif7E
+	mIoQT78w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mt5N3-001yW0-5d; Fri, 03 Dec 2021 10:00:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8C62730001C;
+	Fri,  3 Dec 2021 11:00:47 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 761232B36B3AE; Fri,  3 Dec 2021 11:00:47 +0100 (CET)
+Date: Fri, 3 Dec 2021 11:00:47 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v8 07/14] kallsyms: Hide layout
+Message-ID: <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-8-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,67 +67,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203023118.1447229-20-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211202223214.72888-8-alexandr.lobakin@intel.com>
 
-Hi Stefan,
+On Thu, Dec 02, 2021 at 11:32:07PM +0100, Alexander Lobakin wrote:
+> From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> 
+> This patch makes /proc/kallsyms display in a random order, rather
+> than sorted by address in order to hide the newly randomized address
+> layout.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on zohar-integrity/next-integrity]
-[also build test ERROR on linus/master v5.16-rc3]
-[cannot apply to pcmoore-selinux/next next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211203-103412
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-config: mips-buildonly-randconfig-r002-20211203 (https://download.01.org/0day-ci/archive/20211203/202112031932.qCorYl4u-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1e328b06c15273edf4a40a27ca24931b5efb3a87)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/8766e0181c2639c814f7391feaa411d8c767e37b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211203-103412
-        git checkout 8766e0181c2639c814f7391feaa411d8c767e37b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> security/inode.c:69:19: error: no member named 'ima_ns' in 'struct user_namespace'
-           if (fc->user_ns->ima_ns->late_fs_init) {
-               ~~~~~~~~~~~  ^
-   security/inode.c:70:21: error: no member named 'ima_ns' in 'struct user_namespace'
-                   rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
-                        ~~~~~~~~~~~  ^
-   2 errors generated.
-
-
-vim +69 security/inode.c
-
-    64	
-    65	static int securityfs_init_fs_context(struct fs_context *fc)
-    66	{
-    67		int rc;
-    68	
-  > 69		if (fc->user_ns->ima_ns->late_fs_init) {
-    70			rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
-    71			if (rc)
-    72				return rc;
-    73		}
-    74		fc->ops = &securityfs_context_ops;
-    75		return 0;
-    76	}
-    77	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Is there a reason to not always do this? That is, why are we keeping two
+copies of this code around? Less code is more better etc..
