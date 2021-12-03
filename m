@@ -1,35 +1,36 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC5868
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 21:26:36 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="236873684"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9979B2C9D
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 22:58:28 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="234579779"
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="236873684"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 13:26:26 -0800
+   d="scan'208";a="234579779"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 14:58:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="577615485"
+   d="scan'208";a="501359484"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Dec 2021 13:26:22 -0800
+  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2021 14:58:25 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mtG4U-000I3I-4H; Fri, 03 Dec 2021 21:26:22 +0000
-Date: Sat, 4 Dec 2021 05:25:28 +0800
+	id 1mtHVY-000IA0-Fc; Fri, 03 Dec 2021 22:58:24 +0000
+Date: Sat, 4 Dec 2021 06:58:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Gonda <pgonda@google.com>, thomas.lendacky@amd.com
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-scsi@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	David Rientjes <rientjes@google.com>,
-	Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Joerg Roedel <jroedel@suse.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	John Allen <john.allen@amd.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH V5 5/5] crypto: ccp - Add SEV_INIT_EX support
-Message-ID: <202112040513.JRZWd1LU-lkp@intel.com>
-References: <20211203144642.3460447-6-pgonda@google.com>
+	Ketan Mukadam <ketan.mukadam@broadcom.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
+	Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 REPOST] scsi: be2iscsi: Replace irq_poll with threaded
+ IRQ handler.
+Message-ID: <202112040653.cszvYjJj-lkp@intel.com>
+References: <20211202200556.qz7cjuktgxoum2u2@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,181 +39,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203144642.3460447-6-pgonda@google.com>
+In-Reply-To: <20211202200556.qz7cjuktgxoum2u2@linutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Peter,
+Hi Sebastian,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master kvm/queue linus/master v5.16-rc3 next-20211203]
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next v5.16-rc3 next-20211203]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Peter-Gonda/Add-SEV_INIT_EX-support/20211203-224846
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: x86_64-randconfig-c007-20211203 (https://download.01.org/0day-ci/archive/20211204/202112040513.JRZWd1LU-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Sebastian-Andrzej-Siewior/scsi-be2iscsi-Replace-irq_poll-with-threaded-IRQ-handler/20211203-040851
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: riscv-buildonly-randconfig-r002-20211203 (https://download.01.org/0day-ci/archive/20211204/202112040653.cszvYjJj-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d30fcadf07ee552f20156ea90be2fdb54cb9cb08)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/32a279c228e30c47be88442fe20f890203854d9c
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/46ae6b75188a7c555a80135814182b82a0fad7c8
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Peter-Gonda/Add-SEV_INIT_EX-support/20211203-224846
-        git checkout 32a279c228e30c47be88442fe20f890203854d9c
+        git fetch --no-tags linux-review Sebastian-Andrzej-Siewior/scsi-be2iscsi-Replace-irq_poll-with-threaded-IRQ-handler/20211203-040851
+        git checkout 46ae6b75188a7c555a80135814182b82a0fad7c8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/crypto/ccp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ata/ drivers/infiniband/sw/rxe/ drivers/scsi/be2iscsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/crypto/ccp/sev-dev.c:179:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
-           lockdep_assert_held(sev_cmd_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                               ^
-   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/crypto/ccp/sev-dev.c:179:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-           lockdep_assert_held(sev_cmd_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                        ^
-   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/crypto/ccp/sev-dev.c:215:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
-           lockdep_assert_held(sev_cmd_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                               ^
-   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/crypto/ccp/sev-dev.c:215:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-           lockdep_assert_held(sev_cmd_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                        ^
-   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
->> drivers/crypto/ccp/sev-dev.c:224:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                           PTR_ERR(fp));
-                           ^~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/crypto/ccp/sev-dev.c:244:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
-           lockdep_assert_held(sev_cmd_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                               ^
-   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/crypto/ccp/sev-dev.c:244:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-           lockdep_assert_held(sev_cmd_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                        ^
-   include/linux/lockdep.h:310:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/crypto/ccp/sev-dev.c:1250:15: warning: unused variable 'tmr_page' [-Wunused-variable]
-           struct page *tmr_page;
-                        ^
-   2 warnings and 6 errors generated.
+>> drivers/scsi/be2iscsi/be_main.c:5392:33: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+                   pbe_eq = &phwi_context->be_eq[i];
+                                                 ^
+   drivers/scsi/be2iscsi/be_main.c:5377:16: note: initialize the variable 'i' to silence this warning
+           unsigned int i;
+                         ^
+                          = 0
+   1 warning generated.
 
 
-vim +224 drivers/crypto/ccp/sev-dev.c
+vim +/i +5392 drivers/scsi/be2iscsi/be_main.c
 
-   207	
-   208	static void sev_write_init_ex_file(void)
-   209	{
-   210		struct sev_device *sev = psp_master->sev_data;
-   211		struct file *fp;
-   212		loff_t offset = 0;
-   213		ssize_t nwrite;
-   214	
-   215		lockdep_assert_held(sev_cmd_mutex);
-   216	
-   217		if (!sev_init_ex_buffer)
-   218			return;
-   219	
-   220		fp = filp_open(init_ex_path, O_CREAT | O_WRONLY, 0600);
-   221		if (IS_ERR(fp)) {
-   222			dev_err(sev->dev,
-   223				"SEV: could not open file for write, error %d\n",
- > 224				PTR_ERR(fp));
-   225			return;
-   226		}
-   227	
-   228		nwrite = kernel_write(fp, sev_init_ex_buffer, NV_LENGTH, &offset);
-   229		vfs_fsync(fp, 0);
-   230		filp_close(fp, NULL);
-   231	
-   232		if (nwrite != NV_LENGTH) {
-   233			dev_err(sev->dev,
-   234				"SEV: failed to write %u bytes to non volatile memory area, ret %ld\n",
-   235				NV_LENGTH, nwrite);
-   236			return;
-   237		}
-   238	
-   239		dev_dbg(sev->dev, "SEV: write successful to NV file\n");
-   240	}
-   241	
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5363  
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5364  /*
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5365   * beiscsi_disable_port()- Disable port and cleanup driver resources.
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5366   * This is called in HBA error handling and driver removal.
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5367   * @phba: Instance Priv structure
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5368   * @unload: indicate driver is unloading
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5369   *
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5370   * Free the OS and HW resources held by the driver
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5371   **/
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5372  static void beiscsi_disable_port(struct beiscsi_hba *phba, int unload)
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5373  {
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5374  	struct hwi_context_memory *phwi_context;
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5375  	struct hwi_controller *phwi_ctrlr;
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5376  	struct be_eq_obj *pbe_eq;
+831488669a334e Christoph Hellwig 2017-01-13  5377  	unsigned int i;
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5378  
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5379  	if (!test_and_clear_bit(BEISCSI_HBA_ONLINE, &phba->state))
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5380  		return;
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5381  
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5382  	phwi_ctrlr = phba->phwi_ctrlr;
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5383  	phwi_context = phwi_ctrlr->phwi_ctxt;
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5384  	hwi_disable_intr(phba);
+45371aa398c647 Jitendra Bhivare  2017-10-10  5385  	beiscsi_free_irqs(phba);
+831488669a334e Christoph Hellwig 2017-01-13  5386  	pci_free_irq_vectors(phba->pcidev);
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5387  
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5388  	cancel_delayed_work_sync(&phba->eqd_update);
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5389  	cancel_work_sync(&phba->boot_work);
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5390  	/* WQ might be running cancel queued mcc_work if we are not exiting */
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5391  	if (!unload && beiscsi_hba_in_error(phba)) {
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19 @5392  		pbe_eq = &phwi_context->be_eq[i];
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5393  		cancel_work_sync(&pbe_eq->mcc_work);
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5394  	}
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5395  	hwi_cleanup_port(phba);
+dd940972f36779 Jitendra Bhivare  2016-12-13  5396  	beiscsi_cleanup_port(phba);
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5397  }
+d1d5ca887c0ee6 Jitendra Bhivare  2016-08-19  5398  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
