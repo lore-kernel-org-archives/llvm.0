@@ -1,116 +1,58 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from out4436.biz.mail.alibaba.com (out4436.biz.mail.alibaba.com [47.88.44.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC412C9E
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 01:03:13 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236821654"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="236821654"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 17:02:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="597382158"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Dec 2021 17:02:50 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mswyP-000GwB-W5; Fri, 03 Dec 2021 01:02:49 +0000
-Date: Fri, 3 Dec 2021 09:01:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alistair Francis <alistair.francis@opensource.wdc.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jolsa@redhat.com,
-	mingo@redhat.com, dave@stgolabs.net,
-	linux-perf-users@vger.kernel.org, arnd@arndb.de,
-	namhyung@kernel.org, alistair23@gmail.com, mark.rutland@arm.com,
-	tglx@linutronix.de
-Subject: Re: [PATCH v4 3/6] uapi: futex: Add a futex syscall
-Message-ID: <202112030822.dtjQPM06-lkp@intel.com>
-References: <20211202111659.2077911-3-alistair.francis@opensource.wdc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227F068
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 02:45:17 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0UzEPBeF_1638499489;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UzEPBeF_1638499489)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 03 Dec 2021 10:44:51 +0800
+From: Yang Li <yang.lee@linux.alibaba.com>
+To: mdf@kernel.org
+Cc: hao.wu@intel.com,
+	yilun.xu@intel.com,
+	trix@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] fpga: region: fix kernel-doc
+Date: Fri,  3 Dec 2021 10:44:47 +0800
+Message-Id: <1638499487-74388-1-git-send-email-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202111659.2077911-3-alistair.francis@opensource.wdc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alistair,
+Fix function name in of-fpga-region.c kernel-doc comment
+to remove a warning found by clang(make W=1 LLVM=1).
 
-Thank you for the patch! Yet something to improve:
+drivers/fpga/of-fpga-region.c:451: warning: expecting prototype for
+fpga_region_init(). Prototype was for of_fpga_region_init() instead.
 
-[auto build test ERROR on tip/locking/core]
-[also build test ERROR on linux/master soc/for-next linus/master v5.16-rc3 next-20211202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Alistair-Francis/perf-bench-futex-Add-support-for-32-bit-systems-with-64-bit-time_t/20211202-192015
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 4e0d84634445ed550498d613a49ea8f6cfa5e66c
-config: x86_64-randconfig-a002-20211202 (https://download.01.org/0day-ci/archive/20211203/202112030822.dtjQPM06-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/710fc0b1a255e93e04efbaccf76f6445db51ff1f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alistair-Francis/perf-bench-futex-Add-support-for-32-bit-systems-with-64-bit-time_t/20211202-192015
-        git checkout 710fc0b1a255e93e04efbaccf76f6445db51ff1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
-   ./usr/include/linux/futex_syscall.h:33:16: warning: declaration of 'struct timespec' will not be visible outside of this function [-Wvisibility]
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
->> ./usr/include/linux/futex_syscall.h:45:12: error: invalid application of 'sizeof' to an incomplete type 'struct timespec'
-           if (sizeof(*timeout) == sizeof(struct __kernel_old_timespec))
-                     ^~~~~~~~~~
-   ./usr/include/linux/futex_syscall.h:33:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
->> ./usr/include/linux/futex_syscall.h:46:10: error: implicit declaration of function 'syscall' [-Werror,-Wimplicit-function-declaration]
-                   return syscall(__NR_futex, uaddr, op, val, timeout, uaddr2, val3);
-                          ^
->> ./usr/include/linux/futex_syscall.h:48:24: error: incomplete definition of type 'struct timespec'
-           if (timeout && timeout->tv_sec == (long)timeout->tv_sec) {
-                          ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:33:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:48:49: error: incomplete definition of type 'struct timespec'
-           if (timeout && timeout->tv_sec == (long)timeout->tv_sec) {
-                                                   ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:33:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:51:44: error: incomplete definition of type 'struct timespec'
-                   ts_old.tv_sec = (__kernel_long_t) timeout->tv_sec;
-                                                     ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:33:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:52:45: error: incomplete definition of type 'struct timespec'
-                   ts_old.tv_nsec = (__kernel_long_t) timeout->tv_nsec;
-                                                      ~~~~~~~^
-   ./usr/include/linux/futex_syscall.h:33:16: note: forward declaration of 'struct timespec'
-                         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-                                ^
-   ./usr/include/linux/futex_syscall.h:85:9: error: implicit declaration of function 'syscall' [-Werror,-Wimplicit-function-declaration]
-           return syscall(__NR_futex, uaddr, op, val, nr_requeue, uaddr2, val3);
-                  ^
-   1 warning and 7 errors generated.
-
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/fpga/of-fpga-region.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+index 9c662db..50b8305 100644
+--- a/drivers/fpga/of-fpga-region.c
++++ b/drivers/fpga/of-fpga-region.c
+@@ -444,7 +444,7 @@ static int of_fpga_region_remove(struct platform_device *pdev)
+ };
+ 
+ /**
+- * fpga_region_init - init function for fpga_region class
++ * of_fpga_region_init - init function for fpga_region class
+  * Creates the fpga_region class and registers a reconfig notifier.
+  */
+ static int __init of_fpga_region_init(void)
+-- 
+1.8.3.1
+
