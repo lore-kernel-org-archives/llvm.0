@@ -1,29 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E8C68
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 15:10:14 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236799591"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="236799591"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 07:10:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="513273709"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Dec 2021 07:10:12 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mtACS-000Hht-5b; Fri, 03 Dec 2021 15:10:12 +0000
-Date: Fri, 3 Dec 2021 23:09:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:asahi 45/56] drivers/gpu/drm/tiny/simpledrm.c:915:1:
- error: redefinition of '__inittest'
-Message-ID: <202112032244.L0cMZUzs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD7F68
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 15:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1DEC53FAD;
+	Fri,  3 Dec 2021 15:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638546671;
+	bh=vGP9h9M+lhHdW4WxmHWlKVgyayWG3b+7X0BPqkAv044=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A3CjN3sIImGyYV/stTqQmD1jYrx+zxyigD9Nrgyk3AeTu8CyQAuGVFLab/nccicSM
+	 lCOnGU6yoBpW38gg3LQdC03w5iQjHiBvrNR610uhnv71hLWMCDVTgytWiC949qXNma
+	 UrHlyiTXomEcGnsFAiu6xy3jblgHDBQl/AF5zVey2vmhtNBLjW39DAdxY05KIEf8F9
+	 Wu6+vG/AEP2VaFq0QENw18IzSw2Moc2AMPCPU90BaPeMcoarRyK/rPNDT48JvKK58p
+	 nTv/d4EmzfAwGIeqow3XeY6K1z89VVkhk/5IfSZpuyoiwQRf+qcETwY7CR0gqaoZbr
+	 qRYlm9ezAE7AA==
+Date: Fri, 3 Dec 2021 08:51:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Tom Stellard <tstellar@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+	kernelci@groups.io, llvm@lists.linux.dev,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	glider@google.com
+Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+Message-ID: <Yao86FeC2ybOobLO@archlinux-ax161>
+References: <20211129165803.470795-1-nathan@kernel.org>
+ <202112011140.DA93B3E@keescook>
+ <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
+ <YaodyZzu0MTCJcvO@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,82 +46,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YaodyZzu0MTCJcvO@elver.google.com>
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   69711d887d3f10a4f7dd6fd648bfff63ff66ba18
-commit: 06412fc74f71c816ec5b0aab62be86b3d5cb3b83 [45/56] drm/simpledrm: Bind to OF framebuffers in /chosen
-config: x86_64-randconfig-a015-20211203 (https://download.01.org/0day-ci/archive/20211203/202112032244.L0cMZUzs-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1e328b06c15273edf4a40a27ca24931b5efb3a87)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/06412fc74f71c816ec5b0aab62be86b3d5cb3b83
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout 06412fc74f71c816ec5b0aab62be86b3d5cb3b83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/tiny/ net/mac80211/
+On Fri, Dec 03, 2021 at 02:38:17PM +0100, Marco Elver wrote:
+> On Thu, Dec 02, 2021 at 05:26PM +0900, Masahiro Yamada wrote:
+> > On Thu, Dec 2, 2021 at 4:41 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
+> > > > This patch series raises the minimum supported version of LLVM to
+> > > > 11.0.0.
+> [...]
+> > Only positive feedback so far.
+> > 
+> > All applied to linux-kbuild.
+> 
+> Some of the "dynamic" checks for compiler support unfortunately aren't
+> as easily grepable -- as far as I can tell, we can also include the
+> below, which would save us 2 cc-option invocations for all clang builds.
+> 
+> And just in case:
+> 
+> Acked-by: Marco Elver <elver@google.com>
+> 
+> for the rest as well.
+> 
+> Thanks,
+> -- Marco
+> 
+> ------ >8 ------
+> 
+> From: Marco Elver <elver@google.com>
+> Date: Fri, 3 Dec 2021 14:18:44 +0100
+> Subject: [PATCH] Revert "ubsan, kcsan: Don't combine sanitizer with kcov on
+>  clang"
+> 
+> This reverts commit ea91a1d45d19469001a4955583187b0d75915759.
+> 
+> The minimum Clang version is now 11.0, which fixed the UBSAN/KCSAN vs.
+> KCOV incompatibilities.
+> 
+> Link: https://bugs.llvm.org/show_bug.cgi?id=45831
+> Signed-off-by: Marco Elver <elver@google.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
->> drivers/gpu/drm/tiny/simpledrm.c:915:1: error: redefinition of '__inittest'
-   fs_initcall(simplefb_init);
-   ^
-   include/linux/module.h:119:27: note: expanded from macro 'fs_initcall'
-   #define fs_initcall(fn)                 module_init(fn)
-                                           ^
-   include/linux/module.h:131:42: note: expanded from macro 'module_init'
-           static inline initcall_t __maybe_unused __inittest(void)                \
-                                                   ^
-   drivers/gpu/drm/tiny/simpledrm.c:899:1: note: previous definition is here
-   module_platform_driver(simpledrm_platform_driver);
-   ^
-   include/linux/platform_device.h:252:2: note: expanded from macro 'module_platform_driver'
-           module_driver(__platform_driver, platform_driver_register, \
-           ^
-   include/linux/device/driver.h:262:3: note: expanded from macro 'module_driver'
-   } \
-     ^
-   include/linux/module.h:131:42: note: expanded from macro '\
-   module_init'
-           static inline initcall_t __maybe_unused __inittest(void)                \
-                                                   ^
->> drivers/gpu/drm/tiny/simpledrm.c:915:1: error: redefinition of 'init_module'
-   fs_initcall(simplefb_init);
-   ^
-   include/linux/module.h:119:27: note: expanded from macro 'fs_initcall'
-   #define fs_initcall(fn)                 module_init(fn)
-                                           ^
-   include/linux/module.h:133:6: note: expanded from macro 'module_init'
-           int init_module(void) __copy(initfn)                    \
-               ^
-   drivers/gpu/drm/tiny/simpledrm.c:899:1: note: previous definition is here
-   module_platform_driver(simpledrm_platform_driver);
-   ^
-   include/linux/platform_device.h:252:2: note: expanded from macro 'module_platform_driver'
-           module_driver(__platform_driver, platform_driver_register, \
-           ^
-   include/linux/device/driver.h:262:3: note: expanded from macro 'module_driver'
-   } \
-     ^
-   include/linux/module.h:133:6: note: expanded from macro '\
-   module_init'
-           int init_module(void) __copy(initfn)                    \
-               ^
-   2 errors generated.
-
-
-vim +/__inittest +915 drivers/gpu/drm/tiny/simpledrm.c
-
-   914	
- > 915	fs_initcall(simplefb_init);
-   916	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  lib/Kconfig.kcsan | 11 -----------
+>  lib/Kconfig.ubsan | 12 ------------
+>  2 files changed, 23 deletions(-)
+> 
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index e0a93ffdef30..b81454b2a0d0 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
+>  	  For the list of compilers that support KCSAN, please see
+>  	  <file:Documentation/dev-tools/kcsan.rst>.
+>  
+> -config KCSAN_KCOV_BROKEN
+> -	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+> -	depends on CC_IS_CLANG
+> -	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
+> -	help
+> -	  Some versions of clang support either KCSAN and KCOV but not the
+> -	  combination of the two.
+> -	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+> -	  in newer releases.
+> -
+>  menuconfig KCSAN
+>  	bool "KCSAN: dynamic data race detector"
+>  	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+>  	depends on DEBUG_KERNEL && !KASAN
+> -	depends on !KCSAN_KCOV_BROKEN
+>  	select STACKTRACE
+>  	help
+>  	  The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index e5372a13511d..31f38e7fe948 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -27,16 +27,6 @@ config UBSAN_TRAP
+>  	  the system. For some system builders this is an acceptable
+>  	  trade-off.
+>  
+> -config UBSAN_KCOV_BROKEN
+> -	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+> -	depends on CC_IS_CLANG
+> -	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=bounds -fsanitize-coverage=trace-pc)
+> -	help
+> -	  Some versions of clang support either UBSAN or KCOV but not the
+> -	  combination of the two.
+> -	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+> -	  in newer releases.
+> -
+>  config CC_HAS_UBSAN_BOUNDS
+>  	def_bool $(cc-option,-fsanitize=bounds)
+>  
+> @@ -46,7 +36,6 @@ config CC_HAS_UBSAN_ARRAY_BOUNDS
+>  config UBSAN_BOUNDS
+>  	bool "Perform array index bounds checking"
+>  	default UBSAN
+> -	depends on !UBSAN_KCOV_BROKEN
+>  	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
+>  	help
+>  	  This option enables detection of directly indexed out of bounds
+> @@ -72,7 +61,6 @@ config UBSAN_ARRAY_BOUNDS
+>  config UBSAN_LOCAL_BOUNDS
+>  	bool "Perform array local bounds checking"
+>  	depends on UBSAN_TRAP
+> -	depends on !UBSAN_KCOV_BROKEN
+>  	depends on $(cc-option,-fsanitize=local-bounds)
+>  	help
+>  	  This option enables -fsanitize=local-bounds which traps when an
+> -- 
+> 2.34.0.384.gca35af8252-goog
+> 
