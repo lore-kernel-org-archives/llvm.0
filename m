@@ -1,29 +1,63 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FF32C9D
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 11:36:11 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="234468458"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="234468458"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 03:36:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="678068707"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 03 Dec 2021 03:36:08 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mt6rH-000HWc-QM; Fri, 03 Dec 2021 11:36:07 +0000
-Date: Fri, 3 Dec 2021 19:35:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 2396/5128] ERROR: modpost:
- "relay_file_operations" [drivers/net/wwan/iosm/iosm.ko] undefined!
-Message-ID: <202112031954.jDI602Hn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F532C9E
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 13:38:27 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso4902396wml.1
+        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 05:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XKWNlK6eqjb2it0WQV9hI/kmA0UJJKcU6ddC1EoDvZA=;
+        b=HTAt8exYA2oGWdUvyaIulWi5ZrRu1EP1zOo6h5d9RTG5YftvuG3b2lj6JMbaPob9Y3
+         CG3VP1AS2aVWNtGmqgX+E2dJjL8e122T5NqzVpCrZkFfGKMonaLd+UTmI7vy1xD1fdtu
+         TAXRX1UqRSrrwqiViqF8NVyx2LHRZMSmHOuRr9ZGt9z8uCHlBPMx19vMSX8DTulR09mZ
+         DiOxG63p2Klg6emq/gaoEvMMugh9EG/ki+M79OexpJkfjP5xV94nTMN9SWXRwqVudRu7
+         rlP7DpXlmgkubv9dluoD8edmXOqWTei6e5CTY/sKF3P9qZ54fGERnXjN91KfNbpBHPhS
+         v/sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XKWNlK6eqjb2it0WQV9hI/kmA0UJJKcU6ddC1EoDvZA=;
+        b=nAcajkwgCXw5EaK2JgLgEL+LZEZA78LY9YbgZ/CZw8lCkPrAGBmRw7yuk1mIQEykpD
+         hiL1XDRdV6vokCu/KS1uuLdZv7MhQlgbb+p96cJehNr0jEk4WBC9PUun8MddHiHjqQbW
+         pF5Y5XGC28sfB8IW66XkCVwjx66/InGlbMQIsqebmpV4RPq/Af95yGl8Ijx1Krb48UO7
+         pR40s2m9bdzTy8c429G9brlD9Zz/bpORNJQJLZFHWZVb0LY78HKIdK0E0kT75CCq26NR
+         jcghlDpGw6oqdB0bBJW2ZT9X0mwaQT2ALQRqssfhxUpI10NLTOPnj37GVCr7YHfqaGkj
+         uENQ==
+X-Gm-Message-State: AOAM530Ev20al7PuZEgp9C9xmf/6WU0H3TilllGsMfUAXWXaGSJkN38I
+	qpy1P6I5LJzNvakk+q7xtNNnyA==
+X-Google-Smtp-Source: ABdhPJzluDmTysh0GugLGjeBq1MHPEpecFu9Be6OBqJA5ain2+YgtDJeklqeQZTz2qRvcDpIxpJx6g==
+X-Received: by 2002:a05:600c:3486:: with SMTP id a6mr14948178wmq.32.1638538705645;
+        Fri, 03 Dec 2021 05:38:25 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:cb5f:d3e:205e:c7c4])
+        by smtp.gmail.com with ESMTPSA id m34sm5459401wms.25.2021.12.03.05.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 05:38:24 -0800 (PST)
+Date: Fri, 3 Dec 2021 14:38:17 +0100
+From: Marco Elver <elver@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Tom Stellard <tstellar@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+	kernelci@groups.io, llvm@lists.linux.dev,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	glider@google.com
+Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+Message-ID: <YaodyZzu0MTCJcvO@elver.google.com>
+References: <20211129165803.470795-1-nathan@kernel.org>
+ <202112011140.DA93B3E@keescook>
+ <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,36 +66,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   7afeac307a9561e3a93682c1e7eb22f918aa1187
-commit: 00ef32565b9bd03c63ed944bc27878fbbc1c4e0a [2396/5128] net: wwan: iosm: device trace collection using relayfs
-config: i386-randconfig-r032-20211202 (https://download.01.org/0day-ci/archive/20211203/202112031954.jDI602Hn-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00ef32565b9bd03c63ed944bc27878fbbc1c4e0a
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 00ef32565b9bd03c63ed944bc27878fbbc1c4e0a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Thu, Dec 02, 2021 at 05:26PM +0900, Masahiro Yamada wrote:
+> On Thu, Dec 2, 2021 at 4:41 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
+> > > This patch series raises the minimum supported version of LLVM to
+> > > 11.0.0.
+[...]
+> Only positive feedback so far.
+> 
+> All applied to linux-kbuild.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Some of the "dynamic" checks for compiler support unfortunately aren't
+as easily grepable -- as far as I can tell, we can also include the
+below, which would save us 2 cc-option invocations for all clang builds.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+And just in case:
 
->> ERROR: modpost: "relay_file_operations" [drivers/net/wwan/iosm/iosm.ko] undefined!
->> ERROR: modpost: "relay_buf_full" [drivers/net/wwan/iosm/iosm.ko] undefined!
->> ERROR: modpost: "relay_flush" [drivers/net/wwan/iosm/iosm.ko] undefined!
->> ERROR: modpost: "relay_close" [drivers/net/wwan/iosm/iosm.ko] undefined!
->> ERROR: modpost: "relay_open" [drivers/net/wwan/iosm/iosm.ko] undefined!
->> ERROR: modpost: "relay_switch_subbuf" [drivers/net/wwan/iosm/iosm.ko] undefined!
+Acked-by: Marco Elver <elver@google.com>
 
+for the rest as well.
+
+Thanks,
+-- Marco
+
+------ >8 ------
+
+From: Marco Elver <elver@google.com>
+Date: Fri, 3 Dec 2021 14:18:44 +0100
+Subject: [PATCH] Revert "ubsan, kcsan: Don't combine sanitizer with kcov on
+ clang"
+
+This reverts commit ea91a1d45d19469001a4955583187b0d75915759.
+
+The minimum Clang version is now 11.0, which fixed the UBSAN/KCSAN vs.
+KCOV incompatibilities.
+
+Link: https://bugs.llvm.org/show_bug.cgi?id=45831
+Signed-off-by: Marco Elver <elver@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ lib/Kconfig.kcsan | 11 -----------
+ lib/Kconfig.ubsan | 12 ------------
+ 2 files changed, 23 deletions(-)
+
+diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+index e0a93ffdef30..b81454b2a0d0 100644
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
+ 	  For the list of compilers that support KCSAN, please see
+ 	  <file:Documentation/dev-tools/kcsan.rst>.
+ 
+-config KCSAN_KCOV_BROKEN
+-	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+-	depends on CC_IS_CLANG
+-	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
+-	help
+-	  Some versions of clang support either KCSAN and KCOV but not the
+-	  combination of the two.
+-	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+-	  in newer releases.
+-
+ menuconfig KCSAN
+ 	bool "KCSAN: dynamic data race detector"
+ 	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+ 	depends on DEBUG_KERNEL && !KASAN
+-	depends on !KCSAN_KCOV_BROKEN
+ 	select STACKTRACE
+ 	help
+ 	  The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index e5372a13511d..31f38e7fe948 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -27,16 +27,6 @@ config UBSAN_TRAP
+ 	  the system. For some system builders this is an acceptable
+ 	  trade-off.
+ 
+-config UBSAN_KCOV_BROKEN
+-	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+-	depends on CC_IS_CLANG
+-	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=bounds -fsanitize-coverage=trace-pc)
+-	help
+-	  Some versions of clang support either UBSAN or KCOV but not the
+-	  combination of the two.
+-	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+-	  in newer releases.
+-
+ config CC_HAS_UBSAN_BOUNDS
+ 	def_bool $(cc-option,-fsanitize=bounds)
+ 
+@@ -46,7 +36,6 @@ config CC_HAS_UBSAN_ARRAY_BOUNDS
+ config UBSAN_BOUNDS
+ 	bool "Perform array index bounds checking"
+ 	default UBSAN
+-	depends on !UBSAN_KCOV_BROKEN
+ 	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
+ 	help
+ 	  This option enables detection of directly indexed out of bounds
+@@ -72,7 +61,6 @@ config UBSAN_ARRAY_BOUNDS
+ config UBSAN_LOCAL_BOUNDS
+ 	bool "Perform array local bounds checking"
+ 	depends on UBSAN_TRAP
+-	depends on !UBSAN_KCOV_BROKEN
+ 	depends on $(cc-option,-fsanitize=local-bounds)
+ 	help
+ 	  This option enables -fsanitize=local-bounds which traps when an
+-- 
+2.34.0.384.gca35af8252-goog
+
