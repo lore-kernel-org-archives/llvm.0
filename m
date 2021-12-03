@@ -1,31 +1,59 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ABF68
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 16:14:23 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="300385395"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="300385395"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 08:10:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="561760484"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Dec 2021 08:10:15 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mtB8Y-000Hla-J3; Fri, 03 Dec 2021 16:10:14 +0000
-Date: Sat, 4 Dec 2021 00:09:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shyam Prasad N <sprasad@microsoft.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Steve French <stfrench@microsoft.com>,
-	"Paulo Alcantara (SUSE)" <pc@cjr.nz>
-Subject: [linux-next:master 4708/5128] fs/cifs/connect.c:1566:12: error: no
- member named 'fscache' in 'struct TCP_Server_Info'
-Message-ID: <202112040002.zM4QXUGg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49052C80
+	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 16:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QjwBqRRkSrixSh/IDyfbmaebOro1hr1dDZ0gMoqAxDY=; b=filV5mfIAXvfm0uzdKd9gxn+Ac
+	/Z+Bd/HBfONMrS6Ywwq2Z1V9I2sh7rZnRhXrZb+mLZf65ChTQzrJUzraRuiPZrarIhntiH3mwAljC
+	BLpVdZnwOqd0WZVg9w1rzQnTT7SZJzrZ3SB4ic9vMTZx47mGfdxhg6qjQOmTQ1RurUee0ohGp6MrC
+	46nDrNFg0zbkY2BN0n0ou4kE11nRCvkPZiZsLAOE2bhH4e4V9FDaIUuJiNh54VF+CW2y5W8kS79v9
+	ZVzvesXBl8G8PJYmPI6bdsJ6+T/Gavx2XwBzBd0urakpY2UvJY15R/ay4wJJ1JSgCfCn4qqb8Z5wF
+	fhXW5HFQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mtBUA-009OIf-6T; Fri, 03 Dec 2021 16:32:35 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 37CEC9810D4; Fri,  3 Dec 2021 17:32:34 +0100 (CET)
+Date: Fri, 3 Dec 2021 17:32:34 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v8 00/14] Function Granular KASLR
+Message-ID: <20211203163234.GJ16608@worktop.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <YanzpvmaX1JWYf9t@hirez.programming.kicks-ass.net>
+ <20211203144136.82915-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,228 +62,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211203144136.82915-1-alexandr.lobakin@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   7afeac307a9561e3a93682c1e7eb22f918aa1187
-commit: c148f8eb032ffcbbb33b3c1aa1dd68ba97214562 [4708/5128] cifs: add server conn_id to fscache client cookie
-config: hexagon-buildonly-randconfig-r006-20211202 (https://download.01.org/0day-ci/archive/20211204/202112040002.zM4QXUGg-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c148f8eb032ffcbbb33b3c1aa1dd68ba97214562
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout c148f8eb032ffcbbb33b3c1aa1dd68ba97214562
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Fri, Dec 03, 2021 at 03:41:36PM +0100, Alexander Lobakin wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Fri, 3 Dec 2021 11:38:30 +0100
+> 
+> > On Thu, Dec 02, 2021 at 11:32:00PM +0100, Alexander Lobakin wrote:
+> > 
+> > > feat        make -j65 boot    vmlinux.o vmlinux  bzImage  bogoops/s
+> > > Relocatable 4m38.478s 24.440s 72014208  58579520  9396192 57640.39
+> > > KASLR       4m39.344s 24.204s 72020624  87805776  9740352 57393.80
+> > > FG-K 16 fps 6m16.493s 25.429s 83759856  87194160 10885632 57784.76
+> > > FG-K 8 fps  6m20.190s 25.094s 83759856  88741328 10985248 56625.84
+> > > FG-K 1 fps  7m09.611s 25.922s 83759856  95681128 11352192 56953.99
+> > 
+> > :sadface: so at best it makes my kernel compiles ~50% slower. Who would
+> > ever consider doing that? It's like retpolines weren't bad enough; lets
+> > heap on the fail?
+> 
+> I was waiting for that :D
+> 
+> I know it's horrible for now, but there are some points to consider:
+>  - folks who are placing hardening over everything don't mind
+>    compile times most likely;
+>  - linkers choking on huge LD scripts is actually a bug in their
+>    code. They process 40k sections as orphans (without a generated
+>    LD script) for a split second, so they're likely able to do the
+>    same with it. Our position here is that after FG-KASLR landing
+>    we'll report it and probably look into linkers' code to see if
+>    that can be addressed (Kees et al are on this AFAIU);
+>  - ClangLTO (at least "Fat", not sure about Thin as I didn't used
+>    it) thinks on vmlinux.o for ~5 minutes on 8-core Skylake. Still,
+>    it is here in mainline and is widely (relatively) used.
+>    I know FG-KASLR stuff is way more exotic, but anyways.
+>  - And the last one: I wouldn't consider FG-KASLR production ready
+>    as Kees would like to see it. Apart from compilation time, you
+>    get random performance {in,de}creases here-and-there all over
+>    the kernel and modules you can't predict at all.
+>    I guess it would become better later on when/if we introduce
+>    profiling-based function placement (there are some discussions
+>    around that and one related article is referred in the orig
+>    cover letter), but dunno for now.
+>    There's one issue in the current code as well -- PTI switching
+>    code is in .entry.text which doesn't currently get randomized.
+>    So it can probably be hunted using gadget collectors I guess?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Oooh, so those compile times are not, as one would expect the compile
+times for a set .config but with different kernel, but instead for a
+varying .config on the same kernel?
 
-Note: the linux-next/master HEAD 7afeac307a9561e3a93682c1e7eb22f918aa1187 builds fine.
-      It may have been fixed somewhere.
+IOW, they don't represent the run-time overhead of this thing, but
+merely the toolchain overhead of all this.
 
-All errors (new ones prefixed by >>):
-
->> fs/cifs/connect.c:1566:12: error: no member named 'fscache' in 'struct TCP_Server_Info'
-                   tcp_ses->fscache = tcp_ses->primary_server->fscache;
-                   ~~~~~~~  ^
-   fs/cifs/connect.c:1566:47: error: no member named 'fscache' in 'struct TCP_Server_Info'
-                   tcp_ses->fscache = tcp_ses->primary_server->fscache;
-                                      ~~~~~~~~~~~~~~~~~~~~~~~  ^
-   2 errors generated.
-
-
-vim +1566 fs/cifs/connect.c
-
-  1412	
-  1413	struct TCP_Server_Info *
-  1414	cifs_get_tcp_session(struct smb3_fs_context *ctx,
-  1415			     struct TCP_Server_Info *primary_server)
-  1416	{
-  1417		struct TCP_Server_Info *tcp_ses = NULL;
-  1418		int rc;
-  1419	
-  1420		cifs_dbg(FYI, "UNC: %s\n", ctx->UNC);
-  1421	
-  1422		/* see if we already have a matching tcp_ses */
-  1423		tcp_ses = cifs_find_tcp_session(ctx);
-  1424		if (tcp_ses)
-  1425			return tcp_ses;
-  1426	
-  1427		tcp_ses = kzalloc(sizeof(struct TCP_Server_Info), GFP_KERNEL);
-  1428		if (!tcp_ses) {
-  1429			rc = -ENOMEM;
-  1430			goto out_err;
-  1431		}
-  1432	
-  1433		tcp_ses->hostname = kstrdup(ctx->server_hostname, GFP_KERNEL);
-  1434		if (!tcp_ses->hostname) {
-  1435			rc = -ENOMEM;
-  1436			goto out_err;
-  1437		}
-  1438	
-  1439		if (ctx->nosharesock)
-  1440			tcp_ses->nosharesock = true;
-  1441	
-  1442		tcp_ses->ops = ctx->ops;
-  1443		tcp_ses->vals = ctx->vals;
-  1444		cifs_set_net_ns(tcp_ses, get_net(current->nsproxy->net_ns));
-  1445	
-  1446		tcp_ses->conn_id = atomic_inc_return(&tcpSesNextId);
-  1447		tcp_ses->noblockcnt = ctx->rootfs;
-  1448		tcp_ses->noblocksnd = ctx->noblocksnd || ctx->rootfs;
-  1449		tcp_ses->noautotune = ctx->noautotune;
-  1450		tcp_ses->tcp_nodelay = ctx->sockopt_tcp_nodelay;
-  1451		tcp_ses->rdma = ctx->rdma;
-  1452		tcp_ses->in_flight = 0;
-  1453		tcp_ses->max_in_flight = 0;
-  1454		tcp_ses->credits = 1;
-  1455		if (primary_server) {
-  1456			spin_lock(&cifs_tcp_ses_lock);
-  1457			++primary_server->srv_count;
-  1458			tcp_ses->primary_server = primary_server;
-  1459			spin_unlock(&cifs_tcp_ses_lock);
-  1460		}
-  1461		init_waitqueue_head(&tcp_ses->response_q);
-  1462		init_waitqueue_head(&tcp_ses->request_q);
-  1463		INIT_LIST_HEAD(&tcp_ses->pending_mid_q);
-  1464		mutex_init(&tcp_ses->srv_mutex);
-  1465		memcpy(tcp_ses->workstation_RFC1001_name,
-  1466			ctx->source_rfc1001_name, RFC1001_NAME_LEN_WITH_NULL);
-  1467		memcpy(tcp_ses->server_RFC1001_name,
-  1468			ctx->target_rfc1001_name, RFC1001_NAME_LEN_WITH_NULL);
-  1469		tcp_ses->session_estab = false;
-  1470		tcp_ses->sequence_number = 0;
-  1471		tcp_ses->reconnect_instance = 1;
-  1472		tcp_ses->lstrp = jiffies;
-  1473		tcp_ses->compress_algorithm = cpu_to_le16(ctx->compression);
-  1474		spin_lock_init(&tcp_ses->req_lock);
-  1475		INIT_LIST_HEAD(&tcp_ses->tcp_ses_list);
-  1476		INIT_LIST_HEAD(&tcp_ses->smb_ses_list);
-  1477		INIT_DELAYED_WORK(&tcp_ses->echo, cifs_echo_request);
-  1478		INIT_DELAYED_WORK(&tcp_ses->resolve, cifs_resolve_server);
-  1479		INIT_DELAYED_WORK(&tcp_ses->reconnect, smb2_reconnect_server);
-  1480		mutex_init(&tcp_ses->reconnect_mutex);
-  1481	#ifdef CONFIG_CIFS_DFS_UPCALL
-  1482		mutex_init(&tcp_ses->refpath_lock);
-  1483	#endif
-  1484		memcpy(&tcp_ses->srcaddr, &ctx->srcaddr,
-  1485		       sizeof(tcp_ses->srcaddr));
-  1486		memcpy(&tcp_ses->dstaddr, &ctx->dstaddr,
-  1487			sizeof(tcp_ses->dstaddr));
-  1488		if (ctx->use_client_guid)
-  1489			memcpy(tcp_ses->client_guid, ctx->client_guid,
-  1490			       SMB2_CLIENT_GUID_SIZE);
-  1491		else
-  1492			generate_random_uuid(tcp_ses->client_guid);
-  1493		/*
-  1494		 * at this point we are the only ones with the pointer
-  1495		 * to the struct since the kernel thread not created yet
-  1496		 * no need to spinlock this init of tcpStatus or srv_count
-  1497		 */
-  1498		tcp_ses->tcpStatus = CifsNew;
-  1499		++tcp_ses->srv_count;
-  1500	
-  1501		if (ctx->echo_interval >= SMB_ECHO_INTERVAL_MIN &&
-  1502			ctx->echo_interval <= SMB_ECHO_INTERVAL_MAX)
-  1503			tcp_ses->echo_interval = ctx->echo_interval * HZ;
-  1504		else
-  1505			tcp_ses->echo_interval = SMB_ECHO_INTERVAL_DEFAULT * HZ;
-  1506		if (tcp_ses->rdma) {
-  1507	#ifndef CONFIG_CIFS_SMB_DIRECT
-  1508			cifs_dbg(VFS, "CONFIG_CIFS_SMB_DIRECT is not enabled\n");
-  1509			rc = -ENOENT;
-  1510			goto out_err_crypto_release;
-  1511	#endif
-  1512			tcp_ses->smbd_conn = smbd_get_connection(
-  1513				tcp_ses, (struct sockaddr *)&ctx->dstaddr);
-  1514			if (tcp_ses->smbd_conn) {
-  1515				cifs_dbg(VFS, "RDMA transport established\n");
-  1516				rc = 0;
-  1517				goto smbd_connected;
-  1518			} else {
-  1519				rc = -ENOENT;
-  1520				goto out_err_crypto_release;
-  1521			}
-  1522		}
-  1523		rc = ip_connect(tcp_ses);
-  1524		if (rc < 0) {
-  1525			cifs_dbg(VFS, "Error connecting to socket. Aborting operation.\n");
-  1526			goto out_err_crypto_release;
-  1527		}
-  1528	smbd_connected:
-  1529		/*
-  1530		 * since we're in a cifs function already, we know that
-  1531		 * this will succeed. No need for try_module_get().
-  1532		 */
-  1533		__module_get(THIS_MODULE);
-  1534		tcp_ses->tsk = kthread_run(cifs_demultiplex_thread,
-  1535					  tcp_ses, "cifsd");
-  1536		if (IS_ERR(tcp_ses->tsk)) {
-  1537			rc = PTR_ERR(tcp_ses->tsk);
-  1538			cifs_dbg(VFS, "error %d create cifsd thread\n", rc);
-  1539			module_put(THIS_MODULE);
-  1540			goto out_err_crypto_release;
-  1541		}
-  1542		tcp_ses->min_offload = ctx->min_offload;
-  1543		/*
-  1544		 * at this point we are the only ones with the pointer
-  1545		 * to the struct since the kernel thread not created yet
-  1546		 * no need to spinlock this update of tcpStatus
-  1547		 */
-  1548		tcp_ses->tcpStatus = CifsNeedNegotiate;
-  1549	
-  1550		if ((ctx->max_credits < 20) || (ctx->max_credits > 60000))
-  1551			tcp_ses->max_credits = SMB2_MAX_CREDITS_AVAILABLE;
-  1552		else
-  1553			tcp_ses->max_credits = ctx->max_credits;
-  1554	
-  1555		tcp_ses->nr_targets = 1;
-  1556		tcp_ses->ignore_signature = ctx->ignore_signature;
-  1557		/* thread spawned, put it on the list */
-  1558		spin_lock(&cifs_tcp_ses_lock);
-  1559		list_add(&tcp_ses->tcp_ses_list, &cifs_tcp_ses_list);
-  1560		spin_unlock(&cifs_tcp_ses_lock);
-  1561	
-  1562		/* fscache server cookies are based on primary channel only */
-  1563		if (!CIFS_SERVER_IS_CHAN(tcp_ses))
-  1564			cifs_fscache_get_client_cookie(tcp_ses);
-  1565		else
-> 1566			tcp_ses->fscache = tcp_ses->primary_server->fscache;
-  1567	
-  1568		/* queue echo request delayed work */
-  1569		queue_delayed_work(cifsiod_wq, &tcp_ses->echo, tcp_ses->echo_interval);
-  1570	
-  1571		/* queue dns resolution delayed work */
-  1572		cifs_dbg(FYI, "%s: next dns resolution scheduled for %d seconds in the future\n",
-  1573			 __func__, SMB_DNS_RESOLVE_INTERVAL_DEFAULT);
-  1574	
-  1575		queue_delayed_work(cifsiod_wq, &tcp_ses->resolve, (SMB_DNS_RESOLVE_INTERVAL_DEFAULT * HZ));
-  1576	
-  1577		return tcp_ses;
-  1578	
-  1579	out_err_crypto_release:
-  1580		cifs_crypto_secmech_release(tcp_ses);
-  1581	
-  1582		put_net(cifs_net_ns(tcp_ses));
-  1583	
-  1584	out_err:
-  1585		if (tcp_ses) {
-  1586			if (CIFS_SERVER_IS_CHAN(tcp_ses))
-  1587				cifs_put_tcp_session(tcp_ses->primary_server, false);
-  1588			kfree(tcp_ses->hostname);
-  1589			if (tcp_ses->ssocket)
-  1590				sock_release(tcp_ses->ssocket);
-  1591			kfree(tcp_ses);
-  1592		}
-  1593		return ERR_PTR(rc);
-  1594	}
-  1595	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+So what is the actual runtime overhead of all this?
