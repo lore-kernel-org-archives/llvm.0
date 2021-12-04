@@ -1,29 +1,30 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E242C9D
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 06:04:41 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="297898075"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC362C80
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 07:28:44 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="223974272"
 X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="297898075"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 22:04:40 -0800
+   d="scan'208";a="223974272"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 23:28:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="577844553"
+   d="scan'208";a="460276100"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Dec 2021 22:04:39 -0800
+  by orsmga003.jf.intel.com with ESMTP; 03 Dec 2021 23:28:41 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mtOA2-000IZ5-EO; Sat, 04 Dec 2021 06:04:38 +0000
-Date: Sat, 4 Dec 2021 14:04:03 +0800
+	id 1mtPTM-000Ien-Tb; Sat, 04 Dec 2021 07:28:40 +0000
+Date: Sat, 4 Dec 2021 15:27:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Lucas Tanure <tanureal@opensource.cirrus.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: [ardb:tmp 22/32] ld.lld: error: undefined symbol:
- generic_handle_arch_irq
-Message-ID: <202112041459.a92LWd7t-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 3226/5128] ERROR: modpost: "cs35l41_remove"
+ [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+Message-ID: <202112041547.SKz1bfGR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,34 +35,42 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git tmp
-head:   4cb90ebe207b3c6928ccaf3cdd3adf3e4eecdcec
-commit: f3ad7675e9e02996331c69a48f45db60ac8e9852 [22/32] ARM: remove old-style irq entry
-config: arm-randconfig-r006-20211203 (https://download.01.org/0day-ci/archive/20211204/202112041459.a92LWd7t-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d30fcadf07ee552f20156ea90be2fdb54cb9cb08)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7afeac307a9561e3a93682c1e7eb22f918aa1187
+commit: a5e0091d62abb9599d9dea505ec0e8c820001831 [3226/5128] ASoC: cs35l41: Fix link problem
+config: i386-randconfig-a015-20211130 (https://download.01.org/0day-ci/archive/20211204/202112041547.SKz1bfGR-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=f3ad7675e9e02996331c69a48f45db60ac8e9852
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb tmp
-        git checkout f3ad7675e9e02996331c69a48f45db60ac8e9852
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a5e0091d62abb9599d9dea505ec0e8c820001831
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout a5e0091d62abb9599d9dea505ec0e8c820001831
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+Note: the linux-next/master HEAD 7afeac307a9561e3a93682c1e7eb22f918aa1187 builds fine.
+      It may have been fixed somewhere.
 
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
->> ld.lld: error: undefined symbol: generic_handle_arch_irq
-   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
-   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: "spi_setup" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+>> ERROR: modpost: "cs35l41_remove" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+>> ERROR: modpost: "cs35l41_probe" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+ERROR: modpost: "__devm_regmap_init_spi" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+>> ERROR: modpost: "cs35l41_regmap_spi" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+ERROR: modpost: "__spi_register_driver" [sound/soc/codecs/snd-soc-cs35l41-spi.ko] undefined!
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_CS35L41_SPI
+   Depends on SOUND && !UML && SND && SND_SOC && SPI_MASTER
+   Selected by
+   - SND_SOC_AMD_VANGOGH_MACH && SOUND && !UML && SND && SND_SOC && SND_SOC_AMD_ACP5x && I2C
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
