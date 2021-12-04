@@ -1,33 +1,33 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtprelay.hostedemail.com (smtprelay0179.hostedemail.com [216.40.44.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED0168
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 22:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED114C341C6;
-	Sat,  4 Dec 2021 22:03:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638655434;
-	bh=KKkQKz7YaSOijVhEN1jjAuBeRAr88jX6ff5BW+zjNw8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZA2VYsetzp1OCF0rdJHZ0dFEHyDo+sfyFEvJRm7rJE/gRTLicu3g9tV0E+AcV6px5
-	 FCw35TLq/hOKTTrL4WC9/ZMJDT6WIzPS/TRLdZ/xNYfB8v1pKmmVXr5eotBBAjpF+z
-	 VrjV3eSK+DCYFCgkOoj1lMOJ1zTMqj3eZYbXbnLVT3TPwfBpK7tZVVTRaqjFWtvcgJ
-	 peWBtkUv628feX1BqTW7dlkba6hNlhnqgkgGhEA88FcvI/UY1+O2EZyPQxBR9+jF4h
-	 MtdkcoJFZk97e+TLRJupWZwaIM5WeeS3daRpzeWW4lY/aiQQOHJHtukRZxZ9G+Ezym
-	 4kZpypqOQb6BQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	linux-cachefs@redhat.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] cachefiles: fix __cachefiles_prepare_write() error handling
-Date: Sat,  4 Dec 2021 23:03:16 +0100
-Message-Id: <20211204220350.633811-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7058429CA
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 23:14:03 +0000 (UTC)
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+	by smtpgrave05.hostedemail.com (Postfix) with ESMTP id 0ADAF18194D6C
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 22:35:46 +0000 (UTC)
+Received: from omf11.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+	by smtprelay07.hostedemail.com (Postfix) with ESMTP id 98888181D2FC9;
+	Sat,  4 Dec 2021 22:35:39 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id EB20020033;
+	Sat,  4 Dec 2021 22:34:37 +0000 (UTC)
+Message-ID: <2ced60214ef3bf449e27f5cb22d3dbd0863d97bb.camel@perches.com>
+Subject: Re: [PATCH] MAINTAINERS: Sort entries using parse-maintainers.pl
+From: Joe Perches <joe@perches.com>
+To: Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc: linux-kernel@vger.kernel.org, Linus Torvalds
+ <torvalds@linux-foundation.org>,  Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>,  linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev
+Date: Sat, 04 Dec 2021 14:34:36 -0800
+In-Reply-To: <YavGALvWdsW+BO9w@latitude>
+References: <20211204175255.1361385-1-j.neuschaefer@gmx.net>
+	 <429227f33cf14aee6f0668a3d98aa220b54383d6.camel@perches.com>
+	 <YavGALvWdsW+BO9w@latitude>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,53 +35,36 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Stat-Signature: 38ddh1sw19sydmoenji6nsdzpy4fsty1
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: EB20020033
+X-Spam-Status: No, score=-2.78
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/GhABztSc7GYEWxwTLNE04mHDPa73JKYY=
+X-HE-Tag: 1638657277-951064
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Sat, 2021-12-04 at 20:48 +0100, Jonathan Neuschäfer wrote:
+> On Sat, Dec 04, 2021 at 10:20:24AM -0800, Joe Perches wrote:
+> > On Sat, 2021-12-04 at 18:52 +0100, Jonathan Neuschäfer wrote:
+> > > The MAINTAINERS file got slightly out of order again, making it
+> > > difficult to put new entries at the right (alphabetical) position.
+> > > 
+> > > Run parse-maintainers.pl to restore the alphabetical order.
+> > []
+> > > Checkpatch warns about a few unordered "F:" lines within sections, but I
+> > > left those alone because I wanted this patch to be as automated as possible.
+> > 
+> > The --order option does that.
+> > 
+> > $ ./scripts/parse-maintainers.pl --order --output MAINTAINERS
+> 
+> Ah, good point.
+> 
+> Unfortunately, the result of parse-maintainers.pl --order currently
+> produces a (small) merge conflict when merged/cherry-picked on top of
+> -next, so it might be better to start without --order. (Not sure.)
 
-clang points out that __cachefiles_prepare_write() returns an
-uninitialized error code in one of the code paths:
+My preference is still to automate the running of this command
+by some script and apply it just before every -rc1 is released.
 
-fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        if (pos == 0)
-            ^~~~~~~~
-fs/cachefiles/io.c:492:6: note: uninitialized use occurs here
-        if (ret < 0) {
-            ^~~
-fs/cachefiles/io.c:489:2: note: remove the 'if' if its condition is always true
-        if (pos == 0)
-        ^~~~~~~~~~~~~
-fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silence this warning
-        int ret;
-               ^
-
-Rework to return zero for success here and skip the rest of the
-function.
-
-Fixes: 0443b01eccbb ("cachefiles: Implement the I/O routines")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/cachefiles/io.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/fs/cachefiles/io.c b/fs/cachefiles/io.c
-index 74ef4d1fc562..0fab313a604d 100644
---- a/fs/cachefiles/io.c
-+++ b/fs/cachefiles/io.c
-@@ -486,9 +486,11 @@ static int __cachefiles_prepare_write(struct netfs_cache_resources *cres,
- 	/* Partially allocated, but insufficient space: cull. */
- 	fscache_count_no_write_space();
- 	pos = cachefiles_inject_remove_error();
--	if (pos == 0)
--		ret = vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
--				    *_start, *_len);
-+	if (pos != 0)
-+		return 0;
-+
-+	ret = vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-+			    *_start, *_len);
- 	if (ret < 0) {
- 		trace_cachefiles_io_error(object, file_inode(file), ret,
- 					  cachefiles_trace_fallocate_error);
--- 
-2.29.2
 
