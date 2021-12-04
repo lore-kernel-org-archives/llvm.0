@@ -1,116 +1,64 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009412C80
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 19:48:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1638647298;
-	bh=PrgmBUyfxqtpVy1lwWQb2aVCmUol9Hr5FDzh3x1bgZo=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gL2YIDlIE6qQ3da8brSoJUDmy4jGsmbwJSXzZmtCheuUfzU/VVd4rHq4PzrLkNyOv
-	 Kn+XCmJlaT5ymYQtUF5X+DZnwlxB1U2wGklfwMCr96yqfQFhKQOJGYuH0bV3oJcpbs
-	 Fh3zqwBlYNVikW6/lfmK4o6J+8j+DO2eXZLeRJNo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLzBj-1nAqv50woz-00Htgr; Sat, 04
- Dec 2021 20:48:18 +0100
-Date: Sat, 4 Dec 2021 20:48:16 +0100
-From: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To: Joe Perches <joe@perches.com>
-Cc: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] MAINTAINERS: Sort entries using parse-maintainers.pl
-Message-ID: <YavGALvWdsW+BO9w@latitude>
-References: <20211204175255.1361385-1-j.neuschaefer@gmx.net>
- <429227f33cf14aee6f0668a3d98aa220b54383d6.camel@perches.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D197F68
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 21:17:04 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="261167246"
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="261167246"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 13:17:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="514192798"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2021 13:17:02 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mtcP0-000JSs-1U; Sat, 04 Dec 2021 21:17:02 +0000
+Date: Sun, 5 Dec 2021 05:16:27 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [brauner:fs.binfmt_misc 2/2] fs/binfmt_misc.o: warning: objtool:
+ bm_status_read()+0xc0: unreachable instruction
+Message-ID: <202112050537.EDKcUjHW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ROvq4wnVg2ILd55W"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <429227f33cf14aee6f0668a3d98aa220b54383d6.camel@perches.com>
-X-Provags-ID: V03:K1:Mfj+DDgT2I4N38q2aei8davRHgCE1wdFIJ1g8ujVKryRuGnw1/6
- R3Q1MR/FfJJYbiNJJjCSvuFjAhMz16vQWesCPTP5qnvjRXVSTlqpZf//kOboyarVCfJ7YoL
- RvOwyh/7qTvtQHEc7OhPyEsPKUlb3N3S0MzYPaBmXIXjL85tN/rdL0B1bTleNuDf0KEW4Lr
- j/gZc4WBkWHxXkuRW93Lg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hSSBK00JIFY=:Onp6Mv0JrmzhzTgrvwFgri
- ohWVhm0yixQ+wnmPwzweulJ2DTav9xKEej9IKthN3yC3umPene19QmdkyMoOOx9bk7WojKPqg
- 5S+Kq9LW1TOWlf5BpL4finTgF4MqTuF3oXVLfUg/5Fuql1RSFZvfztmvOJH2qN0/4EVBSP+Pe
- 8XHdJph5hkXUlbGAyB0QvHJh+xFj7lPsC2Q6jbOuFBWOkgWY5Tno27J3ipAEdhvJdivck0NqD
- 2JkNOBauKa+Sg/7gTe/fh60/Y2zbP+3v/ZJ4YMuMFc4tDjrIcAPa6Zw7SYZmJsUyZnhP/qZRP
- nBlais9bZ2rhii82oSxy603GAq9K0GDjEiSvheyXTjlwtrUhrE6pmOFLpZvysnQtDepR5Ydke
- xP6ENq3Yq+GIabRgLtyahNldGoLlJgBlsX8hCfcC15oWAnz8DqPWH1AhGKjw9JtiSC67V1nj2
- DZQlLGZURRGsc1lRQ69evq22PNOiOY6v88d6EcNDm9dhheAS9BYlkIUi03FYQeClyQIG17K2A
- j/suDLiekMC1Kol5VL7AE3BYcaDK/Y5xMs3SwBz3moeQXAPkHS/6voAuLBDM5dwYDaOgMJF7f
- eAlQSif/RU/0++dR52m727m9xOf2Feh+2JTqjG3if/DI1ImQdTFP7jVpPEnOcJKU04QvCszMt
- 6HYoqXeqvZNEFG5edNG6G04orVbZlLBFMzmh4N4iJtRBvbrlOlU4w2LrvpHHwNHdbTFCrY0qo
- SIeGhKwl+Vd77jW8Ct4hdgs2AFe/YnOzDQWJA8QV4OxWFnBpbuSed+MO/tPYwEvpd364mSqLk
- P3jiwz760GFWw+jgpRi3Z6qkdPoSq9C6BsaP5qB66OiCl5QTmSuJs2beDCdRloPXoSBPzuqoj
- YHnbPNea4zPOd6jcaVcMm9zONaTh1UZwBqpTXdVkg8pa+3dygXIZHy24WSOJ6ySDjB0IabRsj
- ctskX7idyGMhP0Rhvli/cu1OEBbChHMAkpF+kLnxSWpN5vXzdubeX34avFxr64WUPk3tumddy
- ZwRZ6m6FjomXdzcduxLvXvWMGGSvbvXhSItt+i0Q2gFVgwzLY9CN5Fc8pCEJqsKU3oizEbEs8
- kTV7TMz8WUPkm8=
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
+CC: linux-kernel@vger.kernel.org
+TO: Laurent Vivier <laurent@vivier.eu>
+CC: Christian Brauner <christian.brauner@ubuntu.com>
 
---ROvq4wnVg2ILd55W
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git fs.binfmt_misc
+head:   eb50eb90a694e05f6fd6533951a56ca3ed040761
+commit: eb50eb90a694e05f6fd6533951a56ca3ed040761 [2/2] binfmt_misc: enable sandboxed mounts
+config: x86_64-randconfig-a001-20211204 (https://download.01.org/0day-ci/archive/20211205/202112050537.EDKcUjHW-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/commit/?id=eb50eb90a694e05f6fd6533951a56ca3ed040761
+        git remote add brauner https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
+        git fetch --no-tags brauner fs.binfmt_misc
+        git checkout eb50eb90a694e05f6fd6533951a56ca3ed040761
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash M=fs/
 
-On Sat, Dec 04, 2021 at 10:20:24AM -0800, Joe Perches wrote:
-> On Sat, 2021-12-04 at 18:52 +0100, Jonathan Neusch=C3=A4fer wrote:
-> > The MAINTAINERS file got slightly out of order again, making it
-> > difficult to put new entries at the right (alphabetical) position.
-> >=20
-> > Run parse-maintainers.pl to restore the alphabetical order.
-> []
-> > Checkpatch warns about a few unordered "F:" lines within sections, but I
-> > left those alone because I wanted this patch to be as automated as poss=
-ible.
->=20
-> The --order option does that.
->=20
-> $ ./scripts/parse-maintainers.pl --order --output MAINTAINERS
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Ah, good point.
+All warnings (new ones prefixed by >>):
 
-Unfortunately, the result of parse-maintainers.pl --order currently
-produces a (small) merge conflict when merged/cherry-picked on top of
--next, so it might be better to start without --order. (Not sure.)
+>> fs/binfmt_misc.o: warning: objtool: bm_status_read()+0xc0: unreachable instruction
 
-
-Jonathan
-
---ROvq4wnVg2ILd55W
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmGrxcIACgkQCDBEmo7z
-X9tVJA//aISsE+7K0fQ3JOcW81DBxVamtjIVwDlgWZY4/GydoC2/Ixgyab2/SNX+
-+sKYYtB1zlrkYtDQFG7UQ7b2dATpwntvZuLMM9j+MtZ9ZxXDmDZz52omGGlZlMIp
-XIVpoglmN9YTWOc0p2iCi2P9wMwdZSghfpjSBdzyp4iZ2OCYpI+Rzuo0Mh+sKpV2
-l5DTv8+kV9gjRgoQGNktF/grwyJZVF5tJqXex5rQg+cftse+cOi5/awVepvG6czD
-w7OrbVzbyt+/M47hI81XtnNsP3nTEXQW8fJsbEIeBpdP+OUwWtP+FI0et1Q4jnaG
-6I0+4xFZcg87jbD/2FpIuEyCvWiw1YBJ52nkfcOFTSjLkuBTdqGc+DmJbZrZEe52
-ZdSmN2l36IKA1Rw+quMe8eCNAI4eiSqtR8M+tar9ydhUxKBiCcVExpraEhXW5E4I
-jBJnzwxb3FFHopI97VhXvTTqdSxVov2cU7vDLoLdGz1LDQr8/ni6pMj8tCkLmYoj
-s3eQ5mdnb86hpObpkbRViFymzJPtxYq/pUzgz0JDubJhUjOVtvqixO+JkP2Uy1qP
-locYLqWcgHoJVXH5k9d6Sbo16FB3ZAPhDGO0mkQhVOHjr2zX/gbqIqeuXO86vSQ2
-IYDaxBZQBPLhgs5v0Na3yyFa51K9/706r+eJYCtvGPboGUwFUx4=
-=7ALR
------END PGP SIGNATURE-----
-
---ROvq4wnVg2ILd55W--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
