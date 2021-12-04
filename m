@@ -1,59 +1,47 @@
-Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE122CA2
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 00:47:47 +0000 (UTC)
-Received: by mail-pg1-f194.google.com with SMTP id k4so4643371pgb.8
-        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 16:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1NXW96FULaq9MCh+MikxqVORQr2ZBOfCRWVjuh1Jzis=;
-        b=Djbf+mJRsfMrGfOHRmNHs1aF9bv5dEmaVVNI8EEYjqDGWPfG+Jampf9GTMubipT3/z
-         sQBazHZTHH+9bifmmiQaeVtqA5TYAaNnLQQZvR/LQkmzyxx8Jwz5eTRYtrapJCBrUORB
-         TyWZ3D1800bAM3QaOF+Ip5Y808ZsGLdYI6JzTG5IBU/uzHYSRURLH5EtuCiZ0dgGEUpp
-         o1aXIhu4IzEeCo8GXMza+BI7WvvJwwFPVq8Xq7AdN9oT1iiee4EUiLdY6UOymks48qDp
-         f3kudYtZHxH7MIqWuWONqkciAhgWLpcvdWxzTDXjigfWme8quV3uRh5AFpSZme7PjUmz
-         6kGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1NXW96FULaq9MCh+MikxqVORQr2ZBOfCRWVjuh1Jzis=;
-        b=t4zQ1n5Z3FhjmjEFeSB72Rk1yguV4IwrSyS3sH645szAGwmQbOAUo8T/eeCa+kwIkD
-         7gjA3KaMPtxL9PXFtj69ouY4mD8XGX1/QdWxrtdIFYF6GU4O3mNEb0G6DrbJnsVIKAe4
-         KqRh24WU8YgcHY1uCmqfeH2tJ2pQ3dIqdYS1bvot1Gi0qJiWSnnNaAmGoT7myDeASnEi
-         h9h0V8YYaHr3C4HE+BXoNfgivfVkNC3tDLBb5G83QJN5B49cvXsigBnZxdTgwwdgm3IY
-         LGMlbj0KHsDTfLg7j4xlJjC7lG9P627DneB5x6OKURoSzLM4WmeSKD2CBRFOSIuykFq+
-         dPoQ==
-X-Gm-Message-State: AOAM533Qho0hnixPO3MWzXMUpA24l53MfZHDWhTufwWOqw7/N1YeRtrH
-	pAxXY1RoK16pdV9e3xeqfMk=
-X-Google-Smtp-Source: ABdhPJwsr7y5BMX5/TVxi4p7OUi6OqtQU4pwpl0F6RZSVT4tTF8u9D27X0kG2fXgW/DTbSlhh19OPw==
-X-Received: by 2002:a63:8bc7:: with SMTP id j190mr6955899pge.240.1638578867239;
-        Fri, 03 Dec 2021 16:47:47 -0800 (PST)
-Received: from localhost ([2405:201:6014:d064:502e:73f4:8af1:9522])
-        by smtp.gmail.com with ESMTPSA id t3sm4856500pfg.94.2021.12.03.16.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 16:47:46 -0800 (PST)
-Date: Sat, 4 Dec 2021 06:17:44 +0530
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH bpf 2/2] samples: bpf: fix 'unknown warning group' build
- warning on Clang
-Message-ID: <20211204004744.eqakjotrfu4ceksp@apollo.legion>
-References: <20211203195004.5803-1-alexandr.lobakin@intel.com>
- <20211203195004.5803-3-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD342CA2
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 01:14:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5BBC341C0;
+	Sat,  4 Dec 2021 01:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638580447;
+	bh=kRPrcbb3nkeObkhB2Ul95O5vYzXbYXpVb4wpEsKiNVc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=asnsLpkfGW5B54GACNHa2REYpExvXo3jNQ4EzyiqY9fIDmXOokZp/AMwEF7YcYXGW
+	 J8rcFwR136OkR1mDFfI5tK1iF2VnKrRg67c7Fkhhhq+PAAWrDRuDzePKnaqzeJaFwx
+	 D31IIJZsGAwGModqVdPAu/5OeU/FQhees9dpw+cd+mqaAkEToGBzas+PeGXavv55Es
+	 gdkbRgbN7w7ofg7j2MrXsphLHSFuXHSbGuVaFiOylZMEbKYKnwpA11NiAdRE4ks55Q
+	 lGMpvyoV0WhI0w44MpU1Up2oDzSSzN8F34t5VEqJCarJ/wJ+AbIeOMyGOGhk1vFQDx
+	 +mgF/49mE0sgg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id F26E45C0F91; Fri,  3 Dec 2021 17:14:06 -0800 (PST)
+Date: Fri, 3 Dec 2021 17:14:06 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Alexander Potapenko <glider@google.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Borislav Petkov <bp@alien8.de>,
+	Dmitry Vyukov <dvyukov@google.com>, Ingo Molnar <mingo@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
+ memory modeling
+Message-ID: <20211204011406.GU641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-5-elver@google.com>
+ <YanbzWyhR0LwdinE@elver.google.com>
+ <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
+ <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
+ <CANpmjNNUinNdBBOVbAgQQYCJVftgUfQQZyPSchWhyVRyjWpedA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,29 +50,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203195004.5803-3-alexandr.lobakin@intel.com>
+In-Reply-To: <CANpmjNNUinNdBBOVbAgQQYCJVftgUfQQZyPSchWhyVRyjWpedA@mail.gmail.com>
 
-On Sat, Dec 04, 2021 at 01:20:04AM IST, Alexander Lobakin wrote:
-> Clang doesn't have 'stringop-truncation' group like GCC does, and
-> complains about it when building samples which use xdp_sample_user
-> infra:
->
->  samples/bpf/xdp_sample_user.h:48:32: warning: unknown warning group '-Wstringop-truncation', ignored [-Wunknown-warning-option]
->  #pragma GCC diagnostic ignored "-Wstringop-truncation"
->                                 ^
-> [ repeat ]
->
-> Those are harmless, but avoidable when guarding it with ifdef.
-> I could guard push/pop as well, but this would require one more
-> ifdef cruft around a single line which I don't think is reasonable.
->
-> Fixes: 156f886cf697 ("samples: bpf: Add basic infrastructure for XDP samples")
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
-
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
+On Sat, Dec 04, 2021 at 12:45:30AM +0100, Marco Elver wrote:
+> On Sat, 4 Dec 2021 at 00:42, Paul E. McKenney <paulmck@kernel.org> wrote:
 > [...]
+> > And to further extend this bug report, the following patch suppresses
+> > the error.
+> >
+> >                                                         Thanx, Paul
+> >
+> > ------------------------------------------------------------------------
+> >
+> > commit d157b802f05bd12cf40bef7a73ca6914b85c865e
+> > Author: Paul E. McKenney <paulmck@kernel.org>
+> > Date:   Fri Dec 3 15:35:29 2021 -0800
+> >
+> >     kcsan: selftest: Move test spinlock to static global
+> 
+> Indeed, that will fix the selftest. The kcsan_test has the same
+> problem (+1 extra problem).
+> 
+> We raced sending the fix. :-)
+> I hope this patch works for you:
+> https://lkml.kernel.org/r/20211203233817.2815340-1-elver@google.com
 
---
-Kartikeya
+I replaced my patch with yours and am starting up testing, thank you!
+
+							Thanx, Paul
