@@ -1,64 +1,75 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D197F68
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 21:17:04 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="261167246"
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="261167246"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 13:17:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="514192798"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2021 13:17:02 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mtcP0-000JSs-1U; Sat, 04 Dec 2021 21:17:02 +0000
-Date: Sun, 5 Dec 2021 05:16:27 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [brauner:fs.binfmt_misc 2/2] fs/binfmt_misc.o: warning: objtool:
- bm_status_read()+0xc0: unreachable instruction
-Message-ID: <202112050537.EDKcUjHW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE1168
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 22:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B32DC341C0;
+	Sat,  4 Dec 2021 22:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638655375;
+	bh=N+VlrsEr9aiqHPnnvtl2aMDzbtaf9aBfb7J7GIVJvYc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MQlsaFk2Yz9w8F/ow/TDwbNpXynefUCUqcMBiOShR/YvcciaPI/kVw3GGFGISK+3L
+	 bJ9ZgDDxHAoxo69VaePdO65LCcqNSA1QGvhgF2yv27OuUCJ6tfnifJAWWgEpBC/tVT
+	 AV8Fw18TrsLOLP9q4xHuiEOnFAHeJPgqkbDdbinasDWS0hSqR/Qcf2BBtxT13hMk42
+	 wIAl1m/RkRuAtDrJdmOmPBq/3R9qBQeLqdHlh/Ye+c67uPeZ7vFAcDlSn1quC8O0b+
+	 SLAjXG6WPd4QZ1Az4BLuW1P6Oyy7A/WVYwanXpOisIOSVQJ95wUkLoFqL1AFmpmsq0
+	 CMuv2NwwAYrXw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Sebastian Reichel <sre@kernel.org>,
+	=?UTF-8?q?Ren=C3=A9=20Moll?= <Rene.Moll@xsens.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] power: reset: ltc2952: fix float conversion error
+Date: Sat,  4 Dec 2021 23:01:49 +0100
+Message-Id: <20211204220249.591482-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Laurent Vivier <laurent@vivier.eu>
-CC: Christian Brauner <christian.brauner@ubuntu.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git fs.binfmt_misc
-head:   eb50eb90a694e05f6fd6533951a56ca3ed040761
-commit: eb50eb90a694e05f6fd6533951a56ca3ed040761 [2/2] binfmt_misc: enable sandboxed mounts
-config: x86_64-randconfig-a001-20211204 (https://download.01.org/0day-ci/archive/20211205/202112050537.EDKcUjHW-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/commit/?id=eb50eb90a694e05f6fd6533951a56ca3ed040761
-        git remote add brauner https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
-        git fetch --no-tags brauner fs.binfmt_misc
-        git checkout eb50eb90a694e05f6fd6533951a56ca3ed040761
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash M=fs/
+clang-14 does not like the way this driver converts a 'long double'
+to an integer when the target architecture disables floating point
+support:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
+        data->wde_interval = 300L * 1E6L;
+                                  ^
 
-All warnings (new ones prefixed by >>):
+Turn this into pure integer math and make it more readable at the
+same time using the NSEC_PER_MSEC macro instead.
 
->> fs/binfmt_misc.o: warning: objtool: bm_status_read()+0xc0: unreachable instruction
-
+Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+index fbb344353fe4..9fc88a9f244c 100644
+--- a/drivers/power/reset/ltc2952-poweroff.c
++++ b/drivers/power/reset/ltc2952-poweroff.c
+@@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+ 
+ static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+ {
+-	data->wde_interval = 300L * 1E6L;
+-	data->trigger_delay = ktime_set(2, 500L*1E6L);
++	data->wde_interval = 300 * NSEC_PER_MSEC;
++	data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
+ 
+ 	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+-- 
+2.29.2
+
