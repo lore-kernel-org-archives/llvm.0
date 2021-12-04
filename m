@@ -1,84 +1,102 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CD029CA
-	for <llvm@lists.linux.dev>; Fri,  3 Dec 2021 23:45:43 +0000 (UTC)
-Received: by mail-ot1-f48.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so5394860otl.8
-        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 15:45:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6BC2CA2
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 00:47:25 +0000 (UTC)
+Received: by mail-pg1-f196.google.com with SMTP id j11so4681703pgs.2
+        for <llvm@lists.linux.dev>; Fri, 03 Dec 2021 16:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=60reH7R0DIOnYiDzjJxXKxDAKSmQYMrrZWuqMItQwS0=;
-        b=lwLR59toSKg0d3DkxASJYGkZ8L16glxKUaDTTvF+88eWEDzjr4kjtxvRl33PVBnKDD
-         htg85jvk5miIto3O0oC10nexmnVRUMkm0LPTObzhAaHdC9pSe7CF2JCNF75x/WGIkOG3
-         PM1RuTN6Nhu5/g4qGlmgmqHRM2UZSR8UXi8+g/rcskGP7alvFuGEMFDeGahQ1pLEjsrX
-         Z6EFmUfQjhtG/4rRPSVC1kWoUh+nSdz2aRIUoHXdKW8VYEFiDZIrfgmJAN7aC4i78hhh
-         MVVhyQh/Hs2vmX+fTK9085aBpBW56vEUhxfheI0Ytpw8QrKAGkDBvIXT/x3LUmzXzWvU
-         D5eA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=82zoxTyylQxErFpnuqHNAfQjAlvM/1ajL8oX6RGNRyI=;
+        b=aMSOLBzknMmr7Jy2594bk5fDz23voRIfH9ahtg/4gH8smT/JhXJoq4fjXKCbOOfQjh
+         JUO/v7GkGRHtren+t3KBBl40Rs/JgiZblRLOWgoWBhOBRf8qzifPQlnq6XSj/enr9ThV
+         1aOzFbaf4wrME/iyezfw4MteryJuFrUZrU/14/clVNgji46r3pj9Xtsb9Wxy/mJ9hfnc
+         JVQspMpiF/UGMiBOj7zJNGxjrMo7KwQ0uwTqgEXjylne4xjRtWT3V8v0voG8ixydYmOP
+         Ni0yDsASH66wl/cQXwUJtHxssbuRy/tL9jd9QMez6T4f5pZDY7dd78TAtoE0GY0mVAM0
+         iuEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=60reH7R0DIOnYiDzjJxXKxDAKSmQYMrrZWuqMItQwS0=;
-        b=UQ/3auXXssdqv80Rrs9eQoGZOcxjs+zmtIVokwZGNIuDZyVCTeEJGAqveoXEHPkCDW
-         EhNA+lETyhTlBSY+OPa2/1UgngkmPSkxMXNhw1iZI+MBb+et+wMx049eXCepG7+w+N8d
-         rKlkm5C+HBhrbpKaNvF2SbDB8+MymzedAJs9gCKG4dLAeEGKwD/47TTeLKnrItiMDq+2
-         DwYcXJUKeEjxCfJK2vL4xpmkAbiXYFkndzy07tXmiLjYpV03EUoRk1UDTE2LAJNpyOQ8
-         YhdQTVVtwz2va6lAXnW/EHUojRLSe3eN4SmnvyEswBz2G6c3sfpBXLjRtw/s04V/1CEI
-         uK3g==
-X-Gm-Message-State: AOAM531ynJ7vXcUItR4U2Cy86xC3USX+vZYuWP1tUNzfVDniVxguObMv
-	5ZFyfW6dPWMA9SdftI20hWIMgdaGQ5OsyVx0oDwEww==
-X-Google-Smtp-Source: ABdhPJwprIsuAE81kQhNwY2u7JUyLZ0Gf1lKN54zx/jf0D8m6dhbAAqy4FkFq551WfGByrnkVKj8Umhm/PE2NQckFns=
-X-Received: by 2002:a9d:77d1:: with SMTP id w17mr18546120otl.329.1638575142007;
- Fri, 03 Dec 2021 15:45:42 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=82zoxTyylQxErFpnuqHNAfQjAlvM/1ajL8oX6RGNRyI=;
+        b=tIW0pXfrntFN3ND0FZoGftXi8KpkWaZPtDcgr+hZ5FqVNx8S/fmHMPy1tKvT8zy7qw
+         0/oFSPlpqPGeg2sTCeMTiGUEtJ/ceJEQoYNvOATDvBmdCd3Q4rjGfkkpMIu3p5nqB4tD
+         EJP75PUEBiOQzDyEK67NW/SD0dNyl9z73ucckUEMToLtYqwgsG5uC+9P1O5q4o4M01x2
+         qOGDkHPTPVQjFxqdvOUA4u/9TfPZhBdPKFxVvZKD8PHmLkS+YI8kgVWFT3YlbOXmsMQ1
+         llh6HDfRarXot7i2s0TIQAoH0kTcK3IUu1I86gN+FxPW9FK3yjVRYLkiVd95iiOTo21g
+         vqlQ==
+X-Gm-Message-State: AOAM532d5eiKiJLYf9c6KyIWy6u9cwoUS8a7x9vcHtY4xiO+7eyrt0lF
+	GknG+3bgBfrtJFQg8aZbqRY=
+X-Google-Smtp-Source: ABdhPJxcDwxNnWas1calrP2vbMdflZjfU2uftdHg9+YuF/nnzOevI8b8awiRgB40YfH/csy2leAZ7A==
+X-Received: by 2002:a05:6a00:2402:b0:4a8:4557:e96b with SMTP id z2-20020a056a00240200b004a84557e96bmr22050497pfh.76.1638578845439;
+        Fri, 03 Dec 2021 16:47:25 -0800 (PST)
+Received: from localhost ([2405:201:6014:d064:502e:73f4:8af1:9522])
+        by smtp.gmail.com with ESMTPSA id ot18sm3589156pjb.14.2021.12.03.16.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 16:47:25 -0800 (PST)
+Date: Sat, 4 Dec 2021 06:17:21 +0530
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH bpf 1/2] samples: bpf: fix xdp_sample_user.o linking with
+ Clang
+Message-ID: <20211204004721.ubdt2kcshorcmhw4@apollo.legion>
+References: <20211203195004.5803-1-alexandr.lobakin@intel.com>
+ <20211203195004.5803-2-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211130114433.2580590-1-elver@google.com> <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com> <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
- <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1> <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
-From: Marco Elver <elver@google.com>
-Date: Sat, 4 Dec 2021 00:45:30 +0100
-Message-ID: <CANpmjNNUinNdBBOVbAgQQYCJVftgUfQQZyPSchWhyVRyjWpedA@mail.gmail.com>
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-To: paulmck@kernel.org
-Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Borislav Petkov <bp@alien8.de>, Dmitry Vyukov <dvyukov@google.com>, Ingo Molnar <mingo@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>, 
-	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
-	x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203195004.5803-2-alexandr.lobakin@intel.com>
 
-On Sat, 4 Dec 2021 at 00:42, Paul E. McKenney <paulmck@kernel.org> wrote:
-[...]
-> And to further extend this bug report, the following patch suppresses
-> the error.
+On Sat, Dec 04, 2021 at 01:20:03AM IST, Alexander Lobakin wrote:
+> Clang (13) doesn't get the jokes about specifying libraries to link in
+> cclags of individual .o objects:
 >
->                                                         Thanx, Paul
+> clang-13: warning: -lm: 'linker' input unused [-Wunused-command-line-argument]
+> [ ... ]
+>   LD  samples/bpf/xdp_redirect_cpu
+>   LD  samples/bpf/xdp_redirect_map_multi
+>   LD  samples/bpf/xdp_redirect_map
+>   LD  samples/bpf/xdp_redirect
+>   LD  samples/bpf/xdp_monitor
+> /usr/bin/ld: samples/bpf/xdp_sample_user.o: in function `sample_summary_print':
+> xdp_sample_user.c:(.text+0x84c): undefined reference to `floor'
+> /usr/bin/ld: xdp_sample_user.c:(.text+0x870): undefined reference to `ceil'
+> /usr/bin/ld: xdp_sample_user.c:(.text+0x8cf): undefined reference to `floor'
+> /usr/bin/ld: xdp_sample_user.c:(.text+0x8f3): undefined reference to `ceil'
+> [ more ]
 >
-> ------------------------------------------------------------------------
+> Specify '-lm' as ldflags for all xdp_sample_user.o users in the main
+> Makefile and remove it from ccflags of ^ in Makefile.target -- just
+> like it's done for all other samples. This works with all compilers.
 >
-> commit d157b802f05bd12cf40bef7a73ca6914b85c865e
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Fri Dec 3 15:35:29 2021 -0800
->
->     kcsan: selftest: Move test spinlock to static global
+> Fixes: 6e1051a54e31 ("samples: bpf: Convert xdp_monitor to XDP samples helper")
+> Fixes: b926c55d856c ("samples: bpf: Convert xdp_redirect to XDP samples helper")
+> Fixes: e531a220cc59 ("samples: bpf: Convert xdp_redirect_cpu to XDP samples helper")
+> Fixes: bbe65865aa05 ("samples: bpf: Convert xdp_redirect_map to XDP samples helper")
+> Fixes: 594a116b2aa1 ("samples: bpf: Convert xdp_redirect_map_multi to XDP samples helper")
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
 
-Indeed, that will fix the selftest. The kcsan_test has the same
-problem (+1 extra problem).
+Thanks, something to remember to test for next time.
 
-We raced sending the fix. :-)
-I hope this patch works for you:
-https://lkml.kernel.org/r/20211203233817.2815340-1-elver@google.com
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Thanks,
--- Marco
+--
+Kartikeya
