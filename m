@@ -1,31 +1,30 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BFA68
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 10:21:50 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="323366784"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D4F2C9E
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 13:56:54 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="235856024"
 X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="323366784"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 02:21:50 -0800
+   d="scan'208";a="235856024"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 05:56:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="562047147"
+   d="scan'208";a="501539698"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Dec 2021 02:21:47 -0800
+  by orsmga007.jf.intel.com with ESMTP; 04 Dec 2021 05:56:51 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mtSAs-000IrZ-FK; Sat, 04 Dec 2021 10:21:46 +0000
-Date: Sat, 4 Dec 2021 18:20:58 +0800
+	id 1mtVX1-000J4I-7Q; Sat, 04 Dec 2021 13:56:51 +0000
+Date: Sat, 4 Dec 2021 21:56:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: yongw.pur@gmail.com, bsingharora@gmail.com, akpm@linux-foundation.org,
-	peterz@infradead.org, mingo@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	yang.yang29@zte.com.cn, wang.yong12@zte.com.cn
-Subject: Re: [PATCH linux-next] delayacct: track delays from memory compact
-Message-ID: <202112041804.vsvLifnA-lkp@intel.com>
-References: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
+To: Deborah Brouwer <deborahbrouwer3563@gmail.com>,
+	linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, hverkuil@xs4all.nl,
+	Deborah Brouwer <deborahbrouwer3563@gmail.com>
+Subject: Re: [PATCH v2] media: vivid: fix timestamp and sequence wrapping
+Message-ID: <202112042134.zRpYtrRg-lkp@intel.com>
+References: <20211204061351.53611-1-deborahbrouwer3563@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,174 +33,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
+In-Reply-To: <20211204061351.53611-1-deborahbrouwer3563@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi,
+Hi Deborah,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on next-20211203]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.16-rc3 next-20211203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/yongw-pur-gmail-com/delayacct-track-delays-from-memory-compact/20211203-224016
-base:    7afeac307a9561e3a93682c1e7eb22f918aa1187
-config: x86_64-randconfig-a011-20211203 (https://download.01.org/0day-ci/archive/20211204/202112041804.vsvLifnA-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Deborah-Brouwer/media-vivid-fix-timestamp-and-sequence-wrapping/20211204-141534
+base:   git://linuxtv.org/media_tree.git master
+config: i386-randconfig-a013-20211203 (https://download.01.org/0day-ci/archive/20211204/202112042134.zRpYtrRg-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ccd829e34aa6aefecf6428975fa82384c6139fd1
+        # https://github.com/0day-ci/linux/commit/e6e5201f7b5b9718f318a5c3034b71fcc79aa47f
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review yongw-pur-gmail-com/delayacct-track-delays-from-memory-compact/20211203-224016
-        git checkout ccd829e34aa6aefecf6428975fa82384c6139fd1
+        git fetch --no-tags linux-review Deborah-Brouwer/media-vivid-fix-timestamp-and-sequence-wrapping/20211204-141534
+        git checkout e6e5201f7b5b9718f318a5c3034b71fcc79aa47f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/test-drivers/vivid/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from init/main.c:58:
->> include/linux/delayacct.h:48:6: error: duplicate member 'freepages_start'
-           u64 freepages_start;
-               ^
-   include/linux/delayacct.h:39:6: note: previous declaration is here
-           u64 freepages_start;
-               ^
-   init/main.c:783:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from kernel/delayacct.c:14:
->> include/linux/delayacct.h:48:6: error: duplicate member 'freepages_start'
-           u64 freepages_start;
-               ^
-   include/linux/delayacct.h:39:6: note: previous declaration is here
-           u64 freepages_start;
-               ^
-   1 error generated.
---
-   In file included from mm/page_alloc.c:77:
->> include/linux/delayacct.h:48:6: error: duplicate member 'freepages_start'
-           u64 freepages_start;
-               ^
-   include/linux/delayacct.h:39:6: note: previous declaration is here
-           u64 freepages_start;
-               ^
-   mm/page_alloc.c:3820:15: warning: no previous prototype for function 'should_fail_alloc_page' [-Wmissing-prototypes]
-   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-                 ^
-   mm/page_alloc.c:3820:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-            ^
-            static 
-   1 warning and 1 error generated.
---
-   In file included from kernel/sched/core.c:13:
-   In file included from kernel/sched/sched.h:47:
->> include/linux/delayacct.h:48:6: error: duplicate member 'freepages_start'
-           u64 freepages_start;
-               ^
-   include/linux/delayacct.h:39:6: note: previous declaration is here
-           u64 freepages_start;
-               ^
-   kernel/sched/core.c:3450:6: warning: no previous prototype for function 'sched_set_stop_task' [-Wmissing-prototypes]
-   void sched_set_stop_task(int cpu, struct task_struct *stop)
-        ^
-   kernel/sched/core.c:3450:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sched_set_stop_task(int cpu, struct task_struct *stop)
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from kernel/sched/fair.c:23:
-   In file included from kernel/sched/sched.h:47:
->> include/linux/delayacct.h:48:6: error: duplicate member 'freepages_start'
-           u64 freepages_start;
-               ^
-   include/linux/delayacct.h:39:6: note: previous declaration is here
-           u64 freepages_start;
-               ^
-   kernel/sched/fair.c:11094:6: warning: no previous prototype for function 'task_vruntime_update' [-Wmissing-prototypes]
-   void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
-        ^
-   kernel/sched/fair.c:11094:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from kernel/sched/rt.c:6:
-   In file included from kernel/sched/sched.h:47:
->> include/linux/delayacct.h:48:6: error: duplicate member 'freepages_start'
-           u64 freepages_start;
-               ^
-   include/linux/delayacct.h:39:6: note: previous declaration is here
-           u64 freepages_start;
-               ^
-   kernel/sched/rt.c:675:6: warning: no previous prototype for function 'sched_rt_bandwidth_account' [-Wmissing-prototypes]
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-        ^
-   kernel/sched/rt.c:675:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-   ^
-   static 
-   1 warning and 1 error generated.
+>> drivers/media/test-drivers/vivid/vivid-ctrls.c:1125:49: warning: overflow in expression; result is -1179869184 with type 'long' [-Winteger-overflow]
+                           dev->time_wrap = (1ULL << 63) - NSEC_PER_SEC * 16;
+                                                                        ^
+   1 warning generated.
 
 
-vim +/freepages_start +48 include/linux/delayacct.h
+vim +/long +1125 drivers/media/test-drivers/vivid/vivid-ctrls.c
 
-    11	
-    12	#ifdef CONFIG_TASK_DELAY_ACCT
-    13	struct task_delay_info {
-    14		raw_spinlock_t	lock;
-    15	
-    16		/* For each stat XXX, add following, aligned appropriately
-    17		 *
-    18		 * struct timespec XXX_start, XXX_end;
-    19		 * u64 XXX_delay;
-    20		 * u32 XXX_count;
-    21		 *
-    22		 * Atomicity of updates to XXX_delay, XXX_count protected by
-    23		 * single lock above (split into XXX_lock if contention is an issue).
-    24		 */
-    25	
-    26		/*
-    27		 * XXX_count is incremented on every XXX operation, the delay
-    28		 * associated with the operation is added to XXX_delay.
-    29		 * XXX_delay contains the accumulated delay time in nanoseconds.
-    30		 */
-    31		u64 blkio_start;
-    32		u64 blkio_delay;	/* wait for sync block io completion */
-    33		u64 swapin_start;
-    34		u64 swapin_delay;	/* wait for swapin */
-    35		u32 blkio_count;	/* total count of the number of sync block */
-    36					/* io operations performed */
-    37		u32 swapin_count;	/* total count of swapin */
-    38	
-    39		u64 freepages_start;
-    40		u64 freepages_delay;	/* wait for memory reclaim */
-    41	
-    42		u64 thrashing_start;
-    43		u64 thrashing_delay;	/* wait for thrashing page */
-    44	
-    45		u64 compact_start;
-    46		u64 compact_delay;	/* wait for memory compact */
-    47	
-  > 48		u64 freepages_start;
-    49		u32 freepages_count;	/* total count of memory reclaim */
-    50		u32 thrashing_count;	/* total count of thrash waits */
-    51		u32 compact_count;	/* total count of memory compact */
-    52	};
-    53	#endif
-    54	
+  1083	
+  1084	static int vivid_streaming_s_ctrl(struct v4l2_ctrl *ctrl)
+  1085	{
+  1086		struct vivid_dev *dev = container_of(ctrl->handler, struct vivid_dev, ctrl_hdl_streaming);
+  1087	
+  1088		switch (ctrl->id) {
+  1089		case VIVID_CID_DQBUF_ERROR:
+  1090			dev->dqbuf_error = true;
+  1091			break;
+  1092		case VIVID_CID_PERC_DROPPED:
+  1093			dev->perc_dropped_buffers = ctrl->val;
+  1094			break;
+  1095		case VIVID_CID_QUEUE_SETUP_ERROR:
+  1096			dev->queue_setup_error = true;
+  1097			break;
+  1098		case VIVID_CID_BUF_PREPARE_ERROR:
+  1099			dev->buf_prepare_error = true;
+  1100			break;
+  1101		case VIVID_CID_START_STR_ERROR:
+  1102			dev->start_streaming_error = true;
+  1103			break;
+  1104		case VIVID_CID_REQ_VALIDATE_ERROR:
+  1105			dev->req_validate_error = true;
+  1106			break;
+  1107		case VIVID_CID_QUEUE_ERROR:
+  1108			if (vb2_start_streaming_called(&dev->vb_vid_cap_q))
+  1109				vb2_queue_error(&dev->vb_vid_cap_q);
+  1110			if (vb2_start_streaming_called(&dev->vb_vbi_cap_q))
+  1111				vb2_queue_error(&dev->vb_vbi_cap_q);
+  1112			if (vb2_start_streaming_called(&dev->vb_vid_out_q))
+  1113				vb2_queue_error(&dev->vb_vid_out_q);
+  1114			if (vb2_start_streaming_called(&dev->vb_vbi_out_q))
+  1115				vb2_queue_error(&dev->vb_vbi_out_q);
+  1116			if (vb2_start_streaming_called(&dev->vb_sdr_cap_q))
+  1117				vb2_queue_error(&dev->vb_sdr_cap_q);
+  1118			break;
+  1119		case VIVID_CID_SEQ_WRAP:
+  1120			dev->seq_wrap = ctrl->val;
+  1121			break;
+  1122		case VIVID_CID_TIME_WRAP:
+  1123			dev->time_wrap = ctrl->val;
+  1124			if (dev->time_wrap == 1)
+> 1125				dev->time_wrap = (1ULL << 63) - NSEC_PER_SEC * 16;
+  1126			else if (dev->time_wrap == 2)
+  1127				dev->time_wrap = ((1ULL << 31) - 16) * NSEC_PER_SEC;
+  1128			break;
+  1129		}
+  1130		return 0;
+  1131	}
+  1132	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
