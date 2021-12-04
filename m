@@ -1,70 +1,63 @@
-Received: from smtprelay.hostedemail.com (smtprelay0179.hostedemail.com [216.40.44.179])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7058429CA
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 23:14:03 +0000 (UTC)
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-	by smtpgrave05.hostedemail.com (Postfix) with ESMTP id 0ADAF18194D6C
-	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 22:35:46 +0000 (UTC)
-Received: from omf11.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-	by smtprelay07.hostedemail.com (Postfix) with ESMTP id 98888181D2FC9;
-	Sat,  4 Dec 2021 22:35:39 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id EB20020033;
-	Sat,  4 Dec 2021 22:34:37 +0000 (UTC)
-Message-ID: <2ced60214ef3bf449e27f5cb22d3dbd0863d97bb.camel@perches.com>
-Subject: Re: [PATCH] MAINTAINERS: Sort entries using parse-maintainers.pl
-From: Joe Perches <joe@perches.com>
-To: Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc: linux-kernel@vger.kernel.org, Linus Torvalds
- <torvalds@linux-foundation.org>,  Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>,  linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev
-Date: Sat, 04 Dec 2021 14:34:36 -0800
-In-Reply-To: <YavGALvWdsW+BO9w@latitude>
-References: <20211204175255.1361385-1-j.neuschaefer@gmx.net>
-	 <429227f33cf14aee6f0668a3d98aa220b54383d6.camel@perches.com>
-	 <YavGALvWdsW+BO9w@latitude>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6207C2C9E
+	for <llvm@lists.linux.dev>; Sat,  4 Dec 2021 23:40:07 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="224022545"
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="224022545"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 15:40:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="501642443"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 04 Dec 2021 15:40:05 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mtedR-000JZm-8t; Sat, 04 Dec 2021 23:40:05 +0000
+Date: Sun, 5 Dec 2021 07:39:13 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [jgunthorpe:iommufd 9/22] drivers/vfio/vfio.o: warning: objtool:
+ vfio_group_fops_open()+0x25d: unreachable instruction
+Message-ID: <202112050732.ao3zKSID-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Stat-Signature: 38ddh1sw19sydmoenji6nsdzpy4fsty1
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: EB20020033
-X-Spam-Status: No, score=-2.78
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/GhABztSc7GYEWxwTLNE04mHDPa73JKYY=
-X-HE-Tag: 1638657277-951064
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, 2021-12-04 at 20:48 +0100, Jonathan Neuschäfer wrote:
-> On Sat, Dec 04, 2021 at 10:20:24AM -0800, Joe Perches wrote:
-> > On Sat, 2021-12-04 at 18:52 +0100, Jonathan Neuschäfer wrote:
-> > > The MAINTAINERS file got slightly out of order again, making it
-> > > difficult to put new entries at the right (alphabetical) position.
-> > > 
-> > > Run parse-maintainers.pl to restore the alphabetical order.
-> > []
-> > > Checkpatch warns about a few unordered "F:" lines within sections, but I
-> > > left those alone because I wanted this patch to be as automated as possible.
-> > 
-> > The --order option does that.
-> > 
-> > $ ./scripts/parse-maintainers.pl --order --output MAINTAINERS
-> 
-> Ah, good point.
-> 
-> Unfortunately, the result of parse-maintainers.pl --order currently
-> produces a (small) merge conflict when merged/cherry-picked on top of
-> -next, so it might be better to start without --order. (Not sure.)
+CC: linux-kernel@vger.kernel.org
+TO: Lu Baolu <baolu.lu@linux.intel.com>
 
-My preference is still to automate the running of this command
-by some script and apply it just before every -rc1 is released.
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   adaf58fcdccd96a03a9d6783e08303612fa3da85
+commit: 3a3d6a0db3e73b2fedc75f0a817e73561f27e70e [9/22] vfio: Remove use of vfio_group_viable()
+config: x86_64-randconfig-a001-20211204 (https://download.01.org/0day-ci/archive/20211205/202112050732.ao3zKSID-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jgunthorpe/linux/commit/3a3d6a0db3e73b2fedc75f0a817e73561f27e70e
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout 3a3d6a0db3e73b2fedc75f0a817e73561f27e70e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/vfio/vfio.o: warning: objtool: vfio_group_fops_open()+0x25d: unreachable instruction
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
