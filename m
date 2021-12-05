@@ -1,33 +1,27 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523C52C9D
-	for <llvm@lists.linux.dev>; Sun,  5 Dec 2021 05:38:25 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="235899739"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18282C9D
+	for <llvm@lists.linux.dev>; Sun,  5 Dec 2021 06:19:23 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="224416341"
 X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="235899739"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 21:38:24 -0800
+   d="scan'208";a="224416341"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 22:19:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="478767074"
+   d="scan'208";a="460484665"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 04 Dec 2021 21:38:20 -0800
+  by orsmga003.jf.intel.com with ESMTP; 04 Dec 2021 22:19:22 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mtkE8-000Jqm-1i; Sun, 05 Dec 2021 05:38:20 +0000
-Date: Sun, 5 Dec 2021 13:37:57 +0800
+	id 1mtkrp-000Jsf-HF; Sun, 05 Dec 2021 06:19:21 +0000
+Date: Sun, 5 Dec 2021 14:18:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alistair Francis <alistair@alistair23.me>, kernel@pengutronix.de,
-	robh+dt@kernel.org, lee.jones@linaro.org, lgirdwood@gmail.com,
-	broonie@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
-	linux-hwmon@vger.kernel.org, andreas@kemnade.info,
-	s.hauer@pengutronix.de
-Subject: Re: [PATCH v16 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
-Message-ID: <202112051306.WFgQGIPH-lkp@intel.com>
-References: <20211202120758.41478-9-alistair@alistair23.me>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 2186/5128] net/mptcp/sockopt.o: warning: objtool:
+ mptcp_setsockopt()+0x1817: unreachable instruction
+Message-ID: <202112051404.2Nfriz4e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,43 +30,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202120758.41478-9-alistair@alistair23.me>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alistair,
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Florian Westphal <fw@strlen.de>
+CC: Mat Martineau <mathew.j.martineau@linux.intel.com>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on lee-mfd/for-mfd-next robh/for-next v5.16-rc3 next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Alistair-Francis/Add-support-for-the-silergy-sy7636a/20211202-201116
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: arm-randconfig-c002-20211205 (https://download.01.org/0day-ci/archive/20211205/202112051306.WFgQGIPH-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7afeac307a9561e3a93682c1e7eb22f918aa1187
+commit: c9406a23c1161c3a9a672d055ec840b00d730a6f [2186/5128] mptcp: sockopt: add SOL_IP freebind & transparent options
+config: x86_64-randconfig-a015-20211205 (https://download.01.org/0day-ci/archive/20211205/202112051404.2Nfriz4e-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/690ae9a20c4cbd1aab1695c0ca6c8d7dbe1d51a6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alistair-Francis/Add-support-for-the-silergy-sy7636a/20211202-201116
-        git checkout 690ae9a20c4cbd1aab1695c0ca6c8d7dbe1d51a6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c9406a23c1161c3a9a672d055ec840b00d730a6f
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout c9406a23c1161c3a9a672d055ec840b00d730a6f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> Error: arch/arm/boot/dts/imx7d-remarkable2.dts:258.3-260.5 Properties must precede subnodes
-   FATAL ERROR: Unable to parse input tree
+>> net/mptcp/sockopt.o: warning: objtool: mptcp_setsockopt()+0x1817: unreachable instruction
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
