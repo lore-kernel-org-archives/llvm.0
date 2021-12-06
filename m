@@ -1,31 +1,86 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301142CA8
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 14:11:23 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="234833066"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="234833066"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:05:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="461820677"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2021 06:05:09 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1muEc8-000LKH-Ea; Mon, 06 Dec 2021 14:05:08 +0000
-Date: Mon, 6 Dec 2021 22:04:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, balbi@kernel.org,
-	laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v4 7/7] usb: gadget: uvc: add format/frame handling code
-Message-ID: <202112062124.HEJZJ0fR-lkp@intel.com>
-References: <20211205225803.268492-8-m.grzeschik@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AA82C80
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 14:32:48 +0000 (UTC)
+Received: by mail-io1-f41.google.com with SMTP id x6so13018348iol.13
+        for <llvm@lists.linux.dev>; Mon, 06 Dec 2021 06:32:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
+        b=GXfZLWErwVXNUIWTHzJ3JSvvaZ1ekUxwLx/RO6eG2oqG8RKwA83QEHyf6Lgu2pvH2e
+         6EAZXpfRzfvbjY71KDHAzWFUD1D5xnfkxDwd1DAzcCl83aTQm6Ne32mTBtwoQgT1CHUV
+         2W8cDfYJZTbjYPvaVlm+oBaInxz7hnYHaJtrKCW3ZUfFjBzMZQu8pSL7cZgSKpwByPwK
+         gdOYhET5KSaY7yVXH/pmeLnQFr/R51Qxn+A8CxvMJ/5bQhb/CoYCURhE7gJQplzFUgS0
+         HnBwT1uFanfIiFq2JoHW276Mrtt8WTSgmVf7U/BsIzKfQ9A9GkpI3mSaOpkBHdDcbQTZ
+         Mhyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
+        b=f2VKYH1dH6/G9r7fzMj0Y5pa4YkMQ0GhPQk+qa/n8lFoFmWoLwcaKHWSH5WGF+HUlY
+         yNSfiNAWhJlbyKz40epRy7kMGZLphN/5bHN8WqcONKDIGYda8eNXyLWfR6e5lE59PwKS
+         9Ww6z/97t5ical4VYlx5QelzBs9jMt3zZOD7gI0jzlLlReWZgAMnbpda+pG3wRb+ArqO
+         b5Xda4dJi/8pCcZbIPz1oA8BPf1jBnUJXbKyfWaUzkku/azy9Kf9zzewPBbaDkxQMNRT
+         DCgjRp7NDV9tf5n3KE9CIvFgrb5ZvT3kIczMOZw03qBR/sTIuAfJ7s5yNkU5YJ15G1xj
+         d8cA==
+X-Gm-Message-State: AOAM531M7NqQj11DRLODYUvng5ZtikT5jvoer0OSW4WAfl2hNEHv4TS0
+	lZDe+enQYFQFa4sDhmlb2E8=
+X-Google-Smtp-Source: ABdhPJx2s79y4UV6UfCELoWwjsBXrn2U9Tro1XMfsLGc7m27xn/DOl5d0HW/E8jg1uMWElErsFJE7A==
+X-Received: by 2002:a02:a708:: with SMTP id k8mr42965751jam.26.1638801167426;
+        Mon, 06 Dec 2021 06:32:47 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id y8sm6337176iox.32.2021.12.06.06.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 06:32:46 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+	by mailauth.nyi.internal (Postfix) with ESMTP id 8E52D27C0054;
+	Mon,  6 Dec 2021 09:32:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 06 Dec 2021 09:32:44 -0500
+X-ME-Sender: <xms:Cx-uYQs85A1MMXJYGuWqEJ7Z5H0fYWyIBMsroi5ZcJYhDA_0sXEVKw>
+    <xme:Cx-uYdeOOSQTLomCC91P6fvNfLUaBzynTvS8S1IJqe42v_kaQOsPATPLrlpxDh5K-
+    VsJpX9OMQqwUGTEww>
+X-ME-Received: <xmr:Cx-uYbxTazrQNhAmwOJDGcwBcZKt0G6ftpVDE7070sHyD2fzk1MP_1dE6sw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgdeihecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpeevieejtdfhieejfeduheehvdevgedugeethefggfdtvdeutdevgeetvddvfeeg
+    tdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
+    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
+    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:Cx-uYTP7IMvllYtCuW-96zpzDKmquPq_Oc0AMq8B6-3JLGB89W1FVQ>
+    <xmx:Cx-uYQ-LAihlYOGwm6Zoiy1lOqxm_kftsSxg_LPN5by606Y0o4ftaA>
+    <xmx:Cx-uYbVLvwYrqkFwFZoM7PbDfKREKDylKP9K-SP5OD6QDsGQMr7wcg>
+    <xmx:DB-uYT3XFpOMXfNRE9xfxrXZdDXokmbhrddzAfQotajWX2sPWXYz3F-Xqns>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Dec 2021 09:32:43 -0500 (EST)
+Date: Mon, 6 Dec 2021 22:31:24 +0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Marco Elver <elver@google.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Borislav Petkov <bp@alien8.de>, Dmitry Vyukov <dvyukov@google.com>,
+	Ingo Molnar <mingo@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
+Message-ID: <Ya4evHE7uQ9eXpax@boqun-archlinux>
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-9-elver@google.com>
+ <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
+ <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,144 +89,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211205225803.268492-8-m.grzeschik@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
 
-Hi Michael,
+On Mon, Dec 06, 2021 at 08:16:11AM +0100, Marco Elver wrote:
+> On Mon, 6 Dec 2021 at 06:04, Boqun Feng <boqun.feng@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > On Tue, Nov 30, 2021 at 12:44:16PM +0100, Marco Elver wrote:
+> > > Also show the location the access was reordered to. An example report:
+> > >
+> > > | ==================================================================
+> > > | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
+> > > |
+> > > | read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
+> > > |  test_kernel_wrong_memorder+0x57/0x90
+> > > |  access_thread+0x99/0xe0
+> > > |  kthread+0x2ba/0x2f0
+> > > |  ret_from_fork+0x22/0x30
+> > > |
+> > > | read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
+> > > |  test_kernel_wrong_memorder+0x57/0x90
+> > > |  access_thread+0x99/0xe0
+> > > |  kthread+0x2ba/0x2f0
+> > > |  ret_from_fork+0x22/0x30
+> > > |   |
+> > > |   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
+> > > |
+> >
+> > Should this be "reordered from" instead of "reordered to"? For example,
+> > if the following case needs a smp_mb() between write to A and write to
+> > B, I think currently it will report as follow:
+> >
+> >         foo() {
+> >                 WRITE_ONCE(A, 1); // let's say A's address is 0xaaaa
+> >                 bar() {
+> >                         WRITE_ONCE(B, 1); // Assume B's address is 0xbbbb
+> >                                           // KCSAN find the problem here
+> >                 }
+> >         }
+> >
+> >         <report>
+> >         | write (reordered) to 0xaaaa of ...:
+> >         | bar+0x... // address of the write to B
+> >         | foo+0x... // address of the callsite to bar()
+> >         | ...
+> >         |  |
+> >         |  +-> reordered to: foo+0x... // address of the write to A
+> >
+> > But since the access reported here is the write to A, so it's a
+> > "reordered from" instead of "reordered to"?
+> 
+> Perhaps I could have commented on this in the commit message to avoid
+> the confusion, but per its updated comment replace_stack_entry()
+> "skips to the first entry that matches the function of @ip, and then
+> replaces that entry with @ip, returning the entries to skip with
+> @replaced containing the replaced entry."
+> 
+> When a reorder_access is set up, the ip to it is stored, which is
+> what's passed to @ip of replace_stack_entry(). It effectively swaps
+> the top frame where the race occurred with where the original access
+> happened. This all works because the runtime is careful to only keep
+> reorder_accesses valid until the original function where it occurred
+> is left.
+> 
 
-I love your patch! Yet something to improve:
+Thanks for the explanation, I was missing the swap here. However...
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on usb/usb-testing v5.16-rc4 next-20211206]
-[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> So in your above example you need to swap "reordered to" and the top
+> frame of the stack trace.
+> 
 
-url:    https://github.com/0day-ci/linux/commits/Michael-Grzeschik/usb-gadget-uvc-use-configfs-entries-for-negotiation-and-v4l2-VIDIOCS/20211206-070014
-base:   git://linuxtv.org/media_tree.git master
-config: riscv-randconfig-r024-20211205 (https://download.01.org/0day-ci/archive/20211206/202112062124.HEJZJ0fR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6e8678903523019903222e4521a5e41af743cab0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/8fdc5cd9a8845e9a061b42155d8d05ddb8514921
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Grzeschik/usb-gadget-uvc-use-configfs-entries-for-negotiation-and-v4l2-VIDIOCS/20211206-070014
-        git checkout 8fdc5cd9a8845e9a061b42155d8d05ddb8514921
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/gadget/function/
+IIUC, the report for my above example will be:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+         | write (reordered) to 0xaaaa of ...:
+         | foo+0x... // address of the write to A
+         | ...
+         |  |
+         |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
 
-All errors (new ones prefixed by >>):
+, right? Because in replace_stack_entry(), it's not the top frame where
+the race occurred that gets swapped, it's the frame which belongs to the
+same function as the original access that gets swapped. In other words,
+when KCSAN finds the problem, top entries of the calling stack are:
 
-   drivers/usb/gadget/function/uvc_v4l2.c:73:2: warning: variable 'uformat' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:81:9: note: uninitialized use occurs here
-           return uformat;
-                  ^~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:73:2: note: remove the condition if it is always true
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^
-   drivers/usb/gadget/function/uvc_v4l2.c:70:29: note: initialize the variable 'uformat' to silence this warning
-           struct uvcg_format *uformat;
-                                      ^
-                                       = NULL
-   drivers/usb/gadget/function/uvc_v4l2.c:139:2: warning: variable 'uformat' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:148:9: note: uninitialized use occurs here
-           return uformat;
-                  ^~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:139:2: note: remove the condition if it is always true
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^
-   drivers/usb/gadget/function/uvc_v4l2.c:137:29: note: initialize the variable 'uformat' to silence this warning
-           struct uvcg_format *uformat;
-                                      ^
-                                       = NULL
->> drivers/usb/gadget/function/uvc_v4l2.c:334:14: error: use of undeclared identifier 'video'
-                   spin_lock(&video->frame_lock);
-                              ^
-   drivers/usb/gadget/function/uvc_v4l2.c:339:16: error: use of undeclared identifier 'video'
-                   spin_unlock(&video->frame_lock);
-                                ^
-   2 warnings and 2 errors generated.
+	[0] bar+0x.. // address of the write to B
+	[1] foo+0x.. // address of the callsite to bar() in foo()
 
+after replace_stack_entry(), they changes to:
 
-vim +/video +334 drivers/usb/gadget/function/uvc_v4l2.c
+	[0] bar+0x.. // address of the write to B
+skip  ->[1] foo+0x.. // address of the write to A
 
-   305	
-   306	static int
-   307	uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
-   308			struct v4l2_frmivalenum *fival)
-   309	{
-   310		struct video_device *vdev = video_devdata(file);
-   311		struct uvc_device *uvc = video_get_drvdata(vdev);
-   312		struct uvcg_format *uformat = NULL;
-   313		struct uvcg_frame *uframe = NULL;
-   314		struct uvcg_frame_ptr *frame;
-   315	
-   316		uformat = find_format_by_pix(uvc, fival->pixel_format);
-   317		if (!uformat)
-   318			return -EINVAL;
-   319	
-   320		list_for_each_entry(frame, &uformat->frames, entry) {
-   321			if (frame->frm->frame.w_width == fival->width &&
-   322			    frame->frm->frame.w_height == fival->height) {
-   323				uframe = frame->frm;
-   324				break;
-   325			}
-   326		}
-   327		if (!uframe)
-   328			return -EINVAL;
-   329	
-   330		if (uvc->streamon) {
-   331			if (fival->index >= 1)
-   332				return -EINVAL;
-   333	
- > 334			spin_lock(&video->frame_lock);
-   335	
-   336			fival->discrete.numerator =
-   337				uframe->dw_frame_interval[uvc->video.cur_ival - 1];
-   338	
-   339			spin_unlock(&video->frame_lock);
-   340		} else {
-   341			if (fival->index >= uframe->frame.b_frame_interval_type)
-   342				return -EINVAL;
-   343	
-   344			fival->discrete.numerator =
-   345				uframe->dw_frame_interval[fival->index];
-   346		}
-   347	
-   348		/* TODO: handle V4L2_FRMIVAL_TYPE_STEPWISE */
-   349		fival->type = V4L2_FRMIVAL_TYPE_DISCRETE;
-   350		fival->discrete.denominator = 10000000;
-   351		v4l2_simplify_fraction(&fival->discrete.numerator,
-   352			&fival->discrete.denominator, 8, 333);
-   353	
-   354		return 0;
-   355	}
-   356	
+, as a result the report won't mention bar() at all.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+And I think a better report will be:
+
+         | write (reordered) to 0xaaaa of ...:
+         | foo+0x... // address of the write to A
+         | ...
+         |  |
+         |  +-> reordered to: bar+0x... // address of the write to B in bar()
+
+because it tells users the exact place the accesses get reordered. That
+means maybe we want something as below? Not completely tested, but I
+play with scope checking a bit, seems it gives what I want. Thoughts?
+
+Regards,
+Boqun
+
+diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
+index 67794404042a..b495ed3aa637 100644
+--- a/kernel/kcsan/report.c
++++ b/kernel/kcsan/report.c
+@@ -324,7 +324,10 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+        else
+                goto fallback;
+
+-       for (skip = 0; skip < num_entries; ++skip) {
++       skip = get_stack_skipnr(stack_entries, num_entries);
++       *replaced = stack_entries[skip];
++
++       for (;skip < num_entries; ++skip) {
+                unsigned long func = stack_entries[skip];
+
+                if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
+@@ -332,7 +335,6 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+                func -= offset;
+
+                if (func == target_func) {
+-                       *replaced = stack_entries[skip];
+                        stack_entries[skip] = ip;
+                        return skip;
+                }
+
+> The implementation is a little trickier of course, but I really wanted
+> the main stack trace to look like any other non-reordered access,
+> which starts from the original access, and only have the "reordered
+> to" location be secondary information.
+> 
+> The foundation for doing this this was put in place here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6c65eb75686f
+> 
+> Thanks,
+> -- Marco
