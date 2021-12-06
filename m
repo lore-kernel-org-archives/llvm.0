@@ -1,92 +1,82 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581E52C80
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 16:19:49 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224599481"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="224599481"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:18:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="579417337"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 08:18:20 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B6GIJ0W021925;
-	Mon, 6 Dec 2021 16:18:19 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
-Date: Mon,  6 Dec 2021 17:17:45 +0100
-Message-Id: <20211206161745.39028-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9599C2C80
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 16:24:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3964C341C1;
+	Mon,  6 Dec 2021 16:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638807880;
+	bh=/Mgs7YPYx7IVvg5XnoT0obYV6pV6FY0D0V7pAeb6GV4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KEdhsDg8m2b6Va5Q4bppyuJTX/3PmskkYjp0saqWfdXZn6rZIy38tYjaMXqgEUHK6
+	 G/V4SBaTMsxZDQjczI5+fe42pi/rc2h3izqs/A5U9gFWLrUM8rj5dm54UWQkLzwH2B
+	 4nmAeKK0+WcsR7Or2lsXUGswtdIcXNjWG6vF243J99kYYuqxfTZKv6xk3wjnc8flQg
+	 2FWL7qDivkWki7uxAmrZEjMStS1lTEEWM53xH5yh/FqPtoziNRBT62vUlKH5dlpzsM
+	 NiHfEiquztMSih5WPCQ/oXysEITYSi6bnveDt98/Po0OC3OpWbh3sRbxyuBtbt739o
+	 7mv2An+jF3oFQ==
+Date: Mon, 6 Dec 2021 09:24:35 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: shuah@kernel.org, ndesaulniers@google.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] selftests: vDSO: parse: warning: fix assignment as a
+ condition
+Message-ID: <Ya45Q9hLPIaociYW@archlinux-ax161>
+References: <20211206102931.1433871-1-anders.roxell@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206102931.1433871-1-anders.roxell@linaro.org>
 
-Clang (13) uninlines __next_node() which emits the following warning
-due to that this function is used in init code (amd_numa_init(),
-sched_init_numa() etc.):
+On Mon, Dec 06, 2021 at 11:29:31AM +0100, Anders Roxell wrote:
+> When building selftests/vDSO with clang the following warning shows up:
+> 
+> clang -std=gnu99 -Wno-pointer-sign vdso_test_gettimeofday.c parse_vdso.c \
+>       -o /tmp/kselftest/vDSO/vdso_test_gettimeofday
+> parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+>                 if (g = h & 0xf0000000)
+>                     ~~^~~~~~~~~~~~~~~~
+> 
+> Rework to a parentheses before doing the check.
 
-WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
-in reference from the function __next_node() to the variable
-.init.data:numa_nodes_parsed
-The function __next_node() references
-the variable __initdata numa_nodes_parsed.
-This is often because __next_node lacks a __initdata
-annotation or the annotation of numa_nodes_parsed is wrong.
+This part of the commit message does not line up with what you are
+actually doing now.
 
-Mark __next_node() as __always_inline() so it won't get uninlined.
-bloat-o-meter over x86_64 binaries says this:
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-scripts/bloat-o-meter -c vmlinux.baseline vmlinux
-add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
-Function                                     old     new   delta
-apply_wqattrs_cleanup                          -     410    +410
-amd_numa_init                                814     842     +28
-sched_init_numa                             1338    1346      +8
-find_next_bit                                 38      19     -19
-__next_node                                   45       -     -45
-apply_wqattrs_prepare                       1069     799    -270
-wq_nice_store                                688     414    -274
-wq_numa_store                                805     433    -372
-wq_cpumask_store                             789     402    -387
-apply_workqueue_attrs                        538     147    -391
-workqueue_set_unbound_cpumask                947     539    -408
-Total: Before=14422603, After=14420883, chg -0.01%
+With that fixed:
 
-So it's both win-win in terms of resolving section mismatch and
-saving some text size (-1.7 Kb is quite nice).
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- include/linux/nodemask.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index 567c3ddba2c4..55ba2c56f39b 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
- }
- 
- #define next_node(n, src) __next_node((n), &(src))
--static inline int __next_node(int n, const nodemask_t *srcp)
-+static __always_inline int __next_node(int n, const nodemask_t *srcp)
- {
- 	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
- }
--- 
-2.33.1
-
+> ---
+> 
+> v1 -> v2: fixed checkpatch warnings
+> 
+>  tools/testing/selftests/vDSO/parse_vdso.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+> index 413f75620a35..fdd38f7e0e43 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -62,7 +62,8 @@ static unsigned long elf_hash(const unsigned char *name)
+>  	while (*name)
+>  	{
+>  		h = (h << 4) + *name++;
+> -		if (g = h & 0xf0000000)
+> +		g = h & 0xf0000000;
+> +		if (g)
+>  			h ^= g >> 24;
+>  		h &= ~g;
+>  	}
+> -- 
+> 2.33.0
+> 
