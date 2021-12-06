@@ -1,123 +1,98 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB432CA6
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 20:57:53 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224275600"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="224275600"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 12:57:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="611377349"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2021 12:57:50 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B6KvnGS024029;
-	Mon, 6 Dec 2021 20:57:49 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
-Date: Mon,  6 Dec 2021 21:57:24 +0100
-Message-ID: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com>
-X-Mailer: git-send-email 2.33.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92962CA6
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 21:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55F0C341C6;
+	Mon,  6 Dec 2021 21:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638825204;
+	bh=ewmuxsY11nEr8SFgDbQVXcVDgcxMTM324HMwRtemalk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bVxWkZ2JiM+rUYpzfw5AhoczNGCtBVMq16DbnibjhljtOQ2xAksAG0Q0sIZqJvDpL
+	 ajq2ZbGIUdFb06nvc0oIdM1D0b2GigOORRTRtsA0sW1ch8E390X8atcbdSdY3uGmhJ
+	 /aUl1q7mMZBTsaMAeFb0AXzke7Nm5FdF44R4ZLGISUqrb+BA0rE/0khyUO/o51pWru
+	 l18zjaR8NQcsd+rPAlqSMg/l0VjUv07X/1Ct1/IKncHLjvntRQ4WDOVNXRYouXPsoj
+	 qJaB1N/t4kIkiJCivxqAJkeHsLo2fd6dOr2GbSY+ztJwkh5zYvtYENe0PWavE9gw9H
+	 UtlA+dTuY8RoA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Ilie Halip <ilie.halip@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ulrich Weigand <Ulrich.Weigand@de.ibm.com>,
+	Christian Borntraeger <borntraeger@de.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Sasha Levin <sashal@kernel.org>,
+	gor@linux.ibm.com,
+	borntraeger@linux.ibm.com,
+	nathan@kernel.org,
+	meted@linux.ibm.com,
+	linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.15 06/24] s390/test_unwind: use raw opcode instead of invalid instruction
+Date: Mon,  6 Dec 2021 16:12:11 -0500
+Message-Id: <20211206211230.1660072-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211206211230.1660072-1-sashal@kernel.org>
+References: <20211206211230.1660072-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Message-ID: <20211206205724.sJtahr3_VzGRFCb1UI5xA3J2M3Sbp9N_l0PRb2csYgE@z>
 
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 6 Dec 2021 11:43:47 -0800
+From: Ilie Halip <ilie.halip@gmail.com>
 
-> On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> >
-> > Clang (13) uninlines __next_node() which emits the following warning
-> > due to that this function is used in init code (amd_numa_init(),
-> > sched_init_numa() etc.):
-> >
-> > WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
-> > in reference from the function __next_node() to the variable
-> > .init.data:numa_nodes_parsed
-> > The function __next_node() references
-> > the variable __initdata numa_nodes_parsed.
-> > This is often because __next_node lacks a __initdata
-> > annotation or the annotation of numa_nodes_parsed is wrong.
-> >
-> > Mark __next_node() as __always_inline() so it won't get uninlined.
-> > bloat-o-meter over x86_64 binaries says this:
-> >
-> > scripts/bloat-o-meter -c vmlinux.baseline vmlinux
-> > add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
-> > Function                                     old     new   delta
-> > apply_wqattrs_cleanup                          -     410    +410
-> > amd_numa_init                                814     842     +28
-> > sched_init_numa                             1338    1346      +8
-> > find_next_bit                                 38      19     -19
-> > __next_node                                   45       -     -45
-> > apply_wqattrs_prepare                       1069     799    -270
-> > wq_nice_store                                688     414    -274
-> > wq_numa_store                                805     433    -372
-> > wq_cpumask_store                             789     402    -387
-> > apply_workqueue_attrs                        538     147    -391
-> > workqueue_set_unbound_cpumask                947     539    -408
-> > Total: Before=14422603, After=14420883, chg -0.01%
-> >
-> > So it's both win-win in terms of resolving section mismatch and
-> > saving some text size (-1.7 Kb is quite nice).
-> >
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> 
-> Thanks for the patch.  See this thread:
-> https://github.com/ClangBuiltLinux/linux/issues/1302
-> 
-> There's a lot more instances of these based on config.  Something like
-> https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
-> would be more appropriate for fixing all instances, but I think this
-> is more so an issue with the inline cost model in LLVM.
-> 
-> I need to finish off https://reviews.llvm.org/D111456, and request
-> that https://reviews.llvm.org/D111272 which landed in clang-14 get
-> backported to the 13.0.1 release which should also help.
+[ Upstream commit 53ae7230918154d1f4281d7aa3aae9650436eadf ]
 
-Oh I see. Sorry for redundant posting, non-applicable then.
-We'll wait for these Clang/LLVM works to be finised, thanks!
+Building with clang & LLVM_IAS=1 leads to an error:
+    arch/s390/lib/test_unwind.c:179:4: error: invalid register pair
+                        "       mvcl    %%r1,%%r1\n"
+                        ^
 
-> 
-> > ---
-> >  include/linux/nodemask.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-> > index 567c3ddba2c4..55ba2c56f39b 100644
-> > --- a/include/linux/nodemask.h
-> > +++ b/include/linux/nodemask.h
-> > @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
-> >  }
-> >
-> >  #define next_node(n, src) __next_node((n), &(src))
-> > -static inline int __next_node(int n, const nodemask_t *srcp)
-> > +static __always_inline int __next_node(int n, const nodemask_t *srcp)
-> >  {
-> >         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
-> >  }
-> > --
-> > 2.33.1
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+The test creates an invalid instruction that would trap at runtime, but the
+LLVM inline assembler tries to validate it at compile time too.
 
-Al
+Use the raw instruction opcode instead.
+
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Ilie Halip <ilie.halip@gmail.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Suggested-by: Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1421
+Link: https://lore.kernel.org/r/20211117174822.3632412-1-ilie.halip@gmail.com
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
+[hca@linux.ibm.com: use illegal opcode, and update comment]
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/s390/lib/test_unwind.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
+index ecf327d743a03..c0635cf787e31 100644
+--- a/arch/s390/lib/test_unwind.c
++++ b/arch/s390/lib/test_unwind.c
+@@ -171,10 +171,11 @@ static noinline int unwindme_func4(struct unwindme *u)
+ 		}
+ 
+ 		/*
+-		 * trigger specification exception
++		 * Trigger operation exception; use insn notation to bypass
++		 * llvm's integrated assembler sanity checks.
+ 		 */
+ 		asm volatile(
+-			"	mvcl	%%r1,%%r1\n"
++			"	.insn	e,0x0000\n"	/* illegal opcode */
+ 			"0:	nopr	%%r7\n"
+ 			EX_TABLE(0b, 0b)
+ 			:);
+-- 
+2.33.0
+
