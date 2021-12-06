@@ -1,149 +1,132 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D212C9D
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 06:14:45 +0000 (UTC)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B64I2TH028793;
-	Mon, 6 Dec 2021 06:14:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=K/Paca94JaAFzf+FMtTON0EOr2JuJkoWvhRnGgBo5wQ=;
- b=AWY9s22GWrJ7pQPvmxHRqajnvsEu0NoI+XXBq3GtyWITFiSbYv+ZN6KKMbM0STo72QIP
- pSyXHTJlfNUJDBwRc8C8njhytsHfonMsEKFr5ekDJQYVDSLcWRqY/5dv6AEyl7DCeeMh
- WkmGDqwoCpbNez933cEcojKDYfym6WtFDiySAXlMl3uVgwmXk2NAdtI7NWyPW1zMynwm
- Rxj7QeHAIN5g+o79PmWaW4PU3L8nh9RtxoLIXI99i8ha4c4ZTY3X/UwCH969lIMc4Yw1
- BFKZFqyOWB2kmQHUwyP3m01M95Oa1cvnCl/qwhE5Tnb+nZ6a4HYY18jXXGpc6++loDZf 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3csbc51jr8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Dec 2021 06:14:37 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B66BHdC030312;
-	Mon, 6 Dec 2021 06:14:36 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3csbc51jr4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Dec 2021 06:14:36 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-	by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B66Dfn3005019;
-	Mon, 6 Dec 2021 06:14:35 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-	by ppma02wdc.us.ibm.com with ESMTP id 3cqyy9e3f3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Dec 2021 06:14:35 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-	by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B66EZQj55509250
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Dec 2021 06:14:35 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5D60028067;
-	Mon,  6 Dec 2021 06:14:35 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AA3F028066;
-	Mon,  6 Dec 2021 06:14:30 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.89.70])
-	by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-	Mon,  6 Dec 2021 06:14:30 +0000 (GMT)
-X-Mailer: emacs 28.0.50 (via feedmail 11-beta-1 I)
-From: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
-        aarcange@redhat.com, ak@linux.intel.com, ben.widawsky@intel.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        feng.tang@intel.com, linux-api@vger.kernel.org,
-        mgorman@techsingularity.net, mhocko@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: + mm-mempolicy-wire-up-syscall-set_mempolicy_home_node.patch
- added to -mm tree
-In-Reply-To: <202112060718.JbZsyJcP-lkp@intel.com>
-References: <20211202225542.A2LkS8Bho%akpm@linux-foundation.org>
- <202112060718.JbZsyJcP-lkp@intel.com>
-Date: Mon, 06 Dec 2021 11:44:28 +0530
-Message-ID: <87o85ub6pn.fsf@linux.ibm.com>
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qY71JCU_pS3T8Xyoe668lhYBq_p4H-sO
-X-Proofpoint-GUID: yad0agPixeWI7UGnr3SVN8RK6pT2MMY8
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FC72C9E
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 07:16:23 +0000 (UTC)
+Received: by mail-oi1-f170.google.com with SMTP id n66so19791415oia.9
+        for <llvm@lists.linux.dev>; Sun, 05 Dec 2021 23:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kMt90pKBGW/au5Bipth7kSeTJYiTzTjqmOMqmPuidYA=;
+        b=XEkNxxxqqg+NZL/6yCqEZBN2SeXMqSO5LfwtQ38GYELUORg3SUHVW8Q5aVqB7bhGqn
+         P4iX/WHdPtE2QjtkMfpoDJLQXNyPbDZrMsykHhDPapvSd5QU7F3VliQV9Yy6W3/x1/yp
+         SPQHl5+NAMtC+/KeBPgVEFMP73nHOjUip8Pe4dz+ysEDvSgMxniak2Xxhya2c2DVmQoB
+         PAasdNsXl2mjxk6waC9R44KBY4SXaQNbBsyaROg55cDONmTVDVBc7DjWKqjzSswf44xw
+         uR5reE0LtjENxNpcjPtWEzqZ5Ub/3t0LHAu34RONtIOSh3hnK5gcV77ZKBM4aWABzWMB
+         VIWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kMt90pKBGW/au5Bipth7kSeTJYiTzTjqmOMqmPuidYA=;
+        b=uJLhCQq1uoD/mrXHRVbIPp3jE4ky1GB6t4MOKB+ZUh4nBXXY5tY0OJJ4uEIclF3AWf
+         z5a7DRjZ3aol1rpKnKjv2uYa1kO5EGpTJcZ68xN09nkyhVWM80+AP0PgEcJY/RSSfdeU
+         dcnVN01LXGdq8WBqWLEtE6ukFgKBtIeqhQ9hD1N8y9uxsMcQJaBt500vUy614Daj7ZK6
+         orNyoXzPTyytXjZPyfzpAe6A9337g+0M6htWz6M7Gvxnyv3ZhI4GiRilGgbZhsmsrKOk
+         /dHRC+MStY+wvgeFU4hUgTgQt8LvxVOzLo4kJyKvtVbEvdMNotGDpMM8/T2r/L5ykYYo
+         7hPg==
+X-Gm-Message-State: AOAM530Ijepbm/21vIhiAO1SKzvbjRIXVB5qIeQ21M6HblyWRlpyBpfm
+	SzEA7qjsS+f9GjnRFSz0glDb97Xf6jiA/6eza9ZC+w==
+X-Google-Smtp-Source: ABdhPJwuGLpnUIDTjpBX3F4eSh7hJt4tJrtZLc3E+7J6kt6gm5BiWZwD1+kzTVPh5ygzYL7/rFy9FoV52gjMqiSEDPo=
+X-Received: by 2002:aca:af50:: with SMTP id y77mr22543199oie.134.1638774982675;
+ Sun, 05 Dec 2021 23:16:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_02,2021-12-06_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 clxscore=1011 priorityscore=1501 suspectscore=0 spamscore=0
- impostorscore=0 mlxscore=0 bulkscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060037
+References: <20211130114433.2580590-1-elver@google.com> <20211130114433.2580590-9-elver@google.com>
+ <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
+In-Reply-To: <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
+From: Marco Elver <elver@google.com>
+Date: Mon, 6 Dec 2021 08:16:11 +0100
+Message-ID: <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
+	Borislav Petkov <bp@alien8.de>, Dmitry Vyukov <dvyukov@google.com>, Ingo Molnar <mingo@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>, 
+	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
+	x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-kernel test robot <lkp@intel.com> writes:
-
+On Mon, 6 Dec 2021 at 06:04, Boqun Feng <boqun.feng@gmail.com> wrote:
+>
 > Hi,
 >
-> I love your patch! Perhaps something to improve:
+> On Tue, Nov 30, 2021 at 12:44:16PM +0100, Marco Elver wrote:
+> > Also show the location the access was reordered to. An example report:
+> >
+> > | ==================================================================
+> > | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
+> > |
+> > | read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
+> > |  test_kernel_wrong_memorder+0x57/0x90
+> > |  access_thread+0x99/0xe0
+> > |  kthread+0x2ba/0x2f0
+> > |  ret_from_fork+0x22/0x30
+> > |
+> > | read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
+> > |  test_kernel_wrong_memorder+0x57/0x90
+> > |  access_thread+0x99/0xe0
+> > |  kthread+0x2ba/0x2f0
+> > |  ret_from_fork+0x22/0x30
+> > |   |
+> > |   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
+> > |
 >
-> [auto build test WARNING on arm64/for-next/core]
-> [also build test WARNING on deller-parisc/for-next linus/master v5.16-rc3]
-> [cannot apply to geert-m68k/for-next powerpc/next s390/features arnd-asm-generic/master tip/x86/asm davem-sparc/master next-20211203]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+> Should this be "reordered from" instead of "reordered to"? For example,
+> if the following case needs a smp_mb() between write to A and write to
+> B, I think currently it will report as follow:
 >
-> url:    https://github.com/0day-ci/linux/commits/akpm-linux-foundation-org/mm-mempolicy-wire-up-syscall-set_mempolicy_home_node-patch-added-to-mm-tree/20211203-065847
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-> config: arm64-randconfig-r025-20211203 (https://download.01.org/0day-ci/archive/20211206/202112060718.JbZsyJcP-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1e328b06c15273edf4a40a27ca24931b5efb3a87)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/0day-ci/linux/commit/d7bb34dec7840474ed1ad87136b47eb1ea0c8bee
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review akpm-linux-foundation-org/mm-mempolicy-wire-up-syscall-set_mempolicy_home_node-patch-added-to-mm-tree/20211203-065847
->         git checkout d7bb34dec7840474ed1ad87136b47eb1ea0c8bee
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+>         foo() {
+>                 WRITE_ONCE(A, 1); // let's say A's address is 0xaaaa
+>                 bar() {
+>                         WRITE_ONCE(B, 1); // Assume B's address is 0xbbbb
+>                                           // KCSAN find the problem here
+>                 }
+>         }
 >
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+>         <report>
+>         | write (reordered) to 0xaaaa of ...:
+>         | bar+0x... // address of the write to B
+>         | foo+0x... // address of the callsite to bar()
+>         | ...
+>         |  |
+>         |  +-> reordered to: foo+0x... // address of the write to A
 >
-> All warnings (new ones prefixed by >>):
->
->            asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
->                                   ^
->    <scratch space>:161:1: note: expanded from here
->    __arm64_sys_process_madvise
->    ^
->    kernel/sys_ni.c:292:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    arch/arm64/include/asm/syscall_wrapper.h:76:13: note: expanded from macro 'COND_SYSCALL'
->            asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
->                       ^
->    kernel/sys_ni.c:293:1: warning: no previous prototype for function '__arm64_sys_process_mrelease' [-Wmissing-prototypes]
->    COND_SYSCALL(process_mrelease);
->    ^
->    arch/arm64/include/asm/syscall_wrapper.h:76:25: note: expanded from macro 'COND_SYSCALL'
->            asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)   \
->                                   ^
->    <scratch space>:162:1: note: expanded from here
->    __arm64_sys_process_mrelease
+> But since the access reported here is the write to A, so it's a
+> "reordered from" instead of "reordered to"?
 
-These build warnings with W=1 are related to arm header includes. arm64
-expand syscall macro such that '__arm64_' is added to the syscall
-handler name. Hence the include  linux/syscall.h that have below
-prototype is not sufficient.   
-asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
-					    unsigned long home_node,
-					    unsigned long flags);
+Perhaps I could have commented on this in the commit message to avoid
+the confusion, but per its updated comment replace_stack_entry()
+"skips to the first entry that matches the function of @ip, and then
+replaces that entry with @ip, returning the entries to skip with
+@replaced containing the replaced entry."
 
+When a reorder_access is set up, the ip to it is stored, which is
+what's passed to @ip of replace_stack_entry(). It effectively swaps
+the top frame where the race occurred with where the original access
+happened. This all works because the runtime is careful to only keep
+reorder_accesses valid until the original function where it occurred
+is left.
 
-That should be fixed outside this series.
+So in your above example you need to swap "reordered to" and the top
+frame of the stack trace.
 
--aneesh
+The implementation is a little trickier of course, but I really wanted
+the main stack trace to look like any other non-reordered access,
+which starts from the original access, and only have the "reordered
+to" location be secondary information.
 
+The foundation for doing this this was put in place here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6c65eb75686f
 
+Thanks,
+-- Marco
