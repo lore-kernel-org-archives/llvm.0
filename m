@@ -1,100 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CBD2CA6
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 21:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CF1C341C6;
-	Mon,  6 Dec 2021 21:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638825349;
-	bh=CtcKASc9UMnknSvliK8E7YX1Ljqy0C2xHCE6Xh0Ics8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SL2CzDCOx1kS7dquvVh1H2GJx7AIIWg9YHwPMpmVimpB+X9Y4KtQ6T0z/btBs4Z9g
-	 BtaYqFZDNyh7otyphtv+C9DD9uytmvZUJ90Sp/VsTIV1mS+IowBcfSVP0YIf2cMex4
-	 x7mwDpsP9WcGkz6FhDSfQZCudVQpKEpr+HFiFS5st612qF5lEBJujjYy+iYId9xMXg
-	 6TYlOCT5tueEfH64D6vlQ1c5sXLT0tQDBYSJbJmCEaIe5+wl+xWoWDYnKEPabNAW73
-	 FsJGWiOd2rl5ZNVtGVXMccRvSP/foaXJbRiQApdbY1OiYr6SPoRIi/JU+iWRIYkGo0
-	 6izF6nJGS4vgw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Ilie Halip <ilie.halip@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Ulrich Weigand <Ulrich.Weigand@de.ibm.com>,
-	Christian Borntraeger <borntraeger@de.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Sasha Levin <sashal@kernel.org>,
-	gor@linux.ibm.com,
-	borntraeger@linux.ibm.com,
-	nathan@kernel.org,
-	svens@linux.ibm.com,
-	iii@linux.ibm.com,
-	meted@linux.ibm.com,
-	linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 03/15] s390/test_unwind: use raw opcode instead of invalid instruction
-Date: Mon,  6 Dec 2021 16:15:03 -0500
-Message-Id: <20211206211520.1660478-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206211520.1660478-1-sashal@kernel.org>
-References: <20211206211520.1660478-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D212C80
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 22:57:43 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="300809720"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="300809720"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 14:57:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="514969605"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 14:57:22 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1muMvB-000Lq5-UY; Mon, 06 Dec 2021 22:57:21 +0000
+Date: Tue, 7 Dec 2021 06:56:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Petko Manolov <petko.manolov@konsulko.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 5/5] adds i2c/ explicitly to Makefile
+Message-ID: <202112070634.8UMBEkLw-lkp@intel.com>
+References: <20211203221247.46324-6-petko.manolov@konsulko.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203221247.46324-6-petko.manolov@konsulko.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Ilie Halip <ilie.halip@gmail.com>
+Hi Petko,
 
-[ Upstream commit 53ae7230918154d1f4281d7aa3aae9650436eadf ]
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on v5.16-rc3]
+[also build test WARNING on next-20211206]
+[cannot apply to media-tree/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Building with clang & LLVM_IAS=1 leads to an error:
-    arch/s390/lib/test_unwind.c:179:4: error: invalid register pair
-                        "       mvcl    %%r1,%%r1\n"
-                        ^
+url:    https://github.com/0day-ci/linux/commits/Petko-Manolov/omv6211-linux-kernel-driver/20211204-061436
+base:    d58071a8a76d779eedab38033ae4c821c30295a5
+config: arm64-randconfig-r032-20211204 (https://download.01.org/0day-ci/archive/20211207/202112070634.8UMBEkLw-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/e3654b0a5fdd1f9b3488b69bf8cc1a2613788f83
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Petko-Manolov/omv6211-linux-kernel-driver/20211204-061436
+        git checkout e3654b0a5fdd1f9b3488b69bf8cc1a2613788f83
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/staging/
 
-The test creates an invalid instruction that would trap at runtime, but the
-LLVM inline assembler tries to validate it at compile time too.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Use the raw instruction opcode instead.
+All warnings (new ones prefixed by >>):
 
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Ilie Halip <ilie.halip@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Suggested-by: Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1421
-Link: https://lore.kernel.org/r/20211117174822.3632412-1-ilie.halip@gmail.com
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
-Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
-[hca@linux.ibm.com: use illegal opcode, and update comment]
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> drivers/staging/media/i2c/ovm6211.c:652:5: warning: no previous prototype for function 'ovm6211_set_pix_clk' [-Wmissing-prototypes]
+   u32 ovm6211_set_pix_clk(struct ovm6211_dev *sensor, const struct ovm6211_mode_info *nm)
+       ^
+   drivers/staging/media/i2c/ovm6211.c:652:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 ovm6211_set_pix_clk(struct ovm6211_dev *sensor, const struct ovm6211_mode_info *nm)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/ovm6211_set_pix_clk +652 drivers/staging/media/i2c/ovm6211.c
+
+a3407db075daa0 Petko Manolov 2021-12-04  651  
+a3407db075daa0 Petko Manolov 2021-12-04 @652  u32 ovm6211_set_pix_clk(struct ovm6211_dev *sensor, const struct ovm6211_mode_info *nm)
+a3407db075daa0 Petko Manolov 2021-12-04  653  {
+a3407db075daa0 Petko Manolov 2021-12-04  654  	u32 s, fmt, fps, ret;
+a3407db075daa0 Petko Manolov 2021-12-04  655  
+a3407db075daa0 Petko Manolov 2021-12-04  656  	/* x * y * [1|2] * y8/y10 * fps */
+a3407db075daa0 Petko Manolov 2021-12-04  657  	s = nm->width * nm->height;
+a3407db075daa0 Petko Manolov 2021-12-04  658  	fmt = 1;
+a3407db075daa0 Petko Manolov 2021-12-04  659  	fps = ovm6211_framerates[sensor->cur_fr_id];
+a3407db075daa0 Petko Manolov 2021-12-04  660  	ret = s * fmt * fps * 2;
+a3407db075daa0 Petko Manolov 2021-12-04  661  
+a3407db075daa0 Petko Manolov 2021-12-04  662  	return ret;
+a3407db075daa0 Petko Manolov 2021-12-04  663  }
+a3407db075daa0 Petko Manolov 2021-12-04  664  
+
 ---
- arch/s390/lib/test_unwind.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-index 6bad84c372dcb..b0b67e6d1f6e2 100644
---- a/arch/s390/lib/test_unwind.c
-+++ b/arch/s390/lib/test_unwind.c
-@@ -171,10 +171,11 @@ static noinline int unwindme_func4(struct unwindme *u)
- 		}
- 
- 		/*
--		 * trigger specification exception
-+		 * Trigger operation exception; use insn notation to bypass
-+		 * llvm's integrated assembler sanity checks.
- 		 */
- 		asm volatile(
--			"	mvcl	%%r1,%%r1\n"
-+			"	.insn	e,0x0000\n"	/* illegal opcode */
- 			"0:	nopr	%%r7\n"
- 			EX_TABLE(0b, 0b)
- 			:);
--- 
-2.33.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
