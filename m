@@ -1,86 +1,30 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AA82C80
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 14:32:48 +0000 (UTC)
-Received: by mail-io1-f41.google.com with SMTP id x6so13018348iol.13
-        for <llvm@lists.linux.dev>; Mon, 06 Dec 2021 06:32:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
-        b=GXfZLWErwVXNUIWTHzJ3JSvvaZ1ekUxwLx/RO6eG2oqG8RKwA83QEHyf6Lgu2pvH2e
-         6EAZXpfRzfvbjY71KDHAzWFUD1D5xnfkxDwd1DAzcCl83aTQm6Ne32mTBtwoQgT1CHUV
-         2W8cDfYJZTbjYPvaVlm+oBaInxz7hnYHaJtrKCW3ZUfFjBzMZQu8pSL7cZgSKpwByPwK
-         gdOYhET5KSaY7yVXH/pmeLnQFr/R51Qxn+A8CxvMJ/5bQhb/CoYCURhE7gJQplzFUgS0
-         HnBwT1uFanfIiFq2JoHW276Mrtt8WTSgmVf7U/BsIzKfQ9A9GkpI3mSaOpkBHdDcbQTZ
-         Mhyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
-        b=f2VKYH1dH6/G9r7fzMj0Y5pa4YkMQ0GhPQk+qa/n8lFoFmWoLwcaKHWSH5WGF+HUlY
-         yNSfiNAWhJlbyKz40epRy7kMGZLphN/5bHN8WqcONKDIGYda8eNXyLWfR6e5lE59PwKS
-         9Ww6z/97t5ical4VYlx5QelzBs9jMt3zZOD7gI0jzlLlReWZgAMnbpda+pG3wRb+ArqO
-         b5Xda4dJi/8pCcZbIPz1oA8BPf1jBnUJXbKyfWaUzkku/azy9Kf9zzewPBbaDkxQMNRT
-         DCgjRp7NDV9tf5n3KE9CIvFgrb5ZvT3kIczMOZw03qBR/sTIuAfJ7s5yNkU5YJ15G1xj
-         d8cA==
-X-Gm-Message-State: AOAM531M7NqQj11DRLODYUvng5ZtikT5jvoer0OSW4WAfl2hNEHv4TS0
-	lZDe+enQYFQFa4sDhmlb2E8=
-X-Google-Smtp-Source: ABdhPJx2s79y4UV6UfCELoWwjsBXrn2U9Tro1XMfsLGc7m27xn/DOl5d0HW/E8jg1uMWElErsFJE7A==
-X-Received: by 2002:a02:a708:: with SMTP id k8mr42965751jam.26.1638801167426;
-        Mon, 06 Dec 2021 06:32:47 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id y8sm6337176iox.32.2021.12.06.06.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 06:32:46 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 8E52D27C0054;
-	Mon,  6 Dec 2021 09:32:44 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 06 Dec 2021 09:32:44 -0500
-X-ME-Sender: <xms:Cx-uYQs85A1MMXJYGuWqEJ7Z5H0fYWyIBMsroi5ZcJYhDA_0sXEVKw>
-    <xme:Cx-uYdeOOSQTLomCC91P6fvNfLUaBzynTvS8S1IJqe42v_kaQOsPATPLrlpxDh5K-
-    VsJpX9OMQqwUGTEww>
-X-ME-Received: <xmr:Cx-uYbxTazrQNhAmwOJDGcwBcZKt0G6ftpVDE7070sHyD2fzk1MP_1dE6sw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgdeihecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeevieejtdfhieejfeduheehvdevgedugeethefggfdtvdeutdevgeetvddvfeeg
-    tdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
-    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
-    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:Cx-uYTP7IMvllYtCuW-96zpzDKmquPq_Oc0AMq8B6-3JLGB89W1FVQ>
-    <xmx:Cx-uYQ-LAihlYOGwm6Zoiy1lOqxm_kftsSxg_LPN5by606Y0o4ftaA>
-    <xmx:Cx-uYbVLvwYrqkFwFZoM7PbDfKREKDylKP9K-SP5OD6QDsGQMr7wcg>
-    <xmx:DB-uYT3XFpOMXfNRE9xfxrXZdDXokmbhrddzAfQotajWX2sPWXYz3F-Xqns>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 09:32:43 -0500 (EST)
-Date: Mon, 6 Dec 2021 22:31:24 +0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Borislav Petkov <bp@alien8.de>, Dmitry Vyukov <dvyukov@google.com>,
-	Ingo Molnar <mingo@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
-Message-ID: <Ya4evHE7uQ9eXpax@boqun-archlinux>
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-9-elver@google.com>
- <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
- <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CE12C80
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 15:58:15 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="298140089"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="298140089"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:58:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="461876209"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2021 07:58:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1muGNW-000LRK-Pb; Mon, 06 Dec 2021 15:58:10 +0000
+Date: Mon, 6 Dec 2021 23:57:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [Intel-gfx] [PATCH 06/14] drm/i915: Use REG_BIT() & co. for
+ universal plane bits
+Message-ID: <202112062346.Pub0KCZK-lkp@intel.com>
+References: <20211201152552.7821-7-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -89,147 +33,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+In-Reply-To: <20211201152552.7821-7-ville.syrjala@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Dec 06, 2021 at 08:16:11AM +0100, Marco Elver wrote:
-> On Mon, 6 Dec 2021 at 06:04, Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Nov 30, 2021 at 12:44:16PM +0100, Marco Elver wrote:
-> > > Also show the location the access was reordered to. An example report:
-> > >
-> > > | ==================================================================
-> > > | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
-> > > |
-> > > | read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
-> > > |  test_kernel_wrong_memorder+0x57/0x90
-> > > |  access_thread+0x99/0xe0
-> > > |  kthread+0x2ba/0x2f0
-> > > |  ret_from_fork+0x22/0x30
-> > > |
-> > > | read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
-> > > |  test_kernel_wrong_memorder+0x57/0x90
-> > > |  access_thread+0x99/0xe0
-> > > |  kthread+0x2ba/0x2f0
-> > > |  ret_from_fork+0x22/0x30
-> > > |   |
-> > > |   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
-> > > |
-> >
-> > Should this be "reordered from" instead of "reordered to"? For example,
-> > if the following case needs a smp_mb() between write to A and write to
-> > B, I think currently it will report as follow:
-> >
-> >         foo() {
-> >                 WRITE_ONCE(A, 1); // let's say A's address is 0xaaaa
-> >                 bar() {
-> >                         WRITE_ONCE(B, 1); // Assume B's address is 0xbbbb
-> >                                           // KCSAN find the problem here
-> >                 }
-> >         }
-> >
-> >         <report>
-> >         | write (reordered) to 0xaaaa of ...:
-> >         | bar+0x... // address of the write to B
-> >         | foo+0x... // address of the callsite to bar()
-> >         | ...
-> >         |  |
-> >         |  +-> reordered to: foo+0x... // address of the write to A
-> >
-> > But since the access reported here is the write to A, so it's a
-> > "reordered from" instead of "reordered to"?
-> 
-> Perhaps I could have commented on this in the commit message to avoid
-> the confusion, but per its updated comment replace_stack_entry()
-> "skips to the first entry that matches the function of @ip, and then
-> replaces that entry with @ip, returning the entries to skip with
-> @replaced containing the replaced entry."
-> 
-> When a reorder_access is set up, the ip to it is stored, which is
-> what's passed to @ip of replace_stack_entry(). It effectively swaps
-> the top frame where the race occurred with where the original access
-> happened. This all works because the runtime is careful to only keep
-> reorder_accesses valid until the original function where it occurred
-> is left.
-> 
+Hi Ville,
 
-Thanks for the explanation, I was missing the swap here. However...
+Thank you for the patch! Yet something to improve:
 
-> So in your above example you need to swap "reordered to" and the top
-> frame of the stack trace.
-> 
+[auto build test ERROR on drm-intel/for-linux-next]
+[cannot apply to drm-tip/drm-tip v5.16-rc4 next-20211206]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-IIUC, the report for my above example will be:
+url:    https://github.com/0day-ci/linux/commits/Ville-Syrjala/drm-i915-Plane-register-cleanup/20211202-010520
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: x86_64-randconfig-a012-20211130 (https://download.01.org/0day-ci/archive/20211206/202112062346.Pub0KCZK-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/50180d495a061c64528e2348a684037f5dc26e2e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ville-Syrjala/drm-i915-Plane-register-cleanup/20211202-010520
+        git checkout 50180d495a061c64528e2348a684037f5dc26e2e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
 
-         | write (reordered) to 0xaaaa of ...:
-         | foo+0x... // address of the write to A
-         | ...
-         |  |
-         |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-, right? Because in replace_stack_entry(), it's not the top frame where
-the race occurred that gets swapped, it's the frame which belongs to the
-same function as the original access that gets swapped. In other words,
-when KCSAN finds the problem, top entries of the calling stack are:
+All errors (new ones prefixed by >>):
 
-	[0] bar+0x.. // address of the write to B
-	[1] foo+0x.. // address of the callsite to bar() in foo()
+>> drivers/gpu/drm/i915/gvt/fb_decoder.c:221:10: error: use of undeclared identifier 'PLANE_CTL_FORMAT_MASK'
+                           val & PLANE_CTL_FORMAT_MASK,
+                                 ^
+   drivers/gpu/drm/i915/gvt/fb_decoder.c:430:21: error: use of undeclared identifier 'SPRITE_YUV_BYTE_ORDER_MASK'
+           yuv_order = (val & SPRITE_YUV_BYTE_ORDER_MASK) >>
+                              ^
+   2 errors generated.
 
-after replace_stack_entry(), they changes to:
 
-	[0] bar+0x.. // address of the write to B
-skip  ->[1] foo+0x.. // address of the write to A
+vim +/PLANE_CTL_FORMAT_MASK +221 drivers/gpu/drm/i915/gvt/fb_decoder.c
 
-, as a result the report won't mention bar() at all.
+9f31d1063b434c Tina Zhang          2017-11-23  192  
+9f31d1063b434c Tina Zhang          2017-11-23  193  /**
+9f31d1063b434c Tina Zhang          2017-11-23  194   * intel_vgpu_decode_primary_plane - Decode primary plane
+9f31d1063b434c Tina Zhang          2017-11-23  195   * @vgpu: input vgpu
+9f31d1063b434c Tina Zhang          2017-11-23  196   * @plane: primary plane to save decoded info
+9f31d1063b434c Tina Zhang          2017-11-23  197   * This function is called for decoding plane
+9f31d1063b434c Tina Zhang          2017-11-23  198   *
+9f31d1063b434c Tina Zhang          2017-11-23  199   * Returns:
+9f31d1063b434c Tina Zhang          2017-11-23  200   * 0 on success, non-zero if failed.
+9f31d1063b434c Tina Zhang          2017-11-23  201   */
+9f31d1063b434c Tina Zhang          2017-11-23  202  int intel_vgpu_decode_primary_plane(struct intel_vgpu *vgpu,
+9f31d1063b434c Tina Zhang          2017-11-23  203  	struct intel_vgpu_primary_plane_format *plane)
+9f31d1063b434c Tina Zhang          2017-11-23  204  {
+a61ac1e75105a0 Chris Wilson        2020-03-06  205  	struct drm_i915_private *dev_priv = vgpu->gvt->gt->i915;
+9f31d1063b434c Tina Zhang          2017-11-23  206  	u32 val, fmt;
+9f31d1063b434c Tina Zhang          2017-11-23  207  	int pipe;
+9f31d1063b434c Tina Zhang          2017-11-23  208  
+9f31d1063b434c Tina Zhang          2017-11-23  209  	pipe = get_active_pipe(vgpu);
+9f31d1063b434c Tina Zhang          2017-11-23  210  	if (pipe >= I915_MAX_PIPES)
+9f31d1063b434c Tina Zhang          2017-11-23  211  		return -ENODEV;
+9f31d1063b434c Tina Zhang          2017-11-23  212  
+90551a1296d4db Zhenyu Wang         2017-12-19  213  	val = vgpu_vreg_t(vgpu, DSPCNTR(pipe));
+9f31d1063b434c Tina Zhang          2017-11-23  214  	plane->enabled = !!(val & DISPLAY_PLANE_ENABLE);
+9f31d1063b434c Tina Zhang          2017-11-23  215  	if (!plane->enabled)
+9f31d1063b434c Tina Zhang          2017-11-23  216  		return -ENODEV;
+9f31d1063b434c Tina Zhang          2017-11-23  217  
+d8d123128c4872 Lucas De Marchi     2021-06-03  218  	if (GRAPHICS_VER(dev_priv) >= 9) {
+b244ffa15c8b1a Zhenyu Wang         2018-08-30  219  		plane->tiled = val & PLANE_CTL_TILED_MASK;
+9f31d1063b434c Tina Zhang          2017-11-23  220  		fmt = skl_format_to_drm(
+9f31d1063b434c Tina Zhang          2017-11-23 @221  			val & PLANE_CTL_FORMAT_MASK,
+9f31d1063b434c Tina Zhang          2017-11-23  222  			val & PLANE_CTL_ORDER_RGBX,
+9f31d1063b434c Tina Zhang          2017-11-23  223  			val & PLANE_CTL_ALPHA_MASK,
+9f31d1063b434c Tina Zhang          2017-11-23  224  			val & PLANE_CTL_YUV422_ORDER_MASK);
+461bd6227ede27 Gustavo A. R. Silva 2017-12-09  225  
+461bd6227ede27 Gustavo A. R. Silva 2017-12-09  226  		if (fmt >= ARRAY_SIZE(skl_pixel_formats)) {
+461bd6227ede27 Gustavo A. R. Silva 2017-12-09  227  			gvt_vgpu_err("Out-of-bounds pixel format index\n");
+461bd6227ede27 Gustavo A. R. Silva 2017-12-09  228  			return -EINVAL;
+461bd6227ede27 Gustavo A. R. Silva 2017-12-09  229  		}
+461bd6227ede27 Gustavo A. R. Silva 2017-12-09  230  
+9f31d1063b434c Tina Zhang          2017-11-23  231  		plane->bpp = skl_pixel_formats[fmt].bpp;
+9f31d1063b434c Tina Zhang          2017-11-23  232  		plane->drm_format = skl_pixel_formats[fmt].drm_format;
+9f31d1063b434c Tina Zhang          2017-11-23  233  	} else {
+a40fa231bb64b3 Tina Zhang          2018-12-03  234  		plane->tiled = val & DISPPLANE_TILED;
+9f31d1063b434c Tina Zhang          2017-11-23  235  		fmt = bdw_format_to_drm(val & DISPPLANE_PIXFORMAT_MASK);
+9f31d1063b434c Tina Zhang          2017-11-23  236  		plane->bpp = bdw_pixel_formats[fmt].bpp;
+9f31d1063b434c Tina Zhang          2017-11-23  237  		plane->drm_format = bdw_pixel_formats[fmt].drm_format;
+9f31d1063b434c Tina Zhang          2017-11-23  238  	}
+9f31d1063b434c Tina Zhang          2017-11-23  239  
+9f31d1063b434c Tina Zhang          2017-11-23  240  	if (!plane->bpp) {
+9f31d1063b434c Tina Zhang          2017-11-23  241  		gvt_vgpu_err("Non-supported pixel format (0x%x)\n", fmt);
+9f31d1063b434c Tina Zhang          2017-11-23  242  		return -EINVAL;
+9f31d1063b434c Tina Zhang          2017-11-23  243  	}
+9f31d1063b434c Tina Zhang          2017-11-23  244  
+9f31d1063b434c Tina Zhang          2017-11-23  245  	plane->hw_format = fmt;
+9f31d1063b434c Tina Zhang          2017-11-23  246  
+90551a1296d4db Zhenyu Wang         2017-12-19  247  	plane->base = vgpu_vreg_t(vgpu, DSPSURF(pipe)) & I915_GTT_PAGE_MASK;
+c25144098bee19 Xiong Zhang         2019-05-27  248  	if (!vgpu_gmadr_is_valid(vgpu, plane->base))
+9f31d1063b434c Tina Zhang          2017-11-23  249  		return  -EINVAL;
+9f31d1063b434c Tina Zhang          2017-11-23  250  
+9f31d1063b434c Tina Zhang          2017-11-23  251  	plane->base_gpa = intel_vgpu_gma_to_gpa(vgpu->gtt.ggtt_mm, plane->base);
+9f31d1063b434c Tina Zhang          2017-11-23  252  	if (plane->base_gpa == INTEL_GVT_INVALID_ADDR) {
+a733390f9a7987 Xiong Zhang         2018-03-28  253  		gvt_vgpu_err("Translate primary plane gma 0x%x to gpa fail\n",
+a733390f9a7987 Xiong Zhang         2018-03-28  254  				plane->base);
+9f31d1063b434c Tina Zhang          2017-11-23  255  		return  -EINVAL;
+9f31d1063b434c Tina Zhang          2017-11-23  256  	}
+9f31d1063b434c Tina Zhang          2017-11-23  257  
+b244ffa15c8b1a Zhenyu Wang         2018-08-30  258  	plane->stride = intel_vgpu_get_stride(vgpu, pipe, plane->tiled,
+d8d123128c4872 Lucas De Marchi     2021-06-03  259  		(GRAPHICS_VER(dev_priv) >= 9) ?
+4a136d590bd4c5 Tina Zhang          2017-11-28  260  		(_PRI_PLANE_STRIDE_MASK >> 6) :
+9f31d1063b434c Tina Zhang          2017-11-23  261  		_PRI_PLANE_STRIDE_MASK, plane->bpp);
+9f31d1063b434c Tina Zhang          2017-11-23  262  
+90551a1296d4db Zhenyu Wang         2017-12-19  263  	plane->width = (vgpu_vreg_t(vgpu, PIPESRC(pipe)) & _PIPE_H_SRCSZ_MASK) >>
+9f31d1063b434c Tina Zhang          2017-11-23  264  		_PIPE_H_SRCSZ_SHIFT;
+9f31d1063b434c Tina Zhang          2017-11-23  265  	plane->width += 1;
+90551a1296d4db Zhenyu Wang         2017-12-19  266  	plane->height = (vgpu_vreg_t(vgpu, PIPESRC(pipe)) &
+9f31d1063b434c Tina Zhang          2017-11-23  267  			_PIPE_V_SRCSZ_MASK) >> _PIPE_V_SRCSZ_SHIFT;
+9f31d1063b434c Tina Zhang          2017-11-23  268  	plane->height += 1;	/* raw height is one minus the real value */
+9f31d1063b434c Tina Zhang          2017-11-23  269  
+90551a1296d4db Zhenyu Wang         2017-12-19  270  	val = vgpu_vreg_t(vgpu, DSPTILEOFF(pipe));
+9f31d1063b434c Tina Zhang          2017-11-23  271  	plane->x_offset = (val & _PRI_PLANE_X_OFF_MASK) >>
+9f31d1063b434c Tina Zhang          2017-11-23  272  		_PRI_PLANE_X_OFF_SHIFT;
+9f31d1063b434c Tina Zhang          2017-11-23  273  	plane->y_offset = (val & _PRI_PLANE_Y_OFF_MASK) >>
+9f31d1063b434c Tina Zhang          2017-11-23  274  		_PRI_PLANE_Y_OFF_SHIFT;
+9f31d1063b434c Tina Zhang          2017-11-23  275  
+9f31d1063b434c Tina Zhang          2017-11-23  276  	return 0;
+9f31d1063b434c Tina Zhang          2017-11-23  277  }
+9f31d1063b434c Tina Zhang          2017-11-23  278  
 
-And I think a better report will be:
-
-         | write (reordered) to 0xaaaa of ...:
-         | foo+0x... // address of the write to A
-         | ...
-         |  |
-         |  +-> reordered to: bar+0x... // address of the write to B in bar()
-
-because it tells users the exact place the accesses get reordered. That
-means maybe we want something as below? Not completely tested, but I
-play with scope checking a bit, seems it gives what I want. Thoughts?
-
-Regards,
-Boqun
-
-diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-index 67794404042a..b495ed3aa637 100644
---- a/kernel/kcsan/report.c
-+++ b/kernel/kcsan/report.c
-@@ -324,7 +324,10 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
-        else
-                goto fallback;
-
--       for (skip = 0; skip < num_entries; ++skip) {
-+       skip = get_stack_skipnr(stack_entries, num_entries);
-+       *replaced = stack_entries[skip];
-+
-+       for (;skip < num_entries; ++skip) {
-                unsigned long func = stack_entries[skip];
-
-                if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
-@@ -332,7 +335,6 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
-                func -= offset;
-
-                if (func == target_func) {
--                       *replaced = stack_entries[skip];
-                        stack_entries[skip] = ip;
-                        return skip;
-                }
-
-> The implementation is a little trickier of course, but I really wanted
-> the main stack trace to look like any other non-reordered access,
-> which starts from the original access, and only have the "reordered
-> to" location be secondary information.
-> 
-> The foundation for doing this this was put in place here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6c65eb75686f
-> 
-> Thanks,
-> -- Marco
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
