@@ -1,36 +1,29 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED84768
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 18:18:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873DAC341C2;
-	Mon,  6 Dec 2021 18:18:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638814697;
-	bh=gPLiuC4sDQvqY7xh6J2FFZnBMVLBctYvzHUPULI8P7k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kcPrDmmNo8QASKPUrBmuxbbK9mMSiaD/IPRHmwTFX1yaiYJ2fzqrg1DmVgDJwgB9L
-	 aYWRcnVZVTyVn6wJcQL2vQC5k/MQAAAXsIFa5p7ovARJiSCh8uj16I3+vzf0H7hSFp
-	 jJcSVHfkPX84LCs5ZRqzK4TgHDa8VDVjIh3s80gsNF/gQxUo4vA6pUlPx92EhN1DCU
-	 hMPvCKLmjBoKaN1k8ubXq6mB9o4Q6sNF89AZOFD7tCjrQHNCyt/zsCfrEfdotvqz/i
-	 dL8qIFMHurJSY13u30NH/4yoCdUiWdFuEwMQRqHMbR9YfB4k6CK68ogaLqrOpeuDa7
-	 +LBRNwWv4NXfg==
-Date: Mon, 6 Dec 2021 11:18:12 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: linux-iio@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-	Baptiste Mansuy <bmansuy@invensense.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Jonathan Albrieux <jonathan.albrieux@gmail.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 00/12] IIO: clang W=1 warning cleanup.
-Message-ID: <Ya5T5CMHn5hzzJy5@archlinux-ax161>
-References: <20211128172445.2616166-1-jic23@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4089D2C9D
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 18:42:18 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217403862"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="217403862"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 10:42:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="461945803"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2021 10:42:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1muIwJ-000LaY-Cp; Mon, 06 Dec 2021 18:42:15 +0000
+Date: Tue, 7 Dec 2021 02:41:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [tglx-devel:msi 20/90] drivers/pci/probe.c:2312:27: error: no member
+ named 'msi_lock' in 'struct pci_dev'
+Message-ID: <202112070219.xshR2G9z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,95 +32,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211128172445.2616166-1-jic23@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Nov 28, 2021 at 05:24:33PM +0000, Jonathan Cameron wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> Hi All,
-> 
-> In the interests of noise reduction in warnings during build tests of
-> new code, this series suppresses a bunch of warnings seen with
-> LLVM=1 W=1.
-> 
-> Note I am seeing two others I haven't fixed here.  One is tied up in
-> the existing CONFIG_PM* cleanup patch set and will be dealt with as
-> part of that.  The other in tsl2772 looks like it might be a bug that
-> needs further analysis. If anyone is curious:
-> 
-> drivers/iio/light/tsl2772.c:576:24: warning: variable 'prox_diode_mask' set but not used [-Wunused-but-set-variable]
->         int i, ret, num_leds, prox_diode_mask;     
-> 
-> As is common with series like this, some of the drivers are old
-> and as such I haven't cc'd original authors etc and would appreciate
-> a sanity check from anyone who has the time.
-> 
-> Mauro and Arnd are cc'd on a bunch of them because a media patch that
-> I happened to see had similar fixes + discussion of type to use in the
-> casting. For some others I've just picked on people who touched
-> the driver in last year or so.
-> 
-> Nothing in this series should have any functional affect.
-> 
-> Jonathan
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi
+head:   36b5ae08d9cb4a60d6ea0f7ff6a3415223dbb289
+commit: 7ea486fb224a3869f662839f110b4c2f2be17fa3 [20/90] PCI/MSI: Move msi_lock to struct pci_dev
+config: x86_64-buildonly-randconfig-r005-20211206 (https://download.01.org/0day-ci/archive/20211207/202112070219.xshR2G9z-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f50be8eb0a12a61d23db6cda452c693001d76898)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=7ea486fb224a3869f662839f110b4c2f2be17fa3
+        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
+        git fetch --no-tags tglx-devel msi
+        git checkout 7ea486fb224a3869f662839f110b4c2f2be17fa3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/
 
-I build tested drivers/iio/ for arm, arm64, s390, and x86_64
-allmodconfig and did not see any warnings other than the ones mentioned
-in the commit message.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-All the fixes look reasonable for the warnings.
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> drivers/pci/probe.c:2312:27: error: no member named 'msi_lock' in 'struct pci_dev'
+           raw_spin_lock_init(&dev->msi_lock);
+                               ~~~  ^
+   include/linux/spinlock.h:106:24: note: expanded from macro 'raw_spin_lock_init'
+           __raw_spin_lock_init((lock), #lock, &__key, LD_WAIT_SPIN);      \
+                                 ^~~~
+   1 error generated.
 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Cc: Stephan Gerhold <stephan@gerhold.net>
-> Cc: Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
-> Cc: Baptiste Mansuy <bmansuy@invensense.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Jonathan Albrieux <jonathan.albrieux@gmail.com>
-> 
-> Jonathan Cameron (12):
->   iio:accel:bma180: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:dc:ina2xx-adc: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:adc:rcar: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:adc:ti-ads1015: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:amplifiers:hmc425a: Suppress clang W=1 warning about pointer to
->     enum conversion.
->   iio:dac:mcp4725: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:imu:inv_icm42600: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:imu:inv_mpu6050: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:magn:ak8975: Suppress clang W=1 warning about pointer to enum
->     conversion.
->   iio:dummy: Drop set but unused variable len.
->   iio:accel:bmc150: Mark structure __maybe_unused as only needed with
->     for pm ops.
->   iio:accel:kxcjk-1013: Mark struct __maybe_unused to avoid warning.
-> 
->  drivers/iio/accel/bma180.c                      | 2 +-
->  drivers/iio/accel/bmc150-accel-core.c           | 2 +-
->  drivers/iio/accel/kxcjk-1013.c                  | 2 +-
->  drivers/iio/adc/ina2xx-adc.c                    | 2 +-
->  drivers/iio/adc/rcar-gyroadc.c                  | 3 +--
->  drivers/iio/adc/ti-ads1015.c                    | 2 +-
->  drivers/iio/amplifiers/hmc425a.c                | 2 +-
->  drivers/iio/dac/mcp4725.c                       | 2 +-
->  drivers/iio/dummy/iio_simple_dummy_buffer.c     | 2 --
->  drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c | 2 +-
->  drivers/iio/imu/inv_icm42600/inv_icm42600_spi.c | 2 +-
->  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c       | 2 +-
->  drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c       | 2 +-
->  drivers/iio/magnetometer/ak8975.c               | 2 +-
->  14 files changed, 13 insertions(+), 16 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> 
+
+vim +2312 drivers/pci/probe.c
+
+  2302	
+  2303	struct pci_dev *pci_alloc_dev(struct pci_bus *bus)
+  2304	{
+  2305		struct pci_dev *dev;
+  2306	
+  2307		dev = kzalloc(sizeof(struct pci_dev), GFP_KERNEL);
+  2308		if (!dev)
+  2309			return NULL;
+  2310	
+  2311		INIT_LIST_HEAD(&dev->bus_list);
+> 2312		raw_spin_lock_init(&dev->msi_lock);
+  2313		dev->dev.type = &pci_dev_type;
+  2314		dev->bus = pci_bus_get(bus);
+  2315	
+  2316		return dev;
+  2317	}
+  2318	EXPORT_SYMBOL(pci_alloc_dev);
+  2319	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
