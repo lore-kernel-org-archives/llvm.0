@@ -1,255 +1,115 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E74D2C9D
-	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 05:04:55 +0000 (UTC)
-Received: by mail-il1-f178.google.com with SMTP id i9so9054763ilu.1
-        for <llvm@lists.linux.dev>; Sun, 05 Dec 2021 21:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tDhe7b+IhPRxxignxx1nDXp2K4ORmwOTZ8ivGctx3KA=;
-        b=gDBAKWrWkjW69MD6bJRbbC4IAUISs6K3clEQYe9+qhYEM+3/ei2QA1p+eyWPl//PkZ
-         MZs1sJjHKYkDAoANTwNTADXYKpdEjYIoi0R38SWvQThsyk9W7siLDhWHxaTtIEwvznxX
-         KsHy0EM0d6MDcPv/1xG1+2t90T3HhVUCpqNxDVZnsHkUi1Y6eq+fBTeGiPCxYug4x2bg
-         SVkrAd1qAIS0Ux/lvZ2x7r2K+56gFzhT1fwfVTxWtoVnmExYkIVzYe5aVUeiB2rCVfQ2
-         5yZPU9xKsAoMWF//IutAF8y9BC+AT6LIYHiIOXQZDA7ya17atidzw1OsV6Xm7smQnWZ3
-         PWFw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58E12C9D
+	for <llvm@lists.linux.dev>; Mon,  6 Dec 2021 06:04:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1638770641;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Wo70tjI7q1UAqboatbwLl0h/uu/FTe3Affu+qnLiGkQ=;
+	b=XYY7eXhylnsg4+T/kxBNzlOHzbFesYNeuv2rR7aHGdKxTXOaTIhPKF7cC/9z2auVGzmII+
+	TPIeXK1RVHGquC54I5la9yxEqJbUguzOSNUhEwG4JIw1FDHiN4/h6w5Ghm/ijjffgbCSm/
+	r05ZP0eHLzTvevFWcOGHIXrbg4/KIw4=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-97-86kn_peyPbGE-B3NCPdxpQ-1; Mon, 06 Dec 2021 01:03:58 -0500
+X-MC-Unique: 86kn_peyPbGE-B3NCPdxpQ-1
+Received: by mail-qv1-f70.google.com with SMTP id fw10-20020a056214238a00b003c05d328ad2so10760049qvb.2
+        for <llvm@lists.linux.dev>; Sun, 05 Dec 2021 22:03:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=tDhe7b+IhPRxxignxx1nDXp2K4ORmwOTZ8ivGctx3KA=;
-        b=rsuRpRku2ChPslWrydLBL8PYRe2id2iD0Qc5vuFxK9x8vFVZ0f9DuPO+3XLkkWWW1t
-         Z/kyaACHJrF6M4FtmMjLebcsQ7lYCfzQb6MWOGHu8NAcKAGLQHJBTh5RFikcbGe3o0NL
-         tbUD38bTTJ0R1+LZk0zJlJN0pnmh4sfTgk1gWKrVd+IJup0dKfyckd+uVTE0nay4FYO6
-         cMKtMO1qvdRekFeo3FVE8OEiEjtCsheO+kfj/W/TQ8vk0DUPIBSbCvWC4A3oLi/eiS6k
-         L81fakxqDPqWVHeATYtcp8Bu2Raww4hLWqYrLmePOW/bANyufCj65M+5LY4BjfDX0fVH
-         B1qQ==
-X-Gm-Message-State: AOAM531evds2xn/GfXzp2ukSE6nzCEv4fLh6aOeSWswUHI+W/mr12CN3
-	DtiUcUTAd1vgKAnJ3P0iZhU=
-X-Google-Smtp-Source: ABdhPJwaVNNy8KXHPX0diE+9BqZRmxfh/F+tlyo2HmuHIUQC0d5++KCQ+YdgK0rTeMwJsEVyI2Orbg==
-X-Received: by 2002:a05:6e02:1aa2:: with SMTP id l2mr31908443ilv.7.1638767094542;
-        Sun, 05 Dec 2021 21:04:54 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id c22sm5776377ioz.15.2021.12.05.21.04.52
+        bh=Wo70tjI7q1UAqboatbwLl0h/uu/FTe3Affu+qnLiGkQ=;
+        b=AfaOsqRJpYOhVd/YLH9b0ea29d7vlj0vdzATlGp4GhTXM6jM+LAWFWkI1NKEMNvM0w
+         EVMkY1H2k9p6bkE8q6XYenISq3FFqUnv6si5cZgFNLi3bGddLPAnPteg4rtbVafotSOo
+         n50NWDlMM7PfBPydXbNN3QSdv8dBPDIqN8KnyVjEGl3T8v+gTf/WuPFrazMhpjrToNiz
+         CGELg0wWDnTbLhV3EGdabENc2iRzS6itl6yt6q6I1I32aSv/4POnUIepvsC1r5Jz1ngz
+         n1fJPOh6pLdDQ4PvEFDV4nxH5YHzN5EEn0KpuVdEPf0ynyed/tyy+BCo0LgbaFpUQ5KD
+         i2eQ==
+X-Gm-Message-State: AOAM531DrX8GLHd8Y04qw9SMu81T8mAesbXo3lmNrKaNfQ6TowALffC+
+	YMDqeqWaxf0gxUo1GZFc8dZIGaGdcaOMqGopByTsm2jV4OR4MKfVRtD2wLuMF73O0W+twQUlinl
+	4DN9jLwr7pQ0fug==
+X-Received: by 2002:ac8:5bcf:: with SMTP id b15mr37503576qtb.474.1638770637766;
+        Sun, 05 Dec 2021 22:03:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwBlcOgv7DcKhfVmXiMUiPn6jj3Lbd0IoNd3WtPjyxukoKwU1wdw7FB6qmJfkTYOfo/DTS8HA==
+X-Received: by 2002:ac8:5bcf:: with SMTP id b15mr37503536qtb.474.1638770637542;
+        Sun, 05 Dec 2021 22:03:57 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id y20sm6176312qkj.24.2021.12.05.22.03.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 21:04:53 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 0841227C0054;
-	Mon,  6 Dec 2021 00:04:51 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 06 Dec 2021 00:04:52 -0500
-X-ME-Sender: <xms:85mtYXWw3oDZ0NxfzGmSkDWVDwODn54pQ3vkyqYQpDkpb-hF89cz7A>
-    <xme:85mtYflbLFvAzyeoTuOKXu2W8_C3GV0Z_k5wT2Koe6rGc-MOKqU5wJb3_OEdT8uip
-    _9vNCV9I3JoCTN_6Q>
-X-ME-Received: <xmr:85mtYTY3cVvAZ0O5xOh8r4B7zeUpWVBWDze0NubZ-LuL89xCy_zGvkEaSiE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjedvgdejlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:85mtYSVyeqXNTvxyxUKsjXeJUcfFiIAmWmDHaJss1eMI7ycPzfiJXw>
-    <xmx:85mtYRmcDwTjVFRx64ILk_o3jPn2_It-kF0eEAZKrowIK0kxCG3gDA>
-    <xmx:85mtYfeI1tYn0Hy_XlBfSO2fu3lpX1xkTId5vyZ3rVDIn8TYewPeMw>
-    <xmx:85mtYQfmvxb8sPHyPVqy-diUzzcHKKuEPRHuW3DggOsRZcB3DDkbF_4ncNk>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 00:04:50 -0500 (EST)
-Date: Mon, 6 Dec 2021 13:03:33 +0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Borislav Petkov <bp@alien8.de>, Dmitry Vyukov <dvyukov@google.com>,
-	Ingo Molnar <mingo@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
-Message-ID: <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-9-elver@google.com>
+        Sun, 05 Dec 2021 22:03:56 -0800 (PST)
+Date: Sun, 5 Dec 2021 22:03:50 -0800
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+	linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v8 08/14] livepatch: only match unique symbols when using
+ FG-KASLR
+Message-ID: <20211206060350.f4hqug2jhgjlaw3c@treble>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-9-alexandr.lobakin@intel.com>
+ <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211130114433.2580590-9-elver@google.com>
 
-Hi,
-
-On Tue, Nov 30, 2021 at 12:44:16PM +0100, Marco Elver wrote:
-> Also show the location the access was reordered to. An example report:
+On Fri, Dec 03, 2021 at 11:05:54AM +0100, Peter Zijlstra wrote:
+> On Thu, Dec 02, 2021 at 11:32:08PM +0100, Alexander Lobakin wrote:
+> > If any type of function granular randomization is enabled, the sympos
+> > algorithm will fail, as it will be impossible to resolve symbols when
+> > there are duplicates using the previous symbol position.
+> > 
+> > We could override sympos to 0, but make it more clear to the user
+> > and bail out if the symbol is not unique.
 > 
-> | ==================================================================
-> | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
-> |
-> | read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
-> |  test_kernel_wrong_memorder+0x57/0x90
-> |  access_thread+0x99/0xe0
-> |  kthread+0x2ba/0x2f0
-> |  ret_from_fork+0x22/0x30
-> |
-> | read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
-> |  test_kernel_wrong_memorder+0x57/0x90
-> |  access_thread+0x99/0xe0
-> |  kthread+0x2ba/0x2f0
-> |  ret_from_fork+0x22/0x30
-> |   |
-> |   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
-> |
+> Since we're going lots of horrendous things already, why can't we fix
+> this duplicate nonsense too?
 
-Should this be "reordered from" instead of "reordered to"? For example,
-if the following case needs a smp_mb() between write to A and write to
-B, I think currently it will report as follow:
+I assume you mean using this new linker flag: "-z unique-symbol"
 
-	foo() {
-		WRITE_ONCE(A, 1); // let's say A's address is 0xaaaa
-		bar() {
-			WRITE_ONCE(B, 1); // Assume B's address is 0xbbbb
-					  // KCSAN find the problem here
-		}
-	}
+https://sourceware.org/bugzilla/show_bug.cgi?id=26391
 
-	<report>
-	| write (reordered) to 0xaaaa of ...:
-	| bar+0x... // address of the write to B
-	| foo+0x... // address of the callsite to bar()
-	| ...
-	|  |
-	|  +-> reordered to: foo+0x... // address of the write to A
+-- 
+Josh
 
-But since the access reported here is the write to A, so it's a
-"reordered from" instead of "reordered to"?
-
-Regards,
-Boqun
-
-> | Reported by Kernel Concurrency Sanitizer on:
-> | CPU: 7 PID: 2310 Comm: access_thread Not tainted 5.14.0-rc1+ #18
-> | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-> | ==================================================================
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  kernel/kcsan/report.c | 35 +++++++++++++++++++++++------------
->  1 file changed, 23 insertions(+), 12 deletions(-)
-> 
-> diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-> index 1b0e050bdf6a..67794404042a 100644
-> --- a/kernel/kcsan/report.c
-> +++ b/kernel/kcsan/report.c
-> @@ -308,10 +308,12 @@ static int get_stack_skipnr(const unsigned long stack_entries[], int num_entries
->  
->  /*
->   * Skips to the first entry that matches the function of @ip, and then replaces
-> - * that entry with @ip, returning the entries to skip.
-> + * that entry with @ip, returning the entries to skip with @replaced containing
-> + * the replaced entry.
->   */
->  static int
-> -replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned long ip)
-> +replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned long ip,
-> +		    unsigned long *replaced)
->  {
->  	unsigned long symbolsize, offset;
->  	unsigned long target_func;
-> @@ -330,6 +332,7 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
->  		func -= offset;
->  
->  		if (func == target_func) {
-> +			*replaced = stack_entries[skip];
->  			stack_entries[skip] = ip;
->  			return skip;
->  		}
-> @@ -342,9 +345,10 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
->  }
->  
->  static int
-> -sanitize_stack_entries(unsigned long stack_entries[], int num_entries, unsigned long ip)
-> +sanitize_stack_entries(unsigned long stack_entries[], int num_entries, unsigned long ip,
-> +		       unsigned long *replaced)
->  {
-> -	return ip ? replace_stack_entry(stack_entries, num_entries, ip) :
-> +	return ip ? replace_stack_entry(stack_entries, num_entries, ip, replaced) :
->  			  get_stack_skipnr(stack_entries, num_entries);
->  }
->  
-> @@ -360,6 +364,14 @@ static int sym_strcmp(void *addr1, void *addr2)
->  	return strncmp(buf1, buf2, sizeof(buf1));
->  }
->  
-> +static void
-> +print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
-> +{
-> +	stack_trace_print(stack_entries, num_entries, 0);
-> +	if (reordered_to)
-> +		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to);
-> +}
-> +
->  static void print_verbose_info(struct task_struct *task)
->  {
->  	if (!task)
-> @@ -378,10 +390,12 @@ static void print_report(enum kcsan_value_change value_change,
->  			 struct other_info *other_info,
->  			 u64 old, u64 new, u64 mask)
->  {
-> +	unsigned long reordered_to = 0;
->  	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
->  	int num_stack_entries = stack_trace_save(stack_entries, NUM_STACK_ENTRIES, 1);
-> -	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip);
-> +	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, &reordered_to);
->  	unsigned long this_frame = stack_entries[skipnr];
-> +	unsigned long other_reordered_to = 0;
->  	unsigned long other_frame = 0;
->  	int other_skipnr = 0; /* silence uninit warnings */
->  
-> @@ -394,7 +408,7 @@ static void print_report(enum kcsan_value_change value_change,
->  	if (other_info) {
->  		other_skipnr = sanitize_stack_entries(other_info->stack_entries,
->  						      other_info->num_stack_entries,
-> -						      other_info->ai.ip);
-> +						      other_info->ai.ip, &other_reordered_to);
->  		other_frame = other_info->stack_entries[other_skipnr];
->  
->  		/* @value_change is only known for the other thread */
-> @@ -434,10 +448,9 @@ static void print_report(enum kcsan_value_change value_change,
->  		       other_info->ai.cpu_id);
->  
->  		/* Print the other thread's stack trace. */
-> -		stack_trace_print(other_info->stack_entries + other_skipnr,
-> +		print_stack_trace(other_info->stack_entries + other_skipnr,
->  				  other_info->num_stack_entries - other_skipnr,
-> -				  0);
-> -
-> +				  other_reordered_to);
->  		if (IS_ENABLED(CONFIG_KCSAN_VERBOSE))
->  			print_verbose_info(other_info->task);
->  
-> @@ -451,9 +464,7 @@ static void print_report(enum kcsan_value_change value_change,
->  		       get_thread_desc(ai->task_pid), ai->cpu_id);
->  	}
->  	/* Print stack trace of this thread. */
-> -	stack_trace_print(stack_entries + skipnr, num_stack_entries - skipnr,
-> -			  0);
-> -
-> +	print_stack_trace(stack_entries + skipnr, num_stack_entries - skipnr, reordered_to);
->  	if (IS_ENABLED(CONFIG_KCSAN_VERBOSE))
->  		print_verbose_info(current);
->  
-> -- 
-> 2.34.0.rc2.393.gf8c9666880-goog
-> 
