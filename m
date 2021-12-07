@@ -1,106 +1,77 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0837B2C9D
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:41:36 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id t26so378436lfk.9
-        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:41:36 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307CC2C9D
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:50:54 +0000 (UTC)
+Received: by mail-lf1-f41.google.com with SMTP id n12so535624lfe.1
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:50:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
-        b=aDIAN17BKGq0GIN+YPIlQpFEpU4IUGBEknSlUTURp1gnh6I71NueXG/IAR3kdGGdnb
-         LXMkE3sM3iS1y3vT4KBCqNdcAzBh0GwpFSY5BZemA+TV9dieQBcMWd4/UUeLInNlkuQW
-         Bf+QMp2p6J6HDkVKgrVYIl6fLaEjWgoqLxuWNHZp7QGVxyaXHU2M2pLj7KRcT6w9jvpe
-         O5LW/kXKV27CBR25kEBseIpFQxdPcpxkMwlMKja49bqU9dOWidyseQGcyzsz6F4R1qO8
-         wHM04ZWGdvFpC4HyJWrMHKaz3QULjsP6DkWcM+Q/H1pkgRGltpi1JaMR6nA+D/q3r45P
-         tNuQ==
+        bh=Gmb+Apudh+c3b4tBgmQNZgnlcpZS4tKe6ho/6WlprlI=;
+        b=QDFc9P5aML7+YtJ4kv8ohPRs/NxD8Xl31/KC9meyRbjsUWaCD8+eUYuX6yVUlGqPHd
+         KK5IUmkhYJUj3NsARjU1eko53272JkmdRrJUgX+l9Aw8osNMVvggDJ3o5a2SoDGLt8Xb
+         QZuDre4bR/z4KskwYlkuCw9lTYA7xJJPi1fr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
-        b=fdEzfw9uzAHKzEJwYec8kjeuyroc6jS5PxL5Ixa1ux4W5j3UzsExVofrCdIuBEQZxZ
-         x7tbTk0c53TNelcYRzRkZeLgHAXatqwDkScZ+IoVKfs+qQLp0fq19R8OYer9s4Upvj4v
-         8UpjElU6Vn09PYf77cWuQFa6eU7ychhcia5S22+hjNsID3EpsiOsYg6UJJm/xsaYtCTG
-         D5zuox261/a6H/hVhqnxUFQotQNlpnpGcIiVi4Gd9w1Dl2eWjaIOe1E42CIXINEV2ZsR
-         0MRyFGTAwCwMXRF6JJpOCzKjcjgwtjycnmARYcISNDMn7/WOKhSZt650+AwEnZQM6nw8
-         J9nw==
-X-Gm-Message-State: AOAM531/zfI3CZ50QKwsqhDboI3KIyPt9tI03A+2WCwwQVidmmDl3Ore
-	+yOHo//v6Vig8S72B0pCZepuPCCtdQL1GKok/PsYug==
-X-Google-Smtp-Source: ABdhPJyeHj3lrlUlDby3ennl3ufCpDgdCUvs6c7j5SLDxK90H6tLe6REyxb4vxCtSTv4FGgP01zjRMahD5LyaHn+DeQ=
-X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr41550500lfv.523.1638902494780;
- Tue, 07 Dec 2021 10:41:34 -0800 (PST)
+        bh=Gmb+Apudh+c3b4tBgmQNZgnlcpZS4tKe6ho/6WlprlI=;
+        b=Sn7jB+QJdAzrdNpX+VEoeCqAyIIO/VN5aEXPmTGclaHmswPxq8xAcPJO/mTx4BZ5iP
+         +I+X0XkpBDVbkQaZHyA8r+8Dy3tAJneNMXInSwdWwNI9NJXhjbQtFqF/eFWeXXvSLrNp
+         +G+ooVW+wF/abmEydzfkHsQVU0fj+Rtl1EbRX7HXoTLOVCab9CtOUsiX504w3cTaknmd
+         2V/6ET8uC4wLzP2louLXz4MrxuXCZMpVpDhAG6mO/nAjtxYuOOhvq70Zgh2+emuCmIKg
+         htZ+Tj9i+hEMwNUoyFSBP9+7LACBu12lgf+FgGNZvzFWvoHCjM3q3408tmzZpVOSpqxd
+         D6Sw==
+X-Gm-Message-State: AOAM530NSeWKfe8mIxprnKNrDUpUi935oSpagKx8rNVH0ISv+1+hyugG
+	n+jCn9aa+LUvnER1uOwDVgcjfthfHIvrswMAjwU=
+X-Google-Smtp-Source: ABdhPJz7TrafgpPRJYock05STB3zKcHmfy3MmAG6ROk7DqoiniGm0IGgiDqz2eO4KrDF9Ym1EciKPA==
+X-Received: by 2002:ac2:5bce:: with SMTP id u14mr43091286lfn.467.1638903052105;
+        Tue, 07 Dec 2021 10:50:52 -0800 (PST)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id m13sm38422lfl.131.2021.12.07.10.50.51
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 10:50:51 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id b40so426505lfv.10
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:50:51 -0800 (PST)
+X-Received: by 2002:adf:e5c7:: with SMTP id a7mr54258440wrn.318.1638903040805;
+ Tue, 07 Dec 2021 10:50:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211204220249.591482-1-arnd@kernel.org>
-In-Reply-To: <20211204220249.591482-1-arnd@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Dec 2021 10:41:24 -0800
-Message-ID: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
-Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+ <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
+In-Reply-To: <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 7 Dec 2021 10:50:24 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjsdmyN3qYjA-Z4bqhin2ZFkssRaaTRm_LdJBqexTxWfQ@mail.gmail.com>
+Message-ID: <CAHk-=wjsdmyN3qYjA-Z4bqhin2ZFkssRaaTRm_LdJBqexTxWfQ@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
 To: Arnd Bergmann <arnd@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Ren=C3=A9_Moll?= <Rene.Moll@xsens.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+	kernelci@groups.io, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, Dec 7, 2021 at 10:17 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> clang-14 does not like the way this driver converts a 'long double'
-> to an integer when the target architecture disables floating point
-> support:
->
-> drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
->         data->wde_interval = 300L * 1E6L;
->                                   ^
->
-> Turn this into pure integer math and make it more readable at the
-> same time using the NSEC_PER_MSEC macro instead.
->
-> Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Ugh. I liked your 1/3 patch, but I absolutely detest this one.
 
-Thanks for the patch! The change in clang-14 (ToT) that triggered this
-has had another patch on top reverting these diagnostics.
-https://reviews.llvm.org/D114162
+Actually, it was 3/3 I liked and that made sense to me.
 
-That said, this change is still worthwhile for the improved semantics, IMO.
+1/3 isn't pretty, but I can live with it.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
-> index fbb344353fe4..9fc88a9f244c 100644
-> --- a/drivers/power/reset/ltc2952-poweroff.c
-> +++ b/drivers/power/reset/ltc2952-poweroff.c
-> @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
->
->  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
->  {
-> -       data->wde_interval = 300L * 1E6L;
-> -       data->trigger_delay = ktime_set(2, 500L*1E6L);
-> +       data->wde_interval = 300 * NSEC_PER_MSEC;
-> +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
->
->         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
-> --
-> 2.29.2
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+          Linus
