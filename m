@@ -1,72 +1,131 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB1168
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1638896549;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VOo08Za0h0B1Awl2dIxSWFReANWHcgpHkuzyXdSQC/M=;
-	b=QkaSgDEmh4jm95aSkFokZVFkejxq0Le5e3n37IntUnoVkOTbQSBvMSx8knTjy1uQMfwylz
-	c8NHvpxt14AYtjQ1A4JaV8Wc5LwDpNF6BWZ9ZIz1YsrHoGtj61aemh6uprAUrSS5b/Jb3g
-	C1YIZvee8MwxACLRYjq18pFtBf13KQg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-rTYf_iefOqGKpwKITIZ5Tw-1; Tue, 07 Dec 2021 12:02:24 -0500
-X-MC-Unique: rTYf_iefOqGKpwKITIZ5Tw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D2AD2F25;
-	Tue,  7 Dec 2021 17:02:23 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 54470177C0;
-	Tue,  7 Dec 2021 17:02:21 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20211204220350.633811-1-arnd@kernel.org>
-References: <20211204220350.633811-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: dhowells@redhat.com, Arnd Bergmann <arnd@arndb.de>,
-    Nathan Chancellor <nathan@kernel.org>,
-    Nick Desaulniers <ndesaulniers@google.com>,
-    Jeff Layton <jlayton@kernel.org>, linux-cachefs@redhat.com,
-    linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] cachefiles: fix __cachefiles_prepare_write() error handling
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07AA68
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AA8C341C8
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638896849;
+	bh=AWAI4dsGFqTjRC1xoqF0cYc1RPAXHGsAWxn92fKI3oI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gf3v2LOOtwGy6hrhLaaWTZdzvHT2yj5fU611wjvPDLNa8iEipEpydiG2MaJQdmcON
+	 5lKqN3WsEE+gquCLQHNajub1oh17woTQIMr9Ec/YVS5pQLeqYAMI51bBhAhV3u39Hs
+	 8XhGioMd5MdkwTerMyzbSvVtibIeZUl3TFPh7iywLJL80GmcXl2IPxHtMLoqyNlyNT
+	 /CrN1hdY0hYnXgaG0xYnfi3pvMQH6BFN0pl6BOEv7NaYnFDwa/ZijuvEyMqdmf3UvB
+	 +TWYf5z8QpIlhyMHDUHSGx1iSk0SsiikS16nizfpEbn/lD2qlASj9M7QZJfWXRphgF
+	 /iAMoxCsfLKKQ==
+Received: by mail-wr1-f42.google.com with SMTP id d9so30896695wrw.4
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 09:07:29 -0800 (PST)
+X-Gm-Message-State: AOAM530GKJZxAXmDMB+li726IT6VgB8xlfSzHmLaYPZDkXCRIXnsY1at
+	jip/QYMOrRYAfehJjMHPo41KrpEZ0xcAVg/N8AI=
+X-Google-Smtp-Source: ABdhPJxWAtCNN0Uz78wSmLpQSouIBrjU5QdcPq1mv6T3zwlTEprnXUaZ5kdK5O0wqBz67kMO3G1bdxsApionhf3b3lc=
+X-Received: by 2002:a5d:64ea:: with SMTP id g10mr53188820wri.137.1638896847522;
+ Tue, 07 Dec 2021 09:07:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1878024.1638896540.1@warthog.procyon.org.uk>
-Date: Tue, 07 Dec 2021 17:02:20 +0000
-Message-ID: <1878025.1638896540@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+ <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
+In-Reply-To: <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Tue, 7 Dec 2021 18:07:11 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
+Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+	kernelci@groups.io, 
+	Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, Dec 7, 2021 at 4:32 PM Matthew Wilcox <willy@infradead.org> wrote:
 
->  	pos = cachefiles_inject_remove_error();
-> -	if (pos == 0)
-> -		ret = vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-> -				    *_start, *_len);
-> +	if (pos != 0)
-> +		return 0;
-> +
-> +	ret = vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-> +			    *_start, *_len);
->  	if (ret < 0) {
+> >  #define __SWAITQUEUE_INITIALIZER(name) {                             \
+> >       .task           =3D current,                                     =
+ \
+> >       .task_list      =3D LIST_HEAD_INIT((name).task_list),            =
+ \
+>
+> swait.h doesn't need to include <linux/struct_types.h> ?
 
-The right fix is to use "ret" rather than "pos".  I've fixed this already on
-my fscache-rewrite branch.  Hopefully I'll be able to push that over to my
-next branch shortly.
+I should probably add it for consistency, also in some other places.
+At the moment it works without that because the new header is pulled
+in through linux/spinlock.h.
 
-David
+> > -
+> >  #define XARRAY_INIT(name, flags) {                           \
+> >       .xa_lock =3D __SPIN_LOCK_UNLOCKED(name.xa_lock),          \
+> >       .xa_flags =3D flags,                                      \
+>
+> I think this is going to break:
+>
+> (cd tools/testing/radix-tree; make)
 
+I've tried addressing this now, but I first ran into a different problem
+that exists in linux-next but not in mainline as of today:
+
+cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
+-fsanitize=3Dundefined   -c -o main.o main.c
+In file included from ./linux/xarray.h:2,
+                 from ./linux/../../../../include/linux/radix-tree.h:21,
+                 from ./linux/radix-tree.h:5,
+                 from main.c:10:
+./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
+hunk=E2=80=99:
+./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
+declaration of function =E2=80=98find_next_bit=E2=80=99
+[-Wimplicit-function-declaration]
+ 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
+      |         ^~~~~~~~~~~~~
+cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
+-fsanitize=3Dundefined   -c -o xarray.o xarray.c
+In file included from ./linux/xarray.h:2,
+                 from ./linux/../../../../include/linux/radix-tree.h:21,
+                 from ./linux/radix-tree.h:5,
+                 from test.h:4,
+                 from xarray.c:8:
+./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
+hunk=E2=80=99:
+./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
+declaration of function =E2=80=98find_next_bit=E2=80=99
+[-Wimplicit-function-declaration]
+ 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
+      |         ^~~~~~~~~~~~~
+In file included from ../../include/linux/bitmap.h:7,
+                 from ../../../lib/xarray.c:9,
+                 from xarray.c:16:
+../../include/linux/find.h: At top level:
+../../include/linux/find.h:31:15: error: conflicting types for =E2=80=98fin=
+d_next_bit=E2=80=99
+   31 | unsigned long find_next_bit(const unsigned long *addr,
+unsigned long size,
+      |               ^~~~~~~~~~~~~
+In file included from ./linux/xarray.h:2,
+                 from ./linux/../../../../include/linux/radix-tree.h:21,
+                 from ./linux/radix-tree.h:5,
+                 from test.h:4,
+                 from xarray.c:8:
+./linux/../../../../include/linux/xarray.h:1669:9: note: previous
+implicit declaration of =E2=80=98find_next_bit=E2=80=99 was here
+ 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
+      |         ^~~~~~~~~~~~~
+make: *** [<builtin>: xarray.o] Error 1
+
+It's clearly broken after Yury's recent bitops.h cleanup, but I can't
+quite find my way
+through the maze of tools/testing headers to fix it.
+
+        Arnd
