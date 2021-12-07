@@ -1,69 +1,120 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A799E68
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:49:00 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="236376865"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="236376865"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:32:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="748862960"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Dec 2021 09:32:10 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mueK1-000MoT-SL; Tue, 07 Dec 2021 17:32:09 +0000
-Date: Wed, 8 Dec 2021 01:31:24 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: arch/x86/mm/extable.o: warning: objtool: fixup_exception()+0x49f:
- unreachable instruction
-Message-ID: <202112080149.c43lMxlq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E912CA8
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:00:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF552C341C3;
+	Tue,  7 Dec 2021 18:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638900008;
+	bh=aKg6nSmYDNEZA50nS90q2gIS47iA/LbgPSILNYZJWOc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=K7+UDhhcc0dBOU7MqY4SBN3EJksBg2IH6U9FEexlBdqMfhrUTWOJx4e/fSnE7hxAx
+	 6/bDkGw1uxCK4vJ2A8333tMo6owkRiBZ9Hpyb5xJHUvCLRoFBDxjkdDvW9GyMu9+9d
+	 wBrGthjDEgRyimNqrM9giAOchoDuHBh/rs/ErnYG+ygWADuuovrFzNOythJL9uMSqj
+	 GZPD5Z2E/uYB1+UWrApVfeh3co+Zu9Qs3pOmH9jBeA/BA2C5ptlBMJno+6gtWhmb0N
+	 QYXnw4rjHmlgdsa8ri4LbIuXKXvAhDsAQul8v1sJprPFrJchMDLdlQi3AHR7HPXUeG
+	 NWKC2Zr7uF37w==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Subject: [PATCH] MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls
+Date: Tue,  7 Dec 2021 10:59:51 -0700
+Message-Id: <20211207175951.135400-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Thomas Gleixner <tglx@linutronix.de>
-CC: Borislav Petkov <bp@suse.de>
+When building with LLVM's integrated assembler, the build errors because
+it does not implement -mfix-loongson2f-{jump,nop}:
 
-Hi Thomas,
+arch/mips/loongson2ef/Platform:36: *** only binutils >= 2.20.2 have needed option -mfix-loongson2f-nop.  Stop.
 
-FYI, the error/warning still remains.
+The error is a little misleading because binutils are not being used in
+this case.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
-commit: 46d28947d9876fc0f8f93d3c69813ef6e9852595 x86/extable: Rework the exception table mechanics
-date:   3 months ago
-config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211208/202112080149.c43lMxlq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=46d28947d9876fc0f8f93d3c69813ef6e9852595
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 46d28947d9876fc0f8f93d3c69813ef6e9852595
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ block// crypto// drivers/ fs// kernel// mm// net/ sound/
+To clear this up, remove the as-option calls because binutils 2.23 is
+the minimum supported version for building the kernel. At the same time,
+remove the cc-option calls for the '-march=' flags, as GCC 5.1.0 is the
+minimum supported version.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This change will not fix the LLVM build for CONFIG_CPU_LOONGSON2{E,F},
+as it does not implement the loongson2{e,f} march arguments (nor r4600,
+so it will error prior to this change) nor the assembler flags mentioned
+above but it will make the errors more obvious.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/mm/extable.o: warning: objtool: fixup_exception()+0x49f: unreachable instruction
-
+Link: https://github.com/ClangBuiltLinux/linux/issues/1529
+Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+This dependency on certain toolchain flags should probably be moved into
+Kconfig at some point so that users cannot select configurations that
+they do not have support for so that their builds do not error. However,
+from a brief survey, there is not a clean way to codify these
+dependencies at the moment because the CPU configs are selected by the
+individual machines that implement them, meaning that the dependencies
+would need to be added to all the machine configs (as 'select ...'
+overrides 'depends on ...'), which is outside the scope of this patch.
+Furthermore, one could argue that it is better for the user to get a big
+error when they are missing support for something, rather than the
+configs getting disabled silently, especially if they are critical to
+the machine.
+
+ arch/mips/loongson2ef/Platform | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
+
+diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
+index ae023b9a1c51..50e659aca543 100644
+--- a/arch/mips/loongson2ef/Platform
++++ b/arch/mips/loongson2ef/Platform
+@@ -2,12 +2,9 @@
+ # Loongson Processors' Support
+ #
+ 
+-# Only gcc >= 4.4 have Loongson specific support
+ cflags-$(CONFIG_CPU_LOONGSON2EF)	+= -Wa,--trap
+-cflags-$(CONFIG_CPU_LOONGSON2E) += \
+-	$(call cc-option,-march=loongson2e,-march=r4600)
+-cflags-$(CONFIG_CPU_LOONGSON2F) += \
+-	$(call cc-option,-march=loongson2f,-march=r4600)
++cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e
++cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
+ #
+ # Some versions of binutils, not currently mainline as of 2019/02/04, support
+ # an -mfix-loongson3-llsc flag which emits a sync prior to each ll instruction
+@@ -32,16 +29,8 @@ cflags-$(CONFIG_CPU_LOONGSON2EF)	+= $(call as-option,-Wa$(comma)-mno-fix-loongso
+ 
+ # Enable the workarounds for Loongson2f
+ ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
+-  ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-nop,),)
+-    $(error only binutils >= 2.20.2 have needed option -mfix-loongson2f-nop)
+-  else
+-    cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa$(comma)-mfix-loongson2f-nop
+-  endif
+-  ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-jump,),)
+-    $(error only binutils >= 2.20.2 have needed option -mfix-loongson2f-jump)
+-  else
+-    cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa$(comma)-mfix-loongson2f-jump
+-  endif
++cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa,-mfix-loongson2f-nop
++cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa,-mfix-loongson2f-jump
+ endif
+ 
+ # Some -march= flags enable MMI instructions, and GCC complains about that
+
+base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+-- 
+2.34.1
+
