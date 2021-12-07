@@ -1,87 +1,94 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A258C68
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:18:15 +0000 (UTC)
-Received: by mail-ed1-f41.google.com with SMTP id y12so60112285eda.12
-        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:18:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WE2EyhdaIKRgniT2lkFi3qndNcuUWHIlT44HhHt4xhI=;
-        b=CNOUylDm39x63E41s5OZ8UaB156/vDwnH5BuYVCS8wlXEnQiVie4bOumiPwXCR+JOV
-         XXGREV0opDGhSHyCgsI7srvQtyHyH/MwrczP4Bhi6Hm6XvnbnNlFfuze5pZC15/KqjEg
-         QJiwXlXdECQ5sYq86gaZjnpO/UzJc/dNbZB2k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WE2EyhdaIKRgniT2lkFi3qndNcuUWHIlT44HhHt4xhI=;
-        b=Dlip9J9qIkrdXIrzJbjvMSglPm8Fq2gKVLeDltlIk3O/pqcg2C+h5qPt7kzgdhz33x
-         XbqpdRyAo3OfNmhxNfy8JQttL1egFwpp6pU56EnBEO6RjY2lsSkEiYu44iwzifzcCHZE
-         agwxXkUueK4/zSPO3DZHsm19z5WsOqJSBTwOSyZ8yFhBjiMNa3BWjDhujPNd6Bg3fC8X
-         LphPfmfkZoZepbemaFqTyIZvVwgQxzlbKM/Fg/hyKnH+mYhSJNnHvBJ1e3DqtLnCHIW4
-         X2LfqmPmRLOJ9Km4S7kY0fZjQdRrTNmK5nHPO60/QiGmZljpormVYC5XHpceWRNsP7D+
-         VKJA==
-X-Gm-Message-State: AOAM5328zhWqVVHZodNNHzY1DDu0NVy1Z1BdNi4f7Ni0LgrPxVg8ENGV
-	ObKUrGPWEp7GuCUdcYV4utTkYxe33WALmn7u
-X-Google-Smtp-Source: ABdhPJxD6E8hH82Vd8HSo0N3s98z9h2CfdovzcBwO8F5cxwuJlmj4cdwZk3m2pxstI9VNFj1rkKmfg==
-X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr1193515ejc.390.1638901092510;
-        Tue, 07 Dec 2021 10:18:12 -0800 (PST)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id b7sm419943edd.26.2021.12.07.10.18.12
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 10:18:12 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id o13so31212843wrs.12
-        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:18:12 -0800 (PST)
-X-Received: by 2002:adf:e5c7:: with SMTP id a7mr54060146wrn.318.1638901081204;
- Tue, 07 Dec 2021 10:18:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91DB68
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:27:41 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="218334637"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="218334637"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 10:13:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="679543523"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 10:13:10 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1muexi-000MqC-9F; Tue, 07 Dec 2021 18:13:10 +0000
+Date: Wed, 8 Dec 2021 02:12:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [Intel-gfx] [PATCH 3/4] drm/i915: Use wm0 only during async
+ flips for DG2
+Message-ID: <202112080246.3GudCMkc-lkp@intel.com>
+References: <20211207110721.30409-3-stanislav.lisovskiy@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
-In-Reply-To: <20211207150927.3042197-3-arnd@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 7 Dec 2021 10:17:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
-Message-ID: <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
-Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
-	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
-	kernelci@groups.io, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207110721.30409-3-stanislav.lisovskiy@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Dec 7, 2021 at 7:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Working towards a cleaner header structure, start by moving the most
-> commonly embedded structures into a single header file that itself
-> has only a minimum set of indirect includes. At this moment, this
-> include structures for
+Hi Stanislav,
 
-Ugh. I liked your 1/3 patch, but I absolutely detest this one.
+Thank you for the patch! Perhaps something to improve:
 
-It makes no sense to me, and just makes that header file a completely
-random collection of some random structure types.
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip v5.16-rc4 next-20211207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-And I absolutely hate how it splits out the definition of the struct
-from basic core infrastructure (initializers etc random inline
-functions) for said structures.
+url:    https://github.com/0day-ci/linux/commits/Stanislav-Lisovskiy/drm-i915-Pass-plane-to-watermark-calculation-functions/20211207-190910
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a011-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080246.3GudCMkc-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8c7a53ddec5435d127040d03a1eb073ec71608dc
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stanislav-Lisovskiy/drm-i915-Pass-plane-to-watermark-calculation-functions/20211207-190910
+        git checkout 8c7a53ddec5435d127040d03a1eb073ec71608dc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-So no. NAK on this one. I think it's a disaster.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-              Linus
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/intel_pm.c:5500:6: warning: no previous prototype for function 'dg2_async_flip_optimization' [-Wmissing-prototypes]
+   bool dg2_async_flip_optimization(struct drm_i915_private *i915,
+        ^
+   drivers/gpu/drm/i915/intel_pm.c:5500:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool dg2_async_flip_optimization(struct drm_i915_private *i915,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/dg2_async_flip_optimization +5500 drivers/gpu/drm/i915/intel_pm.c
+
+  5499	
+> 5500	bool dg2_async_flip_optimization(struct drm_i915_private *i915,
+  5501					 const struct intel_crtc_state *crtc_state,
+  5502					 const struct intel_plane *plane)
+  5503	{
+  5504		return DISPLAY_VER(i915) >= 13 &&
+  5505		       crtc_state->uapi.async_flip &&
+  5506		       plane->async_flip;
+  5507	}
+  5508	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
