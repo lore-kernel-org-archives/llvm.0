@@ -1,131 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07AA68
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:07:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AA8C341C8
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638896849;
-	bh=AWAI4dsGFqTjRC1xoqF0cYc1RPAXHGsAWxn92fKI3oI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gf3v2LOOtwGy6hrhLaaWTZdzvHT2yj5fU611wjvPDLNa8iEipEpydiG2MaJQdmcON
-	 5lKqN3WsEE+gquCLQHNajub1oh17woTQIMr9Ec/YVS5pQLeqYAMI51bBhAhV3u39Hs
-	 8XhGioMd5MdkwTerMyzbSvVtibIeZUl3TFPh7iywLJL80GmcXl2IPxHtMLoqyNlyNT
-	 /CrN1hdY0hYnXgaG0xYnfi3pvMQH6BFN0pl6BOEv7NaYnFDwa/ZijuvEyMqdmf3UvB
-	 +TWYf5z8QpIlhyMHDUHSGx1iSk0SsiikS16nizfpEbn/lD2qlASj9M7QZJfWXRphgF
-	 /iAMoxCsfLKKQ==
-Received: by mail-wr1-f42.google.com with SMTP id d9so30896695wrw.4
-        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 09:07:29 -0800 (PST)
-X-Gm-Message-State: AOAM530GKJZxAXmDMB+li726IT6VgB8xlfSzHmLaYPZDkXCRIXnsY1at
-	jip/QYMOrRYAfehJjMHPo41KrpEZ0xcAVg/N8AI=
-X-Google-Smtp-Source: ABdhPJxWAtCNN0Uz78wSmLpQSouIBrjU5QdcPq1mv6T3zwlTEprnXUaZ5kdK5O0wqBz67kMO3G1bdxsApionhf3b3lc=
-X-Received: by 2002:a5d:64ea:: with SMTP id g10mr53188820wri.137.1638896847522;
- Tue, 07 Dec 2021 09:07:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6156D68
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 17:48:08 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217662925"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="217662925"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:32:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="542882151"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 09:32:10 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mueK1-000MoJ-PY; Tue, 07 Dec 2021 17:32:09 +0000
+Date: Wed, 8 Dec 2021 01:31:18 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [paulmck-rcu:rcu/next 42/52] vmlinux.o: warning: objtool:
+ __context_tracking_enter()+0x75: call to rcu_user_enter() leaves
+ .noinstr.text section
+Message-ID: <202112080042.l1yRbman-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
- <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
-In-Reply-To: <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Tue, 7 Dec 2021 18:07:11 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
-Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
-Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
-	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
-	kernelci@groups.io, 
-	Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Dec 7, 2021 at 4:32 PM Matthew Wilcox <willy@infradead.org> wrote:
+CC: linux-kernel@vger.kernel.org
+TO: Marco Elver <elver@google.com>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
 
-> >  #define __SWAITQUEUE_INITIALIZER(name) {                             \
-> >       .task           =3D current,                                     =
- \
-> >       .task_list      =3D LIST_HEAD_INIT((name).task_list),            =
- \
->
-> swait.h doesn't need to include <linux/struct_types.h> ?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+head:   6a3aa1f6d19ed22b517cbb0acc0f88cda4ad42ad
+commit: fe90808c12f91a180afde9eb71ce44dfcd99bbc3 [42/52] kcsan: Support WEAK_MEMORY with Clang where no objtool support exists
+config: x86_64-randconfig-a003-20210928 (https://download.01.org/0day-ci/archive/20211208/202112080042.l1yRbman-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=fe90808c12f91a180afde9eb71ce44dfcd99bbc3
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu rcu/next
+        git checkout fe90808c12f91a180afde9eb71ce44dfcd99bbc3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I should probably add it for consistency, also in some other places.
-At the moment it works without that because the new header is pulled
-in through linux/spinlock.h.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > -
-> >  #define XARRAY_INIT(name, flags) {                           \
-> >       .xa_lock =3D __SPIN_LOCK_UNLOCKED(name.xa_lock),          \
-> >       .xa_flags =3D flags,                                      \
->
-> I think this is going to break:
->
-> (cd tools/testing/radix-tree; make)
+All warnings (new ones prefixed by >>):
 
-I've tried addressing this now, but I first ran into a different problem
-that exists in linux-next but not in mainline as of today:
+   vmlinux.o: warning: objtool: do_syscall_64()+0x4c: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x6b: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x6f: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x1e: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0x13: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi()+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode()+0x55: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x5c: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x55: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x55: call to __kcsan_check_access() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __context_tracking_enter()+0x75: call to rcu_user_enter() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __context_tracking_exit()+0x3c: call to rcu_user_exit() leaves .noinstr.text section
 
-cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
--fsanitize=3Dundefined   -c -o main.o main.c
-In file included from ./linux/xarray.h:2,
-                 from ./linux/../../../../include/linux/radix-tree.h:21,
-                 from ./linux/radix-tree.h:5,
-                 from main.c:10:
-./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
-hunk=E2=80=99:
-./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
-declaration of function =E2=80=98find_next_bit=E2=80=99
-[-Wimplicit-function-declaration]
- 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
-      |         ^~~~~~~~~~~~~
-cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
--fsanitize=3Dundefined   -c -o xarray.o xarray.c
-In file included from ./linux/xarray.h:2,
-                 from ./linux/../../../../include/linux/radix-tree.h:21,
-                 from ./linux/radix-tree.h:5,
-                 from test.h:4,
-                 from xarray.c:8:
-./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
-hunk=E2=80=99:
-./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
-declaration of function =E2=80=98find_next_bit=E2=80=99
-[-Wimplicit-function-declaration]
- 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
-      |         ^~~~~~~~~~~~~
-In file included from ../../include/linux/bitmap.h:7,
-                 from ../../../lib/xarray.c:9,
-                 from xarray.c:16:
-../../include/linux/find.h: At top level:
-../../include/linux/find.h:31:15: error: conflicting types for =E2=80=98fin=
-d_next_bit=E2=80=99
-   31 | unsigned long find_next_bit(const unsigned long *addr,
-unsigned long size,
-      |               ^~~~~~~~~~~~~
-In file included from ./linux/xarray.h:2,
-                 from ./linux/../../../../include/linux/radix-tree.h:21,
-                 from ./linux/radix-tree.h:5,
-                 from test.h:4,
-                 from xarray.c:8:
-./linux/../../../../include/linux/xarray.h:1669:9: note: previous
-implicit declaration of =E2=80=98find_next_bit=E2=80=99 was here
- 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
-      |         ^~~~~~~~~~~~~
-make: *** [<builtin>: xarray.o] Error 1
-
-It's clearly broken after Yury's recent bitops.h cleanup, but I can't
-quite find my way
-through the maze of tools/testing headers to fix it.
-
-        Arnd
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
