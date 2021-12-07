@@ -1,120 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E912CA8
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF552C341C3;
-	Tue,  7 Dec 2021 18:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638900008;
-	bh=aKg6nSmYDNEZA50nS90q2gIS47iA/LbgPSILNYZJWOc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=K7+UDhhcc0dBOU7MqY4SBN3EJksBg2IH6U9FEexlBdqMfhrUTWOJx4e/fSnE7hxAx
-	 6/bDkGw1uxCK4vJ2A8333tMo6owkRiBZ9Hpyb5xJHUvCLRoFBDxjkdDvW9GyMu9+9d
-	 wBrGthjDEgRyimNqrM9giAOchoDuHBh/rs/ErnYG+ygWADuuovrFzNOythJL9uMSqj
-	 GZPD5Z2E/uYB1+UWrApVfeh3co+Zu9Qs3pOmH9jBeA/BA2C5ptlBMJno+6gtWhmb0N
-	 QYXnw4rjHmlgdsa8ri4LbIuXKXvAhDsAQul8v1sJprPFrJchMDLdlQi3AHR7HPXUeG
-	 NWKC2Zr7uF37w==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Subject: [PATCH] MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls
-Date: Tue,  7 Dec 2021 10:59:51 -0700
-Message-Id: <20211207175951.135400-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A258C68
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:18:15 +0000 (UTC)
+Received: by mail-ed1-f41.google.com with SMTP id y12so60112285eda.12
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:18:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WE2EyhdaIKRgniT2lkFi3qndNcuUWHIlT44HhHt4xhI=;
+        b=CNOUylDm39x63E41s5OZ8UaB156/vDwnH5BuYVCS8wlXEnQiVie4bOumiPwXCR+JOV
+         XXGREV0opDGhSHyCgsI7srvQtyHyH/MwrczP4Bhi6Hm6XvnbnNlFfuze5pZC15/KqjEg
+         QJiwXlXdECQ5sYq86gaZjnpO/UzJc/dNbZB2k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WE2EyhdaIKRgniT2lkFi3qndNcuUWHIlT44HhHt4xhI=;
+        b=Dlip9J9qIkrdXIrzJbjvMSglPm8Fq2gKVLeDltlIk3O/pqcg2C+h5qPt7kzgdhz33x
+         XbqpdRyAo3OfNmhxNfy8JQttL1egFwpp6pU56EnBEO6RjY2lsSkEiYu44iwzifzcCHZE
+         agwxXkUueK4/zSPO3DZHsm19z5WsOqJSBTwOSyZ8yFhBjiMNa3BWjDhujPNd6Bg3fC8X
+         LphPfmfkZoZepbemaFqTyIZvVwgQxzlbKM/Fg/hyKnH+mYhSJNnHvBJ1e3DqtLnCHIW4
+         X2LfqmPmRLOJ9Km4S7kY0fZjQdRrTNmK5nHPO60/QiGmZljpormVYC5XHpceWRNsP7D+
+         VKJA==
+X-Gm-Message-State: AOAM5328zhWqVVHZodNNHzY1DDu0NVy1Z1BdNi4f7Ni0LgrPxVg8ENGV
+	ObKUrGPWEp7GuCUdcYV4utTkYxe33WALmn7u
+X-Google-Smtp-Source: ABdhPJxD6E8hH82Vd8HSo0N3s98z9h2CfdovzcBwO8F5cxwuJlmj4cdwZk3m2pxstI9VNFj1rkKmfg==
+X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr1193515ejc.390.1638901092510;
+        Tue, 07 Dec 2021 10:18:12 -0800 (PST)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id b7sm419943edd.26.2021.12.07.10.18.12
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 10:18:12 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id o13so31212843wrs.12
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:18:12 -0800 (PST)
+X-Received: by 2002:adf:e5c7:: with SMTP id a7mr54060146wrn.318.1638901081204;
+ Tue, 07 Dec 2021 10:18:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+In-Reply-To: <20211207150927.3042197-3-arnd@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 7 Dec 2021 10:17:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
+Message-ID: <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+	kernelci@groups.io, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-When building with LLVM's integrated assembler, the build errors because
-it does not implement -mfix-loongson2f-{jump,nop}:
+On Tue, Dec 7, 2021 at 7:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Working towards a cleaner header structure, start by moving the most
+> commonly embedded structures into a single header file that itself
+> has only a minimum set of indirect includes. At this moment, this
+> include structures for
 
-arch/mips/loongson2ef/Platform:36: *** only binutils >= 2.20.2 have needed option -mfix-loongson2f-nop.  Stop.
+Ugh. I liked your 1/3 patch, but I absolutely detest this one.
 
-The error is a little misleading because binutils are not being used in
-this case.
+It makes no sense to me, and just makes that header file a completely
+random collection of some random structure types.
 
-To clear this up, remove the as-option calls because binutils 2.23 is
-the minimum supported version for building the kernel. At the same time,
-remove the cc-option calls for the '-march=' flags, as GCC 5.1.0 is the
-minimum supported version.
+And I absolutely hate how it splits out the definition of the struct
+from basic core infrastructure (initializers etc random inline
+functions) for said structures.
 
-This change will not fix the LLVM build for CONFIG_CPU_LOONGSON2{E,F},
-as it does not implement the loongson2{e,f} march arguments (nor r4600,
-so it will error prior to this change) nor the assembler flags mentioned
-above but it will make the errors more obvious.
+So no. NAK on this one. I think it's a disaster.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1529
-Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-This dependency on certain toolchain flags should probably be moved into
-Kconfig at some point so that users cannot select configurations that
-they do not have support for so that their builds do not error. However,
-from a brief survey, there is not a clean way to codify these
-dependencies at the moment because the CPU configs are selected by the
-individual machines that implement them, meaning that the dependencies
-would need to be added to all the machine configs (as 'select ...'
-overrides 'depends on ...'), which is outside the scope of this patch.
-Furthermore, one could argue that it is better for the user to get a big
-error when they are missing support for something, rather than the
-configs getting disabled silently, especially if they are critical to
-the machine.
-
- arch/mips/loongson2ef/Platform | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
-
-diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
-index ae023b9a1c51..50e659aca543 100644
---- a/arch/mips/loongson2ef/Platform
-+++ b/arch/mips/loongson2ef/Platform
-@@ -2,12 +2,9 @@
- # Loongson Processors' Support
- #
- 
--# Only gcc >= 4.4 have Loongson specific support
- cflags-$(CONFIG_CPU_LOONGSON2EF)	+= -Wa,--trap
--cflags-$(CONFIG_CPU_LOONGSON2E) += \
--	$(call cc-option,-march=loongson2e,-march=r4600)
--cflags-$(CONFIG_CPU_LOONGSON2F) += \
--	$(call cc-option,-march=loongson2f,-march=r4600)
-+cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e
-+cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
- #
- # Some versions of binutils, not currently mainline as of 2019/02/04, support
- # an -mfix-loongson3-llsc flag which emits a sync prior to each ll instruction
-@@ -32,16 +29,8 @@ cflags-$(CONFIG_CPU_LOONGSON2EF)	+= $(call as-option,-Wa$(comma)-mno-fix-loongso
- 
- # Enable the workarounds for Loongson2f
- ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
--  ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-nop,),)
--    $(error only binutils >= 2.20.2 have needed option -mfix-loongson2f-nop)
--  else
--    cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa$(comma)-mfix-loongson2f-nop
--  endif
--  ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-jump,),)
--    $(error only binutils >= 2.20.2 have needed option -mfix-loongson2f-jump)
--  else
--    cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa$(comma)-mfix-loongson2f-jump
--  endif
-+cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa,-mfix-loongson2f-nop
-+cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa,-mfix-loongson2f-jump
- endif
- 
- # Some -march= flags enable MMI instructions, and GCC complains about that
-
-base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
--- 
-2.34.1
-
+              Linus
