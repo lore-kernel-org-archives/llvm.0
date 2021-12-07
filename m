@@ -1,29 +1,27 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8372B2C9D
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 07:57:52 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224779352"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0012CA0
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 09:09:53 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237763928"
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="224779352"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 23:57:51 -0800
+   d="scan'208";a="237763928"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 01:09:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="611580379"
+   d="scan'208";a="502513425"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2021 23:57:50 -0800
+  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2021 01:09:51 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1muVMD-000MKG-EZ; Tue, 07 Dec 2021 07:57:49 +0000
-Date: Tue, 7 Dec 2021 15:57:18 +0800
+	id 1muWTu-000MNo-Hv; Tue, 07 Dec 2021 09:09:50 +0000
+Date: Tue, 7 Dec 2021 17:09:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused
- function 'readq_ch'
-Message-ID: <202112071510.Udt7cE6h-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: PLEASE submit a bug report to https://bugs.llvm.org/ and include the
+ crash backtrace.
+Message-ID: <202112071631.CBbW0V0o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,79 +32,151 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
+CC: linux-kernel@vger.kernel.org
+TO: Matthew Auld <matthew.auld@intel.com>
+CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
+CC: Ashutosh Dixit <ashutosh.dixit@intel.com>
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
-commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
-date:   9 months ago
-config: mips-buildonly-randconfig-r004-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071510.Udt7cE6h-lkp@intel.com/config)
+commit: 5740211ea442dbfd143093f8eea39faba186042f drm/i915/dmabuf: fix broken build
+date:   6 weeks ago
+config: x86_64-randconfig-a016-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071631.CBbW0V0o-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f50be8eb0a12a61d23db6cda452c693001d76898)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5740211ea442dbfd143093f8eea39faba186042f
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
+        git checkout 5740211ea442dbfd143093f8eea39faba186042f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/mm/ drivers/dma/dw-edma/ drivers/video/fbdev/savage/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused function 'readq_ch'
-   static inline u64 readq_ch(struct dw_edma enum dw_edma_dir dir, u16 ch,
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-   Target: mips64el-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-097a1cb1d5/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch drivers include kernel nr_bisected scripts source usr
-
-
-vim +/readq_ch +192 drivers/dma/dw-edma/dw-edma-v0-core.c
-
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  191  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @192  static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  193  			   const void __iomem *addr)
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  194  {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  195  	u32 value;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  196  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  197  	if (dw->mf == EDMA_MF_EDMA_LEGACY) {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  198  		u32 viewport_sel;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  199  		unsigned long flags;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  201  		raw_spin_lock_irqsave(&dw->lock, flags);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  202  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  203  		viewport_sel = FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  204  		if (dir == EDMA_DIR_READ)
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  205  			viewport_sel |= BIT(31);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  206  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  207  		writel(viewport_sel,
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  208  		       &(__dw_regs(dw)->type.legacy.viewport_sel));
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  209  		value = readq(addr);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  210  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  211  		raw_spin_unlock_irqrestore(&dw->lock, flags);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  212  	} else {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  213  		value = readq(addr);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  214  	}
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  215  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  216  	return value;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  217  }
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  218  
-
-:::::: The code at line 192 was first introduced by commit
-:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
-
-:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %100)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %100, i64 %124)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %109)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %109, i64 %133)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %106)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %106, i64 %130)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %115)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %115, i64 %139)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %95)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %95, i64 %119)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %104)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %104, i64 %128)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %103)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %103, i64 %127)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %112)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %112, i64 %136)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %103)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %103, i64 %127)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %112)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %112, i64 %136)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %111)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %111, i64 %135)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %120)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %120, i64 %144)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %138)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %138, i64 %162)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %187)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %187, i64 %211)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %148)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %148, i64 %172)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %197)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %197, i64 %221)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %144)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %144, i64 %168)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %193)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %193, i64 %217)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %154)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %154, i64 %178)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %203)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %203, i64 %227)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %92, i64 %65)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %101, i64 %74)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %109)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %109, i64 %133)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %162)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %162, i64 %186)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %119)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %119, i64 %143)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 -1, i64 %172)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %172, i64 %196)
+   LLVM ERROR: Broken module found, compilation aborted!
+>> PLEASE submit a bug report to https://bugs.llvm.org/ and include the crash backtrace.
+   %17)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %57, i64 %55)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 0, i64 %53)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 4096, i64 %26)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 928, i64 %4)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 32, i64 %17)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_const_cmp8(i64 32, i64 %32)
+   inlinable function call in a function with debug info must have a !dbg location
+     call void @__sanitizer_cov_trace_cmp8(i64 %11, i64 %1)
+   LLVM ERROR: Broken module found, compilation aborted!
+   Aborted
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
