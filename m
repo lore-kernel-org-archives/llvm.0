@@ -1,67 +1,106 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E682C9D
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:36:27 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="218339016"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="218339016"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 10:34:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="461376128"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 07 Dec 2021 10:34:11 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mufI2-000MrV-Jo; Tue, 07 Dec 2021 18:34:10 +0000
-Date: Wed, 8 Dec 2021 02:33:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mark:linkage/alias-rework 5/7] ld.lld: error: duplicate symbol:
- strchr
-Message-ID: <202112080256.zKIdJqjA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0837B2C9D
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 18:41:36 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id t26so378436lfk.9
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 10:41:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
+        b=aDIAN17BKGq0GIN+YPIlQpFEpU4IUGBEknSlUTURp1gnh6I71NueXG/IAR3kdGGdnb
+         LXMkE3sM3iS1y3vT4KBCqNdcAzBh0GwpFSY5BZemA+TV9dieQBcMWd4/UUeLInNlkuQW
+         Bf+QMp2p6J6HDkVKgrVYIl6fLaEjWgoqLxuWNHZp7QGVxyaXHU2M2pLj7KRcT6w9jvpe
+         O5LW/kXKV27CBR25kEBseIpFQxdPcpxkMwlMKja49bqU9dOWidyseQGcyzsz6F4R1qO8
+         wHM04ZWGdvFpC4HyJWrMHKaz3QULjsP6DkWcM+Q/H1pkgRGltpi1JaMR6nA+D/q3r45P
+         tNuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
+        b=fdEzfw9uzAHKzEJwYec8kjeuyroc6jS5PxL5Ixa1ux4W5j3UzsExVofrCdIuBEQZxZ
+         x7tbTk0c53TNelcYRzRkZeLgHAXatqwDkScZ+IoVKfs+qQLp0fq19R8OYer9s4Upvj4v
+         8UpjElU6Vn09PYf77cWuQFa6eU7ychhcia5S22+hjNsID3EpsiOsYg6UJJm/xsaYtCTG
+         D5zuox261/a6H/hVhqnxUFQotQNlpnpGcIiVi4Gd9w1Dl2eWjaIOe1E42CIXINEV2ZsR
+         0MRyFGTAwCwMXRF6JJpOCzKjcjgwtjycnmARYcISNDMn7/WOKhSZt650+AwEnZQM6nw8
+         J9nw==
+X-Gm-Message-State: AOAM531/zfI3CZ50QKwsqhDboI3KIyPt9tI03A+2WCwwQVidmmDl3Ore
+	+yOHo//v6Vig8S72B0pCZepuPCCtdQL1GKok/PsYug==
+X-Google-Smtp-Source: ABdhPJyeHj3lrlUlDby3ennl3ufCpDgdCUvs6c7j5SLDxK90H6tLe6REyxb4vxCtSTv4FGgP01zjRMahD5LyaHn+DeQ=
+X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr41550500lfv.523.1638902494780;
+ Tue, 07 Dec 2021 10:41:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211204220249.591482-1-arnd@kernel.org>
+In-Reply-To: <20211204220249.591482-1-arnd@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 7 Dec 2021 10:41:24 -0800
+Message-ID: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
+Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Ren=C3=A9_Moll?= <Rene.Moll@xsens.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
-head:   869f25744367b7ec5fb196d9c92acadfbfe87419
-commit: 3bba704175bd8bcb979b1924d650350a08587257 [5/7] arm64: clean up symbol aliasing
-config: arm64-randconfig-r023-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080256.zKIdJqjA-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=3bba704175bd8bcb979b1924d650350a08587257
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark linkage/alias-rework
-        git checkout 3bba704175bd8bcb979b1924d650350a08587257
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> clang-14 does not like the way this driver converts a 'long double'
+> to an integer when the target architecture disables floating point
+> support:
+>
+> drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
+>         data->wde_interval = 300L * 1E6L;
+>                                   ^
+>
+> Turn this into pure integer math and make it more readable at the
+> same time using the NSEC_PER_MSEC macro instead.
+>
+> Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the patch! The change in clang-14 (ToT) that triggered this
+has had another patch on top reverting these diagnostics.
+https://reviews.llvm.org/D114162
 
-All errors (new ones prefixed by >>):
+That said, this change is still worthwhile for the improved semantics, IMO.
 
->> ld.lld: error: duplicate symbol: strchr
-   >>> defined at strchr.o:(__pi_strchr) in archive arch/arm64/lib/lib.a
-   >>> defined at string.c
-   >>>            string.o:(.text+0xEBC) in archive lib/lib.a
+Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+> index fbb344353fe4..9fc88a9f244c 100644
+> --- a/drivers/power/reset/ltc2952-poweroff.c
+> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+>
+>  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+>  {
+> -       data->wde_interval = 300L * 1E6L;
+> -       data->trigger_delay = ktime_set(2, 500L*1E6L);
+> +       data->wde_interval = 300 * NSEC_PER_MSEC;
+> +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
+>
+>         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+>         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+> --
+> 2.29.2
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
