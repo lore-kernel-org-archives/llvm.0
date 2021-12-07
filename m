@@ -1,131 +1,155 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0AA2C80
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 11:19:10 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7d964jVBz4xgY;
-	Tue,  7 Dec 2021 22:19:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1638875948;
-	bh=0XMPFg1uyLXcByQa57fLF55p79RM8131PNd2ix+ygg8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=bllKWJBbZ5SepP/QI5nePCofpeapO/yXsQh3GdA7T6GRyQ3YwRoz3HU4W+hOxciuP
-	 L/KZUi1UGwNjzHgWKO/BZi+TrLa+fHALGKEhRquvGlNUCcmf3V8JcVWzJseXUOtpne
-	 Dl0rzR7bbVJQ9LqxFSSFUjMfCv2xVYZ2c0GmWBfNhxShRobl9qNl/CyahVxIm58HOU
-	 cseXlKGcij6ojOLG1BvahU7GSonXbaxGvS45H5X/huhIjlwYGllxSHR2lVddIGoTz+
-	 JXbKM6QBH1BBDnsgpLMY9yrwkLRey1sHjMGJ+TdeGCehP1D3ZhOJDEC9ylUEQP+rB7
-	 tb+WksYYkS3yg==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Bill Wendling <morbo@google.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, kernel test robot <lkp@intel.com>, Benjamin
- Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras
- <paulus@samba.org>, Nick Desaulniers <ndesaulniers@google.com>,
- llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
- copy_inst_from_kernel_nofault()
-In-Reply-To: <Ya7ntJ0ehZPy6HKA@archlinux-ax161>
-References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
- <202111300652.0yDBNvyJ-lkp@intel.com>
- <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
- <87a6hlq408.fsf@mpe.ellerman.id.au> <YaZqs2tPxMzhgkAW@archlinux-ax161>
- <CAGG=3QX4k6MZ1qkT+sVAroJeBpbZBnOJauM_uJsu2uV1vnVObQ@mail.gmail.com>
- <CAGG=3QVQ9bwWWyKDN3_C2B0v7H6iZ4ZpNybXGCqbzwWrPjuPrg@mail.gmail.com>
- <87o85tnkzt.fsf@mpe.ellerman.id.au> <Ya7ntJ0ehZPy6HKA@archlinux-ax161>
-Date: Tue, 07 Dec 2021 22:19:05 +1100
-Message-ID: <87lf0woe6u.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA482C80
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 11:27:28 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="323811553"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="323811553"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 03:27:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="679411624"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 03:27:25 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7BROmr011993;
+	Tue, 7 Dec 2021 11:27:24 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
+Date: Tue,  7 Dec 2021 12:27:09 +0100
+Message-Id: <20211207112709.4778-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <CAKwvOdkgHhOTKbb4vm9p7uDvvp7eXpTg2cb4rvr1jFgyAgSb-w@mail.gmail.com>
+References: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com> <CAKwvOdkgHhOTKbb4vm9p7uDvvp7eXpTg2cb4rvr1jFgyAgSb-w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Nathan Chancellor <nathan@kernel.org> writes:
-> On Tue, Dec 07, 2021 at 02:37:26PM +1100, Michael Ellerman wrote:
->> Bill Wendling <morbo@google.com> writes:
->> > On Tue, Nov 30, 2021 at 10:38 AM Bill Wendling <morbo@google.com> wrot=
-e:
->> >> On Tue, Nov 30, 2021 at 10:17 AM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->> >> > On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
->> >> > > Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->> >> > > > Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit :
->> ...
->> >> > > >> All warnings (new ones prefixed by >>):
->> >> > > >>
->> >> > > >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
->> >> > > >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpt=
-s.h:7:
->> >> > > >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'v=
-al' is uninitialized when used here [-Wuninitialized]
->> >> > > >>                     *inst =3D ppc_inst(val);
->> >> > > >>                                      ^~~
->> >> > > >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from=
- macro 'ppc_inst'
->> >> > > >>     #define ppc_inst(x) (x)
->> >> > > >>                          ^
->> >> > > >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize t=
-he variable 'val' to silence this warning
->> >> > > >>             unsigned int val, suffix;
->> >> > > >>                             ^
->> >> > > >>                              =3D 0
->> >> > > >
->> >> > > > I can't understand what's wrong here.
->> ...
->> >> > > >
->> >> > > > I see no possibility, no alternative path where val wouldn't be=
- set. The
->> >> > > > asm clearly has *addr as an output param so it is always set.
->> >> > >
->> >> > > I guess clang can't convince itself of that?
->> ...
->> >> >
->> >> > It certainly looks like there is something wrong with how clang is
->> >> > tracking the initialization of the variable because it looks to me =
-like
->> >> > val is only used in the fallthrough path, which happens after it is
->> >> > initialized via lwz.  Perhaps something is wrong with the logic of
->> >> > https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issue=
-s are
->> >> > being migrated from Bugzilla to GitHub Issues right now so I cannot=
- file
->> >> > this upstream at the moment).
->> >> >
->> >> If I remove the casts of "val" the warning doesn't appear. I suspect
->> >> that when I wrote that patch I forgot to remove those when checking.
->> >> #include "Captain_Picard_facepalm.h"
->> >>
->> >> I'll look into it.
->> >>
->> > Small retraction. It's the "*(<cast>)&val" that's the issue. (I.e. the=
- "*&")
->>=20
->> I guess for now I'll just squash this in as a workaround?
->>=20
->>=20
->> diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/=
-inst.h
->> index 631436f3f5c3..5b591c51fec9 100644
->> --- a/arch/powerpc/include/asm/inst.h
->> +++ b/arch/powerpc/include/asm/inst.h
->> @@ -157,6 +157,9 @@ static inline int copy_inst_from_kernel_nofault(ppc_=
-inst_t *inst, u32 *src)
->>  	if (unlikely(!is_kernel_addr((unsigned long)src)))
->>  		return -ERANGE;
->
-> Could we add a version check to this and a link to our bug tracker:
->
-> /* https://github.com/ClangBuiltLinux/linux/issues/1521 */
-> #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 140000
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 6 Dec 2021 16:41:00 -0800
 
-Yep, thanks I'll use that.
+> On Mon, Dec 6, 2021 at 12:57 PM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > From: Nick Desaulniers <ndesaulniers@google.com>
+> > Date: Mon, 6 Dec 2021 11:43:47 -0800
+> >
+> > > On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
+> > > <alexandr.lobakin@intel.com> wrote:
+> > > >
+> > > > Clang (13) uninlines __next_node() which emits the following warning
+> > > > due to that this function is used in init code (amd_numa_init(),
+> > > > sched_init_numa() etc.):
+> > > >
+> > > > WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
+> > > > in reference from the function __next_node() to the variable
+> > > > .init.data:numa_nodes_parsed
+> > > > The function __next_node() references
+> > > > the variable __initdata numa_nodes_parsed.
+> > > > This is often because __next_node lacks a __initdata
+> > > > annotation or the annotation of numa_nodes_parsed is wrong.
+> > > >
+> > > > Mark __next_node() as __always_inline() so it won't get uninlined.
+> > > > bloat-o-meter over x86_64 binaries says this:
+> > > >
+> > > > scripts/bloat-o-meter -c vmlinux.baseline vmlinux
+> > > > add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
+> > > > Function                                     old     new   delta
+> > > > apply_wqattrs_cleanup                          -     410    +410
+> > > > amd_numa_init                                814     842     +28
+> > > > sched_init_numa                             1338    1346      +8
+> > > > find_next_bit                                 38      19     -19
+> > > > __next_node                                   45       -     -45
+> > > > apply_wqattrs_prepare                       1069     799    -270
+> > > > wq_nice_store                                688     414    -274
+> > > > wq_numa_store                                805     433    -372
+> > > > wq_cpumask_store                             789     402    -387
+> > > > apply_workqueue_attrs                        538     147    -391
+> > > > workqueue_set_unbound_cpumask                947     539    -408
+> > > > Total: Before=14422603, After=14420883, chg -0.01%
+> > > >
+> > > > So it's both win-win in terms of resolving section mismatch and
+> > > > saving some text size (-1.7 Kb is quite nice).
+> > > >
+> > > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > >
+> > > Thanks for the patch.  See this thread:
+> > > https://github.com/ClangBuiltLinux/linux/issues/1302
+> > >
+> > > There's a lot more instances of these based on config.  Something like
+> > > https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
+> > > would be more appropriate for fixing all instances, but I think this
+> > > is more so an issue with the inline cost model in LLVM.
+> > >
+> > > I need to finish off https://reviews.llvm.org/D111456, and request
+> > > that https://reviews.llvm.org/D111272 which landed in clang-14 get
+> > > backported to the 13.0.1 release which should also help.
+> >
+> > Oh I see. Sorry for redundant posting, non-applicable then.
+> 
+> No worries; it's a complex issue.  I appreciate that you took the time
+> to test with clang, understand the issue, and send a patch.
+> ++beers_owed;
 
-cheers
+Cool, thank you! :D Open source beer is shared across all
+contributors I guess :P
+
+> If you'd like, I can add you to our github org if you'd like to be
+> cc'ed on issues there; just ping me privately off thread with your
+> github account and I'll add you.
+> https://github.com/ClangBuiltLinux
+
+I think my private (non-Intel) account is added to it (it probably
+was you who added me after my comments on ClangCFI x86 or so), so
+I'll just be watching for it there, thanks!
+
+> > We'll wait for these Clang/LLVM works to be finised, thanks!
+> >
+> > >
+> > > > ---
+> > > >  include/linux/nodemask.h | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+> > > > index 567c3ddba2c4..55ba2c56f39b 100644
+> > > > --- a/include/linux/nodemask.h
+> > > > +++ b/include/linux/nodemask.h
+> > > > @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
+> > > >  }
+> > > >
+> > > >  #define next_node(n, src) __next_node((n), &(src))
+> > > > -static inline int __next_node(int n, const nodemask_t *srcp)
+> > > > +static __always_inline int __next_node(int n, const nodemask_t *srcp)
+> > > >  {
+> > > >         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
+> > > >  }
+> > > > --
+> > > > 2.33.1
+> > > >
+> > >
+> > >
+> > > --
+> > > Thanks,
+> > > ~Nick Desaulniers
+> >
+> > Al
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
+
+Al
