@@ -1,181 +1,80 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4702CA0
-	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 15:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=BurdL9CoYhvyq3FVTEq/kmPu0MyElA+TlhLVyir3/R0=; b=j0UyoYlZuTg6aH2j9xf4JGORW1
-	bdeqF6foQxA3ClXobjdChUFB2Xleavfo55fPkfJ9ttSFenrKUfCSy9UL/yIlGuTs+MNXBDk/lEddE
-	xh1clHwdrjdHcM/w8u46Tb4JN0r3Q/rW5Hj+AuzpZjPmIIJW/rgq1NSAhnQ7I5w1kk2P0agL5xpr3
-	sQEQZT0hwr/KaspIF6zNQz+7CPKkqKeKYFpceb+AZ/R0Z09gNxlkQ5Ed5wjyvnL/8OME0GA0gxYLb
-	1NvuUj3FETVOyTgO8Wx8DK+8R1SWi7AGYL2N/I+uQWNtMkgi/BVsa9ry6XxPw35kiyhUTzShftWAt
-	sLg0J9UQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mucSE-007UJj-8t; Tue, 07 Dec 2021 15:32:30 +0000
-Date: Tue, 7 Dec 2021 15:32:30 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Kees Cook <keescook@chromium.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>,
-	kernelci@groups.io, linux-fsdevel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
-Message-ID: <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
-References: <20211207150927.3042197-1-arnd@kernel.org>
- <20211207150927.3042197-3-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7012CA0
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 15:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25EDC341D3
+	for <llvm@lists.linux.dev>; Tue,  7 Dec 2021 15:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638891905;
+	bh=g79tkc/a+Li5BdZaeuK+ZFDVc5mc9Hy5yd/urszLIjY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=E6EdCsQGqoI66hJoL3n7EpUqQkRuzF41LWfBtMRAipj4Hpih+lb/EyJGusecHIpJS
+	 5v9tW4s3XK05fyMeKXg0fxx0BhC8B8jrBX/gF7KRo1SgAqGs2aFaj+PoTiIsA8GvH9
+	 bpMIEDHWDaLpLqh23QL/hjqcOpOlFf1gY4OlxgH9vhK6DIZINIKn8AiR44xjrnlgk/
+	 cjitLn+5gTDlFnVujFLlUNooV6zoJS1bnKVJMJ6Xq/SB+pu5pTLZIj9eSi3MntzA+O
+	 siq/x4fZMlhHQsR2UjZqikDW6GtEN6INdrj4LYpTD7ABY4c7byjaqFJgGKmIPV6wYg
+	 hUhDpO6aA63eQ==
+Received: by mail-wr1-f53.google.com with SMTP id t18so6464600wrg.11
+        for <llvm@lists.linux.dev>; Tue, 07 Dec 2021 07:45:04 -0800 (PST)
+X-Gm-Message-State: AOAM531gEat4k5LP6t7RTlWgeIlEDfgZYO/eyEyBzWLqv3Xu8ugIvSFl
+	W4PIidKV3BxGeUVF19ZF/UCtbuuw8gZLyEVvHUU=
+X-Google-Smtp-Source: ABdhPJwSjluaVW946SNUj9vmslHGrDrlZH11Hx32c+bZFjNzQOKfgQhzJkCPBop9NKH1wyvBiaVtudSZnKvhS0MQeEw=
+X-Received: by 2002:a5d:64ea:: with SMTP id g10mr52657201wri.137.1638891903239;
+ Tue, 07 Dec 2021 07:45:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207150927.3042197-3-arnd@kernel.org>
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-2-arnd@kernel.org>
+ <Ya979Hh0V2CdhNSU@casper.infradead.org>
+In-Reply-To: <Ya979Hh0V2CdhNSU@casper.infradead.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Tue, 7 Dec 2021 16:44:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2gsdbiQoH_82Nm97DeENzJMUZn99m0LHE4Rt-0pd2d6w@mail.gmail.com>
+Message-ID: <CAK8P3a2gsdbiQoH_82Nm97DeENzJMUZn99m0LHE4Rt-0pd2d6w@mail.gmail.com>
+Subject: Re: [RFC 1/3] headers: add more types to linux/types.h
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+	kernelci@groups.io, 
+	Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 07, 2021 at 04:09:26PM +0100, Arnd Bergmann wrote:
-> Working towards a cleaner header structure, start by moving the most
-> commonly embedded structures into a single header file that itself
-> has only a minimum set of indirect includes. At this moment, this
-> include structures for
-> 
->  - locking
->  - timers
->  - work queues
->  - waitqueues
->  - rcu
->  - xarray
->  - kobject
->  - bio_vec
+On Tue, Dec 7, 2021 at 4:21 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Dec 07, 2021 at 04:09:25PM +0100, Arnd Bergmann wrote:
+> > +struct list_lru {
+> > +     struct list_lru_node    *node;
+> > +#ifdef CONFIG_MEMCG_KMEM
+> > +     struct list_head        list;
+> > +     int                     shrinker_id;
+> > +     bool                    memcg_aware;
+> > +#endif
+> > +};
+>
+> This is the only one that gives me qualms.  While there are other
+> CONFIG options mentioned in types.h they're properties of the platform,
+> eg CONFIG_HAVE_UID16, CONFIG_64BIT, CONFIG_ARCH_DMA_ADDR_T_64BIT, etc.
+> I dislike it that changing this CONFIG option is going to result in
+> rebuilding the _entire_ kernel.  CONFIG_MEMCG_KMEM just isn't that
+> central to how everything works.
 
-I generally support all of this.  I did look at adding struct xarray to
-types.h when I first added it, but was stymied by the need to embed the
-spinlock.  I looked at adding a linux/adt.h or a linux/struct.h but
-it was just too much work.  So thank you for taking this on.
+I included this one because 'struct list_lru' is used in 'struct
+super_block', which I move
+into 'linux/fs_types.h' in the third patch. It is otherwise not used a
+lot though, and
+'struct super_block' is rarely much outside of file system code. If we
+leave super_block
+in fs.h or in a separate header, it should be fine.
 
-> diff --git a/include/linux/struct_types.h b/include/linux/struct_types.h
-> new file mode 100644
-> index 000000000000..5a06849fd347
-> --- /dev/null
-> +++ b/include/linux/struct_types.h
-> @@ -0,0 +1,483 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __LINUX_STRUCT_TYPES_H
-> +#define __LINUX_STRUCT_TYPES_H
-> +/*
-> + * This header includes data structures that build on top of
-> + * the plain types from linux/types.h and that are commonly
-> + * embedded within other structures in the kernel.
-> + *
-> + * By keeping these in one place that has a minimum set of
-> + * indirect includes, we can avoid deeply nested include
-> + * hierarchies that slow down the build and cause frequent
-> + * recompiles after header changes.
-> + *
-> + * Be careful about including further headers here.
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/bits.h>
-> +#include <linux/threads.h>
-> +#include <linux/lockdep_types.h>
-> +#include <linux/rbtree_types.h>
-> +
-> +#if defined(CONFIG_SMP)
-> +# include <asm/spinlock_types.h>
-> +#else
-> +# include <linux/spinlock_types_up.h>
-> +#endif
-> +
-> +/**
-> + * typedef refcount_t - variant of atomic_t specialized for reference counts
-> + * @refs: atomic_t counter field
-> + *
-> + * The counter saturates at REFCOUNT_SATURATED and will not move once
-> + * there. This avoids wrapping the counter and causing 'spurious'
-> + * use-after-free bugs.
-> + */
-
-There's no corresponding patch to Documentation, so this kernel-doc is
-orphaned.
-
-> diff --git a/include/linux/swait.h b/include/linux/swait.h
-> index 6a8c22b8c2a5..d7798752922d 100644
-> --- a/include/linux/swait.h
-> +++ b/include/linux/swait.h
-> @@ -38,18 +38,6 @@
->   * wait queues in most cases.
->   */
->  
-> -struct task_struct;
-> -
-> -struct swait_queue_head {
-> -	raw_spinlock_t		lock;
-> -	struct list_head	task_list;
-> -};
-> -
-> -struct swait_queue {
-> -	struct task_struct	*task;
-> -	struct list_head	task_list;
-> -};
-> -
->  #define __SWAITQUEUE_INITIALIZER(name) {				\
->  	.task		= current,					\
->  	.task_list	= LIST_HEAD_INIT((name).task_list),		\
-
-swait.h doesn't need to include <linux/struct_types.h> ?
-
-> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-> index a91e3d90df8a..4f1e55074ef0 100644
-> --- a/include/linux/xarray.h
-> +++ b/include/linux/xarray.h
-> @@ -275,29 +275,6 @@ enum xa_lock_type {
->  #define XA_FLAGS_ALLOC	(XA_FLAGS_TRACK_FREE | XA_FLAGS_MARK(XA_FREE_MARK))
->  #define XA_FLAGS_ALLOC1	(XA_FLAGS_TRACK_FREE | XA_FLAGS_ZERO_BUSY)
->  
-> -/**
-> - * struct xarray - The anchor of the XArray.
-> - * @xa_lock: Lock that protects the contents of the XArray.
-> - *
-> - * To use the xarray, define it statically or embed it in your data structure.
-> - * It is a very small data structure, so it does not usually make sense to
-> - * allocate it separately and keep a pointer to it in your data structure.
-> - *
-> - * You may use the xa_lock to protect your own data structures as well.
-> - */
-> -/*
-> - * If all of the entries in the array are NULL, @xa_head is a NULL pointer.
-> - * If the only non-NULL entry in the array is at index 0, @xa_head is that
-> - * entry.  If any other entry in the array is non-NULL, @xa_head points
-> - * to an @xa_node.
-> - */
-> -struct xarray {
-> -	spinlock_t	xa_lock;
-> -/* private: The rest of the data structure is not to be used directly. */
-> -	gfp_t		xa_flags;
-> -	void __rcu *	xa_head;
-> -};
-> -
->  #define XARRAY_INIT(name, flags) {				\
->  	.xa_lock = __SPIN_LOCK_UNLOCKED(name.xa_lock),		\
->  	.xa_flags = flags,					\
-
-I think this is going to break:
-
-(cd tools/testing/radix-tree; make)
+        Arnd
