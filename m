@@ -1,31 +1,30 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D89A2CB3
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 23:14:03 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="235485068"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C302CB3
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 23:59:03 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="262070821"
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="235485068"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 15:14:02 -0800
+   d="scan'208";a="262070821"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 15:59:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="503258044"
+   d="scan'208";a="680115112"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2021 15:14:00 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2021 15:59:00 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mv68N-0001BQ-Bk; Wed, 08 Dec 2021 23:13:59 +0000
-Date: Thu, 9 Dec 2021 07:13:07 +0800
+	id 1mv6pw-0001DX-1r; Wed, 08 Dec 2021 23:59:00 +0000
+Date: Thu, 9 Dec 2021 07:58:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Mauro (mdrjr) Ribeiro" <mauro.ribeiro@hardkernel.com>
+To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>,
-	memeka <mihailescu2m@gmail.com>
-Subject: [tobetter:odroid-5.16.y 2/75]
- drivers/gpu/drm/exynos/exynos_hdmi.c:728:10: warning: implicit conversion
- from 'int' to 'u8' (aka 'unsigned char') changes value from 360 to 104
-Message-ID: <202112090757.DdbQ7gPu-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [davidhildenbrand:foll_unshare 1/2] net/phonet/sysctl.c:24:8: error:
+ field designator 'seqcount' does not refer to any field in type 'seqcount_t'
+ (aka 'struct seqcount')
+Message-ID: <202112090736.d9HFdWOz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,393 +35,116 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/tobetter/linux odroid-5.16.y
-head:   04f296b5f991198f16f76ba15a23e9e00e30aac4
-commit: 4815fc21476f578fcfe6e1dc48f32f1f952acd01 [2/75] ODROID-XU4: drm/exynos: add new HDMI PHY pll and resolutions + pre-build EDIDs
-config: arm-randconfig-c002-20211209 (https://download.01.org/0day-ci/archive/20211209/202112090757.DdbQ7gPu-lkp@intel.com/config)
+tree:   git://github.com/davidhildenbrand/linux foll_unshare
+head:   f4b54ddc31ca94dedc57a3aab1f42d348537a31b
+commit: f270db76384cb1df5a7f1b67226a8c8515583e5f [1/2] seqlock: provide lockdep-free raw_seqcount_t variant
+config: riscv-buildonly-randconfig-r003-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090736.d9HFdWOz-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/tobetter/linux/commit/4815fc21476f578fcfe6e1dc48f32f1f952acd01
-        git remote add tobetter https://github.com/tobetter/linux
-        git fetch --no-tags tobetter odroid-5.16.y
-        git checkout 4815fc21476f578fcfe6e1dc48f32f1f952acd01
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/davidhildenbrand/linux/commit/f270db76384cb1df5a7f1b67226a8c8515583e5f
+        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
+        git fetch --no-tags davidhildenbrand foll_unshare
+        git checkout f270db76384cb1df5a7f1b67226a8c8515583e5f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/exynos/ dtbs
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/phonet/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/exynos/exynos_hdmi.c:728:10: warning: implicit conversion from 'int' to 'u8' (aka 'unsigned char') changes value from 360 to 104 [-Wconstant-conversion]
-                           0x8D, 0x168, 0xF5, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-                                 ^~~~~
-   drivers/gpu/drm/exynos/exynos_hdmi.c:727:37: warning: implicit conversion from 'int' to 'u8' (aka 'unsigned char') changes value from 400 to 144 [-Wconstant-conversion]
-                           0x01, 0xD1, 0x29, 0x1618, 0x418, 0x190, 0xF5, 0xCF,
-                                                            ^~~~~
-   drivers/gpu/drm/exynos/exynos_hdmi.c:727:30: warning: implicit conversion from 'int' to 'u8' (aka 'unsigned char') changes value from 1048 to 24 [-Wconstant-conversion]
-                           0x01, 0xD1, 0x29, 0x1618, 0x418, 0x190, 0xF5, 0xCF,
-                                                     ^~~~~
-   drivers/gpu/drm/exynos/exynos_hdmi.c:727:22: warning: implicit conversion from 'int' to 'u8' (aka 'unsigned char') changes value from 5656 to 24 [-Wconstant-conversion]
-                           0x01, 0xD1, 0x29, 0x1618, 0x418, 0x190, 0xF5, 0xCF,
-                                             ^~~~~~
-   4 warnings generated.
+   In file included from net/phonet/sysctl.c:17:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:36:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/phonet/sysctl.c:17:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/phonet/sysctl.c:17:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> net/phonet/sysctl.c:24:8: error: field designator 'seqcount' does not refer to any field in type 'seqcount_t' (aka 'struct seqcount')
+   static DEFINE_SEQLOCK(local_port_range_lock);
+          ^
+   include/linux/seqlock.h:907:18: note: expanded from macro 'DEFINE_SEQLOCK'
+                   seqlock_t sl = __SEQLOCK_UNLOCKED(sl)
+                                  ^
+   include/linux/seqlock.h:888:15: note: expanded from macro '__SEQLOCK_UNLOCKED'
+                   .seqcount = SEQCNT_SPINLOCK_ZERO(lockname, &(lockname).lock), \
+                               ^
+   include/linux/seqlock.h:358:42: note: expanded from macro 'SEQCNT_SPINLOCK_ZERO'
+   #define SEQCNT_SPINLOCK_ZERO(name, lock)        SEQCOUNT_LOCKNAME_ZERO(name, lock)
+                                                   ^
+   include/linux/seqlock.h:353:15: note: expanded from macro 'SEQCOUNT_LOCKNAME_ZERO'
+           .seqcount               = SEQCNT_ZERO(seq_name.seqcount),       \
+                                     ^
+   include/linux/seqlock.h:141:30: note: expanded from macro 'SEQCNT_ZERO'
+   #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+                                ^
+   7 warnings and 1 error generated.
 
 
-vim +728 drivers/gpu/drm/exynos/exynos_hdmi.c
+vim +24 net/phonet/sysctl.c
 
-   397	
-   398	static const struct hdmiphy_config hdmiphy_5420_configs[] = {
-   399		{
-   400			.pixel_clock = 25200000,
-   401			.conf = {
-   402				0x01, 0x52, 0x3F, 0x55, 0x40, 0x01, 0x00, 0xC8,
-   403				0x82, 0xC8, 0xBD, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   404				0x06, 0x80, 0x01, 0x84, 0x05, 0x02, 0x24, 0x66,
-   405				0x54, 0xF4, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   406			},
-   407		},
-   408		{
-   409			.pixel_clock = 27000000,
-   410			.conf = {
-   411				0x01, 0xD1, 0x22, 0x51, 0x40, 0x08, 0xFC, 0xE0,
-   412				0x98, 0xE8, 0xCB, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   413				0x06, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   414				0x54, 0xE4, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   415			},
-   416		},
-   417		{
-   418			.pixel_clock = 27027000,
-   419			.conf = {
-   420				0x01, 0xD1, 0x2D, 0x72, 0x40, 0x64, 0x12, 0xC8,
-   421				0x43, 0xE8, 0x0E, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   422				0x26, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   423				0x54, 0xE3, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   424			},
-   425		},
-   426		{
-   427			.pixel_clock = 31490000,
-   428			.conf = {
-   429				0x01, 0xD1, 0x34, 0x74, 0x44, 0x3C, 0x3A, 0xC2,
-   430				0x81, 0xE8, 0x3B, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   431				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   432				0x54, 0xC3, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   433			},
-   434		},
-   435		{
-   436			.pixel_clock = 32000000,
-   437			.conf = {
-   438				0x01, 0x51, 0x28, 0x55, 0x44, 0x40, 0x00, 0xC8,
-   439				0x02, 0xC8, 0xF0, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   440				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   441				0x54, 0x80, 0x25, 0x01, 0x00, 0x00, 0x01, 0x80,
-   442			},
-   443		},
-   444		/*
-   445		 * To support Vu5A, pixel clock 33.9MHz is needed
-   446		 * but we don't have the exact HDMI PHY table
-   447		 * so as a workaround, the closest table will be used.
-   448		 */
-   449		{
-   450			.pixel_clock = 33900000,
-   451			.conf = {
-   452				0x01, 0x51, 0x28, 0x55, 0x44, 0x40, 0x00, 0xC8,
-   453				0x02, 0xC8, 0xF0, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   454				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   455				0x54, 0x80, 0x25, 0x01, 0x00, 0x00, 0x01, 0x80,
-   456			},
-   457		},
-   458		{
-   459			.pixel_clock = 36000000,
-   460			.conf = {
-   461				0x01, 0x51, 0x2D, 0x55, 0x40, 0x40, 0x00, 0xC8,
-   462				0x02, 0xC8, 0x0E, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   463				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   464				0x54, 0xAB, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   465			},
-   466		},
-   467		{
-   468			.pixel_clock = 40000000,
-   469			.conf = {
-   470				0x01, 0xD1, 0x21, 0x31, 0x40, 0x3C, 0x28, 0xC8,
-   471				0x87, 0xE8, 0xC8, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   472				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   473				0x54, 0x9A, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   474			},
-   475		},
-   476		/*
-   477		 * To support Vu7A+, pixel clock 49MHz is needed
-   478		 * but we don't have the exact HDMI PHY table
-   479		 * so as a workaround, the closest table will be used.
-   480		 */
-   481		{
-   482			.pixel_clock = 49000000,
-   483			.conf = {
-   484				0x01, 0x51, 0x2A, 0x32, 0x42, 0x30, 0x00, 0xC4,
-   485				0x83, 0xE8, 0xFC, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   486				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   487				0x54, 0x7A, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   488			},
-   489		},
-   490		{
-   491			.pixel_clock = 50400000,
-   492			.conf = {
-   493				0x01, 0x51, 0x2A, 0x32, 0x42, 0x30, 0x00, 0xC4,
-   494				0x83, 0xE8, 0xFC, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   495				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   496				0x54, 0x7A, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   497			},
-   498		},
-   499		{
-   500			.pixel_clock = 65000000,
-   501			.conf = {
-   502				0x01, 0xD1, 0x36, 0x34, 0x40, 0x0C, 0x04, 0xC8,
-   503				0x82, 0xE8, 0x45, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   504				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   505				0x54, 0xBD, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   506			},
-   507		},
-   508		{
-   509			.pixel_clock = 71000000,
-   510			.conf = {
-   511				0x01, 0xD1, 0x3B, 0x35, 0x40, 0x0C, 0x04, 0xC8,
-   512				0x85, 0xE8, 0x63, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   513				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   514				0x54, 0x57, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   515			},
-   516		},
-   517		{
-   518			.pixel_clock = 73250000,
-   519			.conf = {
-   520				0x01, 0xD1, 0x1F, 0x10, 0x40, 0x78, 0x8D, 0xC8,
-   521				0x81, 0xE8, 0xB7, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   522				0x56, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   523				0x54, 0xA8, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   524			},
-   525		},
-   526		{
-   527			.pixel_clock = 74170000,
-   528			.conf = {
-   529				0x01, 0xD1, 0x1F, 0x10, 0x40, 0x5B, 0xEF, 0xC8,
-   530				0x81, 0xE8, 0xB9, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   531				0x56, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   532				0x54, 0xA6, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   533			},
-   534		},
-   535		{
-   536			.pixel_clock = 74250000,
-   537			.conf = {
-   538				0x01, 0xD1, 0x1F, 0x10, 0x40, 0x40, 0xF8, 0x08,
-   539				0x81, 0xE8, 0xBA, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   540				0x26, 0x80, 0x09, 0x84, 0x05, 0x22, 0x24, 0x66,
-   541				0x54, 0xA5, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   542			},
-   543		},
-   544		{
-   545			.pixel_clock = 80140000,
-   546			.conf = {
-   547				0x01, 0xD1, 0x21, 0x11, 0x40, 0x3C, 0x2F, 0xC8,
-   548				0x87, 0xE8, 0xC8, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   549				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   550				0x54, 0x99, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   551			},
-   552		},
-   553		{
-   554			.pixel_clock = 83500000,
-   555			.conf = {
-   556				0x01, 0xD1, 0x23, 0x11, 0x40, 0x0C, 0xFB, 0xC8,
-   557				0x85, 0xE8, 0xD1, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   558				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   559				0x54, 0x4A, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   560			},
-   561		},
-   562		{
-   563			.pixel_clock = 84750000,
-   564			.conf = {
-   565				0x01, 0xD1, 0x23, 0x11, 0x40, 0x30, 0x1E, 0xC7,
-   566				0x84, 0xE8, 0xD4, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   567				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   568				0x54, 0x48, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   569			},
-   570		},
-   571		{
-   572			.pixel_clock = 85860000,
-   573			.conf = {
-   574				0x01, 0xD1, 0x24, 0x11, 0x40, 0x30, 0xD2, 0xC8,
-   575				0x84, 0xE8, 0xD5, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   576				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   577				0x54, 0x48, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   578			},
-   579		},
-   580		{
-   581			.pixel_clock = 88750000,
-   582			.conf = {
-   583				0x01, 0xD1, 0x25, 0x11, 0x40, 0x18, 0xFF, 0xC8,
-   584				0x83, 0xE8, 0xDE, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   585				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   586				0x54, 0x45, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   587			},
-   588		},
-   589		{
-   590			.pixel_clock = 89750000,
-   591			.conf = {
-   592				0x01, 0xD1, 0x25, 0x11, 0x40, 0x30, 0x26, 0xC9,
-   593				0x83, 0xE8, 0xE0, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   594				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   595				0x54, 0x89, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   596			},
-   597		},
-   598		{
-   599			.pixel_clock = 104990000,
-   600			.conf = {
-   601				0x01, 0xD1, 0x2C, 0x12, 0x40, 0x78, 0xC3, 0xC2,
-   602				0x81, 0xE8, 0x06, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   603				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   604				0x54, 0x3B, 0x24, 0x00, 0x00, 0x00, 0x01, 0x80,
-   605			},
-   606		},
-   607		{
-   608			.pixel_clock = 106500000,
-   609			.conf = {
-   610				0x01, 0xD1, 0x2C, 0x12, 0x40, 0x0C, 0x09, 0xC8,
-   611				0x84, 0xE8, 0x0A, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   612				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   613				0x54, 0x73, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   614			},
-   615		},
-   616		{
-   617			.pixel_clock = 106560000,
-   618			.conf = {
-   619				0x01, 0xD1, 0x2C, 0x12, 0x40, 0x78, 0x73, 0xCA,
-   620				0x85, 0xE8, 0x0B, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   621				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   622				0x54, 0x73, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   623			},
-   624		},
-   625		{
-   626			.pixel_clock = 107800000,
-   627			.conf = {
-   628				0x01, 0x51, 0x2D, 0x15, 0x40, 0x01, 0x00, 0xC8,
-   629				0x82, 0xC8, 0x0E, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   630				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   631				0x54, 0xC7, 0x25, 0x03, 0x00, 0x00, 0x01, 0x80,
-   632			},
-   633		},
-   634		{
-   635			.pixel_clock = 108000000,
-   636			.conf = {
-   637				0x01, 0x51, 0x2D, 0x15, 0x40, 0x01, 0x00, 0xC8,
-   638				0x82, 0xC8, 0x0E, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   639				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   640				0x54, 0xC7, 0x25, 0x03, 0x00, 0x00, 0x01, 0x80,
-   641			},
-   642		},
-   643		{
-   644			.pixel_clock = 115500000,
-   645			.conf = {
-   646				0x01, 0xD1, 0x30, 0x14, 0x40, 0x0C, 0x03, 0xC8,
-   647				0x88, 0xE8, 0x21, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   648				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   649				0x54, 0x6A, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   650			},
-   651		},
-   652		{
-   653			.pixel_clock = 119000000,
-   654			.conf = {
-   655				0x01, 0xD1, 0x31, 0x14, 0x40, 0x78, 0x41, 0xCB,
-   656				0x89, 0xE8, 0x28, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   657				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   658				0x54, 0x68, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   659			},
-   660		},
-   661		{
-   662			.pixel_clock = 122000000,
-   663			.conf = {
-   664				0x01, 0xD1, 0x33, 0x14, 0x40, 0x30, 0xF0, 0xC8,
-   665				0x85, 0xE8, 0x31, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   666				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   667				0x54, 0x65, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   668			},
-   669		},
-   670		{
-   671			.pixel_clock = 125590000,
-   672			.conf = {
-   673				0x01, 0xD1, 0x34, 0x14, 0x40, 0x78, 0x4F, 0xC2,
-   674				0x81, 0xE8, 0x3A, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   675				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   676				0x54, 0x87, 0x25, 0x03, 0x00, 0x00, 0x01, 0x80,
-   677			},
-   678		},
-   679		{
-   680			.pixel_clock = 146250000,
-   681			.conf = {
-   682				0x01, 0xD1, 0x3D, 0x15, 0x40, 0x18, 0xFD, 0xC8,
-   683				0x83, 0xE8, 0x6E, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   684				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x66,
-   685				0x54, 0x54, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   686			},
-   687		},
-   688		{
-   689			.pixel_clock = 148500000,
-   690			.conf = {
-   691				0x01, 0xD1, 0x1F, 0x00, 0x40, 0x40, 0xF8, 0x08,
-   692				0x81, 0xE8, 0xBA, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   693				0x26, 0x80, 0x09, 0x84, 0x05, 0x22, 0x24, 0x66,
-   694				0x54, 0x4B, 0x25, 0x03, 0x00, 0x80, 0x01, 0x80,
-   695			},
-   696		},
-   697		{
-   698			.pixel_clock = 154000000,
-   699			.conf = {
-   700				0x01, 0xD1, 0x20, 0x01, 0x40, 0x30, 0x08, 0xCC,
-   701				0x8C, 0xE8, 0xC1, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   702				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   703				0x54, 0x3F, 0x25, 0x03, 0x00, 0x00, 0x01, 0x80,
-   704			},
-   705		},
-   706		{
-   707			.pixel_clock = 162000000,
-   708			.conf = {
-   709				0x01, 0xD1, 0x22, 0x01, 0x40, 0x30, 0xD4, 0xCD,
-   710				0x89, 0xE8, 0xC9, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   711				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   712				0x54, 0x31, 0x25, 0x03, 0x00, 0x00, 0x01, 0x80,
-   713			},
-   714		},
-   715		{
-   716			.pixel_clock = 164100000,
-   717			.conf = {
-   718				0x01, 0xD1, 0x22, 0x89, 0x49, 0xB0, 0x15, 0xCE,
-   719				0x8A, 0xF8, 0xCD, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   720				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   721				0x54, 0x2B, 0x25, 0x03, 0x00, 0x00, 0x01, 0x80,
-   722			},
-   723		},
-   724		{
-   725			.pixel_clock = 196900000,
-   726			.conf = {
-   727				0x01, 0xD1, 0x29, 0x1618, 0x418, 0x190, 0xF5, 0xCF,
- > 728				0x8D, 0x168, 0xF5, 0xD8, 0x45, 0xA0, 0xAC, 0x80,
-   729				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   730				0x54, 0xFA, 0x24, 0x03, 0x00, 0x00, 0x01, 0x80,
-   731			},
-   732		},
-   733		{
-   734			.pixel_clock = 204800000,
-   735			.conf = {
-   736				0x01, 0xD1, 0x2B, 0x02, 0x40, 0x30, 0xE0, 0xC8,
-   737				0x85, 0xE8, 0x00, 0xD9, 0x45, 0xA0, 0xAC, 0x80,
-   738				0x08, 0x80, 0x09, 0x84, 0x05, 0x02, 0x24, 0x86,
-   739				0x54, 0x3C, 0x24, 0x01, 0x00, 0x00, 0x01, 0x80,
-   740			},
-   741		},
-   742	};
-   743	
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22  23  
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22 @24  static DEFINE_SEQLOCK(local_port_range_lock);
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22  25  static int local_port_range_min[2] = {0, 0};
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22  26  static int local_port_range_max[2] = {1023, 1023};
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22  27  static int local_port_range[2] = {DYNAMIC_PORT_MIN, DYNAMIC_PORT_MAX};
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22  28  static struct ctl_table_header *phonet_table_hrd;
+87ab4e20b445c6d Remi Denis-Courmont 2008-09-22  29  
+
+:::::: The code at line 24 was first introduced by commit
+:::::: 87ab4e20b445c6d2d2727ab4f96fa17f7259511e Phonet: proc interface for port range
+
+:::::: TO: Remi Denis-Courmont <remi.denis-courmont@nokia.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
