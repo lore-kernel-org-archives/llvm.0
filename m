@@ -1,70 +1,96 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728352C9E
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 08:35:39 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="236524333"
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="236524333"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 00:35:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="502966528"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2021 00:35:36 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1musQJ-0000Ig-Rh; Wed, 08 Dec 2021 08:35:35 +0000
-Date: Wed, 8 Dec 2021 16:34:58 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: arch/x86/kernel/fpu/xstate.o: warning: objtool:
- fpstate_realloc()+0x225: unreachable instruction
-Message-ID: <202112081601.4Ew2BGm4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB58B2C9E
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 08:56:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A96EC341C6
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 08:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638953765;
+	bh=Eko2Wx5nQFmKXKDz/fQjLDLX7s8lD39IKs1xuw9o9eE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GL61B9bP8nKh/AVPPXDP2hg7HRYePKblkrrjbrt7WwjOM2gbdH5PHi2hRN/QguBIx
+	 afexMjiieoRW26lRI7JW/i4FAp9++wgrI1WAYZhDxQLNWqTpNkF8NH3aFTM+TB1WiT
+	 grPkvEhrzjPdUFSDRYT+DppzUIfY+c/WOft99xgESJ3yyx2lBtpkA5sOpwiikVkqCe
+	 b7B/YQrRUzbNmxLMiSyczlvHUGEsndguKWzUY+HStexYYY3LDY4WYFFwaa6jMMxcSQ
+	 LSJP8KNlAiQL3VbAAcilxHMt7TCiMwjd+f/ErOcnxZYMp7CIq/VJNTvqepEKTVMOwT
+	 3ed1+lTCa62ag==
+Received: by mail-wm1-f41.google.com with SMTP id y196so1226989wmc.3
+        for <llvm@lists.linux.dev>; Wed, 08 Dec 2021 00:56:05 -0800 (PST)
+X-Gm-Message-State: AOAM532307dtTk3nSaqgiEZPWzFf/B8RkNC4i6/Rl0J9HRXOpbCK7XIm
+	fQCv8MPkZiwG4F9fZLHyv/OCQ7lGys00/P0Jt5M=
+X-Google-Smtp-Source: ABdhPJy+2il4LRg7kk5tsC0x987FYl7fnjjaweB7d96yKIBcRmeTEesTtuvHseEiSldzBXHu11OvpGO2ElHDQrl+ht8=
+X-Received: by 2002:a1c:1c1:: with SMTP id 184mr14374486wmb.1.1638953763912;
+ Wed, 08 Dec 2021 00:56:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+ <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
+In-Reply-To: <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Wed, 8 Dec 2021 09:55:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
+Message-ID: <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+	kernelci@groups.io, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-CC: linux-kernel@vger.kernel.org
-TO: "Chang S. Bae" <chang.seok.bae@intel.com>
-CC: Borislav Petkov <bp@suse.de>
-CC: Thomas Gleixner <tglx@linutronix.de>
+On Tue, Dec 7, 2021 at 7:17 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Dec 7, 2021 at 7:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Working towards a cleaner header structure, start by moving the most
+> > commonly embedded structures into a single header file that itself
+> > has only a minimum set of indirect includes. At this moment, this
+> > include structures for
+>
+> Ugh. I liked your 1/3 patch, but I absolutely detest this one.
+>
+> It makes no sense to me, and just makes that header file a completely
+> random collection of some random structure types.
+>
+> And I absolutely hate how it splits out the definition of the struct
+> from basic core infrastructure (initializers etc random inline
+> functions) for said structures.
+>
+> So no. NAK on this one. I think it's a disaster.
 
-Hi Chang,
+Ok, thank you for taking a look!
 
-FYI, the error/warning still remains.
+Here is what I'd try next based on the feedback:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
-commit: 2308ee57d93d896618dd65c996429c9d3e469fe0 x86/fpu/amx: Enable the AMX feature in 64-bit mode
-date:   6 weeks ago
-config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211208/202112081601.4Ew2BGm4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2308ee57d93d896618dd65c996429c9d3e469fe0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2308ee57d93d896618dd65c996429c9d3e469fe0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ block// crypto// drivers/ fs// kernel// mm// net/ sound/
+- reduce patch 1 somewhat to only include the types that have a strong reason
+  to get moved to linux/types.h, describing them individually but leaving them
+  it as a single combined patch
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+- keep patch 3, but leave 'struct super_block' in linux/fs.h for the moment
+  because  of 'struct list_lru'.
 
-All warnings (new ones prefixed by >>):
+- drop patch 2, but instead find a new home for each structure (along with
+  its initializers) if needed for defining the types in the new linux/fs_types.h
+  without too many indirect includes. I'll skip the structs that would be needed
+  later for mm.h/sched.h/device.h/.... for the moment.
 
->> arch/x86/kernel/fpu/xstate.o: warning: objtool: fpstate_realloc()+0x225: unreachable instruction
+For the added headers, do you have a preference for whether to try grouping
+them logically or not? I could either split them out individually into many new
+headers (xarray_types.h, idr_types.h, percpu_rwsem_types.h, rwsem_types.h,
+...), or combine some of them when they define related types.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+        Arnd
