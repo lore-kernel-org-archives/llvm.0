@@ -1,31 +1,29 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D9D29CA
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 15:22:52 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="225106971"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3ABA2C80
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 15:53:51 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301237429"
 X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="225106971"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 07:22:52 -0800
+   d="scan'208";a="301237429"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 07:53:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="461725174"
+   d="scan'208";a="462807092"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Dec 2021 07:22:48 -0800
+  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 07:53:49 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1muymN-0000j6-Oj; Wed, 08 Dec 2021 15:22:47 +0000
-Date: Wed, 8 Dec 2021 23:22:43 +0800
+	id 1muzGO-0000l2-Ko; Wed, 08 Dec 2021 15:53:48 +0000
+Date: Wed, 8 Dec 2021 23:53:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gwendal Grignou <gwendal@chromium.org>, jic23@kernel.org,
-	lars@metafoo.de, swboyd@chromium.org
+To: Jiri Slaby <jslaby@suse.cz>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	andy.shevchenko@gmail.com, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>
-Subject: Re: [PATCH v5 3/5] iio: proximity: Add SX9324 support
-Message-ID: <202112082323.CEzDjrR6-lkp@intel.com>
-References: <20211208004311.3098571-4-gwendal@chromium.org>
+	linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 8/19] drivers/tty/mxser.c:1784:30: warning: unused
+ variable 'mxser_ops'
+Message-ID: <202112082345.v46Z3TI4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,59 +32,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208004311.3098571-4-gwendal@chromium.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Gwendal,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on v5.16-rc4 next-20211208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Gwendal-Grignou/Expand-Semtech-SAR-Sensors-support/20211208-084635
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: riscv-randconfig-c006-20211208 (https://download.01.org/0day-ci/archive/20211208/202112082323.CEzDjrR6-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   e07aaf938405b723f435206c00fcc50a11a70399
+commit: f22cec00dbd414f61389ec805a29e70e55b9d84a [8/19] mxser: switch to uart_driver
+config: i386-buildonly-randconfig-r002-20211208 (https://download.01.org/0day-ci/archive/20211208/202112082345.v46Z3TI4-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/d02716a5c3a619239e594e6ba6af2ec38fd3de3d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Gwendal-Grignou/Expand-Semtech-SAR-Sensors-support/20211208-084635
-        git checkout d02716a5c3a619239e594e6ba6af2ec38fd3de3d
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=f22cec00dbd414f61389ec805a29e70e55b9d84a
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout f22cec00dbd414f61389ec805a29e70e55b9d84a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/iio/proximity/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/iio/proximity/sx9324.c:166:9: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int i, ret, pin_idx;
-                  ^
->> drivers/iio/proximity/sx9324.c:871:36: warning: unused variable 'sx9324_acpi_match' [-Wunused-const-variable]
-   static const struct acpi_device_id sx9324_acpi_match[] = {
-                                      ^
-   2 warnings generated.
+   drivers/tty/mxser.c:377:13: warning: unused function 'mxser_must_no_sw_flow_control' [-Wunused-function]
+   static void mxser_must_no_sw_flow_control(unsigned long baseio)
+               ^
+   drivers/tty/mxser.c:591:13: warning: unused function 'mxser_change_speed' [-Wunused-function]
+   static void mxser_change_speed(struct tty_struct *tty,
+               ^
+   drivers/tty/mxser.c:1394:13: warning: unused function 'mxser_start' [-Wunused-function]
+   static void mxser_start(struct tty_struct *tty)
+               ^
+>> drivers/tty/mxser.c:1784:30: warning: unused variable 'mxser_ops' [-Wunused-const-variable]
+   static const struct uart_ops mxser_ops = {
+                                ^
+   4 warnings generated.
 
 
-vim +/sx9324_acpi_match +871 drivers/iio/proximity/sx9324.c
+vim +/mxser_ops +1784 drivers/tty/mxser.c
 
-   870	
- > 871	static const struct acpi_device_id sx9324_acpi_match[] = {
-   872		{ "STH9324", SX9324_WHOAMI_VALUE},
-   873		{ }
-   874	};
-   875	MODULE_DEVICE_TABLE(acpi, sx9324_acpi_match);
-   876	
+  1783	
+> 1784	static const struct uart_ops mxser_ops = {
+  1785		.tx_empty       = mxser_tx_empty,
+  1786		//.get_mctrl      = mxser_get_mctrl,
+  1787		//.set_mctrl      = mxser_set_mctrl,
+  1788		.stop_tx        = mxser_stop_tx,
+  1789		.start_tx       = mxser_start_tx,
+  1790		.stop_rx        = mxser_stop_rx,
+  1791		.break_ctl      = mxser_break_ctl,
+  1792		//.startup        = mxser_startup,
+  1793		//.shutdown       = mxser_shutdown,
+  1794		.set_termios    = mxser_set_termios,
+  1795		//.pm             = mxser_pm,
+  1796		//.type           = mxser_type,
+  1797		//.release_port   = mxser_release_port,
+  1798		//.request_port   = mxser_request_port,
+  1799		//.config_port    = mxser_config_port,
+  1800		//.verify_port    = mxser_verify_port,
+  1801	};
+  1802	
+  1803	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
