@@ -1,22 +1,22 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321212CA6
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 22:22:04 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238192459"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9844C173
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 22:33:04 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218653414"
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="238192459"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 14:22:03 -0800
+   d="scan'208";a="218653414"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 14:33:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="543370327"
+   d="scan'208";a="612271399"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 08 Dec 2021 14:21:59 -0800
+  by orsmga004.jf.intel.com with ESMTP; 08 Dec 2021 14:32:59 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mv5K2-000188-Hs; Wed, 08 Dec 2021 22:21:58 +0000
-Date: Thu, 9 Dec 2021 06:21:48 +0800
+	id 1mv5Ug-00018e-Ke; Wed, 08 Dec 2021 22:32:58 +0000
+Date: Thu, 9 Dec 2021 06:32:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: xiangxia.m.yue@gmail.com, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -29,7 +29,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Alexander Lobakin <alobakin@pm.me>, Paolo Abeni <pabeni@redhat.com>
 Subject: Re: [net-next v2 2/2] net: sched: support hash/classid selecting tx
  queue
-Message-ID: <202112090603.PxlqXFRw-lkp@intel.com>
+Message-ID: <202112090601.FrUCO7HV-lkp@intel.com>
 References: <20211208143408.7047-3-xiangxia.m.yue@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -50,7 +50,7 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/0day-ci/linux/commits/xiangxia-m-yue-gmail-com/net-sched-allow-user-to-select-txqueue/20211208-223656
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 1fe5b01262844be03de98afdd56d1d393df04d7e
-config: i386-randconfig-r023-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090603.PxlqXFRw-lkp@intel.com/config)
+config: i386-randconfig-a015-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090601.FrUCO7HV-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -61,7 +61,7 @@ reproduce (this is a W=1 build):
         git checkout 522fbcfdde012bc46d29aa216bdfa73f512adcbd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash mm/ net/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/sched/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
