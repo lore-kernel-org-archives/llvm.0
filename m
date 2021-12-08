@@ -1,99 +1,151 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3ABA2C80
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 15:53:51 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301237429"
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="301237429"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 07:53:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="462807092"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 07:53:49 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1muzGO-0000l2-Ko; Wed, 08 Dec 2021 15:53:48 +0000
-Date: Wed, 8 Dec 2021 23:53:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 8/19] drivers/tty/mxser.c:1784:30: warning: unused
- variable 'mxser_ops'
-Message-ID: <202112082345.v46Z3TI4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454AA2CB2
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 16:51:11 +0000 (UTC)
+Received: by mail-ed1-f45.google.com with SMTP id x15so10595581edv.1
+        for <llvm@lists.linux.dev>; Wed, 08 Dec 2021 08:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7dto8X3c8dkt8cAuGIAikbVN54E5STCRsv0et+8KXh8=;
+        b=XL0p0g2mnaxR5sNE/l+nWe28s9d3M1czmNdZvqDzJYOtI9OUtCjctzb75KHJ13Fmgf
+         kxjEdIK6lI5Iqihs3D3DF1KbxA+pGkY3myenSVWEXzC6cVMdvOBIHdUDtJwxbbLH0hJC
+         ZuyS2FQBQqB3Fj+cUfkE/veQZzqrEAWYRJ0AI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7dto8X3c8dkt8cAuGIAikbVN54E5STCRsv0et+8KXh8=;
+        b=aIrCteyQQjFeoN8QnKPPGGq0w9kEvJIk88jmBTzQRPiTJ/v9EFGh18XZd1vlGjw9IT
+         oPPL4PflH/VOHu8QELD9QIf13eSRlidyMgH203SSY5MMZ42/SLPkFBCWAywzqZnrwkw6
+         pjtPIh0I8IG1qhYqfzoc2aFZ8rugdyUdNt4+TZNGEkh570YRthLaPydXJU8AZCwobjko
+         wh8TgxJx7CtPovvrzerNGoA6F84Q7PzHRHoJHOKbDQ6S5/zZPQxO3AzFLhPoWGCwizNe
+         DNrIAfNc1rziSFmvAWEns6dVMt8KsY9Bvk3AOa1zMOCAz5ERqNahAh4rnpcMz5n2uk8J
+         fIpQ==
+X-Gm-Message-State: AOAM5313pbSd2FBWrYqVzFMQeCkNqh7L12tgveoYwN2hWRv+HtGd+r90
+	EGVNsa65LEnSSvr3M0QwiL+T54rGBGArZVZHKko=
+X-Google-Smtp-Source: ABdhPJwTmNsWIK4PJXx9L6CGfdFUIyuW2GR7TQzuzCk8XoQtYvEId+UX0Lf8m/uTyGs9QUbIGh/oQQ==
+X-Received: by 2002:a17:906:79c8:: with SMTP id m8mr8145619ejo.511.1638982269084;
+        Wed, 08 Dec 2021 08:51:09 -0800 (PST)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id ho30sm1753859ejc.30.2021.12.08.08.51.08
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 08:51:08 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso4609808wms.3
+        for <llvm@lists.linux.dev>; Wed, 08 Dec 2021 08:51:08 -0800 (PST)
+X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr16865226wmg.152.1638982258068;
+ Wed, 08 Dec 2021 08:50:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+ <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com> <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
+In-Reply-To: <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 8 Dec 2021 08:50:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgX8ZU8eQuegqFYdJ7VciZqNWTdfsM-=ugEWJWchTnw7A@mail.gmail.com>
+Message-ID: <CAHk-=wgX8ZU8eQuegqFYdJ7VciZqNWTdfsM-=ugEWJWchTnw7A@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
+	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+	kernelci@groups.io, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   e07aaf938405b723f435206c00fcc50a11a70399
-commit: f22cec00dbd414f61389ec805a29e70e55b9d84a [8/19] mxser: switch to uart_driver
-config: i386-buildonly-randconfig-r002-20211208 (https://download.01.org/0day-ci/archive/20211208/202112082345.v46Z3TI4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=f22cec00dbd414f61389ec805a29e70e55b9d84a
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout f22cec00dbd414f61389ec805a29e70e55b9d84a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/
+On Wed, Dec 8, 2021 at 12:56 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> For the added headers, do you have a preference for whether to try grouping
+> them logically or not? I could either split them out individually into many new
+> headers (xarray_types.h, idr_types.h, percpu_rwsem_types.h, rwsem_types.h,
+> ...), or combine some of them when they define related types.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So I'd really like to have some logical grouping. I'd rather have ten
+smaller headers that each have one logical grouping than one "put
+random core kernel structs in this one".
 
-All warnings (new ones prefixed by >>):
+ The reason I reacted fairly strongly against this "struct_types.h"
+patch is that I quite often end up looking up some exact type
+definition and the associated initializers etc. It's admittedly seldom
+stuff that is this core (it tends to be some random odder type), but
+just to give a concrete example, that <linux/mutex.h> change was an
+example of something I really dislike.
 
-   drivers/tty/mxser.c:377:13: warning: unused function 'mxser_must_no_sw_flow_control' [-Wunused-function]
-   static void mxser_must_no_sw_flow_control(unsigned long baseio)
-               ^
-   drivers/tty/mxser.c:591:13: warning: unused function 'mxser_change_speed' [-Wunused-function]
-   static void mxser_change_speed(struct tty_struct *tty,
-               ^
-   drivers/tty/mxser.c:1394:13: warning: unused function 'mxser_start' [-Wunused-function]
-   static void mxser_start(struct tty_struct *tty)
-               ^
->> drivers/tty/mxser.c:1784:30: warning: unused variable 'mxser_ops' [-Wunused-const-variable]
-   static const struct uart_ops mxser_ops = {
-                                ^
-   4 warnings generated.
+Moving just the type definition away, particularly when it then
+depends on various kernel config options, and having the core
+initializer macros and functions somewhere different from where the
+type is defined is really nasty when you're looking at some type
+definition details.
 
+(The mutex one is just an example: all the locking structures had the
+same pattern).
 
-vim +/mxser_ops +1784 drivers/tty/mxser.c
+I realize that the locking structs are also exactly the ones that are
+then often embedded in other structures, so I understand why they were
+so prominent in that patch. But at the same time, I think that is how
+C header files work - it has many upsides, but it certainly also has
+that problematic downside of having to get the header inclusion right
+without recursion etc.
 
-  1783	
-> 1784	static const struct uart_ops mxser_ops = {
-  1785		.tx_empty       = mxser_tx_empty,
-  1786		//.get_mctrl      = mxser_get_mctrl,
-  1787		//.set_mctrl      = mxser_set_mctrl,
-  1788		.stop_tx        = mxser_stop_tx,
-  1789		.start_tx       = mxser_start_tx,
-  1790		.stop_rx        = mxser_stop_rx,
-  1791		.break_ctl      = mxser_break_ctl,
-  1792		//.startup        = mxser_startup,
-  1793		//.shutdown       = mxser_shutdown,
-  1794		.set_termios    = mxser_set_termios,
-  1795		//.pm             = mxser_pm,
-  1796		//.type           = mxser_type,
-  1797		//.release_port   = mxser_release_port,
-  1798		//.request_port   = mxser_request_port,
-  1799		//.config_port    = mxser_config_port,
-  1800		//.verify_port    = mxser_verify_port,
-  1801	};
-  1802	
-  1803	
+So instead of trying to split out things like the structures
+associated with locking, I'd rather aim to
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ (a) try to make sure that the locking headers are always
+self-contained enough that there is never any issue with including
+them, and recursion isn't an issue.
+
+ (b) I think it might be better to try to instead split out the more
+specialized and high-level structures, and try to declare _those_
+separately
+
+optimally for (b) is to not declare them at all: in many situations
+you really just want the header file for some function pointer
+declaration, and doing a forward declaration with just "struct
+super_block;" in the generic header file might be the right thing.
+
+Then the relatively few places that actually care what 'struct
+super_block' looks like could include <linux/superblock.h> or
+whatever.
+
+Because a big portion of our code probably does want to include
+<linux/fs.h>, but is not AT ALL interested in how 'struct super_block'
+actually is laid out. The fact that you want declarations for
+functions that take a pointer to it doesn't matter, for them it's
+enough to have that forward-declaration of "this is a valid struct,
+you don't care what it looks like".
+
+So I think I would be much more interested in _that_ kind of patch:
+instead of trying to collect truly core types in one (or a few) header
+files, try to see if all those random other types could not be split
+out into their own patches.
+
+And yes, yes, I realize that 'struct super_block' is actually actively
+used by inline functions in <linux/fs.h>, so they actually require
+that declaration as it stands now. But those functions are generally
+fairly specialized, and they could go along with the structure
+definition into the <superblock.h> header. And maybe some of them
+shouldn't be inline functions at all - we often end up having
+unnecessariyl big and complex headers just because it was easier to
+add an inline function (or expand a trivial one) than it was to just
+make a function declaration and then move the code into a separate C
+file.
+
+(This is also why sometimes macros are more convenient than inline
+functions - they don't need the context. So sometimes the answer for
+trivial helper functions is to just turn then into macros instead).
+
+Hmm?
+
+               Linus
