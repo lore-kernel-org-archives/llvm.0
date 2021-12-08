@@ -1,151 +1,98 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454AA2CB2
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 16:51:11 +0000 (UTC)
-Received: by mail-ed1-f45.google.com with SMTP id x15so10595581edv.1
-        for <llvm@lists.linux.dev>; Wed, 08 Dec 2021 08:51:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7dto8X3c8dkt8cAuGIAikbVN54E5STCRsv0et+8KXh8=;
-        b=XL0p0g2mnaxR5sNE/l+nWe28s9d3M1czmNdZvqDzJYOtI9OUtCjctzb75KHJ13Fmgf
-         kxjEdIK6lI5Iqihs3D3DF1KbxA+pGkY3myenSVWEXzC6cVMdvOBIHdUDtJwxbbLH0hJC
-         ZuyS2FQBQqB3Fj+cUfkE/veQZzqrEAWYRJ0AI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7dto8X3c8dkt8cAuGIAikbVN54E5STCRsv0et+8KXh8=;
-        b=aIrCteyQQjFeoN8QnKPPGGq0w9kEvJIk88jmBTzQRPiTJ/v9EFGh18XZd1vlGjw9IT
-         oPPL4PflH/VOHu8QELD9QIf13eSRlidyMgH203SSY5MMZ42/SLPkFBCWAywzqZnrwkw6
-         pjtPIh0I8IG1qhYqfzoc2aFZ8rugdyUdNt4+TZNGEkh570YRthLaPydXJU8AZCwobjko
-         wh8TgxJx7CtPovvrzerNGoA6F84Q7PzHRHoJHOKbDQ6S5/zZPQxO3AzFLhPoWGCwizNe
-         DNrIAfNc1rziSFmvAWEns6dVMt8KsY9Bvk3AOa1zMOCAz5ERqNahAh4rnpcMz5n2uk8J
-         fIpQ==
-X-Gm-Message-State: AOAM5313pbSd2FBWrYqVzFMQeCkNqh7L12tgveoYwN2hWRv+HtGd+r90
-	EGVNsa65LEnSSvr3M0QwiL+T54rGBGArZVZHKko=
-X-Google-Smtp-Source: ABdhPJwTmNsWIK4PJXx9L6CGfdFUIyuW2GR7TQzuzCk8XoQtYvEId+UX0Lf8m/uTyGs9QUbIGh/oQQ==
-X-Received: by 2002:a17:906:79c8:: with SMTP id m8mr8145619ejo.511.1638982269084;
-        Wed, 08 Dec 2021 08:51:09 -0800 (PST)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id ho30sm1753859ejc.30.2021.12.08.08.51.08
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 08:51:08 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso4609808wms.3
-        for <llvm@lists.linux.dev>; Wed, 08 Dec 2021 08:51:08 -0800 (PST)
-X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr16865226wmg.152.1638982258068;
- Wed, 08 Dec 2021 08:50:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EFC02CB2
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 16:57:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2966CC00446;
+	Wed,  8 Dec 2021 16:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638982648;
+	bh=U3tTSsg5YkUND5CGysUHv+zvBNyCz4YDGgl5Nz/9Vdo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EFxOZtfpBBnu7JPqFL8tL891rBwl464/oqoKWp9UOL45PwwtACEYKTVE8kDmgPs8u
+	 R22DOet+/qo/bQPlxRb0PWQoZOqxSdN87wCrIWAW/iKhSBPS3+gCya6GzcPQ04K12T
+	 Uk+8XvxMtGbJZZL15EzBYWXDX7OUNBeN1/ueAyZDQdFzwCfLZiuPMstKTUboTHxn/z
+	 v1W520QCov0EWrzAj6u7DIu3FJue0oB2cLo7thZQrKdezLQlzrE0N/bdNr4p85lHBa
+	 oZzYZKZPNhpqPu/ZVIjHETkAuA1GC4ZyoJDD8M98Q0Zkdx9HDN8jvdqtSn6ql3QS6g
+	 1BvTlwwGvuvig==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Subject: [PATCH v2] MIPS: Loongson64: Use three arguments for slti
+Date: Wed,  8 Dec 2021 09:56:17 -0700
+Message-Id: <20211208165616.1746108-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
- <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com> <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
-In-Reply-To: <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 8 Dec 2021 08:50:42 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgX8ZU8eQuegqFYdJ7VciZqNWTdfsM-=ugEWJWchTnw7A@mail.gmail.com>
-Message-ID: <CAHk-=wgX8ZU8eQuegqFYdJ7VciZqNWTdfsM-=ugEWJWchTnw7A@mail.gmail.com>
-Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
-	Guenter Roeck <groeck@chromium.org>, Kees Cook <keescook@chromium.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
-	kernelci@groups.io, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 8, 2021 at 12:56 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> For the added headers, do you have a preference for whether to try grouping
-> them logically or not? I could either split them out individually into many new
-> headers (xarray_types.h, idr_types.h, percpu_rwsem_types.h, rwsem_types.h,
-> ...), or combine some of them when they define related types.
+LLVM's integrated assembler does not support 'slti <reg>, <imm>':
 
-So I'd really like to have some logical grouping. I'd rather have ten
-smaller headers that each have one logical grouping than one "put
-random core kernel structs in this one".
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:86:2: note: while in macro instantiation
+ kernel_entry_setup # cpu specific setup
+ ^
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:150:2: note: while in macro instantiation
+ smp_slave_setup
+ ^
 
- The reason I reacted fairly strongly against this "struct_types.h"
-patch is that I quite often end up looking up some exact type
-definition and the associated initializers etc. It's admittedly seldom
-stuff that is this core (it tends to be some random odder type), but
-just to give a concrete example, that <linux/mutex.h> change was an
-example of something I really dislike.
+To increase compatibility with LLVM's integrated assembler, use the full
+form of 'slti <reg>, <reg>, <imm>', which matches the rest of
+arch/mips/. This does not result in any change for GNU as.
 
-Moving just the type definition away, particularly when it then
-depends on various kernel config options, and having the core
-initializer macros and functions somewhere different from where the
-type is defined is really nasty when you're looking at some type
-definition details.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1526
+Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
 
-(The mutex one is just an example: all the locking structures had the
-same pattern).
+v1 -> v2: https://lore.kernel.org/r/20211207170129.578089-1-nathan@kernel.org/
 
-I realize that the locking structs are also exactly the ones that are
-then often embedded in other structures, so I understand why they were
-so prominent in that patch. But at the same time, I think that is how
-C header files work - it has many upsides, but it certainly also has
-that problematic downside of having to get the header inclusion right
-without recursion etc.
+* Fix typos in commit message ("stli" -> "slti") [Sergey]
 
-So instead of trying to split out things like the structures
-associated with locking, I'd rather aim to
+ arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- (a) try to make sure that the locking headers are always
-self-contained enough that there is never any issue with including
-them, and recursion isn't an issue.
+diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+index 13373c5144f8..efb41b351974 100644
+--- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
++++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+@@ -32,7 +32,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
+@@ -63,7 +63,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
 
- (b) I think it might be better to try to instead split out the more
-specialized and high-level structures, and try to declare _those_
-separately
+base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+-- 
+2.34.1
 
-optimally for (b) is to not declare them at all: in many situations
-you really just want the header file for some function pointer
-declaration, and doing a forward declaration with just "struct
-super_block;" in the generic header file might be the right thing.
-
-Then the relatively few places that actually care what 'struct
-super_block' looks like could include <linux/superblock.h> or
-whatever.
-
-Because a big portion of our code probably does want to include
-<linux/fs.h>, but is not AT ALL interested in how 'struct super_block'
-actually is laid out. The fact that you want declarations for
-functions that take a pointer to it doesn't matter, for them it's
-enough to have that forward-declaration of "this is a valid struct,
-you don't care what it looks like".
-
-So I think I would be much more interested in _that_ kind of patch:
-instead of trying to collect truly core types in one (or a few) header
-files, try to see if all those random other types could not be split
-out into their own patches.
-
-And yes, yes, I realize that 'struct super_block' is actually actively
-used by inline functions in <linux/fs.h>, so they actually require
-that declaration as it stands now. But those functions are generally
-fairly specialized, and they could go along with the structure
-definition into the <superblock.h> header. And maybe some of them
-shouldn't be inline functions at all - we often end up having
-unnecessariyl big and complex headers just because it was easier to
-add an inline function (or expand a trivial one) than it was to just
-make a function declaration and then move the code into a separate C
-file.
-
-(This is also why sometimes macros are more convenient than inline
-functions - they don't need the context. So sometimes the answer for
-trivial helper functions is to just turn then into macros instead).
-
-Hmm?
-
-               Linus
