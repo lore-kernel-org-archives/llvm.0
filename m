@@ -1,31 +1,30 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDBF173
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 22:53:15 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="225230509"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF7E173
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 23:03:01 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="298762103"
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="225230509"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 14:53:01 -0800
+   d="scan'208";a="298762103"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 15:03:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="680099181"
+   d="scan'208";a="503254766"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2021 14:52:59 -0800
+  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2021 15:02:59 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mv5o3-0001A1-0Q; Wed, 08 Dec 2021 22:52:59 +0000
-Date: Thu, 9 Dec 2021 06:52:33 +0800
+	id 1mv5xj-0001Ac-4x; Wed, 08 Dec 2021 23:02:59 +0000
+Date: Thu, 9 Dec 2021 07:02:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
+To: "charles.park" <charles.park@hardkernel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [hare-scsi-devel:ata-trace.v3 2/73]
- drivers/ata/libata-core.c:972:13: warning: no previous prototype for
- function 'ata_dev_class_string'
-Message-ID: <202112090629.8XnsDIKk-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>
+Subject: [tobetter:odroid-5.16.y 31/75] drivers/thermal/thermal_helpers.c:79:
+ warning: expecting prototype for thermal_zone_get_temp(). Prototype was for
+ CRITICAL_TEMP() instead
+Message-ID: <202112090618.OVdb1IM2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,61 +35,47 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git ata-trace.v3
-head:   d973dee7af0328b9176e4a1710fb73093c334698
-commit: 41c489a28ae800ac33f419ad83135261e9eba85c [2/73] libata: Add ata_port_classify() helper
-config: i386-randconfig-r021-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090629.8XnsDIKk-lkp@intel.com/config)
+tree:   https://github.com/tobetter/linux odroid-5.16.y
+head:   04f296b5f991198f16f76ba15a23e9e00e30aac4
+commit: 4ea975cf78cb5d4519abedbe526e1098882bdc88 [31/75] ODROID-XU4: Update hack avoiding the invalid temperature by TMU broken
+config: i386-randconfig-a013-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090618.OVdb1IM2-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=41c489a28ae800ac33f419ad83135261e9eba85c
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel ata-trace.v3
-        git checkout 41c489a28ae800ac33f419ad83135261e9eba85c
+        # https://github.com/tobetter/linux/commit/4ea975cf78cb5d4519abedbe526e1098882bdc88
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.16.y
+        git checkout 4ea975cf78cb5d4519abedbe526e1098882bdc88
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ drivers/ata/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ drivers/thermal/ mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/ata/libata-core.c:972:13: warning: no previous prototype for function 'ata_dev_class_string' [-Wmissing-prototypes]
-   const char *ata_dev_class_string(unsigned int class)
-               ^
-   drivers/ata/libata-core.c:972:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   const char *ata_dev_class_string(unsigned int class)
-         ^
-   static 
-   1 warning generated.
+>> drivers/thermal/thermal_helpers.c:79: warning: expecting prototype for thermal_zone_get_temp(). Prototype was for CRITICAL_TEMP() instead
 
 
-vim +/ata_dev_class_string +972 drivers/ata/libata-core.c
+vim +79 drivers/thermal/thermal_helpers.c
 
-   971	
- > 972	const char *ata_dev_class_string(unsigned int class)
-   973	{
-   974		static const char * const class_str[] = {
-   975			"unknown",
-   976			"ATA",
-   977			"ATA (unsupported)",
-   978			"ATAPI",
-   979			"ATAPI (unsupported",
-   980			"PMP",
-   981			"PMP (unsupported)",
-   982			"SEMB",
-   983			"SEMB (unsupported)",
-   984			"ZAC",
-   985			"ZAC (unsupported)",
-   986			"none",
-   987		};
-   988		if (class == 0 || (class - 1) >= ARRAY_SIZE(class_str))
-   989			return "unknown";
-   990		return class_str[class - 1];
-   991	}
-   992	
+    67	
+    68	/**
+    69	 * thermal_zone_get_temp() - returns the temperature of a thermal zone
+    70	 * @tz: a valid pointer to a struct thermal_zone_device
+    71	 * @temp: a valid pointer to where to store the resulting temperature.
+    72	 *
+    73	 * When a valid thermal zone reference is passed, it will fetch its
+    74	 * temperature and fill @temp.
+    75	 *
+    76	 * Return: On success returns 0, an error code otherwise
+    77	 */
+    78	
+  > 79	#define	CRITICAL_TEMP	120000
+    80	int thermal_zone_data[4] = { 0, };
+    81	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
