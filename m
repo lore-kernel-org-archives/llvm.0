@@ -1,31 +1,30 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3AC2C9E
-	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 00:02:32 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="236456681"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A855B2C9E
+	for <llvm@lists.linux.dev>; Wed,  8 Dec 2021 00:11:19 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="323977361"
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="236456681"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:01:19 -0800
+   d="scan'208";a="323977361"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:11:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="611887767"
+   d="scan'208";a="657960036"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 07 Dec 2021 16:01:17 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 16:11:17 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mukOa-000N64-I9; Wed, 08 Dec 2021 00:01:16 +0000
-Date: Wed, 8 Dec 2021 08:00:24 +0800
+	id 1mukYG-000N6h-RC; Wed, 08 Dec 2021 00:11:16 +0000
+Date: Wed, 8 Dec 2021 08:10:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: Anup Patel <anup.patel@wdc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [kees:memcpy/step2/next-20211206 19/19]
- include/linux/fortify-string.h:324:4: warning: call to
- __read_overflow2_field declared with 'warning' attribute: detected read
- beyond size of field (2nd parameter); maybe use struct_group()?
-Message-ID: <202112080732.rL3hdjwC-lkp@intel.com>
+Subject: [avpatel:riscv_kvm_aia_v1 39/40] arch/riscv/kvm/aia_aplic.c:254:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202112080820.BR1BIqGS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,145 +35,108 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git memcpy/step2/next-20211206
-head:   082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
-commit: 082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0 [19/19] fortify: Work around Clang inlining bugs
-config: i386-randconfig-a013-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080732.rL3hdjwC-lkp@intel.com/config)
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   eb55ca3817a59020fc1e3d5a5de0a5adcebbedd0
+commit: dc0299fdaf9714a56b13b955c086bab2f8bd4046 [39/40] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-c006-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080820.BR1BIqGS-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees memcpy/step2/next-20211206
-        git checkout 082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/dc0299fdaf9714a56b13b955c086bab2f8bd4046
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout dc0299fdaf9714a56b13b955c086bab2f8bd4046
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/entry/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/entry/common.c:3:
-   In file included from include/linux/context_tracking.h:5:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from arch/x86/include/asm/preempt.h:7:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/x86/include/asm/thread_info.h:12:
-   In file included from arch/x86/include/asm/page.h:14:
-   In file included from arch/x86/include/asm/page_32.h:35:
-   In file included from include/linux/string.h:253:
->> include/linux/fortify-string.h:324:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-                           __read_overflow2_field(q_size_field, size);
-                           ^
->> include/linux/fortify-string.h:324:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-   2 warnings generated.
+>> arch/riscv/kvm/aia_aplic.c:254:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:293:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:254:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:242:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
 
 
-vim +/warning +324 include/linux/fortify-string.h
+vim +254 arch/riscv/kvm/aia_aplic.c
 
-2fc46de99fed34 Kees Cook      2021-06-16  255  
-2fc46de99fed34 Kees Cook      2021-06-16  256  /*
-2fc46de99fed34 Kees Cook      2021-06-16  257   * __builtin_object_size() must be captured here to avoid evaluating argument
-2fc46de99fed34 Kees Cook      2021-06-16  258   * side-effects further into the macro layers.
-2fc46de99fed34 Kees Cook      2021-06-16  259   */
-2fc46de99fed34 Kees Cook      2021-06-16  260  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
-2fc46de99fed34 Kees Cook      2021-06-16  261  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
-a28a6e860c6cf2 Francis Laniel 2021-02-25  262  
-a91965903a44bf Kees Cook      2021-04-20  263  /*
-a91965903a44bf Kees Cook      2021-04-20  264   * To make sure the compiler can enforce protection against buffer overflows,
-a91965903a44bf Kees Cook      2021-04-20  265   * memcpy(), memmove(), and memset() must not be used beyond individual
-a91965903a44bf Kees Cook      2021-04-20  266   * struct members. If you need to copy across multiple members, please use
-a91965903a44bf Kees Cook      2021-04-20  267   * struct_group() to create a named mirror of an anonymous struct union.
-a91965903a44bf Kees Cook      2021-04-20  268   * (e.g. see struct sk_buff.)
-a91965903a44bf Kees Cook      2021-04-20  269   *
-a91965903a44bf Kees Cook      2021-04-20  270   * Mitigation coverage
-a91965903a44bf Kees Cook      2021-04-20  271   *					Bounds checking at:
-a91965903a44bf Kees Cook      2021-04-20  272   *					+-------+-------+-------+-------+
-a91965903a44bf Kees Cook      2021-04-20  273   *					| Compile time  | Run time      |
-a91965903a44bf Kees Cook      2021-04-20  274   * memcpy() argument sizes:		| write | read  | write | read  |
-a91965903a44bf Kees Cook      2021-04-20  275   *					+-------+-------+-------+-------+
-a91965903a44bf Kees Cook      2021-04-20  276   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
-a91965903a44bf Kees Cook      2021-04-20  277   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
-a91965903a44bf Kees Cook      2021-04-20  278   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
-a91965903a44bf Kees Cook      2021-04-20  279   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
-a91965903a44bf Kees Cook      2021-04-20  280   * memcpy(known,   known,   dynamic)	|   n   |   n   |   b   |   B   |
-a91965903a44bf Kees Cook      2021-04-20  281   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
-a91965903a44bf Kees Cook      2021-04-20  282   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   b   |   V   |
-a91965903a44bf Kees Cook      2021-04-20  283   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
-a91965903a44bf Kees Cook      2021-04-20  284   *					+-------+-------+-------+-------+
-a91965903a44bf Kees Cook      2021-04-20  285   *
-a91965903a44bf Kees Cook      2021-04-20  286   * y = deterministic compile-time bounds checking
-a91965903a44bf Kees Cook      2021-04-20  287   * n = cannot do deterministic compile-time bounds checking
-a91965903a44bf Kees Cook      2021-04-20  288   * n/a = no run-time bounds checking needed since compile-time deterministic
-a91965903a44bf Kees Cook      2021-04-20  289   * b = perform run-time bounds checking
-a91965903a44bf Kees Cook      2021-04-20  290   * B = can perform run-time bounds checking, but current unenforced
-a91965903a44bf Kees Cook      2021-04-20  291   * V = vulnerable to run-time overflow
-a91965903a44bf Kees Cook      2021-04-20  292   *
-a91965903a44bf Kees Cook      2021-04-20  293   */
-a91965903a44bf Kees Cook      2021-04-20  294  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
-a91965903a44bf Kees Cook      2021-04-20  295  					 const size_t p_size,
-a91965903a44bf Kees Cook      2021-04-20  296  					 const size_t q_size,
-a91965903a44bf Kees Cook      2021-04-20  297  					 const size_t p_size_field,
-a91965903a44bf Kees Cook      2021-04-20  298  					 const size_t q_size_field,
-a91965903a44bf Kees Cook      2021-04-20  299  					 const char *func)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  300  {
-a28a6e860c6cf2 Francis Laniel 2021-02-25  301  	if (__builtin_constant_p(size)) {
-a91965903a44bf Kees Cook      2021-04-20  302  		/*
-a91965903a44bf Kees Cook      2021-04-20  303  		 * Length argument is a constant expression, so we
-a91965903a44bf Kees Cook      2021-04-20  304  		 * can perform compile-time bounds checking where
-a91965903a44bf Kees Cook      2021-04-20  305  		 * buffer sizes are known.
-a91965903a44bf Kees Cook      2021-04-20  306  		 */
-a91965903a44bf Kees Cook      2021-04-20  307  
-a91965903a44bf Kees Cook      2021-04-20  308  		/* Error when size is larger than enclosing struct. */
-a91965903a44bf Kees Cook      2021-04-20  309  		if (p_size > p_size_field && p_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  310  			__write_overflow();
-a91965903a44bf Kees Cook      2021-04-20  311  		if (q_size > q_size_field && q_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  312  			__read_overflow2();
-a91965903a44bf Kees Cook      2021-04-20  313  
-a91965903a44bf Kees Cook      2021-04-20  314  		/* Warn when write size argument larger than dest field. */
-a91965903a44bf Kees Cook      2021-04-20  315  		if (p_size_field < size)
-a91965903a44bf Kees Cook      2021-04-20  316  			__write_overflow_field(p_size_field, size);
-a91965903a44bf Kees Cook      2021-04-20  317  		/*
-a91965903a44bf Kees Cook      2021-04-20  318  		 * Warn for source field over-read when building with W=1
-a91965903a44bf Kees Cook      2021-04-20  319  		 * or when an over-write happened, so both can be fixed at
-a91965903a44bf Kees Cook      2021-04-20  320  		 * the same time.
-a91965903a44bf Kees Cook      2021-04-20  321  		 */
-a91965903a44bf Kees Cook      2021-04-20  322  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
-a91965903a44bf Kees Cook      2021-04-20  323  		    q_size_field < size)
-a91965903a44bf Kees Cook      2021-04-20 @324  			__read_overflow2_field(q_size_field, size);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  325  	}
-a91965903a44bf Kees Cook      2021-04-20  326  	/*
-a91965903a44bf Kees Cook      2021-04-20  327  	 * At this point, length argument may not be a constant expression,
-a91965903a44bf Kees Cook      2021-04-20  328  	 * so run-time bounds checking can be done where buffer sizes are
-a91965903a44bf Kees Cook      2021-04-20  329  	 * known. (This is not an "else" because the above checks may only
-a91965903a44bf Kees Cook      2021-04-20  330  	 * be compile-time warnings, and we want to still warn for run-time
-a91965903a44bf Kees Cook      2021-04-20  331  	 * overflows.)
-a91965903a44bf Kees Cook      2021-04-20  332  	 */
-a91965903a44bf Kees Cook      2021-04-20  333  
-a91965903a44bf Kees Cook      2021-04-20  334  	/*
-a91965903a44bf Kees Cook      2021-04-20  335  	 * Always stop accesses beyond the struct that contains the
-a91965903a44bf Kees Cook      2021-04-20  336  	 * field, when the buffer's remaining size is known.
-a91965903a44bf Kees Cook      2021-04-20  337  	 * (The -1 test is to optimize away checks where the buffer
-a91965903a44bf Kees Cook      2021-04-20  338  	 * lengths are unknown.)
-a91965903a44bf Kees Cook      2021-04-20  339  	 */
-a91965903a44bf Kees Cook      2021-04-20  340  	if ((p_size != (size_t)(-1) && p_size < size) ||
-a91965903a44bf Kees Cook      2021-04-20  341  	    (q_size != (size_t)(-1) && q_size < size))
-a91965903a44bf Kees Cook      2021-04-20  342  		fortify_panic(func);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  343  }
-a28a6e860c6cf2 Francis Laniel 2021-02-25  344  
-
-:::::: The code at line 324 was first introduced by commit
-:::::: a91965903a44bf236856efc7e20c6334c4e07388 fortify: Detect struct member overflows in memcpy() at compile-time
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Kees Cook <keescook@chromium.org>
+   238	
+   239	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   240	{
+   241		u32 target;
+   242		bool inject, ie;
+   243		unsigned long flags;
+   244		struct aplic_irq *irqd;
+   245		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   246	
+   247		if (!aplic || !source || (aplic->nr_irqs <= source))
+   248			return -ENODEV;
+   249		irqd = &aplic->irqs[source];
+   250		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   251	
+   252		raw_spin_lock_irqsave(&irqd->lock, flags);
+   253	
+ > 254		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   255			goto skip_unlock;
+   256	
+   257		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   258		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   259			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   260			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   261				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   262			break;
+   263		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   264			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   265			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   266				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   267			break;
+   268		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   270				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   271			break;
+   272		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   273			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   274				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   275			break;
+   276		}
+   277	
+   278		if (level)
+   279			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   280		else
+   281			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   282	
+   283		inject = false;
+   284		target = irqd->target;
+   285		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   286			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   287			inject = true;
+   288		}
+   289	
+   290	skip_unlock:
+   291		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   292	
+   293		if (inject)
+   294			aplic_inject_msi(kvm, source, target);
+   295	
+   296		return 0;
+   297	}
+   298	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
