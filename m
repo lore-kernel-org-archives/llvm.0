@@ -1,82 +1,203 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9002173
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 06:40:36 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4J8ktg48xXz4xhB;
-	Thu,  9 Dec 2021 17:40:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1639032029;
-	bh=suZjxbWzZfiwEHkXF7PVcnVEK2S44YPaAlsYAqlSBBA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=GGuZ7UcqMCRzxt11p1WpFVObvEmF7QF3q/jrxLxUc6xSnoo7r1EJRkoqP1vn8unY6
-	 vk7x0SjUtsMWVgxEegLSD5VvE9ZVlBVlLaw00vXtHyoyazgzpbwSjZnTZon8+G4xf6
-	 PEj+0jm1xquSXV4uVu283TUDCNW8xthP5oi77M2zTAFJ0nojo4zIaZdV+Aohe0Ccoc
-	 B0+hu9YJDrmbWYKuxfW36xqYW2PJT6hj38YjIqGG2ECCbWARwgLOH6iGd/5PuGeSE5
-	 4+66hZc0dkWIA3FSB5tHK6qqWTSkWCHe0LLnqpGbnbHVMCRk3Zt/Tr2/9xnrurM6Gy
-	 wPcbXvVFr7e4A==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Anders Roxell <anders.roxell@linaro.org>, arnd@arndb.de
-Cc: nathan@kernel.org, ndesaulniers@google.com,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Anders Roxell <anders.roxell@linaro.org>, Naresh
- Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH] powerpc: platforms: cell: pervasive: fix clang
- -Wimplicit-fallthrough
-In-Reply-To: <20211207110228.698956-1-anders.roxell@linaro.org>
-References: <20211207110228.698956-1-anders.roxell@linaro.org>
-Date: Thu, 09 Dec 2021 17:40:24 +1100
-Message-ID: <87zgpamgbr.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870CA173
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 08:24:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639038262; x=1670574262;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6A5AWQXLYiocr+OOBCSGB9FRLXfIpaB0p7w82EpjH9c=;
+  b=CZPGyMc/AFL7sTiefGjLpj5GnAz+G2rg+6MwOHqc1L9/wpxomlhm9VZS
+   aQXzDxYAQpk7vHghWD42Prm+813lR1yPQBxK7ovLeqZAepNCxyA305PPp
+   9ogByprhdP441zITSVqT4FQo/OX07aEvDc74sGksNdi4HSyIGKQjIpTzf
+   T7a+JERsEsrX3d5ul7d8GaPRDc++c8zHcXhOwNl6EbggEQJyXY5U33daQ
+   KgR4Y/Hq0BQr6/HuJmYdpwThN/GuXPssMTDmqZQTdo3YyQe7h9BXLuH0i
+   fX9bVrdVOtxOullAIAbciBgAYBMir4ICyICV04OCwXY2bVQuAqKfGD8fm
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237987687"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="237987687"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 00:24:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="543515564"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 09 Dec 2021 00:24:13 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvEir-0001gM-4x; Thu, 09 Dec 2021 08:24:13 +0000
+Date: Thu, 9 Dec 2021 16:24:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [willy-pagecache:for-next 42/48] fs/f2fs/f2fs.h:4057:67: warning:
+ declaration of 'struct pagevec' will not be visible outside of this function
+Message-ID: <202112091651.l741qHlr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Anders Roxell <anders.roxell@linaro.org> writes:
-> Clang warns:
->
-> arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->         case SRR1_WAKEEE:
->         ^
-> arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
->         case SRR1_WAKEEE:
->         ^
->         break;
-> 1 error generated.
->
-> Clang is more pedantic than GCC, which does not warn when failing
-> through to a case that is just break or return. Clang's version
-> is more in line with the kernel's own stance in deprecated.rst.
-> Add athe missing break to silence the warning.
->
-> Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->  arch/powerpc/platforms/cell/pervasive.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/powerpc/platforms/cell/pervasive.c b/arch/powerpc/platforms/cell/pervasive.c
-> index 5b9a7e9f144b..dff8d5e7ab82 100644
-> --- a/arch/powerpc/platforms/cell/pervasive.c
-> +++ b/arch/powerpc/platforms/cell/pervasive.c
-> @@ -78,6 +78,7 @@ static int cbe_system_reset_exception(struct pt_regs *regs)
->  	switch (regs->msr & SRR1_WAKEMASK) {
->  	case SRR1_WAKEDEC:
->  		set_dec(1);
-> +		break;
->  	case SRR1_WAKEEE:
->  		/*
->  		 * Handle these when interrupts get re-enabled and we take
+tree:   git://git.infradead.org/users/willy/pagecache for-next
+head:   9244dddc51b5e46444a334c881372aa66138f74a
+commit: 3fda3cf387c172cc9a528b6556a024627c9843de [42/48] mm: Convert find_lock_entries() to use a folio_batch
+config: x86_64-randconfig-a013-20211207 (https://download.01.org/0day-ci/archive/20211209/202112091651.l741qHlr-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
+        git fetch --no-tags willy-pagecache for-next
+        git checkout 3fda3cf387c172cc9a528b6556a024627c9843de
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-Thanks. I have definitely fixed this somewhere before, but I guess I
-never sent it upstream, or it's still lying in a git stash of mine.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-cheers
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/f2fs/dir.c:13:
+>> fs/f2fs/f2fs.h:4057:67: warning: declaration of 'struct pagevec' will not be visible outside of this function [-Wvisibility]
+   bool f2fs_all_cluster_page_loaded(struct compress_ctx *cc, struct pagevec *pvec,
+                                                                     ^
+   1 warning generated.
+
+
+vim +4057 fs/f2fs/f2fs.h
+
+4c8ff7095bef64 Chao Yu       2019-11-01  4036  
+4c8ff7095bef64 Chao Yu       2019-11-01  4037  /*
+4c8ff7095bef64 Chao Yu       2019-11-01  4038   * compress.c
+4c8ff7095bef64 Chao Yu       2019-11-01  4039   */
+4c8ff7095bef64 Chao Yu       2019-11-01  4040  #ifdef CONFIG_F2FS_FS_COMPRESSION
+4c8ff7095bef64 Chao Yu       2019-11-01  4041  bool f2fs_is_compressed_page(struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4042  struct page *f2fs_compress_control_page(struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4043  int f2fs_prepare_compress_overwrite(struct inode *inode,
+4c8ff7095bef64 Chao Yu       2019-11-01  4044  			struct page **pagep, pgoff_t index, void **fsdata);
+4c8ff7095bef64 Chao Yu       2019-11-01  4045  bool f2fs_compress_write_end(struct inode *inode, void *fsdata,
+4c8ff7095bef64 Chao Yu       2019-11-01  4046  					pgoff_t index, unsigned copied);
+3265d3db1f1639 Chao Yu       2020-03-18  4047  int f2fs_truncate_partial_cluster(struct inode *inode, u64 from, bool lock);
+4c8ff7095bef64 Chao Yu       2019-11-01  4048  void f2fs_compress_write_end_io(struct bio *bio, struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4049  bool f2fs_is_compress_backend_ready(struct inode *inode);
+5e6bbde9598230 Chao Yu       2020-04-08  4050  int f2fs_init_compress_mempool(void);
+5e6bbde9598230 Chao Yu       2020-04-08  4051  void f2fs_destroy_compress_mempool(void);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4052  void f2fs_decompress_cluster(struct decompress_io_ctx *dic);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4053  void f2fs_end_read_compressed_page(struct page *page, bool failed,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4054  							block_t blkaddr);
+4c8ff7095bef64 Chao Yu       2019-11-01  4055  bool f2fs_cluster_is_empty(struct compress_ctx *cc);
+4c8ff7095bef64 Chao Yu       2019-11-01  4056  bool f2fs_cluster_can_merge_page(struct compress_ctx *cc, pgoff_t index);
+b368cc5e263411 Fengnan Chang 2021-10-22 @4057  bool f2fs_all_cluster_page_loaded(struct compress_ctx *cc, struct pagevec *pvec,
+b368cc5e263411 Fengnan Chang 2021-10-22  4058  				int index, int nr_pages);
+bbe1da7e34ac5a Chao Yu       2021-08-06  4059  bool f2fs_sanity_check_cluster(struct dnode_of_data *dn);
+4c8ff7095bef64 Chao Yu       2019-11-01  4060  void f2fs_compress_ctx_add_page(struct compress_ctx *cc, struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4061  int f2fs_write_multi_pages(struct compress_ctx *cc,
+4c8ff7095bef64 Chao Yu       2019-11-01  4062  						int *submitted,
+4c8ff7095bef64 Chao Yu       2019-11-01  4063  						struct writeback_control *wbc,
+4c8ff7095bef64 Chao Yu       2019-11-01  4064  						enum iostat_type io_type);
+4c8ff7095bef64 Chao Yu       2019-11-01  4065  int f2fs_is_compressed_cluster(struct inode *inode, pgoff_t index);
+94afd6d6e52531 Chao Yu       2021-08-04  4066  void f2fs_update_extent_tree_range_compressed(struct inode *inode,
+94afd6d6e52531 Chao Yu       2021-08-04  4067  				pgoff_t fofs, block_t blkaddr, unsigned int llen,
+94afd6d6e52531 Chao Yu       2021-08-04  4068  				unsigned int c_len);
+4c8ff7095bef64 Chao Yu       2019-11-01  4069  int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
+4c8ff7095bef64 Chao Yu       2019-11-01  4070  				unsigned nr_pages, sector_t *last_block_in_bio,
+0683728adab251 Chao Yu       2020-02-18  4071  				bool is_readahead, bool for_write);
+4c8ff7095bef64 Chao Yu       2019-11-01  4072  struct decompress_io_ctx *f2fs_alloc_dic(struct compress_ctx *cc);
+7f59b277f79e8a Eric Biggers  2021-01-04  4073  void f2fs_decompress_end_io(struct decompress_io_ctx *dic, bool failed);
+7f59b277f79e8a Eric Biggers  2021-01-04  4074  void f2fs_put_page_dic(struct page *page);
+94afd6d6e52531 Chao Yu       2021-08-04  4075  unsigned int f2fs_cluster_blocks_are_contiguous(struct dnode_of_data *dn);
+4c8ff7095bef64 Chao Yu       2019-11-01  4076  int f2fs_init_compress_ctx(struct compress_ctx *cc);
+8bfbfb0ddd706b Chao Yu       2021-05-10  4077  void f2fs_destroy_compress_ctx(struct compress_ctx *cc, bool reuse);
+4c8ff7095bef64 Chao Yu       2019-11-01  4078  void f2fs_init_compress_info(struct f2fs_sb_info *sbi);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4079  int f2fs_init_compress_inode(struct f2fs_sb_info *sbi);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4080  void f2fs_destroy_compress_inode(struct f2fs_sb_info *sbi);
+31083031709eea Chao Yu       2020-09-14  4081  int f2fs_init_page_array_cache(struct f2fs_sb_info *sbi);
+31083031709eea Chao Yu       2020-09-14  4082  void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi);
+c68d6c88302250 Chao Yu       2020-09-14  4083  int __init f2fs_init_compress_cache(void);
+c68d6c88302250 Chao Yu       2020-09-14  4084  void f2fs_destroy_compress_cache(void);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4085  struct address_space *COMPRESS_MAPPING(struct f2fs_sb_info *sbi);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4086  void f2fs_invalidate_compress_page(struct f2fs_sb_info *sbi, block_t blkaddr);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4087  void f2fs_cache_compressed_page(struct f2fs_sb_info *sbi, struct page *page,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4088  						nid_t ino, block_t blkaddr);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4089  bool f2fs_load_compressed_page(struct f2fs_sb_info *sbi, struct page *page,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4090  								block_t blkaddr);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4091  void f2fs_invalidate_compress_pages(struct f2fs_sb_info *sbi, nid_t ino);
+5ac443e26a0964 Daeho Jeong   2021-03-15  4092  #define inc_compr_inode_stat(inode)					\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4093  	do {								\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4094  		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);		\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4095  		sbi->compr_new_inode++;					\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4096  	} while (0)
+5ac443e26a0964 Daeho Jeong   2021-03-15  4097  #define add_compr_block_stat(inode, blocks)				\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4098  	do {								\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4099  		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);		\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4100  		int diff = F2FS_I(inode)->i_cluster_size - blocks;	\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4101  		sbi->compr_written_block += blocks;			\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4102  		sbi->compr_saved_block += diff;				\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4103  	} while (0)
+4c8ff7095bef64 Chao Yu       2019-11-01  4104  #else
+4c8ff7095bef64 Chao Yu       2019-11-01  4105  static inline bool f2fs_is_compressed_page(struct page *page) { return false; }
+4c8ff7095bef64 Chao Yu       2019-11-01  4106  static inline bool f2fs_is_compress_backend_ready(struct inode *inode)
+4c8ff7095bef64 Chao Yu       2019-11-01  4107  {
+4c8ff7095bef64 Chao Yu       2019-11-01  4108  	if (!f2fs_compressed_file(inode))
+4c8ff7095bef64 Chao Yu       2019-11-01  4109  		return true;
+4c8ff7095bef64 Chao Yu       2019-11-01  4110  	/* not support compression */
+4c8ff7095bef64 Chao Yu       2019-11-01  4111  	return false;
+4c8ff7095bef64 Chao Yu       2019-11-01  4112  }
+4c8ff7095bef64 Chao Yu       2019-11-01  4113  static inline struct page *f2fs_compress_control_page(struct page *page)
+4c8ff7095bef64 Chao Yu       2019-11-01  4114  {
+4c8ff7095bef64 Chao Yu       2019-11-01  4115  	WARN_ON_ONCE(1);
+4c8ff7095bef64 Chao Yu       2019-11-01  4116  	return ERR_PTR(-EINVAL);
+4c8ff7095bef64 Chao Yu       2019-11-01  4117  }
+5e6bbde9598230 Chao Yu       2020-04-08  4118  static inline int f2fs_init_compress_mempool(void) { return 0; }
+5e6bbde9598230 Chao Yu       2020-04-08  4119  static inline void f2fs_destroy_compress_mempool(void) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4120  static inline void f2fs_decompress_cluster(struct decompress_io_ctx *dic) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4121  static inline void f2fs_end_read_compressed_page(struct page *page,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4122  						bool failed, block_t blkaddr)
+7f59b277f79e8a Eric Biggers  2021-01-04  4123  {
+7f59b277f79e8a Eric Biggers  2021-01-04  4124  	WARN_ON_ONCE(1);
+7f59b277f79e8a Eric Biggers  2021-01-04  4125  }
+7f59b277f79e8a Eric Biggers  2021-01-04  4126  static inline void f2fs_put_page_dic(struct page *page)
+7f59b277f79e8a Eric Biggers  2021-01-04  4127  {
+7f59b277f79e8a Eric Biggers  2021-01-04  4128  	WARN_ON_ONCE(1);
+7f59b277f79e8a Eric Biggers  2021-01-04  4129  }
+94afd6d6e52531 Chao Yu       2021-08-04  4130  static inline unsigned int f2fs_cluster_blocks_are_contiguous(struct dnode_of_data *dn) { return 0; }
+bbe1da7e34ac5a Chao Yu       2021-08-06  4131  static inline bool f2fs_sanity_check_cluster(struct dnode_of_data *dn) { return false; }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4132  static inline int f2fs_init_compress_inode(struct f2fs_sb_info *sbi) { return 0; }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4133  static inline void f2fs_destroy_compress_inode(struct f2fs_sb_info *sbi) { }
+31083031709eea Chao Yu       2020-09-14  4134  static inline int f2fs_init_page_array_cache(struct f2fs_sb_info *sbi) { return 0; }
+31083031709eea Chao Yu       2020-09-14  4135  static inline void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi) { }
+c68d6c88302250 Chao Yu       2020-09-14  4136  static inline int __init f2fs_init_compress_cache(void) { return 0; }
+c68d6c88302250 Chao Yu       2020-09-14  4137  static inline void f2fs_destroy_compress_cache(void) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4138  static inline void f2fs_invalidate_compress_page(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4139  				block_t blkaddr) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4140  static inline void f2fs_cache_compressed_page(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4141  				struct page *page, nid_t ino, block_t blkaddr) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4142  static inline bool f2fs_load_compressed_page(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4143  				struct page *page, block_t blkaddr) { return false; }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4144  static inline void f2fs_invalidate_compress_pages(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4145  							nid_t ino) { }
+5ac443e26a0964 Daeho Jeong   2021-03-15  4146  #define inc_compr_inode_stat(inode)		do { } while (0)
+94afd6d6e52531 Chao Yu       2021-08-04  4147  static inline void f2fs_update_extent_tree_range_compressed(struct inode *inode,
+94afd6d6e52531 Chao Yu       2021-08-04  4148  				pgoff_t fofs, block_t blkaddr, unsigned int llen,
+94afd6d6e52531 Chao Yu       2021-08-04  4149  				unsigned int c_len) { }
+4c8ff7095bef64 Chao Yu       2019-11-01  4150  #endif
+4c8ff7095bef64 Chao Yu       2019-11-01  4151  
+
+:::::: The code at line 4057 was first introduced by commit
+:::::: b368cc5e26341113453e7458f03cdfe0eeb84a40 f2fs: compress: fix overwrite may reduce compress ratio unproperly
+
+:::::: TO: Fengnan Chang <changfengnan@vivo.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
