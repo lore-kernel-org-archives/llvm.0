@@ -1,44 +1,45 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769222C9C
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 10:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=5RLLZ0ThJGB1WBGnDY4uNAU4BDJtEfGj6LzMMLZxmrc=; b=RLbwXjyWyKw3P3bQRGWvyOZogX
-	vfn3sAoDSaLGaw3rt1NTd7wQ8GyR530u10t92iSRoVAkRj230vaAl53thjMO1qICdgKGowxyKCDkb
-	sBK0AAO3nL+l8XuIR4iXDSaIeuJlQrF7JuCF6iM2eUcn1CLMJ7VrOaWGpu5kne+tRimdRyLDNVM62
-	O5kGlpRFCxuA/kSkHnh+GFGbPjMuZjojG/YvEBf+owVrZh15JLNjbokQJqCaNhoYPThoGt7KRg8jF
-	MsUoTaGK+VmQk/O/6e97v+maCkMVolvqpQVC082Y0pfavzN/VeoK3xdDcF7ZSMRe+vp4u7zi8boAZ
-	NGXofEKA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mvGdt-009FuS-FX; Thu, 09 Dec 2021 10:27:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 480B73002DB;
-	Thu,  9 Dec 2021 11:27:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 30E652BB8EE66; Thu,  9 Dec 2021 11:27:13 +0100 (CET)
-Date: Thu, 9 Dec 2021 11:27:13 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Potapenko <glider@google.com>,
-	Jann Horn <jannh@google.com>, Peter Collingbourne <pcc@google.com>,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Subject: Re: randomize_kstack: To init or not to init?
-Message-ID: <YbHaASWR07kPfabg@hirez.programming.kicks-ass.net>
-References: <YbHTKUjEejZCLyhX@elver.google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548C62C9E;
+	Thu,  9 Dec 2021 10:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639047448; x=1670583448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cKo9r0ZgFuFsQ9Ajq9lc/X0NQStJ7P9DNUg5Lfqrf+o=;
+  b=T434XDqRz9t3bv4OoUJZiJ47WVcZZWqqCd81L0CCHlL+mswmhelpOYPz
+   4OpDM/TBQtKf3bUwosry+fRh4YozoDzEblc2jaX4sssbhIOG2jFocmL0Y
+   bS56zNl01M6i7XLpTbOb1HO5v80iaIW61VJMW1M4i8Vn1zdlF1KR9cAo0
+   uNXNsqKgH2Da5gmQ7QF6mNGMUWVEDkZ93bzTzzWB3itzPiG59i+s4JoOA
+   44xRTfEDwoxEXOx70znixRVVetFMtMOEznVVFZTJ2d+Is7GnNxnD/8m8g
+   pySobQp4fAgJX8WGgEGM3fa7/CeAOKxNNeoq87mV6KJdfl7arDWCn9Pvp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="324335970"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="324335970"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:57:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="564716048"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Dec 2021 02:57:23 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvH74-0001oH-Hq; Thu, 09 Dec 2021 10:57:22 +0000
+Date: Thu, 9 Dec 2021 18:56:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
+	serge@hallyn.com, christian.brauner@ubuntu.com,
+	containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+	ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+	roberto.sassu@huawei.com, mpeters@redhat.com
+Subject: Re: [PATCH v5 01/16] ima: Add IMA namespace support
+Message-ID: <202112091857.y0keGg9v-lkp@intel.com>
+References: <20211208221818.1519628-2-stefanb@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,65 +48,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbHTKUjEejZCLyhX@elver.google.com>
+In-Reply-To: <20211208221818.1519628-2-stefanb@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
-> Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
-> default since dcb7c0b9461c2, which is why this came on my radar. And
-> Clang also performs auto-init of allocas when auto-init is on
-> (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
-> aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
-> allocas.
-> 
-> add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> enabled, add_random_kstack_offset() will auto-init that unused portion
-> of the stack used to add an offset.
-> 
-> There are several problems with this:
-> 
-> 	1. These offsets can be as large as 1023 bytes. Performing
-> 	   memset() on them isn't exactly cheap, and this is done on
-> 	   every syscall entry.
-> 
-> 	2. Architectures adding add_random_kstack_offset() to syscall
-> 	   entry implemented in C require them to be 'noinstr' (e.g. see
-> 	   x86 and s390). The potential problem here is that a call to
-> 	   memset may occur, which is not noinstr.
-> 
-> A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> 
->  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> 
-> Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
-> 
-> To figure out what the right solution is, the first thing to figure out
-> is, do we actually want that offset portion of the stack to be
-> auto-init'd?
-> 
-> There are several options:
-> 
-> 	A. Make memset (and probably all other mem-transfer functions)
-> 	   noinstr compatible, if that is even possible. This only solves
-> 	   problem #2.
+Hi Stefan,
 
-While we can shut up objtool real easy, the bigger problem is that
-noinstr also excludes things like kprobes and breakpoints and other such
-goodness from being placed in the text.
+Thank you for the patch! Perhaps something to improve:
 
-> 	B. A workaround could be using a VLA with
-> 	   __attribute__((uninitialized)), but requires some restructuring
-> 	   to make sure the VLA remains in scope and other trickery to
-> 	   convince the compiler to not give up that stack space.
-> 
-> 	C. Introduce a new __builtin_alloca_uninitialized().
-> 
-> I think #C would be the most robust solution, but means this would
-> remain as-is for a while.
-> 
-> Preferences?
+[auto build test WARNING on zohar-integrity/next-integrity]
+[also build test WARNING on linux/master linus/master v5.16-rc4 next-20211208]
+[cannot apply to jmorris-security/next-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I'm with you on C.
+url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211209-062017
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+config: hexagon-randconfig-r045-20211207 (https://download.01.org/0day-ci/archive/20211209/202112091857.y0keGg9v-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0e5d16c2da02e9c61692836edf0b6f7f227e1867
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211209-062017
+        git checkout 0e5d16c2da02e9c61692836edf0b6f7f227e1867
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/open.c:32:
+>> include/linux/ima.h:263:5: warning: 'CONFIG_IMA' is not defined, evaluates to 0 [-Wundef]
+   #if CONFIG_IMA
+       ^
+   1 warning generated.
+
+
+vim +/CONFIG_IMA +263 include/linux/ima.h
+
+   260	
+   261	static inline int create_ima_ns(struct user_namespace *user_ns)
+   262	{
+ > 263	#if CONFIG_IMA
+   264		user_ns->ima_ns = get_ima_ns(&init_ima_ns);
+   265	#endif
+   266		return 0;
+   267	}
+   268	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
