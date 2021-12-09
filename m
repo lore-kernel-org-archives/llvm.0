@@ -1,82 +1,216 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EB729CA
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 19:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639077758; x=1670613758;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=PqdriOk677QIZBfzjDLfblMYn4S5txSnNapsAsL/e3w=;
-  b=bETKz8ZiFkthAfdlIbSxozMalKntzDXC8KjCta5WtZNSR7IzUUMxb5w6
-   x40bU/bKb3YHtihhLHsiAcdNd6fluNiB2CRyPPHOr1uonCGGK6I3XiABq
-   vc6Riz8jU667hgkVyBqmeRomhR5lMtnITyozdcvZbyRTcm0xkrjJkbUL3
-   lQf3qvD7svpPtLXfXWaUlpFZxadiiN6ctG1wU7+xNTHkPt3+7ziUc0OSi
-   YmAIU8A6sPEWs0e9T7MyObGvjQIhYkPw0QTuYYbrMLSuSCQxAKyI73OFM
-   5a7h0PZSnyXi+b8auAKuvZOUXi8Z4vM1BSXNw4kZAfMbTdZOU0dEzUjzv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238132612"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="238132612"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:22:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="516448498"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2021 11:22:37 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mvP00-0002IA-AV; Thu, 09 Dec 2021 19:22:36 +0000
-Date: Fri, 10 Dec 2021 03:21:55 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: block/blk-mq.o: warning: objtool: blk_mq_unquiesce_queue()+0xce:
- unreachable instruction
-Message-ID: <202112100334.H6RmnaAp-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F24329CA;
+	Thu,  9 Dec 2021 19:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65511C004DD;
+	Thu,  9 Dec 2021 19:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639079566;
+	bh=teoF46qjaD0R6MVCCZefMM9Xa6ea84rcddEa/DwjD/8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=O0vCRKfsaeWmxvf5sG/KzPYTqr7p45gvaWWDqh5a+2N1ifo9ns+iel4UBDdqjRLBP
+	 AaSW2hVLPnV97KTxj39jmA6JmC3McQDdGwQc5Kdpy1+zKSdukBdaAvbfvalRAPxp11
+	 HVfYcRHTXOvO1yCzldSbCZ9CWrGj4cQaue3XftV16AQHmea3IzzyacxeHj+aN/2NGC
+	 4sThzBPH/OepjyMHm+CRrT7HrHgO/2ah9OJen5Fn2to3NkC9n5/ogaKho9h9U6HSYh
+	 DNDX2jlLfhq8bRcyPRPVstGtHhVejXv8khXfWgZvmnFEcoZ4GPUqU99YsptsMNPvOX
+	 u2mKzNEWPcGHw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Vaibhav Agarwal <vaibhav.sr@gmail.com>,
+	Mark Greer <mgreer@animalcreek.com>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2] staging: greybus: fix stack size warning with UBSAN
+Date: Thu,  9 Dec 2021 12:51:42 -0700
+Message-Id: <20211209195141.1165233-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Ming Lei <ming.lei@redhat.com>
-CC: Jens Axboe <axboe@kernel.dk>
-CC: Christoph Hellwig <hch@lst.de>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Hi Ming,
+clang warns about excessive stack usage in this driver when
+UBSAN is enabled:
 
-FYI, the error/warning still remains.
+drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
-commit: e70feb8b3e6886c525c88943b5f1508d02f5a683 blk-mq: support concurrent queue quiesce/unquiesce
-date:   7 weeks ago
-config: x86_64-randconfig-r035-20211128 (https://download.01.org/0day-ci/archive/20211210/202112100334.H6RmnaAp-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5c64d8ef8cc0c0ed3e0f2ae693d99e7f70f20a84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e70feb8b3e6886c525c88943b5f1508d02f5a683
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e70feb8b3e6886c525c88943b5f1508d02f5a683
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Rework this code to no longer use compound literals for
+initializing the structure in each case, but instead keep
+the common bits in a preallocated constant array and copy
+them as needed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> block/blk-mq.o: warning: objtool: blk_mq_unquiesce_queue()+0xce: unreachable instruction
-
+Link: https://github.com/ClangBuiltLinux/linux/issues/1535
+Link: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+[nathan: Address review comments from v1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+v1 -> v2: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+
+* Use NULL for name field in SND_DOC_DAPM_* in gbaudio_widgets (Alex).
+
+* Do not eliminate *dw assignment within the switch cases, as invalid
+  enum values in-between valid enum values (such as snd_soc_dapm_demux)
+  would not be handled properly by the "if value is greater than the
+  array size" check (Alex). This addresses a few other comments by Alex
+  and Dan because w->type is not checked against the array's size.
+
+Arnd, if you disagree with this approach, please let me know so that we
+can get this fixed in a way that everyone is happy with.
+
+ drivers/staging/greybus/audio_topology.c | 92 ++++++++++++------------
+ 1 file changed, 45 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
+index 1e613d42d823..7f7d558b76d0 100644
+--- a/drivers/staging/greybus/audio_topology.c
++++ b/drivers/staging/greybus/audio_topology.c
+@@ -974,6 +974,44 @@ static int gbaudio_widget_event(struct snd_soc_dapm_widget *w,
+ 	return ret;
+ }
+ 
++static const struct snd_soc_dapm_widget gbaudio_widgets[] = {
++	[snd_soc_dapm_spk]	= SND_SOC_DAPM_SPK(NULL, gbcodec_event_spk),
++	[snd_soc_dapm_hp]	= SND_SOC_DAPM_HP(NULL, gbcodec_event_hp),
++	[snd_soc_dapm_mic]	= SND_SOC_DAPM_MIC(NULL, gbcodec_event_int_mic),
++	[snd_soc_dapm_output]	= SND_SOC_DAPM_OUTPUT(NULL),
++	[snd_soc_dapm_input]	= SND_SOC_DAPM_INPUT(NULL),
++	[snd_soc_dapm_switch]	= SND_SOC_DAPM_SWITCH_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_pga]	= SND_SOC_DAPM_PGA_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_mixer]	= SND_SOC_DAPM_MIXER_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_mux]	= SND_SOC_DAPM_MUX_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_aif_in]	= SND_SOC_DAPM_AIF_IN_E(NULL, NULL, 0,
++					SND_SOC_NOPM, 0, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_aif_out]	= SND_SOC_DAPM_AIF_OUT_E(NULL, NULL, 0,
++					SND_SOC_NOPM, 0, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++};
++
+ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+ 				      struct snd_soc_dapm_widget *dw,
+ 				      struct gb_audio_widget *w, int *w_size)
+@@ -1052,77 +1090,37 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+ 
+ 	switch (w->type) {
+ 	case snd_soc_dapm_spk:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_SPK(w->name, gbcodec_event_spk);
++		*dw = gbaudio_widgets[w->type];
+ 		module->op_devices |= GBAUDIO_DEVICE_OUT_SPEAKER;
+ 		break;
+ 	case snd_soc_dapm_hp:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_HP(w->name, gbcodec_event_hp);
++		*dw = gbaudio_widgets[w->type];
+ 		module->op_devices |= (GBAUDIO_DEVICE_OUT_WIRED_HEADSET
+ 					| GBAUDIO_DEVICE_OUT_WIRED_HEADPHONE);
+ 		module->ip_devices |= GBAUDIO_DEVICE_IN_WIRED_HEADSET;
+ 		break;
+ 	case snd_soc_dapm_mic:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_MIC(w->name, gbcodec_event_int_mic);
++		*dw = gbaudio_widgets[w->type];
+ 		module->ip_devices |= GBAUDIO_DEVICE_IN_BUILTIN_MIC;
+ 		break;
+ 	case snd_soc_dapm_output:
+-		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_OUTPUT(w->name);
+-		break;
+ 	case snd_soc_dapm_input:
+-		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_INPUT(w->name);
+-		break;
+ 	case snd_soc_dapm_switch:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_SWITCH_E(w->name, SND_SOC_NOPM, 0, 0,
+-					      widget_kctls,
+-					      gbaudio_widget_event,
+-					      SND_SOC_DAPM_PRE_PMU |
+-					      SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_pga:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_PGA_E(w->name, SND_SOC_NOPM, 0, 0, NULL, 0,
+-					   gbaudio_widget_event,
+-					   SND_SOC_DAPM_PRE_PMU |
+-					   SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_mixer:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_MIXER_E(w->name, SND_SOC_NOPM, 0, 0, NULL,
+-					     0, gbaudio_widget_event,
+-					     SND_SOC_DAPM_PRE_PMU |
+-					     SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_mux:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_MUX_E(w->name, SND_SOC_NOPM, 0, 0,
+-					   widget_kctls, gbaudio_widget_event,
+-					   SND_SOC_DAPM_PRE_PMU |
+-					   SND_SOC_DAPM_POST_PMD);
++		*dw = gbaudio_widgets[w->type];
+ 		break;
+ 	case snd_soc_dapm_aif_in:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_AIF_IN_E(w->name, w->sname, 0,
+-					      SND_SOC_NOPM,
+-					      0, 0, gbaudio_widget_event,
+-					      SND_SOC_DAPM_PRE_PMU |
+-					      SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_aif_out:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_AIF_OUT_E(w->name, w->sname, 0,
+-					       SND_SOC_NOPM,
+-					       0, 0, gbaudio_widget_event,
+-					       SND_SOC_DAPM_PRE_PMU |
+-					       SND_SOC_DAPM_POST_PMD);
++		*dw = gbaudio_widgets[w->type];
++		dw->sname = w->sname;
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		goto error;
+ 	}
++	dw->name = w->name;
+ 
+ 	dev_dbg(module->dev, "%s: widget of type %d created\n", dw->name,
+ 		dw->id);
+
+base-commit: 42eb8fdac2fc5d62392dcfcf0253753e821a97b0
+-- 
+2.34.1
+
