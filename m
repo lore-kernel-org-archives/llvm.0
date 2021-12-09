@@ -1,43 +1,38 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37990173
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 15:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639063413; x=1670599413;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RZFJHBfdP6C7iDLd0NSS3cF1752WbL5csfY2j4kzeYU=;
-  b=M7eGws+PcgMG2UpE3Txp0YOU4DK+K5mUo7UOsDo9B+YwLnehwYTmi9zA
-   XNdl7IX0h1NPhYWG0NN5HRaf3u1W4rqYcVW7v+D4JIvwm9uhbUeO2eSGL
-   R5mp41mZt5g3x2tS2+uevg5sHv9ln6Tn7WjueG6SIvNPjWg4/AuJw99cN
-   LVIXkwTRXSdoS5VyJI4C+10LbhXUHXosva0fBtHEa+s8zDOLkR0cSCIL4
-   Ex3IWBe5vUjYLSGUto2oxzvZbYx/cFLTFt7liuOVCvKyAcWyzWgqBaTEF
-   JIKqMZgG3t76aEKG9cCASSaDoHJutNfe+289ulGG9VobpDUZQuUX7QaRz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238062230"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="238062230"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 07:23:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="462167236"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 07:23:30 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mvLGc-00025C-3H; Thu, 09 Dec 2021 15:23:30 +0000
-Date: Thu, 9 Dec 2021 23:22:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Russell King <rmk+kernel@armlinux.org.uk>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9B4173
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 15:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=NlLs77LK/wVjdAfQ8SfyJgTbnmFTAuvu/ZrfrkqzLic=; b=EXiaIIPmNTubRMiFY1iOdyBcgx
+	O1sYvoBAJ1aFmcbVW/1Myjny2Juv6zcSjOzutXyi451H84w8iZ1t3HNNtEtbqh+o1vrw3iTQfYNO0
+	n3GFkrwKxrHhtMNXBJS7/qf3mo/zOWlX2fYVRkqktm6zwfWKu1U4u3u7+RDBePReqJLc2rRJdgs8q
+	XEEfl8hrvbgDD1fv5Q49Zo3AKjy2NWvNyWLNmbnZNDmH/2nhMkv7GaywSS/75aCZoeYuy0oVbwT+n
+	52svAmhr5z8QvqDXtbi9sD9BwCaPnsB/g57U9wS9VebVfWuJtUfiE7AAfAGgKATCHuEGg2VJZ035g
+	j1tf49Aw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56204)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1mvLRU-0000BX-86; Thu, 09 Dec 2021 15:34:44 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1mvLRS-0007Je-Oa; Thu, 09 Dec 2021 15:34:42 +0000
+Date: Thu, 9 Dec 2021 15:34:42 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: kernel test robot <lkp@intel.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
 	Linus Walleij <linus.walleij@linaro.org>
-Subject: arch/arm/kernel/traps.c:775:6: warning: no previous prototype for
- function 'abort'
-Message-ID: <202112092330.MRS9Xygy-lkp@intel.com>
+Subject: Re: arch/arm/kernel/traps.c:775:6: warning: no previous prototype
+ for function 'abort'
+Message-ID: <YbIiEqxPfbYr10pQ@shell.armlinux.org.uk>
+References: <202112092330.MRS9Xygy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,127 +41,22 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202112092330.MRS9Xygy-lkp@intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Hi Ard,
+On Thu, Dec 09, 2021 at 11:22:48PM +0800, kernel test robot wrote:
+> Hi Ard,
+> 
+> FYI, the error/warning still remains.
 
-FYI, the error/warning still remains.
+This is nothing new. You claim that the abort() warning newly shows up
+as a result of a recent change, but I can most definitely assure you
+that abort() has never had a prototype, and it's there because the
+compiler can generate code that issues a branch to this function.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
-commit: 4d576cab16f57e1f87978f6997a725179398341e ARM: 9028/1: disable KASAN in call stack capturing routines
-date:   1 year ago
-config: arm-randconfig-c002-20211209 (https://download.01.org/0day-ci/archive/20211209/202112092330.MRS9Xygy-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4d576cab16f57e1f87978f6997a725179398341e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4d576cab16f57e1f87978f6997a725179398341e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/media/platform/
+This can be seen in the blame output, which references the first commit
+in the kernel tree for these lines.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm/kernel/traps.c:82:6: warning: no previous prototype for function 'dump_backtrace_stm' [-Wmissing-prototypes]
-   void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
-        ^
-   arch/arm/kernel/traps.c:82:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
-   ^
-   static 
-   arch/arm/kernel/traps.c:445:17: warning: no previous prototype for function 'do_undefinstr' [-Wmissing-prototypes]
-   asmlinkage void do_undefinstr(struct pt_regs *regs)
-                   ^
-   arch/arm/kernel/traps.c:445:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void do_undefinstr(struct pt_regs *regs)
-              ^
-              static 
-   arch/arm/kernel/traps.c:510:39: warning: no previous prototype for function 'handle_fiq_as_nmi' [-Wmissing-prototypes]
-   asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
-                                         ^
-   arch/arm/kernel/traps.c:510:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
-              ^
-              static 
-   arch/arm/kernel/traps.c:529:17: warning: no previous prototype for function 'bad_mode' [-Wmissing-prototypes]
-   asmlinkage void bad_mode(struct pt_regs *regs, int reason)
-                   ^
-   arch/arm/kernel/traps.c:529:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void bad_mode(struct pt_regs *regs, int reason)
-              ^
-              static 
-   arch/arm/kernel/traps.c:602:16: warning: no previous prototype for function 'arm_syscall' [-Wmissing-prototypes]
-   asmlinkage int arm_syscall(int no, struct pt_regs *regs)
-                  ^
-   arch/arm/kernel/traps.c:602:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage int arm_syscall(int no, struct pt_regs *regs)
-              ^
-              static 
-   arch/arm/kernel/traps.c:728:1: warning: no previous prototype for function 'baddataabort' [-Wmissing-prototypes]
-   baddataabort(int code, unsigned long instr, struct pt_regs *regs)
-   ^
-   arch/arm/kernel/traps.c:727:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void
-              ^
-              static 
-   arch/arm/kernel/traps.c:768:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
-   asmlinkage void __div0(void)
-                   ^
-   arch/arm/kernel/traps.c:768:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void __div0(void)
-              ^
-              static 
->> arch/arm/kernel/traps.c:775:6: warning: no previous prototype for function 'abort' [-Wmissing-prototypes]
-   void abort(void)
-        ^
-   arch/arm/kernel/traps.c:775:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void abort(void)
-   ^
-   static 
-   arch/arm/kernel/traps.c:783:13: warning: no previous prototype for function 'trap_init' [-Wmissing-prototypes]
-   void __init trap_init(void)
-               ^
-   arch/arm/kernel/traps.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init trap_init(void)
-   ^
-   static 
-   9 warnings generated.
-
-
-vim +/abort +775 arch/arm/kernel/traps.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  767  
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @768  asmlinkage void __div0(void)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  769  {
-4ed89f22280614 Russell King   2014-10-28  770  	pr_err("Division by zero in kernel.\n");
-^1da177e4c3f41 Linus Torvalds 2005-04-16  771  	dump_stack();
-^1da177e4c3f41 Linus Torvalds 2005-04-16  772  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  773  EXPORT_SYMBOL(__div0);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  774  
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @775  void abort(void)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  776  {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  777  	BUG();
-^1da177e4c3f41 Linus Torvalds 2005-04-16  778  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  779  	/* if that doesn't kill us, halt */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  780  	panic("Oops failed to kill thread");
-^1da177e4c3f41 Linus Torvalds 2005-04-16  781  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  782  
-
-:::::: The code at line 775 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
