@@ -1,124 +1,228 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A00E68
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 21:40:55 +0000 (UTC)
-Received: by mail-ot1-f50.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso7661273ots.6
-        for <llvm@lists.linux.dev>; Thu, 09 Dec 2021 13:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2j4bcO0qWcjtdm6gaythjKIq7TrKLkjf4762fiQLRQ0=;
-        b=n+iW5W03vOmikDQVZSWQcgPuAXsqlpYitFH3tqr1et/5xDWgIOK9kThPpB4jjcss7O
-         ZjKxF3TDq3+qYgAR34dCu9tp7H29+MEY+CKVOT8Cu5nSalC9nry4JRVeQwtb5mFMGxx4
-         0Lrq7s1aA6kfllDO2MYNWDOxtPlfeKSyCNjCmjQQkbinkKepobynjZB6jMFVB7zRu+PI
-         HA3tTIceGbVxrBdplywneV5MEcGEf9V9+aUNX+klezWgHY8yJV2RfQRBLEAWhP+53zaZ
-         SZWl51lhczQ6oKPPd3mHs3KDTspweD+IxPTjc8DLzr1bJEU5iEfGredzBeBHFOV6jMAc
-         Bxxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2j4bcO0qWcjtdm6gaythjKIq7TrKLkjf4762fiQLRQ0=;
-        b=isu8NGr9TBrC03Ti+jCc3dfB7K2nIiWni89rmdCDpmh0eup4JZandDmJqCxl8cmHo6
-         Ld/xDjRLGxtamGM0KQ+ynXe2hsVDB86kirEKwRToa6dHI8ouIde6Y8z3+uWHOM5WxKId
-         e259kdYbD6kgXieAvNO7QadY3divYmn8smRXR+qhjH6ZzOPVv8QCbtyWpqBr6a/e6wwj
-         V/p/81aST2SypRMfgi5ILmnvfobu0SWh5ZjeQRBSGaPiT3TuoSzUlVz5DQKMoxcNGcKx
-         dh5bCS2q0xwN8H6rxW58TgNacbpcanJfb9oZe1Fh5/KrFt4M4gm+/BE9W3aKMm+NqsaX
-         GctQ==
-X-Gm-Message-State: AOAM533bt8T+AU42LTfdq3Dh7UqdH/pg2LmMQ/D/9JCb6ffa3mwCDBUg
-	67iMbsj85EVqdkfDOM4away5wR1YpcXShFp84x9sIg==
-X-Google-Smtp-Source: ABdhPJwpwysTautUApz45OTaJShVoj3kfQ/D0iI37xiT5amNXd6UQf69KpysDtdv3QZosj8cf/QWH8aL9M87PP25N+M=
-X-Received: by 2002:a9d:7548:: with SMTP id b8mr7757039otl.92.1639086054434;
- Thu, 09 Dec 2021 13:40:54 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988212CBB
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 22:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639088143; x=1670624143;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C2yo2e9AFBkANsAq4JMfQRtGleFDjrMfkGFpJjsNOOg=;
+  b=mvpwlquFyfDoG6lV5OeWPbMFx6ZFWtD2BFA65l49pZrI5Okfy/YFM8WD
+   ZXcN9S0YSOnLvVHgHaGxctYE3Q40+gIniMp3phZuhMLfSEJdbNGYu/qTf
+   uiIgsWbZqFT9bdzNESEqZDLsL9R62iZ6vpFPnLbO1xYcElTR3lSMdE6nS
+   vzmo7cBqKkOSIns9q9+0/wxvJgZGfPO7Q1wDC1p77MuZ0L0ehAE48yZIZ
+   fKGJImmguukoRm4O26PASk7SeA4I/BYN2FRjMUfaIvfluc6jRjIsPTdZJ
+   GLXFXEX+gKSOqqdRkdpez8U/NJ1b3Odv0yfFyfWqudWIr+N2iumMpji+O
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="218240017"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="218240017"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:15:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="543756698"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 09 Dec 2021 14:15:41 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvRhU-0002Ql-8P; Thu, 09 Dec 2021 22:15:40 +0000
+Date: Fri, 10 Dec 2021 06:15:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Hocko <mhocko@suse.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: mm/page_alloc.c:8046:12: error: implicit declaration of function
+ 'arch_alloc_nodedata'
+Message-ID: <202112100636.K5fagHTG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YbHTKUjEejZCLyhX@elver.google.com> <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
-In-Reply-To: <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Thu, 9 Dec 2021 22:40:42 +0100
-Message-ID: <CANpmjNOA2BKJfPAFH56etdQ70hsoPFb_VJizipKdJMgEgf3jTg@mail.gmail.com>
-Subject: Re: randomize_kstack: To init or not to init?
-To: Jann Horn <jannh@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Alexander Potapenko <glider@google.com>, 
-	Kees Cook <keescook@chromium.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Elena Reshetova <elena.reshetova@intel.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Peter Collingbourne <pcc@google.com>, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, 9 Dec 2021 at 22:16, Jann Horn <jannh@google.com> wrote:
->
-> On Thu, Dec 9, 2021 at 10:58 AM Marco Elver <elver@google.com> wrote:
-> > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
-> > default since dcb7c0b9461c2, which is why this came on my radar. And
-> > Clang also performs auto-init of allocas when auto-init is on
-> > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
-> > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
-> > allocas.
-> >
-> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> > enabled, add_random_kstack_offset() will auto-init that unused portion
-> > of the stack used to add an offset.
-> >
-> > There are several problems with this:
-> >
-> >         1. These offsets can be as large as 1023 bytes. Performing
-> >            memset() on them isn't exactly cheap, and this is done on
-> >            every syscall entry.
-> >
-> >         2. Architectures adding add_random_kstack_offset() to syscall
-> >            entry implemented in C require them to be 'noinstr' (e.g. see
-> >            x86 and s390). The potential problem here is that a call to
-> >            memset may occur, which is not noinstr.
->
-> This doesn't just affect alloca(), right? According to godbolt.org
-> (https://godbolt.org/z/jYrWEx7o8):
->
-> void bar(char *p);
-> void foo() {
->   char arr[512];
->   bar(arr);
-> }
->
-> when compiled with "-ftrivial-auto-var-init=pattern -O2 -mno-sse"
-> gives this result:
->
-> foo:                                    # @foo
->         push    rbx
->         sub     rsp, 512
->         mov     rbx, rsp
->         mov     edx, 512
->         mov     rdi, rbx
->         mov     esi, 170
->         call    memset@PLT
->         mov     rdi, rbx
->         call    bar
->         add     rsp, 512
->         pop     rbx
->         ret
->
-> So I think to fix this properly in a way that doesn't conflict with
-> noinstr validation, I think you'll have to add a compiler flag that
-> lets you specify a noinstr-safe replacement for memset() that should
-> be used here?
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211209-184929/Alexey-Makhalov/mm-fix-panic-in-__alloc_pages/20211102-041405
+head:   652e780546c1fdbe1adcbbe04106f4020e3bfb56
+commit: 652e780546c1fdbe1adcbbe04106f4020e3bfb56 mm: fix panic in __alloc_pages
+date:   11 hours ago
+config: arm-randconfig-r004-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100636.K5fagHTG-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/652e780546c1fdbe1adcbbe04106f4020e3bfb56
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20211209-184929/Alexey-Makhalov/mm-fix-panic-in-__alloc_pages/20211102-041405
+        git checkout 652e780546c1fdbe1adcbbe04106f4020e3bfb56
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Yeah, this story isn't over with __builtin_alloca().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-A workaround would be to use __attribute__((uninitialized)). Of course
-that implies there are no uninit bugs. ;-)
-To initialize in noinstr, __memset can be used explicitly.
+All error/warnings (new ones prefixed by >>):
 
-Maybe there's some guidance on what is and what isn't ok in noinstr
-code so we can actually decide what is the right thing to do. I found
-this: https://lore.kernel.org/all/878rx5b7i5.ffs@tglx/
+   mm/page_alloc.c:3804:15: warning: no previous prototype for function 'should_fail_alloc_page' [-Wmissing-prototypes]
+   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+                 ^
+   mm/page_alloc.c:3804:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+            ^
+            static 
+>> mm/page_alloc.c:8046:12: error: implicit declaration of function 'arch_alloc_nodedata' [-Werror,-Wimplicit-function-declaration]
+                           pgdat = arch_alloc_nodedata(nid);
+                                   ^
+>> mm/page_alloc.c:8046:10: warning: incompatible integer to pointer conversion assigning to 'pg_data_t *' (aka 'struct pglist_data *') from 'int' [-Wint-conversion]
+                           pgdat = arch_alloc_nodedata(nid);
+                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/page_alloc.c:8052:4: error: implicit declaration of function 'arch_refresh_nodedata' [-Werror,-Wimplicit-function-declaration]
+                           arch_refresh_nodedata(nid, pgdat);
+                           ^
+   mm/page_alloc.c:8052:4: note: did you mean 'arch_alloc_nodedata'?
+   mm/page_alloc.c:8046:12: note: 'arch_alloc_nodedata' declared here
+                           pgdat = arch_alloc_nodedata(nid);
+                                   ^
+   2 warnings and 2 errors generated.
 
-Thanks,
--- Marco
+
+vim +/arch_alloc_nodedata +8046 mm/page_alloc.c
+
+  7949	
+  7950	/**
+  7951	 * free_area_init - Initialise all pg_data_t and zone data
+  7952	 * @max_zone_pfn: an array of max PFNs for each zone
+  7953	 *
+  7954	 * This will call free_area_init_node() for each active node in the system.
+  7955	 * Using the page ranges provided by memblock_set_node(), the size of each
+  7956	 * zone in each node and their holes is calculated. If the maximum PFN
+  7957	 * between two adjacent zones match, it is assumed that the zone is empty.
+  7958	 * For example, if arch_max_dma_pfn == arch_max_dma32_pfn, it is assumed
+  7959	 * that arch_max_dma32_pfn has no pages. It is also assumed that a zone
+  7960	 * starts where the previous one ended. For example, ZONE_DMA32 starts
+  7961	 * at arch_max_dma_pfn.
+  7962	 */
+  7963	void __init free_area_init(unsigned long *max_zone_pfn)
+  7964	{
+  7965		unsigned long start_pfn, end_pfn;
+  7966		int i, nid, zone;
+  7967		bool descending;
+  7968	
+  7969		/* Record where the zone boundaries are */
+  7970		memset(arch_zone_lowest_possible_pfn, 0,
+  7971					sizeof(arch_zone_lowest_possible_pfn));
+  7972		memset(arch_zone_highest_possible_pfn, 0,
+  7973					sizeof(arch_zone_highest_possible_pfn));
+  7974	
+  7975		start_pfn = find_min_pfn_with_active_regions();
+  7976		descending = arch_has_descending_max_zone_pfns();
+  7977	
+  7978		for (i = 0; i < MAX_NR_ZONES; i++) {
+  7979			if (descending)
+  7980				zone = MAX_NR_ZONES - i - 1;
+  7981			else
+  7982				zone = i;
+  7983	
+  7984			if (zone == ZONE_MOVABLE)
+  7985				continue;
+  7986	
+  7987			end_pfn = max(max_zone_pfn[zone], start_pfn);
+  7988			arch_zone_lowest_possible_pfn[zone] = start_pfn;
+  7989			arch_zone_highest_possible_pfn[zone] = end_pfn;
+  7990	
+  7991			start_pfn = end_pfn;
+  7992		}
+  7993	
+  7994		/* Find the PFNs that ZONE_MOVABLE begins at in each node */
+  7995		memset(zone_movable_pfn, 0, sizeof(zone_movable_pfn));
+  7996		find_zone_movable_pfns_for_nodes();
+  7997	
+  7998		/* Print out the zone ranges */
+  7999		pr_info("Zone ranges:\n");
+  8000		for (i = 0; i < MAX_NR_ZONES; i++) {
+  8001			if (i == ZONE_MOVABLE)
+  8002				continue;
+  8003			pr_info("  %-8s ", zone_names[i]);
+  8004			if (arch_zone_lowest_possible_pfn[i] ==
+  8005					arch_zone_highest_possible_pfn[i])
+  8006				pr_cont("empty\n");
+  8007			else
+  8008				pr_cont("[mem %#018Lx-%#018Lx]\n",
+  8009					(u64)arch_zone_lowest_possible_pfn[i]
+  8010						<< PAGE_SHIFT,
+  8011					((u64)arch_zone_highest_possible_pfn[i]
+  8012						<< PAGE_SHIFT) - 1);
+  8013		}
+  8014	
+  8015		/* Print out the PFNs ZONE_MOVABLE begins at in each node */
+  8016		pr_info("Movable zone start for each node\n");
+  8017		for (i = 0; i < MAX_NUMNODES; i++) {
+  8018			if (zone_movable_pfn[i])
+  8019				pr_info("  Node %d: %#018Lx\n", i,
+  8020				       (u64)zone_movable_pfn[i] << PAGE_SHIFT);
+  8021		}
+  8022	
+  8023		/*
+  8024		 * Print out the early node map, and initialize the
+  8025		 * subsection-map relative to active online memory ranges to
+  8026		 * enable future "sub-section" extensions of the memory map.
+  8027		 */
+  8028		pr_info("Early memory node ranges\n");
+  8029		for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
+  8030			pr_info("  node %3d: [mem %#018Lx-%#018Lx]\n", nid,
+  8031				(u64)start_pfn << PAGE_SHIFT,
+  8032				((u64)end_pfn << PAGE_SHIFT) - 1);
+  8033			subsection_map_init(start_pfn, end_pfn - start_pfn);
+  8034		}
+  8035	
+  8036		/* Initialise every node */
+  8037		mminit_verify_pageflags_layout();
+  8038		setup_nr_node_ids();
+  8039		for_each_node(nid) {
+  8040			pg_data_t *pgdat;
+  8041	
+  8042			if (!node_online(nid)) {
+  8043				pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
+  8044	
+  8045				/* Allocator not initialized yet */
+> 8046				pgdat = arch_alloc_nodedata(nid);
+  8047				if (!pgdat) {
+  8048					pr_err("Cannot allocate %zuB for node %d.\n",
+  8049							sizeof(*pgdat), nid);
+  8050					continue;
+  8051				}
+> 8052				arch_refresh_nodedata(nid, pgdat);
+  8053				free_area_init_memoryless_node(nid);
+  8054				/*
+  8055				 * not marking this node online because we do not want to
+  8056				 * confuse userspace by sysfs files/directories for node
+  8057				 * without any memory attached to it (see topology_init)
+  8058				 * The pgdat will get fully initialized when a memory is
+  8059				 * hotpluged into it by hotadd_init_pgdat
+  8060				 */
+  8061				continue;
+  8062			}
+  8063	
+  8064			pgdat = NODE_DATA(nid);
+  8065			free_area_init_node(nid);
+  8066	
+  8067			/* Any memory on that node */
+  8068			if (pgdat->node_present_pages)
+  8069				node_set_state(nid, N_MEMORY);
+  8070			check_for_memory(pgdat, nid);
+  8071		}
+  8072	
+  8073		memmap_init();
+  8074	}
+  8075	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
