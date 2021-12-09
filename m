@@ -1,39 +1,41 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A02768
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 14:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C56173
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 14:32:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639059751; x=1670595751;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Y3dkc4QxDTBpYV0Hptiiq9+7mOa2IrjtYWZrE3J4iTs=;
-  b=kXwHKD4O9nBGIgl4w8o+XfkXM6wa+L7n8R47eMluXUNNowjbk32RCmBw
-   kdxTI+z1vvRcQ1hbjjKqY89M9WiHr4o1Jmvmba7GRqED4gBu5B8Tk3i6i
-   iCLCMpsuRTVt/RUaoT6DIf2FEHZmgYmW2UTtcpGXuAQEo8OFhsXvYWrLL
-   +1947hupYr7+0PhFsyGzO89fBcROKwENUjJSs5cp7reloebsOXyFwOC5i
-   bBqByFxNfH6d0IMtXsDZiB1P7Y3r2U54q/3sN/WOMJ6vrp9LNQACrKF0c
-   Zv06pQCTxCjQXZkQm3jwjGDqIfBjCNjOrPGKls/cT3uthmw9PxIKKtnXA
+  t=1639060352; x=1670596352;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wN2jdpinsPWdNTccrUFAdERDZZr00FhXJguxPhU6BVo=;
+  b=YfdmmGe7x6cIHwcxWujvhyzVSY7h/iMopSPanMKdeXegq+eq5d1/rEbj
+   tsFMtoZ+CAvmFIDV4BprzFFGA5dzqqUAD2n8yXpaLBmoJrrnxx22y9AV+
+   imNt4OGueWqohUqCIwPyHGBpFtMxbuzA+JwuocwZEfjchLBuJvpUiBDV/
+   SGbRnXRKRpP3PSzAEwXUwc1snKhLQwWq0zKrEUG6CwJ9FZnvhVW9a6XWr
+   jUgGiWk+/H2MATBT6yBYXS090zC09EYOAQEt9PVyDHwr9TJOf9C/MmnkG
+   lI5ZhN1VZW+zncdSZQ5EnF8zgmH3HWYtLkmWtnzucWj0gPtJwMWI6vwq/
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="235617256"
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="235620632"
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="235617256"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:22:29 -0800
+   d="scan'208";a="235620632"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:32:31 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="516672354"
+   d="scan'208";a="516318946"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Dec 2021 06:22:29 -0800
+  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2021 06:32:29 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvKJY-00020c-2X; Thu, 09 Dec 2021 14:22:28 +0000
-Date: Thu, 9 Dec 2021 22:21:27 +0800
+	id 1mvKTE-000222-KT; Thu, 09 Dec 2021 14:32:28 +0000
+Date: Thu, 9 Dec 2021 22:31:50 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [intel-tdx:guest 143/144] arch/x86/kernel/head_64.o: warning:
- objtool: verify_cpu()+0x4d: unreachable instruction
-Message-ID: <202112092243.McNUP2KL-lkp@intel.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [norov:bm-new 13/15] drivers/leds/trigger/ledtrig-cpu.c:42:17:
+ error: redefinition of 'num_active_cpus' as different kind of symbol
+Message-ID: <202112092257.dQgv78Nx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,32 +46,118 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: linux-kernel@vger.kernel.org
-TO: Andi Kleen <ak@linux.intel.com>
-CC: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
-tree:   https://github.com/intel/tdx.git guest
-head:   41fe88a1b3c28543f49fa6ed9e0e9b6650ed7614
-commit: 4844d5297235bef6b92fe9d0649d2f066f623d5a [143/144] [REVERTME] x86/tdx: Add CONFIG option for KVM SDV workarounds
-config: x86_64-randconfig-a011-20211209 (https://download.01.org/0day-ci/archive/20211209/202112092243.McNUP2KL-lkp@intel.com/config)
+tree:   https://github.com/norov/linux bm-new
+head:   b529d6ec834c582d88d8f1286490bb69ee4bedb2
+commit: d9365a115ddda67b4bbe080adf3919f32b9a36c4 [13/15] kernel/cpu: add num_active_cpu counter
+config: arm64-randconfig-r005-20211208 (https://download.01.org/0day-ci/archive/20211209/202112092257.dQgv78Nx-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/4844d5297235bef6b92fe9d0649d2f066f623d5a
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest
-        git checkout 4844d5297235bef6b92fe9d0649d2f066f623d5a
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/norov/linux/commit/d9365a115ddda67b4bbe080adf3919f32b9a36c4
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bm-new
+        git checkout d9365a115ddda67b4bbe080adf3919f32b9a36c4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the norov/bm-new HEAD b529d6ec834c582d88d8f1286490bb69ee4bedb2 builds fine.
+      It only hurts bisectability.
 
->> arch/x86/kernel/head_64.o: warning: objtool: verify_cpu()+0x4d: unreachable instruction
+All errors (new ones prefixed by >>):
+
+>> drivers/leds/trigger/ledtrig-cpu.c:42:17: error: redefinition of 'num_active_cpus' as different kind of symbol
+   static atomic_t num_active_cpus = ATOMIC_INIT(0);
+                   ^
+   include/linux/cpumask.h:979:28: note: previous definition is here
+   static inline unsigned int num_active_cpus(void)
+                              ^
+>> drivers/leds/trigger/ledtrig-cpu.c:82:34: error: incompatible pointer types passing 'unsigned int (*)(void)' to parameter of type 'atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   atomic_add(is_active ? 1 : -1, &num_active_cpus);
+                                                  ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:54:29: note: passing argument to parameter 'v' here
+   atomic_add(int i, atomic_t *v)
+                               ^
+>> drivers/leds/trigger/ledtrig-cpu.c:83:29: error: incompatible pointer types passing 'unsigned int (*)(void)' to parameter of type 'const atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   active_cpus = atomic_read(&num_active_cpus);
+                                             ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:25:29: note: passing argument to parameter 'v' here
+   atomic_read(const atomic_t *v)
+                               ^
+   3 errors generated.
+
+
+vim +/num_active_cpus +42 drivers/leds/trigger/ledtrig-cpu.c
+
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  40  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  41  static struct led_trigger *trig_cpu_all;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @42  static atomic_t num_active_cpus = ATOMIC_INIT(0);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  43  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  44  /**
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  45   * ledtrig_cpu - emit a CPU event as a trigger
+c10074a1e5809e drivers/leds/trigger/ledtrig-cpu.c Lee Jones         2021-05-28  46   * @ledevt: CPU event to be emitted
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  47   *
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  48   * Emit a CPU event on a CPU core, which will trigger a
+e602fda1a358a0 drivers/leds/trigger/ledtrig-cpu.c Pavel Machek      2016-10-03  49   * bound LED to turn on or turn off.
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  50   */
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  51  void ledtrig_cpu(enum cpu_led_event ledevt)
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  52  {
+24c9301ffd2135 drivers/leds/trigger/ledtrig-cpu.c Christoph Lameter 2014-05-05  53  	struct led_trigger_cpu *trig = this_cpu_ptr(&cpu_trig);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  54  	bool is_active = trig->is_active;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  55  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  56  	/* Locate the correct CPU LED */
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  57  	switch (ledevt) {
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  58  	case CPU_LED_IDLE_END:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  59  	case CPU_LED_START:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  60  		/* Will turn the LED on, max brightness */
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  61  		is_active = true;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  62  		break;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  63  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  64  	case CPU_LED_IDLE_START:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  65  	case CPU_LED_STOP:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  66  	case CPU_LED_HALTED:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  67  		/* Will turn the LED off */
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  68  		is_active = false;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  69  		break;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  70  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  71  	default:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  72  		/* Will leave the LED as it is */
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  73  		break;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  74  	}
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  75  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  76  	if (is_active != trig->is_active) {
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  77  		unsigned int active_cpus;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  78  		unsigned int total_cpus;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  79  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  80  		/* Update trigger state */
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  81  		trig->is_active = is_active;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @82  		atomic_add(is_active ? 1 : -1, &num_active_cpus);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @83  		active_cpus = atomic_read(&num_active_cpus);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  84  		total_cpus = num_present_cpus();
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  85  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  86  		led_trigger_event(trig->_trig,
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  87  			is_active ? LED_FULL : LED_OFF);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  88  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  89  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  90  		led_trigger_event(trig_cpu_all,
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  91  			DIV_ROUND_UP(LED_FULL * active_cpus, total_cpus));
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  92  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  93  	}
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  94  }
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  95  EXPORT_SYMBOL(ledtrig_cpu);
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  96  
+
+:::::: The code at line 42 was first introduced by commit
+:::::: 0b88b71c7762a406ff99c625935474dc42a25003 leds/trigger/cpu: Add LED trigger for all CPUs aggregated
+
+:::::: TO: Paulo Costa <me@paulo.costa.nom.br>
+:::::: CC: Jacek Anaszewski <jacek.anaszewski@gmail.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
