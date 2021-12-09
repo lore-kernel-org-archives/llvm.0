@@ -1,42 +1,41 @@
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06942C9E
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 11:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E084F2C9E
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 11:58:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639048046; x=1670584046;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+pNm7LpSapzSHjAl7xGc+T/u8eNQs01fQUKoECN/oJk=;
-  b=Ly53WCToYicGCEVTKn6RKqWB5tzPPIaKHQp89cj3DbifXTdx1JcIHvVK
-   Wmk66DnMG6cJwDH13+n5FCuMQhXZk1qz5M8iPlWW2n54FEPBngPF5NOlW
-   RVM57nUPiTgG3cUDtEBsUZh+lV0Ex9dfeETZxpH2faehkuS34yT+Kkx4w
-   dkBlToNE7a22MAMSrxlvrjqIlOqQMoeTVbIRK8+yP7GuxleomhzDrsQpO
-   eK1uT03MlD9jKlvCsTv5u2MqtZmKGr6+Dj/oGF5zSw7+k6t1Y/ubeZdxR
-   bXywXo7+CmUa+EweMsrDD8ye5GK5uGffOzZJSQF/EdLjsbk2wTxULSSvd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218099158"
+  t=1639051106; x=1670587106;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=qcywDYrFhu2X5FbYtbeHdNJekkQZYIxdCBhYEvS6MAI=;
+  b=WO3p6dT9/XBCg+WtVvtpeWiTFeZ8pKC0yflGB1V8ZHha0zFVYqY0uXAY
+   9QnG+c6eoorR9eA1Ot82BKVeIQa++hFWKXSMLPNR+TyZQfxuddWySQ+OV
+   nJqN6ol4cgwFSKzzbBwMPhYLv966Y49WsYkGk2YaGHRV8xbiPdFK1dBXY
+   9isJ6sSj115lvs1qfe7isXtxQNXz9hdGaVQl78hJpVUc1hRnD8qVejo8x
+   EKODMLroM+FVWJm6l929wP35/RocnwDiotaDZHTfJ6WN4d5fIXjFhM99G
+   FZc9fJfG1j1lvsRWljmxqdNWHX6PkUupMVOTQ9GTOi6sDkQ1BA8A62XOU
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218105446"
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="218099158"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:07:26 -0800
+   d="scan'208";a="218105446"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:58:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="462091695"
+   d="scan'208";a="612474466"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 03:07:23 -0800
+  by orsmga004.jf.intel.com with ESMTP; 09 Dec 2021 03:58:24 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvHGk-0001pB-QG; Thu, 09 Dec 2021 11:07:22 +0000
-Date: Thu, 9 Dec 2021 19:06:48 +0800
+	id 1mvI47-0001ro-VC; Thu, 09 Dec 2021 11:58:23 +0000
+Date: Thu, 9 Dec 2021 19:57:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: drivers/spi/spi-sh-msiof.c:1072:34: warning: unused variable
- 'sh_msiof_match'
-Message-ID: <202112091948.lD9JYOeh-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 4716/5842] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x45c):
+ relocation R_RISCV_PCREL_HI20 out of range: -524386 is not in [-524288,
+ 524287]; references kallsyms_names
+Message-ID: <202112091953.KSF2cfTQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,64 +46,43 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stephen,
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Miguel Ojeda <ojeda@kernel.org>
+CC: Alex Gaynor <alex.gaynor@gmail.com>
+CC: Wedson Almeida Filho <wedsonaf@google.com>
+CC: Gary Guo <gary@garyguo.net>
+CC: Boqun Feng <boqun.feng@gmail.com>
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
-commit: bbd7ffdbef6888459f301c5889f3b14ada38b913 clk: Allow the common clk framework to be selectable
-date:   1 year, 7 months ago
-config: hexagon-buildonly-randconfig-r003-20211209 (https://download.01.org/0day-ci/archive/20211209/202112091948.lD9JYOeh-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   4eee8d0b64ecc3231040fa68ba750317ffca5c52
+commit: 026221a07000d799269199c93d734cb2f4b731a8 [4716/5842] kallsyms: support "big" kernel symbols
+config: riscv-buildonly-randconfig-r001-20211207 (https://download.01.org/0day-ci/archive/20211209/202112091953.KSF2cfTQ-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbd7ffdbef6888459f301c5889f3b14ada38b913
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bbd7ffdbef6888459f301c5889f3b14ada38b913
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=026221a07000d799269199c93d734cb2f4b731a8
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 026221a07000d799269199c93d734cb2f4b731a8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/spi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/spi/spi-sh-msiof.c:1072:34: warning: unused variable 'sh_msiof_match' [-Wunused-const-variable]
-   static const struct of_device_id sh_msiof_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/sh_msiof_match +1072 drivers/spi/spi-sh-msiof.c
-
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1071  
-50a7e23f536779 Geert Uytterhoeven 2014-02-25 @1072  static const struct of_device_id sh_msiof_match[] = {
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1073  	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
-bdacfc7b6216dd Fabrizio Castro    2017-09-25  1074  	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
-bdacfc7b6216dd Fabrizio Castro    2017-09-25  1075  	{ .compatible = "renesas,msiof-r8a7745",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1076  	{ .compatible = "renesas,msiof-r8a7790",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1077  	{ .compatible = "renesas,msiof-r8a7791",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1078  	{ .compatible = "renesas,msiof-r8a7792",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1079  	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1080  	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1081  	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1082  	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1083  	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
-264c3e8de4fbda Simon Horman       2016-12-20  1084  	{ .compatible = "renesas,sh-msiof",        .data = &sh_data }, /* Deprecated */
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1085  	{},
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1086  };
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1087  MODULE_DEVICE_TABLE(of, sh_msiof_match);
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1088  
-
-:::::: The code at line 1072 was first introduced by commit
-:::::: 50a7e23f53677918bf521b09ce9bb20fb87cd175 spi: sh-msiof: Move default FIFO sizes to device ID data
-
-:::::: TO: Geert Uytterhoeven <geert+renesas@linux-m68k.org>
-:::::: CC: Mark Brown <broonie@linaro.org>
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x45c): relocation R_RISCV_PCREL_HI20 out of range: -524386 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x44e): relocation R_RISCV_PCREL_HI20 out of range: -524386 is not in [-524288, 524287]; references kallsyms_markers
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
