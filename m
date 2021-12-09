@@ -1,216 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F24329CA;
-	Thu,  9 Dec 2021 19:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65511C004DD;
-	Thu,  9 Dec 2021 19:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639079566;
-	bh=teoF46qjaD0R6MVCCZefMM9Xa6ea84rcddEa/DwjD/8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=O0vCRKfsaeWmxvf5sG/KzPYTqr7p45gvaWWDqh5a+2N1ifo9ns+iel4UBDdqjRLBP
-	 AaSW2hVLPnV97KTxj39jmA6JmC3McQDdGwQc5Kdpy1+zKSdukBdaAvbfvalRAPxp11
-	 HVfYcRHTXOvO1yCzldSbCZ9CWrGj4cQaue3XftV16AQHmea3IzzyacxeHj+aN/2NGC
-	 4sThzBPH/OepjyMHm+CRrT7HrHgO/2ah9OJen5Fn2to3NkC9n5/ogaKho9h9U6HSYh
-	 DNDX2jlLfhq8bRcyPRPVstGtHhVejXv8khXfWgZvmnFEcoZ4GPUqU99YsptsMNPvOX
-	 u2mKzNEWPcGHw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Vaibhav Agarwal <vaibhav.sr@gmail.com>,
-	Mark Greer <mgreer@animalcreek.com>,
-	Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2] staging: greybus: fix stack size warning with UBSAN
-Date: Thu,  9 Dec 2021 12:51:42 -0700
-Message-Id: <20211209195141.1165233-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107C62CA6
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 19:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639079621; x=1670615621;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nm48FRt7XUtwxKlZ+7OoCy2YJaK4pgX3jT8cGTw7U5Q=;
+  b=P7oZYFDTyN7LvUfqMtMkhE7iJNja8BUkAjdvpHSmc1y63q1lJ01cZIBN
+   XsDF5AY9+dSqq5P71kZHXABQtW8R636GNBqD+UsiaLg6+GDRVhk5WRLY8
+   mPHS5kARi3HxWRa4B6sOK2HBr6uYayxO4wupKjUSbro6Tm1NMFPhyvTLN
+   JOjAYjyR5pXkgAho82AM7Yce6ApA4NMXSyDibQQvzKZ3x3tKtHQ7+6j1s
+   tdMQF6cDgXtR1rC9RkUceKIHUg7aQIsvcG6b9OZz5iFvh2xXXGN1D8RAy
+   Zq0exwiieQwzFn7+7n64X4XaOtvTOmDUngu+xF09lm2xHFuk54x7zJQTu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="324456413"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="324456413"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:53:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="503627334"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 09 Dec 2021 11:53:37 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvPU0-0002Jg-Vm; Thu, 09 Dec 2021 19:53:36 +0000
+Date: Fri, 10 Dec 2021 03:52:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 13/73] sata_dwc_460ex: use generic tracepoints
+Message-ID: <202112100319.zR4w9NfW-lkp@intel.com>
+References: <20211208163255.114660-14-hare@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208163255.114660-14-hare@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Hannes,
 
-clang warns about excessive stack usage in this driver when
-UBSAN is enabled:
+I love your patch! Yet something to improve:
 
-drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
+[auto build test ERROR on rostedt-trace/for-next]
+[also build test ERROR on axboe-block/for-next linus/master v5.16-rc4 next-20211208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Rework this code to no longer use compound literals for
-initializing the structure in each case, but instead keep
-the common bits in a preallocated constant array and copy
-them as needed.
+url:    https://github.com/0day-ci/linux/commits/Hannes-Reinecke/libata-rework-logging-take-II/20211209-003634
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: i386-randconfig-a012-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100319.zR4w9NfW-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/b3bb5eac4170da8a3e9c477ad4c1c8f97164abc5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Hannes-Reinecke/libata-rework-logging-take-II/20211209-003634
+        git checkout b3bb5eac4170da8a3e9c477ad4c1c8f97164abc5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1535
-Link: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-[nathan: Address review comments from v1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/ata/sata_dwc_460ex.c:744:5: error: implicit declaration of function 'get_dma_dir_descript' [-Werror,-Wimplicit-function-declaration]
+                            get_dma_dir_descript(qc->dma_dir),
+                            ^
+   drivers/ata/sata_dwc_460ex.c:744:5: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+                            get_dma_dir_descript(qc->dma_dir),
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +/get_dma_dir_descript +744 drivers/ata/sata_dwc_460ex.c
+
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  724  
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  725  static void sata_dwc_dma_xfer_complete(struct ata_port *ap, u32 check_status)
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  726  {
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  727  	struct ata_queued_cmd *qc;
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  728  	struct sata_dwc_device_port *hsdevp = HSDEVP_FROM_AP(ap);
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  729  	struct sata_dwc_device *hsdev = HSDEV_FROM_AP(ap);
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  730  	u8 tag = 0;
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  731  
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  732  	tag = ap->link.active_tag;
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  733  	qc = ata_qc_from_tag(ap, tag);
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  734  	if (!qc) {
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  735  		dev_err(ap->dev, "failed to get qc");
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  736  		return;
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  737  	}
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  738  
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  739  #ifdef DEBUG_NCQ
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  740  	if (tag > 0) {
+d578514b271e7c8 Andy Shevchenko 2015-03-03  741  		dev_info(ap->dev,
+d578514b271e7c8 Andy Shevchenko 2015-03-03  742  			 "%s tag=%u cmd=0x%02x dma dir=%s proto=%s dmacr=0x%08x\n",
+4e5b6260cc9ba84 Jens Axboe      2018-05-11  743  			 __func__, qc->hw_tag, qc->tf.command,
+84b47e3b16f8a5b Sergei Shtylyov 2011-01-28 @744  			 get_dma_dir_descript(qc->dma_dir),
+84b47e3b16f8a5b Sergei Shtylyov 2011-01-28  745  			 get_prot_descript(qc->tf.protocol),
+ee81d6cc8e8aa66 Mans Rullgard   2016-04-26  746  			 sata_dwc_readl(&hsdev->sata_dwc_regs->dmacr));
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  747  	}
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  748  #endif
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  749  
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  750  	if (ata_is_dma(qc->tf.protocol)) {
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  751  		if (hsdevp->dma_pending[tag] == SATA_DWC_DMA_PENDING_NONE) {
+d578514b271e7c8 Andy Shevchenko 2015-03-03  752  			dev_err(ap->dev,
+d578514b271e7c8 Andy Shevchenko 2015-03-03  753  				"%s DMA protocol RX and TX DMA not pending dmacr: 0x%08x\n",
+d578514b271e7c8 Andy Shevchenko 2015-03-03  754  				__func__,
+ee81d6cc8e8aa66 Mans Rullgard   2016-04-26  755  				sata_dwc_readl(&hsdev->sata_dwc_regs->dmacr));
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  756  		}
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  757  
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  758  		hsdevp->dma_pending[tag] = SATA_DWC_DMA_PENDING_NONE;
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  759  		sata_dwc_qc_complete(ap, qc, check_status);
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  760  		ap->link.active_tag = ATA_TAG_POISON;
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  761  	} else {
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  762  		sata_dwc_qc_complete(ap, qc, check_status);
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  763  	}
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  764  }
+62936009f35a665 Rupjyoti Sarmah 2010-07-06  765  
+
 ---
-
-v1 -> v2: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
-
-* Use NULL for name field in SND_DOC_DAPM_* in gbaudio_widgets (Alex).
-
-* Do not eliminate *dw assignment within the switch cases, as invalid
-  enum values in-between valid enum values (such as snd_soc_dapm_demux)
-  would not be handled properly by the "if value is greater than the
-  array size" check (Alex). This addresses a few other comments by Alex
-  and Dan because w->type is not checked against the array's size.
-
-Arnd, if you disagree with this approach, please let me know so that we
-can get this fixed in a way that everyone is happy with.
-
- drivers/staging/greybus/audio_topology.c | 92 ++++++++++++------------
- 1 file changed, 45 insertions(+), 47 deletions(-)
-
-diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
-index 1e613d42d823..7f7d558b76d0 100644
---- a/drivers/staging/greybus/audio_topology.c
-+++ b/drivers/staging/greybus/audio_topology.c
-@@ -974,6 +974,44 @@ static int gbaudio_widget_event(struct snd_soc_dapm_widget *w,
- 	return ret;
- }
- 
-+static const struct snd_soc_dapm_widget gbaudio_widgets[] = {
-+	[snd_soc_dapm_spk]	= SND_SOC_DAPM_SPK(NULL, gbcodec_event_spk),
-+	[snd_soc_dapm_hp]	= SND_SOC_DAPM_HP(NULL, gbcodec_event_hp),
-+	[snd_soc_dapm_mic]	= SND_SOC_DAPM_MIC(NULL, gbcodec_event_int_mic),
-+	[snd_soc_dapm_output]	= SND_SOC_DAPM_OUTPUT(NULL),
-+	[snd_soc_dapm_input]	= SND_SOC_DAPM_INPUT(NULL),
-+	[snd_soc_dapm_switch]	= SND_SOC_DAPM_SWITCH_E(NULL, SND_SOC_NOPM,
-+					0, 0, NULL,
-+					gbaudio_widget_event,
-+					SND_SOC_DAPM_PRE_PMU |
-+					SND_SOC_DAPM_POST_PMD),
-+	[snd_soc_dapm_pga]	= SND_SOC_DAPM_PGA_E(NULL, SND_SOC_NOPM,
-+					0, 0, NULL, 0,
-+					gbaudio_widget_event,
-+					SND_SOC_DAPM_PRE_PMU |
-+					SND_SOC_DAPM_POST_PMD),
-+	[snd_soc_dapm_mixer]	= SND_SOC_DAPM_MIXER_E(NULL, SND_SOC_NOPM,
-+					0, 0, NULL, 0,
-+					gbaudio_widget_event,
-+					SND_SOC_DAPM_PRE_PMU |
-+					SND_SOC_DAPM_POST_PMD),
-+	[snd_soc_dapm_mux]	= SND_SOC_DAPM_MUX_E(NULL, SND_SOC_NOPM,
-+					0, 0, NULL,
-+					gbaudio_widget_event,
-+					SND_SOC_DAPM_PRE_PMU |
-+					SND_SOC_DAPM_POST_PMD),
-+	[snd_soc_dapm_aif_in]	= SND_SOC_DAPM_AIF_IN_E(NULL, NULL, 0,
-+					SND_SOC_NOPM, 0, 0,
-+					gbaudio_widget_event,
-+					SND_SOC_DAPM_PRE_PMU |
-+					SND_SOC_DAPM_POST_PMD),
-+	[snd_soc_dapm_aif_out]	= SND_SOC_DAPM_AIF_OUT_E(NULL, NULL, 0,
-+					SND_SOC_NOPM, 0, 0,
-+					gbaudio_widget_event,
-+					SND_SOC_DAPM_PRE_PMU |
-+					SND_SOC_DAPM_POST_PMD),
-+};
-+
- static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
- 				      struct snd_soc_dapm_widget *dw,
- 				      struct gb_audio_widget *w, int *w_size)
-@@ -1052,77 +1090,37 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
- 
- 	switch (w->type) {
- 	case snd_soc_dapm_spk:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_SPK(w->name, gbcodec_event_spk);
-+		*dw = gbaudio_widgets[w->type];
- 		module->op_devices |= GBAUDIO_DEVICE_OUT_SPEAKER;
- 		break;
- 	case snd_soc_dapm_hp:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_HP(w->name, gbcodec_event_hp);
-+		*dw = gbaudio_widgets[w->type];
- 		module->op_devices |= (GBAUDIO_DEVICE_OUT_WIRED_HEADSET
- 					| GBAUDIO_DEVICE_OUT_WIRED_HEADPHONE);
- 		module->ip_devices |= GBAUDIO_DEVICE_IN_WIRED_HEADSET;
- 		break;
- 	case snd_soc_dapm_mic:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_MIC(w->name, gbcodec_event_int_mic);
-+		*dw = gbaudio_widgets[w->type];
- 		module->ip_devices |= GBAUDIO_DEVICE_IN_BUILTIN_MIC;
- 		break;
- 	case snd_soc_dapm_output:
--		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_OUTPUT(w->name);
--		break;
- 	case snd_soc_dapm_input:
--		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_INPUT(w->name);
--		break;
- 	case snd_soc_dapm_switch:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_SWITCH_E(w->name, SND_SOC_NOPM, 0, 0,
--					      widget_kctls,
--					      gbaudio_widget_event,
--					      SND_SOC_DAPM_PRE_PMU |
--					      SND_SOC_DAPM_POST_PMD);
--		break;
- 	case snd_soc_dapm_pga:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_PGA_E(w->name, SND_SOC_NOPM, 0, 0, NULL, 0,
--					   gbaudio_widget_event,
--					   SND_SOC_DAPM_PRE_PMU |
--					   SND_SOC_DAPM_POST_PMD);
--		break;
- 	case snd_soc_dapm_mixer:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_MIXER_E(w->name, SND_SOC_NOPM, 0, 0, NULL,
--					     0, gbaudio_widget_event,
--					     SND_SOC_DAPM_PRE_PMU |
--					     SND_SOC_DAPM_POST_PMD);
--		break;
- 	case snd_soc_dapm_mux:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_MUX_E(w->name, SND_SOC_NOPM, 0, 0,
--					   widget_kctls, gbaudio_widget_event,
--					   SND_SOC_DAPM_PRE_PMU |
--					   SND_SOC_DAPM_POST_PMD);
-+		*dw = gbaudio_widgets[w->type];
- 		break;
- 	case snd_soc_dapm_aif_in:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_AIF_IN_E(w->name, w->sname, 0,
--					      SND_SOC_NOPM,
--					      0, 0, gbaudio_widget_event,
--					      SND_SOC_DAPM_PRE_PMU |
--					      SND_SOC_DAPM_POST_PMD);
--		break;
- 	case snd_soc_dapm_aif_out:
--		*dw = (struct snd_soc_dapm_widget)
--			SND_SOC_DAPM_AIF_OUT_E(w->name, w->sname, 0,
--					       SND_SOC_NOPM,
--					       0, 0, gbaudio_widget_event,
--					       SND_SOC_DAPM_PRE_PMU |
--					       SND_SOC_DAPM_POST_PMD);
-+		*dw = gbaudio_widgets[w->type];
-+		dw->sname = w->sname;
- 		break;
- 	default:
- 		ret = -EINVAL;
- 		goto error;
- 	}
-+	dw->name = w->name;
- 
- 	dev_dbg(module->dev, "%s: widget of type %d created\n", dw->name,
- 		dw->id);
-
-base-commit: 42eb8fdac2fc5d62392dcfcf0253753e821a97b0
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
