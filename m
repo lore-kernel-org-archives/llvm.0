@@ -1,41 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C56173
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 14:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37990173
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 15:23:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639060352; x=1670596352;
+  t=1639063413; x=1670599413;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wN2jdpinsPWdNTccrUFAdERDZZr00FhXJguxPhU6BVo=;
-  b=YfdmmGe7x6cIHwcxWujvhyzVSY7h/iMopSPanMKdeXegq+eq5d1/rEbj
-   tsFMtoZ+CAvmFIDV4BprzFFGA5dzqqUAD2n8yXpaLBmoJrrnxx22y9AV+
-   imNt4OGueWqohUqCIwPyHGBpFtMxbuzA+JwuocwZEfjchLBuJvpUiBDV/
-   SGbRnXRKRpP3PSzAEwXUwc1snKhLQwWq0zKrEUG6CwJ9FZnvhVW9a6XWr
-   jUgGiWk+/H2MATBT6yBYXS090zC09EYOAQEt9PVyDHwr9TJOf9C/MmnkG
-   lI5ZhN1VZW+zncdSZQ5EnF8zgmH3HWYtLkmWtnzucWj0gPtJwMWI6vwq/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="235620632"
+  bh=RZFJHBfdP6C7iDLd0NSS3cF1752WbL5csfY2j4kzeYU=;
+  b=M7eGws+PcgMG2UpE3Txp0YOU4DK+K5mUo7UOsDo9B+YwLnehwYTmi9zA
+   XNdl7IX0h1NPhYWG0NN5HRaf3u1W4rqYcVW7v+D4JIvwm9uhbUeO2eSGL
+   R5mp41mZt5g3x2tS2+uevg5sHv9ln6Tn7WjueG6SIvNPjWg4/AuJw99cN
+   LVIXkwTRXSdoS5VyJI4C+10LbhXUHXosva0fBtHEa+s8zDOLkR0cSCIL4
+   Ex3IWBe5vUjYLSGUto2oxzvZbYx/cFLTFt7liuOVCvKyAcWyzWgqBaTEF
+   JIKqMZgG3t76aEKG9cCASSaDoHJutNfe+289ulGG9VobpDUZQuUX7QaRz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238062230"
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="235620632"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:32:31 -0800
+   d="scan'208";a="238062230"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 07:23:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="516318946"
+   d="scan'208";a="462167236"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2021 06:32:29 -0800
+  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 07:23:30 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvKTE-000222-KT; Thu, 09 Dec 2021 14:32:28 +0000
-Date: Thu, 9 Dec 2021 22:31:50 +0800
+	id 1mvLGc-00025C-3H; Thu, 09 Dec 2021 15:23:30 +0000
+Date: Thu, 9 Dec 2021 23:22:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [norov:bm-new 13/15] drivers/leds/trigger/ledtrig-cpu.c:42:17:
- error: redefinition of 'num_active_cpus' as different kind of symbol
-Message-ID: <202112092257.dQgv78Nx-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Russell King <rmk+kernel@armlinux.org.uk>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: arch/arm/kernel/traps.c:775:6: warning: no previous prototype for
+ function 'abort'
+Message-ID: <202112092330.MRS9Xygy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,118 +48,124 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/norov/linux bm-new
-head:   b529d6ec834c582d88d8f1286490bb69ee4bedb2
-commit: d9365a115ddda67b4bbe080adf3919f32b9a36c4 [13/15] kernel/cpu: add num_active_cpu counter
-config: arm64-randconfig-r005-20211208 (https://download.01.org/0day-ci/archive/20211209/202112092257.dQgv78Nx-lkp@intel.com/config)
+Hi Ard,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+commit: 4d576cab16f57e1f87978f6997a725179398341e ARM: 9028/1: disable KASAN in call stack capturing routines
+date:   1 year ago
+config: arm-randconfig-c002-20211209 (https://download.01.org/0day-ci/archive/20211209/202112092330.MRS9Xygy-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/norov/linux/commit/d9365a115ddda67b4bbe080adf3919f32b9a36c4
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bm-new
-        git checkout d9365a115ddda67b4bbe080adf3919f32b9a36c4
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4d576cab16f57e1f87978f6997a725179398341e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4d576cab16f57e1f87978f6997a725179398341e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/media/platform/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the norov/bm-new HEAD b529d6ec834c582d88d8f1286490bb69ee4bedb2 builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> drivers/leds/trigger/ledtrig-cpu.c:42:17: error: redefinition of 'num_active_cpus' as different kind of symbol
-   static atomic_t num_active_cpus = ATOMIC_INIT(0);
+   arch/arm/kernel/traps.c:82:6: warning: no previous prototype for function 'dump_backtrace_stm' [-Wmissing-prototypes]
+   void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
+        ^
+   arch/arm/kernel/traps.c:82:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
+   ^
+   static 
+   arch/arm/kernel/traps.c:445:17: warning: no previous prototype for function 'do_undefinstr' [-Wmissing-prototypes]
+   asmlinkage void do_undefinstr(struct pt_regs *regs)
                    ^
-   include/linux/cpumask.h:979:28: note: previous definition is here
-   static inline unsigned int num_active_cpus(void)
-                              ^
->> drivers/leds/trigger/ledtrig-cpu.c:82:34: error: incompatible pointer types passing 'unsigned int (*)(void)' to parameter of type 'atomic_t *' [-Werror,-Wincompatible-pointer-types]
-                   atomic_add(is_active ? 1 : -1, &num_active_cpus);
-                                                  ^~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:54:29: note: passing argument to parameter 'v' here
-   atomic_add(int i, atomic_t *v)
-                               ^
->> drivers/leds/trigger/ledtrig-cpu.c:83:29: error: incompatible pointer types passing 'unsigned int (*)(void)' to parameter of type 'const atomic_t *' [-Werror,-Wincompatible-pointer-types]
-                   active_cpus = atomic_read(&num_active_cpus);
-                                             ^~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:25:29: note: passing argument to parameter 'v' here
-   atomic_read(const atomic_t *v)
-                               ^
-   3 errors generated.
+   arch/arm/kernel/traps.c:445:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void do_undefinstr(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/traps.c:510:39: warning: no previous prototype for function 'handle_fiq_as_nmi' [-Wmissing-prototypes]
+   asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
+                                         ^
+   arch/arm/kernel/traps.c:510:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/traps.c:529:17: warning: no previous prototype for function 'bad_mode' [-Wmissing-prototypes]
+   asmlinkage void bad_mode(struct pt_regs *regs, int reason)
+                   ^
+   arch/arm/kernel/traps.c:529:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void bad_mode(struct pt_regs *regs, int reason)
+              ^
+              static 
+   arch/arm/kernel/traps.c:602:16: warning: no previous prototype for function 'arm_syscall' [-Wmissing-prototypes]
+   asmlinkage int arm_syscall(int no, struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/traps.c:602:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int arm_syscall(int no, struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/traps.c:728:1: warning: no previous prototype for function 'baddataabort' [-Wmissing-prototypes]
+   baddataabort(int code, unsigned long instr, struct pt_regs *regs)
+   ^
+   arch/arm/kernel/traps.c:727:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void
+              ^
+              static 
+   arch/arm/kernel/traps.c:768:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
+   asmlinkage void __div0(void)
+                   ^
+   arch/arm/kernel/traps.c:768:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void __div0(void)
+              ^
+              static 
+>> arch/arm/kernel/traps.c:775:6: warning: no previous prototype for function 'abort' [-Wmissing-prototypes]
+   void abort(void)
+        ^
+   arch/arm/kernel/traps.c:775:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void abort(void)
+   ^
+   static 
+   arch/arm/kernel/traps.c:783:13: warning: no previous prototype for function 'trap_init' [-Wmissing-prototypes]
+   void __init trap_init(void)
+               ^
+   arch/arm/kernel/traps.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init trap_init(void)
+   ^
+   static 
+   9 warnings generated.
 
 
-vim +/num_active_cpus +42 drivers/leds/trigger/ledtrig-cpu.c
+vim +/abort +775 arch/arm/kernel/traps.c
 
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  40  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  41  static struct led_trigger *trig_cpu_all;
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @42  static atomic_t num_active_cpus = ATOMIC_INIT(0);
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  43  
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  44  /**
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  45   * ledtrig_cpu - emit a CPU event as a trigger
-c10074a1e5809e drivers/leds/trigger/ledtrig-cpu.c Lee Jones         2021-05-28  46   * @ledevt: CPU event to be emitted
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  47   *
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  48   * Emit a CPU event on a CPU core, which will trigger a
-e602fda1a358a0 drivers/leds/trigger/ledtrig-cpu.c Pavel Machek      2016-10-03  49   * bound LED to turn on or turn off.
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  50   */
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  51  void ledtrig_cpu(enum cpu_led_event ledevt)
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  52  {
-24c9301ffd2135 drivers/leds/trigger/ledtrig-cpu.c Christoph Lameter 2014-05-05  53  	struct led_trigger_cpu *trig = this_cpu_ptr(&cpu_trig);
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  54  	bool is_active = trig->is_active;
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  55  
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  56  	/* Locate the correct CPU LED */
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  57  	switch (ledevt) {
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  58  	case CPU_LED_IDLE_END:
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  59  	case CPU_LED_START:
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  60  		/* Will turn the LED on, max brightness */
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  61  		is_active = true;
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  62  		break;
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  63  
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  64  	case CPU_LED_IDLE_START:
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  65  	case CPU_LED_STOP:
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  66  	case CPU_LED_HALTED:
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  67  		/* Will turn the LED off */
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  68  		is_active = false;
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  69  		break;
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  70  
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  71  	default:
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  72  		/* Will leave the LED as it is */
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  73  		break;
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  74  	}
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  75  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  76  	if (is_active != trig->is_active) {
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  77  		unsigned int active_cpus;
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  78  		unsigned int total_cpus;
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  79  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  80  		/* Update trigger state */
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  81  		trig->is_active = is_active;
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @82  		atomic_add(is_active ? 1 : -1, &num_active_cpus);
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @83  		active_cpus = atomic_read(&num_active_cpus);
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  84  		total_cpus = num_present_cpus();
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  85  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  86  		led_trigger_event(trig->_trig,
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  87  			is_active ? LED_FULL : LED_OFF);
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  88  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  89  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  90  		led_trigger_event(trig_cpu_all,
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  91  			DIV_ROUND_UP(LED_FULL * active_cpus, total_cpus));
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  92  
-0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  93  	}
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  94  }
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  95  EXPORT_SYMBOL(ledtrig_cpu);
-8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  96  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  767  
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @768  asmlinkage void __div0(void)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  769  {
+4ed89f22280614 Russell King   2014-10-28  770  	pr_err("Division by zero in kernel.\n");
+^1da177e4c3f41 Linus Torvalds 2005-04-16  771  	dump_stack();
+^1da177e4c3f41 Linus Torvalds 2005-04-16  772  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  773  EXPORT_SYMBOL(__div0);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  774  
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @775  void abort(void)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  776  {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  777  	BUG();
+^1da177e4c3f41 Linus Torvalds 2005-04-16  778  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  779  	/* if that doesn't kill us, halt */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  780  	panic("Oops failed to kill thread");
+^1da177e4c3f41 Linus Torvalds 2005-04-16  781  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  782  
 
-:::::: The code at line 42 was first introduced by commit
-:::::: 0b88b71c7762a406ff99c625935474dc42a25003 leds/trigger/cpu: Add LED trigger for all CPUs aggregated
+:::::: The code at line 775 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-:::::: TO: Paulo Costa <me@paulo.costa.nom.br>
-:::::: CC: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
