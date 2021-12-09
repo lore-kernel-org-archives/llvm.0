@@ -1,41 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E084F2C9E
-	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 11:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366222CA6
+	for <llvm@lists.linux.dev>; Thu,  9 Dec 2021 11:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639051106; x=1670587106;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=qcywDYrFhu2X5FbYtbeHdNJekkQZYIxdCBhYEvS6MAI=;
-  b=WO3p6dT9/XBCg+WtVvtpeWiTFeZ8pKC0yflGB1V8ZHha0zFVYqY0uXAY
-   9QnG+c6eoorR9eA1Ot82BKVeIQa++hFWKXSMLPNR+TyZQfxuddWySQ+OV
-   nJqN6ol4cgwFSKzzbBwMPhYLv966Y49WsYkGk2YaGHRV8xbiPdFK1dBXY
-   9isJ6sSj115lvs1qfe7isXtxQNXz9hdGaVQl78hJpVUc1hRnD8qVejo8x
-   EKODMLroM+FVWJm6l929wP35/RocnwDiotaDZHTfJ6WN4d5fIXjFhM99G
-   FZc9fJfG1j1lvsRWljmxqdNWHX6PkUupMVOTQ9GTOi6sDkQ1BA8A62XOU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218105446"
+  t=1639051108; x=1670587108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tIAdvPUy74MigiMAu4GN9bW2fukCDWHRWjRFKJ34MoQ=;
+  b=Ni4c4AiVbQH8TPGClN53A+gZF1XOlZBecJJllFhneP2W20ZwRJFnt0c+
+   53acHa6gkP1Csgo8Gkp5v7sP9QKWnBtYQx1zS6b1ywGMtGv4TmMmRdaSL
+   zcUo2LJt6VyMgrt8A/ntlwOsMg+2YjhvIge0hipYdBYrgIprFJPJtNUAV
+   HyZ78BdegIv3doEWowSBxopy+i8Jv5mU3XueuYJahnYfoa46K6rmYbh1r
+   2jI/ANG+bE8GWmsNHVHOxre+b4JTBUwOyj6wOIW88g+f258jlh7U97a3r
+   sFQSSjda+4j7fn+f2jjGe9QrEmVhFRJD4v/fVwHfWCgwrQbosZZNhlOZQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237887648"
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="218105446"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:58:26 -0800
+   d="scan'208";a="237887648"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:58:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="612474466"
+   d="scan'208";a="543571739"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 09 Dec 2021 03:58:24 -0800
+  by orsmga001.jf.intel.com with ESMTP; 09 Dec 2021 03:58:24 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvI47-0001ro-VC; Thu, 09 Dec 2021 11:58:23 +0000
-Date: Thu, 9 Dec 2021 19:57:34 +0800
+	id 1mvI47-0001rm-Un; Thu, 09 Dec 2021 11:58:23 +0000
+Date: Thu, 9 Dec 2021 19:57:38 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 4716/5842] ld.lld: error:
- kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x45c):
- relocation R_RISCV_PCREL_HI20 out of range: -524386 is not in [-524288,
- 524287]; references kallsyms_names
-Message-ID: <202112091953.KSF2cfTQ-lkp@intel.com>
+To: Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
+	vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+	kuba@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH] net: bonding: Add support for IPV6 ns/na
+Message-ID: <202112091907.6iLel0c9-lkp@intel.com>
+References: <1639032622-28098-1-git-send-email-sunshouxin@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,45 +47,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1639032622-28098-1-git-send-email-sunshouxin@chinatelecom.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Miguel Ojeda <ojeda@kernel.org>
-CC: Alex Gaynor <alex.gaynor@gmail.com>
-CC: Wedson Almeida Filho <wedsonaf@google.com>
-CC: Gary Guo <gary@garyguo.net>
-CC: Boqun Feng <boqun.feng@gmail.com>
+Hi Sun,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4eee8d0b64ecc3231040fa68ba750317ffca5c52
-commit: 026221a07000d799269199c93d734cb2f4b731a8 [4716/5842] kallsyms: support "big" kernel symbols
-config: riscv-buildonly-randconfig-r001-20211207 (https://download.01.org/0day-ci/archive/20211209/202112091953.KSF2cfTQ-lkp@intel.com/config)
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.16-rc4 next-20211208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211209-150108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+config: riscv-randconfig-c006-20211209 (https://download.01.org/0day-ci/archive/20211209/202112091907.6iLel0c9-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=026221a07000d799269199c93d734cb2f4b731a8
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 026221a07000d799269199c93d734cb2f4b731a8
+        # https://github.com/0day-ci/linux/commit/ab724c314fcdcaa60e70c590850b2ce57430d7fa
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211209-150108
+        git checkout ab724c314fcdcaa60e70c590850b2ce57430d7fa
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/bonding/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x45c): relocation R_RISCV_PCREL_HI20 out of range: -524386 is not in [-524288, 524287]; references kallsyms_names
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x44e): relocation R_RISCV_PCREL_HI20 out of range: -524386 is not in [-524288, 524287]; references kallsyms_markers
-   >>> referenced by kallsyms.c
-   >>> defined in kernel/built-in.a(kallsyms.o)
+>> drivers/net/bonding/bond_alb.c:1307:26: error: implicit declaration of function 'csum_ipv6_magic' [-Werror,-Wimplicit-function-declaration]
+                           icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
+                                                 ^
+   drivers/net/bonding/bond_alb.c:1307:26: note: did you mean 'csum_tcpudp_magic'?
+   include/asm-generic/checksum.h:52:1: note: 'csum_tcpudp_magic' declared here
+   csum_tcpudp_magic(__be32 saddr, __be32 daddr, __u32 len,
+   ^
+   1 error generated.
+
+
+vim +/csum_ipv6_magic +1307 drivers/net/bonding/bond_alb.c
+
+  1272	
+  1273	static void alb_change_nd_option(struct sk_buff *skb, void *data)
+  1274	{
+  1275		struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
+  1276		struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
+  1277		struct net_device *dev = skb->dev;
+  1278		struct icmp6hdr *icmp6h = icmp6_hdr(skb);
+  1279		struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
+  1280		u8 *lladdr = NULL;
+  1281		u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
+  1282					offsetof(struct nd_msg, opt));
+  1283	
+  1284		while (ndoptlen) {
+  1285			int l;
+  1286	
+  1287			switch (nd_opt->nd_opt_type) {
+  1288			case ND_OPT_SOURCE_LL_ADDR:
+  1289			case ND_OPT_TARGET_LL_ADDR:
+  1290			lladdr = ndisc_opt_addr_data(nd_opt, dev);
+  1291			break;
+  1292	
+  1293			default:
+  1294			break;
+  1295			}
+  1296	
+  1297			l = nd_opt->nd_opt_len << 3;
+  1298	
+  1299			if (ndoptlen < l || l == 0)
+  1300				return;
+  1301	
+  1302			if (lladdr) {
+  1303				memcpy(lladdr, data, dev->addr_len);
+  1304				lladdr = NULL;
+  1305				icmp6h->icmp6_cksum = 0;
+  1306	
+> 1307				icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
+  1308								      &ip6hdr->daddr,
+  1309							ntohs(ip6hdr->payload_len),
+  1310							IPPROTO_ICMPV6,
+  1311							csum_partial(icmp6h,
+  1312								     ntohs(ip6hdr->payload_len), 0));
+  1313				lladdr = NULL;
+  1314			}
+  1315			ndoptlen -= l;
+  1316			nd_opt = ((void *)nd_opt) + l;
+  1317		}
+  1318	}
+  1319	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
