@@ -1,150 +1,279 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580C729CA
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 19:03:57 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id u3so19800608lfl.2
-        for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 11:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YRIlmq1+iZrjFvchtZLa2XEWbp2/+L1kaW6ixwhNcKk=;
-        b=dC55T7NVec8zDfqI25DC4orPrU+YljERqdmhvP8BSBfOEWGs7/rj+vdItXMhXXpORv
-         eqMpdz/v19NnizJpYYgCcjJRlV+J6XYem0gws42YVfFsXBJmlqrGGE344hZBH/SVGQro
-         ZWBUDmPBDw4rOgQ57hZJSHhW9QwTw39/ALNiRcI2h8V8YfSlfCdsVyd3Nza14RKySlsH
-         /tvXJPmp8AaLbq6w0IZIbr3IBqhe0TZyHifZFrVa0z4PldqmMPPOkjqUzT2l0qK21eAI
-         Tr0Khghv2uXuSopdQZ6ruVbeDM3Ymgu8WJnj+/lUgLWY285GHGHm3Ejo8K4fF6rO2qD2
-         u3TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YRIlmq1+iZrjFvchtZLa2XEWbp2/+L1kaW6ixwhNcKk=;
-        b=s+2vjbUXbW6lc6N56snvkULhFZ4wiJxDoUXKqwyI0fhS3+iuB0/6wakVkNqYmGZoCG
-         kaYd2BsmmaR9KC4iiepW7FIqpVXZ42xgkpPAmN9wQxfhsNtkY/8bq5y7KYlyQvgIqp5o
-         3NQfIBIhwNCksNgindF6xCMr5yHiTvfvExy1QwQBrdrsJrp2TboPYBXxuLpQxK425avt
-         BHsCJh4d2w5J4JFmW7t8C4hMiCywNKaXjaem3FzXQyPY4iXs4hRT8V+FVSchCz1XZsh8
-         XvJA+fEegJKdeYK56Bu97zwUvUVyvMBZt7WiVQATZ5eQ1ymavG5r7PRjbpFGGrdKmoTC
-         Kdmg==
-X-Gm-Message-State: AOAM532gyqK8C8WaihAXqfBiY/kYq0dXPzdfpTf8bQrJdZGAD97CZqCX
-	BWAHxwnckmXuwXMF6znuFm/2WgGhwjWBZZ+pI9fz9Q==
-X-Google-Smtp-Source: ABdhPJyoOVN7O/8fGgT5BJ/zKJF8IlTUbgLWM2OtohJe4qNABNx3FzVkhf8SEU9GV7/dxhmyOUNT4D+MIizWI79sKB4=
-X-Received: by 2002:ac2:4d19:: with SMTP id r25mr13734844lfi.82.1639163035097;
- Fri, 10 Dec 2021 11:03:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537C029CA
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 19:05:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639163118; x=1670699118;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4QDWu/RjloXmKRMUHsT2Ng7s0gnpZwjAqRoUzFZc3kQ=;
+  b=YKCI7ky246wkD085NddnYdbPNDOchpIzK8wtRbJCK3IYvRwYENClf5/U
+   ehgoZAlu2wf0WCl4tn/3ROQNgB2spxe8IK+p6PT32fc/nJFu4/WFG1I4z
+   cBHdHpiEcBrINgVVqWIwlKp77fIwqIBg/WwWFzOM2CtOffsqCNqVOELZH
+   c+Cc6IlAg4u9a3qglcXIsr6lGZxIr3Sm5iXmnoykIBksQI83jIarpYCgZ
+   8kCWVSDRn7CipzHpxTBPhvMhw2jdsH4LWFPXKipjeB+vVFMORpu7H3Qnx
+   wRfeYCdayzxYALjVjVnJ8eG29VmsMq6gU14YGlJQ91f6iIV6M1gxuPw4S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="301804665"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="301804665"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:05:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="544072951"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Dec 2021 11:05:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvlCl-0003aL-IS; Fri, 10 Dec 2021 19:05:15 +0000
+Date: Sat, 11 Dec 2021 03:04:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-pci@vger.kernel.org
+Subject: [helgaas-pci:pci/driver-cleanup 8/27]
+ drivers/pci/controller/cadence/pci-j721e.c:370:7: error: assigning to
+ 'struct j721e_pcie_data *' from 'const void *' discards qualifiers
+Message-ID: <202112110238.rZl7p5gE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211210165528.3232292-1-nathan@kernel.org>
-In-Reply-To: <20211210165528.3232292-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 10 Dec 2021 11:03:43 -0800
-Message-ID: <CAKwvOdktm1p-ZxdOmQnGvdeq1zbPd1C5c7Mp0Co55=prccdcrg@mail.gmail.com>
-Subject: Re: [PATCH v2] soc/tegra: fuse: Fix bitwise vs. logical OR warning
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 10, 2021 at 8:57 AM Nathan Chancellor <nathan@kernel.org> wrote=
-:
->
-> A new warning in clang points out two instances where boolean
-> expressions are being used with a bitwise OR instead of logical OR:
->
-> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|'=
- with boolean operands [-Wbitwise-instead-of-logical]
->                 reg =3D tegra_fuse_read_spare(i) |
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
->                                                ||
-> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both oper=
-ands to int to silence this warning
-> drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|'=
- with boolean operands [-Wbitwise-instead-of-logical]
->                 reg =3D tegra_fuse_read_spare(i) |
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
->                                                ||
-> drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both oper=
-ands to int to silence this warning
-> 2 warnings generated.
->
-> The motivation for the warning is that logical operations short circuit
-> while bitwise operations do not.
->
-> In this instance, tegra_fuse_read_spare() is not semantically returning
-> a boolean, it is returning a bit value. Use u32 for its return type so
-> that it can be used with either bitwise or boolean operators without any
-> warnings.
->
-> Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification=
-")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1488
-> Suggested-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git pci/driver-cleanup
+head:   24d25dd0ddf8c2b924a1fafc51dd0e578d304c3a
+commit: 667c60afad253791929991b2dc2ed5417bba2787 [8/27] PCI: j721e: Drop pointless of_device_get_match_data() cast
+config: arm64-randconfig-r014-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110238.rZl7p5gE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=667c60afad253791929991b2dc2ed5417bba2787
+        git remote add helgaas-pci https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+        git fetch --no-tags helgaas-pci pci/driver-cleanup
+        git checkout 667c60afad253791929991b2dc2ed5417bba2787
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/controller/cadence/
 
-Thanks for the revised patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->
-> v1 -> v2: https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kerne=
-l.org/
->
-> * Change return type of tegra_fuse_read_spare(), instead of changing
->   bitwise OR to logical OR in tegra20_init_speedo_data() (Micha=C5=82).
->
-> It would be nice to get this fixed sooner rather than later, as ARCH=3Dar=
-m
-> allmodconfig is broken due to -Werror.
+All errors (new ones prefixed by >>):
 
-Yes please let's try to get this into 5.16-rc5 if possible!
-
->
->  drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
->  drivers/soc/tegra/fuse/fuse.h       | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse=
-/fuse-tegra.c
-> index f2151815db58..e714ed3b61bc 100644
-> --- a/drivers/soc/tegra/fuse/fuse-tegra.c
-> +++ b/drivers/soc/tegra/fuse/fuse-tegra.c
-> @@ -320,7 +320,7 @@ static struct platform_driver tegra_fuse_driver =3D {
->  };
->  builtin_platform_driver(tegra_fuse_driver);
->
-> -bool __init tegra_fuse_read_spare(unsigned int spare)
-> +u32 __init tegra_fuse_read_spare(unsigned int spare)
->  {
->         unsigned int offset =3D fuse->soc->info->spare + spare * 4;
->
-> diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.=
-h
-> index de58feba0435..ecff0c08e959 100644
-> --- a/drivers/soc/tegra/fuse/fuse.h
-> +++ b/drivers/soc/tegra/fuse/fuse.h
-> @@ -65,7 +65,7 @@ struct tegra_fuse {
->  void tegra_init_revision(void);
->  void tegra_init_apbmisc(void);
->
-> -bool __init tegra_fuse_read_spare(unsigned int spare);
-> +u32 __init tegra_fuse_read_spare(unsigned int spare);
->  u32 __init tegra_fuse_read_early(unsigned int offset);
->
->  u8 tegra_get_major_rev(void);
->
-> base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
-> --
-> 2.34.1
->
->
+>> drivers/pci/controller/cadence/pci-j721e.c:370:7: error: assigning to 'struct j721e_pcie_data *' from 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           data = of_device_get_match_data(dev);
+                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +370 drivers/pci/controller/cadence/pci-j721e.c
+
+   351	
+   352	static int j721e_pcie_probe(struct platform_device *pdev)
+   353	{
+   354		struct device *dev = &pdev->dev;
+   355		struct device_node *node = dev->of_node;
+   356		struct pci_host_bridge *bridge;
+   357		struct j721e_pcie_data *data;
+   358		struct cdns_pcie *cdns_pcie;
+   359		struct j721e_pcie *pcie;
+   360		struct cdns_pcie_rc *rc;
+   361		struct cdns_pcie_ep *ep;
+   362		struct gpio_desc *gpiod;
+   363		void __iomem *base;
+   364		struct clk *clk;
+   365		u32 num_lanes;
+   366		u32 mode;
+   367		int ret;
+   368		int irq;
+   369	
+ > 370		data = of_device_get_match_data(dev);
+   371		if (!data)
+   372			return -EINVAL;
+   373	
+   374		mode = (u32)data->mode;
+   375	
+   376		pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
+   377		if (!pcie)
+   378			return -ENOMEM;
+   379	
+   380		pcie->dev = dev;
+   381		pcie->mode = mode;
+   382		pcie->linkdown_irq_regfield = data->linkdown_irq_regfield;
+   383	
+   384		base = devm_platform_ioremap_resource_byname(pdev, "intd_cfg");
+   385		if (IS_ERR(base))
+   386			return PTR_ERR(base);
+   387		pcie->intd_cfg_base = base;
+   388	
+   389		base = devm_platform_ioremap_resource_byname(pdev, "user_cfg");
+   390		if (IS_ERR(base))
+   391			return PTR_ERR(base);
+   392		pcie->user_cfg_base = base;
+   393	
+   394		ret = of_property_read_u32(node, "num-lanes", &num_lanes);
+   395		if (ret || num_lanes > MAX_LANES)
+   396			num_lanes = 1;
+   397		pcie->num_lanes = num_lanes;
+   398	
+   399		if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(48)))
+   400			return -EINVAL;
+   401	
+   402		irq = platform_get_irq_byname(pdev, "link_state");
+   403		if (irq < 0)
+   404			return irq;
+   405	
+   406		dev_set_drvdata(dev, pcie);
+   407		pm_runtime_enable(dev);
+   408		ret = pm_runtime_get_sync(dev);
+   409		if (ret < 0) {
+   410			dev_err(dev, "pm_runtime_get_sync failed\n");
+   411			goto err_get_sync;
+   412		}
+   413	
+   414		ret = j721e_pcie_ctrl_init(pcie);
+   415		if (ret < 0) {
+   416			dev_err(dev, "pm_runtime_get_sync failed\n");
+   417			goto err_get_sync;
+   418		}
+   419	
+   420		ret = devm_request_irq(dev, irq, j721e_pcie_link_irq_handler, 0,
+   421				       "j721e-pcie-link-down-irq", pcie);
+   422		if (ret < 0) {
+   423			dev_err(dev, "failed to request link state IRQ %d\n", irq);
+   424			goto err_get_sync;
+   425		}
+   426	
+   427		j721e_pcie_config_link_irq(pcie);
+   428	
+   429		switch (mode) {
+   430		case PCI_MODE_RC:
+   431			if (!IS_ENABLED(CONFIG_PCIE_CADENCE_HOST)) {
+   432				ret = -ENODEV;
+   433				goto err_get_sync;
+   434			}
+   435	
+   436			bridge = devm_pci_alloc_host_bridge(dev, sizeof(*rc));
+   437			if (!bridge) {
+   438				ret = -ENOMEM;
+   439				goto err_get_sync;
+   440			}
+   441	
+   442			if (!data->byte_access_allowed)
+   443				bridge->ops = &cdns_ti_pcie_host_ops;
+   444			rc = pci_host_bridge_priv(bridge);
+   445			rc->quirk_retrain_flag = data->quirk_retrain_flag;
+   446			rc->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
+   447	
+   448			cdns_pcie = &rc->pcie;
+   449			cdns_pcie->dev = dev;
+   450			cdns_pcie->ops = &j721e_pcie_ops;
+   451			pcie->cdns_pcie = cdns_pcie;
+   452	
+   453			gpiod = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+   454			if (IS_ERR(gpiod)) {
+   455				ret = PTR_ERR(gpiod);
+   456				if (ret != -EPROBE_DEFER)
+   457					dev_err(dev, "Failed to get reset GPIO\n");
+   458				goto err_get_sync;
+   459			}
+   460	
+   461			ret = cdns_pcie_init_phy(dev, cdns_pcie);
+   462			if (ret) {
+   463				dev_err(dev, "Failed to init phy\n");
+   464				goto err_get_sync;
+   465			}
+   466	
+   467			clk = devm_clk_get_optional(dev, "pcie_refclk");
+   468			if (IS_ERR(clk)) {
+   469				ret = PTR_ERR(clk);
+   470				dev_err(dev, "failed to get pcie_refclk\n");
+   471				goto err_pcie_setup;
+   472			}
+   473	
+   474			ret = clk_prepare_enable(clk);
+   475			if (ret) {
+   476				dev_err(dev, "failed to enable pcie_refclk\n");
+   477				goto err_pcie_setup;
+   478			}
+   479			pcie->refclk = clk;
+   480	
+   481			/*
+   482			 * "Power Sequencing and Reset Signal Timings" table in
+   483			 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
+   484			 * indicates PERST# should be deasserted after minimum of 100us
+   485			 * once REFCLK is stable. The REFCLK to the connector in RC
+   486			 * mode is selected while enabling the PHY. So deassert PERST#
+   487			 * after 100 us.
+   488			 */
+   489			if (gpiod) {
+   490				usleep_range(100, 200);
+   491				gpiod_set_value_cansleep(gpiod, 1);
+   492			}
+   493	
+   494			ret = cdns_pcie_host_setup(rc);
+   495			if (ret < 0) {
+   496				clk_disable_unprepare(pcie->refclk);
+   497				goto err_pcie_setup;
+   498			}
+   499	
+   500			break;
+   501		case PCI_MODE_EP:
+   502			if (!IS_ENABLED(CONFIG_PCIE_CADENCE_EP)) {
+   503				ret = -ENODEV;
+   504				goto err_get_sync;
+   505			}
+   506	
+   507			ep = devm_kzalloc(dev, sizeof(*ep), GFP_KERNEL);
+   508			if (!ep) {
+   509				ret = -ENOMEM;
+   510				goto err_get_sync;
+   511			}
+   512			ep->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
+   513	
+   514			cdns_pcie = &ep->pcie;
+   515			cdns_pcie->dev = dev;
+   516			cdns_pcie->ops = &j721e_pcie_ops;
+   517			pcie->cdns_pcie = cdns_pcie;
+   518	
+   519			ret = cdns_pcie_init_phy(dev, cdns_pcie);
+   520			if (ret) {
+   521				dev_err(dev, "Failed to init phy\n");
+   522				goto err_get_sync;
+   523			}
+   524	
+   525			ret = cdns_pcie_ep_setup(ep);
+   526			if (ret < 0)
+   527				goto err_pcie_setup;
+   528	
+   529			break;
+   530		default:
+   531			dev_err(dev, "INVALID device type %d\n", mode);
+   532		}
+   533	
+   534		return 0;
+   535	
+   536	err_pcie_setup:
+   537		cdns_pcie_disable_phy(cdns_pcie);
+   538	
+   539	err_get_sync:
+   540		pm_runtime_put(dev);
+   541		pm_runtime_disable(dev);
+   542	
+   543		return ret;
+   544	}
+   545	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
