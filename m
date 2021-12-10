@@ -1,42 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA79173
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 08:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E74F2C80
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 09:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639123922; x=1670659922;
+  t=1639126984; x=1670662984;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZP84rRNV8kIAEoQp8NeSWuxxSG5ROIfE4yZl49EkSaM=;
-  b=QpNF3MNzxxAdNBRew86Bumd+C0sIoVDrHqua2YbQ/gWi5FDXT6KdRbOu
-   brNOsPDQcqC69NXUblrgch5zB86C1PmdHkM6e95vITXSnVXQLcqqi5js5
-   qiWeuPo64FtbdbrcpbDMcJuqzrdb/3joy3HoabIY2Pxyygn1YrDaiMteK
-   UAr3TAfvUW3ngV8ICBPtkD+up8LhyH83RgX6lwRvH4tM5apuJJdZu8GGO
-   YHRPW+5taxKG26GzOiu332N7KXxPJ45hd/2yGcI+sKvTOeslwl9jcpwSp
-   0gqtYq1pkIbgFiru4CtHG2Q6OiOH5Qdy8HbyIEgu+49DndbdD5lMrvRsQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="299090317"
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="299090317"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 00:12:00 -0800
+  bh=d9E005ceUrk8RQhWMp3JyKJiLMd+NWxUhNFDadchyig=;
+  b=P0W7qt1CCF/R3p23nkmIeuCHwqvFXPeYwVP86iw5rpyxOoGbIknpiVTw
+   S96rigTpO+5GGR/N/g4FzBReE/1bqMGD9VCg/VJwEJ+AEGE7jB6IdALNo
+   ZHyxwTCJohlbkWQcbFFxnNczM7tP3c16460QBrE4QJBSLH2QT6WZHOrLp
+   CHF77d/lphCEgvAWeINU/mkBZw+JojFhCshNJdXb/7HpV0VIL6cdMw/fA
+   jZvTCn/owFNJkg9tSnxlYLSCmHW6lQRWkVTRVl7T8qSgXwGgEWHjJw7xZ
+   bq8I+S6iEbCkoQ/UBflVFYuLpvfyneko+HZOs96MlVmgbcgQO7rkwblJM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="235823106"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="235823106"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 01:03:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="680666584"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="612866881"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 00:11:58 -0800
+  by orsmga004.jf.intel.com with ESMTP; 10 Dec 2021 01:03:00 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvb0Y-0002xE-9p; Fri, 10 Dec 2021 08:11:58 +0000
-Date: Fri, 10 Dec 2021 16:11:43 +0800
+	id 1mvbnv-00030C-Ld; Fri, 10 Dec 2021 09:02:59 +0000
+Date: Fri, 10 Dec 2021 17:02:35 +0800
 From: kernel test robot <lkp@intel.com>
 To: Neil Armstrong <narmstrong@baylibre.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [superna9999:amlogic/v5.17/g12-dsi 5/7]
- drivers/gpu/drm/meson/meson_encoder_dsi.c:72:2: error: implicit declaration
- of function 'meson_vclk_setup'
-Message-ID: <202112101636.y17bk2Zb-lkp@intel.com>
+Subject: [superna9999:amlogic/v5.17/g12-dsi 6/7]
+ drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:58:16: error: use of undeclared
+ identifier 'encoder_dsi'
+Message-ID: <202112101635.GITAhfmQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,18 +49,18 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/superna9999/linux amlogic/v5.17/g12-dsi
 head:   cc44c3ce92a63f2c59a3f0ac03e6defd41542940
-commit: e1e87e576f5befbf752a2c7b9c019328f1742d71 [5/7] fixup! WIP: drm/meson: add DSI encoder
-config: arm-randconfig-r034-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101636.y17bk2Zb-lkp@intel.com/config)
+commit: 02c9727464cf0ef4cebca0197a0f7395be6371f7 [6/7] fixup! drm/meson: add support for MIPI-DSI transceiver
+config: arm-randconfig-r034-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101635.GITAhfmQ-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/superna9999/linux/commit/e1e87e576f5befbf752a2c7b9c019328f1742d71
+        # https://github.com/superna9999/linux/commit/02c9727464cf0ef4cebca0197a0f7395be6371f7
         git remote add superna9999 https://github.com/superna9999/linux
         git fetch --no-tags superna9999 amlogic/v5.17/g12-dsi
-        git checkout e1e87e576f5befbf752a2c7b9c019328f1742d71
+        git checkout 02c9727464cf0ef4cebca0197a0f7395be6371f7
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/meson/
@@ -68,127 +68,268 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:72:2: error: implicit declaration of function 'meson_vclk_setup' [-Werror,-Wimplicit-function-declaration]
-           meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock * 1000, 0, 0, 0, false);
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:58:16: error: use of undeclared identifier 'encoder_dsi'
+           phy_configure(encoder_dsi->phy, &mipi_dsi->phy_opts);
+                         ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:68:2: error: implicit declaration of function 'meson_dw_mipi_dsi_hw_init' [-Werror,-Wimplicit-function-declaration]
+           meson_dw_mipi_dsi_hw_init(mipi_dsi);
            ^
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:72:25: error: use of undeclared identifier 'MESON_VCLK_TARGET_DSI'
-           meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock * 1000, 0, 0, 0, false);
-                                  ^
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:74:2: error: implicit declaration of function 'meson_venc_encoder_dsi_mode_set' [-Werror,-Wimplicit-function-declaration]
-           meson_venc_encoder_dsi_mode_set(priv, mode);
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:68:2: note: did you mean 'dw_mipi_dsi_phy_init'?
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:51:12: note: 'dw_mipi_dsi_phy_init' declared here
+   static int dw_mipi_dsi_phy_init(void *priv_data)
+              ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:72:21: error: use of undeclared identifier 'COLOR_24BIT'
+                   dpi_data_format = COLOR_24BIT;
+                                     ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:73:21: error: use of undeclared identifier 'MIPI_DSI_VENC_COLOR_24B'
+                   venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+                                     ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:76:21: error: use of undeclared identifier 'COLOR_18BIT_CFG_2'
+                   dpi_data_format = COLOR_18BIT_CFG_2;
+                                     ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:77:21: error: use of undeclared identifier 'MIPI_DSI_VENC_COLOR_18B'
+                   venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+                                     ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:70:10: warning: enumeration values 'MIPI_DSI_FMT_RGB666_PACKED' and 'MIPI_DSI_FMT_RGB565' not handled in switch [-Wswitch]
+           switch (mipi_dsi->dsi_device->format) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:89:4: error: too many arguments provided to function-like macro invocation
+                           mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+                           ^
+   arch/arm/include/asm/io.h:300:9: note: macro 'writel_relaxed' defined here
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
            ^
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:74:2: note: did you mean 'meson_venc_mipi_dsi_mode_set'?
-   drivers/gpu/drm/meson/meson_venc.h:70:6: note: 'meson_venc_mipi_dsi_mode_set' declared here
-   void meson_venc_mipi_dsi_mode_set(struct meson_drm *priv,
-        ^
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:96:18: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
-           .atomic_check   = meson_encoder_dsi_atomic_check,
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                             meson_encoder_dsi_atomic_enable
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
-   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:82:2: error: use of undeclared identifier 'writel_relaxed'
+           writel_relaxed((dpi_data_format  << BIT_DPI_COLOR_MODE)  |
+           ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:111:17: error: assigning to 'struct drm_display_mode *' from 'const struct drm_display_mode *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           mipi_dsi->mode = mode;
+                          ^ ~~~~
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:113:8: error: implicit declaration of function 'encoder_dsi_pixel_format_to_bpp' [-Werror,-Wimplicit-function-declaration]
+           bpp = encoder_dsi_pixel_format_to_bpp(mipi_dsi->dsi_device->format);
+                 ^
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:113:8: note: did you mean 'mipi_dsi_pixel_format_to_bpp'?
+   include/drm/drm_mipi_dsi.h:209:19: note: 'mipi_dsi_pixel_format_to_bpp' declared here
+   static inline int mipi_dsi_pixel_format_to_bpp(enum mipi_dsi_pixel_format fmt)
+                     ^
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:116:12: error: use of undeclared identifier 'encoder_dsi'
+                                            bpp, encoder_dsi->dsi_device->lanes,
+                                                 ^
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:161:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret;
                ^
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:97:19: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
-           .atomic_enable  = meson_encoder_dsi_atomic_check,
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                             meson_encoder_dsi_atomic_enable
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
-   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:160:22: warning: unused variable 'encoder' [-Wunused-variable]
+           struct drm_encoder *encoder;
+                               ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:176:13: error: static declaration of 'meson_dw_mipi_dsi_hw_init' follows non-static declaration
+   static void meson_dw_mipi_dsi_hw_init(struct meson_dw_mipi_dsi *mipi_dsi)
                ^
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:98:20: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
-           .atomic_disable = meson_encoder_dsi_atomic_check,
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                             meson_encoder_dsi_atomic_enable
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
-   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
-               ^
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:99:18: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
-           .atomic_check = meson_encoder_dsi_atomic_check,
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                           meson_encoder_dsi_atomic_enable
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
-   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
-               ^
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:96:18: error: incompatible function pointer types initializing 'int (*)(struct drm_bridge *, struct drm_bridge_state *, struct drm_crtc_state *, struct drm_connector_state *)' with an expression of type 'void (struct drm_bridge *, struct drm_bridge_state *)' [-Werror,-Wincompatible-function-pointer-types]
-           .atomic_check   = meson_encoder_dsi_atomic_check,
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:99:18: error: incompatible function pointer types initializing 'int (*)(struct drm_bridge *, struct drm_bridge_state *, struct drm_crtc_state *, struct drm_connector_state *)' with an expression of type 'void (struct drm_bridge *, struct drm_bridge_state *)' [-Werror,-Wincompatible-function-pointer-types]
-           .atomic_check = meson_encoder_dsi_atomic_check,
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:99:18: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           .atomic_check = meson_encoder_dsi_atomic_check,
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:96:18: note: previous initialization is here
-           .atomic_check   = meson_encoder_dsi_atomic_check,
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 9 errors generated.
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:68:2: note: previous implicit declaration is here
+           meson_dw_mipi_dsi_hw_init(mipi_dsi);
+           ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:200:2: error: implicit declaration of function 'witch' [-Werror,-Wimplicit-function-declaration]
+           witch (device->format) {
+           ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:200:24: error: expected ';' after expression
+           witch (device->format) {
+                                 ^
+                                 ;
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:201:2: error: 'case' statement not in switch statement
+           case MIPI_DSI_FMT_RGB888:
+           ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:202:3: error: use of undeclared identifier 'dpi_data_format'
+                   dpi_data_format = COLOR_24BIT;
+                   ^
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:202:21: error: use of undeclared identifier 'COLOR_24BIT'
+                   dpi_data_format = COLOR_24BIT;
+                                     ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:203:3: error: use of undeclared identifier 'venc_data_width'
+                   venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+                   ^
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:203:21: error: use of undeclared identifier 'MIPI_DSI_VENC_COLOR_24B'
+                   venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+                                     ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   3 warnings and 20 errors generated.
 
 
-vim +/meson_vclk_setup +72 drivers/gpu/drm/meson/meson_encoder_dsi.c
+vim +/encoder_dsi +58 drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
 
-    44	
-    45	static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
-    46						     struct drm_bridge_state *bridge_state)
-    47	{
-    48		struct meson_encoder_dsi *encoder_dsi = bridge_to_meson_encoder_dsi(bridge);
-    49		struct drm_atomic_state *state = bridge_state->base.state;
-    50		struct meson_drm *priv = encoder_dsi->priv;
-    51		struct drm_connector_state *conn_state;
-    52		struct drm_crtc_state *crtc_state;
-    53		struct drm_connector *connector;
-    54		struct drm_display_mode *mode;
-    55	
-    56		connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
-    57		if (WARN_ON(!connector))
-    58			return;
+    47	
+    48	#define encoder_to_meson_dw_mipi_dsi(x) \
+    49		container_of(x, struct meson_dw_mipi_dsi, encoder)
+    50	
+    51	static int dw_mipi_dsi_phy_init(void *priv_data)
+    52	{
+    53		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+    54		unsigned int dpi_data_format, venc_data_width;
+    55		struct meson_drm *priv = mipi_dsi->priv;
+    56		int ret;
+    57	
+  > 58		phy_configure(encoder_dsi->phy, &mipi_dsi->phy_opts);
     59	
-    60		conn_state = drm_atomic_get_new_connector_state(state, connector);
-    61		if (WARN_ON(!conn_state))
-    62			return;
-    63	
-    64		crtc_state = drm_atomic_get_new_crtc_state(state, conn_state->crtc);
-    65		if (WARN_ON(!crtc_state))
-    66			return;
+    60		ret = clk_set_rate(mipi_dsi->px_clk, mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate);
+    61		if (ret) {
+    62			pr_err("Failed to set DSI PLL rate %lu\n",
+    63			       mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate);
+    64	
+    65			return ret;
+    66		}
     67	
-    68		mode = &crtc_state->adjusted_mode;
-    69		if (WARN_ON(!mode))
-    70			return;
-    71	
-  > 72		meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock * 1000, 0, 0, 0, false);
-    73	
-  > 74		meson_venc_encoder_dsi_mode_set(priv, mode);
-    75	
-    76		meson_encl_load_gamma(priv);
-    77	
-    78		writel_bits_relaxed(BIT(3), BIT(3), priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
-    79		writel_relaxed(0, priv->io_base + _REG(ENCL_TST_EN));
+  > 68		meson_dw_mipi_dsi_hw_init(mipi_dsi);
+    69	
+  > 70		switch (mipi_dsi->dsi_device->format) {
+    71		case MIPI_DSI_FMT_RGB888:
+  > 72			dpi_data_format = COLOR_24BIT;
+  > 73			venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+    74			break;
+    75		case MIPI_DSI_FMT_RGB666:
+  > 76			dpi_data_format = COLOR_18BIT_CFG_2;
+  > 77			venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+    78			break;
+    79		};
     80	
-    81		writel_relaxed(1, priv->io_base + _REG(ENCL_VIDEO_EN));
-    82	}
-    83	
-    84	static void meson_encoder_dsi_atomic_disable(struct drm_bridge *bridge,
-    85						      struct drm_bridge_state *bridge_state)
-    86	{
-    87		struct meson_encoder_dsi *meson_encoder_dsi =
-    88						bridge_to_meson_encoder_dsi(bridge);
-    89		struct meson_drm *priv = meson_encoder_dsi->priv;
+    81		/* Configure color format for DPI register */
+  > 82		writel_relaxed((dpi_data_format  << BIT_DPI_COLOR_MODE)  |
+    83			       (venc_data_width  << BIT_IN_COLOR_MODE) |
+    84				0 << BIT_COMP0_SEL |
+    85				1 << BIT_COMP1_SEL |
+    86				2 << BIT_COMP2_SEL,
+    87				(mipi_dsi->mode->flags & DRM_MODE_FLAG_NHSYNC ? 0 : BIT(BIT_HSYNC_POL)) |
+    88				(mipi_dsi->mode->flags & DRM_MODE_FLAG_NVSYNC ? 0 : BIT(BIT_VSYNC_POL)),
+  > 89				mipi_dsi->base + MIPI_DSI_TOP_CNTL);
     90	
-    91		writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
-    92	}
-    93	
-    94	static const struct drm_bridge_funcs meson_encoder_dsi_bridge_funcs = {
-    95		.attach		= meson_encoder_dsi_attach,
-  > 96		.atomic_check	= meson_encoder_dsi_atomic_check,
-    97		.atomic_enable	= meson_encoder_dsi_atomic_check,
-    98		.atomic_disable	= meson_encoder_dsi_atomic_check,
-  > 99		.atomic_check = meson_encoder_dsi_atomic_check,
-   100		.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-   101		.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-   102		.atomic_reset = drm_atomic_helper_bridge_reset,
-   103	};
-   104	
+    91		phy_power_on(mipi_dsi->phy);
+    92	
+    93		return 0;
+    94	}
+    95	
+    96	static void dw_mipi_dsi_phy_power_off(void *priv_data)
+    97	{
+    98		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+    99	
+   100		phy_power_off(mipi_dsi->phy);
+   101	}
+   102	
+   103	static int
+   104	dw_mipi_dsi_get_lane_mbps(void *priv_data, const struct drm_display_mode *mode,
+   105				  unsigned long mode_flags, u32 lanes, u32 format,
+   106				  unsigned int *lane_mbps)
+   107	{
+   108		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+   109		int bpp;
+   110	
+ > 111		mipi_dsi->mode = mode;
+   112	
+ > 113		bpp = encoder_dsi_pixel_format_to_bpp(mipi_dsi->dsi_device->format);
+   114	
+   115		phy_mipi_dphy_get_default_config(mode->clock * 1000,
+   116						 bpp, encoder_dsi->dsi_device->lanes,
+   117						 &mipi_dsi->phy_opts.mipi_dphy);
+   118	
+   119		*lane_mbps = mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate / 1000000;
+   120	
+   121		return 0;
+   122	}
+   123	
+   124	static int
+   125	dw_mipi_dsi_phy_get_timing(void *priv_data, unsigned int lane_mbps,
+   126				   struct dw_mipi_dsi_dphy_timing *timing)
+   127	{
+   128		/* TOFIX handle other cases */
+   129	
+   130		timing->clk_lp2hs = 37;
+   131		timing->clk_hs2lp = 135;
+   132		timing->data_lp2hs = 50;
+   133		timing->data_hs2lp = 3;
+   134	
+   135		return 0;
+   136	}
+   137	
+   138	static int
+   139	dw_mipi_dsi_get_esc_clk_rate(void *priv_data, unsigned int *esc_clk_rate)
+   140	{
+   141		*esc_clk_rate = 4; /* Mhz */
+   142	
+   143		return 0;
+   144	}
+   145	
+   146	static const struct dw_mipi_dsi_phy_ops meson_dw_mipi_dsi_phy_ops = {
+   147		.init = dw_mipi_dsi_phy_init,
+   148		.power_off = dw_mipi_dsi_phy_power_off,
+   149		.get_lane_mbps = dw_mipi_dsi_get_lane_mbps,
+   150		.get_timing = dw_mipi_dsi_phy_get_timing,
+   151		.get_esc_clk_rate = dw_mipi_dsi_get_esc_clk_rate,
+   152	};
+   153	
+   154	static int meson_dw_mipi_dsi_bind(struct device *dev, struct device *master,
+   155					void *data)
+   156	{
+   157		struct meson_dw_mipi_dsi *mipi_dsi = dev_get_drvdata(dev);
+   158		struct drm_device *drm = data;
+   159		struct meson_drm *priv = drm->dev_private;
+   160		struct drm_encoder *encoder;
+   161		int ret;
+   162	
+   163		/* Check before if we are supposed to have a sub-device... */
+   164		if (!mipi_dsi->dsi_device)
+   165			return -EPROBE_DEFER;
+   166	
+   167		mipi_dsi->priv = priv;
+   168	
+   169		return 0;
+   170	}
+   171	
+   172	static const struct component_ops meson_dw_mipi_dsi_ops = {
+   173		.bind	= meson_dw_mipi_dsi_bind,
+   174	};
+   175	
+ > 176	static void meson_dw_mipi_dsi_hw_init(struct meson_dw_mipi_dsi *mipi_dsi)
+   177	{
+   178		writel_relaxed((1 << 4) | (1 << 5) | (0 << 6),
+   179				mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+   180	
+   181		writel_bits_relaxed(0xf, 0xf,
+   182				    mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+   183		writel_bits_relaxed(0xf, 0,
+   184				    mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+   185	
+   186		writel_bits_relaxed(0x3, 0x3,
+   187				    mipi_dsi->base + MIPI_DSI_TOP_CLK_CNTL);
+   188	
+   189		writel_relaxed(0, mipi_dsi->base + MIPI_DSI_TOP_MEM_PD);
+   190	}
+   191	
+   192	static int meson_dw_mipi_dsi_host_attach(void *priv_data,
+   193						 struct mipi_dsi_device *device)
+   194	{
+   195		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+   196		u32 reg;
+   197	
+   198		mipi_dsi->dsi_device = device;
+   199	
+ > 200		witch (device->format) {
+ > 201		case MIPI_DSI_FMT_RGB888:
+ > 202			dpi_data_format = COLOR_24BIT;
+ > 203			venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+   204			break;
+   205		case MIPI_DSI_FMT_RGB666:
+   206			dpi_data_format = COLOR_18BIT_CFG_2;
+   207			venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+   208			break;
+   209		case MIPI_DSI_FMT_RGB666_PACKED:
+   210		case MIPI_DSI_FMT_RGB565:
+   211			DRM_DEV_ERROR(mipi_dsi->dev, "invalid pixel format %d\n", device->format);
+   212			return -EINVAL;
+   213		};
+   214	
+   215		phy_init(mipi_dsi->phy);
+   216	
+   217		return 0;
+   218	}
+   219	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
