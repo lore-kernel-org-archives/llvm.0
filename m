@@ -1,77 +1,130 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391A4173
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 22:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E654173
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 23:20:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639176562; x=1670712562;
-  h=date:from:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xnGUiH2xBo93rP//UiobvnuEPVpahvRM4l2eIjRWQaI=;
-  b=II3Qlg2tarO1jtgHeXVd1OXijsJip6SZbGOPa09hZmWuYeG48JapC59E
-   BSAVf7+fkurghcuzN/8kXOfhMI5ofMz6j0u33LWSctlmBA379Rc2/DJUm
-   cwk9Ih3usgB3/OStKSGCw/Nm39FIll63jRBWhPm3FK4ReZNoKgcMP9Edg
-   Ln7yXLNqyqkl9sc3U+xidlOTL77ANecVJ2SZED26445/g0n1kcIS2wFSa
-   1hoG5wlGX+/lSK3mHOm8PJhey3la9P148JeWX8Up3DgYXWGVD03crnqH/
-   TeXbAWNwCKYlzRwMmuSOMDOPxV/PaKyX9kxyfA09c5YuiXiYt8sn1KDUj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238688638"
+  t=1639178423; x=1670714423;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y1RtvOPO5+DIS8Tgbu5czGCC3D3b2Ks7SPiZaM11Q20=;
+  b=kb0hoATOW8sKmOVTDiPYIapI+QPOCw0XLC14TCuLNerkdqqPedxiszqy
+   YMjTHtQKsC0BqCm+BudVlMjzOUgTTc4QAkXfvj2hsAkzsZUVBdJuOdb0m
+   mAUlCNDwZtZmA9l0bJoxk37+rfaX1wyKaIH3m2cjeoRnjoF4l8wQzyxNr
+   HBncptp6TCkmanO2Pf73gb5LIn3y//WZN6xzKRb8uhIBOz3FtuJ4iMm1Z
+   R/2ud/QRSEbtUstAsyS+zDDNcEWzLpI0g5E77XGrUAockuL5QWhS8F8+e
+   4doIjpqiqlgwNOV2Og5WK/99u7LWPs/8xdPdJX4U94yPvTG/zyJJvYvuX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="235991539"
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="238688638"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 14:49:21 -0800
+   d="scan'208";a="235991539"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:20:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="516964400"
+   d="scan'208";a="504135333"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 10 Dec 2021 14:49:20 -0800
+  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2021 15:20:21 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvohb-0003lb-Vp; Fri, 10 Dec 2021 22:49:19 +0000
-Date: Sat, 11 Dec 2021 06:48:33 +0800
+	id 1mvpBc-0003nD-Jm; Fri, 10 Dec 2021 23:20:20 +0000
+Date: Sat, 11 Dec 2021 07:19:43 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 2994/5842] crypto/kdf_sp800108.o: warning:
- objtool: crypto_kdf108_init()+0x194: unreachable instruction
-Message-ID: <202112110621.5er4Fgds-lkp@intel.com>
+To: Liu Yi L <yi.l.liu@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 31/33] ld.lld: error: undefined
+ symbol: interval_tree_span_iter_first
+Message-ID: <202112110730.YDz5VfLg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: "Stephan Müller" <smueller@chronox.de>
-CC: Herbert Xu <herbert@gondor.apana.org.au>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4eee8d0b64ecc3231040fa68ba750317ffca5c52
-commit: d3b04a4398fe8022c9ca4b5ac6ab08059334b180 [2994/5842] security: DH - use KDF implementation from crypto API
-config: x86_64-randconfig-a015-20211205 (https://download.01.org/0day-ci/archive/20211211/202112110621.5er4Fgds-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
+head:   44f89b130eec28760e6b655facd4be49c5bcc3f9
+commit: 74814fdbefe2fb370111a0ce00641c64376447cb [31/33] vfio/pci: Add bind_iommufd() support
+config: arm64-randconfig-r014-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110730.YDz5VfLg-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d3b04a4398fe8022c9ca4b5ac6ab08059334b180
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout d3b04a4398fe8022c9ca4b5ac6ab08059334b180
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/luxis1999/iommufd/commit/74814fdbefe2fb370111a0ce00641c64376447cb
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
+        git checkout 74814fdbefe2fb370111a0ce00641c64376447cb
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> crypto/kdf_sp800108.o: warning: objtool: crypto_kdf108_init()+0x194: unreachable instruction
+>> ld.lld: error: undefined symbol: interval_tree_span_iter_first
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
+   >>> referenced 7 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_span_iter_next
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
+   >>> referenced 7 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_iter_first
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_area) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_area) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_area_find_exact) in archive drivers/built-in.a
+   >>> referenced 12 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_insert
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_area_finalize) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_reserve_iova) in archive drivers/built-in.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: interval_tree_remove
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(__iopt_unmap_iova) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: interval_tree_iter_next
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_unaccess_pages) in archive drivers/built-in.a
+   >>> referenced by io_pagetable.c
+   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
+   >>> referenced 5 more times
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for IOMMUFD
+   Depends on IOMMU_SUPPORT
+   Selected by
+   - VFIO_PCI_CORE && VFIO && PCI && MMU
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
