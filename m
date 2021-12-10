@@ -1,148 +1,150 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D66B2C99
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 18:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639160058; x=1670696058;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vmpQh9ClAs0N1BFmhaM0KGq2ssljRnw0FnY+my++upU=;
-  b=VOOYzPrLFFkee5wyyv1SbGt5vcbylhi4Yc/pI21eW9qbu6/ObrJGlIFZ
-   Eagz5bqrZ2EVi2kMrrfm3fHjUDzFA8Bc8Zwb8K2dSs/XHMEUH13NACpWK
-   Wlwg9hHUjQb1fVy1zqFiY/R9WbWDD7e1IrWPQBBxTGn6EhEORdu0NdAVf
-   nolui7StdAa/0otTk9iC5bfivoMpKNWcQaxmuw2N8wPrS1jOW57MsZfaS
-   MFoLtft6zUjbfx+kv1KcDTSKjDJubEUqvALjcD6efCP2kCThDsxgbCbDm
-   MBXMiohucarShMBsJNxy/9s9IWAOi2iBEg9lA9YjWaBsRd0+330/EYCry
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238352465"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="238352465"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:14:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="565316282"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Dec 2021 10:14:14 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mvkPO-0003W1-6c; Fri, 10 Dec 2021 18:14:14 +0000
-Date: Sat, 11 Dec 2021 02:13:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-	vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-	kuba@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
-Subject: Re: [PATCH V2] net: bonding: Add support for IPV6 ns/na
-Message-ID: <202112110234.hkzxELcK-lkp@intel.com>
-References: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580C729CA
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 19:03:57 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id u3so19800608lfl.2
+        for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 11:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YRIlmq1+iZrjFvchtZLa2XEWbp2/+L1kaW6ixwhNcKk=;
+        b=dC55T7NVec8zDfqI25DC4orPrU+YljERqdmhvP8BSBfOEWGs7/rj+vdItXMhXXpORv
+         eqMpdz/v19NnizJpYYgCcjJRlV+J6XYem0gws42YVfFsXBJmlqrGGE344hZBH/SVGQro
+         ZWBUDmPBDw4rOgQ57hZJSHhW9QwTw39/ALNiRcI2h8V8YfSlfCdsVyd3Nza14RKySlsH
+         /tvXJPmp8AaLbq6w0IZIbr3IBqhe0TZyHifZFrVa0z4PldqmMPPOkjqUzT2l0qK21eAI
+         Tr0Khghv2uXuSopdQZ6ruVbeDM3Ymgu8WJnj+/lUgLWY285GHGHm3Ejo8K4fF6rO2qD2
+         u3TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YRIlmq1+iZrjFvchtZLa2XEWbp2/+L1kaW6ixwhNcKk=;
+        b=s+2vjbUXbW6lc6N56snvkULhFZ4wiJxDoUXKqwyI0fhS3+iuB0/6wakVkNqYmGZoCG
+         kaYd2BsmmaR9KC4iiepW7FIqpVXZ42xgkpPAmN9wQxfhsNtkY/8bq5y7KYlyQvgIqp5o
+         3NQfIBIhwNCksNgindF6xCMr5yHiTvfvExy1QwQBrdrsJrp2TboPYBXxuLpQxK425avt
+         BHsCJh4d2w5J4JFmW7t8C4hMiCywNKaXjaem3FzXQyPY4iXs4hRT8V+FVSchCz1XZsh8
+         XvJA+fEegJKdeYK56Bu97zwUvUVyvMBZt7WiVQATZ5eQ1ymavG5r7PRjbpFGGrdKmoTC
+         Kdmg==
+X-Gm-Message-State: AOAM532gyqK8C8WaihAXqfBiY/kYq0dXPzdfpTf8bQrJdZGAD97CZqCX
+	BWAHxwnckmXuwXMF6znuFm/2WgGhwjWBZZ+pI9fz9Q==
+X-Google-Smtp-Source: ABdhPJyoOVN7O/8fGgT5BJ/zKJF8IlTUbgLWM2OtohJe4qNABNx3FzVkhf8SEU9GV7/dxhmyOUNT4D+MIizWI79sKB4=
+X-Received: by 2002:ac2:4d19:: with SMTP id r25mr13734844lfi.82.1639163035097;
+ Fri, 10 Dec 2021 11:03:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211210165528.3232292-1-nathan@kernel.org>
+In-Reply-To: <20211210165528.3232292-1-nathan@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 10 Dec 2021 11:03:43 -0800
+Message-ID: <CAKwvOdktm1p-ZxdOmQnGvdeq1zbPd1C5c7Mp0Co55=prccdcrg@mail.gmail.com>
+Subject: Re: [PATCH v2] soc/tegra: fuse: Fix bitwise vs. logical OR warning
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sun,
+On Fri, Dec 10, 2021 at 8:57 AM Nathan Chancellor <nathan@kernel.org> wrote=
+:
+>
+> A new warning in clang points out two instances where boolean
+> expressions are being used with a bitwise OR instead of logical OR:
+>
+> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|'=
+ with boolean operands [-Wbitwise-instead-of-logical]
+>                 reg =3D tegra_fuse_read_spare(i) |
+>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>                                                ||
+> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both oper=
+ands to int to silence this warning
+> drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|'=
+ with boolean operands [-Wbitwise-instead-of-logical]
+>                 reg =3D tegra_fuse_read_spare(i) |
+>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>                                                ||
+> drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both oper=
+ands to int to silence this warning
+> 2 warnings generated.
+>
+> The motivation for the warning is that logical operations short circuit
+> while bitwise operations do not.
+>
+> In this instance, tegra_fuse_read_spare() is not semantically returning
+> a boolean, it is returning a bit value. Use u32 for its return type so
+> that it can be used with either bitwise or boolean operators without any
+> warnings.
+>
+> Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification=
+")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1488
+> Suggested-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Thanks for the revised patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.16-rc4 next-20211208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> ---
+>
+> v1 -> v2: https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kerne=
+l.org/
+>
+> * Change return type of tegra_fuse_read_spare(), instead of changing
+>   bitwise OR to logical OR in tegra20_init_speedo_data() (Micha=C5=82).
+>
+> It would be nice to get this fixed sooner rather than later, as ARCH=3Dar=
+m
+> allmodconfig is broken due to -Werror.
 
-url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211210-210940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c741e49150dbb0c0aebe234389f4aa8b47958fa8
-config: hexagon-randconfig-r006-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110234.hkzxELcK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f86d634c3ced7ec9b5af72e4b92bca681be033f7
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211210-210940
-        git checkout f86d634c3ced7ec9b5af72e4b92bca681be033f7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/bonding/
+Yes please let's try to get this into 5.16-rc5 if possible!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>
+>  drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
+>  drivers/soc/tegra/fuse/fuse.h       | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse=
+/fuse-tegra.c
+> index f2151815db58..e714ed3b61bc 100644
+> --- a/drivers/soc/tegra/fuse/fuse-tegra.c
+> +++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+> @@ -320,7 +320,7 @@ static struct platform_driver tegra_fuse_driver =3D {
+>  };
+>  builtin_platform_driver(tegra_fuse_driver);
+>
+> -bool __init tegra_fuse_read_spare(unsigned int spare)
+> +u32 __init tegra_fuse_read_spare(unsigned int spare)
+>  {
+>         unsigned int offset =3D fuse->soc->info->spare + spare * 4;
+>
+> diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.=
+h
+> index de58feba0435..ecff0c08e959 100644
+> --- a/drivers/soc/tegra/fuse/fuse.h
+> +++ b/drivers/soc/tegra/fuse/fuse.h
+> @@ -65,7 +65,7 @@ struct tegra_fuse {
+>  void tegra_init_revision(void);
+>  void tegra_init_apbmisc(void);
+>
+> -bool __init tegra_fuse_read_spare(unsigned int spare);
+> +u32 __init tegra_fuse_read_spare(unsigned int spare);
+>  u32 __init tegra_fuse_read_early(unsigned int offset);
+>
+>  u8 tegra_get_major_rev(void);
+>
+> base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+> --
+> 2.34.1
+>
+>
 
-All errors (new ones prefixed by >>):
 
->> drivers/net/bonding/bond_alb.c:1318:26: error: implicit declaration of function 'csum_ipv6_magic' [-Werror,-Wimplicit-function-declaration]
-                           icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
-                                                 ^
-   drivers/net/bonding/bond_alb.c:1318:26: note: did you mean 'csum_tcpudp_magic'?
-   arch/hexagon/include/asm/checksum.h:21:9: note: 'csum_tcpudp_magic' declared here
-   __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
-           ^
-   arch/hexagon/include/asm/checksum.h:20:27: note: expanded from macro 'csum_tcpudp_magic'
-   #define csum_tcpudp_magic csum_tcpudp_magic
-                             ^
-   1 error generated.
-
-
-vim +/csum_ipv6_magic +1318 drivers/net/bonding/bond_alb.c
-
-  1283	
-  1284	static void alb_change_nd_option(struct sk_buff *skb, void *data)
-  1285	{
-  1286		struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
-  1287		struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
-  1288		struct net_device *dev = skb->dev;
-  1289		struct icmp6hdr *icmp6h = icmp6_hdr(skb);
-  1290		struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
-  1291		u8 *lladdr = NULL;
-  1292		u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
-  1293					offsetof(struct nd_msg, opt));
-  1294	
-  1295		while (ndoptlen) {
-  1296			int l;
-  1297	
-  1298			switch (nd_opt->nd_opt_type) {
-  1299			case ND_OPT_SOURCE_LL_ADDR:
-  1300			case ND_OPT_TARGET_LL_ADDR:
-  1301			lladdr = ndisc_opt_addr_data(nd_opt, dev);
-  1302			break;
-  1303	
-  1304			default:
-  1305			lladdr = NULL;
-  1306			break;
-  1307			}
-  1308	
-  1309			l = nd_opt->nd_opt_len << 3;
-  1310	
-  1311			if (ndoptlen < l || l == 0)
-  1312				return;
-  1313	
-  1314			if (lladdr) {
-  1315				memcpy(lladdr, data, dev->addr_len);
-  1316				icmp6h->icmp6_cksum = 0;
-  1317	
-> 1318				icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
-  1319								      &ip6hdr->daddr,
-  1320							ntohs(ip6hdr->payload_len),
-  1321							IPPROTO_ICMPV6,
-  1322							csum_partial(icmp6h,
-  1323								     ntohs(ip6hdr->payload_len), 0));
-  1324			}
-  1325			ndoptlen -= l;
-  1326			nd_opt = ((void *)nd_opt) + l;
-  1327		}
-  1328	}
-  1329	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+Thanks,
+~Nick Desaulniers
