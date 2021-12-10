@@ -1,111 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14692C99
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 16:57:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03CEC00446;
-	Fri, 10 Dec 2021 16:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639155445;
-	bh=jET+YLDQ2r1VmsaDyAomjk4pSNQ9+dFdxLKsYrjuJcU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=UmhIYrIMDeDK7n1lLWFTjsNiyMfC0BgwO4+Oe1AD7IiL8Nd/8YdaaAUdKes9hfmAX
-	 LtqRQBKnniX7w9m3KbUcxgOlxMF6cx01+0uKbCTS/RTUQviDyWHF30XWJ9uDSbtkGh
-	 Y41Whl+tzeDeGfC9HgMTsh0am4kj/b97aemcI0+p8A3l99+GJsGLaQ42JNBPgYUDco
-	 /BDrGrWdJFXg1tA7w23/ysFLNeXb4KIma4vYfmlbRvI0oRYz960LJeo5YCk8TVAaju
-	 FjncMM0+oMhqY1eeruK7XKiKF7AGewpcTkY15Av5lZM2cxphfWnfyAH5e/Mxi/ZySw
-	 QQuH23PHwd+Yg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	=?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v2] soc/tegra: fuse: Fix bitwise vs. logical OR warning
-Date: Fri, 10 Dec 2021 09:55:29 -0700
-Message-Id: <20211210165528.3232292-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08512C99
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 17:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639156994; x=1670692994;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rTfF76K0FsB4XBpW8sWa4r3qEyc0/4HPl1FjiP6CD4o=;
+  b=mSpDMkVnIQd/4X/SLrt/bnyf1xSphrDnyCFGBX8hr0CIglBsDUBGys9D
+   dV3ElFcHQEXmS4PUUyQqKDfAB1FwIFvR7pC3+8Gixs1Q6G6nEhmeRTRQH
+   YFQWXOxFcKHGXHF4ScEjtQ1xjZF0XhlLQh7XxgE7AIwYyHq7vf+Uw/n5x
+   tkoI6jwRZ+WKJYZm7B09yNhKbQMTzofk+dmlTIajnRTmnz0klmHraWnQx
+   Iqo6RQJ9WQ4DkPxRclkizZJtxGMEU4+OWaeyWQr9dg47p7+IXvwqKkOUd
+   ROELPmieVc6qyBpGuy3PxBZL9Qstp/bDyYeGlplu6cqVtj0+yq7HpMuSN
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="299177290"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="299177290"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:23:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="612992661"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 10 Dec 2021 09:23:12 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvjbz-0003Qo-UK; Fri, 10 Dec 2021 17:23:11 +0000
+Date: Sat, 11 Dec 2021 01:22:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liu Yi L <yi.l.liu@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 32/33]
+ include/linux/iommufd.h:30:1: error: expected identifier or '('
+Message-ID: <202112110116.DbhBjj3j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-A new warning in clang points out two instances where boolean
-expressions are being used with a bitwise OR instead of logical OR:
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
+head:   44f89b130eec28760e6b655facd4be49c5bcc3f9
+commit: 219a6860a2c8c2c89d71793ce4f9375f3e7bb61f [32/33] vfio/pci: Add VFIO_DEVICE_ATTACH_IOASPT
+config: hexagon-randconfig-r011-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110116.DbhBjj3j-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/219a6860a2c8c2c89d71793ce4f9375f3e7bb61f
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
+        git checkout 219a6860a2c8c2c89d71793ce4f9375f3e7bb61f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
 
-drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                reg = tegra_fuse_read_spare(i) |
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                               ||
-drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both operands to int to silence this warning
-drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                reg = tegra_fuse_read_spare(i) |
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                               ||
-drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both operands to int to silence this warning
-2 warnings generated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The motivation for the warning is that logical operations short circuit
-while bitwise operations do not.
+All errors (new ones prefixed by >>):
 
-In this instance, tegra_fuse_read_spare() is not semantically returning
-a boolean, it is returning a bit value. Use u32 for its return type so
-that it can be used with either bitwise or boolean operators without any
-warnings.
+   In file included from drivers/vfio/vfio.c:35:
+>> include/linux/iommufd.h:30:1: error: expected identifier or '('
+   {
+   ^
+   1 error generated.
 
-Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1488
-Suggested-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+vim +30 include/linux/iommufd.h
+
+8a81aeff73cead Jason Gunthorpe 2021-11-11  26  
+8a81aeff73cead Jason Gunthorpe 2021-11-11  27  #else /* !CONFIG_IOMMUFD */
+8a81aeff73cead Jason Gunthorpe 2021-11-11  28  static inline struct iommufd_device *
+8a81aeff73cead Jason Gunthorpe 2021-11-11  29  iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
+8a81aeff73cead Jason Gunthorpe 2021-11-11 @30  {
+8a81aeff73cead Jason Gunthorpe 2021-11-11  31  	return ERR_PTR(-EOPNOTSUPP);
+8a81aeff73cead Jason Gunthorpe 2021-11-11  32  }
+8a81aeff73cead Jason Gunthorpe 2021-11-11  33  
+
+:::::: The code at line 30 was first introduced by commit
+:::::: 8a81aeff73cead826a9b7d26e9af4f09c9fd700f iommufd: Add kAPI toward external drivers
+
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Liu Yi L <yi.l.liu@intel.com>
+
 ---
-
-v1 -> v2: https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kernel.org/
-
-* Change return type of tegra_fuse_read_spare(), instead of changing
-  bitwise OR to logical OR in tegra20_init_speedo_data() (Michał).
-
-It would be nice to get this fixed sooner rather than later, as ARCH=arm
-allmodconfig is broken due to -Werror.
-
- drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
- drivers/soc/tegra/fuse/fuse.h       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
-index f2151815db58..e714ed3b61bc 100644
---- a/drivers/soc/tegra/fuse/fuse-tegra.c
-+++ b/drivers/soc/tegra/fuse/fuse-tegra.c
-@@ -320,7 +320,7 @@ static struct platform_driver tegra_fuse_driver = {
- };
- builtin_platform_driver(tegra_fuse_driver);
- 
--bool __init tegra_fuse_read_spare(unsigned int spare)
-+u32 __init tegra_fuse_read_spare(unsigned int spare)
- {
- 	unsigned int offset = fuse->soc->info->spare + spare * 4;
- 
-diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.h
-index de58feba0435..ecff0c08e959 100644
---- a/drivers/soc/tegra/fuse/fuse.h
-+++ b/drivers/soc/tegra/fuse/fuse.h
-@@ -65,7 +65,7 @@ struct tegra_fuse {
- void tegra_init_revision(void);
- void tegra_init_apbmisc(void);
- 
--bool __init tegra_fuse_read_spare(unsigned int spare);
-+u32 __init tegra_fuse_read_spare(unsigned int spare);
- u32 __init tegra_fuse_read_early(unsigned int offset);
- 
- u8 tegra_get_major_rev(void);
-
-base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
