@@ -1,41 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EED62C99
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 18:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D66B2C99
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 18:14:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639159426; x=1670695426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LAHwgZ9mmMRfEXXYxpHctVnwaqoW94BRjWxXAVA/q9g=;
-  b=CAl619ndZeSsiOkPw0vcx3nQL1vE+eADiBu2CgyAiEPWvdh+z+RbSF15
-   k8gLOzndn/zqvnFUtkY9jKwTLO+PyqTT4iaFKc+ZNE11meW9JV8DoYm4n
-   plHMB6vZYKooSKtxMcOpiFEjHgUGckzHfFJOKtz0HopVQNnbaWklH7lxH
-   SHiWimgN+iikyQ6UHF75/Zr7baFgMBvIKluhvXlQA3M+YJa1AbVnRughV
-   XD18fcGN9e8UVi5IL6hKhngzwv4w/bUqZawa9l8rcFIFtJXQhH13WGJw3
-   c57VLEfW8Hs3HHALfdmEMWy3ugkzyiSCnODpa8Fcc6t1zsNRVGJnPqr7S
+  t=1639160058; x=1670696058;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vmpQh9ClAs0N1BFmhaM0KGq2ssljRnw0FnY+my++upU=;
+  b=VOOYzPrLFFkee5wyyv1SbGt5vcbylhi4Yc/pI21eW9qbu6/ObrJGlIFZ
+   Eagz5bqrZ2EVi2kMrrfm3fHjUDzFA8Bc8Zwb8K2dSs/XHMEUH13NACpWK
+   Wlwg9hHUjQb1fVy1zqFiY/R9WbWDD7e1IrWPQBBxTGn6EhEORdu0NdAVf
+   nolui7StdAa/0otTk9iC5bfivoMpKNWcQaxmuw2N8wPrS1jOW57MsZfaS
+   MFoLtft6zUjbfx+kv1KcDTSKjDJubEUqvALjcD6efCP2kCThDsxgbCbDm
+   MBXMiohucarShMBsJNxy/9s9IWAOi2iBEg9lA9YjWaBsRd0+330/EYCry
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="218427099"
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238352465"
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="218427099"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:03:16 -0800
+   d="scan'208";a="238352465"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:14:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="680827116"
+   d="scan'208";a="565316282"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 10:03:14 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 10 Dec 2021 10:14:14 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvkEj-0003Up-EO; Fri, 10 Dec 2021 18:03:13 +0000
-Date: Sat, 11 Dec 2021 02:03:05 +0800
+	id 1mvkPO-0003W1-6c; Fri, 10 Dec 2021 18:14:14 +0000
+Date: Sat, 11 Dec 2021 02:13:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lukas Czerner <lczerner@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: fs/ext4/ioctl.c:45:5: warning: no previous prototype for function
- 'ext4_modify_primary_sb'
-Message-ID: <202112110115.5HqRcRHH-lkp@intel.com>
+To: Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
+	vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+	kuba@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH V2] net: bonding: Add support for IPV6 ns/na
+Message-ID: <202112110234.hkzxELcK-lkp@intel.com>
+References: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,260 +47,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211210-231726/Lukas-Czerner/ext4-implement-support-for-get-set-fs-label/20211112-060030
-head:   3645884240a4d5f00133b71e3a7fbb2070588706
-commit: 3645884240a4d5f00133b71e3a7fbb2070588706 ext4: implement support for get/set fs label
-date:   3 hours ago
-config: hexagon-randconfig-r016-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110115.5HqRcRHH-lkp@intel.com/config)
+Hi Sun,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.16-rc4 next-20211208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211210-210940
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c741e49150dbb0c0aebe234389f4aa8b47958fa8
+config: hexagon-randconfig-r006-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110234.hkzxELcK-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3645884240a4d5f00133b71e3a7fbb2070588706
+        # https://github.com/0day-ci/linux/commit/f86d634c3ced7ec9b5af72e4b92bca681be033f7
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20211210-231726/Lukas-Czerner/ext4-implement-support-for-get-set-fs-label/20211112-060030
-        git checkout 3645884240a4d5f00133b71e3a7fbb2070588706
+        git fetch --no-tags linux-review Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211210-210940
+        git checkout f86d634c3ced7ec9b5af72e4b92bca681be033f7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/bonding/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/ext4/ioctl.c:45:5: warning: no previous prototype for function 'ext4_modify_primary_sb' [-Wmissing-prototypes]
-   int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-       ^
-   fs/ext4/ioctl.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-   ^
-   static 
->> fs/ext4/ioctl.c:165:5: warning: no previous prototype for function 'ext4_modify_superblocks_fn' [-Wmissing-prototypes]
-   int ext4_modify_superblocks_fn(struct super_block *sb,
-       ^
-   fs/ext4/ioctl.c:165:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ext4_modify_superblocks_fn(struct super_block *sb,
-   ^
-   static 
-   2 warnings generated.
+>> drivers/net/bonding/bond_alb.c:1318:26: error: implicit declaration of function 'csum_ipv6_magic' [-Werror,-Wimplicit-function-declaration]
+                           icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
+                                                 ^
+   drivers/net/bonding/bond_alb.c:1318:26: note: did you mean 'csum_tcpudp_magic'?
+   arch/hexagon/include/asm/checksum.h:21:9: note: 'csum_tcpudp_magic' declared here
+   __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
+           ^
+   arch/hexagon/include/asm/checksum.h:20:27: note: expanded from macro 'csum_tcpudp_magic'
+   #define csum_tcpudp_magic csum_tcpudp_magic
+                             ^
+   1 error generated.
 
 
-vim +/ext4_modify_primary_sb +45 fs/ext4/ioctl.c
+vim +/csum_ipv6_magic +1318 drivers/net/bonding/bond_alb.c
 
-    44	
-  > 45	int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-    46				   ext4_modify_sb_callback func,
-    47				   const void *arg)
-    48	{
-    49		int err = 0;
-    50		struct ext4_sb_info *sbi = EXT4_SB(sb);
-    51		struct buffer_head *bh = sbi->s_sbh;
-    52		struct ext4_super_block *es = sbi->s_es;
-    53	
-    54		trace_ext4_modify_sb(sb, bh->b_blocknr, 1);
-    55	
-    56		BUFFER_TRACE(bh, "get_write_access");
-    57		err = ext4_journal_get_write_access(handle, sb,
-    58						    bh,
-    59						    EXT4_JTR_NONE);
-    60		if (err)
-    61			goto out_err;
-    62	
-    63		lock_buffer(bh);
-    64		func(es, arg);
-    65		ext4_superblock_csum_set(sb);
-    66		unlock_buffer(bh);
-    67	
-    68		if (buffer_write_io_error(bh) || !buffer_uptodate(bh)) {
-    69			ext4_msg(sbi->s_sb, KERN_ERR, "previous I/O error to "
-    70				 "superblock detected");
-    71			clear_buffer_write_io_error(bh);
-    72			set_buffer_uptodate(bh);
-    73		}
-    74	
-    75		err = ext4_handle_dirty_metadata(handle, NULL, bh);
-    76		if (err)
-    77			goto out_err;
-    78		err = sync_dirty_buffer(bh);
-    79	out_err:
-    80		ext4_std_error(sb, err);
-    81		return err;
-    82	}
-    83	
-    84	/*
-    85	 * Update one backup superblcok in the group 'grp' using the primary
-    86	 * superblock data. If the handle is NULL the modification is not
-    87	 * journalled.
-    88	 *
-    89	 * Returns: 0 when no modification was done (no superblock in the group)
-    90	 *	    1 when the modification was successful
-    91	 *	   <0 on error
-    92	 */
-    93	static int ext4_update_backup_sb(struct super_block *sb, handle_t *handle,
-    94					 ext4_group_t grp)
-    95	{
-    96		int err = 0;
-    97		ext4_fsblk_t sb_block;
-    98		struct buffer_head *bh;
-    99		unsigned long offset = 0;
-   100	
-   101		if (!ext4_bg_has_super(sb, grp))
-   102			return 0;
-   103	
-   104		/*
-   105		 * For the group 0 there is always 1k padding, so we have
-   106		 * either adjust offset, or sb_block depending on blocksize
-   107		 */
-   108		if (grp == 0) {
-   109			sb_block = 1 * EXT4_MIN_BLOCK_SIZE;
-   110			offset = do_div(sb_block, sb->s_blocksize);
-   111		} else {
-   112			sb_block = ext4_group_first_block_no(sb, grp);
-   113			offset = 0;
-   114		}
-   115	
-   116		trace_ext4_modify_sb(sb, sb_block, handle ? 1 : 0);
-   117	
-   118		bh = sb_getblk(sb, sb_block);
-   119		if (IS_ERR(bh))
-   120			return PTR_ERR(bh);
-   121	
-   122		if (handle) {
-   123			BUFFER_TRACE(bh, "get_write_access");
-   124			err = ext4_journal_get_write_access(handle, sb,
-   125							    bh,
-   126							    EXT4_JTR_NONE);
-   127			if (err)
-   128				goto out_bh;
-   129		}
-   130	
-   131		lock_buffer(bh);
-   132		memcpy(bh->b_data + offset, EXT4_SB(sb)->s_es,
-   133		       sizeof(struct ext4_super_block));
-   134		set_buffer_uptodate(bh);
-   135		unlock_buffer(bh);
-   136	
-   137		if (err)
-   138			goto out_bh;
-   139	
-   140		if (handle) {
-   141			err = ext4_handle_dirty_metadata(handle, NULL, bh);
-   142			if (err)
-   143				goto out_bh;
-   144		} else {
-   145			BUFFER_TRACE(bh, "marking dirty");
-   146			mark_buffer_dirty(bh);
-   147		}
-   148		err = sync_dirty_buffer(bh);
-   149	
-   150	out_bh:
-   151		brelse(bh);
-   152		ext4_std_error(sb, err);
-   153		return (err) ? err : 1;
-   154	}
-   155	
-   156	/*
-   157	 * Modify primary and backup superblocks using the provided function
-   158	 * func and argument arg.
-   159	 *
-   160	 * Only the primary superblock and at most two backup superblock
-   161	 * modifications are journalled; the rest is modified without journal.
-   162	 * This is safe because e2fsck will re-write them if there is a problem,
-   163	 * and we're very unlikely to ever need more than two backups.
-   164	 */
- > 165	int ext4_modify_superblocks_fn(struct super_block *sb,
-   166				       ext4_modify_sb_callback func,
-   167				       const void *arg)
-   168	{
-   169		handle_t *handle;
-   170		ext4_group_t ngroups;
-   171		unsigned int three = 1;
-   172		unsigned int five = 5;
-   173		unsigned int seven = 7;
-   174		int err = 0, ret, i;
-   175		ext4_group_t grp, primary_grp;
-   176		struct ext4_sb_info *sbi = EXT4_SB(sb);
-   177	
-   178		/*
-   179		 * We can't modify superblocks while the online resize is running
-   180		 */
-   181		if (test_and_set_bit_lock(EXT4_FLAGS_RESIZING,
-   182					  &sbi->s_ext4_flags)) {
-   183			ext4_msg(sb, KERN_ERR, "Can't modify superblock while"
-   184				 "performing online resize");
-   185			return -EBUSY;
-   186		}
-   187	
-   188		/*
-   189		 * We're only going to modify primary superblock and two
-   190		 * backup superblocks in this transaction.
-   191		 */
-   192		handle = ext4_journal_start_sb(sb, EXT4_HT_MISC, 3);
-   193		if (IS_ERR(handle)) {
-   194			err = PTR_ERR(handle);
-   195			goto out;
-   196		}
-   197	
-   198		/* Modify primary superblock */
-   199		err = ext4_modify_primary_sb(sb, handle, func, arg);
-   200		if (err) {
-   201			ext4_msg(sb, KERN_ERR, "Failed to modify primary "
-   202				 "superblock");
-   203			goto out_journal;
-   204		}
-   205	
-   206		primary_grp = ext4_get_group_number(sb, sbi->s_sbh->b_blocknr);
-   207		ngroups = ext4_get_groups_count(sb);
-   208	
-   209		/*
-   210		 * Update backup superblocks. We have to start from group 0
-   211		 * because it might not be where the primary superblock is
-   212		 * if the fs is mounted with -o sb=<backup_sb_block>
-   213		 */
-   214		i = 0;
-   215		grp = 0;
-   216		while (grp < ngroups) {
-   217			/* Skip primary superblock */
-   218			if (grp == primary_grp)
-   219				goto next_grp;
-   220	
-   221			ret = ext4_update_backup_sb(sb, handle, grp);
-   222			if (ret < 0) {
-   223				err = ret;
-   224				goto out_journal;
-   225			}
-   226	
-   227			i += ret;
-   228			if (handle && i > 1) {
-   229				/*
-   230				 * We're only journalling primary superblock and
-   231				 * two backup superblocks; the rest is not
-   232				 * journalled.
-   233				 */
-   234				err = ext4_journal_stop(handle);
-   235				if (err)
-   236					goto out;
-   237				handle = NULL;
-   238			}
-   239	next_grp:
-   240			grp = ext4_list_backups(sb, &three, &five, &seven);
-   241		}
-   242	
-   243	out_journal:
-   244		if (handle) {
-   245			ret = ext4_journal_stop(handle);
-   246			if (ret && !err)
-   247				err = ret;
-   248		}
-   249	out:
-   250		clear_bit_unlock(EXT4_FLAGS_RESIZING, &sbi->s_ext4_flags);
-   251		smp_mb__after_atomic();
-   252		return err ? err : 0;
-   253	}
-   254	
+  1283	
+  1284	static void alb_change_nd_option(struct sk_buff *skb, void *data)
+  1285	{
+  1286		struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
+  1287		struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
+  1288		struct net_device *dev = skb->dev;
+  1289		struct icmp6hdr *icmp6h = icmp6_hdr(skb);
+  1290		struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
+  1291		u8 *lladdr = NULL;
+  1292		u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
+  1293					offsetof(struct nd_msg, opt));
+  1294	
+  1295		while (ndoptlen) {
+  1296			int l;
+  1297	
+  1298			switch (nd_opt->nd_opt_type) {
+  1299			case ND_OPT_SOURCE_LL_ADDR:
+  1300			case ND_OPT_TARGET_LL_ADDR:
+  1301			lladdr = ndisc_opt_addr_data(nd_opt, dev);
+  1302			break;
+  1303	
+  1304			default:
+  1305			lladdr = NULL;
+  1306			break;
+  1307			}
+  1308	
+  1309			l = nd_opt->nd_opt_len << 3;
+  1310	
+  1311			if (ndoptlen < l || l == 0)
+  1312				return;
+  1313	
+  1314			if (lladdr) {
+  1315				memcpy(lladdr, data, dev->addr_len);
+  1316				icmp6h->icmp6_cksum = 0;
+  1317	
+> 1318				icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
+  1319								      &ip6hdr->daddr,
+  1320							ntohs(ip6hdr->payload_len),
+  1321							IPPROTO_ICMPV6,
+  1322							csum_partial(icmp6h,
+  1323								     ntohs(ip6hdr->payload_len), 0));
+  1324			}
+  1325			ndoptlen -= l;
+  1326			nd_opt = ((void *)nd_opt) + l;
+  1327		}
+  1328	}
+  1329	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
