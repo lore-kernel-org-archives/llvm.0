@@ -1,279 +1,240 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537C029CA
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 19:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639163118; x=1670699118;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4QDWu/RjloXmKRMUHsT2Ng7s0gnpZwjAqRoUzFZc3kQ=;
-  b=YKCI7ky246wkD085NddnYdbPNDOchpIzK8wtRbJCK3IYvRwYENClf5/U
-   ehgoZAlu2wf0WCl4tn/3ROQNgB2spxe8IK+p6PT32fc/nJFu4/WFG1I4z
-   cBHdHpiEcBrINgVVqWIwlKp77fIwqIBg/WwWFzOM2CtOffsqCNqVOELZH
-   c+Cc6IlAg4u9a3qglcXIsr6lGZxIr3Sm5iXmnoykIBksQI83jIarpYCgZ
-   8kCWVSDRn7CipzHpxTBPhvMhw2jdsH4LWFPXKipjeB+vVFMORpu7H3Qnx
-   wRfeYCdayzxYALjVjVnJ8eG29VmsMq6gU14YGlJQ91f6iIV6M1gxuPw4S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="301804665"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="301804665"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:05:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="544072951"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Dec 2021 11:05:16 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mvlCl-0003aL-IS; Fri, 10 Dec 2021 19:05:15 +0000
-Date: Sat, 11 Dec 2021 03:04:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-pci@vger.kernel.org
-Subject: [helgaas-pci:pci/driver-cleanup 8/27]
- drivers/pci/controller/cadence/pci-j721e.c:370:7: error: assigning to
- 'struct j721e_pcie_data *' from 'const void *' discards qualifiers
-Message-ID: <202112110238.rZl7p5gE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9842CA1
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 19:32:56 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id cf39so7765464lfb.8
+        for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 11:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=16vBrnrnLm/KrdSkDqkkNxS0xymKNayV9NN0QHH9Fsc=;
+        b=Fc16dXw7QrcrWym6s0uO3FUlkAd4uNZUZrWupNfe7G2/CR/8Yl570W2sz91fC34oEo
+         A7iSCYIityuJlPftUpYO1kCLgwJpyP8uR0AoZdJxVM1AUwsAuQB2fZii12OInz4H5e+X
+         soS/WQ6Pfl6KwacAVi9hiM9vJsOBiheOBKkNBFz3hpIQSpYRqz7a2Kt65q6oxfcFFmFo
+         dIitB01qrAc1hS4i5DJuLYgrRIBlNg7c6POSBsYCTGByiarvRQEEJccD3c901j+vS4wA
+         ffF/lNG9tDuAPV9taCSFHXSUnkuRHSNpDotI+gbNd2ruK02Vax+OLd6B7mzg22FyN1hD
+         StAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=16vBrnrnLm/KrdSkDqkkNxS0xymKNayV9NN0QHH9Fsc=;
+        b=O0kWJwP5ys1OnWO8Gpx3cKGXLIDdekqbtzoW+BJla7iKfFIs2QwmWP7WG5uhnojf6o
+         7hO/88AaxIVMxbfikLA1lvdUOlHSAw59Pp/DKdmsdblocWKpBl3ie2fdZ2hjjK8059/s
+         Ha4Tgc5gpfkSCfmwc7ZgtnGu51kd3hmdvH9zFGO/xsiVu4H3O6jwQXbDZyNs8qf3HzNn
+         wblEN/Sdr8O2eWdoMQaX4pu6zjrmEgqgqtNtZDIB+4l/C7dOTWBVYEhm1GqfzzE8JDfF
+         3DtbU1XX0zO+UN+vSKtbiU6eD0y9ml+du1uIMM5V6zAiWvMcEe1a3Ay4TVpOPOYPO/fN
+         wDJA==
+X-Gm-Message-State: AOAM530+pgkzAAGyQB6zIwaosc+291L/eQ39G1V/RnoBFTKLNfzmdyXJ
+	yG7zhfy5k/raB8qlFbagXTWpReGsPAiDKXYtb5O9kgJNWMc=
+X-Google-Smtp-Source: ABdhPJxF3+fnmbuK2XdBNyM0bI0+qKHJ0qxHxOEv72SG10GFXigVk57qhPNNilvsV+RXMaejOkWh09XKp2X17SEkv20=
+X-Received: by 2002:ac2:4d19:: with SMTP id r25mr13865559lfi.82.1639164774486;
+ Fri, 10 Dec 2021 11:32:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211209195141.1165233-1-nathan@kernel.org>
+In-Reply-To: <20211209195141.1165233-1-nathan@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 10 Dec 2021 11:32:42 -0800
+Message-ID: <CAKwvOdmKUsQc7UoxzqPvsH+FqxvxHGd43N9dDiYn1T31gZ94Sg@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: greybus: fix stack size warning with UBSAN
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Vaibhav Agarwal <vaibhav.sr@gmail.com>, Mark Greer <mgreer@animalcreek.com>, 
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git pci/driver-cleanup
-head:   24d25dd0ddf8c2b924a1fafc51dd0e578d304c3a
-commit: 667c60afad253791929991b2dc2ed5417bba2787 [8/27] PCI: j721e: Drop pointless of_device_get_match_data() cast
-config: arm64-randconfig-r014-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110238.rZl7p5gE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=667c60afad253791929991b2dc2ed5417bba2787
-        git remote add helgaas-pci https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
-        git fetch --no-tags helgaas-pci pci/driver-cleanup
-        git checkout 667c60afad253791929991b2dc2ed5417bba2787
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/controller/cadence/
+On Thu, Dec 9, 2021 at 11:52 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> clang warns about excessive stack usage in this driver when
+> UBSAN is enabled:
+>
+> drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
+>
+> Rework this code to no longer use compound literals for
+> initializing the structure in each case, but instead keep
+> the common bits in a preallocated constant array and copy
+> them as needed.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1535
+> Link: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> [nathan: Address review comments from v1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for helping to get this across the finish line.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All errors (new ones prefixed by >>):
+> ---
+>
+> v1 -> v2: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+>
+> * Use NULL for name field in SND_DOC_DAPM_* in gbaudio_widgets (Alex).
+>
+> * Do not eliminate *dw assignment within the switch cases, as invalid
+>   enum values in-between valid enum values (such as snd_soc_dapm_demux)
+>   would not be handled properly by the "if value is greater than the
+>   array size" check (Alex). This addresses a few other comments by Alex
+>   and Dan because w->type is not checked against the array's size.
+>
+> Arnd, if you disagree with this approach, please let me know so that we
+> can get this fixed in a way that everyone is happy with.
+>
+>  drivers/staging/greybus/audio_topology.c | 92 ++++++++++++------------
+>  1 file changed, 45 insertions(+), 47 deletions(-)
+>
+> diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
+> index 1e613d42d823..7f7d558b76d0 100644
+> --- a/drivers/staging/greybus/audio_topology.c
+> +++ b/drivers/staging/greybus/audio_topology.c
+> @@ -974,6 +974,44 @@ static int gbaudio_widget_event(struct snd_soc_dapm_widget *w,
+>         return ret;
+>  }
+>
+> +static const struct snd_soc_dapm_widget gbaudio_widgets[] = {
+> +       [snd_soc_dapm_spk]      = SND_SOC_DAPM_SPK(NULL, gbcodec_event_spk),
+> +       [snd_soc_dapm_hp]       = SND_SOC_DAPM_HP(NULL, gbcodec_event_hp),
+> +       [snd_soc_dapm_mic]      = SND_SOC_DAPM_MIC(NULL, gbcodec_event_int_mic),
+> +       [snd_soc_dapm_output]   = SND_SOC_DAPM_OUTPUT(NULL),
+> +       [snd_soc_dapm_input]    = SND_SOC_DAPM_INPUT(NULL),
+> +       [snd_soc_dapm_switch]   = SND_SOC_DAPM_SWITCH_E(NULL, SND_SOC_NOPM,
+> +                                       0, 0, NULL,
+> +                                       gbaudio_widget_event,
+> +                                       SND_SOC_DAPM_PRE_PMU |
+> +                                       SND_SOC_DAPM_POST_PMD),
+> +       [snd_soc_dapm_pga]      = SND_SOC_DAPM_PGA_E(NULL, SND_SOC_NOPM,
+> +                                       0, 0, NULL, 0,
+> +                                       gbaudio_widget_event,
+> +                                       SND_SOC_DAPM_PRE_PMU |
+> +                                       SND_SOC_DAPM_POST_PMD),
+> +       [snd_soc_dapm_mixer]    = SND_SOC_DAPM_MIXER_E(NULL, SND_SOC_NOPM,
+> +                                       0, 0, NULL, 0,
+> +                                       gbaudio_widget_event,
+> +                                       SND_SOC_DAPM_PRE_PMU |
+> +                                       SND_SOC_DAPM_POST_PMD),
+> +       [snd_soc_dapm_mux]      = SND_SOC_DAPM_MUX_E(NULL, SND_SOC_NOPM,
+> +                                       0, 0, NULL,
+> +                                       gbaudio_widget_event,
+> +                                       SND_SOC_DAPM_PRE_PMU |
+> +                                       SND_SOC_DAPM_POST_PMD),
+> +       [snd_soc_dapm_aif_in]   = SND_SOC_DAPM_AIF_IN_E(NULL, NULL, 0,
+> +                                       SND_SOC_NOPM, 0, 0,
+> +                                       gbaudio_widget_event,
+> +                                       SND_SOC_DAPM_PRE_PMU |
+> +                                       SND_SOC_DAPM_POST_PMD),
+> +       [snd_soc_dapm_aif_out]  = SND_SOC_DAPM_AIF_OUT_E(NULL, NULL, 0,
+> +                                       SND_SOC_NOPM, 0, 0,
+> +                                       gbaudio_widget_event,
+> +                                       SND_SOC_DAPM_PRE_PMU |
+> +                                       SND_SOC_DAPM_POST_PMD),
+> +};
+> +
+>  static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+>                                       struct snd_soc_dapm_widget *dw,
+>                                       struct gb_audio_widget *w, int *w_size)
+> @@ -1052,77 +1090,37 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+>
+>         switch (w->type) {
+>         case snd_soc_dapm_spk:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_SPK(w->name, gbcodec_event_spk);
+> +               *dw = gbaudio_widgets[w->type];
+>                 module->op_devices |= GBAUDIO_DEVICE_OUT_SPEAKER;
+>                 break;
+>         case snd_soc_dapm_hp:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_HP(w->name, gbcodec_event_hp);
+> +               *dw = gbaudio_widgets[w->type];
+>                 module->op_devices |= (GBAUDIO_DEVICE_OUT_WIRED_HEADSET
+>                                         | GBAUDIO_DEVICE_OUT_WIRED_HEADPHONE);
+>                 module->ip_devices |= GBAUDIO_DEVICE_IN_WIRED_HEADSET;
+>                 break;
+>         case snd_soc_dapm_mic:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_MIC(w->name, gbcodec_event_int_mic);
+> +               *dw = gbaudio_widgets[w->type];
+>                 module->ip_devices |= GBAUDIO_DEVICE_IN_BUILTIN_MIC;
+>                 break;
+>         case snd_soc_dapm_output:
+> -               *dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_OUTPUT(w->name);
+> -               break;
+>         case snd_soc_dapm_input:
+> -               *dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_INPUT(w->name);
+> -               break;
+>         case snd_soc_dapm_switch:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_SWITCH_E(w->name, SND_SOC_NOPM, 0, 0,
+> -                                             widget_kctls,
+> -                                             gbaudio_widget_event,
+> -                                             SND_SOC_DAPM_PRE_PMU |
+> -                                             SND_SOC_DAPM_POST_PMD);
+> -               break;
+>         case snd_soc_dapm_pga:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_PGA_E(w->name, SND_SOC_NOPM, 0, 0, NULL, 0,
+> -                                          gbaudio_widget_event,
+> -                                          SND_SOC_DAPM_PRE_PMU |
+> -                                          SND_SOC_DAPM_POST_PMD);
+> -               break;
+>         case snd_soc_dapm_mixer:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_MIXER_E(w->name, SND_SOC_NOPM, 0, 0, NULL,
+> -                                            0, gbaudio_widget_event,
+> -                                            SND_SOC_DAPM_PRE_PMU |
+> -                                            SND_SOC_DAPM_POST_PMD);
+> -               break;
+>         case snd_soc_dapm_mux:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_MUX_E(w->name, SND_SOC_NOPM, 0, 0,
+> -                                          widget_kctls, gbaudio_widget_event,
+> -                                          SND_SOC_DAPM_PRE_PMU |
+> -                                          SND_SOC_DAPM_POST_PMD);
+> +               *dw = gbaudio_widgets[w->type];
+>                 break;
+>         case snd_soc_dapm_aif_in:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_AIF_IN_E(w->name, w->sname, 0,
+> -                                             SND_SOC_NOPM,
+> -                                             0, 0, gbaudio_widget_event,
+> -                                             SND_SOC_DAPM_PRE_PMU |
+> -                                             SND_SOC_DAPM_POST_PMD);
+> -               break;
+>         case snd_soc_dapm_aif_out:
+> -               *dw = (struct snd_soc_dapm_widget)
+> -                       SND_SOC_DAPM_AIF_OUT_E(w->name, w->sname, 0,
+> -                                              SND_SOC_NOPM,
+> -                                              0, 0, gbaudio_widget_event,
+> -                                              SND_SOC_DAPM_PRE_PMU |
+> -                                              SND_SOC_DAPM_POST_PMD);
+> +               *dw = gbaudio_widgets[w->type];
+> +               dw->sname = w->sname;
+>                 break;
+>         default:
+>                 ret = -EINVAL;
+>                 goto error;
+>         }
+> +       dw->name = w->name;
+>
+>         dev_dbg(module->dev, "%s: widget of type %d created\n", dw->name,
+>                 dw->id);
+>
+> base-commit: 42eb8fdac2fc5d62392dcfcf0253753e821a97b0
+> --
+> 2.34.1
+>
+>
 
->> drivers/pci/controller/cadence/pci-j721e.c:370:7: error: assigning to 'struct j721e_pcie_data *' from 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           data = of_device_get_match_data(dev);
-                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
 
-
-vim +370 drivers/pci/controller/cadence/pci-j721e.c
-
-   351	
-   352	static int j721e_pcie_probe(struct platform_device *pdev)
-   353	{
-   354		struct device *dev = &pdev->dev;
-   355		struct device_node *node = dev->of_node;
-   356		struct pci_host_bridge *bridge;
-   357		struct j721e_pcie_data *data;
-   358		struct cdns_pcie *cdns_pcie;
-   359		struct j721e_pcie *pcie;
-   360		struct cdns_pcie_rc *rc;
-   361		struct cdns_pcie_ep *ep;
-   362		struct gpio_desc *gpiod;
-   363		void __iomem *base;
-   364		struct clk *clk;
-   365		u32 num_lanes;
-   366		u32 mode;
-   367		int ret;
-   368		int irq;
-   369	
- > 370		data = of_device_get_match_data(dev);
-   371		if (!data)
-   372			return -EINVAL;
-   373	
-   374		mode = (u32)data->mode;
-   375	
-   376		pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
-   377		if (!pcie)
-   378			return -ENOMEM;
-   379	
-   380		pcie->dev = dev;
-   381		pcie->mode = mode;
-   382		pcie->linkdown_irq_regfield = data->linkdown_irq_regfield;
-   383	
-   384		base = devm_platform_ioremap_resource_byname(pdev, "intd_cfg");
-   385		if (IS_ERR(base))
-   386			return PTR_ERR(base);
-   387		pcie->intd_cfg_base = base;
-   388	
-   389		base = devm_platform_ioremap_resource_byname(pdev, "user_cfg");
-   390		if (IS_ERR(base))
-   391			return PTR_ERR(base);
-   392		pcie->user_cfg_base = base;
-   393	
-   394		ret = of_property_read_u32(node, "num-lanes", &num_lanes);
-   395		if (ret || num_lanes > MAX_LANES)
-   396			num_lanes = 1;
-   397		pcie->num_lanes = num_lanes;
-   398	
-   399		if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(48)))
-   400			return -EINVAL;
-   401	
-   402		irq = platform_get_irq_byname(pdev, "link_state");
-   403		if (irq < 0)
-   404			return irq;
-   405	
-   406		dev_set_drvdata(dev, pcie);
-   407		pm_runtime_enable(dev);
-   408		ret = pm_runtime_get_sync(dev);
-   409		if (ret < 0) {
-   410			dev_err(dev, "pm_runtime_get_sync failed\n");
-   411			goto err_get_sync;
-   412		}
-   413	
-   414		ret = j721e_pcie_ctrl_init(pcie);
-   415		if (ret < 0) {
-   416			dev_err(dev, "pm_runtime_get_sync failed\n");
-   417			goto err_get_sync;
-   418		}
-   419	
-   420		ret = devm_request_irq(dev, irq, j721e_pcie_link_irq_handler, 0,
-   421				       "j721e-pcie-link-down-irq", pcie);
-   422		if (ret < 0) {
-   423			dev_err(dev, "failed to request link state IRQ %d\n", irq);
-   424			goto err_get_sync;
-   425		}
-   426	
-   427		j721e_pcie_config_link_irq(pcie);
-   428	
-   429		switch (mode) {
-   430		case PCI_MODE_RC:
-   431			if (!IS_ENABLED(CONFIG_PCIE_CADENCE_HOST)) {
-   432				ret = -ENODEV;
-   433				goto err_get_sync;
-   434			}
-   435	
-   436			bridge = devm_pci_alloc_host_bridge(dev, sizeof(*rc));
-   437			if (!bridge) {
-   438				ret = -ENOMEM;
-   439				goto err_get_sync;
-   440			}
-   441	
-   442			if (!data->byte_access_allowed)
-   443				bridge->ops = &cdns_ti_pcie_host_ops;
-   444			rc = pci_host_bridge_priv(bridge);
-   445			rc->quirk_retrain_flag = data->quirk_retrain_flag;
-   446			rc->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
-   447	
-   448			cdns_pcie = &rc->pcie;
-   449			cdns_pcie->dev = dev;
-   450			cdns_pcie->ops = &j721e_pcie_ops;
-   451			pcie->cdns_pcie = cdns_pcie;
-   452	
-   453			gpiod = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-   454			if (IS_ERR(gpiod)) {
-   455				ret = PTR_ERR(gpiod);
-   456				if (ret != -EPROBE_DEFER)
-   457					dev_err(dev, "Failed to get reset GPIO\n");
-   458				goto err_get_sync;
-   459			}
-   460	
-   461			ret = cdns_pcie_init_phy(dev, cdns_pcie);
-   462			if (ret) {
-   463				dev_err(dev, "Failed to init phy\n");
-   464				goto err_get_sync;
-   465			}
-   466	
-   467			clk = devm_clk_get_optional(dev, "pcie_refclk");
-   468			if (IS_ERR(clk)) {
-   469				ret = PTR_ERR(clk);
-   470				dev_err(dev, "failed to get pcie_refclk\n");
-   471				goto err_pcie_setup;
-   472			}
-   473	
-   474			ret = clk_prepare_enable(clk);
-   475			if (ret) {
-   476				dev_err(dev, "failed to enable pcie_refclk\n");
-   477				goto err_pcie_setup;
-   478			}
-   479			pcie->refclk = clk;
-   480	
-   481			/*
-   482			 * "Power Sequencing and Reset Signal Timings" table in
-   483			 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
-   484			 * indicates PERST# should be deasserted after minimum of 100us
-   485			 * once REFCLK is stable. The REFCLK to the connector in RC
-   486			 * mode is selected while enabling the PHY. So deassert PERST#
-   487			 * after 100 us.
-   488			 */
-   489			if (gpiod) {
-   490				usleep_range(100, 200);
-   491				gpiod_set_value_cansleep(gpiod, 1);
-   492			}
-   493	
-   494			ret = cdns_pcie_host_setup(rc);
-   495			if (ret < 0) {
-   496				clk_disable_unprepare(pcie->refclk);
-   497				goto err_pcie_setup;
-   498			}
-   499	
-   500			break;
-   501		case PCI_MODE_EP:
-   502			if (!IS_ENABLED(CONFIG_PCIE_CADENCE_EP)) {
-   503				ret = -ENODEV;
-   504				goto err_get_sync;
-   505			}
-   506	
-   507			ep = devm_kzalloc(dev, sizeof(*ep), GFP_KERNEL);
-   508			if (!ep) {
-   509				ret = -ENOMEM;
-   510				goto err_get_sync;
-   511			}
-   512			ep->quirk_detect_quiet_flag = data->quirk_detect_quiet_flag;
-   513	
-   514			cdns_pcie = &ep->pcie;
-   515			cdns_pcie->dev = dev;
-   516			cdns_pcie->ops = &j721e_pcie_ops;
-   517			pcie->cdns_pcie = cdns_pcie;
-   518	
-   519			ret = cdns_pcie_init_phy(dev, cdns_pcie);
-   520			if (ret) {
-   521				dev_err(dev, "Failed to init phy\n");
-   522				goto err_get_sync;
-   523			}
-   524	
-   525			ret = cdns_pcie_ep_setup(ep);
-   526			if (ret < 0)
-   527				goto err_pcie_setup;
-   528	
-   529			break;
-   530		default:
-   531			dev_err(dev, "INVALID device type %d\n", mode);
-   532		}
-   533	
-   534		return 0;
-   535	
-   536	err_pcie_setup:
-   537		cdns_pcie_disable_phy(cdns_pcie);
-   538	
-   539	err_get_sync:
-   540		pm_runtime_put(dev);
-   541		pm_runtime_disable(dev);
-   542	
-   543		return ret;
-   544	}
-   545	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Thanks,
+~Nick Desaulniers
