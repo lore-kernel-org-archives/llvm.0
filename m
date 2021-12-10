@@ -1,87 +1,150 @@
-Received: from pb-sasl-trial3.pobox.com (pb-sasl-trial3.pobox.com [64.147.108.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46ED68
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 13:28:17 +0000 (UTC)
-Received: from pb-sasl-trial3.pobox.com (localhost.local [127.0.0.1])
-	by pb-sasl-trial3.pobox.com (Postfix) with ESMTP id A2E342E1EC;
-	Fri, 10 Dec 2021 08:20:49 -0500 (EST)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
-	:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=sasl; bh=E68Man9i8uGbUzpPImAfkcG0qQQ=; b=M3i/hG
-	+azN6LUuLTqwmsHeWkGG7FXoUTNLjKlcghu0jP1JL7tMcr1g3DLKr0EwVhjeBZ/L
-	y8icsjLdxH0UvesHgER6DOoFGERVbG5wJCPvby524NWd/jljcQFS250sFKI/vS4w
-	tPkXHLp5Tqj+0NTd4s++EeeXGODc+op0P7iZ8=
-Received: from pb-smtp1.nyi.icgroup.com (pb-smtp1.pobox.com [10.90.30.53])
-	by pb-sasl-trial3.pobox.com (Postfix) with ESMTP id 7B5532E1E9;
-	Fri, 10 Dec 2021 08:20:49 -0500 (EST)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=t/i4EcgilqHL2J/A6MZhr8Rb0kiWWXpYExUCO+guzKc=; b=wl6ECYHXf3DMmbJe3rjaV3PHwRQeyftEtMeaXX/tLxVUyMNdWluOEpCkL6gCK68AGUCs3Qpr5a/bOUni3SRDm7odrxxtfU+++aqtjURc2s+DqWbqYpQ+/IlgADslc0PIS+iauEYxKrzGgFVDccc1X5aVWjPyjohZIr9jY6hiZmc=
-Received: from yoda.home (unknown [96.21.170.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by pb-smtp1.pobox.com (Postfix) with ESMTPSA id D48B2101024;
-	Fri, 10 Dec 2021 08:20:48 -0500 (EST)
-	(envelope-from nico@fluxnic.net)
-Received: from xanadu.home (xanadu.home [192.168.2.2])
-	by yoda.home (Postfix) with ESMTPSA id 5172A2DA003C;
-	Fri, 10 Dec 2021 08:20:47 -0500 (EST)
-Date: Fri, 10 Dec 2021 08:20:47 -0500 (EST)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-cc: Peter Zijlstra <peterz@infradead.org>, linux-hardening@vger.kernel.org, 
-    x86@kernel.org, Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-    Kristen Carlson Accardi <kristen@linux.intel.com>, 
-    Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>, 
-    Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-    Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
-    kernel test robot <lkp@intel.com>, Miroslav Benes <mbenes@suse.cz>, 
-    Evgenii Shatokhin <eshatokhin@virtuozzo.com>, 
-    Jonathan Corbet <corbet@lwn.net>, Masahiro Yamada <masahiroy@kernel.org>, 
-    Michal Marek <michal.lkml@markovi.net>, "H . J . Lu" <hjl.tools@gmail.com>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Herbert Xu <herbert@gondor.apana.org.au>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
-    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-    Dave Hansen <dave.hansen@linux.intel.com>, 
-    "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-    Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, 
-    Marios Pomonis <pomonis@google.com>, 
-    Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org, 
-    linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
-    live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
- into separate sections
-In-Reply-To: <20211210110102.707759-1-alexandr.lobakin@intel.com>
-Message-ID: <2onsnq80-p1s8-00-roo9-n02q74319ro@syhkavp.arg>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net> <20211210110102.707759-1-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA98868
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 13:57:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BB8C00446;
+	Fri, 10 Dec 2021 13:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639144637;
+	bh=HApJC6EzUOt/EzWznJ0iNnlPdZVkY79vRKaMNXSksv4=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Ja0ctpOj024X5zlXg1EaMkJVexGemRhIjFH9YQHPQpmJ5+vSj0DvsnPOkh2QJB0KH
+	 VjxRx4OQP7PkbN0vzJ67MbK6/Z7mLjYMAlRTkzUmPXfM9ahvlRYRWZ2UTHROmu2Cuy
+	 2kd0toOeCRNGJ2TTKv4OhzlvEGqSjcth5cIosWkyQssqy5PDogdk/rMDYPAoXb5+Kq
+	 ZlgSReAL4oVaMb+zehiIg01eG7R47rEwYugqjWTz3XjCd08LlMnxjqsYSGc4H/IaJp
+	 k6iNIEQDMdmEEt4JTQ6QY+Y4Ctd66ypOGf3gzM6bVI14ogECKMmNnKsknpqrQ3wMIN
+	 +zxx4ZkLDHieg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 563EB5C0FCD; Fri, 10 Dec 2021 05:57:17 -0800 (PST)
+Date: Fri, 10 Dec 2021 05:57:17 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: David Woodhouse <dwmw@amazon.co.uk>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:dev.2021.12.07a 56/57] kernel/rcu/tree.c:4312:45:
+ warning: variable 'flags' is uninitialized when used here
+Message-ID: <20211210135717.GL641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202112101543.wHvqhgYk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID:
- FD891D6C-59BB-11EC-A1FA-E10CCAD8090B-78420484!pb-smtp1.pobox.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112101543.wHvqhgYk-lkp@intel.com>
 
-On Fri, 10 Dec 2021, Alexander Lobakin wrote:
-
-> I could do unconditional
+On Fri, Dec 10, 2021 at 03:30:22PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.12.07a
+> head:   89ddc546d3ad541bc89ec553c92036c98aef57a6
+> commit: 342f2d0f88f3c2d7ab2ae206be5846579319e3bf [56/57] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
+> config: hexagon-randconfig-r041-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101543.wHvqhgYk-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+>         git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+>         git fetch --no-tags paulmck-rcu dev.2021.12.07a
+>         git checkout 342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 > 
-> .pushsection %S.##name
->                 ^^^^^^ function name
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> but this would involve changing LDS scripts (and vmlinux.lds.h) to
-> let's say replace *(.noinstr.text) with *(.noinstr.text*).
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
+>                    rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>                                                              ^~~~~
+>    kernel/rcu/tree.c:4280:21: note: initialize the variable 'flags' to silence this warning
+>            unsigned long flags, seq_flags;
+>                               ^
+>                                = 0
+>    1 warning generated.
 
-Yes, this is meant to be used with a linker script that expects the new 
-name.
+Good catch, but Neeraj and David beat you to this.  The updated commit
+is defd1f8a1f4e ("rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock
+for exclusion").
 
+One thing that might be helpful to you during times of backlock...  In the
+-rcu tree, if you have several branches with the same prefix (for example,
+dev.2021.12.03a, dev.2021.12.07a, and dev.2021.12.09a), you can safely
+ignore all but the last one in lexicographic order.  In this example,
+dev.2021.12.09a obsoletes dev.2021.12.03a and dev.2021.12.07a, so you
+would lose nothing by just ignoring the earlier two branches.
 
-Nicolas
+							Thanx, Paul
+
+> vim +/flags +4312 kernel/rcu/tree.c
+> 
+> 4df8374254ea929 Thomas Gleixner         2016-07-13  4266  
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4267  /*
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4268   * Mark the specified CPU as being online so that subsequent grace periods
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4269   * (both expedited and normal) will wait on it.  Note that this means that
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4270   * incoming CPUs are not allowed to use RCU read-side critical sections
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4271   * until this function is called.  Failing to observe this restriction
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4272   * will result in lockdep splats.
+> deb34f364398083 Paul E. McKenney        2017-03-23  4273   *
+> deb34f364398083 Paul E. McKenney        2017-03-23  4274   * Note that this function is special in that it is invoked directly
+> deb34f364398083 Paul E. McKenney        2017-03-23  4275   * from the incoming CPU rather than from the cpuhp_step mechanism.
+> deb34f364398083 Paul E. McKenney        2017-03-23  4276   * This is because this function must be invoked at a precise location.
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4277   */
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4278  void rcu_cpu_starting(unsigned int cpu)
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4279  {
+> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4280  	unsigned long flags, seq_flags;
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4281  	unsigned long mask;
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4282  	struct rcu_data *rdp;
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4283  	struct rcu_node *rnp;
+> abfce0414814149 Wei Yang                2020-04-19  4284  	bool newcpu;
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4285  
+> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4286  	rdp = per_cpu_ptr(&rcu_data, cpu);
+> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4287  	if (rdp->cpu_started)
+> f64c6013a202931 Peter Zijlstra          2018-05-22  4288  		return;
+> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4289  	rdp->cpu_started = true;
+> f64c6013a202931 Peter Zijlstra          2018-05-22  4290  
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4291  	rnp = rdp->mynode;
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4292  	mask = rdp->grpmask;
+> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4293  	local_irq_save(seq_flags);
+> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4294  	arch_spin_lock(&rcu_state.ofl_lock);
+> 2caebefb00f03b5 Paul E. McKenney        2021-07-28  4295  	rcu_dynticks_eqs_online();
+> 4d60b475f858ebd Paul E. McKenney        2020-10-13  4296  	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4297  	raw_spin_lock_rcu_node(rnp);
+> 105abf82b0a6266 Paul E. McKenney        2020-01-03  4298  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+> abfce0414814149 Wei Yang                2020-04-19  4299  	newcpu = !(rnp->expmaskinitnext & mask);
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4300  	rnp->expmaskinitnext |= mask;
+> 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4301  	/* Allow lockless access for expedited grace periods. */
+> abfce0414814149 Wei Yang                2020-04-19  4302  	smp_store_release(&rcu_state.ncpus, rcu_state.ncpus + newcpu); /* ^^^ */
+> 2f08469563550d1 Paul E. McKenney        2020-02-10  4303  	ASSERT_EXCLUSIVE_WRITER(rcu_state.ncpus);
+> e05121ba5b81e2f Paul E. McKenney        2018-05-07  4304  	rcu_gpnum_ovf(rnp, rdp); /* Offline-induced counter wrap? */
+> eb7a6653887b540 Paul E. McKenney        2018-07-05  4305  	rdp->rcu_onl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+> eb7a6653887b540 Paul E. McKenney        2018-07-05  4306  	rdp->rcu_onl_gp_flags = READ_ONCE(rcu_state.gp_flags);
+> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4307) 
+> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4308) 	/* An incoming CPU should never be blocking a grace period. */
+> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4309) 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
+> 516e5ae0c940162 Joel Fernandes (Google  2019-09-05  4310) 		rcu_disable_urgency_upon_qs(rdp);
+> 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4311  		/* Report QS -after- changing ->qsmaskinitnext! */
+> b50912d0b5e03f1 Paul E. McKenney        2018-07-03 @4312  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+> 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4313  	} else {
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4314  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4315  	}
+> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4316  	arch_spin_unlock(&rcu_state.ofl_lock);
+> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4317  	local_irq_restore(seq_flags);
+> 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4318  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4319  }
+> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4320  
+> 
+> :::::: The code at line 4312 was first introduced by commit
+> :::::: b50912d0b5e03f11004fec1e2b50244de9e2fa41 rcu: Remove rsp parameter from rcu_report_qs_rnp()
+> 
+> :::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> :::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
