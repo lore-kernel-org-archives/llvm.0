@@ -1,131 +1,259 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E654173
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 23:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639178423; x=1670714423;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y1RtvOPO5+DIS8Tgbu5czGCC3D3b2Ks7SPiZaM11Q20=;
-  b=kb0hoATOW8sKmOVTDiPYIapI+QPOCw0XLC14TCuLNerkdqqPedxiszqy
-   YMjTHtQKsC0BqCm+BudVlMjzOUgTTc4QAkXfvj2hsAkzsZUVBdJuOdb0m
-   mAUlCNDwZtZmA9l0bJoxk37+rfaX1wyKaIH3m2cjeoRnjoF4l8wQzyxNr
-   HBncptp6TCkmanO2Pf73gb5LIn3y//WZN6xzKRb8uhIBOz3FtuJ4iMm1Z
-   R/2ud/QRSEbtUstAsyS+zDDNcEWzLpI0g5E77XGrUAockuL5QWhS8F8+e
-   4doIjpqiqlgwNOV2Og5WK/99u7LWPs/8xdPdJX4U94yPvTG/zyJJvYvuX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="235991539"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="235991539"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:20:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="504135333"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2021 15:20:21 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mvpBc-0003nD-Jm; Fri, 10 Dec 2021 23:20:20 +0000
-Date: Sat, 11 Dec 2021 07:19:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liu Yi L <yi.l.liu@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 31/33] ld.lld: error: undefined
- symbol: interval_tree_span_iter_first
-Message-ID: <202112110730.YDz5VfLg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7EA173
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 23:35:05 +0000 (UTC)
+Received: by mail-io1-f43.google.com with SMTP id p65so12180459iof.3
+        for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 15:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6QJ20M3nxOHhc4R0qveSgmz/rniLYt7DfPOg8sRQIf8=;
+        b=rrCfTEHy0Sza6kwofNY9pYQjnJGnUT5EPxAln3g3orsrmTX5xCPVMbt4TaQtyyz6sf
+         ybbCHwy9DKxx00uUHb/+/dDXVCRO8cXXPU4iwV4T1lj8jLTiOPmga3DLE71SdpIqGT0o
+         dL9AA3wwMBaEWQoJCnRfN9Fwav/adMOneKAJODyy93MTqblwPDPw+eJbfNquOa1vxY4V
+         g+kzShsjmMohhEABPCAx5aPp0i6zJ/RFm4jZUTRhX6jdQxlXRMn/XfCqlrQ40KOuxGbE
+         t4xRN6ZRMIXU1Uj7avN4VtbgrTEORxlKsO1V+dq1pImbsF40H3kNaFscgMCmv4ETFFhV
+         A0gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6QJ20M3nxOHhc4R0qveSgmz/rniLYt7DfPOg8sRQIf8=;
+        b=0SlT4FQfx2uKwtm7HENRvCEwzdLC00fPbUhpOLRuJjccDUW5PDqdEtzRUOxUlVtZTN
+         NnEh0MrOmiTmh42urKduzAt7PM9TJKhzuqT4mUOAJGWZtScIVunldBOPJnf98oPilQjE
+         nEM9JEkj+tiH30qowIKjQMMsx8LCQ0VbbRv7U+CprSBB2iO/RlOMN89JwOW0msiM6pz9
+         rqT/9EumQzMl1xNjxtREEkPM6LnifIaa1VJ1fj7Snl3ERpZTOw3pj9rzZCqWa52nmsyR
+         E+1yJiFZMBveOORLDLIJ48ga7JByR2j5s5+JgGuiPOD+BYCVm5HVkkPsKr62YjJda9NQ
+         lwPg==
+X-Gm-Message-State: AOAM532W0GesnLQP8cByqCNBR1cY3RtAyT9VuUixVJShPOAh99rQIEBJ
+	FxI9m6zhbQeagLBsWyLoPRpWzA==
+X-Google-Smtp-Source: ABdhPJwN5+sithcuVL1r0Md3aO3vE7jZYF/cLvv6tzplQZQkyyxTZcFKfO/LBD8WzsRRjeh8klwvrw==
+X-Received: by 2002:a5e:861a:: with SMTP id z26mr23583887ioj.134.1639179304040;
+        Fri, 10 Dec 2021 15:35:04 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id q4sm2900399ilj.7.2021.12.10.15.35.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 15:35:03 -0800 (PST)
+Message-ID: <0ce9cde4-de94-856b-329c-d75929799bb2@linaro.org>
+Date: Fri, 10 Dec 2021 17:35:01 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [greybus-dev] [PATCH v2] staging: greybus: fix stack size warning
+ with UBSAN
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>,
+ Vaibhav Agarwal <vaibhav.sr@gmail.com>, Mark Greer <mgreer@animalcreek.com>,
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, linux-staging@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ greybus-dev@lists.linaro.org
+References: <20211209195141.1165233-1-nathan@kernel.org>
+From: Alex Elder <elder@linaro.org>
+In-Reply-To: <20211209195141.1165233-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
-head:   44f89b130eec28760e6b655facd4be49c5bcc3f9
-commit: 74814fdbefe2fb370111a0ce00641c64376447cb [31/33] vfio/pci: Add bind_iommufd() support
-config: arm64-randconfig-r014-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110730.YDz5VfLg-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/luxis1999/iommufd/commit/74814fdbefe2fb370111a0ce00641c64376447cb
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
-        git checkout 74814fdbefe2fb370111a0ce00641c64376447cb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On 12/9/21 1:51 PM, Nathan Chancellor wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang warns about excessive stack usage in this driver when
+> UBSAN is enabled:
+> 
+> drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
+> 
+> Rework this code to no longer use compound literals for
+> initializing the structure in each case, but instead keep
+> the common bits in a preallocated constant array and copy
+> them as needed.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1535
+> Link: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> [nathan: Address review comments from v1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This looks good to me and it seems the switch statement
+becomes much more concise.
 
-All errors (new ones prefixed by >>):
+One thing I would suggest is that you somehow capture
+in comments the fact that you're manually assigning the
+widget name and in a couple spots the "sname" (I don't know
+what that represents).
 
->> ld.lld: error: undefined symbol: interval_tree_span_iter_first
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced 7 more times
---
->> ld.lld: error: undefined symbol: interval_tree_span_iter_next
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced 7 more times
---
->> ld.lld: error: undefined symbol: interval_tree_iter_first
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_area) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_area) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_area_find_exact) in archive drivers/built-in.a
-   >>> referenced 12 more times
---
->> ld.lld: error: undefined symbol: interval_tree_insert
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_area_finalize) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_reserve_iova) in archive drivers/built-in.a
-   >>> referenced 2 more times
---
->> ld.lld: error: undefined symbol: interval_tree_remove
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(__iopt_unmap_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: interval_tree_iter_next
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_unaccess_pages) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
-   >>> referenced 5 more times
+Someday these SND_SOC_DAPM*() macros could be changed,
+and it would be helpful to have a little guidance around
+this code to explain what was done here.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
+This isn't critical, but would improve maintainability.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+We can see what others think, but either way:
+
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+> ---
+> 
+> v1 -> v2: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+> 
+> * Use NULL for name field in SND_DOC_DAPM_* in gbaudio_widgets (Alex).
+> 
+> * Do not eliminate *dw assignment within the switch cases, as invalid
+>    enum values in-between valid enum values (such as snd_soc_dapm_demux)
+>    would not be handled properly by the "if value is greater than the
+>    array size" check (Alex). This addresses a few other comments by Alex
+>    and Dan because w->type is not checked against the array's size.
+> 
+> Arnd, if you disagree with this approach, please let me know so that we
+> can get this fixed in a way that everyone is happy with.
+> 
+>   drivers/staging/greybus/audio_topology.c | 92 ++++++++++++------------
+>   1 file changed, 45 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
+> index 1e613d42d823..7f7d558b76d0 100644
+> --- a/drivers/staging/greybus/audio_topology.c
+> +++ b/drivers/staging/greybus/audio_topology.c
+> @@ -974,6 +974,44 @@ static int gbaudio_widget_event(struct snd_soc_dapm_widget *w,
+>   	return ret;
+>   }
+>   
+> +static const struct snd_soc_dapm_widget gbaudio_widgets[] = {
+> +	[snd_soc_dapm_spk]	= SND_SOC_DAPM_SPK(NULL, gbcodec_event_spk),
+> +	[snd_soc_dapm_hp]	= SND_SOC_DAPM_HP(NULL, gbcodec_event_hp),
+> +	[snd_soc_dapm_mic]	= SND_SOC_DAPM_MIC(NULL, gbcodec_event_int_mic),
+> +	[snd_soc_dapm_output]	= SND_SOC_DAPM_OUTPUT(NULL),
+> +	[snd_soc_dapm_input]	= SND_SOC_DAPM_INPUT(NULL),
+> +	[snd_soc_dapm_switch]	= SND_SOC_DAPM_SWITCH_E(NULL, SND_SOC_NOPM,
+> +					0, 0, NULL,
+> +					gbaudio_widget_event,
+> +					SND_SOC_DAPM_PRE_PMU |
+> +					SND_SOC_DAPM_POST_PMD),
+> +	[snd_soc_dapm_pga]	= SND_SOC_DAPM_PGA_E(NULL, SND_SOC_NOPM,
+> +					0, 0, NULL, 0,
+> +					gbaudio_widget_event,
+> +					SND_SOC_DAPM_PRE_PMU |
+> +					SND_SOC_DAPM_POST_PMD),
+> +	[snd_soc_dapm_mixer]	= SND_SOC_DAPM_MIXER_E(NULL, SND_SOC_NOPM,
+> +					0, 0, NULL, 0,
+> +					gbaudio_widget_event,
+> +					SND_SOC_DAPM_PRE_PMU |
+> +					SND_SOC_DAPM_POST_PMD),
+> +	[snd_soc_dapm_mux]	= SND_SOC_DAPM_MUX_E(NULL, SND_SOC_NOPM,
+> +					0, 0, NULL,
+> +					gbaudio_widget_event,
+> +					SND_SOC_DAPM_PRE_PMU |
+> +					SND_SOC_DAPM_POST_PMD),
+> +	[snd_soc_dapm_aif_in]	= SND_SOC_DAPM_AIF_IN_E(NULL, NULL, 0,
+> +					SND_SOC_NOPM, 0, 0,
+> +					gbaudio_widget_event,
+> +					SND_SOC_DAPM_PRE_PMU |
+> +					SND_SOC_DAPM_POST_PMD),
+> +	[snd_soc_dapm_aif_out]	= SND_SOC_DAPM_AIF_OUT_E(NULL, NULL, 0,
+> +					SND_SOC_NOPM, 0, 0,
+> +					gbaudio_widget_event,
+> +					SND_SOC_DAPM_PRE_PMU |
+> +					SND_SOC_DAPM_POST_PMD),
+> +};
+> +
+>   static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+>   				      struct snd_soc_dapm_widget *dw,
+>   				      struct gb_audio_widget *w, int *w_size)
+> @@ -1052,77 +1090,37 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+>   
+>   	switch (w->type) {
+>   	case snd_soc_dapm_spk:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_SPK(w->name, gbcodec_event_spk);
+> +		*dw = gbaudio_widgets[w->type];
+>   		module->op_devices |= GBAUDIO_DEVICE_OUT_SPEAKER;
+>   		break;
+>   	case snd_soc_dapm_hp:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_HP(w->name, gbcodec_event_hp);
+> +		*dw = gbaudio_widgets[w->type];
+>   		module->op_devices |= (GBAUDIO_DEVICE_OUT_WIRED_HEADSET
+>   					| GBAUDIO_DEVICE_OUT_WIRED_HEADPHONE);
+>   		module->ip_devices |= GBAUDIO_DEVICE_IN_WIRED_HEADSET;
+>   		break;
+>   	case snd_soc_dapm_mic:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_MIC(w->name, gbcodec_event_int_mic);
+> +		*dw = gbaudio_widgets[w->type];
+>   		module->ip_devices |= GBAUDIO_DEVICE_IN_BUILTIN_MIC;
+>   		break;
+>   	case snd_soc_dapm_output:
+> -		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_OUTPUT(w->name);
+> -		break;
+>   	case snd_soc_dapm_input:
+> -		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_INPUT(w->name);
+> -		break;
+>   	case snd_soc_dapm_switch:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_SWITCH_E(w->name, SND_SOC_NOPM, 0, 0,
+> -					      widget_kctls,
+> -					      gbaudio_widget_event,
+> -					      SND_SOC_DAPM_PRE_PMU |
+> -					      SND_SOC_DAPM_POST_PMD);
+> -		break;
+>   	case snd_soc_dapm_pga:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_PGA_E(w->name, SND_SOC_NOPM, 0, 0, NULL, 0,
+> -					   gbaudio_widget_event,
+> -					   SND_SOC_DAPM_PRE_PMU |
+> -					   SND_SOC_DAPM_POST_PMD);
+> -		break;
+>   	case snd_soc_dapm_mixer:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_MIXER_E(w->name, SND_SOC_NOPM, 0, 0, NULL,
+> -					     0, gbaudio_widget_event,
+> -					     SND_SOC_DAPM_PRE_PMU |
+> -					     SND_SOC_DAPM_POST_PMD);
+> -		break;
+>   	case snd_soc_dapm_mux:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_MUX_E(w->name, SND_SOC_NOPM, 0, 0,
+> -					   widget_kctls, gbaudio_widget_event,
+> -					   SND_SOC_DAPM_PRE_PMU |
+> -					   SND_SOC_DAPM_POST_PMD);
+> +		*dw = gbaudio_widgets[w->type];
+>   		break;
+>   	case snd_soc_dapm_aif_in:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_AIF_IN_E(w->name, w->sname, 0,
+> -					      SND_SOC_NOPM,
+> -					      0, 0, gbaudio_widget_event,
+> -					      SND_SOC_DAPM_PRE_PMU |
+> -					      SND_SOC_DAPM_POST_PMD);
+> -		break;
+>   	case snd_soc_dapm_aif_out:
+> -		*dw = (struct snd_soc_dapm_widget)
+> -			SND_SOC_DAPM_AIF_OUT_E(w->name, w->sname, 0,
+> -					       SND_SOC_NOPM,
+> -					       0, 0, gbaudio_widget_event,
+> -					       SND_SOC_DAPM_PRE_PMU |
+> -					       SND_SOC_DAPM_POST_PMD);
+> +		*dw = gbaudio_widgets[w->type];
+> +		dw->sname = w->sname;
+>   		break;
+>   	default:
+>   		ret = -EINVAL;
+>   		goto error;
+>   	}
+> +	dw->name = w->name;
+>   
+>   	dev_dbg(module->dev, "%s: widget of type %d created\n", dw->name,
+>   		dw->id);
+> 
+> base-commit: 42eb8fdac2fc5d62392dcfcf0253753e821a97b0
+> 
+
