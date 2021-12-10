@@ -1,122 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0242C9E
-	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 21:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E32C00446;
-	Fri, 10 Dec 2021 21:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639172205;
-	bh=quqqk2+XKEPZPkqqZjIbW9jY+fM2e8bd5aQy29m8gjI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=e+8jI0ulgF3nIj2rlV/NtN6BgKJUBy3SytgR+epsAxAYH9wnfBAmJjVokcYnB3w9b
-	 j6Hn71q1XbvozO+5lKyFxsiNz8dQqCazBsSxFNylo9ZDoyJ4qp7KuwlV4h1635Ceiu
-	 /qzV/9sB7AUju38oMYpqujICHwzUc+e/ocufF7ZyOSht4PE5mXoyTUqdGeCxPlTQk0
-	 4LNhQWI3oF9khAl4+E2l/7JftYJJz3X3OOE63J11alFyvlXK1mOMjpb6i5WhMcnTMW
-	 1sgKWkxtaOwdLyL6WbaTsYJlw5gFT8X9WLqZK47GFDYSiboESqNQaw3TY+Yat46c+U
-	 rgM9fFTT0vrrw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Ben Widawsky <ben.widawsky@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-cxl@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] cxl/core: Remove cxld_const_init in cxl_decoder_alloc()
-Date: Fri, 10 Dec 2021 14:36:27 -0700
-Message-Id: <20211210213627.2477370-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A94173
+	for <llvm@lists.linux.dev>; Fri, 10 Dec 2021 22:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639175903; x=1670711903;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rFcz27gpg3qsJSGB0uVAYFYRtvPj3RtwT1v3avMoNRo=;
+  b=HvbUuk+g0RKPmEqRCjB++gccS2OOPvNQUTsdtt43UdJnS9FBFnS9jOn+
+   oAfLSqwn9PKzmD704eB8a165mJnyoLRJVgrsyETfs8k0tXeNFliM2IpnX
+   pWHvrom8C2TV+Wqz0hGsybzJO/7ZLOt4UVgKXrlYRQWq97xbKDO43GXGF
+   B+1zgMCCuwtsebejowH7gpx+dhdr4ELa31Q9N1fhgFd8e/cwwHWXX/tgY
+   uEj74uR/LjJzUXwAkkQ1AO8CKRKu9xAaEB8E0MTXSjjknys42rVRmri/T
+   AtWLC3Ibcac80KBkNlkfxQzd2BRUHfSR8AWaNbry50c8xKDtLEiQbCDRc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="324725741"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="324725741"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 14:38:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="480885890"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 10 Dec 2021 14:38:20 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mvoWx-0003l4-N3; Fri, 10 Dec 2021 22:38:19 +0000
+Date: Sat, 11 Dec 2021 06:38:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.17/g12-dsi 10/23]
+ drivers/gpu/drm/meson/meson_encoder_dsi.c:125:69: warning: variable 'ret' is
+ uninitialized when used here
+Message-ID: <202112110644.NcoPvA8p-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Commit 48667f676189 ("cxl/core: Split decoder setup into alloc + add")
-aimed to fix a large stack frame warning but from v5 to v6, it
-introduced a new instance of the warning due to allocating
-cxld_const_init on the stack, which was done due to the use of const on
-the nr_target member of the cxl_decoder struct. With ARCH=arm
-allmodconfig minus CONFIG_KASAN:
+tree:   https://github.com/superna9999/linux amlogic/v5.17/g12-dsi
+head:   62dac9179f2937dc08bffe08d15c6846bc4aedb4
+commit: d521159dd8a996678230b50e4ecafcdf50648c52 [10/23] fixup! WIP: drm/meson: add DSI encoder
+config: arm-randconfig-r033-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110644.NcoPvA8p-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/superna9999/linux/commit/d521159dd8a996678230b50e4ecafcdf50648c52
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.17/g12-dsi
+        git checkout d521159dd8a996678230b50e4ecafcdf50648c52
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/meson/
 
-GCC 11.2.0:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-drivers/cxl/core/bus.c: In function ‘cxl_decoder_alloc’:
-drivers/cxl/core/bus.c:523:1: error: the frame size of 1032 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-  523 | }
-      | ^
-cc1: all warnings being treated as errors
+All warnings (new ones prefixed by >>):
 
-Clang 12.0.1:
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:125:69: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   dev_err(priv->dev, "Failed to find DSI transceiver bridge: %d\n", ret);
+                                                                                     ^~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:108:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-drivers/cxl/core/bus.c:486:21: error: stack frame size of 1056 bytes in function 'cxl_decoder_alloc' [-Werror,-Wframe-larger-than=]
-struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
-                    ^
-1 error generated.
 
-Revert that part of the change, which makes the stack frame of
-cxl_decoder_alloc() much more reasonable.
+vim +/ret +125 drivers/gpu/drm/meson/meson_encoder_dsi.c
 
-Fixes: 48667f676189 ("cxl/core: Split decoder setup into alloc + add")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1539
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+6b197be782e0410 Neil Armstrong 2021-12-09  103  
+6b197be782e0410 Neil Armstrong 2021-12-09  104  int meson_encoder_dsi_init(struct meson_drm *priv)
+6b197be782e0410 Neil Armstrong 2021-12-09  105  {
+6b197be782e0410 Neil Armstrong 2021-12-09  106  	struct meson_encoder_dsi *meson_encoder_dsi;
+6b197be782e0410 Neil Armstrong 2021-12-09  107  	struct device_node *remote;
+6b197be782e0410 Neil Armstrong 2021-12-09  108  	int ret;
+6b197be782e0410 Neil Armstrong 2021-12-09  109  
+6b197be782e0410 Neil Armstrong 2021-12-09  110  	DRM_DEBUG_DRIVER("\n");
+6b197be782e0410 Neil Armstrong 2021-12-09  111  
+6b197be782e0410 Neil Armstrong 2021-12-09  112  	meson_encoder_dsi = devm_kzalloc(priv->dev, sizeof(*meson_encoder_dsi), GFP_KERNEL);
+6b197be782e0410 Neil Armstrong 2021-12-09  113  	if (!meson_encoder_dsi)
+6b197be782e0410 Neil Armstrong 2021-12-09  114  		return -ENOMEM;
+6b197be782e0410 Neil Armstrong 2021-12-09  115  
+6b197be782e0410 Neil Armstrong 2021-12-09  116  	/* DSI Transceiver Bridge */
+6b197be782e0410 Neil Armstrong 2021-12-09  117  	remote = of_graph_get_remote_node(priv->dev->of_node, 1, 0);
+6b197be782e0410 Neil Armstrong 2021-12-09  118  	if (!remote) {
+6b197be782e0410 Neil Armstrong 2021-12-09  119  		dev_err(priv->dev, "DSI transceiver device is disabled");
+6b197be782e0410 Neil Armstrong 2021-12-09  120  		return 0;
+6b197be782e0410 Neil Armstrong 2021-12-09  121  	}
+6b197be782e0410 Neil Armstrong 2021-12-09  122  
+6b197be782e0410 Neil Armstrong 2021-12-09  123  	meson_encoder_dsi->next_bridge = of_drm_find_bridge(remote);
+6b197be782e0410 Neil Armstrong 2021-12-09  124  	if (!meson_encoder_dsi->next_bridge) {
+6b197be782e0410 Neil Armstrong 2021-12-09 @125  		dev_err(priv->dev, "Failed to find DSI transceiver bridge: %d\n", ret);
+
+:::::: The code at line 125 was first introduced by commit
+:::::: 6b197be782e0410bb911b74fb152daefccce6a29 WIP: drm/meson: add DSI encoder
+
+:::::: TO: Neil Armstrong <narmstrong@baylibre.com>
+:::::: CC: Neil Armstrong <narmstrong@baylibre.com>
+
 ---
- drivers/cxl/core/bus.c | 6 ++----
- drivers/cxl/cxl.h      | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/cxl/core/bus.c b/drivers/cxl/core/bus.c
-index 17a4fff029f8..3f9b98ecd18b 100644
---- a/drivers/cxl/core/bus.c
-+++ b/drivers/cxl/core/bus.c
-@@ -485,9 +485,7 @@ static int decoder_populate_targets(struct cxl_decoder *cxld,
- 
- struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
- {
--	struct cxl_decoder *cxld, cxld_const_init = {
--		.nr_targets = nr_targets,
--	};
-+	struct cxl_decoder *cxld;
- 	struct device *dev;
- 	int rc = 0;
- 
-@@ -497,13 +495,13 @@ struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
- 	cxld = kzalloc(struct_size(cxld, target, nr_targets), GFP_KERNEL);
- 	if (!cxld)
- 		return ERR_PTR(-ENOMEM);
--	memcpy(cxld, &cxld_const_init, sizeof(cxld_const_init));
- 
- 	rc = ida_alloc(&port->decoder_ida, GFP_KERNEL);
- 	if (rc < 0)
- 		goto err;
- 
- 	cxld->id = rc;
-+	cxld->nr_targets = nr_targets;
- 	dev = &cxld->dev;
- 	device_initialize(dev);
- 	device_set_pm_not_required(dev);
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index ab4596f0b751..a5a0be3f088b 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -191,7 +191,7 @@ struct cxl_decoder {
- 	int interleave_granularity;
- 	enum cxl_decoder_type target_type;
- 	unsigned long flags;
--	const int nr_targets;
-+	int nr_targets;
- 	struct cxl_dport *target[];
- };
- 
-
-base-commit: 53989fad1286e652ea3655ae3367ba698da8d2ff
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
