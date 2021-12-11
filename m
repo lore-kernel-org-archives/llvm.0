@@ -1,47 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7C568
-	for <llvm@lists.linux.dev>; Sat, 11 Dec 2021 05:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C9468
+	for <llvm@lists.linux.dev>; Sat, 11 Dec 2021 05:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639200093; x=1670736093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4jeFRTkBneJ9Tg0hGd9/F1vN4Ck2h1BgrDoHalejcwQ=;
-  b=XOH2suBgSy0SarfpCZhQii1yVn0YhbYxbk2T0NZlNufu9cas3iFBVILI
-   Z/LlYKTwrNJfM2k5IQ2wX7Lu4QqhgPASSlpJMCqH5b1PLjMT5o6v8whzf
-   PEhCX5P81h/f5lir9VXVBPdUuhtk/zqCYTc3Tuis7bmIQ6VyFfu42i5i2
-   U+LKV+pB0SYOebDiaGY7zFCE18uSz6nf7Cs5wvMXXY2ygRUVStfnmxylh
-   ZVxxrERiBsTzvs4/HqDtFygdL77i8Vj9MrdldcV3JBuli2HKcI7C03p8x
-   a9s1zw/6zTI9hjz1yK5aUeVR5OqCpo/lb/YC4gC491BavxeUS3kWPjlum
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="219195486"
+  t=1639200934; x=1670736934;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/bZKWyAFHG3HJHAMwXYUZZsrHm4ILvRq4hR+zJiXZu4=;
+  b=V3yVm0MH6CaBVMY541qz1+4k9Xeu1vXf1zJjnW9unjg5QBmFp5bN8nBt
+   zh37Xo+yvXQlFRDFL9NRKCGtGBkT+r+JswQfdZ3CaQgew1MzNJzJzPd3V
+   lqI5KFqEAkAso0RQ5r2g6ZtTSLGaQhSO8bUOoRWXeFGcDVBlNmkZ1KoLi
+   PiQ81+55SHWGZnX1Ema8O9YY5NYItIA+zlIGFL8nbkSVFeqrwtSeTH+4i
+   +KtXZ/mMkQRchtT31RC4FLjTw8RPy2h9h6MsjPZUhZaa1c+wMNwHLE75o
+   P4NItlVmxpGac+ZGq72K9Kn9ovPfRS+WKjHS88D8iyvDzYxRUel5+sd2Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="236024592"
 X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="219195486"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 21:21:32 -0800
+   d="scan'208";a="236024592"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 21:35:34 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="480966268"
+   d="scan'208";a="462790275"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Dec 2021 21:21:30 -0800
+  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2021 21:35:31 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mvup7-000492-Ik; Sat, 11 Dec 2021 05:21:29 +0000
-Date: Sat, 11 Dec 2021 13:21:08 +0800
+	id 1mvv2g-0004Av-Rv; Sat, 11 Dec 2021 05:35:30 +0000
+Date: Sat, 11 Dec 2021 13:34:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wander Lairson Costa <wander@redhat.com>, linux-kernel@vger.kernel.org
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-rt-users@vger.kernel.org,
-	Wander Lairson Costa <wander@redhat.com>
-Subject: Re: [PREEMPT_RT PATCH 1/2] block: Avoid sleeping function called
- from invalid context bug
-Message-ID: <202112111300.2jYSEVK1-lkp@intel.com>
-References: <20211210204156.96336-2-wander@redhat.com>
+	linux-kernel@vger.kernel.org,
+	Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function
+ 'set_test_mode_src_osc_freq_target_low_bits'
+Message-ID: <202112111334.EmMJpBTI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,81 +45,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210204156.96336-2-wander@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Wander,
+Hi Geert,
 
-Thank you for the patch! Yet something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on linux/master linus/master v5.16-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Wander-Lairson-Costa/Fix-warnings-in-blktrace/20211211-044405
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: i386-randconfig-a016-20211210 (https://download.01.org/0day-ci/archive/20211211/202112111300.2jYSEVK1-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6f513529296fd4f696afb4354c46508abe646541
+commit: ade896460e4a62f5e4a892a98d254937f6f5b64c drm: DRM_KMB_DISPLAY should depend on ARCH_KEEMBAY
+date:   1 year, 1 month ago
+config: mips-randconfig-r026-20211211 (https://download.01.org/0day-ci/archive/20211211/202112111334.EmMJpBTI-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/37b10b13961fb1af60139789717a018f788f714e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Wander-Lairson-Costa/Fix-warnings-in-blktrace/20211211-044405
-        git checkout 37b10b13961fb1af60139789717a018f788f714e
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ade896460e4a62f5e4a892a98d254937f6f5b64c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ade896460e4a62f5e4a892a98d254937f6f5b64c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/kmb/ fs/ mm/ sound/soc/samsung/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> block/blk-cgroup.c:1915:8: error: implicit declaration of function 'get_cpu_light' [-Werror,-Wimplicit-function-declaration]
-           cpu = get_cpu_light();
-                 ^
->> block/blk-cgroup.c:1932:2: error: implicit declaration of function 'put_cpu_light' [-Werror,-Wimplicit-function-declaration]
-           put_cpu_light();
-           ^
-   block/blk-cgroup.c:1932:2: note: did you mean 'get_cpu_light'?
-   block/blk-cgroup.c:1915:8: note: 'get_cpu_light' declared here
-           cpu = get_cpu_light();
-                 ^
-   2 errors generated.
+>> drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
+   set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi
+   ^
+>> drivers/gpu/drm/kmb/kmb_dsi.c:824:2: warning: unused function 'set_test_mode_src_osc_freq_target_hi_bits'
+   set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-097a1cb1d5/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch drivers fs include kernel mm nr_bisected scripts sound source usr
 
 
-vim +/get_cpu_light +1915 block/blk-cgroup.c
+vim +/set_test_mode_src_osc_freq_target_low_bits +812 drivers/gpu/drm/kmb/kmb_dsi.c
 
-  1908	
-  1909	void blk_cgroup_bio_start(struct bio *bio)
-  1910	{
-  1911		int rwd = blk_cgroup_io_type(bio), cpu;
-  1912		struct blkg_iostat_set *bis;
-  1913		unsigned long flags;
-  1914	
-> 1915		cpu = get_cpu_light();
-  1916		bis = per_cpu_ptr(bio->bi_blkg->iostat_cpu, cpu);
-  1917		flags = u64_stats_update_begin_irqsave(&bis->sync);
-  1918	
-  1919		/*
-  1920		 * If the bio is flagged with BIO_CGROUP_ACCT it means this is a split
-  1921		 * bio and we would have already accounted for the size of the bio.
-  1922		 */
-  1923		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
-  1924			bio_set_flag(bio, BIO_CGROUP_ACCT);
-  1925			bis->cur.bytes[rwd] += bio->bi_iter.bi_size;
-  1926		}
-  1927		bis->cur.ios[rwd]++;
-  1928	
-  1929		u64_stats_update_end_irqrestore(&bis->sync, flags);
-  1930		if (cgroup_subsys_on_dfl(io_cgrp_subsys))
-  1931			cgroup_rstat_updated(bio->bi_blkg->blkcg->css.cgroup, cpu);
-> 1932		put_cpu_light();
-  1933	}
-  1934	
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  810  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  811  static inline void
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @812  	set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_dsi,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  813  						   u32 dphy_no,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  814  						   u32 freq)
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  815  {
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  816  	/* Typical rise/fall time=166, refer Table 1207 databook,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  817  	 * sr_osc_freq_target[7:0]
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  818  	 */
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  819  	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  820  		       (freq & 0x7f));
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  821  }
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  822  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  823  static inline void
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @824  	set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  825  						  u32 dphy_no,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  826  						  u32 freq)
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  827  {
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  828  	u32 data;
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  829  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  830  	/* Flag this as high nibble */
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  831  	data = ((freq >> 6) & 0x1f) | (1 << 7);
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  832  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  833  	/* Typical rise/fall time=166, refer Table 1207 databook,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  834  	 * sr_osc_freq_target[11:7]
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  835  	 */
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  836  	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, data);
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  837  }
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  838  
+
+:::::: The code at line 812 was first introduced by commit
+:::::: 98521f4d4b4cb265374a4b1e13b41287a1960243 drm/kmb: Mipi DSI part of the display driver
+
+:::::: TO: Anitha Chrisanthus <anitha.chrisanthus@intel.com>
+:::::: CC: Sam Ravnborg <sam@ravnborg.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
