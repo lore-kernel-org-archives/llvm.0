@@ -1,83 +1,104 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7352C99
-	for <llvm@lists.linux.dev>; Sat, 11 Dec 2021 17:01:11 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-61-1s9Z_dAWPDe0SOxPMZbbFA-1; Sat, 11 Dec 2021 17:01:08 +0000
-X-MC-Unique: 1s9Z_dAWPDe0SOxPMZbbFA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Sat, 11 Dec 2021 17:01:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Sat, 11 Dec 2021 17:01:07 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Jann Horn' <jannh@google.com>, Marco Elver <elver@google.com>, "Peter
- Zijlstra" <peterz@infradead.org>, Alexander Potapenko <glider@google.com>
-CC: Kees Cook <keescook@chromium.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Elena Reshetova <elena.reshetova@intel.com>, "Mark
- Rutland" <mark.rutland@arm.com>, Peter Collingbourne <pcc@google.com>,
-	"kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>
-Subject: RE: randomize_kstack: To init or not to init?
-Thread-Topic: randomize_kstack: To init or not to init?
-Thread-Index: AQHX7UIUmxdq4YrWzkyiG3jb/JAMzqwthFQA
-Date: Sat, 11 Dec 2021 17:01:07 +0000
-Message-ID: <d35ca52c81e7408ba94210c6dbc30368@AcuMS.aculab.com>
-References: <YbHTKUjEejZCLyhX@elver.google.com>
- <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
-In-Reply-To: <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6B429CA
+	for <llvm@lists.linux.dev>; Sat, 11 Dec 2021 17:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639244330; x=1670780330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ykuwn+tdex3+F1J38kt/JVcFBoUWKsuFDil94PvRK+U=;
+  b=RRQ159IvTgH78s8uzFHHz3bquxg4yKdr7fglLp2UBsZUOB7O2wDlLT1f
+   BvgWVp+JmhiGAdf4FNymHkltvU/oF5mejweFPnUaUmQa3UPQ3TLa28VF+
+   q+n+3EH13byhWjxkzvmKyS9uiJ1SHgCT3vTC+wHiMEh3QXPCMHCIO9Co4
+   ygDjJge6r2wEg+GxnQPCwZ89rNqacAlmfqwuvVPJiTnLNE273TTo4xXSh
+   ehVsvwLTz9xKR3mfGhALV0xXu+GEu00/oXau3bS8z16ur8PMvb1nIkeP/
+   VKifqezxMRznw8w45vVUQzx/rEzdx0qOtRHTmdgw5IQ2uss4vgGA4BMt0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="237281574"
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="237281574"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 09:38:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="660212335"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Dec 2021 09:38:47 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mw6Kd-0004sa-BJ; Sat, 11 Dec 2021 17:38:47 +0000
+Date: Sun, 12 Dec 2021 01:38:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [drm-intel:topic/core-for-CI 16/25]
+ arch/powerpc/platforms/embedded6xx/Kconfig:2:error: recursive dependency
+ detected!
+Message-ID: <202112120048.dsQgEDob-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-RnJvbTogSmFubiBIb3JuDQo+IFNlbnQ6IDA5IERlY2VtYmVyIDIwMjEgMjE6MTYNCi4uLg0KPiBU
-aGlzIGRvZXNuJ3QganVzdCBhZmZlY3QgYWxsb2NhKCksIHJpZ2h0PyBBY2NvcmRpbmcgdG8gZ29k
-Ym9sdC5vcmcNCj4gKGh0dHBzOi8vZ29kYm9sdC5vcmcvei9qWXJXRXg3bzgpOg0KPiANCj4gdm9p
-ZCBiYXIoY2hhciAqcCk7DQo+IHZvaWQgZm9vKCkgew0KPiAgIGNoYXIgYXJyWzUxMl07DQo+ICAg
-YmFyKGFycik7DQo+IH0NCj4gDQo+IHdoZW4gY29tcGlsZWQgd2l0aCAiLWZ0cml2aWFsLWF1dG8t
-dmFyLWluaXQ9cGF0dGVybiAtTzIgLW1uby1zc2UiDQo+IGdpdmVzIHRoaXMgcmVzdWx0Og0KPiAN
-Cj4gZm9vOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMgQGZvbw0KPiAgICAg
-ICAgIHB1c2ggICAgcmJ4DQo+ICAgICAgICAgc3ViICAgICByc3AsIDUxMg0KPiAgICAgICAgIG1v
-diAgICAgcmJ4LCByc3ANCj4gICAgICAgICBtb3YgICAgIGVkeCwgNTEyDQo+ICAgICAgICAgbW92
-ICAgICByZGksIHJieA0KPiAgICAgICAgIG1vdiAgICAgZXNpLCAxNzANCj4gICAgICAgICBjYWxs
-ICAgIG1lbXNldEBQTFQNCj4gICAgICAgICBtb3YgICAgIHJkaSwgcmJ4DQo+ICAgICAgICAgY2Fs
-bCAgICBiYXINCj4gICAgICAgICBhZGQgICAgIHJzcCwgNTEyDQo+ICAgICAgICAgcG9wICAgICBy
-YngNCj4gICAgICAgICByZXQNCg0KSmVlcGVycyAtIEkgZG9uJ3QgZXZlciB3YW50IHRoYXQgdG8g
-aGFwcGVuIG5vdCBldmVyLi4uDQoNClRoZXJlIGlzIHBsZW50eSBvZiB1c2Vyc3BhY2UgY29kZSB0
-aGF0IGFsbG9jYXRlcyBsYXJnZSBhcnJheXMgb24gc3RhY2sNCihJIGJldCBzb21lIGdldCBpbnRv
-IE1CIHNpemVzKSB0aGF0IGFyZSBjb3JyZWN0bHkgYm91bmQtY2hlY2tlZCBidXQNCnRoZSBleHBl
-bnNlIG9mIGluaXRpYWxpc2luZyB0aGVtIHdpbGwgYmUgaG9ycmlkLg0KDQpTbyB5b3UgZW5kIHVw
-IHdpdGggaG9ycmlkLCBjb21wbGV4LCBtb3JlIGxpa2VseSB0byBiZSBidWdneSwgY29kZQ0KdGhh
-dCB0cmllcyB0byBhbGxvY2F0ZSB0aGluZ3MgdGhhdCBhcmUgJ2p1c3QgYmlnIGVub3VnaCcgcmF0
-aGVyDQp0aGFuIGp1c3QgYSBzYW5pdHkgY2hlY2sgb24gYSBsYXJnZSBidWZmZXIuDQoNClR5cGlj
-YWwgZXhhbXBsZXMgYXJlIGNoYXIgcGF0aFtNQVhQQVRIXS4NCllvdSBrbm93IHRoZSBwYXRoIHdp
-bGwgYWxtb3N0IGNlcnRhaW5seSBiZSA8IDEwMCBieXRlcy4NCk1BWFBBVEggaXMgb3ZlcmtpbGwg
-LSBidXQgY2FuIGJlIHRlc3RlZCBmb3IuDQpCdXQgeW91IGRvbid0IHdhbnQgcGF0aFtdIGluaXRp
-YWxpc2VkLg0KU28geW91IGNhbmUgdG8gcGljayBhIHNob3J0ZXIgbGVuZ3RoIC0gYW5kIHRoZW4g
-aXQgYWxsIGdvZXMgJ1RJVFNVUCcNCndoZW4gdGhlIGFjdHVhbCBwYXRoIGlzIGEgYml0IGxvbmdl
-ciB0aGFuIHlvdSBhbGxvd2VkIGZvci4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
-cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
-MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+tree:   git://anongit.freedesktop.org/drm-intel topic/core-for-CI
+head:   4c82fd0506b4cc196a375d1200361fb0c5439acd
+commit: b3acf17eafd473e6e8f8f7c5ec7040efaaff22b8 [16/25] Revert "drm/i915: Don't select BROKEN"
+config: powerpc64-randconfig-r015-20211210
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        git remote add drm-intel git://anongit.freedesktop.org/drm-intel
+        git fetch --no-tags drm-intel topic/core-for-CI
+        git checkout b3acf17eafd473e6e8f8f7c5ec7040efaaff22b8
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=powerpc  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=powerpc 
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/powerpc/platforms/embedded6xx/Kconfig:2:error: recursive dependency detected!
+   arch/powerpc/platforms/embedded6xx/Kconfig:2: symbol EMBEDDED6xx depends on BROKEN_ON_SMP
+   init/Kconfig:113: symbol BROKEN_ON_SMP depends on BROKEN
+   init/Kconfig:110: symbol BROKEN is selected by DRM_I915_DEBUG
+   drivers/gpu/drm/i915/Kconfig.debug:19: symbol DRM_I915_DEBUG depends on DRM_I915
+   drivers/gpu/drm/i915/Kconfig:2: symbol DRM_I915 depends on DRM
+   drivers/gpu/drm/Kconfig:8: symbol DRM depends on AGP
+   drivers/char/agp/Kconfig:2: symbol AGP depends on PCI
+   drivers/pci/Kconfig:16: symbol PCI depends on HAVE_PCI
+   drivers/pci/Kconfig:7: symbol HAVE_PCI is selected by FORCE_PCI
+   drivers/pci/Kconfig:11: symbol FORCE_PCI is selected by MVME5100
+   arch/powerpc/platforms/embedded6xx/Kconfig:51: symbol MVME5100 depends on EMBEDDED6xx
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
+
+
+vim +2 arch/powerpc/platforms/embedded6xx/Kconfig
+
+a35e370cfd2ddf Arnd Bergmann    2007-08-30 @2  config EMBEDDED6xx
+a35e370cfd2ddf Arnd Bergmann    2007-08-30  3  	bool "Embedded 6xx/7xx/7xxx-based boards"
+be34fff07c3755 Christophe Leroy 2018-11-17  4  	depends on PPC_BOOK3S_32 && BROKEN_ON_SMP
+14cf11af6cf608 Paul Mackerras   2005-09-26  5  
+
+:::::: The code at line 2 was first introduced by commit
+:::::: a35e370cfd2ddfb5d2f0ceae376ffeda273b357c [POWERPC] Move embedded6xx into multiplatform
+
+:::::: TO: Arnd Bergmann <arnd@arndb.de>
+:::::: CC: Paul Mackerras <paulus@samba.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
