@@ -1,70 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A272C9E
-	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 15:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3526C34611;
-	Mon, 13 Dec 2021 15:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639407611;
-	bh=WjcGELbu5JIKbGB4EMlOVci44ait6RcZ0lcliNjSfIA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=psYdtPJZOEQQuzAu/yovjNacJXoUwfT9h2sMTh8oPH0Jf45yQlcUfxbC+3uiYqdS8
-	 ePjf4HZhOZIBN4lIh4/i8m6yo9+ZcGptg15ajxDewsplStTINzNycAgDOhRlSpWXHM
-	 dBz9f3KjkZPs29f/WPyuate7otj9zYpTqXoV3lvwxcp0KSYr0bAUQuf8w748pFitbw
-	 HxIdShlgRuLvo52xBPL1BLObLnwk68393gpvcXPFqVyiNcQptIYdiBPlwaAMigJ3xt
-	 mAixPmPLMddJtMgSZmV5SDlcJp+cojEyvn17IDJ+1saDTnAAPbELCW1cdZGJvPTFLz
-	 SjZNMoTvw2Daw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D30D66098C;
-	Mon, 13 Dec 2021 15:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1FF2C9E
+	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 16:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639412034; x=1670948034;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6+QrT9PT0z1rtduUNr8ZmGIGhH54pt3OP/+NNkLfl0U=;
+  b=l7MMn5WsBw4MN/BaZZf2yeUyGkteXE2rPr5DkKpIypFsoYx62WLoh/nm
+   frfiwdofebn/ymgtpVOhMKZr2Pn1SESPyMJb/qmey6l4KLsVEiGBXCvx9
+   53OdRMPFavHHNW7+ZOwpakBM5TVtB/ydYErpi+QBoXPSWbM10XuGH9+MQ
+   R60Zy765o7kegZi09HNtvc4u9DXvkMeTRYZzZZZYu8gtcHyDF6ZY8vb9S
+   V5fsoU2/wE69S85BiZawRcxOpLNq4Yp46MDWJQB+znCFAcVIH5ou/fAqX
+   mdxyO1YNFGCAjqGk2UQwtF2Jhy7FZSvQuLF/WVzm49xHL7QP4xLNsdxX6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="219448628"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="219448628"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:12:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="613879560"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 08:12:50 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mwnwY-0006ov-0u; Mon, 13 Dec 2021 16:12:50 +0000
+Date: Tue, 14 Dec 2021 00:12:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andi Shyti <andi.shyti@linux.intel.com>,
+	Intel GFX <intel-gfx@lists.freedesktop.org>,
+	DRI Devel <dri-devel@lists.freedesktop.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Andi Shyti <andi@etezian.org>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: [PATCH RESEND v7 12/12] drm/i915: Move the GGTT from i915
+ private data to the GT
+Message-ID: <202112132358.IwEcWeWW-lkp@intel.com>
+References: <20211212152117.118428-13-andi.shyti@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] mt76: remove variable set but not used
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <163940761085.26947.2175837807635652318.git-patchwork-notify@kernel.org>
-Date: Mon, 13 Dec 2021 15:00:10 +0000
-References: <20211213095413.99456-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20211213095413.99456-1-yang.lee@linux.alibaba.com>
-To: Yang Li <yang.lee@linux.alibaba.com>
-Cc: nbd@nbd.name, lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
- shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
- davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
- nathan@kernel.org, ndesaulniers@google.com, linux-wireless@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, abaci@linux.alibaba.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211212152117.118428-13-andi.shyti@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hello:
+Hi Andi,
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+I love your patch! Yet something to improve:
 
-On Mon, 13 Dec 2021 17:54:13 +0800 you wrote:
-> The code that uses variable queued has been removed,
-> and "mt76_is_usb(dev) ? q->ndesc - q->queued : q->queued"
-> didn't do anything, so all they should be removed as well.
-> 
-> Eliminate the following clang warnings:
-> drivers/net/wireless/mediatek/mt76/debugfs.c:77:9: warning: variable
-> ‘queued’ set but not used.
-> 
-> [...]
+[auto build test ERROR on drm-tip/drm-tip]
+[also build test ERROR on drm/drm-next]
+[cannot apply to drm-intel/for-linux-next drm-exynos/exynos-drm-next v5.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Here is the summary with links:
-  - [-next] mt76: remove variable set but not used
-    https://git.kernel.org/netdev/net-next/c/93d576f54e0f
+url:    https://github.com/0day-ci/linux/commits/Andi-Shyti/More-preparation-for-multi-gt-patches/20211212-232416
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: x86_64-randconfig-a003-20211213 (https://download.01.org/0day-ci/archive/20211213/202112132358.IwEcWeWW-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/98ef49d710790dda7a193c10b5b7f28516f730bc
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andi-Shyti/More-preparation-for-multi-gt-patches/20211212-232416
+        git checkout 98ef49d710790dda7a193c10b5b7f28516f730bc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gvt/gtt.c:321:25: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
+                   e->val64 = read_pte64(vgpu->gvt->gt->ggtt, index);
+                                         ^~~~~~~~~~~~~~~~~~~
+                                         &
+   drivers/gpu/drm/i915/gvt/gtt.c:282:41: note: passing argument to parameter 'ggtt' here
+   static u64 read_pte64(struct i915_ggtt *ggtt, unsigned long index)
+                                           ^
+   drivers/gpu/drm/i915/gvt/gtt.c:346:15: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
+                   write_pte64(vgpu->gvt->gt->ggtt, index, e->val64);
+                               ^~~~~~~~~~~~~~~~~~~
+                               &
+   drivers/gpu/drm/i915/gvt/gtt.c:296:43: note: passing argument to parameter 'ggtt' here
+   static void write_pte64(struct i915_ggtt *ggtt, unsigned long index, u64 pte)
+                                             ^
+   drivers/gpu/drm/i915/gvt/gtt.c:2900:17: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
+                                   write_pte64(vgpu->gvt->gt->ggtt, offset + idx, pte);
+                                               ^~~~~~~~~~~~~~~~~~~
+                                               &
+   drivers/gpu/drm/i915/gvt/gtt.c:296:43: note: passing argument to parameter 'ggtt' here
+   static void write_pte64(struct i915_ggtt *ggtt, unsigned long index, u64 pte)
+                                             ^
+   drivers/gpu/drm/i915/gvt/gtt.c:2908:17: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
+                                   write_pte64(vgpu->gvt->gt->ggtt, offset + idx, pte);
+                                               ^~~~~~~~~~~~~~~~~~~
+                                               &
+   drivers/gpu/drm/i915/gvt/gtt.c:296:43: note: passing argument to parameter 'ggtt' here
+   static void write_pte64(struct i915_ggtt *ggtt, unsigned long index, u64 pte)
+                                             ^
+   4 errors generated.
 
 
+vim +321 drivers/gpu/drm/i915/gvt/gtt.c
+
+2707e44466881d Zhi Wang     2016-03-28  302  
+4b2dbbc22541e4 Changbin Du  2017-08-02  303  static inline int gtt_get_entry64(void *pt,
+2707e44466881d Zhi Wang     2016-03-28  304  		struct intel_gvt_gtt_entry *e,
+2707e44466881d Zhi Wang     2016-03-28  305  		unsigned long index, bool hypervisor_access, unsigned long gpa,
+2707e44466881d Zhi Wang     2016-03-28  306  		struct intel_vgpu *vgpu)
+2707e44466881d Zhi Wang     2016-03-28  307  {
+2707e44466881d Zhi Wang     2016-03-28  308  	const struct intel_gvt_device_info *info = &vgpu->gvt->device_info;
+2707e44466881d Zhi Wang     2016-03-28  309  	int ret;
+2707e44466881d Zhi Wang     2016-03-28  310  
+2707e44466881d Zhi Wang     2016-03-28  311  	if (WARN_ON(info->gtt_entry_size != 8))
+4b2dbbc22541e4 Changbin Du  2017-08-02  312  		return -EINVAL;
+2707e44466881d Zhi Wang     2016-03-28  313  
+2707e44466881d Zhi Wang     2016-03-28  314  	if (hypervisor_access) {
+2707e44466881d Zhi Wang     2016-03-28  315  		ret = intel_gvt_hypervisor_read_gpa(vgpu, gpa +
+2707e44466881d Zhi Wang     2016-03-28  316  				(index << info->gtt_entry_size_shift),
+2707e44466881d Zhi Wang     2016-03-28  317  				&e->val64, 8);
+4b2dbbc22541e4 Changbin Du  2017-08-02  318  		if (WARN_ON(ret))
+4b2dbbc22541e4 Changbin Du  2017-08-02  319  			return ret;
+2707e44466881d Zhi Wang     2016-03-28  320  	} else if (!pt) {
+a61ac1e75105a0 Chris Wilson 2020-03-06 @321  		e->val64 = read_pte64(vgpu->gvt->gt->ggtt, index);
+2707e44466881d Zhi Wang     2016-03-28  322  	} else {
+2707e44466881d Zhi Wang     2016-03-28  323  		e->val64 = *((u64 *)pt + index);
+2707e44466881d Zhi Wang     2016-03-28  324  	}
+4b2dbbc22541e4 Changbin Du  2017-08-02  325  	return 0;
+2707e44466881d Zhi Wang     2016-03-28  326  }
+2707e44466881d Zhi Wang     2016-03-28  327  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
