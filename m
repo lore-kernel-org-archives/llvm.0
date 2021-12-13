@@ -1,42 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CBE68
-	for <llvm@lists.linux.dev>; Sun, 12 Dec 2021 19:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A425468
+	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 02:03:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639335929; x=1670871929;
+  t=1639361019; x=1670897019;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TTMbivIx6+EEqvo4fLhm7KnkaJz+VcWj2lijC/6p20w=;
-  b=H5CiudL20H7t1FTNVK1ToMDD20uWhrZNIy73HZT6jCA/O1J1mucJfkmM
-   eUsmpMm6lDPMnyTUBMQj/gyX3rlaABLg4agvh+EoSVI6M/5mNUhZ9TAih
-   1FrScMG27l2waPgTJnrsSMg+k88EdOa5Oq/Sd2RPVBThfPinfKYMRX0ai
-   tvUNSJwgx8Suf7WBUGT6TtptYuZKtLCJqmwl0++1GHMgIw8NouABOnROi
-   bB7KvmjlbIxi2MF0E5jb12uUPfDlCZlwK3hbWp1NpPi52zvN9Zr6ETm9E
-   CFDnDffZFpBHEza9ZlWoZHOOlfdjj6gwBsi8EFUnYe+5omU7wVEVHcX+2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="238845504"
-X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
-   d="scan'208";a="238845504"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 11:05:28 -0800
+  bh=TVoA1VIScZ/2Idf6o7SLH4w3ccsFnd5hkPg8FCUkcKU=;
+  b=OkLVm9m496iGbXfeNacFzVaebyRMALIBGqg6v/I5GThu/JM8IMv3BsuU
+   Tx5PUldISl0UzQd9S6dkLP8Ia1oJ486qhpNhsDOgx/TrszwyYkoZLgpwH
+   oQNOm1xj8LULjm4fLbSEbZiuC2GrxmV270XMeR6/CoCZzmi3EZjk0DYmY
+   i3z6B46ws+GQC6FuPeL22z5DHJJtyVPil2ADhtMd69J9ZtNPdvDcxTDdj
+   eTs4A6VmWV1lZkg1L88svW7p8ibFAqUNlKt/5j9i7MC/GxOtaaIwNeKn7
+   8AQ+wk6QGC7I0A3V/OtM3wylQ31PjSBz07LZdj3bGO2Ws+TKS4ChAqg6u
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="262771422"
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="262771422"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 18:03:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
-   d="scan'208";a="754016121"
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="463220430"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2021 11:05:27 -0800
+  by orsmga003.jf.intel.com with ESMTP; 12 Dec 2021 18:03:34 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mwUA2-0005ug-Hc; Sun, 12 Dec 2021 19:05:26 +0000
-Date: Mon, 13 Dec 2021 03:05:10 +0800
+	id 1mwagf-00069z-JU; Mon, 13 Dec 2021 02:03:33 +0000
+Date: Mon, 13 Dec 2021 10:03:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haiyue Wang <haiyue.wang@intel.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: drivers/net/ethernet/intel/iavf/iavf_fdir.c:340:5: warning: format
- specifies type 'unsigned short' but the argument has type 'int'
-Message-ID: <202112130255.AGgZbDIE-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [jpirko-mlxsw:combined_queue 1009/1044]
+ drivers/net/ethernet/mscc/ocelot_fdma.c:737:38: error: no member named
+ 'dma_addr' in 'struct ocelot_fdma_tx_buf'
+Message-ID: <202112130911.uKvnwPy0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,124 +49,60 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Haiyue,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a763d5a5abd65797aec3dd1bf01fe2ccbec32967
-commit: 527691bf0682d7ddcca77fc17dabd2fa090572ff iavf: Support IPv4 Flow Director filters
-date:   9 months ago
-config: riscv-randconfig-r014-20211212 (https://download.01.org/0day-ci/archive/20211213/202112130255.AGgZbDIE-lkp@intel.com/config)
+tree:   https://github.com/jpirko/linux_mlxsw combined_queue
+head:   69ba5a4da9c5d6bbf903d21503643ca69492e34c
+commit: 753a026cfec1429c9e32e004ae4d4c2727cc0111 [1009/1044] net: ocelot: add FDMA support
+config: i386-randconfig-r013-20211212 (https://download.01.org/0day-ci/archive/20211213/202112130911.uKvnwPy0-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=527691bf0682d7ddcca77fc17dabd2fa090572ff
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 527691bf0682d7ddcca77fc17dabd2fa090572ff
+        # https://github.com/jpirko/linux_mlxsw/commit/753a026cfec1429c9e32e004ae4d4c2727cc0111
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw combined_queue
+        git checkout 753a026cfec1429c9e32e004ae4d4c2727cc0111
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/intel/iavf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/display/dc/dce/ drivers/gpu/drm/amd/display/dc/dcn201/ drivers/gpu/drm/amd/display/dc/dcn21/ drivers/gpu/drm/amd/display/dc/dcn30/ drivers/net/ethernet/mscc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/iavf/iavf_fdir.c:340:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                            ntohs(fltr->ip_data.dst_port),
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:118:33: note: expanded from macro 'dev_info'
-           _dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                    ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                       ^~~~~~~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/iavf/iavf_fdir.c:341:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                            ntohs(fltr->ip_data.src_port));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:118:33: note: expanded from macro 'dev_info'
-           _dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                    ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                       ^~~~~~~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+>> drivers/net/ethernet/mscc/ocelot_fdma.c:737:38: error: no member named 'dma_addr' in 'struct ocelot_fdma_tx_buf'
+                   dma_unmap_single(ocelot->dev, txb->dma_addr, skb->len,
+                                                 ~~~  ^
+   include/linux/dma-mapping.h:407:64: note: expanded from macro 'dma_unmap_single'
+   #define dma_unmap_single(d, a, s, r) dma_unmap_single_attrs(d, a, s, r, 0)
+                                                                  ^
+   1 error generated.
 
 
-vim +340 drivers/net/ethernet/intel/iavf/iavf_fdir.c
+vim +737 drivers/net/ethernet/mscc/ocelot_fdma.c
 
-   316	
-   317	/**
-   318	 * iavf_print_fdir_fltr
-   319	 * @adapter: adapter structure
-   320	 * @fltr: Flow Director filter to print
-   321	 *
-   322	 * Print the Flow Director filter
-   323	 **/
-   324	void iavf_print_fdir_fltr(struct iavf_adapter *adapter, struct iavf_fdir_fltr *fltr)
-   325	{
-   326		const char *proto = iavf_fdir_flow_proto_name(fltr->flow_type);
-   327	
-   328		if (!proto)
-   329			return;
-   330	
-   331		switch (fltr->flow_type) {
-   332		case IAVF_FDIR_FLOW_IPV4_TCP:
-   333		case IAVF_FDIR_FLOW_IPV4_UDP:
-   334		case IAVF_FDIR_FLOW_IPV4_SCTP:
-   335			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 %s: dst_port %hu src_port %hu\n",
-   336				 fltr->loc,
-   337				 &fltr->ip_data.v4_addrs.dst_ip,
-   338				 &fltr->ip_data.v4_addrs.src_ip,
-   339				 proto,
- > 340				 ntohs(fltr->ip_data.dst_port),
-   341				 ntohs(fltr->ip_data.src_port));
-   342			break;
-   343		case IAVF_FDIR_FLOW_IPV4_AH:
-   344		case IAVF_FDIR_FLOW_IPV4_ESP:
-   345			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 %s: SPI %u\n",
-   346				 fltr->loc,
-   347				 &fltr->ip_data.v4_addrs.dst_ip,
-   348				 &fltr->ip_data.v4_addrs.src_ip,
-   349				 proto,
-   350				 ntohl(fltr->ip_data.spi));
-   351			break;
-   352		case IAVF_FDIR_FLOW_IPV4_OTHER:
-   353			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 proto: %u L4_bytes: 0x%x\n",
-   354				 fltr->loc,
-   355				 &fltr->ip_data.v4_addrs.dst_ip,
-   356				 &fltr->ip_data.v4_addrs.src_ip,
-   357				 fltr->ip_data.proto,
-   358				 ntohl(fltr->ip_data.l4_header));
-   359			break;
-   360		default:
-   361			break;
-   362		}
-   363	}
-   364	
+   722	
+   723	static void ocelot_fdma_free_tx_ring(struct ocelot *ocelot)
+   724	{
+   725		struct ocelot_fdma *fdma = ocelot->fdma;
+   726		struct ocelot_fdma_tx_ring *tx_ring;
+   727		struct ocelot_fdma_tx_buf *txb;
+   728		struct sk_buff *skb;
+   729		u16 idx;
+   730	
+   731		tx_ring = &fdma->tx_ring;
+   732		idx = tx_ring->next_to_clean;
+   733	
+   734		while (idx != tx_ring->next_to_use) {
+   735			txb = &tx_ring->bufs[idx];
+   736			skb = txb->skb;
+ > 737			dma_unmap_single(ocelot->dev, txb->dma_addr, skb->len,
+   738					 DMA_TO_DEVICE);
+   739			dev_kfree_skb_any(skb);
+   740			idx = ocelot_fdma_idx_next(idx, OCELOT_FDMA_TX_RING_SIZE);
+   741		}
+   742	}
+   743	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
