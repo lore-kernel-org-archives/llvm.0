@@ -1,48 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1FF2C9E
-	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 16:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1D52C9E
+	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 16:14:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639412034; x=1670948034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6+QrT9PT0z1rtduUNr8ZmGIGhH54pt3OP/+NNkLfl0U=;
-  b=l7MMn5WsBw4MN/BaZZf2yeUyGkteXE2rPr5DkKpIypFsoYx62WLoh/nm
-   frfiwdofebn/ymgtpVOhMKZr2Pn1SESPyMJb/qmey6l4KLsVEiGBXCvx9
-   53OdRMPFavHHNW7+ZOwpakBM5TVtB/ydYErpi+QBoXPSWbM10XuGH9+MQ
-   R60Zy765o7kegZi09HNtvc4u9DXvkMeTRYZzZZZYu8gtcHyDF6ZY8vb9S
-   V5fsoU2/wE69S85BiZawRcxOpLNq4Yp46MDWJQB+znCFAcVIH5ou/fAqX
-   mdxyO1YNFGCAjqGk2UQwtF2Jhy7FZSvQuLF/WVzm49xHL7QP4xLNsdxX6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="219448628"
+  t=1639412042; x=1670948042;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qUrF6DCnAYbQ7VDaEHqREF/nZ89MsB0OivMR+pFxIn4=;
+  b=MAwqkov4i6ZUdhcm86amFN5VfG7tOC/IWZ2vEEYgsq5VjHplp4X5KU5+
+   FEzCWOIbjSxkluDBdzBZq+jJV3s3VDtPUli79t1b6K2M3nyXkbeCmZR6m
+   MDjbSfVfbrHCwREyqfyJwvDiZQ1fiIEulYIFBFS470WEhihPsx4jiSwYR
+   Dze4Lg19E5zYT9dragjx515DEvQue1dZ2LR4FeFPtvqNBEb18CG7iO3Qu
+   DY6rPvL1mPN3l8fGT4SsFbADCLtMmk8LRkkcJz+9vgH2SQxR2or5uY7P1
+   4NxCV4z0Z0XbxZC/oEZYP5hRFExQis5GJxjoYzRkEZ93P9yU7AFh7hxOT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="299548719"
 X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="219448628"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:12:53 -0800
+   d="scan'208";a="299548719"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:12:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="613879560"
+   d="scan'208";a="660898513"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 08:12:50 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 13 Dec 2021 08:12:50 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mwnwY-0006ov-0u; Mon, 13 Dec 2021 16:12:50 +0000
-Date: Tue, 14 Dec 2021 00:12:36 +0800
+	id 1mwnwY-0006p2-22; Mon, 13 Dec 2021 16:12:50 +0000
+Date: Tue, 14 Dec 2021 00:12:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andi Shyti <andi.shyti@linux.intel.com>,
-	Intel GFX <intel-gfx@lists.freedesktop.org>,
-	DRI Devel <dri-devel@lists.freedesktop.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-	Andi Shyti <andi@etezian.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Chris Wilson <chris@chris-wilson.co.uk>
-Subject: Re: [PATCH RESEND v7 12/12] drm/i915: Move the GGTT from i915
- private data to the GT
-Message-ID: <202112132358.IwEcWeWW-lkp@intel.com>
-References: <20211212152117.118428-13-andi.shyti@linux.intel.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, build@wireguard.com,
+	linux-kernel@vger.kernel.org
+Subject: [zx2c4-wireguard:stable 1/1]
+ arch/x86/crypto/curve25519-x86_64.c:1135:15: error: passing 'const u64 *'
+ (aka 'const unsigned long long *') to parameter of type 'u64 *' (aka
+ 'unsigned long long *') discards qualifiers
+Message-ID: <202112132233.pOx31Nie-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,99 +46,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211212152117.118428-13-andi.shyti@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Andi,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on drm-tip/drm-tip]
-[also build test ERROR on drm/drm-next]
-[cannot apply to drm-intel/for-linux-next drm-exynos/exynos-drm-next v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Andi-Shyti/More-preparation-for-multi-gt-patches/20211212-232416
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-randconfig-a003-20211213 (https://download.01.org/0day-ci/archive/20211213/202112132358.IwEcWeWW-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git stable
+head:   4bd76aceb9f2887c6ddfeb1594a0ac0fe863dc7c
+commit: 4bd76aceb9f2887c6ddfeb1594a0ac0fe863dc7c [1/1] crypto: x86/curve25519 - use in/out register constraints more precisely
+config: x86_64-buildonly-randconfig-r004-20211213 (https://download.01.org/0day-ci/archive/20211213/202112132233.pOx31Nie-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/98ef49d710790dda7a193c10b5b7f28516f730bc
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andi-Shyti/More-preparation-for-multi-gt-patches/20211212-232416
-        git checkout 98ef49d710790dda7a193c10b5b7f28516f730bc
+        # https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git/commit/?id=4bd76aceb9f2887c6ddfeb1594a0ac0fe863dc7c
+        git remote add zx2c4-wireguard https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git
+        git fetch --no-tags zx2c4-wireguard stable
+        git checkout 4bd76aceb9f2887c6ddfeb1594a0ac0fe863dc7c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ drivers/gpu/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gvt/gtt.c:321:25: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
-                   e->val64 = read_pte64(vgpu->gvt->gt->ggtt, index);
-                                         ^~~~~~~~~~~~~~~~~~~
-                                         &
-   drivers/gpu/drm/i915/gvt/gtt.c:282:41: note: passing argument to parameter 'ggtt' here
-   static u64 read_pte64(struct i915_ggtt *ggtt, unsigned long index)
-                                           ^
-   drivers/gpu/drm/i915/gvt/gtt.c:346:15: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
-                   write_pte64(vgpu->gvt->gt->ggtt, index, e->val64);
-                               ^~~~~~~~~~~~~~~~~~~
-                               &
-   drivers/gpu/drm/i915/gvt/gtt.c:296:43: note: passing argument to parameter 'ggtt' here
-   static void write_pte64(struct i915_ggtt *ggtt, unsigned long index, u64 pte)
-                                             ^
-   drivers/gpu/drm/i915/gvt/gtt.c:2900:17: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
-                                   write_pte64(vgpu->gvt->gt->ggtt, offset + idx, pte);
-                                               ^~~~~~~~~~~~~~~~~~~
-                                               &
-   drivers/gpu/drm/i915/gvt/gtt.c:296:43: note: passing argument to parameter 'ggtt' here
-   static void write_pte64(struct i915_ggtt *ggtt, unsigned long index, u64 pte)
-                                             ^
-   drivers/gpu/drm/i915/gvt/gtt.c:2908:17: error: passing 'struct i915_ggtt' to parameter of incompatible type 'struct i915_ggtt *'; take the address with &
-                                   write_pte64(vgpu->gvt->gt->ggtt, offset + idx, pte);
-                                               ^~~~~~~~~~~~~~~~~~~
-                                               &
-   drivers/gpu/drm/i915/gvt/gtt.c:296:43: note: passing argument to parameter 'ggtt' here
-   static void write_pte64(struct i915_ggtt *ggtt, unsigned long index, u64 pte)
-                                             ^
-   4 errors generated.
+>> arch/x86/crypto/curve25519-x86_64.c:1135:15: error: passing 'const u64 *' (aka 'const unsigned long long *') to parameter of type 'u64 *' (aka 'unsigned long long *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           fmul(b, t00, i, tmp);
+                        ^
+   arch/x86/crypto/curve25519-x86_64.c:159:49: note: passing argument to parameter 'f2' here
+   static inline void fmul(u64 *out, u64 *f1, u64 *f2, u64 *tmp)
+                                                   ^
+   arch/x86/crypto/curve25519-x86_64.c:1218:17: error: passing 'const u64 *' (aka 'const unsigned long long *') to parameter of type 'u64 *' (aka 'unsigned long long *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           fmul(tmp, tmp, x, tmp_w);
+                          ^
+   arch/x86/crypto/curve25519-x86_64.c:159:49: note: passing argument to parameter 'f2' here
+   static inline void fmul(u64 *out, u64 *f1, u64 *f2, u64 *tmp)
+                                                   ^
+   arch/x86/crypto/curve25519-x86_64.c:1574:12: error: passing 'const u64 *' (aka 'const unsigned long long *') to parameter of type 'u64 *' (aka 'unsigned long long *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           fmul(c, &table_ladder[4 * k], b, ef);
+                                   ^~~~~~~~~~~~~~~~~~~~
+   arch/x86/crypto/curve25519-x86_64.c:159:40: note: passing argument to parameter 'f1' here
+   static inline void fmul(u64 *out, u64 *f1, u64 *f2, u64 *tmp)
+                                          ^
+   3 errors generated.
 
 
-vim +321 drivers/gpu/drm/i915/gvt/gtt.c
+vim +1135 arch/x86/crypto/curve25519-x86_64.c
 
-2707e44466881d Zhi Wang     2016-03-28  302  
-4b2dbbc22541e4 Changbin Du  2017-08-02  303  static inline int gtt_get_entry64(void *pt,
-2707e44466881d Zhi Wang     2016-03-28  304  		struct intel_gvt_gtt_entry *e,
-2707e44466881d Zhi Wang     2016-03-28  305  		unsigned long index, bool hypervisor_access, unsigned long gpa,
-2707e44466881d Zhi Wang     2016-03-28  306  		struct intel_vgpu *vgpu)
-2707e44466881d Zhi Wang     2016-03-28  307  {
-2707e44466881d Zhi Wang     2016-03-28  308  	const struct intel_gvt_device_info *info = &vgpu->gvt->device_info;
-2707e44466881d Zhi Wang     2016-03-28  309  	int ret;
-2707e44466881d Zhi Wang     2016-03-28  310  
-2707e44466881d Zhi Wang     2016-03-28  311  	if (WARN_ON(info->gtt_entry_size != 8))
-4b2dbbc22541e4 Changbin Du  2017-08-02  312  		return -EINVAL;
-2707e44466881d Zhi Wang     2016-03-28  313  
-2707e44466881d Zhi Wang     2016-03-28  314  	if (hypervisor_access) {
-2707e44466881d Zhi Wang     2016-03-28  315  		ret = intel_gvt_hypervisor_read_gpa(vgpu, gpa +
-2707e44466881d Zhi Wang     2016-03-28  316  				(index << info->gtt_entry_size_shift),
-2707e44466881d Zhi Wang     2016-03-28  317  				&e->val64, 8);
-4b2dbbc22541e4 Changbin Du  2017-08-02  318  		if (WARN_ON(ret))
-4b2dbbc22541e4 Changbin Du  2017-08-02  319  			return ret;
-2707e44466881d Zhi Wang     2016-03-28  320  	} else if (!pt) {
-a61ac1e75105a0 Chris Wilson 2020-03-06 @321  		e->val64 = read_pte64(vgpu->gvt->gt->ggtt, index);
-2707e44466881d Zhi Wang     2016-03-28  322  	} else {
-2707e44466881d Zhi Wang     2016-03-28  323  		e->val64 = *((u64 *)pt + index);
-2707e44466881d Zhi Wang     2016-03-28  324  	}
-4b2dbbc22541e4 Changbin Du  2017-08-02  325  	return 0;
-2707e44466881d Zhi Wang     2016-03-28  326  }
-2707e44466881d Zhi Wang     2016-03-28  327  
+bb611bdfd6be34 Jason A. Donenfeld 2019-11-08  1122  
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1123  static void finv(u64 *o, const u64 *i, u64 *tmp)
+bb611bdfd6be34 Jason A. Donenfeld 2019-11-08  1124  {
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1125  	u64 t1[16U] = { 0U };
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1126  	u64 *a0 = t1;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1127  	u64 *b = t1 + (u32)4U;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1128  	u64 *c = t1 + (u32)8U;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1129  	u64 *t00 = t1 + (u32)12U;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1130  	u64 *tmp1 = tmp;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1131  	u64 *a;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1132  	u64 *t0;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1133  	fsquare_times(a0, i, tmp1, (u32)1U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1134  	fsquare_times(t00, a0, tmp1, (u32)2U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20 @1135  	fmul(b, t00, i, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1136  	fmul(a0, b, a0, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1137  	fsquare_times(t00, a0, tmp1, (u32)1U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1138  	fmul(b, t00, b, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1139  	fsquare_times(t00, b, tmp1, (u32)5U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1140  	fmul(b, t00, b, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1141  	fsquare_times(t00, b, tmp1, (u32)10U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1142  	fmul(c, t00, b, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1143  	fsquare_times(t00, c, tmp1, (u32)20U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1144  	fmul(t00, t00, c, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1145  	fsquare_times(t00, t00, tmp1, (u32)10U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1146  	fmul(b, t00, b, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1147  	fsquare_times(t00, b, tmp1, (u32)50U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1148  	fmul(c, t00, b, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1149  	fsquare_times(t00, c, tmp1, (u32)100U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1150  	fmul(t00, t00, c, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1151  	fsquare_times(t00, t00, tmp1, (u32)50U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1152  	fmul(t00, t00, b, tmp);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1153  	fsquare_times(t00, t00, tmp1, (u32)5U);
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1154  	a = t1;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1155  	t0 = t1 + (u32)12U;
+07b586fe06625b Jason A. Donenfeld 2020-01-20  1156  	fmul(o, t0, a, tmp);
+bb611bdfd6be34 Jason A. Donenfeld 2019-11-08  1157  }
+bb611bdfd6be34 Jason A. Donenfeld 2019-11-08  1158  
+
+:::::: The code at line 1135 was first introduced by commit
+:::::: 07b586fe06625b0b610dc3d3a969c51913d143d4 crypto: x86/curve25519 - replace with formally verified implementation
+
+:::::: TO: Jason A. Donenfeld <Jason@zx2c4.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
