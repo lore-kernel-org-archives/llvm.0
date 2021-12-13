@@ -1,42 +1,36 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAE129CA
-	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 19:57:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639425477; x=1670961477;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=X16UMJKF95xzeL6Z5hGLHMG5bE2vvHJLHy/radFG42Y=;
-  b=SFdNGiPccZeVsfcq+uTlyZtYxc32jjTTG4v3cNDu3ScEkJmHBU/NrHv8
-   zLAcSoFlC8Re2tm2V+pSVweRnAYxXzJo78t0HNl5PaTfZ9YY4m/alC7Km
-   qdfLVYZrH3482LtSrF7ON8I/ZPmFqrfcLTJ+4AyOMD7ozyIHllTB9I9dy
-   YlNwJt1/oCYsQ8eydkHgkNezZB72Cx36lMktRmmA91+3efj+GFLdJZl5c
-   EGWuy6ExJ2ZKOb5CE0D7g/gt8gYNEmomXijP1pIGUtQFBB3q1KYYdNsSQ
-   jrsQL2ikd1jaWAa8lb6O3z1hNMMay+EWA02Oh5qpCrrLvnNVWQjbCyJEn
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="238628996"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="238628996"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 11:57:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="613956228"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 11:57:55 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mwrSM-00071G-FE; Mon, 13 Dec 2021 19:57:54 +0000
-Date: Tue, 14 Dec 2021 03:57:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Palmer <daniel@0x0f.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F57629CA
+	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 20:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F953C34600;
+	Mon, 13 Dec 2021 20:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639425756;
+	bh=heBHJLyx6ORRW7ViWIHQ9l8vOn3mdxoqMYNDB5gKna4=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=R/hRI9XcMZwe21lKbyY7Ro2wcWzZfCyhUYZkehvPMJUbf3uGfH+lj4kpyK1rpQn2U
+	 GMAigzYPPxyFRNqj2RgXFxOJnhge57XGu4XvFhk/50qRRF4jGDSJCWRJPb011JWOO3
+	 4vmPeyq3BOdOrgx7CwIau/JbvUjkj1zz7yMbymMt/U4W2J7DQz7ZAlcWcHFaPPSBj5
+	 7QIsNOMn/OExs7KjKHh/5hGKieiPeJvg/TL3DU+rdnZ55YAAftyM37bBkBkI+loREC
+	 fOuWQvhLLgLNWN95yVr/dWwft1DAdQ1DuFyfzUUVRiEkNtkq4l4kwwhgYKLIiWYxC9
+	 8p7hI7DmU8Knw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 102785C0F2F; Mon, 13 Dec 2021 12:02:36 -0800 (PST)
+Date: Mon, 13 Dec 2021 12:02:36 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: "Chen, Rong A" <rong.a.chen@intel.com>
+Cc: kernel test robot <lkp@intel.com>, David Woodhouse <dwmw@amazon.co.uk>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 47/76]
- drivers/pinctrl/mstar/pinctrl-msc313.c:1339:4: warning: unannotated
- fall-through between switch labels
-Message-ID: <202112140343.VO0Mdyih-lkp@intel.com>
+Subject: Re: [kbuild-all] Re: [paulmck-rcu:dev.2021.12.07a 56/57]
+ kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when
+ used here
+Message-ID: <20211213200236.GU641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202112101543.wHvqhgYk-lkp@intel.com>
+ <20211210135717.GL641268@paulmck-ThinkPad-P17-Gen-1>
+ <a3543eca-32b5-9489-322a-bea82dc6e0ca@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,92 +39,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <a3543eca-32b5-9489-322a-bea82dc6e0ca@intel.com>
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   3b75af2a2f0d6aea3abc4cf56690ae7a6fd2dac6
-commit: 0d8434e20c2d30bac37d042462ba57649e33a786 [47/76] pinctrl header names
-config: arm-randconfig-r012-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140343.VO0Mdyih-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/linux-chenxing/linux/commit/0d8434e20c2d30bac37d042462ba57649e33a786
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 0d8434e20c2d30bac37d042462ba57649e33a786
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/pinctrl/mstar/
+On Mon, Dec 13, 2021 at 04:36:36PM +0800, Chen, Rong A wrote:
+> 
+> 
+> On 12/10/2021 9:57 PM, Paul E. McKenney wrote:
+> > On Fri, Dec 10, 2021 at 03:30:22PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.12.07a
+> > > head:   89ddc546d3ad541bc89ec553c92036c98aef57a6
+> > > commit: 342f2d0f88f3c2d7ab2ae206be5846579319e3bf [56/57] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
+> > > config: hexagon-randconfig-r041-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101543.wHvqhgYk-lkp@intel.com/config)
+> > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+> > > reproduce (this is a W=1 build):
+> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >          chmod +x ~/bin/make.cross
+> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+> > >          git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+> > >          git fetch --no-tags paulmck-rcu dev.2021.12.07a
+> > >          git checkout 342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+> > >          # save the config file to linux build tree
+> > >          mkdir build_dir
+> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> > > 
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > > > > kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
+> > >                     rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+> > >                                                               ^~~~~
+> > >     kernel/rcu/tree.c:4280:21: note: initialize the variable 'flags' to silence this warning
+> > >             unsigned long flags, seq_flags;
+> > >                                ^
+> > >                                 = 0
+> > >     1 warning generated.
+> > 
+> > Good catch, but Neeraj and David beat you to this.  The updated commit
+> > is defd1f8a1f4e ("rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock
+> > for exclusion").
+> > 
+> > One thing that might be helpful to you during times of backlock...  In the
+> > -rcu tree, if you have several branches with the same prefix (for example,
+> > dev.2021.12.03a, dev.2021.12.07a, and dev.2021.12.09a), you can safely
+> > ignore all but the last one in lexicographic order.  In this example,
+> > dev.2021.12.09a obsoletes dev.2021.12.03a and dev.2021.12.07a, so you
+> > would lose nothing by just ignoring the earlier two branches.
+> > 
+> > 							Thanx, Paul
+> 
+> Hi Paul,
+> 
+> Thanks for the advice, We'll investigate it in the near future to avoid
+> sending old issues that already fixed in the latest branch.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If you have already done the testing, there is no problem sending me the
+reports.  But if you are behind, why needlessly get more behind?  ;-)
 
-All warnings (new ones prefixed by >>):
+							Thanx, Paul
 
->> drivers/pinctrl/mstar/pinctrl-msc313.c:1339:4: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-                           default:
-                           ^
-   drivers/pinctrl/mstar/pinctrl-msc313.c:1339:4: note: insert 'break;' to avoid fall-through
-                           default:
-                           ^
-                           break; 
->> drivers/pinctrl/mstar/pinctrl-msc313.c:201:27: warning: unused variable 'sd_drivestrengths' [-Wunused-const-variable]
-   static const unsigned int sd_drivestrengths[] = {4, 8};
-                             ^
->> drivers/pinctrl/mstar/pinctrl-msc313.c:215:27: warning: unused variable 'spi0_drivestrengths' [-Wunused-const-variable]
-   static const unsigned int spi0_drivestrengths[] = {4, 8, 12, 16};
-                             ^
->> drivers/pinctrl/mstar/pinctrl-msc313.c:225:27: warning: unused variable 'i2c_drivestrengths' [-Wunused-const-variable]
-   static const unsigned int i2c_drivestrengths[] = {4, 8};
-                             ^
->> drivers/pinctrl/mstar/pinctrl-msc313.c:233:27: warning: unused variable 'sr_drivestrengths' [-Wunused-const-variable]
-   static const unsigned int sr_drivestrengths[] = {4, 8};
-                             ^
-   5 warnings generated.
-
-
-vim +1339 drivers/pinctrl/mstar/pinctrl-msc313.c
-
-4e180cab5755b5 Daniel Palmer 2020-12-07  1318  
-4e180cab5755b5 Daniel Palmer 2020-12-07  1319  static int mstar_set_config(struct msc313_pinctrl *pinctrl, int pin, unsigned long config)
-4e180cab5755b5 Daniel Palmer 2020-12-07  1320  {
-4e180cab5755b5 Daniel Palmer 2020-12-07  1321  	enum pin_config_param param = pinconf_to_config_param(config);
-4e180cab5755b5 Daniel Palmer 2020-12-07  1322  	u32 arg = pinconf_to_config_argument(config);
-4e180cab5755b5 Daniel Palmer 2020-12-07  1323  	int i;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1324  	unsigned int mask;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1325  	const struct msc313_pinctrl_pinconf *confpin;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1326  
-4e180cab5755b5 Daniel Palmer 2020-12-07  1327  	dev_dbg(pinctrl->dev, "setting %d:%u on pin %d\n", (int)config, (unsigned int)arg, pin);
-4e180cab5755b5 Daniel Palmer 2020-12-07  1328  	for (i = 0; i < pinctrl->info->npinconfs; i++) {
-4e180cab5755b5 Daniel Palmer 2020-12-07  1329  		if (pinctrl->info->pinconfs[i].pin == pin) {
-4e180cab5755b5 Daniel Palmer 2020-12-07  1330  			confpin = &pinctrl->info->pinconfs[i];
-4e180cab5755b5 Daniel Palmer 2020-12-07  1331  			switch (param) {
-4e180cab5755b5 Daniel Palmer 2020-12-07  1332  			case PIN_CONFIG_BIAS_PULL_UP:
-4e180cab5755b5 Daniel Palmer 2020-12-07  1333  				if (confpin->pull_en_reg != -1) {
-4e180cab5755b5 Daniel Palmer 2020-12-07  1334  					dev_dbg(pinctrl->dev, "setting pull up %d on pin %d\n", (int) arg, pin);
-4e180cab5755b5 Daniel Palmer 2020-12-07  1335  					mask = 1 << confpin->pull_en_bit;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1336  					regmap_update_bits(pinctrl->regmap, confpin->pull_en_reg, mask, arg ? mask : 0);
-4e180cab5755b5 Daniel Palmer 2020-12-07  1337  				} else
-4e180cab5755b5 Daniel Palmer 2020-12-07  1338  					dev_info(pinctrl->dev, "pullup reg/bit isn't known for pin %d\n", pin);
-4e180cab5755b5 Daniel Palmer 2020-12-07 @1339  			default:
-4e180cab5755b5 Daniel Palmer 2020-12-07  1340  				break;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1341  			}
-4e180cab5755b5 Daniel Palmer 2020-12-07  1342  			return 0;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1343  		}
-4e180cab5755b5 Daniel Palmer 2020-12-07  1344  	}
-4e180cab5755b5 Daniel Palmer 2020-12-07  1345  	return 0;
-4e180cab5755b5 Daniel Palmer 2020-12-07  1346  }
-4e180cab5755b5 Daniel Palmer 2020-12-07  1347  
-
-:::::: The code at line 1339 was first introduced by commit
-:::::: 4e180cab5755b5116ca4fb151ce6068ff5442e70 pinctrl: mstar: msc313 pinctrl driver
-
-:::::: TO: Daniel Palmer <daniel@0x0f.com>
-:::::: CC: Daniel Palmer <daniel@0x0f.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Best Regards,
+> Rong Chen
+> 
+> > 
+> > > vim +/flags +4312 kernel/rcu/tree.c
+> > > 
+> > > 4df8374254ea929 Thomas Gleixner         2016-07-13  4266
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4267  /*
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4268   * Mark the specified CPU as being online so that subsequent grace periods
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4269   * (both expedited and normal) will wait on it.  Note that this means that
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4270   * incoming CPUs are not allowed to use RCU read-side critical sections
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4271   * until this function is called.  Failing to observe this restriction
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4272   * will result in lockdep splats.
+> > > deb34f364398083 Paul E. McKenney        2017-03-23  4273   *
+> > > deb34f364398083 Paul E. McKenney        2017-03-23  4274   * Note that this function is special in that it is invoked directly
+> > > deb34f364398083 Paul E. McKenney        2017-03-23  4275   * from the incoming CPU rather than from the cpuhp_step mechanism.
+> > > deb34f364398083 Paul E. McKenney        2017-03-23  4276   * This is because this function must be invoked at a precise location.
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4277   */
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4278  void rcu_cpu_starting(unsigned int cpu)
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4279  {
+> > > 342f2d0f88f3c2d David Woodhouse         2021-12-09  4280  	unsigned long flags, seq_flags;
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4281  	unsigned long mask;
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4282  	struct rcu_data *rdp;
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4283  	struct rcu_node *rnp;
+> > > abfce0414814149 Wei Yang                2020-04-19  4284  	bool newcpu;
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4285
+> > > c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4286  	rdp = per_cpu_ptr(&rcu_data, cpu);
+> > > c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4287  	if (rdp->cpu_started)
+> > > f64c6013a202931 Peter Zijlstra          2018-05-22  4288  		return;
+> > > c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4289  	rdp->cpu_started = true;
+> > > f64c6013a202931 Peter Zijlstra          2018-05-22  4290
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4291  	rnp = rdp->mynode;
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4292  	mask = rdp->grpmask;
+> > > 342f2d0f88f3c2d David Woodhouse         2021-12-09  4293  	local_irq_save(seq_flags);
+> > > 342f2d0f88f3c2d David Woodhouse         2021-12-09  4294  	arch_spin_lock(&rcu_state.ofl_lock);
+> > > 2caebefb00f03b5 Paul E. McKenney        2021-07-28  4295  	rcu_dynticks_eqs_online();
+> > > 4d60b475f858ebd Paul E. McKenney        2020-10-13  4296  	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+> > > 342f2d0f88f3c2d David Woodhouse         2021-12-09  4297  	raw_spin_lock_rcu_node(rnp);
+> > > 105abf82b0a6266 Paul E. McKenney        2020-01-03  4298  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+> > > abfce0414814149 Wei Yang                2020-04-19  4299  	newcpu = !(rnp->expmaskinitnext & mask);
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4300  	rnp->expmaskinitnext |= mask;
+> > > 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4301  	/* Allow lockless access for expedited grace periods. */
+> > > abfce0414814149 Wei Yang                2020-04-19  4302  	smp_store_release(&rcu_state.ncpus, rcu_state.ncpus + newcpu); /* ^^^ */
+> > > 2f08469563550d1 Paul E. McKenney        2020-02-10  4303  	ASSERT_EXCLUSIVE_WRITER(rcu_state.ncpus);
+> > > e05121ba5b81e2f Paul E. McKenney        2018-05-07  4304  	rcu_gpnum_ovf(rnp, rdp); /* Offline-induced counter wrap? */
+> > > eb7a6653887b540 Paul E. McKenney        2018-07-05  4305  	rdp->rcu_onl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+> > > eb7a6653887b540 Paul E. McKenney        2018-07-05  4306  	rdp->rcu_onl_gp_flags = READ_ONCE(rcu_state.gp_flags);
+> > > 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4307)
+> > > 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4308) 	/* An incoming CPU should never be blocking a grace period. */
+> > > 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4309) 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
+> > > 516e5ae0c940162 Joel Fernandes (Google  2019-09-05  4310) 		rcu_disable_urgency_upon_qs(rdp);
+> > > 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4311  		/* Report QS -after- changing ->qsmaskinitnext! */
+> > > b50912d0b5e03f1 Paul E. McKenney        2018-07-03 @4312  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+> > > 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4313  	} else {
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4314  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4315  	}
+> > > 342f2d0f88f3c2d David Woodhouse         2021-12-09  4316  	arch_spin_unlock(&rcu_state.ofl_lock);
+> > > 342f2d0f88f3c2d David Woodhouse         2021-12-09  4317  	local_irq_restore(seq_flags);
+> > > 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4318  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4319  }
+> > > 7ec99de36f40261 Paul E. McKenney        2016-06-30  4320
+> > > 
+> > > :::::: The code at line 4312 was first introduced by commit
+> > > :::::: b50912d0b5e03f11004fec1e2b50244de9e2fa41 rcu: Remove rsp parameter from rcu_report_qs_rnp()
+> > > 
+> > > :::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> > > :::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> > > 
+> > > ---
+> > > 0-DAY CI Kernel Test Service, Intel Corporation
+> > > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > _______________________________________________
+> > kbuild-all mailing list -- kbuild-all@lists.01.org
+> > To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> > 
