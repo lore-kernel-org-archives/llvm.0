@@ -1,42 +1,41 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41222C99
-	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 07:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B342C99
+	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 08:19:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639379921; x=1670915921;
+  t=1639383582; x=1670919582;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AIbbmzNZcgzxQKEzVLn/5Cw5O8pw129BW14If9H5KUY=;
-  b=aatBznFdS/ue8zCU+wrj+4bI8KFRyd+xkh3gYr9OSXaaogzcv8KK5GCa
-   p49nHz6uT4ebW3STXxjn/Y1wfgwFL5xT3tYLsPazOlqcT+BEKIx4AMUxm
-   qU0R85zGD09n9DEhJXKZWleqQtpSth6DMYNIn1NRZnmjnsxCN5yrQPlAq
-   SW5Yy3/gfXRfW9MghpRNLGTY/yMVlV5nYwNGn72JKpB+v4VGSk/oxLqcu
-   D8HFk/TnfJhhavqnL1826Lu4ww9bpkZj78cMqGI5ioDnDG82viYjse1EI
-   aHZgFnD6FvfncXKUN4vS39fnqwXtexsYXTa8iUSAGp24Xhq2u/6Csb7bF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="302059235"
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="302059235"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 23:18:41 -0800
+  bh=CcZ6j7wZRf+2nO2/s1OWKAqqclg5MMxFBTOMiZbC45I=;
+  b=DW1zPGlIITPQkfX2x521OWGxU6/2MI8tYGJrOkRV/piZQHPvmV2XTo08
+   5qtb/Q3b0YY53s0wvXHJSedmOB4SOCNxJEBFo8Uqd8ansf8l3acUWnTuZ
+   11TlzA+3ShWG6dsfs0LOmcouJN5NUMrrQ3rBzOZI/6RUJpz5rluaDof7P
+   XIbEgDStx+lrSyd+TKwBD+gW41qBjQHE39hf928ovP77byEmxxSUACh/2
+   F4BkIzNLmOg+avMTDDDJ4kzhVGVi44Xk/Xl02pjJ+D+mjQMeSt53HcJyw
+   KBXKwjT1KJSINLZQxQtRYnrrJ+pisakyetLjFmtwuUBEzjSlx9AskUjhq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225961874"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="225961874"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:19:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="608908851"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="481436005"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Dec 2021 23:18:39 -0800
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2021 00:19:41 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mwfbb-0006Qd-8E; Mon, 13 Dec 2021 07:18:39 +0000
-Date: Mon, 13 Dec 2021 15:18:11 +0800
+	id 1mwgYe-0006SQ-Dp; Mon, 13 Dec 2021 08:19:40 +0000
+Date: Mon, 13 Dec 2021 16:18:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
+To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:asahi-soc/pmgr 1/2] ERROR: modpost:
- "of_phandle_iterator_args" [drivers/soc/apple/apple-pmgr-pwrstate.ko]
- undefined!
-Message-ID: <202112131521.YW7Lbttb-lkp@intel.com>
+	linux-kbuild@vger.kernel.org
+Subject: [masahiroy-kbuild:testing-kconfig 24/25] scripts/gen_autoksyms.sh:
+ 1526: include/config/auto.conf: Syntax error: "(" unexpected
+Message-ID: <202112131617.gF1CreGQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,30 +46,36 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/AsahiLinux/linux asahi-soc/pmgr
-head:   cc1fe1e54ba565aaec0006796db65b7c3b1ccd69
-commit: 6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2 [1/2] soc: apple: Add driver for Apple PMGR power state controls
-config: arm64-randconfig-r006-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131521.YW7Lbttb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+Hi Masahiro,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git testing-kconfig
+head:   e0b2802c637b32a68e0a9f99fc4bb1102518bf79
+commit: 24b17f5f009bd77f46c48645dfd03d430439bd43 [24/25] kbuild: do not quote string values in include/config/auto.conf
+config: x86_64-randconfig-a003-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131617.gF1CreGQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi-soc/pmgr
-        git checkout 6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=24b17f5f009bd77f46c48645dfd03d430439bd43
+        git remote add masahiroy-kbuild https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+        git fetch --no-tags masahiroy-kbuild testing-kconfig
+        git checkout 24b17f5f009bd77f46c48645dfd03d430439bd43
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "of_phandle_iterator_args" [drivers/soc/apple/apple-pmgr-pwrstate.ko] undefined!
+>> scripts/gen_autoksyms.sh: 1526: include/config/auto.conf: Syntax error: "(" unexpected
+   make[1]: *** [Makefile:1151: include/generated/autoksyms.h] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
