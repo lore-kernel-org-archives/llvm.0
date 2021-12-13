@@ -1,82 +1,178 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B342C99
-	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 08:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6AF68
+	for <llvm@lists.linux.dev>; Mon, 13 Dec 2021 08:36:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639383582; x=1670919582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CcZ6j7wZRf+2nO2/s1OWKAqqclg5MMxFBTOMiZbC45I=;
-  b=DW1zPGlIITPQkfX2x521OWGxU6/2MI8tYGJrOkRV/piZQHPvmV2XTo08
-   5qtb/Q3b0YY53s0wvXHJSedmOB4SOCNxJEBFo8Uqd8ansf8l3acUWnTuZ
-   11TlzA+3ShWG6dsfs0LOmcouJN5NUMrrQ3rBzOZI/6RUJpz5rluaDof7P
-   XIbEgDStx+lrSyd+TKwBD+gW41qBjQHE39hf928ovP77byEmxxSUACh/2
-   F4BkIzNLmOg+avMTDDDJ4kzhVGVi44Xk/Xl02pjJ+D+mjQMeSt53HcJyw
-   KBXKwjT1KJSINLZQxQtRYnrrJ+pisakyetLjFmtwuUBEzjSlx9AskUjhq
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225961874"
+  t=1639384601; x=1670920601;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=MLwKWlHuDZfnIeyy1QWhivi4pxHn0acp6WQCWS0Ckes=;
+  b=ilNND8U9+BOedTb/FYEkt5vhnqWtO6ez+g7UDMNrudCPB1SpH9Ii9cay
+   f5UNmLxe4Kkp9xcLnplYhdE3hzadLXDT3uQ2Ek1/YU4dpE/AYv4p23+Uh
+   TJ0S832Z2DMxE4Pmnjr0aasImrC2iUNmQq+S9OkyPduuiPlHQMjrc9oPH
+   63kYO6+jSunhhOpw1JxMlsRa08wkPk+FSJJc1c9qopaaNEP9CpR8xRjrC
+   bRX0aG2kpIbC8R2QUY4VgYYB5+9oAeNv4T+1zJPfdmwf9uiwouAJ5JarS
+   zrNOl0vvxl3fGHFTnS4HmLc7AVKMXGbVBtZojEJEKEgBa5VPTA4AEeHHX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="218702123"
 X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="225961874"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:19:42 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="218702123"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:36:40 -0800
 X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="481436005"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2021 00:19:41 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mwgYe-0006SQ-Dp; Mon, 13 Dec 2021 08:19:40 +0000
-Date: Mon, 13 Dec 2021 16:18:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kbuild@vger.kernel.org
-Subject: [masahiroy-kbuild:testing-kconfig 24/25] scripts/gen_autoksyms.sh:
- 1526: include/config/auto.conf: Syntax error: "(" unexpected
-Message-ID: <202112131617.gF1CreGQ-lkp@intel.com>
+   d="scan'208";a="464540315"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.170.242]) ([10.249.170.242])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:36:38 -0800
+Subject: Re: [kbuild-all] Re: [paulmck-rcu:dev.2021.12.07a 56/57]
+ kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when
+ used here
+To: paulmck@kernel.org, kernel test robot <lkp@intel.com>
+Cc: David Woodhouse <dwmw@amazon.co.uk>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202112101543.wHvqhgYk-lkp@intel.com>
+ <20211210135717.GL641268@paulmck-ThinkPad-P17-Gen-1>
+From: "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <a3543eca-32b5-9489-322a-bea82dc6e0ca@intel.com>
+Date: Mon, 13 Dec 2021 16:36:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211210135717.GL641268@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Hi Masahiro,
 
-First bad commit (maybe != root cause):
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git testing-kconfig
-head:   e0b2802c637b32a68e0a9f99fc4bb1102518bf79
-commit: 24b17f5f009bd77f46c48645dfd03d430439bd43 [24/25] kbuild: do not quote string values in include/config/auto.conf
-config: x86_64-randconfig-a003-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131617.gF1CreGQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=24b17f5f009bd77f46c48645dfd03d430439bd43
-        git remote add masahiroy-kbuild https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-        git fetch --no-tags masahiroy-kbuild testing-kconfig
-        git checkout 24b17f5f009bd77f46c48645dfd03d430439bd43
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+On 12/10/2021 9:57 PM, Paul E. McKenney wrote:
+> On Fri, Dec 10, 2021 at 03:30:22PM +0800, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.12.07a
+>> head:   89ddc546d3ad541bc89ec553c92036c98aef57a6
+>> commit: 342f2d0f88f3c2d7ab2ae206be5846579319e3bf [56/57] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
+>> config: hexagon-randconfig-r041-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101543.wHvqhgYk-lkp@intel.com/config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+>>          git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+>>          git fetch --no-tags paulmck-rcu dev.2021.12.07a
+>>          git checkout 342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
+>>                     rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>>                                                               ^~~~~
+>>     kernel/rcu/tree.c:4280:21: note: initialize the variable 'flags' to silence this warning
+>>             unsigned long flags, seq_flags;
+>>                                ^
+>>                                 = 0
+>>     1 warning generated.
+> 
+> Good catch, but Neeraj and David beat you to this.  The updated commit
+> is defd1f8a1f4e ("rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock
+> for exclusion").
+> 
+> One thing that might be helpful to you during times of backlock...  In the
+> -rcu tree, if you have several branches with the same prefix (for example,
+> dev.2021.12.03a, dev.2021.12.07a, and dev.2021.12.09a), you can safely
+> ignore all but the last one in lexicographic order.  In this example,
+> dev.2021.12.09a obsoletes dev.2021.12.03a and dev.2021.12.07a, so you
+> would lose nothing by just ignoring the earlier two branches.
+> 
+> 							Thanx, Paul
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Paul,
 
-All errors (new ones prefixed by >>):
+Thanks for the advice, We'll investigate it in the near future to avoid
+sending old issues that already fixed in the latest branch.
 
->> scripts/gen_autoksyms.sh: 1526: include/config/auto.conf: Syntax error: "(" unexpected
-   make[1]: *** [Makefile:1151: include/generated/autoksyms.h] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Best Regards,
+Rong Chen
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+>> vim +/flags +4312 kernel/rcu/tree.c
+>>
+>> 4df8374254ea929 Thomas Gleixner         2016-07-13  4266
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4267  /*
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4268   * Mark the specified CPU as being online so that subsequent grace periods
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4269   * (both expedited and normal) will wait on it.  Note that this means that
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4270   * incoming CPUs are not allowed to use RCU read-side critical sections
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4271   * until this function is called.  Failing to observe this restriction
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4272   * will result in lockdep splats.
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4273   *
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4274   * Note that this function is special in that it is invoked directly
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4275   * from the incoming CPU rather than from the cpuhp_step mechanism.
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4276   * This is because this function must be invoked at a precise location.
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4277   */
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4278  void rcu_cpu_starting(unsigned int cpu)
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4279  {
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4280  	unsigned long flags, seq_flags;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4281  	unsigned long mask;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4282  	struct rcu_data *rdp;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4283  	struct rcu_node *rnp;
+>> abfce0414814149 Wei Yang                2020-04-19  4284  	bool newcpu;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4285
+>> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4286  	rdp = per_cpu_ptr(&rcu_data, cpu);
+>> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4287  	if (rdp->cpu_started)
+>> f64c6013a202931 Peter Zijlstra          2018-05-22  4288  		return;
+>> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4289  	rdp->cpu_started = true;
+>> f64c6013a202931 Peter Zijlstra          2018-05-22  4290
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4291  	rnp = rdp->mynode;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4292  	mask = rdp->grpmask;
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4293  	local_irq_save(seq_flags);
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4294  	arch_spin_lock(&rcu_state.ofl_lock);
+>> 2caebefb00f03b5 Paul E. McKenney        2021-07-28  4295  	rcu_dynticks_eqs_online();
+>> 4d60b475f858ebd Paul E. McKenney        2020-10-13  4296  	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4297  	raw_spin_lock_rcu_node(rnp);
+>> 105abf82b0a6266 Paul E. McKenney        2020-01-03  4298  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+>> abfce0414814149 Wei Yang                2020-04-19  4299  	newcpu = !(rnp->expmaskinitnext & mask);
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4300  	rnp->expmaskinitnext |= mask;
+>> 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4301  	/* Allow lockless access for expedited grace periods. */
+>> abfce0414814149 Wei Yang                2020-04-19  4302  	smp_store_release(&rcu_state.ncpus, rcu_state.ncpus + newcpu); /* ^^^ */
+>> 2f08469563550d1 Paul E. McKenney        2020-02-10  4303  	ASSERT_EXCLUSIVE_WRITER(rcu_state.ncpus);
+>> e05121ba5b81e2f Paul E. McKenney        2018-05-07  4304  	rcu_gpnum_ovf(rnp, rdp); /* Offline-induced counter wrap? */
+>> eb7a6653887b540 Paul E. McKenney        2018-07-05  4305  	rdp->rcu_onl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+>> eb7a6653887b540 Paul E. McKenney        2018-07-05  4306  	rdp->rcu_onl_gp_flags = READ_ONCE(rcu_state.gp_flags);
+>> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4307)
+>> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4308) 	/* An incoming CPU should never be blocking a grace period. */
+>> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4309) 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
+>> 516e5ae0c940162 Joel Fernandes (Google  2019-09-05  4310) 		rcu_disable_urgency_upon_qs(rdp);
+>> 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4311  		/* Report QS -after- changing ->qsmaskinitnext! */
+>> b50912d0b5e03f1 Paul E. McKenney        2018-07-03 @4312  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>> 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4313  	} else {
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4314  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4315  	}
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4316  	arch_spin_unlock(&rcu_state.ofl_lock);
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4317  	local_irq_restore(seq_flags);
+>> 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4318  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4319  }
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4320
+>>
+>> :::::: The code at line 4312 was first introduced by commit
+>> :::::: b50912d0b5e03f11004fec1e2b50244de9e2fa41 rcu: Remove rsp parameter from rcu_report_qs_rnp()
+>>
+>> :::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+>> :::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+>>
+>> ---
+>> 0-DAY CI Kernel Test Service, Intel Corporation
+>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 
