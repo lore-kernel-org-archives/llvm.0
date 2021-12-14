@@ -1,44 +1,41 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9E62CAA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF5068
 	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 17:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639503257; x=1671039257;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mP3jyoD5+KogMfnKwg3vSG8O5BYFyxm5P3O0pJQUOTU=;
-  b=IOs5YMWmTPQzp4+n75U1oOxh5wNVgtGvYfilJ50ddyfkbrpyX6TLlDtY
-   uE35RCCkip99t8f/BGyyaG4uesSWRZK/i4JWJas+0F/2y1HXewMdEAMtc
-   AxzcXNhHNdMvhVndQvdCl0JpAvANcD+Q7bTHpNcQGE1h/zoPrvEDUkJKh
-   LpfdZotrPrx0ou1dbUKBC18Ur44BgHz/nEV04VgXK6mlaDro0XMLJ5gyP
-   BuxBLMKaftqbTo5Ay7VKqZjlMZ4z7mw26DvbrnkRpAEBUQLtjtLsZ/2Bv
-   lYZVB55oGk77jX3CTxrQ50/RvY6nbxb0+jitWOIrLEcY9i+ZjgcS6hO6C
+  bh=3m4KrKgqDcX0rfsDzNXxYGp7TPhHBGaHWDD+JMQ8xOI=;
+  b=XPYUAtyeUEZSTAmRxw3XYIaHI8VzKIdb18TRDPs1cgNp7lLpI0qMiXwp
+   JMa4E10Tw+cS09mmTQZEKuryKpQKYCxXNbdtvxQgtdRimA4ligzvygj89
+   4GIrkkBbkQeNhh83ea7qLQR7nMJp54sF4rShUKCY0H1loEZuK1WY8Y++m
+   paUAkcc6cnp8PkYuk2Sri1BgPuOWP0tlu6XHnfL8l8gLpVeo9APEgLsFN
+   Te7MvjWAy3pgus24ycuIxHQs+uhotQTJ9xsbd6nM/wyaJ7sOGNOxC8N2V
+   dAEBnANj9EXJBp2k/+yDw5j1T9QkXDsQyAToc0fjpUBbEL5Z115WhpEps
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302412351"
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226311725"
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="302412351"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:34:17 -0800
+   d="scan'208";a="226311725"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:34:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="463879453"
+   d="scan'208";a="482041549"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2021 09:34:15 -0800
+  by orsmga002.jf.intel.com with ESMTP; 14 Dec 2021 09:34:15 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxBgs-0000ZE-Ee; Tue, 14 Dec 2021 17:34:14 +0000
-Date: Wed, 15 Dec 2021 01:33:53 +0800
+	id 1mxBgs-0000ZH-FD; Tue, 14 Dec 2021 17:34:14 +0000
+Date: Wed, 15 Dec 2021 01:33:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+To: Ryder Lee <ryder.lee@mediatek.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Davor Joja <davor.joja@logicbricks.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.10 223/1981]
- drivers/media/i2c/adv7511-v4l2.c:2251:21: warning: no previous prototype for
- function 'adv7511_subdev'
-Message-ID: <202112150131.smFBwCJv-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>
+Subject: drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:2393:5: warning: no
+ previous prototype for function 'mt7915_mcu_set_fixed_rate'
+Message-ID: <202112150129.mnFkjamR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,60 +46,100 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Radhey,
+Hi Ryder,
 
 FYI, the error/warning still remains.
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.10
-head:   87ec9a2d98a7a7dfc98b57348a0ec310fd170e4b
-commit: c879ca1c486ba6c809ca48c82c0c8a289d97ce15 [223/1981] drivers: media: Customized adv7511 for Xylon LogiCVC (deprecated)
-config: riscv-randconfig-r042-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150131.smFBwCJv-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
+commit: 9a93364d6595358a11d07e7f4261ae263ae2a02a mt76: mt7915: rework debugfs fixed-rate knob
+date:   7 weeks ago
+config: arm64-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150129.mnFkjamR-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/Xilinx/linux-xlnx/commit/c879ca1c486ba6c809ca48c82c0c8a289d97ce15
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.10
-        git checkout c879ca1c486ba6c809ca48c82c0c8a289d97ce15
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9a93364d6595358a11d07e7f4261ae263ae2a02a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9a93364d6595358a11d07e7f4261ae263ae2a02a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/input/misc/ drivers/media/i2c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/media/i2c/adv7511-v4l2.c:427:2: error: void function 'adv7511_set_rgb_quantization_mode' should not return a value [-Wreturn-type]
-           return 0;
-           ^      ~
->> drivers/media/i2c/adv7511-v4l2.c:2251:21: warning: no previous prototype for function 'adv7511_subdev' [-Wmissing-prototypes]
-   struct v4l2_subdev *adv7511_subdev(struct v4l2_subdev *sd)
-                       ^
-   drivers/media/i2c/adv7511-v4l2.c:2251:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct v4l2_subdev *adv7511_subdev(struct v4l2_subdev *sd)
+>> drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:2393:5: warning: no previous prototype for function 'mt7915_mcu_set_fixed_rate' [-Wmissing-prototypes]
+   int mt7915_mcu_set_fixed_rate(struct mt7915_dev *dev,
+       ^
+   drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:2393:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mt7915_mcu_set_fixed_rate(struct mt7915_dev *dev,
    ^
    static 
-   1 warning and 1 error generated.
+   1 warning generated.
 
 
-vim +/adv7511_subdev +2251 drivers/media/i2c/adv7511-v4l2.c
+vim +/mt7915_mcu_set_fixed_rate +2393 drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
 
-  2250	
-> 2251	struct v4l2_subdev *adv7511_subdev(struct v4l2_subdev *sd)
-  2252	{
-  2253		static struct v4l2_subdev *subdev;
-  2254	
-  2255		if (sd)
-  2256			subdev = sd;
-  2257	
-  2258		return subdev;
-  2259	}
-  2260	EXPORT_SYMBOL(adv7511_subdev);
-  2261	
+e57b7901469fc0b Ryder Lee     2020-04-25  2392  
+9fac3c81eebd81b Ryder Lee     2020-04-25 @2393  int mt7915_mcu_set_fixed_rate(struct mt7915_dev *dev,
+9fac3c81eebd81b Ryder Lee     2020-04-25  2394  			      struct ieee80211_sta *sta, u32 rate)
+9fac3c81eebd81b Ryder Lee     2020-04-25  2395  {
+9fac3c81eebd81b Ryder Lee     2020-04-25  2396  	struct mt7915_sta *msta = (struct mt7915_sta *)sta->drv_priv;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2397  	struct mt7915_vif *mvif = msta->vif;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2398  	struct sta_rec_ra_fixed *ra;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2399  	struct sk_buff *skb;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2400  	struct tlv *tlv;
+3e68af622254bad Ryder Lee     2020-05-12  2401  	int len = sizeof(struct sta_req_hdr) + sizeof(*ra);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2402  
+3e68af622254bad Ryder Lee     2020-05-12  2403  	skb = mt7915_mcu_alloc_sta_req(dev, mvif, msta, len);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2404  	if (IS_ERR(skb))
+9fac3c81eebd81b Ryder Lee     2020-04-25  2405  		return PTR_ERR(skb);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2406  
+9fac3c81eebd81b Ryder Lee     2020-04-25  2407  	tlv = mt7915_mcu_add_tlv(skb, STA_REC_RA_UPDATE, sizeof(*ra));
+9fac3c81eebd81b Ryder Lee     2020-04-25  2408  	ra = (struct sta_rec_ra_fixed *)tlv;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2409  
+9fac3c81eebd81b Ryder Lee     2020-04-25  2410  	if (!rate) {
+9fac3c81eebd81b Ryder Lee     2020-04-25  2411  		ra->field = cpu_to_le32(RATE_PARAM_AUTO);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2412  		goto out;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2413  	}
+9fac3c81eebd81b Ryder Lee     2020-04-25  2414  
+4d2423326de9e98 Ryder Lee     2021-08-07  2415  	ra->field = cpu_to_le32(RATE_PARAM_FIXED);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2416  	ra->phy.type = FIELD_GET(RATE_CFG_PHY_TYPE, rate);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2417  	ra->phy.bw = FIELD_GET(RATE_CFG_BW, rate);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2418  	ra->phy.nss = FIELD_GET(RATE_CFG_NSS, rate);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2419  	ra->phy.mcs = FIELD_GET(RATE_CFG_MCS, rate);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2420  	ra->phy.stbc = FIELD_GET(RATE_CFG_STBC, rate);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2421  
+9fac3c81eebd81b Ryder Lee     2020-04-25  2422  	if (ra->phy.bw)
+9fac3c81eebd81b Ryder Lee     2020-04-25  2423  		ra->phy.ldpc = 7;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2424  	else
+9fac3c81eebd81b Ryder Lee     2020-04-25  2425  		ra->phy.ldpc = FIELD_GET(RATE_CFG_LDPC, rate) * 7;
+9fac3c81eebd81b Ryder Lee     2020-04-25  2426  
+9fac3c81eebd81b Ryder Lee     2020-04-25  2427  	/* HT/VHT - SGI: 1, LGI: 0; HE - SGI: 0, MGI: 1, LGI: 2 */
+4d2423326de9e98 Ryder Lee     2021-08-07  2428  	if (ra->phy.type > MT_PHY_TYPE_VHT) {
+4d2423326de9e98 Ryder Lee     2021-08-07  2429  		ra->phy.he_ltf = FIELD_GET(RATE_CFG_HE_LTF, rate) * 85;
+4d2423326de9e98 Ryder Lee     2021-08-07  2430  		ra->phy.sgi = FIELD_GET(RATE_CFG_GI, rate) * 85;
+4d2423326de9e98 Ryder Lee     2021-08-07  2431  	} else {
+4d2423326de9e98 Ryder Lee     2021-08-07  2432  		ra->phy.sgi = FIELD_GET(RATE_CFG_GI, rate) * 15;
+4d2423326de9e98 Ryder Lee     2021-08-07  2433  	}
+9fac3c81eebd81b Ryder Lee     2020-04-25  2434  
+9fac3c81eebd81b Ryder Lee     2020-04-25  2435  out:
+fa62d0e0080bca7 Felix Fietkau 2020-09-30  2436  	return mt76_mcu_skb_send_msg(&dev->mt76, skb,
+c203dd621780842 Felix Fietkau 2021-01-06  2437  				     MCU_EXT_CMD(STA_REC_UPDATE), true);
+9fac3c81eebd81b Ryder Lee     2020-04-25  2438  }
+9fac3c81eebd81b Ryder Lee     2020-04-25  2439  
+
+:::::: The code at line 2393 was first introduced by commit
+:::::: 9fac3c81eebd81bbce8b050e15b03d3490841717 mt76: mt7915: set peer Tx fixed rate through debugfs
+
+:::::: TO: Ryder Lee <ryder.lee@mediatek.com>
+:::::: CC: Felix Fietkau <nbd@nbd.name>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
