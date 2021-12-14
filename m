@@ -1,43 +1,31 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB7668
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 17:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639504518; x=1671040518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CWKd4c6pmpkfVy6aW9VcSytG8AoS/c/lxqMSaRM5+2I=;
-  b=K82tV1FMJniG0iMSBnWDQPF+8MQunVRZfZlAWH7SxHg4xRnyDtqAQhYH
-   79+cJqudljiuaM7TCPw5crQapgQ0jCcbHYOVC2D1pC0X6giPZsZjdbUwy
-   WPqAONJkfOzi2RT9+bPkTRNwDSp8csqnOIum4Zt4tvMc7wlY2xJLhUT2I
-   +xfE7PtdaWmmnZ7y9iArJ6jbg89+z6m2qprJBs9o2/hZb7wOLoE21aNYI
-   +RTz7uSO8e/ASpPR7hQrdSZjgGbViQ/gR91Kcm2Dry1fKLad9kPKjycOb
-   5QMqOx0wn1nMm7Xp3pLALtYZgMR2HpE/QWEXsJp+hzhOYoM4V3OD3r5Us
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237774333"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="237774333"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:55:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="614373532"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 14 Dec 2021 09:55:15 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxC1C-0000aq-Ro; Tue, 14 Dec 2021 17:55:14 +0000
-Date: Wed, 15 Dec 2021 01:54:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	Michal Simek <monstr@monstr.eu>, Jonathan Corbet <corbet@lwn.net>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.10 1566/1981] fs/pstore/zone.c:39:
- warning: expecting prototype for struct psz_head. Prototype was for struct
- psz_buffer instead
-Message-ID: <202112150136.7UyCfGsC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A822568
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 18:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA269C34600;
+	Tue, 14 Dec 2021 18:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639505222;
+	bh=snNZ5pvPEda5tFxSouYZVnEaCsqOGiTLHoqkbWDbHoM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UPwdcSIvb+tbW2yjr2HxlxXZphPHU7vJrgigYJHCznVVtc/edMZB5cDk1IahTI5CG
+	 jVrwdsKkYZ+O05tmiXg5dgdfQXqIE7y07l1HxTfBA2tzQJOdFPsB7W+BSeL1L0JmWk
+	 AdUSwRABkptmESSmqOYaA9nwH/Fac0oPXUMYVQTLjrNbQl9sskhyqTdOBYo/Q6vXmZ
+	 HceHa/VSOozj9CLOyBHQ9dIKM9ToTnFhSbTgBKgPf+QHKg6so3MKR7Ldq9rEU84/GJ
+	 nlK9n8WFvJpeIK3U/yMxrm6RLiSwqk0KhOvR4G29Od4ICajP4/dJiXKXoX6VxnJfcN
+	 kzI05BRWP2Nnw==
+Date: Tue, 14 Dec 2021 11:06:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nick Desaulniers <ndesaulniers@google.com>, list@opendingux.net,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/3] MIPS: boot/compressed: Disable abicalls
+Message-ID: <YbjdQfrC+EjeJjRV@archlinux-ax161>
+References: <20211213224914.1501303-1-paul@crapouillou.net>
+ <20211213224914.1501303-2-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,58 +34,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211213224914.1501303-2-paul@crapouillou.net>
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.10
-head:   87ec9a2d98a7a7dfc98b57348a0ec310fd170e4b
-commit: d3328cb2dd0a2fb94a09587105c37299e296d4c6 [1566/1981] scripts: kernel-doc: validate kernel-doc markup with the actual names
-config: x86_64-randconfig-a011-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150136.7UyCfGsC-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/d3328cb2dd0a2fb94a09587105c37299e296d4c6
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.10
-        git checkout d3328cb2dd0a2fb94a09587105c37299e296d4c6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/pstore/
+On Mon, Dec 13, 2021 at 10:49:12PM +0000, Paul Cercueil wrote:
+> Avoid complaints from Clang/LLVM by building the decompress program with
+> -mno-abicalls.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+What is the message?
 
-All warnings (new ones prefixed by >>):
-
->> fs/pstore/zone.c:39: warning: expecting prototype for struct psz_head. Prototype was for struct psz_buffer instead
-
-
-vim +39 fs/pstore/zone.c
-
-d26c3321fe18dc WeiXiong Liao 2020-03-25  24  
-d26c3321fe18dc WeiXiong Liao 2020-03-25  25  /**
-d26c3321fe18dc WeiXiong Liao 2020-03-25  26   * struct psz_head - header of zone to flush to storage
-d26c3321fe18dc WeiXiong Liao 2020-03-25  27   *
-d26c3321fe18dc WeiXiong Liao 2020-03-25  28   * @sig: signature to indicate header (PSZ_SIG xor PSZONE-type value)
-d26c3321fe18dc WeiXiong Liao 2020-03-25  29   * @datalen: length of data in @data
-0dc068265a1c59 WeiXiong Liao 2020-03-25  30   * @start: offset into @data where the beginning of the stored bytes begin
-d26c3321fe18dc WeiXiong Liao 2020-03-25  31   * @data: zone data.
-d26c3321fe18dc WeiXiong Liao 2020-03-25  32   */
-d26c3321fe18dc WeiXiong Liao 2020-03-25  33  struct psz_buffer {
-d26c3321fe18dc WeiXiong Liao 2020-03-25  34  #define PSZ_SIG (0x43474244) /* DBGC */
-d26c3321fe18dc WeiXiong Liao 2020-03-25  35  	uint32_t sig;
-d26c3321fe18dc WeiXiong Liao 2020-03-25  36  	atomic_t datalen;
-0dc068265a1c59 WeiXiong Liao 2020-03-25  37  	atomic_t start;
-d26c3321fe18dc WeiXiong Liao 2020-03-25  38  	uint8_t data[];
-d26c3321fe18dc WeiXiong Liao 2020-03-25 @39  };
-d26c3321fe18dc WeiXiong Liao 2020-03-25  40  
-
-:::::: The code at line 39 was first introduced by commit
-:::::: d26c3321fe18dc74517dc1f518d584aa33b0a851 pstore/zone: Introduce common layer to manage storage zones
-
-:::::: TO: WeiXiong Liao <liaoweixiong@allwinnertech.com>
-:::::: CC: Kees Cook <keescook@chromium.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  arch/mips/boot/compressed/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> index f27cf31b4140..4c9ecfbb0ef4 100644
+> --- a/arch/mips/boot/compressed/Makefile
+> +++ b/arch/mips/boot/compressed/Makefile
+> @@ -27,10 +27,10 @@ ifdef CONFIG_CPU_LOONGSON64
+>  KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
+>  endif
+>  
+> -KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS \
+> +KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ -D__DISABLE_EXPORTS \
+>  	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+>  
+> -KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+> +KBUILD_AFLAGS := $(KBUILD_AFLAGS) -mno-abicalls -D__ASSEMBLY__ \
+>  	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+>  	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
+>  
+> -- 
+> 2.33.0
+> 
+> 
