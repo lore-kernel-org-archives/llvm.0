@@ -1,43 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE4729CA
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 20:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C758B29CA
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 22:03:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639515090; x=1671051090;
+  t=1639519412; x=1671055412;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jf3OkZfIOFN18a+HLaBkiehOT7liQfKruaIeee2Cb0I=;
-  b=mUW6eySYOpW6YDRqs5r4FF50o33yLNuedgkCDyLcG/UjYzoLG7OCoNMI
-   SsJC/8QSko/P5d+VOhyWICQuG0ZJc4I3TC9uUzc9hKWZANjZNxoZ41MxB
-   BJ/DK2IoPEWZNA7BlcZuLTlNW/Ve37UvcDO1xdEwmPEsOrAXi7Rlaooum
-   ZgpRr5jKykoPafvzxNuGVOVAP4N4ETdngVvZXYOd7XInTeIJpjmh0hdht
-   F7jzur9HempLxTzzFCWA9Ieq4HUdP7gJIjfjZfJyWc4s16Hv4yU3nPlaq
-   +JboJdpBYIxFby52L8SqQcygnPRd3B6WFhRZWrLCO6tYoswmonRHIChOA
+  bh=5PmAzK2/sfKUZ2BGAwAHafsf+NzQ82CfvTS31m6HQnA=;
+  b=dCQI9NQnT2e3AR3kkxQR1aGvtqDKw4mB7npukWFriEJM9LUmWlHe2J3w
+   mg5muFJs0Z0lCbZVP0xj4M7jFzS3fzwBB8o9VZHo9mEUtFwXSqwDRkoyb
+   oSYYJ/jJuSPkLFblw63sfMacVmmN9Nm1RHltqaz5aeB07sM3BBFrssYM7
+   x0gYDzbTVOPCGdk2in+DjhPSVCwHVm38p3OpMy7eL8E48MoWkeOtgBuhZ
+   88RAsONn73qepOd85D61XXjOyczGtwhk+AuQdN/MTaATxKxqobyoXatZG
+   VEfQK2JWyTVso4IWlKDtTKIbbG0q53kDtoV8h2hGMwf2jv4Q5KyFuBZdz
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239030796"
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226372924"
 X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="239030796"
+   d="scan'208";a="226372924"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 12:51:30 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 14:03:31 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="465255740"
+   d="scan'208";a="465273457"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 12:51:28 -0800
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 14:03:30 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxElj-0000lP-UY; Tue, 14 Dec 2021 20:51:27 +0000
-Date: Wed, 15 Dec 2021 04:51:04 +0800
+	id 1mxFtR-0000ow-ES; Tue, 14 Dec 2021 22:03:29 +0000
+Date: Wed, 15 Dec 2021 06:02:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To: Atish Patra <atish.patra@wdc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.10 1964/1981]
- drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of
- function 'FIELD_PREP'
-Message-ID: <202112150402.8WBLORs1-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-doc@vger.kernel.org
+Subject: [palmer:riscv-pmu 4/10] drivers/perf/riscv_pmu_legacy.c:76: warning:
+ This comment starts with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202112150635.JSGg5exu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,140 +48,59 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.10
-head:   87ec9a2d98a7a7dfc98b57348a0ec310fd170e4b
-commit: 0a6e9d56f285540e5ca6c69c7fad2c3520b79c50 [1964/1981] clocking-wizard: Support higher frequency accuracy
-config: x86_64-randconfig-a013-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150402.8WBLORs1-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git riscv-pmu
+head:   7a94c6fb363cfe62906cb0503d763204b0fe32b8
+commit: e4d5f33e63b1260f378512c0f6e5a117ed6b894a [4/10] RISC-V: Add a simple platform driver for RISC-V legacy perf
+config: riscv-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150635.JSGg5exu-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/0a6e9d56f285540e5ca6c69c7fad2c3520b79c50
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.10
-        git checkout 0a6e9d56f285540e5ca6c69c7fad2c3520b79c50
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=e4d5f33e63b1260f378512c0f6e5a117ed6b894a
+        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
+        git fetch --no-tags palmer riscv-pmu
+        git checkout e4d5f33e63b1260f378512c0f6e5a117ed6b894a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/ drivers/perf/ drivers/power/supply/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-                 ^
->> drivers/clk/clk-xlnx-clock-wizard.c:392:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-               ^
-   2 errors generated.
+>> drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * This is just a simple implementation to allow legacy implementations
 
 
-vim +/FIELD_PREP +324 drivers/clk/clk-xlnx-clock-wizard.c
+vim +76 drivers/perf/riscv_pmu_legacy.c
 
-   301	
-   302	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
-   303					       unsigned long parent_rate)
-   304	{
-   305		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   306		u32 reg, pre;
-   307		u16 retries;
-   308		int err;
-   309		u64 vco_freq, rate_div, f, clockout0_div;
-   310	
-   311		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
-   312		if (err)
-   313			pr_err("failed to get divisors\n");
-   314	
-   315		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
-   316		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   317	
-   318		clockout0_div = rate_div / WZRD_FRAC_POINTS;
-   319	
-   320		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   321		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
-   322		f = f & WZRD_CLKOUT_FRAC_MASK;
-   323	
- > 324		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-   325		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
-   326	
-   327		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
-   328		/* Set divisor and clear phase offset */
-   329		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
-   330		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
-   331		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
-   332		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
-   333		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
-   334		/* Check status register */
-   335		retries = WZRD_DR_NUM_RETRIES;
-   336		while (retries--) {
-   337			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
-   338								WZRD_DR_LOCK_BIT_MASK)
-   339				break;
-   340		}
-   341	
-   342		if (!retries)
-   343			return -ETIMEDOUT;
-   344	
-   345		/* Initiate reconfiguration */
-   346		writel(WZRD_DR_BEGIN_DYNA_RECONF,
-   347		       divider->base + WZRD_DR_INIT_REG_OFFSET);
-   348	
-   349		/* Check status register */
-   350		retries = WZRD_DR_NUM_RETRIES;
-   351		while (retries--) {
-   352			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
-   353								WZRD_DR_LOCK_BIT_MASK)
-   354				break;
-   355		}
-   356	
-   357		if (!retries)
-   358			return -ETIMEDOUT;
-   359	
-   360		return 0;
-   361	}
-   362	
-   363	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
-   364					unsigned long parent_rate)
-   365	{
-   366		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   367		unsigned long flags = 0;
-   368		int ret;
-   369	
-   370		if (divider->lock)
-   371			spin_lock_irqsave(divider->lock, flags);
-   372		else
-   373			__acquire(divider->lock);
-   374	
-   375		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
-   376	
-   377		if (divider->lock)
-   378			spin_unlock_irqrestore(divider->lock, flags);
-   379		else
-   380			__release(divider->lock);
-   381	
-   382		return ret;
-   383	}
-   384	
-   385	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
-   386						      unsigned long parent_rate)
-   387	{
-   388		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   389		u32 m, d, o, div, reg, f;
-   390	
-   391		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
- > 392		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   393		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
-   394		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
-   395		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   396		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
-   397	
-   398		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
-   399		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
-   400				divider->flags, divider->width);
-   401	}
-   402	
+    74	
+    75	/**
+  > 76	 * This is just a simple implementation to allow legacy implementations
+    77	 * compatible with new RISC-V PMU driver framework.
+    78	 * This driver only allows reading two counters i.e CYCLE & INSTRET.
+    79	 * However, it can not start or stop the counter. Thus, it is not very useful
+    80	 * will be removed in future.
+    81	 */
+    82	static void pmu_legacy_init(struct riscv_pmu *pmu)
+    83	{
+    84		pr_info("Legacy PMU implementation is available\n");
+    85	
+    86		pmu->num_counters = RISCV_PMU_LEGACY_NUM_CTR;
+    87		pmu->ctr_start = pmu_legacy_ctr_start;
+    88		pmu->ctr_stop = NULL;
+    89		pmu->event_map = pmu_legacy_event_map;
+    90		pmu->ctr_get_idx = pmu_legacy_ctr_get_idx;
+    91		pmu->ctr_get_width = NULL;
+    92		pmu->ctr_clear_idx = NULL;
+    93		pmu->ctr_read = pmu_legacy_read_ctr;
+    94	
+    95		perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+    96	}
+    97	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
