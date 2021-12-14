@@ -1,250 +1,750 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6787168
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 07:23:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639466633; x=1671002633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=nyOWjgxaBHie8zN5KgQjW7JZ2zK9B6J6kOyl4z95c6I=;
-  b=g7ErpZm0jefQ9NXSWb4FPujzNtDS4JI0mZMsB84PQmv+GGubuAcpQ3m9
-   9yTqIWpXM+FYcCbtvA4l89hYolcF7Vw3L0eneo9elBMQb/HhFZ37nJ7h9
-   sYanUTuqD1cdIFUHOvMnKOSc1ptboCpBnjDFajf5ggoCKWX5hGnY+PtXV
-   Pyi819AG3gKAI4nJCQbjf2Ho6jQIaq3tb0p1pc2EgNQPwqKYtJ7OdzP8K
-   kbNOWs058HPgMe+B3Nn1HwZavpv11qH4YwMAaKdcXPT4TuJZaIJ9OKYb8
-   lwVEo3UsJ0BPSmDgg2pXK4WrZMEjANpzb//pXzZciENDsmZ33PGVJR80c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="325191757"
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="325191757"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 23:23:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="464965573"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 23:23:51 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mx2AA-00002I-LY; Tue, 14 Dec 2021 07:23:50 +0000
-Date: Tue, 14 Dec 2021 15:23:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kechen Lu <kechenl@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH] KVM: x86: add kvm per-vCPU exits disable capability
-Message-ID: <202112141509.dBVwl6Ux-lkp@intel.com>
-References: <20211214033227.264714-1-kechenl@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F605168
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 07:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1639468775;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=78ZmRXq2hMWFqR1/dhzamPogJItaAWAcmnp3aHtvGy8=;
+	b=Dpuq2fgNNiTqqBffWdMdE3zgtYhA5TXi05ZLxlzQ0jim6WyWp72Yb7AqN1rb2OluahO/Iy
+	MsNJ4TIxa2UmZ58w4/x2QAh5dWDgV11WVk4vQbW+nE0OrHX+eNn0eDjoKbzaWDk4EGRHqR
+	Wq6kBCy3nmi5DUMo9J6dsflIsWs/LtU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-211-qVnH9cAbMnaL-7sDX4O0UA-1; Tue, 14 Dec 2021 02:59:29 -0500
+X-MC-Unique: qVnH9cAbMnaL-7sDX4O0UA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A392100C661
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 07:59:28 +0000 (UTC)
+Received: from [172.64.9.13] (unknown [10.30.33.187])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5C8A5100E125;
+	Tue, 14 Dec 2021 07:59:05 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211214033227.264714-1-kechenl@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-Hi Kechen,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on mst-vhost/linux-next tip/master linux/master linus/master v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Kechen-Lu/KVM-x86-add-kvm-per-vCPU-exits-disable-capability/20211214-113446
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-config: i386-buildonly-randconfig-r004-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141509.dBVwl6Ux-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/08f20df47a09e327aee3e73a8d7c77b1ffc01bc0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kechen-Lu/KVM-x86-add-kvm-per-vCPU-exits-disable-capability/20211214-113446
-        git checkout 08f20df47a09e327aee3e73a8d7c77b1ffc01bc0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/x86.c:5775:23: warning: shift count >= width of type [-Wshift-count-overflow]
-                   if (cap->args[0] & ~KVM_X86_DISABLE_VALID_EXITS)
-                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/kvm.h:806:12: note: expanded from macro 'KVM_X86_DISABLE_VALID_EXITS'
-                                                 KVM_X86_DISABLE_EXITS_PER_VCPU)
-                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/kvm.h:801:51: note: expanded from macro 'KVM_X86_DISABLE_EXITS_PER_VCPU'
-   #define KVM_X86_DISABLE_EXITS_PER_VCPU       (1UL << 63)
-                                                     ^  ~~
-   arch/x86/kvm/x86.c:5787:23: warning: shift count >= width of type [-Wshift-count-overflow]
-                   if ((cap->args[0] & KVM_X86_DISABLE_EXITS_PER_VCPU) &&
-                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/kvm.h:801:51: note: expanded from macro 'KVM_X86_DISABLE_EXITS_PER_VCPU'
-   #define KVM_X86_DISABLE_EXITS_PER_VCPU       (1UL << 63)
-                                                     ^  ~~
-   arch/x86/kvm/x86.c:2335:19: warning: unused function 'gtod_is_based_on_tsc' [-Wunused-function]
-   static inline int gtod_is_based_on_tsc(int mode)
-                     ^
-   3 warnings generated.
+From: CKI Project <cki-project@redhat.com>
+To: skt-results-master@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?q?=F0=9F=92=A5?= PANICKED: Test report for kernel 5.16.0-rc5
+ (mainline.kernel.org-clang, 5472f14a)
+Date: Tue, 14 Dec 2021 07:59:04 -0000
+CC: Yi Zhang <yizhan@redhat.com>, Fendy Tjahjadi <ftjahjad@redhat.com>,
+ Memory Management <mm-qe@redhat.com>, Jan Stancek <jstancek@redhat.com>,
+ Li Wang <liwang@redhat.com>, Jiri Dluhos <jdluhos@redhat.com>,
+ Hangbin Liu <haliu@redhat.com>, Milos Malik <mmalik@redhat.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, Ziqian Sun <zsun@redhat.com>,
+ Ondrej Moris <omoris@redhat.com>
+Message-ID: <cki.DYIBF8T6STUB3WL11EKO@redhat.com>
+X-Gitlab-Pipeline-ID: 428750255
+X-Gitlab-Url: https://gitlab.com
+X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/428750255?=
+X-DataWarehouse-Checkout-IID: 26917
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +5775 arch/x86/kvm/x86.c
 
-23d43cf998275bc Christoffer Dall    2012-07-24  5724  
-e5d83c74a5800c2 Paolo Bonzini       2017-02-16  5725  int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-90de4a1875180f8 Nadav Amit          2015-04-13  5726  			    struct kvm_enable_cap *cap)
-90de4a1875180f8 Nadav Amit          2015-04-13  5727  {
-90de4a1875180f8 Nadav Amit          2015-04-13  5728  	int r;
-90de4a1875180f8 Nadav Amit          2015-04-13  5729  
-90de4a1875180f8 Nadav Amit          2015-04-13  5730  	if (cap->flags)
-90de4a1875180f8 Nadav Amit          2015-04-13  5731  		return -EINVAL;
-90de4a1875180f8 Nadav Amit          2015-04-13  5732  
-90de4a1875180f8 Nadav Amit          2015-04-13  5733  	switch (cap->cap) {
-90de4a1875180f8 Nadav Amit          2015-04-13  5734  	case KVM_CAP_DISABLE_QUIRKS:
-90de4a1875180f8 Nadav Amit          2015-04-13  5735  		kvm->arch.disabled_quirks = cap->args[0];
-90de4a1875180f8 Nadav Amit          2015-04-13  5736  		r = 0;
-90de4a1875180f8 Nadav Amit          2015-04-13  5737  		break;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5738  	case KVM_CAP_SPLIT_IRQCHIP: {
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5739  		mutex_lock(&kvm->lock);
-b053b2aef25d007 Steve Rutherford    2015-07-29  5740  		r = -EINVAL;
-b053b2aef25d007 Steve Rutherford    2015-07-29  5741  		if (cap->args[0] > MAX_NR_RESERVED_IOAPIC_PINS)
-b053b2aef25d007 Steve Rutherford    2015-07-29  5742  			goto split_irqchip_unlock;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5743  		r = -EEXIST;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5744  		if (irqchip_in_kernel(kvm))
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5745  			goto split_irqchip_unlock;
-557abc40d121358 Paolo Bonzini       2016-06-13  5746  		if (kvm->created_vcpus)
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5747  			goto split_irqchip_unlock;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5748  		r = kvm_setup_empty_irq_routing(kvm);
-5c0aea0e8d98e38 David Hildenbrand   2017-04-28  5749  		if (r)
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5750  			goto split_irqchip_unlock;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5751  		/* Pairs with irqchip_in_kernel. */
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5752  		smp_wmb();
-49776faf93f8074 Radim Krčmář        2016-12-16  5753  		kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
-b053b2aef25d007 Steve Rutherford    2015-07-29  5754  		kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
-ef8b4b7203682cc Paolo Bonzini       2021-11-30  5755  		kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5756  		r = 0;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5757  split_irqchip_unlock:
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5758  		mutex_unlock(&kvm->lock);
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5759  		break;
-49df6397edfc5a8 Steve Rutherford    2015-07-29  5760  	}
-3713131345fbea2 Radim Krčmář        2016-07-12  5761  	case KVM_CAP_X2APIC_API:
-3713131345fbea2 Radim Krčmář        2016-07-12  5762  		r = -EINVAL;
-3713131345fbea2 Radim Krčmář        2016-07-12  5763  		if (cap->args[0] & ~KVM_X2APIC_API_VALID_FLAGS)
-3713131345fbea2 Radim Krčmář        2016-07-12  5764  			break;
-3713131345fbea2 Radim Krčmář        2016-07-12  5765  
-3713131345fbea2 Radim Krčmář        2016-07-12  5766  		if (cap->args[0] & KVM_X2APIC_API_USE_32BIT_IDS)
-3713131345fbea2 Radim Krčmář        2016-07-12  5767  			kvm->arch.x2apic_format = true;
-c519265f2aa348b Radim Krčmář        2016-07-12  5768  		if (cap->args[0] & KVM_X2APIC_API_DISABLE_BROADCAST_QUIRK)
-c519265f2aa348b Radim Krčmář        2016-07-12  5769  			kvm->arch.x2apic_broadcast_quirk_disabled = true;
-3713131345fbea2 Radim Krčmář        2016-07-12  5770  
-3713131345fbea2 Radim Krčmář        2016-07-12  5771  		r = 0;
-3713131345fbea2 Radim Krčmář        2016-07-12  5772  		break;
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5773  	case KVM_CAP_X86_DISABLE_EXITS:
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5774  		r = -EINVAL;
-4d5422cea3b61f1 Wanpeng Li          2018-03-12 @5775  		if (cap->args[0] & ~KVM_X86_DISABLE_VALID_EXITS)
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5776  			break;
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5777  
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5778  		if ((cap->args[0] & KVM_X86_DISABLE_EXITS_MWAIT) &&
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5779  			kvm_can_mwait_in_guest())
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5780  			kvm->arch.mwait_in_guest = true;
-766d3571d8e50d3 Michael S. Tsirkin  2018-06-08  5781  		if (cap->args[0] & KVM_X86_DISABLE_EXITS_HLT)
-caa057a2cad647f Wanpeng Li          2018-03-12  5782  			kvm->arch.hlt_in_guest = true;
-b31c114b82b2b55 Wanpeng Li          2018-03-12  5783  		if (cap->args[0] & KVM_X86_DISABLE_EXITS_PAUSE)
-b31c114b82b2b55 Wanpeng Li          2018-03-12  5784  			kvm->arch.pause_in_guest = true;
-b51700632e0e532 Wanpeng Li          2019-05-21  5785  		if (cap->args[0] & KVM_X86_DISABLE_EXITS_CSTATE)
-b51700632e0e532 Wanpeng Li          2019-05-21  5786  			kvm->arch.cstate_in_guest = true;
-08f20df47a09e32 Kechen Lu           2021-12-13  5787  		if ((cap->args[0] & KVM_X86_DISABLE_EXITS_PER_VCPU) &&
-08f20df47a09e32 Kechen Lu           2021-12-13  5788  			cap->args[1])
-08f20df47a09e32 Kechen Lu           2021-12-13  5789  			kvm->arch.exits_disable_vcpu_mask = cap->args[1];
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5790  		r = 0;
-4d5422cea3b61f1 Wanpeng Li          2018-03-12  5791  		break;
-6fbbde9a1969dfb Drew Schmitt        2018-08-20  5792  	case KVM_CAP_MSR_PLATFORM_INFO:
-6fbbde9a1969dfb Drew Schmitt        2018-08-20  5793  		kvm->arch.guest_can_read_msr_platform_info = cap->args[0];
-6fbbde9a1969dfb Drew Schmitt        2018-08-20  5794  		r = 0;
-c4f55198c7c2b87 Jim Mattson         2018-10-16  5795  		break;
-c4f55198c7c2b87 Jim Mattson         2018-10-16  5796  	case KVM_CAP_EXCEPTION_PAYLOAD:
-c4f55198c7c2b87 Jim Mattson         2018-10-16  5797  		kvm->arch.exception_payload_enabled = cap->args[0];
-c4f55198c7c2b87 Jim Mattson         2018-10-16  5798  		r = 0;
-6fbbde9a1969dfb Drew Schmitt        2018-08-20  5799  		break;
-1ae099540e8c7f1 Alexander Graf      2020-09-25  5800  	case KVM_CAP_X86_USER_SPACE_MSR:
-1ae099540e8c7f1 Alexander Graf      2020-09-25  5801  		kvm->arch.user_space_msr_mask = cap->args[0];
-1ae099540e8c7f1 Alexander Graf      2020-09-25  5802  		r = 0;
-1ae099540e8c7f1 Alexander Graf      2020-09-25  5803  		break;
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5804  	case KVM_CAP_X86_BUS_LOCK_EXIT:
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5805  		r = -EINVAL;
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5806  		if (cap->args[0] & ~KVM_BUS_LOCK_DETECTION_VALID_MODE)
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5807  			break;
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5808  
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5809  		if ((cap->args[0] & KVM_BUS_LOCK_DETECTION_OFF) &&
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5810  		    (cap->args[0] & KVM_BUS_LOCK_DETECTION_EXIT))
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5811  			break;
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5812  
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5813  		if (kvm_has_bus_lock_exit &&
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5814  		    cap->args[0] & KVM_BUS_LOCK_DETECTION_EXIT)
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5815  			kvm->arch.bus_lock_detection_enabled = true;
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5816  		r = 0;
-fe6b6bc802b4008 Chenyi Qiang        2020-11-06  5817  		break;
-fe7e948837f312d Sean Christopherson 2021-04-12  5818  #ifdef CONFIG_X86_SGX_KVM
-fe7e948837f312d Sean Christopherson 2021-04-12  5819  	case KVM_CAP_SGX_ATTRIBUTE: {
-fe7e948837f312d Sean Christopherson 2021-04-12  5820  		unsigned long allowed_attributes = 0;
-fe7e948837f312d Sean Christopherson 2021-04-12  5821  
-fe7e948837f312d Sean Christopherson 2021-04-12  5822  		r = sgx_set_attribute(&allowed_attributes, cap->args[0]);
-fe7e948837f312d Sean Christopherson 2021-04-12  5823  		if (r)
-fe7e948837f312d Sean Christopherson 2021-04-12  5824  			break;
-fe7e948837f312d Sean Christopherson 2021-04-12  5825  
-fe7e948837f312d Sean Christopherson 2021-04-12  5826  		/* KVM only supports the PROVISIONKEY privileged attribute. */
-fe7e948837f312d Sean Christopherson 2021-04-12  5827  		if ((allowed_attributes & SGX_ATTR_PROVISIONKEY) &&
-fe7e948837f312d Sean Christopherson 2021-04-12  5828  		    !(allowed_attributes & ~SGX_ATTR_PROVISIONKEY))
-fe7e948837f312d Sean Christopherson 2021-04-12  5829  			kvm->arch.sgx_provisioning_allowed = true;
-fe7e948837f312d Sean Christopherson 2021-04-12  5830  		else
-fe7e948837f312d Sean Christopherson 2021-04-12  5831  			r = -EINVAL;
-fe7e948837f312d Sean Christopherson 2021-04-12  5832  		break;
-fe7e948837f312d Sean Christopherson 2021-04-12  5833  	}
-fe7e948837f312d Sean Christopherson 2021-04-12  5834  #endif
-54526d1fd59338f Nathan Tempelman    2021-04-08  5835  	case KVM_CAP_VM_COPY_ENC_CONTEXT_FROM:
-54526d1fd59338f Nathan Tempelman    2021-04-08  5836  		r = -EINVAL;
-54526d1fd59338f Nathan Tempelman    2021-04-08  5837  		if (kvm_x86_ops.vm_copy_enc_context_from)
-54526d1fd59338f Nathan Tempelman    2021-04-08  5838  			r = kvm_x86_ops.vm_copy_enc_context_from(kvm, cap->args[0]);
-54526d1fd59338f Nathan Tempelman    2021-04-08  5839  		return r;
-b56639318bb2be6 Peter Gonda         2021-10-21  5840  	case KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM:
-b56639318bb2be6 Peter Gonda         2021-10-21  5841  		r = -EINVAL;
-b56639318bb2be6 Peter Gonda         2021-10-21  5842  		if (kvm_x86_ops.vm_move_enc_context_from)
-b56639318bb2be6 Peter Gonda         2021-10-21  5843  			r = kvm_x86_ops.vm_move_enc_context_from(
-b56639318bb2be6 Peter Gonda         2021-10-21  5844  				kvm, cap->args[0]);
-b56639318bb2be6 Peter Gonda         2021-10-21  5845  		return r;
-0dbb11230437895 Ashish Kalra        2021-06-08  5846  	case KVM_CAP_EXIT_HYPERCALL:
-0dbb11230437895 Ashish Kalra        2021-06-08  5847  		if (cap->args[0] & ~KVM_EXIT_HYPERCALL_VALID_MASK) {
-0dbb11230437895 Ashish Kalra        2021-06-08  5848  			r = -EINVAL;
-0dbb11230437895 Ashish Kalra        2021-06-08  5849  			break;
-0dbb11230437895 Ashish Kalra        2021-06-08  5850  		}
-0dbb11230437895 Ashish Kalra        2021-06-08  5851  		kvm->arch.hypercall_exit_enabled = cap->args[0];
-0dbb11230437895 Ashish Kalra        2021-06-08  5852  		r = 0;
-0dbb11230437895 Ashish Kalra        2021-06-08  5853  		break;
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5854  	case KVM_CAP_EXIT_ON_EMULATION_FAILURE:
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5855  		r = -EINVAL;
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5856  		if (cap->args[0] & ~1)
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5857  			break;
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5858  		kvm->arch.exit_on_emulation_error = cap->args[0];
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5859  		r = 0;
-19238e75bd8ed8f Aaron Lewis         2021-05-10  5860  		break;
-90de4a1875180f8 Nadav Amit          2015-04-13  5861  	default:
-90de4a1875180f8 Nadav Amit          2015-04-13  5862  		r = -EINVAL;
-90de4a1875180f8 Nadav Amit          2015-04-13  5863  		break;
-90de4a1875180f8 Nadav Amit          2015-04-13  5864  	}
-90de4a1875180f8 Nadav Amit          2015-04-13  5865  	return r;
-90de4a1875180f8 Nadav Amit          2015-04-13  5866  }
-90de4a1875180f8 Nadav Amit          2015-04-13  5867  
+Check out this report and any autotriaged failures in our web dashboard:
+    https://datawarehouse.cki-project.org/kcidb/checkouts/26917
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hello,
+
+We ran automated tests on a recent commit from this kernel tree:
+
+       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git
+            Commit: 5472f14a3742 - Merge tag 'for_linus' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/mst/vhost
+
+The results of these automated tests are provided below.
+
+    Overall result: FAILED (see details below)
+             Merge: OK
+           Compile: OK
+ Selftests compile: FAILED
+             Tests: PANICKED
+    Targeted tests: NO
+
+All kernel binaries, config files, and logs are available for download here=
+:
+
+  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
+fix=3Ddatawarehouse-public/2021/12/13/428750255
+
+One or more kernel tests failed:
+
+    aarch64:
+     =E2=9D=8C LTP: openposix test suite
+
+    ppc64le:
+     =F0=9F=92=A5 LTP - cve
+
+    x86_64 (debug):
+     =E2=9D=8C LTP - syscalls
+     =E2=9D=8C LTP: openposix test suite
+
+    x86_64:
+     =E2=9D=8C selinux-policy: serge-testsuite
+     =E2=9D=8C LTP: openposix test suite
+     =E2=9D=8C trace: ftrace/tracer
+
+We hope that these logs can help you find the problem quickly. For the full
+detail on our testing procedures, please scroll to the bottom of this messa=
+ge.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
+Compile testing
+---------------
+
+We compiled the kernel for 5 architectures:
+
+    aarch64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    ppc64le:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    s390x:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+
+We built the following selftests:
+
+  x86_64:
+      net: OK
+      bpf: fail
+      seccomp: OK
+      lkdtm: OK
+      install and packaging: OK
+
+You can find the full log (build-selftests.log) in the artifact storage abo=
+ve.
+
+
+Hardware testing
+----------------
+We booted each kernel and ran the following tests:
+
+  aarch64:
+    Host 1:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+
+    Host 3:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 Networking bridge: sanity - mlx5
+       =E2=9C=85 Ethernet drivers sanity - mlx5
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 ACPI enabled test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9D=8C LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
+e test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 Storage blktests - blk
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 7:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+
+    Host 8:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+  ppc64le:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+
+    Host 2:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - srp
+
+    Host 3:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+
+    Host 4:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=92=A5 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+  s390x:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 2:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 3:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - srp
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 Storage blktests - blk
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 7:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+  x86_64 (debug):
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
+
+    Host 2:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9D=8C LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9C=85 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9D=8C kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Networking: igmp conformance test
+
+  x86_64:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9D=8C selinux-policy: serge-testsuite
+       =E2=9C=85 Storage blktests - blk
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
+       =F0=9F=9A=A7 =E2=9C=85 Podman system test - as user
+       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvdimm ndctl test s=
+uite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
+
+    Host 2:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - srp
+
+    Host 3:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+
+    Host 4:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9D=8C LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9D=8C trace: ftrace/tracer
+       =E2=9C=85 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9D=8C xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9C=85 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Networking: igmp conformance test
+       =F0=9F=9A=A7 =E2=9D=8C audit: audit testsuite test
+
+    Host 5:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+  Test sources: https://gitlab.com/cki-project/kernel-tests
+    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
+ existing tests!
+
+Aborted tests
+-------------
+Tests that didn't complete running successfully are marked with =E2=9A=A1=
+=E2=9A=A1=E2=9A=A1.
+If this was caused by an infrastructure issue, we try to mark that
+explicitly in the report.
+
+Waived tests
+------------
+If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
+uch tests are
+executed but their results are not taken into account. Tests are waived whe=
+n
+their results are not reliable enough, e.g. when they're just introduced or=
+ are
+being fixed.
+
+Testing timeout
+---------------
+We aim to provide a report within reasonable timeframe. Tests that haven't
+finished running yet are marked with =E2=8F=B1.
+Targeted tests
+--------------
+Test runs for patches always include a set of base tests, plus some
+tests chosen based on the file paths modified by the patch. The latter
+are called "targeted tests". If no targeted tests are run, that means
+no patch-specific tests are available. Please, consider contributing a
+targeted test for related patches to increase test coverage. See
+https://docs.engineering.redhat.com/x/_wEZB for more details.
+
