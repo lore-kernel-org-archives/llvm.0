@@ -1,23 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EA9173
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 11:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E65C34605;
-	Tue, 14 Dec 2021 11:36:27 +0000 (UTC)
-Date: Tue, 14 Dec 2021 11:36:24 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] arm64/xor: use EOR3 instructions when available
-Message-ID: <YbiBuI0XvpWXqbki@arm.com>
-References: <20211213140252.2856053-1-ardb@kernel.org>
- <YbgDR461O9gCEi+Q@archlinux-ax161>
- <CAMj1kXFKuHuzsrDBcUjbaVO6-NQkj8J+vMty_qU3Y0pDwT905w@mail.gmail.com>
- <CAMj1kXGadU-_dM9OtXzy6OqKqReYyzEB-F6NVwDOEodpzwtemw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E17729CA
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 12:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639486334; x=1671022334;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LhOCH6KCJMVbaBpDHKKj3GnByfkmhM3q0uSs05SfGP4=;
+  b=O10XzehiPJILgksvn70xbOsf7idjaE2TiHRo0gM+h6zPuiBzvvruG0no
+   saWJw9DQBtzfWb52nIEbl7SQ/pw8LeBqYy/9hSuSv+EkTXskeR7VZU5wL
+   B+6kQOOh38tBC+0ZLxgIvY42Kj7Qafuf1T7KpDA1X0IhtFx4oMU5mFAFP
+   Bx0cVoVNQKdo4h3zZRftp0mMZvYtStdR3R+Wqw8fD5lfpzJHmkXlpxC93
+   //RFrxylWffkqpvf9ZOmZ0urlzst3GT+L5grGgHtH3TVbuRIol0KroD8S
+   cDUHdK/qhA1PaX/OEDiQxhhwLAEdFrLGWyBX36I2KWSvTzEAW/ZxTpZ0A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="219654170"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="219654170"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 04:52:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="505348409"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 14 Dec 2021 04:52:08 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mx7Hs-0000Jx-8F; Tue, 14 Dec 2021 12:52:08 +0000
+Date: Tue, 14 Dec 2021 20:51:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Palmer <daniel@0x0f.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 66/78]
+ drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value
+ of function declared with 'warn_unused_result' attribute
+Message-ID: <202112142011.TrAzr38n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,52 +45,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXGadU-_dM9OtXzy6OqKqReYyzEB-F6NVwDOEodpzwtemw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Dec 14, 2021 at 12:05:34PM +0100, Ard Biesheuvel wrote:
-> On Tue, 14 Dec 2021 at 09:19, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > + Arnd
-> >
-> > On Tue, 14 Dec 2021 at 03:37, Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Ard,
-> > >
-> > > On Mon, Dec 13, 2021 at 03:02:52PM +0100, Ard Biesheuvel wrote:
-> > > > Use the EOR3 instruction to implement xor_blocks() if the instruction is
-> > > > available, which is the case if the CPU implements the SHA-3 extension.
-> > > > This is about 20% faster on Apple M1 when using the 5-way version.
-> > > >
-> > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > Our CI reported that this patch as commit ce9ba49a2460 ("arm64/xor: use
-> > > EOR3 instructions when available") in the arm64 tree breaks
-> > > allyesconfig:
-> > >
-> > > https://github.com/ClangBuiltLinux/continuous-integration2/runs/4514540083?check_suite_focus=true
-> > >
-> > > I also see this when building with GCC 11.2.0:
-> > >
-> > > WARNING: modpost: EXPORT symbol "xor_block_inner_neon" [vmlinux] version ...
-> > > Is "xor_block_inner_neon" prototyped in <asm/asm-prototypes.h>?
-> > > aarch64-linux-gnu-ld: arch/arm64/lib/xor-neon.o: relocation R_AARCH64_ABS32 against `__crc_xor_block_inner_neon' can not be used when making a shared object
-> >
-> > I suspect this is another genksyms crash, preventing the
-> > __crc_xor_block_inner_neon symbol from ever being emitted.
-> >
-> > This is a recurring annoyance and I am not sure how to address this
-> > properly. Arnd might have some thoughts on the matter as well.
-> 
-> I managed to reproduce this: it's not a crash but definitely a bug in
-> genksyms, as it simply fails to produce the output containing the
-> assignment of __crc_xor_block_inner_neon.
-> 
-> Moving the definition of xor_block_inner_neon as below works around the issue.
-> 
-> Catalin: would you like me to spin a v3? Or do your prefer to just
-> fold this into the existing one?
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   04c62a6ed8b1b9034464e903809c8b6a9354bf6e
+commit: ef6b5b20ff3e51fa6026bc510f66980c5107698c [66/78] irqchip: MStar wakeup intc
+config: hexagon-buildonly-randconfig-r002-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142011.TrAzr38n-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/linux-chenxing/linux/commit/ef6b5b20ff3e51fa6026bc510f66980c5107698c
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout ef6b5b20ff3e51fa6026bc510f66980c5107698c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clocksource/ drivers/irqchip/
 
-I'll fold it in. Thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Catalin
+All warnings (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/warn_unused_result +132 drivers/irqchip/irq-msc313-pm-wakeup.c
+
+    97	
+    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
+    99					   struct device_node *parent)
+   100	{
+   101		int ret = 0, irq;
+   102		struct regmap *pmsleep;
+   103		struct msc313_sleep_intc *intc;
+   104		struct irq_domain *domain;
+   105	
+   106		irq = of_irq_get(node, 0);
+   107		if (irq <= 0)
+   108			return irq;
+   109	
+   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
+   111		if (IS_ERR(pmsleep))
+   112			return PTR_ERR(pmsleep);
+   113	
+   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
+   115		if (!intc)
+   116			return -ENOMEM;
+   117	
+   118		intc->mask = regmap_field_alloc(pmsleep, field_mask);
+   119		intc->type = regmap_field_alloc(pmsleep, field_type);
+   120		intc->status = regmap_field_alloc(pmsleep, field_status);
+   121	
+   122		/* The masks survive deep sleep so clear them. */
+   123		regmap_field_write(intc->mask, ~0);
+   124	
+   125		domain = irq_domain_add_linear(node, NUM_IRQ,
+   126				&msc313_pm_wakeup_intc_domain_ops, intc);
+   127		if (!domain) {
+   128			ret = -ENOMEM;
+   129			goto out_free;
+   130		}
+   131	
+ > 132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+   133					"pmsleep", domain);
+   134	
+   135		return 0;
+   136	
+   137	out_free:
+   138		kfree(intc);
+   139		return ret;
+   140	}
+   141	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
