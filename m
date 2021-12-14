@@ -1,43 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D99168
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 14:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3BD168
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 14:55:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639493113; x=1671029113;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WQKrV4OzD0SqhBtmXwIJ1hykqV9B1YWEhM0wY7GOid8=;
-  b=H/f+lSzgCBbV+p4edAcc/dHEAaTP8JEa1ToK9B6RbVCI5q8N4IhuigIw
-   6DBV3r31DCvED4NCofL1m5/w6jvUyRx0iL/ah/pnEaZa397DJ53eozmb+
-   TFp21Wkh/4MPmXp7nLZED1znPnZ/D0WvLVxXCn+/4lI9UbQ64Iywy85UN
-   HLShfQOKkWjAHFkGytng0YR7YQ09GcoUgjfxPNA9YjW3CBs+shbV+ZAiO
-   PseH5AWTwrVAqYQ2PezbJcSIO54uzataiNGFXzMeXbxs7/cLk5J2PXOVK
-   oNMd30Gs0p77KLKN5+oYjGsWIuVMu+XY7hA0xVqX/J+p2E41UnuJjl7PU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="325266259"
+  t=1639493713; x=1671029713;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZYhnMK1uQovUSaJwQHnoaCxy9WVLQdtZ/feCAnwBnDY=;
+  b=RXcRRBCpUik//vS/+Bo/hYe7IrZLkv/qG7xam6LL2wm3zy5g2sRbBKix
+   o1w08XTfnjOnLlwo6liFEDiRtJatksvgMbrI0KH8q62pc+EessKDrNYc/
+   gjWa838fUv78X5odxBYTh3/ZCKVusiJ4hGWaIg2D7Xfaty7F75H/Mrcjw
+   KSBO3c8s23aj73Zu+SINE8c9OS1me92Y1kr/GMLPOlNEi8Fmu2NjZfOEq
+   OsaGWTpTu8sXxaTCNO2gfjLFN8wxT8N2+Rk/SXTcuM78kGva3zGBQGIYX
+   fOwBRt/tiSJZ0AVyUy84MsnusBbRY/9ewMs4BGY5Z2F7VLcbjUwoMHGhV
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="219675444"
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="325266259"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 06:45:12 -0800
+   d="scan'208";a="219675444"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 06:55:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="505380509"
+   d="scan'208";a="465118913"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Dec 2021 06:45:10 -0800
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 06:55:11 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mx93G-0000PT-0V; Tue, 14 Dec 2021 14:45:10 +0000
-Date: Tue, 14 Dec 2021 22:44:28 +0800
+	id 1mx9Cw-0000Qh-Ca; Tue, 14 Dec 2021 14:55:10 +0000
+Date: Tue, 14 Dec 2021 22:54:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Wang <wangborong@cdjrlc.com>
+To: Chandan Babu R <chandan.babu@oracle.com>, linux-xfs@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable
- 'group' is used uninitialized whenever 'for' loop exits because its
- condition is false
-Message-ID: <202112142208.QW0tVv0m-lkp@intel.com>
+	Chandan Babu R <chandan.babu@oracle.com>, djwong@kernel.org,
+	david@fromorbit.com
+Subject: Re: [PATCH V4 06/16] xfs: Promote xfs_extnum_t and xfs_aextnum_t to
+ 64 and 32-bits respectively
+Message-ID: <202112142236.nxhglKkO-lkp@intel.com>
+References: <20211214084519.759272-7-chandan.babu@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,97 +47,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211214084519.759272-7-chandan.babu@oracle.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Jason,
+Hi Chandan,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
-commit: 29d45a642d4ea8de7e89b57f856046df7c3b219f pinctrl: bcm2835: Replace BUG with BUG_ON
-date:   5 months ago
-config: mips-randconfig-c004-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142208.QW0tVv0m-lkp@intel.com/config)
+[auto build test ERROR on xfs-linux/for-next]
+[also build test ERROR on v5.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Chandan-Babu-R/xfs-Extend-per-inode-extent-counters/20211214-164920
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+config: riscv-randconfig-r042-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142236.nxhglKkO-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29d45a642d4ea8de7e89b57f856046df7c3b219f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 29d45a642d4ea8de7e89b57f856046df7c3b219f
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/db28da144803c4262c0d8622d736a7d20952ef6b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Chandan-Babu-R/xfs-Extend-per-inode-extent-counters/20211214-164920
+        git checkout db28da144803c4262c0d8622d736a7d20952ef6b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/bcm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable 'group' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-                       ^~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/bcm/pinctrl-bcm2835.c:423:10: note: uninitialized use occurs here
-           switch (group) {
-                   ^~~~~
-   drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: note: remove the condition if it is always true
-           for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-                       ^~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/bcm/pinctrl-bcm2835.c:409:11: note: initialize the variable 'group' to silence this warning
-           int group;
-                    ^
-                     = 0
-   1 warning generated.
-
-
-vim +412 drivers/pinctrl/bcm/pinctrl-bcm2835.c
-
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  402  
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  403  static void bcm2835_gpio_irq_handler(struct irq_desc *desc)
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  404  {
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  405  	struct gpio_chip *chip = irq_desc_get_handler_data(desc);
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  406  	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  407  	struct irq_chip *host_chip = irq_desc_get_chip(desc);
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  408  	int irq = irq_desc_get_irq(desc);
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  409  	int group;
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  410  	int i;
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  411  
-73345a18d464b1b drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2019-08-12 @412  	for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-73345a18d464b1b drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2019-08-12  413  		if (chip->irq.parents[i] == irq) {
-0d885e9da176ad3 drivers/pinctrl/bcm/pinctrl-bcm2835.c Thierry Reding 2017-07-20  414  			group = i;
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  415  			break;
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  416  		}
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  417  	}
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  418  	/* This should not happen, every IRQ has a bank */
-29d45a642d4ea8d drivers/pinctrl/bcm/pinctrl-bcm2835.c Jason Wang     2021-06-24  419  	BUG_ON(i == BCM2835_NUM_IRQS);
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  420  
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  421  	chained_irq_enter(host_chip, desc);
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  422  
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  423  	switch (group) {
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  424  	case 0: /* IRQ0 covers GPIOs 0-27 */
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  425  		bcm2835_gpio_irq_handle_bank(pc, 0, 0x0fffffff);
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  426  		break;
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  427  	case 1: /* IRQ1 covers GPIOs 28-45 */
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  428  		bcm2835_gpio_irq_handle_bank(pc, 0, 0xf0000000);
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  429  		bcm2835_gpio_irq_handle_bank(pc, 1, 0x00003fff);
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  430  		break;
-b1d84a3d0a26c58 drivers/pinctrl/bcm/pinctrl-bcm2835.c Stefan Wahren  2020-02-08  431  	case 2: /* IRQ2 covers GPIOs 46-57 */
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  432  		bcm2835_gpio_irq_handle_bank(pc, 1, 0x003fc000);
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  433  		break;
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  434  	}
-00445b5d5866c7b drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  435  
-85ae9e512f437cd drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  436  	chained_irq_exit(host_chip, desc);
-e1b2dc70cd5b00e drivers/pinctrl/pinctrl-bcm2835.c     Simon Arlott   2012-09-27  437  }
-e1b2dc70cd5b00e drivers/pinctrl/pinctrl-bcm2835.c     Simon Arlott   2012-09-27  438  
-
-:::::: The code at line 412 was first introduced by commit
-:::::: 73345a18d464b1b945b29f54f630ace6873344e2 pinctrl: bcm2835: Pass irqchip when adding gpiochip
-
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+>> ld.lld: error: undefined symbol: __udivdi3
+   >>> referenced by xfs_bmap.c
+   >>>               xfs/libxfs/xfs_bmap.o:(xfs_bmap_compute_maxlevels) in archive fs/built-in.a
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
