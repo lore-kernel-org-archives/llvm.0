@@ -1,41 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF5068
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 17:34:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AEA68
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 17:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639503257; x=1671039257;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3m4KrKgqDcX0rfsDzNXxYGp7TPhHBGaHWDD+JMQ8xOI=;
-  b=XPYUAtyeUEZSTAmRxw3XYIaHI8VzKIdb18TRDPs1cgNp7lLpI0qMiXwp
-   JMa4E10Tw+cS09mmTQZEKuryKpQKYCxXNbdtvxQgtdRimA4ligzvygj89
-   4GIrkkBbkQeNhh83ea7qLQR7nMJp54sF4rShUKCY0H1loEZuK1WY8Y++m
-   paUAkcc6cnp8PkYuk2Sri1BgPuOWP0tlu6XHnfL8l8gLpVeo9APEgLsFN
-   Te7MvjWAy3pgus24ycuIxHQs+uhotQTJ9xsbd6nM/wyaJ7sOGNOxC8N2V
-   dAEBnANj9EXJBp2k/+yDw5j1T9QkXDsQyAToc0fjpUBbEL5Z115WhpEps
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226311725"
+  t=1639503918; x=1671039918;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F3HoPhFHGctdT/s7T7t7qJo6l9axdFPUmqG0h0u3N2c=;
+  b=mFYeIsL/fh3ZeiMZIEs0Dwty6rHfnxhY+nMYzGgU7kwFWKvRjOLRGkM8
+   YFy3qYeZBKNpq9yML8YfmSYPAIa5rGp0s4kvqzrp1FANebYcO9YbOiCp8
+   QDj5GBgn7slot/yqit25FFFvOxTkF3STJNa9f9oOTw2tb7gjRKczgkKv+
+   Xw7coEmwHuhwzHZ6xn5Mlceq0BOpjWyekEZeNwHAwazRssoycrzYzXVoU
+   W5r4mRkhn+qN97BeuzqHVUfrooBE72DN84dezQXSEqyGRzZkGTGvai7V5
+   70dyVvWjLDULCpDWrKDCfAUZTQ4KMuliP/SFFhxp9KV0gbWeBLXmelcb5
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="219052052"
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="226311725"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:34:16 -0800
+   d="scan'208";a="219052052"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:45:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="482041549"
+   d="scan'208";a="463882598"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 14 Dec 2021 09:34:15 -0800
+  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2021 09:45:15 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxBgs-0000ZH-FD; Tue, 14 Dec 2021 17:34:14 +0000
-Date: Wed, 15 Dec 2021 01:33:56 +0800
+	id 1mxBrW-0000a2-KM; Tue, 14 Dec 2021 17:45:14 +0000
+Date: Wed, 15 Dec 2021 01:44:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ryder Lee <ryder.lee@mediatek.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>
-Subject: drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:2393:5: warning: no
- previous prototype for function 'mt7915_mcu_set_fixed_rate'
-Message-ID: <202112150129.mnFkjamR-lkp@intel.com>
+To: cgel.zte@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] pktgen: use min() to make code cleaner
+Message-ID: <202112150130.jdr5Ps5z-lkp@intel.com>
+References: <20211214114447.439632-1-deng.changcheng@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,102 +44,153 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211214114447.439632-1-deng.changcheng@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Ryder,
+Hi,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
-commit: 9a93364d6595358a11d07e7f4261ae263ae2a02a mt76: mt7915: rework debugfs fixed-rate knob
-date:   7 weeks ago
-config: arm64-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150129.mnFkjamR-lkp@intel.com/config)
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master horms-ipvs/master linus/master v5.16-rc5 next-20211213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/pktgen-use-min-to-make-code-cleaner/20211214-194646
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git a3c62a042237d1adeb0290dcb768e17edd6dcd25
+config: x86_64-randconfig-r016-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150130.jdr5Ps5z-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9a93364d6595358a11d07e7f4261ae263ae2a02a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9a93364d6595358a11d07e7f4261ae263ae2a02a
+        # https://github.com/0day-ci/linux/commit/7cc9aa88278e63d75ce0af120e4b6992bff00e7e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/pktgen-use-min-to-make-code-cleaner/20211214-194646
+        git checkout 7cc9aa88278e63d75ce0af120e4b6992bff00e7e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/power/supply/ net/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:2393:5: warning: no previous prototype for function 'mt7915_mcu_set_fixed_rate' [-Wmissing-prototypes]
-   int mt7915_mcu_set_fixed_rate(struct mt7915_dev *dev,
-       ^
-   drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:2393:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mt7915_mcu_set_fixed_rate(struct mt7915_dev *dev,
-   ^
-   static 
-   1 warning generated.
+>> net/core/pktgen.c:2781:14: warning: comparison of distinct pointer types ('typeof (datalen / frags) *' (aka 'int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   frag_len = min(datalen / frags, PAGE_SIZE);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> net/core/pktgen.c:2798:9: warning: comparison of distinct pointer types ('typeof (datalen) *' (aka 'int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                                       min(datalen, PAGE_SIZE));
+                                       ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/mt7915_mcu_set_fixed_rate +2393 drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
+vim +2781 net/core/pktgen.c
 
-e57b7901469fc0b Ryder Lee     2020-04-25  2392  
-9fac3c81eebd81b Ryder Lee     2020-04-25 @2393  int mt7915_mcu_set_fixed_rate(struct mt7915_dev *dev,
-9fac3c81eebd81b Ryder Lee     2020-04-25  2394  			      struct ieee80211_sta *sta, u32 rate)
-9fac3c81eebd81b Ryder Lee     2020-04-25  2395  {
-9fac3c81eebd81b Ryder Lee     2020-04-25  2396  	struct mt7915_sta *msta = (struct mt7915_sta *)sta->drv_priv;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2397  	struct mt7915_vif *mvif = msta->vif;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2398  	struct sta_rec_ra_fixed *ra;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2399  	struct sk_buff *skb;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2400  	struct tlv *tlv;
-3e68af622254bad Ryder Lee     2020-05-12  2401  	int len = sizeof(struct sta_req_hdr) + sizeof(*ra);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2402  
-3e68af622254bad Ryder Lee     2020-05-12  2403  	skb = mt7915_mcu_alloc_sta_req(dev, mvif, msta, len);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2404  	if (IS_ERR(skb))
-9fac3c81eebd81b Ryder Lee     2020-04-25  2405  		return PTR_ERR(skb);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2406  
-9fac3c81eebd81b Ryder Lee     2020-04-25  2407  	tlv = mt7915_mcu_add_tlv(skb, STA_REC_RA_UPDATE, sizeof(*ra));
-9fac3c81eebd81b Ryder Lee     2020-04-25  2408  	ra = (struct sta_rec_ra_fixed *)tlv;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2409  
-9fac3c81eebd81b Ryder Lee     2020-04-25  2410  	if (!rate) {
-9fac3c81eebd81b Ryder Lee     2020-04-25  2411  		ra->field = cpu_to_le32(RATE_PARAM_AUTO);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2412  		goto out;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2413  	}
-9fac3c81eebd81b Ryder Lee     2020-04-25  2414  
-4d2423326de9e98 Ryder Lee     2021-08-07  2415  	ra->field = cpu_to_le32(RATE_PARAM_FIXED);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2416  	ra->phy.type = FIELD_GET(RATE_CFG_PHY_TYPE, rate);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2417  	ra->phy.bw = FIELD_GET(RATE_CFG_BW, rate);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2418  	ra->phy.nss = FIELD_GET(RATE_CFG_NSS, rate);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2419  	ra->phy.mcs = FIELD_GET(RATE_CFG_MCS, rate);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2420  	ra->phy.stbc = FIELD_GET(RATE_CFG_STBC, rate);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2421  
-9fac3c81eebd81b Ryder Lee     2020-04-25  2422  	if (ra->phy.bw)
-9fac3c81eebd81b Ryder Lee     2020-04-25  2423  		ra->phy.ldpc = 7;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2424  	else
-9fac3c81eebd81b Ryder Lee     2020-04-25  2425  		ra->phy.ldpc = FIELD_GET(RATE_CFG_LDPC, rate) * 7;
-9fac3c81eebd81b Ryder Lee     2020-04-25  2426  
-9fac3c81eebd81b Ryder Lee     2020-04-25  2427  	/* HT/VHT - SGI: 1, LGI: 0; HE - SGI: 0, MGI: 1, LGI: 2 */
-4d2423326de9e98 Ryder Lee     2021-08-07  2428  	if (ra->phy.type > MT_PHY_TYPE_VHT) {
-4d2423326de9e98 Ryder Lee     2021-08-07  2429  		ra->phy.he_ltf = FIELD_GET(RATE_CFG_HE_LTF, rate) * 85;
-4d2423326de9e98 Ryder Lee     2021-08-07  2430  		ra->phy.sgi = FIELD_GET(RATE_CFG_GI, rate) * 85;
-4d2423326de9e98 Ryder Lee     2021-08-07  2431  	} else {
-4d2423326de9e98 Ryder Lee     2021-08-07  2432  		ra->phy.sgi = FIELD_GET(RATE_CFG_GI, rate) * 15;
-4d2423326de9e98 Ryder Lee     2021-08-07  2433  	}
-9fac3c81eebd81b Ryder Lee     2020-04-25  2434  
-9fac3c81eebd81b Ryder Lee     2020-04-25  2435  out:
-fa62d0e0080bca7 Felix Fietkau 2020-09-30  2436  	return mt76_mcu_skb_send_msg(&dev->mt76, skb,
-c203dd621780842 Felix Fietkau 2021-01-06  2437  				     MCU_EXT_CMD(STA_REC_UPDATE), true);
-9fac3c81eebd81b Ryder Lee     2020-04-25  2438  }
-9fac3c81eebd81b Ryder Lee     2020-04-25  2439  
-
-:::::: The code at line 2393 was first introduced by commit
-:::::: 9fac3c81eebd81bbce8b050e15b03d3490841717 mt76: mt7915: set peer Tx fixed rate through debugfs
-
-:::::: TO: Ryder Lee <ryder.lee@mediatek.com>
-:::::: CC: Felix Fietkau <nbd@nbd.name>
+  2754	
+  2755	static void pktgen_finalize_skb(struct pktgen_dev *pkt_dev, struct sk_buff *skb,
+  2756					int datalen)
+  2757	{
+  2758		struct timespec64 timestamp;
+  2759		struct pktgen_hdr *pgh;
+  2760	
+  2761		pgh = skb_put(skb, sizeof(*pgh));
+  2762		datalen -= sizeof(*pgh);
+  2763	
+  2764		if (pkt_dev->nfrags <= 0) {
+  2765			skb_put_zero(skb, datalen);
+  2766		} else {
+  2767			int frags = pkt_dev->nfrags;
+  2768			int i, len;
+  2769			int frag_len;
+  2770	
+  2771	
+  2772			if (frags > MAX_SKB_FRAGS)
+  2773				frags = MAX_SKB_FRAGS;
+  2774			len = datalen - frags * PAGE_SIZE;
+  2775			if (len > 0) {
+  2776				skb_put_zero(skb, len);
+  2777				datalen = frags * PAGE_SIZE;
+  2778			}
+  2779	
+  2780			i = 0;
+> 2781			frag_len = min(datalen / frags, PAGE_SIZE);
+  2782			while (datalen > 0) {
+  2783				if (unlikely(!pkt_dev->page)) {
+  2784					int node = numa_node_id();
+  2785	
+  2786					if (pkt_dev->node >= 0 && (pkt_dev->flags & F_NODE))
+  2787						node = pkt_dev->node;
+  2788					pkt_dev->page = alloc_pages_node(node, GFP_KERNEL | __GFP_ZERO, 0);
+  2789					if (!pkt_dev->page)
+  2790						break;
+  2791				}
+  2792				get_page(pkt_dev->page);
+  2793				skb_frag_set_page(skb, i, pkt_dev->page);
+  2794				skb_frag_off_set(&skb_shinfo(skb)->frags[i], 0);
+  2795				/*last fragment, fill rest of data*/
+  2796				if (i == (frags - 1))
+  2797					skb_frag_size_set(&skb_shinfo(skb)->frags[i],
+> 2798					    min(datalen, PAGE_SIZE));
+  2799				else
+  2800					skb_frag_size_set(&skb_shinfo(skb)->frags[i], frag_len);
+  2801				datalen -= skb_frag_size(&skb_shinfo(skb)->frags[i]);
+  2802				skb->len += skb_frag_size(&skb_shinfo(skb)->frags[i]);
+  2803				skb->data_len += skb_frag_size(&skb_shinfo(skb)->frags[i]);
+  2804				i++;
+  2805				skb_shinfo(skb)->nr_frags = i;
+  2806			}
+  2807		}
+  2808	
+  2809		/* Stamp the time, and sequence number,
+  2810		 * convert them to network byte order
+  2811		 */
+  2812		pgh->pgh_magic = htonl(PKTGEN_MAGIC);
+  2813		pgh->seq_num = htonl(pkt_dev->seq_num);
+  2814	
+  2815		if (pkt_dev->flags & F_NO_TIMESTAMP) {
+  2816			pgh->tv_sec = 0;
+  2817			pgh->tv_usec = 0;
+  2818		} else {
+  2819			/*
+  2820			 * pgh->tv_sec wraps in y2106 when interpreted as unsigned
+  2821			 * as done by wireshark, or y2038 when interpreted as signed.
+  2822			 * This is probably harmless, but if anyone wants to improve
+  2823			 * it, we could introduce a variant that puts 64-bit nanoseconds
+  2824			 * into the respective header bytes.
+  2825			 * This would also be slightly faster to read.
+  2826			 */
+  2827			ktime_get_real_ts64(&timestamp);
+  2828			pgh->tv_sec = htonl(timestamp.tv_sec);
+  2829			pgh->tv_usec = htonl(timestamp.tv_nsec / NSEC_PER_USEC);
+  2830		}
+  2831	}
+  2832	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
