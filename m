@@ -1,31 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CE1173
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 18:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33447C34600;
-	Tue, 14 Dec 2021 18:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639507291;
-	bh=Lm/tT7fRE229vkUkryx0iiaG7TEWf4gIZp4cgRrskN4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZzwfYXCfcXQJISn378p8zpFZRx21maaKTC5rSiqdJlL9YhEGSZmx4jYbjBBhOFiC4
-	 2K0a9T7ysMCq09XbYHOCz3QgxvmJD0DbTa/YIWaYaYtdGzquS9VB4hMBpea+XhbBj/
-	 jKOCuTHP/UMVUQMMywT9ZU3byKra/tb5FFnetE3tzXw97kB62KosKHx0M7ZqTyLieT
-	 gYbGpPCxYdSDyA1AvgMbMEWzfpvPNbam2YAtMDYkUk1EKudItHQXEUsCcmOqkqV7Fd
-	 TH/zmK1mb5ky9eNgXUEkVwCsU/ZEN7QLq3C+8lZZ9L0otLu0hfGbwb76eXdy5HaIwQ
-	 TJ/11yrLe9t7Q==
-Date: Tue, 14 Dec 2021 11:41:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jason Wang <wangborong@cdjrlc.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable
- 'group' is used uninitialized whenever 'for' loop exits because its
- condition is false
-Message-ID: <YbjlV4HdWI8WUcAR@archlinux-ax161>
-References: <202112142208.QW0tVv0m-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B1A173
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 19:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639508608; x=1671044608;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VKCAjMhyI8Dgt9CMayZySS+sPj4qOQp3+irsS2QldPk=;
+  b=B7tMolQybW90thI23V1Vxn60NROJjfdKJ5hfIM6f/7zCX2OynIWBirq7
+   3nfGH8uKMfw/vmInsw7u7yl8d6Ez/W6xLD0mKee0U1X2AFthZqdNsKy7u
+   8b7IENkEnOFAoaSyRTNDXjA7z6mP6ifKQTcuP0g8w06I44SGDTzJ+i3dG
+   D/wXyom8SOZ1k48zKcK1Io+lbtx8jyEa1i0HIaQXBts/0ZwIAi55gNnoB
+   ln9AFc7WXklZyFUPhBEDxfOsLR+5rd3jBs8xWPXlMkr8zTcsq2uozeE5m
+   HNxJ8a4Tpr9l9IokHKEbU7COnPgkvkBpJS01uEzI0cMXLP5xQJhNynUXD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263201545"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="263201545"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 10:36:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="505468051"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 14 Dec 2021 10:36:16 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxCet-0000d6-Ka; Tue, 14 Dec 2021 18:36:15 +0000
+Date: Wed, 15 Dec 2021 02:35:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [linusw-nomadik:ux500-href-charging-v5.16-rc1-prim 35/35]
+ drivers/power/supply/samsung-sdi-battery.c:55:5: warning: no previous
+ prototype for function 'samsung_sdi_battery_get_info'
+Message-ID: <202112150222.sFmcltTF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,58 +45,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202112142208.QW0tVv0m-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Dec 14, 2021 at 10:44:28PM +0800, kernel test robot wrote:
-> Hi Jason,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
-> commit: 29d45a642d4ea8de7e89b57f856046df7c3b219f pinctrl: bcm2835: Replace BUG with BUG_ON
-> date:   5 months ago
-> config: mips-randconfig-c004-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142208.QW0tVv0m-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29d45a642d4ea8de7e89b57f856046df7c3b219f
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 29d45a642d4ea8de7e89b57f856046df7c3b219f
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/bcm/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable 'group' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
->            for (i = 0; i < BCM2835_NUM_IRQS; i++) {
->                        ^~~~~~~~~~~~~~~~~~~~
->    drivers/pinctrl/bcm/pinctrl-bcm2835.c:423:10: note: uninitialized use occurs here
->            switch (group) {
->                    ^~~~~
->    drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: note: remove the condition if it is always true
->            for (i = 0; i < BCM2835_NUM_IRQS; i++) {
->                        ^~~~~~~~~~~~~~~~~~~~
->    drivers/pinctrl/bcm/pinctrl-bcm2835.c:409:11: note: initialize the variable 'group' to silence this warning
->            int group;
->                     ^
->                      = 0
->    1 warning generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git ux500-href-charging-v5.16-rc1-prim
+head:   86b93a3192d2eb04134708293a8274948d210db4
+commit: 86b93a3192d2eb04134708293a8274948d210db4 [35/35] samsung hack
+config: riscv-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150222.sFmcltTF-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git/commit/?id=86b93a3192d2eb04134708293a8274948d210db4
+        git remote add linusw-nomadik https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+        git fetch --no-tags linusw-nomadik ux500-href-charging-v5.16-rc1-prim
+        git checkout 86b93a3192d2eb04134708293a8274948d210db4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/ drivers/perf/ drivers/power/supply/
 
-It seems like MIP's __BUG_ON() makes it harder for clang to figure out
-that 'i == BCM2835_NUM_IRQS' will make the kernel panic, which is the
-only way that the loop exits because the condition is false.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I am not really sure of a way to fix this other than just reverting that
-change or changing the BUG_ON() to WARN_ON().
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> drivers/power/supply/samsung-sdi-battery.c:55:5: warning: no previous prototype for function 'samsung_sdi_battery_get_info' [-Wmissing-prototypes]
+   int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
+       ^
+   drivers/power/supply/samsung-sdi-battery.c:55:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
+   ^
+   static 
+   drivers/power/supply/samsung-sdi-battery.c:71:1: error: non-void function does not return a value in all control paths [-Werror,-Wreturn-type]
+   }
+   ^
+   1 warning and 1 error generated.
+
+
+vim +/samsung_sdi_battery_get_info +55 drivers/power/supply/samsung-sdi-battery.c
+
+    54	
+  > 55	int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
