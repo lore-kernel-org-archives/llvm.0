@@ -1,95 +1,188 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11E7173
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 19:46:07 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id v15so30025333ljc.0
-        for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 11:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h0rTzffy35/5abt9w3+JNjuxLlxaRoxP3g+y8dZlZ1c=;
-        b=Dlq1h6n6Nvy+Cx6orR+qAeWjN4UhGYRKo8AEJONU4Tl7IgPIn8A8bJVM4adjeHLG4o
-         kFxaUYmqDuUNKExMHNZTQJyi80oZ17YmubLHrwMoCK/kYhPSIE9RSCSjVM+OGhDWOof0
-         pgmONlQeQRIDyaZdfCQZ7bUCFiM99gbxQk/1p5vOeREwMpl3j0h7eDliXN9MgN7iO5Rv
-         EWTyISbHCSBIQXoRj2ENRUSIPYykjbIx2OdgASRMr3ieT9d6I8FKOaNe83Kg8UUCzK/a
-         OoY3PAtj5LYrfwBd+XQ5KAw6mLHP1qq4eXzYeRlYHEb98BmQxHQp28hMhpmvtutsK78q
-         orZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h0rTzffy35/5abt9w3+JNjuxLlxaRoxP3g+y8dZlZ1c=;
-        b=MWigxfwWl5jMr8S7fcXslIuAlKM4H/eK5hnPwYz6sJm47f4GEXneCQvdWfLPHHRy9f
-         y4qse5V36C9eVyVbMZcOcgb0aG9pizxFrFlZSQn7tqm8FGEbDcZgZ6UcLkTsgPQYBu0u
-         sIS78ZoWdc1MdsFHpf+brPx80gsvUEZrYv3zKEK/ms9i/ukBrfhi+9PEkIMvvmTqItv0
-         HoSg6wryRoWOJKli2CJixyfIf3aW00xXXhihpTl6zWHI6CyDyuvmM1aOPC0fYup1L+cB
-         7TboGRrGxJ5GjJX4B19JiaYzF8aRJQQXMCqNo/PCfIIzTW2lPA9ejllgII3qovVCK/MC
-         notA==
-X-Gm-Message-State: AOAM532E386qkvZySZkxsB6V7d1cJEng7i3fZKQiTBtE+ipNWAhDBtGV
-	bH37eSAiSY5vru4DRPvIJef/7fsLBZk5LEgRPp1lLQ==
-X-Google-Smtp-Source: ABdhPJwGoGeLABVrt6BVPXO09ywkaWM8/03cuPwfU8AEYwOvgEoW4yq37S2fOhcW1EQgpnfA50ZiAqNLEEQ7cliL6qY=
-X-Received: by 2002:a2e:7a06:: with SMTP id v6mr6802646ljc.198.1639511165825;
- Tue, 14 Dec 2021 11:46:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE4729CA
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 20:51:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639515090; x=1671051090;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jf3OkZfIOFN18a+HLaBkiehOT7liQfKruaIeee2Cb0I=;
+  b=mUW6eySYOpW6YDRqs5r4FF50o33yLNuedgkCDyLcG/UjYzoLG7OCoNMI
+   SsJC/8QSko/P5d+VOhyWICQuG0ZJc4I3TC9uUzc9hKWZANjZNxoZ41MxB
+   BJ/DK2IoPEWZNA7BlcZuLTlNW/Ve37UvcDO1xdEwmPEsOrAXi7Rlaooum
+   ZgpRr5jKykoPafvzxNuGVOVAP4N4ETdngVvZXYOd7XInTeIJpjmh0hdht
+   F7jzur9HempLxTzzFCWA9Ieq4HUdP7gJIjfjZfJyWc4s16Hv4yU3nPlaq
+   +JboJdpBYIxFby52L8SqQcygnPRd3B6WFhRZWrLCO6tYoswmonRHIChOA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239030796"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="239030796"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 12:51:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="465255740"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 12:51:28 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxElj-0000lP-UY; Tue, 14 Dec 2021 20:51:27 +0000
+Date: Wed, 15 Dec 2021 04:51:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.10 1964/1981]
+ drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of
+ function 'FIELD_PREP'
+Message-ID: <202112150402.8WBLORs1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211213224914.1501303-1-paul@crapouillou.net> <20211213224914.1501303-4-paul@crapouillou.net>
-In-Reply-To: <20211213224914.1501303-4-paul@crapouillou.net>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 14 Dec 2021 11:45:54 -0800
-Message-ID: <CAKwvOd=GRFJd63CN43RsCTg3_sJ3j2Ak4JNve-N+rtuksz-wMg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] MIPS: Add support for LTO
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nathan Chancellor <nathan@kernel.org>, list@opendingux.net, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Dec 13, 2021 at 2:49 PM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Allow CONFIG_LTO_CLANG to be enabled. The ThinLTO variant is not yet
-> supported.
->
-> While this option allows to build a LTO'd kernel, the result kernel file
-> ends up being *bigger* than the non-LTO variant (about 3.6 MiB with LTO
-> vs. 3.1 MiB without with a ZSTD-compressed kernel).
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.10
+head:   87ec9a2d98a7a7dfc98b57348a0ec310fd170e4b
+commit: 0a6e9d56f285540e5ca6c69c7fad2c3520b79c50 [1964/1981] clocking-wizard: Support higher frequency accuracy
+config: x86_64-randconfig-a013-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150402.8WBLORs1-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/0a6e9d56f285540e5ca6c69c7fad2c3520b79c50
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.10
+        git checkout 0a6e9d56f285540e5ca6c69c7fad2c3520b79c50
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-LGTM but I think there's more work to be done first based on my
-comments on the earlier patches.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-In particular, we should be able to boot the result and not have to
-modify any Makefiles outside of the series to get it to link.
+All errors (new ones prefixed by >>):
 
-Good to know we're close though!  Don't give up!
-
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 0215dc1529e9..6987db8d5f64 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -22,6 +22,7 @@ config MIPS
->         select ARCH_USE_QUEUED_RWLOCKS
->         select ARCH_USE_QUEUED_SPINLOCKS
->         select ARCH_SUPPORTS_HUGETLBFS if CPU_SUPPORTS_HUGEPAGES
-> +       select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
->         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
->         select ARCH_WANT_IPC_PARSE_VERSION
->         select ARCH_WANT_LD_ORPHAN_WARN
-> --
-> 2.33.0
->
+>> drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
+                 ^
+>> drivers/clk/clk-xlnx-clock-wizard.c:392:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+               ^
+   2 errors generated.
 
 
--- 
-Thanks,
-~Nick Desaulniers
+vim +/FIELD_PREP +324 drivers/clk/clk-xlnx-clock-wizard.c
+
+   301	
+   302	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
+   303					       unsigned long parent_rate)
+   304	{
+   305		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   306		u32 reg, pre;
+   307		u16 retries;
+   308		int err;
+   309		u64 vco_freq, rate_div, f, clockout0_div;
+   310	
+   311		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
+   312		if (err)
+   313			pr_err("failed to get divisors\n");
+   314	
+   315		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
+   316		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
+   317	
+   318		clockout0_div = rate_div / WZRD_FRAC_POINTS;
+   319	
+   320		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
+   321		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
+   322		f = f & WZRD_CLKOUT_FRAC_MASK;
+   323	
+ > 324		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
+   325		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
+   326	
+   327		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
+   328		/* Set divisor and clear phase offset */
+   329		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
+   330		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
+   331		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
+   332		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
+   333		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
+   334		/* Check status register */
+   335		retries = WZRD_DR_NUM_RETRIES;
+   336		while (retries--) {
+   337			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
+   338								WZRD_DR_LOCK_BIT_MASK)
+   339				break;
+   340		}
+   341	
+   342		if (!retries)
+   343			return -ETIMEDOUT;
+   344	
+   345		/* Initiate reconfiguration */
+   346		writel(WZRD_DR_BEGIN_DYNA_RECONF,
+   347		       divider->base + WZRD_DR_INIT_REG_OFFSET);
+   348	
+   349		/* Check status register */
+   350		retries = WZRD_DR_NUM_RETRIES;
+   351		while (retries--) {
+   352			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
+   353								WZRD_DR_LOCK_BIT_MASK)
+   354				break;
+   355		}
+   356	
+   357		if (!retries)
+   358			return -ETIMEDOUT;
+   359	
+   360		return 0;
+   361	}
+   362	
+   363	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
+   364					unsigned long parent_rate)
+   365	{
+   366		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   367		unsigned long flags = 0;
+   368		int ret;
+   369	
+   370		if (divider->lock)
+   371			spin_lock_irqsave(divider->lock, flags);
+   372		else
+   373			__acquire(divider->lock);
+   374	
+   375		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
+   376	
+   377		if (divider->lock)
+   378			spin_unlock_irqrestore(divider->lock, flags);
+   379		else
+   380			__release(divider->lock);
+   381	
+   382		return ret;
+   383	}
+   384	
+   385	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
+   386						      unsigned long parent_rate)
+   387	{
+   388		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   389		u32 m, d, o, div, reg, f;
+   390	
+   391		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
+ > 392		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+   393		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
+   394		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
+   395		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+   396		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
+   397	
+   398		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
+   399		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
+   400				divider->flags, divider->width);
+   401	}
+   402	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
