@@ -1,179 +1,126 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC36968
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 10:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639477203; x=1671013203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lB/96R8LtT4ubU1NkMbFVEKmi85F4Z2ZjCkVakV6Bug=;
-  b=FS3FVXakC17JqgS2NubHRuDcEY46w27dBZKowhCU+BkLU27KwqhSTGoD
-   D7w21jJhhXI6oYwlMoVfwpOC0UpqVcu8U8oqXojsXFDs/bLW0Qts+9tbi
-   aeOFUOoBsxBb1QDT8y7OmHd3GGeSp2VirFM2HUKB4Tkr06N8ya07PxCiu
-   79IbX/fZs6urxkMFmxSKKZkF+AV1+yoVPxkdXiTwcgg3DJazyTz5NDewA
-   gjt0U8ZKGLA14WEMB1xr7cZQoyBuh5rKn9o5vCzPJ9564zwXLKNn0fkcM
-   ZEuF0ulCjG97JyiXMauEDj+UyRQhSeMs0ims5Zusbu9WLGj4hkWG9yy9R
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="219632058"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="219632058"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:20:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465019940"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 02:20:00 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mx4ue-0000BO-6A; Tue, 14 Dec 2021 10:20:00 +0000
-Date: Tue, 14 Dec 2021 18:19:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wen Gong <quic_wgong@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Kalle Valo <kvalo@codeaurora.org>, ath10k@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [kvalo-ath:pending 53/57]
- drivers/net/wireless/ath/ath11k/wmi.c:5657:3: warning: variable 'len' is
- uninitialized when used here
-Message-ID: <202112141834.pliLIgBL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1238173
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 11:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F33CC34607
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 11:05:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639479946;
+	bh=LS6ukPn73nYGhW7oHvAxO0eyMwA69AtGWOW3qvBCcaY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZX3WrYNVyVapVzoI9iygt/Fj1pqkPDWMqTZ/FMbJ6vYdkkp9tHR0CVXtyqpdthgas
+	 MY2hiiV2Qt4bZbbxlj04WO7rYQc5DpQv2Kul4aoumcA9+ak/6wQOks7VbVqptLorH9
+	 On+5urN6PEjbEloiWyo9TLAu9DUM6EjgxlkSw2ZLuyoKXJ0gZk/fvzsJ3kvOexHl4A
+	 YGbuhdBbp3oXZYf0taivlLq6Hu3lghS/8gpKnY6r6Qt0kqYl1pS9+lH2ROvsgchPgE
+	 j8Hfy4hroTGWg3CRASJUaQ0YYx1L9YFMIpQBuxc7g30oJ2y3P9LIwelLCIwF0rGt8V
+	 5CehaGtnemweg==
+Received: by mail-oi1-f180.google.com with SMTP id bk14so26799373oib.7
+        for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 03:05:46 -0800 (PST)
+X-Gm-Message-State: AOAM5335Zk0M9BVITLBop4kHLRB5T1LpU39Ed6VJaWioP/KCu7uq1psc
+	QBH0NrI2an0ZoxX5qGh/XlkCVqyclIuvEWNvj2k=
+X-Google-Smtp-Source: ABdhPJzM0f99Waf5tZI/4HBLSb3S6BX5djeyoICvHu7DSsVqE0LIQEDn7tBazuzICXPpkUrrXgHakUWxrEa7Af0UjV4=
+X-Received: by 2002:a05:6808:1919:: with SMTP id bf25mr3892104oib.33.1639479945765;
+ Tue, 14 Dec 2021 03:05:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211213140252.2856053-1-ardb@kernel.org> <YbgDR461O9gCEi+Q@archlinux-ax161>
+ <CAMj1kXFKuHuzsrDBcUjbaVO6-NQkj8J+vMty_qU3Y0pDwT905w@mail.gmail.com>
+In-Reply-To: <CAMj1kXFKuHuzsrDBcUjbaVO6-NQkj8J+vMty_qU3Y0pDwT905w@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 14 Dec 2021 12:05:34 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGadU-_dM9OtXzy6OqKqReYyzEB-F6NVwDOEodpzwtemw@mail.gmail.com>
+Message-ID: <CAMj1kXGadU-_dM9OtXzy6OqKqReYyzEB-F6NVwDOEodpzwtemw@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64/xor: use EOR3 instructions when available
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git pending
-head:   6cce4964a399f7eb43e75e57de0def72561a162c
-commit: b368704018cc51a0908adf79649fd692624e75da [53/57] ath11k: report rssi of each chain to mac80211 for QCA6390/WCN6855
-config: x86_64-randconfig-a003-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141834.pliLIgBL-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?id=b368704018cc51a0908adf79649fd692624e75da
-        git remote add kvalo-ath https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
-        git fetch --no-tags kvalo-ath pending
-        git checkout b368704018cc51a0908adf79649fd692624e75da
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
+On Tue, 14 Dec 2021 at 09:19, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> + Arnd
+>
+> On Tue, 14 Dec 2021 at 03:37, Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Hi Ard,
+> >
+> > On Mon, Dec 13, 2021 at 03:02:52PM +0100, Ard Biesheuvel wrote:
+> > > Use the EOR3 instruction to implement xor_blocks() if the instruction is
+> > > available, which is the case if the CPU implements the SHA-3 extension.
+> > > This is about 20% faster on Apple M1 when using the 5-way version.
+> > >
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > Our CI reported that this patch as commit ce9ba49a2460 ("arm64/xor: use
+> > EOR3 instructions when available") in the arm64 tree breaks
+> > allyesconfig:
+> >
+> > https://github.com/ClangBuiltLinux/continuous-integration2/runs/4514540083?check_suite_focus=true
+> >
+> > I also see this when building with GCC 11.2.0:
+> >
+> > WARNING: modpost: EXPORT symbol "xor_block_inner_neon" [vmlinux] version ...
+> > Is "xor_block_inner_neon" prototyped in <asm/asm-prototypes.h>?
+> > aarch64-linux-gnu-ld: arch/arm64/lib/xor-neon.o: relocation R_AARCH64_ABS32 against `__crc_xor_block_inner_neon' can not be used when making a shared object
+>
+> I suspect this is another genksyms crash, preventing the
+> __crc_xor_block_inner_neon symbol from ever being emitted.
+>
+> This is a recurring annoyance and I am not sure how to address this
+> properly. Arnd might have some thoughts on the matter as well.
+>
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I managed to reproduce this: it's not a crash but definitely a bug in
+genksyms, as it simply fails to produce the output containing the
+assignment of __crc_xor_block_inner_neon.
 
-All warnings (new ones prefixed by >>):
+Moving the definition of xor_block_inner_neon as below works around the issue.
 
->> drivers/net/wireless/ath/ath11k/wmi.c:5657:3: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   len -= sizeof(*src);
-                   ^~~
-   drivers/net/wireless/ath/ath11k/wmi.c:5637:9: note: initialize the variable 'len' to silence this warning
-           u32 len;
-                  ^
-                   = 0
-   1 warning generated.
+Catalin: would you like me to spin a v3? Or do your prefer to just
+fold this into the existing one?
 
+diff --git a/arch/arm64/lib/xor-neon.c b/arch/arm64/lib/xor-neon.c
+index 5c8688700f63..d189cf4e70ea 100644
+--- a/arch/arm64/lib/xor-neon.c
++++ b/arch/arm64/lib/xor-neon.c
+@@ -167,6 +167,15 @@ void xor_arm64_neon_5(unsigned long bytes,
+unsigned long *p1,
+        } while (--lines > 0);
+ }
 
-vim +/len +5657 drivers/net/wireless/ath/ath11k/wmi.c
++struct xor_block_template xor_block_inner_neon __ro_after_init = {
++       .name   = "__inner_neon__",
++       .do_2   = xor_arm64_neon_2,
++       .do_3   = xor_arm64_neon_3,
++       .do_4   = xor_arm64_neon_4,
++       .do_5   = xor_arm64_neon_5,
++};
++EXPORT_SYMBOL(xor_block_inner_neon);
++
+ static inline uint64x2_t eor3(uint64x2_t p, uint64x2_t q, uint64x2_t r)
+ {
+        uint64x2_t res;
+@@ -296,15 +305,6 @@ static void xor_arm64_eor3_5(unsigned long bytes,
+unsigned long *p1,
+        } while (--lines > 0);
+ }
 
-b368704018cc51 Wen Gong   2021-12-13  5628  
-b368704018cc51 Wen Gong   2021-12-13  5629  static int ath11k_wmi_tlv_fw_stats_data_parse(struct ath11k_base *ab,
-b368704018cc51 Wen Gong   2021-12-13  5630  					      struct wmi_tlv_fw_stats_parse *parse,
-b368704018cc51 Wen Gong   2021-12-13  5631  					      const void *ptr)
-b368704018cc51 Wen Gong   2021-12-13  5632  {
-b368704018cc51 Wen Gong   2021-12-13  5633  	struct ath11k_fw_stats *stats = parse->stats;
-b368704018cc51 Wen Gong   2021-12-13  5634  	const struct wmi_stats_event *ev = parse->ev;
-b368704018cc51 Wen Gong   2021-12-13  5635  	int i;
-b368704018cc51 Wen Gong   2021-12-13  5636  	const void *data = ptr;
-b368704018cc51 Wen Gong   2021-12-13  5637  	u32 len;
-b368704018cc51 Wen Gong   2021-12-13  5638  
-b368704018cc51 Wen Gong   2021-12-13  5639  	if (!ev) {
-b368704018cc51 Wen Gong   2021-12-13  5640  		ath11k_warn(ab, "failed to fetch update stats ev");
-b368704018cc51 Wen Gong   2021-12-13  5641  		return -EPROTO;
-b368704018cc51 Wen Gong   2021-12-13  5642  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5643  
-d5c65159f28953 Kalle Valo 2019-11-23  5644  	stats->stats_id = 0;
-d5c65159f28953 Kalle Valo 2019-11-23  5645  
-d5c65159f28953 Kalle Valo 2019-11-23  5646  	for (i = 0; i < ev->num_pdev_stats; i++) {
-d5c65159f28953 Kalle Valo 2019-11-23  5647  		const struct wmi_pdev_stats *src;
-d5c65159f28953 Kalle Valo 2019-11-23  5648  		struct ath11k_fw_stats_pdev *dst;
-d5c65159f28953 Kalle Valo 2019-11-23  5649  
-d5c65159f28953 Kalle Valo 2019-11-23  5650  		src = data;
-b368704018cc51 Wen Gong   2021-12-13  5651  		if (len < sizeof(*src))
-d5c65159f28953 Kalle Valo 2019-11-23  5652  			return -EPROTO;
-d5c65159f28953 Kalle Valo 2019-11-23  5653  
-d5c65159f28953 Kalle Valo 2019-11-23  5654  		stats->stats_id = WMI_REQUEST_PDEV_STAT;
-d5c65159f28953 Kalle Valo 2019-11-23  5655  
-d5c65159f28953 Kalle Valo 2019-11-23  5656  		data += sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23 @5657  		len -= sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5658  
-d5c65159f28953 Kalle Valo 2019-11-23  5659  		dst = kzalloc(sizeof(*dst), GFP_ATOMIC);
-d5c65159f28953 Kalle Valo 2019-11-23  5660  		if (!dst)
-d5c65159f28953 Kalle Valo 2019-11-23  5661  			continue;
-d5c65159f28953 Kalle Valo 2019-11-23  5662  
-d5c65159f28953 Kalle Valo 2019-11-23  5663  		ath11k_wmi_pull_pdev_stats_base(&src->base, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5664  		ath11k_wmi_pull_pdev_stats_tx(&src->tx, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5665  		ath11k_wmi_pull_pdev_stats_rx(&src->rx, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5666  		list_add_tail(&dst->list, &stats->pdevs);
-d5c65159f28953 Kalle Valo 2019-11-23  5667  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5668  
-d5c65159f28953 Kalle Valo 2019-11-23  5669  	for (i = 0; i < ev->num_vdev_stats; i++) {
-d5c65159f28953 Kalle Valo 2019-11-23  5670  		const struct wmi_vdev_stats *src;
-d5c65159f28953 Kalle Valo 2019-11-23  5671  		struct ath11k_fw_stats_vdev *dst;
-d5c65159f28953 Kalle Valo 2019-11-23  5672  
-d5c65159f28953 Kalle Valo 2019-11-23  5673  		src = data;
-b368704018cc51 Wen Gong   2021-12-13  5674  		if (len < sizeof(*src))
-d5c65159f28953 Kalle Valo 2019-11-23  5675  			return -EPROTO;
-d5c65159f28953 Kalle Valo 2019-11-23  5676  
-d5c65159f28953 Kalle Valo 2019-11-23  5677  		stats->stats_id = WMI_REQUEST_VDEV_STAT;
-d5c65159f28953 Kalle Valo 2019-11-23  5678  
-d5c65159f28953 Kalle Valo 2019-11-23  5679  		data += sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5680  		len -= sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5681  
-d5c65159f28953 Kalle Valo 2019-11-23  5682  		dst = kzalloc(sizeof(*dst), GFP_ATOMIC);
-d5c65159f28953 Kalle Valo 2019-11-23  5683  		if (!dst)
-d5c65159f28953 Kalle Valo 2019-11-23  5684  			continue;
-d5c65159f28953 Kalle Valo 2019-11-23  5685  
-d5c65159f28953 Kalle Valo 2019-11-23  5686  		ath11k_wmi_pull_vdev_stats(src, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5687  		list_add_tail(&dst->list, &stats->vdevs);
-d5c65159f28953 Kalle Valo 2019-11-23  5688  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5689  
-d5c65159f28953 Kalle Valo 2019-11-23  5690  	for (i = 0; i < ev->num_bcn_stats; i++) {
-d5c65159f28953 Kalle Valo 2019-11-23  5691  		const struct wmi_bcn_stats *src;
-d5c65159f28953 Kalle Valo 2019-11-23  5692  		struct ath11k_fw_stats_bcn *dst;
-d5c65159f28953 Kalle Valo 2019-11-23  5693  
-d5c65159f28953 Kalle Valo 2019-11-23  5694  		src = data;
-b368704018cc51 Wen Gong   2021-12-13  5695  		if (len < sizeof(*src))
-d5c65159f28953 Kalle Valo 2019-11-23  5696  			return -EPROTO;
-d5c65159f28953 Kalle Valo 2019-11-23  5697  
-d5c65159f28953 Kalle Valo 2019-11-23  5698  		stats->stats_id = WMI_REQUEST_BCN_STAT;
-d5c65159f28953 Kalle Valo 2019-11-23  5699  
-d5c65159f28953 Kalle Valo 2019-11-23  5700  		data += sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5701  		len -= sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5702  
-d5c65159f28953 Kalle Valo 2019-11-23  5703  		dst = kzalloc(sizeof(*dst), GFP_ATOMIC);
-d5c65159f28953 Kalle Valo 2019-11-23  5704  		if (!dst)
-d5c65159f28953 Kalle Valo 2019-11-23  5705  			continue;
-d5c65159f28953 Kalle Valo 2019-11-23  5706  
-d5c65159f28953 Kalle Valo 2019-11-23  5707  		ath11k_wmi_pull_bcn_stats(src, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5708  		list_add_tail(&dst->list, &stats->bcn);
-d5c65159f28953 Kalle Valo 2019-11-23  5709  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5710  
-d5c65159f28953 Kalle Valo 2019-11-23  5711  	return 0;
-d5c65159f28953 Kalle Valo 2019-11-23  5712  }
-d5c65159f28953 Kalle Valo 2019-11-23  5713  
-
-:::::: The code at line 5657 was first introduced by commit
-:::::: d5c65159f2895379e11ca13f62feabe93278985d ath11k: driver for Qualcomm IEEE 802.11ax devices
-
-:::::: TO: Kalle Valo <kvalo@codeaurora.org>
-:::::: CC: Kalle Valo <kvalo@codeaurora.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-struct xor_block_template xor_block_inner_neon __ro_after_init = {
+-       .name   = "__inner_neon__",
+-       .do_2   = xor_arm64_neon_2,
+-       .do_3   = xor_arm64_neon_3,
+-       .do_4   = xor_arm64_neon_4,
+-       .do_5   = xor_arm64_neon_5,
+-};
+-EXPORT_SYMBOL(xor_block_inner_neon);
+-
+ static int __init xor_neon_init(void)
+ {
+        if (IS_ENABLED(CONFIG_AS_HAS_SHA3) && cpu_have_named_feature(SHA3)) {
