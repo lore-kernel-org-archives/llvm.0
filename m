@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BA668
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 18:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB656C34604;
-	Tue, 14 Dec 2021 18:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CE1173
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 18:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33447C34600;
+	Tue, 14 Dec 2021 18:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639505474;
-	bh=npqiSJQC8npMD2xZMDOWUY8IvRks07YDNszBOT2tffE=;
+	s=k20201202; t=1639507291;
+	bh=Lm/tT7fRE229vkUkryx0iiaG7TEWf4gIZp4cgRrskN4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DkKxvy5k5HIVTn3ULiDE2tqAfwttoqYsxQB82yD4aO3JWTJIHe7wrOMifO7PzhnoU
-	 xv6UhrG6S8EH/THgtfIc1I1NzJ7pqp0SU/xYdR/tVMcnfyR60mcGRp8kasKe1zGTGE
-	 +quP60gOcaYH4KSv1s4TfLVC0OWnxRlQuUVDa1JMp59FbCUF3wHEU0XOvd/bmGt55B
-	 quwetdsEz0mY9jd+9hCIo3a9r1MO1LjpL7jJzt9wj6o06UIAyC5S7RORxJVtsjGxKU
-	 HsUMnr9kZfTVpNCZMsS32/VW687hhEFJzyH6GXQuh+x2jxOFJAWuUJxnRqzM4QVlHZ
-	 CONI4Y6jjZluw==
-Date: Tue, 14 Dec 2021 11:11:10 -0700
+	b=ZzwfYXCfcXQJISn378p8zpFZRx21maaKTC5rSiqdJlL9YhEGSZmx4jYbjBBhOFiC4
+	 2K0a9T7ysMCq09XbYHOCz3QgxvmJD0DbTa/YIWaYaYtdGzquS9VB4hMBpea+XhbBj/
+	 jKOCuTHP/UMVUQMMywT9ZU3byKra/tb5FFnetE3tzXw97kB62KosKHx0M7ZqTyLieT
+	 gYbGpPCxYdSDyA1AvgMbMEWzfpvPNbam2YAtMDYkUk1EKudItHQXEUsCcmOqkqV7Fd
+	 TH/zmK1mb5ky9eNgXUEkVwCsU/ZEN7QLq3C+8lZZ9L0otLu0hfGbwb76eXdy5HaIwQ
+	 TJ/11yrLe9t7Q==
+Date: Tue, 14 Dec 2021 11:41:27 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nick Desaulniers <ndesaulniers@google.com>, list@opendingux.net,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] MIPS: Add support for LTO
-Message-ID: <YbjePln35WuOX+31@archlinux-ax161>
-References: <20211213224914.1501303-1-paul@crapouillou.net>
+To: kernel test robot <lkp@intel.com>
+Cc: Jason Wang <wangborong@cdjrlc.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable
+ 'group' is used uninitialized whenever 'for' loop exits because its
+ condition is false
+Message-ID: <YbjlV4HdWI8WUcAR@archlinux-ax161>
+References: <202112142208.QW0tVv0m-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,43 +34,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213224914.1501303-1-paul@crapouillou.net>
+In-Reply-To: <202112142208.QW0tVv0m-lkp@intel.com>
 
-On Mon, Dec 13, 2021 at 10:49:11PM +0000, Paul Cercueil wrote:
-> Hi,
+On Tue, Dec 14, 2021 at 10:44:28PM +0800, kernel test robot wrote:
+> Hi Jason,
 > 
-> With this set of patches, it becomes possible to build a LTO'd kernel
-> with LLVM/Clang on MIPS.
+> FYI, the error/warning still remains.
 > 
-> This was tested on a Ingenic JZ4770 based system. It requires the
-> linking step of the vmlinuz.bin to be done with binutils' LD instead of
-> LLVM's ld.lld [1], but the vmlinuz ELF itself can be completely built
-> with LLVM.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
+> commit: 29d45a642d4ea8de7e89b57f856046df7c3b219f pinctrl: bcm2835: Replace BUG with BUG_ON
+> date:   5 months ago
+> config: mips-randconfig-c004-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142208.QW0tVv0m-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mips-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29d45a642d4ea8de7e89b57f856046df7c3b219f
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 29d45a642d4ea8de7e89b57f856046df7c3b219f
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/bcm/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable 'group' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+>            for (i = 0; i < BCM2835_NUM_IRQS; i++) {
+>                        ^~~~~~~~~~~~~~~~~~~~
+>    drivers/pinctrl/bcm/pinctrl-bcm2835.c:423:10: note: uninitialized use occurs here
+>            switch (group) {
+>                    ^~~~~
+>    drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: note: remove the condition if it is always true
+>            for (i = 0; i < BCM2835_NUM_IRQS; i++) {
+>                        ^~~~~~~~~~~~~~~~~~~~
+>    drivers/pinctrl/bcm/pinctrl-bcm2835.c:409:11: note: initialize the variable 'group' to silence this warning
+>            int group;
+>                     ^
+>                      = 0
+>    1 warning generated.
 
-The patches seem fine to me but it might be nice to have this fixed up
-before the series is merged so that everything just works when this
-configuration is selected. I have added some thoughts on the GitHub
-issue.
+It seems like MIP's __BUG_ON() makes it harder for clang to figure out
+that 'i == BCM2835_NUM_IRQS' will make the kernel panic, which is the
+only way that the loop exits because the condition is false.
 
-> Strangely, the LTO'd kernel is bigger in size (3.6 MiB vs. 3.1 MiB
-> without LTO), which might be completely normal and I just have wrong
-> expectations.
-> 
-> Cheers,
-> -Paul
-> 
-> [1]: https://github.com/ClangBuiltLinux/linux/issues/1333
-> 
-> Paul Cercueil (3):
->   MIPS: boot/compressed: Disable abicalls
->   MIPS: boot/compressed: Build without LTO
->   MIPS: Add support for LTO
-> 
->  arch/mips/Kconfig                  | 1 +
->  arch/mips/boot/compressed/Makefile | 7 +++++--
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
-> 
+I am not really sure of a way to fix this other than just reverting that
+change or changing the BUG_ON() to WARN_ON().
+
+Cheers,
+Nathan
