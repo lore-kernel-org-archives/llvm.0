@@ -1,119 +1,109 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198E7173
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 19:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639510104; x=1671046104;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hnMalQnj2NaFVd4xW9/X0H56XQiM/o5zsUGnaOAP68E=;
-  b=IIojoEDtmCwtJSz0xTcZDbkDermhjmL+E3L10SvNL2kf7hBhL7zHOKFC
-   vgcSuCEBHG7xgw9rP9gtW5T/ihUNBExuh79awYKeEDse5GxSgXJewZqZn
-   p68jwIW1pvGMmfD20gl/b7Jcxk+q9tbuLCT3UmVOO+bTgmj5u+UlwF5/O
-   ukN24iZA7jNgec30ODy7DLBNwO2EKP8LdFCvtT7Z4NZIuUUCb4R94nSp8
-   IlpLsODbbz+RLKpiJp0P/TPhLKTe/KdkEcYHHtqpY9kAA3vTkIqywQ0fy
-   9/XglHOsGTiB0Zx2fz2WQ0nX6vITVXWixkVUHBL2EfTkngKWkPOTSEIGQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239290842"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="239290842"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 11:28:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="505492787"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Dec 2021 11:28:22 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxDTJ-0000g2-FG; Tue, 14 Dec 2021 19:28:21 +0000
-Date: Wed, 15 Dec 2021 03:27:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ardb:for-kernelci 2/2] <instantiation>:4:12: error: operand must be
- a register in range [r0, r14]
-Message-ID: <202112150319.rZuO4LiO-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC49173
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 19:34:15 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id bi37so38890010lfb.5
+        for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 11:34:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dl2iT6KtwkArkWpu4TKpHkB1JYhlOVD8tWdR0g05Kik=;
+        b=ppKZVIYvSpHjo+S2FtMLfGCT1I/ZcNCGwrapDzcSKGQvI4rKcQa0J3HiBvYWct64CD
+         pjJxC2A5GGIxtuI/+BHqvQDcriFwbZztXOMPp3MvVd3gHNvd0oHBMO7HVdUeOBxcJw0T
+         BKn7/jfDTdSCqZDbdFsFltz2qwevOfG8J+uTWrMrp/KFm0laB3vp3sDJWbU7By9Y1123
+         L2rGLHEHna2RLGvyyKF/A3e4fMb0SYuY2N9t1gonIGgR5w2gIF8ztTKWmZ+NnBqOBH/v
+         QUjOk2f2Y/i+6tG3gDpCIesZZlRr2+Ls9pYOr+/V4nynrMLFa43/AtZfEGHzbUvZqQ9R
+         oCKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dl2iT6KtwkArkWpu4TKpHkB1JYhlOVD8tWdR0g05Kik=;
+        b=lc5MBwmWVXfHX4wPnxucN2njr/9Aj7wOCCeCqx5hSVigvmno43CgKqRFx5Or/OWIvp
+         0TPt+GImyjTmwp7OkQrk0u9yfBdSLE1E4XA+LBkOoZT4KUhZBvhavDxLQPeP/AJgHx7g
+         zxA1kiCr6rgUex+510e+YB3vzDKd672n3bG6eOszgYsoj+f/XImz019dG33dUY8wBuI9
+         onAB5PjZ2E3IjD7i0IKFXnvRDJnt96R9CG7tNqUoT+pvTVxDQY8nH6BxJzKiBkpqwRyR
+         9HODUGSSbGlwAzAKTP2cCnBMWb5nX27+2HYSdQSrdlgvu4a6N71ENzsYlWpDLjTPIQTn
+         KSjA==
+X-Gm-Message-State: AOAM5323E2q7w0aI44eYhwI7Jhbdw2ELDInSXOD9mibWjd8l0Gmr7it2
+	sXmS623T4Je1x2VeyMYBY4JatIcSFoBYTKdhmIVcQA==
+X-Google-Smtp-Source: ABdhPJxES0U3idmv8VA0GlFgs82CWHx9tfDuuFcdaU4FVcajgtSxXmkub8oZvbsWID90bY6FKcFoxfIjHFuD4Kgut+E=
+X-Received: by 2002:a05:6512:607:: with SMTP id b7mr6541968lfe.489.1639510453554;
+ Tue, 14 Dec 2021 11:34:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211213224914.1501303-1-paul@crapouillou.net>
+In-Reply-To: <20211213224914.1501303-1-paul@crapouillou.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 14 Dec 2021 11:34:02 -0800
+Message-ID: <CAKwvOdn=7iYyOg8+wikOK-6Xogf9Z6wdmkJEacYV_S1MpZ-YDw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] MIPS: Add support for LTO
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nathan Chancellor <nathan@kernel.org>, list@opendingux.net, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   e87ef81a2a09f584487c502ff4dfe618b298000f
-commit: e87ef81a2a09f584487c502ff4dfe618b298000f [2/2] fixup! ARM: assembler: use explicit relocation for ADR with a function symbol
-config: arm-randconfig-r031-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150319.rZuO4LiO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=e87ef81a2a09f584487c502ff4dfe618b298000f
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout e87ef81a2a09f584487c502ff4dfe618b298000f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Mon, Dec 13, 2021 at 2:49 PM Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> Hi,
+>
+> With this set of patches, it becomes possible to build a LTO'd kernel
+> with LLVM/Clang on MIPS.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Paul,
+Overall, nice work pursuing this and working through all the related
+issues; thanks for the series!
 
-All errors (new ones prefixed by >>):
+We should clarify whether this is LTO_CLANG_THIN or LTO_CLANG_FULL.
+Getting support for either would be nice, but for each architecture
+has had its own distinct challenges.
 
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w r9, pc, #4
-              ^
-   arch/arm/kernel/entry-armv.S:490:2: note: while in macro instantiation
-    badr r9, ret_from_exception
-    ^
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   arch/arm/kernel/entry-armv.S:509:2: note: while in macro instantiation
-    badr lr, __und_usr_fault_32
-    ^
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   arch/arm/kernel/entry-armv.S:727:2: note: while in macro instantiation
-    badr lr, ret_from_exception
-    ^
---
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   <instantiation>:6:2: note: while in macro instantiation
-    badr lr, __ret_fast_syscall @ return address
-    ^
-   arch/arm/kernel/entry-common.S:255:2: note: while in macro instantiation
-    invoke_syscall tbl, scno, r10, __ret_fast_syscall
-    ^
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   <instantiation>:6:2: note: while in macro instantiation
-    badr lr, __sys_trace_return @ return address
-    ^
-   arch/arm/kernel/entry-common.S:289:2: note: while in macro instantiation
-    invoke_syscall tbl, scno, r10, __sys_trace_return, reload=1
-    ^
---
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   arch/arm/kernel/sleep.S:92:2: note: while in macro instantiation
-    badr lr, cpu_suspend_abort
-    ^
+>
+> This was tested on a Ingenic JZ4770 based system. It requires the
+> linking step of the vmlinuz.bin to be done with binutils' LD instead of
+> LLVM's ld.lld [1], but the vmlinuz ELF itself can be completely built
+> with LLVM.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+eh, this patch set sounds incomplete then; Can we wait to resolve
+https://github.com/ClangBuiltLinux/linux/issues/1333 BEFORE this
+series?  Hacking up arch/mips/boot/compressed/Makefile to force a
+different linker is not something we should encourage.
+
+>
+> Strangely, the LTO'd kernel is bigger in size (3.6 MiB vs. 3.1 MiB
+> without LTO), which might be completely normal and I just have wrong
+> expectations.
+
+Are you building with CC_OPTIMIZE_FOR_SIZE or CC_OPTIMIZE_FOR_SIZE?
+LTO != LD_DEAD_CODE_DATA_ELIMINATION
+
+>
+> Cheers,
+> -Paul
+>
+> [1]: https://github.com/ClangBuiltLinux/linux/issues/1333
+>
+> Paul Cercueil (3):
+>   MIPS: boot/compressed: Disable abicalls
+>   MIPS: boot/compressed: Build without LTO
+>   MIPS: Add support for LTO
+>
+>  arch/mips/Kconfig                  | 1 +
+>  arch/mips/boot/compressed/Makefile | 7 +++++--
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+>
+> --
+> 2.33.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
