@@ -1,135 +1,98 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F9D2C80
-	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 08:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639469154; x=1671005154;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rjV2vJCIHQHCMOKR5klOAYcSglpVlBbDX5kT5PNhLRY=;
-  b=VpdaMJ0JPOrs4DS08YA8otUYk7lvNOGIGisl2G63spANOGr0IrPsgmAq
-   FybiSxdfRQ6XhzyvGiJSVJf+cMIL+JVXIzJImAj4JR+mmKCDwVkExqszL
-   mpraCmCvUL5WLT0rzPD+3I1zqLINJtnhryZ2VH7sVlTmBgrs3gNEeewJq
-   sRNNgnpinQf0G/UvON4miyGGocqbnhyPhC6BMI+NMUMiDpj9+5XPTQ+cr
-   2xUATSq1NuMRa1kIA58WVCOXsw9MVGWBAaVmsUWcV6gNQDRr2b+LXqoMx
-   WGChgj1Vg63LMXmcNvdEmgvBxLMY9FTBA8EhQd9r0h5/fb8EAriIBSdJM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225783720"
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="225783720"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 00:05:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="464977888"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 00:05:52 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mx2op-00004F-C7; Tue, 14 Dec 2021 08:05:51 +0000
-Date: Tue, 14 Dec 2021 16:05:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [tglx-devel:x86/fpu-kvm 1/6] arch/x86/kernel/fpu/xstate.c:1625:6:
- warning: variable 'ret' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202112141631.KodrezTK-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0D32C80
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 08:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE90C34607
+	for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 08:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639470009;
+	bh=ZPX5WOauPLBFAA7/nm7d89PTpA2MGv0mdjmSsflDJtU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jRcALEu97XSjviU9ZS7Klgy0jDfbdAeQCRRXyR8pperYbUNaJUJq8hm97ERfFDVB6
+	 q+FPOfNADSAWjxWooIIfA5u2I//GjfbqgfL7/89L73rcrv+Cdtl2gZHq5/4Re/P3Ay
+	 QAqgr5jcccOpILDk9r0Iv4EJFHw8cxcenpe/5LWSLZNzCreGN7K6mFcvMTBu+H/swF
+	 gSo9Bjtm1RH+E35GyBE9rV9IvY2kwl/zkU9qgfXnI8amfZKA0Eb8/WWq0fYplQ1SAe
+	 XtwkAPyAEOz5LGkESZErIxnr/hB2kcl+NMXW3YACtbYUL+yP1PFwOlKLt4P5Bh9XDG
+	 wX82RMnY+CFYg==
+Received: by mail-oi1-f173.google.com with SMTP id q25so26521355oiw.0
+        for <llvm@lists.linux.dev>; Tue, 14 Dec 2021 00:20:09 -0800 (PST)
+X-Gm-Message-State: AOAM531gRrn14/BeWBqp4PYu4mv1SMWyEQ3JVusYZQb+1nyLxpB9UnjE
+	6uqm5hjW0AniygD6hQi8i1JOxAiIVaKPFchFoOM=
+X-Google-Smtp-Source: ABdhPJz4o8XqXrzGvXt6FC/1tFVAYz2c2UxuBJZib/SgH1TVMox0vQG+VfvOmaY6qm0cBDymgWdpyZk3kLkQCYLI7hY=
+X-Received: by 2002:a05:6808:1919:: with SMTP id bf25mr3353729oib.33.1639470008950;
+ Tue, 14 Dec 2021 00:20:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211213140252.2856053-1-ardb@kernel.org> <YbgDR461O9gCEi+Q@archlinux-ax161>
+In-Reply-To: <YbgDR461O9gCEi+Q@archlinux-ax161>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 14 Dec 2021 09:19:57 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFKuHuzsrDBcUjbaVO6-NQkj8J+vMty_qU3Y0pDwT905w@mail.gmail.com>
+Message-ID: <CAMj1kXFKuHuzsrDBcUjbaVO6-NQkj8J+vMty_qU3Y0pDwT905w@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64/xor: use EOR3 instructions when available
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/fpu-kvm
-head:   e16d6eec3c9e60abfb29d0d77f08411d326142dd
-commit: 8a4ae8c80ec211646b5824b7c89d64cf7d286625 [1/6] x86/fpu: Extend fpu_xstate_prctl() with guest permissions
-config: x86_64-randconfig-r035-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141631.KodrezTK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=8a4ae8c80ec211646b5824b7c89d64cf7d286625
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel x86/fpu-kvm
-        git checkout 8a4ae8c80ec211646b5824b7c89d64cf7d286625
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/fpu/
++ Arnd
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, 14 Dec 2021 at 03:37, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Ard,
+>
+> On Mon, Dec 13, 2021 at 03:02:52PM +0100, Ard Biesheuvel wrote:
+> > Use the EOR3 instruction to implement xor_blocks() if the instruction is
+> > available, which is the case if the CPU implements the SHA-3 extension.
+> > This is about 20% faster on Apple M1 when using the 5-way version.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+>
+> Our CI reported that this patch as commit ce9ba49a2460 ("arm64/xor: use
+> EOR3 instructions when available") in the arm64 tree breaks
+> allyesconfig:
+>
+> https://github.com/ClangBuiltLinux/continuous-integration2/runs/4514540083?check_suite_focus=true
+>
+> I also see this when building with GCC 11.2.0:
+>
+> WARNING: modpost: EXPORT symbol "xor_block_inner_neon" [vmlinux] version ...
+> Is "xor_block_inner_neon" prototyped in <asm/asm-prototypes.h>?
+> aarch64-linux-gnu-ld: arch/arm64/lib/xor-neon.o: relocation R_AARCH64_ABS32 against `__crc_xor_block_inner_neon' can not be used when making a shared object
 
-All warnings (new ones prefixed by >>):
+I suspect this is another genksyms crash, preventing the
+__crc_xor_block_inner_neon symbol from ever being emitted.
 
->> arch/x86/kernel/fpu/xstate.c:1625:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (!guest) {
-               ^~~~~~
-   arch/x86/kernel/fpu/xstate.c:1637:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   arch/x86/kernel/fpu/xstate.c:1625:2: note: remove the 'if' if its condition is always true
-           if (!guest) {
-           ^~~~~~~~~~~~
-   arch/x86/kernel/fpu/xstate.c:1611:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+This is a recurring annoyance and I am not sure how to address this
+properly. Arnd might have some thoughts on the matter as well.
 
 
-vim +1625 arch/x86/kernel/fpu/xstate.c
-
-  1597	
-  1598	static int __xstate_request_perm(u64 permitted, u64 requested, bool guest)
-  1599	{
-  1600		/*
-  1601		 * This deliberately does not exclude !XSAVES as we still might
-  1602		 * decide to optionally context switch XCR0 or talk the silicon
-  1603		 * vendors into extending XFD for the pre AMX states, especially
-  1604		 * AVX512.
-  1605		 */
-  1606		bool compacted = cpu_feature_enabled(X86_FEATURE_XSAVES);
-  1607		struct fpu *fpu = &current->group_leader->thread.fpu;
-  1608		struct fpu_state_perm *perm;
-  1609		unsigned int ksize, usize;
-  1610		u64 mask;
-  1611		int ret;
-  1612	
-  1613		/* Check whether fully enabled */
-  1614		if ((permitted & requested) == requested)
-  1615			return 0;
-  1616	
-  1617		/* Calculate the resulting kernel state size */
-  1618		mask = permitted | requested;
-  1619		ksize = xstate_calculate_size(mask, compacted);
-  1620	
-  1621		/* Calculate the resulting user state size */
-  1622		mask &= XFEATURE_MASK_USER_SUPPORTED;
-  1623		usize = xstate_calculate_size(mask, false);
-  1624	
-> 1625		if (!guest) {
-  1626			ret = validate_sigaltstack(usize);
-  1627			if (ret)
-  1628				return ret;
-  1629		}
-  1630	
-  1631		perm = guest ? &fpu->guest_perm : &fpu->perm;
-  1632		/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
-  1633		WRITE_ONCE(perm->__state_perm, requested);
-  1634		/* Protected by sighand lock */
-  1635		perm->__state_size = ksize;
-  1636		perm->__user_state_size = usize;
-  1637		return ret;
-  1638	}
-  1639	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> arch/arm64/lib/xor-neon.o:(.data+0x0): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data+0x18): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data+0x20): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x0): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x8): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x10): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x18): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x20): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x28): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x30): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x38): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x40): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(__patchable_function_entries+0x48): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.fini_array+0x0): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.init_array+0x0): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data..ro_after_init+0x8): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data..ro_after_init+0x18): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data..ro_after_init+0x20): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data..ro_after_init+0x28): dangerous relocation: unsupported relocation
+> arch/arm64/lib/xor-neon.o:(.data..ro_after_init+0x30): dangerous relocation: unsupported relocation
+>
+> Cheers,
+> Nathan
