@@ -1,99 +1,109 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940E4173
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 21:18:56 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id l145-20020a25cc97000000b005c5d04a1d52so45750159ybf.23
-        for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 13:18:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=rfVzBKQXio+HJXcXyWZGxwvKV+1ieQCkHCR6oMZnhoQ=;
-        b=iCmR+gGbmyXOnWlggmkLKgqCZETL+UsDkC4M0h8JwWcI/caMbap6KncjxKcGqAxSI9
-         hg+KsaOr1/lqwi6oydwa7pC4tdpKk4hh61iRMdMEBqU5D6FcLcdMvk2GKsPur5Cqdi72
-         qELjEG2pnXAOLoJrD7ymmQGb9iIaqE9laajR3IyLxMgQkVyPZj9Cy1nPbfN0ky7zA9ok
-         JIFrQYfgjpingUFtYiY5q79aX3t43WGvmK9hexSIDAQj2+oehgoPatjx+H2+nRO+fCvn
-         Y0gbmDgLOW6PDfd/cHz0vDNgdlpT60jDhUAVdlcmmpDRR6fv2mKtaXPcT4FejCGODoLQ
-         6GUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=rfVzBKQXio+HJXcXyWZGxwvKV+1ieQCkHCR6oMZnhoQ=;
-        b=cdYuhn+NSfVUDoHPo9kwloMYnm7eBPQKzqxsXdG0FzAE47+1RNgb1JdS2USo/lcThQ
-         T1lRgp8Vedg3sznxQv+Naqr0aE9fNdwnX+7QDV5aiOilH0857Q4Y1Q+8+vCNihrzzIec
-         bT7hox31dO++Z83MPwL4xzZ6HFdRmxP9mVD952PW8RioMN8GzWMcwIffsMF1llnRRQtt
-         mg+8wFuyVGBsuSKKno0a6nCVZ0KQ1Ep+32ncqol7HAZBm4icDkbLa2DWeoMw1CUGLsR3
-         tG9U+LGr+zdDU68IEVI8yEmufzMQuJU4jptFF1IPG0Rp3qD8Khu5P3nKmYTx7bO0+Hpw
-         KkVw==
-X-Gm-Message-State: AOAM530CGlWrJSkFdDQ/S8x4AjyVCe88P5sSYrQWsJGcHHWhuOUgFkdZ
-	otST/jmjAbHtUHsjGtJYJk91yuBV
-X-Google-Smtp-Source: ABdhPJzCzD5XDaWR+cmfxbrVDviEasAJCo8xjv8+n9ymRKD84WfniioScLNBi8V7FVqJq9QXE97EAFMVxQ==
-X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:ec97:1221:3aa:f18f])
- (user=morbo job=sendgmr) by 2002:a25:ae12:: with SMTP id a18mr8586004ybj.412.1639603135579;
- Wed, 15 Dec 2021 13:18:55 -0800 (PST)
-Date: Wed, 15 Dec 2021 13:18:47 -0800
-Message-Id: <20211215211847.206208-1-morbo@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898982CA4
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 22:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCCEC36AE3;
+	Wed, 15 Dec 2021 22:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639608420;
+	bh=fXQuO+N6X9s4aSRl5T3wSk3erhKCx7vnAIkoyKDNTPk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mh8WQHweKF6pvQz7w+P3rd60rSCEg6k8BGWyy5Gh92kfPLcDgKI+UzgD0eas+3/Mn
+	 8o+pRiu/CTRzUZ8iqLoF0N69bvd2ZlprFWSCFBVLqr51hE5Y2ABZlA0+dssylMYCGe
+	 TuEp23TWXC5K06FculukA5vCu1QpdNnGd4iIAudYUNPAIzFunnQKviYGUNYxVL6K3Y
+	 8swCfPqZ/rrTeSc7ga9609XWR+2iLDU0oRGw3+e0NJtKQhdfvKYu49+Vtlrl669ZR+
+	 njLkf6GaKMqK1tom+elJjpjIvQLBLxTcisAb/uOewx+qkWPtENhONCcjxDEmr57Eks
+	 OR86gfrEXg/jg==
+Date: Wed, 15 Dec 2021 15:46:54 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Juergen Gross <jgross@suse.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86: use builtins to read eflags
+Message-ID: <YbpwXjGcLty1ns81@archlinux-ax161>
+References: <20211215211847.206208-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH] x86: use builtins to read eflags
-From: Bill Wendling <morbo@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
-Cc: Bill Wendling <morbo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215211847.206208-1-morbo@google.com>
 
-GCC and Clang both have builtins to read from and write to the
-EFLAGS register. This allows the compiler to determine the best way
-to generate the code, which can improve code generation.
+On Wed, Dec 15, 2021 at 01:18:47PM -0800, Bill Wendling wrote:
+> GCC and Clang both have builtins to read from and write to the
+> EFLAGS register. This allows the compiler to determine the best way
+> to generate the code, which can improve code generation.
+> 
+> Signed-off-by: Bill Wendling <morbo@google.com>
 
-Signed-off-by: Bill Wendling <morbo@google.com>
----
- arch/x86/include/asm/irqflags.h | 24 +++++-------------------
- 1 file changed, 5 insertions(+), 19 deletions(-)
+I think there has been discussion about doing this in the past (possibly
+even from you?) but last time it was talked about, Andy pointed out that
+Clang's codegen is suboptimal and filed a couple of bugs:
 
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index c5ce9845c999..574fb44b82f7 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -15,25 +15,11 @@
-  * Interrupt control:
-  */
- 
--/* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
--extern inline unsigned long native_save_fl(void);
--extern __always_inline unsigned long native_save_fl(void)
--{
--	unsigned long flags;
--
--	/*
--	 * "=rm" is safe here, because "pop" adjusts the stack before
--	 * it evaluates its effective address -- this is part of the
--	 * documented behavior of the "pop" instruction.
--	 */
--	asm volatile("# __raw_save_flags\n\t"
--		     "pushf ; pop %0"
--		     : "=rm" (flags)
--		     : /* no input */
--		     : "memory");
--
--	return flags;
--}
-+#ifdef CONFIG_X86_64
-+#define native_save_fl()	__builtin_ia32_readeflags_u64()
-+#else
-+#define native_save_fl()	__builtin_ia32_readeflags_u32()
-+#endif
- 
- static __always_inline void native_irq_disable(void)
- {
--- 
-2.34.1.173.g76aa8bc2d0-goog
+https://lore.kernel.org/r/CALCETrXUaeNUbkQSeMPpPKWDBCEpqX1gLgkv2G9zLeeYMjK8VQ@mail.gmail.com/
 
+https://llvm.org/PR47530 (which is really https://llvm.org/PR20197)
+https://llvm.org/PR47531
+
+It seems like the second one is the one that actually matters in this
+case but if I am reading the bug report and Phabricator correct, it does
+not seem like it has been addresed so does it actually improve code
+generation? If there is another reason to do this (can't tell from the
+previous thread or this commit message), it might be worth calling that
+out as well.
+
+Cheers,
+Nathan
+
+> ---
+>  arch/x86/include/asm/irqflags.h | 24 +++++-------------------
+>  1 file changed, 5 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+> index c5ce9845c999..574fb44b82f7 100644
+> --- a/arch/x86/include/asm/irqflags.h
+> +++ b/arch/x86/include/asm/irqflags.h
+> @@ -15,25 +15,11 @@
+>   * Interrupt control:
+>   */
+>  
+> -/* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
+> -extern inline unsigned long native_save_fl(void);
+> -extern __always_inline unsigned long native_save_fl(void)
+> -{
+> -	unsigned long flags;
+> -
+> -	/*
+> -	 * "=rm" is safe here, because "pop" adjusts the stack before
+> -	 * it evaluates its effective address -- this is part of the
+> -	 * documented behavior of the "pop" instruction.
+> -	 */
+> -	asm volatile("# __raw_save_flags\n\t"
+> -		     "pushf ; pop %0"
+> -		     : "=rm" (flags)
+> -		     : /* no input */
+> -		     : "memory");
+> -
+> -	return flags;
+> -}
+> +#ifdef CONFIG_X86_64
+> +#define native_save_fl()	__builtin_ia32_readeflags_u64()
+> +#else
+> +#define native_save_fl()	__builtin_ia32_readeflags_u32()
+> +#endif
+>  
+>  static __always_inline void native_irq_disable(void)
+>  {
+> -- 
+> 2.34.1.173.g76aa8bc2d0-goog
+> 
