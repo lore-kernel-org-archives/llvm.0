@@ -1,49 +1,34 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B079F29CA
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 17:12:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639588342; x=1671124342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=edXL2NDH77Vq5+3qPUNxhejC8s6Say3j/M5f/xR81ck=;
-  b=lXTzIVKjCZ6nFEXls0D0pyVNXlHMrcj4Fn3BqBFkCA1msikNDbLnSdfn
-   y1f45fsdhv7FYMUTLiNbAgLyYRvVDSyq6O2Wwtejor6lp3XCvgsSBM4cl
-   NGXiJ74s6CYFDoxdKZG79b16dYwVxY2CC+WmkgeIfaPaCqtx3ozqm6FYX
-   /rDEVRktlr9/pwWzSyIUj7n6fwfc8ca2ft4TlRGQVyD7ZTamlyCDPI+Lb
-   XZ0HR8odpNHrfEGbdq8J5/mBcC9OBVX1IBaq4H24IHCkVF4JzpOyUgI7k
-   Skj6kLAAWAO8wq1lRzc2F1kQQM9UUED7tTA5ZV6iYlg9XJFzwKbb3PhP2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="236815837"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="236815837"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 09:09:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="482464752"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Dec 2021 09:09:08 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxXm8-00026X-6O; Wed, 15 Dec 2021 17:09:08 +0000
-Date: Thu, 16 Dec 2021 01:08:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pratyush Yadav <p.yadav@ti.com>, Vinod Koul <vkoul@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0934229CA
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 17:21:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70D3C36AE2;
+	Wed, 15 Dec 2021 17:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639588909;
+	bh=5kw5d/dJmPzKVkRoB5LKQamLyO243vfdE9NF/V8TtsA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GWrV/EiGznIzhs5lwHJfEXtffgY2NeUaRr7i2F+yyxfvUdi5E5PZH8LhxdNnL0YSH
+	 BTn6ii0Rzh8zF2kWe6R/WqtZygnZM7ZyDPgb3w/1e28BxOFEna4BM/bknhhwJygDhT
+	 HcarbJQtmlCViCoj9EUHxN19Ot4IQpszrgIMShunJxuTKVQypiyMuzA+aJDGhiIVbG
+	 E3xvQGhiurqW59+sdJ1Krk1YEjLThrj/fJDQONn17v+vNuPIjct7ywwrF+zxiludTG
+	 UJp1CmtzhFt3c0UNCpd3v2O1aRco/GnsWDVQdsux3pHG/MdKAOYfk3+98HAfR8NOEA
+	 zKW2zb7SvdjAA==
+Date: Wed, 15 Dec 2021 10:21:44 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pratyush Yadav <p.yadav@ti.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Kishon Vijay Abraham I <kishon@ti.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Swapnil Jakhade <sjakhade@cadence.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] phy: cadence: Add Cadence D-PHY Rx driver
-Message-ID: <202112160116.Cc1gKnvK-lkp@intel.com>
-References: <20211214180703.3268-2-p.yadav@ti.com>
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: [linux-stable-rc:queue/5.10 6492/9999] ERROR: modpost:
+ "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
+Message-ID: <YbokKLRVkIDCnE8F@archlinux-ax161>
+References: <202112151422.M34sDTRZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,87 +37,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214180703.3268-2-p.yadav@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202112151422.M34sDTRZ-lkp@intel.com>
 
-Hi Pratyush,
+On Wed, Dec 15, 2021 at 02:49:44PM +0800, kernel test robot wrote:
+> Hi Nathan,
+> 
+> First bad commit (maybe != root cause):
 
-I love your patch! Perhaps something to improve:
+Indeed, pre-existing issue :)
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v5.16-rc5 next-20211214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+> head:   a0e5648b46a984339e8c472bfe5da299dd65fc3b
+> commit: f7121692795c654b52b460a11107a87285bb1dcd [6492/9999] hexagon: handle {,SOFT}IRQENTRY_TEXT in linker script
+> config: hexagon-randconfig-r041-20211215 (https://download.01.org/0day-ci/archive/20211215/202112151422.M34sDTRZ-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f7121692795c654b52b460a11107a87285bb1dcd
+>         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+>         git fetch --no-tags linux-stable-rc queue/5.10
+>         git checkout f7121692795c654b52b460a11107a87285bb1dcd
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> ERROR: modpost: "__raw_writesl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
+> ERROR: modpost: "__raw_readsl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
 
-url:    https://github.com/0day-ci/linux/commits/Pratyush-Yadav/Rx-mode-support-for-Cadence-DPHY/20211215-021112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: riscv-randconfig-r035-20211215 (https://download.01.org/0day-ci/archive/20211216/202112160116.Cc1gKnvK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7422cc73ff300a5eb0e57ff6fe426e01f5dcb2b0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pratyush-Yadav/Rx-mode-support-for-Cadence-DPHY/20211215-021112
-        git checkout 7422cc73ff300a5eb0e57ff6fe426e01f5dcb2b0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/phy/cadence/
+This is fixed in linux-5.10.y head, commit 0854c9ff2151 ("hexagon:
+export raw I/O routines for modules").
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> >> ERROR: modpost: "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
+> >> ERROR: modpost: "raid6_datap_recov" [fs/btrfs/btrfs.ko] undefined!
+> >> ERROR: modpost: "raid6_call" [fs/btrfs/btrfs.ko] undefined!
+> >> ERROR: modpost: "xor_blocks" [fs/btrfs/btrfs.ko] undefined!
+> >> ERROR: modpost: "__compiletime_assert_963" [fs/btrfs/btrfs.ko] undefined!
+> 
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for BTRFS_FS
+>    Depends on BLOCK && !PPC_256K_PAGES && !PAGE_SIZE_256KB
+>    Selected by
+>    - TEST_KMOD && RUNTIME_TESTING_MENU && m && MODULES && NETDEVICES && NET_CORE && INET && BLOCK
 
-All warnings (new ones prefixed by >>):
+The rest of the errors should be fixed by my series here, which is
+currently in -mm:
 
->> drivers/phy/cadence/cdns-dphy-rx.c:223:46: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                   dev_err(dev, "Failed to create PHY: %d\n", PTR_ERR(dphy->phy));
-                                                       ~~     ^~~~~~~~~~~~~~~~~~
-                                                       %ld
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning generated.
+https://lore.kernel.org/r/20211129230141.228085-1-nathan@kernel.org/
 
+I can backport it once it lands in mainline.
 
-vim +223 drivers/phy/cadence/cdns-dphy-rx.c
-
-   203	
-   204	static int cdns_dphy_rx_probe(struct platform_device *pdev)
-   205	{
-   206		struct device *dev = &pdev->dev;
-   207		struct phy_provider *provider;
-   208		struct cdns_dphy_rx *dphy;
-   209	
-   210		dphy = devm_kzalloc(dev, sizeof(*dphy), GFP_KERNEL);
-   211		if (!dphy)
-   212			return -ENOMEM;
-   213	
-   214		dev_set_drvdata(dev, dphy);
-   215		dphy->dev = dev;
-   216	
-   217		dphy->regs = devm_platform_ioremap_resource(pdev, 0);
-   218		if (IS_ERR(dphy->regs))
-   219			return PTR_ERR(dphy->regs);
-   220	
-   221		dphy->phy = devm_phy_create(dev, NULL, &cdns_dphy_rx_ops);
-   222		if (IS_ERR(dphy->phy)) {
- > 223			dev_err(dev, "Failed to create PHY: %d\n", PTR_ERR(dphy->phy));
-   224			return PTR_ERR(dphy->phy);
-   225		}
-   226	
-   227		phy_set_drvdata(dphy->phy, dphy);
-   228		provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-   229	
-   230		return PTR_ERR_OR_ZERO(provider);
-   231	}
-   232	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
