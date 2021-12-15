@@ -1,154 +1,125 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB96168
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 20:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639599919; x=1671135919;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MgslzzP5kR+7+beKecc+2qJE2wbRP6ryZCH5m7rfd8Q=;
-  b=DZ+23a935TYFe0ghUWq2Sv1XLoTOmm2mXdp4YGGBNE/LzDKd4g2O70XN
-   220y5RzjgL10Mkfy+YlHWD6aSmmD3EynJf74QRDe69JzXu78ARyqTJtOs
-   mhwX7iY1Z/MK/J5xYrA0qoEpgO3IiPImf4TvXBdlHZysIeyzAo/Bbn5bb
-   e8gQvpIHPSaH8BRg+sQoU15M5sYj4NTyXFcFQm8oyMGTTo0SMcG9rbyJS
-   F6kDgEQayzFMiojRErOiAHWCtplHRH8Izl45wSpZOjiunhlsJlOQuCu6d
-   SJFqX6qabB6VWlyIA5YUH9YWHiwqwOLTXo8Vv1uEr4Ga+o8BhnlALj8yk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226611575"
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="226611575"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 12:25:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="465760509"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2021 12:25:17 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxapw-0002Hv-IZ; Wed, 15 Dec 2021 20:25:16 +0000
-Date: Thu, 16 Dec 2021 04:25:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 22/33] drivers/acpi/acpi_dbg.c:263:6: warning:
- comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and
- 'typeof ((CIRC_SPACE_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *'
- (aka 'unsigned int *'))
-Message-ID: <202112160440.3ZOATMun-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6672A173
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 21:15:03 +0000 (UTC)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7C2153F1EB;
+	Wed, 15 Dec 2021 21:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1639602394;
+	bh=RWzxkXzAVp/A9fejasmC/on0nYacq+ErNHO8Y6i1/Yc=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type;
+	b=M2We8DIImoLjKFS67Q3bg6htGqMpSrjhwvUfGL0gbS5zqAQyiTIH+cQtYEPtRxccw
+	 4qzZsBzucrmzyuIvQBnjzS5ddn96CjQbRn1NxK+Mxy6BLPMdc0ATJDNDQimEs5jd3k
+	 VCix+EW1yuzmrXnDW4ciXavpJ8zJLC1UNgvA89QqLbQ+IKJoomyPTOYDSoP7grxat/
+	 QxO95Yon4fyslvxMXKbpQhGIfr1r89AGQ3me+maQoLbfAklzQ013GQpr9j4Fmb1QtR
+	 3jwvzrjSU9H5qXGUqyPkoxJdus2nB1bc6yP3VZwdIWdbZoc9oA0l1bwCOTV6ZG3b59
+	 633Kf6pYW/ycw==
+Subject: Re: [PATCH -next] apparmor: Fix kernel-doc
+To: Yang Li <yang.lee@linux.alibaba.com>
+Cc: jmorris@namei.org, serge@hallyn.com, nathan@kernel.org,
+ ndesaulniers@google.com, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <1637134678-81292-1-git-send-email-yang.lee@linux.alibaba.com>
+From: John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+Message-ID: <b9523142-cb9b-eac7-3ee2-5f4ae02d1f75@canonical.com>
+Date: Wed, 15 Dec 2021 13:06:32 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1637134678-81292-1-git-send-email-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
-commit: 4671e2ec5eadf881696fad611235561e94c6be9c [22/33] circ_buf: switch macros to inlines
-config: i386-randconfig-a011-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160440.3ZOATMun-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=4671e2ec5eadf881696fad611235561e94c6be9c
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout 4671e2ec5eadf881696fad611235561e94c6be9c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
+On 11/16/21 11:37 PM, Yang Li wrote:
+> Fix function name in security/apparmor/label.c, policy.c, procattr.c
+> kernel-doc comment to remove some warnings found by clang(make W=1 LLVM=1).
+> 
+> security/apparmor/label.c:499: warning: expecting prototype for
+> aa_label_next_not_in_set(). Prototype was for
+> __aa_label_next_not_in_set() instead
+> security/apparmor/label.c:2147: warning: expecting prototype for
+> __aa_labelset_udate_subtree(). Prototype was for
+> __aa_labelset_update_subtree() instead
+> 
+> security/apparmor/policy.c:434: warning: expecting prototype for
+> aa_lookup_profile(). Prototype was for aa_lookupn_profile() instead
+> 
+> security/apparmor/procattr.c:101: warning: expecting prototype for
+> aa_setprocattr_chagnehat(). Prototype was for aa_setprocattr_changehat()
+> instead
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I have pulled this into my tree
 
-All warnings (new ones prefixed by >>):
+> ---
+>  security/apparmor/label.c    | 4 ++--
+>  security/apparmor/policy.c   | 2 +-
+>  security/apparmor/procattr.c | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/security/apparmor/label.c b/security/apparmor/label.c
+> index 0b0265d..e8ada60 100644
+> --- a/security/apparmor/label.c
+> +++ b/security/apparmor/label.c
+> @@ -485,7 +485,7 @@ int aa_label_next_confined(struct aa_label *label, int i)
+>  }
+>  
+>  /**
+> - * aa_label_next_not_in_set - return the next profile of @sub not in @set
+> + * __aa_label_next_not_in_set - return the next profile of @sub not in @set
+>   * @I: label iterator
+>   * @set: label to test against
+>   * @sub: label to if is subset of @set
+> @@ -2136,7 +2136,7 @@ static void __labelset_update(struct aa_ns *ns)
+>  }
+>  
+>  /**
+> - * __aa_labelset_udate_subtree - update all labels with a stale component
+> + * __aa_labelset_update_subtree - update all labels with a stale component
+>   * @ns: ns to start update at (NOT NULL)
+>   *
+>   * Requires: @ns lock be held
+> diff --git a/security/apparmor/policy.c b/security/apparmor/policy.c
+> index b0cbc4906..8357f4a 100644
+> --- a/security/apparmor/policy.c
+> +++ b/security/apparmor/policy.c
+> @@ -422,7 +422,7 @@ static struct aa_profile *__lookup_profile(struct aa_policy *base,
+>  }
+>  
+>  /**
+> - * aa_lookup_profile - find a profile by its full or partial name
+> + * aa_lookupn_profile - find a profile by its full or partial name
+>   * @ns: the namespace to start from (NOT NULL)
+>   * @hname: name to do lookup on.  Does not contain namespace prefix (NOT NULL)
+>   * @n: size of @hname
+> diff --git a/security/apparmor/procattr.c b/security/apparmor/procattr.c
+> index fde332e..86ad26e 100644
+> --- a/security/apparmor/procattr.c
+> +++ b/security/apparmor/procattr.c
+> @@ -90,7 +90,7 @@ static char *split_token_from_name(const char *op, char *args, u64 *token)
+>  }
+>  
+>  /**
+> - * aa_setprocattr_chagnehat - handle procattr interface to change_hat
+> + * aa_setprocattr_changehat - handle procattr interface to change_hat
+>   * @args: args received from writing to /proc/<pid>/attr/current (NOT NULL)
+>   * @size: size of the args
+>   * @flags: set of flags governing behavior
+> 
 
->> drivers/acpi/acpi_dbg.c:263:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and 'typeof ((CIRC_SPACE_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           n = min(len, circ_space_to_end(crc));
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> drivers/acpi/acpi_dbg.c:585:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and 'typeof ((CIRC_CNT_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           n = min(len, circ_count_to_end(crc));
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   drivers/acpi/acpi_dbg.c:655:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and 'typeof ((CIRC_SPACE_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           n = min(len, circ_space_to_end(crc));
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   3 warnings generated.
-
-
-vim +263 drivers/acpi/acpi_dbg.c
-
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  249  
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  250  static int acpi_aml_write_kern(const char *buf, int len)
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  251  {
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  252  	int ret;
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  253  	struct circ_buf *crc = &acpi_aml_io.out_crc;
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  254  	int n;
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  255  	char *p;
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  256  
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  257  	ret = acpi_aml_lock_write(crc, ACPI_AML_OUT_KERN);
-287980e49ffc0f Arnd Bergmann 2016-05-27  258  	if (ret < 0)
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  259  		return ret;
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  260  	/* sync tail before inserting logs */
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  261  	smp_mb();
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  262  	p = &crc->buf[crc->head];
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03 @263  	n = min(len, circ_space_to_end(crc));
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  264  	memcpy(p, buf, n);
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  265  	/* sync head after inserting logs */
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  266  	smp_wmb();
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  267  	crc->head = (crc->head + n) & (ACPI_AML_BUF_SIZE - 1);
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  268  	acpi_aml_unlock_fifo(ACPI_AML_OUT_KERN, true);
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  269  	return n;
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  270  }
-8cfb0cdf07e2c2 Lv Zheng      2015-12-03  271  
-
-:::::: The code at line 263 was first introduced by commit
-:::::: 8cfb0cdf07e2c260c4d1a102bfec35183907834f ACPI / debugger: Add IO interface to access debugger functionalities
-
-:::::: TO: Lv Zheng <lv.zheng@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
