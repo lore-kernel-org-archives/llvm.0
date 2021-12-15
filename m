@@ -1,42 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E62173
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 10:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587D4168
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 11:06:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639563418; x=1671099418;
+  t=1639566419; x=1671102419;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N1bnE2MaC7ppbJ+K9AtlutnOd4jq2oXcq3ZwkAs4BOA=;
-  b=Q1VhnTqde/of4sRNu8SHvadQgg9aXtqnYjejkRuHfimGdDC5TlxgsFZl
-   rykvQsuX3c7e2pihbiYVWulFJytBnUDO0NDDJz+RhQ5E5cFnJiUZ4dYb4
-   Y951VM8+KndXNA0Jg/ccdlXcyuIz5XYKvgqnKqbfnYwjtbtshap1OxTpw
-   ryX/iaYxYPnqFVa9H+tjabdW/A+iSIA0NmRwrfSfGErUrJvjNlQcYSIdv
-   Cc9ViZoJfFbayr6U1arNDQ+BxGenpWqAC4QmXJOCk9wNtzhb1sSCsDOcL
-   KOD17PwiTr8cLJhCvJAeYVewCEvMn8w1rm5xL/XBQOiBwv2gms8wRuhrO
+  bh=+9v6HklrEHaUKQQTxfWKtZY1fc5zCJpba60VCSVAPdo=;
+  b=F3yfX+VxmXI1XrglswJkNH999Bnd/mGlkK8X6ttNf9TdirVYCFjBmLfn
+   0XIPSE5a+KBo95Z1C5JfPco5ijOPEr6kHFwqihSaeFHrWD41ny8wO5c/2
+   rh8apdch2KaOGcrHiUOITlq/vHmmPXUp2MEYG7RF0FL9l2J24i2J8pZG+
+   JapB6yJF/yR/RFyzOoPxZzJDJ+s2ZR88xnLqBa7L95+eB5CLrBal09YxV
+   0ct3Pj9ySTzdQWZd92lGO7IRaEGgvV7FRc0yjxCfQLQvGN/beaSMJCfkP
+   tWEY2xhDVLCtDEP4tX5Rv12yL/tik5HQ2azXAlmwSFE2IhHe7rLNjq/VA
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226476852"
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226061491"
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226476852"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:16:57 -0800
+   d="scan'208";a="226061491"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 03:06:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="465530775"
+   d="scan'208";a="614664929"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2021 02:16:56 -0800
+  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2021 03:06:57 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxRLD-0001bV-RE; Wed, 15 Dec 2021 10:16:55 +0000
-Date: Wed, 15 Dec 2021 18:15:57 +0800
+	id 1mxS7c-0001eR-Rq; Wed, 15 Dec 2021 11:06:56 +0000
+Date: Wed, 15 Dec 2021 19:06:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mel Gorman <mgorman@suse.de>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: Error: failed to load BTF from
- /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/vmlinux: No such file
- or directory
-Message-ID: <202112151834.E4Cf3891-lkp@intel.com>
+Subject: [rmk-arm:zii 147/186]
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1531:49: error:
+ incompatible pointer types passing 'struct phylink_config *' to parameter of
+ type 'struct phylink_pcs *'
+Message-ID: <202112151831.VAQ7h5FH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,36 +48,82 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
-commit: 66d9282523b3228183b14d9f812872dd2620704d mm/page_alloc: Correct return value of populated elements if bulk array is populated
-date:   6 months ago
-config: x86_64-randconfig-a004-20211215 (https://download.01.org/0day-ci/archive/20211215/202112151834.E4Cf3891-lkp@intel.com/config)
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
+head:   d3ebd79d7fb6476e2409c147e4dcc304733f7ae6
+commit: dc659b3d109e3e55a76c0ed143119dad7b369ec8 [147/186] net: axienet: convert to phylink_pcs
+config: x86_64-randconfig-r016-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151831.VAQ7h5FH-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=66d9282523b3228183b14d9f812872dd2620704d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 66d9282523b3228183b14d9f812872dd2620704d
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm zii
+        git checkout dc659b3d109e3e55a76c0ed143119dad7b369ec8
         # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash tools/all
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/ drivers/net/ethernet/xilinx/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> Error: failed to load BTF from /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/vmlinux: No such file or directory
-   make[4]: *** [Makefile:180: /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/tools/bpf/bpftool/vmlinux.h] Error 2
-   make[4]: *** Waiting for unfinished jobs....
-   make[3]: *** [Makefile:110: bpftool] Error 2
-   make[3]: *** Waiting for unfinished jobs....
->> Error: failed to load BTF from /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/vmlinux: No such file or directory
-   make[5]: *** [Makefile:180: /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/tools/bpf/runqslower/bpftool/vmlinux.h] Error 2
-   make[4]: *** [Makefile:90: /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/tools/bpf/runqslower/bpftool/bpftool] Error 2
-   make[3]: *** [Makefile:119: runqslower] Error 2
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1531:49: error: incompatible pointer types passing 'struct phylink_config *' to parameter of type 'struct phylink_pcs *' [-Werror,-Wincompatible-pointer-types]
+           struct net_device *ndev = pcs_to_axienet_local(pcs)->ndev;
+                                                          ^~~
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1506:71: note: passing argument to parameter 'pcs' here
+   static struct axienet_local *pcs_to_axienet_local(struct phylink_pcs *pcs)
+                                                                         ^
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1532:53: error: incompatible pointer types passing 'struct phylink_config *' to parameter of type 'struct phylink_pcs *' [-Werror,-Wincompatible-pointer-types]
+           struct mdio_device *pcs_phy = pcs_to_axienet_local(pcs)->pcs_phy;
+                                                              ^~~
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1506:71: note: passing argument to parameter 'pcs' here
+   static struct axienet_local *pcs_to_axienet_local(struct phylink_pcs *pcs)
+                                                                         ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1537:8: error: use of undeclared identifier 'iface'
+                               iface == PHY_INTERFACE_MODE_SGMII ?
+                               ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1554:16: error: incompatible function pointer types initializing 'int (*)(struct phylink_pcs *, unsigned int, phy_interface_t, const unsigned long *, bool)' (aka 'int (*)(struct phylink_pcs *, unsigned int, phy_interface_t, const unsigned long *, _Bool)') with an expression of type 'int (struct phylink_config *, unsigned int, phy_interface_t, const unsigned long *, bool)' (aka 'int (struct phylink_config *, unsigned int, phy_interface_t, const unsigned long *, _Bool)') [-Werror,-Wincompatible-function-pointer-types]
+           .pcs_config = axienet_pcs_config,
+                         ^~~~~~~~~~~~~~~~~~
+   4 errors generated.
+
+
+vim +1531 drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+
+  1525	
+  1526	static int axienet_pcs_config(struct phylink_config *pcs, unsigned int mode,
+  1527				      phy_interface_t interface,
+  1528				      const unsigned long *advertising,
+  1529				      bool permit_pause_to_mac)
+  1530	{
+> 1531		struct net_device *ndev = pcs_to_axienet_local(pcs)->ndev;
+  1532		struct mdio_device *pcs_phy = pcs_to_axienet_local(pcs)->pcs_phy;
+  1533		int ret;
+  1534	
+  1535		ret = mdiobus_write(pcs_phy->bus, pcs_phy->addr,
+  1536				    XLNX_MII_STD_SELECT_REG,
+> 1537				    iface == PHY_INTERFACE_MODE_SGMII ?
+  1538					XLNX_MII_STD_SELECT_SGMII : 0);
+  1539		if (ret < 0) {
+  1540			netdev_warn(ndev, "Failed to switch PHY interface: %d\n",
+  1541				    ret);
+  1542			return ret;
+  1543		}
+  1544	
+  1545		ret = phylink_mii_c22_pcs_config(pcs_phy, mode, interface, advertising);
+  1546		if (ret < 0)
+  1547			netdev_warn(ndev, "Failed to configure PCS: %d\n", ret);
+  1548	
+  1549		return ret;
+  1550	}
+  1551	
+  1552	static const struct phylink_pcs_ops axienet_pcs_ops = {
+  1553		.pcs_get_state = axienet_pcs_get_state,
+> 1554		.pcs_config = axienet_pcs_config,
+  1555		.pcs_an_restart = axienet_pcs_an_restart,
+  1556	};
+  1557	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
