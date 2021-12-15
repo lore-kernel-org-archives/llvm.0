@@ -1,48 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA1D168
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 11:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B12C9E
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 13:00:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639568305; x=1671104305;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s+prArY32irXvi/thTXklh/Zphxwn2fb4NSykP2xIPU=;
-  b=VBbXoTdhajAUQEAQXiTIJIEQGL/hB4ue3PZRI8WSinsUmU+oqZkcIwS+
-   Sj8eNJXM3HoARGvwBUoE8EIrPTeTtVqmeh8OWfwJIRdCoqvtQVtz7Ebxi
-   gMSoys2ssMJePqXR516MD3YjLuK4kGp+Rz7iP4JnQfrZyMaeIYOs75cGs
-   LDENB+0n0EcA6Ug1Zv+hp+Kc2V2DDtIrCeYZ0nx3QIgIs0wVQ1uNMh7gS
-   w4KIONXFSABk8Rqq3E9RQqzH1cY0XFUmGnTpDO9PyOKgEpF8o+vrH4X1K
-   N/gKF1WpMh3M7PwOUsOfMI2d0Hki+cY+Us/JVTSy6dZhYGZ+KLPp1PUG5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237944927"
+  t=1639573203; x=1671109203;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nt2h9p6k4ncr1PGqQ1Ad3ihh8RU6txIOTolOX5sgeWo=;
+  b=W8oxhLeM0pkjuMZRb8SGNeiN5mqpaOxeh+ed4P3U1T7ZTRzfYOUa7psR
+   O4Kbp8FzhT12scw2yRcjZFioWZgHY8BAHb7RwjKmlPgGHkORoLzrzdzV/
+   o71Gc/ahW8YhN6rICzLCEecDFlWw8jToDgZ1jIGSnRWZYU+HkJ2C7MbqN
+   05mBT8Kzw6Pl/q0WQfsxl/O1i7G3GJpYlIBoBuROcqXggy1kZrlt4h95C
+   SJ/UMuQHWwBtrhCqFvUYp1P/loxSwmv/LmRp3Dlq61cPakzuVKtvCRM6q
+   2C399tBCYiumdwjYLlTM0UDX/nggiTQqiRCsS5KTIF+W7q6fQbuy3a+ka
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226077593"
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="237944927"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 03:38:01 -0800
+   d="scan'208";a="226077593"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 05:00:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="464237946"
+   d="scan'208";a="682480524"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 03:37:58 -0800
+  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 05:00:02 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxSbd-0001gB-Gu; Wed, 15 Dec 2021 11:37:57 +0000
-Date: Wed, 15 Dec 2021 19:37:19 +0800
+	id 1mxTt3-0001ng-Al; Wed, 15 Dec 2021 13:00:01 +0000
+Date: Wed, 15 Dec 2021 20:59:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Taniya Das <tdas@codeaurora.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 01/15] clk: qcom: gpucc-sdm660: fix two clocks with
- parent_names
-Message-ID: <202112151937.olimzu4n-lkp@intel.com>
-References: <20211215005423.2114261-2-dmitry.baryshkov@linaro.org>
+	linux-arm-kernel@lists.infradead.org
+Subject: [linusw-nomadik:ux500-href-charging-v5.16-rc1-prim 35/35]
+ drivers/power/supply/samsung-sdi-battery.c:71:1: error: non-void function
+ does not return a value in all control paths
+Message-ID: <202112152004.1gns6xiD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,72 +45,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215005423.2114261-2-dmitry.baryshkov@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Dmitry,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on v5.16-rc5 next-20211214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Dmitry-Baryshkov/clk-qcom-another-round-of-clock-drivers-cleanup/20211215-085637
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: riscv-randconfig-r011-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151937.olimzu4n-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git ux500-href-charging-v5.16-rc1-prim
+head:   86b93a3192d2eb04134708293a8274948d210db4
+commit: 86b93a3192d2eb04134708293a8274948d210db4 [35/35] samsung hack
+config: riscv-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112152004.1gns6xiD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/a93be2f54e6825699913bbe0aab77dd7e4837fde
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Dmitry-Baryshkov/clk-qcom-another-round-of-clock-drivers-cleanup/20211215-085637
-        git checkout a93be2f54e6825699913bbe0aab77dd7e4837fde
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git/commit/?id=86b93a3192d2eb04134708293a8274948d210db4
+        git remote add linusw-nomadik https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+        git fetch --no-tags linusw-nomadik ux500-href-charging-v5.16-rc1-prim
+        git checkout 86b93a3192d2eb04134708293a8274948d210db4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/qcom/gpucc-sdm660.c:208:24: error: no member named 'clr' in 'struct clk_rcg2'; did you mean 'clkr'?
-                                   &rbbmtimer_clk_src.clr.hw,
-                                                      ^~~
-                                                      clkr
-   drivers/clk/qcom/clk-rcg.h:150:20: note: 'clkr' declared here
-           struct clk_regmap       clkr;
-                                   ^
-   1 error generated.
+   drivers/power/supply/samsung-sdi-battery.c:55:5: warning: no previous prototype for function 'samsung_sdi_battery_get_info' [-Wmissing-prototypes]
+   int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
+       ^
+   drivers/power/supply/samsung-sdi-battery.c:55:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
+   ^
+   static 
+>> drivers/power/supply/samsung-sdi-battery.c:71:1: error: non-void function does not return a value in all control paths [-Werror,-Wreturn-type]
+   }
+   ^
+   1 warning and 1 error generated.
 
 
-vim +208 drivers/clk/qcom/gpucc-sdm660.c
+vim +71 drivers/power/supply/samsung-sdi-battery.c
 
-   198	
-   199	static struct clk_branch gpucc_rbbmtimer_clk = {
-   200		.halt_reg = 0x10d0,
-   201		.halt_check = BRANCH_HALT,
-   202		.clkr = {
-   203			.enable_reg = 0x10d0,
-   204			.enable_mask = BIT(0),
-   205			.hw.init = &(struct clk_init_data){
-   206				.name = "gpucc_rbbmtimer_clk",
-   207				.parent_hws = (const struct clk_hw*[]){
- > 208					&rbbmtimer_clk_src.clr.hw,
-   209				},
-   210				.num_parents = 1,
-   211				.flags = CLK_SET_RATE_PARENT,
-   212				.ops = &clk_branch2_ops,
-   213			},
-   214		},
-   215	};
-   216	
+    54	
+    55	int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
+    56					 struct device_node *np)
+    57	{
+    58		struct samsung_sdi_battery *batt;
+    59		int i;
+    60	
+    61		for (i = 0; i < ARRAY_SIZE(samsung_sdi_batteries); i++) {
+    62			batt = &samsung_sdi_batteries[i];
+    63			if (of_device_is_compatible(np, batt->compatible))
+    64				break;
+    65		}
+    66	
+    67		if (i == ARRAY_SIZE(samsung_sdi_batteries))
+    68			return -ENODEV;
+    69	
+    70		*info = &batt->info;
+  > 71	}
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
