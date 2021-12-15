@@ -1,45 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0469729CA
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 17:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB96168
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 20:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639590614; x=1671126614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UXVAi9BXaydSML6j5ZDaOSyhxIpn0/1a6PgbOjLKiYU=;
-  b=W1YsBP1zIVXWagfZT7KoEMNhpxKKPeaBwfEvlxS0gt62kPTvwOOTZ1E9
-   P3FuknhzvB1GQVqNruWhhASjjkpXUEmqIhJrEL49g5Q2e6/3EwoRUveTT
-   4WAFO2u7MI8IMBZEtjzgSucDoRU+DauwOcdVQlOK555XT5ZLDl3iHCDS/
-   xeU8WZx7TuczVXSjosSwQ/OSOvR6dKvcJXl+tvWhgBlM1Vfp9QaFjOMs1
-   L2Tp+XW1HRPBmUvYY69W5gtsNAYygQw+pDzFnJt9mpngKGoHxa4ByX7bP
-   s86xM5CkJJePXgOGp0cNEYH8abMWK0fFoNJzalBAaSKBABLDOfc4ByofC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238033531"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="238033531"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 09:50:13 -0800
+  t=1639599919; x=1671135919;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MgslzzP5kR+7+beKecc+2qJE2wbRP6ryZCH5m7rfd8Q=;
+  b=DZ+23a935TYFe0ghUWq2Sv1XLoTOmm2mXdp4YGGBNE/LzDKd4g2O70XN
+   220y5RzjgL10Mkfy+YlHWD6aSmmD3EynJf74QRDe69JzXu78ARyqTJtOs
+   mhwX7iY1Z/MK/J5xYrA0qoEpgO3IiPImf4TvXBdlHZysIeyzAo/Bbn5bb
+   e8gQvpIHPSaH8BRg+sQoU15M5sYj4NTyXFcFQm8oyMGTTo0SMcG9rbyJS
+   F6kDgEQayzFMiojRErOiAHWCtplHRH8Izl45wSpZOjiunhlsJlOQuCu6d
+   SJFqX6qabB6VWlyIA5YUH9YWHiwqwOLTXo8Vv1uEr4Ga+o8BhnlALj8yk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226611575"
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="226611575"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 12:25:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="614801880"
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="465760509"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2021 09:50:10 -0800
+  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2021 12:25:17 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxYPq-000291-90; Wed, 15 Dec 2021 17:50:10 +0000
-Date: Thu, 16 Dec 2021 01:49:27 +0800
+	id 1mxapw-0002Hv-IZ; Wed, 15 Dec 2021 20:25:16 +0000
+Date: Thu, 16 Dec 2021 04:25:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+To: Jiri Slaby <jslaby@suse.cz>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	matthew.auld@intel.com
-Subject: Re: [PATCH 1/7] drm/i915: Avoid using the i915_fence_array when
- collecting dependencies
-Message-ID: <202112160101.AqbkqxoO-lkp@intel.com>
-References: <20211215103611.777665-2-thomas.hellstrom@linux.intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 22/33] drivers/acpi/acpi_dbg.c:263:6: warning:
+ comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and
+ 'typeof ((CIRC_SPACE_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *'
+ (aka 'unsigned int *'))
+Message-ID: <202112160440.3ZOATMun-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,69 +46,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215103611.777665-2-thomas.hellstrom@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "Thomas,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on drm-exynos/exynos-drm-next drm/drm-next next-20211214]
-[cannot apply to drm-intel/for-linux-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211215-183859
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-randconfig-a013-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160101.AqbkqxoO-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
+commit: 4671e2ec5eadf881696fad611235561e94c6be9c [22/33] circ_buf: switch macros to inlines
+config: i386-randconfig-a011-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160440.3ZOATMun-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0f61eb08a6b9d7fa9f19eaa071ad5591de123633
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211215-183859
-        git checkout 0f61eb08a6b9d7fa9f19eaa071ad5591de123633
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=4671e2ec5eadf881696fad611235561e94c6be9c
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 4671e2ec5eadf881696fad611235561e94c6be9c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c:634:5: warning: no previous prototype for function 'prev_deps' [-Wmissing-prototypes]
-   int prev_deps(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
-       ^
-   drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c:634:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int prev_deps(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
-   ^
-   static 
-   1 warning generated.
+>> drivers/acpi/acpi_dbg.c:263:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and 'typeof ((CIRC_SPACE_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           n = min(len, circ_space_to_end(crc));
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> drivers/acpi/acpi_dbg.c:585:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and 'typeof ((CIRC_CNT_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           n = min(len, circ_count_to_end(crc));
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   drivers/acpi/acpi_dbg.c:655:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'int *') and 'typeof ((CIRC_SPACE_TO_END((crc)->head, (crc)->tail, ((1UL) << 12)))) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           n = min(len, circ_space_to_end(crc));
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +/prev_deps +634 drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+vim +263 drivers/acpi/acpi_dbg.c
 
-   633	
- > 634	int prev_deps(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
-   635		      struct i915_deps *deps)
-   636	{
-   637		int ret;
-   638	
-   639		ret = i915_deps_add_dependency(deps, bo->moving, ctx);
-   640		if (!ret)
-   641			/*
-   642			 * TODO: Only await excl fence here, and shared fences before
-   643			 * signaling the migration fence.
-   644			 */
-   645			ret = i915_deps_add_resv(deps, bo->base.resv, true, false, ctx);
-   646	
-   647		return ret;
-   648	}
-   649	
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  249  
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  250  static int acpi_aml_write_kern(const char *buf, int len)
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  251  {
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  252  	int ret;
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  253  	struct circ_buf *crc = &acpi_aml_io.out_crc;
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  254  	int n;
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  255  	char *p;
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  256  
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  257  	ret = acpi_aml_lock_write(crc, ACPI_AML_OUT_KERN);
+287980e49ffc0f Arnd Bergmann 2016-05-27  258  	if (ret < 0)
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  259  		return ret;
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  260  	/* sync tail before inserting logs */
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  261  	smp_mb();
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  262  	p = &crc->buf[crc->head];
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03 @263  	n = min(len, circ_space_to_end(crc));
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  264  	memcpy(p, buf, n);
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  265  	/* sync head after inserting logs */
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  266  	smp_wmb();
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  267  	crc->head = (crc->head + n) & (ACPI_AML_BUF_SIZE - 1);
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  268  	acpi_aml_unlock_fifo(ACPI_AML_OUT_KERN, true);
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  269  	return n;
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  270  }
+8cfb0cdf07e2c2 Lv Zheng      2015-12-03  271  
+
+:::::: The code at line 263 was first introduced by commit
+:::::: 8cfb0cdf07e2c260c4d1a102bfec35183907834f ACPI / debugger: Add IO interface to access debugger functionalities
+
+:::::: TO: Lv Zheng <lv.zheng@intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
