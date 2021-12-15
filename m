@@ -1,46 +1,46 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6152D68
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 06:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE8168
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 06:49:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639550392; x=1671086392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LXaG3RNyDTFgVc8HPZRc/tEwHLLs1D0tpqJvvdD9cpc=;
-  b=mNwPggS7m4ADrj8/XjscyFAu5XhMWuJ2batawrju2/CTvWIb0OY5pA6+
-   u53KWrFLueLAvqMvAf9kPHWsh2TR9OkiOfDXpGdjNCr6dtzl+9u2g3fsn
-   4pVZ1Euye/mrpagOAr7/Rmrj3jnW1xbNBe4na0BCllIz5xqmIkJIoILsj
-   QO4jPsnQJV1f9uLYq47n0TmKuiuhtoSo61q+2XXNakgf3dyqT0zKBxRLi
-   9eSqUpvsvXOnQQoCyRcnyk1mYLudaQDCzy33XtZ1a6W0KrGWJbrxy/IHg
-   eNIXgbstYHZnaPMM6gmrMOhYZe/iuSA2A6QtxjRwF0uJjm/rUmJOCQHxv
+  t=1639550993; x=1671086993;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tlWVm7QvhIjLJzb7sblUOYKNLCH6nsHpLHtq64kzL0A=;
+  b=kLisQP9KzhfR3SFP5zMnN1WyElmrZCU1mDyXZqkD8xV0cgN60fjLQRdO
+   dY1Vg1oXiszO3TLupB5Y4KUKzfYTPrGE2igaC/ItfF9LqSG35XPDj1d79
+   C5k6zJq4cre78s4iOUumGFqYWLrG2z9uAXzdTm84mWn8KSU6ZJlhQuBCC
+   g8WUYFJZvceQb6140Ra2pf2IGm8SyzC7PfsMHqxGNquAsocbvofY/KqGQ
+   sAdPaqn1bRPQcV6es/pKSVcbHf0Q9tUxbQgvYQYBUWVEX6GKaLOnrx8Y2
+   upINcghfBzQsSTMA1ec6nmvDwonZCsmnmzyQV0ssd1B6yRCn5Qv3sYf0y
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237898704"
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226021698"
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="237898704"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 22:39:51 -0800
+   d="scan'208";a="226021698"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 22:49:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="545476032"
+   d="scan'208";a="614601628"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 22:39:48 -0800
+  by orsmga004.jf.intel.com with ESMTP; 14 Dec 2021 22:49:48 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxNx5-0001OA-RK; Wed, 15 Dec 2021 06:39:47 +0000
-Date: Wed, 15 Dec 2021 14:39:27 +0800
+	id 1mxO6l-0001Ot-VC; Wed, 15 Dec 2021 06:49:47 +0000
+Date: Wed, 15 Dec 2021 14:49:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: "David E. Box" <david.e.box@linux.intel.com>, lee.jones@linaro.org,
-	hdegoede@redhat.com, bhelgaas@google.com,
-	gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-	srinivas.pandruvada@intel.com, mgross@linux.intel.com
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH V3 4/6] platform/x86: Add Intel Software Defined Silicon
- driver
-Message-ID: <202112151420.ZVi8YXOl-lkp@intel.com>
-References: <20211213175921.1897860-5-david.e.box@linux.intel.com>
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.10 6492/9999] ERROR: modpost:
+ "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
+Message-ID: <202112151422.M34sDTRZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,59 +49,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213175921.1897860-5-david.e.box@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "David,
+Hi Nathan,
 
-I love your patch! Yet something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on helgaas-pci/next shuah-kselftest/next linus/master v5.16-rc5 next-20211214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/David-E-Box/Auxiliary-bus-driver-support-for-Intel-PCIe-VSEC-DVSEC/20211214-020016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: x86_64-randconfig-r013-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151420.ZVi8YXOl-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   a0e5648b46a984339e8c472bfe5da299dd65fc3b
+commit: f7121692795c654b52b460a11107a87285bb1dcd [6492/9999] hexagon: handle {,SOFT}IRQENTRY_TEXT in linker script
+config: hexagon-randconfig-r041-20211215 (https://download.01.org/0day-ci/archive/20211215/202112151422.M34sDTRZ-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/405984bb2427331f6e97ffef42244a5d2d090da3
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review David-E-Box/Auxiliary-bus-driver-support-for-Intel-PCIe-VSEC-DVSEC/20211214-020016
-        git checkout 405984bb2427331f6e97ffef42244a5d2d090da3
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f7121692795c654b52b460a11107a87285bb1dcd
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout f7121692795c654b52b460a11107a87285bb1dcd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/platform/x86/intel/sdsi.c:566:2: error: expected ';' after top level declarator
-   }
-    ^
-    ;
-   1 error generated.
+ERROR: modpost: "__raw_writesl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
+ERROR: modpost: "__raw_readsl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
+>> ERROR: modpost: "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
+>> ERROR: modpost: "raid6_datap_recov" [fs/btrfs/btrfs.ko] undefined!
+>> ERROR: modpost: "raid6_call" [fs/btrfs/btrfs.ko] undefined!
+>> ERROR: modpost: "xor_blocks" [fs/btrfs/btrfs.ko] undefined!
+>> ERROR: modpost: "__compiletime_assert_963" [fs/btrfs/btrfs.ko] undefined!
 
-
-vim +566 drivers/platform/x86/intel/sdsi.c
-
-   558	
-   559	static struct auxiliary_driver sdsi_aux_driver = {
-   560		.driver = {
-   561			.dev_groups = sdsi_groups,
-   562		},
-   563		.id_table	= sdsi_aux_id_table,
-   564		.probe		= sdsi_probe,
-   565		/* No remove. All resources are handled under devm */
- > 566	}
-   567	module_auxiliary_driver(sdsi_aux_driver);
-   568	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for BTRFS_FS
+   Depends on BLOCK && !PPC_256K_PAGES && !PAGE_SIZE_256KB
+   Selected by
+   - TEST_KMOD && RUNTIME_TESTING_MENU && m && MODULES && NETDEVICES && NET_CORE && INET && BLOCK
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
