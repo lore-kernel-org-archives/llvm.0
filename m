@@ -1,42 +1,25 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6CC2C9E
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 14:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639577706; x=1671113706;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mXadMJ3tQn4OVJug2MpN2ZRQ2ZVutALlMQqE74ru3Mo=;
-  b=ZgFYkI6YTt+sXvYPzodKJZeMoXWK016EyHNQg3I/7vm9yY3Ib52oNoVt
-   1tInwwKtAYr7Ly69DrdDI9LdBrRnvvaW1IoQxm5V/XThFTdrI8D8GX3kE
-   pPudrZ8/6ikojki27h4bB3zIaU67HljvwcIaKrEZVy0BEF5itGPtRT22A
-   kldVjCosrO7tocHE8QdmdsPNKwGObNq+g043NVRDu679Th17PRYYyNTBo
-   3mKe+ixWqfzrD9SDxktj1AOzN72AVqezrGF3KY4ttAmu8kJ0VhiHAY6A/
-   LduaSWG7/5SSkkeGLf5h6D4ykWu7/H4jDwy3U4Ju+g7EIjeoAsxuqHd/n
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="236770690"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="236770690"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:15:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="682509817"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 06:15:03 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxV3e-0001rz-Hp; Wed, 15 Dec 2021 14:15:02 +0000
-Date: Wed, 15 Dec 2021 22:14:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.10 1449/1981]
- drivers/i2c/busses/i2c-xiic.c:1134:39: warning: unused variable 'xiic_2_00'
-Message-ID: <202112152213.IDAtG7U6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A924D68
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 15:15:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9B4C3461A;
+	Wed, 15 Dec 2021 15:15:19 +0000 (UTC)
+Date: Wed, 15 Dec 2021 15:15:16 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] arm64/xor: use EOR3 instructions when available
+Message-ID: <YboGhIW8FYTSBtbE@arm.com>
+References: <20211213140252.2856053-1-ardb@kernel.org>
+ <YbgDR461O9gCEi+Q@archlinux-ax161>
+ <CAMj1kXFKuHuzsrDBcUjbaVO6-NQkj8J+vMty_qU3Y0pDwT905w@mail.gmail.com>
+ <CAMj1kXGadU-_dM9OtXzy6OqKqReYyzEB-F6NVwDOEodpzwtemw@mail.gmail.com>
+ <YbiBuI0XvpWXqbki@arm.com>
+ <CAMj1kXGgnZvYG16u3Jw3xmgJMMRFODkAATSWTdqR8CL-Sjc3Qw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,43 +28,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMj1kXGgnZvYG16u3Jw3xmgJMMRFODkAATSWTdqR8CL-Sjc3Qw@mail.gmail.com>
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.10
-head:   87ec9a2d98a7a7dfc98b57348a0ec310fd170e4b
-commit: 7dec447a8d4279154a4f2342c5b453f2fa9e9671 [1449/1981] i2c: xiic: Switch to Xiic standard mode for i2c-read
-config: x86_64-randconfig-r021-20211214 (https://download.01.org/0day-ci/archive/20211215/202112152213.IDAtG7U6-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/7dec447a8d4279154a4f2342c5b453f2fa9e9671
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.10
-        git checkout 7dec447a8d4279154a4f2342c5b453f2fa9e9671
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/i2c/busses/ drivers/infiniband/hw/hfi1/ kernel/gcov/
+On Tue, Dec 14, 2021 at 01:57:47PM +0100, Ard Biesheuvel wrote:
+> On Tue, 14 Dec 2021 at 12:36, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Tue, Dec 14, 2021 at 12:05:34PM +0100, Ard Biesheuvel wrote:
+> > > On Tue, 14 Dec 2021 at 09:19, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > On Tue, 14 Dec 2021 at 03:37, Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > > On Mon, Dec 13, 2021 at 03:02:52PM +0100, Ard Biesheuvel wrote:
+> > > > > > Use the EOR3 instruction to implement xor_blocks() if the instruction is
+> > > > > > available, which is the case if the CPU implements the SHA-3 extension.
+> > > > > > This is about 20% faster on Apple M1 when using the 5-way version.
+> > > > > >
+> > > > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > >
+> > > > > Our CI reported that this patch as commit ce9ba49a2460 ("arm64/xor: use
+> > > > > EOR3 instructions when available") in the arm64 tree breaks
+> > > > > allyesconfig:
+> > > > >
+> > > > > https://github.com/ClangBuiltLinux/continuous-integration2/runs/4514540083?check_suite_focus=true
+> > > > >
+> > > > > I also see this when building with GCC 11.2.0:
+> > > > >
+> > > > > WARNING: modpost: EXPORT symbol "xor_block_inner_neon" [vmlinux] version ...
+> > > > > Is "xor_block_inner_neon" prototyped in <asm/asm-prototypes.h>?
+> > > > > aarch64-linux-gnu-ld: arch/arm64/lib/xor-neon.o: relocation R_AARCH64_ABS32 against `__crc_xor_block_inner_neon' can not be used when making a shared object
+> > > >
+> > > > I suspect this is another genksyms crash, preventing the
+> > > > __crc_xor_block_inner_neon symbol from ever being emitted.
+> > > >
+> > > > This is a recurring annoyance and I am not sure how to address this
+> > > > properly. Arnd might have some thoughts on the matter as well.
+> > >
+> > > I managed to reproduce this: it's not a crash but definitely a bug in
+> > > genksyms, as it simply fails to produce the output containing the
+> > > assignment of __crc_xor_block_inner_neon.
+> > >
+> > > Moving the definition of xor_block_inner_neon as below works around the issue.
+> > >
+> > > Catalin: would you like me to spin a v3? Or do your prefer to just
+> > > fold this into the existing one?
+> >
+> > I'll fold it in. Thanks.
+> 
+> The root cause appears to be that genksyms gives up when it encounters
+> 
+> static inline uint64x2_t eor3(uint64x2_t p, uint64x2_t q, uint64x2_t r)
+> {
+> 
+> because the types are not defined. This is because our
+> asm/neon-intrinsics.h header avoids #include'ing arm-neon.h in the
+> context of genksyms, as doing so does result in a genksyms crash.
+> 
+> I have very little motivation to go and figure out why genksyms
+> crashes in that case, so I think for now, we can stick with the fix I
+> proposed. Alternatively, we could typedef uint64x2_t to something
+> arbitrary if __GENKSYMS__ is defined, or use a macro instead of a
+> static inline for eor3()
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'll stick to the fix you proposed (already folded in). If we ever add
+another EXPORT_SYMBOL after the eor3() function, we better look into
+fixing genksyms or defining a dummy uint64x2_t.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-xiic.c:1134:39: warning: unused variable 'xiic_2_00' [-Wunused-const-variable]
-   static const struct xiic_version_data xiic_2_00 = {
-                                         ^
-   1 warning generated.
-
-
-vim +/xiic_2_00 +1134 drivers/i2c/busses/i2c-xiic.c
-
-  1133	
-> 1134	static const struct xiic_version_data xiic_2_00 = {
-  1135		.quirks = DYNAMIC_MODE_READ_BROKEN_BIT,
-  1136	};
-  1137	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Catalin
