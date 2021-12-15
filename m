@@ -1,43 +1,48 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587D4168
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 11:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA1D168
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 11:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639566419; x=1671102419;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+9v6HklrEHaUKQQTxfWKtZY1fc5zCJpba60VCSVAPdo=;
-  b=F3yfX+VxmXI1XrglswJkNH999Bnd/mGlkK8X6ttNf9TdirVYCFjBmLfn
-   0XIPSE5a+KBo95Z1C5JfPco5ijOPEr6kHFwqihSaeFHrWD41ny8wO5c/2
-   rh8apdch2KaOGcrHiUOITlq/vHmmPXUp2MEYG7RF0FL9l2J24i2J8pZG+
-   JapB6yJF/yR/RFyzOoPxZzJDJ+s2ZR88xnLqBa7L95+eB5CLrBal09YxV
-   0ct3Pj9ySTzdQWZd92lGO7IRaEGgvV7FRc0yjxCfQLQvGN/beaSMJCfkP
-   tWEY2xhDVLCtDEP4tX5Rv12yL/tik5HQ2azXAlmwSFE2IhHe7rLNjq/VA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226061491"
+  t=1639568305; x=1671104305;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s+prArY32irXvi/thTXklh/Zphxwn2fb4NSykP2xIPU=;
+  b=VBbXoTdhajAUQEAQXiTIJIEQGL/hB4ue3PZRI8WSinsUmU+oqZkcIwS+
+   Sj8eNJXM3HoARGvwBUoE8EIrPTeTtVqmeh8OWfwJIRdCoqvtQVtz7Ebxi
+   gMSoys2ssMJePqXR516MD3YjLuK4kGp+Rz7iP4JnQfrZyMaeIYOs75cGs
+   LDENB+0n0EcA6Ug1Zv+hp+Kc2V2DDtIrCeYZ0nx3QIgIs0wVQ1uNMh7gS
+   w4KIONXFSABk8Rqq3E9RQqzH1cY0XFUmGnTpDO9PyOKgEpF8o+vrH4X1K
+   N/gKF1WpMh3M7PwOUsOfMI2d0Hki+cY+Us/JVTSy6dZhYGZ+KLPp1PUG5
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237944927"
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226061491"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 03:06:58 -0800
+   d="scan'208";a="237944927"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 03:38:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="614664929"
+   d="scan'208";a="464237946"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2021 03:06:57 -0800
+  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 03:37:58 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxS7c-0001eR-Rq; Wed, 15 Dec 2021 11:06:56 +0000
-Date: Wed, 15 Dec 2021 19:06:52 +0800
+	id 1mxSbd-0001gB-Gu; Wed, 15 Dec 2021 11:37:57 +0000
+Date: Wed, 15 Dec 2021 19:37:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Taniya Das <tdas@codeaurora.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [rmk-arm:zii 147/186]
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1531:49: error:
- incompatible pointer types passing 'struct phylink_config *' to parameter of
- type 'struct phylink_pcs *'
-Message-ID: <202112151831.VAQ7h5FH-lkp@intel.com>
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 01/15] clk: qcom: gpucc-sdm660: fix two clocks with
+ parent_names
+Message-ID: <202112151937.olimzu4n-lkp@intel.com>
+References: <20211215005423.2114261-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,84 +51,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211215005423.2114261-2-dmitry.baryshkov@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
-head:   d3ebd79d7fb6476e2409c147e4dcc304733f7ae6
-commit: dc659b3d109e3e55a76c0ed143119dad7b369ec8 [147/186] net: axienet: convert to phylink_pcs
-config: x86_64-randconfig-r016-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151831.VAQ7h5FH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+Hi Dmitry,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on v5.16-rc5 next-20211214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Dmitry-Baryshkov/clk-qcom-another-round-of-clock-drivers-cleanup/20211215-085637
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: riscv-randconfig-r011-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151937.olimzu4n-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm zii
-        git checkout dc659b3d109e3e55a76c0ed143119dad7b369ec8
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/a93be2f54e6825699913bbe0aab77dd7e4837fde
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Dmitry-Baryshkov/clk-qcom-another-round-of-clock-drivers-cleanup/20211215-085637
+        git checkout a93be2f54e6825699913bbe0aab77dd7e4837fde
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/ drivers/net/ethernet/xilinx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1531:49: error: incompatible pointer types passing 'struct phylink_config *' to parameter of type 'struct phylink_pcs *' [-Werror,-Wincompatible-pointer-types]
-           struct net_device *ndev = pcs_to_axienet_local(pcs)->ndev;
-                                                          ^~~
-   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1506:71: note: passing argument to parameter 'pcs' here
-   static struct axienet_local *pcs_to_axienet_local(struct phylink_pcs *pcs)
-                                                                         ^
-   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1532:53: error: incompatible pointer types passing 'struct phylink_config *' to parameter of type 'struct phylink_pcs *' [-Werror,-Wincompatible-pointer-types]
-           struct mdio_device *pcs_phy = pcs_to_axienet_local(pcs)->pcs_phy;
-                                                              ^~~
-   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1506:71: note: passing argument to parameter 'pcs' here
-   static struct axienet_local *pcs_to_axienet_local(struct phylink_pcs *pcs)
-                                                                         ^
->> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1537:8: error: use of undeclared identifier 'iface'
-                               iface == PHY_INTERFACE_MODE_SGMII ?
-                               ^
->> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1554:16: error: incompatible function pointer types initializing 'int (*)(struct phylink_pcs *, unsigned int, phy_interface_t, const unsigned long *, bool)' (aka 'int (*)(struct phylink_pcs *, unsigned int, phy_interface_t, const unsigned long *, _Bool)') with an expression of type 'int (struct phylink_config *, unsigned int, phy_interface_t, const unsigned long *, bool)' (aka 'int (struct phylink_config *, unsigned int, phy_interface_t, const unsigned long *, _Bool)') [-Werror,-Wincompatible-function-pointer-types]
-           .pcs_config = axienet_pcs_config,
-                         ^~~~~~~~~~~~~~~~~~
-   4 errors generated.
+>> drivers/clk/qcom/gpucc-sdm660.c:208:24: error: no member named 'clr' in 'struct clk_rcg2'; did you mean 'clkr'?
+                                   &rbbmtimer_clk_src.clr.hw,
+                                                      ^~~
+                                                      clkr
+   drivers/clk/qcom/clk-rcg.h:150:20: note: 'clkr' declared here
+           struct clk_regmap       clkr;
+                                   ^
+   1 error generated.
 
 
-vim +1531 drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+vim +208 drivers/clk/qcom/gpucc-sdm660.c
 
-  1525	
-  1526	static int axienet_pcs_config(struct phylink_config *pcs, unsigned int mode,
-  1527				      phy_interface_t interface,
-  1528				      const unsigned long *advertising,
-  1529				      bool permit_pause_to_mac)
-  1530	{
-> 1531		struct net_device *ndev = pcs_to_axienet_local(pcs)->ndev;
-  1532		struct mdio_device *pcs_phy = pcs_to_axienet_local(pcs)->pcs_phy;
-  1533		int ret;
-  1534	
-  1535		ret = mdiobus_write(pcs_phy->bus, pcs_phy->addr,
-  1536				    XLNX_MII_STD_SELECT_REG,
-> 1537				    iface == PHY_INTERFACE_MODE_SGMII ?
-  1538					XLNX_MII_STD_SELECT_SGMII : 0);
-  1539		if (ret < 0) {
-  1540			netdev_warn(ndev, "Failed to switch PHY interface: %d\n",
-  1541				    ret);
-  1542			return ret;
-  1543		}
-  1544	
-  1545		ret = phylink_mii_c22_pcs_config(pcs_phy, mode, interface, advertising);
-  1546		if (ret < 0)
-  1547			netdev_warn(ndev, "Failed to configure PCS: %d\n", ret);
-  1548	
-  1549		return ret;
-  1550	}
-  1551	
-  1552	static const struct phylink_pcs_ops axienet_pcs_ops = {
-  1553		.pcs_get_state = axienet_pcs_get_state,
-> 1554		.pcs_config = axienet_pcs_config,
-  1555		.pcs_an_restart = axienet_pcs_an_restart,
-  1556	};
-  1557	
+   198	
+   199	static struct clk_branch gpucc_rbbmtimer_clk = {
+   200		.halt_reg = 0x10d0,
+   201		.halt_check = BRANCH_HALT,
+   202		.clkr = {
+   203			.enable_reg = 0x10d0,
+   204			.enable_mask = BIT(0),
+   205			.hw.init = &(struct clk_init_data){
+   206				.name = "gpucc_rbbmtimer_clk",
+   207				.parent_hws = (const struct clk_hw*[]){
+ > 208					&rbbmtimer_clk_src.clr.hw,
+   209				},
+   210				.num_parents = 1,
+   211				.flags = CLK_SET_RATE_PARENT,
+   212				.ops = &clk_branch2_ops,
+   213			},
+   214		},
+   215	};
+   216	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
