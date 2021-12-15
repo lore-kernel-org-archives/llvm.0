@@ -1,292 +1,157 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0E92CA4
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 23:50:37 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id k2so35746104lji.4
-        for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 15:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BvnUVA9KinbAmAkummF6AR6o92CdjauAjJz/D8y2ogE=;
-        b=gtKoewFrMWho/e3gopobq6+1wom54dD0soV3W0Gv/DYstGtCTgRPRQxmQchT4SnFur
-         X3OkZaXRViRAMd5GAanDoMASt/oScYiP6NZQgZHNku6FOPXsk1Rwm/ryWaqEFjxskoE0
-         8DI/72OVLowibtdtQRYnZ+TKSo63WxuecY46b8Ngm+brAjKysD9gfNI0brCOKi9aOSul
-         YEjME30s+n1rrSIlP1wBOvsrs2K7/EFr6YRoc+TlSm24S2O3ZlR0xv9L1h525dLYB8Aq
-         eonPsJvaDbrMOU/UdDB8QX4P0CQS+rooibUfycxb6jrPX5IQP+ZGtXg6AtH5vWNyQ+wv
-         8Gmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BvnUVA9KinbAmAkummF6AR6o92CdjauAjJz/D8y2ogE=;
-        b=Kzh912Ipz4UbtKCtU9W5ElQKgLGOwPsV6DHK9bO3fHRpwWKpTnif/Q5lALLUvMRnwa
-         urDCXvTWjJek+gLSR0H+FP6rdY3AWwf6ndaxXkjuq2jSMHaJLFk89DLVamFzJN5XZg5g
-         x52Z/ObJ4bHeiI1ApbVLor9MtWQTL4m8sm2vWCufU+F/zVihN2i4oT7Z+guwpQZK4eOx
-         WUrsZ72KlG6Rmsay/Co9iLb2D7W3eM8d0s8Ruy58SLZ2RmdSbhjELSMZU6nXHweYhSbT
-         nUGo1uyihyko6h6R5Ab01B4dVIKJt/6p6zpJgsF5QSf+lfxxDYM6ljYCtRkVgkjY4r2c
-         jrVQ==
-X-Gm-Message-State: AOAM533h1ECFrEUsC7IEA0X9/qeGG5BBKIhgwISqzYcr0K6FHLblGFVr
-	ASTRrZ+xt8pX+IcNWHCmisInP1hWJE34MTVJ+6EAjg==
-X-Google-Smtp-Source: ABdhPJzmIji6GQ9BODxY67hzrXH3ZifndbDc8kcrraLrLddp/MDmi3O7YMP0bvwZjQtOKmS+opWkP+rmC1SS2575n3Q=
-X-Received: by 2002:a2e:90d0:: with SMTP id o16mr12361249ljg.339.1639612235490;
- Wed, 15 Dec 2021 15:50:35 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7162CA4
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 23:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639612775; x=1671148775;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RiY1ihhZKdu+YcvMfbiNQ1cZB6IklN5zMWxNq+cHgPo=;
+  b=ixjDKzYhFTCnB8PwhsJC5XNcqvQ6lGU8/aMlyVB5gcw7Kq22h3gB55H7
+   xePfcs36xIxgbGUa9fKOOkPrzWqB+ld9VJmPTW9Z5hsZ1G4r/CpFJtX2z
+   HvbypFsGD4ZACXK9BaYp0wJjN7OU1nTYZY6UkwCqDNtUfB/Nowt0p66ao
+   zzf3ukWFhfdWHC8U7NxG4Aeje+g9xUkhSBtnzyKZZRVkfVSVjRzYJzIOB
+   mRVEiZE5fiNFYKWXwRNgoa4132e6q2EXjHQZjWx6hLIZdBDfsi7Xmmv8G
+   5CetJNg+H+bgZN6EjwQy2FWANs/sTJS384fqXjbKVH+sseiSqz07/O6nl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226644702"
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="226644702"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 15:59:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="682710342"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 15:59:24 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxeB9-0002VM-FR; Wed, 15 Dec 2021 23:59:23 +0000
+Date: Thu, 16 Dec 2021 07:59:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Slaby <jslaby@suse.cz>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 21/33] drivers/tty/mxser.c:826:15: error: use of
+ undeclared identifier 'port'
+Message-ID: <202112160704.5dKPWYFQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <157245708.33559.1639605989199.JavaMail.zimbra@efficios.com>
-In-Reply-To: <157245708.33559.1639605989199.JavaMail.zimbra@efficios.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 15 Dec 2021 15:50:23 -0800
-Message-ID: <CAKwvOdkUhqt8eUQ_3HknXkF=6LBFY6Zc7rsXFPCT3GwNfmDoUQ@mail.gmail.com>
-Subject: Re: clang asm goto issue small reproducer
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, 
-	Bill Wendling <morbo@google.com>, James Y Knight <jyknight@google.com>, 
-	Eli Friedman <efriedma@quicinc.com>
-Content-Type: multipart/mixed; boundary="000000000000de77da05d337f80c"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
---000000000000de77da05d337f80c
-Content-Type: text/plain; charset="UTF-8"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
+commit: 5726d981962bcf45daa931de98923a2aab063487 [21/33] mxser: switch to uart_driver
+config: i386-randconfig-a013-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160704.5dKPWYFQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=5726d981962bcf45daa931de98923a2aab063487
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 5726d981962bcf45daa931de98923a2aab063487
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On Wed, Dec 15, 2021 at 2:06 PM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> Hi Nick,
->
-> I have a small reproducer for the asm goto issue we discussed over irc. I have
-> axed away all code that is not the problematic function by hand. Hopefully this
-> won't change the overall optimization context too much.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If I cut the compilation pipeline off at after "middle-end"
-optimizations, I can see that `this_cpu_list_pop` returns `NULL` for
-test.c while in test-asm.c, it's a phi node of either NULL or head
-(which looks correct; for the test-asm.c case).
+All errors (new ones prefixed by >>):
 
-"GVNPass" seems to be converting
-
-return:                                           ; preds =
-%cleanup.thread19, %cleanup.thread
-  %retval.118 = phi %struct.percpu_list_node* [ %9, %cleanup.thread ],
-[ null, %cleanup.thread19 ]
-  ret %struct.percpu_list_node* %retval.118
-
-into:
-
-return:                                           ; preds =
-%cleanup.thread19, %cleanup.thread
-  ret %struct.percpu_list_node* null
-
-Which drops the
-  %9 = load %struct.percpu_list_node*, %struct.percpu_list_node**
-%head, align 8, !tbaa !9
-
-I think GVN may be eliminating a phi that it should not be.
-Specifically, it seems that GVN thinks the default/fallthrough
-successor is unreachable, which seems incorrect to me. The predecessor
-lists all look correct to me, so GVN may be stumbling on callbr
-itself.
-
-$ clang -O2 test.c -emit-llvm -S -o - -Xclang -disable-llvm-passes > test.ll
-$ opt -O2 -print-before=gvn -print-after=gvn
--filter-print-funcs=this_cpu_list_pop test.ll -o /dev/null 2>
-test.gvn.ll
-
-Then using this reproducer, I was able to narrow it down a little further:
-
-$ opt -O2 -print-before=gvn -print-module-scope
---filter-print-funcs=this_cpu_list_pop test.ll -S 2>test.pre-gvn.ll
-$ llvm-extract --func=this_cpu_list_pop test.pre-gvn.ll -o
-test.pre-gvn.this_cpu_list_pop.bc --recursive
-$ llvm-dis test.pre-gvn.this_cpu_list_pop.bc
-$ cat repro.sh
-#!/usr/bin/env sh
-set -e
-grep -q "%retval.118 = phi %struct.percpu_list_node\* \[ %9,
-%cleanup.thread \], \[ null, %cleanup.thread19 \]" $1
-grep -q "ret %struct.percpu_list_node\* %retval.118" $1
-OUT=$(opt -passes=gvn $1 -S -o -)
-echo $OUT | grep -q "ret %struct.percpu_list_node\* null"
-$ llvm-reduce --test=./repro.sh test.pre-gvn.this_cpu_list_pop.ll
-
-Then pared down further manually, see reduced.ll
-
-I've filed https://github.com/llvm/llvm-project/issues/52735, let's
-discuss more there?
-
->
-> on x86-64:
->
-> Buggy code:
-> clang-13 -O2 -o test.o test.c
->
-> OK code (added a dummy asm("")):
-> clang-13 -O2 -o test-asm.o test-asm.c
->
-> Thanks,
->
-> Mathieu
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+>> drivers/tty/mxser.c:826:15: error: use of undeclared identifier 'port'
+           kfifo_reset(&port->xmit_fifo);
+                        ^
+>> drivers/tty/mxser.c:826:15: error: use of undeclared identifier 'port'
+   2 errors generated.
 
 
+vim +/port +826 drivers/tty/mxser.c
 
--- 
-Thanks,
-~Nick Desaulniers
+ee7e5e66f2d4fa drivers/tty/mxser.c  Jiri Slaby     2021-09-22  763  
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  764  static int mxser_startup(struct uart_port *uport)
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  765  {
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  766  	struct mxser_port *info = to_mport(uport);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  767  	unsigned long flags;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  768  
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  769  	spin_lock_irqsave(&uport->lock, flags);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  770  
+e13da5a8a148c0 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  771  	if (!uport->type) {
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  772  		spin_unlock_irqrestore(&uport->lock, flags);
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  773  		return -EINVAL;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  774  	}
+94c7e3efe3b70b drivers/tty/mxser.c  Jiri Slaby     2021-12-15  775  
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  776  	BUG_ON("we use kfifo");
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  777  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  778  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  779  	 * Clear the FIFO buffers and disable them
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  780  	 * (they will be reenabled in mxser_change_speed())
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  781  	 */
+ee7e5e66f2d4fa drivers/tty/mxser.c  Jiri Slaby     2021-09-22  782  	mxser_disable_and_clear_FIFO(info);
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  783  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  784  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  785  	 * At this point there's no way the LSR could still be 0xFF;
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  786  	 * if it is, then bail out, because there's likely no UART
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  787  	 * here.
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  788  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  789  	if (inb(uport->iobase + UART_LSR) == 0xff) {
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  790  		spin_unlock_irqrestore(&uport->lock, flags);
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  791  		return -ENODEV;
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  792  	}
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  793  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  794  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  795  	 * Clear the interrupt registers.
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  796  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  797  	(void) inb(uport->iobase + UART_LSR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  798  	(void) inb(uport->iobase + UART_RX);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  799  	(void) inb(uport->iobase + UART_IIR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  800  	(void) inb(uport->iobase + UART_MSR);
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  801  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  802  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  803  	 * Now, initialize the UART
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  804  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  805  	outb(UART_LCR_WLEN8, uport->iobase + UART_LCR);	/* reset DLAB */
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  806  	info->MCR = UART_MCR_DTR | UART_MCR_RTS;
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  807  	outb(info->MCR, uport->iobase + UART_MCR);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  808  
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  809  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  810  	 * Finally, enable interrupts
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  811  	 */
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  812  	info->IER = UART_IER_MSI | UART_IER_RLSI | UART_IER_RDI;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  813  
+292955a7c011e2 drivers/tty/mxser.c  Jiri Slaby     2021-06-18  814  	if (info->board->must_hwid)
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  815  		info->IER |= MOXA_MUST_IER_EGDAI;
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  816  	outb(info->IER, uport->iobase + UART_IER);	/* enable interrupts */
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  817  
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  818  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  819  	 * And clear the interrupt registers again for luck.
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  820  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  821  	(void) inb(uport->iobase + UART_LSR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  822  	(void) inb(uport->iobase + UART_RX);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  823  	(void) inb(uport->iobase + UART_IIR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  824  	(void) inb(uport->iobase + UART_MSR);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  825  
+94c7e3efe3b70b drivers/tty/mxser.c  Jiri Slaby     2021-12-15 @826  	kfifo_reset(&port->xmit_fifo);
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  827  	spin_unlock_irqrestore(&uport->lock, flags);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  828  
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  829  	return 0;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  830  }
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  831  
 
---000000000000de77da05d337f80c
-Content-Type: application/octet-stream; name="test.gvn.ll"
-Content-Disposition: attachment; filename="test.gvn.ll"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kx85ene20>
-X-Attachment-Id: f_kx85ene20
+:::::: The code at line 826 was first introduced by commit
+:::::: 94c7e3efe3b70b291054ac2344013c35b314ffe6 mxser: switch from xmit_buf to kfifo
 
-KioqIElSIER1bXAgQmVmb3JlIEdWTlBhc3Mgb24gdGhpc19jcHVfbGlzdF9wb3AgKioqCjsgRnVu
-Y3Rpb24gQXR0cnM6IG5vdW53aW5kIHV3dGFibGUKZGVmaW5lIGRzb19sb2NhbCAlc3RydWN0LnBl
-cmNwdV9saXN0X25vZGUqIEB0aGlzX2NwdV9saXN0X3BvcCglc3RydWN0LnBlcmNwdV9saXN0KiAl
-bGlzdCwgaTMyKiB3cml0ZW9ubHkgJV9jcHUpIGxvY2FsX3VubmFtZWRfYWRkciAjMCB7CmVudHJ5
-OgogICVoZWFkID0gYWxsb2NhICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSosIGFsaWduIDgKICAl
-MCA9IGJpdGNhc3QgJXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiogJWhlYWQgdG8gaTgqCiAgJTEg
-PSB0YWlsIGNhbGwgaTgqIGFzbSAibW92ICVmczowLCAkMCIsICI9cix+e2RpcmZsYWd9LH57ZnBz
-cn0sfntmbGFnc30iKCkgIzMsICFzcmNsb2MgITMKICAlMiA9IGxvYWQgaTMyLCBpMzIqIEByc2Vx
-X29mZnNldCwgYWxpZ24gNCwgIXRiYWEgITQKICAlaWR4LmV4dC5pLmkxMSA9IHNleHQgaTMyICUy
-IHRvIGk2NAogICVhZGQucHRyLmkuaTEyID0gZ2V0ZWxlbWVudHB0ciBpOCwgaTgqICUxLCBpNjQg
-JWlkeC5leHQuaS5pMTEKICAlY3B1X2lkX3N0YXJ0LmkgPSBiaXRjYXN0IGk4KiAlYWRkLnB0ci5p
-LmkxMiB0byBpMzIqCiAgJTMgPSBiaXRjYXN0ICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSoqICVo
-ZWFkIHRvIGk2NCoKICAlNCA9IGJpdGNhc3QgaTgqICVhZGQucHRyLmkuaTEyIHRvICVzdHJ1Y3Qu
-cnNlcSoKICBiciBsYWJlbCAlZm9yLmNvbmQKCmZvci5jb25kOiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9ICVjbGVhbnVwLCAlZW50cnkKICBjYWxsIHZv
-aWQgQGxsdm0ubGlmZXRpbWUuc3RhcnQucDBpOChpNjQgOCwgaTgqIG5vbm51bGwgJTApICM0CiAg
-JTUgPSBsb2FkIHZvbGF0aWxlIGkzMiwgaTMyKiAlY3B1X2lkX3N0YXJ0LmksIGFsaWduIDMyLCAh
-dGJhYSAhNAogICVpZHhwcm9tID0gc2V4dCBpMzIgJTUgdG8gaTY0CiAgJWhlYWQxID0gZ2V0ZWxl
-bWVudHB0ciBpbmJvdW5kcyAlc3RydWN0LnBlcmNwdV9saXN0LCAlc3RydWN0LnBlcmNwdV9saXN0
-KiAlbGlzdCwgaTY0IDAsIGkzMiAwLCBpNjQgJWlkeHByb20sIGkzMiAwCiAgJTYgPSBiaXRjYXN0
-ICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSoqICVoZWFkMSB0byBpNjQqCiAgY2FsbGJyIHZvaWQg
-YXNtIHNpZGVlZmZlY3QgIi5wdXNoc2VjdGlvbiBfX3JzZXFfY3MsIFwyMmF3XDIyXDBBXDA5LmJh
-bGlnbiAzMlwwQVwwOTM6XDBBXDA5LmxvbmcgMHgwLCAweDBcMEFcMDkucXVhZCAxZiwgKDJmIC0g
-MWYpLCA0ZlwwQVwwOS5wb3BzZWN0aW9uXDBBXDA5LnB1c2hzZWN0aW9uIF9fcnNlcV9jc19wdHJf
-YXJyYXksIFwyMmF3XDIyXDBBXDA5LnF1YWQgM2JcMEFcMDkucG9wc2VjdGlvblwwQVwwOS5wdXNo
-c2VjdGlvbiBfX3JzZXFfZXhpdF9wb2ludF9hcnJheSwgXDIyYXdcMjJcMEFcMDkucXVhZCAxZiwg
-JHs3Omx9XDBBXDA5LnBvcHNlY3Rpb25cMEFcMDlsZWFxIDNiKCVyaXApLCAlcmF4XDBBXDA5bW92
-cSAlcmF4LCA4KCQxKVwwQVwwOTE6XDBBXDA5Y21wbCAkMCwgNCgkMSlcMEFcMDlqbnogNGZcMEFc
-MDltb3ZxICQyLCAlcmJ4XDBBXDA5Y21wcSAlcmJ4LCAkM1wwQVwwOWplICR7NzpsfVwwQVwwOW1v
-dnEgJXJieCwgJDVcMEFcMDlhZGRxICQ0LCAlcmJ4XDBBXDA5bW92cSAoJXJieCksICVyYnhcMEFc
-MDl1ZDJcMEFcMDltb3ZxICVyYngsICQyXDBBXDA5MjpcMEFcMDkucHVzaHNlY3Rpb24gX19yc2Vx
-X2ZhaWx1cmUsIFwyMmF4XDIyXDBBXDA5LmJ5dGUgMHgwZiwgMHhiOSwgMHgzZFwwQVwwOS5sb25n
-IDB4NTMwNTMwNTNcMEFcMDk0OlwwQVwwOWptcCAkezY6bH1cMEFcMDkucG9wc2VjdGlvblwwQVww
-OSIsICJyLHIsKm0scixlciwqbSxpLGksfnttZW1vcnl9LH57Y2N9LH57cmF4fSx+e3JieH0sfntk
-aXJmbGFnfSx+e2Zwc3J9LH57ZmxhZ3N9IihpMzIgJTUsICVzdHJ1Y3QucnNlcSogJTQsIGk2NCog
-JTYsIGk2NCAwLCBpNjQgOCwgaTY0KiBub25udWxsICUzLCBpOCogYmxvY2thZGRyZXNzKEB0aGlz
-X2NwdV9saXN0X3BvcCwgJWNsZWFudXApLCBpOCogYmxvY2thZGRyZXNzKEB0aGlzX2NwdV9saXN0
-X3BvcCwgJWNsZWFudXAudGhyZWFkMTkpKSAjNAogICAgICAgICAgdG8gbGFiZWwgJWlmLnRoZW4g
-W2xhYmVsICVjbGVhbnVwLCBsYWJlbCAlY2xlYW51cC50aHJlYWQxOV0sICFzcmNsb2MgITgKCmNs
-ZWFudXAudGhyZWFkMTk6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9
-ICVmb3IuY29uZAogICU3ID0gYml0Y2FzdCAlc3RydWN0LnBlcmNwdV9saXN0X25vZGUqKiAlaGVh
-ZCB0byBpOCoKICBjYWxsIHZvaWQgQGxsdm0ubGlmZXRpbWUuZW5kLnAwaTgoaTY0IDgsIGk4KiBu
-b25udWxsICU3KSAjNAogIGJyIGxhYmVsICVyZXR1cm4KCmlmLnRoZW46ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9ICVmb3IuY29uZAogICUubGNzc2Eg
-PSBwaGkgaTMyIFsgJTUsICVmb3IuY29uZCBdCiAgJTggPSBiaXRjYXN0ICVzdHJ1Y3QucGVyY3B1
-X2xpc3Rfbm9kZSoqICVoZWFkIHRvIGk4KgogICV0b2Jvb2w2Lm5vdCA9IGljbXAgZXEgaTMyKiAl
-X2NwdSwgbnVsbAogIGJyIGkxICV0b2Jvb2w2Lm5vdCwgbGFiZWwgJWNsZWFudXAudGhyZWFkLCBs
-YWJlbCAlaWYudGhlbjcKCmlmLnRoZW43OiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgOyBwcmVkcyA9ICVpZi50aGVuCiAgc3RvcmUgaTMyICUubGNzc2EsIGkzMiogJV9j
-cHUsIGFsaWduIDQsICF0YmFhICE0CiAgYnIgbGFiZWwgJWNsZWFudXAudGhyZWFkCgpjbGVhbnVw
-LnRocmVhZDogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDsgcHJlZHMgPSAlaWYu
-dGhlbiwgJWlmLnRoZW43CiAgJTkgPSBsb2FkICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSosICVz
-dHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSoqICVoZWFkLCBhbGlnbiA4LCAhdGJhYSAhOQogIGNhbGwg
-dm9pZCBAbGx2bS5saWZldGltZS5lbmQucDBpOChpNjQgOCwgaTgqIG5vbm51bGwgJTgpICM0CiAg
-YnIgbGFiZWwgJXJldHVybgoKY2xlYW51cDogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICA7IHByZWRzID0gJWZvci5jb25kCiAgY2FsbCB2b2lkIEBsbHZtLmxpZmV0aW1l
-LmVuZC5wMGk4KGk2NCA4LCBpOCogbm9ubnVsbCAlMCkgIzQKICBiciBsYWJlbCAlZm9yLmNvbmQK
-CnJldHVybjogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVk
-cyA9ICVjbGVhbnVwLnRocmVhZDE5LCAlY2xlYW51cC50aHJlYWQKICAlcmV0dmFsLjExOCA9IHBo
-aSAlc3RydWN0LnBlcmNwdV9saXN0X25vZGUqIFsgJTksICVjbGVhbnVwLnRocmVhZCBdLCBbIG51
-bGwsICVjbGVhbnVwLnRocmVhZDE5IF0KICByZXQgJXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiAl
-cmV0dmFsLjExOAp9CioqKiBJUiBEdW1wIEFmdGVyIEdWTlBhc3Mgb24gdGhpc19jcHVfbGlzdF9w
-b3AgKioqCjsgRnVuY3Rpb24gQXR0cnM6IG5vdW53aW5kIHV3dGFibGUKZGVmaW5lIGRzb19sb2Nh
-bCAlc3RydWN0LnBlcmNwdV9saXN0X25vZGUqIEB0aGlzX2NwdV9saXN0X3BvcCglc3RydWN0LnBl
-cmNwdV9saXN0KiAlbGlzdCwgaTMyKiB3cml0ZW9ubHkgJV9jcHUpIGxvY2FsX3VubmFtZWRfYWRk
-ciAjMCB7CmVudHJ5OgogICVoZWFkID0gYWxsb2NhICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSos
-IGFsaWduIDgKICAlMCA9IGJpdGNhc3QgJXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiogJWhlYWQg
-dG8gaTgqCiAgJTEgPSB0YWlsIGNhbGwgaTgqIGFzbSAibW92ICVmczowLCAkMCIsICI9cix+e2Rp
-cmZsYWd9LH57ZnBzcn0sfntmbGFnc30iKCkgIzMsICFzcmNsb2MgITMKICAlMiA9IGxvYWQgaTMy
-LCBpMzIqIEByc2VxX29mZnNldCwgYWxpZ24gNCwgIXRiYWEgITQKICAlaWR4LmV4dC5pLmkxMSA9
-IHNleHQgaTMyICUyIHRvIGk2NAogICVhZGQucHRyLmkuaTEyID0gZ2V0ZWxlbWVudHB0ciBpOCwg
-aTgqICUxLCBpNjQgJWlkeC5leHQuaS5pMTEKICAlY3B1X2lkX3N0YXJ0LmkgPSBiaXRjYXN0IGk4
-KiAlYWRkLnB0ci5pLmkxMiB0byBpMzIqCiAgJTMgPSBiaXRjYXN0ICVzdHJ1Y3QucGVyY3B1X2xp
-c3Rfbm9kZSoqICVoZWFkIHRvIGk2NCoKICAlNCA9IGJpdGNhc3QgaTgqICVhZGQucHRyLmkuaTEy
-IHRvICVzdHJ1Y3QucnNlcSoKICBiciBsYWJlbCAlZm9yLmNvbmQKCmZvci5jb25kOiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9ICVjbGVhbnVwLCAlZW50
-cnkKICBjYWxsIHZvaWQgQGxsdm0ubGlmZXRpbWUuc3RhcnQucDBpOChpNjQgOCwgaTgqIG5vbm51
-bGwgJTApICM0CiAgJTUgPSBsb2FkIHZvbGF0aWxlIGkzMiwgaTMyKiAlY3B1X2lkX3N0YXJ0Lmks
-IGFsaWduIDMyLCAhdGJhYSAhNAogICVpZHhwcm9tID0gc2V4dCBpMzIgJTUgdG8gaTY0CiAgJWhl
-YWQxID0gZ2V0ZWxlbWVudHB0ciBpbmJvdW5kcyAlc3RydWN0LnBlcmNwdV9saXN0LCAlc3RydWN0
-LnBlcmNwdV9saXN0KiAlbGlzdCwgaTY0IDAsIGkzMiAwLCBpNjQgJWlkeHByb20sIGkzMiAwCiAg
-JTYgPSBiaXRjYXN0ICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSoqICVoZWFkMSB0byBpNjQqCiAg
-Y2FsbGJyIHZvaWQgYXNtIHNpZGVlZmZlY3QgIi5wdXNoc2VjdGlvbiBfX3JzZXFfY3MsIFwyMmF3
-XDIyXDBBXDA5LmJhbGlnbiAzMlwwQVwwOTM6XDBBXDA5LmxvbmcgMHgwLCAweDBcMEFcMDkucXVh
-ZCAxZiwgKDJmIC0gMWYpLCA0ZlwwQVwwOS5wb3BzZWN0aW9uXDBBXDA5LnB1c2hzZWN0aW9uIF9f
-cnNlcV9jc19wdHJfYXJyYXksIFwyMmF3XDIyXDBBXDA5LnF1YWQgM2JcMEFcMDkucG9wc2VjdGlv
-blwwQVwwOS5wdXNoc2VjdGlvbiBfX3JzZXFfZXhpdF9wb2ludF9hcnJheSwgXDIyYXdcMjJcMEFc
-MDkucXVhZCAxZiwgJHs3Omx9XDBBXDA5LnBvcHNlY3Rpb25cMEFcMDlsZWFxIDNiKCVyaXApLCAl
-cmF4XDBBXDA5bW92cSAlcmF4LCA4KCQxKVwwQVwwOTE6XDBBXDA5Y21wbCAkMCwgNCgkMSlcMEFc
-MDlqbnogNGZcMEFcMDltb3ZxICQyLCAlcmJ4XDBBXDA5Y21wcSAlcmJ4LCAkM1wwQVwwOWplICR7
-NzpsfVwwQVwwOW1vdnEgJXJieCwgJDVcMEFcMDlhZGRxICQ0LCAlcmJ4XDBBXDA5bW92cSAoJXJi
-eCksICVyYnhcMEFcMDl1ZDJcMEFcMDltb3ZxICVyYngsICQyXDBBXDA5MjpcMEFcMDkucHVzaHNl
-Y3Rpb24gX19yc2VxX2ZhaWx1cmUsIFwyMmF4XDIyXDBBXDA5LmJ5dGUgMHgwZiwgMHhiOSwgMHgz
-ZFwwQVwwOS5sb25nIDB4NTMwNTMwNTNcMEFcMDk0OlwwQVwwOWptcCAkezY6bH1cMEFcMDkucG9w
-c2VjdGlvblwwQVwwOSIsICJyLHIsKm0scixlciwqbSxpLGksfnttZW1vcnl9LH57Y2N9LH57cmF4
-fSx+e3JieH0sfntkaXJmbGFnfSx+e2Zwc3J9LH57ZmxhZ3N9IihpMzIgJTUsICVzdHJ1Y3QucnNl
-cSogJTQsIGk2NCogJTYsIGk2NCAwLCBpNjQgOCwgaTY0KiBub25udWxsICUzLCBpOCogYmxvY2th
-ZGRyZXNzKEB0aGlzX2NwdV9saXN0X3BvcCwgJWNsZWFudXApLCBpOCogYmxvY2thZGRyZXNzKEB0
-aGlzX2NwdV9saXN0X3BvcCwgJWNsZWFudXAudGhyZWFkMTkpKSAjNAogICAgICAgICAgdG8gbGFi
-ZWwgJWlmLnRoZW4gW2xhYmVsICVjbGVhbnVwLCBsYWJlbCAlY2xlYW51cC50aHJlYWQxOV0sICFz
-cmNsb2MgITgKCmNsZWFudXAudGhyZWFkMTk6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgOyBwcmVkcyA9ICVmb3IuY29uZAogIGNhbGwgdm9pZCBAbGx2bS5saWZldGltZS5lbmQucDBp
-OChpNjQgOCwgaTgqIG5vbm51bGwgJTApICM0CiAgYnIgbGFiZWwgJXJldHVybgoKaWYudGhlbjog
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA7IHByZWRzID0gJWZvci5j
-b25kCiAgJXRvYm9vbDYubm90ID0gaWNtcCBlcSBpMzIqICVfY3B1LCBudWxsCiAgYnIgaTEgJXRv
-Ym9vbDYubm90LCBsYWJlbCAlY2xlYW51cC50aHJlYWQsIGxhYmVsICVpZi50aGVuNwoKaWYudGhl
-bjc6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA7IHByZWRzID0gJWlm
-LnRoZW4KICBzdG9yZSBpMzIgJTUsIGkzMiogJV9jcHUsIGFsaWduIDQsICF0YmFhICE0CiAgYnIg
-bGFiZWwgJWNsZWFudXAudGhyZWFkCgpjbGVhbnVwLnRocmVhZDogICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIDsgcHJlZHMgPSAlaWYudGhlbiwgJWlmLnRoZW43CiAgY2FsbCB2b2lk
-IEBsbHZtLmxpZmV0aW1lLmVuZC5wMGk4KGk2NCA4LCBpOCogbm9ubnVsbCAlMCkgIzQKICBiciBs
-YWJlbCAlcmV0dXJuCgpjbGVhbnVwOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIDsgcHJlZHMgPSAlZm9yLmNvbmQKICBjYWxsIHZvaWQgQGxsdm0ubGlmZXRpbWUuZW5k
-LnAwaTgoaTY0IDgsIGk4KiBub25udWxsICUwKSAjNAogIGJyIGxhYmVsICVmb3IuY29uZAoKcmV0
-dXJuOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA7IHByZWRzID0g
-JWNsZWFudXAudGhyZWFkMTksICVjbGVhbnVwLnRocmVhZAogIHJldCAlc3RydWN0LnBlcmNwdV9s
-aXN0X25vZGUqIG51bGwKfQo=
---000000000000de77da05d337f80c
-Content-Type: application/octet-stream; name="reduced.ll"
-Content-Disposition: attachment; filename="reduced.ll"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kx86npne1>
-X-Attachment-Id: f_kx86npne1
+:::::: TO: Jiri Slaby <jslaby@suse.cz>
+:::::: CC: Jiri Slaby <jslaby@suse.cz>
 
-JXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlID0gdHlwZSB7IGk2NCwgJXN0cnVjdC5wZXJjcHVfbGlz
-dF9ub2RlKiB9CgpkZWZpbmUgJXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiBAdGhpc19jcHVfbGlz
-dF9wb3AoKSB7CiAgJWhlYWQgPSBhbGxvY2EgJXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiwgaTMy
-IDAsIGFsaWduIDgKICBiciBsYWJlbCAlZm9yLmNvbmQKCmZvci5jb25kOgogIGNhbGxiciB2b2lk
-IGFzbSBzaWRlZWZmZWN0ICIiLCAiaSxpIihpOCogYmxvY2thZGRyZXNzKEB0aGlzX2NwdV9saXN0
-X3BvcCwgJWNsZWFudXApLCBpOCogYmxvY2thZGRyZXNzKEB0aGlzX2NwdV9saXN0X3BvcCwgJWNs
-ZWFudXAudGhyZWFkMTkpKQogICAgICAgICAgdG8gbGFiZWwgJWNsZWFudXAudGhyZWFkIFtsYWJl
-bCAlY2xlYW51cCwgbGFiZWwgJWNsZWFudXAudGhyZWFkMTldCgpjbGVhbnVwLnRocmVhZDoKICAl
-eCA9IGxvYWQgJXN0cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiwgJXN0cnVjdC5wZXJjcHVfbGlzdF9u
-b2RlKiogJWhlYWQsIGFsaWduIDgKICBiciBsYWJlbCAlcmV0dXJuCgpjbGVhbnVwOgogIGJyIGxh
-YmVsICVmb3IuY29uZAoKY2xlYW51cC50aHJlYWQxOToKICBiciBsYWJlbCAlcmV0dXJuCgpyZXR1
-cm46ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDsgcHJlZHMgPSAl
-Y2xlYW51cC50aHJlYWQsICVjbGVhbnVwLnRocmVhZDE5CiAgJXJldHZhbC4xMTggPSBwaGkgJXN0
-cnVjdC5wZXJjcHVfbGlzdF9ub2RlKiBbICV4LCAlY2xlYW51cC50aHJlYWQgXSwgWyBudWxsLCAl
-Y2xlYW51cC50aHJlYWQxOSBdCiAgcmV0ICVzdHJ1Y3QucGVyY3B1X2xpc3Rfbm9kZSogJXJldHZh
-bC4xMTgKfQo=
---000000000000de77da05d337f80c--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
