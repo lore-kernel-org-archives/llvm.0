@@ -1,125 +1,99 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6672A173
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 21:15:03 +0000 (UTC)
-Received: from [192.168.192.153] (unknown [50.126.114.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7C2153F1EB;
-	Wed, 15 Dec 2021 21:06:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1639602394;
-	bh=RWzxkXzAVp/A9fejasmC/on0nYacq+ErNHO8Y6i1/Yc=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type;
-	b=M2We8DIImoLjKFS67Q3bg6htGqMpSrjhwvUfGL0gbS5zqAQyiTIH+cQtYEPtRxccw
-	 4qzZsBzucrmzyuIvQBnjzS5ddn96CjQbRn1NxK+Mxy6BLPMdc0ATJDNDQimEs5jd3k
-	 VCix+EW1yuzmrXnDW4ciXavpJ8zJLC1UNgvA89QqLbQ+IKJoomyPTOYDSoP7grxat/
-	 QxO95Yon4fyslvxMXKbpQhGIfr1r89AGQ3me+maQoLbfAklzQ013GQpr9j4Fmb1QtR
-	 3jwvzrjSU9H5qXGUqyPkoxJdus2nB1bc6yP3VZwdIWdbZoc9oA0l1bwCOTV6ZG3b59
-	 633Kf6pYW/ycw==
-Subject: Re: [PATCH -next] apparmor: Fix kernel-doc
-To: Yang Li <yang.lee@linux.alibaba.com>
-Cc: jmorris@namei.org, serge@hallyn.com, nathan@kernel.org,
- ndesaulniers@google.com, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <1637134678-81292-1-git-send-email-yang.lee@linux.alibaba.com>
-From: John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-Message-ID: <b9523142-cb9b-eac7-3ee2-5f4ae02d1f75@canonical.com>
-Date: Wed, 15 Dec 2021 13:06:32 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940E4173
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 21:18:56 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id l145-20020a25cc97000000b005c5d04a1d52so45750159ybf.23
+        for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 13:18:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rfVzBKQXio+HJXcXyWZGxwvKV+1ieQCkHCR6oMZnhoQ=;
+        b=iCmR+gGbmyXOnWlggmkLKgqCZETL+UsDkC4M0h8JwWcI/caMbap6KncjxKcGqAxSI9
+         hg+KsaOr1/lqwi6oydwa7pC4tdpKk4hh61iRMdMEBqU5D6FcLcdMvk2GKsPur5Cqdi72
+         qELjEG2pnXAOLoJrD7ymmQGb9iIaqE9laajR3IyLxMgQkVyPZj9Cy1nPbfN0ky7zA9ok
+         JIFrQYfgjpingUFtYiY5q79aX3t43WGvmK9hexSIDAQj2+oehgoPatjx+H2+nRO+fCvn
+         Y0gbmDgLOW6PDfd/cHz0vDNgdlpT60jDhUAVdlcmmpDRR6fv2mKtaXPcT4FejCGODoLQ
+         6GUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rfVzBKQXio+HJXcXyWZGxwvKV+1ieQCkHCR6oMZnhoQ=;
+        b=cdYuhn+NSfVUDoHPo9kwloMYnm7eBPQKzqxsXdG0FzAE47+1RNgb1JdS2USo/lcThQ
+         T1lRgp8Vedg3sznxQv+Naqr0aE9fNdwnX+7QDV5aiOilH0857Q4Y1Q+8+vCNihrzzIec
+         bT7hox31dO++Z83MPwL4xzZ6HFdRmxP9mVD952PW8RioMN8GzWMcwIffsMF1llnRRQtt
+         mg+8wFuyVGBsuSKKno0a6nCVZ0KQ1Ep+32ncqol7HAZBm4icDkbLa2DWeoMw1CUGLsR3
+         tG9U+LGr+zdDU68IEVI8yEmufzMQuJU4jptFF1IPG0Rp3qD8Khu5P3nKmYTx7bO0+Hpw
+         KkVw==
+X-Gm-Message-State: AOAM530CGlWrJSkFdDQ/S8x4AjyVCe88P5sSYrQWsJGcHHWhuOUgFkdZ
+	otST/jmjAbHtUHsjGtJYJk91yuBV
+X-Google-Smtp-Source: ABdhPJzCzD5XDaWR+cmfxbrVDviEasAJCo8xjv8+n9ymRKD84WfniioScLNBi8V7FVqJq9QXE97EAFMVxQ==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:ec97:1221:3aa:f18f])
+ (user=morbo job=sendgmr) by 2002:a25:ae12:: with SMTP id a18mr8586004ybj.412.1639603135579;
+ Wed, 15 Dec 2021 13:18:55 -0800 (PST)
+Date: Wed, 15 Dec 2021 13:18:47 -0800
+Message-Id: <20211215211847.206208-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <1637134678-81292-1-git-send-email-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH] x86: use builtins to read eflags
+From: Bill Wendling <morbo@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc: Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/16/21 11:37 PM, Yang Li wrote:
-> Fix function name in security/apparmor/label.c, policy.c, procattr.c
-> kernel-doc comment to remove some warnings found by clang(make W=1 LLVM=1).
-> 
-> security/apparmor/label.c:499: warning: expecting prototype for
-> aa_label_next_not_in_set(). Prototype was for
-> __aa_label_next_not_in_set() instead
-> security/apparmor/label.c:2147: warning: expecting prototype for
-> __aa_labelset_udate_subtree(). Prototype was for
-> __aa_labelset_update_subtree() instead
-> 
-> security/apparmor/policy.c:434: warning: expecting prototype for
-> aa_lookup_profile(). Prototype was for aa_lookupn_profile() instead
-> 
-> security/apparmor/procattr.c:101: warning: expecting prototype for
-> aa_setprocattr_chagnehat(). Prototype was for aa_setprocattr_changehat()
-> instead
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Acked-by: John Johansen <john.johansen@canonical.com>
+GCC and Clang both have builtins to read from and write to the
+EFLAGS register. This allows the compiler to determine the best way
+to generate the code, which can improve code generation.
 
-I have pulled this into my tree
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+ arch/x86/include/asm/irqflags.h | 24 +++++-------------------
+ 1 file changed, 5 insertions(+), 19 deletions(-)
 
-> ---
->  security/apparmor/label.c    | 4 ++--
->  security/apparmor/policy.c   | 2 +-
->  security/apparmor/procattr.c | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/security/apparmor/label.c b/security/apparmor/label.c
-> index 0b0265d..e8ada60 100644
-> --- a/security/apparmor/label.c
-> +++ b/security/apparmor/label.c
-> @@ -485,7 +485,7 @@ int aa_label_next_confined(struct aa_label *label, int i)
->  }
->  
->  /**
-> - * aa_label_next_not_in_set - return the next profile of @sub not in @set
-> + * __aa_label_next_not_in_set - return the next profile of @sub not in @set
->   * @I: label iterator
->   * @set: label to test against
->   * @sub: label to if is subset of @set
-> @@ -2136,7 +2136,7 @@ static void __labelset_update(struct aa_ns *ns)
->  }
->  
->  /**
-> - * __aa_labelset_udate_subtree - update all labels with a stale component
-> + * __aa_labelset_update_subtree - update all labels with a stale component
->   * @ns: ns to start update at (NOT NULL)
->   *
->   * Requires: @ns lock be held
-> diff --git a/security/apparmor/policy.c b/security/apparmor/policy.c
-> index b0cbc4906..8357f4a 100644
-> --- a/security/apparmor/policy.c
-> +++ b/security/apparmor/policy.c
-> @@ -422,7 +422,7 @@ static struct aa_profile *__lookup_profile(struct aa_policy *base,
->  }
->  
->  /**
-> - * aa_lookup_profile - find a profile by its full or partial name
-> + * aa_lookupn_profile - find a profile by its full or partial name
->   * @ns: the namespace to start from (NOT NULL)
->   * @hname: name to do lookup on.  Does not contain namespace prefix (NOT NULL)
->   * @n: size of @hname
-> diff --git a/security/apparmor/procattr.c b/security/apparmor/procattr.c
-> index fde332e..86ad26e 100644
-> --- a/security/apparmor/procattr.c
-> +++ b/security/apparmor/procattr.c
-> @@ -90,7 +90,7 @@ static char *split_token_from_name(const char *op, char *args, u64 *token)
->  }
->  
->  /**
-> - * aa_setprocattr_chagnehat - handle procattr interface to change_hat
-> + * aa_setprocattr_changehat - handle procattr interface to change_hat
->   * @args: args received from writing to /proc/<pid>/attr/current (NOT NULL)
->   * @size: size of the args
->   * @flags: set of flags governing behavior
-> 
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index c5ce9845c999..574fb44b82f7 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -15,25 +15,11 @@
+  * Interrupt control:
+  */
+ 
+-/* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
+-extern inline unsigned long native_save_fl(void);
+-extern __always_inline unsigned long native_save_fl(void)
+-{
+-	unsigned long flags;
+-
+-	/*
+-	 * "=rm" is safe here, because "pop" adjusts the stack before
+-	 * it evaluates its effective address -- this is part of the
+-	 * documented behavior of the "pop" instruction.
+-	 */
+-	asm volatile("# __raw_save_flags\n\t"
+-		     "pushf ; pop %0"
+-		     : "=rm" (flags)
+-		     : /* no input */
+-		     : "memory");
+-
+-	return flags;
+-}
++#ifdef CONFIG_X86_64
++#define native_save_fl()	__builtin_ia32_readeflags_u64()
++#else
++#define native_save_fl()	__builtin_ia32_readeflags_u32()
++#endif
+ 
+ static __always_inline void native_irq_disable(void)
+ {
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 
