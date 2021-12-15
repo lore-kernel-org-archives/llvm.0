@@ -1,34 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0934229CA
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 17:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70D3C36AE2;
-	Wed, 15 Dec 2021 17:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639588909;
-	bh=5kw5d/dJmPzKVkRoB5LKQamLyO243vfdE9NF/V8TtsA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GWrV/EiGznIzhs5lwHJfEXtffgY2NeUaRr7i2F+yyxfvUdi5E5PZH8LhxdNnL0YSH
-	 BTn6ii0Rzh8zF2kWe6R/WqtZygnZM7ZyDPgb3w/1e28BxOFEna4BM/bknhhwJygDhT
-	 HcarbJQtmlCViCoj9EUHxN19Ot4IQpszrgIMShunJxuTKVQypiyMuzA+aJDGhiIVbG
-	 E3xvQGhiurqW59+sdJ1Krk1YEjLThrj/fJDQONn17v+vNuPIjct7ywwrF+zxiludTG
-	 UJp1CmtzhFt3c0UNCpd3v2O1aRco/GnsWDVQdsux3pHG/MdKAOYfk3+98HAfR8NOEA
-	 zKW2zb7SvdjAA==
-Date: Wed, 15 Dec 2021 10:21:44 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0469729CA
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 17:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639590614; x=1671126614;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UXVAi9BXaydSML6j5ZDaOSyhxIpn0/1a6PgbOjLKiYU=;
+  b=W1YsBP1zIVXWagfZT7KoEMNhpxKKPeaBwfEvlxS0gt62kPTvwOOTZ1E9
+   P3FuknhzvB1GQVqNruWhhASjjkpXUEmqIhJrEL49g5Q2e6/3EwoRUveTT
+   4WAFO2u7MI8IMBZEtjzgSucDoRU+DauwOcdVQlOK555XT5ZLDl3iHCDS/
+   xeU8WZx7TuczVXSjosSwQ/OSOvR6dKvcJXl+tvWhgBlM1Vfp9QaFjOMs1
+   L2Tp+XW1HRPBmUvYY69W5gtsNAYygQw+pDzFnJt9mpngKGoHxa4ByX7bP
+   s86xM5CkJJePXgOGp0cNEYH8abMWK0fFoNJzalBAaSKBABLDOfc4ByofC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238033531"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="238033531"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 09:50:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="614801880"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2021 09:50:10 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxYPq-000291-90; Wed, 15 Dec 2021 17:50:10 +0000
+Date: Thu, 16 Dec 2021 01:49:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: Re: [linux-stable-rc:queue/5.10 6492/9999] ERROR: modpost:
- "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
-Message-ID: <YbokKLRVkIDCnE8F@archlinux-ax161>
-References: <202112151422.M34sDTRZ-lkp@intel.com>
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	matthew.auld@intel.com
+Subject: Re: [PATCH 1/7] drm/i915: Avoid using the i915_fence_array when
+ collecting dependencies
+Message-ID: <202112160101.AqbkqxoO-lkp@intel.com>
+References: <20211215103611.777665-2-thomas.hellstrom@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,60 +48,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202112151422.M34sDTRZ-lkp@intel.com>
+In-Reply-To: <20211215103611.777665-2-thomas.hellstrom@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Dec 15, 2021 at 02:49:44PM +0800, kernel test robot wrote:
-> Hi Nathan,
-> 
-> First bad commit (maybe != root cause):
+Hi "Thomas,
 
-Indeed, pre-existing issue :)
+Thank you for the patch! Perhaps something to improve:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-> head:   a0e5648b46a984339e8c472bfe5da299dd65fc3b
-> commit: f7121692795c654b52b460a11107a87285bb1dcd [6492/9999] hexagon: handle {,SOFT}IRQENTRY_TEXT in linker script
-> config: hexagon-randconfig-r041-20211215 (https://download.01.org/0day-ci/archive/20211215/202112151422.M34sDTRZ-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f7121692795c654b52b460a11107a87285bb1dcd
->         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
->         git fetch --no-tags linux-stable-rc queue/5.10
->         git checkout f7121692795c654b52b460a11107a87285bb1dcd
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> ERROR: modpost: "__raw_writesl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
-> ERROR: modpost: "__raw_readsl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on drm-exynos/exynos-drm-next drm/drm-next next-20211214]
+[cannot apply to drm-intel/for-linux-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This is fixed in linux-5.10.y head, commit 0854c9ff2151 ("hexagon:
-export raw I/O routines for modules").
+url:    https://github.com/0day-ci/linux/commits/Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211215-183859
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: x86_64-randconfig-a013-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160101.AqbkqxoO-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0f61eb08a6b9d7fa9f19eaa071ad5591de123633
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211215-183859
+        git checkout 0f61eb08a6b9d7fa9f19eaa071ad5591de123633
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
 
-> >> ERROR: modpost: "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "raid6_datap_recov" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "raid6_call" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "xor_blocks" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "__compiletime_assert_963" [fs/btrfs/btrfs.ko] undefined!
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for BTRFS_FS
->    Depends on BLOCK && !PPC_256K_PAGES && !PAGE_SIZE_256KB
->    Selected by
->    - TEST_KMOD && RUNTIME_TESTING_MENU && m && MODULES && NETDEVICES && NET_CORE && INET && BLOCK
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The rest of the errors should be fixed by my series here, which is
-currently in -mm:
+All warnings (new ones prefixed by >>):
 
-https://lore.kernel.org/r/20211129230141.228085-1-nathan@kernel.org/
+>> drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c:634:5: warning: no previous prototype for function 'prev_deps' [-Wmissing-prototypes]
+   int prev_deps(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
+       ^
+   drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c:634:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int prev_deps(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
+   ^
+   static 
+   1 warning generated.
 
-I can backport it once it lands in mainline.
 
-Cheers,
-Nathan
+vim +/prev_deps +634 drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+
+   633	
+ > 634	int prev_deps(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
+   635		      struct i915_deps *deps)
+   636	{
+   637		int ret;
+   638	
+   639		ret = i915_deps_add_dependency(deps, bo->moving, ctx);
+   640		if (!ret)
+   641			/*
+   642			 * TODO: Only await excl fence here, and shared fences before
+   643			 * signaling the migration fence.
+   644			 */
+   645			ret = i915_deps_add_resv(deps, bo->base.resv, true, false, ctx);
+   646	
+   647		return ret;
+   648	}
+   649	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
