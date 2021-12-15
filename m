@@ -1,29 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BB42CA2
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 09:45:58 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237927369"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E62173
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 10:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639563418; x=1671099418;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N1bnE2MaC7ppbJ+K9AtlutnOd4jq2oXcq3ZwkAs4BOA=;
+  b=Q1VhnTqde/of4sRNu8SHvadQgg9aXtqnYjejkRuHfimGdDC5TlxgsFZl
+   rykvQsuX3c7e2pihbiYVWulFJytBnUDO0NDDJz+RhQ5E5cFnJiUZ4dYb4
+   Y951VM8+KndXNA0Jg/ccdlXcyuIz5XYKvgqnKqbfnYwjtbtshap1OxTpw
+   ryX/iaYxYPnqFVa9H+tjabdW/A+iSIA0NmRwrfSfGErUrJvjNlQcYSIdv
+   Cc9ViZoJfFbayr6U1arNDQ+BxGenpWqAC4QmXJOCk9wNtzhb1sSCsDOcL
+   KOD17PwiTr8cLJhCvJAeYVewCEvMn8w1rm5xL/XBQOiBwv2gms8wRuhrO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226476852"
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="237927369"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 01:45:57 -0800
+   d="scan'208";a="226476852"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:16:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="482332423"
+   d="scan'208";a="465530775"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Dec 2021 01:45:55 -0800
+  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2021 02:16:56 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxQrD-0001ZC-1a; Wed, 15 Dec 2021 09:45:55 +0000
-Date: Wed, 15 Dec 2021 17:45:07 +0800
+	id 1mxRLD-0001bV-RE; Wed, 15 Dec 2021 10:16:55 +0000
+Date: Wed, 15 Dec 2021 18:15:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ansuel Smith <ansuelsmth@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [net-next PATCH RFC v6 12/16] net: dsa: qca8k: add support for
- mdio read/write in Ethernet packet
-Message-ID: <202112151702.Xhos4slJ-lkp@intel.com>
-References: <20211214224409.5770-13-ansuelsmth@gmail.com>
+To: Mel Gorman <mgorman@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Error: failed to load BTF from
+ /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/vmlinux: No such file
+ or directory
+Message-ID: <202112151834.E4Cf3891-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,75 +45,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214224409.5770-13-ansuelsmth@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Ansuel,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/Ansuel-Smith/Add-support-for-qca8k-mdio-rw-in-Ethernet-packet/20211215-064645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git fe4c82a7e0f06abdf5a6978aa00457b63bd46680
-config: arm64-randconfig-r016-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151702.Xhos4slJ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
+commit: 66d9282523b3228183b14d9f812872dd2620704d mm/page_alloc: Correct return value of populated elements if bulk array is populated
+date:   6 months ago
+config: x86_64-randconfig-a004-20211215 (https://download.01.org/0day-ci/archive/20211215/202112151834.E4Cf3891-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/8036c636992760ad100109c1385110b8fda46e25
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ansuel-Smith/Add-support-for-qca8k-mdio-rw-in-Ethernet-packet/20211215-064645
-        git checkout 8036c636992760ad100109c1385110b8fda46e25
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=66d9282523b3228183b14d9f812872dd2620704d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 66d9282523b3228183b14d9f812872dd2620704d
         # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/dsa/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash tools/all
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/dsa/qca8k.c:2577:3: error: expected expression
-                   struct tag_qca_priv *priv;
-                   ^
->> drivers/net/dsa/qca8k.c:2579:3: error: use of undeclared identifier 'priv'
-                   priv = ds->tagger_data;
-                   ^
-   drivers/net/dsa/qca8k.c:2584:3: error: use of undeclared identifier 'priv'
-                   priv->rw_reg_ack_handler = qca8k_rw_reg_ack_handler;
-                   ^
-   3 errors generated.
-
-
-vim +2577 drivers/net/dsa/qca8k.c
-
-  2569	
-  2570	static int qca8k_connect_tag_protocol(struct dsa_switch *ds,
-  2571					      enum dsa_tag_protocol proto)
-  2572	{
-  2573		struct qca8k_priv *qca8k_priv = ds->priv;
-  2574	
-  2575		switch (proto) {
-  2576		case DSA_TAG_PROTO_QCA:
-> 2577			struct tag_qca_priv *priv;
-  2578	
-> 2579			priv = ds->tagger_data;
-  2580	
-  2581			mutex_init(&qca8k_priv->mdio_hdr_data.mutex);
-  2582			init_completion(&qca8k_priv->mdio_hdr_data.rw_done);
-  2583	
-  2584			priv->rw_reg_ack_handler = qca8k_rw_reg_ack_handler;
-  2585	
-  2586			break;
-  2587		default:
-  2588			return -EOPNOTSUPP;
-  2589		}
-  2590	
-  2591		return 0;
-  2592	}
-  2593	
+>> Error: failed to load BTF from /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/vmlinux: No such file or directory
+   make[4]: *** [Makefile:180: /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/tools/bpf/bpftool/vmlinux.h] Error 2
+   make[4]: *** Waiting for unfinished jobs....
+   make[3]: *** [Makefile:110: bpftool] Error 2
+   make[3]: *** Waiting for unfinished jobs....
+>> Error: failed to load BTF from /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/vmlinux: No such file or directory
+   make[5]: *** [Makefile:180: /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/tools/bpf/runqslower/bpftool/vmlinux.h] Error 2
+   make[4]: *** [Makefile:90: /kbuild/obj/consumer/x86_64-randconfig-a004-20211215/tools/bpf/runqslower/bpftool/bpftool] Error 2
+   make[3]: *** [Makefile:119: runqslower] Error 2
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
