@@ -1,109 +1,131 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B12C9E
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 13:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639573203; x=1671109203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nt2h9p6k4ncr1PGqQ1Ad3ihh8RU6txIOTolOX5sgeWo=;
-  b=W8oxhLeM0pkjuMZRb8SGNeiN5mqpaOxeh+ed4P3U1T7ZTRzfYOUa7psR
-   O4Kbp8FzhT12scw2yRcjZFioWZgHY8BAHb7RwjKmlPgGHkORoLzrzdzV/
-   o71Gc/ahW8YhN6rICzLCEecDFlWw8jToDgZ1jIGSnRWZYU+HkJ2C7MbqN
-   05mBT8Kzw6Pl/q0WQfsxl/O1i7G3GJpYlIBoBuROcqXggy1kZrlt4h95C
-   SJ/UMuQHWwBtrhCqFvUYp1P/loxSwmv/LmRp3Dlq61cPakzuVKtvCRM6q
-   2C399tBCYiumdwjYLlTM0UDX/nggiTQqiRCsS5KTIF+W7q6fQbuy3a+ka
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226077593"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226077593"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 05:00:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="682480524"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 05:00:02 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxTt3-0001ng-Al; Wed, 15 Dec 2021 13:00:01 +0000
-Date: Wed, 15 Dec 2021 20:59:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [linusw-nomadik:ux500-href-charging-v5.16-rc1-prim 35/35]
- drivers/power/supply/samsung-sdi-battery.c:71:1: error: non-void function
- does not return a value in all control paths
-Message-ID: <202112152004.1gns6xiD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547E92C9E
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 13:47:52 +0000 (UTC)
+Received: by mail-wm1-f74.google.com with SMTP id 187-20020a1c02c4000000b003335872db8dso12623140wmc.2
+        for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 05:47:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=OiRhOn6hhEzgrwgWwdtGgn/CZg2YKiK3rEUHDdKnpy4=;
+        b=dz6MSih8U6A2edXcGzmgJn2xpFVEX0X+AuXvNAs6fZUjF391UFlHyRHFy1SpVnE92h
+         6bcCFw+dbJPic8Ypvwz3PFUBNsnqveWqIKjsxaw1c6s+0HeDc9nXBCl1fpneMMPhGJEh
+         hGp/6fswZV5s7PcGQdX5SoMdgeXdqRov1TsdORAQ9yHVadGvfr1q+8fSZCO3blq9u0Hp
+         BOl4cKbxT7Etdw9CoGzDT8LD0FwWo3pRdN4AxW8Gy0crJ6AXhDt/JPFuH6sUcMODYTUN
+         A4fiMN5n7G+KvayTCTTqkbo3Ztrohgv1/Ack1xDCYohAflmSiYjGUfZApx90JKT+aX4e
+         GXwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=OiRhOn6hhEzgrwgWwdtGgn/CZg2YKiK3rEUHDdKnpy4=;
+        b=p4hBOtR6OAFh9/Yp75lwLPfFza2TcwbSgv9HjU7KmxxLb9AEZTgh7gg6ZlfUEDesHq
+         qaRAlA2gXsBPTqKlgSOWpovPWT8NdCbXQ7BYnTxzmOVuxQ7GJzOgU5ecT7U4ehGrh2qt
+         /u3eatPkq50XOze22sbn+bckVsWjlHB/+6DSvzX8NmV3I4K+Ie99g39bTdD5OTPyMEwH
+         EHSenoupVBsTsnXtTg2v5lAjVR0vbfZnwHrEO/kjmJxMzAdKg/dXfYHdpGG+sVLXHilR
+         KzWNp47lRW3TESFHdlBCkHpzuQrr55xX2OA8bAIqcJNZNRv4q1DbYKRI1J2ft81jVsD8
+         UUVA==
+X-Gm-Message-State: AOAM530fvS1/aCwVcp0z4X5ypxSiryihULDalglBS/wKoBGCsSluMm+j
+	P0wqiGc1rKP2MR3rWwie69bpz6N5Bw==
+X-Google-Smtp-Source: ABdhPJxLc2N+PgyfZwzGx4wdTK3j0eOkYqce+1YFNfeu6XJYmCTIGga/14R9lp7QLNgHtyLFNOn2K/hQlQ==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:f9c2:fca2:6c2e:7e9f])
+ (user=elver job=sendgmr) by 2002:a05:600c:4e56:: with SMTP id
+ e22mr2873386wmq.39.1639576070516; Wed, 15 Dec 2021 05:47:50 -0800 (PST)
+Date: Wed, 15 Dec 2021 14:46:18 +0100
+Message-Id: <20211215134618.3241240-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH -kbuild] Revert "ubsan, kcsan: Don't combine sanitizer with
+ kcov on clang"
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git ux500-href-charging-v5.16-rc1-prim
-head:   86b93a3192d2eb04134708293a8274948d210db4
-commit: 86b93a3192d2eb04134708293a8274948d210db4 [35/35] samsung hack
-config: riscv-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112152004.1gns6xiD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git/commit/?id=86b93a3192d2eb04134708293a8274948d210db4
-        git remote add linusw-nomadik https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-        git fetch --no-tags linusw-nomadik ux500-href-charging-v5.16-rc1-prim
-        git checkout 86b93a3192d2eb04134708293a8274948d210db4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+This reverts commit ea91a1d45d19469001a4955583187b0d75915759.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The minimum Clang version is now 11.0, which fixed the UBSAN/KCSAN vs.
+KCOV incompatibilities.
 
-All errors (new ones prefixed by >>):
-
-   drivers/power/supply/samsung-sdi-battery.c:55:5: warning: no previous prototype for function 'samsung_sdi_battery_get_info' [-Wmissing-prototypes]
-   int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
-       ^
-   drivers/power/supply/samsung-sdi-battery.c:55:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
-   ^
-   static 
->> drivers/power/supply/samsung-sdi-battery.c:71:1: error: non-void function does not return a value in all control paths [-Werror,-Wreturn-type]
-   }
-   ^
-   1 warning and 1 error generated.
-
-
-vim +71 drivers/power/supply/samsung-sdi-battery.c
-
-    54	
-    55	int samsung_sdi_battery_get_info(struct power_supply_battery_info **info,
-    56					 struct device_node *np)
-    57	{
-    58		struct samsung_sdi_battery *batt;
-    59		int i;
-    60	
-    61		for (i = 0; i < ARRAY_SIZE(samsung_sdi_batteries); i++) {
-    62			batt = &samsung_sdi_batteries[i];
-    63			if (of_device_is_compatible(np, batt->compatible))
-    64				break;
-    65		}
-    66	
-    67		if (i == ARRAY_SIZE(samsung_sdi_batteries))
-    68			return -ENODEV;
-    69	
-    70		*info = &batt->info;
-  > 71	}
-
+Link: https://bugs.llvm.org/show_bug.cgi?id=45831
+Signed-off-by: Marco Elver <elver@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ lib/Kconfig.kcsan | 11 -----------
+ lib/Kconfig.ubsan | 12 ------------
+ 2 files changed, 23 deletions(-)
+
+diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+index e0a93ffdef30..b81454b2a0d0 100644
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
+ 	  For the list of compilers that support KCSAN, please see
+ 	  <file:Documentation/dev-tools/kcsan.rst>.
+ 
+-config KCSAN_KCOV_BROKEN
+-	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+-	depends on CC_IS_CLANG
+-	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
+-	help
+-	  Some versions of clang support either KCSAN and KCOV but not the
+-	  combination of the two.
+-	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+-	  in newer releases.
+-
+ menuconfig KCSAN
+ 	bool "KCSAN: dynamic data race detector"
+ 	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+ 	depends on DEBUG_KERNEL && !KASAN
+-	depends on !KCSAN_KCOV_BROKEN
+ 	select STACKTRACE
+ 	help
+ 	  The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index e5372a13511d..31f38e7fe948 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -27,16 +27,6 @@ config UBSAN_TRAP
+ 	  the system. For some system builders this is an acceptable
+ 	  trade-off.
+ 
+-config UBSAN_KCOV_BROKEN
+-	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+-	depends on CC_IS_CLANG
+-	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=bounds -fsanitize-coverage=trace-pc)
+-	help
+-	  Some versions of clang support either UBSAN or KCOV but not the
+-	  combination of the two.
+-	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+-	  in newer releases.
+-
+ config CC_HAS_UBSAN_BOUNDS
+ 	def_bool $(cc-option,-fsanitize=bounds)
+ 
+@@ -46,7 +36,6 @@ config CC_HAS_UBSAN_ARRAY_BOUNDS
+ config UBSAN_BOUNDS
+ 	bool "Perform array index bounds checking"
+ 	default UBSAN
+-	depends on !UBSAN_KCOV_BROKEN
+ 	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
+ 	help
+ 	  This option enables detection of directly indexed out of bounds
+@@ -72,7 +61,6 @@ config UBSAN_ARRAY_BOUNDS
+ config UBSAN_LOCAL_BOUNDS
+ 	bool "Perform array local bounds checking"
+ 	depends on UBSAN_TRAP
+-	depends on !UBSAN_KCOV_BROKEN
+ 	depends on $(cc-option,-fsanitize=local-bounds)
+ 	help
+ 	  This option enables -fsanitize=local-bounds which traps when an
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+
