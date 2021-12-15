@@ -1,131 +1,87 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547E92C9E
-	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 13:47:52 +0000 (UTC)
-Received: by mail-wm1-f74.google.com with SMTP id 187-20020a1c02c4000000b003335872db8dso12623140wmc.2
-        for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 05:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=OiRhOn6hhEzgrwgWwdtGgn/CZg2YKiK3rEUHDdKnpy4=;
-        b=dz6MSih8U6A2edXcGzmgJn2xpFVEX0X+AuXvNAs6fZUjF391UFlHyRHFy1SpVnE92h
-         6bcCFw+dbJPic8Ypvwz3PFUBNsnqveWqIKjsxaw1c6s+0HeDc9nXBCl1fpneMMPhGJEh
-         hGp/6fswZV5s7PcGQdX5SoMdgeXdqRov1TsdORAQ9yHVadGvfr1q+8fSZCO3blq9u0Hp
-         BOl4cKbxT7Etdw9CoGzDT8LD0FwWo3pRdN4AxW8Gy0crJ6AXhDt/JPFuH6sUcMODYTUN
-         A4fiMN5n7G+KvayTCTTqkbo3Ztrohgv1/Ack1xDCYohAflmSiYjGUfZApx90JKT+aX4e
-         GXwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=OiRhOn6hhEzgrwgWwdtGgn/CZg2YKiK3rEUHDdKnpy4=;
-        b=p4hBOtR6OAFh9/Yp75lwLPfFza2TcwbSgv9HjU7KmxxLb9AEZTgh7gg6ZlfUEDesHq
-         qaRAlA2gXsBPTqKlgSOWpovPWT8NdCbXQ7BYnTxzmOVuxQ7GJzOgU5ecT7U4ehGrh2qt
-         /u3eatPkq50XOze22sbn+bckVsWjlHB/+6DSvzX8NmV3I4K+Ie99g39bTdD5OTPyMEwH
-         EHSenoupVBsTsnXtTg2v5lAjVR0vbfZnwHrEO/kjmJxMzAdKg/dXfYHdpGG+sVLXHilR
-         KzWNp47lRW3TESFHdlBCkHpzuQrr55xX2OA8bAIqcJNZNRv4q1DbYKRI1J2ft81jVsD8
-         UUVA==
-X-Gm-Message-State: AOAM530fvS1/aCwVcp0z4X5ypxSiryihULDalglBS/wKoBGCsSluMm+j
-	P0wqiGc1rKP2MR3rWwie69bpz6N5Bw==
-X-Google-Smtp-Source: ABdhPJxLc2N+PgyfZwzGx4wdTK3j0eOkYqce+1YFNfeu6XJYmCTIGga/14R9lp7QLNgHtyLFNOn2K/hQlQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:f9c2:fca2:6c2e:7e9f])
- (user=elver job=sendgmr) by 2002:a05:600c:4e56:: with SMTP id
- e22mr2873386wmq.39.1639576070516; Wed, 15 Dec 2021 05:47:50 -0800 (PST)
-Date: Wed, 15 Dec 2021 14:46:18 +0100
-Message-Id: <20211215134618.3241240-1-elver@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6CC2C9E
+	for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 14:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639577706; x=1671113706;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mXadMJ3tQn4OVJug2MpN2ZRQ2ZVutALlMQqE74ru3Mo=;
+  b=ZgFYkI6YTt+sXvYPzodKJZeMoXWK016EyHNQg3I/7vm9yY3Ib52oNoVt
+   1tInwwKtAYr7Ly69DrdDI9LdBrRnvvaW1IoQxm5V/XThFTdrI8D8GX3kE
+   pPudrZ8/6ikojki27h4bB3zIaU67HljvwcIaKrEZVy0BEF5itGPtRT22A
+   kldVjCosrO7tocHE8QdmdsPNKwGObNq+g043NVRDu679Th17PRYYyNTBo
+   3mKe+ixWqfzrD9SDxktj1AOzN72AVqezrGF3KY4ttAmu8kJ0VhiHAY6A/
+   LduaSWG7/5SSkkeGLf5h6D4ykWu7/H4jDwy3U4Ju+g7EIjeoAsxuqHd/n
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="236770690"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="236770690"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:15:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="682509817"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 06:15:03 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxV3e-0001rz-Hp; Wed, 15 Dec 2021 14:15:02 +0000
+Date: Wed, 15 Dec 2021 22:14:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.10 1449/1981]
+ drivers/i2c/busses/i2c-xiic.c:1134:39: warning: unused variable 'xiic_2_00'
+Message-ID: <202112152213.IDAtG7U6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH -kbuild] Revert "ubsan, kcsan: Don't combine sanitizer with
- kcov on clang"
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-This reverts commit ea91a1d45d19469001a4955583187b0d75915759.
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.10
+head:   87ec9a2d98a7a7dfc98b57348a0ec310fd170e4b
+commit: 7dec447a8d4279154a4f2342c5b453f2fa9e9671 [1449/1981] i2c: xiic: Switch to Xiic standard mode for i2c-read
+config: x86_64-randconfig-r021-20211214 (https://download.01.org/0day-ci/archive/20211215/202112152213.IDAtG7U6-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/7dec447a8d4279154a4f2342c5b453f2fa9e9671
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.10
+        git checkout 7dec447a8d4279154a4f2342c5b453f2fa9e9671
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/i2c/busses/ drivers/infiniband/hw/hfi1/ kernel/gcov/
 
-The minimum Clang version is now 11.0, which fixed the UBSAN/KCSAN vs.
-KCOV incompatibilities.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Link: https://bugs.llvm.org/show_bug.cgi?id=45831
-Signed-off-by: Marco Elver <elver@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+All warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-xiic.c:1134:39: warning: unused variable 'xiic_2_00' [-Wunused-const-variable]
+   static const struct xiic_version_data xiic_2_00 = {
+                                         ^
+   1 warning generated.
+
+
+vim +/xiic_2_00 +1134 drivers/i2c/busses/i2c-xiic.c
+
+  1133	
+> 1134	static const struct xiic_version_data xiic_2_00 = {
+  1135		.quirks = DYNAMIC_MODE_READ_BROKEN_BIT,
+  1136	};
+  1137	
+
 ---
- lib/Kconfig.kcsan | 11 -----------
- lib/Kconfig.ubsan | 12 ------------
- 2 files changed, 23 deletions(-)
-
-diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-index e0a93ffdef30..b81454b2a0d0 100644
---- a/lib/Kconfig.kcsan
-+++ b/lib/Kconfig.kcsan
-@@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
- 	  For the list of compilers that support KCSAN, please see
- 	  <file:Documentation/dev-tools/kcsan.rst>.
- 
--config KCSAN_KCOV_BROKEN
--	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
--	depends on CC_IS_CLANG
--	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
--	help
--	  Some versions of clang support either KCSAN and KCOV but not the
--	  combination of the two.
--	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
--	  in newer releases.
--
- menuconfig KCSAN
- 	bool "KCSAN: dynamic data race detector"
- 	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
- 	depends on DEBUG_KERNEL && !KASAN
--	depends on !KCSAN_KCOV_BROKEN
- 	select STACKTRACE
- 	help
- 	  The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
-diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index e5372a13511d..31f38e7fe948 100644
---- a/lib/Kconfig.ubsan
-+++ b/lib/Kconfig.ubsan
-@@ -27,16 +27,6 @@ config UBSAN_TRAP
- 	  the system. For some system builders this is an acceptable
- 	  trade-off.
- 
--config UBSAN_KCOV_BROKEN
--	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
--	depends on CC_IS_CLANG
--	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=bounds -fsanitize-coverage=trace-pc)
--	help
--	  Some versions of clang support either UBSAN or KCOV but not the
--	  combination of the two.
--	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
--	  in newer releases.
--
- config CC_HAS_UBSAN_BOUNDS
- 	def_bool $(cc-option,-fsanitize=bounds)
- 
-@@ -46,7 +36,6 @@ config CC_HAS_UBSAN_ARRAY_BOUNDS
- config UBSAN_BOUNDS
- 	bool "Perform array index bounds checking"
- 	default UBSAN
--	depends on !UBSAN_KCOV_BROKEN
- 	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
- 	help
- 	  This option enables detection of directly indexed out of bounds
-@@ -72,7 +61,6 @@ config UBSAN_ARRAY_BOUNDS
- config UBSAN_LOCAL_BOUNDS
- 	bool "Perform array local bounds checking"
- 	depends on UBSAN_TRAP
--	depends on !UBSAN_KCOV_BROKEN
- 	depends on $(cc-option,-fsanitize=local-bounds)
- 	help
- 	  This option enables -fsanitize=local-bounds which traps when an
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
