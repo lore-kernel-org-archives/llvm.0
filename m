@@ -1,139 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749F1173
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 17:57:57 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPSA id C3007C36AE5;
-	Thu, 16 Dec 2021 17:57:53 +0000 (UTC)
-Date: Thu, 16 Dec 2021 18:03:18 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-iio@vger.kernel.org, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Mauro
- Carvalho Chehab <mchehab+huawei@kernel.org>, Stephan Gerhold
- <stephan@gerhold.net>, Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
- Baptiste Mansuy <bmansuy@invensense.com>, Linus Walleij
- <linus.walleij@linaro.org>, Jonathan Albrieux
- <jonathan.albrieux@gmail.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 00/12] IIO: clang W=1 warning cleanup.
-Message-ID: <20211216180318.26651b58@jic23-huawei>
-In-Reply-To: <Ya5T5CMHn5hzzJy5@archlinux-ax161>
-References: <20211128172445.2616166-1-jic23@kernel.org>
-	<Ya5T5CMHn5hzzJy5@archlinux-ax161>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7EA29CA
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 18:22:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639678940; x=1671214940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MYJpTqX2I4GceJxtDJQl5ErgAnA0jLMi39Gzet3l17U=;
+  b=GDHqPeM3lXiwkS/llCeRyitL+j730Wps7HhY30jQMAcc4KSzP1menptf
+   NdUccQphEV9+Nh6djWTmuBQupJIyM7cZggA7LLE3iICDACjTlzgpXrysu
+   p/Nct+8pYjPnIWeOVtmrz5zf0NdOydgoH2TTGTuxYhEwDiI2bWL1jFetY
+   YjK289FAE3Q2Rw0SC0D29ahKDe01Nl3X/s83maXhsJpLkrOyqvLFG3r1A
+   lhLk/OqRRb1U8mpdHAEjoeTaunerTlRIlfVQtAwRdg9gGLNCQ8cLF/RCZ
+   6p2csH3HoYtRV8iWgALPUlwphhSYcZ1IzoNTIDMgxyIM4ueg+RceXF2aC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239376722"
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="239376722"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 10:22:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="611627864"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Dec 2021 10:22:17 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxvOT-0003e7-6I; Thu, 16 Dec 2021 18:22:17 +0000
+Date: Fri, 17 Dec 2021 02:21:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+	gregkh@linuxfoundation.org, rafael@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 2/2] mm: reimplement si_mem_available()
+Message-ID: <202112170216.SkyvfZzv-lkp@intel.com>
+References: <20211216124655.32247-3-zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216124655.32247-3-zhengqi.arch@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 6 Dec 2021 11:18:12 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+Hi Qi,
 
-> On Sun, Nov 28, 2021 at 05:24:33PM +0000, Jonathan Cameron wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > Hi All,
-> > 
-> > In the interests of noise reduction in warnings during build tests of
-> > new code, this series suppresses a bunch of warnings seen with
-> > LLVM=1 W=1.
-> > 
-> > Note I am seeing two others I haven't fixed here.  One is tied up in
-> > the existing CONFIG_PM* cleanup patch set and will be dealt with as
-> > part of that.  The other in tsl2772 looks like it might be a bug that
-> > needs further analysis. If anyone is curious:
-> > 
-> > drivers/iio/light/tsl2772.c:576:24: warning: variable 'prox_diode_mask' set but not used [-Wunused-but-set-variable]
-> >         int i, ret, num_leds, prox_diode_mask;     
-> > 
-> > As is common with series like this, some of the drivers are old
-> > and as such I haven't cc'd original authors etc and would appreciate
-> > a sanity check from anyone who has the time.
-> > 
-> > Mauro and Arnd are cc'd on a bunch of them because a media patch that
-> > I happened to see had similar fixes + discussion of type to use in the
-> > casting. For some others I've just picked on people who touched
-> > the driver in last year or so.
-> > 
-> > Nothing in this series should have any functional affect.
-> > 
-> > Jonathan  
-> 
-> I build tested drivers/iio/ for arm, arm64, s390, and x86_64
-> allmodconfig and did not see any warnings other than the ones mentioned
-> in the commit message.
-> 
-> All the fixes look reasonable for the warnings.
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Thank you for the patch! Yet something to improve:
 
-Thanks!
+[auto build test ERROR on hnaz-mm/master]
+[also build test ERROR on driver-core/driver-core-testing linux/master linus/master v5.16-rc5 next-20211215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Series applied to the togreg branch of iio.git and pushed out as
-testing initially to see if 0-day can find anything we missed.
+url:    https://github.com/0day-ci/linux/commits/Qi-Zheng/add-MemAvailable-to-per-node-meminfo/20211216-204828
+base:   https://github.com/hnaz/linux-mm master
+config: hexagon-randconfig-r045-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170216.SkyvfZzv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7980664f23d619d15a3931fe1ab7d1dbafad7c88
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Qi-Zheng/add-MemAvailable-to-per-node-meminfo/20211216-204828
+        git checkout 7980664f23d619d15a3931fe1ab7d1dbafad7c88
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-Thanks,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jonathan
+All errors (new ones prefixed by >>):
 
-> 
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > Cc: Stephan Gerhold <stephan@gerhold.net>
-> > Cc: Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
-> > Cc: Baptiste Mansuy <bmansuy@invensense.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Jonathan Albrieux <jonathan.albrieux@gmail.com>
-> > 
-> > Jonathan Cameron (12):
-> >   iio:accel:bma180: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:dc:ina2xx-adc: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:adc:rcar: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:adc:ti-ads1015: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:amplifiers:hmc425a: Suppress clang W=1 warning about pointer to
-> >     enum conversion.
-> >   iio:dac:mcp4725: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:imu:inv_icm42600: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:imu:inv_mpu6050: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:magn:ak8975: Suppress clang W=1 warning about pointer to enum
-> >     conversion.
-> >   iio:dummy: Drop set but unused variable len.
-> >   iio:accel:bmc150: Mark structure __maybe_unused as only needed with
-> >     for pm ops.
-> >   iio:accel:kxcjk-1013: Mark struct __maybe_unused to avoid warning.
-> > 
-> >  drivers/iio/accel/bma180.c                      | 2 +-
-> >  drivers/iio/accel/bmc150-accel-core.c           | 2 +-
-> >  drivers/iio/accel/kxcjk-1013.c                  | 2 +-
-> >  drivers/iio/adc/ina2xx-adc.c                    | 2 +-
-> >  drivers/iio/adc/rcar-gyroadc.c                  | 3 +--
-> >  drivers/iio/adc/ti-ads1015.c                    | 2 +-
-> >  drivers/iio/amplifiers/hmc425a.c                | 2 +-
-> >  drivers/iio/dac/mcp4725.c                       | 2 +-
-> >  drivers/iio/dummy/iio_simple_dummy_buffer.c     | 2 --
-> >  drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c | 2 +-
-> >  drivers/iio/imu/inv_icm42600/inv_icm42600_spi.c | 2 +-
-> >  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c       | 2 +-
-> >  drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c       | 2 +-
-> >  drivers/iio/magnetometer/ak8975.c               | 2 +-
-> >  14 files changed, 13 insertions(+), 16 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
-> > 
-> >   
+>> ld.lld: error: undefined symbol: si_meminfo_node
+   >>> referenced by page_alloc.c
+   >>>               page_alloc.o:(si_mem_available) in archive mm/built-in.a
+   >>> referenced by page_alloc.c
+   >>>               page_alloc.o:(si_mem_available) in archive mm/built-in.a
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
