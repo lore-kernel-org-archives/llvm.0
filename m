@@ -1,188 +1,128 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E441173
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 08:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846AE29CA
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 09:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639644900; x=1671180900;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wzwBpV7OlQLWz0V1iQuNEaldUK64ztj7NgFIJWRBpug=;
-  b=fFXEA+VoEFD9TdhNwHcxBQ1NimUDQKWXslsqMVoQJcN5Vm+v9ilI1wCi
-   jpLxO8i5ypujbSE51jNlZQven6ZB/AIz6lrRMZQmEHHY3LF2dynaKPMtr
-   BwW/z7+rZpkpaiyQMkSnz3ARM1zLKwaj6uLKSgZ6R4WwPqIzrGRjYL/iU
-   f7lsdkioE1vG+l+xQ9VZ7EvxcS5rLOWkm4W2xkDW1jOxmvuPuqxvmykap
-   cWWvgjCQMFfMSc/GTwnt5Pj7Ny9aqDKOjCg73sn95av7OOOHlMxTIFcza
-   oaj1sk00bMdyBnqwI8JKAZ520/Y2qyV/dsuweO47Ty2c7G+nq/j9nZ4gO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226724251"
+  t=1639646937; x=1671182937;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e8Xe02CmurKlZgVHuJqNKmF3CkiPchp4egjDv7zpCBk=;
+  b=kEZZZsDJFMxWEYjeensAGrkCcYWaatDAwmB1r9wWm3NJCu3NiEwBb6qW
+   8HowXp+ErUtdrAIKdCxK/ppdt2tlnQ6QO1vjZINkmigHmzCn617uH0f/Z
+   Wf3IVAWSoxs80yT64cntCa7DgwStQaFAueaikfzZHHNH1C+qit9TGa0bp
+   vXL4su/iUgvM9hEjB4dc9k/JfRDoCsA/aB2cE6gPX1oToZaiuIjcgqBce
+   vdnLOHCD4ew6C26JcymzT9/CoBc+kNzvpi5ITr9FNzk46gb0o2u7hwk75
+   Du+G2PG1IB1s9jyncWQUG12Rhv70J53TBvzGx9MDNvJgxUYSXKriO2Neh
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226730882"
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="226724251"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 00:54:59 -0800
+   d="scan'208";a="226730882"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 01:28:57 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="755799681"
-Received: from unknown (HELO [10.239.159.175]) ([10.239.159.175])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 00:54:56 -0800
-Message-ID: <bb691703-5f88-081e-9ac5-edd969343ead@intel.com>
-Date: Thu, 16 Dec 2021 16:54:54 +0800
+   d="scan'208";a="615088695"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 01:28:55 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxn4I-0002yZ-SK; Thu, 16 Dec 2021 09:28:54 +0000
+Date: Thu, 16 Dec 2021 17:28:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	"Darrick J. Wong" <darrick.wong@oracle.com>,
+	linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:repair-symlink-swapext 322/325]
+ fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for
+ function 'xfs_symlink_remote_read'
+Message-ID: <202112161727.ehXN074t-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 4/4] coresight: etm3x: Don't trace PID for non-root PID
- namespace
-Content-Language: en-US
-To: Leo Yan <leo.yan@linaro.org>, kernel test robot <lkp@intel.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach
- <mike.leach@linaro.org>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org
-References: <20211213121323.1887180-5-leo.yan@linaro.org>
- <202112140344.viPmOWp6-lkp@intel.com>
- <20211214044628.GB1884193@leoy-ThinkPad-X240s>
-From: Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <20211214044628.GB1884193@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git repair-symlink-swapext
+head:   851df07d9599471df909c4ff0e3cf33f4b9619f0
+commit: b0cad080048a93ceeae93b51a0cab55c85c5a7ec [322/325] xfs: move remote symlink target read function to libxfs
+config: riscv-randconfig-r042-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161727.ehXN074t-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=b0cad080048a93ceeae93b51a0cab55c85c5a7ec
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs repair-symlink-swapext
+        git checkout b0cad080048a93ceeae93b51a0cab55c85c5a7ec
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/xfs/libxfs/xfs_symlink_remote.c:28:1: warning: no previous prototype for function 'xfs_symlink_blocks' [-Wmissing-prototypes]
+   xfs_symlink_blocks(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:38:1: warning: no previous prototype for function 'xfs_symlink_hdr_set' [-Wmissing-prototypes]
+   xfs_symlink_hdr_set(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:37:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:68:1: warning: no previous prototype for function 'xfs_symlink_hdr_ok' [-Wmissing-prototypes]
+   xfs_symlink_hdr_ok(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:67:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:167:1: warning: no previous prototype for function 'xfs_symlink_local_to_remote' [-Wmissing-prototypes]
+   xfs_symlink_local_to_remote(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:206:1: warning: no previous prototype for function 'xfs_symlink_shortform_verify' [-Wmissing-prototypes]
+   xfs_symlink_shortform_verify(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:205:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   xfs_failaddr_t
+   ^
+   static 
+>> fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for function 'xfs_symlink_remote_read' [-Wmissing-prototypes]
+   xfs_symlink_remote_read(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:238:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   6 warnings generated.
 
 
+vim +/xfs_symlink_remote_read +239 fs/xfs/libxfs/xfs_symlink_remote.c
 
-On 12/14/21 12:46, Leo Yan wrote:
-> Hi,
->
-> On Tue, Dec 14, 2021 at 03:16:42AM +0800, kernel test robot wrote:
->> Hi Leo,
->>
->> I love your patch! Yet something to improve:
->>
->> [auto build test ERROR on linus/master]
->> [also build test ERROR on v5.16-rc5]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>
->> url:    https://github.com/0day-ci/linux/commits/Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2585cf9dfaaddf00b069673f27bb3f8530e2039c
->> config: arm-buildonly-randconfig-r003-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140344.viPmOWp6-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm cross compiling tool for clang build
->>          # apt-get install binutils-arm-linux-gnueabi
->>          # https://github.com/0day-ci/linux/commit/81d5f47788c40d34c8159d64d4505eb485254e8f
->>          git remote add linux-review https://github.com/0day-ci/linux
->>          git fetch --no-tags linux-review Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
->>          git checkout 81d5f47788c40d34c8159d64d4505eb485254e8f
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/hwtracing/coresight/coresight-etm3x-core.c:344:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
->>             if (!task_is_in_init_pid_ns(current))
->>                  ^
->>     1 error generated.
->>
->>
->> vim +/task_is_in_init_pid_ns +344 drivers/hwtracing/coresight/coresight-etm3x-core.c
->>
->>     301	
->>     302	#define ETM3X_SUPPORTED_OPTIONS (ETMCR_CYC_ACC | \
->>     303					 ETMCR_TIMESTAMP_EN | \
->>     304					 ETMCR_RETURN_STACK)
->>     305	
->>     306	static int etm_parse_event_config(struct etm_drvdata *drvdata,
->>     307					  struct perf_event *event)
->>     308	{
->>     309		struct etm_config *config = &drvdata->config;
->>     310		struct perf_event_attr *attr = &event->attr;
->>     311	
->>     312		if (!attr)
->>     313			return -EINVAL;
->>     314	
->>     315		/* Clear configuration from previous run */
->>     316		memset(config, 0, sizeof(struct etm_config));
->>     317	
->>     318		if (attr->exclude_kernel)
->>     319			config->mode = ETM_MODE_EXCL_KERN;
->>     320	
->>     321		if (attr->exclude_user)
->>     322			config->mode = ETM_MODE_EXCL_USER;
->>     323	
->>     324		/* Always start from the default config */
->>     325		etm_set_default(config);
->>     326	
->>     327		/*
->>     328		 * By default the tracers are configured to trace the whole address
->>     329		 * range.  Narrow the field only if requested by user space.
->>     330		 */
->>     331		if (config->mode)
->>     332			etm_config_trace_mode(config);
->>     333	
->>     334		/*
->>     335		 * At this time only cycle accurate, return stack  and timestamp
->>     336		 * options are available.
->>     337		 */
->>     338		if (attr->config & ~ETM3X_SUPPORTED_OPTIONS)
->>     339			return -EINVAL;
->>     340	
->>     341		config->ctrl = attr->config;
->>     342	
->>     343		/* Don't trace contextID when runs in non-root PID namespace */
->>   > 344		if (!task_is_in_init_pid_ns(current))
-> This patchset is based on another patchset [1], as described on the
-> cover letter patch.  This is why here reports for building failure.
->
-> To avoid the false positive reporting, if any better practice I can
-> follow up to resolve the dependency between two patchsets, please let
-> me know and I will do in next time.
+   236	
+   237	/* Read a remote symlink target into the buffer. */
+   238	int
+ > 239	xfs_symlink_remote_read(
 
-Hi Leo,
-
-Sorry for the inconvenience, the bot doesn't support to parse the link 
-in cover letter yet,
-we suggest to use '--base' as documented 
-inhttps://git-scm.com/docs/git-format-patch
-
-Best Regards,
-Rong CHen
-
->
-> Thanks,
-> Leo
->
-> [1] https://lore.kernel.org/lkml/20211208083320.472503-1-leo.yan@linaro.org/
->
->>     345			config->ctrl &= ~ETMCR_CTXID_SIZE;
->>     346	
->>     347		/*
->>     348		 * Possible to have cores with PTM (supports ret stack) and ETM
->>     349		 * (never has ret stack) on the same SoC. So if we have a request
->>     350		 * for return stack that can't be honoured on this core then
->>     351		 * clear the bit - trace will still continue normally
->>     352		 */
->>     353		if ((config->ctrl & ETMCR_RETURN_STACK) &&
->>     354		    !(drvdata->etmccer & ETMCCER_RETSTACK))
->>     355			config->ctrl &= ~ETMCR_RETURN_STACK;
->>     356	
->>     357		return 0;
->>     358	}
->>     359	
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
