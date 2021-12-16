@@ -1,79 +1,113 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DC3168
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 19:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639682602; x=1671218602;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+9UIs6DXdw/2p0SD8sm0w2yn59ctufkPEAeuZZ/z2LI=;
-  b=SGG5iENDG8PgsH4AxDdPCtGHvNjJ5OJTpR3SDUZ7mHT/yXTm59FzmxjU
-   dC1aRic3+1c6zwA/bi6NITFl0DGW7Z/y/xORsyG1dTH1bxzeEstLPVGYy
-   8uF7elVlw5FY6ZY42FskYKl13H16AYL+UMvP57m3nc+4Vsyx3+1QKkZXC
-   Y0yi1FMGY3jEaAVgEpNl/KiexkdTi21VuF7om4lC9OQTqCb+I3qHnSmqx
-   XJmc3nO0ZYcP4pnOGb89srRjv1zlI0BeylVd9W2pfJhd7bBC3OfYfbUEs
-   kaOLgk4ytGrU2l6vJ79GOZu3dPUz9RNGdgKDIa6kgreJKEIyt6TMoBrW+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="263744932"
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="263744932"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 11:23:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="506429023"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 11:23:20 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mxwLY-0003iS-4O; Thu, 16 Dec 2021 19:23:20 +0000
-Date: Fri, 17 Dec 2021 03:23:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tero Kristo <tero.kristo@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [t-kristo-pm:usi-5.16-v5-bpf 16/19]
- ./usr/include/linux/bpf_hid.h:13:10: fatal error: 'linux/workqueue.h' file
- not found
-Message-ID: <202112170310.bckZdCKh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B25168
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 19:55:25 +0000 (UTC)
+Received: by mail-ed1-f51.google.com with SMTP id o20so91325390eds.10
+        for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 11:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IOXiuI6LubyIojQSSPOrAuT1Pzx6Dib99dr/KQXnlVQ=;
+        b=PsjjFessyuD8M6gyj4nhtoquh95EtpKtar+McrP49/5ybr6ITdQ3iemUosEzuHtE+b
+         5acpCcsORf7x9jNtdUdYHkKsz9IKiNH6gHEVv6wMJ7DCfdWHVhgrxA/zi/GpERur6nR8
+         rDk59WuqCF2jo5LeLWlQHDW743R2cTmjNfFka6TA3vIIQCk1ViCGDVeU+fHynfBr4tYl
+         asNL94bDdFgxqza3yAAc9FBl8veKC0Cs2s1KSaKXVbT7yWIyM0pwlREY7EZW0BhXuVjd
+         lNZkNHlVj+6EYsl6C297hbP8ckNBpv5dPhz1GRKmCnL60BDR7E250bJZ9phoMKhuLkzI
+         7KtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IOXiuI6LubyIojQSSPOrAuT1Pzx6Dib99dr/KQXnlVQ=;
+        b=4g4jvRZzDTqMRgsI9RTNtCIzfc2jDQ8OVK3HR5grpxDzc3Mxsp9hoda+B8gUoPute6
+         VdM/3fnK7vIkFfWBfWPeqj0wj8K9BurTTEPc/sbgKMYk8s+/SUgN4tlXXlZmIC6RZbZy
+         ihpJER4fEqOv1tQdsFXH4aQfodGIBrQZ8vo/mnFzGlIhNWPlTciWd+scAmx2HrW2bpEF
+         iFATXcqH3uRpoivB+uGcasmqHkgir2bFt77TXnqPi5UNwwXhbnRdSKUeRI4DiwvoCqDP
+         GOy2KBc2Wk2OWkz/rtKPPdlBLyGCKvlqZqmhyEprlSvxYMXluBOUp5lUUysfONWSlIuC
+         TrxA==
+X-Gm-Message-State: AOAM5309KH+wVuD0OVqGaFVfMj9kX1+PX7kwEWrQwkPiUOBgdTCden4v
+	fNJ1Y4XPSdpn69o+Gf5PaYSQcwZyk/84xZJGhC2u
+X-Google-Smtp-Source: ABdhPJyH++bVUV/h5tufDRSPBxUBp0JrVSC9Sq0G74EZnaboOzWr9e7a+HeWkcP70X9osrIcutc+ZjjmxMmALFbZt7M=
+X-Received: by 2002:a50:cd52:: with SMTP id d18mr4746385edj.386.1639684523275;
+ Thu, 16 Dec 2021 11:55:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211215211847.206208-1-morbo@google.com> <87mtl1l63m.ffs@tglx>
+In-Reply-To: <87mtl1l63m.ffs@tglx>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 16 Dec 2021 11:55:12 -0800
+Message-ID: <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
+Subject: Re: [PATCH] x86: use builtins to read eflags
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/t-kristo/linux-pm usi-5.16-v5-bpf
-head:   82a2c7cbd9682f2664179cd7e01647e46272c316
-commit: 8ffc42bfd37f05ffa2c284b71a6c3bb5021fac8f [16/19] HID: bpf: add support for new workqueue triggering BPF call
-config: x86_64-randconfig-a014-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170310.bckZdCKh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/t-kristo/linux-pm/commit/8ffc42bfd37f05ffa2c284b71a6c3bb5021fac8f
-        git remote add t-kristo-pm https://github.com/t-kristo/linux-pm
-        git fetch --no-tags t-kristo-pm usi-5.16-v5-bpf
-        git checkout 8ffc42bfd37f05ffa2c284b71a6c3bb5021fac8f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, Dec 15, 2021 at 4:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Bill,
+>
+> On Wed, Dec 15 2021 at 13:18, Bill Wendling wrote:
+>
+> please always CC the relevant mailing lists, i.e. this lacks a cc:
+> linux-kernel@vger.kernel.org
+>
+I thought that was automatically added. But as Peter pointed out in
+another email thread, no one has time to read the LKML, so it seems a
+bit pointless? Nonetheless it's added now.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > GCC and Clang both have builtins to read from and write to the
+> > EFLAGS register. This allows the compiler to determine the best way
+> > to generate the code, which can improve code generation.
+>
+> Emphasis on *can*. Just claiming that this might improve things does not
+> cut it. Where is the prove?
+>
+There are a few proofs. First, clang generates better code with the
+builtin. Yes, that's because clang doesn't handle the "=rm" constraint
+in the same way that GCC does, but that's not really relevant (sure,
+clang should correct this, but that shouldn't prevent this patch from
+going, because builtins are generally better than inline assembly).
+Builtins exist for a reason. The compiler's able to understand what's
+going on and generate the appropriate code for it. It also gives the
+compiler more freedom for optimizations.
 
-All errors (new ones prefixed by >>):
+Secondly, this one small function has had multiple changes since its
+creation, basically pinging back and forth trying to determine the
+best constraints to use:
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/bpf_hid.h:13:10: fatal error: 'linux/workqueue.h' file not found
-   #include <linux/workqueue.h>
-            ^~~~~~~~~~~~~~~~~~~
-   1 error generated.
+  6abcd98f x86: irqflags consolidation
+  f1f029c7 x86: fix assembly constraints in native_save_fl()
+  ab94fcf5 x86: allow "=rm" in native_save_fl()
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The information on which form to use already exists in the compiler.
+Using the builtin will save future churning and thus developers' time.
+
+> IIRC, this was proposed before and the real reason was not better code
+> generation but to address the confusion of clang vs. the '=rm'
+> constraint which is still correct despite some clang folks having
+> different opinions.
+>
+> So what has changed since then?
+
+The minimal version of GCC is now 5.1, which supports these builtins.
+That wasn't the case before.
+
+> AFAICT, nothing. So I consider this as
+> another attempt of "let's see whether it sticks".
+>
+The first patch was dismissed primarily because it was deemed too
+convoluted, because I was trying to get past the then GCC minimal
+version not supporting the builtins.
+
+-bw
