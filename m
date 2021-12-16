@@ -1,72 +1,161 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955EC29CA
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 00:57:10 +0000 (UTC)
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1639616221;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HtVW5kpcTinJbyFAjuXw5VKYcrS836PGPU3LL9cSpwk=;
-	b=ip889JsqJlGEmQwaHwtMpEASiULdSLzRzz7EdOQ/ezeHe+E0qk+2dftw+0aVsFFHZ3ZfQ1
-	rDNVIw4ajQkI3WHKgzjkXf3jjvaWlg/IuJ5xnw7LtBu3mDRLdeeZDaf+7yHtcBVvHx5qEl
-	h28od89kFJYIa+GU27GYY3FeLBZDChdAsVQqMnDOrdXSqg9XucroxaGZrsKSq2eG8YS5tu
-	zgCx40/k71KCdvr3bMJpwRgB6Kxoy0LTDIGLodRNd5yBzs7zq0yvPdwRDd/C0KqoIa93sA
-	AVhyRh+TKsc1xwkZ9dD5VfWbXWMeR8ljs3kZDi9usSEi73OhWDhtn2Sn5bwgHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1639616221;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HtVW5kpcTinJbyFAjuXw5VKYcrS836PGPU3LL9cSpwk=;
-	b=xODN9S+/QSPgf2ZY+fPjzkp7tLAvMWg/O13rLt1ZI/CMmQkognzC2iFPh3qsBrze2C4qqn
-	yVVmIt0Scr2OoxAg==
-To: Bill Wendling <morbo@google.com>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Juergen
- Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, Andy
- Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
-Cc: Bill Wendling <morbo@google.com>
-Subject: Re: [PATCH] x86: use builtins to read eflags
-In-Reply-To: <20211215211847.206208-1-morbo@google.com>
-References: <20211215211847.206208-1-morbo@google.com>
-Date: Thu, 16 Dec 2021 01:57:01 +0100
-Message-ID: <87mtl1l63m.ffs@tglx>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D9629CA
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 01:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639616428; x=1671152428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=gN4+d66eBI/gXay2wWeA6BkAs5oa3s8HM8occSuZ8po=;
+  b=ERhirm9sN9gg1DW8rWZxbjHmOhaYkooCVCXVat0Z7up4I7r0bKuJig1T
+   +JNn4VdxFQHB2WCHSOrThbfpVMvJzDrDaRp2U46Mkn+jwjYnzIxiETsjQ
+   Ua/RpKmoezL8FO+i6UhBM4pncXShgMmi9jfpoCrVlTAdG1dfEtCUkPnL4
+   Br37hsTP7JMhP05RV92JmQJzX61nNpUs8vkGYRKY4iSUDfKMPO3kk8kFG
+   fMUcwGA2jEIJlzo2LJqJMmGE4hFh/LDx7eSQ1qxpeFJ7vDU5WUyyqiqan
+   95ENgKka+k6w8g4ZvcJ51w7PCf4f49BfK2oviIae2evZoIRzsr4Ke3yzW
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238111793"
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="238111793"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 17:00:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="545784568"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Dec 2021 17:00:25 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mxf8D-0002Xr-5A; Thu, 16 Dec 2021 01:00:25 +0000
+Date: Thu, 16 Dec 2021 09:00:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] pinctrl: add one more "const" for generic function groups
+Message-ID: <202112160816.btxt2IyR-lkp@intel.com>
+References: <20211215174821.21668-1-zajec5@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211215174821.21668-1-zajec5@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Bill,
+Hi "Rafał,
 
-On Wed, Dec 15 2021 at 13:18, Bill Wendling wrote:
+I love your patch! Yet something to improve:
 
-please always CC the relevant mailing lists, i.e. this lacks a cc:
-linux-kernel@vger.kernel.org
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on v5.16-rc5 next-20211214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-It's not that hard to figure that out because it's well documented.
+url:    https://github.com/0day-ci/linux/commits/Rafa-Mi-ecki/pinctrl-add-one-more-const-for-generic-function-groups/20211216-014859
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+config: arm64-randconfig-r031-20211215 (https://download.01.org/0day-ci/archive/20211216/202112160816.btxt2IyR-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/e4338a6ad34998afb60c5ad294aafa06cd7110a7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rafa-Mi-ecki/pinctrl-add-one-more-const-for-generic-function-groups/20211216-014859
+        git checkout e4338a6ad34998afb60c5ad294aafa06cd7110a7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/
 
-> GCC and Clang both have builtins to read from and write to the
-> EFLAGS register. This allows the compiler to determine the best way
-> to generate the code, which can improve code generation.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Emphasis on *can*. Just claiming that this might improve things does not
-cut it. Where is the prove?
+All errors (new ones prefixed by >>):
 
-IIRC, this was proposed before and the real reason was not better code
-generation but to address the confusion of clang vs. the '=rm'
-constraint which is still correct despite some clang folks having
-different opinions.
+>> drivers/pinctrl/pinctrl-keembay.c:1594:8: error: assigning to 'const char **' from 'const char *const *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           grp = func->group_names;
+                               ^ ~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/pinctrl/freescale/pinctrl-imx.c:672:24: error: read-only variable is not assignable
+                   func->group_names[i] = child->name;
+                   ~~~~~~~~~~~~~~~~~~~~ ^
+   1 error generated.
 
-So what has changed since then? AFAICT, nothing. So I consider this as
-another attempt of "let's see whether it sticks".
 
-Thanks,
+vim +1594 drivers/pinctrl/pinctrl-keembay.c
 
-        tglx
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1556  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1557  static int keembay_add_functions(struct keembay_pinctrl *kpc,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1558  				 struct function_desc *function)
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1559  {
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1560  	unsigned int i;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1561  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1562  	/* Assign the groups for each function */
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1563  	for (i = 0; i < kpc->npins; i++) {
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1564  		const struct pinctrl_pin_desc *pdesc = keembay_pins + i;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1565  		struct keembay_mux_desc *mux = pdesc->drv_data;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1566  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1567  		while (mux->name) {
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1568  			struct function_desc *func;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1569  			const char **grp;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1570  			size_t grp_size;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1571  			u32 j, grp_num;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1572  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1573  			for (j = 0; j < kpc->nfuncs; j++) {
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1574  				if (!strcmp(mux->name, function[j].name))
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1575  					break;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1576  			}
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1577  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1578  			if (j == kpc->nfuncs)
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1579  				return -EINVAL;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1580  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1581  			func = function + j;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1582  			grp_num = func->num_group_names;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1583  			grp_size = sizeof(*func->group_names);
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1584  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1585  			if (!func->group_names) {
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1586  				func->group_names = devm_kcalloc(kpc->dev,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1587  								 grp_num,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1588  								 grp_size,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1589  								 GFP_KERNEL);
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1590  				if (!func->group_names)
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1591  					return -ENOMEM;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1592  			}
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1593  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06 @1594  			grp = func->group_names;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1595  			while (*grp)
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1596  				grp++;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1597  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1598  			*grp = pdesc->name;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1599  			mux++;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1600  		}
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1601  	}
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1602  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1603  	/* Add all functions */
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1604  	for (i = 0; i < kpc->nfuncs; i++) {
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1605  		pinmux_generic_add_function(kpc->pctrl,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1606  					    function[i].name,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1607  					    function[i].group_names,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1608  					    function[i].num_group_names,
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1609  					    function[i].data);
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1610  	}
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1611  
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1612  	return 0;
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1613  }
+ffd4e739358be0 Lakshmi Sowjanya D 2021-08-06  1614  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
