@@ -1,43 +1,46 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2002B2CA2
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 12:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE182CA4;
+	Thu, 16 Dec 2021 12:03:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639656181; x=1671192181;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iqFtp2U83/P0+3k00NjhK/l7028RUN72TSeB0sy3bG0=;
-  b=AeoZ7Isfcv3BSzkfSgs2CT5MtVKom2UJr00Fb2+OUnQmbw1vDkNmoMeC
-   uZOoBDvPcb1nDEh/6BQZJDEBecRrNbRDQmj48Lvom7VH6m58MWwcBlfhY
-   gU52eA+5uGz5ACDbpb7jG1V90S6faFnZvctvGjCMGKHFlTjdpgCtN0Q+G
-   fOqwUd4dTqTekZa87YILs6X8PsT+dJB7K0W2MP7PyiftY+1zD7cQjXJBt
-   n2/eF/aLc7h+44g+qcLgoMetWluM9SDTNJLh0gL5KALq0bXxyrWDAItx9
-   vSMVl/ilZczDUCWVB2aYvbMOPE/Xff/Ru0ihWJuD4ut6Y+xeSwK+MRIBe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="263632641"
+  t=1639656182; x=1671192182;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B0yYE6pyJ5FHWWiTURE+O7JxIfssJQEmx4NecM1/bC8=;
+  b=EecB9fCWXZ3Oe+nYKGUP/Qdmb8p2pKG0W2FjaZMEcO64TupbOuIcD3rk
+   WFaDTFofCl2Fp5Qhqc807wkeoY0mS/CZ093Oo8Gg4zjrwR7REgMeaTjTP
+   Q81j1Qe13YaRaym6Ja/oXINK7MUC+2+j/uUwH9ei98eVSYaa8uB/uQhCD
+   U1rlwq7X/xXuFV2EKyMC/5p8Zuoq+d6bCZunGEhXPswh4N9M2XvvpDEm9
+   zvGzwEy7h5m98mYRdeZJOG/KOlacWyjUIw4oesaa9SAS654yEJLdxQe58
+   c3GYUrtIhIqBmDIlLazeAoviLZ8lx84WAKLtjQwyQXrNI8a+/OGCIiRhU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220151172"
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="263632641"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:03:00 -0800
+   d="scan'208";a="220151172"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:03:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="682919096"
+   d="scan'208";a="568369340"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Dec 2021 04:02:58 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 16 Dec 2021 04:02:58 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxpTN-00035k-RS; Thu, 16 Dec 2021 12:02:57 +0000
-Date: Thu, 16 Dec 2021 20:02:03 +0800
+	id 1mxpTN-00035m-Rr; Thu, 16 Dec 2021 12:02:57 +0000
+Date: Thu, 16 Dec 2021 20:02:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"Darrick J. Wong" <darrick.wong@oracle.com>,
-	linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:repair-symlink-swapext 323/325]
- fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for
- function 'xfs_symlink_write_target'
-Message-ID: <202112161930.6u4fjfND-lkp@intel.com>
+To: Stefan Berger <stefanb@linux.vnet.ibm.com>,
+	linux-integrity@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
+	serge@hallyn.com, christian.brauner@ubuntu.com,
+	containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+	ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+	roberto.sassu@huawei.com, mpeters@redhat.com
+Subject: Re: [PATCH v7 14/14] ima: Setup securityfs for IMA namespace
+Message-ID: <202112161948.NK58RGVT-lkp@intel.com>
+References: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,161 +49,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git repair-symlink-swapext
-head:   851df07d9599471df909c4ff0e3cf33f4b9619f0
-commit: 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254 [323/325] xfs: move symlink target write function to libxfs
-config: riscv-randconfig-r042-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161930.6u4fjfND-lkp@intel.com/config)
+Hi Stefan,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on zohar-integrity/next-integrity]
+[also build test WARNING on linux/master linus/master v5.16-rc5]
+[cannot apply to jmorris-security/next-testing next-20211215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+config: mips-buildonly-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161948.NK58RGVT-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs repair-symlink-swapext
-        git checkout 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/bc2f1f683efbf2ad7b955fd4afc78861609eff4b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
+        git checkout bc2f1f683efbf2ad7b955fd4afc78861609eff4b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash security/integrity/ima/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   fs/xfs/libxfs/xfs_symlink_remote.c:28:1: warning: no previous prototype for function 'xfs_symlink_blocks' [-Wmissing-prototypes]
-   xfs_symlink_blocks(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:38:1: warning: no previous prototype for function 'xfs_symlink_hdr_set' [-Wmissing-prototypes]
-   xfs_symlink_hdr_set(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:37:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
+>> security/integrity/ima/ima_fs.c:451:5: warning: no previous prototype for function 'ima_fs_ns_init' [-Wmissing-prototypes]
+   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+       ^
+   security/integrity/ima/ima_fs.c:451:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
    ^
    static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:68:1: warning: no previous prototype for function 'xfs_symlink_hdr_ok' [-Wmissing-prototypes]
-   xfs_symlink_hdr_ok(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:67:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:167:1: warning: no previous prototype for function 'xfs_symlink_local_to_remote' [-Wmissing-prototypes]
-   xfs_symlink_local_to_remote(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:206:1: warning: no previous prototype for function 'xfs_symlink_shortform_verify' [-Wmissing-prototypes]
-   xfs_symlink_shortform_verify(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:205:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   xfs_failaddr_t
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for function 'xfs_symlink_remote_read' [-Wmissing-prototypes]
-   xfs_symlink_remote_read(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:238:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
->> fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for function 'xfs_symlink_write_target' [-Wmissing-prototypes]
-   xfs_symlink_write_target(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:310:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   7 warnings generated.
+   1 warning generated.
 
 
-vim +/xfs_symlink_write_target +311 fs/xfs/libxfs/xfs_symlink_remote.c
+vim +/ima_fs_ns_init +451 security/integrity/ima/ima_fs.c
 
-   236	
-   237	/* Read a remote symlink target into the buffer. */
-   238	int
- > 239	xfs_symlink_remote_read(
-   240		struct xfs_inode	*ip,
-   241		char			*link)
-   242	{
-   243		struct xfs_mount	*mp = ip->i_mount;
-   244		struct xfs_bmbt_irec	mval[XFS_SYMLINK_MAPS];
-   245		struct xfs_buf		*bp;
-   246		xfs_daddr_t		d;
-   247		char			*cur_chunk;
-   248		int			pathlen = ip->i_disk_size;
-   249		int			nmaps = XFS_SYMLINK_MAPS;
-   250		int			byte_cnt;
-   251		int			n;
-   252		int			error = 0;
-   253		int			fsblocks = 0;
-   254		int			offset;
-   255	
-   256		ASSERT(xfs_isilocked(ip, XFS_ILOCK_SHARED | XFS_ILOCK_EXCL));
-   257	
-   258		fsblocks = xfs_symlink_blocks(mp, pathlen);
-   259		error = xfs_bmapi_read(ip, 0, fsblocks, mval, &nmaps, 0);
-   260		if (error)
-   261			goto out;
-   262	
-   263		offset = 0;
-   264		for (n = 0; n < nmaps; n++) {
-   265			d = XFS_FSB_TO_DADDR(mp, mval[n].br_startblock);
-   266			byte_cnt = XFS_FSB_TO_B(mp, mval[n].br_blockcount);
-   267	
-   268			error = xfs_buf_read(mp->m_ddev_targp, d, BTOBB(byte_cnt), 0,
-   269					&bp, &xfs_symlink_buf_ops);
-   270			if (error)
-   271				return error;
-   272			byte_cnt = XFS_SYMLINK_BUF_SPACE(mp, byte_cnt);
-   273			if (pathlen < byte_cnt)
-   274				byte_cnt = pathlen;
-   275	
-   276			cur_chunk = bp->b_addr;
-   277			if (xfs_has_crc(mp)) {
-   278				if (!xfs_symlink_hdr_ok(ip->i_ino, offset,
-   279								byte_cnt, bp)) {
-   280					xfs_inode_mark_sick(ip, XFS_SICK_INO_SYMLINK);
-   281					error = -EFSCORRUPTED;
-   282					xfs_alert(mp,
-   283	"symlink header does not match required off/len/owner (0x%x/Ox%x,0x%llx)",
-   284						offset, byte_cnt, ip->i_ino);
-   285					xfs_buf_relse(bp);
-   286					goto out;
-   287	
-   288				}
-   289	
-   290				cur_chunk += sizeof(struct xfs_dsymlink_hdr);
-   291			}
-   292	
-   293			memcpy(link + offset, cur_chunk, byte_cnt);
-   294	
-   295			pathlen -= byte_cnt;
-   296			offset += byte_cnt;
-   297	
-   298			xfs_buf_relse(bp);
-   299		}
-   300		ASSERT(pathlen == 0);
-   301	
-   302		link[ip->i_disk_size] = '\0';
-   303		error = 0;
-   304	
-   305	 out:
-   306		return error;
-   307	}
-   308	
-   309	/* Write the symlink target into the inode. */
-   310	int
- > 311	xfs_symlink_write_target(
+   450	
+ > 451	int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+   452	{
+   453		struct ima_namespace *ns = user_ns->ima_ns;
+   454		struct dentry *int_dir;
+   455		struct dentry *ima_dir = NULL;
+   456		struct dentry *ima_symlink = NULL;
+   457		struct dentry *binary_runtime_measurements = NULL;
+   458		struct dentry *ascii_runtime_measurements = NULL;
+   459		struct dentry *runtime_measurements_count = NULL;
+   460		struct dentry *violations = NULL;
+   461	
+   462		/* FIXME: update when evm and integrity are namespaced */
+   463		if (user_ns != &init_user_ns) {
+   464			int_dir =
+   465				securityfs_create_dir("integrity", root);
+   466			if (IS_ERR(int_dir))
+   467				return -1;
+   468		} else
+   469			int_dir = integrity_dir;
+   470	
+   471		ima_dir = securityfs_create_dir("ima", int_dir);
+   472		if (IS_ERR(ima_dir))
+   473			goto out;
+   474	
+   475		ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
+   476							NULL);
+   477		if (IS_ERR(ima_symlink))
+   478			goto out;
+   479	
+   480		binary_runtime_measurements =
+   481		    securityfs_create_file("binary_runtime_measurements",
+   482					   S_IRUSR | S_IRGRP, ima_dir, NULL,
+   483					   &ima_measurements_ops);
+   484		if (IS_ERR(binary_runtime_measurements))
+   485			goto out;
+   486	
+   487		ascii_runtime_measurements =
+   488		    securityfs_create_file("ascii_runtime_measurements",
+   489					   S_IRUSR | S_IRGRP, ima_dir, NULL,
+   490					   &ima_ascii_measurements_ops);
+   491		if (IS_ERR(ascii_runtime_measurements))
+   492			goto out;
+   493	
+   494		runtime_measurements_count =
+   495		    securityfs_create_file("runtime_measurements_count",
+   496					   S_IRUSR | S_IRGRP, ima_dir, NULL,
+   497					   &ima_measurements_count_ops);
+   498		if (IS_ERR(runtime_measurements_count))
+   499			goto out;
+   500	
+   501		violations =
+   502		    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
+   503					   ima_dir, NULL, &ima_htable_violations_ops);
+   504		if (IS_ERR(violations))
+   505			goto out;
+   506	
+   507	
+   508		if (!ns->policy_dentry_removed) {
+   509			ns->policy_dentry =
+   510			    securityfs_create_file("policy", POLICY_FILE_FLAGS,
+   511						   ima_dir, NULL,
+   512						   &ima_measure_policy_ops);
+   513			if (IS_ERR(ns->policy_dentry))
+   514				goto out;
+   515		}
+   516	
+   517		return 0;
+   518	out:
+   519		securityfs_remove(ns->policy_dentry);
+   520		securityfs_remove(violations);
+   521		securityfs_remove(runtime_measurements_count);
+   522		securityfs_remove(ascii_runtime_measurements);
+   523		securityfs_remove(binary_runtime_measurements);
+   524		securityfs_remove(ima_symlink);
+   525		securityfs_remove(ima_dir);
+   526		if (user_ns != &init_user_ns)
+   527			securityfs_remove(integrity_dir);
+   528	
+   529		return -1;
+   530	}
+   531	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
