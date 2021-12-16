@@ -1,113 +1,60 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E27C2C9C
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 03:12:12 +0000 (UTC)
-Received: by mail-oi1-f171.google.com with SMTP id bk14so34528619oib.7
-        for <llvm@lists.linux.dev>; Wed, 15 Dec 2021 19:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OfZS1Njc5yh2bfwwXg5RMSkOxds11+ph3qRszAqv9Pc=;
-        b=pPkUkRSWWWMPrzGA2U+Rp+lnG5AJbf7Ru5YJ/j5Fyl6iB67coLnIcNknGaBlmK262W
-         fSr5QUbbsSYn0OUpILY9uHrLyhAxUVU6GNFSRb4k4UsdaXDJaA6IQW2MsU7eKXgDcyPw
-         Z1zqGfXm2D89wR8Lzt9qh77T0Qd8zI+ucOefnFlvPFfxzS7FwJVQl8SQfk/aLMrDb+UH
-         Dmo0nN7jqWZd9dp5SEOoYs30zTN8Rhuap4h4oT8DOLNTFGf00taK9bhtls1zXDe91hja
-         C+FNBd5paIyzCcbrgzpWnJ7tCtielYd5DaZcIbh5c3+ixw7LiBMysx8YheNyAmhwjDcX
-         rrug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OfZS1Njc5yh2bfwwXg5RMSkOxds11+ph3qRszAqv9Pc=;
-        b=DgG4WQmXWXbWYh5RWQGeAsXRL0FgWH9RR2gJGDydJd09oOdjK1HPKJ0TIsTXnuDaER
-         cxaPVF0YXbz9QizZGd+wrDmBsEoeX6jmkQYc5zD47dV5UvUEWxyHu2k17DHlvXcAOfwB
-         +DH5AsUmG/+9KtVMMjZHqS5k31b4v0oxRCXfldWMW05xDydIVoR1ETsFRcP0mfZCgcYb
-         qQFdNzyDbwmxaQvXak7MH7Lml/fDJc5uipCmOpTcpAtcITUNGaBFr1DFCgNOxkDrYdJE
-         gYRmjKHnfgSIN9bJ0DW/Vy5guhZeK6hLeKegWT79Dr4nOaiNqDitG10OjmJPPXcZNsta
-         kyrQ==
-X-Gm-Message-State: AOAM5301Rvg4dI79xaZWUEG5XqUxfoXu2OsttXS0ayJygZyF+stqPWlh
-	WuMACq6aW5JqH2pAQqq2CBChxWW6tmd+7KrJ5OvZ9w==
-X-Google-Smtp-Source: ABdhPJyX1OXymKbWNBsIE1E8AupgYn3qxOT6wxKG0eN0/chi0YZ7SfZ2WvEkeGPr+hCpX84UDhL/q3CJaSPAmEDm1yU=
-X-Received: by 2002:aca:120f:: with SMTP id 15mr2596471ois.132.1639624331477;
- Wed, 15 Dec 2021 19:12:11 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB66168
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 06:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50385C36AE2;
+	Thu, 16 Dec 2021 06:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639637156;
+	bh=DAHiQZ/A9fSoAedgWlGLb4HM/aUKVwB/P8OFL5cQTpE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=uzi1gsDjoSzvtQLPxTsFIOiMBj4s//5SeulcHvdqPHR9atceMdIJLt8sxPvBf24j1
+	 VLfOnw13I3CdNY9dT47QSX8zknqH0AEosCTpB7XAeVB5+XRMjtbRZZb4oS0vBml4U2
+	 2SzgVz0cm4QtDnDQliCeTk8oB3cNq27VqNilQCXwbYEAfCDrbDdqnZGqzhLH9COBhc
+	 yjTzT8VMeUQHyzu6wjpc6BMSga04o+zs/1+dlqNs67kMyByakhDU/y5bXCUx1uwhNn
+	 DbCXaobSA9y81til1dzqnK76XTqlp2hO6fz9q+BTjADqpPfOXsffUpX3238d/H8sTc
+	 qsHS6pzIfOhZQ==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202112142208.QW0tVv0m-lkp@intel.com> <YbjlV4HdWI8WUcAR@archlinux-ax161>
-In-Reply-To: <YbjlV4HdWI8WUcAR@archlinux-ax161>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 16 Dec 2021 04:12:00 +0100
-Message-ID: <CACRpkdaBE-wyhiekdW9WtO=zdpDqjZuT7DqqsT2kWzeDGepivQ@mail.gmail.com>
-Subject: Re: drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable
- 'group' is used uninitialized whenever 'for' loop exits because its condition
- is false
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Jason Wang <wangborong@cdjrlc.com>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1635232282-3992-10-git-send-email-dillon.minfei@gmail.com>
+References: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com> <1635232282-3992-10-git-send-email-dillon.minfei@gmail.com>
+Subject: Re: [PATCH v7 09/10] clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after system enter shell
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: patrice.chotard@foss.st.com, hugues.fruchet@foss.st.com, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, lkp@intel.com, kbuild-all@lists.01.org, llvm@lists.linux.dev
+To: Dillon Min <dillon.minfei@gmail.com>, alexandre.torgue@foss.st.com, ezequiel@collabora.com, gabriel.fernandez@foss.st.com, gabriel.fernandez@st.com, gnurou@gmail.com, hverkuil-cisco@xs4all.nl, mchehab+huawei@kernel.org, mchehab@kernel.org, mcoquelin.stm32@gmail.com, mturquette@baylibre.com, pihsun@chromium.org, robh+dt@kernel.org
+Date: Wed, 15 Dec 2021 22:45:55 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211216064556.50385C36AE2@smtp.kernel.org>
 
-On Tue, Dec 14, 2021 at 7:41 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Tue, Dec 14, 2021 at 10:44:28PM +0800, kernel test robot wrote:
-> > Hi Jason,
-> >
-> > FYI, the error/warning still remains.
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
-> > commit: 29d45a642d4ea8de7e89b57f856046df7c3b219f pinctrl: bcm2835: Replace BUG with BUG_ON
-> > date:   5 months ago
-> > config: mips-randconfig-c004-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142208.QW0tVv0m-lkp@intel.com/config)
-> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install mips cross compiling tool for clang build
-> >         # apt-get install binutils-mips-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29d45a642d4ea8de7e89b57f856046df7c3b219f
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 29d45a642d4ea8de7e89b57f856046df7c3b219f
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/bcm/
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: warning: variable 'group' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-> >            for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-> >                        ^~~~~~~~~~~~~~~~~~~~
-> >    drivers/pinctrl/bcm/pinctrl-bcm2835.c:423:10: note: uninitialized use occurs here
-> >            switch (group) {
-> >                    ^~~~~
-> >    drivers/pinctrl/bcm/pinctrl-bcm2835.c:412:14: note: remove the condition if it is always true
-> >            for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-> >                        ^~~~~~~~~~~~~~~~~~~~
-> >    drivers/pinctrl/bcm/pinctrl-bcm2835.c:409:11: note: initialize the variable 'group' to silence this warning
-> >            int group;
-> >                     ^
-> >                      = 0
-> >    1 warning generated.
->
-> It seems like MIP's __BUG_ON() makes it harder for clang to figure out
-> that 'i == BCM2835_NUM_IRQS' will make the kernel panic, which is the
-> only way that the loop exits because the condition is false.
->
-> I am not really sure of a way to fix this other than just reverting that
-> change or changing the BUG_ON() to WARN_ON().
+Quoting Dillon Min (2021-10-26 00:11:21)
+> stm32's clk driver register two ltdc gate clk to clk core by
+> clk_hw_register_gate() and clk_hw_register_composite()
+>=20
+> first: 'stm32f429_gates[]', clk name is 'ltdc', which no user to use.
+> second: 'stm32f429_aux_clk[]', clk name is 'lcd-tft', used by ltdc driver
+>=20
+> both of them point to the same offset of stm32's RCC register. after
+> kernel enter console, clk core turn off ltdc's clk as 'stm32f429_gates[]'
+> is no one to use. but, actually 'stm32f429_aux_clk[]' is in use.
+>=20
+> stm32f469/746/769 have the same issue, fix it.
+>=20
+> Fixes: daf2d117cbca ("clk: stm32f4: Add lcd-tft clock")
+> Link: https://lore.kernel.org/linux-arm-kernel/1590564453-24499-7-git-sen=
+d-email-dillon.minfei@gmail.com/
+> Link: https://lore.kernel.org/lkml/CAPTRvHkf0cK_4ZidM17rPo99gWDmxgqFt4CDU=
+jqFFwkOeQeFDg@mail.gmail.com/
+> Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
+> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> Acked-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> ---
 
-We can also just ignore the test robot like any invalid
-review comment.
-
-The maintainer of this driver can decide, if it's up to me I'd
-just ignore it.
-
-Yours,
-Linus Walleij
+Applied to clk-next
