@@ -1,46 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE182CA4;
-	Thu, 16 Dec 2021 12:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490472C9C
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 13:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639656182; x=1671192182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B0yYE6pyJ5FHWWiTURE+O7JxIfssJQEmx4NecM1/bC8=;
-  b=EecB9fCWXZ3Oe+nYKGUP/Qdmb8p2pKG0W2FjaZMEcO64TupbOuIcD3rk
-   WFaDTFofCl2Fp5Qhqc807wkeoY0mS/CZ093Oo8Gg4zjrwR7REgMeaTjTP
-   Q81j1Qe13YaRaym6Ja/oXINK7MUC+2+j/uUwH9ei98eVSYaa8uB/uQhCD
-   U1rlwq7X/xXuFV2EKyMC/5p8Zuoq+d6bCZunGEhXPswh4N9M2XvvpDEm9
-   zvGzwEy7h5m98mYRdeZJOG/KOlacWyjUIw4oesaa9SAS654yEJLdxQe58
-   c3GYUrtIhIqBmDIlLazeAoviLZ8lx84WAKLtjQwyQXrNI8a+/OGCIiRhU
+  t=1639660445; x=1671196445;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DNvzDMeT+XZgO89dspmJUKtjopxAoJTg/j008G+c06o=;
+  b=QtjPNnqSuptTgdQKt+coxQEKO1z6XwrxHg1fejB2849qZeAxOeFyMYJ+
+   BEkSlKXnqPG+NZOtZqE8HefzS1SmkfHVHfJNVHH08wtZK6FCpmzjPBoqZ
+   VgaeuLFou1BbVrK9KNrKEYfN9of32W7U0aZ7aoTrgT5zCZqh6FrH2XteY
+   TBi2PhQtTV3kNGfT3DBy9J0SyhUnseoQb4sKK/EQ7kB/m3ZS9G+2Iv4Gd
+   7Ntu6QDkx/xD6SFRhnkrpS5nsElfU5M0jPARtsXRJPrWhjSpyg4CDfIfp
+   TC9SCYaSHV5lictBQijaeRdvEpTvohtFbERYwKoji6FkUvAIpBIeg+qyp
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220151172"
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="263645974"
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="220151172"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:03:01 -0800
+   d="scan'208";a="263645974"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 05:14:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="568369340"
+   d="scan'208";a="506274340"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Dec 2021 04:02:58 -0800
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 05:14:02 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mxpTN-00035m-Rr; Thu, 16 Dec 2021 12:02:57 +0000
-Date: Thu, 16 Dec 2021 20:02:05 +0800
+	id 1mxqa9-0003Bb-Si; Thu, 16 Dec 2021 13:14:01 +0000
+Date: Thu, 16 Dec 2021 21:13:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stefan Berger <stefanb@linux.vnet.ibm.com>,
-	linux-integrity@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
-	serge@hallyn.com, christian.brauner@ubuntu.com,
-	containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-	ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-	roberto.sassu@huawei.com, mpeters@redhat.com
-Subject: Re: [PATCH v7 14/14] ima: Setup securityfs for IMA namespace
-Message-ID: <202112161948.NK58RGVT-lkp@intel.com>
-References: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
+To: Sean Christopherson <sean.j.christopherson@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream 72/152] arch/x86/kvm/vmx/tdx_stubs.c:4:13:
+ warning: no previous prototype for function 'tdx_pre_kvm_init'
+Message-ID: <202112162144.0WgRhoCw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,136 +45,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stefan,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on zohar-integrity/next-integrity]
-[also build test WARNING on linux/master linus/master v5.16-rc5]
-[cannot apply to jmorris-security/next-testing next-20211215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-config: mips-buildonly-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161948.NK58RGVT-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: bf8636a6b18c9a4a17d11dd306dcc7809db9cc9c [72/152] KVM: TDX: Stub in tdx.h with structs, accessors, and VMCS helpers
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162144.0WgRhoCw-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/bc2f1f683efbf2ad7b955fd4afc78861609eff4b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
-        git checkout bc2f1f683efbf2ad7b955fd4afc78861609eff4b
+        # https://github.com/intel/tdx/commit/bf8636a6b18c9a4a17d11dd306dcc7809db9cc9c
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout bf8636a6b18c9a4a17d11dd306dcc7809db9cc9c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash security/integrity/ima/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> security/integrity/ima/ima_fs.c:451:5: warning: no previous prototype for function 'ima_fs_ns_init' [-Wmissing-prototypes]
-   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-       ^
-   security/integrity/ima/ima_fs.c:451:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+>> arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+               ^
+   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
    ^
    static 
    1 warning generated.
 
 
-vim +/ima_fs_ns_init +451 security/integrity/ima/ima_fs.c
+vim +/tdx_pre_kvm_init +4 arch/x86/kvm/vmx/tdx_stubs.c
 
-   450	
- > 451	int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-   452	{
-   453		struct ima_namespace *ns = user_ns->ima_ns;
-   454		struct dentry *int_dir;
-   455		struct dentry *ima_dir = NULL;
-   456		struct dentry *ima_symlink = NULL;
-   457		struct dentry *binary_runtime_measurements = NULL;
-   458		struct dentry *ascii_runtime_measurements = NULL;
-   459		struct dentry *runtime_measurements_count = NULL;
-   460		struct dentry *violations = NULL;
-   461	
-   462		/* FIXME: update when evm and integrity are namespaced */
-   463		if (user_ns != &init_user_ns) {
-   464			int_dir =
-   465				securityfs_create_dir("integrity", root);
-   466			if (IS_ERR(int_dir))
-   467				return -1;
-   468		} else
-   469			int_dir = integrity_dir;
-   470	
-   471		ima_dir = securityfs_create_dir("ima", int_dir);
-   472		if (IS_ERR(ima_dir))
-   473			goto out;
-   474	
-   475		ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
-   476							NULL);
-   477		if (IS_ERR(ima_symlink))
-   478			goto out;
-   479	
-   480		binary_runtime_measurements =
-   481		    securityfs_create_file("binary_runtime_measurements",
-   482					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   483					   &ima_measurements_ops);
-   484		if (IS_ERR(binary_runtime_measurements))
-   485			goto out;
-   486	
-   487		ascii_runtime_measurements =
-   488		    securityfs_create_file("ascii_runtime_measurements",
-   489					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   490					   &ima_ascii_measurements_ops);
-   491		if (IS_ERR(ascii_runtime_measurements))
-   492			goto out;
-   493	
-   494		runtime_measurements_count =
-   495		    securityfs_create_file("runtime_measurements_count",
-   496					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   497					   &ima_measurements_count_ops);
-   498		if (IS_ERR(runtime_measurements_count))
-   499			goto out;
-   500	
-   501		violations =
-   502		    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
-   503					   ima_dir, NULL, &ima_htable_violations_ops);
-   504		if (IS_ERR(violations))
-   505			goto out;
-   506	
-   507	
-   508		if (!ns->policy_dentry_removed) {
-   509			ns->policy_dentry =
-   510			    securityfs_create_file("policy", POLICY_FILE_FLAGS,
-   511						   ima_dir, NULL,
-   512						   &ima_measure_policy_ops);
-   513			if (IS_ERR(ns->policy_dentry))
-   514				goto out;
-   515		}
-   516	
-   517		return 0;
-   518	out:
-   519		securityfs_remove(ns->policy_dentry);
-   520		securityfs_remove(violations);
-   521		securityfs_remove(runtime_measurements_count);
-   522		securityfs_remove(ascii_runtime_measurements);
-   523		securityfs_remove(binary_runtime_measurements);
-   524		securityfs_remove(ima_symlink);
-   525		securityfs_remove(ima_dir);
-   526		if (user_ns != &init_user_ns)
-   527			securityfs_remove(integrity_dir);
-   528	
-   529		return -1;
-   530	}
-   531	
+     3	
+   > 4	void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
