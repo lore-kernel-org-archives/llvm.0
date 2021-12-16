@@ -1,123 +1,139 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C498F2CA4
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 16:50:53 +0000 (UTC)
-Received: by mail-wm1-f44.google.com with SMTP id y83-20020a1c7d56000000b003456dfe7c5cso1263957wmc.1
-        for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 08:50:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sT7c6xsY79+p4VjCJ0GuWfCfN2sZ5xBnIoxrf7S6ddA=;
-        b=zXJ8r9ZL0HMuqNYJiTcdyKwaAcd2Hm/hnU26Go6jzk3Hiqo6X0i9NLN9p6AspDCY0V
-         DnjMCTaUmWGj8gTU4jp+mH45CQeZtiarFsCe+yc/f0nDOdAnPxjQC70VaJKYtLnLRShG
-         PfSJ2EX7Nbd5fP3chAm3iaKeLZkRETpU0Ch5pbTy9u16mVSub4HJUIj7TwAybF5baBVB
-         aXLVkPwjApwqDmEmqo9gMgPyBsB+4+3BjQeNQZ7QmKQ6kHmoEpzrgXUATJf+2OTny8zg
-         HYP2jb9qpyT3+5zqx7mRL6VNvRtyMVnbb4ZHIkWgaGVJckVXv43kTDFrMfYDkPpU0rUj
-         fK+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sT7c6xsY79+p4VjCJ0GuWfCfN2sZ5xBnIoxrf7S6ddA=;
-        b=0U2AXVtjelUvNLSsPKMrraUXPkFde9jC5vbmJFZMicD54bahON1Kd7i1PeGMJsqCAZ
-         L1ACCwvDMn2+x2+eDVGrTyTAXVaeEk+gfZPSkkIxyqut/ImIcHamolStW/YFNrAPpWjv
-         K0K2lwV9Uu/0dsudfEZwDVGkRir7EdGj/rsbiOiI1zB/0nIQdachxT031eVu+8JrWEQ/
-         S7KKyOyBOPQUXK7peTFO8xrf2j/tMWc06w9Tc1Y6GvUuNgG2VSjuVMxP2tEhXHIHFnmU
-         rpT/HSBzRiqu/4xCuOWAWx9BVZTYaB159ZG+K6b4EZJ7OHTFaQV6m81spqwcs9P7qHDy
-         yuxA==
-X-Gm-Message-State: AOAM53374zfIcnpf7x3GORm+bCwKvr6d3gIgxsFyVjh28qgBsvmOlQvN
-	itCKkhRltJdOpO1Y2uaogvmkyw==
-X-Google-Smtp-Source: ABdhPJyYw/JR5XWgtcqwAnuLqgpwIaezx+JHl1pGQ/V7SoktSGt0KL2b9TPIMm6Wy/etnCFJyiPINw==
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr5873052wmn.98.1639673452137;
-        Thu, 16 Dec 2021 08:50:52 -0800 (PST)
-Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id y15sm7438906wry.72.2021.12.16.08.50.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 08:50:51 -0800 (PST)
-From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: kafai@fb.com,
-	songliubraving@fb.com,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	quentin@isovalent.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Enable cross-building with clang
-Date: Thu, 16 Dec 2021 16:38:43 +0000
-Message-Id: <20211216163842.829836-7-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211216163842.829836-1-jean-philippe@linaro.org>
-References: <20211216163842.829836-1-jean-philippe@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749F1173
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 17:57:57 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPSA id C3007C36AE5;
+	Thu, 16 Dec 2021 17:57:53 +0000 (UTC)
+Date: Thu, 16 Dec 2021 18:03:18 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-iio@vger.kernel.org, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Mauro
+ Carvalho Chehab <mchehab+huawei@kernel.org>, Stephan Gerhold
+ <stephan@gerhold.net>, Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
+ Baptiste Mansuy <bmansuy@invensense.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Jonathan Albrieux
+ <jonathan.albrieux@gmail.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH 00/12] IIO: clang W=1 warning cleanup.
+Message-ID: <20211216180318.26651b58@jic23-huawei>
+In-Reply-To: <Ya5T5CMHn5hzzJy5@archlinux-ax161>
+References: <20211128172445.2616166-1-jic23@kernel.org>
+	<Ya5T5CMHn5hzzJy5@archlinux-ax161>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Cross building using clang requires passing the "-target" flag rather
-than using the CROSS_COMPILE prefix. Makefile.include transforms
-CROSS_COMPILE into CLANG_CROSS_FLAGS. Clear CROSS_COMPILE for bpftool
-and the host libbpf, and use the clang flags for urandom_read and bench.
+On Mon, 6 Dec 2021 11:18:12 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
----
- tools/testing/selftests/bpf/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On Sun, Nov 28, 2021 at 05:24:33PM +0000, Jonathan Cameron wrote:
+> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > 
+> > Hi All,
+> > 
+> > In the interests of noise reduction in warnings during build tests of
+> > new code, this series suppresses a bunch of warnings seen with
+> > LLVM=1 W=1.
+> > 
+> > Note I am seeing two others I haven't fixed here.  One is tied up in
+> > the existing CONFIG_PM* cleanup patch set and will be dealt with as
+> > part of that.  The other in tsl2772 looks like it might be a bug that
+> > needs further analysis. If anyone is curious:
+> > 
+> > drivers/iio/light/tsl2772.c:576:24: warning: variable 'prox_diode_mask' set but not used [-Wunused-but-set-variable]
+> >         int i, ret, num_leds, prox_diode_mask;     
+> > 
+> > As is common with series like this, some of the drivers are old
+> > and as such I haven't cc'd original authors etc and would appreciate
+> > a sanity check from anyone who has the time.
+> > 
+> > Mauro and Arnd are cc'd on a bunch of them because a media patch that
+> > I happened to see had similar fixes + discussion of type to use in the
+> > casting. For some others I've just picked on people who touched
+> > the driver in last year or so.
+> > 
+> > Nothing in this series should have any functional affect.
+> > 
+> > Jonathan  
+> 
+> I build tested drivers/iio/ for arm, arm64, s390, and x86_64
+> allmodconfig and did not see any warnings other than the ones mentioned
+> in the commit message.
+> 
+> All the fixes look reasonable for the warnings.
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 43f6f3159431..42ffc24e9e71 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -170,7 +170,7 @@ $(OUTPUT)/%:%.c
- 
- $(OUTPUT)/urandom_read: urandom_read.c
- 	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
- 
- $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
- 	$(call msg,MOD,,$@)
-@@ -217,7 +217,7 @@ BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
--		    CC=$(HOSTCC) LD=$(HOSTLD)				       \
-+		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) 	       \
- 		    EXTRA_CFLAGS='-g -O0'				       \
- 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
-@@ -248,7 +248,7 @@ $(HOST_BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
- 		$(APIDIR)/linux/bpf.h					       \
- 		| $(HOST_BUILD_DIR)/libbpf
- 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR)                             \
--		    EXTRA_CFLAGS='-g -O0'				       \
-+		    EXTRA_CFLAGS='-g -O0' ARCH= CROSS_COMPILE=		       \
- 		    OUTPUT=$(HOST_BUILD_DIR)/libbpf/ CC=$(HOSTCC) LD=$(HOSTLD) \
- 		    DESTDIR=$(HOST_SCRATCH_DIR)/ prefix= all install_headers
- endif
-@@ -551,7 +551,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
- 		 $(OUTPUT)/bench_strncmp.o
- 	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
- 
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
--- 
-2.34.1
+Thanks!
+
+Series applied to the togreg branch of iio.git and pushed out as
+testing initially to see if 0-day can find anything we missed.
+
+Thanks,
+
+Jonathan
+
+> 
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > Cc: Stephan Gerhold <stephan@gerhold.net>
+> > Cc: Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
+> > Cc: Baptiste Mansuy <bmansuy@invensense.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Jonathan Albrieux <jonathan.albrieux@gmail.com>
+> > 
+> > Jonathan Cameron (12):
+> >   iio:accel:bma180: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:dc:ina2xx-adc: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:adc:rcar: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:adc:ti-ads1015: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:amplifiers:hmc425a: Suppress clang W=1 warning about pointer to
+> >     enum conversion.
+> >   iio:dac:mcp4725: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:imu:inv_icm42600: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:imu:inv_mpu6050: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:magn:ak8975: Suppress clang W=1 warning about pointer to enum
+> >     conversion.
+> >   iio:dummy: Drop set but unused variable len.
+> >   iio:accel:bmc150: Mark structure __maybe_unused as only needed with
+> >     for pm ops.
+> >   iio:accel:kxcjk-1013: Mark struct __maybe_unused to avoid warning.
+> > 
+> >  drivers/iio/accel/bma180.c                      | 2 +-
+> >  drivers/iio/accel/bmc150-accel-core.c           | 2 +-
+> >  drivers/iio/accel/kxcjk-1013.c                  | 2 +-
+> >  drivers/iio/adc/ina2xx-adc.c                    | 2 +-
+> >  drivers/iio/adc/rcar-gyroadc.c                  | 3 +--
+> >  drivers/iio/adc/ti-ads1015.c                    | 2 +-
+> >  drivers/iio/amplifiers/hmc425a.c                | 2 +-
+> >  drivers/iio/dac/mcp4725.c                       | 2 +-
+> >  drivers/iio/dummy/iio_simple_dummy_buffer.c     | 2 --
+> >  drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c | 2 +-
+> >  drivers/iio/imu/inv_icm42600/inv_icm42600_spi.c | 2 +-
+> >  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c       | 2 +-
+> >  drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c       | 2 +-
+> >  drivers/iio/magnetometer/ak8975.c               | 2 +-
+> >  14 files changed, 13 insertions(+), 16 deletions(-)
+> > 
+> > -- 
+> > 2.34.1
+> > 
+> >   
 
