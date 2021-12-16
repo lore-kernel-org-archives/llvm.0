@@ -1,41 +1,41 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8F42CA6
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 16:50:49 +0000 (UTC)
-Received: by mail-wr1-f50.google.com with SMTP id e5so11887161wrc.5
-        for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 08:50:49 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA44F2CA9
+	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 16:50:50 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id b73so3859063wmd.0
+        for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 08:50:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pJRqVurWv/xPXVPfg9RJJPd9MELUol7kDVQDIoB29M4=;
-        b=j11Nk8Sqnke5x2cKuVDNGRjjHdUv65mw61hzMSDPnxhKxKjz9QpmvRbTOAP7PT0Qj4
-         lRXxMRjip+9dtbSJwULLTlpd8uQFObXQRsWQK8/SkwknGd8VnKGckm/sWIgoysHaC/Z8
-         HdC4fr9IHtl+IEBfF+F9+H/3xJPYuVVbF95I7BezfRE6DXptsOftO9AhzQ6zL24dejmq
-         jSJY9DN376cNEDYkyJoBYBC9NY7VYUdMQyBdZH/81RjvIU84Yl1ebNqL7SVO3KFoofjN
-         8moq9RwIwng4+LkWkIyMunWctj6e/4mQi717khuAB1ziYwlG6OJGS4YONFdZQtSx0VUB
-         j5OA==
+        bh=tJ57tzLvzYQgO/9a3Xp1difD235xOW6tp16fePO+Nvw=;
+        b=FssgxFJeWNvA52S2sKL8qB9q1T0ylP/fCugzW2B7O25Ifxn5IiNuY3dG8Bzo6PA9Rk
+         kwV+nNqZ9QZ/SRGM0ntcjAk3PpHDXtW8jGqDo9qv26D9ZXRjsiTPE1u3kX4VdjZi3mw9
+         T4yiRmy2ZNZOorhXbNxf3mtNLHNMKUPY7Q0GDycbsLZmO0Z1q38k9xLg2fOyYl5ZUcXM
+         jYeDM2xivey529HnCxoeEYc+ilywrnRXW+QAzGS7iLw6UFoAcZ38r/SOBJoR6ATWvl0M
+         F6zNnMzjkhW847CpHIaTyz3JMrC1f64//fNhIl1GGt/tZ2WKShrkm1VhRmkJ9PQpZc08
+         0Xdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pJRqVurWv/xPXVPfg9RJJPd9MELUol7kDVQDIoB29M4=;
-        b=oLaM0YvoNwsmEyIzAOxGyiec0aXYpjhqU8vAKb1kC7LMZKRqg4QipMQ6zU1pHGjqAa
-         UIO6/WnAFNH0Vmn1thWdW+gf/hkH+7TadaDBuPVxiQy5VuHEmtXDbJBEILlRlFrVwqzq
-         jXy+oo5s7iKjiCzaV0lGPzAlAfNsvHuTJxQzTIFNt9xz0cDstqY4WVMZfQ6zjFbIx5xu
-         5+PabmZ47mFrnftWqOkcWgpvSpL8YH3+q3aKpH4B2SwfdABlXldMmdBV9JQhvvHOOlSQ
-         lLCAQZKLlFY4vL5nYdxqngq30pgssydSnVXVzgyru/szckFGFDIcNX8e4fSeVnY2m/7C
-         saZQ==
-X-Gm-Message-State: AOAM533vYANyeA4PubL6lyAb3JIWT1G0Bj7IWT0ft67QTU3aEZfHXjdF
-	wwjsXzDjbvQcBba29/RRluLTYpwOw15oUg==
-X-Google-Smtp-Source: ABdhPJxzwdAAnWi1SsHBCOcf33UW6I563gS8lB7I43K9co91J+vPwBcD4O7ZqVJpBGGrEwajiLNvbw==
-X-Received: by 2002:adf:f708:: with SMTP id r8mr10213612wrp.198.1639673448266;
-        Thu, 16 Dec 2021 08:50:48 -0800 (PST)
+        bh=tJ57tzLvzYQgO/9a3Xp1difD235xOW6tp16fePO+Nvw=;
+        b=HDKv6WNUjDG4QUim6r6KmTOX4E7qLJRfgoFxnTBOlCy464T3Bc6KCfsvFQNEWKebzq
+         busDgvwKkIj3CbotqSZS2JUtzIqs3parFpy5vnu4LzkNQQdQHXDm1AoqIz7tEPHb0pym
+         LgEYfCLpqeos1MxoNrgCXRO3knNlqy6EXc4lAuFNsLyYN9qSbGNDIH5YairZbTY73jfc
+         aHPA5FmKqpopfV/DtR+ueasILJlyFsacc+bU74VTRIpd0hym10G8kg46PrJhzrDXA1xY
+         iK+9pXXih2qA80imxsb5pGdZTGSmM9Iip2N84LVpm0d9x/UPHRtwBH1dSGk1zYeWr/MJ
+         CDNQ==
+X-Gm-Message-State: AOAM5313JTAEBpAginGx77VLls92uEqtF4icSzPhbYiBy5A+a47T63IB
+	f6sJw6XDIs2vBtqkZrnxlTF7tA==
+X-Google-Smtp-Source: ABdhPJzkUQ91OzbhQT8Zh1Yv5cFer+EkjDQhAjtPzPWe+NBWXRNdGWaP8Jrjn9dbEUm9AuAgAFar0A==
+X-Received: by 2002:a1c:1f88:: with SMTP id f130mr5863988wmf.91.1639673449319;
+        Thu, 16 Dec 2021 08:50:49 -0800 (PST)
 Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id y15sm7438906wry.72.2021.12.16.08.50.47
+        by smtp.gmail.com with ESMTPSA id y15sm7438906wry.72.2021.12.16.08.50.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 08:50:47 -0800 (PST)
+        Thu, 16 Dec 2021 08:50:49 -0800 (PST)
 From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -53,9 +53,9 @@ Cc: kafai@fb.com,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v2 2/6] tools/resolve_btfids: Support cross-building the kernel with clang
-Date: Thu, 16 Dec 2021 16:38:39 +0000
-Message-Id: <20211216163842.829836-3-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next v2 3/6] tools/libbpf: Enable cross-building with clang
+Date: Thu, 16 Dec 2021 16:38:40 +0000
+Message-Id: <20211216163842.829836-4-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211216163842.829836-1-jean-philippe@linaro.org>
 References: <20211216163842.829836-1-jean-philippe@linaro.org>
@@ -67,32 +67,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The CROSS_COMPILE variable may be present during resolve_btfids build if
-the kernel is being cross-built. Since resolve_btfids is always executed
-on the host, we set CC to HOSTCC in order to use the host toolchain when
-cross-building with GCC. But instead of a toolchain prefix, cross-build
-with clang uses a "-target" parameter, which Makefile.include deduces
-from the CROSS_COMPILE variable. In order to avoid cross-building
-libbpf, clear CROSS_COMPILE before building resolve_btfids.
+Cross-building using clang requires passing the "-target" flag rather
+than using the CROSS_COMPILE prefix. Makefile.include transforms
+CROSS_COMPILE into CLANG_CROSS_FLAGS. Add them to the CFLAGS.
 
 Acked-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/bpf/resolve_btfids/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/lib/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 751643f860b2..9ddeca947635 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -19,6 +19,7 @@ CC       = $(HOSTCC)
- LD       = $(HOSTLD)
- ARCH     = $(HOSTARCH)
- RM      ?= rm
-+CROSS_COMPILE =
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 5f7086fae31c..f947b61b2107 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -90,6 +90,7 @@ override CFLAGS += -Werror -Wall
+ override CFLAGS += $(INCLUDES)
+ override CFLAGS += -fvisibility=hidden
+ override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++override CFLAGS += $(CLANG_CROSS_FLAGS)
  
- OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ # flags specific for shared library
+ SHLIB_FLAGS := -DSHARED -fPIC
+@@ -162,7 +163,7 @@ $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
+ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
  
+ $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN_SHARED) $(VERSION_SCRIPT)
+-	$(QUIET_LINK)$(CC) $(LDFLAGS) \
++	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) \
+ 		--shared -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
+ 		-Wl,--version-script=$(VERSION_SCRIPT) $< -lelf -lz -o $@
+ 	@ln -sf $(@F) $(OUTPUT)libbpf.so
 -- 
 2.34.1
 
