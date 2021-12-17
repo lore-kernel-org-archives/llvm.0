@@ -1,44 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6846929CA
-	for <llvm@lists.linux.dev>; Thu, 16 Dec 2021 23:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB4D2CA0
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 02:11:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639698572; x=1671234572;
+  t=1639707096; x=1671243096;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZqOQad8ijOnESgkxHixcz4BprEm777kirwRvPk7K25g=;
-  b=PDLU3crbOmBZURky96mdZNIvA1XKfAnhqWs8+BJkZvOhTOM6uxhdXtQf
-   YTYFOEJBmSNPRHdcWNimADN2CkbYJnr9i8troiG1NRbFlzT4HQFN9Zpzu
-   1PQnIlpttlzLM/ozu+RlTABrk84ITzDFAxWCTC1GQ8nNsrgF4VazyPxS3
-   PdsOx9zfJyRt02bRDxmV1e0waw+7Tw2C4mBwwVmUju2BnHymfF7+9OgWd
-   W8cNPqda93wq8YMqiws2fOR2qnbHvs6jVB4W8dS1Lc230TXwg+bJaKSfp
-   yBzg5H3NFe8uaOKbyje29COuJpq9WtBds6RRVkn2/eoT/MqIEaIWL1Ki3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237173633"
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="237173633"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 15:49:31 -0800
+  bh=yAjiwUaIEdzf9SApDqxL8mfZBxrBi9Lf0q22oUAsn3o=;
+  b=McEoWApoDBlMJKB26LaHLQ05+ttbO4c0pOBd05qas3cYSDTnq6tlI1dm
+   3bG5uyYI0g+nEFl8VsfRlbE/lIKDaFoMXxx3M/2925n3X9tPSXEAeB7pf
+   X60aVsofH9ue9INnkQBhMp/Ui1m8R97/Mko6qG5mvDwPaVzr3rayZQ29C
+   yiohlu9PuBkuzetg/mLT2R5HenB14axa8vWojc1piJ0XeaYvnRhk8Pbwv
+   U20O08KGckHj/Vk0qHLq5WC0IioLWVOgmgJZR1nYpwVlK8OjBF0iSVMkC
+   oOD2dFAszvpR/PPYmg2BvmW0D/p6AwkhVoCtvSCQeeKUEEmxGpIC+tYVg
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300434312"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="300434312"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:11:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="506545809"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="756326021"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 15:49:29 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2021 18:11:33 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1my0V7-0003y0-05; Thu, 16 Dec 2021 23:49:29 +0000
-Date: Fri, 17 Dec 2021 07:48:39 +0800
+	id 1my2ib-00045e-4r; Fri, 17 Dec 2021 02:11:33 +0000
+Date: Fri, 17 Dec 2021 10:11:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Florian Westphal <fw@strlen.de>, Eric Garver <eric@garver.life>,
-	Phil Sutter <phil@nwl.cc>
-Subject: Re: [PATCH nf v3] netfilter: nat: force port remap to prevent
- shadowing well-known ports
-Message-ID: <202112170757.knetsZWh-lkp@intel.com>
-References: <20211216152816.1481-1-fw@strlen.de>
+To: cgel.zte@gmail.com, tytso@mit.edu
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Changcheng Deng <deng.changcheng@zte.com.cn>,
+	Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] ext4: use min() to make code cleaner
+Message-ID: <202112171003.SXtQAHHE-lkp@intel.com>
+References: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,120 +47,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216152816.1481-1-fw@strlen.de>
+In-Reply-To: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Florian,
+Hi,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on nf/master]
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on v5.16-rc5 next-20211215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Florian-Westphal/netfilter-nat-force-port-remap-to-prevent-shadowing-well-known-ports/20211216-232930
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf.git master
-config: arm-randconfig-r005-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170757.knetsZWh-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+config: hexagon-randconfig-r026-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171003.SXtQAHHE-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/cc216934b951862fcd3ea10c9bef2eecd84d8e6f
+        # https://github.com/0day-ci/linux/commit/ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Florian-Westphal/netfilter-nat-force-port-remap-to-prevent-shadowing-well-known-ports/20211216-232930
-        git checkout cc216934b951862fcd3ea10c9bef2eecd84d8e6f
+        git fetch --no-tags linux-review cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
+        git checkout ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/netfilter/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/netfilter/nf_nat_core.c:550:11: error: no member named 'local_origin' in 'struct nf_conn'
-               !ct->local_origin)
-                ~~  ^
-   1 error generated.
+>> fs/ext4/super.c:6926:12: warning: comparison of distinct pointer types ('typeof (sb->s_blocksize - offset) *' (aka 'unsigned long *') and 'typeof (toread) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+                   tocopy = min(sb->s_blocksize - offset, toread);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags' [-Wunused-function]
+   EXT4_SET_CTX(flags);
+   ^
+   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
+                      ^
+   <scratch space>:148:1: note: expanded from here
+   ctx_test_flags
+   ^
+   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags' [-Wunused-function]
+   EXT4_SET_CTX(mount_flags);
+   ^
+   fs/ext4/super.c:2163:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline void ctx_clear_##name(struct ext4_fs_context *ctx, int flag)\
+                      ^
+   <scratch space>:169:1: note: expanded from here
+   ctx_clear_mount_flags
+   ^
+   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags' [-Wunused-function]
+   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
+                      ^
+   <scratch space>:172:1: note: expanded from here
+   ctx_test_mount_flags
+   ^
+   4 warnings generated.
 
 
-vim +550 net/netfilter/nf_nat_core.c
+vim +6926 fs/ext4/super.c
 
-   528	
-   529	/* Manipulate the tuple into the range given. For NF_INET_POST_ROUTING,
-   530	 * we change the source to map into the range. For NF_INET_PRE_ROUTING
-   531	 * and NF_INET_LOCAL_OUT, we change the destination to map into the
-   532	 * range. It might not be possible to get a unique tuple, but we try.
-   533	 * At worst (or if we race), we will end up with a final duplicate in
-   534	 * __nf_conntrack_confirm and drop the packet. */
-   535	static void
-   536	get_unique_tuple(struct nf_conntrack_tuple *tuple,
-   537			 const struct nf_conntrack_tuple *orig_tuple,
-   538			 const struct nf_nat_range2 *range,
-   539			 struct nf_conn *ct,
-   540			 enum nf_nat_manip_type maniptype)
-   541	{
-   542		bool random_port = range->flags & NF_NAT_RANGE_PROTO_RANDOM_ALL;
-   543		const struct nf_conntrack_zone *zone;
-   544		struct net *net = nf_ct_net(ct);
-   545	
-   546		zone = nf_ct_zone(ct);
-   547	
-   548		if (maniptype == NF_NAT_MANIP_SRC &&
-   549		    !random_port &&
- > 550		    !ct->local_origin)
-   551			random_port = tuple_force_port_remap(orig_tuple);
-   552	
-   553		/* 1) If this srcip/proto/src-proto-part is currently mapped,
-   554		 * and that same mapping gives a unique tuple within the given
-   555		 * range, use that.
-   556		 *
-   557		 * This is only required for source (ie. NAT/masq) mappings.
-   558		 * So far, we don't do local source mappings, so multiple
-   559		 * manips not an issue.
-   560		 */
-   561		if (maniptype == NF_NAT_MANIP_SRC && !random_port) {
-   562			/* try the original tuple first */
-   563			if (in_range(orig_tuple, range)) {
-   564				if (!nf_nat_used_tuple(orig_tuple, ct)) {
-   565					*tuple = *orig_tuple;
-   566					return;
-   567				}
-   568			} else if (find_appropriate_src(net, zone,
-   569							orig_tuple, tuple, range)) {
-   570				pr_debug("get_unique_tuple: Found current src map\n");
-   571				if (!nf_nat_used_tuple(tuple, ct))
-   572					return;
-   573			}
-   574		}
-   575	
-   576		/* 2) Select the least-used IP/proto combination in the given range */
-   577		*tuple = *orig_tuple;
-   578		find_best_ips_proto(zone, tuple, range, ct, maniptype);
-   579	
-   580		/* 3) The per-protocol part of the manip is made to map into
-   581		 * the range to make a unique tuple.
-   582		 */
-   583	
-   584		/* Only bother mapping if it's not already in range and unique */
-   585		if (!random_port) {
-   586			if (range->flags & NF_NAT_RANGE_PROTO_SPECIFIED) {
-   587				if (!(range->flags & NF_NAT_RANGE_PROTO_OFFSET) &&
-   588				    l4proto_in_range(tuple, maniptype,
-   589				          &range->min_proto,
-   590				          &range->max_proto) &&
-   591				    (range->min_proto.all == range->max_proto.all ||
-   592				     !nf_nat_used_tuple(tuple, ct)))
-   593					return;
-   594			} else if (!nf_nat_used_tuple(tuple, ct)) {
-   595				return;
-   596			}
-   597		}
-   598	
-   599		/* Last chance: get protocol to try to obtain unique tuple. */
-   600		nf_nat_l4proto_unique_tuple(tuple, range, maniptype, ct);
-   601	}
-   602	
+  6904	
+  6905	/* Read data from quotafile - avoid pagecache and such because we cannot afford
+  6906	 * acquiring the locks... As quota files are never truncated and quota code
+  6907	 * itself serializes the operations (and no one else should touch the files)
+  6908	 * we don't have to be afraid of races */
+  6909	static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
+  6910				       size_t len, loff_t off)
+  6911	{
+  6912		struct inode *inode = sb_dqopt(sb)->files[type];
+  6913		ext4_lblk_t blk = off >> EXT4_BLOCK_SIZE_BITS(sb);
+  6914		int offset = off & (sb->s_blocksize - 1);
+  6915		int tocopy;
+  6916		size_t toread;
+  6917		struct buffer_head *bh;
+  6918		loff_t i_size = i_size_read(inode);
+  6919	
+  6920		if (off > i_size)
+  6921			return 0;
+  6922		if (off+len > i_size)
+  6923			len = i_size-off;
+  6924		toread = len;
+  6925		while (toread > 0) {
+> 6926			tocopy = min(sb->s_blocksize - offset, toread);
+  6927			bh = ext4_bread(NULL, inode, blk, 0);
+  6928			if (IS_ERR(bh))
+  6929				return PTR_ERR(bh);
+  6930			if (!bh)	/* A hole? */
+  6931				memset(data, 0, tocopy);
+  6932			else
+  6933				memcpy(data, bh->b_data+offset, tocopy);
+  6934			brelse(bh);
+  6935			offset = 0;
+  6936			toread -= tocopy;
+  6937			data += tocopy;
+  6938			blk++;
+  6939		}
+  6940		return len;
+  6941	}
+  6942	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
