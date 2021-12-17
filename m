@@ -1,39 +1,49 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6DD2CA7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2082C9C
 	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 10:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639737253; x=1671273253;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=rOF7HAx6fNwZtCxO7I5iyge9DZgy63Qo3QwhA65eFBk=;
-  b=mn64yezXGogbW/GR7M99kndhCi7XA6d2J89yiNXp0SMxVx7nB8v5MGmH
-   NMi1RjqypMomcJDi2E+XKhZOlaiidrd2jNArw7wwifDoFtgUpAAw/Z7R3
-   H0b9S2QzJTFX7PP94E8fEAUH9GIxxk6EFAqLtiGie3/xVjiFofjIse5b8
-   TE9uW+6gEzkc0/HbUiZUeeKNvEZNZiDBu6hDlcI5d96oPKeJIodzhhOEx
-   Ei8K8hWVbfkYK+budqPcWrlEmCxpvVPCaXDCqhTEgTjbvcHNc68+Nm0/h
-   6MAdhVRzPvLwQkoIm7o18+DdllRHsZWZaFTTjO8q+vVBDco63qUTrO3Us
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NVNGMMi+GcP2D2tp7o/8LBJVGo1HVXYBvPe0/10EQVw=;
+  b=PXhr7E1ku2b7Z87olp2mGz94qbH52i6IKb11yKOcZOLysVMzlNUeHIRv
+   4mJ04bwtSdrC4PF8Ax9wpQnnvW5QJAmk6poShBq8D7JMxF5QYAbGiL88V
+   JrrtpAQvY9AdsFyT77WiKdlTF5I52lfXISiI+1v0baxeQHEahnF5ITHzQ
+   P0wFrk32D/ESeESydwo3OfYjBpHLfF3hRQmEJsNo15+k11r6y1mCH6fod
+   ezbPgUs3xYmHrN5wPRC0UP1G/Z7Okj2wO8iC4y+Xr8Vvc5V8yeX7QDgq1
+   BMtxod4eFknP4Zpllj78oCizwg/a5Ifmvv+vvSOmuVclCzUgCkM/T8aF+
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="227015028"
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="238471850"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="227015028"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 02:34:10 -0800
+   d="scan'208";a="238471850"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 02:34:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="465082983"
+   d="scan'208";a="605861172"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Dec 2021 02:34:09 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Dec 2021 02:34:09 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1myAYz-0004bF-4H; Fri, 17 Dec 2021 10:34:09 +0000
-Date: Fri, 17 Dec 2021 18:33:45 +0800
+	id 1myAYz-0004bD-3w; Fri, 17 Dec 2021 10:34:09 +0000
+Date: Fri, 17 Dec 2021 18:33:43 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: Re: [PATCH mptcp-next 03/21] mptcp: reflect remote port (not 0) in
- ANNOUNCED events
-Message-ID: <202112171855.pp7XfSkU-lkp@intel.com>
+To: NeilBrown <neilb@suse.de>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna.schumaker@netapp.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mel Gorman <mgorman@suse.de>, Christoph Hellwig <hch@infradead.org>,
+	David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/18] Structural cleanup for filesystem-based swap
+Message-ID: <202112171822.DW1WPE1G-lkp@intel.com>
+References: <163969850251.20885.10819272484905153807.stgit@noble.brown>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,41 +52,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <163969850251.20885.10819272484905153807.stgit@noble.brown>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-In-Reply-To: <20211216222314.1244708-4-kishen.maloor@intel.com>
-References: <20211216222314.1244708-4-kishen.maloor@intel.com>
-TO: Kishen Maloor <kishen.maloor@intel.com>
-TO: kishen.maloor@intel.com
-TO: mptcp@lists.linux.dev
+Hi NeilBrown,
 
-Hi Kishen,
+Thank you for the patch! Yet something to improve:
 
-Thank you for the patch! Perhaps something to improve:
+[auto build test ERROR on cifs/for-next]
+[also build test ERROR on axboe-block/for-next mszeredi-vfs/overlayfs-next rostedt-trace/for-next linus/master v5.16-rc5 next-20211216]
+[cannot apply to trondmy-nfs/linux-next hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-[auto build test WARNING on f81a8b95bfe9cae8ff02739e3e263d9310422af7]
-
-url:    https://github.com/0day-ci/linux/commits/Kishen-Maloor/mptcp-support-userspace-path-management/20211217-062636
-base:   f81a8b95bfe9cae8ff02739e3e263d9310422af7
-config: x86_64-randconfig-a011-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171855.pp7XfSkU-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+config: arm-randconfig-r005-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171822.DW1WPE1G-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/bdb267794b512f230544060dba463c0fa9881780
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/6443c9d01129c1a1c19f3df4a594b01e3772e6bd
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kishen-Maloor/mptcp-support-userspace-path-management/20211217-062636
-        git checkout bdb267794b512f230544060dba463c0fa9881780
+        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+        git checkout 6443c9d01129c1a1c19f3df4a594b01e3772e6bd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/nfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/mptcp/pm_netlink.o: warning: objtool: mptcp_event_addr_announced()+0x39e: unreachable instruction
+>> fs/nfs/file.c:512:8: error: implicit declaration of function 'add_swap_extent' [-Werror,-Wimplicit-function-declaration]
+           ret = add_swap_extent(sis, 0, sis->max, 0);
+                 ^
+   1 error generated.
+
+
+vim +/add_swap_extent +512 fs/nfs/file.c
+
+   486	
+   487	static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
+   488							sector_t *span)
+   489	{
+   490		unsigned long blocks;
+   491		long long isize;
+   492		int ret;
+   493		struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
+   494		struct inode *inode = file->f_mapping->host;
+   495	
+   496		if (!file->f_mapping->a_ops->swap_rw)
+   497			/* Cannot support swap */
+   498			return -EINVAL;
+   499	
+   500		spin_lock(&inode->i_lock);
+   501		blocks = inode->i_blocks;
+   502		isize = inode->i_size;
+   503		spin_unlock(&inode->i_lock);
+   504		if (blocks*512 < isize) {
+   505			pr_warn("swap activate: swapfile has holes\n");
+   506			return -EINVAL;
+   507		}
+   508	
+   509		ret = rpc_clnt_swap_activate(clnt);
+   510		if (ret)
+   511			return ret;
+ > 512		ret = add_swap_extent(sis, 0, sis->max, 0);
+   513		if (ret < 0) {
+   514			rpc_clnt_swap_deactivate(clnt);
+   515			return ret;
+   516		}
+   517		*span = sis->pages;
+   518		sis->flags |= SWP_FS_OPS;
+   519		return ret;
+   520	}
+   521	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
