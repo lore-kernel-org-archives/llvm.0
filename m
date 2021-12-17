@@ -1,41 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FA6173
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 06:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FB22CA2
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 06:08:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639721276; x=1671257276;
+  t=1639721283; x=1671257283;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=eNDfGUWW19ToK9mJDNXUB/znIfAE5aRIf83P8onlN8w=;
-  b=gSBm9C8rS7gs5ShKGWpEoizqCrHkCgsQeKZl3BlZ5ZlWjCplEaBm71/3
-   d5Ree/4JQJBXG7jQhvOgo4I2Wh/xHeYogO37SQw+mPyxVIfr9mL6tgaPU
-   JgN9eaRZGcRTx4YeYMmd0rUUcSrCRS/0+wX+C1+x10EgLvrQoW/SrKUq6
-   2r5HfvexOl5NSgoweBuPXfifszQc4+9rfDHyfOLZ/0Yz+eblkQwC/WJPM
-   snEvm4KcgcZEOozwkkys7ueBChDJizPWH2wFyuB9ypspoV6fg+6zTnhOq
-   7Y0pp9Udy+4KswQf+1rzhEtJTuxLcYViyOcVVDmjDEb1Ux0oPENE4twih
+  bh=fHgp6vVwDbRgvIayqgjGiMTx1loNVDl0DI+FMBCQ7YA=;
+  b=GgcaFY75abSBArBLTmYzkvQhg7YGVjADzbpR+EBlTx0ep1LBJcs6p0NB
+   2TS6D8eGPS5H2j/RkyYXlC1TZgrNdaGqtb97DPygCUd/Zr6gy1GqkQsSK
+   h7wBe/Ld1Nn9VmKZNGXAZLezcGJtryeMcuPD7IGG+eXKwUhrI5OQ+IJmp
+   ZKtF5rxZJJ9W8WvNI5JZEMAYRHIYWZ65gmpAqmIhaMV5VCTkBaHXHXZKB
+   Ahs4NcfFHnNQ71Ilhy1RejDhg7jou68RZFuSLc3CV0GkBZPpzcloxk2zC
+   Bbjmal8v04J9R5/+Qk2UwIEajEm4Qr6xOKK0iI6AyZweJijez46p3HnAQ
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226975830"
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300464050"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="226975830"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 22:07:55 -0800
+   d="scan'208";a="300464050"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 22:07:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="615453654"
+   d="scan'208";a="506642284"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 22:07:54 -0800
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 22:07:55 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1my6PK-0004IP-7M; Fri, 17 Dec 2021 06:07:54 +0000
-Date: Fri, 17 Dec 2021 14:07:47 +0800
+	id 1my6PK-0004II-4P; Fri, 17 Dec 2021 06:07:54 +0000
+Date: Fri, 17 Dec 2021 14:07:19 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
 Subject: Re: [PATCH v3 17/25] iomap: Convert iomap_write_begin() and
  iomap_write_end() to folios
-Message-ID: <202112171450.ZkHT3FCx-lkp@intel.com>
+Message-ID: <202112171400.vuSHf13n-lkp@intel.com>
 References: <20211216210715.3801857-18-willy@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,27 +61,25 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Matthew-Wilcox-Oracle/iomap-xfs-folio-patches/20211217-050934
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: riscv-buildonly-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171450.ZkHT3FCx-lkp@intel.com/config)
+config: hexagon-randconfig-r045-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171400.vuSHf13n-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/0day-ci/linux/commit/2d3e5234105d9fb12c78cf6c09a20d65e5a55e2f
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Matthew-Wilcox-Oracle/iomap-xfs-folio-patches/20211217-050934
         git checkout 2d3e5234105d9fb12c78cf6c09a20d65e5a55e2f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/iomap/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/iomap/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/iomap/buffered-io.c:620:9: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12)) - ((unsigned long)(pos) & ~(~(((1UL) << (12)) - 1)))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+>> fs/iomap/buffered-io.c:620:9: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof ((1UL << 14) - ((unsigned long)(pos) & ~(~((1 << 14) - 1)))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
                    len = min(len, PAGE_SIZE - offset_in_page(pos));
                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
