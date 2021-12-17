@@ -1,382 +1,295 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4640429CA
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 13:01:31 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7195E210FD;
-	Fri, 17 Dec 2021 12:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1639745572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WCJzCAu4NNbPu9CjU+dpWTMGM68h7akARlwvYcO0EDE=;
-	b=iKDDlvKV5UYfjmcjAX8OluOyRHPfBCizZ1yURVD3o8Yju5wJWpvUWNrfyIC2XdEbp/Y4f/
-	tPj75a9uTLnfeuKVIkeDQos9Ts4XyKSEKpJ08XypV5ZUrhACefNDJ9bKSMMXknOZuRygGW
-	ZDRjBPC6DRgzbaciynuJaplNRCS6+Xo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1639745572;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WCJzCAu4NNbPu9CjU+dpWTMGM68h7akARlwvYcO0EDE=;
-	b=ALXR23ne3O7y66oLqaGwre53xF2l3uwYDxXPyarKkVe5yZDk743MnnN3YOR7MsNjbGJBih
-	pa+QI0l2Je2UAmDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4CF5613DD4;
-	Fri, 17 Dec 2021 12:52:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id BrhXESSIvGG1cgAAMHmgww
-	(envelope-from <bp@suse.de>); Fri, 17 Dec 2021 12:52:52 +0000
-Date: Fri, 17 Dec 2021 13:52:53 +0100
-From: Borislav Petkov <bp@suse.de>
-To: Yin Fengwei <fengwei.yin@intel.com>
-Cc: Carel Si <beibei.si@intel.com>, Joerg Roedel <jroedel@suse.de>,
-	LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-	lkp@lists.01.org, lkp@intel.com, bfields@fieldses.org,
-	llvm@lists.linux.dev
-Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
- BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
-Message-ID: <YbyIJYzqtHPKRMFt@zn.tnic>
-References: <20211209144141.GC25654@xsang-OptiPlex-9020>
- <YbjIoewxGaodXHKF@zn.tnic>
- <20211215070012.GA26582@linux.intel.com>
- <Ybm96seTxl+pWjTX@zn.tnic>
- <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
- <YbsPwyLnejLQMbTb@zn.tnic>
- <20211216115838.GA23522@linux.intel.com>
- <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D6C29CA
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 13:56:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639749376; x=1671285376;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Otmlq2qzc1svuonbnVshGBcOYgOfOSQtapBA8oKj0+k=;
+  b=WBOIFkBbmKnvXa+EXNFYYwTeVEg6AdOzf0yYchfH2g5paBYACL6sG4bx
+   E15qHtoFuK+/IW7msdXaYrfMZhcO19CYFVLrx1zzSSdm7aMi4AQASiZ+P
+   JRniGwMZQRU5tCkMlEOF1gqH99VxAT6qJJg6I66dYpvshsD9U51TSKneJ
+   o5xvHJqxG94zmFuxaliImhf42JnVaMYxkloi0itYdftJHHsWrkSaKi/Dl
+   SbaOla81VAE0249+zUJ8oD3XIRPoahCIUkZnMTFiaugS2FPBJAm47qxWS
+   CZmvt4mtdqsNAPwz7PuURng0FUoZU0CFfGMiROxj2WTjrwcHr3qwlxFAF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226615392"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="226615392"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 05:56:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="466516199"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 17 Dec 2021 05:56:13 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1myDiX-0004mq-9h; Fri, 17 Dec 2021 13:56:13 +0000
+Date: Fri, 17 Dec 2021 21:56:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kai Huang <kai.huang@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream 132/152] arch/x86/kvm/mmu/tdp_mmu.c:1258:43:
+ warning: variable 'shared' is uninitialized when used here
+Message-ID: <202112172122.1aS4OBuJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Add Bruce and clang folks to the party.
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: 81d423a001d35c498d0c024fa49bba248a916c55 [132/152] KVM, x86/mmu: Support TDX private mapping for TDP MMU
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211217/202112172122.1aS4OBuJ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/81d423a001d35c498d0c024fa49bba248a916c55
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout 81d423a001d35c498d0c024fa49bba248a916c55
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-On Thu, Dec 16, 2021 at 08:21:15PM +0800, Yin Fengwei wrote:
-> Hi Boris,
->=20
-> On 12/16/2021 7:58 PM, Carel Si wrote:
-> > Hi Boris,
-> >=20
-> > On Thu, Dec 16, 2021 at 11:06:59AM +0100, Borislav Petkov wrote:
-> >> On Thu, Dec 16, 2021 at 03:04:16PM +0800, Yin Fengwei wrote:
-> >>> The testing was with Qemu.
-> >>
-> >> This is hardly what I asked for.
-> >>
-> >>> And we found that the hang is related with clang-14.
-> >>
-> >> I saw that already.
-> >>
-> >>> The original report showed the kernel is built with clang-14:
-> >>>         # build kernel
-> >>> 	cd linux
-> >>> 	cp config-5.16.0-rc3-00003-gf154f290855b .config
-> >>> 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 olddefconfig prep=
-are modules_prepare bzImage modules
-> >>> 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 INSTALL_MOD_PATH=
-=3D<mod-install-dir> modules_install
-> >>
-> >> I saw that too.
-> >>
-> >>> Looks like KASAN related stub generated by clang-14 (KASAN_SHADOW_OFF=
-SET and asan_report).
-> >>> This function is early function called before kasan_init.
-> >>>
-> >>> Looks like we need to disable KASAN_SANITIZE for arch/x86/kernel/cpu/=
-common.c. So clang-14 will
-> >>> be happy with this kind of early TLB flush? Thanks.
-> >>
-> >> Ok, I don't understand: I asked for how exactly to reproduce and wheth=
-er
-> >> you can send me your vmlinux you built with your clang-14. What I get =
-is
-> >> some possible explanation about what might be happening.
-> >>
-> >> So what do you expect me to do? Say, "oh, sure, you're right, send me a
-> >> patch" without even being able to see for myself what the root cause i=
-s?
-> >>
-> >> What if it is not the kernel's fault but clang-14 is miscompiling crap
-> >> as in so many other cases?
-> >>
-> >> I built clang-14 and built with your .config and it works here fine. So
-> >> why does yours fail?
-> >>
-> >> Or what's the point of all this?
->=20
-> I had concern that our report is an invalid report because you can't repr=
-oduce
-> it in your side. If that's the case, it could waste more your time. That'=
-s why
-> I did check and shared what I got. I am very sorry if I did it wrong.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sure, you can always add your analysis but I'd like to reproduce myself
-too. So, in the future, please answer the questions and then feel free
-to add your analysis - I'll gladly have a look.
+All warnings (new ones prefixed by >>):
 
-Which wasn't that far from the truth, btw.
+>> arch/x86/kvm/mmu/tdp_mmu.c:1258:43: warning: variable 'shared' is uninitialized when used here [-Wuninitialized]
+                   tdp_mmu_zap_alias_spte(vcpu, gfn_alias, shared);
+                                                           ^~~~~~
+   arch/x86/kvm/mmu/tdp_mmu.c:1233:13: note: initialize the variable 'shared' to silence this warning
+           bool shared;
+                      ^
+                       = 0
+>> arch/x86/kvm/mmu/tdp_mmu.c:1409:32: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
+                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   arch/x86/kvm/mmu/tdp_mmu.c:1409:32: note: place parentheses around the '|' expression to silence this warning
+                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   arch/x86/kvm/mmu/tdp_mmu.c:1409:32: note: place parentheses around the '?:' expression to evaluate it first
+                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+                                                ^
+                   (                                                   )
+   2 warnings generated.
 
-But it isn't KASAN but GCOV profiling. Or is it KCOV profiling which
-clang does.
 
-That thing adds some counting glue to native_write_cr4():
+vim +/shared +1258 arch/x86/kvm/mmu/tdp_mmu.c
 
-(my comments from the actual singlestepping in qemu start with '##' below)
-
-	movq	$__llvm_gcov_ctr.48+8, %rbx				##  mov    $0xffffffff8837d3c0,%rbx
-=2ELBB8_1:                                # %set_register
-                                        # =3D>This Inner Loop Header: Depth=
-=3D1
-
-	jmp	.Ltmp42
-	...
-
-=2ELtmp42:                                # Block address taken
-=2ELBB8_7:                                # %if.end79
-        movq    %rbx, %rax						## 0xffffffff8837d3c0
-        shrq    $3, %rax						## 0x1ffffffff106fa78
-        movabsq $-2305847407260205056, %rcx     # imm =3D 0xDFFFFC000000000=
-0	## 0xdffffc0000000000
-        cmpb    $0, (%rax,%rcx)
-        je      .LBB8_9
-
-so the memory address CMP accesses is something as nonsensical as
-
-  0xfffffbfff106fa78
-
-so I'm guessing we need to setup something for that __llvm_gcov_ctr to
-deref properly but I haven't dug deeper.
-
-The important thing is that this triggers with clang-13 and -14. gcc is
-fine with the same config but that probably is because gcc does other
-profiling - gcov - I guess. Looking at the resulting asm, it has a bunch
-of those counter increments:
-
-        incq    __gcov0.native_write_cr4+88(%rip)       # __gcov0.native_wr=
-ite_cr4[11]
-
-but no weird memory references.
-
-So, clang folks, what's up?
-
-The fix is simple but I'd like to understand first why does this fail
-only with clang, 13 and newer.
-
-(I mean, melver pointed me to
-
-  380d53c45ff2 ("compiler_attributes.h: define __no_profile, add to noinstr=
-")
-
-which explains why 13 and newer).
-
-Btw, joro, that second hunk is I think needed too because a couple of
-lines earlier we set up the cr4 shadow so I think you should use it
-instead of touching the hw CR4.
+  1219	
+  1220	/*
+  1221	 * Handle a TDP page fault (NPT/EPT violation/misconfiguration) by installing
+  1222	 * page tables and SPTEs to translate the faulting guest physical address.
+  1223	 */
+  1224	int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+  1225	{
+  1226		struct kvm_mmu *mmu = vcpu->arch.mmu;
+  1227		struct tdp_iter iter;
+  1228		struct kvm_mmu_page *sp;
+  1229		u64 *child_pt;
+  1230		u64 new_spte;
+  1231		gfn_t raw_gfn;
+  1232		bool is_private;
+  1233		bool shared;
+  1234		int ret;
+  1235	
+  1236		kvm_mmu_hugepage_adjust(vcpu, fault);
+  1237	
+  1238		trace_kvm_mmu_spte_requested(fault);
+  1239	
+  1240		rcu_read_lock();
+  1241	
+  1242		raw_gfn = fault->addr >> PAGE_SHIFT;
+  1243		is_private = kvm_is_private_gfn(vcpu->kvm, raw_gfn);
+  1244	
+  1245		if (is_error_noslot_pfn(fault->pfn) ||
+  1246				kvm_is_reserved_pfn(fault->pfn)) {
+  1247			if (is_private) {
+  1248				rcu_read_unlock();
+  1249				return -EFAULT;
+  1250			}
+  1251		} else if (vcpu->kvm->arch.gfn_shared_mask) {
+  1252			gfn_t gfn_alias = raw_gfn ^ vcpu->kvm->arch.gfn_shared_mask;
+  1253			/*
+  1254			 * At given time, for one GPA, only one mapping can be valid
+  1255			 * (either private, or shared).  Zap aliasing mapping to make
+  1256			 * sure of it.  Also see comment in direct_page_fault().
+  1257			 */
+> 1258			tdp_mmu_zap_alias_spte(vcpu, gfn_alias, shared);
+  1259		}
+  1260	
+  1261		tdp_mmu_for_each_pte(iter, mmu, is_private, raw_gfn, raw_gfn + 1) {
+  1262			if (fault->nx_huge_page_workaround_enabled)
+  1263				disallowed_hugepage_adjust(fault, iter.old_spte, iter.level);
+  1264	
+  1265			if (iter.level == fault->goal_level)
+  1266				break;
+  1267	
+  1268			/*
+  1269			 * If there is an SPTE mapping a large page at a higher level
+  1270			 * than the target, that SPTE must be cleared and replaced
+  1271			 * with a non-leaf SPTE.
+  1272			 */
+  1273			if (is_shadow_present_pte(iter.old_spte) &&
+  1274			    is_large_pte(iter.old_spte)) {
+  1275				if (!tdp_mmu_zap_spte_flush_excl_or_shared(vcpu->kvm,
+  1276							&iter, shared))
+  1277					break;
+  1278				/*
+  1279				 * TODO: large page support.
+  1280				 * Doesn't support large page for TDX now
+  1281				 */
+  1282				WARN_ON(is_private_spte(&iter.old_spte));
+  1283	
+  1284	
+  1285				/*
+  1286				 * The iter must explicitly re-read the spte here
+  1287				 * because the new value informs the !present
+  1288				 * path below.
+  1289				 */
+  1290				iter.old_spte = READ_ONCE(*rcu_dereference(iter.sptep));
+  1291			}
+  1292	
+  1293			if (!is_shadow_present_pte(iter.old_spte)) {
+  1294	
+  1295				/*
+  1296				 * TODO: large page support.
+  1297				 * Not expecting blocked private SPTE points to a
+  1298				 * large page now.
+  1299				 */
+  1300				WARN_ON(is_zapped_private_pte(iter.old_spte) &&
+  1301						is_large_pte(iter.old_spte));
+  1302	
+  1303				/*
+  1304				 * If SPTE has been frozen by another thread, just
+  1305				 * give up and retry, avoiding unnecessary page table
+  1306				 * allocation and free.
+  1307				 */
+  1308				if (is_removed_spte(iter.old_spte))
+  1309					break;
+  1310	
+  1311				sp = alloc_tdp_mmu_page(vcpu,
+  1312						tdp_iter_gfn_unalias(vcpu->kvm, &iter),
+  1313						iter.level - 1, is_private);
+  1314				child_pt = sp->spt;
+  1315	
+  1316				new_spte = make_nonleaf_spte(child_pt,
+  1317							     !shadow_accessed_mask);
+  1318	
+  1319				if (tdp_mmu_set_spte_excl_or_shared(vcpu->kvm, &iter,
+  1320							new_spte, shared)) {
+  1321					tdp_mmu_link_page(vcpu->kvm, sp,
+  1322							  fault->huge_page_disallowed &&
+  1323							  fault->req_level >= iter.level);
+  1324	
+  1325					trace_kvm_mmu_get_page(sp, true);
+  1326				} else {
+  1327					tdp_mmu_free_sp(sp);
+  1328					break;
+  1329				}
+  1330			}
+  1331		}
+  1332	
+  1333		if (iter.level != fault->goal_level) {
+  1334			rcu_read_unlock();
+  1335			return RET_PF_RETRY;
+  1336		}
+  1337	
+  1338		ret = tdp_mmu_map_handle_target_level(vcpu, fault, &iter, shared);
+  1339		rcu_read_unlock();
+  1340	
+  1341		return ret;
+  1342	}
+  1343	
+  1344	static bool block_private_gfn_range(struct kvm *kvm,
+  1345					    struct kvm_gfn_range *range);
+  1346	
+  1347	bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+  1348					 bool flush)
+  1349	{
+  1350		struct kvm_mmu_page *root;
+  1351	
+  1352		for_each_tdp_mmu_root_yield_safe(kvm, root, range->slot->as_id, false) {
+  1353			if (is_private_sp(root))
+  1354				flush |= block_private_gfn_range(kvm, range);
+  1355			else
+  1356				flush = zap_gfn_range(kvm, root, range->start, range->end,
+  1357					       range->may_block, flush, false);
+  1358		}
+  1359	
+  1360		return flush;
+  1361	}
+  1362	
+  1363	typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
+  1364				      struct kvm_gfn_range *range);
+  1365	
+  1366	static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+  1367							   struct kvm_gfn_range *range,
+  1368							   tdp_handler_t handler)
+  1369	{
+  1370		struct kvm_mmu_page *root;
+  1371		struct tdp_iter iter;
+  1372		bool ret = false;
+  1373	
+  1374		rcu_read_lock();
+  1375	
+  1376		/*
+  1377		 * Don't support rescheduling, none of the MMU notifiers that funnel
+  1378		 * into this helper allow blocking; it'd be dead, wasteful code.
+  1379		 */
+  1380		for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
+  1381			/*
+  1382			 * For TDX shared mapping, set GFN shared bit to the range,
+  1383			 * so the handler() doesn't need to set it, to avoid duplicated
+  1384			 * code in multiple handler()s.
+  1385			 */
+  1386			if (kvm->arch.gfn_shared_mask && !is_private_sp(root)) {
+  1387				range->start |= kvm->arch.gfn_shared_mask;
+  1388				range->end |= kvm->arch.gfn_shared_mask;
+  1389			}
+  1390			tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
+  1391				ret |= handler(kvm, &iter, range);
+  1392		}
+  1393	
+  1394		rcu_read_unlock();
+  1395	
+  1396		return ret;
+  1397	}
+  1398	
+  1399	static bool block_private_spte(struct kvm *kvm, struct tdp_iter *iter,
+  1400					    struct kvm_gfn_range *range)
+  1401	{
+  1402		u64 new_spte;
+  1403	
+  1404		if (WARN_ON(!is_private_spte(iter->sptep)))
+  1405			return false;
+  1406	
+  1407		new_spte = SPTE_PRIVATE_ZAPPED |
+  1408			(spte_to_pfn(iter->old_spte) << PAGE_SHIFT) |
+> 1409			is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+  1410	
+  1411		WRITE_ONCE(*rcu_dereference(iter->sptep), new_spte);
+  1412	
+  1413		static_call(kvm_x86_zap_private_spte)(kvm, iter->gfn, iter->level);
+  1414	
+  1415		return true;
+  1416	}
+  1417	
 
 ---
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 0083464de5e3..79b3d67addcc 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
- }
- EXPORT_SYMBOL(native_write_cr0);
-=20
--void native_write_cr4(unsigned long val)
-+void __no_profile native_write_cr4(unsigned long val)
- {
- 	unsigned long bits_changed =3D 0;
-=20
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 75acb6027a87..68d2b7f9a913 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -483,7 +483,7 @@ asmlinkage __visible void __init x86_64_start_kernel(ch=
-ar * real_mode_data)
- 	/* Kill off the identity-map trampoline */
- 	reset_early_page_tables();
-=20
--	__native_tlb_flush_global(native_read_cr4());
-+	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
-=20
- 	clear_bss();
-=20
-
-
-Leaving in the rest for the newly added folks.
-
-> If you don't want to use lkp tool to reproduce the issue, following comma=
-nd
-> could be used as well:
->=20
-> Use Qemu command so only kernel image need be downloaded:
-> qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G -s -S -kern=
-el vmlinuz-5.16.0-rc3-00003-gf154f290855b -nographic -append "console=3Dtty=
-S0 earlyprintk=3DttyS0,115200"
-> to reproduce it.
->=20
->=20
->=20
-> Regards
-> Yin, Fengwei
->=20
->=20
->=20
-> >>
-> >> I mean, if you cannot send me what I ask for, you can say so. Then I c=
-an
-> >> ignore this whole report altogether and waste my time somewhere else.
-> >=20
-> > We have uploaded vmlinuz, modules.cgz, config as well as other related =
-file to:
-> > https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randconfig-a0=
-13-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/
-> >=20
-> > Machine types can refer to:
-> > https://zerobin.net/?e107cf7b56495d80#MQLh14wUT9Osv1tWCwiQx/okkAN48Nq+d=
-rVPE0PiNPw=3D
-> >=20
-> > If there's any other msg needed, pls feel free to propose, thanks.
-> >=20
-> > Below are our full steps to reproduce the issue:
-> >=20
-> > # download lkp-tests
-> > $ git clone https://github.com/intel/lkp-tests.git
-> >=20
-> > $ cd lkp-tests/
-> >=20
-> > # download vmlinuz
-> > $ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randco=
-nfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/vmlinu=
-z-5.16.0-rc3-00003-gf154f290855b
-> >=20
-> > # dowmload modules.cgz
-> > $ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randco=
-nfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/module=
-s.cgz
-> >=20
-> > # download job-script which is attached
-> >=20
-> > # run lkp qemu
-> > lkp-tests$ sudo bin/lkp qemu -k vmlinuz-5.16.0-rc3-00003-gf154f290855b =
--m modules.cgz job-script
-> >=20
-> > ~/lkp-tests/pkg/lkp-src ~/lkp-tests
-> > x86_64
-> > =3D=3D> Making package: lkp-src 0-1 (Thu 16 Dec 2021 07:26:22 PM CST)
-> > =3D=3D> Checking runtime dependencies...
-> > =3D=3D> Checking buildtime dependencies...
-> > =3D=3D> WARNING: Using existing $srcdir/ tree
-> > =3D=3D> Removing existing $pkgdir/ directory...
-> > =3D=3D> Starting build()...
-> > make: Entering directory '/home/carel/lkp-tests/bin/event'
-> > klcc  -D_FORTIFY_SOURCE=3D2  -c -o wakeup.o wakeup.c
-> > klcc  -Wl,-O1,--sort-common,--as-needed,-z,relro -static -o wakeup wake=
-up.o
-> > rm -f wakeup.o
-> > strip wakeup
-> > make: Leaving directory '/home/carel/lkp-tests/bin/event'
-> > =3D=3D> Entering fakeroot environment...
-> > x86_64
-> > =3D=3D> Starting package()...
-> > =3D=3D> Creating package "lkp-src"...
-> > 103987 blocks
-> > renamed '/home/carel/.lkp/cache/lkp-x86_64.cgz.tmp' -> '/home/carel/.lk=
-p/cache/lkp-x86_64.cgz'
-> > =3D=3D> Leaving fakeroot environment.
-> > =3D=3D> Finished making: lkp-src 0-1 (Thu 16 Dec 2021 07:26:24 PM CST)
-> > ~/lkp-tests
-> > 12 blocks
-> > result_root: /home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-=
-20200603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd=
-44ad253c0ef8a9337bb/0
-> > downloading initrds ...
-> > use local modules: /home/carel/.lkp/cache/modules.cgz
-> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
-http://0day.sh.intel.com:80/~lkp/osimage/debian/debian-10.4-x86_64-20200603=
-=2Ecgz -N -P /home/carel/.lkp/cache/osimage/debian
-> > 440459 blocks
-> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
-http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.c=
-gz/run-ipconfig_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debi=
-an-10.4-x86_64-20200603.cgz
-> > 1773 blocks
-> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
-http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.c=
-gz/lkp_20210707.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debian-10.4-x=
-86_64-20200603.cgz
-> > 2321 blocks
-> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
-http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.c=
-gz/rsync-rootfs_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debi=
-an-10.4-x86_64-20200603.cgz
-> > 6856 blocks
-> > exec command: qemu-system-x86_64 -enable-kvm -fsdev local,id=3Dtest_dev=
-,path=3D/home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-20200603.=
-cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0=
-ef8a9337bb/0,security_model=3Dnone -device virtio-9p-pci,fsdev=3Dtest_dev,m=
-ount_tag=3D9p/virtfs_mount -kernel vmlinuz-5.16.0-rc3-00003-gf154f290855b -=
-append root=3D/dev/ram0 user=3Dlkp job=3D/lkp/jobs/scheduled/vm-snb-192/boo=
-t-1-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a9337b=
-b-20211208-23538-lnvkeg-5.yaml ARCH=3Dx86_64 kconfig=3Dx86_64-randconfig-a0=
-13-20211207 branch=3Dtip/x86/mm commit=3Df154f290855b070cc94dd44ad253c0ef8a=
-9337bb BOOT_IMAGE=3D/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f15=
-4f290855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.16.0-rc3-00003-gf154f290855=
-b vmalloc=3D128M initramfs_async=3D0 page_owner=3Don max_uptime=3D600 RESUL=
-T_ROOT=3D/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randc=
-onfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/3 LKP=
-_LOCAL_RUN=3D1 selinux=3D0 debug apic=3Ddebug sysrq_always_enabled rcupdate=
-=2Ercu_cpu_stall_timeout=3D100 net.ifnames=3D0 printk.devkmsg=3Don panic=3D=
--1 softlockup_panic=3D1 nmi_watchdog=3Dpanic oops=3Dpanic load_ramdisk=3D2 =
-prompt_ramdisk=3D0 drbd.minor_count=3D8 systemd.log_level=3Derr ignore_logl=
-evel console=3Dtty0 earlyprintk=3DttyS0,115200 console=3DttyS0,115200 vga=
-=3Dnormal rw  ip=3Ddhcp result_service=3D9p/virtfs_mount -initrd /home/care=
-l/.lkp/cache/final_initrd -smp 2 -m 3144M -no-reboot -watchdog i6300esb -rt=
-c base=3Dlocaltime -device e1000,netdev=3Dnet0 -netdev user,id=3Dnet0 -disp=
-lay none -monitor null -serial stdio
-> > early console in setup code
-> > early console in extract_kernel
-> > input_data: 0x0000000006ffc2e0
-> > input_len: 0x000000000260cb2b
-> > output: 0x0000000001000000
-> > output_len: 0x00000000079e7da4
-> > kernel_total_size: 0x0000000008a2c000
-> > needed_size: 0x0000000008c00000
-> > trampoline_32bit: 0x000000000009d000
-> > Physical KASLR using RDTSC...
-> > Virtual KASLR using RDTSC...
-> >=20
-> > Decompressing Linux... Parsing ELF... Performing relocations... done.
-> > Booting the kernel.
-> >=20
-> >>
-> >> --=20
-> >> Regards/Gruss,
-> >>     Boris.
-> >>
-> >> SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG N=
-=C3=BCrnberg
-
---=20
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG N=C3=BCr=
-nberg
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
