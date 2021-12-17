@@ -1,49 +1,45 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2082C9C
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 10:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC502C9C
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 12:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639737253; x=1671273253;
+  t=1639743314; x=1671279314;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NVNGMMi+GcP2D2tp7o/8LBJVGo1HVXYBvPe0/10EQVw=;
-  b=PXhr7E1ku2b7Z87olp2mGz94qbH52i6IKb11yKOcZOLysVMzlNUeHIRv
-   4mJ04bwtSdrC4PF8Ax9wpQnnvW5QJAmk6poShBq8D7JMxF5QYAbGiL88V
-   JrrtpAQvY9AdsFyT77WiKdlTF5I52lfXISiI+1v0baxeQHEahnF5ITHzQ
-   P0wFrk32D/ESeESydwo3OfYjBpHLfF3hRQmEJsNo15+k11r6y1mCH6fod
-   ezbPgUs3xYmHrN5wPRC0UP1G/Z7Okj2wO8iC4y+Xr8Vvc5V8yeX7QDgq1
-   BMtxod4eFknP4Zpllj78oCizwg/a5Ifmvv+vvSOmuVclCzUgCkM/T8aF+
+  bh=WaZLnIsliWvdIOqFBG7CzikYKTfNgwGDsX9roA6gPyA=;
+  b=gnoLcCV8QD/+FUN/YLQet0+5ZtLkuUll8i4BNYnx4IgXc6vwWeeV6VEY
+   ADxXf+x3Uc26P1XPbrBt318oLZvg45sblmjip5oYeYF4kuTKhx4uooXIC
+   ZRq7/o49gqz4ro1+TQux2xk+RbR1csYqldYAF17W8Y1EjaLAS3sc11o7v
+   +OjF6W778pZY+dir6TBdnfIpGH6qxICmjqNcpkxVadymTODsb91+fkM/h
+   YeBTInRd7tVvaXfoSAFAIbZQWRbBw8KTEnFj3tOiNvAHqXJpwzRKaguoA
+   pF0h+wrNcIfthYpzg1hmCwOJGkfO5xB6sewAV46cFwWvTlCMmSj9P03BJ
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="238471850"
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="227029442"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="238471850"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 02:34:12 -0800
+   d="scan'208";a="227029442"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 04:15:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="605861172"
+   d="scan'208";a="506744738"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Dec 2021 02:34:09 -0800
+  by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 04:15:12 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1myAYz-0004bD-3w; Fri, 17 Dec 2021 10:34:09 +0000
-Date: Fri, 17 Dec 2021 18:33:43 +0800
+	id 1myC8l-0004iQ-G2; Fri, 17 Dec 2021 12:15:11 +0000
+Date: Fri, 17 Dec 2021 20:14:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neilb@suse.de>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna.schumaker@netapp.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mel Gorman <mgorman@suse.de>, Christoph Hellwig <hch@infradead.org>,
-	David Howells <dhowells@redhat.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/18] Structural cleanup for filesystem-based swap
-Message-ID: <202112171822.DW1WPE1G-lkp@intel.com>
-References: <163969850251.20885.10819272484905153807.stgit@noble.brown>
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	matthew.auld@intel.com
+Subject: Re: [Intel-gfx] [PATCH v2 6/7] drm/i915: Use vma resources for async
+ unbinding
+Message-ID: <202112172015.HCePn2cg-lkp@intel.com>
+References: <20211217091929.105781-7-thomas.hellstrom@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,86 +48,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <163969850251.20885.10819272484905153807.stgit@noble.brown>
+In-Reply-To: <20211217091929.105781-7-thomas.hellstrom@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi NeilBrown,
+Hi "Thomas,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on cifs/for-next]
-[also build test ERROR on axboe-block/for-next mszeredi-vfs/overlayfs-next rostedt-trace/for-next linus/master v5.16-rc5 next-20211216]
-[cannot apply to trondmy-nfs/linux-next hnaz-mm/master]
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on next-20211216]
+[cannot apply to drm-exynos/exynos-drm-next drm/drm-next drm-intel/for-linux-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.16-rc5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: arm-randconfig-r005-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171822.DW1WPE1G-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211217-172108
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-r021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112172015.HCePn2cg-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/6443c9d01129c1a1c19f3df4a594b01e3772e6bd
+        # https://github.com/0day-ci/linux/commit/45f1249183a30dea38defee195b33c7f6753d9f9
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-        git checkout 6443c9d01129c1a1c19f3df4a594b01e3772e6bd
+        git fetch --no-tags linux-review Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211217-172108
+        git checkout 45f1249183a30dea38defee195b33c7f6753d9f9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/nfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/nfs/file.c:512:8: error: implicit declaration of function 'add_swap_extent' [-Werror,-Wimplicit-function-declaration]
-           ret = add_swap_extent(sis, 0, sis->max, 0);
-                 ^
-   1 error generated.
+>> drivers/gpu/drm/i915/i915_vma_resource.c:379:39: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+           pr_err("vma resource size is %lu\n", sizeof(struct i915_vma_resource));
+                                        ~~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                        %u
+   include/linux/printk.h:493:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/add_swap_extent +512 fs/nfs/file.c
+vim +379 drivers/gpu/drm/i915/i915_vma_resource.c
 
-   486	
-   487	static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
-   488							sector_t *span)
-   489	{
-   490		unsigned long blocks;
-   491		long long isize;
-   492		int ret;
-   493		struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
-   494		struct inode *inode = file->f_mapping->host;
-   495	
-   496		if (!file->f_mapping->a_ops->swap_rw)
-   497			/* Cannot support swap */
-   498			return -EINVAL;
-   499	
-   500		spin_lock(&inode->i_lock);
-   501		blocks = inode->i_blocks;
-   502		isize = inode->i_size;
-   503		spin_unlock(&inode->i_lock);
-   504		if (blocks*512 < isize) {
-   505			pr_warn("swap activate: swapfile has holes\n");
-   506			return -EINVAL;
-   507		}
-   508	
-   509		ret = rpc_clnt_swap_activate(clnt);
-   510		if (ret)
-   511			return ret;
- > 512		ret = add_swap_extent(sis, 0, sis->max, 0);
-   513		if (ret < 0) {
-   514			rpc_clnt_swap_deactivate(clnt);
-   515			return ret;
-   516		}
-   517		*span = sis->pages;
-   518		sis->flags |= SWP_FS_OPS;
-   519		return ret;
-   520	}
-   521	
+   376	
+   377	int __init i915_vma_resource_module_init(void)
+   378	{
+ > 379		pr_err("vma resource size is %lu\n", sizeof(struct i915_vma_resource));
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
