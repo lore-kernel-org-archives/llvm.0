@@ -1,45 +1,45 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC502C9C
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 12:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639743314; x=1671279314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WaZLnIsliWvdIOqFBG7CzikYKTfNgwGDsX9roA6gPyA=;
-  b=gnoLcCV8QD/+FUN/YLQet0+5ZtLkuUll8i4BNYnx4IgXc6vwWeeV6VEY
-   ADxXf+x3Uc26P1XPbrBt318oLZvg45sblmjip5oYeYF4kuTKhx4uooXIC
-   ZRq7/o49gqz4ro1+TQux2xk+RbR1csYqldYAF17W8Y1EjaLAS3sc11o7v
-   +OjF6W778pZY+dir6TBdnfIpGH6qxICmjqNcpkxVadymTODsb91+fkM/h
-   YeBTInRd7tVvaXfoSAFAIbZQWRbBw8KTEnFj3tOiNvAHqXJpwzRKaguoA
-   pF0h+wrNcIfthYpzg1hmCwOJGkfO5xB6sewAV46cFwWvTlCMmSj9P03BJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="227029442"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="227029442"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 04:15:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="506744738"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 04:15:12 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1myC8l-0004iQ-G2; Fri, 17 Dec 2021 12:15:11 +0000
-Date: Fri, 17 Dec 2021 20:14:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	matthew.auld@intel.com
-Subject: Re: [Intel-gfx] [PATCH v2 6/7] drm/i915: Use vma resources for async
- unbinding
-Message-ID: <202112172015.HCePn2cg-lkp@intel.com>
-References: <20211217091929.105781-7-thomas.hellstrom@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E08829CA
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 12:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=phfSQOq+yHoa1/Is//J703S9KmGy3k5Z+ZGw0hERoCw=; b=nqhpDQDdE4h3YoMocmuJgMOmWR
+	U9+JtecNnWJDXaXsYT4Q4SaMyfV8T0rbbFBXLx2zRmcUofUm3WVSBZ+YlroZwx2BXs1juzKuUnRNz
+	sBPovTeDZuncDOL5A0A1pROpidRxOMHDKNItT7POmhMUHeCW5DS7An/RIBLaP4ZGetRfiSo2BBUre
+	OvblY9ZV7SrCIJnIZiR/Pwj0UeTkDQP7goSGyJCZSBcgqpII2AEUFuNQk7T09VsR8/IkelBMOxCY/
+	Wd1bzGe8JrWFhHVd75XJh6D1vpk3MUZtpZJ3WCiKGr0w4a+CE3jlY6l4NQLHxiFbdCgANsxLTqMm8
+	QQMGWAAg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1myCf6-00Gh52-Aa; Fri, 17 Dec 2021 12:48:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A0463000E6;
+	Fri, 17 Dec 2021 13:48:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id AB0F426713FE3; Fri, 17 Dec 2021 13:48:35 +0100 (CET)
+Date: Fri, 17 Dec 2021 13:48:35 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Juergen Gross <jgross@suse.com>, Andy Lutomirski <luto@kernel.org>,
+	llvm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86: use builtins to read eflags
+Message-ID: <YbyHIxIvsisEtfr8@hirez.programming.kicks-ass.net>
+References: <20211215211847.206208-1-morbo@google.com>
+ <87mtl1l63m.ffs@tglx>
+ <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,63 +48,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217091929.105781-7-thomas.hellstrom@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
 
-Hi "Thomas,
+On Thu, Dec 16, 2021 at 11:55:12AM -0800, Bill Wendling wrote:
+> On Wed, Dec 15, 2021 at 4:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > Bill,
+> >
+> > On Wed, Dec 15 2021 at 13:18, Bill Wendling wrote:
+> >
+> > please always CC the relevant mailing lists, i.e. this lacks a cc:
+> > linux-kernel@vger.kernel.org
+> >
+> I thought that was automatically added. But as Peter pointed out in
+> another email thread, no one has time to read the LKML, so it seems a
+> bit pointless? Nonetheless it's added now.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on next-20211216]
-[cannot apply to drm-exynos/exynos-drm-next drm/drm-next drm-intel/for-linux-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211217-172108
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-r021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112172015.HCePn2cg-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/45f1249183a30dea38defee195b33c7f6753d9f9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Thomas-Hellstr-m/drm-i915-Asynchronous-vma-unbinding/20211217-172108
-        git checkout 45f1249183a30dea38defee195b33c7f6753d9f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/i915_vma_resource.c:379:39: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-           pr_err("vma resource size is %lu\n", sizeof(struct i915_vma_resource));
-                                        ~~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                        %u
-   include/linux/printk.h:493:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +379 drivers/gpu/drm/i915/i915_vma_resource.c
-
-   376	
-   377	int __init i915_vma_resource_module_init(void)
-   378	{
- > 379		pr_err("vma resource size is %lu\n", sizeof(struct i915_vma_resource));
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It is archived and really handy for future references. If/when needed etc..
