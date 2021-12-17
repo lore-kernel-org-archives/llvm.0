@@ -1,387 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFBE173
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 18:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EF9C36AE7;
-	Fri, 17 Dec 2021 18:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639764258;
-	bh=meiH4fi/rAZ5h6AeJg5lVBUqNEluw6i/57WEgQwlhp4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cuLsIyqNER24jwfHRLV0G9wW3Tru3f9QWcN1vLc6ChoZ/+PPZYVNnMn1pcgKTrPOZ
-	 3jsjrSN6Pq2L4oCuDprWGPHeNvQWJlJiCCf9HFgd3PWhtSCxgI09r2l6Yh8gZHqt/1
-	 6qeaaMD9IMsDCym0z9a7bbeuNtx/QpP/DJI9wmCWmNxy5h1HAKeR0qgfQJm8MZmWLW
-	 Qpjo6s7tEDMJG9rDjAOA5dTVp51b4UCUFoesAdevruju3awTWvjqW4In4++Y6qbcd5
-	 noXTpCoF24S9IZm4He4k+KY/D6asaQyFaFDlnWPw51l2l8CaW/mPiMSdxFQNtZB0yf
-	 RZjk8or30xLvg==
-Date: Fri, 17 Dec 2021 11:04:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@suse.de>
-Cc: Yin Fengwei <fengwei.yin@intel.com>, Carel Si <beibei.si@intel.com>,
-	Joerg Roedel <jroedel@suse.de>, LKML <linux-kernel@vger.kernel.org>,
-	x86@kernel.org, lkp@lists.01.org, lkp@intel.com,
-	bfields@fieldses.org, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
- BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
-Message-ID: <YbzRHXEMnZjyXzWa@archlinux-ax161>
-References: <20211209144141.GC25654@xsang-OptiPlex-9020>
- <YbjIoewxGaodXHKF@zn.tnic>
- <20211215070012.GA26582@linux.intel.com>
- <Ybm96seTxl+pWjTX@zn.tnic>
- <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
- <YbsPwyLnejLQMbTb@zn.tnic>
- <20211216115838.GA23522@linux.intel.com>
- <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
- <YbyIJYzqtHPKRMFt@zn.tnic>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2936E2CAA
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 19:39:56 +0000 (UTC)
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1639769987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lMoouhykfVfJDl5sZJhCVdZA9ieCcvUqFvIwv5UecYE=;
+	b=H4pSoXGCJPahnKGGfJxGXMh7FLemTtcdUmr5xjEQI0TIsGmRBMFSb1MLokm4VU/tafg5TW
+	SfeKu5x9oY8boid/0HRP9oNCLFUptBbwmnnsz/PajMldiAjcgTWJC41Yu/H3JHqacmMvF2
+	zfFTXCUODen4Oq9Sf/jwJrnEC6Ghr3N+ylxb/aPcY/SMLbq9f32EwK/mP6fWRp7ODDzC1P
+	QL591eRfc59V8kltV4QgRhwWIs1DkAJ1hH22fRvxtqTv6CQVf8wdtwqYzoJDyEzZIkKwI+
+	yv5f/OwwxpfkjVyWRRJck3ku1IOisrk4lO7dxXE9Jn2BqOC6y+NMQ7393Q0TIg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1639769987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lMoouhykfVfJDl5sZJhCVdZA9ieCcvUqFvIwv5UecYE=;
+	b=OQmraGIkv5P/wktQ+QliiKi7xL+YiExNLBYDPaGYpX+0W5MYiKLHpN2vf4u3S3lNmPeLPQ
+	pKYUo/avDW2+JNCQ==
+To: Bill Wendling <morbo@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H . Peter Anvin"
+ <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, Peter Zijlstra
+ <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
+ llvm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86: use builtins to read eflags
+In-Reply-To: <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
+References: <20211215211847.206208-1-morbo@google.com> <87mtl1l63m.ffs@tglx>
+ <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
+Date: Fri, 17 Dec 2021 20:39:46 +0100
+Message-ID: <87o85faum5.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YbyIJYzqtHPKRMFt@zn.tnic>
+Content-Type: text/plain
 
-Hi Boris,
+Bill,
 
-On Fri, Dec 17, 2021 at 01:52:53PM +0100, Borislav Petkov wrote:
-> Add Bruce and clang folks to the party.
->=20
-> On Thu, Dec 16, 2021 at 08:21:15PM +0800, Yin Fengwei wrote:
-> > Hi Boris,
-> >=20
-> > On 12/16/2021 7:58 PM, Carel Si wrote:
-> > > Hi Boris,
-> > >=20
-> > > On Thu, Dec 16, 2021 at 11:06:59AM +0100, Borislav Petkov wrote:
-> > >> On Thu, Dec 16, 2021 at 03:04:16PM +0800, Yin Fengwei wrote:
-> > >>> The testing was with Qemu.
-> > >>
-> > >> This is hardly what I asked for.
-> > >>
-> > >>> And we found that the hang is related with clang-14.
-> > >>
-> > >> I saw that already.
-> > >>
-> > >>> The original report showed the kernel is built with clang-14:
-> > >>>         # build kernel
-> > >>> 	cd linux
-> > >>> 	cp config-5.16.0-rc3-00003-gf154f290855b .config
-> > >>> 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 olddefconfig pr=
-epare modules_prepare bzImage modules
-> > >>> 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 INSTALL_MOD_PAT=
-H=3D<mod-install-dir> modules_install
-> > >>
-> > >> I saw that too.
-> > >>
-> > >>> Looks like KASAN related stub generated by clang-14 (KASAN_SHADOW_O=
-FFSET and asan_report).
-> > >>> This function is early function called before kasan_init.
-> > >>>
-> > >>> Looks like we need to disable KASAN_SANITIZE for arch/x86/kernel/cp=
-u/common.c. So clang-14 will
-> > >>> be happy with this kind of early TLB flush? Thanks.
-> > >>
-> > >> Ok, I don't understand: I asked for how exactly to reproduce and whe=
-ther
-> > >> you can send me your vmlinux you built with your clang-14. What I ge=
-t is
-> > >> some possible explanation about what might be happening.
-> > >>
-> > >> So what do you expect me to do? Say, "oh, sure, you're right, send m=
-e a
-> > >> patch" without even being able to see for myself what the root cause=
- is?
-> > >>
-> > >> What if it is not the kernel's fault but clang-14 is miscompiling cr=
-ap
-> > >> as in so many other cases?
-> > >>
-> > >> I built clang-14 and built with your .config and it works here fine.=
- So
-> > >> why does yours fail?
-> > >>
-> > >> Or what's the point of all this?
-> >=20
-> > I had concern that our report is an invalid report because you can't re=
-produce
-> > it in your side. If that's the case, it could waste more your time. Tha=
-t's why
-> > I did check and shared what I got. I am very sorry if I did it wrong.
->=20
-> Sure, you can always add your analysis but I'd like to reproduce myself
-> too. So, in the future, please answer the questions and then feel free
-> to add your analysis - I'll gladly have a look.
->=20
-> Which wasn't that far from the truth, btw.
->=20
-> But it isn't KASAN but GCOV profiling. Or is it KCOV profiling which
-> clang does.
+On Thu, Dec 16 2021 at 11:55, Bill Wendling wrote:
+> On Wed, Dec 15, 2021 at 4:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> Emphasis on *can*. Just claiming that this might improve things does not
+>> cut it. Where is the prove?
+>>
+> There are a few proofs. First, clang generates better code with the
+> builtin.
 
-This is GCOV, -fprofile-arcs.
+which is best demonstrated by showing the before and after.
 
-> That thing adds some counting glue to native_write_cr4():
->=20
-> (my comments from the actual singlestepping in qemu start with '##' below)
->=20
-> 	movq	$__llvm_gcov_ctr.48+8, %rbx				##  mov    $0xffffffff8837d3c0,%rbx
-> .LBB8_1:                                # %set_register
->                                         # =3D>This Inner Loop Header: Dep=
-th=3D1
->=20
-> 	jmp	.Ltmp42
-> 	...
->=20
-> .Ltmp42:                                # Block address taken
-> .LBB8_7:                                # %if.end79
->         movq    %rbx, %rax						## 0xffffffff8837d3c0
->         shrq    $3, %rax						## 0x1ffffffff106fa78
->         movabsq $-2305847407260205056, %rcx     # imm =3D 0xDFFFFC0000000=
-000	## 0xdffffc0000000000
->         cmpb    $0, (%rax,%rcx)
->         je      .LBB8_9
->=20
-> so the memory address CMP accesses is something as nonsensical as
->=20
->   0xfffffbfff106fa78
->=20
-> so I'm guessing we need to setup something for that __llvm_gcov_ctr to
-> deref properly but I haven't dug deeper.
+> Yes, that's because clang doesn't handle the "=rm" constraint
+> in the same way that GCC does, but that's not really relevant (sure,
+> clang should correct this, but that shouldn't prevent this patch from
+> going, because builtins are generally better than inline assembly).
+> Builtins exist for a reason. The compiler's able to understand what's
+> going on and generate the appropriate code for it. It also gives the
+> compiler more freedom for optimizations.
+>
+> Secondly, this one small function has had multiple changes since its
+> creation, basically pinging back and forth trying to determine the
+> best constraints to use:
+>
+>   6abcd98f x86: irqflags consolidation
+>   f1f029c7 x86: fix assembly constraints in native_save_fl()
+>   ab94fcf5 x86: allow "=rm" in native_save_fl()
+>
+> The information on which form to use already exists in the compiler.
+> Using the builtin will save future churning and thus developers' time.
 
-I am not reallys ure how exactly GCOV works under the hood so I cannot
-really comment on it (Nick might); it seems like llvm_gcov_init needs to
-get called for __llvm_gcov_ctr to get set up properly and maybe that
-hasn't happened at the point.
+Why is the above and this
 
-> The important thing is that this triggers with clang-13 and -14. gcc is
-> fine with the same config but that probably is because gcc does other
-> profiling - gcov - I guess. Looking at the resulting asm, it has a bunch
-> of those counter increments:
->=20
->         incq    __gcov0.native_write_cr4+88(%rip)       # __gcov0.native_=
-write_cr4[11]
->=20
-> but no weird memory references.
->=20
-> So, clang folks, what's up?
->=20
-> The fix is simple but I'd like to understand first why does this fail
-> only with clang, 13 and newer.
->=20
-> (I mean, melver pointed me to
->=20
->   380d53c45ff2 ("compiler_attributes.h: define __no_profile, add to noins=
-tr")
->=20
-> which explains why 13 and newer).
+> The minimal version of GCC is now 5.1, which supports these builtins.
+> That wasn't the case before.
 
-This is a bit of a brain dump, apologies for not offering much upfront
-analysis, I am not as familiar with LLVM internals as Nick but this
-might help others look into the problem.
+not part of the change log to avoid maintainers having to ask exactly
+these questions?
 
-I ended up seeing this thread yesterday through a lore filter that I
-have and I bisected LLVM based on the fact that it happened with
-clang-13 but not clang-12; that bisect pointed out Nick's commit in LLVM
-that added the no profile attribute, which means that GCOV and KASAN
-need to be enabled to see this bug. I was not able to reproduce it with
-just one of them enabled at a time.
+Thanks,
 
-With that, I removed the no profile attribute dependency on GCOV_KERNEL
-and bisected again, landing on the commit in LLVM 13 that enables the
-new pass manager, which fundamentally changes how LLVM transforms its
-IR. Whenever that has happened in the past, it usually points to a
-pre-existing issue; if I go back to clang-11 (the current minimum of
--next) and enable the NPM there with -fexperimental-new-pass-manager, I
-see this hang so it seems like there might be some issue how GCOV and
-KASAN are manipulated together in the context of the NPM that was not
-present with the legacy pass manager. I do see tests in LLVM that test
-to make sure __llvm_gcov_ctr does not get instrumented with KASAN, maybe
-there is another interaction that should not be happening between those
-two?
+        tglx
 
-> Btw, joro, that second hunk is I think needed too because a couple of
-> lines earlier we set up the cr4 shadow so I think you should use it
-> instead of touching the hw CR4.
->=20
-> ---
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 0083464de5e3..79b3d67addcc 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
->  }
->  EXPORT_SYMBOL(native_write_cr0);
-> =20
-> -void native_write_cr4(unsigned long val)
-> +void __no_profile native_write_cr4(unsigned long val)
->  {
->  	unsigned long bits_changed =3D 0;
-> =20
-> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-> index 75acb6027a87..68d2b7f9a913 100644
-> --- a/arch/x86/kernel/head64.c
-> +++ b/arch/x86/kernel/head64.c
-> @@ -483,7 +483,7 @@ asmlinkage __visible void __init x86_64_start_kernel(=
-char * real_mode_data)
->  	/* Kill off the identity-map trampoline */
->  	reset_early_page_tables();
-> =20
-> -	__native_tlb_flush_global(native_read_cr4());
-> +	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
-> =20
->  	clear_bss();
-> =20
->=20
->=20
-> Leaving in the rest for the newly added folks.
->=20
-> > If you don't want to use lkp tool to reproduce the issue, following com=
-mand
-> > could be used as well:
-> >=20
-> > Use Qemu command so only kernel image need be downloaded:
-> > qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G -s -S -ke=
-rnel vmlinuz-5.16.0-rc3-00003-gf154f290855b -nographic -append "console=3Dt=
-tyS0 earlyprintk=3DttyS0,115200"
-> > to reproduce it.
-> >=20
-> >=20
-> >=20
-> > Regards
-> > Yin, Fengwei
-> >=20
-> >=20
-> >=20
-> > >>
-> > >> I mean, if you cannot send me what I ask for, you can say so. Then I=
- can
-> > >> ignore this whole report altogether and waste my time somewhere else.
-> > >=20
-> > > We have uploaded vmlinuz, modules.cgz, config as well as other relate=
-d file to:
-> > > https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randconfig-=
-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/
-> > >=20
-> > > Machine types can refer to:
-> > > https://zerobin.net/?e107cf7b56495d80#MQLh14wUT9Osv1tWCwiQx/okkAN48Nq=
-+drVPE0PiNPw=3D
-> > >=20
-> > > If there's any other msg needed, pls feel free to propose, thanks.
-> > >=20
-> > > Below are our full steps to reproduce the issue:
-> > >=20
-> > > # download lkp-tests
-> > > $ git clone https://github.com/intel/lkp-tests.git
-> > >=20
-> > > $ cd lkp-tests/
-> > >=20
-> > > # download vmlinuz
-> > > $ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-rand=
-config-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/vmli=
-nuz-5.16.0-rc3-00003-gf154f290855b
-> > >=20
-> > > # dowmload modules.cgz
-> > > $ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-rand=
-config-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/modu=
-les.cgz
-> > >=20
-> > > # download job-script which is attached
-> > >=20
-> > > # run lkp qemu
-> > > lkp-tests$ sudo bin/lkp qemu -k vmlinuz-5.16.0-rc3-00003-gf154f290855=
-b -m modules.cgz job-script
-> > >=20
-> > > ~/lkp-tests/pkg/lkp-src ~/lkp-tests
-> > > x86_64
-> > > =3D=3D> Making package: lkp-src 0-1 (Thu 16 Dec 2021 07:26:22 PM CST)
-> > > =3D=3D> Checking runtime dependencies...
-> > > =3D=3D> Checking buildtime dependencies...
-> > > =3D=3D> WARNING: Using existing $srcdir/ tree
-> > > =3D=3D> Removing existing $pkgdir/ directory...
-> > > =3D=3D> Starting build()...
-> > > make: Entering directory '/home/carel/lkp-tests/bin/event'
-> > > klcc  -D_FORTIFY_SOURCE=3D2  -c -o wakeup.o wakeup.c
-> > > klcc  -Wl,-O1,--sort-common,--as-needed,-z,relro -static -o wakeup wa=
-keup.o
-> > > rm -f wakeup.o
-> > > strip wakeup
-> > > make: Leaving directory '/home/carel/lkp-tests/bin/event'
-> > > =3D=3D> Entering fakeroot environment...
-> > > x86_64
-> > > =3D=3D> Starting package()...
-> > > =3D=3D> Creating package "lkp-src"...
-> > > 103987 blocks
-> > > renamed '/home/carel/.lkp/cache/lkp-x86_64.cgz.tmp' -> '/home/carel/.=
-lkp/cache/lkp-x86_64.cgz'
-> > > =3D=3D> Leaving fakeroot environment.
-> > > =3D=3D> Finished making: lkp-src 0-1 (Thu 16 Dec 2021 07:26:24 PM CST)
-> > > ~/lkp-tests
-> > > 12 blocks
-> > > result_root: /home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_6=
-4-20200603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94=
-dd44ad253c0ef8a9337bb/0
-> > > downloading initrds ...
-> > > use local modules: /home/carel/.lkp/cache/modules.cgz
-> > > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-=
-8 http://0day.sh.intel.com:80/~lkp/osimage/debian/debian-10.4-x86_64-202006=
-03.cgz -N -P /home/carel/.lkp/cache/osimage/debian
-> > > 440459 blocks
-> > > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-=
-8 http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603=
-=2Ecgz/run-ipconfig_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/=
-debian-10.4-x86_64-20200603.cgz
-> > > 1773 blocks
-> > > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-=
-8 http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603=
-=2Ecgz/lkp_20210707.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debian-10=
-=2E4-x86_64-20200603.cgz
-> > > 2321 blocks
-> > > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-=
-8 http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603=
-=2Ecgz/rsync-rootfs_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/=
-debian-10.4-x86_64-20200603.cgz
-> > > 6856 blocks
-> > > exec command: qemu-system-x86_64 -enable-kvm -fsdev local,id=3Dtest_d=
-ev,path=3D/home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-2020060=
-3.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253=
-c0ef8a9337bb/0,security_model=3Dnone -device virtio-9p-pci,fsdev=3Dtest_dev=
-,mount_tag=3D9p/virtfs_mount -kernel vmlinuz-5.16.0-rc3-00003-gf154f290855b=
- -append root=3D/dev/ram0 user=3Dlkp job=3D/lkp/jobs/scheduled/vm-snb-192/b=
-oot-1-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a933=
-7bb-20211208-23538-lnvkeg-5.yaml ARCH=3Dx86_64 kconfig=3Dx86_64-randconfig-=
-a013-20211207 branch=3Dtip/x86/mm commit=3Df154f290855b070cc94dd44ad253c0ef=
-8a9337bb BOOT_IMAGE=3D/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f=
-154f290855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.16.0-rc3-00003-gf154f2908=
-55b vmalloc=3D128M initramfs_async=3D0 page_owner=3Don max_uptime=3D600 RES=
-ULT_ROOT=3D/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-ran=
-dconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/3 L=
-KP_LOCAL_RUN=3D1 selinux=3D0 debug apic=3Ddebug sysrq_always_enabled rcupda=
-te.rcu_cpu_stall_timeout=3D100 net.ifnames=3D0 printk.devkmsg=3Don panic=3D=
--1 softlockup_panic=3D1 nmi_watchdog=3Dpanic oops=3Dpanic load_ramdisk=3D2 =
-prompt_ramdisk=3D0 drbd.minor_count=3D8 systemd.log_level=3Derr ignore_logl=
-evel console=3Dtty0 earlyprintk=3DttyS0,115200 console=3DttyS0,115200 vga=
-=3Dnormal rw  ip=3Ddhcp result_service=3D9p/virtfs_mount -initrd /home/care=
-l/.lkp/cache/final_initrd -smp 2 -m 3144M -no-reboot -watchdog i6300esb -rt=
-c base=3Dlocaltime -device e1000,netdev=3Dnet0 -netdev user,id=3Dnet0 -disp=
-lay none -monitor null -serial stdio
-> > > early console in setup code
-> > > early console in extract_kernel
-> > > input_data: 0x0000000006ffc2e0
-> > > input_len: 0x000000000260cb2b
-> > > output: 0x0000000001000000
-> > > output_len: 0x00000000079e7da4
-> > > kernel_total_size: 0x0000000008a2c000
-> > > needed_size: 0x0000000008c00000
-> > > trampoline_32bit: 0x000000000009d000
-> > > Physical KASLR using RDTSC...
-> > > Virtual KASLR using RDTSC...
-> > >=20
-> > > Decompressing Linux... Parsing ELF... Performing relocations... done.
-> > > Booting the kernel.
 
-Cheers,
-Nathan
+
+
