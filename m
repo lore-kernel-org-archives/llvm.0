@@ -1,44 +1,41 @@
 Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB4D2CA0
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 02:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48448168
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 02:31:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639707096; x=1671243096;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yAjiwUaIEdzf9SApDqxL8mfZBxrBi9Lf0q22oUAsn3o=;
-  b=McEoWApoDBlMJKB26LaHLQ05+ttbO4c0pOBd05qas3cYSDTnq6tlI1dm
-   3bG5uyYI0g+nEFl8VsfRlbE/lIKDaFoMXxx3M/2925n3X9tPSXEAeB7pf
-   X60aVsofH9ue9INnkQBhMp/Ui1m8R97/Mko6qG5mvDwPaVzr3rayZQ29C
-   yiohlu9PuBkuzetg/mLT2R5HenB14axa8vWojc1piJ0XeaYvnRhk8Pbwv
-   U20O08KGckHj/Vk0qHLq5WC0IioLWVOgmgJZR1nYpwVlK8OjBF0iSVMkC
-   oOD2dFAszvpR/PPYmg2BvmW0D/p6AwkhVoCtvSCQeeKUEEmxGpIC+tYVg
+  t=1639708296; x=1671244296;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eFF78Je0CtfG03hk3mp/iE7iGFSVUhT+xxQARKuzI6g=;
+  b=ZEfWSiuKcMxykDZvVMOz5g3gZgTI/nPIe4Pw47CC8ji1Hw944v5z38p7
+   9PCsdOqJJzmnyqpgpnGJxD+FDdPQYmsvU6b22QErvU+5HC32aNAceAcZO
+   nGU30b86QFZI1krsdL5UkWrgT+TOTyceHfdhXW3CfZdmz4LfKsxrcv4s0
+   3+5BkAb7M8wN9cD2fi1J29+60GtP9JeovnCAgSjAvCNzThAM/PCxjPfWk
+   sy1mmXXpXOEIIbQwdy2U5KhAAjn8/6Qi5stBgN250SdpyE+nAeY+wgbu1
+   g70zcTF/tpUTYi+u5VcBVL0gWHbjmChAcNmPuLnT8c4BXaEJQXA3hYyh2
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300434312"
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300437112"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="300434312"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:11:36 -0800
+   d="scan'208";a="300437112"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:31:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="756326021"
+   d="scan'208";a="506589963"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2021 18:11:33 -0800
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 18:31:34 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1my2ib-00045e-4r; Fri, 17 Dec 2021 02:11:33 +0000
-Date: Fri, 17 Dec 2021 10:11:03 +0800
+	id 1my31x-000472-Nc; Fri, 17 Dec 2021 02:31:33 +0000
+Date: Fri, 17 Dec 2021 10:31:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: cgel.zte@gmail.com, tytso@mit.edu
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Changcheng Deng <deng.changcheng@zte.com.cn>,
-	Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] ext4: use min() to make code cleaner
-Message-ID: <202112171003.SXtQAHHE-lkp@intel.com>
-References: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 107/152] arch/x86/kvm/vmx/tdx_stubs.c:13:12:
+ warning: no previous prototype for function 'tdx_vcpu_run'
+Message-ID: <202112171042.JZamNPE0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,123 +44,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on v5.16-rc5 next-20211215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-config: hexagon-randconfig-r026-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171003.SXtQAHHE-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: 4dce28ae6facd2c06b513bc1e6fa48e397438a3a [107/152] KVM: TDX: Implement TDX vcpu enter/exit path
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171042.JZamNPE0-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
-        git checkout ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
+        # https://github.com/intel/tdx/commit/4dce28ae6facd2c06b513bc1e6fa48e397438a3a
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout 4dce28ae6facd2c06b513bc1e6fa48e397438a3a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/ext4/super.c:6926:12: warning: comparison of distinct pointer types ('typeof (sb->s_blocksize - offset) *' (aka 'unsigned long *') and 'typeof (toread) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   tocopy = min(sb->s_blocksize - offset, toread);
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags' [-Wunused-function]
-   EXT4_SET_CTX(flags);
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+               ^
+   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
    ^
-   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
-                      ^
-   <scratch space>:148:1: note: expanded from here
-   ctx_test_flags
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
    ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags' [-Wunused-function]
-   EXT4_SET_CTX(mount_flags);
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
+   void tdx_hardware_enable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_enable(void) {}
    ^
-   fs/ext4/super.c:2163:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context *ctx, int flag)\
-                      ^
-   <scratch space>:169:1: note: expanded from here
-   ctx_clear_mount_flags
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
+   void tdx_hardware_disable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_disable(void) {}
    ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags' [-Wunused-function]
-   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
-                      ^
-   <scratch space>:172:1: note: expanded from here
-   ctx_test_mount_flags
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for function 'tdx_vcpu_create' [-Wmissing-prototypes]
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
    ^
-   4 warnings generated.
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for function 'tdx_vcpu_free' [-Wmissing-prototypes]
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for function 'tdx_vcpu_reset' [-Wmissing-prototypes]
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:13:12: warning: no previous prototype for function 'tdx_vcpu_run' [-Wmissing-prototypes]
+   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:14:6: warning: no previous prototype for function 'tdx_vcpu_load' [-Wmissing-prototypes]
+   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:15:6: warning: no previous prototype for function 'tdx_vcpu_put' [-Wmissing-prototypes]
+   void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:16:6: warning: no previous prototype for function 'tdx_prepare_switch_to_guest' [-Wmissing-prototypes]
+   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:18:5: warning: no previous prototype for function 'tdx_dev_ioctl' [-Wmissing-prototypes]
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:19:5: warning: no previous prototype for function 'tdx_vm_ioctl' [-Wmissing-prototypes]
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:20:72: error: use of undeclared identifier 'ENOPNOTSUPP'
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+                                                                          ^
+   arch/x86/kvm/vmx/tdx_stubs.c:20:5: warning: no previous prototype for function 'tdx_vcpu_ioctl' [-Wmissing-prototypes]
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:22:6: warning: no previous prototype for function 'tdx_flush_tlb' [-Wmissing-prototypes]
+   void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:23:6: warning: no previous prototype for function 'tdx_load_mmu_pgd' [-Wmissing-prototypes]
+   void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+   ^
+   static 
+   16 warnings and 1 error generated.
 
 
-vim +6926 fs/ext4/super.c
+vim +/tdx_vcpu_run +13 arch/x86/kvm/vmx/tdx_stubs.c
 
-  6904	
-  6905	/* Read data from quotafile - avoid pagecache and such because we cannot afford
-  6906	 * acquiring the locks... As quota files are never truncated and quota code
-  6907	 * itself serializes the operations (and no one else should touch the files)
-  6908	 * we don't have to be afraid of races */
-  6909	static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
-  6910				       size_t len, loff_t off)
-  6911	{
-  6912		struct inode *inode = sb_dqopt(sb)->files[type];
-  6913		ext4_lblk_t blk = off >> EXT4_BLOCK_SIZE_BITS(sb);
-  6914		int offset = off & (sb->s_blocksize - 1);
-  6915		int tocopy;
-  6916		size_t toread;
-  6917		struct buffer_head *bh;
-  6918		loff_t i_size = i_size_read(inode);
-  6919	
-  6920		if (off > i_size)
-  6921			return 0;
-  6922		if (off+len > i_size)
-  6923			len = i_size-off;
-  6924		toread = len;
-  6925		while (toread > 0) {
-> 6926			tocopy = min(sb->s_blocksize - offset, toread);
-  6927			bh = ext4_bread(NULL, inode, blk, 0);
-  6928			if (IS_ERR(bh))
-  6929				return PTR_ERR(bh);
-  6930			if (!bh)	/* A hole? */
-  6931				memset(data, 0, tocopy);
-  6932			else
-  6933				memcpy(data, bh->b_data+offset, tocopy);
-  6934			brelse(bh);
-  6935			offset = 0;
-  6936			toread -= tocopy;
-  6937			data += tocopy;
-  6938			blk++;
-  6939		}
-  6940		return len;
-  6941	}
-  6942	
+     9	
+    10	int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+    11	void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+    12	void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+  > 13	fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+  > 14	void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+  > 15	void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+  > 16	void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+    17	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
