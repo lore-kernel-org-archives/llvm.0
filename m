@@ -1,50 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D21C2C9D
-	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 08:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C402C9D
+	for <llvm@lists.linux.dev>; Fri, 17 Dec 2021 09:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639731126; x=1671267126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x+I5rE7VNY12BhYU+2TspOP4sX4P36nu1hjhpz7qMZc=;
-  b=N4Fib0Fp/QFD63oCsHkl/GRD4eIWXqtlf4shQOqoQus2eEs8MHnVATYt
-   wRyR72rjpBOeP2QFIPTLN+jJOXu/ooVTM0FOEzKOfSzUm69xIMeWhbTdN
-   fEKXaXrUxGzDb+ERetQQ2dti+tbk2IVUf6kKZzHtyQO+MG8Ny+/H/vQhY
-   ZLZgu1h8MvYsCjQLkow94rjP2f5/GeCa44tERyMYI46w/0nGPXNbh1GgQ
-   /8YnuGrisg5sB/OmA5SDpGMGu1k54GeB18QRNR2nJ00iR4T6lC+15RxYM
-   2I07RxZf9F1e4+kAyA9zIkVXJeEqnOZy56nmfXH/NWvsZO3FlWBYXA/gW
+  t=1639731727; x=1671267727;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4PCaldpWtbovduGDfm1gPlrd41u++3W3PVljxhmYNzc=;
+  b=NyDT0TDhi8gUzxTPhfQntrvG4IB9vJntsIUQBvPXUWQMWLakkSC8Oi89
+   4zGWkj5BrEEgDCwJ17u43KKBDrjFKrI9GXYIrpSG+JR0GekY+w3w9jkJd
+   kukFsPaQTuz7cR33sKMaKSEymUKAHdZOorFK4QIcGda7upeBZInJc3TAt
+   e1f51dIHqyOrgYTj9pEEpdN7N+UmpWNc2pi8GHfBBvw20v5tTUBvbmsvF
+   gxYm+bXt97s5qdS/oWCwl/PytX68j7VDh7mMr3hTTrJoRigtu1DYCNaUc
+   w43ZE8FLBgl8W5EmwoEuQdCoMul7VfLQf8uMMlYdriZLEuo+Z9vXUByuq
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226573074"
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237255244"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="226573074"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 00:52:05 -0800
+   d="scan'208";a="237255244"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 01:02:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="662788992"
+   d="scan'208";a="466436386"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Dec 2021 00:52:00 -0800
+  by orsmga006.jf.intel.com with ESMTP; 17 Dec 2021 01:02:02 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1my8y8-0004VB-1I; Fri, 17 Dec 2021 08:52:00 +0000
-Date: Fri, 17 Dec 2021 16:51:33 +0800
+	id 1my97q-0004WB-AA; Fri, 17 Dec 2021 09:02:02 +0000
+Date: Fri, 17 Dec 2021 17:01:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neilb@suse.de>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna.schumaker@netapp.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mel Gorman <mgorman@suse.de>, Christoph Hellwig <hch@infradead.org>,
-	David Howells <dhowells@redhat.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/18] MM: reclaim mustn't enter FS for SWP_FS_OPS
- swap-space
-Message-ID: <202112171635.JUIRMzHQ-lkp@intel.com>
-References: <163969850295.20885.4255989535187500085.stgit@noble.brown>
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 126/152] arch/x86/kvm/vmx/tdx_stubs.c:13:6:
+ warning: no previous prototype for function 'tdx_inject_nmi'
+Message-ID: <202112171611.EkYfPiKg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,103 +44,199 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <163969850295.20885.4255989535187500085.stgit@noble.brown>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi NeilBrown,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on cifs/for-next]
-[also build test ERROR on axboe-block/for-next rostedt-trace/for-next linus/master v5.16-rc5]
-[cannot apply to trondmy-nfs/linux-next hnaz-mm/master mszeredi-vfs/overlayfs-next next-20211216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: arm-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171635.JUIRMzHQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: e5add375b2478be4f63bfc75497bfaae0d514fa0 [126/152] KVM: TDX: Implement methods to inject NMI
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171611.EkYfPiKg-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/a8e1b1ffec6ade1545df519d254eae0400b7ec37
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-        git checkout a8e1b1ffec6ade1545df519d254eae0400b7ec37
+        # https://github.com/intel/tdx/commit/e5add375b2478be4f63bfc75497bfaae0d514fa0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout e5add375b2478be4f63bfc75497bfaae0d514fa0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ^
-   mm/vmscan.c:1480:20: note: did you mean 'swp_swap_info'?
-   include/linux/swap.h:487:40: note: 'swp_swap_info' declared here
-   static inline struct swap_info_struct *swp_swap_info(swp_entry_t entry)
-                                          ^
->> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/compiler.h:216:28: note: expanded from macro 'data_race'
-           __unqual_scalar_typeof(({ expr; })) __v = ({                    \
-                                     ^~~~
-   include/linux/compiler_types.h:291:13: note: expanded from macro '__unqual_scalar_typeof'
-                   _Generic((x),                                           \
-                             ^
->> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ^
->> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/compiler.h:216:28: note: expanded from macro 'data_race'
-           __unqual_scalar_typeof(({ expr; })) __v = ({                    \
-                                     ^~~~
-   include/linux/compiler_types.h:298:15: note: expanded from macro '__unqual_scalar_typeof'
-                            default: (x)))
-                                      ^
->> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ^
->> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/compiler.h:218:3: note: expanded from macro 'data_race'
-                   expr;                                                   \
-                   ^~~~
->> mm/vmscan.c:1480:9: error: invalid argument type 'void' to unary expression
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   7 errors generated.
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+               ^
+   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
+   void tdx_hardware_enable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_enable(void) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
+   void tdx_hardware_disable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_disable(void) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for function 'tdx_vcpu_create' [-Wmissing-prototypes]
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for function 'tdx_vcpu_free' [-Wmissing-prototypes]
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for function 'tdx_vcpu_reset' [-Wmissing-prototypes]
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:13:6: warning: no previous prototype for function 'tdx_inject_nmi' [-Wmissing-prototypes]
+   void tdx_inject_nmi(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_inject_nmi(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:14:12: warning: no previous prototype for function 'tdx_vcpu_run' [-Wmissing-prototypes]
+   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:15:6: warning: no previous prototype for function 'tdx_vcpu_load' [-Wmissing-prototypes]
+   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:16:6: warning: no previous prototype for function 'tdx_vcpu_put' [-Wmissing-prototypes]
+   void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:17:6: warning: no previous prototype for function 'tdx_prepare_switch_to_guest' [-Wmissing-prototypes]
+   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:18:6: warning: no previous prototype for function 'tdx_handle_exit_irqoff' [-Wmissing-prototypes]
+   void tdx_handle_exit_irqoff(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_handle_exit_irqoff(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:19:5: warning: no previous prototype for function 'tdx_handle_exit' [-Wmissing-prototypes]
+   int tdx_handle_exit(struct kvm_vcpu *vcpu,
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_handle_exit(struct kvm_vcpu *vcpu,
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:21:6: warning: no previous prototype for function 'tdx_is_emulated_msr' [-Wmissing-prototypes]
+   bool tdx_is_emulated_msr(u32 index, bool write) { return false; }
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:21:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool tdx_is_emulated_msr(u32 index, bool write) { return false; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:22:5: warning: no previous prototype for function 'tdx_get_msr' [-Wmissing-prototypes]
+   int tdx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:23:5: warning: no previous prototype for function 'tdx_set_msr' [-Wmissing-prototypes]
+   int tdx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:25:6: warning: no previous prototype for function 'tdx_apicv_post_state_restore' [-Wmissing-prototypes]
+   void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:25:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:26:5: warning: no previous prototype for function 'tdx_deliver_posted_interrupt' [-Wmissing-prototypes]
+   int tdx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector) { return 0; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector) { return 0; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:27:6: warning: no previous prototype for function 'tdx_get_exit_info' [-Wmissing-prototypes]
+   void tdx_get_exit_info(struct kvm_vcpu *vcpu, u32 *reason,
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_get_exit_info(struct kvm_vcpu *vcpu, u32 *reason,
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:30:5: warning: no previous prototype for function 'tdx_dev_ioctl' [-Wmissing-prototypes]
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:31:5: warning: no previous prototype for function 'tdx_vm_ioctl' [-Wmissing-prototypes]
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+       ^
 
 
-vim +/page_swap_info +1480 mm/vmscan.c
+vim +/tdx_inject_nmi +13 arch/x86/kvm/vmx/tdx_stubs.c
 
-  1467	
-  1468	static bool test_may_enter_fs(struct page *page, gfp_t gfp_mask)
-  1469	{
-  1470		if (gfp_mask & __GFP_FS)
-  1471			return true;
-  1472		if (!PageSwapCache(page) || !(gfp_mask & __GFP_IO))
-  1473			return false;
-  1474		/* We can "enter_fs" for swap-cache with only __GFP_IO
-  1475		 * providing this isn't SWP_FS_OPS.
-  1476		 * ->flags can be updated non-atomicially (scan_swap_map_slots),
-  1477		 * but that will never affect SWP_FS_OPS, so the data_race
-  1478		 * is safe.
-  1479		 */
-> 1480		return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-  1481	}
-  1482	
+     9	
+    10	int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+    11	void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+    12	void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+  > 13	void tdx_inject_nmi(struct kvm_vcpu *vcpu) {}
+    14	fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+    15	void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+    16	void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+    17	void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+    18	void tdx_handle_exit_irqoff(struct kvm_vcpu *vcpu) {}
+    19	int tdx_handle_exit(struct kvm_vcpu *vcpu,
+    20			enum exit_fastpath_completion fastpath) { return 0; }
+    21	bool tdx_is_emulated_msr(u32 index, bool write) { return false; }
+    22	int tdx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+    23	int tdx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+    24	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
