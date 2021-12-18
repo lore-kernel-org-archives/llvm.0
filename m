@@ -1,103 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37AD168
-	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 15:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1639841238;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=86SiuzQkzNAn+schu4EkUzziC+m9VbK+PfQYtTZrNxs=;
-	b=HHMSTEQkMwVbEoHKpzcKhgqqjCkXuNF0/Tb3ijuKYRAXjT+dHa+sk85Y7RndEPBKWewXeN
-	V2Z6use9ls65mFzVZ/qwKrMS/h0y29M2+E84+rA96Pz1Psw+b46uUJ3MZ4/1toF9bs+7h7
-	gaAqVsW7sowLcP7o9feANEphqqXxJ8M=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-jaF0ICHrOgaSiTksPNIuLA-1; Sat, 18 Dec 2021 10:27:17 -0500
-X-MC-Unique: jaF0ICHrOgaSiTksPNIuLA-1
-Received: by mail-oi1-f198.google.com with SMTP id k124-20020acaba82000000b002a7401b177cso3282490oif.8
-        for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 07:27:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=86SiuzQkzNAn+schu4EkUzziC+m9VbK+PfQYtTZrNxs=;
-        b=VcuEHnmzxAac3BJ/KGP+J4ogspph1aJ/JvwQj2nMvz4oPmV3r+9+oaWp/40QyJTrb5
-         NBr+6bDLxEIY8s+dTCgtHBTOr8Vf0o6Ine2K8LeG04KNVw1/Bwg8Fc8pBFt296VJmGWl
-         mxqPepO9bTVMdspL77jQ79xkEZ6Qk25Vw3ae0cde8VVRvdBonPGB658QWDx8RO4UDCJZ
-         FAHLmY99MRwrGnQ9rQo30CydMMv+FWwtVNJbLdc8HkZB8huLdozbTlN2FoUJbAhtGXqD
-         mmt+KN0X8+63DM5/Z646oJNBnCYK6cQfn+BArmFH2vjcPTxQfbFIq2DqTj8NjiaxUBXw
-         /lMA==
-X-Gm-Message-State: AOAM5334g6KsnIi3MD5dMTUn9r9ksdSYWO66EA/AW46tQ9GcUbCdDbEZ
-	l1x2fR+VWZsbTfLGeNDFhGgeffioN0g3Q5wl6s2tTG0wr3rZmySCBv4khTvaWlG1OrKh/E22RtY
-	RmdDFC+MItfRlWQ==
-X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr5798786otp.226.1639841236962;
-        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQXs8/YlLAB/Dah8N/DouTHOvgWlTfYorr/QdF2xSDDW13RsfjVj/NVWwFUZ/bdOydpAXgVQ==
-X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr5798767otp.226.1639841236770;
-        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id z12sm2161206oor.45.2021.12.18.07.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
-From: trix@redhat.com
-To: linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-gpio@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6215F29CA
+	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 17:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639850276; x=1671386276;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eL6atpWvTyM+P3t0NlBStkzHNd9WYBegko0U6zf6mLg=;
+  b=jibXzWU9G0oL6wzR6KSof+9aVvboXtxXTuxYOBLQ3Qc4VIvPcLtuR3H2
+   YdlWec1lDwQoTdkNACV6P/o0FJWvn02m2sRjkagQkm3a1oxIDxG7b+wIO
+   HWKO8G/hTCWduOJ8ZXm4aguBJgVKOspiIksdTXHtcEwAiNADu76xMHq9f
+   oPdvHpn0UD2T437R2zUWVqRjy6cTzj3LkhGBAkwgM8xJ7qY8+vx04CQtI
+   53fSomSHeAPTJkf/o6UHc6FMoUJN7dJcpfZGd/B9NPigHn8rIjR5F1z+w
+   h7XHWXhNE1RoYDmTsyJNxKsZ/O5VfuSBKQfxMxd8IzgaodgwjZvNK2muQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="240162892"
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="240162892"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 09:57:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="465474389"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 18 Dec 2021 09:57:53 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mydxw-0006GI-Nt; Sat, 18 Dec 2021 17:57:52 +0000
+Date: Sun, 19 Dec 2021 01:57:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] gpio: sim: fix uninitialized ret variable
-Date: Sat, 18 Dec 2021 07:27:12 -0800
-Message-Id: <20211218152712.2832502-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	"Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+	Heiko Carstens <hca@linux.ibm.com>
+Subject: samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no
+ previous prototype for function 'my_direct_func1'
+Message-ID: <202112190117.RKPcHQjE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9eaa88c7036eda3f6c215f87ca693594cf90559b
+commit: e1067a07cfbc5a36abad3752fafe4c79e06db1bb ftrace/samples: Add module to test multi direct modify interface
+date:   9 days ago
+config: x86_64-randconfig-a001-20211219 (https://download.01.org/0day-ci/archive/20211219/202112190117.RKPcHQjE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1067a07cfbc5a36abad3752fafe4c79e06db1bb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e1067a07cfbc5a36abad3752fafe4c79e06db1bb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash samples/ftrace/
 
-Building with clang returns this error:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-gpio-sim.c:889:7: error: variable 'ret' is uninitialized
-  when used here
+All warnings (new ones prefixed by >>):
 
-ret should be the status of the call to
-gpio_sim_make_bank_swnode stored in bank->swnode.
+>> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous prototype for function 'my_direct_func1' [-Wmissing-prototypes]
+   void my_direct_func1(unsigned long ip)
+        ^
+   samples/ftrace/ftrace-direct-multi-modify.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void my_direct_func1(unsigned long ip)
+   ^
+   static 
+>> samples/ftrace/ftrace-direct-multi-modify.c:12:6: warning: no previous prototype for function 'my_direct_func2' [-Wmissing-prototypes]
+   void my_direct_func2(unsigned long ip)
+        ^
+   samples/ftrace/ftrace-direct-multi-modify.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void my_direct_func2(unsigned long ip)
+   ^
+   static 
+   2 warnings generated.
 
-Fixes: 83960fcf4818 ("gpio: sim: new testing module")
-Signed-off-by: Tom Rix <trix@redhat.com>
+
+vim +/my_direct_func1 +7 samples/ftrace/ftrace-direct-multi-modify.c
+
+     6	
+   > 7	void my_direct_func1(unsigned long ip)
+     8	{
+     9		trace_printk("my direct func1 ip %lx\n", ip);
+    10	}
+    11	
+  > 12	void my_direct_func2(unsigned long ip)
+    13	{
+    14		trace_printk("my direct func2 ip %lx\n", ip);
+    15	}
+    16	
+
 ---
- drivers/gpio/gpio-sim.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-index ef6145f51c8ae..bef00dcc4dc8f 100644
---- a/drivers/gpio/gpio-sim.c
-+++ b/drivers/gpio/gpio-sim.c
-@@ -886,7 +886,8 @@ static int gpio_sim_device_activate_unlocked(struct gpio_sim_device *dev)
- 
- 	list_for_each_entry(bank, &dev->bank_list, siblings) {
- 		bank->swnode = gpio_sim_make_bank_swnode(bank, swnode);
--		if (ret) {
-+		if (IS_ERR(bank->swnode)) {
-+			ret = PTR_ERR(bank->swnode);
- 			gpio_sim_remove_swnode_recursive(swnode);
- 			return ret;
- 		}
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
