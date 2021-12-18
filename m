@@ -1,42 +1,41 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC6E173
-	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 05:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4242CA8
+	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 08:39:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639806457; x=1671342457;
+  t=1639816782; x=1671352782;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pV4If9Dp3fmfJH3DO68XXwXakleAL4XBU5TecZ8OLOw=;
-  b=LcThwoOE9fN+vP9+NnzdCoTrlA9Jrnmqee5VS/MkmAJB7X4vWbvuB2Cp
-   7HcimLZf+DcJTLqxFBwTz6/F/2MehzIkI6Fyc0mcQrPmyNJL7XqrLXvIz
-   tJJjVUxuNzMJXtJD/X/HInF3iqR281dUsKuKbnMv1GCXuWQnX1WA4cgHA
-   /jBrDpZ2jgaRmMAvJaoqVIznGmErO1utOZ6z1uxj+v3Bd+R1dxzfp+Puv
-   gAgrKrWzHf+2Aln9IkYkscPi7HovLU+TH6iEdjZVc62YHeJmw8MeupkR4
-   AW8ELF8h3ROyzqwif6kfV+IgINCn1oY3hJLWZ0/L9Q1v+CZjtlp8WM40n
+  bh=ce9r5xRfIpg0H8wAymbdPyFTcv3jbC/zXUDnc7LeVjM=;
+  b=n1mSwpUdD2a9NPOFAbkuKUYFwmCkDigELgXLHDKvd9apvtaGFarK3Avz
+   UwrAJWTvqx5RfIf67srZmjfeDdwaEFR6aFnsNFNfuIHOoTBvZ0KSj7Z5t
+   7SS/Bn+jjpKMjOdgwPjMCafvFyeQ639JxKFRhPzRMC+Fevhn1nt7dit2+
+   gZNLGkaURyMoJfTTd0F7Kdyi3idJ0FzzmVuV18z5FOLJSNXNsbmFDIxWh
+   bwuam/uA9o1EpRXhsjZ1XasQ2X6dcBnzCmnJFc47hMwFO+WFwTpK9wdEk
+   4j46iEIx6G3lRx32bWRXbsTt5GoluOgPiAW8KCy5qrcM987pq6Dhb7eXz
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="240113840"
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="240113840"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 21:47:36 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="239714020"
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="239714020"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 00:39:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="546629419"
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="683663433"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Dec 2021 21:47:34 -0800
+  by orsmga005.jf.intel.com with ESMTP; 18 Dec 2021 00:39:39 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mySZC-0005fL-6S; Sat, 18 Dec 2021 05:47:34 +0000
-Date: Sat, 18 Dec 2021 13:46:36 +0800
+	id 1myVFj-0005nk-29; Sat, 18 Dec 2021 08:39:39 +0000
+Date: Sat, 18 Dec 2021 16:38:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <sean.j.christopherson@intel.com>
+To: Gary Guo <gary@garyguo.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream 81/152] arch/x86/kvm/vmx/tdx_stubs.c:16:72:
- error: use of undeclared identifier 'ENOPNOTSUPP'
-Message-ID: <202112181310.4ECj0YDS-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [nbdd0121:riscv 1/4] arch/riscv/kernel/head.S:232:6: error: unknown
+ operand
+Message-ID: <202112181654.Fct7RFbP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,109 +46,90 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
-commit: 2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7 [81/152] KVM: TDX: Do TDX specific vcpu initialization
-config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181310.4ECj0YDS-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+tree:   https://github.com/nbdd0121/linux riscv
+head:   696be59be32488c7c2417cd633008c2162f89fa8
+commit: 4481ee1b02354fde9960268a3fd8d638124aba1a [1/4] riscv: enable TIME CSR in U mode
+config: riscv-randconfig-r011-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181654.Fct7RFbP-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout 2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/nbdd0121/linux/commit/4481ee1b02354fde9960268a3fd8d638124aba1a
+        git remote add nbdd0121 https://github.com/nbdd0121/linux
+        git fetch --no-tags nbdd0121 riscv
+        git checkout 4481ee1b02354fde9960268a3fd8d638124aba1a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
-   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-               ^
-   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
-   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-              ^
-   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
-   void tdx_hardware_enable(void) {}
+>> arch/riscv/kernel/head.S:232:6: error: unknown operand
+    csrw, CSR_MCOUNTEREN, 2
         ^
-   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_hardware_enable(void) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
-   void tdx_hardware_disable(void) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_hardware_disable(void) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for function 'tdx_vcpu_create' [-Wmissing-prototypes]
-   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for function 'tdx_vcpu_free' [-Wmissing-prototypes]
-   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for function 'tdx_vcpu_reset' [-Wmissing-prototypes]
-   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:14:5: warning: no previous prototype for function 'tdx_dev_ioctl' [-Wmissing-prototypes]
-   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:15:5: warning: no previous prototype for function 'tdx_vm_ioctl' [-Wmissing-prototypes]
-   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-   ^
-   static 
->> arch/x86/kvm/vmx/tdx_stubs.c:16:72: error: use of undeclared identifier 'ENOPNOTSUPP'
-   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-                                                                          ^
-   arch/x86/kvm/vmx/tdx_stubs.c:16:5: warning: no previous prototype for function 'tdx_vcpu_ioctl' [-Wmissing-prototypes]
-   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-   ^
-   static 
-   10 warnings and 1 error generated.
 
 
-vim +/ENOPNOTSUPP +16 arch/x86/kvm/vmx/tdx_stubs.c
+vim +232 arch/riscv/kernel/head.S
 
-    13	
-    14	int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-    15	int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-  > 16	int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+   203	
+   204	ENTRY(_start_kernel)
+   205		/* Mask all interrupts */
+   206		csrw CSR_IE, zero
+   207		csrw CSR_IP, zero
+   208	
+   209	#ifdef CONFIG_RISCV_M_MODE
+   210		/* flush the instruction cache */
+   211		fence.i
+   212	
+   213		/* Reset all registers except ra, a0, a1 */
+   214		call reset_regs
+   215	
+   216		/*
+   217		 * Setup a PMP to permit access to all of memory.  Some machines may
+   218		 * not implement PMPs, so we set up a quick trap handler to just skip
+   219		 * touching the PMPs on any trap.
+   220		 */
+   221		la a0, pmp_done
+   222		csrw CSR_TVEC, a0
+   223	
+   224		li a0, -1
+   225		csrw CSR_PMPADDR0, a0
+   226		li a0, (PMP_A_NAPOT | PMP_R | PMP_W | PMP_X)
+   227		csrw CSR_PMPCFG0, a0
+   228	.align 2
+   229	pmp_done:
+   230	
+   231		/* Allow user-mode to access time CSR */
+ > 232		csrw, CSR_MCOUNTEREN, 2
+   233	
+   234		/*
+   235		 * The hartid in a0 is expected later on, and we have no firmware
+   236		 * to hand it to us.
+   237		 */
+   238		csrr a0, CSR_MHARTID
+   239	#endif /* CONFIG_RISCV_M_MODE */
+   240	
+   241		/* Allow user-mode to access time CSR */
+   242		csrw CSR_SCOUNTEREN, 2
+   243	
+   244		/* Load the global pointer */
+   245	.option push
+   246	.option norelax
+   247		la gp, __global_pointer$
+   248	.option pop
+   249	
+   250		/*
+   251		 * Disable FPU to detect illegal usage of
+   252		 * floating point in kernel space
+   253		 */
+   254		li t0, SR_FS
+   255		csrc CSR_STATUS, t0
+   256	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
