@@ -1,73 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8A02C9C
-	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 21:59:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07558C36AE2;
-	Sat, 18 Dec 2021 21:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639864792;
-	bh=wam9loU8V856n8e0hFf1diTiVcbDuIvMneEPX8rUNV4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=REadAfyLv1DPdHMcI3znvivxHTwBT+obVubXSCL2jk37x8zJZ6X17ndi+m11UKL5F
-	 pmqxCOO1O6Lat6Eo8Eb8K/03XKBaqty8OBqigHWKSrveq+L30YRB0SPL2GLiHjgZ3K
-	 S47e4JEHf0PX3BHlYQ4uMFIeMyxqs5y8a/OELfaA/8sAtvSbbMUhoh6DIFtdCurwHW
-	 7L0tGvG4hDH/RGncFZrtqwfYEjIwpePL2EZJLlEyhLd0DGBLzvYqIME0nZQPUGukuF
-	 ny/KIh/BWGDIHpPqMfaJouiRMXiEO0EyJXBtOAt94sCi1vqgixdyH2Rps4oqsm6tjX
-	 iy/tlh9EkH1/Q==
-Date: Sat, 18 Dec 2021 14:59:48 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: trix@redhat.com
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, ndesaulniers@google.com,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] gpio: sim: fix uninitialized ret variable
-Message-ID: <Yb5Z1A1tX6xdrDce@archlinux-ax161>
-References: <20211218152712.2832502-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5DB2C82
+	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 22:59:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1639868342;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
+	b=Im1kGUsm3A+qzwBgSZEIPgnUg9YNhdyNuZMVb2PkZJsiZsBr/dVm/9b5VFsyly+t5Sx478
+	ZM/aGn64Tg49s1EsDsFfnRSjhPJxDCkgxvP8O5JAcLICA2mLRu06hp4bs6KhDGH1hADKbL
+	iEIoGW+56HaVlsyLBU5U19tOtUHVk6Q=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-Kah0FigNO-SwlveIsjZ09g-1; Sat, 18 Dec 2021 17:59:00 -0500
+X-MC-Unique: Kah0FigNO-SwlveIsjZ09g-1
+Received: by mail-wr1-f71.google.com with SMTP id h12-20020adfa4cc000000b001a22dceda69so1811520wrb.16
+        for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 14:58:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
+        b=6fjHI3nKvn+WRLzyZOjEknfKai4iICrtAu/LWsQ88UDotySUU2GEaRHbGZcZKDZIrn
+         1UjAmnIr6IY2DBX2+94D+AVnXFz4WooldqlWFwzUjhxlYDOeF7YfJprLZ080MQJwBJKT
+         8ha49oVwSOcHvR3Iv2m3bcGt/HEvIugbro3v+9EofgIFtAAWjzNhBLg/E/jUS92bqGO7
+         TvQgEUW0ILw3j07eVSOJFh/S6mzpht8+x2n4PXjBp5yh/Q4LRat99UQMAiw3BAVZroAU
+         7ma+it4nEDD8P8UkKJaLwsjARrZxB0WgygW0jVrxkHPhpTB0OpfUhXiRWb9dRT+0iUMr
+         +KXA==
+X-Gm-Message-State: AOAM533QJyqjmxZmNKEtVcRPpcRA7nxsd5wgkUfN8geq2hqF0F2D7F9W
+	IEsglQO+Snzwd7oTa9QzRW86avOGSonBHD+XpV88LNP9+fLYqY3pp6iClITMIPuIaXKt0Dtu+4C
+	qXecWyi0fycFGdQ==
+X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024794wmc.70.1639868338953;
+        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy6XNPwqC4x+1n7wbfAYLEDuEUUa0YRDFZDM3AZOesJw01Di5J81acMjEVtY8JI8qBixVlHEA==
+X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024788wmc.70.1639868338808;
+        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
+Received: from krava ([83.240.60.218])
+        by smtp.gmail.com with ESMTPSA id u12sm11474338wrf.60.2021.12.18.14.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
+Date: Sat, 18 Dec 2021 23:58:56 +0100
+From: Jiri Olsa <jolsa@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	"Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+	Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no
+ previous prototype for function 'my_direct_func1'
+Message-ID: <Yb5nsJdwCl+8d8Fv@krava>
+References: <202112190117.RKPcHQjE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <202112190117.RKPcHQjE-lkp@intel.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211218152712.2832502-1-trix@redhat.com>
 
-On Sat, Dec 18, 2021 at 07:27:12AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Sun, Dec 19, 2021 at 01:57:29AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   9eaa88c7036eda3f6c215f87ca693594cf90559b
+> commit: e1067a07cfbc5a36abad3752fafe4c79e06db1bb ftrace/samples: Add module to test multi direct modify interface
+> date:   9 days ago
+> config: x86_64-randconfig-a001-20211219 (https://download.01.org/0day-ci/archive/20211219/202112190117.RKPcHQjE-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1067a07cfbc5a36abad3752fafe4c79e06db1bb
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout e1067a07cfbc5a36abad3752fafe4c79e06db1bb
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash samples/ftrace/
 > 
-> Building with clang returns this error:
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> gpio-sim.c:889:7: error: variable 'ret' is uninitialized
->   when used here
+> All warnings (new ones prefixed by >>):
 > 
-> ret should be the status of the call to
-> gpio_sim_make_bank_swnode stored in bank->swnode.
-> 
-> Fixes: 83960fcf4818 ("gpio: sim: new testing module")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous prototype for function 'my_direct_func1' [-Wmissing-prototypes]
+>    void my_direct_func1(unsigned long ip)
+>         ^
+>    samples/ftrace/ftrace-direct-multi-modify.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void my_direct_func1(unsigned long ip)
+>    ^
+>    static 
+> >> samples/ftrace/ftrace-direct-multi-modify.c:12:6: warning: no previous prototype for function 'my_direct_func2' [-Wmissing-prototypes]
+>    void my_direct_func2(unsigned long ip)
+>         ^
+>    samples/ftrace/ftrace-direct-multi-modify.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void my_direct_func2(unsigned long ip)
+>    ^
+>    static 
+>    2 warnings generated.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+ugh, not again.. of course :-\ will send the fix
 
+thanks,
+jirka
+
+> 
+> 
+> vim +/my_direct_func1 +7 samples/ftrace/ftrace-direct-multi-modify.c
+> 
+>      6	
+>    > 7	void my_direct_func1(unsigned long ip)
+>      8	{
+>      9		trace_printk("my direct func1 ip %lx\n", ip);
+>     10	}
+>     11	
+>   > 12	void my_direct_func2(unsigned long ip)
+>     13	{
+>     14		trace_printk("my direct func2 ip %lx\n", ip);
+>     15	}
+>     16	
+> 
 > ---
->  drivers/gpio/gpio-sim.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 > 
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index ef6145f51c8ae..bef00dcc4dc8f 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -886,7 +886,8 @@ static int gpio_sim_device_activate_unlocked(struct gpio_sim_device *dev)
->  
->  	list_for_each_entry(bank, &dev->bank_list, siblings) {
->  		bank->swnode = gpio_sim_make_bank_swnode(bank, swnode);
-> -		if (ret) {
-> +		if (IS_ERR(bank->swnode)) {
-> +			ret = PTR_ERR(bank->swnode);
->  			gpio_sim_remove_swnode_recursive(swnode);
->  			return ret;
->  		}
-> -- 
-> 2.26.3
-> 
+
