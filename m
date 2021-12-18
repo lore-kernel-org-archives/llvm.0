@@ -1,42 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A47168
-	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 03:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC6E173
+	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 05:47:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639799016; x=1671335016;
+  t=1639806457; x=1671342457;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GXptn5xPUR40U4QhdwFu1hawOnMsfvW05PjXCMVS+a4=;
-  b=nztc9x8dY/lBXH9hvl1ZoY+IOhGxe1JCMhqGAfHVnQDZdBIJNm7uPVPa
-   W0H5X5cqPwWVqFVS1Br0YeQ5y56G1zeKqT5Wbcl7lyiFn1+ThmLk0upVF
-   WYmfvMnKwDZsdJB0DMsIk0MzLPna9TbXa7vfF77J2iZDCVrrdL0rVnyIF
-   68KRBEyfHKrdIHlDzO3iNgRHno80KbMOPWUzQDNRBAUk0+36IZH7pzIUa
-   KIzl8Mu1+wFILzoFEa/CtWr4H5lkqndBROZZMhT5OK60sXpVlPKmNAraG
-   /xuDusyUQDGTYMuCSFzEvqggGajdODFCPKCtm/rejW15N6jqXfRwHncGG
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="264059599"
+  bh=pV4If9Dp3fmfJH3DO68XXwXakleAL4XBU5TecZ8OLOw=;
+  b=LcThwoOE9fN+vP9+NnzdCoTrlA9Jrnmqee5VS/MkmAJB7X4vWbvuB2Cp
+   7HcimLZf+DcJTLqxFBwTz6/F/2MehzIkI6Fyc0mcQrPmyNJL7XqrLXvIz
+   tJJjVUxuNzMJXtJD/X/HInF3iqR281dUsKuKbnMv1GCXuWQnX1WA4cgHA
+   /jBrDpZ2jgaRmMAvJaoqVIznGmErO1utOZ6z1uxj+v3Bd+R1dxzfp+Puv
+   gAgrKrWzHf+2Aln9IkYkscPi7HovLU+TH6iEdjZVc62YHeJmw8MeupkR4
+   AW8ELF8h3ROyzqwif6kfV+IgINCn1oY3hJLWZ0/L9Q1v+CZjtlp8WM40n
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="240113840"
 X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="264059599"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 19:43:35 -0800
+   d="scan'208";a="240113840"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 21:47:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="507009626"
+   d="scan'208";a="546629419"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 19:43:31 -0800
+  by orsmga001.jf.intel.com with ESMTP; 17 Dec 2021 21:47:34 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1myQd9-0005Yw-9y; Sat, 18 Dec 2021 03:43:31 +0000
-Date: Sat, 18 Dec 2021 11:42:30 +0800
+	id 1mySZC-0005fL-6S; Sat, 18 Dec 2021 05:47:34 +0000
+Date: Sat, 18 Dec 2021 13:46:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <Tianyu.Lan@microsoft.com>
+To: Sean Christopherson <sean.j.christopherson@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
-	Michael Kelley <mikelley@microsoft.com>
-Subject: [hyperv:hyperv-next 1/5] kernel/dma/swiotlb.c:166:7: warning: no
- previous prototype for function 'swiotlb_mem_remap'
-Message-ID: <202112181133.7Ki4aggA-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream 81/152] arch/x86/kvm/vmx/tdx_stubs.c:16:72:
+ error: use of undeclared identifier 'ENOPNOTSUPP'
+Message-ID: <202112181310.4ECj0YDS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,61 +47,109 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
-head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
-commit: 32be866293fe5355adbf91da1cd612f439fc71e5 [1/5] swiotlb: Add swiotlb bounce buffer remap function for HV IVM
-config: x86_64-randconfig-r025-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181133.7Ki4aggA-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: 2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7 [81/152] KVM: TDX: Do TDX specific vcpu initialization
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181310.4ECj0YDS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=32be866293fe5355adbf91da1cd612f439fc71e5
-        git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
-        git fetch --no-tags hyperv hyperv-next
-        git checkout 32be866293fe5355adbf91da1cd612f439fc71e5
+        # https://github.com/intel/tdx/commit/2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout 2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/dma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/dma/swiotlb.c:166:7: warning: no previous prototype for function 'swiotlb_mem_remap' [-Wmissing-prototypes]
-   void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
-         ^
-   kernel/dma/swiotlb.c:166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+               ^
+   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
    ^
    static 
-   1 warning generated.
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
+   void tdx_hardware_enable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_enable(void) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
+   void tdx_hardware_disable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_disable(void) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for function 'tdx_vcpu_create' [-Wmissing-prototypes]
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for function 'tdx_vcpu_free' [-Wmissing-prototypes]
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for function 'tdx_vcpu_reset' [-Wmissing-prototypes]
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:14:5: warning: no previous prototype for function 'tdx_dev_ioctl' [-Wmissing-prototypes]
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:15:5: warning: no previous prototype for function 'tdx_vm_ioctl' [-Wmissing-prototypes]
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:16:72: error: use of undeclared identifier 'ENOPNOTSUPP'
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+                                                                          ^
+   arch/x86/kvm/vmx/tdx_stubs.c:16:5: warning: no previous prototype for function 'tdx_vcpu_ioctl' [-Wmissing-prototypes]
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+   ^
+   static 
+   10 warnings and 1 error generated.
 
 
-vim +/swiotlb_mem_remap +166 kernel/dma/swiotlb.c
+vim +/ENOPNOTSUPP +16 arch/x86/kvm/vmx/tdx_stubs.c
 
-   160	
-   161	/*
-   162	 * Remap swioltb memory in the unencrypted physical address space
-   163	 * when swiotlb_unencrypted_base is set. (e.g. for Hyper-V AMD SEV-SNP
-   164	 * Isolation VMs).
-   165	 */
- > 166	void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
-   167	{
-   168		void *vaddr = NULL;
-   169	
-   170		if (swiotlb_unencrypted_base) {
-   171			phys_addr_t paddr = mem->start + swiotlb_unencrypted_base;
-   172	
-   173			vaddr = memremap(paddr, bytes, MEMREMAP_WB);
-   174			if (!vaddr)
-   175				pr_err("Failed to map the unencrypted memory %llx size %lx.\n",
-   176				       paddr, bytes);
-   177		}
-   178	
-   179		return vaddr;
-   180	}
-   181	
+    13	
+    14	int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+    15	int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+  > 16	int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
