@@ -1,42 +1,39 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D03B168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861E429CA
 	for <llvm@lists.linux.dev>; Sun, 19 Dec 2021 04:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639887255; x=1671423255;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qg0l10N0oGqusyqqv4ijSEmstuJ+o1BVUZv/9rxrixE=;
-  b=GVRNPazlxOCFuPTJe86EgEoH9bTZ+nzwp7FeGV3IXWQtJmXuOHj0NXB2
-   Kw0rRuU9eGaaHw8cO/W8OsOJ99L+H7c3uObv7oU1i6A1eGWmvUx0kHRyw
-   wMUP27PN7evI/6uJr1psKEIRymzqPETQzHd3ipE84NyUEW2KFM5ElUicV
-   P5dmMlRzaimmHlmTtsIRT0v/NX04xpJQzuyCcBu3EukLG+HWy6a+cto6a
-   TTbpf1/izrl7Tvam7bkvprsh4iuxMsCtapbIta2+NnfvFT3oNl4LxZVes
-   +rvvuQnuwZsbtoKkkhzUdztupteT62nqzRg9sb1lBjuzu7UWlslKqMN6c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="264157690"
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=jQdm4y2s3dIApejZTYVtqGyy/yAJGRFU1wEpnHlNtwI=;
+  b=TbbuNE7ybeQmWhEiSKfypfklpxJgVvU8XsAWg5EwSfXcKjG2L32x45d5
+   wYYG3lFvDRE6tJx+3X+w7YJpbPmwwpUOkFrW6MNvjknjmjm+U6R3/nTJf
+   09HoCvLqVVtRFzvzkRxoWqHrlEfZR/iB/yeHnRxPlEryhlQEGCXQyC16j
+   LfXJHmN69me6X/JC2CWDod54CeTCqZKtbKKtlOyigojAbmIiiLiEARET3
+   ibrxt07ig3moGwHJHH9I48NFlVRahf12IB3uE+s9qfMiildthvSHbe8qP
+   /6Wf/KxRnONqZl5QpENSknI9i0T6HhIRqXaTe6XamxefrNTJiLkiNX9fj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="219988172"
 X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
-   d="scan'208";a="264157690"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 20:14:14 -0800
+   d="scan'208";a="219988172"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 20:14:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
-   d="scan'208";a="683848731"
+   d="scan'208";a="520308848"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Dec 2021 20:14:13 -0800
+  by orsmga008.jf.intel.com with ESMTP; 18 Dec 2021 20:14:13 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mynaO-0006h6-Ew; Sun, 19 Dec 2021 04:14:12 +0000
-Date: Sun, 19 Dec 2021 12:14:06 +0800
+	id 1mynaO-0006h2-EI; Sun, 19 Dec 2021 04:14:12 +0000
+Date: Sun, 19 Dec 2021 12:14:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2] drm: make drm_syncobj_array_wait() use the range
- hrtimer feature
-Message-ID: <202112191223.dorzSdCu-lkp@intel.com>
-References: <20211218141839.25078-1-ishitatsuyuki@gmail.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: vmx_update_host_rsp()+0x2d: call to
+ __kasan_check_read() leaves .noinstr.text section
+Message-ID: <202112191243.CFzzXRtq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,31 +42,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211218141839.25078-1-ishitatsuyuki@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Tatsuyuki,
+CC: linux-kernel@vger.kernel.org
+TO: Peter Zijlstra <peterz@infradead.org>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.16-rc5 next-20211217]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Tatsuyuki-Ishi/drm-make-drm_syncobj_array_wait-use-the-range-hrtimer-feature/20211218-222016
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: x86_64-randconfig-a016-20211218 (https://download.01.org/0day-ci/archive/20211219/202112191223.dorzSdCu-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3f667b5d4053ad54aee13dab5c94f04ff75ddfdf
+commit: db2b0c5d7b6f19b3c2cab08c531b65342eb5252b objtool: Support pv_opsindirect calls for noinstr
+date:   3 months ago
+config: x86_64-randconfig-a002-20211219 (https://download.01.org/0day-ci/archive/20211219/202112191243.CFzzXRtq-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d0e29bdb6f8cd1a9042e34c833035438900bf332
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tatsuyuki-Ishi/drm-make-drm_syncobj_array_wait-use-the-range-hrtimer-feature/20211218-222016
-        git checkout d0e29bdb6f8cd1a9042e34c833035438900bf332
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db2b0c5d7b6f19b3c2cab08c531b65342eb5252b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout db2b0c5d7b6f19b3c2cab08c531b65342eb5252b
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
@@ -77,9 +67,22 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "select_estimate_accuracy" [drivers/gpu/drm/drm.ko] undefined!
+   vmlinux.o: warning: objtool: do_syscall_64()+0x1a: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x28: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x2a: call to static_key_count() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: vmx_update_host_rsp()+0x2d: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit()+0x72: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: vmx_l1d_flush()+0xf: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: sync_regs()+0x24: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0x10: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0x14: call to cpu_entry_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi()+0x10b: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_setup()+0x13: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check()+0x3d: call to mce_gather_info() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_page_fault()+0x38: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_nmi_enter()+0x42: call to __kasan_check_read() leaves .noinstr.text section
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
