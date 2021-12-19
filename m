@@ -1,134 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5DB2C82
-	for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 22:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1639868342;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
-	b=Im1kGUsm3A+qzwBgSZEIPgnUg9YNhdyNuZMVb2PkZJsiZsBr/dVm/9b5VFsyly+t5Sx478
-	ZM/aGn64Tg49s1EsDsFfnRSjhPJxDCkgxvP8O5JAcLICA2mLRu06hp4bs6KhDGH1hADKbL
-	iEIoGW+56HaVlsyLBU5U19tOtUHVk6Q=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-Kah0FigNO-SwlveIsjZ09g-1; Sat, 18 Dec 2021 17:59:00 -0500
-X-MC-Unique: Kah0FigNO-SwlveIsjZ09g-1
-Received: by mail-wr1-f71.google.com with SMTP id h12-20020adfa4cc000000b001a22dceda69so1811520wrb.16
-        for <llvm@lists.linux.dev>; Sat, 18 Dec 2021 14:58:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
-        b=6fjHI3nKvn+WRLzyZOjEknfKai4iICrtAu/LWsQ88UDotySUU2GEaRHbGZcZKDZIrn
-         1UjAmnIr6IY2DBX2+94D+AVnXFz4WooldqlWFwzUjhxlYDOeF7YfJprLZ080MQJwBJKT
-         8ha49oVwSOcHvR3Iv2m3bcGt/HEvIugbro3v+9EofgIFtAAWjzNhBLg/E/jUS92bqGO7
-         TvQgEUW0ILw3j07eVSOJFh/S6mzpht8+x2n4PXjBp5yh/Q4LRat99UQMAiw3BAVZroAU
-         7ma+it4nEDD8P8UkKJaLwsjARrZxB0WgygW0jVrxkHPhpTB0OpfUhXiRWb9dRT+0iUMr
-         +KXA==
-X-Gm-Message-State: AOAM533QJyqjmxZmNKEtVcRPpcRA7nxsd5wgkUfN8geq2hqF0F2D7F9W
-	IEsglQO+Snzwd7oTa9QzRW86avOGSonBHD+XpV88LNP9+fLYqY3pp6iClITMIPuIaXKt0Dtu+4C
-	qXecWyi0fycFGdQ==
-X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024794wmc.70.1639868338953;
-        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6XNPwqC4x+1n7wbfAYLEDuEUUa0YRDFZDM3AZOesJw01Di5J81acMjEVtY8JI8qBixVlHEA==
-X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024788wmc.70.1639868338808;
-        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
-Received: from krava ([83.240.60.218])
-        by smtp.gmail.com with ESMTPSA id u12sm11474338wrf.60.2021.12.18.14.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
-Date: Sat, 18 Dec 2021 23:58:56 +0100
-From: Jiri Olsa <jolsa@redhat.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-	Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no
- previous prototype for function 'my_direct_func1'
-Message-ID: <Yb5nsJdwCl+8d8Fv@krava>
-References: <202112190117.RKPcHQjE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D03B168
+	for <llvm@lists.linux.dev>; Sun, 19 Dec 2021 04:14:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639887255; x=1671423255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qg0l10N0oGqusyqqv4ijSEmstuJ+o1BVUZv/9rxrixE=;
+  b=GVRNPazlxOCFuPTJe86EgEoH9bTZ+nzwp7FeGV3IXWQtJmXuOHj0NXB2
+   Kw0rRuU9eGaaHw8cO/W8OsOJ99L+H7c3uObv7oU1i6A1eGWmvUx0kHRyw
+   wMUP27PN7evI/6uJr1psKEIRymzqPETQzHd3ipE84NyUEW2KFM5ElUicV
+   P5dmMlRzaimmHlmTtsIRT0v/NX04xpJQzuyCcBu3EukLG+HWy6a+cto6a
+   TTbpf1/izrl7Tvam7bkvprsh4iuxMsCtapbIta2+NnfvFT3oNl4LxZVes
+   +rvvuQnuwZsbtoKkkhzUdztupteT62nqzRg9sb1lBjuzu7UWlslKqMN6c
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="264157690"
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="264157690"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 20:14:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="683848731"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 18 Dec 2021 20:14:13 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mynaO-0006h6-Ew; Sun, 19 Dec 2021 04:14:12 +0000
+Date: Sun, 19 Dec 2021 12:14:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v2] drm: make drm_syncobj_array_wait() use the range
+ hrtimer feature
+Message-ID: <202112191223.dorzSdCu-lkp@intel.com>
+References: <20211218141839.25078-1-ishitatsuyuki@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202112190117.RKPcHQjE-lkp@intel.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211218141839.25078-1-ishitatsuyuki@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Dec 19, 2021 at 01:57:29AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9eaa88c7036eda3f6c215f87ca693594cf90559b
-> commit: e1067a07cfbc5a36abad3752fafe4c79e06db1bb ftrace/samples: Add module to test multi direct modify interface
-> date:   9 days ago
-> config: x86_64-randconfig-a001-20211219 (https://download.01.org/0day-ci/archive/20211219/202112190117.RKPcHQjE-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1067a07cfbc5a36abad3752fafe4c79e06db1bb
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e1067a07cfbc5a36abad3752fafe4c79e06db1bb
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash samples/ftrace/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous prototype for function 'my_direct_func1' [-Wmissing-prototypes]
->    void my_direct_func1(unsigned long ip)
->         ^
->    samples/ftrace/ftrace-direct-multi-modify.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void my_direct_func1(unsigned long ip)
->    ^
->    static 
-> >> samples/ftrace/ftrace-direct-multi-modify.c:12:6: warning: no previous prototype for function 'my_direct_func2' [-Wmissing-prototypes]
->    void my_direct_func2(unsigned long ip)
->         ^
->    samples/ftrace/ftrace-direct-multi-modify.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void my_direct_func2(unsigned long ip)
->    ^
->    static 
->    2 warnings generated.
+Hi Tatsuyuki,
 
-ugh, not again.. of course :-\ will send the fix
+Thank you for the patch! Yet something to improve:
 
-thanks,
-jirka
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.16-rc5 next-20211217]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> 
-> 
-> vim +/my_direct_func1 +7 samples/ftrace/ftrace-direct-multi-modify.c
-> 
->      6	
->    > 7	void my_direct_func1(unsigned long ip)
->      8	{
->      9		trace_printk("my direct func1 ip %lx\n", ip);
->     10	}
->     11	
->   > 12	void my_direct_func2(unsigned long ip)
->     13	{
->     14		trace_printk("my direct func2 ip %lx\n", ip);
->     15	}
->     16	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+url:    https://github.com/0day-ci/linux/commits/Tatsuyuki-Ishi/drm-make-drm_syncobj_array_wait-use-the-range-hrtimer-feature/20211218-222016
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: x86_64-randconfig-a016-20211218 (https://download.01.org/0day-ci/archive/20211219/202112191223.dorzSdCu-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d0e29bdb6f8cd1a9042e34c833035438900bf332
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tatsuyuki-Ishi/drm-make-drm_syncobj_array_wait-use-the-range-hrtimer-feature/20211218-222016
+        git checkout d0e29bdb6f8cd1a9042e34c833035438900bf332
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "select_estimate_accuracy" [drivers/gpu/drm/drm.ko] undefined!
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
