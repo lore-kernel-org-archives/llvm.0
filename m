@@ -1,146 +1,131 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D142C82
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 14:19:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49F72CA0
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 14:50:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640009961; x=1671545961;
+  t=1640011812; x=1671547812;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SmmpPoWknX/04b0LTXOTnTFuxaObwEMDn3ClqW8vP7Y=;
-  b=EjfiRoUfUT6qsYNYmaPUiZhokJVbB7qcubCXnR6T/m0TT71mO/f0nkQL
-   AfaF4mFrHdeZ6OkYf7zOfJhTazPTmNcRMii7ZwlKZ4IX2umOt9FmjCvop
-   0zzw4Nl49GSiuDCe1QpWqzhwkEoKzAgki/UsiTvDXnr8ZM7vRn3sZIW89
-   BnAOGbAk/fXg/OGeFKzIIgb3cEFp37Mrlq+VNv/H0CbnHV5FW45YZrUJ9
-   uosDPcCkQnPeC6fSyacodD3zvqQcXTJFu+hPwwklxDxuW8fKI8SyP21A+
-   czpS216LGBSUNDaGYntzZVe1uOSXuBkynrVGcLBg3M5yAr2Z7XL5M7aMo
+   mime-version:in-reply-to;
+  bh=6aY8R+FrA8xXoG4kyznqdj/eYcyxadWwCoczLCY+IlM=;
+  b=adWVhrYKrvxG89Kot5UFB8YkXGJYqkJ2EOHrISLdFOwWOUOPC9BZw3A0
+   q0eUDvlZLgbtFX9RqDnRSaESzecIyIvQfXgDZPn6BTJ5M0uPM2gia/K5e
+   FOhS2CFxibmMHwHbTK7EaBKLXjme4RzK3eRnxn9BAWYhCqUqJ8EtEVEk4
+   0AaSYFhFqukEJDuakqHAEyNq63Tx1T+dNOBwseMf8+IQZHw3VVVbb0Chy
+   5VfMIKqXyGQJ0t5MIWWUrmo9QgGkHiGQ6hAtBkAaNGa9hPsmd12QUxySj
+   B712HZEyTfcgf+4C25bNrCk8N0u7Z+bf15GkDjXxq1SNJczCOUVS5zrMn
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237712992"
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="303552345"
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="237712992"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:19:16 -0800
+   d="scan'208";a="303552345"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:50:11 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="606727518"
+   d="scan'208";a="616419441"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2021 06:19:13 -0800
+  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 06:50:09 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzJVM-0007r2-6b; Mon, 20 Dec 2021 14:19:08 +0000
-Date: Mon, 20 Dec 2021 22:18:18 +0800
+	id 1mzJzN-0007t2-0e; Mon, 20 Dec 2021 14:50:09 +0000
+Date: Mon, 20 Dec 2021 22:49:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] sysfs: add sysfs_add_bin_file_to_group()
-Message-ID: <202112202254.l5IadaDs-lkp@intel.com>
-References: <20211220064730.28806-1-zajec5@gmail.com>
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH net-next v2 07/13] net: dsa: realtek: add new mdio
+ interface for drivers
+Message-ID: <202112202212.PeXrGA7n-lkp@intel.com>
+References: <20211218081425.18722-8-luizluca@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211220064730.28806-1-zajec5@gmail.com>
+In-Reply-To: <20211218081425.18722-8-luizluca@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "Rafał,
+Hi Luiz,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on char-misc/char-misc-testing linux/master linus/master v5.16-rc6 next-20211217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test WARNING on net-next/master]
 
-url:    https://github.com/0day-ci/linux/commits/Rafa-Mi-ecki/sysfs-add-sysfs_add_bin_file_to_group/20211220-144856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git aa483f3ce655ed9ee4f32d050d1822eec2d20ada
-config: x86_64-randconfig-r024-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202254.l5IadaDs-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
+url:    https://github.com/0day-ci/linux/commits/Luiz-Angelo-Daros-de-Luca/dt-bindings-net-dsa-realtek-smi-mark-unsupported-switches/20211218-171506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e1c5d7b6926f63d3750a273486a143e50d216ad
+config: arm-randconfig-c002-20211219 (https://download.01.org/0day-ci/archive/20211220/202112202212.PeXrGA7n-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/a9802080b6d35af5dfd7ae847a0978e47caafd59
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/4098c967b9f6635090798d9eb031f57ae26ed422
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Rafa-Mi-ecki/sysfs-add-sysfs_add_bin_file_to_group/20211220-144856
-        git checkout a9802080b6d35af5dfd7ae847a0978e47caafd59
+        git fetch --no-tags linux-review Luiz-Angelo-Daros-de-Luca/dt-bindings-net-dsa-realtek-smi-mark-unsupported-switches/20211218-171506
+        git checkout 4098c967b9f6635090798d9eb031f57ae26ed422
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/sysfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/dsa/realtek/ kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/sysfs/file.c:379:5: warning: no previous prototype for function '__sysfs_add_file_to_group' [-Wmissing-prototypes]
-   int __sysfs_add_file_to_group(struct kobject *kobj,
+>> drivers/net/dsa/realtek/realtek-mdio.c:53:5: warning: no previous prototype for function 'realtek_mdio_read_reg' [-Wmissing-prototypes]
+   int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
        ^
-   fs/sysfs/file.c:379:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __sysfs_add_file_to_group(struct kobject *kobj,
+   drivers/net/dsa/realtek/realtek-mdio.c:53:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
    ^
    static 
    1 warning generated.
 
 
-vim +/__sysfs_add_file_to_group +379 fs/sysfs/file.c
+vim +/realtek_mdio_read_reg +53 drivers/net/dsa/realtek/realtek-mdio.c
 
-   372	
-   373	/**
-   374	 * sysfs_add_file_to_group - add an attribute file to a pre-existing group.
-   375	 * @kobj: object we're acting for.
-   376	 * @attr: attribute descriptor.
-   377	 * @group: group name.
-   378	 */
- > 379	int __sysfs_add_file_to_group(struct kobject *kobj,
-   380				      const struct attribute *attr,
-   381				      const struct bin_attribute *battr,
-   382				      const char *group)
-   383	{
-   384		struct kernfs_node *parent;
-   385		kuid_t uid;
-   386		kgid_t gid;
-   387		int error;
-   388	
-   389		if (WARN_ON((attr && battr) || (!attr && !battr)))
-   390			return -EINVAL;
-   391	
-   392		if (group) {
-   393			parent = kernfs_find_and_get(kobj->sd, group);
-   394		} else {
-   395			parent = kobj->sd;
-   396			kernfs_get(parent);
-   397		}
-   398	
-   399		if (!parent)
-   400			return -ENOENT;
-   401	
-   402		kobject_get_ownership(kobj, &uid, &gid);
-   403		if (attr)
-   404			error = sysfs_add_file_mode_ns(parent, attr, attr->mode, uid,
-   405						       gid, NULL);
-   406		else
-   407			error = sysfs_add_bin_file_mode_ns(parent, battr, battr->attr.mode,
-   408							   uid, gid, NULL);
-   409		kernfs_put(parent);
-   410	
-   411		return error;
-   412	}
-   413	
+    52	
+  > 53	int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
+    54	{
+    55		u32 phy_id = priv->phy_id;
+    56		struct mii_bus *bus = priv->bus;
+    57	
+    58		BUG_ON(in_interrupt());
+    59	
+    60		mutex_lock(&bus->mdio_lock);
+    61		/* Write Start command to register 29 */
+    62		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
+    63	
+    64		/* Write address control code to register 31 */
+    65		bus->write(bus, phy_id, MDC_MDIO_CTRL0_REG, MDC_MDIO_ADDR_OP);
+    66	
+    67		/* Write Start command to register 29 */
+    68		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
+    69	
+    70		/* Write address to register 23 */
+    71		bus->write(bus, phy_id, MDC_MDIO_ADDRESS_REG, addr);
+    72	
+    73		/* Write Start command to register 29 */
+    74		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
+    75	
+    76		/* Write read control code to register 21 */
+    77		bus->write(bus, phy_id, MDC_MDIO_CTRL1_REG, MDC_MDIO_READ_OP);
+    78	
+    79		/* Write Start command to register 29 */
+    80		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
+    81	
+    82		/* Read data from register 25 */
+    83		*data = bus->read(bus, phy_id, MDC_MDIO_DATA_READ_REG);
+    84	
+    85		mutex_unlock(&bus->mdio_lock);
+    86	
+    87		return 0;
+    88	}
+    89	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
