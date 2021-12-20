@@ -1,42 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49F72CA0
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 14:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4522CA0
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 15:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640011812; x=1671547812;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6aY8R+FrA8xXoG4kyznqdj/eYcyxadWwCoczLCY+IlM=;
-  b=adWVhrYKrvxG89Kot5UFB8YkXGJYqkJ2EOHrISLdFOwWOUOPC9BZw3A0
-   q0eUDvlZLgbtFX9RqDnRSaESzecIyIvQfXgDZPn6BTJ5M0uPM2gia/K5e
-   FOhS2CFxibmMHwHbTK7EaBKLXjme4RzK3eRnxn9BAWYhCqUqJ8EtEVEk4
-   0AaSYFhFqukEJDuakqHAEyNq63Tx1T+dNOBwseMf8+IQZHw3VVVbb0Chy
-   5VfMIKqXyGQJ0t5MIWWUrmo9QgGkHiGQ6hAtBkAaNGa9hPsmd12QUxySj
-   B712HZEyTfcgf+4C25bNrCk8N0u7Z+bf15GkDjXxq1SNJczCOUVS5zrMn
+  t=1640013612; x=1671549612;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l8AMP3pMeTOE0Bebgw47YiCbv8lrzVYPL5lB+0HCag0=;
+  b=dI47COJoc11mqQJke4x1Vj0BYkAofR1MZ29O0FoNr0/fdUAbqYQF7bM3
+   NSWMjbz3sU2ZkB6i4Ddz9ZZXRv25s7i2r6GhrSjIfJ9cd+s8RJOnn1o0Z
+   RkW+Z2FsPDlpIsejJNeXXeNFsLEE03Bvd9nZUM2dote+ZAJr/0d0INzYN
+   U3LW5vOyesacM84J/Hu/smKV0af/tMbZiSG6eIR+UFAI1T0uaqUI941ak
+   pu/5CIpn5StVrGUJi40EWPGxIrcvlt4HLkI6QA7QyXNqhwCqhe3+pSg39
+   xCk0UZ1QWUVsKoWz+FQ2Onc1+5+YqyYjNalNJHhaziGFh3zO0W0IZUFx0
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="303552345"
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="264378457"
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="303552345"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:50:11 -0800
+   d="scan'208";a="264378457"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 07:20:11 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="616419441"
+   d="scan'208";a="757330263"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 06:50:09 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 20 Dec 2021 07:20:10 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzJzN-0007t2-0e; Mon, 20 Dec 2021 14:50:09 +0000
-Date: Mon, 20 Dec 2021 22:49:07 +0800
+	id 1mzKSP-0007ug-H5; Mon, 20 Dec 2021 15:20:09 +0000
+Date: Mon, 20 Dec 2021 23:19:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH net-next v2 07/13] net: dsa: realtek: add new mdio
- interface for drivers
-Message-ID: <202112202212.PeXrGA7n-lkp@intel.com>
-References: <20211218081425.18722-8-luizluca@gmail.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [chao:feature/dax 5/9] fs/f2fs/data.c:4178:9: error: implicit
+ declaration of function 'dax_writeback_mapping_range'
+Message-ID: <202112202302.OWA4emnZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,87 +45,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211218081425.18722-8-luizluca@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Luiz,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/Luiz-Angelo-Daros-de-Luca/dt-bindings-net-dsa-realtek-smi-mark-unsupported-switches/20211218-171506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e1c5d7b6926f63d3750a273486a143e50d216ad
-config: arm-randconfig-c002-20211219 (https://download.01.org/0day-ci/archive/20211220/202112202212.PeXrGA7n-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
+commit: 2908c6445a36c37b0af40ba94f72c957a87d8fd8 [5/9] f2fs: support dax address space operation
+config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202302.OWA4emnZ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/4098c967b9f6635090798d9eb031f57ae26ed422
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Luiz-Angelo-Daros-de-Luca/dt-bindings-net-dsa-realtek-smi-mark-unsupported-switches/20211218-171506
-        git checkout 4098c967b9f6635090798d9eb031f57ae26ed422
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=2908c6445a36c37b0af40ba94f72c957a87d8fd8
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout 2908c6445a36c37b0af40ba94f72c957a87d8fd8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/dsa/realtek/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/dsa/realtek/realtek-mdio.c:53:5: warning: no previous prototype for function 'realtek_mdio_read_reg' [-Wmissing-prototypes]
-   int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
-       ^
-   drivers/net/dsa/realtek/realtek-mdio.c:53:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
-   ^
-   static 
-   1 warning generated.
+>> fs/f2fs/data.c:4178:9: error: implicit declaration of function 'dax_writeback_mapping_range' [-Werror,-Wimplicit-function-declaration]
+           return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
+                  ^
+   1 error generated.
 
 
-vim +/realtek_mdio_read_reg +53 drivers/net/dsa/realtek/realtek-mdio.c
+vim +/dax_writeback_mapping_range +4178 fs/f2fs/data.c
 
-    52	
-  > 53	int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
-    54	{
-    55		u32 phy_id = priv->phy_id;
-    56		struct mii_bus *bus = priv->bus;
-    57	
-    58		BUG_ON(in_interrupt());
-    59	
-    60		mutex_lock(&bus->mdio_lock);
-    61		/* Write Start command to register 29 */
-    62		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
-    63	
-    64		/* Write address control code to register 31 */
-    65		bus->write(bus, phy_id, MDC_MDIO_CTRL0_REG, MDC_MDIO_ADDR_OP);
-    66	
-    67		/* Write Start command to register 29 */
-    68		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
-    69	
-    70		/* Write address to register 23 */
-    71		bus->write(bus, phy_id, MDC_MDIO_ADDRESS_REG, addr);
-    72	
-    73		/* Write Start command to register 29 */
-    74		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
-    75	
-    76		/* Write read control code to register 21 */
-    77		bus->write(bus, phy_id, MDC_MDIO_CTRL1_REG, MDC_MDIO_READ_OP);
-    78	
-    79		/* Write Start command to register 29 */
-    80		bus->write(bus, phy_id, MDC_MDIO_START_REG, MDC_MDIO_START_OP);
-    81	
-    82		/* Read data from register 25 */
-    83		*data = bus->read(bus, phy_id, MDC_MDIO_DATA_READ_REG);
-    84	
-    85		mutex_unlock(&bus->mdio_lock);
-    86	
-    87		return 0;
-    88	}
-    89	
+  4169	
+  4170	static int f2fs_dax_writepages(struct address_space *mapping,
+  4171						struct writeback_control *wbc)
+  4172	{
+  4173		struct f2fs_sb_info *sbi = F2FS_I_SB(mapping->host);
+  4174	
+  4175		if (unlikely(f2fs_cp_error(sbi)))
+  4176			return -EIO;
+  4177	
+> 4178		return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
+  4179	}
+  4180	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
