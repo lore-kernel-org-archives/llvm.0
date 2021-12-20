@@ -1,33 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34DC173
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 16:53:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7F3C36AEB;
-	Mon, 20 Dec 2021 16:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640019215;
-	bh=3tng0c+exoWLRMJhgUUBf8iWK6eeHHSOlliF3Y22w8o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RQ8wMoXleAc54QXgk6aG90sPteIpAjI4Sclqch1tFNhfql2CkHysTEp9+R+oPStu2
-	 bV2EyQ/peBQeUuVJ1+kqM5iA0qE1nOKPtOGvglygUEwUMc47Qi5S50Qyarh0VlPI6q
-	 jHOJl3ph7/Rho44asibCYenHnd73IVnNnC6dXIsAcUx890C0OWjoRVGZa2i6Hdyb0J
-	 Jfnp6u2c/hm0cQifluxyoHKSAvEO+FHPyAzVkdYNCrqIwjo4RxP2m5moSzCYVzXD4A
-	 LmGcRa4IRR93xvjNFKzZYK/5tRXkA9uKRa3m8NNwUhLit3a6mVpJQbeX3L/IkJMDfD
-	 /ZhcWy+ocgY1Q==
-Date: Mon, 20 Dec 2021 09:53:30 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Wei Liu <wei.liu@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Tianyu Lan <Tianyu.Lan@microsoft.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Long Li <longli@microsoft.com>,
-	Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [hyperv:hyperv-next 4/5] drivers/hv/vmbus_drv.c:2082:29:
- warning: shift count >= width of type
-Message-ID: <YcC1CobR/n0tJhdV@archlinux-ax161>
-References: <202112181827.o3X7GmHz-lkp@intel.com>
- <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA53F173
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 17:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640020397; x=1671556397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MqkVzxr9XhGz20O9djEWhlXF6L01WiGy/1aPYksMFb0=;
+  b=QyDoEW1so/gRacO4ip696D6p8Ze7zzCZsThxILqIY5++JAZvJrTgCP5t
+   y03ggu9QiV+qK9ceKKuvc/Lio3mvrrXcAUqhTNSvgOJGJ5a9VWz7VQI1b
+   jeJ6xZvVfc9iVnf2615IMTsBzSWRVRMEY01TnCNrkFpuHN5Z8IPo/cTwW
+   OR3QuBkgkvQgZEPi+dQngoN4I1s/BbUGCqjDiGF4d/swxVvwPk1wWmlf9
+   nXEcVg0YiUIdtunNnAxf6m9RZUXmZt8XPs9QDXOl4UeGNc9jyAQxUp3yD
+   fQcLYPMtAslCrlARFaQlynYmQ7IjYrQEZ4fYb08nu9pC7885pYNf8aCDJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="326524258"
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="326524258"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 09:13:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="569923728"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 09:13:14 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mzMDp-00081r-I5; Mon, 20 Dec 2021 17:13:13 +0000
+Date: Tue, 21 Dec 2021 01:12:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: cgel.zte@gmail.com, kvalo@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, davem@davemloft.net,
+	kuba@kernel.org, ath11k@lists.infradead.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Changcheng Deng <deng.changcheng@zte.com.cn>,
+	Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] ath11k: use min() to make code cleaner
+Message-ID: <202112210104.cbWjNxoN-lkp@intel.com>
+References: <20211220112133.472472-1-deng.changcheng@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,56 +49,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
+In-Reply-To: <20211220112133.472472-1-deng.changcheng@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Wei,
+Hi,
 
-On Sun, Dec 19, 2021 at 12:29:37PM +0000, Wei Liu wrote:
-> On Sat, Dec 18, 2021 at 06:20:43PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
-> > head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
-> > commit: 6327882f7b4a476ea902de4bee5657f1028d6859 [4/5] scsi: storvsc: Add Isolation VM support for storvsc driver
-> > config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181827.o3X7GmHz-lkp@intel.com/config)
-> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=6327882f7b4a476ea902de4bee5657f1028d6859
-> >         git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
-> >         git fetch --no-tags hyperv hyperv-next
-> >         git checkout 6327882f7b4a476ea902de4bee5657f1028d6859
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hv/
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/hv/vmbus_drv.c:2082:29: warning: shift count >= width of type [-Wshift-count-overflow]
-> >    static u64 vmbus_dma_mask = DMA_BIT_MASK(64);
-> >                                ^~~~~~~~~~~~~~~~
-> >    include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-> >    #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-> >                                                         ^ ~~~
-> 
-> I don't think there is anything wrong with the code. When n is 64 the
-> problematic expression is not evaluated.
+Thank you for the patch! Perhaps something to improve:
 
-Yes, unfortunately, this is an outstanding bug in clang where it does
-not properly build a control flow graph for expressions at a global
-scope:
+[auto build test WARNING on kvalo-ath/ath-next]
+[also build test WARNING on v5.16-rc6 next-20211220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-https://github.com/ClangBuiltLinux/linux/issues/92
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/ath11k-use-min-to-make-code-cleaner/20211220-192326
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath-next
+config: hexagon-randconfig-r001-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210104.cbWjNxoN-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/526b459a20794d7325764c3fea5fd3e0521d6084
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/ath11k-use-min-to-make-code-cleaner/20211220-192326
+        git checkout 526b459a20794d7325764c3fea5fd3e0521d6084
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
 
-We should absolutely fix that but it has not come up too often so other
-fires have been prioritized. Now that -Werror is a thing, that issue's
-priority should probably be upgraded, as this warning will break
-allmodconfig for clang.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you were feeling generous, just changing that to ~0ULL directly would
-solve the warning but I get that it is less documentation that way.
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> drivers/net/wireless/ath/ath11k/wmi.c:617:12: warning: comparison of distinct pointer types ('typeof (frame->len) *' (aka 'unsigned int *') and 'typeof (64) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+           buf_len = min(frame->len, WMI_MGMT_SEND_DOWNLD_LEN);
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +617 drivers/net/wireless/ath/ath11k/wmi.c
+
+   606	
+   607	int ath11k_wmi_mgmt_send(struct ath11k *ar, u32 vdev_id, u32 buf_id,
+   608				 struct sk_buff *frame)
+   609	{
+   610		struct ath11k_pdev_wmi *wmi = ar->wmi;
+   611		struct wmi_mgmt_send_cmd *cmd;
+   612		struct wmi_tlv *frame_tlv;
+   613		struct sk_buff *skb;
+   614		u32 buf_len;
+   615		int ret, len;
+   616	
+ > 617		buf_len = min(frame->len, WMI_MGMT_SEND_DOWNLD_LEN);
+   618	
+   619		len = sizeof(*cmd) + sizeof(*frame_tlv) + roundup(buf_len, 4);
+   620	
+   621		skb = ath11k_wmi_alloc_skb(wmi->wmi_ab, len);
+   622		if (!skb)
+   623			return -ENOMEM;
+   624	
+   625		cmd = (struct wmi_mgmt_send_cmd *)skb->data;
+   626		cmd->tlv_header = FIELD_PREP(WMI_TLV_TAG, WMI_TAG_MGMT_TX_SEND_CMD) |
+   627				  FIELD_PREP(WMI_TLV_LEN, sizeof(*cmd) - TLV_HDR_SIZE);
+   628		cmd->vdev_id = vdev_id;
+   629		cmd->desc_id = buf_id;
+   630		cmd->chanfreq = 0;
+   631		cmd->paddr_lo = lower_32_bits(ATH11K_SKB_CB(frame)->paddr);
+   632		cmd->paddr_hi = upper_32_bits(ATH11K_SKB_CB(frame)->paddr);
+   633		cmd->frame_len = frame->len;
+   634		cmd->buf_len = buf_len;
+   635		cmd->tx_params_valid = 0;
+   636	
+   637		frame_tlv = (struct wmi_tlv *)(skb->data + sizeof(*cmd));
+   638		frame_tlv->header = FIELD_PREP(WMI_TLV_TAG, WMI_TAG_ARRAY_BYTE) |
+   639				    FIELD_PREP(WMI_TLV_LEN, buf_len);
+   640	
+   641		memcpy(frame_tlv->value, frame->data, buf_len);
+   642	
+   643		ath11k_ce_byte_swap(frame_tlv->value, buf_len);
+   644	
+   645		ret = ath11k_wmi_cmd_send(wmi, skb, WMI_MGMT_TX_SEND_CMDID);
+   646		if (ret) {
+   647			ath11k_warn(ar->ab,
+   648				    "failed to submit WMI_MGMT_TX_SEND_CMDID cmd\n");
+   649			dev_kfree_skb(skb);
+   650		}
+   651	
+   652		return ret;
+   653	}
+   654	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
