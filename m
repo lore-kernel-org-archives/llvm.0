@@ -1,114 +1,146 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036BE2C82
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 14:12:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D142C82
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 14:19:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640009550; x=1671545550;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rqvsOpIixW7RTGrdUz0Xm3qC62qrpABj6D5TeHDs8B0=;
-  b=E38Mruo3QdHsnrqCiOWm5xNdZ0Ivc8S51rFG3xExZnk0QMBAsVCfLew7
-   MiEJ7GBMNi9lt5VST+B74x5sEJ2OFiKiJ5xTfW9ilcGG38359b05r6aWv
-   7hbCW7Xdxeh5ET93w6zLE+9eakmGeFa7E1KokyesXjJSeR9TWFQjoSu+I
-   +YoLuzEdnfm0cHEsTcJZxiXzCoe6mI4p8Gd1cLCcFcf5Mz/i+mfTW6xjZ
-   OUQ3pgBLMKlLcQ+HKYvlU8Tskm9UNYDvoVNzKQEbQBP9kpQtFwqozJODG
-   yXhN2H4okpkG4kI7rc2/EtI1oO1XngwpNquyG9wuSTqUJleQUEOoJGBwi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="227027320"
+  t=1640009961; x=1671545961;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=SmmpPoWknX/04b0LTXOTnTFuxaObwEMDn3ClqW8vP7Y=;
+  b=EjfiRoUfUT6qsYNYmaPUiZhokJVbB7qcubCXnR6T/m0TT71mO/f0nkQL
+   AfaF4mFrHdeZ6OkYf7zOfJhTazPTmNcRMii7ZwlKZ4IX2umOt9FmjCvop
+   0zzw4Nl49GSiuDCe1QpWqzhwkEoKzAgki/UsiTvDXnr8ZM7vRn3sZIW89
+   BnAOGbAk/fXg/OGeFKzIIgb3cEFp37Mrlq+VNv/H0CbnHV5FW45YZrUJ9
+   uosDPcCkQnPeC6fSyacodD3zvqQcXTJFu+hPwwklxDxuW8fKI8SyP21A+
+   czpS216LGBSUNDaGYntzZVe1uOSXuBkynrVGcLBg3M5yAr2Z7XL5M7aMo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237712992"
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="227027320"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:07:15 -0800
+   d="scan'208";a="237712992"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:19:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="755370719"
+   d="scan'208";a="606727518"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Dec 2021 06:07:13 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2021 06:19:13 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzJJj-0007pY-NB; Mon, 20 Dec 2021 14:07:07 +0000
-Date: Mon, 20 Dec 2021 22:06:57 +0800
+	id 1mzJVM-0007r2-6b; Mon, 20 Dec 2021 14:19:08 +0000
+Date: Mon, 20 Dec 2021 22:18:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+To: =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 4/9] fs/f2fs/file.c:584:7: error: implicit
- declaration of function 'daxdev_mapping_supported'
-Message-ID: <202112202110.sW5LQCPm-lkp@intel.com>
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] sysfs: add sysfs_add_bin_file_to_group()
+Message-ID: <202112202254.l5IadaDs-lkp@intel.com>
+References: <20211220064730.28806-1-zajec5@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211220064730.28806-1-zajec5@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
-commit: f154828642167c70161576b977082361123a5768 [4/9] f2fs: support dax page fault
-config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202110.sW5LQCPm-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
+Hi "Rafał,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on char-misc/char-misc-testing linux/master linus/master v5.16-rc6 next-20211217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Rafa-Mi-ecki/sysfs-add-sysfs_add_bin_file_to_group/20211220-144856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git aa483f3ce655ed9ee4f32d050d1822eec2d20ada
+config: x86_64-randconfig-r024-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202254.l5IadaDs-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=f154828642167c70161576b977082361123a5768
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout f154828642167c70161576b977082361123a5768
+        # https://github.com/0day-ci/linux/commit/a9802080b6d35af5dfd7ae847a0978e47caafd59
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rafa-Mi-ecki/sysfs-add-sysfs_add_bin_file_to_group/20211220-144856
+        git checkout a9802080b6d35af5dfd7ae847a0978e47caafd59
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/sysfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/f2fs/file.c:584:7: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror,-Wimplicit-function-declaration]
-           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-                ^
-   1 error generated.
+>> fs/sysfs/file.c:379:5: warning: no previous prototype for function '__sysfs_add_file_to_group' [-Wmissing-prototypes]
+   int __sysfs_add_file_to_group(struct kobject *kobj,
+       ^
+   fs/sysfs/file.c:379:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __sysfs_add_file_to_group(struct kobject *kobj,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/daxdev_mapping_supported +584 fs/f2fs/file.c
+vim +/__sysfs_add_file_to_group +379 fs/sysfs/file.c
 
-   569	
-   570	static int f2fs_file_mmap(struct file *file, struct vm_area_struct *vma)
-   571	{
-   572		struct inode *inode = file_inode(file);
-   573	
-   574		if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
-   575			return -EIO;
-   576	
-   577		if (!f2fs_is_compress_backend_ready(inode))
-   578			return -EOPNOTSUPP;
-   579	
-   580		/*
-   581		 * We don't support synchronous mappings for non-DAX files and
-   582		 * for DAX files if underneath dax_device is not synchronous.
-   583		 */
- > 584		if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-   585			return -EOPNOTSUPP;
-   586	
-   587		file_accessed(file);
-   588	
-   589		if (IS_DAX(inode)) {
-   590			vma->vm_ops = &f2fs_dax_vm_ops;
-   591			vma->vm_flags |= VM_HUGEPAGE;
-   592		} else {
-   593			vma->vm_ops = &f2fs_file_vm_ops;
-   594		}
-   595	
-   596		set_inode_flag(inode, FI_MMAP_FILE);
-   597		return 0;
-   598	}
-   599	
+   372	
+   373	/**
+   374	 * sysfs_add_file_to_group - add an attribute file to a pre-existing group.
+   375	 * @kobj: object we're acting for.
+   376	 * @attr: attribute descriptor.
+   377	 * @group: group name.
+   378	 */
+ > 379	int __sysfs_add_file_to_group(struct kobject *kobj,
+   380				      const struct attribute *attr,
+   381				      const struct bin_attribute *battr,
+   382				      const char *group)
+   383	{
+   384		struct kernfs_node *parent;
+   385		kuid_t uid;
+   386		kgid_t gid;
+   387		int error;
+   388	
+   389		if (WARN_ON((attr && battr) || (!attr && !battr)))
+   390			return -EINVAL;
+   391	
+   392		if (group) {
+   393			parent = kernfs_find_and_get(kobj->sd, group);
+   394		} else {
+   395			parent = kobj->sd;
+   396			kernfs_get(parent);
+   397		}
+   398	
+   399		if (!parent)
+   400			return -ENOENT;
+   401	
+   402		kobject_get_ownership(kobj, &uid, &gid);
+   403		if (attr)
+   404			error = sysfs_add_file_mode_ns(parent, attr, attr->mode, uid,
+   405						       gid, NULL);
+   406		else
+   407			error = sysfs_add_bin_file_mode_ns(parent, battr, battr->attr.mode,
+   408							   uid, gid, NULL);
+   409		kernfs_put(parent);
+   410	
+   411		return error;
+   412	}
+   413	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
