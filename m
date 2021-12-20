@@ -1,46 +1,48 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF63173
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 18:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3995D29CA
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 18:55:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640024120; x=1671560120;
+  t=1640026520; x=1671562520;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xn3SfHAVBBxgPNY/hfMHHIDWLipvyx6cHeleLt7x/qI=;
-  b=mWHLqqcb33wXqp1uArWrCe/8RGQ/DUQiE+pNnGIOIqSxeSOMhUZaM5Mg
-   bO6je565QjYyw7wy5n0rwUcDVvxGISrIay6tmDXVj+AGGB2j35szQ6DlK
-   EqB6QMb/7abPyFcGVOSh8+HSOlCBPX8VGw8BfmKSWyekeGDuCtkndHwFJ
-   LhhmCTs2zXMFV1keWzA4V/LpYStSyVYcTnKM9HEBbRG+QzZk7vLvq3SdY
-   anZ5VidgXThUB7OJCstJFooYt8pXDpqAyAPq5uCPKb8i8zPJPkXLWmRRp
-   nh2xWRwZt4so8+G04H4W4sTGKEq+IQAwzyBA4ZNbBtbWyBldIbXrwOEBq
+  bh=TmqgGeucLGZnyhqVlqCwWmUp6vjmwJf9wJg2gbgOpjI=;
+  b=F1bkAeUl7hyR6TCscbYOS4jnf7IdWWaKoBETmjZho5QtpDfkmmbwk91T
+   b7WJnhQLI5FLCvGqQ/GgXlyozbQDaGuYH1IlmfkQ1ydCLpNIxw7JpyxSf
+   dNKKvyivOLX40YWeImY77t4Bk+T249/AnKrYSrcJlv6yty7PX/Z3N/ijN
+   a81onVft3vSJDLn4A+iZ6LtOHpEoojmK8/WdOLQn52l7aCc2LO75HTqlY
+   dy17HpxI8ewYksiJFxODlnTS+8frDrmwUeXa6zfrdDB5YXB1GIRZ3hTB6
+   AVO4eZfJ08TznI/MZNFQ2sVDs0ki9jQ+ufH4GU109uYYvSXF2651uM4Jz
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="240051217"
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="264434336"
 X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="240051217"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 10:15:18 -0800
+   d="scan'208";a="264434336"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 10:55:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="684370606"
+   d="scan'208";a="467503582"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2021 10:15:15 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2021 10:55:16 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzNBr-00085W-6H; Mon, 20 Dec 2021 18:15:15 +0000
-Date: Tue, 21 Dec 2021 02:14:14 +0800
+	id 1mzNoa-00087P-0h; Mon, 20 Dec 2021 18:55:16 +0000
+Date: Tue, 21 Dec 2021 02:54:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wander Lairson Costa <wander@redhat.com>, linux-kernel@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>, Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org
+To: Sean Nyekjaer <sean@geanix.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Boris Brezillon <bbrezillon@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Wander Lairson Costa <wander@redhat.com>
-Subject: Re: [PATCH v4 1/1] blktrace: switch trace spinlock to a raw spinlock
-Message-ID: <202112210258.y6u1AZpZ-lkp@intel.com>
-References: <20211220130357.8790-2-wander@redhat.com>
+	Sean Nyekjaer <sean@geanix.com>, linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: protect access to rawnand devices while in
+ suspend
+Message-ID: <202112210255.fmm6tiKT-lkp@intel.com>
+References: <20211220130015.3630975-1-sean@geanix.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,83 +51,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220130357.8790-2-wander@redhat.com>
+In-Reply-To: <20211220130015.3630975-1-sean@geanix.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Wander,
+Hi Sean,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on linux/master linus/master v5.16-rc6 next-20211220]
+[auto build test WARNING on mtd/nand/next]
+[also build test WARNING on linux/master linus/master v5.16-rc6 next-20211220]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Wander-Lairson-Costa/blktrace-switch-trace-spinlock-to-a-raw-spinlock/20211220-210538
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: hexagon-randconfig-r045-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210258.y6u1AZpZ-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Sean-Nyekjaer/mtd-rawnand-protect-access-to-rawnand-devices-while-in-suspend/20211220-210300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210255.fmm6tiKT-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/b270731108ecba0d77a6db93d057290406c51a20
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/4820bae9bf9bca82933f29066b18ea85f8c06178
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Wander-Lairson-Costa/blktrace-switch-trace-spinlock-to-a-raw-spinlock/20211220-210538
-        git checkout b270731108ecba0d77a6db93d057290406c51a20
+        git fetch --no-tags linux-review Sean-Nyekjaer/mtd-rawnand-protect-access-to-rawnand-devices-while-in-suspend/20211220-210300
+        git checkout 4820bae9bf9bca82933f29066b18ea85f8c06178
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/mtd/nand/raw/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   kernel/trace/blktrace.c:148:63: warning: parameter 'blkcg' set but not used [-Wunused-but-set-parameter]
-   void __trace_note_message(struct blk_trace *bt, struct blkcg *blkcg,
-                                                                 ^
->> kernel/trace/blktrace.c:1611:17: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
-                   spin_lock_irq(&running_trace_lock);
-                                 ^~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock.h:372:55: note: passing argument to parameter 'lock' here
-   static __always_inline void spin_lock_irq(spinlock_t *lock)
-                                                         ^
-   kernel/trace/blktrace.c:1613:19: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
-                   spin_unlock_irq(&running_trace_lock);
-                                   ^~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock.h:397:57: note: passing argument to parameter 'lock' here
-   static __always_inline void spin_unlock_irq(spinlock_t *lock)
-                                                           ^
-   1 warning and 2 errors generated.
+>> drivers/mtd/nand/raw/nand_base.c:4426:2: warning: variable 'ret' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+           default:
+           ^~~~~~~
+   drivers/mtd/nand/raw/nand_base.c:4437:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/mtd/nand/raw/nand_base.c:4414:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +1611 kernel/trace/blktrace.c
+vim +/ret +4426 drivers/mtd/nand/raw/nand_base.c
 
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1599  
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1600  static int blk_trace_remove_queue(struct request_queue *q)
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1601  {
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1602  	struct blk_trace *bt;
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1603  
-c3dbe541ef7775 kernel/trace/blktrace.c Jan Kara                 2020-06-05  1604  	bt = rcu_replace_pointer(q->blk_trace, NULL,
-85e0cbbb8a7953 kernel/trace/blktrace.c Luis Chamberlain         2020-06-19  1605  				 lockdep_is_held(&q->debugfs_mutex));
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1606  	if (bt == NULL)
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1607  		return -EINVAL;
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1608  
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1609  	if (bt->trace_state == Blktrace_running) {
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1610  		bt->trace_state = Blktrace_stopped;
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23 @1611  		spin_lock_irq(&running_trace_lock);
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1612  		list_del_init(&bt->running_list);
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1613  		spin_unlock_irq(&running_trace_lock);
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1614  		relay_flush(bt->rchan);
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1615  	}
-5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1616  
-a6da0024ffc19e kernel/trace/blktrace.c Jens Axboe               2017-11-05  1617  	put_probe_ref();
-c780e86dd48ef6 kernel/trace/blktrace.c Jan Kara                 2020-02-06  1618  	synchronize_rcu();
-ad5dd5493a55e4 kernel/trace/blktrace.c Li Zefan                 2009-03-27  1619  	blk_trace_free(bt);
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1620  	return 0;
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1621  }
-c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1622  
+2af7c653993199 drivers/mtd/nand/nand_base.c     Simon Kagstrom  2009-10-05  4403  
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4404  /**
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4405   * nand_write_oob - [MTD Interface] NAND write data and/or out-of-band
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4406   * @mtd: MTD device structure
+844d3b427ef1a4 drivers/mtd/nand/nand_base.c     Randy Dunlap    2006-06-28  4407   * @to: offset to write to
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4408   * @ops: oob operation description structure
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4409   */
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4410  static int nand_write_oob(struct mtd_info *mtd, loff_t to,
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4411  			  struct mtd_oob_ops *ops)
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4412  {
+0813621ba898aa drivers/mtd/nand/raw/nand_base.c Boris Brezillon 2018-11-11  4413  	struct nand_chip *chip = mtd_to_nand(mtd);
+80107e764846a6 drivers/mtd/nand/raw/nand_base.c Colin Ian King  2019-07-31  4414  	int ret;
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4415  
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4416  	ops->retlen = 0;
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4417  
+4820bae9bf9bca drivers/mtd/nand/raw/nand_base.c Sean Nyekjaer   2021-12-20  4418  	nand_get_device(chip);
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4419  
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4420  	switch (ops->mode) {
+0612b9ddc2eeda drivers/mtd/nand/nand_base.c     Brian Norris    2011-08-30  4421  	case MTD_OPS_PLACE_OOB:
+0612b9ddc2eeda drivers/mtd/nand/nand_base.c     Brian Norris    2011-08-30  4422  	case MTD_OPS_AUTO_OOB:
+0612b9ddc2eeda drivers/mtd/nand/nand_base.c     Brian Norris    2011-08-30  4423  	case MTD_OPS_RAW:
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4424  		break;
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4425  
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29 @4426  	default:
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4427  		goto out;
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4428  	}
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4429  
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4430  	if (!ops->datbuf)
+0813621ba898aa drivers/mtd/nand/raw/nand_base.c Boris Brezillon 2018-11-11  4431  		ret = nand_do_write_oob(chip, to, ops);
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4432  	else
+0813621ba898aa drivers/mtd/nand/raw/nand_base.c Boris Brezillon 2018-11-11  4433  		ret = nand_do_write_ops(chip, to, ops);
+8593fbc68b0df1 drivers/mtd/nand/nand_base.c     Thomas Gleixner 2006-05-29  4434  
+^1da177e4c3f41 drivers/mtd/nand/nand_base.c     Linus Torvalds  2005-04-16  4435  out:
+0813621ba898aa drivers/mtd/nand/raw/nand_base.c Boris Brezillon 2018-11-11  4436  	nand_release_device(chip);
+^1da177e4c3f41 drivers/mtd/nand/nand_base.c     Linus Torvalds  2005-04-16  4437  	return ret;
+^1da177e4c3f41 drivers/mtd/nand/nand_base.c     Linus Torvalds  2005-04-16  4438  }
+^1da177e4c3f41 drivers/mtd/nand/nand_base.c     Linus Torvalds  2005-04-16  4439  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
