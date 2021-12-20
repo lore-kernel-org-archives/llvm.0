@@ -1,43 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A8E2C9D
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 20:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D342C9D
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 22:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640033846; x=1671569846;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GXiEAIkvpM54nRM5gXc5wo8WacmND3thLJnZc0dy4XY=;
-  b=b90V2SsOqGBaXUbs28bJaR9jb2mzZMgW+z379ADuTuzGIkwijZNytHLf
-   IF9x+FF0U9U9Lae7lFARd5wLSXrdouCqth8xnxPAnSC/hAthPnZzD4l7B
-   tMfNMpPIdBAB8YGqiRWbEOwf5eNi63T37BZE8VVFVTmQhwAVaJq3rgzkJ
-   FN3nmQGQSYLhZ7vRK3CiFabZxAByhPLyjcFshSKVuuo++nHiHhCSAhNCK
-   A5hlvGbcLLL8h2Bz6FfdIkQUWavPzVCwR14I4ILgcnBokbu+Y1SV5HdMf
-   arLkrGzaCQfs7SHWUHY4qIdUpKkt88K52VILCTl09Q0qCw29dpB0WIRSx
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227122101"
+  t=1640039368; x=1671575368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DxMcUMbioDOhOD93wmC5Rwexi0nOYA65S8MORrUrYfQ=;
+  b=iCPwT6taZLMBgb30pXxiI49HkJNa9mQ1aa4n3s4/HNB366wjK//vmHLX
+   RfrTivTMAhNaBtgyQ5zxgxlO3yif/NXGbeHfX2oCbY4/NZ9d1cQrZqh5m
+   uXMDHRvFdkgsPCAuQJI+HM7qrZaeOhGJJmDeu2l/MhU5SuJRmIQzogDbo
+   xnv3ykTciYra6qqbAuKEhMWZZ8CQL9bngjtrdDbr2k5k9CHK9Oq2ldgFp
+   EosULjXMuP4uhd+12AacG/yWvkXFMRBYitXKGqnKUUTH960WD44kbfeP/
+   i9LRbzIuEbXnL/fMrOT/GHsaB6DZe6UsRLu7tIrWeYoGnfFiHxV9jvMfw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="237819981"
 X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="227122101"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 12:57:24 -0800
+   d="scan'208";a="237819981"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 14:29:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="467540826"
+   d="scan'208";a="466093938"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2021 12:57:22 -0800
+  by orsmga003.jf.intel.com with ESMTP; 20 Dec 2021 14:29:25 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzPik-0008El-5d; Mon, 20 Dec 2021 20:57:22 +0000
-Date: Tue, 21 Dec 2021 04:57:04 +0800
+	id 1mzR9p-0008Kh-7R; Mon, 20 Dec 2021 22:29:25 +0000
+Date: Tue, 21 Dec 2021 06:28:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [axboe-block:nvme-passthru-wip.2 4/10] fs/io_uring.c:11271:2: error:
- call to __compiletime_assert_764 declared with 'error' attribute:
- BUILD_BUG_ON failed: offsetof(struct io_uring_cmd_sqe, user_data) !=
- sqe_offsets[1].user_data
-Message-ID: <202112210447.xuPrVLM2-lkp@intel.com>
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 1/2] firmware: arm_scmi: Filter out negative results
+ on scmi_reading_get
+Message-ID: <202112210649.czZr6hoM-lkp@intel.com>
+References: <20211220174155.40239-2-cristian.marussi@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,122 +45,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211220174155.40239-2-cristian.marussi@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git nvme-passthru-wip.2
-head:   edab2611e228dc05e995d3e2e4d25cb9e0989c75
-commit: 278755c32b7fd62a8e82a1229c819ed2fcd85730 [4/10] io_uring: add infrastructure around io_uring_cmd_sqe
-config: mips-buildonly-randconfig-r001-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210447.xuPrVLM2-lkp@intel.com/config)
+Hi Cristian,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linux/master]
+[also build test WARNING on groeck-staging/hwmon-next soc/for-next linus/master v5.16-rc6 next-20211220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Cristian-Marussi/Sensor-readings-fixes/20211221-014235
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+config: hexagon-randconfig-r041-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210649.czZr6hoM-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=278755c32b7fd62a8e82a1229c819ed2fcd85730
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block nvme-passthru-wip.2
-        git checkout 278755c32b7fd62a8e82a1229c819ed2fcd85730
+        # https://github.com/0day-ci/linux/commit/6f0ec7d066a305bdb889a75e772ef0be72f365f9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Cristian-Marussi/Sensor-readings-fixes/20211221-014235
+        git checkout 6f0ec7d066a305bdb889a75e772ef0be72f365f9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/arm_scmi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/io_uring.c:11271:2: error: call to __compiletime_assert_764 declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct io_uring_cmd_sqe, user_data) != sqe_offsets[1].user_data
-           BUILD_BUG_SQEC_ELEM(sqe_offsets[1].user_data,   __u64,  user_data);
-           ^
-   fs/io_uring.c:11268:2: note: expanded from macro 'BUILD_BUG_SQEC_ELEM'
-           __BUILD_BUG_VERIFY_ELEMENT(struct io_uring_cmd_sqe, eoffset, etype, ename)
-           ^
-   fs/io_uring.c:11228:2: note: expanded from macro '__BUILD_BUG_VERIFY_ELEMENT'
-           BUILD_BUG_ON(offsetof(stype, ename) != eoffset); \
-           ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:323:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:316:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:13:1: note: expanded from here
-   __compiletime_assert_764
-   ^
->> fs/io_uring.c:11272:2: error: call to __compiletime_assert_766 declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct io_uring_cmd_sqe, personality) != sqe_offsets[1].personality
-           BUILD_BUG_SQEC_ELEM(sqe_offsets[1].personality, __u16,  personality);
-           ^
-   fs/io_uring.c:11268:2: note: expanded from macro 'BUILD_BUG_SQEC_ELEM'
-           __BUILD_BUG_VERIFY_ELEMENT(struct io_uring_cmd_sqe, eoffset, etype, ename)
-           ^
-   fs/io_uring.c:11228:2: note: expanded from macro '__BUILD_BUG_VERIFY_ELEMENT'
-           BUILD_BUG_ON(offsetof(stype, ename) != eoffset); \
-           ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:323:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:316:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:21:1: note: expanded from here
-   __compiletime_assert_766
-   ^
-   2 errors generated.
+>> drivers/firmware/arm_scmi/sensors.c:733:63: warning: shift count >= width of type [-Wshift-count-overflow]
+           if (!ret && si->version > SCMIv2_SENSOR_PROTOCOL && *value & BIT(63)) {
+                                                                        ^~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                          ^  ~~~~
+   1 warning generated.
 
 
-vim +/error +11271 fs/io_uring.c
+vim +733 drivers/firmware/arm_scmi/sensors.c
 
- 11231	
- 11232	#define BUILD_BUG_SQE_ELEM(eoffset, etype, ename) \
- 11233		__BUILD_BUG_VERIFY_ELEMENT(struct io_uring_sqe, eoffset, etype, ename)
- 11234		BUILD_BUG_ON(sizeof(struct io_uring_sqe) != 64);
- 11235		BUILD_BUG_ON(sizeof(struct io_uring_cmd_sqe) != 64);
- 11236		BUILD_BUG_SQE_ELEM(0,  __u8,   hdr.opcode);
- 11237		BUILD_BUG_SQE_ELEM(1,  __u8,   hdr.flags);
- 11238		BUILD_BUG_SQE_ELEM(2,  __u16,  hdr.ioprio);
- 11239		BUILD_BUG_SQE_ELEM(4,  __s32,  hdr.fd);
- 11240		BUILD_BUG_SQE_ELEM(8,  __u64,  off);
- 11241		BUILD_BUG_SQE_ELEM(8,  __u64,  addr2);
- 11242		BUILD_BUG_SQE_ELEM(16, __u64,  addr);
- 11243		BUILD_BUG_SQE_ELEM(16, __u64,  splice_off_in);
- 11244		BUILD_BUG_SQE_ELEM(24, __u32,  len);
- 11245		BUILD_BUG_SQE_ELEM(28,     __kernel_rwf_t, rw_flags);
- 11246		BUILD_BUG_SQE_ELEM(28, /* compat */   int, rw_flags);
- 11247		BUILD_BUG_SQE_ELEM(28, /* compat */ __u32, rw_flags);
- 11248		BUILD_BUG_SQE_ELEM(28, __u32,  fsync_flags);
- 11249		BUILD_BUG_SQE_ELEM(28, /* compat */ __u16,  poll_events);
- 11250		BUILD_BUG_SQE_ELEM(28, __u32,  poll32_events);
- 11251		BUILD_BUG_SQE_ELEM(28, __u32,  sync_range_flags);
- 11252		BUILD_BUG_SQE_ELEM(28, __u32,  msg_flags);
- 11253		BUILD_BUG_SQE_ELEM(28, __u32,  timeout_flags);
- 11254		BUILD_BUG_SQE_ELEM(28, __u32,  accept_flags);
- 11255		BUILD_BUG_SQE_ELEM(28, __u32,  cancel_flags);
- 11256		BUILD_BUG_SQE_ELEM(28, __u32,  open_flags);
- 11257		BUILD_BUG_SQE_ELEM(28, __u32,  statx_flags);
- 11258		BUILD_BUG_SQE_ELEM(28, __u32,  fadvise_advice);
- 11259		BUILD_BUG_SQE_ELEM(28, __u32,  splice_flags);
- 11260		BUILD_BUG_SQE_ELEM(32, __u64,  user_data);
- 11261		BUILD_BUG_SQE_ELEM(40, __u16,  buf_index);
- 11262		BUILD_BUG_SQE_ELEM(40, __u16,  buf_group);
- 11263		BUILD_BUG_SQE_ELEM(42, __u16,  personality);
- 11264		BUILD_BUG_SQE_ELEM(44, __s32,  splice_fd_in);
- 11265		BUILD_BUG_SQE_ELEM(44, __u32,  file_index);
- 11266	
- 11267		#define BUILD_BUG_SQEC_ELEM(eoffset, etype, ename) \
- 11268		__BUILD_BUG_VERIFY_ELEMENT(struct io_uring_cmd_sqe, eoffset, etype, ename)
- 11269		BUILD_BUG_SQEC_ELEM(8,				__u64,	user_data);
- 11270		BUILD_BUG_SQEC_ELEM(18,				__u16,	personality);
- 11271		BUILD_BUG_SQEC_ELEM(sqe_offsets[1].user_data,	__u64,	user_data);
- 11272		BUILD_BUG_SQEC_ELEM(sqe_offsets[1].personality,	__u16,	personality);
+   681	
+   682	/**
+   683	 * scmi_sensor_reading_get  - Read scalar sensor value
+   684	 * @ph: Protocol handle
+   685	 * @sensor_id: Sensor ID
+   686	 * @value: The 64bit value sensor reading
+   687	 *
+   688	 * This function returns a single 64 bit reading value representing the sensor
+   689	 * value; if the platform SCMI Protocol implementation and the sensor support
+   690	 * multiple axis and timestamped-reads, this just returns the first axis while
+   691	 * dropping the timestamp value.
+   692	 * Use instead the @scmi_sensor_reading_get_timestamped to retrieve the array of
+   693	 * timestamped multi-axis values.
+   694	 *
+   695	 * Return: 0 on Success
+   696	 */
+   697	static int scmi_sensor_reading_get(const struct scmi_protocol_handle *ph,
+   698					   u32 sensor_id, u64 *value)
+   699	{
+   700		int ret;
+   701		struct scmi_xfer *t;
+   702		struct scmi_msg_sensor_reading_get *sensor;
+   703		struct sensors_info *si = ph->get_priv(ph);
+   704		struct scmi_sensor_info *s = si->sensors + sensor_id;
+   705	
+   706		ret = ph->xops->xfer_get_init(ph, SENSOR_READING_GET,
+   707					      sizeof(*sensor), 0, &t);
+   708		if (ret)
+   709			return ret;
+   710	
+   711		sensor = t->tx.buf;
+   712		sensor->id = cpu_to_le32(sensor_id);
+   713		if (s->async) {
+   714			sensor->flags = cpu_to_le32(SENSOR_READ_ASYNC);
+   715			ret = ph->xops->do_xfer_with_response(ph, t);
+   716			if (!ret) {
+   717				struct scmi_resp_sensor_reading_complete *resp;
+   718	
+   719				resp = t->rx.buf;
+   720				if (le32_to_cpu(resp->id) == sensor_id)
+   721					*value =
+   722						get_unaligned_le64(&resp->readings_low);
+   723				else
+   724					ret = -EPROTO;
+   725			}
+   726		} else {
+   727			sensor->flags = cpu_to_le32(0);
+   728			ret = ph->xops->do_xfer(ph, t);
+   729			if (!ret)
+   730				*value = get_unaligned_le64(t->rx.buf);
+   731		}
+   732	
+ > 733		if (!ret && si->version > SCMIv2_SENSOR_PROTOCOL && *value & BIT(63)) {
+   734			dev_warn_once(ph->dev,
+   735				      "SCMI FW Sensor version:0x%X reported negative value %ld\n",
+   736				      si->version, (long)*value);
+   737			*value = 0;
+   738			ret = -EIO;
+   739		}
+   740	
+   741		ph->xops->xfer_put(ph, t);
+   742		return ret;
+   743	}
+   744	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
