@@ -1,39 +1,43 @@
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4D32C9D
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 20:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A8E2C9D
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 20:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640033844; x=1671569844;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=7OyOnIf+Jd2MsV8Hy66PWALG1YoRZgvQ11f/R0gUTwI=;
-  b=c8RZVg8zJJ+Hkmw9AVJ6nfZR1VwmAsjVeEAOCy3vLJie0vmeyX6qlXXN
-   ez04uv2GFCkufnW6xTvdKx2IishzEegWTChh3KI9I656tL72JhOlfylYX
-   FcG5YfqQo5d1XvUqA/mrLfrtWi70JiGdRL9hea9I0DL+R1tJzlctG6RdB
-   5ZKeAsRUROK/+6L5IDw9lMBoBQvx2I8DKSZf4/k/5YZVE0QLsEqwcHa9V
-   6TqA6OGl7MhNxD9xbkkdP2/Xp58mymDjqTzM/ET9SVVyc9o8LKMiQeQMh
-   Lo+XRMGsvdCjZwIPAeeRzsBjx8hiWNX7Nm4Cig8z84QY9nvTc93ktzZVg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227122099"
+  t=1640033846; x=1671569846;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GXiEAIkvpM54nRM5gXc5wo8WacmND3thLJnZc0dy4XY=;
+  b=b90V2SsOqGBaXUbs28bJaR9jb2mzZMgW+z379ADuTuzGIkwijZNytHLf
+   IF9x+FF0U9U9Lae7lFARd5wLSXrdouCqth8xnxPAnSC/hAthPnZzD4l7B
+   tMfNMpPIdBAB8YGqiRWbEOwf5eNi63T37BZE8VVFVTmQhwAVaJq3rgzkJ
+   FN3nmQGQSYLhZ7vRK3CiFabZxAByhPLyjcFshSKVuuo++nHiHhCSAhNCK
+   A5hlvGbcLLL8h2Bz6FfdIkQUWavPzVCwR14I4ILgcnBokbu+Y1SV5HdMf
+   arLkrGzaCQfs7SHWUHY4qIdUpKkt88K52VILCTl09Q0qCw29dpB0WIRSx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227122101"
 X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="227122099"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 12:57:23 -0800
+   d="scan'208";a="227122101"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 12:57:24 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="684415327"
+   d="scan'208";a="467540826"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2021 12:57:22 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2021 12:57:22 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzPik-0008En-5x; Mon, 20 Dec 2021 20:57:22 +0000
-Date: Tue, 21 Dec 2021 04:56:53 +0800
+	id 1mzPik-0008El-5d; Mon, 20 Dec 2021 20:57:22 +0000
+Date: Tue, 21 Dec 2021 04:57:04 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 4811/8898] drivers/media/usb/s2255/s2255drv.o:
- warning: objtool: read_pipe_completion()+0x151c: unreachable instruction
-Message-ID: <202112210449.O7OgseCD-lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [axboe-block:nvme-passthru-wip.2 4/10] fs/io_uring.c:11271:2: error:
+ call to __compiletime_assert_764 declared with 'error' attribute:
+ BUILD_BUG_ON failed: offsetof(struct io_uring_cmd_sqe, user_data) !=
+ sqe_offsets[1].user_data
+Message-ID: <202112210447.xuPrVLM2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,48 +48,120 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-CC: Mauro Carvalho Chehab <mchehab@kernel.org>
-CC: linux-media@vger.kernel.org
-CC: Hans Verkuil <hverkuil@xs4all.nl>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   07f8c60fe60f84977dc815ec8a6b1100827c34dd
-commit: ee1806beff85d4f1a3d7f22aa1bcdc8ffb59b36c [4811/8898] media: videobuf2: add WARN_ON_ONCE if bytesused is bigger than buffer length
-config: x86_64-randconfig-r026-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210449.O7OgseCD-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git nvme-passthru-wip.2
+head:   edab2611e228dc05e995d3e2e4d25cb9e0989c75
+commit: 278755c32b7fd62a8e82a1229c819ed2fcd85730 [4/10] io_uring: add infrastructure around io_uring_cmd_sqe
+config: mips-buildonly-randconfig-r001-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210447.xuPrVLM2-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ee1806beff85d4f1a3d7f22aa1bcdc8ffb59b36c
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ee1806beff85d4f1a3d7f22aa1bcdc8ffb59b36c
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=278755c32b7fd62a8e82a1229c819ed2fcd85730
+        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+        git fetch --no-tags axboe-block nvme-passthru-wip.2
+        git checkout 278755c32b7fd62a8e82a1229c819ed2fcd85730
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ fs// mm//
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/usb/s2255/s2255drv.o: warning: objtool: read_pipe_completion()+0x151c: unreachable instruction
---
->> drivers/media/usb/uvc/uvc_queue.o: warning: objtool: uvc_queue_buffer_release()+0x1db: unreachable instruction
---
->> drivers/media/usb/gspca/gspca.o: warning: objtool: gspca_frame_add()+0x4d5: unreachable instruction
---
->> drivers/media/usb/pwc/pwc-uncompress.o: warning: objtool: pwc_decompress()+0x433: unreachable instruction
---
->> drivers/media/usb/cx231xx/cx231xx-video.o: warning: objtool: cx231xx_copy_video_line()+0x437: unreachable instruction
---
->> drivers/media/pci/dt3155/dt3155.o: warning: objtool: dt3155_buf_prepare()+0x97: unreachable instruction
---
->> drivers/media/pci/tw5864/tw5864-video.o: warning: objtool: tw5864_handle_frame_task()+0x6c8: unreachable instruction
---
->> drivers/input/touchscreen/atmel_mxt_ts.o: warning: objtool: mxt_buffer_queue()+0x5b2: unreachable instruction
+>> fs/io_uring.c:11271:2: error: call to __compiletime_assert_764 declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct io_uring_cmd_sqe, user_data) != sqe_offsets[1].user_data
+           BUILD_BUG_SQEC_ELEM(sqe_offsets[1].user_data,   __u64,  user_data);
+           ^
+   fs/io_uring.c:11268:2: note: expanded from macro 'BUILD_BUG_SQEC_ELEM'
+           __BUILD_BUG_VERIFY_ELEMENT(struct io_uring_cmd_sqe, eoffset, etype, ename)
+           ^
+   fs/io_uring.c:11228:2: note: expanded from macro '__BUILD_BUG_VERIFY_ELEMENT'
+           BUILD_BUG_ON(offsetof(stype, ename) != eoffset); \
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:323:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:316:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:13:1: note: expanded from here
+   __compiletime_assert_764
+   ^
+>> fs/io_uring.c:11272:2: error: call to __compiletime_assert_766 declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct io_uring_cmd_sqe, personality) != sqe_offsets[1].personality
+           BUILD_BUG_SQEC_ELEM(sqe_offsets[1].personality, __u16,  personality);
+           ^
+   fs/io_uring.c:11268:2: note: expanded from macro 'BUILD_BUG_SQEC_ELEM'
+           __BUILD_BUG_VERIFY_ELEMENT(struct io_uring_cmd_sqe, eoffset, etype, ename)
+           ^
+   fs/io_uring.c:11228:2: note: expanded from macro '__BUILD_BUG_VERIFY_ELEMENT'
+           BUILD_BUG_ON(offsetof(stype, ename) != eoffset); \
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:323:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:316:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:21:1: note: expanded from here
+   __compiletime_assert_766
+   ^
+   2 errors generated.
+
+
+vim +/error +11271 fs/io_uring.c
+
+ 11231	
+ 11232	#define BUILD_BUG_SQE_ELEM(eoffset, etype, ename) \
+ 11233		__BUILD_BUG_VERIFY_ELEMENT(struct io_uring_sqe, eoffset, etype, ename)
+ 11234		BUILD_BUG_ON(sizeof(struct io_uring_sqe) != 64);
+ 11235		BUILD_BUG_ON(sizeof(struct io_uring_cmd_sqe) != 64);
+ 11236		BUILD_BUG_SQE_ELEM(0,  __u8,   hdr.opcode);
+ 11237		BUILD_BUG_SQE_ELEM(1,  __u8,   hdr.flags);
+ 11238		BUILD_BUG_SQE_ELEM(2,  __u16,  hdr.ioprio);
+ 11239		BUILD_BUG_SQE_ELEM(4,  __s32,  hdr.fd);
+ 11240		BUILD_BUG_SQE_ELEM(8,  __u64,  off);
+ 11241		BUILD_BUG_SQE_ELEM(8,  __u64,  addr2);
+ 11242		BUILD_BUG_SQE_ELEM(16, __u64,  addr);
+ 11243		BUILD_BUG_SQE_ELEM(16, __u64,  splice_off_in);
+ 11244		BUILD_BUG_SQE_ELEM(24, __u32,  len);
+ 11245		BUILD_BUG_SQE_ELEM(28,     __kernel_rwf_t, rw_flags);
+ 11246		BUILD_BUG_SQE_ELEM(28, /* compat */   int, rw_flags);
+ 11247		BUILD_BUG_SQE_ELEM(28, /* compat */ __u32, rw_flags);
+ 11248		BUILD_BUG_SQE_ELEM(28, __u32,  fsync_flags);
+ 11249		BUILD_BUG_SQE_ELEM(28, /* compat */ __u16,  poll_events);
+ 11250		BUILD_BUG_SQE_ELEM(28, __u32,  poll32_events);
+ 11251		BUILD_BUG_SQE_ELEM(28, __u32,  sync_range_flags);
+ 11252		BUILD_BUG_SQE_ELEM(28, __u32,  msg_flags);
+ 11253		BUILD_BUG_SQE_ELEM(28, __u32,  timeout_flags);
+ 11254		BUILD_BUG_SQE_ELEM(28, __u32,  accept_flags);
+ 11255		BUILD_BUG_SQE_ELEM(28, __u32,  cancel_flags);
+ 11256		BUILD_BUG_SQE_ELEM(28, __u32,  open_flags);
+ 11257		BUILD_BUG_SQE_ELEM(28, __u32,  statx_flags);
+ 11258		BUILD_BUG_SQE_ELEM(28, __u32,  fadvise_advice);
+ 11259		BUILD_BUG_SQE_ELEM(28, __u32,  splice_flags);
+ 11260		BUILD_BUG_SQE_ELEM(32, __u64,  user_data);
+ 11261		BUILD_BUG_SQE_ELEM(40, __u16,  buf_index);
+ 11262		BUILD_BUG_SQE_ELEM(40, __u16,  buf_group);
+ 11263		BUILD_BUG_SQE_ELEM(42, __u16,  personality);
+ 11264		BUILD_BUG_SQE_ELEM(44, __s32,  splice_fd_in);
+ 11265		BUILD_BUG_SQE_ELEM(44, __u32,  file_index);
+ 11266	
+ 11267		#define BUILD_BUG_SQEC_ELEM(eoffset, etype, ename) \
+ 11268		__BUILD_BUG_VERIFY_ELEMENT(struct io_uring_cmd_sqe, eoffset, etype, ename)
+ 11269		BUILD_BUG_SQEC_ELEM(8,				__u64,	user_data);
+ 11270		BUILD_BUG_SQEC_ELEM(18,				__u16,	personality);
+ 11271		BUILD_BUG_SQEC_ELEM(sqe_offsets[1].user_data,	__u64,	user_data);
+ 11272		BUILD_BUG_SQEC_ELEM(sqe_offsets[1].personality,	__u16,	personality);
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
