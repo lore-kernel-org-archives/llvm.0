@@ -1,42 +1,33 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78DB173
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 16:32:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640017934; x=1671553934;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AmeYQ2+C1rq8NgcMuvBbnlKuOlgOSEfDw7amnUjKDY8=;
-  b=mxm3f7f7oNGGfz/jqfvZbE2hPq3/0v5wJFAGn0DP96TJnMnJHt8m9Xm+
-   zgUBYadVO1tntVbEav6XA6wf/JXqJFtdkrkZrgQaDqtNCyUMCTiBzUgIN
-   Dx0J7xzAKuHfV8qG4/cuN52xzR+rIuUBePP1JbHY+5BHTG34bO6ISOAPP
-   uITav3bomzttzl8RqyMDJQ4bUwun9rrUbbMjYAy35JLVmjDI53fMLpH1j
-   SgcgIds+yQzYjw6byttG32uH6a0h3vRtkXMlpASRV+5fD0mh1XEDBbQGk
-   ChaXKoUWNS8O55broocVQMN0tfwPNeu8oVQjy4GL1n9ItWc+gwhTIy4Pe
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220893177"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="220893177"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 08:32:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="569903457"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 08:32:12 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mzLa7-0007zD-H4; Mon, 20 Dec 2021 16:32:11 +0000
-Date: Tue, 21 Dec 2021 00:31:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 8/9] fs/f2fs/file.c:1106:10: error: implicit
- declaration of function 'dax_layout_busy_page'
-Message-ID: <202112210031.prMeKhRK-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34DC173
+	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 16:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7F3C36AEB;
+	Mon, 20 Dec 2021 16:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1640019215;
+	bh=3tng0c+exoWLRMJhgUUBf8iWK6eeHHSOlliF3Y22w8o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RQ8wMoXleAc54QXgk6aG90sPteIpAjI4Sclqch1tFNhfql2CkHysTEp9+R+oPStu2
+	 bV2EyQ/peBQeUuVJ1+kqM5iA0qE1nOKPtOGvglygUEwUMc47Qi5S50Qyarh0VlPI6q
+	 jHOJl3ph7/Rho44asibCYenHnd73IVnNnC6dXIsAcUx890C0OWjoRVGZa2i6Hdyb0J
+	 Jfnp6u2c/hm0cQifluxyoHKSAvEO+FHPyAzVkdYNCrqIwjo4RxP2m5moSzCYVzXD4A
+	 LmGcRa4IRR93xvjNFKzZYK/5tRXkA9uKRa3m8NNwUhLit3a6mVpJQbeX3L/IkJMDfD
+	 /ZhcWy+ocgY1Q==
+Date: Mon, 20 Dec 2021 09:53:30 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Wei Liu <wei.liu@kernel.org>
+Cc: kernel test robot <lkp@intel.com>,
+	Tianyu Lan <Tianyu.Lan@microsoft.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Long Li <longli@microsoft.com>,
+	Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [hyperv:hyperv-next 4/5] drivers/hv/vmbus_drv.c:2082:29:
+ warning: shift count >= width of type
+Message-ID: <YcC1CobR/n0tJhdV@archlinux-ax161>
+References: <202112181827.o3X7GmHz-lkp@intel.com>
+ <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,69 +36,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
-commit: ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa [8/9] f2fs: handle layout changes to pinned DAX mappings
-config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210031.prMeKhRK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
+Hi Wei,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Sun, Dec 19, 2021 at 12:29:37PM +0000, Wei Liu wrote:
+> On Sat, Dec 18, 2021 at 06:20:43PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+> > head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
+> > commit: 6327882f7b4a476ea902de4bee5657f1028d6859 [4/5] scsi: storvsc: Add Isolation VM support for storvsc driver
+> > config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181827.o3X7GmHz-lkp@intel.com/config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=6327882f7b4a476ea902de4bee5657f1028d6859
+> >         git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+> >         git fetch --no-tags hyperv hyperv-next
+> >         git checkout 6327882f7b4a476ea902de4bee5657f1028d6859
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hv/
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> drivers/hv/vmbus_drv.c:2082:29: warning: shift count >= width of type [-Wshift-count-overflow]
+> >    static u64 vmbus_dma_mask = DMA_BIT_MASK(64);
+> >                                ^~~~~~~~~~~~~~~~
+> >    include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+> >    #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> >                                                         ^ ~~~
+> 
+> I don't think there is anything wrong with the code. When n is 64 the
+> problematic expression is not evaluated.
 
-All error/warnings (new ones prefixed by >>):
+Yes, unfortunately, this is an outstanding bug in clang where it does
+not properly build a control flow graph for expressions at a global
+scope:
 
-   fs/f2fs/file.c:584:7: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror,-Wimplicit-function-declaration]
-           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-                ^
->> fs/f2fs/file.c:1106:10: error: implicit declaration of function 'dax_layout_busy_page' [-Werror,-Wimplicit-function-declaration]
-                   page = dax_layout_busy_page(inode->i_mapping);
-                          ^
->> fs/f2fs/file.c:1106:8: warning: incompatible integer to pointer conversion assigning to 'struct page *' from 'int' [-Wint-conversion]
-                   page = dax_layout_busy_page(inode->i_mapping);
-                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+https://github.com/ClangBuiltLinux/linux/issues/92
 
+We should absolutely fix that but it has not come up too often so other
+fires have been prioritized. Now that -Werror is a thing, that issue's
+priority should probably be upgraded, as this warning will break
+allmodconfig for clang.
 
-vim +/dax_layout_busy_page +1106 fs/f2fs/file.c
+If you were feeling generous, just changing that to ~0ULL directly would
+solve the warning but I get that it is less documentation that way.
 
-  1096	
-  1097	int f2fs_break_layouts(struct inode *inode)
-  1098	{
-  1099		struct page *page;
-  1100		int error;
-  1101	
-  1102		if (WARN_ON_ONCE(!rwsem_is_locked(&inode->i_mapping->invalidate_lock)))
-  1103			return -EINVAL;
-  1104	
-  1105		do {
-> 1106			page = dax_layout_busy_page(inode->i_mapping);
-  1107			if (!page)
-  1108				return 0;
-  1109	
-  1110			error = ___wait_var_event(&page->_refcount,
-  1111					atomic_read(&page->_refcount) == 1,
-  1112					TASK_INTERRUPTIBLE, 0, 0,
-  1113					f2fs_wait_dax_page(inode));
-  1114		} while (error == 0);
-  1115	
-  1116		return error;
-  1117	}
-  1118	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
