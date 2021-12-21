@@ -1,42 +1,46 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D342C9D
-	for <llvm@lists.linux.dev>; Mon, 20 Dec 2021 22:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A98D2C9C
+	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 01:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640039368; x=1671575368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DxMcUMbioDOhOD93wmC5Rwexi0nOYA65S8MORrUrYfQ=;
-  b=iCPwT6taZLMBgb30pXxiI49HkJNa9mQ1aa4n3s4/HNB366wjK//vmHLX
-   RfrTivTMAhNaBtgyQ5zxgxlO3yif/NXGbeHfX2oCbY4/NZ9d1cQrZqh5m
-   uXMDHRvFdkgsPCAuQJI+HM7qrZaeOhGJJmDeu2l/MhU5SuJRmIQzogDbo
-   xnv3ykTciYra6qqbAuKEhMWZZ8CQL9bngjtrdDbr2k5k9CHK9Oq2ldgFp
-   EosULjXMuP4uhd+12AacG/yWvkXFMRBYitXKGqnKUUTH960WD44kbfeP/
-   i9LRbzIuEbXnL/fMrOT/GHsaB6DZe6UsRLu7tIrWeYoGnfFiHxV9jvMfw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="237819981"
-X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="237819981"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 14:29:27 -0800
+  t=1640051021; x=1671587021;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y2r13LSehJuyWi3VUyYlT3eBWB8znWZRHuXXRToy74E=;
+  b=T2NOSghiIdHiPUia+oKqeeKmdz1G51YiM9htyUB9S6puvETX53y28saD
+   /nwTVrUzyPhmgcqI4+AN6ZhUNwzkRvTkTLpaJk0nlaR1zeuiJNTkTd1Oa
+   LRT1luhY2mS23Q/josnxH7z2oYkGySORJrTQBEKYCAj9mF7FD4eT8s3No
+   pjtWoI+8zfyU8p+OinAn8MMZTDDwekLLy5bX7rk3QHsKBsCtt9/YOoQhD
+   XOYxmS53S+Qlpla7gDrdH2pEp92ygaQZXA27lpUXtYNVz4lq4cYJKCXME
+   kBEFtjsIKwhUVkYf2RoxF16oX4TPOzMK4spDPbbCP5bTmzzZpQrxqoHtP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="239048527"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="239048527"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 17:43:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="466093938"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="570050947"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 20 Dec 2021 14:29:25 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 17:43:38 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzR9p-0008Kh-7R; Mon, 20 Dec 2021 22:29:25 +0000
-Date: Tue, 21 Dec 2021 06:28:40 +0800
+	id 1mzUBl-0008Vi-EF; Tue, 21 Dec 2021 01:43:37 +0000
+Date: Tue, 21 Dec 2021 09:42:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cristian Marussi <cristian.marussi@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 1/2] firmware: arm_scmi: Filter out negative results
- on scmi_reading_get
-Message-ID: <202112210649.czZr6hoM-lkp@intel.com>
-References: <20211220174155.40239-2-cristian.marussi@arm.com>
+To: Fangrui Song <maskray@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <natechancellor@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [linux-stable-rc:queue/4.19 3414/9999]
+ arch/powerpc/kernel/process.c:1285:6: error: no previous prototype for
+ function 'show_user_instructions'
+Message-ID: <202112210926.fs7sutsS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,113 +49,391 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220174155.40239-2-cristian.marussi@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Cristian,
+Hi Fangrui,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on linux/master]
-[also build test WARNING on groeck-staging/hwmon-next soc/for-next linus/master v5.16-rc6 next-20211220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+First bad commit (maybe != root cause):
 
-url:    https://github.com/0day-ci/linux/commits/Cristian-Marussi/Sensor-readings-fixes/20211221-014235
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-config: hexagon-randconfig-r041-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210649.czZr6hoM-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
+head:   9f6406625bbb07737566962028df57ed2e9e7bc0
+commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [3414/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
+config: powerpc64-randconfig-r015-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210926.fs7sutsS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6f0ec7d066a305bdb889a75e772ef0be72f365f9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Cristian-Marussi/Sensor-readings-fixes/20211221-014235
-        git checkout 6f0ec7d066a305bdb889a75e772ef0be72f365f9
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=69c122751164c3c343eea205fd5c3e1d5132f967
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/4.19
+        git checkout 69c122751164c3c343eea205fd5c3e1d5132f967
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/arm_scmi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/firmware/arm_scmi/sensors.c:733:63: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (!ret && si->version > SCMIv2_SENSOR_PROTOCOL && *value & BIT(63)) {
-                                                                        ^~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^  ~~~~
-   1 warning generated.
+   In file included from arch/powerpc/kernel/process.c:18:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:19:
+   In file included from include/linux/string.h:6:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/kernel/process.c:18:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+   arch/powerpc/kernel/process.c:216:16: error: variable 'cpumsr' set but not used [-Werror,-Wunused-but-set-variable]
+           unsigned long cpumsr;
+                         ^
+>> arch/powerpc/kernel/process.c:1285:6: error: no previous prototype for function 'show_user_instructions' [-Werror,-Wmissing-prototypes]
+   void show_user_instructions(struct pt_regs *regs)
+        ^
+   arch/powerpc/kernel/process.c:1285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void show_user_instructions(struct pt_regs *regs)
+   ^
+   static 
+   4 errors generated.
+--
+   In file included from arch/powerpc/kernel/mce_power.c:26:
+   In file included from include/linux/ptrace.h:5:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/kernel/mce_power.c:26:
+   In file included from include/linux/ptrace.h:6:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+>> arch/powerpc/kernel/mce_power.c:601:6: error: no previous prototype for function '__machine_check_early_realmode_p7' [-Werror,-Wmissing-prototypes]
+   long __machine_check_early_realmode_p7(struct pt_regs *regs)
+        ^
+   arch/powerpc/kernel/mce_power.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long __machine_check_early_realmode_p7(struct pt_regs *regs)
+   ^
+   static 
+>> arch/powerpc/kernel/mce_power.c:609:6: error: no previous prototype for function '__machine_check_early_realmode_p8' [-Werror,-Wmissing-prototypes]
+   long __machine_check_early_realmode_p8(struct pt_regs *regs)
+        ^
+   arch/powerpc/kernel/mce_power.c:609:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long __machine_check_early_realmode_p8(struct pt_regs *regs)
+   ^
+   static 
+   arch/powerpc/kernel/mce_power.c:614:6: error: no previous prototype for function '__machine_check_early_realmode_p9' [-Werror,-Wmissing-prototypes]
+   long __machine_check_early_realmode_p9(struct pt_regs *regs)
+        ^
+   arch/powerpc/kernel/mce_power.c:614:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long __machine_check_early_realmode_p9(struct pt_regs *regs)
+   ^
+   static 
+   5 errors generated.
+--
+   In file included from arch/powerpc/mm/pgtable-book3s64.c:10:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:19:
+   In file included from include/linux/string.h:6:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/mm/pgtable-book3s64.c:10:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+   arch/powerpc/mm/pgtable-book3s64.c:462:6: error: no previous prototype for function 'arch_report_meminfo' [-Werror,-Wmissing-prototypes]
+   void arch_report_meminfo(struct seq_file *m)
+        ^
+   arch/powerpc/mm/pgtable-book3s64.c:462:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void arch_report_meminfo(struct seq_file *m)
+   ^
+   static 
+>> arch/powerpc/mm/pgtable-book3s64.c:493:5: error: no previous prototype for function 'pmd_move_must_withdraw' [-Werror,-Wmissing-prototypes]
+   int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
+       ^
+   arch/powerpc/mm/pgtable-book3s64.c:493:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
+   ^
+   static 
+   4 errors generated.
+--
+   In file included from arch/powerpc/mm/pkeys.c:8:
+   In file included from arch/powerpc/include/asm/mman.h:15:
+   In file included from include/linux/mm.h:9:
+   In file included from include/linux/mmdebug.h:5:
+   In file included from include/linux/bug.h:5:
+   In file included from arch/powerpc/include/asm/bug.h:128:
+   In file included from include/asm-generic/bug.h:5:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/mm/pkeys.c:8:
+   In file included from arch/powerpc/include/asm/mman.h:15:
+   In file included from include/linux/mm.h:10:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:54:
+   In file included from include/linux/irqflags.h:16:
+   In file included from arch/powerpc/include/asm/irqflags.h:12:
+   In file included from arch/powerpc/include/asm/hw_irq.h:64:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+>> arch/powerpc/mm/pkeys.c:60:5: error: no previous prototype for function 'pkey_initialize' [-Werror,-Wmissing-prototypes]
+   int pkey_initialize(void)
+       ^
+   arch/powerpc/mm/pkeys.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pkey_initialize(void)
+   ^
+   static 
+>> arch/powerpc/mm/pkeys.c:406:6: error: no previous prototype for function 'arch_vma_access_permitted' [-Werror,-Wmissing-prototypes]
+   bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
+        ^
+   arch/powerpc/mm/pkeys.c:406:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
+   ^
+   static 
+>> arch/powerpc/mm/pkeys.c:420:6: error: no previous prototype for function 'arch_dup_pkeys' [-Werror,-Wmissing-prototypes]
+   void arch_dup_pkeys(struct mm_struct *oldmm, struct mm_struct *mm)
+        ^
+   arch/powerpc/mm/pkeys.c:420:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void arch_dup_pkeys(struct mm_struct *oldmm, struct mm_struct *mm)
+   ^
+   static 
+   5 errors generated.
+--
+   In file included from arch/powerpc/sysdev/udbg_memcons.c:21:
+   In file included from include/linux/kernel.h:10:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+>> arch/powerpc/sysdev/udbg_memcons.c:48:6: error: no previous prototype for function 'memcons_putc' [-Werror,-Wmissing-prototypes]
+   void memcons_putc(char c)
+        ^
+   arch/powerpc/sysdev/udbg_memcons.c:48:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void memcons_putc(char c)
+   ^
+   static 
+>> arch/powerpc/sysdev/udbg_memcons.c:61:5: error: no previous prototype for function 'memcons_getc_poll' [-Werror,-Wmissing-prototypes]
+   int memcons_getc_poll(void)
+       ^
+   arch/powerpc/sysdev/udbg_memcons.c:61:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int memcons_getc_poll(void)
+   ^
+   static 
+>> arch/powerpc/sysdev/udbg_memcons.c:84:5: error: no previous prototype for function 'memcons_getc' [-Werror,-Wmissing-prototypes]
+   int memcons_getc(void)
+       ^
+   arch/powerpc/sysdev/udbg_memcons.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int memcons_getc(void)
+   ^
+   static 
+   4 errors generated.
+--
+   In file included from arch/powerpc/platforms/powermac/feature.c:20:
+   In file included from include/linux/init.h:5:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/platforms/powermac/feature.c:21:
+   In file included from include/linux/delay.h:26:
+   In file included from arch/powerpc/include/asm/delay.h:6:
+   In file included from arch/powerpc/include/asm/time.h:18:
+   In file included from include/linux/percpu.h:7:
+   In file included from include/linux/smp.h:64:
+   In file included from arch/powerpc/include/asm/smp.h:28:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+>> arch/powerpc/platforms/powermac/feature.c:1548:6: error: no previous prototype for function 'g5_phy_disable_cpu1' [-Werror,-Wmissing-prototypes]
+   void g5_phy_disable_cpu1(void)
+        ^
+   arch/powerpc/platforms/powermac/feature.c:1548:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void g5_phy_disable_cpu1(void)
+   ^
+   static 
+   3 errors generated.
+--
+   In file included from arch/powerpc/platforms/powernv/pci-ioda.c:14:
+   In file included from include/linux/kernel.h:10:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/platforms/powernv/pci-ioda.c:15:
+   In file included from include/linux/pci.h:29:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:13:
+   In file included from include/linux/mutex.h:14:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+>> arch/powerpc/platforms/powernv/pci-ioda.c:874:18: error: variable 'parent' set but not used [-Werror,-Wunused-but-set-variable]
+           struct pci_dev *parent;
+                           ^
+   3 errors generated.
+--
+   In file included from arch/powerpc/platforms/pseries/ras.c:19:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:19:
+   In file included from include/linux/string.h:6:
+   In file included from include/linux/compiler.h:250:
+   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:311:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+   In file included from arch/powerpc/platforms/pseries/ras.c:19:
+   In file included from include/linux/sched.h:12:
+   In file included from arch/powerpc/include/asm/current.h:16:
+   In file included from arch/powerpc/include/asm/paca.h:21:
+   In file included from arch/powerpc/include/asm/lppaca.h:36:
+   In file included from arch/powerpc/include/asm/mmu.h:313:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
+   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
+   static inline const int pud_pfn(pud_t pud)
+                 ^~~~~~
+   arch/powerpc/platforms/pseries/ras.c:59:12: error: no previous prototype for function 'init_ras_hotplug_IRQ' [-Werror,-Wmissing-prototypes]
+   int __init init_ras_hotplug_IRQ(void)
+              ^
+   arch/powerpc/platforms/pseries/ras.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init init_ras_hotplug_IRQ(void)
+   ^
+   static 
+>> arch/powerpc/platforms/pseries/ras.c:163:7: error: variable 'modifier' set but not used [-Werror,-Wunused-but-set-variable]
+           char modifier;
+                ^
+   arch/powerpc/platforms/pseries/ras.c:252:6: error: variable 'status' set but not used [-Werror,-Wunused-but-set-variable]
+           int status;
+               ^
+   5 errors generated.
 
 
-vim +733 drivers/firmware/arm_scmi/sensors.c
+vim +/show_user_instructions +1285 arch/powerpc/kernel/process.c
 
-   681	
-   682	/**
-   683	 * scmi_sensor_reading_get  - Read scalar sensor value
-   684	 * @ph: Protocol handle
-   685	 * @sensor_id: Sensor ID
-   686	 * @value: The 64bit value sensor reading
-   687	 *
-   688	 * This function returns a single 64 bit reading value representing the sensor
-   689	 * value; if the platform SCMI Protocol implementation and the sensor support
-   690	 * multiple axis and timestamped-reads, this just returns the first axis while
-   691	 * dropping the timestamp value.
-   692	 * Use instead the @scmi_sensor_reading_get_timestamped to retrieve the array of
-   693	 * timestamped multi-axis values.
-   694	 *
-   695	 * Return: 0 on Success
-   696	 */
-   697	static int scmi_sensor_reading_get(const struct scmi_protocol_handle *ph,
-   698					   u32 sensor_id, u64 *value)
-   699	{
-   700		int ret;
-   701		struct scmi_xfer *t;
-   702		struct scmi_msg_sensor_reading_get *sensor;
-   703		struct sensors_info *si = ph->get_priv(ph);
-   704		struct scmi_sensor_info *s = si->sensors + sensor_id;
-   705	
-   706		ret = ph->xops->xfer_get_init(ph, SENSOR_READING_GET,
-   707					      sizeof(*sensor), 0, &t);
-   708		if (ret)
-   709			return ret;
-   710	
-   711		sensor = t->tx.buf;
-   712		sensor->id = cpu_to_le32(sensor_id);
-   713		if (s->async) {
-   714			sensor->flags = cpu_to_le32(SENSOR_READ_ASYNC);
-   715			ret = ph->xops->do_xfer_with_response(ph, t);
-   716			if (!ret) {
-   717				struct scmi_resp_sensor_reading_complete *resp;
-   718	
-   719				resp = t->rx.buf;
-   720				if (le32_to_cpu(resp->id) == sensor_id)
-   721					*value =
-   722						get_unaligned_le64(&resp->readings_low);
-   723				else
-   724					ret = -EPROTO;
-   725			}
-   726		} else {
-   727			sensor->flags = cpu_to_le32(0);
-   728			ret = ph->xops->do_xfer(ph, t);
-   729			if (!ret)
-   730				*value = get_unaligned_le64(t->rx.buf);
-   731		}
-   732	
- > 733		if (!ret && si->version > SCMIv2_SENSOR_PROTOCOL && *value & BIT(63)) {
-   734			dev_warn_once(ph->dev,
-   735				      "SCMI FW Sensor version:0x%X reported negative value %ld\n",
-   736				      si->version, (long)*value);
-   737			*value = 0;
-   738			ret = -EIO;
-   739		}
-   740	
-   741		ph->xops->xfer_put(ph, t);
-   742		return ret;
-   743	}
-   744	
+06d67d54741a5b Paul Mackerras          2005-10-10  1284  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01 @1285  void show_user_instructions(struct pt_regs *regs)
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1286  {
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1287  	unsigned long pc;
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1288  	int i;
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1289  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1290  	pc = regs->nip - (instructions_to_print * 3 / 4 * sizeof(int));
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1291  
+a932ed3b718147 Michael Ellerman        2018-10-05  1292  	/*
+a932ed3b718147 Michael Ellerman        2018-10-05  1293  	 * Make sure the NIP points at userspace, not kernel text/data or
+a932ed3b718147 Michael Ellerman        2018-10-05  1294  	 * elsewhere.
+a932ed3b718147 Michael Ellerman        2018-10-05  1295  	 */
+a932ed3b718147 Michael Ellerman        2018-10-05  1296  	if (!__access_ok(pc, instructions_to_print * sizeof(int), USER_DS)) {
+a932ed3b718147 Michael Ellerman        2018-10-05  1297  		pr_info("%s[%d]: Bad NIP, not dumping instructions.\n",
+a932ed3b718147 Michael Ellerman        2018-10-05  1298  			current->comm, current->pid);
+a932ed3b718147 Michael Ellerman        2018-10-05  1299  		return;
+a932ed3b718147 Michael Ellerman        2018-10-05  1300  	}
+a932ed3b718147 Michael Ellerman        2018-10-05  1301  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1302  	pr_info("%s[%d]: code: ", current->comm, current->pid);
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1303  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1304  	for (i = 0; i < instructions_to_print; i++) {
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1305  		int instr;
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1306  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1307  		if (!(i % 8) && (i > 0)) {
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1308  			pr_cont("\n");
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1309  			pr_info("%s[%d]: code: ", current->comm, current->pid);
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1310  		}
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1311  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1312  		if (probe_kernel_address((unsigned int __user *)pc, instr)) {
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1313  			pr_cont("XXXXXXXX ");
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1314  		} else {
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1315  			if (regs->nip == pc)
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1316  				pr_cont("<%08x> ", instr);
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1317  			else
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1318  				pr_cont("%08x ", instr);
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1319  		}
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1320  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1321  		pc += sizeof(int);
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1322  	}
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1323  
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1324  	pr_cont("\n");
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1325  }
+88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1326  
+
+:::::: The code at line 1285 was first introduced by commit
+:::::: 88b0fe17573592a8e3196bf143f865da460178e7 powerpc: Add show_user_instructions()
+
+:::::: TO: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
