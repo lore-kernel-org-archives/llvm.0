@@ -1,166 +1,92 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E459173
-	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 17:16:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640106978; x=1671642978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IFDWg1QnMHEW+1kgWM0jrUfEP4GIANB+qKGijyGGPSQ=;
-  b=bnjo+3F5rQrfJ1AhFO4tljjFCgm0IrAv+sCe837U18sRZlzb7c4CyJZB
-   7TRsRSiSeMzcTEDh8xPoxDR1fW+8uO9SLucQZ2PpedYFCn8Rbvr0fbGXE
-   GB/HdsnhJg+G53WF3gZH+wXPBOoPbcZyJidht9ODOoGdjKOxclg07xQQp
-   bWtXs29fM1aQJS9jjYcCuDoktuvA6nyWgEU8IunIPiBRVwGN058Yz/klX
-   n9sW5wx1xfB4X0179WqZggL0cbo0M8MIFs0/GzVVnFW1x1RWun02H2xmK
-   y0rPJH2Xu53AXB1AdkJh7E2UGagYfAjNdc9XPnlfPEN5Z+KG4BWQb7hvu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="221115418"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="221115418"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:15:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="508149106"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 09:15:01 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mzij6-0009Eu-Ub; Tue, 21 Dec 2021 17:15:00 +0000
-Date: Wed, 22 Dec 2021 01:14:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F7C168
+	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 18:45:03 +0000 (UTC)
+Received: by mail-wm1-f47.google.com with SMTP id c66so5179wma.5
+        for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 10:45:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sP8tGVLSq+J8OoY4ZEIZdlL5ioBYvuT3xm7rNvUEflw=;
+        b=Jg3B9hSImyqr8JAxuDtr8VSKOk2Y/dAXnQlgy7Gs0O7lNN48oonawsgfd5T0X99BMo
+         3prOZpl0lcyHbJkGoeQwRcYztxCp+92XIxOGuuSg6El7mc6aTdhK+T+tTj/i2VYsIkqU
+         gY4zk7gyYyq74X4e4k7hJkOwXU8o37tJO+WpnIyFLBAnAOWNNONTc1q9kMAwmb9jkEnt
+         I91RZjm6gypNO5i37RPnL531XZMYwFlPpkaU+lQ8bkzy9e7gkPtEg11oida65UkuZBiX
+         g6SwKhPOWCEuCI3L3WC3qL/CvbAbkOjUohDi9YCu83hiYtcqFyy60QjlVj1VsEQut2Go
+         lp0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sP8tGVLSq+J8OoY4ZEIZdlL5ioBYvuT3xm7rNvUEflw=;
+        b=mlxMRYy54PHYnh0DFTAGafQCO4bCs+/9AeWwNwY5fd2xxrmmn2fKkQdKfC1R3Ga/n6
+         uXXbSfxcsjvLWmFG6h0C4i8Ck13vVTS1KB3ww3WLnMKl5WKvLy+//lNWQJayIrOPXzzu
+         QdfGb9FT6j/0ySbmpB7qt1bGBURjcxXYgkJf0MZdI3Y00nWpym+YWnzpxpLSzULYnmzx
+         QXlXO6BiAATAAMmQ2RnEeOVL25vpXETE9G+p2FlZPFpyK8YQMyg4ETr4wwTafgWZPbvW
+         ZZH8g2GAk7LS7x4HW9puYhOMb3ysgXIE/BTm4YolWxgeweDZOPuIS837sP3pS89IWemD
+         34mQ==
+X-Gm-Message-State: AOAM5312vBCqxKnU66OBjOt6FjqpKNCiYk4QbAgoyB/suEEoR06/6Kt4
+	QzhGlUOf9m4Ys9X8VEdW7Wc=
+X-Google-Smtp-Source: ABdhPJwNmb5CLJkrtrJvYyjtqY1LRirngqPgqUNRGYXV+tkZmmmRO1HN1TdmGtt0k3LRJ6c2lALRaQ==
+X-Received: by 2002:a7b:c94f:: with SMTP id i15mr3892023wml.79.1640112302147;
+        Tue, 21 Dec 2021 10:45:02 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n8sm20269308wri.47.2021.12.21.10.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 10:45:01 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Iurii Zaikin <yzaikin@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Xiaoming Ni <nixiaoming@huawei.com>,
+	linux-fsdevel@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>
-Subject: [frederic-dynticks:preempt/arm-v4 2/5] lib/Kconfig.debug:536:error:
- recursive dependency detected!
-Message-ID: <202112220052.Go2LhCpb-lkp@intel.com>
+	llvm@lists.linux.dev
+Subject: [PATCH][next] kernel/sysctl.c: remove unused variable ten_thousand
+Date: Tue, 21 Dec 2021 18:45:01 +0000
+Message-Id: <20211221184501.574670-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git preempt/arm-v4
-head:   6fc1c7e3d83c4e06b019b041894d9bb25f37ac6c
-commit: 44d4846a007823ebf184ef1861a37362a43c6434 [2/5] arm64: implement support for static call trampolines
-config: arm64-randconfig-r022-20211220
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6c2bf01270a8a52b7986d5c49eaa7ad1c7083ec5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=44d4846a007823ebf184ef1861a37362a43c6434
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks preempt/arm-v4
-        git checkout 44d4846a007823ebf184ef1861a37362a43c6434
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64  randconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
+The const variable ten_thousand is not used, it is redundant and can
+be removed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cleans up clang warning:
+kernel/sysctl.c:99:18: warning: unused variable 'ten_thousand' [-Wunused-const-variable]
+static const int ten_thousand = 10000;
 
-All errors (new ones prefixed by >>):
-
->> lib/Kconfig.debug:536:error: recursive dependency detected!
-   lib/Kconfig.debug:536: symbol DEBUG_FS is selected by ZSMALLOC_STAT
-   mm/Kconfig:705: symbol ZSMALLOC_STAT depends on ZSMALLOC
-   mm/Kconfig:694: symbol ZSMALLOC is selected by ZSWAP_ZPOOL_DEFAULT_ZSMALLOC
-   mm/Kconfig:644: symbol ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is part of choice <choice>
-   mm/Kconfig:618: choice <choice> contains symbol <choice>
-   mm/Kconfig:618: choice <choice> contains symbol ZSWAP
-   mm/Kconfig:534: symbol ZSWAP depends on CRYPTO
-   crypto/Kconfig:16: symbol CRYPTO is selected by SND_SOC_CROS_EC_CODEC
-   sound/soc/codecs/Kconfig:583: symbol SND_SOC_CROS_EC_CODEC is selected by SND_SOC_AMD_RV_RT5682_MACH
-   sound/soc/amd/Kconfig:32: symbol SND_SOC_AMD_RV_RT5682_MACH depends on GPIOLIB
-   drivers/gpio/Kconfig:14: symbol GPIOLIB is selected by CEC_GPIO
-   drivers/media/cec/platform/Kconfig:43: symbol CEC_GPIO depends on PREEMPTION
-   kernel/Kconfig.preempt:92: symbol PREEMPTION is selected by PREEMPT_BUILD
-   kernel/Kconfig.preempt:9: symbol PREEMPT_BUILD is selected by PREEMPT_DYNAMIC
-   kernel/Kconfig.preempt:96: symbol PREEMPT_DYNAMIC depends on HAVE_PREEMPT_DYNAMIC
-   arch/Kconfig:1266: symbol HAVE_PREEMPT_DYNAMIC depends on HAVE_STATIC_CALL
-   arch/Kconfig:1259: symbol HAVE_STATIC_CALL is selected by LTO_CLANG_THIN
-   arch/Kconfig:697: symbol LTO_CLANG_THIN is part of choice <choice>
-   arch/Kconfig:663: choice <choice> contains symbol LTO_CLANG_FULL
-   arch/Kconfig:678: symbol LTO_CLANG_FULL is part of choice HAS_LTO_CLANG
-   arch/Kconfig:649: symbol HAS_LTO_CLANG depends on GCOV_KERNEL
-   kernel/gcov/Kconfig:4: symbol GCOV_KERNEL depends on DEBUG_FS
-   For a resolution refer to Documentation/kbuild/kconfig-language.rst
-   subsection "Kconfig recursive dependency limitations"
-
-
-vim +536 lib/Kconfig.debug
-
-6210b6402f582b Changbin Du    2019-12-06  492  
-6dfc06651b3d29 Dave Hansen    2013-07-01  493  config MAGIC_SYSRQ
-6dfc06651b3d29 Dave Hansen    2013-07-01  494  	bool "Magic SysRq key"
-6dfc06651b3d29 Dave Hansen    2013-07-01  495  	depends on !UML
-6dfc06651b3d29 Dave Hansen    2013-07-01  496  	help
-6dfc06651b3d29 Dave Hansen    2013-07-01  497  	  If you say Y here, you will have some control over the system even
-6dfc06651b3d29 Dave Hansen    2013-07-01  498  	  if the system crashes for example during kernel debugging (e.g., you
-6dfc06651b3d29 Dave Hansen    2013-07-01  499  	  will be able to flush the buffer cache to disk, reboot the system
-6dfc06651b3d29 Dave Hansen    2013-07-01  500  	  immediately or dump some status information). This is accomplished
-6dfc06651b3d29 Dave Hansen    2013-07-01  501  	  by pressing various keys while holding SysRq (Alt+PrintScreen). It
-6dfc06651b3d29 Dave Hansen    2013-07-01  502  	  also works on a serial console (on PC hardware at least), if you
-6dfc06651b3d29 Dave Hansen    2013-07-01  503  	  send a BREAK and then within 5 seconds a command keypress. The
-f8998c226587fb Hans Holmberg  2017-03-16  504  	  keys are documented in <file:Documentation/admin-guide/sysrq.rst>.
-f8998c226587fb Hans Holmberg  2017-03-16  505  	  Don't say Y unless you really know what this hack does.
-8446f1d391f3d2 Ingo Molnar    2005-09-06  506  
-8eaede49dfdc1f Ben Hutchings  2013-10-07  507  config MAGIC_SYSRQ_DEFAULT_ENABLE
-8eaede49dfdc1f Ben Hutchings  2013-10-07  508  	hex "Enable magic SysRq key functions by default"
-8eaede49dfdc1f Ben Hutchings  2013-10-07  509  	depends on MAGIC_SYSRQ
-8eaede49dfdc1f Ben Hutchings  2013-10-07  510  	default 0x1
-8eaede49dfdc1f Ben Hutchings  2013-10-07  511  	help
-8eaede49dfdc1f Ben Hutchings  2013-10-07  512  	  Specifies which SysRq key functions are enabled by default.
-8eaede49dfdc1f Ben Hutchings  2013-10-07  513  	  This may be set to 1 or 0 to enable or disable them all, or
-f8998c226587fb Hans Holmberg  2017-03-16  514  	  to a bitmask as described in Documentation/admin-guide/sysrq.rst.
-8eaede49dfdc1f Ben Hutchings  2013-10-07  515  
-732dbf3a6104a3 Felix Fietkau  2016-12-22  516  config MAGIC_SYSRQ_SERIAL
-732dbf3a6104a3 Felix Fietkau  2016-12-22  517  	bool "Enable magic SysRq key over serial"
-732dbf3a6104a3 Felix Fietkau  2016-12-22  518  	depends on MAGIC_SYSRQ
-732dbf3a6104a3 Felix Fietkau  2016-12-22  519  	default y
-732dbf3a6104a3 Felix Fietkau  2016-12-22  520  	help
-732dbf3a6104a3 Felix Fietkau  2016-12-22  521  	  Many embedded boards have a disconnected TTL level serial which can
-732dbf3a6104a3 Felix Fietkau  2016-12-22  522  	  generate some garbage that can lead to spurious false sysrq detects.
-732dbf3a6104a3 Felix Fietkau  2016-12-22  523  	  This option allows you to decide whether you want to enable the
-732dbf3a6104a3 Felix Fietkau  2016-12-22  524  	  magic SysRq key.
-732dbf3a6104a3 Felix Fietkau  2016-12-22  525  
-68af43173d3fce Dmitry Safonov 2020-03-02  526  config MAGIC_SYSRQ_SERIAL_SEQUENCE
-68af43173d3fce Dmitry Safonov 2020-03-02  527  	string "Char sequence that enables magic SysRq over serial"
-68af43173d3fce Dmitry Safonov 2020-03-02  528  	depends on MAGIC_SYSRQ_SERIAL
-68af43173d3fce Dmitry Safonov 2020-03-02  529  	default ""
-68af43173d3fce Dmitry Safonov 2020-03-02  530  	help
-68af43173d3fce Dmitry Safonov 2020-03-02  531  	  Specifies a sequence of characters that can follow BREAK to enable
-68af43173d3fce Dmitry Safonov 2020-03-02  532  	  SysRq on a serial console.
-68af43173d3fce Dmitry Safonov 2020-03-02  533  
-d3394b3d51828d Dmitry Safonov 2020-03-06  534  	  If unsure, leave an empty string and the option will not be enabled.
-d3394b3d51828d Dmitry Safonov 2020-03-06  535  
-ec29a5c197e6ef Changbin Du    2019-12-06 @536  config DEBUG_FS
-ec29a5c197e6ef Changbin Du    2019-12-06  537  	bool "Debug Filesystem"
-ec29a5c197e6ef Changbin Du    2019-12-06  538  	help
-ec29a5c197e6ef Changbin Du    2019-12-06  539  	  debugfs is a virtual file system that kernel developers use to put
-ec29a5c197e6ef Changbin Du    2019-12-06  540  	  debugging files into.  Enable this option to be able to read and
-ec29a5c197e6ef Changbin Du    2019-12-06  541  	  write to these files.
-ec29a5c197e6ef Changbin Du    2019-12-06  542  
-ec29a5c197e6ef Changbin Du    2019-12-06  543  	  For detailed documentation on the debugfs API, see
-ec29a5c197e6ef Changbin Du    2019-12-06  544  	  Documentation/filesystems/.
-ec29a5c197e6ef Changbin Du    2019-12-06  545  
-ec29a5c197e6ef Changbin Du    2019-12-06  546  	  If unsure, say N.
-ec29a5c197e6ef Changbin Du    2019-12-06  547  
-
-:::::: The code at line 536 was first introduced by commit
-:::::: ec29a5c197e6ef88fd94a2f3ea087037ae8acc21 kernel-hacking: move DEBUG_FS to 'Generic Kernel Debugging Instruments'
-
-:::::: TO: Changbin Du <changbin.du@gmail.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
+Fixes: c26da54dc8ca ("printk: move printk sysctl to printk/sysctl.c")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ kernel/sysctl.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 7f07b058b180..ace130de4a17 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -95,9 +95,6 @@
+ 
+ /* Constants used for minimum and  maximum */
+ 
+-#ifdef CONFIG_PRINTK
+-static const int ten_thousand = 10000;
+-#endif
+ #ifdef CONFIG_PERF_EVENTS
+ static const int six_hundred_forty_kb = 640 * 1024;
+ #endif
+-- 
+2.33.1
+
