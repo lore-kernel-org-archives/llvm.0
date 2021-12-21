@@ -1,98 +1,166 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EEF2C82
-	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 15:22:14 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2F5DD1F388;
-	Tue, 21 Dec 2021 15:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1640100133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z59VsQxPK7tcYGrkiUV7duMrk49fkRi2ISpPTXEYeVw=;
-	b=kRHcuyPJG/g1WfdTCvJIc3r+XpE+Qmg+GMpFMQFebNt/s4nIc2+Yc3cnqkD6IdRvgIvrrU
-	iiHPGfjbjzZvzMO6XE/SNro+KTKugA4MiYFWK9kztv+9f2b4BUYbMprXN0PDvRV2Ac4IJo
-	4bU2ZCNjWT7xFIq0fqIJE8ENidBIYMQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1640100133;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z59VsQxPK7tcYGrkiUV7duMrk49fkRi2ISpPTXEYeVw=;
-	b=ddLjwFfbNdKuBPnlRt96fTBTphXHFMP5fn2SoN3I+ANCSmxD/X+5XmLoOt8OlwDnDXVw+/
-	a7AQTg9lMxmjTzBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10F9613C98;
-	Tue, 21 Dec 2021 15:22:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id TmKbAyXxwWGAZAAAMHmgww
-	(envelope-from <bp@suse.de>); Tue, 21 Dec 2021 15:22:13 +0000
-Date: Tue, 21 Dec 2021 16:22:19 +0100
-From: Borislav Petkov <bp@suse.de>
-To: Marco Elver <elver@google.com>
-Cc: Carel Si <beibei.si@intel.com>, "Yin, Fengwei" <fengwei.yin@intel.com>,
-	Joerg Roedel <jroedel@suse.de>, LKML <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-	"bfields@fieldses.org" <bfields@fieldses.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
- BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
-Message-ID: <YcHxKzB3WPurKlZ9@zn.tnic>
-References: <YbjIoewxGaodXHKF@zn.tnic>
- <20211215070012.GA26582@linux.intel.com>
- <Ybm96seTxl+pWjTX@zn.tnic>
- <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
- <YbsPwyLnejLQMbTb@zn.tnic>
- <20211216115838.GA23522@linux.intel.com>
- <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
- <YbyIJYzqtHPKRMFt@zn.tnic>
- <20211221143153.GA4676@linux.intel.com>
- <CANpmjNO4hs1B9eDY9edGGOXY45a8smdtYfYfbDRnGWSYch4wGg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E459173
+	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 17:16:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640106978; x=1671642978;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IFDWg1QnMHEW+1kgWM0jrUfEP4GIANB+qKGijyGGPSQ=;
+  b=bnjo+3F5rQrfJ1AhFO4tljjFCgm0IrAv+sCe837U18sRZlzb7c4CyJZB
+   7TRsRSiSeMzcTEDh8xPoxDR1fW+8uO9SLucQZ2PpedYFCn8Rbvr0fbGXE
+   GB/HdsnhJg+G53WF3gZH+wXPBOoPbcZyJidht9ODOoGdjKOxclg07xQQp
+   bWtXs29fM1aQJS9jjYcCuDoktuvA6nyWgEU8IunIPiBRVwGN058Yz/klX
+   n9sW5wx1xfB4X0179WqZggL0cbo0M8MIFs0/GzVVnFW1x1RWun02H2xmK
+   y0rPJH2Xu53AXB1AdkJh7E2UGagYfAjNdc9XPnlfPEN5Z+KG4BWQb7hvu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="221115418"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="221115418"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:15:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="508149106"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 09:15:01 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1mzij6-0009Eu-Ub; Tue, 21 Dec 2021 17:15:00 +0000
+Date: Wed, 22 Dec 2021 01:14:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Frederic Weisbecker <frederic@kernel.org>
+Subject: [frederic-dynticks:preempt/arm-v4 2/5] lib/Kconfig.debug:536:error:
+ recursive dependency detected!
+Message-ID: <202112220052.Go2LhCpb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANpmjNO4hs1B9eDY9edGGOXY45a8smdtYfYfbDRnGWSYch4wGg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Dec 21, 2021 at 04:10:31PM +0100, Marco Elver wrote:
-> Also double-check the Makefile-based solution: the Makefiles in both
-> directories already contain various KCOV_INSTRUMENT/K*SAN_SANITIZE :=
-> n, so perhaps adding GCOV_PROFILE or GCOV_PROFILE_whicheverfile.o := n
-> may be more appropriate should the functions that should not be
-> instrumented be a moving target, and prone to breakage again in
-> future.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git preempt/arm-v4
+head:   6fc1c7e3d83c4e06b019b041894d9bb25f37ac6c
+commit: 44d4846a007823ebf184ef1861a37362a43c6434 [2/5] arm64: implement support for static call trampolines
+config: arm64-randconfig-r022-20211220
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6c2bf01270a8a52b7986d5c49eaa7ad1c7083ec5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=44d4846a007823ebf184ef1861a37362a43c6434
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks preempt/arm-v4
+        git checkout 44d4846a007823ebf184ef1861a37362a43c6434
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
 
-Yeah, I asked whether we should exclude the whole ...cpu/common.c from
-profiling - it has mostly init code so it probably doesn't matter
-for coverage but no one said anything so I left it to the function
-annotation.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-And also, I'm still waiting on clang folks to chime in on the New Pass
-Manager and whether there's a bug in clang there so that we won't need
-the __no_profile annotation at all. I mean, gcc is fine with that config
-so unless clang is doing more profiling gunk than gcc and requires that
-__llvm_gcov_init constructor... see Nathan's mail upthread.
+All errors (new ones prefixed by >>):
 
-Thx.
+>> lib/Kconfig.debug:536:error: recursive dependency detected!
+   lib/Kconfig.debug:536: symbol DEBUG_FS is selected by ZSMALLOC_STAT
+   mm/Kconfig:705: symbol ZSMALLOC_STAT depends on ZSMALLOC
+   mm/Kconfig:694: symbol ZSMALLOC is selected by ZSWAP_ZPOOL_DEFAULT_ZSMALLOC
+   mm/Kconfig:644: symbol ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is part of choice <choice>
+   mm/Kconfig:618: choice <choice> contains symbol <choice>
+   mm/Kconfig:618: choice <choice> contains symbol ZSWAP
+   mm/Kconfig:534: symbol ZSWAP depends on CRYPTO
+   crypto/Kconfig:16: symbol CRYPTO is selected by SND_SOC_CROS_EC_CODEC
+   sound/soc/codecs/Kconfig:583: symbol SND_SOC_CROS_EC_CODEC is selected by SND_SOC_AMD_RV_RT5682_MACH
+   sound/soc/amd/Kconfig:32: symbol SND_SOC_AMD_RV_RT5682_MACH depends on GPIOLIB
+   drivers/gpio/Kconfig:14: symbol GPIOLIB is selected by CEC_GPIO
+   drivers/media/cec/platform/Kconfig:43: symbol CEC_GPIO depends on PREEMPTION
+   kernel/Kconfig.preempt:92: symbol PREEMPTION is selected by PREEMPT_BUILD
+   kernel/Kconfig.preempt:9: symbol PREEMPT_BUILD is selected by PREEMPT_DYNAMIC
+   kernel/Kconfig.preempt:96: symbol PREEMPT_DYNAMIC depends on HAVE_PREEMPT_DYNAMIC
+   arch/Kconfig:1266: symbol HAVE_PREEMPT_DYNAMIC depends on HAVE_STATIC_CALL
+   arch/Kconfig:1259: symbol HAVE_STATIC_CALL is selected by LTO_CLANG_THIN
+   arch/Kconfig:697: symbol LTO_CLANG_THIN is part of choice <choice>
+   arch/Kconfig:663: choice <choice> contains symbol LTO_CLANG_FULL
+   arch/Kconfig:678: symbol LTO_CLANG_FULL is part of choice HAS_LTO_CLANG
+   arch/Kconfig:649: symbol HAS_LTO_CLANG depends on GCOV_KERNEL
+   kernel/gcov/Kconfig:4: symbol GCOV_KERNEL depends on DEBUG_FS
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
 
--- 
-Regards/Gruss,
-    Boris.
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+vim +536 lib/Kconfig.debug
+
+6210b6402f582b Changbin Du    2019-12-06  492  
+6dfc06651b3d29 Dave Hansen    2013-07-01  493  config MAGIC_SYSRQ
+6dfc06651b3d29 Dave Hansen    2013-07-01  494  	bool "Magic SysRq key"
+6dfc06651b3d29 Dave Hansen    2013-07-01  495  	depends on !UML
+6dfc06651b3d29 Dave Hansen    2013-07-01  496  	help
+6dfc06651b3d29 Dave Hansen    2013-07-01  497  	  If you say Y here, you will have some control over the system even
+6dfc06651b3d29 Dave Hansen    2013-07-01  498  	  if the system crashes for example during kernel debugging (e.g., you
+6dfc06651b3d29 Dave Hansen    2013-07-01  499  	  will be able to flush the buffer cache to disk, reboot the system
+6dfc06651b3d29 Dave Hansen    2013-07-01  500  	  immediately or dump some status information). This is accomplished
+6dfc06651b3d29 Dave Hansen    2013-07-01  501  	  by pressing various keys while holding SysRq (Alt+PrintScreen). It
+6dfc06651b3d29 Dave Hansen    2013-07-01  502  	  also works on a serial console (on PC hardware at least), if you
+6dfc06651b3d29 Dave Hansen    2013-07-01  503  	  send a BREAK and then within 5 seconds a command keypress. The
+f8998c226587fb Hans Holmberg  2017-03-16  504  	  keys are documented in <file:Documentation/admin-guide/sysrq.rst>.
+f8998c226587fb Hans Holmberg  2017-03-16  505  	  Don't say Y unless you really know what this hack does.
+8446f1d391f3d2 Ingo Molnar    2005-09-06  506  
+8eaede49dfdc1f Ben Hutchings  2013-10-07  507  config MAGIC_SYSRQ_DEFAULT_ENABLE
+8eaede49dfdc1f Ben Hutchings  2013-10-07  508  	hex "Enable magic SysRq key functions by default"
+8eaede49dfdc1f Ben Hutchings  2013-10-07  509  	depends on MAGIC_SYSRQ
+8eaede49dfdc1f Ben Hutchings  2013-10-07  510  	default 0x1
+8eaede49dfdc1f Ben Hutchings  2013-10-07  511  	help
+8eaede49dfdc1f Ben Hutchings  2013-10-07  512  	  Specifies which SysRq key functions are enabled by default.
+8eaede49dfdc1f Ben Hutchings  2013-10-07  513  	  This may be set to 1 or 0 to enable or disable them all, or
+f8998c226587fb Hans Holmberg  2017-03-16  514  	  to a bitmask as described in Documentation/admin-guide/sysrq.rst.
+8eaede49dfdc1f Ben Hutchings  2013-10-07  515  
+732dbf3a6104a3 Felix Fietkau  2016-12-22  516  config MAGIC_SYSRQ_SERIAL
+732dbf3a6104a3 Felix Fietkau  2016-12-22  517  	bool "Enable magic SysRq key over serial"
+732dbf3a6104a3 Felix Fietkau  2016-12-22  518  	depends on MAGIC_SYSRQ
+732dbf3a6104a3 Felix Fietkau  2016-12-22  519  	default y
+732dbf3a6104a3 Felix Fietkau  2016-12-22  520  	help
+732dbf3a6104a3 Felix Fietkau  2016-12-22  521  	  Many embedded boards have a disconnected TTL level serial which can
+732dbf3a6104a3 Felix Fietkau  2016-12-22  522  	  generate some garbage that can lead to spurious false sysrq detects.
+732dbf3a6104a3 Felix Fietkau  2016-12-22  523  	  This option allows you to decide whether you want to enable the
+732dbf3a6104a3 Felix Fietkau  2016-12-22  524  	  magic SysRq key.
+732dbf3a6104a3 Felix Fietkau  2016-12-22  525  
+68af43173d3fce Dmitry Safonov 2020-03-02  526  config MAGIC_SYSRQ_SERIAL_SEQUENCE
+68af43173d3fce Dmitry Safonov 2020-03-02  527  	string "Char sequence that enables magic SysRq over serial"
+68af43173d3fce Dmitry Safonov 2020-03-02  528  	depends on MAGIC_SYSRQ_SERIAL
+68af43173d3fce Dmitry Safonov 2020-03-02  529  	default ""
+68af43173d3fce Dmitry Safonov 2020-03-02  530  	help
+68af43173d3fce Dmitry Safonov 2020-03-02  531  	  Specifies a sequence of characters that can follow BREAK to enable
+68af43173d3fce Dmitry Safonov 2020-03-02  532  	  SysRq on a serial console.
+68af43173d3fce Dmitry Safonov 2020-03-02  533  
+d3394b3d51828d Dmitry Safonov 2020-03-06  534  	  If unsure, leave an empty string and the option will not be enabled.
+d3394b3d51828d Dmitry Safonov 2020-03-06  535  
+ec29a5c197e6ef Changbin Du    2019-12-06 @536  config DEBUG_FS
+ec29a5c197e6ef Changbin Du    2019-12-06  537  	bool "Debug Filesystem"
+ec29a5c197e6ef Changbin Du    2019-12-06  538  	help
+ec29a5c197e6ef Changbin Du    2019-12-06  539  	  debugfs is a virtual file system that kernel developers use to put
+ec29a5c197e6ef Changbin Du    2019-12-06  540  	  debugging files into.  Enable this option to be able to read and
+ec29a5c197e6ef Changbin Du    2019-12-06  541  	  write to these files.
+ec29a5c197e6ef Changbin Du    2019-12-06  542  
+ec29a5c197e6ef Changbin Du    2019-12-06  543  	  For detailed documentation on the debugfs API, see
+ec29a5c197e6ef Changbin Du    2019-12-06  544  	  Documentation/filesystems/.
+ec29a5c197e6ef Changbin Du    2019-12-06  545  
+ec29a5c197e6ef Changbin Du    2019-12-06  546  	  If unsure, say N.
+ec29a5c197e6ef Changbin Du    2019-12-06  547  
+
+:::::: The code at line 536 was first introduced by commit
+:::::: ec29a5c197e6ef88fd94a2f3ea087037ae8acc21 kernel-hacking: move DEBUG_FS to 'Generic Kernel Debugging Instruments'
+
+:::::: TO: Changbin Du <changbin.du@gmail.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
