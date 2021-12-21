@@ -1,220 +1,103 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9F9168
-	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 19:54:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640116457; x=1671652457;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KqyXKHG7JsPgxEKwB6VpV/smJwmPoEUQbrSxZ2bCCV0=;
-  b=McwmaTZ5ytP6YQPtrCnNBYpu+c3QqjgV2Kbw97+KPn+lQw4vFWOPD/MO
-   RpQyHTe60D7kDE8hDAgj1g7ljEaByrc9OA5DagzK7JGQv17Fymv/Hua61
-   18B7rDji9Fa/XMZQy5rCarnuWLc7nurOaqc4p0qPQ6CqQ2wB4QpuxQ8oj
-   XVY7sctN6k2RPJtpdw75MQ/Wr78c6OQDJcLuzVap671hrIoczxGjPQ97K
-   Z9jjpf+FOr8KzFP5tpg9INZAyhEHa4o3jqFDI4Fv1Pk+9TTK76vvIseET
-   c6Doaf6aaMjrnxYfdne3QdJH1Y8WeDov0i5dj1ebyKVffTPVQYUBPmPul
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="301248076"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="301248076"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 11:54:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="548317016"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 21 Dec 2021 11:54:14 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mzlDB-0009U5-NV; Tue, 21 Dec 2021 19:54:13 +0000
-Date: Wed, 22 Dec 2021 03:54:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3D129CA
+	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 21:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1640120411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=opHhr7eJomY1CIR2KI4V/ZHUiBD46mZi8UhoJAWs9bo=;
+	b=RxscHBDT+SbDqznQv6BGgtoAWFiXEO44eTg8jHR1fRGImFZEqEnY7N5UUfx/7KYihHpZ92
+	g6Uo0y6KfsBx8QACWQMx+gXib6/mwyl+B9888dyotmMrSEzhW8JyV6qXxIGa5OWBjkjGfT
+	NiE7ITWnSyiDuYYnfHyFxGFEwMXTdG0=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-446-fxCz2x0sOqKBHL6-3a4jEw-1; Tue, 21 Dec 2021 16:00:09 -0500
+X-MC-Unique: fxCz2x0sOqKBHL6-3a4jEw-1
+Received: by mail-oo1-f70.google.com with SMTP id c15-20020a4a87cf000000b002caccd96998so210141ooi.10
+        for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 13:00:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=opHhr7eJomY1CIR2KI4V/ZHUiBD46mZi8UhoJAWs9bo=;
+        b=DDpsF8+Al39EALDRDh95a/MLByeraRL7jHx+/bj3fW/4EEhvVpFkqpAFHPjgmBM+b8
+         nkzsMh0HSBc6D90E3X/Duu7PjknmnVpH7MiAO/Plf32BYgNYoavMK7FkfmiFOq2KlRq4
+         WpJt2Qx55S5U+uwRCO+14kAQpqeTZHbs/ISh8CYRdftAP01hUmzq+w6aNQTyGKIBaznW
+         9ajCpzv2DnCtN1FsfDfzIl7pOs82nCbPhzvE+tf6RZNiJQmZFglavVNWcuQZ0L+DCn5S
+         8nCe869Zy/9axsbiQzsIqyFvc6CVd9SvXfTBdhW4RkVuSFUeemh+txG7NkaCE6qWJ5Lw
+         vqPA==
+X-Gm-Message-State: AOAM530YZx6CSP0rSPRMTmacaFMsYJG3FLX4bJOadjKeWoEJmGdEeveP
+	FtVeP790H7jcs3hijGcQn/hOlJFP9W65bHflHNh9+B0oN7XZWHAY/awL+55WNJ/+zNzONdBsCTp
+	t28Ya+TNuPnPUTA==
+X-Received: by 2002:aca:aa49:: with SMTP id t70mr9911oie.85.1640120408915;
+        Tue, 21 Dec 2021 13:00:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJziVncuYfrfE+RPUGyGvApAs6V4DsQA0c2MP2vr+q3FzM7aw2hm+pPGcEc53t9Jy+88JOV4pw==
+X-Received: by 2002:aca:aa49:: with SMTP id t70mr9890oie.85.1640120408439;
+        Tue, 21 Dec 2021 13:00:08 -0800 (PST)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id f59sm2021otf.9.2021.12.21.13.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 13:00:08 -0800 (PST)
+From: trix@redhat.com
+To: wangzhou1@hisilicon.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Peter Xu <peterx@redhat.com>
-Subject: [davidhildenbrand:unshare_new 3/4] mm/gup.c:39:6: error: conflicting
- types for 'gup_must_unshare'
-Message-ID: <202112220333.iWZqSzKw-lkp@intel.com>
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] crypto: cleanup warning in qm_get_qos_value()
+Date: Tue, 21 Dec 2021 12:59:53 -0800
+Message-Id: <20211221205953.3128923-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-tree:   git://github.com/davidhildenbrand/linux unshare_new
-head:   0b0d58f51fe2675e4dcfb11263ad4cbec053711f
-commit: d3eb6d68346c3d9e89ae68461e0eabb5bc7def17 [3/4] mm: gup: trigger unsharing via FAULT_FLAG_UNSHARE when required (!hugetlb)
-config: hexagon-randconfig-r045-20211220 (https://download.01.org/0day-ci/archive/20211222/202112220333.iWZqSzKw-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/davidhildenbrand/linux/commit/d3eb6d68346c3d9e89ae68461e0eabb5bc7def17
-        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
-        git fetch --no-tags davidhildenbrand unshare_new
-        git checkout d3eb6d68346c3d9e89ae68461e0eabb5bc7def17
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Building with clang static analysis returns this warning:
 
-All error/warnings (new ones prefixed by >>):
+qm.c:4382:11: warning: The left operand of '==' is a garbage value
+        if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+            ~~~~ ^
 
-   In file included from mm/gup.c:7:
-   include/linux/mm.h:1384:24: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-           if (PageAnon(page) && PageAnonUnshared(page)) {
-                                 ^
-   include/linux/mm.h:1386:4: error: implicit declaration of function 'ClearPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                           ClearPageAnonUnshared(page);
-                           ^
-   include/linux/mm.h:1386:4: note: did you mean 'PageAnonUnshared'?
-   include/linux/mm.h:1384:24: note: 'PageAnonUnshared' declared here
-           if (PageAnon(page) && PageAnonUnshared(page)) {
-                                 ^
->> mm/gup.c:39:6: error: conflicting types for 'gup_must_unshare'
-   bool gup_must_unshare(unsigned int flags, struct page *page)
-        ^
-   include/linux/mm.h:3086:13: note: previous declaration is here
-   extern bool gup_must_unshare(unsigned int flags, struct page *page,
-               ^
->> mm/gup.c:593:34: error: too few arguments to function call, expected 3, have 2
-           if (gup_must_unshare(flags, page)) {
-               ~~~~~~~~~~~~~~~~            ^
-   include/linux/mm.h:3086:13: note: 'gup_must_unshare' declared here
-   extern bool gup_must_unshare(unsigned int flags, struct page *page,
-               ^
->> mm/gup.c:595:7: error: implicit declaration of function 'mark_anon_page_exclusive' [-Werror,-Wimplicit-function-declaration]
-                   if (mark_anon_page_exclusive(page, pte_write(pte))) {
-                       ^
-   5 errors generated.
---
-   In file included from mm/memory.c:43:
-   include/linux/mm.h:1384:24: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-           if (PageAnon(page) && PageAnonUnshared(page)) {
-                                 ^
-   include/linux/mm.h:1386:4: error: implicit declaration of function 'ClearPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                           ClearPageAnonUnshared(page);
-                           ^
-   include/linux/mm.h:1386:4: note: did you mean 'PageAnonUnshared'?
-   include/linux/mm.h:1384:24: note: 'PageAnonUnshared' declared here
-           if (PageAnon(page) && PageAnonUnshared(page)) {
-                                 ^
-   mm/memory.c:3018:3: error: implicit declaration of function '__SetPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                   __SetPageAnonUnshared(new_page);
-                   ^
-   mm/memory.c:3191:24: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                   if (PageKsm(page) || PageAnonUnshared(page))
-                                        ^
-   mm/memory.c:3207:4: error: implicit declaration of function 'SetPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                           SetPageAnonUnshared(page);
-                           ^
-   mm/memory.c:3207:4: note: did you mean 'PageAnonUnshared'?
-   include/linux/mm.h:1384:24: note: 'PageAnonUnshared' declared here
-           if (PageAnon(page) && PageAnonUnshared(page)) {
-                                 ^
-   mm/memory.c:3215:10: error: implicit declaration of function 'wp_page_unshare' [-Werror,-Wimplicit-function-declaration]
-                   return wp_page_unshare(vmf);
-                          ^
-   mm/memory.c:3215:10: note: did you mean 'do_wp_page_unshare'?
-   mm/memory.c:3177:19: note: 'do_wp_page_unshare' declared here
-   static vm_fault_t do_wp_page_unshare(struct vm_fault *vmf)
-                     ^
->> mm/memory.c:3247:3: error: implicit declaration of function 'SetPageExclusive' [-Werror,-Wimplicit-function-declaration]
-                   SetPageExclusive(page);
-                   ^
-   mm/memory.c:3247:3: note: did you mean 'SetPageAnonExclusive'?
-   include/linux/page-flags.h:952:29: note: 'SetPageAnonExclusive' declared here
-   static __always_inline void SetPageAnonExclusive(struct page *page)
-                               ^
-   mm/memory.c:3255:3: error: implicit declaration of function 'SetPageExclusive' [-Werror,-Wimplicit-function-declaration]
-                   SetPageExclusive(page);
-                   ^
->> mm/memory.c:3240:5: warning: no previous prototype for function 'mark_anon_page_exclusive' [-Wmissing-prototypes]
-   int mark_anon_page_exclusive(struct page *page, bool mapped_writable)
-       ^
-   mm/memory.c:3240:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mark_anon_page_exclusive(struct page *page, bool mapped_writable)
-   ^
-   static 
-   mm/memory.c:3376:29: error: use of undeclared identifier 'page'
-                   return do_wp_page_unshare(page);
-                                             ^
-   mm/memory.c:3415:7: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                   if (PageAnonUnshared(page))
-                       ^
-   mm/memory.c:4591:8: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                           if (PageAnonUnshared(page))
-                               ^
-   mm/memory.c:4591:25: error: use of undeclared identifier 'page'
-                           if (PageAnonUnshared(page))
-                                                ^
-   mm/memory.c:4593:19: error: use of undeclared identifier 'page'
-                           if (page_count(page) == 1) {
-                                          ^
-   mm/memory.c:4594:5: error: implicit declaration of function 'SetPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
-                                   SetPageAnonUnshared(page);
-                                   ^
-   mm/memory.c:4594:25: error: use of undeclared identifier 'page'
-                                   SetPageAnonUnshared(page);
-                                                       ^
-   1 warning and 15 errors generated.
+The call to qm_qos_value_init() can return an error without setting
+*val.  So check ret before checking *val.
 
-
-vim +/gup_must_unshare +39 mm/gup.c
-
-    31	
-    32	/*
-    33	 * Indicates for which pages we have to trigger unsharing first to make
-    34	 * anonymous pages exclusive to the MM. Once exlusive, only fork() can
-    35	 * turn the pages !exclusive -- and only if there are no additional references.
-    36	 *
-    37	 * This function is safe to be called in IRQ context.
-    38	 */
-  > 39	bool gup_must_unshare(unsigned int flags, struct page *page)
-    40	{
-    41		if (flags & FOLL_NOUNSHARE)
-    42			return false;
-    43		else if (!(flags & FOLL_UNSHARE)) {
-    44			/*
-    45			 * As a default, unshare only for FOLL_PIN. The corner cases
-    46			 * that cannot use FOLL_PIN right now and have to use FOLL_GET
-    47			 * (i.e., O_DIRECT), although they are reading/writing page
-    48			 * content should manually set FOLL_UNSHARE with FOLL_GET.
-    49			 */
-    50			if (!(flags & FOLL_PIN))
-    51				return false;
-    52		}
-    53		/*
-    54		 * All of the following properties should be stable also during
-    55		 * gup-fast-only, whereby we hold a reference to the compound page.
-    56		 * (similarly to the page_is_secretmem() check) and require a proper
-    57		 * sync on unmap from the page table to avoid use-after-free.
-    58		 */
-    59		if (!PageAnon(page))
-    60			return false;
-    61		if (PageKsm(page))
-    62			return false;
-    63		if (PageHuge(page))
-    64			/* TODO: handle hugetlb as well. */
-    65			return false;
-    66		/*
-    67		 * Without the mmap_lock, this can change during fork(). gup-fast-only
-    68		 * is handled properly via the mm->write_protect_seq and undos the
-    69		 * pinning in case we detect that fork() might have changed this.
-    70		 */
-    71		return !PageAnonExclusive(page);
-    72	}
-    73	
-
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/crypto/hisilicon/qm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index b1fe9c7b8cc89..c906f2e59277b 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
+ 		return -EINVAL;
+ 
+ 	ret = qm_qos_value_init(val_buf, val);
+-	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
++	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
+ 		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
+ 		return -EINVAL;
+ 	}
+-- 
+2.26.3
+
