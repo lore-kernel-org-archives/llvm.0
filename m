@@ -1,44 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D8E2C82
-	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 02:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609A22C82
+	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 03:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640054682; x=1671590682;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rccSrwlGr6cUl8+h54aE7yci9HQl5L/7zDdfyCmeovk=;
-  b=GMEyNGvGeKhcvG/zNQWbBfPEUtTtgXn8k562Js5rxNDfX2r4D1Ks6gBI
-   ssrNvt8A+/+qJ4sKElPGsCbzY9ToXHYq+NOzykYgXS3ollnB34QnSpVCl
-   g5ZCVw0u+0YjtFSpNopS4YJYHfbNTDQswvJo7WQfQsc7+04QTG7IoK/cO
-   yz0hS7OSPWBKz3U6vB6/TzYqTpQw4lm7WmV2IV3sjEEXNazAIbl1V6u+g
-   AANBTtXYIs5NyZ/dcqYGfq92GraWpSd6VIqGUhEfXFWKSHs1W3Nzy4Xtv
-   gK+LRzvvP3a1jNm2H/5QVsyDlf3QGqtUBnFeJYlsS5eXfKH/F7tSKbYQg
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="264497532"
+  t=1640058945; x=1671594945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YbLRnUgyMlyi8+C76wF6gJqPdnVNyJwYAh2wh9jiwuA=;
+  b=Ni3X/+E456WOo5ieL7DCm7pum+fyBhKkmiFPO7cb7Ulb3Ev2twe3aeUi
+   BDUo/ssRO2MMeJlzZE51KKARJOT6oiq9eX/SLE8X62iaZzbqdn0ax7yhM
+   yLaE3Hbli8SXeOl32YY9NJG53YViZI1i7dG2//gwavI+vuu4zg32INsVm
+   B63aDs/CKEIbQC7x9UcGQoBiONPIAgFakGD1rXjLXCdSzfY03nN/j8LEU
+   Rk0dBt7Ol8ztEQ1dRE0gfzL0GJp5ciP26u/XvaToAavZPLYcB8zjrPkwn
+   fMy11JNDMTmLC6yqbEJH9eMblxDzUqWtCX7FP6ng3AyKLvyMbUbQmx0kZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240274615"
 X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="264497532"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 18:44:42 -0800
+   d="scan'208";a="240274615"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 19:55:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="684501179"
+   d="scan'208";a="484286601"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2021 18:44:40 -0800
+  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 19:55:43 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzV8p-0008aP-IA; Tue, 21 Dec 2021 02:44:39 +0000
-Date: Tue, 21 Dec 2021 10:43:48 +0800
+	id 1mzWFb-0008eZ-0h; Tue, 21 Dec 2021 03:55:43 +0000
+Date: Tue, 21 Dec 2021 11:54:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Adam Ford <aford173@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, arm@kernel.org,
-	Shawn Guo <shawnguo@kernel.org>,
-	Lucas Stach <l.stach@pengutronix.de>
-Subject: [soc:imx/drivers 7/7] drivers/soc/imx/imx8m-blk-ctrl.c:536:4: error:
- field designator 'mipi_phy_rst_mask' does not refer to any field in type
- 'const struct imx8m_blk_ctrl_domain_data'
-Message-ID: <202112211020.yQtfoIrI-lkp@intel.com>
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 2/2] hwmon: (scmi) Filter out results wrongly
+ interpreted as negatives
+Message-ID: <202112211141.DiW591Y0-lkp@intel.com>
+References: <20211220174155.40239-3-cristian.marussi@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,92 +45,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211220174155.40239-3-cristian.marussi@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git imx/drivers
-head:   7f511d514e8c34b6dd0c17b5496e48b2a6a2626c
-commit: 7f511d514e8c34b6dd0c17b5496e48b2a6a2626c [7/7] soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl
-config: hexagon-randconfig-r045-20211220 (https://download.01.org/0day-ci/archive/20211221/202112211020.yQtfoIrI-lkp@intel.com/config)
+Hi Cristian,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linux/master]
+[also build test WARNING on groeck-staging/hwmon-next soc/for-next linus/master v5.16-rc6 next-20211220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Cristian-Marussi/Sensor-readings-fixes/20211221-014235
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+config: arm-randconfig-r031-20211220 (https://download.01.org/0day-ci/archive/20211221/202112211141.DiW591Y0-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=7f511d514e8c34b6dd0c17b5496e48b2a6a2626c
-        git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-        git fetch --no-tags soc imx/drivers
-        git checkout 7f511d514e8c34b6dd0c17b5496e48b2a6a2626c
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/6a3ccc22734d65dfe13f598a7469c4ca3094eeea
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Cristian-Marussi/Sensor-readings-fixes/20211221-014235
+        git checkout 6a3ccc22734d65dfe13f598a7469c4ca3094eeea
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/imx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwmon/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/soc/imx/imx8m-blk-ctrl.c:536:4: error: field designator 'mipi_phy_rst_mask' does not refer to any field in type 'const struct imx8m_blk_ctrl_domain_data'
-                   .mipi_phy_rst_mask = BIT(17),
-                    ^
-   drivers/soc/imx/imx8m-blk-ctrl.c:545:4: error: field designator 'mipi_phy_rst_mask' does not refer to any field in type 'const struct imx8m_blk_ctrl_domain_data'
-                   .mipi_phy_rst_mask = BIT(16),
-                    ^
->> drivers/soc/imx/imx8m-blk-ctrl.c:570:17: error: invalid application of 'sizeof' to an incomplete type 'const struct imx8m_blk_ctrl_domain_data[]'
-           .num_domains = ARRAY_SIZE(imx8mn_disp_blk_ctl_domain_data),
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:46:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   3 errors generated.
+>> drivers/hwmon/scmi-hwmon.c:88:14: warning: shift count >= width of type [-Wshift-count-overflow]
+           if (value & BIT(63)) {
+                       ^~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                          ^  ~~~~
+   1 warning generated.
 
 
-vim +536 drivers/soc/imx/imx8m-blk-ctrl.c
+vim +88 drivers/hwmon/scmi-hwmon.c
 
-   527	
-   528	static const struct imx8m_blk_ctrl_domain_data imx8mn_disp_blk_ctl_domain_data[] = {
-   529		[IMX8MN_DISPBLK_PD_MIPI_DSI] = {
-   530			.name = "dispblk-mipi-dsi",
-   531			.clk_names = (const char *[]){ "dsi-pclk", "dsi-ref", },
-   532			.num_clks = 2,
-   533			.gpc_name = "mipi-dsi",
-   534			.rst_mask = BIT(0) | BIT(1),
-   535			.clk_mask = BIT(0) | BIT(1),
- > 536			.mipi_phy_rst_mask = BIT(17),
-   537		},
-   538		[IMX8MN_DISPBLK_PD_MIPI_CSI] = {
-   539			.name = "dispblk-mipi-csi",
-   540			.clk_names = (const char *[]){ "csi-aclk", "csi-pclk" },
-   541			.num_clks = 2,
-   542			.gpc_name = "mipi-csi",
-   543			.rst_mask = BIT(2) | BIT(3),
-   544			.clk_mask = BIT(2) | BIT(3),
-   545			.mipi_phy_rst_mask = BIT(16),
-   546		},
-   547		[IMX8MN_DISPBLK_PD_LCDIF] = {
-   548			.name = "dispblk-lcdif",
-   549			.clk_names = (const char *[]){ "lcdif-axi", "lcdif-apb", "lcdif-pix", },
-   550			.num_clks = 3,
-   551			.gpc_name = "lcdif",
-   552			.rst_mask = BIT(4) | BIT(5),
-   553			.clk_mask = BIT(4) | BIT(5),
-   554		},
-   555		[IMX8MN_DISPBLK_PD_ISI] = {
-   556			.name = "dispblk-isi",
-   557			.clk_names = (const char *[]){ "disp_axi", "disp_apb", "disp_axi_root",
-   558							"disp_apb_root"},
-   559			.num_clks = 4,
-   560			.gpc_name = "isi",
-   561			.rst_mask = BIT(6) | BIT(7),
-   562			.clk_mask = BIT(6) | BIT(7),
-   563		},
-   564	};
-   565	
-   566	static const struct imx8m_blk_ctrl_data imx8mn_disp_blk_ctl_dev_data = {
-   567		.max_reg = 0x84,
-   568		.power_notifier_fn = imx8mn_disp_power_notifier,
-   569		.domains = imx8mn_disp_blk_ctl_domain_data,
- > 570		.num_domains = ARRAY_SIZE(imx8mn_disp_blk_ctl_domain_data),
-   571	};
-   572	
+    66	
+    67	static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+    68				   u32 attr, int channel, long *val)
+    69	{
+    70		int ret;
+    71		u64 value;
+    72		const struct scmi_sensor_info *sensor;
+    73		struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
+    74	
+    75		sensor = *(scmi_sensors->info[type] + channel);
+    76		/*
+    77		 * Can fail with EIO if the backing SCMI Sensor FW version tried to
+    78		 * report a negative value.
+    79		 */
+    80		ret = sensor_ops->reading_get(scmi_sensors->ph, sensor->id, &value);
+    81		if (ret)
+    82			return ret;
+    83	
+    84		/*
+    85		 * Cannot accept either valid positive values so big that would be
+    86		 * interpreted as negative by HWMON signed long *val return value.
+    87		 */
+  > 88		if (value & BIT(63)) {
+    89			dev_warn_once(dev,
+    90				      "Reported unsigned value too big.\n");
+    91			return -EIO;
+    92		}
+    93	
+    94		ret = scmi_hwmon_scale(sensor, &value);
+    95		if (!ret)
+    96			*val = value;
+    97	
+    98		return ret;
+    99	}
+   100	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
