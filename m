@@ -1,80 +1,106 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEEE2C9C
-	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 12:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB072C82
+	for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 14:34:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640090338; x=1671626338;
-  h=date:from:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5i8JtUydwpVJDu6JKYzCrVZamw238lU3ABsDldI+8b8=;
-  b=DzC/JAD6Im2zrlA8HjKc0yei91Fts8qz4vwZcvk2SnZ3ULGF/9MX/Mre
-   8i7h0PvbdmWklr+cuElzpxtrYVtKlJgio9MkgJL7gfkqZlAP5vnuusgw4
-   rFnfmVZ1x0YZyVRS0M3cWCxgH2KbKWIvEfQlISPAtJ4sIFFEpXubMYHmu
-   spaGVP4x0AxAJ/oj/49SvqxTS/EE0NMPL++HAzeemg1CitGhOVcPmr1vY
-   wh19ot+HYyHW3QK5sxB18RSw9c1zsjjP+XCXgy6ti3faT8A0h5WZMWruG
-   ZfxzjVp6U9NhadBUSwBGFu4GQcs9mdAz0ll+kDej3a6vc/8KWdUcfzetS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="237923387"
+  t=1640097256; x=1671633256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OcNRIgcgXZ7GQYAfSBs5DkjQzI4mhLNysLq43pD7LA4=;
+  b=SiENDTsparnfLWYlnVaSzSwnesgcrjtq2XB2I821nmpbt245oZrYcrku
+   W3nwmMrDROq0BbI5XChEDvhqWLOiD8NsKaa9LJfxqUXA5E/MbT4J1T3GY
+   6RzmznXgZXAD7dAr6c4EfuHAXKGnVgBpz6QsYxKARxdYrB5puXba98dT9
+   AlDWJYtl/Hxgcrid3iENBiG5K3qjLjGOt8pOxVq8ZqGtpOMPn1EBNQs7a
+   WeQir0Ae3nR7AH3J4m0/U4jib/aqOhb94dtNDDIo1a/ykWn0Szv/ggJkl
+   kxxVT2XBIvLukqQwk4cBt4UTxHSNzIzwcPx+cH5nFQZiJDB/NFiyveEEJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240625975"
 X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="237923387"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 04:38:58 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="240625975"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:34:16 -0800
 X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="508059135"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 04:38:57 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1mzePw-00095v-Bq; Tue, 21 Dec 2021 12:38:56 +0000
-Date: Tue, 21 Dec 2021 20:38:33 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 231/8898] drivers/gpu/drm/i915/intel_pm.o:
- warning: objtool: intel_init_clock_gating_hooks()+0x279: unreachable
- instruction
-Message-ID: <202112212046.ywpTEZnK-lkp@intel.com>
+   d="scan'208";a="616779165"
+Received: from carel.sh.intel.com (HELO linux.intel.com) ([10.239.158.92])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:34:13 -0800
+Date: Tue, 21 Dec 2021 22:31:54 +0800
+From: Carel Si <beibei.si@intel.com>
+To: Borislav Petkov <bp@suse.de>
+Cc: "Yin, Fengwei" <fengwei.yin@intel.com>, Joerg Roedel <jroedel@suse.de>,
+	LKML <linux-kernel@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
+	"bfields@fieldses.org" <bfields@fieldses.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+Message-ID: <20211221143153.GA4676@linux.intel.com>
+References: <20211209144141.GC25654@xsang-OptiPlex-9020>
+ <YbjIoewxGaodXHKF@zn.tnic>
+ <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+ <YbyIJYzqtHPKRMFt@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YbyIJYzqtHPKRMFt@zn.tnic>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Nathan Chancellor <nathan@kernel.org>
-CC: "Ville Syrjälä" <ville.syrjala@linux.intel.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>
+Hi Boris,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   07f8c60fe60f84977dc815ec8a6b1100827c34dd
-commit: 2e70570656adfe1c5d9a29940faa348d5f132199 [231/8898] drm/i915: Avoid bitwise vs logical OR warning in snb_wm_latency_quirk()
-config: x86_64-randconfig-r026-20211220 (https://download.01.org/0day-ci/archive/20211221/202112212046.ywpTEZnK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=2e70570656adfe1c5d9a29940faa348d5f132199
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 2e70570656adfe1c5d9a29940faa348d5f132199
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ fs// mm//
+On Fri, Dec 17, 2021 at 08:52:53PM +0800, Borislav Petkov wrote:
+> ---
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 0083464de5e3..79b3d67addcc 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
+>  }
+>  EXPORT_SYMBOL(native_write_cr0);
+>  
+> -void native_write_cr4(unsigned long val)
+> +void __no_profile native_write_cr4(unsigned long val)
+>  {
+>  	unsigned long bits_changed = 0;
+>  
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index 75acb6027a87..68d2b7f9a913 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -483,7 +483,7 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+>  	/* Kill off the identity-map trampoline */
+>  	reset_early_page_tables();
+>  
+> -	__native_tlb_flush_global(native_read_cr4());
+> +	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
+>  
+>  	clear_bss();
+>  
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+We tested your patch, it can fix the issue, thanks.
 
-All warnings (new ones prefixed by >>):
+=========================================================================================
+compiler/kconfig/rootfs/sleep/tbox_group/testcase:
+  clang-14/x86_64-randconfig-a013-20211207/debian-10.4-x86_64-20200603.cgz/1/vm-snb/boot
 
->> drivers/gpu/drm/i915/intel_pm.o: warning: objtool: intel_init_clock_gating_hooks()+0x279: unreachable instruction
+commit: 
+  9de4999050 ("x86/realmode: Add comment for Global bit usage in trampoline_pgd")
+  f154f29085 ("x86/mm/64: Flush global TLB on boot and AP bringup") 
+  d12ddfe498 ("fixup-for-f154f29085")
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+9de4999050b5f2e8 f154f290855b070cc94dd44ad25 d12ddfe498329a0967c008d8183 
+---------------- --------------------------- --------------------------- 
+       fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
+           |             |             |             |             |    
+           :27         100%          27:27           0%            :27    dmesg.BUG:kernel_reboot-without-warning_in_boot_stage
