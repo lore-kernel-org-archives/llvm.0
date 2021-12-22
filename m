@@ -1,95 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA3F2C9C
-	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 00:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53259C36AE9;
-	Wed, 22 Dec 2021 00:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640134390;
-	bh=P5+2yc3KCKxVxhRcIuwHjO5vFJ9W3AScc9KUpeZDGDw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Sybfz6riq5b75n2hH5ZrRGrZjuzFYwr0uKNRXXm/V7pi8BSVAMTXrCGV8thBqstU1
-	 OEAZgOTmw4x/y/GB/xHjHwd7V/n5RsSGWTDm76mv/zlwFa4BSQdVOHLRXpcBdsgxtH
-	 aFEoLbTQyiPtnv80aoOJr+OEyETQyMWPqTFEqehFvNAjuLoWiYSO37KTAp2bKF8iwW
-	 rkIFfJb6KuVVyIdSUiB6kq/8+nz8FBhvsmwbC6z99EIdrTjofIoCckSza088zKQeDv
-	 Xsoam8+xfxRzhtcXifEA2ykhgMPL9nLSG99+RrPbjS9k7ueOldhZkCxPR/U26B8k+Z
-	 H8f8+dym+krPQ==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
-Date: Tue, 21 Dec 2021 17:52:45 -0700
-Message-Id: <20211222005245.3081136-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5508D2C9C
+	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 02:01:08 +0000 (UTC)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJbhj4X8jz91rH;
+	Wed, 22 Dec 2021 09:44:05 +0800 (CST)
+Received: from [10.67.103.22] (10.67.103.22) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 22 Dec
+ 2021 09:44:55 +0800
+Message-ID: <d3227d10-cf28-10a5-d560-f46309970c5f@hisilicon.com>
+Date: Wed, 22 Dec 2021 09:44:50 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH] crypto: cleanup warning in qm_get_qos_value()
+To: <trix@redhat.com>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+	<nathan@kernel.org>, <ndesaulniers@google.com>
+CC: <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20211221205953.3128923-1-trix@redhat.com>
+From: Zhou Wang <wangzhou1@hisilicon.com>
+In-Reply-To: <20211221205953.3128923-1-trix@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.22]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 
-When cross compiling i386_defconfig on an arm64 host with clang, there
-are a few instances of '-Waddress-of-packed-member' and
-'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
-which should both be disabled with the cc-disable-warning calls in that
-directory's Makefile, which indicates that cc-disable-warning is failing
-at the point of testing these flags.
+在 2021/12/22 4:59, trix@redhat.com 写道:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Building with clang static analysis returns this warning:
+> 
+> qm.c:4382:11: warning: The left operand of '==' is a garbage value
+>         if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+>             ~~~~ ^
+> 
+> The call to qm_qos_value_init() can return an error without setting
+> *val.  So check ret before checking *val.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/crypto/hisilicon/qm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index b1fe9c7b8cc89..c906f2e59277b 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
+>  		return -EINVAL;
+>  
+>  	ret = qm_qos_value_init(val_buf, val);
+> -	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+> +	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
+>  		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
+>  		return -EINVAL;
+>  	}
+> 
 
-The cc-disable-warning calls fail because at the point that the flags
-are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
-which has the '--target=' flag to tell clang what architecture it is
-targeting. Without the '--target=' flag, the host architecture (arm64)
-is used and i386 is not a valid value for '-march=' in that case. This
-error can be seen by adding some logging to try-run:
+Should check return firstly, thanks.
 
-clang-14: error: the clang compiler does not support '-march=i386'
-
-Invoking the compiler has to succeed prior to calling cc-option or
-cc-disable-warning in order to accurately test whether or not the flag
-is supported; if it doesn't, the requested flag can never be added to
-the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
-so that any new flags that might be added in the future can be
-accurately tested.
-
-Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/boot/compressed/Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 431bf7f846c3..169186dba1d7 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -28,7 +28,7 @@ KCOV_INSTRUMENT		:= n
- targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
- 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
- 
--KBUILD_CFLAGS := -m$(BITS) -O2
-+KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
- KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
- KBUILD_CFLAGS += -Wundef
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
-@@ -47,7 +47,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
- # Disable relocation relaxation in case the link is not PIE.
- KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
- KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
--KBUILD_CFLAGS += $(CLANG_FLAGS)
- 
- # sev.c indirectly inludes inat-table.h which is generated during
- # compilation and stored in $(objtree). Add the directory to the includes so
-
-base-commit: 2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
--- 
-2.34.1
-
+Zhou
