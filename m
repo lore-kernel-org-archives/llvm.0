@@ -1,42 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408BD2C9C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8700D2C9D
 	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 23:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1640215567; x=1671751567;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xFL68gEi6O6xjxMH5+Z0YMtwly1O35QCKA4Ru7/0AU4=;
-  b=Qwyyud6IjdPF+kTfXq9soHjfRWacOT/5Gu6AV4peiN5tveh0fMWTZZW7
-   v1xEmK6YoKy1st9yjy12J9gja2XqQbs2NYYBoV59xMcG20SbXU6a/GQKF
-   I5dZhvKxYHDhSEsbOYQ3G4JXdIwYuANT7B92rP26JJj/lLCj8z3ag6nGu
-   GagJUhddyyBcYT1AW3fjvHYvn59LpM7Qgu4aqtVc86SdxdbDwsVQrRbzg
-   kJqTku46F4teiCxv0PZ3LPfWM9hi/iAW1G/7/cb1bS4CAdabRRSKb6phK
-   ycfbqnrU0YkzKLmOTXQwxq2ViifN2P52rJIeu3/PWwIPs+01PuQUyAY7K
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="238258541"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J7vnVG5q1My3KWcdQmTiXRPCNvGbUpytvZ6Hrp86Z8I=;
+  b=hszrZlvlZhlqz0McK+ucVadwLF/nvh9XHgawpBxJGqZp7AjasHVB2GlQ
+   B+IK57IHwvLeQZw3uCizM5Mirorpl+aZyXrJPQESzTZCiKAaaTpo7gjSr
+   bwpPM6Z+TwwFNlE19W24HjvTYypACvbp92SdxtRt60sd4JMzjUhALI4QG
+   TMJs5i4r0DxqKLkC6Dv/LcuFvF7otGVPKXzZPCqFVjtw0Yqguo3OiWBEX
+   BZ/KAP3tIMs39LvF0x9snpCjLWIGFXalYFC5zuHI/4zV9DqgAEjD4WKPp
+   01leUiHCvNxyOBJy3COxhQa4xPgHXeYqv8kjdJwZlDZGuEmD4BnZmLsL7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264929441"
 X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="238258541"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 15:26:06 -0800
+   d="scan'208";a="264929441"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 15:26:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="466821022"
+   d="scan'208";a="508652227"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Dec 2021 15:26:04 -0800
+  by orsmga007.jf.intel.com with ESMTP; 22 Dec 2021 15:26:04 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n0Azk-00013I-1r; Wed, 22 Dec 2021 23:26:04 +0000
-Date: Thu, 23 Dec 2021 07:25:39 +0800
+	id 1n0Azk-00013G-15; Wed, 22 Dec 2021 23:26:04 +0000
+Date: Thu, 23 Dec 2021 07:25:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 1/1] serial: 8250_exar: derive nr_ports from ID for
- Acces I/O cards
-Message-ID: <202112230724.7vFjZf3K-lkp@intel.com>
-References: <20211222194413.75069-1-andriy.shevchenko@linux.intel.com>
+To: Bo Jiao <Bo.Jiao@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+	Sujuan Chen <sujuan.chen@mediatek.com>,
+	Ryder Lee <ryder.lee@mediatek.com>
+Subject: [nbd168-wireless:mt76 5/28]
+ drivers/net/wireless/mediatek/mt76/mt7915/dma.c:97:6: warning: variable
+ 'base' is used uninitialized whenever 'if' condition is false
+Message-ID: <202112230704.dKCp3lmX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,128 +47,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211222194413.75069-1-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Andy,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on v5.16-rc6 next-20211222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/serial-8250_exar-derive-nr_ports-from-ID-for-Acces-I-O-cards/20211223-034500
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: riscv-randconfig-r042-20211222 (https://download.01.org/0day-ci/archive/20211223/202112230724.7vFjZf3K-lkp@intel.com/config)
+tree:   https://github.com/nbd168/wireless mt76
+head:   05f0500c7b0147353e97de7369d504c5fbd3951e
+commit: 22c2fb9495d35e0c442c23bcd3b8a4a18a28c62d [5/28] mt76: mt7915: rework dma.c to adapt mt7916 changes
+config: mips-randconfig-r033-20211222 (https://download.01.org/0day-ci/archive/20211223/202112230704.dKCp3lmX-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/533949cbef2191c3b9dd62584b56648987bc1e5b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/serial-8250_exar-derive-nr_ports-from-ID-for-Acces-I-O-cards/20211223-034500
-        git checkout 533949cbef2191c3b9dd62584b56648987bc1e5b
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/nbd168/wireless/commit/22c2fb9495d35e0c442c23bcd3b8a4a18a28c62d
+        git remote add nbd168-wireless https://github.com/nbd168/wireless
+        git fetch --no-tags nbd168-wireless mt76
+        git checkout 22c2fb9495d35e0c442c23bcd3b8a4a18a28c62d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/tty/serial/8250/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/tty/serial/8250/8250_exar.c:627:3: error: use of undeclared identifier 'nr'
-                   nr = BIT(((pcidev->device & 0x38) >> 3) - 1);
+>> drivers/net/wireless/mediatek/mt76/mt7915/dma.c:97:6: warning: variable 'base' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (!is_mt7915(&dev->mt76)) {
+               ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:101:70: note: uninitialized use occurs here
+           mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT_WA) + ofs, PREFETCH(0x1c0 + base, 0x4));
+                                                                               ^~~~
+   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:85:35: note: expanded from macro 'PREFETCH'
+   #define PREFETCH(_base, _depth) ((_base) << 16 | (_depth))
+                                     ^~~~~
+   drivers/net/wireless/mediatek/mt76/mt7915/../mt76.h:829:63: note: expanded from macro 'mt76_wr'
+   #define mt76_wr(dev, ...)       (dev)->mt76.bus->wr(&((dev)->mt76), __VA_ARGS__)
+                                                                       ^~~~~~~~~~~
+   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:97:2: note: remove the 'if' if its condition is always true
+           if (!is_mt7915(&dev->mt76)) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:86:10: note: initialize the variable 'base' to silence this warning
+           u32 base;
                    ^
-   1 error generated.
+                    = 0
+   1 warning generated.
 
 
-vim +/nr +627 drivers/tty/serial/8250/8250_exar.c
+vim +97 drivers/net/wireless/mediatek/mt76/mt7915/dma.c
 
-   606	
-   607	static int
-   608	exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
-   609	{
-   610		unsigned int nr_ports, i, bar = 0, maxnr;
-   611		struct exar8250_board *board;
-   612		struct uart_8250_port uart;
-   613		struct exar8250 *priv;
-   614		int rc;
-   615	
-   616		board = (struct exar8250_board *)ent->driver_data;
-   617		if (!board)
-   618			return -EINVAL;
-   619	
-   620		rc = pcim_enable_device(pcidev);
-   621		if (rc)
-   622			return rc;
-   623	
-   624		maxnr = pci_resource_len(pcidev, bar) >> (board->reg_shift + 3);
-   625	
-   626		if (pcidev->vendor == PCI_VENDOR_ID_ACCESSIO)
- > 627			nr = BIT(((pcidev->device & 0x38) >> 3) - 1);
-   628		else if (board->num_ports)
-   629			nr_ports = board->num_ports;
-   630		else
-   631			nr_ports = pcidev->device & 0x0f;
-   632	
-   633		priv = devm_kzalloc(&pcidev->dev, struct_size(priv, line, nr_ports), GFP_KERNEL);
-   634		if (!priv)
-   635			return -ENOMEM;
-   636	
-   637		priv->board = board;
-   638		priv->virt = pcim_iomap(pcidev, bar, 0);
-   639		if (!priv->virt)
-   640			return -ENOMEM;
-   641	
-   642		pci_set_master(pcidev);
-   643	
-   644		rc = pci_alloc_irq_vectors(pcidev, 1, 1, PCI_IRQ_ALL_TYPES);
-   645		if (rc < 0)
-   646			return rc;
-   647	
-   648		memset(&uart, 0, sizeof(uart));
-   649		uart.port.flags = UPF_SHARE_IRQ | UPF_EXAR_EFR | UPF_FIXED_TYPE | UPF_FIXED_PORT;
-   650		uart.port.irq = pci_irq_vector(pcidev, 0);
-   651		uart.port.dev = &pcidev->dev;
-   652	
-   653		rc = devm_request_irq(&pcidev->dev, uart.port.irq, exar_misc_handler,
-   654				 IRQF_SHARED, "exar_uart", priv);
-   655		if (rc)
-   656			return rc;
-   657	
-   658		/* Clear interrupts */
-   659		exar_misc_clear(priv);
-   660	
-   661		for (i = 0; i < nr_ports && i < maxnr; i++) {
-   662			rc = board->setup(priv, pcidev, &uart, i);
-   663			if (rc) {
-   664				dev_err(&pcidev->dev, "Failed to setup port %u\n", i);
-   665				break;
-   666			}
-   667	
-   668			dev_dbg(&pcidev->dev, "Setup PCI port: port %lx, irq %d, type %d\n",
-   669				uart.port.iobase, uart.port.irq, uart.port.iotype);
-   670	
-   671			priv->line[i] = serial8250_register_8250_port(&uart);
-   672			if (priv->line[i] < 0) {
-   673				dev_err(&pcidev->dev,
-   674					"Couldn't register serial port %lx, irq %d, type %d, error %d\n",
-   675					uart.port.iobase, uart.port.irq,
-   676					uart.port.iotype, priv->line[i]);
-   677				break;
-   678			}
-   679		}
-   680		priv->nr = i;
-   681		pci_set_drvdata(pcidev, priv);
-   682		return 0;
-   683	}
-   684	
+    82	
+    83	static void __mt7915_dma_prefetch(struct mt7915_dev *dev, u32 ofs)
+    84	{
+    85	#define PREFETCH(_base, _depth)	((_base) << 16 | (_depth))
+    86		u32 base;
+    87	
+    88		/* prefetch SRAM wrapping boundary for tx/rx ring. */
+    89		mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_FWDL) + ofs, PREFETCH(0x0, 0x4));
+    90		mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_WM) + ofs, PREFETCH(0x40, 0x4));
+    91		mt76_wr(dev, MT_TXQ_EXT_CTRL(0) + ofs, PREFETCH(0x80, 0x4));
+    92		mt76_wr(dev, MT_TXQ_EXT_CTRL(1) + ofs, PREFETCH(0xc0, 0x4));
+    93		mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_WA) + ofs, PREFETCH(0x100, 0x4));
+    94	
+    95		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MCU) + ofs, PREFETCH(0x140, 0x4));
+    96		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MCU_WA) + ofs, PREFETCH(0x180, 0x4));
+  > 97		if (!is_mt7915(&dev->mt76)) {
+    98			mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MAIN_WA) + ofs, PREFETCH(0x1c0, 0x4));
+    99			base = 0x40;
+   100		}
+   101		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT_WA) + ofs, PREFETCH(0x1c0 + base, 0x4));
+   102		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MAIN) + ofs, PREFETCH(0x200 + base, 0x4));
+   103		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT) + ofs, PREFETCH(0x240 + base, 0x4));
+   104	
+   105		/* for mt7915, the ring which is next the last
+   106		 * used ring must be initialized.
+   107		 */
+   108		if (is_mt7915(&dev->mt76)) {
+   109			ofs += 0x4;
+   110			mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_WA) + ofs, PREFETCH(0x140, 0x0));
+   111			mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT_WA) + ofs, PREFETCH(0x200 + base, 0x0));
+   112			mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT) + ofs, PREFETCH(0x280 + base, 0x0));
+   113		}
+   114	}
+   115	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
