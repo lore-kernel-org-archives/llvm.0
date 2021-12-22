@@ -1,42 +1,49 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4538C168
-	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 07:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797852CA0
+	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 09:26:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640158481; x=1671694481;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=83WKMpgmd2Hu6tY0NSHF4KKHcftxqykMjMZPEZ1Wo/c=;
-  b=D/D62YsGJWNzjp9fxkMtrU3dRTsEIKYZ7K0gB17jcUKXDI64MRtWbI8Y
-   o7T1H5q6jSd++uUHWdCchAC14M+x1X0jsR7ZVB02/jNq6VYSzr7giuaux
-   2uUADf0SDDehz4VzGneECKFPaytG+M8nBBwHWABHkVF3cJP/WiNprrnFf
-   NgU9wIjUi+K24ZYVT4AX6isSDwRxVTCAPC4HNGKOLKwI30c0vy1ZpuNSN
-   IiH4T6yY1jOuhpUaKVhVPEcXecdzvBFSCOn76Iteh6kCpArvS/GuwjYsb
-   LOYpPlENvjqiYOH/aBJ19UCAsxUsamFTGASQToCe+Jh8rgNG/Tp0DnehN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240789998"
-X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="240789998"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 23:34:39 -0800
+  t=1640165202; x=1671701202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BWSCNL8E8hvaZ2ldO5d2vDPYWr3g9rssV1h09w5DYN8=;
+  b=bCL4PC2qkC7EOPuHoTvtdQUxxGtrlwsLiujix7aUHVM6ur5yO1eVEH1C
+   YVQFy/2cYpcAEgagh/p4jzNn/Qt3iak8wFwpcFOKk2huthSzsvwvNVuxJ
+   tg6rKDor42cmtN1q+Cywqm/UoigE6UDwF+0ktk0cBtC3NINvcR/1POd/l
+   2irMq0mCigpVOreP0vtgi9W3m538TAzJ1jshIoeQvjLJgSbdAc9AJy8Ax
+   1XbmL5AOIutXmpXc7P07XVvXDvxNKVxJgoEp+6Cnz8G/hviyLIxrmOkss
+   FzEHu3I90bSj1v01dvQsladwTTviHwqww7lZv9bFOrWiP+nUabZlPAcqn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240390627"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="240390627"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 01:26:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="684933256"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="466610892"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 23:34:37 -0800
+  by orsmga003.jf.intel.com with ESMTP; 22 Dec 2021 01:26:39 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1mzw8z-0000FN-12; Wed, 22 Dec 2021 07:34:37 +0000
-Date: Wed, 22 Dec 2021 15:34:01 +0800
+	id 1mzxtO-0000Jb-J9; Wed, 22 Dec 2021 09:26:38 +0000
+Date: Wed, 22 Dec 2021 17:25:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"masahiroy@kernel.org" <masahiroy@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sm8350-next-20211215 24/35]
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1040:37: warning: unused
- variable 'sm8350_regdma'
-Message-ID: <202112221505.c3wIxSKR-lkp@intel.com>
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 3/3] powerpc/vdso: Merge vdso64 and vdso32 into a single
+ directory
+Message-ID: <202112221723.qyvrCJHe-lkp@intel.com>
+References: <c4ff129869fa6b0c936ff7e388eee42bb5f46778.1640108961.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,52 +52,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <c4ff129869fa6b0c936ff7e388eee42bb5f46778.1640108961.git.christophe.leroy@csgroup.eu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/andersson/kernel wip/sm8350-next-20211215
-head:   525164cde506e9a9353b07816e50e26685e57fe4
-commit: 54ccddafd25a1a96ca276ffe86c96c41fcc98b80 [24/35] drm/msm/dpu: Fix typo in sm8350 hw_catalog
-config: hexagon-randconfig-r041-20211222 (https://download.01.org/0day-ci/archive/20211222/202112221505.c3wIxSKR-lkp@intel.com/config)
+Hi Christophe,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on v5.16-rc6 next-20211221]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-vdso-augment-VDSO32-functions-to-support-64-bits-build/20211222-021033
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-randconfig-r023-20211222 (https://download.01.org/0day-ci/archive/20211222/202112221723.qyvrCJHe-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/andersson/kernel/commit/54ccddafd25a1a96ca276ffe86c96c41fcc98b80
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sm8350-next-20211215
-        git checkout 54ccddafd25a1a96ca276ffe86c96c41fcc98b80
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/0day-ci/linux/commit/16137812dbb55d25ebe3962d5fb7486cb5b43311
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-vdso-augment-VDSO32-functions-to-support-64-bits-build/20211222-021033
+        git checkout 16137812dbb55d25ebe3962d5fb7486cb5b43311
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1040:37: warning: unused variable 'sm8350_regdma' [-Wunused-const-variable]
-   static const struct dpu_reg_dma_cfg sm8350_regdma = {
-                                       ^
+   <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+   #warning syscall futex_waitv not implemented
+    ^
    1 warning generated.
+>> arch/powerpc/kernel/vdso/gettimeofday.S:75:8: error: unsupported directive '.stabs'
+   .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; _restgpr_31_x:
+          ^
+   arch/powerpc/kernel/vdso/gettimeofday.S:76:8: error: unsupported directive '.stabs'
+   .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32gpr_31_x; _rest32gpr_31_x:
+          ^
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:71: arch/powerpc/kernel/vdso/gettimeofday-32.o] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:421: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/sm8350_regdma +1040 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+vim +75 arch/powerpc/kernel/vdso/gettimeofday.S
 
-af776a3e1c304bf Jonathan Marek 2020-07-10  1039  
-2fee5af852f1b5e Robert Foss    2021-06-16 @1040  static const struct dpu_reg_dma_cfg sm8350_regdma = {
-2fee5af852f1b5e Robert Foss    2021-06-16  1041  	.base = 0x0,
-2fee5af852f1b5e Robert Foss    2021-06-16  1042  	.version = 0x00020000,
-2fee5af852f1b5e Robert Foss    2021-06-16  1043  	.trigger_sel_off = 0x119c,
-2fee5af852f1b5e Robert Foss    2021-06-16  1044  	.xin_id = 7,
-2fee5af852f1b5e Robert Foss    2021-06-16  1045  	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-2fee5af852f1b5e Robert Foss    2021-06-16  1046  };
-2fee5af852f1b5e Robert Foss    2021-06-16  1047  
-
-:::::: The code at line 1040 was first introduced by commit
-:::::: 2fee5af852f1b5e0cfacae8782b09c0a888b3488 drm/msm/dpu: Add SM8350 to hw catalog
-
-:::::: TO: Robert Foss <robert.foss@linaro.org>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  70  
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  71  /* Routines for restoring integer registers, called by the compiler.  */
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  72  /* Called with r11 pointing to the stack header word of the caller of the */
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  73  /* function, just beyond the end of the integer restore area.  */
+11f0a078a8b6be arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-12-21  74  #ifndef __powerpc64__
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09 @75  _GLOBAL(_restgpr_31_x)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
