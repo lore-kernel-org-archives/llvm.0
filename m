@@ -1,105 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA00173
-	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 16:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E612C36AEC;
-	Wed, 22 Dec 2021 16:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640190746;
-	bh=EoWvMzgB4Oiw21ajZCqNhfLhvU5qelDGfyG17Q/4Ggo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bYFWsKiOMQ6My9greRO94noO+cI89f0fPGIgkMkYVfrVJ2BB2Sr9E5e2L6ooiX3jw
-	 GSIV/rg7s3m3yvVWG0KKkODnI+A6LNR5/tBn6nyXhOL0LcHp/sO49RvQiNSvKhAp+U
-	 wtvbUvVd+U+JayuDrvjUpY+3Xo5wZLbNXbT9B32EIToH5Vp8I2IqQixFSE0ohr1/mC
-	 CWZIj641Aq4NMgz3RHwBo3X33vBocIiWvdcvtbfpZ8hYB65VjPdAIrYsyC0avpF9va
-	 +0u+iK4ZxORJHI2ILiMfXefG3WGQWAqsspwZXEfE5MIiovy9FNNiGM7htjth2ZCUkZ
-	 8CK2PlgL5QXnA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE4A173
+	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 17:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1640194169;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ziVhIeG/+C1hVAL/19RU4EWJLhjrdCffUUmjmXtDbFA=;
+	b=aqz77xozJKZoWnzZ33aJUiSGX2r8Uzfniq/uaa7UnOGQU75BSMUVjKpP/jr7G4rhPVL5lp
+	BkpneCjLmr14JYZpV9vMhYlRZxckROrgSIVBmSmwiwRWXxWKxHwBMSCCjBvahc97mY/eGC
+	2YmhEY2heMhDh/vyHn4C1qch+hNJf+o=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-jH2wmW8jOu-h4HbnLifDwA-1; Wed, 22 Dec 2021 12:29:28 -0500
+X-MC-Unique: jH2wmW8jOu-h4HbnLifDwA-1
+Received: by mail-oo1-f71.google.com with SMTP id p3-20020a4a4803000000b002da84ca8abcso1470155ooa.14
+        for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 09:29:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ziVhIeG/+C1hVAL/19RU4EWJLhjrdCffUUmjmXtDbFA=;
+        b=vBNmJP6YmfITxJpM1x/bspQT2wqkcRnbJdMR5v1yFiP/3QtP37qPIrjpWLBp1/i0ia
+         j8BPd4qBwTc4brWsmgyuo0By+IJM8j7hrFD9K/vwrh3QJ6t9XLDQ1VEDUxnDKsKbLA4q
+         Z6xynAtvsMx9w6uIjPrA15+vWZRtlU+rguR4pHyk3/G6FV2mORhr4vXToar4GfqPy++V
+         wORm4aJGSMHEOyO4hSEqiqznXoJs/9F0bS2HT62e62whaTfijOx+3/v6+DNkGI+CHbiP
+         nYExSilkkzBpZJPGqlKb9PDtDs/50FfSOQN2KsgJE1FrXTjeCbbj1pkIl2gGpv+G9Rc5
+         V0hA==
+X-Gm-Message-State: AOAM532fryxnGiR6+PRM7yjfVBVUDawB6SpzRhL9FuaVAvRbxQCjsvAz
+	8R31T66i3VLvaRzr6MMcuP4CSWiHavkxLBteHa00caR4kAUwprFL2XTuK2E1VtF9BKxjand8/QR
+	KwCPBgdZyVDz0Zw==
+X-Received: by 2002:a05:6830:314b:: with SMTP id c11mr2687013ots.224.1640194167842;
+        Wed, 22 Dec 2021 09:29:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxLuaJSYaMDrkK3LxDpl+f8Sw4+Sd0epeIomMC+76AxWf8uHWNgfE2xrDKogbzg5ksrKHQIdg==
+X-Received: by 2002:a05:6830:314b:: with SMTP id c11mr2687001ots.224.1640194167650;
+        Wed, 22 Dec 2021 09:29:27 -0800 (PST)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id m12sm512075oiw.23.2021.12.22.09.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 09:29:27 -0800 (PST)
+From: trix@redhat.com
+To: wangzhou1@hisilicon.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	yekai13@huawei.com
+Cc: linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
-Date: Wed, 22 Dec 2021 09:30:41 -0700
-Message-Id: <20211222163040.1961481-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] crypto: cleanup warning in qm_get_qos_value()
+Date: Wed, 22 Dec 2021 09:29:23 -0800
+Message-Id: <20211222172923.3209810-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-When cross compiling i386_defconfig on an arm64 host with clang, there
-are a few instances of '-Waddress-of-packed-member' and
-'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
-which should both be disabled with the cc-disable-warning calls in that
-directory's Makefile, which indicates that cc-disable-warning is failing
-at the point of testing these flags.
+From: Tom Rix <trix@redhat.com>
 
-The cc-disable-warning calls fail because at the point that the flags
-are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
-which has the '--target=' flag to tell clang what architecture it is
-targeting. Without the '--target=' flag, the host architecture (arm64)
-is used and i386 is not a valid value for '-march=' in that case. This
-error can be seen by adding some logging to try-run:
+Building with clang static analysis returns this warning:
 
-clang-14: error: the clang compiler does not support '-march=i386'
+qm.c:4382:11: warning: The left operand of '==' is a garbage value
+        if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+            ~~~~ ^
 
-Invoking the compiler has to succeed prior to calling cc-option or
-cc-disable-warning in order to accurately test whether or not the flag
-is supported; if it doesn't, the requested flag can never be added to
-the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
-so that any new flags that might be added in the future can be
-accurately tested.
+The call to qm_qos_value_init() can return an error without setting
+*val.  So check ret before checking *val.
 
-Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Fixes: 72b010dc33b9 ("crypto: hisilicon/qm - supports writing QoS int the host")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
+v2: Add Fixes: line
 
-v1 -> v2: https://lore.kernel.org/r/20211222005245.3081136-1-nathan@kernel.org/
+ drivers/crypto/hisilicon/qm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-* Add a comment above initial KBUILD_CFLAGS assignment that explains why
-  CLANG_FLAGS is at the top and why it should not be moved (Boris).
-
- arch/x86/boot/compressed/Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 431bf7f846c3..e11813646051 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -28,7 +28,11 @@ KCOV_INSTRUMENT		:= n
- targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
- 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index b1fe9c7b8cc89..c906f2e59277b 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
+ 		return -EINVAL;
  
--KBUILD_CFLAGS := -m$(BITS) -O2
-+# CLANG_FLAGS must come before any cc-disable-warning or cc-option calls in
-+# case of cross compiling, as it has the '--target=' flag, which is needed to
-+# avoid errors with '-march=i386', and future flags may depend on the target to
-+# be valid.
-+KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
- KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
- KBUILD_CFLAGS += -Wundef
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
-@@ -47,7 +51,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
- # Disable relocation relaxation in case the link is not PIE.
- KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
- KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
--KBUILD_CFLAGS += $(CLANG_FLAGS)
- 
- # sev.c indirectly inludes inat-table.h which is generated during
- # compilation and stored in $(objtree). Add the directory to the includes so
-
-base-commit: 2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+ 	ret = qm_qos_value_init(val_buf, val);
+-	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
++	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
+ 		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
+ 		return -EINVAL;
+ 	}
 -- 
-2.34.1
+2.26.3
 
