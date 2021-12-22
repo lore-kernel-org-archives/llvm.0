@@ -1,88 +1,95 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266FF2C9C
-	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 00:32:26 +0000 (UTC)
-Received: by mail-lj1-f169.google.com with SMTP id by39so1032069ljb.2
-        for <llvm@lists.linux.dev>; Tue, 21 Dec 2021 16:32:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=7xcE93SQUTnmpprWNNrn4RnRomw6varxCO+eWG92cmo=;
-        b=lmhKgJQu05WCKShkgxDOsnJSAglx5hzJxv7qyXZ4Tm7pQYz4+yeOpG80ZLArYxBmUY
-         ne4ldsh61991ts1XU68fuBrm3GN4LVFapTCIZv06MJihkZLfXn9dbdqWbUUjlfH4euOW
-         UtVDi0xkPxHV8V3z9uFgTWH1UdG/GmkT+fxp7BT1a8noXHRY3W2a+QFpec3R9xJQ+pS2
-         wQ7CF9YP8H92Wv60P8pK5zIIUYclRTQGKi1VXqAWKvb/Ct28iDmiDrJpSF1Omswsm57N
-         n88g9bRTRN83+PNKHdn2oat1PQE1p4KYi92RY5zqE8M+W1re4FUz6TedObimILzA7+C7
-         KiwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=7xcE93SQUTnmpprWNNrn4RnRomw6varxCO+eWG92cmo=;
-        b=vY5QT38yjDROtSF33WT15kQVOF3WUjJ+UvHR+hgdX/unm7Ja83IKtffUUh5sNEhPJ/
-         V9INxufv3gC14bJDN6blO9KYD8YC0UNiQwX7+4ZJJgKR8ORYEApujO+T11FcdETbY/7Z
-         XZLoRsCi6gUagamQ4R9lyWkLEEGdKeDQoPNahQ6YODzGVvI5x4r/m/LoIY+Yvupjuy4a
-         b6ee2EGEkZssqNQFs6r2OAu6NneCSiivHxtEheGuUfTWo6jQiaycZPOz2XuMkUhELpBz
-         t9i/HdcnvAr/+8QFzxc1ibwLyjVidGea680LJH69lFMQ8NGeMyvKRzdntCcRmlsLzxvJ
-         kKsg==
-X-Gm-Message-State: AOAM532Cla1ztctca1MeWPHGmNk58v1DJ2LuMibWfR6K+m3vCJ5SHiDZ
-	4H/3xSOedXzU91dsFjkYV+oJiiBzf1AlWHBJhsCqYw==
-X-Google-Smtp-Source: ABdhPJx3iJnHCsyoWnKA49ZPV189cBeO62N/fdKwG5AlxTJ7ZmS4LzxQHLqVDQMicic51FyA7eCfJlBZTkljL8LNg30=
-X-Received: by 2002:a2e:141c:: with SMTP id u28mr570364ljd.338.1640133143982;
- Tue, 21 Dec 2021 16:32:23 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA3F2C9C
+	for <llvm@lists.linux.dev>; Wed, 22 Dec 2021 00:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53259C36AE9;
+	Wed, 22 Dec 2021 00:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1640134390;
+	bh=P5+2yc3KCKxVxhRcIuwHjO5vFJ9W3AScc9KUpeZDGDw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Sybfz6riq5b75n2hH5ZrRGrZjuzFYwr0uKNRXXm/V7pi8BSVAMTXrCGV8thBqstU1
+	 OEAZgOTmw4x/y/GB/xHjHwd7V/n5RsSGWTDm76mv/zlwFa4BSQdVOHLRXpcBdsgxtH
+	 aFEoLbTQyiPtnv80aoOJr+OEyETQyMWPqTFEqehFvNAjuLoWiYSO37KTAp2bKF8iwW
+	 rkIFfJb6KuVVyIdSUiB6kq/8+nz8FBhvsmwbC6z99EIdrTjofIoCckSza088zKQeDv
+	 Xsoam8+xfxRzhtcXifEA2ykhgMPL9nLSG99+RrPbjS9k7ueOldhZkCxPR/U26B8k+Z
+	 H8f8+dym+krPQ==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
+Date: Tue, 21 Dec 2021 17:52:45 -0700
+Message-Id: <20211222005245.3081136-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 21 Dec 2021 16:32:12 -0800
-Message-ID: <CAKwvOd=3ZSuiLxWbRWicTWF2WX4biS=-+EEXbSJiuLEborbD6w@mail.gmail.com>
-Subject: CROSS_COMPILE_COMPAT cherry picks for linux-5.10.y and linux-5.15.y
-To: Greg KH <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: "# 3.4.x" <stable@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Stephen Boyd <swboyd@chromium.org>, 
-	Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Dear stable kernel maintainers,
+When cross compiling i386_defconfig on an arm64 host with clang, there
+are a few instances of '-Waddress-of-packed-member' and
+'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
+which should both be disabled with the cc-disable-warning calls in that
+directory's Makefile, which indicates that cc-disable-warning is failing
+at the point of testing these flags.
 
-Please consider cherry-picking to linux-5.15.y:
+The cc-disable-warning calls fail because at the point that the flags
+are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
+which has the '--target=' flag to tell clang what architecture it is
+targeting. Without the '--target=' flag, the host architecture (arm64)
+is used and i386 is not a valid value for '-march=' in that case. This
+error can be seen by adding some logging to try-run:
 
-commit 3e6f8d1fa184 ("arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd")
+clang-14: error: the clang compiler does not support '-march=i386'
 
-Please also consider cherry-picking to linux-5.10.y:
+Invoking the compiler has to succeed prior to calling cc-option or
+cc-disable-warning in order to accurately test whether or not the flag
+is supported; if it doesn't, the requested flag can never be added to
+the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
+so that any new flags that might be added in the future can be
+accurately tested.
 
-commit ef94340583ee ("arm64: vdso32: drop -no-integrated-as flag")
-commit 3e6f8d1fa184 ("arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd")
+Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/boot/compressed/Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-They landed in v5.13-rc1 and v5.16-rc1 respectively.
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 431bf7f846c3..169186dba1d7 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -28,7 +28,7 @@ KCOV_INSTRUMENT		:= n
+ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
+ 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
+ 
+-KBUILD_CFLAGS := -m$(BITS) -O2
++KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
+ KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
+ KBUILD_CFLAGS += -Wundef
+ KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+@@ -47,7 +47,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+ # Disable relocation relaxation in case the link is not PIE.
+ KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+-KBUILD_CFLAGS += $(CLANG_FLAGS)
+ 
+ # sev.c indirectly inludes inat-table.h which is generated during
+ # compilation and stored in $(objtree). Add the directory to the includes so
 
-They allow the command line for building the arm64 compat vdso to be
-shortened by dropping the need for CROSS_COMPILE_COMPAT for LLVM=1
-(and LLVM_IAS=1) builds.
+base-commit: 2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+-- 
+2.34.1
 
-linux-5.15.y:
-from:
-$ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 -j72
-to:
-$ ARCH=arm64 make LLVM=1 -j72
-
-linux-5.10.y:
-from:
-$ ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make LLVM=1 LLVM_IAS=1 -j72
-to
-$ ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make LLVM=1 LLVM_IAS=1 -j72
-
-This can be verified with the above by checking .config for
-CONFIG_COMPAT_VDSO=y after running defconfig or building
-arch/arm64/kernel/vdso32/.
-
-I also verified these build with clang-10, which was the minimum
-supported release of clang for linux-5.10.y and linux-5.15.y
-(Documentation/process/changes.rst).
---
-Thanks,
-~Nick Desaulniers
