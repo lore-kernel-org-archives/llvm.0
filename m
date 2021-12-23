@@ -1,110 +1,201 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D432C80
-	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 00:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0CC29CA
+	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 00:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219030; x=1671755030;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fdl2pqtwfSmHqco13iW37DLHxkjyBxAhNXlPzt3ZhyI=;
-  b=YoWccRpPqMKFHTGGe8XtBHmE6Kt3XzGGlXsUehexQaeCwt8a36RedQAX
-   +UdQnutVI0HgEilJEHZNmbA4nRfL6jbY0KCmliIcKxufdSE/cXg1NGcbg
-   LXRBKo/bI1dEVljLSlu/FLEbAQDjps9etQQZSGqDDmToHCwdxTqXhIkWU
-   it5h9np37iPaeI/vUhYKusS2NAVQTh3/LKHNplaMFVKM+NldQVT/D89EY
-   QaEsk4fgqwjLn7JdPmHsJqLWTJ3O5/njeo5mtWfQizXhcwsJRP9kNqMpB
-   irRnwzTVBBatc/B3CuCH7vojPe+6MUKpMJmhcKZ9rNKcBMk/uyzVSk9cC
+  t=1640220429; x=1671756429;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BDkevwZcPC1lV5iGmPBU8XCAUFg0Tix5/IkG1xiFR2s=;
+  b=iOCk8/5UB41Aj/e0ez+HAGJAc5Gyk9jopmnBxAHOMFMMoK3x/L/zUtBP
+   C3WEYN7R8XZTrXqxeFlLwDMK4ye1tjKBz5xxVQEsiDkf1NolCJC3vfqOV
+   RAZ4cL0/fstfbKySImlXJGNdob7EkCpdy46A7R2cgKv6Va2YuySoNmRtt
+   3/zwix7DUw+T0ouBUMWZm4E2R2veya/X1q3ryuCatN0RFVT92kVErMyzC
+   pLa9HKkH4PJxKt5ka1qezCPcReYuwHTGq2GVSKTd6W5x4NgXAkXz8puBH
+   go0LrKFdyNiKqQ8Kxj1M7iicUGfX7wWW75fIp8pbPh/MTrxBCmwCgQLK0
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="239481956"
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327038028"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="239481956"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:50 -0800
+   d="scan'208";a="327038028"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:47:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="521881999"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2021 16:23:39 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79K032467;
-	Thu, 23 Dec 2021 00:23:37 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: linux-hardening@vger.kernel.org, x86@kernel.org
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v9 15/15] maintainers: add MAINTAINERS entry for FG-KASLR
-Date: Thu, 23 Dec 2021 01:22:09 +0100
-Message-Id: <20211223002209.1092165-16-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+   d="scan'208";a="468353664"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2021 16:47:06 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n0CG9-00016A-92; Thu, 23 Dec 2021 00:47:05 +0000
+Date: Thu, 23 Dec 2021 08:46:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bo Jiao <Bo.Jiao@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+	Sujuan Chen <sujuan.chen@mediatek.com>,
+	Ryder Lee <ryder.lee@mediatek.com>
+Subject: [nbd168-wireless:mt76 10/28]
+ drivers/net/wireless/mediatek/mt76/mt7915/mac.c:472:5: warning: variable
+ 'flags' set but not used
+Message-ID: <202112230801.vyMZPnaw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Add an entry for FG-KASLR containing the maintainers, reviewers,
-public mailing lists, files and so on.
+tree:   https://github.com/nbd168/wireless mt76
+head:   05f0500c7b0147353e97de7369d504c5fbd3951e
+commit: 0aa6b534b5e1cfe82e676d1d8f90bcea584565d3 [10/28] mt76: mt7915: update rx rate reporting for mt7916
+config: mips-randconfig-r033-20211222 (https://download.01.org/0day-ci/archive/20211223/202112230801.vyMZPnaw-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/nbd168/wireless/commit/0aa6b534b5e1cfe82e676d1d8f90bcea584565d3
+        git remote add nbd168-wireless https://github.com/nbd168/wireless
+        git fetch --no-tags nbd168-wireless mt76
+        git checkout 0aa6b534b5e1cfe82e676d1d8f90bcea584565d3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7915/
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/mediatek/mt76/mt7915/mac.c:472:5: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+           u8 flags, stbc, gi, bw, dcm, mode, nss;
+              ^
+>> drivers/net/wireless/mediatek/mt76/mt7915/mac.c:535:3: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
+                   flags |= RATE_INFO_FLAGS_HE_MCS;
+                   ^~~~~
+   drivers/net/wireless/mediatek/mt76/mt7915/mac.c:472:10: note: initialize the variable 'flags' to silence this warning
+           u8 flags, stbc, gi, bw, dcm, mode, nss;
+                   ^
+                    = '\0'
+   2 warnings generated.
+
+
+vim +/flags +472 drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+
+   464	
+   465	static int
+   466	mt7915_mac_fill_rx_rate(struct mt7915_dev *dev,
+   467				struct mt76_rx_status *status,
+   468				struct ieee80211_supported_band *sband,
+   469				__le32 *rxv)
+   470	{
+   471		u32 v0, v2;
+ > 472		u8 flags, stbc, gi, bw, dcm, mode, nss;
+   473		int i, idx;
+   474		bool cck = false;
+   475	
+   476		v0 = le32_to_cpu(rxv[0]);
+   477		v2 = le32_to_cpu(rxv[2]);
+   478	
+   479		idx = i = FIELD_GET(MT_PRXV_TX_RATE, v0);
+   480		nss = FIELD_GET(MT_PRXV_NSTS, v0) + 1;
+   481	
+   482		if (!is_mt7915(&dev->mt76)) {
+   483			stbc = FIELD_GET(MT_PRXV_HT_STBC, v0);
+   484			gi = FIELD_GET(MT_PRXV_HT_SHORT_GI, v0);
+   485			mode = FIELD_GET(MT_PRXV_TX_MODE, v0);
+   486			dcm = FIELD_GET(MT_PRXV_DCM, v0);
+   487			bw = FIELD_GET(MT_PRXV_FRAME_MODE, v0);
+   488		} else {
+   489			stbc = FIELD_GET(MT_CRXV_HT_STBC, v2);
+   490			gi = FIELD_GET(MT_CRXV_HT_SHORT_GI, v2);
+   491			mode = FIELD_GET(MT_CRXV_TX_MODE, v2);
+   492			dcm = !!(idx & GENMASK(3, 0) & MT_PRXV_TX_DCM);
+   493			bw = FIELD_GET(MT_CRXV_FRAME_MODE, v2);
+   494		}
+   495	
+   496		switch (mode) {
+   497		case MT_PHY_TYPE_CCK:
+   498			cck = true;
+   499			fallthrough;
+   500		case MT_PHY_TYPE_OFDM:
+   501			i = mt76_get_rate(&dev->mt76, sband, i, cck);
+   502			break;
+   503		case MT_PHY_TYPE_HT_GF:
+   504		case MT_PHY_TYPE_HT:
+   505			status->encoding = RX_ENC_HT;
+   506			if (i > 31)
+   507				return -EINVAL;
+   508	
+   509			flags = RATE_INFO_FLAGS_MCS;
+   510			if (gi)
+   511				flags |= RATE_INFO_FLAGS_SHORT_GI;
+   512			break;
+   513		case MT_PHY_TYPE_VHT:
+   514			status->nss = nss;
+   515			status->encoding = RX_ENC_VHT;
+   516			if (i > 9)
+   517				return -EINVAL;
+   518	
+   519			flags = RATE_INFO_FLAGS_VHT_MCS;
+   520			if (gi)
+   521				flags |= RATE_INFO_FLAGS_SHORT_GI;
+   522			break;
+   523		case MT_PHY_TYPE_HE_MU:
+   524		case MT_PHY_TYPE_HE_SU:
+   525		case MT_PHY_TYPE_HE_EXT_SU:
+   526		case MT_PHY_TYPE_HE_TB:
+   527			status->nss = nss;
+   528			status->encoding = RX_ENC_HE;
+   529			i &= GENMASK(3, 0);
+   530	
+   531			if (gi <= NL80211_RATE_INFO_HE_GI_3_2)
+   532				status->he_gi = gi;
+   533	
+   534			status->he_dcm = dcm;
+ > 535			flags |= RATE_INFO_FLAGS_HE_MCS;
+   536			break;
+   537		default:
+   538			return -EINVAL;
+   539		}
+   540		status->rate_idx = i;
+   541	
+   542		switch (bw) {
+   543		case IEEE80211_STA_RX_BW_20:
+   544			break;
+   545		case IEEE80211_STA_RX_BW_40:
+   546			if (mode & MT_PHY_TYPE_HE_EXT_SU &&
+   547			    (idx & MT_PRXV_TX_ER_SU_106T)) {
+   548				status->bw = RATE_INFO_BW_HE_RU;
+   549				status->he_ru =
+   550					NL80211_RATE_INFO_HE_RU_ALLOC_106;
+   551			} else {
+   552				status->bw = RATE_INFO_BW_40;
+   553			}
+   554			break;
+   555		case IEEE80211_STA_RX_BW_80:
+   556			status->bw = RATE_INFO_BW_80;
+   557			break;
+   558		case IEEE80211_STA_RX_BW_160:
+   559			status->bw = RATE_INFO_BW_160;
+   560			break;
+   561		default:
+   562			return -EINVAL;
+   563		}
+   564	
+   565		status->enc_flags |= RX_ENC_FLAG_STBC_MASK * stbc;
+   566		if (mode < MT_PHY_TYPE_HE_SU && gi)
+   567			status->enc_flags |= RX_ENC_FLAG_SHORT_GI;
+   568	
+   569		return 0;
+   570	}
+   571	
+
 ---
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8912b2c1260c..efdb313b6813 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7853,6 +7853,18 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/fujitsu-tablet.c
- 
-+FUNCTION-GRAINED KASLR (FG-KASLR)
-+M:	Alexander Lobakin <alexandr.lobakin@intel.com>
-+R:	Kristen Carlson Accardi <kristen@linux.intel.com>
-+R:	Kees Cook <keescook@chromium.org>
-+L:	linux-hardening@vger.kernel.org
-+S:	Supported
-+F:	Documentation/security/fgkaslr.rst
-+F:	arch/x86/boot/compressed/fgkaslr.c
-+F:	arch/x86/boot/compressed/gen-symbols.h
-+F:	arch/x86/boot/compressed/utils.c
-+F:	scripts/generate_text_sections.pl
-+
- FUSE: FILESYSTEM IN USERSPACE
- M:	Miklos Szeredi <miklos@szeredi.hu>
- L:	linux-fsdevel@vger.kernel.org
--- 
-2.33.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
