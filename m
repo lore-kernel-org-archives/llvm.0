@@ -1,99 +1,104 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC9F2C82
-	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 16:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=/tyAvhoyg1hQEH2SYEuGFD0l8CiSoOd6tqxbhV2JRnI=; b=NNjVio1DVMhWyDn6xUSgP1zglG
-	O0tafy2qc3LdNtt2vLhXe2B37ILp2eEVlum7DfDn2MdHLawS9OrfX/hPtEVtLOY1XnI3zRemoNgEw
-	iI/vMYlqImaqdaYTLQ3xDM/q3Hb/CIz8NfD8azxF72VmmF9HnCiMEnwjIWDa0zgYLEwAx/RkjoA/v
-	B4jqEA73t7b3c2xz/uOY6Wm5fxnsCjLe/NqVXxLzB7JM3iNhdexvJGa5bQGTTtiZsTE4JE0TVoyYV
-	BVEtz7jYhobveE92sgyPApjjdjbxIm+j0bBAs9qnf5iA2EHVzTWaZf7Sbhzyy/eKhI9/DXD0A7pdj
-	p+sINhPA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1n0QCs-0038Ey-VT; Thu, 23 Dec 2021 15:40:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 812A5300347;
-	Thu, 23 Dec 2021 16:40:36 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 54C0E20CF2F9E; Thu, 23 Dec 2021 16:40:36 +0100 (CET)
-Date: Thu, 23 Dec 2021 16:40:36 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	Andy Lavr <andy.lavr@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-	live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v9 00/15] Function Granular KASLR
-Message-ID: <YcSYdJowLyutM/7m@hirez.programming.kicks-ass.net>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223151504.1409203-1-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFED2CAA
+	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 20:30:15 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id u22so10792436lju.7
+        for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 12:30:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Odt0JsRPKSwzZrSogY/TSKmJxhU81pD7uS/KWPJG7aw=;
+        b=AgIToA7aaUbbuygVsn68Z8gYx2R+pQYR1IGhjy1yu+LyX5dNysFzXbkdgswMVTwTep
+         0hI1Ae/3TaPJPhWnCgvYHJ1VxnHq4l/eFg5e3kj/JRuOb7mac6NKG5+ybt3ENDX/mSaq
+         0xzI/qhLfARJdv2pkCjradsG9Wzj6pj4xZ8TfjQHTecXRkE4KDhq9AUTCvqpomHD7nct
+         wHr7wkKfJp2gGHQWmp3oI6tTwBS2Vz6LouKFC6ASCZELLqgy8+qcg8nboxxGhWJcEIzj
+         dWufJ966D9lg/OGYmwR5V+BL41B2Pi6FMkc2jhL5RAoV/B9HXcKhRs6Rytt/j7+GidI2
+         UWIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Odt0JsRPKSwzZrSogY/TSKmJxhU81pD7uS/KWPJG7aw=;
+        b=8HXMIaDlSHArJ5xn0io5AYQ8scox0jkqIdk7Nl20sAyUmTNF4jFxH+oDB5fzussPP4
+         bPt4EYzfTXzrTwXqwJoFVx8CTMyLRU90ykmDWtNhecDlQihGALL+jPhx9R2oEa/A7xfo
+         IVAPSyfcCJ+xFcVrEwdGzuVi97aY49Gk1oHhUiQmJY9wXjYITYf6oLEU2sYZOMH/0oTo
+         hgOLyQ+FJLZ/gksVcQdcmem8kKPKi6Qv+gO3sLgVRV+1hgF9exzPNuTgBKkuqDlCobT7
+         JAuk4eYImS9lvTR7aCk2ptk/1QjUHMkHBf7Z0O2BSRNEvceHrsq49E/qBfHHrmEk2Dsl
+         zxKQ==
+X-Gm-Message-State: AOAM530I1O5IkKW3WbHJQ2FIbXtpPkPMzK/qIOv8/fTqv+yiCQnRKNGz
+	+VXa2b8knGgoLkFQqQvGuHrq0dUi32wJMAqdEtWrAw==
+X-Google-Smtp-Source: ABdhPJyYWN/xeRMF+9Dfpv8zcB/XlMiakJ1FyMZHUYzjhf10Y8zM74gGT8+Mckyyk2oE+tUZO5jm/ikoSyjgvNoCFBc=
+X-Received: by 2002:a2e:908b:: with SMTP id l11mr2705599ljg.62.1640291413074;
+ Thu, 23 Dec 2021 12:30:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223151504.1409203-1-alexandr.lobakin@intel.com>
+References: <20211223162848.3243702-1-trix@redhat.com>
+In-Reply-To: <20211223162848.3243702-1-trix@redhat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 23 Dec 2021 12:30:01 -0800
+Message-ID: <CAKwvOd=dLjMAim_FRNyWegzEjy0_1vF2xVW1hNPQ55=32qO4Wg@mail.gmail.com>
+Subject: Re: [PATCH] mac80211: initialize variable have_higher_than_11mbit
+To: trix@redhat.com
+Cc: johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org, 
+	nathan@kernel.org, linville@tuxdriver.com, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Dec 23, 2021 at 04:15:04PM +0100, Alexander Lobakin wrote:
-> From: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Date: Thu, 23 Dec 2021 01:21:54 +0100
-> 
-> > This is a massive rework and a respin of Kristen Accardi's marvellous
-> > FG-KASLR series (v5).
-> 
-> [ snip ]
-> 
-> > The series is also available here: [3]
-> 
-> As per request, I've published a version rebased ontop of
-> linux-next-20211223 here: [4].
-> 
-> During the rebasing, I saw that some ASM code conflicts with, I
-> guess, Peter's "execute past ret" mitigation.
-> So I would also like to ask you to give me a branch which I should
-> pick to base my series on top of. There's a bunch of different x86
-> branches, like several in peterz-queue, x86/core etc., so I got lost
-> a little.
-> The one posted yesterday was based on the mainline 5.16-rc6.
+On Thu, Dec 23, 2021 at 8:29 AM <trix@redhat.com> wrote:
+>
+> From: Tom Rix <trix@redhat.com>
+>
+> Clang static analysis reports this warnings
+>
+> mlme.c:5332:7: warning: Branch condition evaluates to a
+>   garbage value
+>     have_higher_than_11mbit)
+>     ^~~~~~~~~~~~~~~~~~~~~~~
+>
+> have_higher_than_11mbit is only set to true some of the time in
+> ieee80211_get_rates() but is checked all of the time.  So
+> have_higher_than_11mbit needs to be initialized to false.
 
-For anything tip related, tip/master isn't a bad target. I did two asm
-related x86 series, both are in tip/x86/core I think (/me checks, yep).
+LGTM. There's only one caller of ieee80211_get_rates() today; if there
+were others, they could make a similar mistake in the future. An
+alternate approach: ieee80211_get_rates() could unconditionally write
+false before the loop that could later write true. Then call sites
+don't need to worry about this conditional assignment. Perhaps that
+would be preferable? If not:
 
-Never base anything of my queue.git, that's all throw-away/staging
-stuff. Either it lives and goes on into tip or not :-)
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  net/mac80211/mlme.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+> index 51f55c4ee3c6e..766cbbc9c3a72 100644
+> --- a/net/mac80211/mlme.c
+> +++ b/net/mac80211/mlme.c
+> @@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
+>          */
+>         if (new_sta) {
+>                 u32 rates = 0, basic_rates = 0;
+> -               bool have_higher_than_11mbit;
+> +               bool have_higher_than_11mbit = false;
+>                 int min_rate = INT_MAX, min_rate_index = -1;
+>                 const struct cfg80211_bss_ies *ies;
+>                 int shift = ieee80211_vif_get_shift(&sdata->vif);
+> --
+> 2.26.3
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
