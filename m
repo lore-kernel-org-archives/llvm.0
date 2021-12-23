@@ -1,110 +1,108 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DF829CA
-	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 16:19:11 +0000 (UTC)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 982081EC050F;
-	Thu, 23 Dec 2021 17:19:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1640276345;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D6029CA
+	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 16:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1640276939;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=xD7MPmC+2ErQI45EeQc4ikxUsZJzTJ2cRRbJueAos0k=;
-	b=D4SwgyECbZXrWKJoUzQiCtm8/t6M2YEw709TpWDVw6NzzAgX4EPGOR68xs9k8TPlpgvFUg
-	0uKLMAXKLMbEhbiTqiLG6iucLxuQIsb8Ige1whlicMVNanfochNf6LZ8yBcVMXCvLp/d3r
-	XBe2nuP9Sbzq1wdLW4ZEtOY7iA2jc38=
-Date: Thu, 23 Dec 2021 17:19:06 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-Message-ID: <YcShenJgaOeOdbIj@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-2-alexandr.lobakin@intel.com>
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uJOgwGjirTFzn7tlsminzBCCoKOlNNhzzWyCm3307/w=;
+	b=Cwd6XVFRfyOtfQg+iPJcFvDtfj+fCn8AZA3Gtn9zcUWoru+JjgMmt0B+Gpno00cRNvR/X0
+	eXxRMo6xKsatixs7xLkYANF9vcXSKJXMaaCmJ86Zp9W4UdaAuQDAoup1qmK7XrcSbFvxpV
+	idX59ax/f7I44Xgzv6v7+LqhaIDrdzY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-sUZKh-y5P2KlMo7bW0Jjqw-1; Thu, 23 Dec 2021 11:28:58 -0500
+X-MC-Unique: sUZKh-y5P2KlMo7bW0Jjqw-1
+Received: by mail-qk1-f200.google.com with SMTP id bk35-20020a05620a1a2300b0046d2a9b93dfso4654163qkb.16
+        for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 08:28:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uJOgwGjirTFzn7tlsminzBCCoKOlNNhzzWyCm3307/w=;
+        b=kl7012vazeT+8V2Qa/ot2SizGsD9NWuMkNq/JwDflTA4eB1lRrI/HxVuRQWUWun1i+
+         6URd6/VGBMXVEuexr+/382+sHbA4d+aA7r7xxCN697iCxv+UB+Cgs4J3orf7M9O6LJvi
+         RLYLJAgqXtXh7+CsfGzvO9k0sigUnBhq+mdziqJtmyKX2Ma2taoDuJqmrdxLTCrpC2NO
+         ewe2lONbtA7Lr+AS5gxz0xa30203WyxmUyGI9yAQxDEuebKu3QpdtmxO3QNZrsL0Rama
+         3fMRlirDGU//+lZh3+sYBpReqLM/dYx70VC044LY4LhfVMpuYbsymroowRqq2I0I3k/u
+         RUnQ==
+X-Gm-Message-State: AOAM5319jgDfldL70ciqsnqPwWb3ZwFt6pB9gL0uao/DTDyhA9y+zrkc
+	a4w1iwT8/V1K51i67ZNR9Oar3LJp36hG9fAwkf58CFpnisCW77BFpm7S96I/bkOqHsDx2cKNQhf
+	bL4b9GdB4vHZpcw==
+X-Received: by 2002:a37:a8cc:: with SMTP id r195mr1907016qke.480.1640276938440;
+        Thu, 23 Dec 2021 08:28:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwzpz9zm2A3nxoNm6dr+ZZ7zHfR2tVjNN8kjrl0r7RnwHfLx6ohxoG8UtvwJHnYzNd5uok2bw==
+X-Received: by 2002:a37:a8cc:: with SMTP id r195mr1906996qke.480.1640276938135;
+        Thu, 23 Dec 2021 08:28:58 -0800 (PST)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id u11sm4743795qtw.29.2021.12.23.08.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 08:28:57 -0800 (PST)
+From: trix@redhat.com
+To: johannes@sipsolutions.net,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	linville@tuxdriver.com
+Cc: linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] mac80211: initialize variable have_higher_than_11mbit
+Date: Thu, 23 Dec 2021 08:28:48 -0800
+Message-Id: <20211223162848.3243702-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211223002209.1092165-2-alexandr.lobakin@intel.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-On Thu, Dec 23, 2021 at 01:21:55AM +0100, Alexander Lobakin wrote:
-> For now, that condition from remove_dot():
-> 
-> if (m && (s[n + m] == '.' || s[n + m] == 0))
-> 
-> which was designed to test if it's a dot or a \0 after the suffix
-> is never satisfied.
-> This is due to that s[n + m] always points to the last digit of a
-> numeric suffix, not on the symbol next to it:
-> 
-> param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> 
-> So it's off by one and was like that since 2014.
+From: Tom Rix <trix@redhat.com>
 
-What's the relevance of this? Looking at
+Clang static analysis reports this warnings
 
-  7d02b490e93c ("Kbuild, lto: Drop .number postfixes in modpost")
+mlme.c:5332:7: warning: Branch condition evaluates to a
+  garbage value
+    have_higher_than_11mbit)
+    ^~~~~~~~~~~~~~~~~~~~~~~
 
-what you're fixing here is something LTO-related. How do you trigger
-this?
+have_higher_than_11mbit is only set to true some of the time in
+ieee80211_get_rates() but is checked all of the time.  So
+have_higher_than_11mbit needs to be initialized to false.
 
-For a Cc:stable patch, I'm missing a lot of context.
+Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ net/mac80211/mlme.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> `-z uniq-symbol` linker flag which we are planning to use to
-				     ^^
-
-Who's "we"?
-
-> simplify livepatching brings numeric suffixes back, fix this.
-> Otherwise:
-> 
-> ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
-> 
-> Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> Cc: stable@vger.kernel.org # 3.17+
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-
-...
-
+diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+index 51f55c4ee3c6e..766cbbc9c3a72 100644
+--- a/net/mac80211/mlme.c
++++ b/net/mac80211/mlme.c
+@@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
+ 	 */
+ 	if (new_sta) {
+ 		u32 rates = 0, basic_rates = 0;
+-		bool have_higher_than_11mbit;
++		bool have_higher_than_11mbit = false;
+ 		int min_rate = INT_MAX, min_rate_index = -1;
+ 		const struct cfg80211_bss_ies *ies;
+ 		int shift = ieee80211_vif_get_shift(&sdata->vif);
 -- 
-Regards/Gruss,
-    Boris.
+2.26.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
