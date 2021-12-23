@@ -1,34 +1,34 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BB22C80
-	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 00:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BB12C80
+	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 00:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219026; x=1671755026;
+  t=1640219029; x=1671755029;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6bgGNBnZwENMN8GpY2U+2AbjFachztYCvAD4DvsBiQw=;
-  b=oIgdReW2znaIz80ygtLYnZzJqe8FqNIw0LFQAVq0EMIt7pmxnvLrNlHG
-   j14iQTezO7Us0L2AX2IZbG875GgsdhImOAX/dpHKxPzBg5o5HZ9lXR3Mn
-   DL0dqtKHVO/+uOUsaoQb9FVhcYJO1phnwLowc3uJqPUsfqOYLqs5jpS7i
-   5UBsrNOiQz3fbTTXg/YvApDbw5I7n8imXvg1u9DMVEz5fukJpmcTiTuSD
-   J3MEd4bGp7n77B+5FnJXGgouPb0LalVljOEVL1wf2rTf6+y4r4eHePJkx
-   DT8eiTc5OHWQSIuw95bcCa66mBZadMQ6UA4pllke9QIYQqEk17dC2Syc+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="238264235"
+  bh=+KrOqIqb4aeQ6x0G1EHmcHniPYRjIzt9aPk8YuSf44w=;
+  b=Ww0bYH7JL8KXDgW5nqnPw7h4flB6olOJscvQwug7bG1vXBPubSNC+Q31
+   upsz4nw2Xb2k6MJL/GZmxYUmAfksiO+KTvsq8jB6PNff/BpIvKzvkzlht
+   MbJ8zbE8yaO/9TGyAklAeXQ1JhnDvxxc/47e7xFz2ebPhZbTcaGMCgwKM
+   ZIxQKSwG778DNDv/7WgigwgAclkU5AQUYm77hCowBHCxqgOyoVr6+3/tm
+   ubjU3s2ZiEeI5pdyJRNXQUOIInsBUMQz5NXT/LVNjDCfGHaYgz0CscPF4
+   q8RINMo8p+nIly2JWQV+F9NIxVyuqL5dl2Q05sbtRoW8Yp6Au0smi23Xw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="239481952"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="238264235"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:46 -0800
+   d="scan'208";a="239481952"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:48 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="617312145"
+X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
+   d="scan'208";a="521881976"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 22 Dec 2021 16:23:37 -0800
+  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2021 16:23:33 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79J032467;
-	Thu, 23 Dec 2021 00:23:35 GMT
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79H032467;
+	Thu, 23 Dec 2021 00:23:31 GMT
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
 To: linux-hardening@vger.kernel.org, x86@kernel.org
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -60,9 +60,9 @@ Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v9 14/15] Documentation: add documentation for FG-KASLR
-Date: Thu, 23 Dec 2021 01:22:08 +0100
-Message-Id: <20211223002209.1092165-15-alexandr.lobakin@intel.com>
+Subject: [PATCH v9 12/15] module: Reorder functions
+Date: Thu, 23 Dec 2021 01:22:06 +0100
+Message-Id: <20211223002209.1092165-13-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
@@ -76,225 +76,216 @@ Content-Transfer-Encoding: 8bit
 
 From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-Describe the main principles behind the FG-KASLR hardening feature
-in a new doc section.
+Introduce a new config option to allow modules to be re-ordered
+by function. This option can be enabled independently of the
+kernel text KASLR or FG_KASLR settings so that it can be used
+by architectures that do not support either of these features.
+This option will be selected by default if CONFIG_FG_KASLR is
+selected.
+
+If a module has functions split out into separate text sections
+(i.e. compiled with the -ffunction-sections flag), reorder the
+functions to provide some code diversification to modules.
+
+alobakin:
+Make it work with ClangCFI -- in such builds, .text section must
+always come first and be page-aligned. Exclude it from the shuffle
+list and leave as it is.
+Make this feature depend on `-z unique-symbol` as well, due to the
+very same reasons.
+Traditionally, use common shuffle_array() from <linux/random.h>.
 
 Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Tested-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Acked-by: Jessica Yu <jeyu@kernel.org>
+Tested-by: Jessica Yu <jeyu@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
+Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- .../admin-guide/kernel-parameters.txt         |   6 +
- Documentation/security/fgkaslr.rst            | 172 ++++++++++++++++++
- Documentation/security/index.rst              |   1 +
- 3 files changed, 179 insertions(+)
- create mode 100644 Documentation/security/fgkaslr.rst
+ Makefile                |  6 +++-
+ include/linux/linkage.h |  1 +
+ init/Kconfig            | 14 ++++++++
+ kernel/module.c         | 73 +++++++++++++++++++++++++++++++++++++++--
+ 4 files changed, 91 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index fc34332c8d9a..b79423c5a41a 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2224,6 +2224,12 @@
- 			kernel and module base offset ASLR (Address Space
- 			Layout Randomization).
+diff --git a/Makefile b/Makefile
+index 3346269341d4..74d270c77d96 100644
+--- a/Makefile
++++ b/Makefile
+@@ -900,7 +900,7 @@ export SECSUBST_AFLAGS
+ endif
  
-+	nofgkaslr	[KNL]
-+			When CONFIG_FG_KASLR is set, this parameter
-+			disables kernel function granular ASLR
-+			(Address Space Layout Randomization).
-+			See Documentation/security/fgkaslr.rst.
+ # Same for modules. LD DCE doesn't work for them, thus not checking for it
+-ifneq ($(CONFIG_LTO_CLANG),)
++ifneq ($(CONFIG_MODULE_FG_KASLR)$(CONFIG_LTO_CLANG),)
+ KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
+ KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
+ endif
+@@ -909,6 +909,10 @@ endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
+ # ClangLTO implies `-ffunction-sections -fdata-sections`, no need
+ # to specify them manually and trigger a pointless full rebuild
+ ifndef CONFIG_LTO_CLANG
++ifdef CONFIG_MODULE_FG_KASLR
++KBUILD_CFLAGS_MODULE += -ffunction-sections
++endif
 +
- 	kasan_multi_shot
- 			[KNL] Enforce KASAN (Kernel Address Sanitizer) to print
- 			report on every invalid memory access. Without this
-diff --git a/Documentation/security/fgkaslr.rst b/Documentation/security/fgkaslr.rst
-new file mode 100644
-index 000000000000..50dc24f675b5
---- /dev/null
-+++ b/Documentation/security/fgkaslr.rst
-@@ -0,0 +1,172 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================================================================
-+Function Granular Kernel Address Space Layout Randomization (fgkaslr)
-+=====================================================================
-+
-+:Date: 6 April 2020
-+:Author: Kristen Accardi
-+
-+Kernel Address Space Layout Randomization (KASLR) was merged into the kernel
-+with the objective of increasing the difficulty of code reuse attacks. Code
-+reuse attacks reused existing code snippets to get around existing memory
-+protections. They exploit software bugs which expose addresses of useful code
-+snippets to control the flow of execution for their own nefarious purposes.
-+KASLR as it was originally implemented moves the entire kernel code text as a
-+unit at boot time in order to make addresses less predictable. The order of the
-+code within the segment is unchanged - only the base address is shifted. There
-+are a few shortcomings to this algorithm.
-+
-+1. Low Entropy - there are only so many locations the kernel can fit in. This
-+   means an attacker could guess without too much trouble.
-+2. Knowledge of a single address can reveal the offset of the base address,
-+   exposing all other locations for a published/known kernel image.
-+3. Info leaks abound.
-+
-+Finer grained ASLR has been proposed as a way to make ASLR more resistant
-+to info leaks. It is not a new concept at all, and there are many variations
-+possible. Function reordering is an implementation of finer grained ASLR
-+which randomizes the layout of an address space on a function level
-+granularity. The term "fgkaslr" is used in this document to refer to the
-+technique of function reordering when used with KASLR, as well as finer grained
-+KASLR in general.
-+
-+The objective of this patch set is to improve a technology that is already
-+merged into the kernel (KASLR). This code will not prevent all code reuse
-+attacks, and should be considered as one of several tools that can be used.
-+
-+Implementation Details
-+======================
-+
-+The over-arching objective of the fgkaslr implementation is incremental
-+improvement over the existing KASLR algorithm. It is designed to work with
-+the existing solution, and there are two main area where code changes occur:
-+Build time, and Load time.
-+
-+Build time
-+----------
-+
-+GCC has had an option to place functions into individual .text sections
-+for many years now (-ffunction-sections). This option is used to implement
-+function reordering at load time. The final compiled vmlinux retains all the
-+section headers, which can be used to help find the address ranges of each
-+function. Using this information and an expanded table of relocation addresses,
-+individual text sections can be shuffled immediately after decompression.
-+Some data tables inside the kernel that have assumptions about order
-+require sorting after the update. In order to modify these tables,
-+a few key symbols from the objcopy symbol stripping process are preserved
-+for use after shuffling the text segments. Any special input sections which are
-+defined by the kernel build process and collected into the .text output
-+segment are left unmodified and will still be present inside the .text segment,
-+unrandomized other than normal base address randomization.
-+
-+Load time
-+---------
-+
-+The boot kernel was modified to parse the vmlinux elf file after
-+decompression to check for symbols for modifying data tables, and to
-+look for any .text.* sections to randomize. The sections are then shuffled,
-+and tables are updated or resorted. The existing code which updated relocation
-+addresses was modified to account for not just a fixed delta from the load
-+address, but the offset that the function section was moved to. This requires
-+inspection of each address to see if it was impacted by a randomization.
-+
-+In order to hide the new layout, symbols reported through /proc/kallsyms will
-+be displayed in a random order.
-+
-+Performance Impact
-+==================
-+
-+There are two areas where function reordering can impact performance: boot
-+time latency, and run time performance.
-+
-+Boot time latency
-+-----------------
-+
-+This implementation of finer grained KASLR impacts the boot time of the kernel
-+in several places. It requires additional parsing of the kernel ELF file to
-+obtain the section headers of the sections to be randomized. It calls the
-+random number generator for each section to be randomized to determine that
-+section's new memory location. It copies the decompressed kernel into a new
-+area of memory to avoid corruption when laying out the newly randomized
-+sections. It increases the number of relocations the kernel has to perform at
-+boot time vs. standard KASLR, and it also requires a lookup on each address
-+that needs to be relocated to see if it was in a randomized section and needs
-+to be adjusted by a new offset. Finally, it re-sorts a few data tables that
-+are required to be sorted by address.
-+
-+Booting a test VM on a modern, well appointed system showed an increase in
-+latency of approximately 1 second.
-+
-+Run time
-+--------
-+
-+The performance impact at run-time of function reordering varies by workload.
-+Randomly reordering the functions will cause an increase in cache misses
-+for some workloads. Some workloads perform significantly worse under FGKASLR,
-+while others stay the same or even improve. In general, it will depend on the
-+code flow whether or not finer grained KASLR will impact a workload, and how
-+the underlying code was designed. Because the layout changes per boot, each
-+time a system is rebooted the performance of a workload may change.
-+
-+Image Size
-+==========
-+
-+fgkaslr increases the size of the kernel binary due to the extra section
-+headers that are included, as well as the extra relocations that need to
-+be added. You can expect fgkaslr to increase the size of the resulting
-+vmlinux by about 3%, and the compressed image (bzImage) by 15%.
-+
-+Memory Usage
-+============
-+
-+fgkaslr increases the amount of heap that is required at boot time,
-+although this extra memory is released when the kernel has finished
-+decompression. As a result, it may not be appropriate to use this feature
-+on systems without much memory.
-+
-+Building
-+========
-+
-+To enable fine grained KASLR, you need to have the following config options
-+set (including all the ones you would use to build normal KASLR)
-+
-+``CONFIG_FG_KASLR=y``
-+
-+fgkaslr for the kernel is only supported for the X86_64 architecture.
-+
-+Modules
-+=======
-+
-+Modules are randomized similarly to the rest of the kernel by shuffling
-+the sections at load time prior to moving them into memory. The module must
-+also have been build with the -ffunction-sections compiler option.
-+
-+Although fgkaslr for the kernel is only supported for the X86_64 architecture,
-+it is possible to use fgkaslr with modules on other architectures. To enable
-+this feature, select the following config option:
-+
-+``CONFIG_MODULE_FG_KASLR``
-+
-+This option is selected automatically for X86_64 when CONFIG_FG_KASLR is set.
-+
-+Disabling
-+=========
-+
-+Disabling normal kaslr using the nokaslr command line option also disables
-+fgkaslr. In addition, it is possible to disable fgkaslr separately by booting
-+with "nofgkaslr" on the commandline.
-+
-+Further Information
-+===================
-+
-+There are a lot of academic papers which explore finer grained ASLR.
-+This paper in particular contributed significantly to the implementation design.
-+
-+Selfrando: Securing the Tor Browser against De-anonymization Exploits,
-+M. Conti, S. Crane, T. Frassetto, et al.
-+
-+For more information on how function layout impacts performance, see:
-+
-+Optimizing Function Placement for Large-Scale Data-Center Applications,
-+G. Ottoni, B. Maher
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 16335de04e8c..41444124090f 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -7,6 +7,7 @@ Security Documentation
+ ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections
+ endif
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index f3c96fb6a534..deb26069278a 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -80,6 +80,7 @@
+ #if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
+     ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
+      (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
++     (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
+      (defined(CONFIG_LTO_CLANG)))
  
-    credentials
-    IMA-templates
-+   fgkaslr
-    keys/index
-    lsm
-    lsm-development
+ #define SYM_PUSH_SECTION(name)				\
+diff --git a/init/Kconfig b/init/Kconfig
+index 381b063b4925..38c82e21efd7 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2376,6 +2376,20 @@ config UNUSED_KSYMS_WHITELIST
+ 	  one per line. The path can be absolute, or relative to the kernel
+ 	  source tree.
+ 
++config MODULE_FG_KASLR
++	bool "Module Function Granular Layout Randomization"
++	depends on $(cc-option,-ffunction-sections)
++	depends on LD_HAS_Z_UNIQUE_SYMBOL || !LIVEPATCH
++	default FG_KASLR
++	depends on BROKEN
++	help
++	  This option randomizes the module text section by reordering the text
++	  section by function at module load time. In order to use this
++	  feature, the module must have been compiled with the
++	  -ffunction-sections compiler flag.
++
++	  If unsure, say N.
++
+ endif # MODULES
+ 
+ config MODULES_TREE_LOOKUP
+diff --git a/kernel/module.c b/kernel/module.c
+index 84a9141a5e15..802e1098eaf4 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -57,6 +57,7 @@
+ #include <linux/bsearch.h>
+ #include <linux/dynamic_debug.h>
+ #include <linux/audit.h>
++#include <linux/random.h>
+ #include <uapi/linux/module.h>
+ #include "module-internal.h"
+ 
+@@ -1527,7 +1528,7 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
+ 
+ 	for (section = 0; section < sect_attrs->nsections; section++)
+ 		kfree(sect_attrs->attrs[section].battr.attr.name);
+-	kfree(sect_attrs);
++	kvfree(sect_attrs);
+ }
+ 
+ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+@@ -1544,7 +1545,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+ 	size[0] = ALIGN(struct_size(sect_attrs, attrs, nloaded),
+ 			sizeof(sect_attrs->grp.bin_attrs[0]));
+ 	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
+-	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
++	sect_attrs = kvzalloc(size[0] + size[1], GFP_KERNEL);
+ 	if (sect_attrs == NULL)
+ 		return;
+ 
+@@ -2416,6 +2417,71 @@ static bool module_init_layout_section(const char *sname)
+ 	return module_init_section(sname);
+ }
+ 
++/*
++ * randomize_text()
++ * Look through the core section looking for executable code sections.
++ * Store sections in an array and then shuffle the sections
++ * to reorder the functions.
++ */
++static void randomize_text(struct module *mod, struct load_info *info)
++{
++	int max_sections = info->hdr->e_shnum;
++	int num_text_sections = 0;
++	Elf_Shdr **text_list;
++	int i, size;
++
++	text_list = kvmalloc_array(max_sections, sizeof(*text_list), GFP_KERNEL);
++	if (!text_list)
++		return;
++
++	for (i = 0; i < max_sections; i++) {
++		Elf_Shdr *shdr = &info->sechdrs[i];
++		const char *sname = info->secstrings + shdr->sh_name;
++
++		if (!(shdr->sh_flags & SHF_ALLOC) ||
++		    !(shdr->sh_flags & SHF_EXECINSTR) ||
++		    (shdr->sh_flags & ARCH_SHF_SMALL) ||
++		    module_init_layout_section(sname))
++			continue;
++
++		/*
++		 * With CONFIG_CFI_CLANG, .text with __cfi_check() must come
++		 * before any other text sections, and be aligned to PAGE_SIZE.
++		 * Don't include it in the shuffle list.
++		 */
++		if (IS_ENABLED(CONFIG_CFI_CLANG) && !strcmp(sname, ".text"))
++			continue;
++
++		if (!num_text_sections)
++			size = shdr->sh_entsize;
++
++		text_list[num_text_sections] = shdr;
++		num_text_sections++;
++	}
++
++	if (!num_text_sections)
++		goto exit;
++
++	shuffle_array(text_list, num_text_sections);
++
++	for (i = 0; i < num_text_sections; i++) {
++		Elf_Shdr *shdr = text_list[i];
++
++		/*
++		 * get_offset has a section index for it's last
++		 * argument, that is only used by arch_mod_section_prepend(),
++		 * which is only defined by parisc. Since this type
++		 * of randomization isn't supported on parisc, we can
++		 * safely pass in zero as the last argument, as it is
++		 * ignored.
++		 */
++		shdr->sh_entsize = get_offset(mod, &size, shdr, 0);
++	}
++
++exit:
++	kvfree(text_list);
++}
++
+ /*
+  * Lay out the SHF_ALLOC sections in a way not dissimilar to how ld
+  * might -- code, read-only data, read-write data, small data.  Tally
+@@ -2510,6 +2576,9 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 			break;
+ 		}
+ 	}
++
++	if (IS_ENABLED(CONFIG_MODULE_FG_KASLR))
++		randomize_text(mod, info);
+ }
+ 
+ static void set_license(struct module *mod, const char *license)
 -- 
 2.33.1
 
