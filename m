@@ -1,34 +1,34 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F1A2C80
-	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 00:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FA12C9C
+	for <llvm@lists.linux.dev>; Thu, 23 Dec 2021 00:23:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219003; x=1671755003;
+  t=1640219004; x=1671755004;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AWx+QB6HIyDDIu9Ym5IUpqB3nDldtSibW4hj/k1NkSs=;
-  b=Qz8HvMMUexw37oLktLzFbwshfsFMuefbuJfqOPheMNIhEIkKT5gncldx
-   ULcf91b7Ex+c62qBQR8xgfWQw1hkOyiOe2H+AX05GcalAKKf/A/P+v0jM
-   0B2YJIbskjJRNrLRqoORONS/519AXyKdqFK0OJpduuDaoQXPSneHn30bf
-   k98FW3BbPigh0Bo2fXTBFUJ3EB3Ic9csi1hEa3sIy0SnjU582naGLb1Cz
-   JVJdxuSY3aHZSS+e3DFJkwSF1feIR2o7TlS99Sa19/xHOtFVdqmbqg2tv
-   qwY/gr4z7PFTlD+s4TpiBKHc9XxiCTSA2ve/LBHbxOccmSordHF9QOMDy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327035976"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="327035976"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:23 -0800
+  bh=cJt4EQ6UCbCx+1z2FmP05zLBMZ/f/ExXF1JWdLFGisg=;
+  b=GjRuf5WALefNTwAnB0/DKQWY02Kz/l+f2hEiJuijutvOi16fK9GbVVVz
+   KbRU1t/W2aS4UTBxHsAWJryCUxF4IoJOhKEeAaq86QSfhovc4A4sNAGPr
+   hBVKeByHmOzAMhe+/gR9Gb+zzlBqkRacGeatFM4b2YfVkhEwkCuJTcAu/
+   9kxpBH9q+5PC1hKA3EJAlZsK4acLccp06V4w7PdX0d9ng4FCxWiLtJrRU
+   J/KJCORgdHTSjt3hETQGxlk5Vd7txCXVGvnVO3VKyUSUgWVP9IKJ8AsaJ
+   OxrMFn7zDmBKzquT3UfcCgzPYYjGiS2NpYODkSLmy1mv2v6tJn/842fG+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264935651"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="264935651"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:23 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="756561065"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="587169695"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Dec 2021 16:23:14 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 16:23:16 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N797032467;
-	Thu, 23 Dec 2021 00:23:11 GMT
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N798032467;
+	Thu, 23 Dec 2021 00:23:13 GMT
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
 To: linux-hardening@vger.kernel.org, x86@kernel.org
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -60,9 +60,9 @@ Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-Date: Thu, 23 Dec 2021 01:21:56 +0100
-Message-Id: <20211223002209.1092165-3-alexandr.lobakin@intel.com>
+Subject: [PATCH v9 03/15] kallsyms: Hide layout
+Date: Thu, 23 Dec 2021 01:21:57 +0100
+Message-Id: <20211223002209.1092165-4-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
@@ -74,183 +74,235 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Position-based search, which means that if we have several symbols
-with the same name, we additionally need to provide an "index" of
-the desired symbol, is fragile. Par exemple, it breaks when two
-symbols with the same name are located in different sections.
+From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-Since a while, LD has a flag `-z unique-symbol` which appends
-numeric suffixes to the functions with the same name (in symtab
-and strtab).
-Check for its availability and always prefer when the livepatching
-is on. This needs a little adjustment to the modpost to make it
-strip suffixes before adding exports.
+This patch makes /proc/kallsyms display in a random order, rather
+than sorted by address in order to hide the newly randomized address
+layout.
 
-depmod needs some treatment as well, tho its false-positibe warnings
-about unknown symbols are harmless and don't alter the return code.
-And there is a bunch more livepatch code to optimize-out after
-introducing this, but let's leave it for later.
+alobakin:
+Don't depend FG-KASLR and always do that for unpriviledged accesses
+as suggested by several folks.
+Also, introduce and use a shuffle_array() macro which shuffles an
+array using Fisher-Yates. We'll make use of it several more times
+later on.
 
-Suggested-by: H.J. Lu <hjl.tools@gmail.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
+Suggested-by: Ard Biesheuvel <ardb@kernel.org> # always do that
+Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com> # always do that
+Suggested-by: Peter Zijlstra <peterz@infradead.org> # always do that, macro
+Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- Makefile                |  6 ++++++
- init/Kconfig            |  3 +++
- kernel/livepatch/core.c | 20 +++++++++++++-------
- scripts/mod/modpost.c   | 42 ++++++++++++++++++++++-------------------
- 4 files changed, 45 insertions(+), 26 deletions(-)
+ include/linux/random.h | 16 ++++++++
+ kernel/kallsyms.c      | 93 ++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 93 insertions(+), 16 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d85f1ff79f5c..9dc15c67d132 100644
---- a/Makefile
-+++ b/Makefile
-@@ -882,6 +882,12 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
- KBUILD_CFLAGS += -fno-inline-functions-called-once
- endif
+diff --git a/include/linux/random.h b/include/linux/random.h
+index f45b8be3e3c4..c859a698089c 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -110,6 +110,22 @@ declare_get_random_var_wait(long)
  
-+# Prefer linking with the `-z unique-symbol` if available, this eliminates
-+# position-based search
-+ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
-+KBUILD_LDFLAGS += -z unique-symbol
-+endif
+ unsigned long randomize_page(unsigned long start, unsigned long range);
+ 
++/**
++ * shuffle_array - use a Fisher Yates algorithm to shuffle an array.
++ * @arr: pointer to the array
++ * @nents: the number of elements in the array
++ */
++#define shuffle_array(arr, nents) ({				\
++	typeof(&(arr)[0]) __arr = &(arr)[0];			\
++	size_t __i;						\
++								\
++	for (__i = (nents) - 1; __i > 0; __i--) {		\
++		size_t __j = get_random_long() % (__i + 1);	\
++								\
++		swap(__arr[__i], __arr[__j]);			\
++	}							\
++})
 +
- ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
- KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
- LDFLAGS_vmlinux += --gc-sections
-diff --git a/init/Kconfig b/init/Kconfig
-index 4b7bac10c72d..37926d19a74a 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -86,6 +86,9 @@ config CC_HAS_ASM_INLINE
- config CC_HAS_NO_PROFILE_FN_ATTR
- 	def_bool $(success,echo '__attribute__((no_profile_instrument_function)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
+ /*
+  * This is designed to be standalone for just prandom
+  * users, but for now we include it from <linux/random.h>
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 3011bc33a5ba..5d41b993113f 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -574,13 +574,15 @@ struct kallsym_iter {
+ 	loff_t pos_mod_end;
+ 	loff_t pos_ftrace_mod_end;
+ 	loff_t pos_bpf_end;
++	loff_t pos_end;
+ 	unsigned long value;
+ 	unsigned int nameoff; /* If iterating in core kernel symbols. */
+ 	char type;
+ 	char name[KSYM_NAME_LEN];
+ 	char module_name[MODULE_NAME_LEN];
+ 	int exported;
+-	int show_value;
++	bool show_layout;
++	loff_t shuffled_pos[];
+ };
  
-+config LD_HAS_Z_UNIQUE_SYMBOL
-+	def_bool $(ld-option,-z unique-symbol)
+ int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+@@ -660,11 +662,19 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
+  */
+ static int get_ksymbol_kprobe(struct kallsym_iter *iter)
+ {
++	int ret;
 +
- config CONSTRUCTORS
- 	bool
- 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 335d988bd811..b2c787297f85 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
- 	args->count++;
- 
- 	/*
--	 * Finish the search when the symbol is found for the desired position
--	 * or the position is not defined for a non-unique symbol.
-+	 * Finish the search when unique symbol names are enabled
-+	 * or the symbol is found for the desired position or the
-+	 * position is not defined for a non-unique symbol.
- 	 */
--	if ((args->pos && (args->count == args->pos)) ||
--	    (!args->pos && (args->count > 1)))
-+	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
-+	    (args->pos && args->count == args->pos) ||
-+	    (!args->pos && args->count > 1))
- 		return 1;
- 
- 	return 0;
-@@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 
- 	/*
- 	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
--	 * otherwise ensure the symbol position count matches sympos.
-+	 * otherwise ensure the symbol position count matches sympos. If the LD
-+	 * `-z unique` flag is enabled, sympos checks are not relevant.
- 	 */
--	if (args.addr == 0)
-+	if (args.addr == 0) {
- 		pr_err("symbol '%s' not found in symbol table\n", name);
--	else if (args.count > 1 && sympos == 0) {
-+	} else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
-+		goto out_ok;
-+	} else if (args.count > 1 && sympos == 0) {
- 		pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
- 		       name, objname);
- 	} else if (sympos != args.count && sympos > 0) {
- 		pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
- 		       sympos, name, objname ? objname : "vmlinux");
- 	} else {
-+out_ok:
- 		*addr = args.addr;
- 		return 0;
- 	}
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index ccc6d35580f2..f39cc73a082c 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -689,11 +689,28 @@ static void handle_modversion(const struct module *mod,
- 	sym_set_crc(symname, crc);
- }
- 
-+static char *remove_dot(char *s)
-+{
-+	size_t n = strcspn(s, ".");
-+
-+	if (n && s[n]) {
-+		size_t m = strspn(s + n + 1, "0123456789");
-+
-+		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
-+			s[n] = 0;
-+
-+		/* strip trailing .lto */
-+		if (strends(s, ".lto"))
-+			s[strlen(s) - 4] = '\0';
+ 	strlcpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
+ 	iter->exported = 0;
+-	return kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
+-				  &iter->value, &iter->type,
+-				  iter->name) < 0 ? 0 : 1;
++	ret = kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
++				 &iter->value, &iter->type,
++				 iter->name);
++	if (ret < 0) {
++		iter->pos_end = iter->pos;
++		return 0;
 +	}
 +
-+	return s;
-+}
-+
- static void handle_symbol(struct module *mod, struct elf_info *info,
- 			  const Elf_Sym *sym, const char *symname)
- {
- 	enum export export;
--	const char *name;
++	return 1;
+ }
  
- 	if (strstarts(symname, "__ksymtab"))
- 		export = export_from_secname(info, get_secindex(info, sym));
-@@ -734,8 +751,11 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
- 	default:
- 		/* All exported symbols */
- 		if (strstarts(symname, "__ksymtab_")) {
--			name = symname + strlen("__ksymtab_");
--			sym_add_exported(name, mod, export);
-+			char *name;
-+
-+			name = NOFAIL(strdup(symname + strlen("__ksymtab_")));
-+			sym_add_exported(remove_dot(name), mod, export);
-+			free(name);
- 		}
- 		if (strcmp(symname, "init_module") == 0)
- 			mod->has_init = 1;
-@@ -1965,22 +1985,6 @@ static void check_sec_ref(struct module *mod, const char *modname,
+ /* Returns space to next name. */
+@@ -687,11 +697,12 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
+ 	iter->name[0] = '\0';
+ 	iter->nameoff = get_symbol_offset(new_pos);
+ 	iter->pos = new_pos;
+-	if (new_pos == 0) {
++	if (iter->show_layout && new_pos == 0) {
+ 		iter->pos_arch_end = 0;
+ 		iter->pos_mod_end = 0;
+ 		iter->pos_ftrace_mod_end = 0;
+ 		iter->pos_bpf_end = 0;
++		iter->pos_end = 0;
  	}
  }
  
--static char *remove_dot(char *s)
--{
--	size_t n = strcspn(s, ".");
--
--	if (n && s[n]) {
--		size_t m = strspn(s + n + 1, "0123456789");
--		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
--			s[n] = 0;
--
--		/* strip trailing .lto */
--		if (strends(s, ".lto"))
--			s[strlen(s) - 4] = '\0';
--	}
--	return s;
--}
--
- static void read_symbols(const char *modname)
+@@ -720,13 +731,23 @@ static int update_iter_mod(struct kallsym_iter *iter, loff_t pos)
+ 	    get_ksymbol_bpf(iter))
+ 		return 1;
+ 
+-	return get_ksymbol_kprobe(iter);
++	if ((!iter->pos_end || iter->pos_end > pos) &&
++	    get_ksymbol_kprobe(iter))
++		return 1;
++
++	return 0;
+ }
+ 
+ /* Returns false if pos at or past end of file. */
+ static int update_iter(struct kallsym_iter *iter, loff_t pos)
  {
- 	const char *symname;
+-	/* Module symbols can be accessed randomly. */
++	if (!iter->show_layout) {
++		if (pos > iter->pos_end)
++			return 0;
++
++		pos = iter->shuffled_pos[pos];
++	}
++
+ 	if (pos >= kallsyms_num_syms)
+ 		return update_iter_mod(iter, pos);
+ 
+@@ -769,7 +790,7 @@ static int s_show(struct seq_file *m, void *p)
+ 	if (!iter->name[0])
+ 		return 0;
+ 
+-	value = iter->show_value ? (void *)iter->value : NULL;
++	value = iter->show_layout ? (void *)iter->value : NULL;
+ 
+ 	if (iter->module_name[0]) {
+ 		char type;
+@@ -806,9 +827,10 @@ static inline int kallsyms_for_perf(void)
+ }
+ 
+ /*
+- * We show kallsyms information even to normal users if we've enabled
+- * kernel profiling and are explicitly not paranoid (so kptr_restrict
+- * is clear, and sysctl_perf_event_paranoid isn't set).
++ * We show kallsyms information and display them sorted by address even
++ * to normal users if we've enabled kernel profiling and are explicitly
++ * not paranoid (so kptr_restrict is clear, and sysctl_perf_event_paranoid
++ * isn't set).
+  *
+  * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
+  * block even that).
+@@ -838,16 +860,54 @@ static int kallsyms_open(struct inode *inode, struct file *file)
+ 	 * using get_symbol_offset for every symbol.
+ 	 */
+ 	struct kallsym_iter *iter;
+-	iter = __seq_open_private(file, &kallsyms_op, sizeof(*iter));
+-	if (!iter)
+-		return -ENOMEM;
+-	reset_iter(iter, 0);
++	/*
++	 * This fake iter is needed for the cases with unprivileged
++	 * access. We need to know the exact number of symbols to
++	 * randomize the display layout.
++	 */
++	struct kallsym_iter fake;
++	size_t size = sizeof(*iter);
++	loff_t pos;
++
++	fake.show_layout = true;
++	reset_iter(&fake, 0);
+ 
+ 	/*
+ 	 * Instead of checking this on every s_show() call, cache
+ 	 * the result here at open time.
+ 	 */
+-	iter->show_value = kallsyms_show_value(file->f_cred);
++	fake.show_layout = kallsyms_show_value(file->f_cred);
++	if (fake.show_layout)
++		goto open;
++
++	for (pos = kallsyms_num_syms; update_iter_mod(&fake, pos); pos++)
++		;
++
++	size = struct_size(iter, shuffled_pos, fake.pos_end + 1);
++
++open:
++	iter = __seq_open_private(file, &kallsyms_op, size);
++	if (!iter)
++		return -ENOMEM;
++
++	iter->show_layout = fake.show_layout;
++	reset_iter(iter, 0);
++
++	if (iter->show_layout)
++		return 0;
++
++	/* Copy the bounds since they were already discovered above */
++	iter->pos_arch_end = fake.pos_arch_end;
++	iter->pos_mod_end = fake.pos_mod_end;
++	iter->pos_ftrace_mod_end = fake.pos_ftrace_mod_end;
++	iter->pos_bpf_end = fake.pos_bpf_end;
++	iter->pos_end = fake.pos_end;
++
++	for (pos = 0; pos <= iter->pos_end; pos++)
++		iter->shuffled_pos[pos] = pos;
++
++	shuffle_array(iter->shuffled_pos, iter->pos_end + 1);
++
+ 	return 0;
+ }
+ 
+@@ -858,6 +918,7 @@ const char *kdb_walk_kallsyms(loff_t *pos)
+ 	if (*pos == 0) {
+ 		memset(&kdb_walk_kallsyms_iter, 0,
+ 		       sizeof(kdb_walk_kallsyms_iter));
++		kdb_walk_kallsyms_iter.show_layout = true;
+ 		reset_iter(&kdb_walk_kallsyms_iter, 0);
+ 	}
+ 	while (1) {
 -- 
 2.33.1
 
