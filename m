@@ -1,60 +1,60 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A6A29CA
-	for <llvm@lists.linux.dev>; Fri, 24 Dec 2021 15:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2762CA0
+	for <llvm@lists.linux.dev>; Fri, 24 Dec 2021 15:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1640358466;
+	s=mimecast20190719; t=1640358520;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=BF/YCJv1AAKRhV+98m4TlzO0qSIWH7hI7+kRVcFAOVU=;
-	b=eE6sLvtFo2IyAjSaGC0HX+JDOwYm4FJt5amiu5tOMbTjltLADzACQFh5t8PvhHrWiwrcBv
-	L9cI6cXHfsP1yrvQQmkI0Y4TY7eoD6QVALXVzkqy7aEytm/mwTwPftqvAmnVx/sPaFTkMB
-	4u0htpWV8LGJPUik4wTY1/dUUB3CKuI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=VANKkwXTML/2/9ot1sh770YbPivcKWxATAmwzqHleQQ=;
+	b=Lgm1naDCMat7MRaNP/85kZwgewcJk4nssGCoeaiS0Zk5FZHdqsA49KvNO21ddRk5iIviJY
+	edb7YLLWv06ulBPsPAMs0J9rn3W6enuWoONqgyUOczYwM4KoFTPPHhXbwuoMkmu1z2B266
+	/ZBKUnkKMfOfYJUtP+vhfWlmXR5j4QE=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-LTC_PrPWOKmxg0Fgefl8-g-1; Fri, 24 Dec 2021 10:07:45 -0500
-X-MC-Unique: LTC_PrPWOKmxg0Fgefl8-g-1
-Received: by mail-qt1-f197.google.com with SMTP id o12-20020a05622a008c00b002aff5552c89so5829959qtw.23
-        for <llvm@lists.linux.dev>; Fri, 24 Dec 2021 07:07:45 -0800 (PST)
+ us-mta-564-nQXMVLejMr2uB_97DxdGWg-1; Fri, 24 Dec 2021 10:08:39 -0500
+X-MC-Unique: nQXMVLejMr2uB_97DxdGWg-1
+Received: by mail-qv1-f69.google.com with SMTP id iw6-20020a0562140f2600b004118fe44fa1so4096668qvb.13
+        for <llvm@lists.linux.dev>; Fri, 24 Dec 2021 07:08:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=BF/YCJv1AAKRhV+98m4TlzO0qSIWH7hI7+kRVcFAOVU=;
-        b=DoH2RZh0fS8s6nEUaUHxbtL/OxeWNKglQxwfenoAPwJi3W3zQYEyL4tNEyX94HQl62
-         hqlv1jq9BlPxuZ/KuceAvCa9glGzsf9OJo5qU8dZTHH9qBiDTR12AzKJ9/BBuKzLARuO
-         uDJyXSnqezGFX1KrFvaGhWTut8oMJijCAZCG8SlZD1wSO9KE8oZUng65FhQPEmzE9tEs
-         BvcCwJPWnYvRNKVvzWz5usnW6RMt4IiO2WEwl5FhZgQGbVKTDwec6alyMdu+q5QXU3oe
-         MN67jwlsDABpLRH7mVcKtkIL0qsrKTqf1WqnsS82QzaFRX6G3ty+dMAlz+ZtDisNl4i5
-         FxPQ==
-X-Gm-Message-State: AOAM5313SelYVxpBTv47kMsk5MDBxpo9QC9lTK6WfW7Em/lKkvBLxP3t
-	5t0z8jYQy8Uy6IOvwqHNmOI8Lziy1+8PRS85AK2U3E/+66s/I02hneEyMokNmpVYVsvLhzNVPzn
-	rlUoXzkRFbvrwPw==
-X-Received: by 2002:a05:620a:809:: with SMTP id s9mr4863329qks.156.1640358464964;
-        Fri, 24 Dec 2021 07:07:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy1pKHrG4CVFHlqnEQE1caIilyx7SPxj7M2T/jSxcp1oBjfTGs3uB+F1wC/sUIYc89L4aGXzg==
-X-Received: by 2002:a05:620a:809:: with SMTP id s9mr4863309qks.156.1640358464728;
-        Fri, 24 Dec 2021 07:07:44 -0800 (PST)
+        bh=VANKkwXTML/2/9ot1sh770YbPivcKWxATAmwzqHleQQ=;
+        b=rARLFtzMS41dMO1ruRlovDXR7oBgYEjZRS8OL6z3rp5aoMFhpKrg14h47tlhxF0113
+         svPO/nY9aewI8Krk9ExxhORMfBb9JRh94s25OOI4g833PWWcsFXaGUW7byc0T9hdUyXC
+         UHA3uofNLW444uDe1Vi/4FCmTzpzbohBrQpu0GcOYzJ+4OQcgc6CtyV+Rb1/SPy3FDDY
+         lPf4ky/9zECOhYMzhZEdedYUqWRn5fJoRD9ydNeBRsh2OQENwU04n3CUxeP5AfBtfFXX
+         wYUdzn5ciDADOa626ArqDdLfO1WSJ81/7RbC5MZBp4ohOCVAoKxEYPCCqKibyJa9v97j
+         /TLg==
+X-Gm-Message-State: AOAM531BMWLrfT9wRajmjT5MkuqHEU1vUqEeBj4NPecAxO0dJIfLKH9L
+	29uWffG1ZKU22yaZE5KqZVf7CCsjcue9EDlF/5frhyge0VtiPVsfqWJL3XJyJc5jE8ypfdpFux/
+	b5cDNn76ndiJ04w==
+X-Received: by 2002:ac8:4a87:: with SMTP id l7mr5860368qtq.310.1640358518573;
+        Fri, 24 Dec 2021 07:08:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwKkj/oUpZ8SgPSGh8spTXveLPNfIswgd7mJJYvqRjSeHCVzNFqxnzEZiIsSaW0BbAzrBkQHA==
+X-Received: by 2002:ac8:4a87:: with SMTP id l7mr5860343qtq.310.1640358518355;
+        Fri, 24 Dec 2021 07:08:38 -0800 (PST)
 Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id bl8sm7314148qkb.38.2021.12.24.07.07.43
+        by smtp.gmail.com with ESMTPSA id b11sm6512248qtx.85.2021.12.24.07.08.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 07:07:44 -0800 (PST)
+        Fri, 24 Dec 2021 07:08:38 -0800 (PST)
 From: trix@redhat.com
-To: paul@paul-moore.com,
-	stephen.smalley.work@gmail.com,
-	eparis@parisplace.org,
+To: jacopo@jmondi.org,
+	jic23@kernel.org,
+	lars@metafoo.de,
 	nathan@kernel.org,
 	ndesaulniers@google.com
-Cc: selinux@vger.kernel.org,
+Cc: linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] selinux: initialize proto variable in selinux_ip_postroute_compat()
-Date: Fri, 24 Dec 2021 07:07:39 -0800
-Message-Id: <20211224150739.3278019-1-trix@redhat.com>
+Subject: [PATCH] iio: chemical: set val parameter only on success
+Date: Fri, 24 Dec 2021 07:08:33 -0800
+Message-Id: <20211224150833.3278236-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -71,35 +71,52 @@ Content-Type: text/plain; charset="US-ASCII"
 
 From: Tom Rix <trix@redhat.com>
 
-Clang static analysis reports this warning
+Clang static analysis reports this representative warning
 
-hooks.c:5765:6: warning: 4th function call argument is an uninitialized value
-        if (selinux_xfrm_postroute_last(sksec->sid, skb, &ad, proto))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sunrise_co2.c:410:9: warning: Assigned value is garbage or undefined
+  *val = value;
+       ^ ~~~~~
 
-selinux_parse_skb() can return ok without setting proto.  The later call
-to selinux_xfrm_postroute_last() does an early check of proto and can
-return ok is the garbage proto value matches.  So initialize proto.
+The ealier call to sunrise_read_word can fail without setting
+value.  So defer setting val until we know the read was successful.
 
-Fixes: eef9b41622f2 ("selinux: cleanup selinux_xfrm_sock_rcv_skb() and selinux_xfrm_postroute_last()")
+Fixes: c397894e24f1 ("iio: chemical: Add Senseair Sunrise 006-0-007 driver")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- security/selinux/hooks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/chemical/sunrise_co2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index e2a6d0f5c47af..fd7a0e9e26647 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5742,7 +5742,7 @@ static unsigned int selinux_ip_postroute_compat(struct sk_buff *skb,
- 	struct sk_security_struct *sksec;
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
--	u8 proto;
-+	u8 proto = 0;
+diff --git a/drivers/iio/chemical/sunrise_co2.c b/drivers/iio/chemical/sunrise_co2.c
+index 233bd0f379c93..8440dc0c77cfe 100644
+--- a/drivers/iio/chemical/sunrise_co2.c
++++ b/drivers/iio/chemical/sunrise_co2.c
+@@ -407,24 +407,24 @@ static int sunrise_read_raw(struct iio_dev *iio_dev,
+ 			mutex_lock(&sunrise->lock);
+ 			ret = sunrise_read_word(sunrise, SUNRISE_CO2_FILTERED_COMP_REG,
+ 						&value);
+-			*val = value;
+ 			mutex_unlock(&sunrise->lock);
  
- 	sk = skb_to_full_sk(skb);
- 	if (sk == NULL)
+ 			if (ret)
+ 				return ret;
+ 
++			*val = value;
+ 			return IIO_VAL_INT;
+ 
+ 		case IIO_TEMP:
+ 			mutex_lock(&sunrise->lock);
+ 			ret = sunrise_read_word(sunrise, SUNRISE_CHIP_TEMPERATURE_REG,
+ 						&value);
+-			*val = value;
+ 			mutex_unlock(&sunrise->lock);
+ 
+ 			if (ret)
+ 				return ret;
+ 
++			*val = value;
+ 			return IIO_VAL_INT;
+ 
+ 		default:
 -- 
 2.26.3
 
