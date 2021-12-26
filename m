@@ -1,161 +1,113 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBD6168
-	for <llvm@lists.linux.dev>; Sun, 26 Dec 2021 07:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56EA173
+	for <llvm@lists.linux.dev>; Sun, 26 Dec 2021 13:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640505459; x=1672041459;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NuX6nngFQtTXu7k+vB5zT3o8zKqFbePkKEZ8vk2NqOw=;
-  b=X630G/ut1vawLbcStLq7mM33LkScgEfswQ6p6stvGVwQUfbymWQFTM5c
-   d4KPX/h5FnnEWEbvnwlYQB/h7XsDcZ+knqFFTAuVgsbLnTCckiQgtGmRe
-   /ADnXaRlxvV5z56kyPhxqlC/kG/+QHI5mucZgAszVo9XlGWiADiYltyPg
-   L7pWwzrEv1ob9DOl6u+PGRASwHERYY5ZGPh+CNUDdVWY2OyepP03C83OF
-   Vo8kvrKAkTBdYbN7/wVqkvo/1wEp+olY2sOxdkenNmQCoeaKJXQvJFxyN
-   ndrHsE0dScJRzcnv87ladezi9II0GimXpoiezAtXtnAQQvFjjGBHzvpfV
+  t=1640526168; x=1672062168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BXSyAfPPKL+BNYyTWCrcjcEA6M7erOc92NWo0C5C1GI=;
+  b=aKG2SaAL05S0G7PjZOT+aY7IVz/D46OsynSnrwDnHD3M05yOrYOKSr+m
+   C9cc+Sa3jgyyUkrLX9CQGx9Qgvjs4du6p1kgzl2sVt8Gbj+/o3j8EZ8cL
+   R7bFy5gCxYDETK3uJ4OgJKoSvnCYLxiUwNmxUfmI4VSlUr5riPcbuk8Dy
+   dmw0315gA2+mhbnrhrniETECydA2Aq8+GfMe4qS2SnyzIuW55g7JM5gY6
+   SudYworHjrqlplkHImGTgOhkxZxaznVKU5hnvI69WwAuSgwmjsmoR73C5
+   esavhjAs1xIjVbMLbtFXWgavGO+28mkwH89AzCx2slKnAbXHicLZSD6u/
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="301848881"
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="301848881"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 23:57:38 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="238646074"
+X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
+   d="scan'208";a="238646074"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 05:42:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="485746919"
+X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
+   d="scan'208";a="467636285"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 25 Dec 2021 23:57:35 -0800
+  by orsmga003.jf.intel.com with ESMTP; 26 Dec 2021 05:42:44 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1OPP-0005DD-5L; Sun, 26 Dec 2021 07:57:35 +0000
-Date: Sun, 26 Dec 2021 15:57:05 +0800
+	id 1n1TnQ-0005Q1-4l; Sun, 26 Dec 2021 13:42:44 +0000
+Date: Sun, 26 Dec 2021 21:42:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+	melissa.srw@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mwen@igalia.com,
+	rodrigosiqueiramelo@gmail.com, hamohammed.sa@gmail.com,
+	daniel@ffwll.ch, airlied@linux.ie, dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: drivers/irqchip/irq-bcm7038-l1.c:89:28: warning: unused function
- 'reg_mask_status'
-Message-ID: <202112261532.AJEnMzCL-lkp@intel.com>
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v2 1/1] drm/vkms: add zpos plane property
+Message-ID: <202112262151.0Z5oNd2u-lkp@intel.com>
+References: <20211226111219.27616-2-jose.exposito89@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211226111219.27616-2-jose.exposito89@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Paul,
+Hi "José,
 
-First bad commit (maybe != root cause):
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   438645193e59e91761ccb3fa55f6ce70b615ff93
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   1 year, 3 months ago
-config: mips-randconfig-c004-20211226 (https://download.01.org/0day-ci/archive/20211226/202112261532.AJEnMzCL-lkp@intel.com/config)
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v5.16-rc6 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jos-Exp-sito/drm-vkms-zpos/20211226-191434
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-randconfig-r041-20211226 (https://download.01.org/0day-ci/archive/20211226/202112262151.0Z5oNd2u-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # https://github.com/0day-ci/linux/commit/48c96494b71972f4bf1769682e94e59724dba874
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/drm-vkms-zpos/20211226-191434
+        git checkout 48c96494b71972f4bf1769682e94e59724dba874
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash block/ drivers/irqchip/ drivers/scsi/ufs/ kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/vkms/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-bcm7038-l1.c:89:28: warning: unused function 'reg_mask_status'
-   static inline unsigned int reg_mask_status(struct bcm7038_l1_chip
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 133, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   and $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-0c553cc1af/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch block drivers include kernel mm nr_bisected scripts sound source usr
---
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:1487:7: warning: variable 'expires_in_hardirq' set but not used
-   bool expires_in_hardirq;
-   ^
-   kernel/time/hrtimer.c:147:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:621:19: warning: unused function 'hrtimer_hres_active'
-   static inline int hrtimer_hres_active(void)
-   ^
-   kernel/time/hrtimer.c:1726:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 21, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-0c553cc1af/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch block drivers include kernel mm nr_bisected scripts sound source usr
+>> drivers/gpu/drm/vkms/vkms_plane.c:170:15: error: use of undeclared identifier 'NUM_OVERLAY_PLANES'
+                                                        1, NUM_OVERLAY_PLANES);
+                                                           ^
+   1 error generated.
 
 
-vim +/reg_mask_status +89 drivers/irqchip/irq-bcm7038-l1.c
+vim +/NUM_OVERLAY_PLANES +170 drivers/gpu/drm/vkms/vkms_plane.c
 
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25  88  
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25 @89  static inline unsigned int reg_mask_status(struct bcm7038_l1_chip *intc,
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25  90  					   unsigned int word)
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25  91  {
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25  92  	return (1 * intc->n_words + word) * sizeof(u32);
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25  93  }
-5f7f0317ed28b8 Kevin Cernekee 2014-12-25  94  
-
-:::::: The code at line 89 was first introduced by commit
-:::::: 5f7f0317ed28b86bdae9baf65bb72d405b6f79ee IRQCHIP: Add new driver for BCM7038-style level 1 interrupt controllers
-
-:::::: TO: Kevin Cernekee <cernekee@gmail.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+   162	
+   163	static int vkms_plane_create_zpos_property(struct vkms_plane *plane)
+   164	{
+   165		int ret;
+   166		unsigned int zpos = drm_plane_index(&plane->base);
+   167	
+   168		if (plane->base.type == DRM_PLANE_TYPE_OVERLAY) {
+   169			ret = drm_plane_create_zpos_property(&plane->base, zpos,
+ > 170							     1, NUM_OVERLAY_PLANES);
+   171		} else {
+   172			ret = drm_plane_create_zpos_immutable_property(&plane->base,
+   173								       zpos);
+   174		}
+   175	
+   176		return ret;
+   177	}
+   178	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
