@@ -1,42 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375202C82
-	for <llvm@lists.linux.dev>; Sun, 26 Dec 2021 00:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EF429CA
+	for <llvm@lists.linux.dev>; Sun, 26 Dec 2021 02:59:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640477248; x=1672013248;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WfFaV8hfeowLndpeEI4lkbZoSACOT0NWb7ffCjiD9FY=;
-  b=SpIgijcZGApSL/w5SDfXuMHvMkZN0LJ1XTt8tG8DRwvODbE1/Ft0gHrI
-   bpew8nobKAy3ori/bZhfdjbnHRy6y9nJpF6MssUpDN5mfgOCtye2+ZJfq
-   jcpASTnbwIfSwO+UTBb9bAg2b5WdSnFcz7DQYgR4FKtRZjYabMIQsdpZW
-   iUBAXndY37FRyabxvZbezVDTifVwM5ZMjy0vkIj1paMClHuKB7mvG7BXC
-   1UW6Xt2MdC/7CSgkB+9/AuQ0shXFGSl4aikU6LBL7kAP/2wYyGN1uUldv
-   ilP0J3sWTkadTnDzXFT59jrkvWATG9IiMvJ2UNCjkQ2yYmRMu8LkYXkmE
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="240871572"
+  t=1640487571; x=1672023571;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Jbz3u5gJydZHb6lOxXr8ZHFuls8hGbfCbxperOuOAC4=;
+  b=A9a/aD2oAiBQ5rhuQDL4/uhy3QdwDemaPnvU1uacQevuZWqRgEbaIfgW
+   GHMSeAHwmM+BA67YATVhEq0qnVha8onl4ELpWLVSqx+yysYworFUfM2nw
+   F2T3LZ4EJfyXDPjdfhoeureQdQ1Dsqer3Fggf++Wxu0kaC2Y9KgPs15bz
+   EXOKwJ/HOnpgFgJZ7/Unbi7FkKR4KVZ+rYoLySUwS3AwRWGW0cfXsadQd
+   bKJIWLehrx8XOT6ZNs2fqRDXJpgrwvIEOfekCYfIYAtP5Q9sTFGFop6+A
+   /B6ijinVsxCCbnOb6un/VxH/vJqannoE57hkd77pUapLnUElEnTEm/IXv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="227919072"
 X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="240871572"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 16:07:27 -0800
+   d="scan'208";a="227919072"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 18:59:30 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="618036687"
+   d="scan'208";a="571707909"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 Dec 2021 16:07:26 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 25 Dec 2021 18:59:29 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1H4P-0004s9-BS; Sun, 26 Dec 2021 00:07:25 +0000
-Date: Sun, 26 Dec 2021 08:07:03 +0800
+	id 1n1Jku-0004yD-DU; Sun, 26 Dec 2021 02:59:28 +0000
+Date: Sun, 26 Dec 2021 10:58:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haiyue Wang <haiyue.wang@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: drivers/net/ethernet/intel/iavf/iavf_fdir.c:340:5: warning: format
- specifies type 'unsigned short' but the argument has type 'int'
-Message-ID: <202112260757.hcK6HH5M-lkp@intel.com>
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: drivers/input/touchscreen/ads7846.c:705:24: warning: taking address
+ of packed member 'data' of class or structure 'ads7846_buf' may result in an
+ unaligned pointer value
+Message-ID: <202112261050.OodYJnM4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,124 +47,55 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Haiyue,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   e2ae0d4a6b0ba461542f0fd0ba0b828658013e9f
-commit: 527691bf0682d7ddcca77fc17dabd2fa090572ff iavf: Support IPv4 Flow Director filters
-date:   9 months ago
-config: riscv-randconfig-r023-20211226 (https://download.01.org/0day-ci/archive/20211226/202112260757.hcK6HH5M-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project a9e8b1ee7fd44b53c555a7823ae8fd1a8209c520)
+commit: 415e915fdfc775ad0c6675fde1008f6f43dd6251 Merge tag 'v5.11' into next
+date:   10 months ago
+config: mips-randconfig-r033-20211226 (https://download.01.org/0day-ci/archive/20211226/202112261050.OodYJnM4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=527691bf0682d7ddcca77fc17dabd2fa090572ff
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=415e915fdfc775ad0c6675fde1008f6f43dd6251
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 527691bf0682d7ddcca77fc17dabd2fa090572ff
+        git checkout 415e915fdfc775ad0c6675fde1008f6f43dd6251
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/intel/iavf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/input/touchscreen/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/iavf/iavf_fdir.c:340:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                            ntohs(fltr->ip_data.dst_port),
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:118:33: note: expanded from macro 'dev_info'
-           _dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                    ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                       ^~~~~~~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/iavf/iavf_fdir.c:341:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                            ntohs(fltr->ip_data.src_port));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:118:33: note: expanded from macro 'dev_info'
-           _dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                    ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                       ^~~~~~~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+>> drivers/input/touchscreen/ads7846.c:705:24: warning: taking address of packed member 'data' of class or structure 'ads7846_buf' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           value = be16_to_cpup(&buf->data);
+                                 ^~~~~~~~~
+   1 warning generated.
 
 
-vim +340 drivers/net/ethernet/intel/iavf/iavf_fdir.c
+vim +705 drivers/input/touchscreen/ads7846.c
 
-   316	
-   317	/**
-   318	 * iavf_print_fdir_fltr
-   319	 * @adapter: adapter structure
-   320	 * @fltr: Flow Director filter to print
-   321	 *
-   322	 * Print the Flow Director filter
-   323	 **/
-   324	void iavf_print_fdir_fltr(struct iavf_adapter *adapter, struct iavf_fdir_fltr *fltr)
-   325	{
-   326		const char *proto = iavf_fdir_flow_proto_name(fltr->flow_type);
-   327	
-   328		if (!proto)
-   329			return;
-   330	
-   331		switch (fltr->flow_type) {
-   332		case IAVF_FDIR_FLOW_IPV4_TCP:
-   333		case IAVF_FDIR_FLOW_IPV4_UDP:
-   334		case IAVF_FDIR_FLOW_IPV4_SCTP:
-   335			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 %s: dst_port %hu src_port %hu\n",
-   336				 fltr->loc,
-   337				 &fltr->ip_data.v4_addrs.dst_ip,
-   338				 &fltr->ip_data.v4_addrs.src_ip,
-   339				 proto,
- > 340				 ntohs(fltr->ip_data.dst_port),
-   341				 ntohs(fltr->ip_data.src_port));
-   342			break;
-   343		case IAVF_FDIR_FLOW_IPV4_AH:
-   344		case IAVF_FDIR_FLOW_IPV4_ESP:
-   345			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 %s: SPI %u\n",
-   346				 fltr->loc,
-   347				 &fltr->ip_data.v4_addrs.dst_ip,
-   348				 &fltr->ip_data.v4_addrs.src_ip,
-   349				 proto,
-   350				 ntohl(fltr->ip_data.spi));
-   351			break;
-   352		case IAVF_FDIR_FLOW_IPV4_OTHER:
-   353			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 proto: %u L4_bytes: 0x%x\n",
-   354				 fltr->loc,
-   355				 &fltr->ip_data.v4_addrs.dst_ip,
-   356				 &fltr->ip_data.v4_addrs.src_ip,
-   357				 fltr->ip_data.proto,
-   358				 ntohl(fltr->ip_data.l4_header));
-   359			break;
-   360		default:
-   361			break;
-   362		}
-   363	}
-   364	
+2991a1ca6e9b13 Jason Wang     2010-10-13  700  
+6965eece2a89c3 Oleksij Rempel 2021-01-20  701  static int ads7846_get_value(struct ads7846_buf *buf)
+2991a1ca6e9b13 Jason Wang     2010-10-13  702  {
+879f2fea8a5a74 Andrey Gelman  2015-10-06  703  	int value;
+2991a1ca6e9b13 Jason Wang     2010-10-13  704  
+6965eece2a89c3 Oleksij Rempel 2021-01-20 @705  	value = be16_to_cpup(&buf->data);
+879f2fea8a5a74 Andrey Gelman  2015-10-06  706  
+879f2fea8a5a74 Andrey Gelman  2015-10-06  707  	/* enforce ADC output is 12 bits width */
+879f2fea8a5a74 Andrey Gelman  2015-10-06  708  	return (value >> 3) & 0xfff;
+2991a1ca6e9b13 Jason Wang     2010-10-13  709  }
+ffa458c1bd9b6f David Brownell 2006-01-08  710  
+
+:::::: The code at line 705 was first introduced by commit
+:::::: 6965eece2a89c3f1d00881c6052ee1e987870c08 Input: ads7846 - convert to one message
+
+:::::: TO: Oleksij Rempel <o.rempel@pengutronix.de>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
