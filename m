@@ -1,48 +1,45 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963772C9D
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 12:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAA3173
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 13:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640607563; x=1672143563;
+  t=1640610023; x=1672146023;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ua1yW5wIKaV/7/cJgZ22aiptC0ketXaQ8sCqM1TMBq0=;
-  b=IlFRS+xcJA0BcMadB6xMFzdv5VJ2dxWOTG2qpUx32LRp7yiAzyHB0J0B
-   1FP0gyvp1mckvkNOoC3lQ8PfNIBfG2flDPAteStkwZHuC99cdMvuTv3W+
-   Hem+SY+Bc5Jo1nNUfmfbinHhpjeXRR83rSZQiSL/BtXpsg45YVwmnxUeH
-   XgxFVlmohDQXzuutfJK+1NVaad1wsksExM7e46jVJImTdHkBE2iBZzvTr
-   +0zmRrxup3DPNtiGujOdoRdof0g0egAL0pGrVm2jRoagjYcXxrpp13xcg
-   SpB89CakgaqemhWUQJ8sixMh/A23+KBX7qN3zurMFtF9kaBDdv0dXnOho
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="241154592"
+  bh=MKxL8dgBk3R5/XNvlt7YYq/kRC7xwnUj2P3HBcvE73c=;
+  b=bDNczRsEiDId+xra8rdabO2vdD4aTNLfyLMGFaepyJPNRaxO71QOdUP+
+   XSaeKpczvVxu5hCHdKaUr+qLcp/EJxGLnNthel938r8d2r8L2FGI7rMXL
+   lA+J180mkxe3UJUqYvjEfyBFYE8Kf2gPiHZxabnCTs4wgo/cLRg3+ex7t
+   YxIo+uH2dG++iZEW5hD4qFU67shQX8H8TCbsEZfxXi2C4bOUSJjRrxY2/
+   hxiQgmLbTwGmlBtN85b3mbS5++4biOkIgkcduq4jLR9Ct7UnEXYS7ij80
+   6q/6XCy9YDgCD+Km+qsqat/jPJ3vV2s8LkL3XZjeLyC7PTc3WDun42sxr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="221873031"
 X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="241154592"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 04:19:23 -0800
+   d="scan'208";a="221873031"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 05:00:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="686260210"
+   d="scan'208";a="588561503"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Dec 2021 04:19:19 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 27 Dec 2021 05:00:20 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1oyE-0006GK-Pj; Mon, 27 Dec 2021 12:19:18 +0000
-Date: Mon, 27 Dec 2021 20:18:58 +0800
+	id 1n1pbv-0006HT-74; Mon, 27 Dec 2021 13:00:19 +0000
+Date: Mon, 27 Dec 2021 20:59:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-iio@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 13/23] counter: Provide alternative counter
- registration functions
-Message-ID: <202112272054.WsrEZBF1-lkp@intel.com>
-References: <20211227094526.698714-14-u.kleine-koenig@pengutronix.de>
+To: Vasily Averin <vvs@virtuozzo.com>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna.schumaker@netapp.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@openvz.org,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfs: local_lock: handle async processing of F_SETLK with
+ FL_SLEEP
+Message-ID: <202112272042.Xlz50x0x-lkp@intel.com>
+References: <6613b17b-43bd-07d0-2ca7-1581a39cdf7b@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,109 +48,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211227094526.698714-14-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <6613b17b-43bd-07d0-2ca7-1581a39cdf7b@virtuozzo.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "Uwe,
+Hi Vasily,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on a7904a538933c525096ca2ccde1e60d0ee62c08e]
+[auto build test WARNING on trondmy-nfs/linux-next]
+[also build test WARNING on v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Uwe-Kleine-K-nig/counter-cleanups-and-device-lifetime-fixes/20211227-174815
-base:   a7904a538933c525096ca2ccde1e60d0ee62c08e
-config: i386-randconfig-r006-20211227 (https://download.01.org/0day-ci/archive/20211227/202112272054.WsrEZBF1-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Vasily-Averin/nfs-local_lock-handle-async-processing-of-F_SETLK-with-FL_SLEEP/20211227-184705
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+config: i386-randconfig-r034-20211227 (https://download.01.org/0day-ci/archive/20211227/202112272042.Xlz50x0x-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/250e0e3d91caea9f7c61652a7a9a8c006b2464be
+        # https://github.com/0day-ci/linux/commit/00e7edbaaa914f1b049ab8a652c5a91483f4141d
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Uwe-Kleine-K-nig/counter-cleanups-and-device-lifetime-fixes/20211227-174815
-        git checkout 250e0e3d91caea9f7c61652a7a9a8c006b2464be
+        git fetch --no-tags linux-review Vasily-Averin/nfs-local_lock-handle-async-processing-of-F_SETLK-with-FL_SLEEP/20211227-184705
+        git checkout 00e7edbaaa914f1b049ab8a652c5a91483f4141d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/counter/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/nfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/counter/counter-core.c:175:41: warning: variable 'id' is uninitialized when used here [-Wuninitialized]
-           dev->devt = MKDEV(MAJOR(counter_devt), id);
-                                                  ^~
-   include/linux/kdev_t.h:12:46: note: expanded from macro 'MKDEV'
-   #define MKDEV(ma,mi)    (((ma) << MINORBITS) | (mi))
-                                                   ^~
-   drivers/counter/counter-core.c:149:8: note: initialize the variable 'id' to silence this warning
-           int id, err;
-                 ^
-                  = 0
+>> fs/nfs/file.c:772:25: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+           else if ((fl->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+                                  ^  ~~~~~~~~
+   fs/nfs/file.c:772:25: note: use '&' for a bitwise operation
+           else if ((fl->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+                                  ^~
+                                  &
+   fs/nfs/file.c:772:25: note: remove constant to silence this warning
+           else if ((fl->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+                                 ~^~~~~~~~~~~
    1 warning generated.
 
 
-vim +/id +175 drivers/counter/counter-core.c
+vim +772 fs/nfs/file.c
 
-   134	
-   135	/**
-   136	 * counter_alloc - allocate a counter_device
-   137	 * @sizeof_priv: size of the driver private data
-   138	 *
-   139	 * This is part one of counter registration. The structure is allocated
-   140	 * dynamically to ensure the right lifetime for the embedded struct device.
-   141	 *
-   142	 * If this succeeds, call counter_put() to get rid of the counter_device again.
-   143	 */
-   144	struct counter_device *counter_alloc(size_t sizeof_priv)
-   145	{
-   146		struct counter_device_allochelper *ch;
-   147		struct counter_device *counter;
-   148		struct device *dev;
-   149		int id, err;
-   150	
-   151		ch = kzalloc(sizeof(*ch) + sizeof_priv, GFP_KERNEL);
-   152		if (!ch) {
-   153			err = -ENOMEM;
-   154			goto err_alloc_ch;
-   155		}
-   156	
-   157		counter = &ch->counter;
-   158		dev = &counter->dev;
-   159	
-   160		/* Acquire unique ID */
-   161		err = ida_alloc(&counter_ida, GFP_KERNEL);
-   162		if (err < 0) {
-   163			goto err_ida_alloc;
-   164		}
-   165		dev->id = err;
-   166	
-   167		err = counter_chrdev_add(counter);
-   168		if (err < 0)
-   169			goto err_chrdev_add;
-   170	
-   171		device_initialize(dev);
-   172		/* Configure device structure for Counter */
-   173		dev->type = &counter_device_type;
-   174		dev->bus = &counter_bus_type;
- > 175		dev->devt = MKDEV(MAJOR(counter_devt), id);
-   176	
-   177		mutex_init(&counter->ops_exist_lock);
-   178	
-   179		return counter;
-   180	
-   181	err_chrdev_add:
-   182	
-   183		ida_free(&counter_ida, dev->id);
-   184	err_ida_alloc:
-   185	
-   186		kfree(ch);
-   187	err_alloc_ch:
-   188	
-   189		return ERR_PTR(err);
-   190	}
-   191	EXPORT_SYMBOL_GPL(counter_alloc);
-   192	
+   751	
+   752	static int
+   753	do_setlk(struct file *filp, int cmd, struct file_lock *fl, int is_local)
+   754	{
+   755		struct inode *inode = filp->f_mapping->host;
+   756		int status;
+   757	
+   758		/*
+   759		 * Flush all pending writes before doing anything
+   760		 * with locks..
+   761		 */
+   762		status = nfs_sync_mapping(filp->f_mapping);
+   763		if (status != 0)
+   764			goto out;
+   765	
+   766		/*
+   767		 * Use local locking if mounted with "-onolock" or with appropriate
+   768		 * "-olocal_lock="
+   769		 */
+   770		if (!is_local)
+   771			status = NFS_PROTO(inode)->lock(filp, cmd, fl);
+ > 772		else if ((fl->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+   773			status = posix_lock_file(filp, fl, NULL);
+   774		else
+   775			status = locks_lock_file_wait(filp, fl);
+   776		if (status)
+   777			goto out;
+   778	
+   779		/*
+   780		 * Invalidate cache to prevent missing any changes.  If
+   781		 * the file is mapped, clear the page cache as well so
+   782		 * those mappings will be loaded.
+   783		 *
+   784		 * This makes locking act as a cache coherency point.
+   785		 */
+   786		nfs_sync_mapping(filp->f_mapping);
+   787		if (!NFS_PROTO(inode)->have_delegation(inode, FMODE_READ)) {
+   788			nfs_zap_caches(inode);
+   789			if (mapping_mapped(filp->f_mapping))
+   790				nfs_revalidate_mapping(inode, filp->f_mapping);
+   791		}
+   792	out:
+   793		return status;
+   794	}
+   795	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
