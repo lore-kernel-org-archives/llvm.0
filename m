@@ -1,81 +1,135 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A41029CA
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 15:48:42 +0000 (UTC)
-Received: by mail-ed1-f41.google.com with SMTP id b13so63141661edd.8
-        for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 07:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ruYVqDjSzvKE9ESDPOstmLOwEK7+kWJthKgCsoXnHVY=;
-        b=gncD0yuRaX+MOn2Kq0j/LeVUg8abEo1ACRTxQ6aLtpDnN9/a2GUIwaLmSNy7xfXDmH
-         +5ecYsxj+WJ49A1B1MAWUBY667WuJ/xk18ROqTqZcFB/xiSeYrZybosg5tTWvSWnePOF
-         /MaNtMrJ/QFkLpQLSOB57zKZYNQZtRs1pQAM25x1sPo/ZXzF9/Xr575HQO8zUpKBPzXc
-         Pim6X6E8EiYFsdO+XelUg0gDZHgxUbq9waD8Ep37ER/fVO3qbepfA3LDtBU231R0PJNa
-         4Ib7NkZ6AejM255yP3a17tRZgAtUx1gB/6OAxqZ6pyAszJclgSw356QQMsQ8Z4ZTH4oN
-         W/sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ruYVqDjSzvKE9ESDPOstmLOwEK7+kWJthKgCsoXnHVY=;
-        b=gZxlxfur0J5zmCc3oigp3GEY4+RBJcZjlPsLAfNOjxJBukdxrJ3VYKbmv3Ih079A8w
-         /sjIGkT0q+V/8OWjGtEYHoVgidK9YMwYwTOHUqthcZphUevzIYHwPcNmDLx6QodFy8sZ
-         Wv4OJi9ypc1GAnj7rLz28rcAbE8nlhL1GGp3rVut84VtDMF2yt/t0p0d5l5kCfuNN39o
-         5MbpHLALuO5lhyXhYBtD/WwhMOr38H2SLQ58+hOxBipthtHQU8Lwm9u4mfG9OQzbxN81
-         xH12RHyOK02xX0z3uyaHweOaW2qt8t5f+MpLE2+OudWHO5NYPLEz/OJuSfW7UiW2xkEO
-         dtXw==
-X-Gm-Message-State: AOAM5335EcveIOSGbMv/3my7HW0zTrZ24glgQrhSwe/e7nB781j67wEx
-	k5JkMg3hDM/ND9gWskzJ7pCBZNfs9eE7bBdvreMe
-X-Google-Smtp-Source: ABdhPJykLSQBHob3XG4bD0UAP8+YA6SVKSYWEEW+4XpOd3xphqx/nenjfXqcIvc7dsZdFgHEfd0gNvauJ5cgfEAh/qE=
-X-Received: by 2002:a17:906:7304:: with SMTP id di4mr14134518ejc.327.1640620121150;
- Mon, 27 Dec 2021 07:48:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9979629CA
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 15:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640620607; x=1672156607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PxtyPzt0KLfSLLa1pPBudg9doH4Gy9uQA/cjdZanweI=;
+  b=ahV+WiFkqp/5e6VN0XhaDdA8ex3CWODe6NcJmkdQlLdkrcIm0O12rPiK
+   +WZ2ij/BBaIG6JR/d9ne9DrGNZe6nYQkJKtX3o9mJyYlI9cQC1IhZTFdi
+   UvewKKzpvwgvkhkVAaoJ4BNOdWzznv01xafzzgN5WUtJD3UZHGruAeEeH
+   t+dryklpHS6rD08CpxZ2qFm2wyo5Z+I2dZdfySYH9wt3c/S2k3m3nzHLS
+   oZ/RJCdvQD7tQBB7aiyN9vtI2ChrsqC/pqhcXtua1xKSEfDkqkxOyqa4o
+   2WDmhF2PXMisBwdArgiD4efBYezB08LhRqFU4tmBMPQlzzPkJEDIbvLDa
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="304585257"
+X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
+   d="scan'208";a="304585257"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 07:56:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
+   d="scan'208";a="686318910"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Dec 2021 07:56:28 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n1sMO-0006XQ-Bx; Mon, 27 Dec 2021 15:56:28 +0000
+Date: Mon, 27 Dec 2021 23:55:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+	linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+	linux-erofs@lists.ozlabs.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+	bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+	gerry@linux.alibaba.com
+Subject: Re: [PATCH v1 19/23] cachefiles: implement .demand_read() for demand
+ read
+Message-ID: <202112272353.ekKESQX6-lkp@intel.com>
+References: <20211227125444.21187-20-jefflexu@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211224150739.3278019-1-trix@redhat.com>
-In-Reply-To: <20211224150739.3278019-1-trix@redhat.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 27 Dec 2021 10:48:30 -0500
-Message-ID: <CAHC9VhR+ou3fx_b0dKgu12L6janT8_7DEHQ54QY-QYsZcUDEag@mail.gmail.com>
-Subject: Re: [PATCH] selinux: initialize proto variable in selinux_ip_postroute_compat()
-To: trix@redhat.com
-Cc: stephen.smalley.work@gmail.com, eparis@parisplace.org, nathan@kernel.org, 
-	ndesaulniers@google.com, selinux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227125444.21187-20-jefflexu@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 24, 2021 at 10:07 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> Clang static analysis reports this warning
->
-> hooks.c:5765:6: warning: 4th function call argument is an uninitialized value
->         if (selinux_xfrm_postroute_last(sksec->sid, skb, &ad, proto))
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> selinux_parse_skb() can return ok without setting proto.  The later call
-> to selinux_xfrm_postroute_last() does an early check of proto and can
-> return ok is the garbage proto value matches.  So initialize proto.
->
-> Fixes: eef9b41622f2 ("selinux: cleanup selinux_xfrm_sock_rcv_skb() and selinux_xfrm_postroute_last()")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  security/selinux/hooks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Jeffle,
 
-Thanks Tom.  I don't think this is something that could be easily
-triggered on a normal system, even if the compatibility mode was
-enabled, but this is something that we should fix regardless.  I've
-merged this into selinux/stable-5.16 and will send this up to Linus as
-soon as it clears the normal automated testing.
+Thank you for the patch! Perhaps something to improve:
 
--- 
-paul moore
-www.paul-moore.com
+[auto build test WARNING on dhowells-fs/fscache-next]
+[cannot apply to xiang-erofs/dev-test ceph-client/for-linus linus/master v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jeffle-Xu/fscache-erofs-fscache-based-demand-read-semantics/20211227-205742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git fscache-next
+config: i386-randconfig-r005-20211227 (https://download.01.org/0day-ci/archive/20211227/202112272353.ekKESQX6-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/54c300b4598e3f2836d8233681da387fe388cfda
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jeffle-Xu/fscache-erofs-fscache-based-demand-read-semantics/20211227-205742
+        git checkout 54c300b4598e3f2836d8233681da387fe388cfda
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cachefiles/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/cachefiles/io.c:564:5: warning: no previous prototype for function 'cachefiles_demand_read' [-Wmissing-prototypes]
+   int cachefiles_demand_read(struct netfs_cache_resources *cres,
+       ^
+   fs/cachefiles/io.c:564:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cachefiles_demand_read(struct netfs_cache_resources *cres,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/cachefiles_demand_read +564 fs/cachefiles/io.c
+
+   563	
+ > 564	int cachefiles_demand_read(struct netfs_cache_resources *cres,
+   565				   loff_t start_pos, size_t len)
+   566	{
+   567		struct cachefiles_object *object;
+   568		struct cachefiles_cache *cache;
+   569		struct cachefiles_req *req;
+   570		int ret;
+   571	
+   572		object = cachefiles_cres_object(cres);
+   573		cache = object->volume->cache;
+   574	
+   575		req = cachefiles_alloc_req(object, start_pos, len);
+   576		if (!req)
+   577			return -ENOMEM;
+   578	
+   579		spin_lock(&cache->reqs_lock);
+   580		ret = idr_alloc(&cache->reqs, req, 0, 0, GFP_KERNEL);
+   581		if (ret >= 0)
+   582			req->req_in.id = ret;
+   583		spin_unlock(&cache->reqs_lock);
+   584		if (ret < 0) {
+   585			kfree(req);
+   586			return -ENOMEM;
+   587		}
+   588	
+   589		wake_up_all(&cache->daemon_pollwq);
+   590	
+   591		wait_for_completion(&req->done);
+   592		kfree(req);
+   593	
+   594		return 0;
+   595	}
+   596	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
