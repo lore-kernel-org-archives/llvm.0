@@ -1,42 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0665A173
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 04:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0337173
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 04:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640579593; x=1672115593;
+  t=1640580792; x=1672116792;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=nol3FYP3LRCZ1YAmW0+Wj7yf3ZmSd3yRMGdzGZs1N1M=;
-  b=ITJls5ixbnyJ9rlEeFd6D52KONIJIT6+QHoMstyojRaD+5oA7jBIk1hZ
-   1FTmgbIRe0qEt4nwoFd5NPAb6sCQm3pgv5nr12a3q8m2BAMhIDCtD1whl
-   9Wsw5OKKoY06gEs99ITukVakDhrY8Gy02Znc96qzp6o4XI+yjGfjTfkL9
-   mVxLKss2sh10VDgRNH6yFe6qpOC3xHGQgLMN/Dv9JQ3UF35B8DE9Ke2Sy
-   BfZuCSyDv1nb8nqFzjBWeafAIhGw98q509fNJEgGrK2/oH9bB568BQRoY
-   jqo0g7uYih5JomtCiwEMO95Ha3x2f+QIdk0xWtjPs9HF7WiNxbwbs7c1i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="239943381"
+  bh=RvVQch9igr77zYD8cq7zz+ZCJ4Ef+4whg/UoJuLu2WI=;
+  b=et9fOvBX+/aIFiDJSVVwV7G2zlfCBrTIKh3dHzLNnqTO7v7sCbvzJhkm
+   VOWnqJ3Gqqlb6MQE6bx1nAG0iEkJ2+opvws+SGsfASKwpBOPrv9rGgF/9
+   9FLr68ArqlQgG2KVqZxggkkmiRrer79GArJwwcoA2ZyfGOZbHCcmrL49S
+   XfquKzbXoeIIvw1ChQXdGBew8suaW8jYXOnel3wcUbWJHCHJpmc8oGiyq
+   4FW4qgafd3E+dLNPI/yZr5cYHlEfhnQHwrdfyzLwLblbWVWI6zJOCeLIZ
+   /VvDHHdtirVrKfIxAgvrlR/+NIV7o6fYlXipAEIk69is/7ldb7Yjq0tdT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="238697628"
 X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="239943381"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:33:11 -0800
+   d="scan'208";a="238697628"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:53:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="467758128"
+   d="scan'208";a="686174054"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Dec 2021 20:33:10 -0800
+  by orsmga005.jf.intel.com with ESMTP; 26 Dec 2021 20:53:10 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1hh7-00063h-OI; Mon, 27 Dec 2021 04:33:09 +0000
-Date: Mon, 27 Dec 2021 12:32:36 +0800
+	id 1n1i0T-00064I-UC; Mon, 27 Dec 2021 04:53:09 +0000
+Date: Mon, 27 Dec 2021 12:52:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: grantseltzer <grantseltzer@gmail.com>
+To: Cong Wang <xiyou.wangcong@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH bpf-next v2] libbpf: Add documentation for bpf_map batch
- operations
-Message-ID: <202112271230.YWo0e6o5-lkp@intel.com>
-References: <20211225203717.35718-1-grantseltzer@gmail.com>
+Subject: Re: [RFC Patch v3 3/3] net_sched: introduce eBPF based Qdisc
+Message-ID: <202112271239.sDqlvXQh-lkp@intel.com>
+References: <20211224200059.161979-4-xiyou.wangcong@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,56 +44,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211225203717.35718-1-grantseltzer@gmail.com>
+In-Reply-To: <20211224200059.161979-4-xiyou.wangcong@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi grantseltzer,
+Hi Cong,
 
-Thank you for the patch! Yet something to improve:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on bpf-next/master]
+[also build test WARNING on net-next/master next-20211224]
+[cannot apply to bpf/master net/master horms-ipvs/master linus/master v5.16-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/grantseltzer/libbpf-Add-documentation-for-bpf_map-batch-operations/20211226-043930
+url:    https://github.com/0day-ci/linux/commits/Cong-Wang/net_sched-introduce-eBPF-based-Qdisc/20211225-040205
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-randconfig-a004-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271230.YWo0e6o5-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
+config: i386-randconfig-c001-20211226 (https://download.01.org/0day-ci/archive/20211227/202112271239.sDqlvXQh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project a9e8b1ee7fd44b53c555a7823ae8fd1a8209c520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f8daffaa56bc1d00f28a1bc7db7ca91d98ae3c53
+        # https://github.com/0day-ci/linux/commit/3281415061bcf1a15f10b0a750d35ad9de23b469
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review grantseltzer/libbpf-Add-documentation-for-bpf_map-batch-operations/20211226-043930
-        git checkout f8daffaa56bc1d00f28a1bc7db7ca91d98ae3c53
+        git fetch --no-tags linux-review Cong-Wang/net_sched-introduce-eBPF-based-Qdisc/20211225-040205
+        git checkout 3281415061bcf1a15f10b0a750d35ad9de23b469
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/sched/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> bpf.c:698:15: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                                       NULL, keys, NULL, count, opts);
-                                             ^~~~
-   bpf.c:668:28: note: passing argument to parameter 'keys' here
-                                   void *out_batch, void *keys, void *values,
-                                                          ^
-   bpf.c:722:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                                       keys, values, count, opts);
-                                       ^~~~
-   bpf.c:668:28: note: passing argument to parameter 'keys' here
-                                   void *out_batch, void *keys, void *values,
-                                                          ^
-   bpf.c:722:15: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                                       keys, values, count, opts);
-                                             ^~~~~~
-   bpf.c:668:40: note: passing argument to parameter 'values' here
-                                   void *out_batch, void *keys, void *values,
-                                                                      ^
-   3 errors generated.
-   make[6]: *** [tools/build/Makefile.build:97: kernel/bpf/preload/libbpf/staticobjs/bpf.o] Error 1
-   make[6]: Target '__build' not remade because of errors.
+>> net/sched/sch_bpf.c:178:3: warning: variable 'cl' is uninitialized when used here [-Wuninitialized]
+                   cl->overlimits++;
+                   ^~
+   net/sched/sch_bpf.c:162:26: note: initialize the variable 'cl' to silence this warning
+           struct sch_bpf_class *cl;
+                                   ^
+                                    = NULL
+>> net/sched/sch_bpf.c:458:5: warning: no previous prototype for function 'bpf_skb_classify' [-Wmissing-prototypes]
+   u32 bpf_skb_classify(struct sk_buff *skb, int ifindex, u32 handle)
+       ^
+   net/sched/sch_bpf.c:458:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 bpf_skb_classify(struct sk_buff *skb, int ifindex, u32 handle)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/cl +178 net/sched/sch_bpf.c
+
+   155	
+   156	static struct sk_buff *sch_bpf_dequeue(struct Qdisc *sch)
+   157	{
+   158		struct sch_bpf_qdisc *q = qdisc_priv(sch);
+   159		struct sk_buff *ret = NULL;
+   160		struct sch_bpf_ctx ctx = {};
+   161		struct bpf_prog *dequeue;
+   162		struct sch_bpf_class *cl;
+   163		s64 now;
+   164		int res;
+   165	
+   166	again:
+   167		dequeue = rcu_dereference(q->dequeue_prog.prog);
+   168		ctx.classid = sch->handle;
+   169		res = bpf_prog_run(dequeue, &ctx);
+   170		switch (res) {
+   171		case SCH_BPF_OK:
+   172			ret = (struct sk_buff *)ctx.skb;
+   173			break;
+   174		case SCH_BPF_THROTTLE:
+   175			now = ktime_get_ns();
+   176			qdisc_watchdog_schedule_ns(&q->watchdog, now + ctx.delay);
+   177			qdisc_qstats_overlimit(sch);
+ > 178			cl->overlimits++;
+   179			return NULL;
+   180		case SCH_BPF_CONTINUE:
+   181			goto again;
+   182		default:
+   183			kfree_skb((struct sk_buff *)ctx.skb);
+   184			ret = NULL;
+   185		}
+   186	
+   187		return ret;
+   188	}
+   189	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
