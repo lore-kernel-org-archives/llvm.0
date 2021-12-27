@@ -1,136 +1,251 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0337173
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 04:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF55173
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 05:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640580792; x=1672116792;
+  t=1640582055; x=1672118055;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RvVQch9igr77zYD8cq7zz+ZCJ4Ef+4whg/UoJuLu2WI=;
-  b=et9fOvBX+/aIFiDJSVVwV7G2zlfCBrTIKh3dHzLNnqTO7v7sCbvzJhkm
-   VOWnqJ3Gqqlb6MQE6bx1nAG0iEkJ2+opvws+SGsfASKwpBOPrv9rGgF/9
-   9FLr68ArqlQgG2KVqZxggkkmiRrer79GArJwwcoA2ZyfGOZbHCcmrL49S
-   XfquKzbXoeIIvw1ChQXdGBew8suaW8jYXOnel3wcUbWJHCHJpmc8oGiyq
-   4FW4qgafd3E+dLNPI/yZr5cYHlEfhnQHwrdfyzLwLblbWVWI6zJOCeLIZ
-   /VvDHHdtirVrKfIxAgvrlR/+NIV7o6fYlXipAEIk69is/7ldb7Yjq0tdT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="238697628"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RpSMF+3ff+nLgcbvAwxYHiZVOLHjyewz7UBKq1wZB5s=;
+  b=VzbPevQKDDO/KpqcAtgLkn0zMJWrpr+RpKpxEFMoMY4AlwfUvB7Dy1LC
+   yH/rfz/p/8Dl3BwZzoPME+J4VH4g0WsZl0B+0W5zTB0zSsYGpampAN01Y
+   pIDX21KTb1uHC70iuGCEdeDFGcULeHscP6N2pn6AoWKZ0QruHrvr5g7zt
+   tZ1fQ0CwYS/6Pr4PaS/nvC9Z1uN8N6r5FC3noKfwyj1K4RK8zw5JegOcp
+   6sASPrbz3t9XppRmrrJz2f8bsL7MZ/Kk4ptU5+Pglabs4Fwu+6+z+baKJ
+   l3wRPq6NvVFCjtWDi+TNpX5tpIrWvtzR/ZIBqggmp3dS+xa77zcXvjai9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="239945826"
 X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="238697628"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:53:12 -0800
+   d="scan'208";a="239945826"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 21:14:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="686174054"
+   d="scan'208";a="553665547"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Dec 2021 20:53:10 -0800
+  by orsmga001.jf.intel.com with ESMTP; 26 Dec 2021 21:14:11 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1i0T-00064I-UC; Mon, 27 Dec 2021 04:53:09 +0000
-Date: Mon, 27 Dec 2021 12:52:59 +0800
+	id 1n1iKo-00065f-B7; Mon, 27 Dec 2021 05:14:10 +0000
+Date: Mon, 27 Dec 2021 13:13:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC Patch v3 3/3] net_sched: introduce eBPF based Qdisc
-Message-ID: <202112271239.sDqlvXQh-lkp@intel.com>
-References: <20211224200059.161979-4-xiyou.wangcong@gmail.com>
+To: =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 3/3] nvmem: add driver handling U-Boot environment
+ variables
+Message-ID: <202112271307.07oSwFJV-lkp@intel.com>
+References: <20211222192320.21974-3-zajec5@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211224200059.161979-4-xiyou.wangcong@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211222192320.21974-3-zajec5@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Cong,
+Hi "Rafał,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on net-next/master next-20211224]
-[cannot apply to bpf/master net/master horms-ipvs/master linus/master v5.16-rc7]
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v5.16-rc7 next-20211224]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Cong-Wang/net_sched-introduce-eBPF-based-Qdisc/20211225-040205
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-c001-20211226 (https://download.01.org/0day-ci/archive/20211227/202112271239.sDqlvXQh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project a9e8b1ee7fd44b53c555a7823ae8fd1a8209c520)
+url:    https://github.com/0day-ci/linux/commits/Rafa-Mi-ecki/mtd-core-call-devm_of_platform_populate-for-MTD-devices/20211223-032456
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: riscv-randconfig-c006-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271307.07oSwFJV-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3281415061bcf1a15f10b0a750d35ad9de23b469
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/43acf8c3e5ac48785826453744a925ff149b1d60
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Cong-Wang/net_sched-introduce-eBPF-based-Qdisc/20211225-040205
-        git checkout 3281415061bcf1a15f10b0a750d35ad9de23b469
+        git fetch --no-tags linux-review Rafa-Mi-ecki/mtd-core-call-devm_of_platform_populate-for-MTD-devices/20211223-032456
+        git checkout 43acf8c3e5ac48785826453744a925ff149b1d60
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/nvmem/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> net/sched/sch_bpf.c:178:3: warning: variable 'cl' is uninitialized when used here [-Wuninitialized]
-                   cl->overlimits++;
-                   ^~
-   net/sched/sch_bpf.c:162:26: note: initialize the variable 'cl' to silence this warning
-           struct sch_bpf_class *cl;
-                                   ^
-                                    = NULL
->> net/sched/sch_bpf.c:458:5: warning: no previous prototype for function 'bpf_skb_classify' [-Wmissing-prototypes]
-   u32 bpf_skb_classify(struct sk_buff *skb, int ifindex, u32 handle)
-       ^
-   net/sched/sch_bpf.c:458:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u32 bpf_skb_classify(struct sk_buff *skb, int ifindex, u32 handle)
-   ^
-   static 
-   2 warnings generated.
+>> drivers/nvmem/u-boot-env.c:126:46: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+           dev_info(dev, "offset:0x%08x len:0x%08x\n", image_offset, image_len);
+                                   ~~~~                ^~~~~~~~~~~~
+                                   %08lx
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/nvmem/u-boot-env.c:126:60: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+           dev_info(dev, "offset:0x%08x len:0x%08x\n", image_offset, image_len);
+                                              ~~~~                   ^~~~~~~~~
+                                              %08lx
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+>> drivers/nvmem/u-boot-env.c:190:38: error: incompatible pointer types passing 'size_t *' (aka 'unsigned long *') to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+           if (of_property_read_u32(np, "reg", &priv->offset) ||
+                                               ^~~~~~~~~~~~~
+   include/linux/of.h:1255:17: note: passing argument to parameter 'out_value' here
+                                          u32 *out_value)
+                                               ^
+   drivers/nvmem/u-boot-env.c:191:47: error: incompatible pointer types passing 'size_t *' (aka 'unsigned long *') to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+               of_property_read_u32_index(np, "reg", 1, &priv->size)) {
+                                                        ^~~~~~~~~~~
+   include/linux/of.h:311:28: note: passing argument to parameter 'out_value' here
+                                          u32 index, u32 *out_value);
+                                                          ^
+   2 warnings and 2 errors generated.
 
 
-vim +/cl +178 net/sched/sch_bpf.c
+vim +190 drivers/nvmem/u-boot-env.c
 
-   155	
-   156	static struct sk_buff *sch_bpf_dequeue(struct Qdisc *sch)
-   157	{
-   158		struct sch_bpf_qdisc *q = qdisc_priv(sch);
-   159		struct sk_buff *ret = NULL;
-   160		struct sch_bpf_ctx ctx = {};
-   161		struct bpf_prog *dequeue;
-   162		struct sch_bpf_class *cl;
-   163		s64 now;
-   164		int res;
-   165	
-   166	again:
-   167		dequeue = rcu_dereference(q->dequeue_prog.prog);
-   168		ctx.classid = sch->handle;
-   169		res = bpf_prog_run(dequeue, &ctx);
-   170		switch (res) {
-   171		case SCH_BPF_OK:
-   172			ret = (struct sk_buff *)ctx.skb;
-   173			break;
-   174		case SCH_BPF_THROTTLE:
-   175			now = ktime_get_ns();
-   176			qdisc_watchdog_schedule_ns(&q->watchdog, now + ctx.delay);
-   177			qdisc_qstats_overlimit(sch);
- > 178			cl->overlimits++;
-   179			return NULL;
-   180		case SCH_BPF_CONTINUE:
-   181			goto again;
-   182		default:
-   183			kfree_skb((struct sk_buff *)ctx.skb);
-   184			ret = NULL;
-   185		}
-   186	
-   187		return ret;
-   188	}
+    99	
+   100	static int u_boot_env_parse(struct u_boot_env *priv)
+   101	{
+   102		struct device *dev = priv->dev;
+   103		struct u_boot_env_image *image;
+   104		size_t image_offset;
+   105		size_t image_len;
+   106		uint32_t crc32;
+   107		size_t bytes;
+   108		uint8_t *buf;
+   109		int err;
+   110	
+   111		image_offset = 0;
+   112		image_len = priv->size;
+   113		if (priv->format == U_BOOT_FORMAT_BRCM) {
+   114			struct u_boot_brcm_header header;
+   115	
+   116			err = mtd_read(priv->mtd, priv->offset, sizeof(header), &bytes,
+   117				       (uint8_t *)&header);
+   118			if (err && !mtd_is_bitflip(err)) {
+   119				dev_err(dev, "Failed to read from mtd: %d\n", err);
+   120				return err;
+   121			}
+   122	
+   123			image_offset = sizeof(header);
+   124			image_len = le32_to_cpu(header.len);
+   125		}
+ > 126		dev_info(dev, "offset:0x%08x len:0x%08x\n", image_offset, image_len);
+   127	
+   128		buf = kcalloc(1, image_len, GFP_KERNEL);
+   129		if (!buf) {
+   130			err = -ENOMEM;
+   131			goto err_out;
+   132		}
+   133		image = (struct u_boot_env_image *)buf;
+   134	
+   135		err = mtd_read(priv->mtd, priv->offset + image_offset, image_len, &bytes, buf);
+   136		if (err && !mtd_is_bitflip(err)) {
+   137			dev_err(dev, "Failed to read from mtd: %d\n", err);
+   138			goto err_kfree;
+   139		}
+   140	
+   141		crc32 = crc32(~0, buf + 4, image_len - 4) ^ ~0L;
+   142		if (crc32 != le32_to_cpu(image->crc32)) {
+   143			dev_err(dev, "Invalid calculated CRC32: 0x%08x\n", crc32);
+   144			err = -EINVAL;
+   145			goto err_kfree;
+   146		}
+   147	
+   148		buf[image_len - 1] = '\0';
+   149		err = u_boot_env_add_cells(priv, image_offset + sizeof(*image),
+   150					   buf + sizeof(*image),
+   151					   image_len - sizeof(*image));
+   152		if (err)
+   153			dev_err(dev, "Failed to add cells: %d\n", err);
+   154	
+   155	err_kfree:
+   156		kfree(buf);
+   157	err_out:
+   158		return err;
+   159	}
+   160	
+   161	static const struct of_device_id u_boot_env_of_match_table[] = {
+   162		{ .compatible = "u-boot,env", .data = (void *)U_BOOT_FORMAT_DEFAULT, },
+   163		{ .compatible = "brcm,env", .data = (void *)U_BOOT_FORMAT_BRCM, },
+   164		{},
+   165	};
+   166	
+   167	static int u_boot_env_probe(struct platform_device *pdev)
+   168	{
+   169		struct nvmem_config config = {
+   170			.name = "u-boot-env",
+   171			.reg_read = u_boot_env_read,
+   172		};
+   173		struct device *dev = &pdev->dev;
+   174		struct device_node *np = dev->of_node;
+   175		const struct of_device_id *of_id;
+   176		struct u_boot_env *priv;
+   177		const char *label;
+   178		int err;
+   179	
+   180		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+   181		if (!priv)
+   182			return -ENOMEM;
+   183		priv->dev = dev;
+   184	
+   185		of_id = of_match_device(u_boot_env_of_match_table, dev);
+   186		if (!of_id)
+   187			return -EINVAL;
+   188		priv->format = (uintptr_t)of_id->data;
    189	
+ > 190		if (of_property_read_u32(np, "reg", &priv->offset) ||
+   191		    of_property_read_u32_index(np, "reg", 1, &priv->size)) {
+   192			dev_err(dev, "Failed to read \"reg\" property\n");
+   193			return -EINVAL;
+   194		}
+   195	
+   196		label = of_get_property(np->parent, "label", NULL);
+   197		if (!label)
+   198			label = np->parent->name;
+   199	
+   200		priv->mtd = get_mtd_device_nm(label);
+   201		if (IS_ERR(priv->mtd)) {
+   202			dev_err(dev, "Failed to find \"%s\" MTD device: %ld\n", label, PTR_ERR(priv->mtd));
+   203			return PTR_ERR(priv->mtd);
+   204		}
+   205	
+   206		err = u_boot_env_parse(priv);
+   207		if (err)
+   208			return err;
+   209	
+   210		config.dev = dev;
+   211		config.cells = priv->cells;
+   212		config.ncells = priv->ncells;
+   213		config.priv = priv;
+   214		config.size = priv->size;
+   215	
+   216		return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
+   217	}
+   218	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
