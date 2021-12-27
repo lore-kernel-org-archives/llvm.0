@@ -1,41 +1,46 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CD72C82
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 19:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9855173
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 20:53:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640632836; x=1672168836;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5qPmzy9sn+NRM9Zgy3Od0b1mCgeekHEPWxTmGO+1g28=;
-  b=aRvyP8f73D7SBVRdBn0NKAAAg+MiRRpUg0I4eH5EwrwsDf3rFw/PCpSh
-   YMcua+n1uLbmY+d/783zOm9fN2hLF3ddGQW8w2XuQWGfWkWptRwRpFJ0F
-   SxH6GmESB747aGmU3rFCWxGBCTMjtn7m2ziR5gpUF0PQpV+UGvjFmebFN
-   FkNdNJ/v7r4yfwmSwXbb3AiJUGDozRVCVAd2EvEi7jy+oaAzleRDmM2Hb
-   4NUVuBbp6zhZL1pneaSzs7Kr2cPvWJ8QamFU1sCBEbL4et/8DyZAWvdfs
-   73Al+jz9LVDEmXlRdmSeEnAJwGY/R4jN/XfSDwlut11qe1N2f7DQlHU82
+  t=1640638420; x=1672174420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uMjxg5roKHjPfWYUpElwi13J+sMC3KKOIcQdkIvCfiU=;
+  b=hDLUledruYKytu+bafehbJi+K95lH48GEob2cb+25JQeaIt2kjxIHXMy
+   JoFEGqKuyptE0ZGvy4hNY/nbuVP2Gz+CmclaYv9Pnz4r6vt4HKKo3CLOR
+   7oaPdHH0Ea60mLBTwqthc3QJWk74JDGhD238MMhGdB5LECenJWu2d9ToL
+   l5/2z3CEfmyaL6bCCPs10daQCnLWYXELuROtzyg8V7kq2VO3PTDfzgJ51
+   2QE+pBoyz0hhXR3jnRG0YtdMmRbGtvRRpbjJ+3EwIufLK4hQi1/Ez7Ucl
+   URvVb3+AKPVUMExPha0oCVNztL9RX3d9UC63EAZC7HBvU3Diy55Hu6GWs
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241211963"
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241220265"
 X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="241211963"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 11:20:35 -0800
+   d="scan'208";a="241220265"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 12:53:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="686375600"
+   d="scan'208";a="618556922"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Dec 2021 11:20:33 -0800
+  by orsmga004.jf.intel.com with ESMTP; 27 Dec 2021 12:53:37 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1vXt-0006ir-8b; Mon, 27 Dec 2021 19:20:33 +0000
-Date: Tue, 28 Dec 2021 03:19:59 +0800
+	id 1n1wzw-0006qR-FJ; Mon, 27 Dec 2021 20:53:36 +0000
+Date: Tue, 28 Dec 2021 04:52:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
+To: Prasad Malisetty <quic_c_pmaliset@quicinc.com>, agross@kernel.org,
+	bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com,
+	robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
-Subject: [atishp04:isa_ext_support 3/4] arch/riscv/kernel/cpufeature.c:82:24:
- warning: address of array 'edata->dtprop' will always evaluate to 'true'
-Message-ID: <202112280309.fgjGevFd-lkp@intel.com>
+	quic_vbadigan@quicinc.com
+Subject: Re: [PATCH v1] PCI: qcom: Add system PM support
+Message-ID: <202112280442.89f08VJU-lkp@intel.com>
+References: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,77 +49,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/atishp04/linux isa_ext_support
-head:   cf2f3fa532aa7c672f681ca0685046c738bfb45f
-commit: ae97a995345b68c472f3a904fc8fbefaa97ae26a [3/4] RISC-V: Provide a framework for parsing multi-letter ISA extensions
-config: riscv-randconfig-c006-20211226 (https://download.01.org/0day-ci/archive/20211228/202112280309.fgjGevFd-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
+Hi Prasad,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on helgaas-pci/next]
+[also build test WARNING on v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Prasad-Malisetty/PCI-qcom-Add-system-PM-support/20211223-001052
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: s390-randconfig-c005-20211227 (https://download.01.org/0day-ci/archive/20211228/202112280442.89f08VJU-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/ae97a995345b68c472f3a904fc8fbefaa97ae26a
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 isa_ext_support
-        git checkout ae97a995345b68c472f3a904fc8fbefaa97ae26a
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/880ea4b05c26f859dd3f59f330d9aa08b7fc1d9f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Prasad-Malisetty/PCI-qcom-Add-system-PM-support/20211223-001052
+        git checkout 880ea4b05c26f859dd3f59f330d9aa08b7fc1d9f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/dwc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/riscv/kernel/cpufeature.c:82:24: warning: address of array 'edata->dtprop' will always evaluate to 'true' [-Wpointer-bool-conversion]
-           if (!edata || !edata->dtprop)
-                         ~~~~~~~~^~~~~~
-   1 warning generated.
+   In file included from drivers/pci/controller/dwc/pcie-qcom.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/pci/controller/dwc/pcie-qcom.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/pci/controller/dwc/pcie-qcom.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/pci/controller/dwc/pcie-qcom.c:1718:32: warning: unused variable 'qcom_pcie_pm_ops' [-Wunused-const-variable]
+   static const struct dev_pm_ops qcom_pcie_pm_ops = {
+                                  ^
+   13 warnings generated.
 
 
-vim +82 arch/riscv/kernel/cpufeature.c
+vim +/qcom_pcie_pm_ops +1718 drivers/pci/controller/dwc/pcie-qcom.c
 
-    76	
-    77	int riscv_isa_ext_list_add(struct riscv_isa_ext_data *edata)
-    78	{
-    79		struct device_node *node, *enode;
-    80		int eid;
-    81	
-  > 82		if (!edata || !edata->dtprop)
-    83			return -EINVAL;
-    84	
-    85		node = of_find_node_by_path("/cpus");
-    86		if (!node) {
-    87			pr_err("No CPU information found in DT\n");
-    88			return -ENOENT;
-    89		}
-    90	
-    91		enode = of_get_child_by_name(node, "riscv,isa-ext");
-    92		if (!enode) {
-    93			pr_err("No riscv-isa-ext found in DT\n");
-    94			return -ENOENT;
-    95		}
-    96	
-    97		eid = edata->isa_ext_id;
-    98		if (eid < RISCV_ISA_EXT_BASE || eid >= RISCV_ISA_EXT_MAX)
-    99			return -EINVAL;
-   100	
-   101		if (!of_property_read_bool(enode, edata->dtprop)) {
-   102			pr_err("The ISA extension %s is not present in DT\n", edata->dtprop);
-   103			return -ENODEV;
-   104		}
-   105	
-   106		/* Enable the extension id in the riscv_isa for easier probing */
-   107		riscv_isa[0] |= 1 << eid;
-   108		list_add(&edata->node, &riscv_isa_ext_list);
-   109		pr_info("RISC-V ISA extension '%s' available\n", edata->uprop);
-   110	
-   111		return 0;
-   112	}
-   113	
+  1717	
+> 1718	static const struct dev_pm_ops qcom_pcie_pm_ops = {
+  1719		SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend_noirq, qcom_pcie_pm_resume_noirq)
+  1720	};
+  1721	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
