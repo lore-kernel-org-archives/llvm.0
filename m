@@ -1,46 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4DE2C82
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 12:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F152C82
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 12:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640606963; x=1672142963;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=okfjJNDIMcbw0e+Sab5DYvFf+BRXsTdpjDfl4ffFb88=;
-  b=Dw7XvkLIQMaSPWnPqhLYiyHZKrqM1dGSqq+DJIMW+M9vKfWFU0YVF2Gg
-   c1V2qM4XXg9s4+GBZ5ggN7J4mXttan7Jmc51HezLa41hZr0eHzO8B4WUK
-   dum8KrzRAGNIJWksmp77YJzNdo9fVJ9Gaq9kPDfUjhrVKEAxYaVUqEC1y
-   YL29jD5Y69pIEGMEQgjehTQMvvsU1FrJQ/wJjb/d0DWzhj09iNnMwfgK4
-   F+McieyuZihnU8xwixEOfU+y7f4HaH/F/JSMm12mnYb6WQSMdXnpm5Adi
-   j8zhwi2LIGEe3ttqCsNU/otSv++W15BhI/ub1Px0+6gkuiJRRlTKdqj+h
+  t=1640607561; x=1672143561;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s6xouXcykijpveoTUGFNct2Khmd+c+dHLgqj9WkOB70=;
+  b=Kyh3Yc3IZ/pJmba3GNuYyxusFFcDkzlGt0BILgAtjLIvwNsqLhSlsQ9C
+   nAtf4OEkp9Mx8HFYsL2dJ7GeG1Oco6Laf35cPIZm6BvJXvnHt26CAZ+WZ
+   miXFFUGk8/MSZDPUOYsRSuLZChsfv1ixrS316IUSFp5W39cs9hDieQu++
+   rZeSnclZY9T6SiXpCfd7DYyTHVDdOhrVFpi554oo+1tSjFR1AtgigxYhT
+   29yme6bqroS9Ayo+xPkVJlHv23Wtcly+UqTIdYcS0QdA2FWaAtCxcxlW5
+   g0LZ3dYvx7KsPMIuWLYykWFoKphGT6u/2M3vCH1KUq6u8g2ZzwAhsSxPy
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="304561251"
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="221869975"
 X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="304561251"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 04:09:22 -0800
+   d="scan'208";a="221869975"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 04:19:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="758403941"
+   d="scan'208";a="553775938"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Dec 2021 04:09:19 -0800
+  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 04:19:19 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1ooY-0006Fl-Lb; Mon, 27 Dec 2021 12:09:18 +0000
-Date: Mon, 27 Dec 2021 20:08:33 +0800
+	id 1n1oyE-0006GQ-S3; Mon, 27 Dec 2021 12:19:18 +0000
+Date: Mon, 27 Dec 2021 20:18:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qiang Wang <wangqiang.wq.frank@bytedance.com>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] libbpf: Support repeated legacy kprobes on same
- function
-Message-ID: <202112272030.W0PW9fN7-lkp@intel.com>
-References: <20211225083242.38498-2-wangqiang.wq.frank@bytedance.com>
+To: Anup Patel <anup.patel@wdc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_aia_v1 30/34]
+ drivers/irqchip/irq-riscv-imsic.c:142:30: warning: variable 'global' set but
+ not used
+Message-ID: <202112272015.GBtofHiu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,48 +45,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211225083242.38498-2-wangqiang.wq.frank@bytedance.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Qiang,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on bpf-next/master]
-[also build test ERROR on bpf/master horms-ipvs/master linus/master v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Qiang-Wang/libbpf-Use-probe_name-for-legacy-kprobe/20211225-163349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-c001-20211227 (https://download.01.org/0day-ci/archive/20211227/202112272030.W0PW9fN7-lkp@intel.com/config)
+tree:   https://github.com/avpatel/linux.git riscv_aia_v1
+head:   ab1dc4967c46d77179ef56870a5d556c61aa9b0c
+commit: 595f7c41a6420b47ceb2abc4d603237f53711ca5 [30/34] irqchip: Add incoming MSI controller driver
+config: riscv-randconfig-r001-20211227 (https://download.01.org/0day-ci/archive/20211227/202112272015.GBtofHiu-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4a70a6c46086b85c64cae0b5c67980bd7f73cfeb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Qiang-Wang/libbpf-Use-probe_name-for-legacy-kprobe/20211225-163349
-        git checkout 4a70a6c46086b85c64cae0b5c67980bd7f73cfeb
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/595f7c41a6420b47ceb2abc4d603237f53711ca5
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_aia_v1
+        git checkout 595f7c41a6420b47ceb2abc4d603237f53711ca5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/irqchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> libbpf.c:9896:4: error: expected ')'
-                    __sync_fetch_and_add(&index, 1));
-                    ^
-   libbpf.c:9895:10: note: to match this '('
-           snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(), kfunc_name, offset
-                   ^
-   1 error generated.
-   make[6]: *** [tools/build/Makefile.build:97: kernel/bpf/preload/libbpf/staticobjs/libbpf.o] Error 1
-   make[6]: Target '__build' not remade because of errors.
+>> drivers/irqchip/irq-riscv-imsic.c:142:30: warning: variable 'global' set but not used [-Wunused-but-set-variable]
+           struct imsic_global_config *global;
+                                       ^
+   drivers/irqchip/irq-riscv-imsic.c:138:22: warning: unused function 'imsic_cpu_page_virt' [-Wunused-function]
+   static void __iomem *imsic_cpu_page_virt(unsigned int cpu,
+                        ^
+   2 warnings generated.
+
+
+vim +/global +142 drivers/irqchip/irq-riscv-imsic.c
+
+   137	
+   138	static void __iomem *imsic_cpu_page_virt(unsigned int cpu,
+   139						 unsigned int guest_index)
+   140	{
+   141		struct imsic_handler *handler = per_cpu_ptr(&imsic_handlers, cpu);
+ > 142		struct imsic_global_config *global;
+   143		struct imsic_local_config *local;
+   144	
+   145		if (!handler || !handler->priv)
+   146			return NULL;
+   147		local = &handler->local;
+   148		global = &handler->priv->global;
+   149	
+   150		return local->msi_va + (guest_index * IMSIC_MMIO_PAGE_SZ);
+   151	}
+   152	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
