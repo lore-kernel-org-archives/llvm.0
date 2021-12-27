@@ -1,160 +1,107 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9855173
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 20:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640638420; x=1672174420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uMjxg5roKHjPfWYUpElwi13J+sMC3KKOIcQdkIvCfiU=;
-  b=hDLUledruYKytu+bafehbJi+K95lH48GEob2cb+25JQeaIt2kjxIHXMy
-   JoFEGqKuyptE0ZGvy4hNY/nbuVP2Gz+CmclaYv9Pnz4r6vt4HKKo3CLOR
-   7oaPdHH0Ea60mLBTwqthc3QJWk74JDGhD238MMhGdB5LECenJWu2d9ToL
-   l5/2z3CEfmyaL6bCCPs10daQCnLWYXELuROtzyg8V7kq2VO3PTDfzgJ51
-   2QE+pBoyz0hhXR3jnRG0YtdMmRbGtvRRpbjJ+3EwIufLK4hQi1/Ez7Ucl
-   URvVb3+AKPVUMExPha0oCVNztL9RX3d9UC63EAZC7HBvU3Diy55Hu6GWs
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241220265"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="241220265"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 12:53:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="618556922"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Dec 2021 12:53:37 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n1wzw-0006qR-FJ; Mon, 27 Dec 2021 20:53:36 +0000
-Date: Tue, 28 Dec 2021 04:52:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prasad Malisetty <quic_c_pmaliset@quicinc.com>, agross@kernel.org,
-	bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com,
-	robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	quic_vbadigan@quicinc.com
-Subject: Re: [PATCH v1] PCI: qcom: Add system PM support
-Message-ID: <202112280442.89f08VJU-lkp@intel.com>
-References: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3468173
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 21:26:05 +0000 (UTC)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A8EAD1EC0136;
+	Mon, 27 Dec 2021 22:25:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1640640359;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=3Cy1PdT8ee7b18BUpAQeCkPJPidVgoTXUgpiQywVRN4=;
+	b=m6LiU/XltNjPORveRWWGZ/X44V1K+ujkDgCpPAWQMC9V+qzDBp+9Bn0nbrALtQ/VwgFbm3
+	IbJ0tL4dk5QJKecJUiN2UQuD5Fgac8/LCQbbXD+eVIXLd3gF3AkY750J3xp8zJf4uhz59o
+	ti+zSCpcL9CI9POJ+ZDF+aTNsMTb5WE=
+Date: Mon, 27 Dec 2021 22:26:02 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
+Message-ID: <YcovajZkEd0WY8p4@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-2-alexandr.lobakin@intel.com>
+ <YcShenJgaOeOdbIj@zn.tnic>
+ <20211227182246.1447062-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211227182246.1447062-1-alexandr.lobakin@intel.com>
 
-Hi Prasad,
+On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
+> It's just a couple lines below. I trigger this using `-z uniq-symbol`
+> which uses numeric suffixes for globals as well.
 
-Thank you for the patch! Perhaps something to improve:
+Aha, so that's for the fgkaslr purposes now.
 
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> It fixes a commit dated 2014, thus Cc:stable. Although the
+> remove_dot() might've been introduced for neverlanded GCC LTO, but
+> in fact numeric suffixes are used a lot by the toolchains in regular
+> builds as well. Just not for globals, that's why it's "well hidden".
 
-url:    https://github.com/0day-ci/linux/commits/Prasad-Malisetty/PCI-qcom-Add-system-PM-support/20211223-001052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: s390-randconfig-c005-20211227 (https://download.01.org/0day-ci/archive/20211228/202112280442.89f08VJU-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/880ea4b05c26f859dd3f59f330d9aa08b7fc1d9f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Prasad-Malisetty/PCI-qcom-Add-system-PM-support/20211223-001052
-        git checkout 880ea4b05c26f859dd3f59f330d9aa08b7fc1d9f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/dwc/
+Does "well hidden" warrant a stable backport then? Because if no
+toolchain is using numeric suffixes for globals, then no need for the
+stable tag, I'd say.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> I thought it's a common saying in commit messages, isn't it?
 
-All warnings (new ones prefixed by >>):
+Lemme give you my canned and a lot more eloquent explanation for that:
 
-   In file included from drivers/pci/controller/dwc/pcie-qcom.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/pci/controller/dwc/pcie-qcom.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/pci/controller/dwc/pcie-qcom.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/pci/controller/dwc/pcie-qcom.c:1718:32: warning: unused variable 'qcom_pcie_pm_ops' [-Wunused-const-variable]
-   static const struct dev_pm_ops qcom_pcie_pm_ops = {
-                                  ^
-   13 warnings generated.
+"Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
 
+Also, pls read section "2) Describe your changes" in
+Documentation/process/submitting-patches.rst for more details.
 
-vim +/qcom_pcie_pm_ops +1718 drivers/pci/controller/dwc/pcie-qcom.c
+Also, see section "Changelog" in
+Documentation/process/maintainer-tip.rst
 
-  1717	
-> 1718	static const struct dev_pm_ops qcom_pcie_pm_ops = {
-  1719		SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend_noirq, qcom_pcie_pm_resume_noirq)
-  1720	};
-  1721	
+Bottom line is: personal pronouns are ambiguous in text, especially with
+so many parties/companies/etc developing the kernel so let's avoid them
+please."
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
