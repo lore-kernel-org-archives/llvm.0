@@ -1,108 +1,83 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC8C29CA
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 16:16:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640621794; x=1672157794;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BSDqVuSIFYDIk5tliu/YGKfCAxw8HvtD1Jo1sDA/1yI=;
-  b=HigDxRj60xSBrdVAvB/oolmLSlZEBjQ8nc6Gdu2nTZeLAVTDr+Kb+NS+
-   92irRI8SyamhXgoGmBukBf8Vkx+xXJI5YdicEDnbZk5tb8O72I/ey+Jje
-   TeS00voHwu+vtpqiTWg4G8I8nS8hoXRb8h1Ht3YfA8f1xrX4A7/sprjje
-   UJG8iYSDabCTirM9Xo3pezq/tjLbaKoBs68+Wu+KYcwX/b8/+622n8CM7
-   JQlH6OdFaGHwgsMjJepJkaz1Zrx2J66EPLVIk7tLBt98leABpbnzj/mgZ
-   NPrOy4y4WB0Z0s47DqkoIzFZoqLtIFTQuG0/NwuBDlQQVpr3I38qX9MTs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="241445429"
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="241445429"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 08:16:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="467890042"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Dec 2021 08:16:29 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n1sfl-0006ZE-20; Mon, 27 Dec 2021 16:16:29 +0000
-Date: Tue, 28 Dec 2021 00:16:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qianggui Song <qianggui.song@amlogic.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-gpio@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Qianggui Song <qianggui.song@amlogic.com>,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] pinctrl: meson: add pinctrl driver support for
- Meson-S4 Soc
-Message-ID: <202112280001.MfQS59Vr-lkp@intel.com>
-References: <20211227080649.32275-3-qianggui.song@amlogic.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A089168;
+	Mon, 27 Dec 2021 16:43:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E46C36AE7;
+	Mon, 27 Dec 2021 16:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1640623403;
+	bh=WFk47Lhwi5z+idtPDIQjy1p/P02mO2Zj/3w53lMufQs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=shptdpzrcG2hbM0C0cvPyOTd97auugmZ+iWuE1BiKyIsTQqX388ntmD2pyXTmFmnK
+	 xjLEDJeYM4YEwx5qdqmzDM0cAiuOpC6l4jH4BYb2Eo15IYjSzVHV5WKaAE+JKp/rJ4
+	 rg4kmlpLMHTLONECBfOBO5TtihUW/0/nJpRXNAQ3cFEVhDjMGwly5roq/+9HhUEVhL
+	 jsBUGJG5w5GDuQx80OJbI40uACq3Z28wtBQMWFT+jZKLTLQwSiQ3VT9hrY26GaCdWz
+	 e32tXWeG4nBz2ZLuGAX8E/q/vLsm/vgAiS3hOGKf64d8jpbwdqBtjJps5T7TM8TNUR
+	 BnLAm7ssmj+SA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] media: atomisp: Do not define input_system_cfg2400_t twice
+Date: Mon, 27 Dec 2021 09:42:43 -0700
+Message-Id: <20211227164243.2329724-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227080649.32275-3-qianggui.song@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Qianggui,
+When CONFIG_VIDEO_ATOMISP_ISP2401 is disabled, clang warns:
 
-Thank you for the patch! Yet something to improve:
+./drivers/staging/media/atomisp//pci/isp2400_input_system_local.h:32:40:
+error: redefinition of typedef 'input_system_cfg2400_t' is a C11 feature
+[-Werror,-Wtypedef-redefinition]
+typedef struct input_system_cfg2400_s           input_system_cfg2400_t;
+                                                ^
+./drivers/staging/media/atomisp//pci/input_system_local.h:22:40: note:
+previous definition is here
+typedef struct input_system_cfg2400_s           input_system_cfg2400_t;
+                                                ^
+1 error generated.
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on robh/for-next v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+input_system_cfg2400_t's typedef was copied from
+isp2400_input_system_local.h to input_system_local.h, rather than moved.
+Remove the one in isp2400_input_system_local.h so that there is no more
+warning, which can break the build under -Werror.
 
-url:    https://github.com/0day-ci/linux/commits/Qianggui-Song/pinctrl-meson-s4-add-pinctrl-driver/20211227-160714
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-config: arm64-randconfig-r002-20211227 (https://download.01.org/0day-ci/archive/20211228/202112280001.MfQS59Vr-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/43334d14477ef1b54fe7c261204f68c77230a18b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Qianggui-Song/pinctrl-meson-s4-add-pinctrl-driver/20211227-160714
-        git checkout 43334d14477ef1b54fe7c261204f68c77230a18b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
+Fixes: 4005ecee616a ("media: atomisp: shift some structs from input_system_local")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1557
 Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/pinctrl/meson/pinctrl-meson-s4.c:9:10: fatal error: 'dt-bindings/gpio/meson-s4-gpio.h' file not found
-   #include <dt-bindings/gpio/meson-s4-gpio.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +9 drivers/pinctrl/meson/pinctrl-meson-s4.c
-
-   > 9	#include <dt-bindings/gpio/meson-s4-gpio.h>
-    10	#include "pinctrl-meson.h"
-    11	#include "pinctrl-meson-axg-pmx.h"
-    12	
-
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/staging/media/atomisp/pci/isp2400_input_system_local.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/isp2400_input_system_local.h b/drivers/staging/media/atomisp/pci/isp2400_input_system_local.h
+index 6880c9b6aa65..c3ae5014a039 100644
+--- a/drivers/staging/media/atomisp/pci/isp2400_input_system_local.h
++++ b/drivers/staging/media/atomisp/pci/isp2400_input_system_local.h
+@@ -29,8 +29,6 @@
+ #include "isp_acquisition_defs.h"
+ #include "input_system_ctrl_defs.h"
+ 
+-typedef struct input_system_cfg2400_s		input_system_cfg2400_t;
+-
+ struct target_cfg2400_s {
+ 	input_switch_cfg_channel_t		input_switch_channel_cfg;
+ 	target_isp_cfg_t	target_isp_cfg;
+
+base-commit: 68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
+-- 
+2.34.1
+
