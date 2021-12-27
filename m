@@ -1,46 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C29D168
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 04:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0665A173
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 04:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640578333; x=1672114333;
+  t=1640579593; x=1672115593;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GlcD9Zjp1E+9n0H6NzNbutTs+RGmfE5poRkHAv054+Q=;
-  b=ZHs+oMVKlY4jlpxer/B2KHUj3CxfxM9nV9mzuz+rYiSym6wgmTVLNsFK
-   mcYHmv/Qk3q7tqp3Q0mwjcj2aE3OnjDyMwlDvmA86dKRzv9pyGNLobXUK
-   wXdzRkYHau+tbEZOUv2Sw+a89hSkDxj7+WvLaW0WzIIiFPbFftmEzn7Jh
-   LHW03Xkf+v1GKEULnutZxUvBt4AtrLN+5D0/WRfVpV6IEeffGnTjiOhY6
-   G9ejo0gV4NY2Wlzu3ZYVqQn9hRSVQ1HZnQ6iqm66kN2EOr5NEGz/s/WYG
-   IPWH1l9pHmX62dKGbmTCaUxEppdt513+/AMNxjW7PbFBevNq+yBGmc7KD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="228462700"
+  bh=nol3FYP3LRCZ1YAmW0+Wj7yf3ZmSd3yRMGdzGZs1N1M=;
+  b=ITJls5ixbnyJ9rlEeFd6D52KONIJIT6+QHoMstyojRaD+5oA7jBIk1hZ
+   1FTmgbIRe0qEt4nwoFd5NPAb6sCQm3pgv5nr12a3q8m2BAMhIDCtD1whl
+   9Wsw5OKKoY06gEs99ITukVakDhrY8Gy02Znc96qzp6o4XI+yjGfjTfkL9
+   mVxLKss2sh10VDgRNH6yFe6qpOC3xHGQgLMN/Dv9JQ3UF35B8DE9Ke2Sy
+   BfZuCSyDv1nb8nqFzjBWeafAIhGw98q509fNJEgGrK2/oH9bB568BQRoY
+   jqo0g7uYih5JomtCiwEMO95Ha3x2f+QIdk0xWtjPs9HF7WiNxbwbs7c1i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="239943381"
 X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="228462700"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:12:12 -0800
+   d="scan'208";a="239943381"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:33:11 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="553652913"
+   d="scan'208";a="467758128"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Dec 2021 20:12:09 -0800
+  by orsmga003.jf.intel.com with ESMTP; 26 Dec 2021 20:33:10 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1hMm-00061b-Sg; Mon, 27 Dec 2021 04:12:08 +0000
-Date: Mon, 27 Dec 2021 12:11:44 +0800
+	id 1n1hh7-00063h-OI; Mon, 27 Dec 2021 04:33:09 +0000
+Date: Mon, 27 Dec 2021 12:32:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jic23@kernel.org,
-	lars@metafoo.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Matt Ranostay <matt.ranostay@konsulko.com>,
-	Chris Lesiak <chris.lesiak@licor.com>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
-Message-ID: <202112271213.Z6jyi5YK-lkp@intel.com>
-References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+To: grantseltzer <grantseltzer@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH bpf-next v2] libbpf: Add documentation for bpf_map batch
+ operations
+Message-ID: <202112271230.YWo0e6o5-lkp@intel.com>
+References: <20211225203717.35718-1-grantseltzer@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,55 +45,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20211225203717.35718-1-grantseltzer@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Kai-Heng,
+Hi grantseltzer,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/0day-ci/linux/commits/Kai-Heng-Feng/iio-humidity-hdc100x-Add-ACPI-HID-table/20211224-230046
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: mips-randconfig-c004-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271213.Z6jyi5YK-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/grantseltzer/libbpf-Add-documentation-for-bpf_map-batch-operations/20211226-043930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-randconfig-a004-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271230.YWo0e6o5-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/59648fe59d706ab2b9e719418c490d505ee5cc93
+        # https://github.com/0day-ci/linux/commit/f8daffaa56bc1d00f28a1bc7db7ca91d98ae3c53
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kai-Heng-Feng/iio-humidity-hdc100x-Add-ACPI-HID-table/20211224-230046
-        git checkout 59648fe59d706ab2b9e719418c490d505ee5cc93
+        git fetch --no-tags linux-review grantseltzer/libbpf-Add-documentation-for-bpf_map-batch-operations/20211226-043930
+        git checkout f8daffaa56bc1d00f28a1bc7db7ca91d98ae3c53
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/humidity/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iio/humidity/hdc100x.c:420:36: warning: unused variable 'hdc100x_acpi_match' [-Wunused-const-variable]
-   static const struct acpi_device_id hdc100x_acpi_match[] = {
-                                      ^
-   1 warning generated.
-
-
-vim +/hdc100x_acpi_match +420 drivers/iio/humidity/hdc100x.c
-
-   419	
- > 420	static const struct acpi_device_id hdc100x_acpi_match[] = {
-   421		{"HDC1010"},
-   422		{ },
-   423	};
-   424	
+>> bpf.c:698:15: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                       NULL, keys, NULL, count, opts);
+                                             ^~~~
+   bpf.c:668:28: note: passing argument to parameter 'keys' here
+                                   void *out_batch, void *keys, void *values,
+                                                          ^
+   bpf.c:722:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                       keys, values, count, opts);
+                                       ^~~~
+   bpf.c:668:28: note: passing argument to parameter 'keys' here
+                                   void *out_batch, void *keys, void *values,
+                                                          ^
+   bpf.c:722:15: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                       keys, values, count, opts);
+                                             ^~~~~~
+   bpf.c:668:40: note: passing argument to parameter 'values' here
+                                   void *out_batch, void *keys, void *values,
+                                                                      ^
+   3 errors generated.
+   make[6]: *** [tools/build/Makefile.build:97: kernel/bpf/preload/libbpf/staticobjs/bpf.o] Error 1
+   make[6]: Target '__build' not remade because of errors.
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
