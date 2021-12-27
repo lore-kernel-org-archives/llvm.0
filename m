@@ -1,55 +1,104 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A1D173
-	for <llvm@lists.linux.dev>; Sun, 26 Dec 2021 22:02:02 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4JMZLk4Skhz4xdB;
-	Mon, 27 Dec 2021 08:53:50 +1100 (AEDT)
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-To: Alexey Kardashevskiy <aik@ozlabs.ru>, linuxppc-dev@lists.ozlabs.org
-Cc: Segher Boessenkool <segher@kernel.crashing.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, Alan Modra <amodra@au1.ibm.com>, Nicholas Piggin <npiggin@gmail.com>, Daniel Axtens <dja@axtens.net>
-In-Reply-To: <20211221055904.555763-1-aik@ozlabs.ru>
-References: <20211221055904.555763-1-aik@ozlabs.ru>
-Subject: Re: [PATCH kernel 0/6] powerpc: Build with LLVM_IAS=1
-Message-Id: <164055555286.3187272.4918713007568303339.b4-ty@ellerman.id.au>
-Date: Mon, 27 Dec 2021 08:52:32 +1100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C29D168
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 04:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640578333; x=1672114333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GlcD9Zjp1E+9n0H6NzNbutTs+RGmfE5poRkHAv054+Q=;
+  b=ZHs+oMVKlY4jlpxer/B2KHUj3CxfxM9nV9mzuz+rYiSym6wgmTVLNsFK
+   mcYHmv/Qk3q7tqp3Q0mwjcj2aE3OnjDyMwlDvmA86dKRzv9pyGNLobXUK
+   wXdzRkYHau+tbEZOUv2Sw+a89hSkDxj7+WvLaW0WzIIiFPbFftmEzn7Jh
+   LHW03Xkf+v1GKEULnutZxUvBt4AtrLN+5D0/WRfVpV6IEeffGnTjiOhY6
+   G9ejo0gV4NY2Wlzu3ZYVqQn9hRSVQ1HZnQ6iqm66kN2EOr5NEGz/s/WYG
+   IPWH1l9pHmX62dKGbmTCaUxEppdt513+/AMNxjW7PbFBevNq+yBGmc7KD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="228462700"
+X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
+   d="scan'208";a="228462700"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:12:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
+   d="scan'208";a="553652913"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Dec 2021 20:12:09 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n1hMm-00061b-Sg; Mon, 27 Dec 2021 04:12:08 +0000
+Date: Mon, 27 Dec 2021 12:11:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jic23@kernel.org,
+	lars@metafoo.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Matt Ranostay <matt.ranostay@konsulko.com>,
+	Chris Lesiak <chris.lesiak@licor.com>, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
+Message-ID: <202112271213.Z6jyi5YK-lkp@intel.com>
+References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 21 Dec 2021 16:58:58 +1100, Alexey Kardashevskiy wrote:
-> This allows compiling the upstream Linux with the upstream llvm with one fix on top;
-> https://reviews.llvm.org/D115419
-> 
-> This is based on sha1
-> 798527287598 Michael Ellerman "Automatic merge of 'next' into merge (2021-12-14 00:12)".
-> 
-> Please comment. Thanks.
-> 
-> [...]
+Hi Kai-Heng,
 
-Applied to powerpc/next.
+Thank you for the patch! Perhaps something to improve:
 
-[1/6] powerpc/toc: PowerPC64 future proof kernel toc, revised for lld
-      https://git.kernel.org/powerpc/c/a3ad84da076009c94969fa97f604257667e2980f
-[2/6] powerpc: check for support for -Wa,-m{power4,any}
-      https://git.kernel.org/powerpc/c/f5140cab448e4819ca6f158cb4130352f73c92e4
-[3/6] powerpc/64/asm: Inline BRANCH_TO_C000
-      https://git.kernel.org/powerpc/c/fd983957971632088908c646116383402f04084b
-[4/6] powerpc/64/asm: Do not reassign labels
-      https://git.kernel.org/powerpc/c/d72c4a36d7ab560127885473a310ece28988b604
-[5/6] powerpc/mm: Switch obsolete dssall to .long
-      https://git.kernel.org/powerpc/c/d51f86cfd8e378d4907958db77da3074f6dce3ba
-[6/6] powerpc/mm/book3s64/hash: Switch pre 2.06 tlbiel to .long
-      https://git.kernel.org/powerpc/c/62479e6e26ef18f00e2e540c0e30156254533a43
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-cheers
+url:    https://github.com/0day-ci/linux/commits/Kai-Heng-Feng/iio-humidity-hdc100x-Add-ACPI-HID-table/20211224-230046
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: mips-randconfig-c004-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271213.Z6jyi5YK-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/59648fe59d706ab2b9e719418c490d505ee5cc93
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kai-Heng-Feng/iio-humidity-hdc100x-Add-ACPI-HID-table/20211224-230046
+        git checkout 59648fe59d706ab2b9e719418c490d505ee5cc93
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/humidity/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/humidity/hdc100x.c:420:36: warning: unused variable 'hdc100x_acpi_match' [-Wunused-const-variable]
+   static const struct acpi_device_id hdc100x_acpi_match[] = {
+                                      ^
+   1 warning generated.
+
+
+vim +/hdc100x_acpi_match +420 drivers/iio/humidity/hdc100x.c
+
+   419	
+ > 420	static const struct acpi_device_id hdc100x_acpi_match[] = {
+   421		{"HDC1010"},
+   422		{ },
+   423	};
+   424	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
