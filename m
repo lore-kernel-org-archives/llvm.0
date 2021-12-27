@@ -1,31 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157D1168
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 17:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B7CC36AEA;
-	Mon, 27 Dec 2021 17:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640625946;
-	bh=4iN0FX8tYwraxgWoiYyflN/g98ltq7WczqWNu5oyKd0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z0EhTraDUbeLoBrW4ulhg4TvAwZTTzr9VpOv4YMxV+PeowlT4dF8F5uLNgcnYM848
-	 +2pY6CuIDMaWldtU7vGVA4Gl1h5Ic5JatadG54qnJoTRx6TN0d5m5Qn59I6SzwHTws
-	 wdF2jAdjimCduCMZ4eJt55OF/Z4rSf3063HSYXC2VcCELymdH9yBoMG8K9DdIZzc4l
-	 Jx9Hlt28HREPJAjhQz6xPEQrNOP7u/dl8z10kcHaiYDXXR04FgdLkNGHxO3bqTft+f
-	 3QkioQ+/j007s0RRQXLANEkx0LpMy+wx3V82iTnN9BYTGqUpO1No5y0p/LvJK79Dve
-	 8nHdii/ZP4zyg==
-Date: Mon, 27 Dec 2021 10:25:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: chenxiang <chenxiang66@hisilicon.com>
-Cc: jejb@linux.ibm.com, martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org, linuxarm@huawei.com,
-	john.garry@huawei.com, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 05/15] scsi: hisi_sas: Fix some issues related to
- asd_sas_port->phy_list
-Message-ID: <Ycn3FoW9eOZNFMiL@archlinux-ax161>
-References: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
- <1639999298-244569-6-git-send-email-chenxiang66@hisilicon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A039168
+	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 17:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640627930; x=1672163930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NkjbsmiVmuHzXY7F0rRZhYetn0NtusHxc19MkfdVzHs=;
+  b=QUV8cwcyLluahe5rJChHvRMRMws59ZUJlMj8CGaGIKc+bhVc2rdOXPxO
+   a9gz0/CSOlmtvmvOVcyDmmpCyXpGSmSekiY5KSfuks1V5oryW/XJTH1Dd
+   6vD8+sqF+OHu2Ukl/mw1FOQRqQEc7yClRfbxlkJTGxPMzK7una4lSyrcD
+   /18mO7c79sHNviWsOpJUNe/ZTBzDZXHh9P6ZxZ51MgWsfbYxHBcLBzhDZ
+   lXyovfol+qgUPunlB/8VSpp0hKQ1kyCFmjYxIxn85+pD5phwVK2gbnApH
+   z/laTQvsxaEPlc+r8STq1amA/SlTFVxlq4OwbNENxiuuiuZRsVa7EVJGu
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="221918639"
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="221918639"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 09:58:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="618517709"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 27 Dec 2021 09:58:32 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n1uGW-0006fj-1i; Mon, 27 Dec 2021 17:58:32 +0000
+Date: Tue, 28 Dec 2021 01:58:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vasily Averin <vvs@virtuozzo.com>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna.schumaker@netapp.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@openvz.org,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfs4: handle async processing of F_SETLK with FL_SLEEP
+Message-ID: <202112280146.yo82FThq-lkp@intel.com>
+References: <3a2c6cb9-abe7-ab32-b11c-d78621361555@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,100 +47,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1639999298-244569-6-git-send-email-chenxiang66@hisilicon.com>
+In-Reply-To: <3a2c6cb9-abe7-ab32-b11c-d78621361555@virtuozzo.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Xiang,
+Hi Vasily,
 
-On Mon, Dec 20, 2021 at 07:21:28PM +0800, chenxiang wrote:
-> From: Xiang Chen <chenxiang66@hisilicon.com>
-> 
-> Most places that use asd_sas_port->phy_list are protected by spinlock
-> asd_sas_port->phy_list_lock, but there are some places which lack of it
-> in hisi_sas driver, so add it in function hisi_sas_refresh_port_id() when
-> accessing asd_sas_port->phy_list. But it has a risk that list mutates while
-> dropping the lock at the same time in function
-> hisi_sas_send_ata_reset_each_phy(), so read asd_sas_port->phy_mask
-> instead of accessing asd_sas_port->phy_list to avoid the risk.
-> 
-> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-> Acked-by: John Garry <john.garry@huawei.com>
-> ---
->  drivers/scsi/hisi_sas/hisi_sas_main.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index ad64ccd41420..051092e294f7 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -1428,11 +1428,13 @@ static void hisi_sas_refresh_port_id(struct hisi_hba *hisi_hba)
->  		sas_port = device->port;
->  		port = to_hisi_sas_port(sas_port);
->  
-> +		spin_lock(&sas_port->phy_list_lock);
->  		list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el)
->  			if (state & BIT(sas_phy->id)) {
->  				phy = sas_phy->lldd_phy;
->  				break;
->  			}
-> +		spin_unlock(&sas_port->phy_list_lock);
->  
->  		if (phy) {
->  			port->id = phy->port_id;
-> @@ -1509,22 +1511,25 @@ static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
->  	struct ata_link *link;
->  	u8 fis[20] = {0};
->  	u32 state;
-> +	int i;
->  
->  	state = hisi_hba->hw->get_phys_state(hisi_hba);
-> -	list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el) {
-> +	for (i = 0; i < hisi_hba->n_phy; i++) {
->  		if (!(state & BIT(sas_phy->id)))
->  			continue;
-> +		if (!(sas_port->phy_mask & BIT(i)))
-> +			continue;
->  
->  		ata_for_each_link(link, ap, EDGE) {
->  			int pmp = sata_srst_pmp(link);
->  
-> -			tmf_task.phy_id = sas_phy->id;
-> +			tmf_task.phy_id = i;
->  			hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
->  			rc = hisi_sas_exec_internal_tmf_task(device, fis, s,
->  							     &tmf_task);
->  			if (rc != TMF_RESP_FUNC_COMPLETE) {
->  				dev_err(dev, "phy%d ata reset failed rc=%d\n",
-> -					sas_phy->id, rc);
-> +					i, rc);
->  				break;
->  			}
->  		}
-> -- 
-> 2.33.0
-> 
-> 
+Thank you for the patch! Perhaps something to improve:
 
-Please ignore this if it was already reported, I do not see any reports
-of it on lore.kernel.org nor a commit fixing it in Martin's tree.
+[auto build test WARNING on trondmy-nfs/linux-next]
+[also build test WARNING on v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This commit as commit 29e2bac87421 ("scsi: hisi_sas: Fix some issues
-related to asd_sas_port->phy_list") in -next causes the following clang
-warning, which will break the build under -Werror:
+url:    https://github.com/0day-ci/linux/commits/Vasily-Averin/nfs4-handle-async-processing-of-F_SETLK-with-FL_SLEEP/20211227-184632
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+config: i386-randconfig-r005-20211227 (https://download.01.org/0day-ci/archive/20211228/202112280146.yo82FThq-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7ae55d384b2f337e6630509e451c35dda45ae185
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vasily-Averin/nfs4-handle-async-processing-of-F_SETLK-with-FL_SLEEP/20211227-184632
+        git checkout 7ae55d384b2f337e6630509e451c35dda45ae185
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/nfs/
 
-drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy' is uninitialized when used here [-Werror,-Wuninitialized]
-                if (!(state & BIT(sas_phy->id)))
-                                  ^~~~~~~
-./include/vdso/bits.h:7:30: note: expanded from macro 'BIT'
-#define BIT(nr)                 (UL(1) << (nr))
-                                           ^~
-drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the variable 'sas_phy' to silence this warning
-        struct asd_sas_phy *sas_phy;
-                                   ^
-                                    = NULL
-1 error generated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It seems like this variable is entirely unused now, should it be removed
-along with this check?
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> fs/nfs/nfs4proc.c:7202:25: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+           if ((request->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+                                  ^  ~~~~~~~~
+   fs/nfs/nfs4proc.c:7202:25: note: use '&' for a bitwise operation
+           if ((request->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+                                  ^~
+                                  &
+   fs/nfs/nfs4proc.c:7202:25: note: remove constant to silence this warning
+           if ((request->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+                                 ~^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +7202 fs/nfs/nfs4proc.c
+
+  7193	
+  7194	static int _nfs4_proc_setlk(struct nfs4_state *state, int cmd, struct file_lock *request)
+  7195	{
+  7196		struct nfs_inode *nfsi = NFS_I(state->inode);
+  7197		struct nfs4_state_owner *sp = state->owner;
+  7198		unsigned char fl_flags = request->fl_flags;
+  7199		int status;
+  7200	
+  7201		request->fl_flags |= FL_ACCESS;
+> 7202		if ((request->fl_flags && FL_SLEEP) && IS_SETLK(cmd))
+  7203			status = posix_lock_file(request->fl_file, request, NULL);
+  7204		else
+  7205			status = locks_lock_inode_wait(state->inode, request);
+  7206		if (status)
+  7207			goto out;
+  7208		mutex_lock(&sp->so_delegreturn_mutex);
+  7209		down_read(&nfsi->rwsem);
+  7210		if (test_bit(NFS_DELEGATED_STATE, &state->flags)) {
+  7211			/* Yes: cache locks! */
+  7212			/* ...but avoid races with delegation recall... */
+  7213			request->fl_flags = fl_flags & ~FL_SLEEP;
+  7214			status = locks_lock_inode_wait(state->inode, request);
+  7215			up_read(&nfsi->rwsem);
+  7216			mutex_unlock(&sp->so_delegreturn_mutex);
+  7217			goto out;
+  7218		}
+  7219		up_read(&nfsi->rwsem);
+  7220		mutex_unlock(&sp->so_delegreturn_mutex);
+  7221		status = _nfs4_do_setlk(state, cmd, request, NFS_LOCK_NEW);
+  7222	out:
+  7223		request->fl_flags = fl_flags;
+  7224		return status;
+  7225	}
+  7226	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
