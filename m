@@ -1,109 +1,138 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D67173
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 13:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEC9168
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 17:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640696946; x=1672232946;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=T9KienbKoJRSijMppvQxduQLqVCCs4k5PR0zcKzGI2E=;
-  b=bmrcvJwyn0N2ApfQEu1XMOYyvGQLVvT6HJvxRu6AxkyZOFkgke20TFot
-   TsxtYFAh4BtVLGKkyTzZ9j+n4n8eGWR8GY7LvSzKMWcn++TGolfwPuVbD
-   B5Jg+XhrPWtfPNpI6lIGXUHTzCG0PgeKtrFVrDOTJCo18z7nbCtBA232c
-   J0feQWg1GYKBBL1hFtKDPFckS3RaEfIDIs6RycKNnGiDTpvcZsKas2DEK
-   mlSZLvF9ZSR/A5ue14g1g9uRSN8GOvzP4fmnTmBoqg2IoQmYiijao5ipW
-   4pIL0MwyOlCMa+/GHHqgZQfvYyDbib/Bjx47YCf5T8RT6KMdvZ0CZ8chD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="304721083"
+  t=1640711105; x=1672247105;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KHhXdEfIwTp7IIrrW70KmlJrU5+AcMwf8sgzb0u1BTQ=;
+  b=BQDV12zufIn3y7kViZ5Jpt3ulVBzf1xgHYmdvpui4sYL++yBRhMLLgZl
+   +In54oVBpemChMdhPSSao9SBGGuQnw129cutz7Qf/nNUzRCAFu7YWz9R2
+   GxD3zZn3E64NTF62bjny9/LAO6irwQAZcUtaMYwEa2FUmSNP83yXJQxHU
+   0Z9wgDM+bnvLBFseQ3FQ4ne1jZh4VKaDmMBeEuEKGlgQCkglp0egUZOAw
+   Uc7z7Dlj7IfP9sX+k+2BvvismjYilXtXFrvVgBSma1hHoodEN3fhtyl1j
+   cgprRmSQTooX90qS62YE/hsf/m7imZoI75H3rmwRsPJBt8R2BRSmon1qS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="238937503"
 X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="304721083"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 05:09:05 -0800
+   d="scan'208";a="238937503"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 09:05:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="470024011"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Dec 2021 05:09:04 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n2CDw-0007Zh-4n; Tue, 28 Dec 2021 13:09:04 +0000
-Date: Tue, 28 Dec 2021 21:08:11 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: ld.lld: error: section .dynamic file range overlaps with .text
-Message-ID: <202112282014.LvW1YqPi-lkp@intel.com>
+   d="scan'208";a="572369723"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2021 09:04:56 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BSH4sNa000463;
+	Tue, 28 Dec 2021 17:04:54 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
+Date: Tue, 28 Dec 2021 18:03:08 +0100
+Message-Id: <20211228170308.1454063-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <YcovajZkEd0WY8p4@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic> <20211227182246.1447062-1-alexandr.lobakin@intel.com> <YcovajZkEd0WY8p4@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Tong Tiangen <tongtiangen@huawei.com>
-CC: Palmer Dabbelt <palmerdabbelt@google.com>
+From: Borislav Petkov <bp@alien8.de>
+Date: Mon, 27 Dec 2021 22:26:02 +0100
 
-Hi Tong,
+> On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
+> > It's just a couple lines below. I trigger this using `-z uniq-symbol`
+> > which uses numeric suffixes for globals as well.
+> 
+> Aha, so that's for the fgkaslr purposes now.
 
-FYI, the error/warning still remains.
+Well, linking using unique names is meant to be used always
+when available and livepatching is enabled, at least I hope so.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a8ad9a2434dc7967ab285437f443cae633b6fc1c
-commit: dffe11e280a42c2501e5b0cdebd85a77f539bb05 riscv/vdso: Add support for time namespaces
-date:   3 months ago
-config: riscv-buildonly-randconfig-r005-20211228 (https://download.01.org/0day-ci/archive/20211228/202112282014.LvW1YqPi-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dffe11e280a42c2501e5b0cdebd85a77f539bb05
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dffe11e280a42c2501e5b0cdebd85a77f539bb05
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
+> 
+> > It fixes a commit dated 2014, thus Cc:stable. Although the
+> > remove_dot() might've been introduced for neverlanded GCC LTO, but
+> > in fact numeric suffixes are used a lot by the toolchains in regular
+> > builds as well. Just not for globals, that's why it's "well hidden".
+> 
+> Does "well hidden" warrant a stable backport then? Because if no
+> toolchain is using numeric suffixes for globals, then no need for the
+> stable tag, I'd say.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hmm, makes sense. The fact that I haven't seen any similar reports
+or issues (even on LTO builds) sorta says there are no benefits from
+backporting this.
+Ok, I'll drop the tag. It's never too late anyway to port this in
+case someone will face it.
 
-All errors (new ones prefixed by >>):
+> 
+> > I thought it's a common saying in commit messages, isn't it?
+> 
+> Lemme give you my canned and a lot more eloquent explanation for that:
+> 
+> "Please use passive voice in your commit message: no "we" or "I", etc,
+> and describe your changes in imperative mood.
+> 
+> Also, pls read section "2) Describe your changes" in
+> Documentation/process/submitting-patches.rst for more details.
+> 
+> Also, see section "Changelog" in
+> Documentation/process/maintainer-tip.rst
+> 
+> Bottom line is: personal pronouns are ambiguous in text, especially with
+> so many parties/companies/etc developing the kernel so let's avoid them
+> please."
+> 
+> Thx.
 
->> ld.lld: error: section .dynamic file range overlaps with .text
-   >>> .dynamic range is [0x7D0, 0x8FF]
-   >>> .text range is [0x800, 0x1C57]
---
->> ld.lld: error: section .text file range overlaps with _ftrace_annotated_branch
-   >>> .text range is [0x800, 0x1C57]
-   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
---
->> ld.lld: error: section .dynamic virtual address range overlaps with .text
-   >>> .dynamic range is [0x7D0, 0x8FF]
-   >>> .text range is [0x800, 0x1C57]
---
->> ld.lld: error: section .text virtual address range overlaps with _ftrace_annotated_branch
-   >>> .text range is [0x800, 0x1C57]
-   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
---
->> ld.lld: error: section .dynamic load address range overlaps with .text
-   >>> .dynamic range is [0x7D0, 0x8FF]
-   >>> .text range is [0x800, 0x1C57]
---
->> ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
-   >>> .text range is [0x800, 0x1C57]
-   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
---
->> ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
-   >>> .text range is [0x800, 0x1C57]
-   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
-   llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
+Ah, you're right. "Common used" doesn't mean "correct". I'll fix it
+in the next spin being published after accumulating a bunch more
+comments.
+Thanks!
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+Al
