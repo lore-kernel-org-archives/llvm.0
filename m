@@ -1,42 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1888A173
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 04:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CFE173
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 06:02:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640667053; x=1672203053;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aiuxcONnj71aXEmgkYr2N1y/JXsnYBJg5uqF4Tlt6qA=;
-  b=JiP4dE10P7JJhCmhE6T9cIRb7Da5lLjpGR4fANysGWlG0dRW7QXrKBgE
-   adFm+uTGT8ESXv6yIKYNbm+hxBBktebM8RTQBy0TLpES1QSg1xOwrbz0U
-   ctYfxfjBepCvexujL28MhKm2LzGwqwvmtNVvEQYDICC3Vf4sg46gxhYp4
-   MaQMRjVVuwJLHyGMsO0ny7P2ykjxEBpC5MAgwrk3eqJo1gBFWckIazWgu
-   ZfHnr+ldLviq1n2LxGlBU22eyw5VaEW/SokptyEXHcKE9UM/e6K2Rufed
-   k2LK0eBnH9C6vRAmy3fb0BRTcGCm6ZqDztewA0wZKmm5CRoUNbODBEugG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="302065194"
+  t=1640671322; x=1672207322;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Eq5xKh+1C+iNFI+0PwCle38sDWZVf8PAkyabY5jLFno=;
+  b=Ic9vyD/MzHk7s1E4/xJ0UoSJvURv9JpPx5zbYYEjPgqVyZ15nkok5Gy7
+   e0VYWGhJycsklMBC7lRocTCzz49q8nZvYbBYlAdwdivJC/HsJjqW+QSSq
+   mV5IDQ45WFoAo9kKRHJSsxnYGTxHY/d78pTu0zDdG0sELrFHcK7yVb+Pv
+   mX5eA17mcPcwny+eyFRX9M+FzjCR19gjzIU9SuSUHalC+f1w34emyi5mF
+   suVGZ4STrfO9ohdfJEZXuK1KTwtYHbYj0P+GTZ83jWf2rjWQISiytYM0A
+   OQzKD3ktvDcSxtFa7bgFqydTlELy8Dp4LklC6Ea9RzeAIPBWwRm6e1Kgv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="265546437"
 X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="302065194"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 20:50:52 -0800
+   d="scan'208";a="265546437"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 22:01:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="486200656"
+   d="scan'208";a="554075225"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Dec 2021 20:50:50 -0800
+  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 22:01:52 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n24Rl-0007FD-RC; Tue, 28 Dec 2021 04:50:49 +0000
-Date: Tue, 28 Dec 2021 12:50:34 +0800
+	id 1n25YW-0007IV-1N; Tue, 28 Dec 2021 06:01:52 +0000
+Date: Tue, 28 Dec 2021 14:01:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lukas Czerner <lczerner@redhat.com>
+To: Alim Akhtar <alim.akhtar@samsung.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: [tytso-ext4:dev 15/32] fs/ext4/super.c:2173:1: warning: unused
- function 'ctx_clear_flags'
-Message-ID: <202112281210.5KoelwNW-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable
+ 'exynos_ufs_of_match'
+Message-ID: <202112281324.w3VTX6oh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,216 +45,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-head:   856dd2096e2a01f6eb2c9d60f6e0cd587aa273a8
-commit: 4437992be7ca3ac5dd0a62cad10357112d4fb43e [15/32] ext4: remove lazyt=
-ime/nolazytime mount options handled by MS_LAZYTIME
-config: mips-buildonly-randconfig-r006-20211228 (https://download.01.org/0d=
-ay-ci/archive/20211228/202112281210.5KoelwNW-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af=
-744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
+Hi Alim,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a8ad9a2434dc7967ab285437f443cae633b6fc1c
+commit: d31503fe395d1d7e17b85eb7b291cc1a4bff2671 scsi: ufs: Allow exynos ufs driver to build as module
+date:   1 year, 6 months ago
+config: hexagon-randconfig-r032-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281324.w3VTX6oh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git/co=
-mmit/?id=3D4437992be7ca3ac5dd0a62cad10357112d4fb43e
-        git remote add tytso-ext4 https://git.kernel.org/pub/scm/linux/kern=
-el/git/tytso/ext4.git
-        git fetch --no-tags tytso-ext4 dev
-        git checkout 4437992be7ca3ac5dd0a62cad10357112d4fb43e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d31503fe395d1d7e17b85eb7b291cc1a4bff2671
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d31503fe395d1d7e17b85eb7b291cc1a4bff2671
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/ext4/super.c:2173:1: warning: unused function 'ctx_clear_flags'
-   EXT4_SET_CTX(flags);
-   ^
-   fs/ext4/super.c:2161:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context ^
-   <scratch space>:66:1: note: expanded from here
-   ctx_clear_flags
-   ^
-   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags'
-   fs/ext4/super.c:2167:34: note: expanded from macro 'EXT4_SET_CTX'
-   static inline unsigned long ^
-   <scratch space>:69:1: note: expanded from here
-   ctx_test_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags'
-   EXT4_SET_CTX(mount_flags);
-   ^
-   fs/ext4/super.c:2161:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context ^
-   <scratch space>:90:1: note: expanded from here
-   ctx_clear_mount_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags'
-   fs/ext4/super.c:2167:34: note: expanded from macro 'EXT4_SET_CTX'
-   static inline unsigned long ^
-   <scratch space>:93:1: note: expanded from here
-   ctx_test_mount_flags
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/bitops.h", .line =3D 105, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://bugs.llvm.org/ and include the cra=
-sh backtrace, preprocessed source, and associated run script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,fs/ext4/.super.o.d -nostdinc -Iarch=
-/mips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/=
-mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./i=
-nclude/generated/uapi -include include/linux/compiler-version.h -include in=
-clude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ =
--DVMLINUX_LOAD_ADDRESS=3D0xffffffff80100000 -DLINKER_LOAD_ADDRESS=3D0x80100=
-000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_E=
-XTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-st=
-rict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-functio=
-n-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-secu=
-rity -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -Werror=3Dunknown=
--warning-option -Werror=3Dignored-optimization-argument -mno-check-zero-div=
-ision -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_S=
-ET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-check -march=3D=
-mips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-au=
-1x00 -Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tables -=
-fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-me=
-mber -Os -Wframe-larger-than=3D1024 -fstack-protector -Wimplicit-fallthroug=
-h -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable -Wno-unused-const=
--variable -ftrivial-auto-var-init=3Dzero -enable-trivial-auto-var-init-zero=
--knowing-it-will-be-removed-from-clang -fno-stack-clash-protection -pg -Wde=
-claration-after-statement -Wvla -Wno-pointer-sign -Wno-array-bounds -fno-st=
-rict-overflow -fno-stack-check -Werror=3Ddate-time -Werror=3Dincompatible-p=
-ointer-types -Wextra -Wunused -Wno-unused-parameter -Wmissing-declarations =
--Wmissing-format-attribute -Wmissing-prototypes -Wold-style-definition -Wmi=
-ssing-include-dirs -Wunused-but-set-variable -Wunused-const-variable -Wno-m=
-issing-field-initializers -Wno-sign-compare -Wno-type-limits -I fs/ext4 -I =
-=2E/fs/ext4 -ffunction-sections -fdata-sections -DKBUILD_MODFILE=3D"fs/ext4=
-/ext4" -DKBUILD_BASENAME=3D"super" -DKBUILD_MODNAME=3D"ext4" -D__KBUILD_MOD=
-NAME=3Dkmod_ext4 -c -o fs/ext4/super.o fs/ext4/super.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'fs/ext4/super.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@ext4_read_bh_nowai=
-t'
-   #0 0x000055a28effc39f Signals.cpp:0:0
-   #1 0x000055a28effa2ec llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-7171af7445/bin/clang-14+0x33fc2ec)
-   #2 0x000055a28ef3df37 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-7171af7445/bin/clang-14+0x333ff37)
-   #3 0x000055a28eff299e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-7171af7445/bin/clang-14+0x33f499e)
-   #4 0x000055a28cc7ed1b (/opt/cross/clang-7171af7445/bin/clang-14+0x1080d1=
-b)
-   #5 0x000055a28ef449dc llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-7171af7445/bin/clang-14+0x33469dc)
-   #6 0x000055a28fc22da8 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-7171af7445/bin/clang-14+0x4024da8)
-   #7 0x000055a28fc1eb49 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-7171af7445/bin/clang-14+0x4020b49)
-   #8 0x000055a28d6d7f4e llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-7171af7445/bin/clang-14+0x1ad9f4e)
-   #9 0x000055a28e36d60d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x000055a28e7a6337 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-7171af7445/bin/clang-14+0x2ba8337)
-   #11 0x000055a28e7a64b1 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-7171af7445/bin/clang-14+0x2ba84b1)
-   #12 0x000055a28e7a778f llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-7171af7445/bin/clang-14+0x2ba978f)
-   #13 0x000055a28f30a44a clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-7171af7445/bin/clang-14+0x370c=
-44a)
-   #14 0x000055a28ff37da3 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-7171af7445/bin/clang-14+0x4339da3)
-   #15 0x000055a290a3bcf9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-7171af7445/bin/clang-14+0x4e3dcf9)
-   #16 0x000055a28ff36bff clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-7171af7445/bin/clang-14+0x4338bff)
-   #17 0x000055a28f935401 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-7171af7445/bin/clang-14+0x3d37401)
-   #18 0x000055a28f8cd03a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-7171af7445/bin/clang-14+0x3ccf03a)
-   #19 0x000055a28f9fe46b (/opt/cross/clang-7171af7445/bin/clang-14+0x3e004=
-6b)
-   #20 0x000055a28cc7fa64 cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-7171af7445/bin/clang-14+0x1081a64)
-   #21 0x000055a28cc7cfab ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x000055a28f76a0d5 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x000055a28ef3ddf3 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-7171af7445/bin/clang-14+0x333fdf3)
-   #24 0x000055a28f76a9ce clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x000055a28f741557 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-717=
-1af7445/bin/clang-14+0x3b43557)
-   #26 0x000055a28f741f37 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-7171af7445/bin/clang-14+0x3b43f37)
-   #27 0x000055a28f74b799 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-7171af7445/bin/clang-14+0x3b4d799)
-   #28 0x000055a28cba819f main (/opt/cross/clang-7171af7445/bin/clang-14+0x=
-faa19f)
-   #29 0x00007f08b6be9d0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x000055a28cc7caca _start (/opt/cross/clang-7171af7445/bin/clang-14+=
-0x107eaca)
-   clang-14: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 7171af744543433ac75b2=
-32eb7dfdaef7efd4d7a)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-7171af7445/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch fs include kernel nr_bisected scripts source usr
+>> drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable 'exynos_ufs_of_match' [-Wunused-const-variable]
+   static const struct of_device_id exynos_ufs_of_match[] = {
+                                    ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FRAME_POINTER
+   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
+   Selected by
+   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
 
 
-vim +/ctx_clear_flags +2173 fs/ext4/super.c
+vim +/exynos_ufs_of_match +1268 drivers/scsi/ufs/ufs-exynos.c
 
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2172 =20
-6e47a3cc68fc52 Lukas Czerner 2021-10-27 @2173  EXT4_SET_CTX(flags);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2174  EXT4_SET_CTX(mount_opt);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2175  EXT4_SET_CTX(mount_opt2);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2176  EXT4_SET_CTX(mount_flags);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2177 =20
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1267  
+55f4b1f73631a0 Alim Akhtar 2020-05-28 @1268  static const struct of_device_id exynos_ufs_of_match[] = {
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1269  	{ .compatible = "samsung,exynos7-ufs",
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1270  	  .data	      = &exynos_ufs_drvs },
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1271  	{},
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1272  };
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1273  
 
-:::::: The code at line 2173 was first introduced by commit
-:::::: 6e47a3cc68fc525428297a00524833361ebbb0e9 ext4: get rid of super bloc=
-k and sbi from handle_mount_ops()
+:::::: The code at line 1268 was first introduced by commit
+:::::: 55f4b1f73631a0817717fe6e98517de51b4c3527 scsi: ufs: ufs-exynos: Add UFS host support for Exynos SoCs
 
-:::::: TO: Lukas Czerner <lczerner@redhat.com>
-:::::: CC: Theodore Ts'o <tytso@mit.edu>
+:::::: TO: Alim Akhtar <alim.akhtar@samsung.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
