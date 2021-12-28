@@ -1,127 +1,190 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B208168
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 01:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640656609; x=1672192609;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DKwG8lWbT6mngDQUOHLQ6ktH2iz4mmzsTr40NcmYb+Y=;
-  b=UZgOTtCUdZLRchK1OQ1I0gVPJwHEwPiZYhKRZ+QC20w5LaXvaaJq4IPz
-   8cRmyr7YHLMwu7o9GUifCO5CuT/Fzvz8zFDc2HPgcR0nlXkFTOUbpqGi9
-   zEMpuA0vYXmB4tLDKMlxKPS8d+hQqj56k5coR88+h4khAbphBBgkCF3tP
-   xdOszRVtqQuC8gnN6egy6xq5ybIaIznMfiivlhiVtHPIJC+2dNfL1+Kgb
-   LQeY0bu6PLQe9wDuYR76LegPRuA2ECnLjho/ZNwUGWEYGsaWBm08L4/y6
-   HW4y6bdvkbfbXXbiDaMrYo4FxoqWcrnA0p+8ImUW8E6+8qggCiF0mesIW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="221293812"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="221293812"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 17:56:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="468001512"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Dec 2021 17:56:45 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n21jI-000761-UL; Tue, 28 Dec 2021 01:56:44 +0000
-Date: Tue, 28 Dec 2021 09:56:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jessica Clarke <jrtc27@jrtc27.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Bob Moore <robert.moore@intel.com>
-Subject: [rafael-pm:bleeding-edge 97/119]
- drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer
- subtraction with a null pointer has undefined behavior
-Message-ID: <202112280907.gTYYYuB4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DAB168
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 02:20:34 +0000 (UTC)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JNHrD4wptzccDH;
+	Tue, 28 Dec 2021 10:03:24 +0800 (CST)
+Received: from [10.40.193.166] (10.40.193.166) by
+ dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 10:03:51 +0800
+Subject: Re: [PATCH v2 05/15] scsi: hisi_sas: Fix some issues related to
+ asd_sas_port->phy_list
+To: Nathan Chancellor <nathan@kernel.org>, <martin.petersen@oracle.com>,
+	<john.garry@huawei.com>
+References: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
+ <1639999298-244569-6-git-send-email-chenxiang66@hisilicon.com>
+ <Ycn3FoW9eOZNFMiL@archlinux-ax161>
+CC: <jejb@linux.ibm.com>, <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+	<llvm@lists.linux.dev>, <colin.i.king@gmail.com>
+From: "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <3d20171c-f5ac-d01e-9f0e-ba51835d68f0@hisilicon.com>
+Date: Tue, 28 Dec 2021 10:03:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   86e4182dd2d1465f6446863dd26da97ea069c8a2
-commit: ca25f92b72d25457653dbf2a81f322235804fb05 [97/119] ACPICA: Use original data_table_region pointer for accesses
-config: i386-randconfig-a012-20211228 (https://download.01.org/0day-ci/archive/20211228/202112280907.gTYYYuB4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ca25f92b72d25457653dbf2a81f322235804fb05
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout ca25f92b72d25457653dbf2a81f322235804fb05
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/acpica/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-               (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/acpi/actypes.h:513:41: note: expanded from macro 'ACPI_PTR_TO_PHYSADDR'
-   #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
-                                           ^~~~~~~~~~~~~~~~~~
-   include/acpi/actypes.h:510:41: note: expanded from macro 'ACPI_TO_INTEGER'
-   #define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/acpi/actypes.h:505:79: note: expanded from macro 'ACPI_PTR_DIFF'
-   #define ACPI_PTR_DIFF(a, b)             ((acpi_size) (ACPI_CAST_PTR (u8, (a)) - ACPI_CAST_PTR (u8, (b))))
-                                                                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+In-Reply-To: <Ycn3FoW9eOZNFMiL@archlinux-ax161>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.40.193.166]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
 
 
-vim +519 drivers/acpi/acpica/exregion.c
+Hi Nathan and Colin,
+Thank you for your report.
 
-   486	
-   487	/*******************************************************************************
-   488	 *
-   489	 * FUNCTION:    acpi_ex_data_table_space_handler
-   490	 *
-   491	 * PARAMETERS:  function            - Read or Write operation
-   492	 *              address             - Where in the space to read or write
-   493	 *              bit_width           - Field width in bits (8, 16, or 32)
-   494	 *              value               - Pointer to in or out value
-   495	 *              handler_context     - Pointer to Handler's context
-   496	 *              region_context      - Pointer to context specific to the
-   497	 *                                    accessed region
-   498	 *
-   499	 * RETURN:      Status
-   500	 *
-   501	 * DESCRIPTION: Handler for the Data Table address space (Op Region)
-   502	 *
-   503	 ******************************************************************************/
-   504	
-   505	acpi_status
-   506	acpi_ex_data_table_space_handler(u32 function,
-   507					 acpi_physical_address address,
-   508					 u32 bit_width,
-   509					 u64 *value,
-   510					 void *handler_context, void *region_context)
-   511	{
-   512		struct acpi_data_table_space_context *mapping;
-   513		char *pointer;
-   514	
-   515		ACPI_FUNCTION_TRACE(ex_data_table_space_handler);
-   516	
-   517		mapping = (struct acpi_data_table_space_context *) region_context;
-   518		pointer = ACPI_CAST_PTR(char, mapping->pointer) +
- > 519		    (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
+在 2021/12/28 1:25, Nathan Chancellor 写道:
+> Hi Xiang,
+>
+> On Mon, Dec 20, 2021 at 07:21:28PM +0800, chenxiang wrote:
+>> From: Xiang Chen <chenxiang66@hisilicon.com>
+>>
+>> Most places that use asd_sas_port->phy_list are protected by spinlock
+>> asd_sas_port->phy_list_lock, but there are some places which lack of it
+>> in hisi_sas driver, so add it in function hisi_sas_refresh_port_id() when
+>> accessing asd_sas_port->phy_list. But it has a risk that list mutates while
+>> dropping the lock at the same time in function
+>> hisi_sas_send_ata_reset_each_phy(), so read asd_sas_port->phy_mask
+>> instead of accessing asd_sas_port->phy_list to avoid the risk.
+>>
+>> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+>> Acked-by: John Garry <john.garry@huawei.com>
+>> ---
+>>   drivers/scsi/hisi_sas/hisi_sas_main.c | 11 ++++++++---
+>>   1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> index ad64ccd41420..051092e294f7 100644
+>> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> @@ -1428,11 +1428,13 @@ static void hisi_sas_refresh_port_id(struct hisi_hba *hisi_hba)
+>>   		sas_port = device->port;
+>>   		port = to_hisi_sas_port(sas_port);
+>>   
+>> +		spin_lock(&sas_port->phy_list_lock);
+>>   		list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el)
+>>   			if (state & BIT(sas_phy->id)) {
+>>   				phy = sas_phy->lldd_phy;
+>>   				break;
+>>   			}
+>> +		spin_unlock(&sas_port->phy_list_lock);
+>>   
+>>   		if (phy) {
+>>   			port->id = phy->port_id;
+>> @@ -1509,22 +1511,25 @@ static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
+>>   	struct ata_link *link;
+>>   	u8 fis[20] = {0};
+>>   	u32 state;
+>> +	int i;
+>>   
+>>   	state = hisi_hba->hw->get_phys_state(hisi_hba);
+>> -	list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el) {
+>> +	for (i = 0; i < hisi_hba->n_phy; i++) {
+>>   		if (!(state & BIT(sas_phy->id)))
+>>   			continue;
+>> +		if (!(sas_port->phy_mask & BIT(i)))
+>> +			continue;
+>>   
+>>   		ata_for_each_link(link, ap, EDGE) {
+>>   			int pmp = sata_srst_pmp(link);
+>>   
+>> -			tmf_task.phy_id = sas_phy->id;
+>> +			tmf_task.phy_id = i;
+>>   			hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
+>>   			rc = hisi_sas_exec_internal_tmf_task(device, fis, s,
+>>   							     &tmf_task);
+>>   			if (rc != TMF_RESP_FUNC_COMPLETE) {
+>>   				dev_err(dev, "phy%d ata reset failed rc=%d\n",
+>> -					sas_phy->id, rc);
+>> +					i, rc);
+>>   				break;
+>>   			}
+>>   		}
+>> -- 
+>> 2.33.0
+>>
+>>
+> Please ignore this if it was already reported, I do not see any reports
+> of it on lore.kernel.org nor a commit fixing it in Martin's tree.
+>
+> This commit as commit 29e2bac87421 ("scsi: hisi_sas: Fix some issues
+> related to asd_sas_port->phy_list") in -next causes the following clang
+> warning, which will break the build under -Werror:
+>
+> drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy' is uninitialized when used here [-Werror,-Wuninitialized]
+>                  if (!(state & BIT(sas_phy->id)))
+>                                    ^~~~~~~
+> ./include/vdso/bits.h:7:30: note: expanded from macro 'BIT'
+> #define BIT(nr)                 (UL(1) << (nr))
+>                                             ^~
+> drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the variable 'sas_phy' to silence this warning
+>          struct asd_sas_phy *sas_phy;
+>                                     ^
+>                                      = NULL
+> 1 error generated.
+>
+> It seems like this variable is entirely unused now, should it be removed
+> along with this check?
+>
 
+Right, it needs to be removed as the additional check is enough.
+
+@Martin and @John Garry, could you have a review and consider to merge 
+following patch ?
+
+From: Xiang Chen <chenxiang66@hisilicon.com>
+Date: Tue, 28 Dec 2021 09:40:01 +0800
+Subject: [PATCH] scsi: libsas: Remove unused variable and check in function
+  hisi_sas_send_ata_reset_each_phy()
+
+In commit 29e2bac87421 ("scsi: hisi_sas: Fix some issues related to
+asd_sas_port->phy_list"), we use asd_sas_port->phy_mask instead of
+accessing asd_sas_port->phy_list, and it is enough to use
+asd_sas_port->phy_mask to check the state of phy, so removing the
+old and unused check.
+
+Fixes: 29e2bac87421 ("scsi: hisi_sas: Fix some issues related to 
+asd_sas_port->phy_list")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  drivers/scsi/hisi_sas/hisi_sas_main.c | 5 -----
+  1 file changed, 5 deletions(-)
+
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c 
+b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index f46f679fe825..a05ec7aece5a 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -1525,16 +1525,11 @@ static void 
+hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
+         struct device *dev = hisi_hba->dev;
+         int s = sizeof(struct host_to_dev_fis);
+         int rc = TMF_RESP_FUNC_FAILED;
+-       struct asd_sas_phy *sas_phy;
+         struct ata_link *link;
+         u8 fis[20] = {0};
+-       u32 state;
+         int i;
+
+-       state = hisi_hba->hw->get_phys_state(hisi_hba);
+         for (i = 0; i < hisi_hba->n_phy; i++) {
+-               if (!(state & BIT(sas_phy->id)))
+-                       continue;
+                 if (!(sas_port->phy_mask & BIT(i)))
+                         continue;
+
+--
+2.33.0
+
+
+
