@@ -1,138 +1,91 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEC9168
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 17:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640711105; x=1672247105;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KHhXdEfIwTp7IIrrW70KmlJrU5+AcMwf8sgzb0u1BTQ=;
-  b=BQDV12zufIn3y7kViZ5Jpt3ulVBzf1xgHYmdvpui4sYL++yBRhMLLgZl
-   +In54oVBpemChMdhPSSao9SBGGuQnw129cutz7Qf/nNUzRCAFu7YWz9R2
-   GxD3zZn3E64NTF62bjny9/LAO6irwQAZcUtaMYwEa2FUmSNP83yXJQxHU
-   0Z9wgDM+bnvLBFseQ3FQ4ne1jZh4VKaDmMBeEuEKGlgQCkglp0egUZOAw
-   Uc7z7Dlj7IfP9sX+k+2BvvismjYilXtXFrvVgBSma1hHoodEN3fhtyl1j
-   cgprRmSQTooX90qS62YE/hsf/m7imZoI75H3rmwRsPJBt8R2BRSmon1qS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="238937503"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="238937503"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 09:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="572369723"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2021 09:04:56 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BSH4sNa000463;
-	Tue, 28 Dec 2021 17:04:54 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-Date: Tue, 28 Dec 2021 18:03:08 +0100
-Message-Id: <20211228170308.1454063-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YcovajZkEd0WY8p4@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic> <20211227182246.1447062-1-alexandr.lobakin@intel.com> <YcovajZkEd0WY8p4@zn.tnic>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4F52C80
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 18:33:44 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPSA id 9E4EAC36AEC;
+	Tue, 28 Dec 2021 18:33:41 +0000 (UTC)
+Date: Tue, 28 Dec 2021 18:39:25 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: trix@redhat.com
+Cc: jacopo@jmondi.org, lars@metafoo.de, nathan@kernel.org,
+ ndesaulniers@google.com, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] iio: chemical: set val parameter only on success
+Message-ID: <20211228183925.059884e1@jic23-huawei>
+In-Reply-To: <20211224150833.3278236-1-trix@redhat.com>
+References: <20211224150833.3278236-1-trix@redhat.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Borislav Petkov <bp@alien8.de>
-Date: Mon, 27 Dec 2021 22:26:02 +0100
+On Fri, 24 Dec 2021 07:08:33 -0800
+trix@redhat.com wrote:
 
-> On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
-> > It's just a couple lines below. I trigger this using `-z uniq-symbol`
-> > which uses numeric suffixes for globals as well.
+> From: Tom Rix <trix@redhat.com>
 > 
-> Aha, so that's for the fgkaslr purposes now.
+> Clang static analysis reports this representative warning
+> 
+> sunrise_co2.c:410:9: warning: Assigned value is garbage or undefined
+>   *val = value;
+>        ^ ~~~~~
+> 
+> The ealier call to sunrise_read_word can fail without setting
+> value.  So defer setting val until we know the read was successful.
+> 
+> Fixes: c397894e24f1 ("iio: chemical: Add Senseair Sunrise 006-0-007 driver")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Tom,
 
-Well, linking using unique names is meant to be used always
-when available and livepatching is enabled, at least I hope so.
+This won't have any actual affect as if the read_raw callback returns a negative
+error code we won't use the value.  However, good to clean it up so applied
+to the togreg branch of iio.git.
 
-> 
-> > It fixes a commit dated 2014, thus Cc:stable. Although the
-> > remove_dot() might've been introduced for neverlanded GCC LTO, but
-> > in fact numeric suffixes are used a lot by the toolchains in regular
-> > builds as well. Just not for globals, that's why it's "well hidden".
-> 
-> Does "well hidden" warrant a stable backport then? Because if no
-> toolchain is using numeric suffixes for globals, then no need for the
-> stable tag, I'd say.
+Thanks,
 
-Hmm, makes sense. The fact that I haven't seen any similar reports
-or issues (even on LTO builds) sorta says there are no benefits from
-backporting this.
-Ok, I'll drop the tag. It's never too late anyway to port this in
-case someone will face it.
+Jonathan
+> ---
+>  drivers/iio/chemical/sunrise_co2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/chemical/sunrise_co2.c b/drivers/iio/chemical/sunrise_co2.c
+> index 233bd0f379c93..8440dc0c77cfe 100644
+> --- a/drivers/iio/chemical/sunrise_co2.c
+> +++ b/drivers/iio/chemical/sunrise_co2.c
+> @@ -407,24 +407,24 @@ static int sunrise_read_raw(struct iio_dev *iio_dev,
+>  			mutex_lock(&sunrise->lock);
+>  			ret = sunrise_read_word(sunrise, SUNRISE_CO2_FILTERED_COMP_REG,
+>  						&value);
+> -			*val = value;
+>  			mutex_unlock(&sunrise->lock);
+>  
+>  			if (ret)
+>  				return ret;
+>  
+> +			*val = value;
+>  			return IIO_VAL_INT;
+>  
+>  		case IIO_TEMP:
+>  			mutex_lock(&sunrise->lock);
+>  			ret = sunrise_read_word(sunrise, SUNRISE_CHIP_TEMPERATURE_REG,
+>  						&value);
+> -			*val = value;
+>  			mutex_unlock(&sunrise->lock);
+>  
+>  			if (ret)
+>  				return ret;
+>  
+> +			*val = value;
+>  			return IIO_VAL_INT;
+>  
+>  		default:
 
-> 
-> > I thought it's a common saying in commit messages, isn't it?
-> 
-> Lemme give you my canned and a lot more eloquent explanation for that:
-> 
-> "Please use passive voice in your commit message: no "we" or "I", etc,
-> and describe your changes in imperative mood.
-> 
-> Also, pls read section "2) Describe your changes" in
-> Documentation/process/submitting-patches.rst for more details.
-> 
-> Also, see section "Changelog" in
-> Documentation/process/maintainer-tip.rst
-> 
-> Bottom line is: personal pronouns are ambiguous in text, especially with
-> so many parties/companies/etc developing the kernel so let's avoid them
-> please."
-> 
-> Thx.
-
-Ah, you're right. "Common used" doesn't mean "correct". I'll fix it
-in the next spin being published after accumulating a bunch more
-comments.
-Thanks!
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-
-Al
