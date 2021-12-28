@@ -1,43 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060482CA0
-	for <llvm@lists.linux.dev>; Mon, 27 Dec 2021 23:55:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B208168
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 01:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640649344; x=1672185344;
+  t=1640656609; x=1672192609;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oCzHUn5owXJebXvUWKmGnpGjdIoHINwbBpL+tG0QFb8=;
-  b=cxaqHO10ZFPYPnDVxY0t4a2NVOw75YrINR3r4M4Vh9Z577qf9ggXQvhM
-   /3jPhbdswq+C3rfXCB88KmIHnHLZf0GXOCJP6BjKK9cpAOhsOtC+iPA+p
-   dUnkLOomo6NUL7NYOEhJsWF8evfdn3IfkpXXflTbltN0KeXZkUtWB+GWP
-   P+zJ3OXi1dbN086A7hesdF2W+7GjjMC62nx+40rUGNFdA6wuGn1EfbXne
-   IFvY7KIiMjnXqZypbqomUoIAGeWUGfyKzXYamGb5fOFsFFHF0Fjcfjb5F
-   OHAgFeSHeYf1wYK9f4rJXWBL1hESnHhpSD80GR82h+z6QOVzBqBvt67Cd
+  bh=DKwG8lWbT6mngDQUOHLQ6ktH2iz4mmzsTr40NcmYb+Y=;
+  b=UZgOTtCUdZLRchK1OQ1I0gVPJwHEwPiZYhKRZ+QC20w5LaXvaaJq4IPz
+   8cRmyr7YHLMwu7o9GUifCO5CuT/Fzvz8zFDc2HPgcR0nlXkFTOUbpqGi9
+   zEMpuA0vYXmB4tLDKMlxKPS8d+hQqj56k5coR88+h4khAbphBBgkCF3tP
+   xdOszRVtqQuC8gnN6egy6xq5ybIaIznMfiivlhiVtHPIJC+2dNfL1+Kgb
+   LQeY0bu6PLQe9wDuYR76LegPRuA2ECnLjho/ZNwUGWEYGsaWBm08L4/y6
+   HW4y6bdvkbfbXXbiDaMrYo4FxoqWcrnA0p+8ImUW8E6+8qggCiF0mesIW
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="240065879"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="240065879"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 15:55:43 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="221293812"
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="221293812"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 17:56:48 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="486148915"
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="468001512"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Dec 2021 15:55:41 -0800
+  by orsmga003.jf.intel.com with ESMTP; 27 Dec 2021 17:56:45 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n1zq8-0006zV-Ha; Mon, 27 Dec 2021 23:55:40 +0000
-Date: Tue, 28 Dec 2021 07:55:12 +0800
+	id 1n21jI-000761-UL; Tue, 28 Dec 2021 01:56:44 +0000
+Date: Tue, 28 Dec 2021 09:56:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
+To: Jessica Clarke <jrtc27@jrtc27.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: sound/soc/samsung/aries_wm8994.c:525:34: warning: unused variable
- 'samsung_wm8994_of_match'
-Message-ID: <202112280714.FGyyQ0Qc-lkp@intel.com>
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Bob Moore <robert.moore@intel.com>
+Subject: [rafael-pm:bleeding-edge 97/119]
+ drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer
+ subtraction with a null pointer has undefined behavior
+Message-ID: <202112280907.gTYYYuB4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,162 +49,78 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Masahiro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2
-commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
-date:   10 months ago
-config: s390-buildonly-randconfig-r004-20211228 (https://download.01.org/0day-ci/archive/20211228/202112280714.FGyyQ0Qc-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   86e4182dd2d1465f6446863dd26da97ea069c8a2
+commit: ca25f92b72d25457653dbf2a81f322235804fb05 [97/119] ACPICA: Use original data_table_region pointer for accesses
+config: i386-randconfig-a012-20211228 (https://download.01.org/0day-ci/archive/20211228/202112280907.gTYYYuB4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ea29b20a828511de3348334e529a3d046a180416
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ca25f92b72d25457653dbf2a81f322235804fb05
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout ca25f92b72d25457653dbf2a81f322235804fb05
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/soc/mediatek/ sound/soc/samsung/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/acpica/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from sound/soc/samsung/aries_wm8994.c:10:
-   In file included from include/linux/of_gpio.h:14:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from sound/soc/samsung/aries_wm8994.c:10:
-   In file included from include/linux/of_gpio.h:14:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from sound/soc/samsung/aries_wm8994.c:10:
-   In file included from include/linux/of_gpio.h:14:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from sound/soc/samsung/aries_wm8994.c:10:
-   In file included from include/linux/of_gpio.h:14:
-   In file included from include/linux/gpio/driver.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> sound/soc/samsung/aries_wm8994.c:525:34: warning: unused variable 'samsung_wm8994_of_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_wm8994_of_match[] = {
-                                    ^
-   21 warnings generated.
+>> drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+               (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/acpi/actypes.h:513:41: note: expanded from macro 'ACPI_PTR_TO_PHYSADDR'
+   #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
+                                           ^~~~~~~~~~~~~~~~~~
+   include/acpi/actypes.h:510:41: note: expanded from macro 'ACPI_TO_INTEGER'
+   #define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/acpi/actypes.h:505:79: note: expanded from macro 'ACPI_PTR_DIFF'
+   #define ACPI_PTR_DIFF(a, b)             ((acpi_size) (ACPI_CAST_PTR (u8, (a)) - ACPI_CAST_PTR (u8, (b))))
+                                                                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/samsung_wm8994_of_match +525 sound/soc/samsung/aries_wm8994.c
+vim +519 drivers/acpi/acpica/exregion.c
 
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  524  
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14 @525  static const struct of_device_id samsung_wm8994_of_match[] = {
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  526  	{
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  527  		.compatible = "samsung,fascinate4g-wm8994",
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  528  		.data = &fascinate4g_variant,
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  529  	},
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  530  	{
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  531  		.compatible = "samsung,aries-wm8994",
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  532  		.data = &aries_variant,
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  533  	},
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  534  	{ /* sentinel */ },
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  535  };
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  536  MODULE_DEVICE_TABLE(of, samsung_wm8994_of_match);
-7a3a7671fa6c7e Jonathan Bakker 2020-06-14  537  
-
-:::::: The code at line 525 was first introduced by commit
-:::::: 7a3a7671fa6c7e90aff5f4242add2a40587b85ef ASoC: samsung: Add driver for Aries boards
-
-:::::: TO: Jonathan Bakker <xc-racer2@live.ca>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   486	
+   487	/*******************************************************************************
+   488	 *
+   489	 * FUNCTION:    acpi_ex_data_table_space_handler
+   490	 *
+   491	 * PARAMETERS:  function            - Read or Write operation
+   492	 *              address             - Where in the space to read or write
+   493	 *              bit_width           - Field width in bits (8, 16, or 32)
+   494	 *              value               - Pointer to in or out value
+   495	 *              handler_context     - Pointer to Handler's context
+   496	 *              region_context      - Pointer to context specific to the
+   497	 *                                    accessed region
+   498	 *
+   499	 * RETURN:      Status
+   500	 *
+   501	 * DESCRIPTION: Handler for the Data Table address space (Op Region)
+   502	 *
+   503	 ******************************************************************************/
+   504	
+   505	acpi_status
+   506	acpi_ex_data_table_space_handler(u32 function,
+   507					 acpi_physical_address address,
+   508					 u32 bit_width,
+   509					 u64 *value,
+   510					 void *handler_context, void *region_context)
+   511	{
+   512		struct acpi_data_table_space_context *mapping;
+   513		char *pointer;
+   514	
+   515		ACPI_FUNCTION_TRACE(ex_data_table_space_handler);
+   516	
+   517		mapping = (struct acpi_data_table_space_context *) region_context;
+   518		pointer = ACPI_CAST_PTR(char, mapping->pointer) +
+ > 519		    (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
