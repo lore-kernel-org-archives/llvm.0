@@ -1,136 +1,157 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473422C80
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 18:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640717142; x=1672253142;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fGYv5mgtvdW9kjOwwWT2K4cBBnwt6DpPEhDNG75IPw0=;
-  b=O89pLlvOwDhb1l4pKLR/N9cj8cbJ4uYdC+4w1Q43BdTApOhM42uucrtB
-   6XCd/sUtPMjzXwDTd37uB21FEg5uQ2qcZtHVFqL3KdKri3/mbkPNTpW8x
-   LU9GD4sM1NSlDyaisy3ie99lbSPw/7giC0VmtfivQXxYBwJsLFjyzA6lw
-   gm6RtAeI0HmtwTzgCPa2O+SH9wiDNhlOOg6xeG8EewxcbRrZEs6vqKwx0
-   iu/udunY5SRp1xup0FRGAnhSDrBsmLtm20rS7kMT9oB4E0by6AIvLWYa+
-   cUgq9Mih9d7hM9OQ3ThibMMr31j6X/0Gsh6RKyOaz75fyQCMPZCihTXMV
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265638582"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="265638582"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 10:45:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="468202030"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Dec 2021 10:45:22 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n2HTN-0007wY-Cb; Tue, 28 Dec 2021 18:45:21 +0000
-Date: Wed, 29 Dec 2021 02:45:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v2 17/17]
- arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for
- function 'compat_setup_rt_frame'
-Message-ID: <202112290250.xtdytZe1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617072C80
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 18:56:09 +0000 (UTC)
+Received: by mail-lj1-f179.google.com with SMTP id p7so31342967ljj.1
+        for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 10:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OxdfxLuiSeWnXlU6gfhg71wxiE+vMrvatpHVdz5QN7g=;
+        b=Ras2/40KS2Q64dMJMWOqT02xLehnyD9+zE9s4u71NAFP7NawCp4DUYULihV9fus3RP
+         ALyQKuaOOAH0lWSb453txIGSfhV+pIOaoLS9cxI/lfw3q59NXIp5yCSK+NIhCS9HsqNy
+         FzweukWxgmcCnSqkf28bmkySDucRpjSaGZubd87qkka5xdiBdZ4YaSX6NpRFasCAt3pc
+         DLcfmQIxWW3ff+h1y5KQhbPc6dI1454ukl6B5pQVXRxp8Eq6jqGzUZdJP42V6+ujDHFH
+         KXznw2J0FudkddglGUcHE0hoXGEmbM82vK1bp5a8ekWIc5bdUiaBFhoHOgwfQaFRG0pr
+         ApBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OxdfxLuiSeWnXlU6gfhg71wxiE+vMrvatpHVdz5QN7g=;
+        b=bonGZRIHHRpCWtj9O55PNgCtnfLC1jLwu+/pmFg/mmZkwQ3mXgog/gJvGo0rjEWEfg
+         L+YiQ846gZzqGsMLfoXYHd9Q2A2IvPlxViM0uE9kG1wgKxn03sp6xTx8GjNzgkjkEJuV
+         o05wJSlxpAZSFHhczn30dusM5xfyl6LKN5Gw499rAiu/ImwZJi/zx5kB8Whtcs7biVlx
+         mQq5XB35t/5av3e96p0W1vOXuMc/2+/ZJ2vA8wPqlG5gPN5n6grupBdT0J6g0+fj6m60
+         wJN2lXDqWaCsDRmmHAFOO7vLTvqcY8a1AGeG5jb4MA0ZEXjb6kDq5YGE8cS+AZ7wINhp
+         vc3w==
+X-Gm-Message-State: AOAM530ek1vrgJUpzrkT3qrHBUOuPxkQ89q2DZ/rATIvX9DY7kIzuQ8w
+	3yrCVuqX4443wJ1UXO7otb4maekr6LxGqXUJqbBQFw==
+X-Google-Smtp-Source: ABdhPJxSHEH7S9BL9eRVIvEVwtJoh0q7t8Ea+aoQCnO5P1krfwZ0pAqTW/eFTemIqU9uH8bmc+kunDU8qLoyC8UA3jk=
+X-Received: by 2002:a2e:141c:: with SMTP id u28mr19256751ljd.338.1640717767195;
+ Tue, 28 Dec 2021 10:56:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211223162848.3243702-1-trix@redhat.com> <CAKwvOd=dLjMAim_FRNyWegzEjy0_1vF2xVW1hNPQ55=32qO4Wg@mail.gmail.com>
+ <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
+In-Reply-To: <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 28 Dec 2021 10:55:55 -0800
+Message-ID: <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
+Subject: Re: [PATCH] mac80211: initialize variable have_higher_than_11mbit
+To: Tom Rix <trix@redhat.com>
+Cc: johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org, 
+	nathan@kernel.org, linville@tuxdriver.com, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Guo,
+On Fri, Dec 24, 2021 at 6:01 AM Tom Rix <trix@redhat.com> wrote:
+>
+>
+> On 12/23/21 12:30 PM, Nick Desaulniers wrote:
+> > On Thu, Dec 23, 2021 at 8:29 AM <trix@redhat.com> wrote:
+> >> From: Tom Rix <trix@redhat.com>
+> >>
+> >> Clang static analysis reports this warnings
+> >>
+> >> mlme.c:5332:7: warning: Branch condition evaluates to a
+> >>    garbage value
+> >>      have_higher_than_11mbit)
+> >>      ^~~~~~~~~~~~~~~~~~~~~~~
+> >>
+> >> have_higher_than_11mbit is only set to true some of the time in
+> >> ieee80211_get_rates() but is checked all of the time.  So
+> >> have_higher_than_11mbit needs to be initialized to false.
+> > LGTM. There's only one caller of ieee80211_get_rates() today; if there
+> > were others, they could make a similar mistake in the future. An
+> > alternate approach: ieee80211_get_rates() could unconditionally write
+> > false before the loop that could later write true. Then call sites
+> > don't need to worry about this conditional assignment. Perhaps that
+> > would be preferable? If not:
+>
+> The have_higher_than_11mbit variable had previously be initialized to false.
+>
+> The commit 5d6a1b069b7f moved the variable without initializing.
 
-First bad commit (maybe != root cause):
+I'm not disagreeing with that.
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v2
-head:   750f87086bdd630f80b9bc3581bc3f329ef20f53
-commit: 750f87086bdd630f80b9bc3581bc3f329ef20f53 [17/17] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-buildonly-randconfig-r002-20211228 (https://download.01.org/0day-ci/archive/20211229/202112290250.xtdytZe1-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/750f87086bdd630f80b9bc3581bc3f329ef20f53
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v2
-        git checkout 750f87086bdd630f80b9bc3581bc3f329ef20f53
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+My point is that these sometimes uninitialized warnings you're
+finding+fixing with clang static analyzer are demonstrating a
+recurring pattern with code.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+When _not_ using the static analyzer, -Wuninitialized and
+-Wsometimes-uninitialized work in Clang by building a control flow
+graph, but they only analyze a function locally.
 
-All warnings (new ones prefixed by >>):
+For example, consider the following code:
+```
+_Bool is_thursday(void);
+void hello(int);
 
->> arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-       ^
-   arch/riscv/kernel/compat_signal.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-   ^
-   static 
-   1 warning generated.
+void init (int* x) {
+  if (is_thursday())
+    *x = 1;
+}
+
+void foo (void) {
+  int x;
+  init(&x);
+  hello(x);
+}
+```
+(Clang+GCC today will warn on the above; x is considered to "escape"
+the scope of foo as init could write the address of x to a global.
+Instead clang's static analyzer will take the additional time to
+analyze the callee.  But here's a spooky question: what happens when
+init is in another translation unit? IIRC, the static analyzer doesn't
+do cross TU analysis; I could be wrong though, I haven't run it in a
+while.)
+
+My point is that you're sending patches initializing x, when I think
+it might be nicer to instead have functions like init always write a
+value (unconditionally, rather than conditionally).  That way other
+callers of init don't have to worry about sometimes initialized
+variables.
+
+>
+> Tom
+>
+> >
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> >> Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
+> >> Signed-off-by: Tom Rix <trix@redhat.com>
+> >> ---
+> >>   net/mac80211/mlme.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+> >> index 51f55c4ee3c6e..766cbbc9c3a72 100644
+> >> --- a/net/mac80211/mlme.c
+> >> +++ b/net/mac80211/mlme.c
+> >> @@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
+> >>           */
+> >>          if (new_sta) {
+> >>                  u32 rates = 0, basic_rates = 0;
+> >> -               bool have_higher_than_11mbit;
+> >> +               bool have_higher_than_11mbit = false;
+> >>                  int min_rate = INT_MAX, min_rate_index = -1;
+> >>                  const struct cfg80211_bss_ies *ies;
+> >>                  int shift = ieee80211_vif_get_shift(&sdata->vif);
+> >> --
+> >> 2.26.3
+> >>
+> >
+>
 
 
-vim +/compat_setup_rt_frame +199 arch/riscv/kernel/compat_signal.c
-
-520279d27c28fd Guo Ren 2021-12-13  198  
-520279d27c28fd Guo Ren 2021-12-13 @199  int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-520279d27c28fd Guo Ren 2021-12-13  200  	struct pt_regs *regs)
-520279d27c28fd Guo Ren 2021-12-13  201  {
-520279d27c28fd Guo Ren 2021-12-13  202  	struct compat_rt_sigframe __user *frame;
-520279d27c28fd Guo Ren 2021-12-13  203  	long err = 0;
-520279d27c28fd Guo Ren 2021-12-13  204  
-520279d27c28fd Guo Ren 2021-12-13  205  	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
-520279d27c28fd Guo Ren 2021-12-13  206  	if (!access_ok(frame, sizeof(*frame)))
-520279d27c28fd Guo Ren 2021-12-13  207  		return -EFAULT;
-520279d27c28fd Guo Ren 2021-12-13  208  
-520279d27c28fd Guo Ren 2021-12-13  209  	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
-520279d27c28fd Guo Ren 2021-12-13  210  
-520279d27c28fd Guo Ren 2021-12-13  211  	/* Create the ucontext. */
-520279d27c28fd Guo Ren 2021-12-13  212  	err |= __put_user(0, &frame->uc.uc_flags);
-520279d27c28fd Guo Ren 2021-12-13  213  	err |= __put_user(NULL, &frame->uc.uc_link);
-520279d27c28fd Guo Ren 2021-12-13  214  	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
-520279d27c28fd Guo Ren 2021-12-13  215  	err |= compat_setup_sigcontext(frame, regs);
-520279d27c28fd Guo Ren 2021-12-13  216  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-520279d27c28fd Guo Ren 2021-12-13  217  	if (err)
-520279d27c28fd Guo Ren 2021-12-13  218  		return -EFAULT;
-520279d27c28fd Guo Ren 2021-12-13  219  
-520279d27c28fd Guo Ren 2021-12-13  220  	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
-520279d27c28fd Guo Ren 2021-12-13  221  			current->mm->context.vdso, rt_sigreturn);
-520279d27c28fd Guo Ren 2021-12-13  222  
-520279d27c28fd Guo Ren 2021-12-13  223  	/*
-520279d27c28fd Guo Ren 2021-12-13  224  	 * Set up registers for signal handler.
-520279d27c28fd Guo Ren 2021-12-13  225  	 * Registers that we don't modify keep the value they had from
-520279d27c28fd Guo Ren 2021-12-13  226  	 * user-space at the time we took the signal.
-520279d27c28fd Guo Ren 2021-12-13  227  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-520279d27c28fd Guo Ren 2021-12-13  228  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-520279d27c28fd Guo Ren 2021-12-13  229  	 */
-520279d27c28fd Guo Ren 2021-12-13  230  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-520279d27c28fd Guo Ren 2021-12-13  231  	regs->sp = (unsigned long)frame;
-520279d27c28fd Guo Ren 2021-12-13  232  	regs->a0 = ksig->sig;                     /* a0: signal number */
-520279d27c28fd Guo Ren 2021-12-13  233  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-520279d27c28fd Guo Ren 2021-12-13  234  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-520279d27c28fd Guo Ren 2021-12-13  235  
-
-:::::: The code at line 199 was first introduced by commit
-:::::: 520279d27c28fd0bcabaef85d9c71cb592da21c2 riscv: compat: signal: Add rt_frame implementation
-
-:::::: TO: Guo Ren <guoren@linux.alibaba.com>
-:::::: CC: Guo Ren <guoren@linux.alibaba.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Thanks,
+~Nick Desaulniers
