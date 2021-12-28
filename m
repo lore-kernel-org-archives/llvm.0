@@ -1,41 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035EC173
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 21:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBC7173
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 22:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640726249; x=1672262249;
+  t=1640730569; x=1672266569;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kow9FGm/Pl0JbZ8Tse+3zfcjTwFgeAuVwtdnDZCds2Q=;
-  b=LZEFdNmddL1SgM2xuJIcsl/ogJ9iD0DaLVZhqVOQ0fDdnbBV54DSgAE9
-   GV7jbCSo+OjkABk7JNEOu5xTpCqkv7mMzAVZkEuyuK49Cgytwd8DdwwAy
-   OumT8B4kIXpDG4NZ1J0n5TvfB2kBxwfkedE3lEq2dfhLGa10xa0Va75GC
-   kwdYLzJ3GmetuwPbIRUZzjxWwGYXL+BXdCMT243RcIJoYwwhYvNmtX8Oy
-   LJac9sQ2SRhKgFUOPBrBaw05PceiL1oFZQhSFQkuVfbaDgdOE0HLdR0WH
-   9//NS9538d2Z33ycqZRPH8uTlYSiLr82TH5iZWFiFZIgadmtlm/DisFMw
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="327749407"
+  bh=DRuhd65hyW+WPKRnPyeJK3oIE08As/+pnjnoGGE9/cU=;
+  b=Djf9hYPcp+lQlIFBEdK3dn/ffwWZS67GS6TYti4WNyPRG1XmD3p4fjVr
+   Ql1zfmyg+SpdF2q06oBSDmzBuxrH97aaFM/faciX5RGcoPg0lwyJlHlLC
+   rP8tgiCxHlIu5fifLjg0LCysSfJTtUDb5BGfJ7jBzenH8z8DT/VmsIUPc
+   e1lZTPNCZ1Zh/D45w2j5Ut6eR4lzVvlTWy1K8JFSLdt2DI4eAQ+EFnHd6
+   CsdWd1Ao1YqyX48hMgUY/d9NOGIT08nB4IjD21tSvQNCZ7UmjxF8jcLw/
+   /+89o/y61NFLoimWP6TwofuuVeZFjLEhCEMq8MuVwKD588tp1sqLjFU2u
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="228734110"
 X-IronPort-AV: E=Sophos;i="5.88,243,1635231600"; 
-   d="scan'208";a="327749407"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 13:17:28 -0800
+   d="scan'208";a="228734110"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 14:29:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,243,1635231600"; 
-   d="scan'208";a="510286699"
+   d="scan'208";a="523779452"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Dec 2021 13:17:26 -0800
+  by orsmga008.jf.intel.com with ESMTP; 28 Dec 2021 14:29:27 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n2JqY-00083p-80; Tue, 28 Dec 2021 21:17:26 +0000
-Date: Wed, 29 Dec 2021 05:17:17 +0800
+	id 1n2KyE-00085b-Lz; Tue, 28 Dec 2021 22:29:26 +0000
+Date: Wed, 29 Dec 2021 06:28:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Guo Ren <guoren@linux.alibaba.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sm8350-next-20211215 37/44]
- drivers/gpu/drm/i915/display/intel_dp.c:4796:85: error: expected ')'
-Message-ID: <202112290511.XYGimJZZ-lkp@intel.com>
+Subject: [csky-linux:riscv_compat_v2 17/17] arch/riscv/mm/kasan_init.c:20:2:
+ error: call to __compiletime_assert_313 declared with 'error' attribute:
+ BUILD_BUG_ON failed: KASAN_SHADOW_OFFSET != KASAN_SHADOW_END - (1UL << (64 -
+ KASAN_SHADOW_SCALE_SHIFT))
+Message-ID: <202112290641.BEJik8MB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,50 +48,102 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/andersson/kernel wip/sm8350-next-20211215
-head:   12c44709c1bb0b1aba90680327bcdcf9b93a8d2f
-commit: 1da0d241cb3c3d9deab1fe98a96d3dfab53fb268 [37/44] drm: Add hpd state to drm_connector_oob_hotplug_event()
-config: i386-randconfig-a016-20211228 (https://download.01.org/0day-ci/archive/20211229/202112290511.XYGimJZZ-lkp@intel.com/config)
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v2
+head:   750f87086bdd630f80b9bc3581bc3f329ef20f53
+commit: 750f87086bdd630f80b9bc3581bc3f329ef20f53 [17/17] riscv: compat: Add COMPAT Kbuild skeletal support
+config: riscv-buildonly-randconfig-r005-20211228 (https://download.01.org/0day-ci/archive/20211229/202112290641.BEJik8MB-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/andersson/kernel/commit/1da0d241cb3c3d9deab1fe98a96d3dfab53fb268
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sm8350-next-20211215
-        git checkout 1da0d241cb3c3d9deab1fe98a96d3dfab53fb268
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/750f87086bdd630f80b9bc3581bc3f329ef20f53
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v2
+        git checkout 750f87086bdd630f80b9bc3581bc3f329ef20f53
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_dp.c:4796:85: error: expected ')'
-   static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
-                                                                                       ^
-   drivers/gpu/drm/i915/display/intel_dp.c:4796:39: note: to match this '('
-   static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
-                                         ^
+>> arch/riscv/mm/kasan_init.c:20:2: error: call to __compiletime_assert_313 declared with 'error' attribute: BUILD_BUG_ON failed: KASAN_SHADOW_OFFSET != KASAN_SHADOW_END - (1UL << (64 - KASAN_SHADOW_SCALE_SHIFT))
+           BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:335:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:323:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:316:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:7:1: note: expanded from here
+   __compiletime_assert_313
+   ^
    1 error generated.
 
 
-vim +4796 drivers/gpu/drm/i915/display/intel_dp.c
+vim +/error +20 arch/riscv/mm/kasan_init.c
 
-  4795	
-> 4796	static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
-  4797	{
-  4798		struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
-  4799		struct drm_i915_private *i915 = to_i915(connector->dev);
-  4800	
-  4801		spin_lock_irq(&i915->irq_lock);
-  4802		i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-  4803		spin_unlock_irq(&i915->irq_lock);
-  4804		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-  4805	}
-  4806	
+e178d670f251b6 Nylon Chen      2021-01-16  13  
+8ad8b72721d0f0 Nick Hu         2020-01-06  14  extern pgd_t early_pg_dir[PTRS_PER_PGD];
+8ad8b72721d0f0 Nick Hu         2020-01-06  15  asmlinkage void __init kasan_early_init(void)
+8ad8b72721d0f0 Nick Hu         2020-01-06  16  {
+8ad8b72721d0f0 Nick Hu         2020-01-06  17  	uintptr_t i;
+8ad8b72721d0f0 Nick Hu         2020-01-06  18  	pgd_t *pgd = early_pg_dir + pgd_index(KASAN_SHADOW_START);
+8ad8b72721d0f0 Nick Hu         2020-01-06  19  
+54c5639d8f507e Alexandre Ghiti 2021-10-29 @20  	BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=
+54c5639d8f507e Alexandre Ghiti 2021-10-29  21  		KASAN_SHADOW_END - (1UL << (64 - KASAN_SHADOW_SCALE_SHIFT)));
+54c5639d8f507e Alexandre Ghiti 2021-10-29  22  
+8ad8b72721d0f0 Nick Hu         2020-01-06  23  	for (i = 0; i < PTRS_PER_PTE; ++i)
+8ad8b72721d0f0 Nick Hu         2020-01-06  24  		set_pte(kasan_early_shadow_pte + i,
+8ad8b72721d0f0 Nick Hu         2020-01-06  25  			mk_pte(virt_to_page(kasan_early_shadow_page),
+8ad8b72721d0f0 Nick Hu         2020-01-06  26  			       PAGE_KERNEL));
+8ad8b72721d0f0 Nick Hu         2020-01-06  27  
+8ad8b72721d0f0 Nick Hu         2020-01-06  28  	for (i = 0; i < PTRS_PER_PMD; ++i)
+8ad8b72721d0f0 Nick Hu         2020-01-06  29  		set_pmd(kasan_early_shadow_pmd + i,
+8458ca147c204e Zong Li         2020-02-07  30  			pfn_pmd(PFN_DOWN
+8458ca147c204e Zong Li         2020-02-07  31  				(__pa((uintptr_t) kasan_early_shadow_pte)),
+8ad8b72721d0f0 Nick Hu         2020-01-06  32  				__pgprot(_PAGE_TABLE)));
+8ad8b72721d0f0 Nick Hu         2020-01-06  33  
+8ad8b72721d0f0 Nick Hu         2020-01-06  34  	for (i = KASAN_SHADOW_START; i < KASAN_SHADOW_END;
+8ad8b72721d0f0 Nick Hu         2020-01-06  35  	     i += PGDIR_SIZE, ++pgd)
+8ad8b72721d0f0 Nick Hu         2020-01-06  36  		set_pgd(pgd,
+8458ca147c204e Zong Li         2020-02-07  37  			pfn_pgd(PFN_DOWN
+8458ca147c204e Zong Li         2020-02-07  38  				(__pa(((uintptr_t) kasan_early_shadow_pmd))),
+8ad8b72721d0f0 Nick Hu         2020-01-06  39  				__pgprot(_PAGE_TABLE)));
+8ad8b72721d0f0 Nick Hu         2020-01-06  40  
+8ad8b72721d0f0 Nick Hu         2020-01-06  41  	/* init for swapper_pg_dir */
+8ad8b72721d0f0 Nick Hu         2020-01-06  42  	pgd = pgd_offset_k(KASAN_SHADOW_START);
+8ad8b72721d0f0 Nick Hu         2020-01-06  43  
+8ad8b72721d0f0 Nick Hu         2020-01-06  44  	for (i = KASAN_SHADOW_START; i < KASAN_SHADOW_END;
+8ad8b72721d0f0 Nick Hu         2020-01-06  45  	     i += PGDIR_SIZE, ++pgd)
+8ad8b72721d0f0 Nick Hu         2020-01-06  46  		set_pgd(pgd,
+8458ca147c204e Zong Li         2020-02-07  47  			pfn_pgd(PFN_DOWN
+8458ca147c204e Zong Li         2020-02-07  48  				(__pa(((uintptr_t) kasan_early_shadow_pmd))),
+8ad8b72721d0f0 Nick Hu         2020-01-06  49  				__pgprot(_PAGE_TABLE)));
+8ad8b72721d0f0 Nick Hu         2020-01-06  50  
+4cb699d0447be8 Vincent Chen    2020-07-10  51  	local_flush_tlb_all();
+8ad8b72721d0f0 Nick Hu         2020-01-06  52  }
+8ad8b72721d0f0 Nick Hu         2020-01-06  53  
+
+:::::: The code at line 20 was first introduced by commit
+:::::: 54c5639d8f507ebefa814f574cb6f763033a72a5 riscv: Fix asan-stack clang build
+
+:::::: TO: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
