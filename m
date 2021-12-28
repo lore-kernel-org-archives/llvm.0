@@ -1,106 +1,112 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CFE173
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 06:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640671322; x=1672207322;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Eq5xKh+1C+iNFI+0PwCle38sDWZVf8PAkyabY5jLFno=;
-  b=Ic9vyD/MzHk7s1E4/xJ0UoSJvURv9JpPx5zbYYEjPgqVyZ15nkok5Gy7
-   e0VYWGhJycsklMBC7lRocTCzz49q8nZvYbBYlAdwdivJC/HsJjqW+QSSq
-   mV5IDQ45WFoAo9kKRHJSsxnYGTxHY/d78pTu0zDdG0sELrFHcK7yVb+Pv
-   mX5eA17mcPcwny+eyFRX9M+FzjCR19gjzIU9SuSUHalC+f1w34emyi5mF
-   suVGZ4STrfO9ohdfJEZXuK1KTwtYHbYj0P+GTZ83jWf2rjWQISiytYM0A
-   OQzKD3ktvDcSxtFa7bgFqydTlELy8Dp4LklC6Ea9RzeAIPBWwRm6e1Kgv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="265546437"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="265546437"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 22:01:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="554075225"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 22:01:52 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n25YW-0007IV-1N; Tue, 28 Dec 2021 06:01:52 +0000
-Date: Tue, 28 Dec 2021 14:01:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable
- 'exynos_ufs_of_match'
-Message-ID: <202112281324.w3VTX6oh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54263168
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 08:37:23 +0000 (UTC)
+Received: by mail-ua1-f45.google.com with SMTP id c36so5314525uae.13
+        for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 00:37:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tQlFNR8cZsfmJYOadbGaTb/yUlOB1dRG6fgInli2WVA=;
+        b=42RQDfbSkQW6jADhhI7F4N4p3I1CMrpGdjahPQlLkdSWdTAsE0hgqv4DOg1sJGbxX+
+         2HkiK26AxN7Efg1Axx97HSG41EbloYpBAYjc7ft/u2+03BfdKNvXccVz1k+pTLgWWCKD
+         s79ub8QhQPAgaPbutzDn9Dtm3Salg+X3WM2qpdQRZIdWps7H55XaYx8iKPf4Lz0iyQ2v
+         xNmPNq157t3ou+65ns/gl8sa0FfsEybFrNImIqd8+h/LpLsZODGXK3VRMM+r0KIpbEaP
+         fiGeoG3TUsyHFAoc2WNA8hM/APZ68AHH/+yOq5GDcTFexxgW12NoYD3I6khRQeY40TN9
+         uQMA==
+X-Gm-Message-State: AOAM531GIhuK94WJLAFU8Qu/w40Aa4GVxgWwdPvCZbPqTexMOoowC1C5
+	tUpObRCyInU95N9k9G6Hm9ywh9vwQCtQQg==
+X-Google-Smtp-Source: ABdhPJx4BcjOV0COsw6x9yH85GDJTVxliTT32E5rEiDW5gW0UxEu3HOpmLf9fK+N7VeiJYu+31XEDg==
+X-Received: by 2002:a05:6102:3f04:: with SMTP id k4mr5476064vsv.3.1640680641757;
+        Tue, 28 Dec 2021 00:37:21 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id d15sm3497956vsb.18.2021.12.28.00.37.21
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 00:37:21 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id r15so30937340uao.3
+        for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 00:37:21 -0800 (PST)
+X-Received: by 2002:ab0:15a1:: with SMTP id i30mr6096810uae.122.1640680640883;
+ Tue, 28 Dec 2021 00:37:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <202112280309.fgjGevFd-lkp@intel.com>
+In-Reply-To: <202112280309.fgjGevFd-lkp@intel.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 28 Dec 2021 09:37:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVdXMqUDjeXsvFbSNk8hKcDAms-Z5JK+pGAcYvykyCzwg@mail.gmail.com>
+Message-ID: <CAMuHMdVdXMqUDjeXsvFbSNk8hKcDAms-Z5JK+pGAcYvykyCzwg@mail.gmail.com>
+Subject: Re: [atishp04:isa_ext_support 3/4] arch/riscv/kernel/cpufeature.c:82:24:
+ warning: address of array 'edata->dtprop' will always evaluate to 'true'
+To: kernel test robot <lkp@intel.com>
+Cc: Atish Patra <atishp@rivosinc.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Atish Patra <Atish.Patra@wdc.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alim,
+On Tue, Dec 28, 2021 at 9:21 AM kernel test robot <lkp@intel.com> wrote:
+> tree:   https://github.com/atishp04/linux isa_ext_support
+> head:   cf2f3fa532aa7c672f681ca0685046c738bfb45f
+> commit: ae97a995345b68c472f3a904fc8fbefaa97ae26a [3/4] RISC-V: Provide a framework for parsing multi-letter ISA extensions
+> config: riscv-randconfig-c006-20211226 (https://download.01.org/0day-ci/archive/20211228/202112280309.fgjGevFd-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://github.com/atishp04/linux/commit/ae97a995345b68c472f3a904fc8fbefaa97ae26a
+>         git remote add atishp04 https://github.com/atishp04/linux
+>         git fetch --no-tags atishp04 isa_ext_support
+>         git checkout ae97a995345b68c472f3a904fc8fbefaa97ae26a
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> arch/riscv/kernel/cpufeature.c:82:24: warning: address of array 'edata->dtprop' will always evaluate to 'true' [-Wpointer-bool-conversion]
+>            if (!edata || !edata->dtprop)
+>                          ~~~~~~~~^~~~~~
+>    1 warning generated.
+>
+>
+> vim +82 arch/riscv/kernel/cpufeature.c
+>
+>     76
+>     77  int riscv_isa_ext_list_add(struct riscv_isa_ext_data *edata)
+>     78  {
+>     79          struct device_node *node, *enode;
+>     80          int eid;
+>     81
+>   > 82          if (!edata || !edata->dtprop)
 
-First bad commit (maybe != root cause):
+if (!edata || !edata->dtprop[0])
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a8ad9a2434dc7967ab285437f443cae633b6fc1c
-commit: d31503fe395d1d7e17b85eb7b291cc1a4bff2671 scsi: ufs: Allow exynos ufs driver to build as module
-date:   1 year, 6 months ago
-config: hexagon-randconfig-r032-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281324.w3VTX6oh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d31503fe395d1d7e17b85eb7b291cc1a4bff2671
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d31503fe395d1d7e17b85eb7b291cc1a4bff2671
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
+>     83                  return -EINVAL;
+>     84
+>     85          node = of_find_node_by_path("/cpus");
+>     86          if (!node) {
+>     87                  pr_err("No CPU information found in DT\n");
+>     88                  return -ENOENT;
+>     89          }
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Gr{oetje,eeting}s,
 
-All warnings (new ones prefixed by >>):
+                        Geert
 
->> drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable 'exynos_ufs_of_match' [-Wunused-const-variable]
-   static const struct of_device_id exynos_ufs_of_match[] = {
-                                    ^
-   1 warning generated.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
-   Selected by
-   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
-
-
-vim +/exynos_ufs_of_match +1268 drivers/scsi/ufs/ufs-exynos.c
-
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1267  
-55f4b1f73631a0 Alim Akhtar 2020-05-28 @1268  static const struct of_device_id exynos_ufs_of_match[] = {
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1269  	{ .compatible = "samsung,exynos7-ufs",
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1270  	  .data	      = &exynos_ufs_drvs },
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1271  	{},
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1272  };
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1273  
-
-:::::: The code at line 1268 was first introduced by commit
-:::::: 55f4b1f73631a0817717fe6e98517de51b4c3527 scsi: ufs: ufs-exynos: Add UFS host support for Exynos SoCs
-
-:::::: TO: Alim Akhtar <alim.akhtar@samsung.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
