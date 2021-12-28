@@ -1,157 +1,96 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617072C80
-	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 18:56:09 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id p7so31342967ljj.1
-        for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 10:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OxdfxLuiSeWnXlU6gfhg71wxiE+vMrvatpHVdz5QN7g=;
-        b=Ras2/40KS2Q64dMJMWOqT02xLehnyD9+zE9s4u71NAFP7NawCp4DUYULihV9fus3RP
-         ALyQKuaOOAH0lWSb453txIGSfhV+pIOaoLS9cxI/lfw3q59NXIp5yCSK+NIhCS9HsqNy
-         FzweukWxgmcCnSqkf28bmkySDucRpjSaGZubd87qkka5xdiBdZ4YaSX6NpRFasCAt3pc
-         DLcfmQIxWW3ff+h1y5KQhbPc6dI1454ukl6B5pQVXRxp8Eq6jqGzUZdJP42V6+ujDHFH
-         KXznw2J0FudkddglGUcHE0hoXGEmbM82vK1bp5a8ekWIc5bdUiaBFhoHOgwfQaFRG0pr
-         ApBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OxdfxLuiSeWnXlU6gfhg71wxiE+vMrvatpHVdz5QN7g=;
-        b=bonGZRIHHRpCWtj9O55PNgCtnfLC1jLwu+/pmFg/mmZkwQ3mXgog/gJvGo0rjEWEfg
-         L+YiQ846gZzqGsMLfoXYHd9Q2A2IvPlxViM0uE9kG1wgKxn03sp6xTx8GjNzgkjkEJuV
-         o05wJSlxpAZSFHhczn30dusM5xfyl6LKN5Gw499rAiu/ImwZJi/zx5kB8Whtcs7biVlx
-         mQq5XB35t/5av3e96p0W1vOXuMc/2+/ZJ2vA8wPqlG5gPN5n6grupBdT0J6g0+fj6m60
-         wJN2lXDqWaCsDRmmHAFOO7vLTvqcY8a1AGeG5jb4MA0ZEXjb6kDq5YGE8cS+AZ7wINhp
-         vc3w==
-X-Gm-Message-State: AOAM530ek1vrgJUpzrkT3qrHBUOuPxkQ89q2DZ/rATIvX9DY7kIzuQ8w
-	3yrCVuqX4443wJ1UXO7otb4maekr6LxGqXUJqbBQFw==
-X-Google-Smtp-Source: ABdhPJxSHEH7S9BL9eRVIvEVwtJoh0q7t8Ea+aoQCnO5P1krfwZ0pAqTW/eFTemIqU9uH8bmc+kunDU8qLoyC8UA3jk=
-X-Received: by 2002:a2e:141c:: with SMTP id u28mr19256751ljd.338.1640717767195;
- Tue, 28 Dec 2021 10:56:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035EC173
+	for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 21:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640726249; x=1672262249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kow9FGm/Pl0JbZ8Tse+3zfcjTwFgeAuVwtdnDZCds2Q=;
+  b=LZEFdNmddL1SgM2xuJIcsl/ogJ9iD0DaLVZhqVOQ0fDdnbBV54DSgAE9
+   GV7jbCSo+OjkABk7JNEOu5xTpCqkv7mMzAVZkEuyuK49Cgytwd8DdwwAy
+   OumT8B4kIXpDG4NZ1J0n5TvfB2kBxwfkedE3lEq2dfhLGa10xa0Va75GC
+   kwdYLzJ3GmetuwPbIRUZzjxWwGYXL+BXdCMT243RcIJoYwwhYvNmtX8Oy
+   LJac9sQ2SRhKgFUOPBrBaw05PceiL1oFZQhSFQkuVfbaDgdOE0HLdR0WH
+   9//NS9538d2Z33ycqZRPH8uTlYSiLr82TH5iZWFiFZIgadmtlm/DisFMw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="327749407"
+X-IronPort-AV: E=Sophos;i="5.88,243,1635231600"; 
+   d="scan'208";a="327749407"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 13:17:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,243,1635231600"; 
+   d="scan'208";a="510286699"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Dec 2021 13:17:26 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n2JqY-00083p-80; Tue, 28 Dec 2021 21:17:26 +0000
+Date: Wed, 29 Dec 2021 05:17:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sm8350-next-20211215 37/44]
+ drivers/gpu/drm/i915/display/intel_dp.c:4796:85: error: expected ')'
+Message-ID: <202112290511.XYGimJZZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211223162848.3243702-1-trix@redhat.com> <CAKwvOd=dLjMAim_FRNyWegzEjy0_1vF2xVW1hNPQ55=32qO4Wg@mail.gmail.com>
- <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
-In-Reply-To: <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 28 Dec 2021 10:55:55 -0800
-Message-ID: <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
-Subject: Re: [PATCH] mac80211: initialize variable have_higher_than_11mbit
-To: Tom Rix <trix@redhat.com>
-Cc: johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org, 
-	nathan@kernel.org, linville@tuxdriver.com, linux-wireless@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 24, 2021 at 6:01 AM Tom Rix <trix@redhat.com> wrote:
->
->
-> On 12/23/21 12:30 PM, Nick Desaulniers wrote:
-> > On Thu, Dec 23, 2021 at 8:29 AM <trix@redhat.com> wrote:
-> >> From: Tom Rix <trix@redhat.com>
-> >>
-> >> Clang static analysis reports this warnings
-> >>
-> >> mlme.c:5332:7: warning: Branch condition evaluates to a
-> >>    garbage value
-> >>      have_higher_than_11mbit)
-> >>      ^~~~~~~~~~~~~~~~~~~~~~~
-> >>
-> >> have_higher_than_11mbit is only set to true some of the time in
-> >> ieee80211_get_rates() but is checked all of the time.  So
-> >> have_higher_than_11mbit needs to be initialized to false.
-> > LGTM. There's only one caller of ieee80211_get_rates() today; if there
-> > were others, they could make a similar mistake in the future. An
-> > alternate approach: ieee80211_get_rates() could unconditionally write
-> > false before the loop that could later write true. Then call sites
-> > don't need to worry about this conditional assignment. Perhaps that
-> > would be preferable? If not:
->
-> The have_higher_than_11mbit variable had previously be initialized to false.
->
-> The commit 5d6a1b069b7f moved the variable without initializing.
+tree:   https://github.com/andersson/kernel wip/sm8350-next-20211215
+head:   12c44709c1bb0b1aba90680327bcdcf9b93a8d2f
+commit: 1da0d241cb3c3d9deab1fe98a96d3dfab53fb268 [37/44] drm: Add hpd state to drm_connector_oob_hotplug_event()
+config: i386-randconfig-a016-20211228 (https://download.01.org/0day-ci/archive/20211229/202112290511.XYGimJZZ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/1da0d241cb3c3d9deab1fe98a96d3dfab53fb268
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sm8350-next-20211215
+        git checkout 1da0d241cb3c3d9deab1fe98a96d3dfab53fb268
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-I'm not disagreeing with that.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-My point is that these sometimes uninitialized warnings you're
-finding+fixing with clang static analyzer are demonstrating a
-recurring pattern with code.
+All errors (new ones prefixed by >>):
 
-When _not_ using the static analyzer, -Wuninitialized and
--Wsometimes-uninitialized work in Clang by building a control flow
-graph, but they only analyze a function locally.
-
-For example, consider the following code:
-```
-_Bool is_thursday(void);
-void hello(int);
-
-void init (int* x) {
-  if (is_thursday())
-    *x = 1;
-}
-
-void foo (void) {
-  int x;
-  init(&x);
-  hello(x);
-}
-```
-(Clang+GCC today will warn on the above; x is considered to "escape"
-the scope of foo as init could write the address of x to a global.
-Instead clang's static analyzer will take the additional time to
-analyze the callee.  But here's a spooky question: what happens when
-init is in another translation unit? IIRC, the static analyzer doesn't
-do cross TU analysis; I could be wrong though, I haven't run it in a
-while.)
-
-My point is that you're sending patches initializing x, when I think
-it might be nicer to instead have functions like init always write a
-value (unconditionally, rather than conditionally).  That way other
-callers of init don't have to worry about sometimes initialized
-variables.
-
->
-> Tom
->
-> >
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> >> Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> >> ---
-> >>   net/mac80211/mlme.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
-> >> index 51f55c4ee3c6e..766cbbc9c3a72 100644
-> >> --- a/net/mac80211/mlme.c
-> >> +++ b/net/mac80211/mlme.c
-> >> @@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
-> >>           */
-> >>          if (new_sta) {
-> >>                  u32 rates = 0, basic_rates = 0;
-> >> -               bool have_higher_than_11mbit;
-> >> +               bool have_higher_than_11mbit = false;
-> >>                  int min_rate = INT_MAX, min_rate_index = -1;
-> >>                  const struct cfg80211_bss_ies *ies;
-> >>                  int shift = ieee80211_vif_get_shift(&sdata->vif);
-> >> --
-> >> 2.26.3
-> >>
-> >
->
+>> drivers/gpu/drm/i915/display/intel_dp.c:4796:85: error: expected ')'
+   static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
+                                                                                       ^
+   drivers/gpu/drm/i915/display/intel_dp.c:4796:39: note: to match this '('
+   static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
+                                         ^
+   1 error generated.
 
 
--- 
-Thanks,
-~Nick Desaulniers
+vim +4796 drivers/gpu/drm/i915/display/intel_dp.c
+
+  4795	
+> 4796	static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
+  4797	{
+  4798		struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
+  4799		struct drm_i915_private *i915 = to_i915(connector->dev);
+  4800	
+  4801		spin_lock_irq(&i915->irq_lock);
+  4802		i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
+  4803		spin_unlock_irq(&i915->irq_lock);
+  4804		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+  4805	}
+  4806	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
