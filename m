@@ -1,42 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDB9168
-	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 10:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B042C80
+	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 11:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640772661; x=1672308661;
+  t=1640777584; x=1672313584;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lGf6/X9BDj8lFtPmeErN4ZyizHYoRMyWvIbeu13QZO0=;
-  b=TY/ZavsPUDEkiFPt8Ziepnpd8QfaRtTrjujiz+s6KKVpPStNuezS2Auh
-   Jb36nMkKoIaNWFXczKPqKV+XkzLZaKgy/iuxdbM0GRZOxxlYkRkKhXHkO
-   kFhzulhPWNdcypNZjWlVl4mo+VNFvSimcZkk3O0HsQRn0PFGvIFGfmzmo
-   KCrgvz7bkSfXMaGDxjWCj/4vfCRIHklPDVirkous9Z8ojjchtsio/8Ees
-   +6NJky73JmLJoNC9WbMFpmu33qGW8XPAnlE6nk7t/Rm89eA1tTmSBX6SG
-   Gdifrq/rdIhbOY4R7iMV39iZ7V2eGyasgzBTPexxdCl1l9NMxzbFz9lxx
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="240281952"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="240281952"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 02:11:00 -0800
+  bh=WOppu46yfxfyzYaDBnTj4lZIptZv34kviksQfAidF+A=;
+  b=fmu/9JKpjZtwztoCIZ6CsLvTW8lVcGv6YrFboYFTN2rBl9VlH+30KwUJ
+   2cgLd9BJ/QCL+hD6//lzMe7MJEc91qr97jT7ZMKyQnnl9/SZ2v5vls3/W
+   r0F6N4JU/8A+Cn/iCm14j3Bnr+kUNctqJ9rIgPUgg2tO0lXr/vBKvG8dz
+   7vq5J9zfpmvdj06B2+wAJuXj3lloySfd2nz0l8/3o0LnTcrfj0CiCdDk5
+   F9hvihzba/7sShlq71mSsvi3EN509j2zr5YPCHMbYr845q5wA4shw7iv+
+   Vpos0Ev3GmBnByRRsO6f3r+PLnbVv9qenY+6dYas3h0KKA/dGDTeRy1+d
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265742613"
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="265742613"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 03:33:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="468433080"
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="486589795"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Dec 2021 02:10:59 -0800
+  by orsmga002.jf.intel.com with ESMTP; 29 Dec 2021 03:33:00 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n2Vv8-0008oz-ED; Wed, 29 Dec 2021 10:10:58 +0000
-Date: Wed, 29 Dec 2021 18:10:12 +0800
+	id 1n2XCV-0008rp-N7; Wed, 29 Dec 2021 11:32:59 +0000
+Date: Wed, 29 Dec 2021 19:32:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH bpf-next v2 3/4] ice: xsk: improve AF_XDP ZC Tx and use
- batching API
-Message-ID: <202112291846.LmSTdxbq-lkp@intel.com>
-References: <20211216135958.3434-4-maciej.fijalkowski@intel.com>
+To: menglong8.dong@gmail.com, daniel@iogearbox.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
+	andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
+	kuba@kernel.org
+Subject: Re: [PATCH net-next] net: bpf: hook for inet port bind conflict check
+Message-ID: <202112291915.muBKYGuT-lkp@intel.com>
+References: <20211229085547.206008-1-imagedong@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,162 +47,153 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216135958.3434-4-maciej.fijalkowski@intel.com>
+In-Reply-To: <20211229085547.206008-1-imagedong@tencent.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Maciej,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on net-next/master]
 
-url:    https://github.com/0day-ci/linux/commits/Maciej-Fijalkowski/xsk-Tx-improvements/20211216-220139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: riscv-randconfig-r042-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291846.LmSTdxbq-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/menglong8-dong-gmail-com/net-bpf-hook-for-inet-port-bind-conflict-check/20211229-165656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 271d3be1c3b6b0be083a99254a0ecac41789929b
+config: hexagon-buildonly-randconfig-r002-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291915.muBKYGuT-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/64cb650145881d3738a05befb3773e16b1a5de56
+        # https://github.com/0day-ci/linux/commit/ca8b713d84b5e09a77bfae226287297f49cd97c9
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Maciej-Fijalkowski/xsk-Tx-improvements/20211216-220139
-        git checkout 64cb650145881d3738a05befb3773e16b1a5de56
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/net-bpf-hook-for-inet-port-bind-conflict-check/20211229-165656
+        git checkout ca8b713d84b5e09a77bfae226287297f49cd97c9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/intel/ice/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ipv4/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/ice/ice_xsk.c:636: warning: expecting prototype for ice_clean_xdp_irq(). Prototype was for ice_clean_xdp_irq_zc() instead
->> drivers/net/ethernet/intel/ice/ice_xsk.c:719: warning: expecting prototype for ice_xmit_pkt(). Prototype was for ice_xmit_pkt_batch() instead
+   In file included from net/ipv4/route.c:79:
+   In file included from include/linux/mroute.h:10:
+   In file included from include/linux/mroute_base.h:10:
+   In file included from include/net/ip_fib.h:20:
+   In file included from include/net/inetpeer.h:16:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:92:
+   In file included from include/linux/tcp.h:20:
+   In file included from include/net/inet_connection_sock.h:21:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   net/ipv4/route.c:869:6: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
+           int log_martians;
+               ^
+   1 warning and 1 error generated.
+--
+   In file included from net/ipv4/inetpeer.c:22:
+   In file included from include/net/ip.h:29:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   1 error generated.
+--
+   In file included from net/ipv4/udp.c:100:
+   In file included from include/net/icmp.h:19:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+>> net/ipv4/udp.c:203:9: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+                   res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                         ^
+   2 errors generated.
+--
+   In file included from net/ipv4/igmp.c:92:
+   In file included from include/net/ip.h:29:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   net/ipv4/igmp.c:1905:6: warning: variable 'changerec' set but not used [-Wunused-but-set-variable]
+           int     changerec = 0;
+                   ^
+   1 warning and 1 error generated.
+--
+   In file included from net/ipv4/ip_gre.c:19:
+   In file included from include/linux/tcp.h:20:
+   In file included from include/net/inet_connection_sock.h:21:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   net/ipv4/ip_gre.c:143:15: warning: variable 'data_len' set but not used [-Wunused-but-set-variable]
+           unsigned int data_len = 0;
+                        ^
+   1 warning and 1 error generated.
+--
+   In file included from net/ipv4/ah4.c:9:
+   In file included from include/net/ip.h:29:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   net/ipv4/ah4.c:513:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                           aalg_desc->uinfo.auth.icv_fullbits / 8);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   In file included from net/ipv4/esp4.c:8:
+   In file included from include/net/ip.h:29:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   net/ipv4/esp4.c:1116:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                                   aalg_desc->uinfo.auth.icv_fullbits / 8);
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   In file included from net/ipv4/netfilter/nf_reject_ipv4.c:7:
+   In file included from include/net/ip.h:29:
+>> include/net/inet_sock.h:307:8: error: implicit declaration of function 'BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE' [-Werror,-Wimplicit-function-declaration]
+           res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+                 ^
+   net/ipv4/netfilter/nf_reject_ipv4.c:242:16: warning: variable 'niph' set but not used [-Wunused-but-set-variable]
+           struct iphdr *niph;
+                         ^
+   1 warning and 1 error generated.
 
 
-vim +636 drivers/net/ethernet/intel/ice/ice_xsk.c
+vim +/BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE +307 include/net/inet_sock.h
 
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  628  
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  629  /**
-64cb650145881d Maciej Fijalkowski     2021-12-16  630   * ice_clean_xdp_irq - Reclaim resources after transmit completes on XDP ring
-64cb650145881d Maciej Fijalkowski     2021-12-16  631   * @xdp_ring: XDP ring to clean
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  632   *
-64cb650145881d Maciej Fijalkowski     2021-12-16  633   * Returns count of cleaned descriptors
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  634   */
-64cb650145881d Maciej Fijalkowski     2021-12-16  635  static u16 ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04 @636  {
-64cb650145881d Maciej Fijalkowski     2021-12-16  637  	struct ice_tx_desc *next_dd_desc;
-64cb650145881d Maciej Fijalkowski     2021-12-16  638  	u16 next_dd = xdp_ring->next_dd;
-64cb650145881d Maciej Fijalkowski     2021-12-16  639  	u16 desc_cnt = xdp_ring->count;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  640  	struct ice_tx_buf *tx_buf;
-64cb650145881d Maciej Fijalkowski     2021-12-16  641  	u16 ntc, cleared_dds = 0;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  642  	u32 xsk_frames = 0;
-64cb650145881d Maciej Fijalkowski     2021-12-16  643  	u16 i;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  644  
-64cb650145881d Maciej Fijalkowski     2021-12-16  645  	next_dd_desc = ICE_TX_DESC(xdp_ring, next_dd);
-64cb650145881d Maciej Fijalkowski     2021-12-16  646  	if (!(next_dd_desc->cmd_type_offset_bsz &
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  647  	    cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE)))
-64cb650145881d Maciej Fijalkowski     2021-12-16  648  		return 0;
-64cb650145881d Maciej Fijalkowski     2021-12-16  649  
-64cb650145881d Maciej Fijalkowski     2021-12-16  650  again:
-64cb650145881d Maciej Fijalkowski     2021-12-16  651  	cleared_dds++;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  652  
-64cb650145881d Maciej Fijalkowski     2021-12-16  653  	ntc = xdp_ring->next_to_clean;
-64cb650145881d Maciej Fijalkowski     2021-12-16  654  
-64cb650145881d Maciej Fijalkowski     2021-12-16  655  	for (i = 0; i < ICE_TX_THRESH; i++) {
-64cb650145881d Maciej Fijalkowski     2021-12-16  656  		tx_buf = &xdp_ring->tx_buf[ntc];
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  657  
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  658  		if (tx_buf->raw_buf) {
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  659  			ice_clean_xdp_tx_buf(xdp_ring, tx_buf);
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  660  			tx_buf->raw_buf = NULL;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  661  		} else {
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  662  			xsk_frames++;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  663  		}
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  664  
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  665  		ntc++;
-64cb650145881d Maciej Fijalkowski     2021-12-16  666  		if (ntc >= xdp_ring->count)
-64cb650145881d Maciej Fijalkowski     2021-12-16  667  			ntc = 0;
-64cb650145881d Maciej Fijalkowski     2021-12-16  668  	}
-64cb650145881d Maciej Fijalkowski     2021-12-16  669  
-64cb650145881d Maciej Fijalkowski     2021-12-16  670  	xdp_ring->next_to_clean += ICE_TX_THRESH;
-64cb650145881d Maciej Fijalkowski     2021-12-16  671  	if (xdp_ring->next_to_clean >= desc_cnt)
-64cb650145881d Maciej Fijalkowski     2021-12-16  672  		xdp_ring->next_to_clean -= desc_cnt;
-64cb650145881d Maciej Fijalkowski     2021-12-16  673  	if (xsk_frames)
-64cb650145881d Maciej Fijalkowski     2021-12-16  674  		xsk_tx_completed(xdp_ring->xsk_pool, xsk_frames);
-64cb650145881d Maciej Fijalkowski     2021-12-16  675  	next_dd_desc->cmd_type_offset_bsz = 0;
-64cb650145881d Maciej Fijalkowski     2021-12-16  676  	xdp_ring->next_dd = xdp_ring->next_dd + ICE_TX_THRESH;
-64cb650145881d Maciej Fijalkowski     2021-12-16  677  	if (xdp_ring->next_dd >= desc_cnt)
-64cb650145881d Maciej Fijalkowski     2021-12-16  678  		xdp_ring->next_dd = ICE_TX_THRESH - 1;
-64cb650145881d Maciej Fijalkowski     2021-12-16  679  
-64cb650145881d Maciej Fijalkowski     2021-12-16  680  	next_dd_desc = ICE_TX_DESC(xdp_ring, next_dd);
-64cb650145881d Maciej Fijalkowski     2021-12-16  681  	if ((next_dd_desc->cmd_type_offset_bsz &
-64cb650145881d Maciej Fijalkowski     2021-12-16  682  	    cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE)))
-64cb650145881d Maciej Fijalkowski     2021-12-16  683  		goto again;
-64cb650145881d Maciej Fijalkowski     2021-12-16  684  
-64cb650145881d Maciej Fijalkowski     2021-12-16  685  	return cleared_dds * ICE_TX_THRESH;
-64cb650145881d Maciej Fijalkowski     2021-12-16  686  }
-64cb650145881d Maciej Fijalkowski     2021-12-16  687  
-64cb650145881d Maciej Fijalkowski     2021-12-16  688  /**
-64cb650145881d Maciej Fijalkowski     2021-12-16  689   * ice_xmit_pkt - produce a single HW Tx descriptor out of AF_XDP descriptor
-64cb650145881d Maciej Fijalkowski     2021-12-16  690   * @xdp_ring: XDP ring to produce the HW Tx descriptor on
-64cb650145881d Maciej Fijalkowski     2021-12-16  691   * @desc: AF_XDP descriptor to pull the DMA address and length from
-64cb650145881d Maciej Fijalkowski     2021-12-16  692   * @total_bytes: bytes accumulator that will be used for stats update
-64cb650145881d Maciej Fijalkowski     2021-12-16  693   */
-64cb650145881d Maciej Fijalkowski     2021-12-16  694  static void ice_xmit_pkt(struct ice_tx_ring *xdp_ring, struct xdp_desc *desc,
-64cb650145881d Maciej Fijalkowski     2021-12-16  695  			 unsigned int *total_bytes)
-64cb650145881d Maciej Fijalkowski     2021-12-16  696  {
-64cb650145881d Maciej Fijalkowski     2021-12-16  697  	struct ice_tx_desc *tx_desc;
-64cb650145881d Maciej Fijalkowski     2021-12-16  698  	dma_addr_t dma;
-64cb650145881d Maciej Fijalkowski     2021-12-16  699  
-64cb650145881d Maciej Fijalkowski     2021-12-16  700  	dma = xsk_buff_raw_get_dma(xdp_ring->xsk_pool, desc->addr);
-64cb650145881d Maciej Fijalkowski     2021-12-16  701  	xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, desc->len);
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  702  
-64cb650145881d Maciej Fijalkowski     2021-12-16  703  	tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_to_use++);
-64cb650145881d Maciej Fijalkowski     2021-12-16  704  	tx_desc->buf_addr = cpu_to_le64(dma);
-64cb650145881d Maciej Fijalkowski     2021-12-16  705  	tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
-64cb650145881d Maciej Fijalkowski     2021-12-16  706  						      0, desc->len, 0);
-64cb650145881d Maciej Fijalkowski     2021-12-16  707  
-64cb650145881d Maciej Fijalkowski     2021-12-16  708  	*total_bytes += desc->len;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  709  }
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  710  
-64cb650145881d Maciej Fijalkowski     2021-12-16  711  /**
-64cb650145881d Maciej Fijalkowski     2021-12-16  712   * ice_xmit_pkt - produce a batch of HW Tx descriptors out of AF_XDP descriptors
-64cb650145881d Maciej Fijalkowski     2021-12-16  713   * @xdp_ring: XDP ring to produce the HW Tx descriptors on
-64cb650145881d Maciej Fijalkowski     2021-12-16  714   * @descs: AF_XDP descriptors to pull the DMA addresses and lengths from
-64cb650145881d Maciej Fijalkowski     2021-12-16  715   * @total_bytes: bytes accumulator that will be used for stats update
-64cb650145881d Maciej Fijalkowski     2021-12-16  716   */
-64cb650145881d Maciej Fijalkowski     2021-12-16  717  static void ice_xmit_pkt_batch(struct ice_tx_ring *xdp_ring, struct xdp_desc *descs,
-64cb650145881d Maciej Fijalkowski     2021-12-16  718  			       unsigned int *total_bytes)
-64cb650145881d Maciej Fijalkowski     2021-12-16 @719  {
-64cb650145881d Maciej Fijalkowski     2021-12-16  720  	u16 ntu = xdp_ring->next_to_use;
-64cb650145881d Maciej Fijalkowski     2021-12-16  721  	struct ice_tx_desc *tx_desc;
-64cb650145881d Maciej Fijalkowski     2021-12-16  722  	dma_addr_t dma;
-64cb650145881d Maciej Fijalkowski     2021-12-16  723  	u32 i;
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  724  
-64cb650145881d Maciej Fijalkowski     2021-12-16  725  	loop_unrolled_for(i = 0; i < PKTS_PER_BATCH; i++) {
-64cb650145881d Maciej Fijalkowski     2021-12-16  726  		dma = xsk_buff_raw_get_dma(xdp_ring->xsk_pool, descs[i].addr);
-64cb650145881d Maciej Fijalkowski     2021-12-16  727  		xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, descs[i].len);
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  728  
-64cb650145881d Maciej Fijalkowski     2021-12-16  729  		tx_desc = ICE_TX_DESC(xdp_ring, ntu++);
-64cb650145881d Maciej Fijalkowski     2021-12-16  730  		tx_desc->buf_addr = cpu_to_le64(dma);
-64cb650145881d Maciej Fijalkowski     2021-12-16  731  		tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
-64cb650145881d Maciej Fijalkowski     2021-12-16  732  							      0, descs[i].len, 0);
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  733  
-64cb650145881d Maciej Fijalkowski     2021-12-16  734  		*total_bytes += descs[i].len;
-64cb650145881d Maciej Fijalkowski     2021-12-16  735  	}
-64cb650145881d Maciej Fijalkowski     2021-12-16  736  
-64cb650145881d Maciej Fijalkowski     2021-12-16  737  	xdp_ring->next_to_use = ntu;
-64cb650145881d Maciej Fijalkowski     2021-12-16  738  
-64cb650145881d Maciej Fijalkowski     2021-12-16  739  	if (xdp_ring->next_to_use > xdp_ring->next_rs) {
-64cb650145881d Maciej Fijalkowski     2021-12-16  740  		tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_rs);
-64cb650145881d Maciej Fijalkowski     2021-12-16  741  		tx_desc->cmd_type_offset_bsz |=
-64cb650145881d Maciej Fijalkowski     2021-12-16  742  			cpu_to_le64(ICE_TX_DESC_CMD_RS << ICE_TXD_QW1_CMD_S);
-64cb650145881d Maciej Fijalkowski     2021-12-16  743  		xdp_ring->next_rs += ICE_TX_THRESH;
-64cb650145881d Maciej Fijalkowski     2021-12-16  744  	}
-64cb650145881d Maciej Fijalkowski     2021-12-16  745  }
-64cb650145881d Maciej Fijalkowski     2021-12-16  746  
+   300	
+   301	static inline int inet_bind_conflict(struct sock *sk, int port)
+   302	{
+   303		int res;
+   304		int old = sk->sk_num;
+   305	
+   306		sk->sk_num = port;
+ > 307		res = BPF_CGROUP_RUN_PROG_INET_LPORT_INUSE(sk);
+   308		sk->sk_num = old;
+   309		return res;
+   310	}
+   311	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
