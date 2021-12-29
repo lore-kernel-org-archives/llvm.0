@@ -1,166 +1,138 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f74.google.com (mail-qv1-f74.google.com [209.85.219.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C853168
-	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 02:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640743355; x=1672279355;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BdVhmTkiGfjCTka06ojdzziUJXH+69n4D5sD653s1uw=;
-  b=jOA3XYy8090DdU0AFeZZNBJbjKHthI4jCg91f+c0HnmSY3iMDWBVCtcm
-   /nqW/t4/+sxDodgpQZXs8XyKxVzuIgN4xE6xAHY4UZcsUld3a0szH7nHh
-   ytd2XV237wvh0K4mE18Mw0bmNuABiucLlJyAN8KnFwmqXGpWCkvLbzvoN
-   kigyJBuz2q1/aqw82nJCrHUi2qCswohnBxhpGfgjk3DpP4lOzRdH3DJNT
-   LppZiTpZ9lX6eeG1Er9czNMhjxGoSIORr/7i9p0xLA2tVbekDp2goV7dD
-   1xeE2QY3L6pghtDo4khdKAP6n1om3aZreGpzcTYTH1Lc0Cwu4sQyi4bjw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265681930"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="265681930"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 18:02:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="761246006"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Dec 2021 18:02:33 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n2OIS-0008Ha-SU; Wed, 29 Dec 2021 02:02:32 +0000
-Date: Wed, 29 Dec 2021 10:01:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Lutomirski <luto@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [luto:sched/lazymm 14/17] kernel/sched/core.c:4982:15: warning:
- variable 'old_active_mm' is uninitialized when used here
-Message-ID: <202112290930.hCel1twi-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B54168
+	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 02:13:22 +0000 (UTC)
+Received: by mail-qv1-f74.google.com with SMTP id iw6-20020a0562140f2600b004118fe44fa1so13224562qvb.13
+        for <llvm@lists.linux.dev>; Tue, 28 Dec 2021 18:13:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ZKMSXc/jMpfaWf09da1q1+bGVDKO4UknzJqykhMae6A=;
+        b=l6Y6bBb+/+l32vwPuzGN7A9dFXMTvRQCL3ovIAmmchpqjAgEAqfkrgiU2tIzAdk9Mz
+         ZMnpKYfMFjTpTTaFB/mfp8OIRxoxrlZssdgJo7qMc3eNNbnfwuDMGJtXaE17T413mD3D
+         l7H3+oEYiEv2u2e49F8Q2ws9Hx5TIRMpxnu5mnJuh3DdH24x++jmmhXgRWR3e8a9RbLL
+         2ZHo/+7UvGdmjW+P5Ju3RfjU1aq8biiKUbgRH0GPNu0Ynf+PqCIAAXKTAHu5C5Y/RMav
+         6otZGsfKdujl6gXvE4Rq0CoYlBtu3ntGgK65p8zGDX5ybb8TOTCbMPkosKs4/HnYe3/n
+         StUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ZKMSXc/jMpfaWf09da1q1+bGVDKO4UknzJqykhMae6A=;
+        b=ZPDv6g857PW8e6X6U1U8mgo7Cp2sM6pwvpZp10t/GCF72cIYNEBCMLO1Y5rlBqSfVt
+         RZVjQ4hoPAE4bWqnJAuZYdYluQmHetwpHr5zMSmniZnx+e6vhD9hV6idzOcaSsdtMW9E
+         4DpkwmLwT7zIK9XdMDHJ2w/kCa1APngXGRM++7qSCPMQF0CfzrqPj0oii0m5BmvO9+vD
+         F/ZIiViMAyDKCePBS1Ek+Ghzhc+AB7/IqjqvKyscvowziAG3Lic2Y9SYbSeiUakyEQW/
+         LKBQ0GEqbyR0tU6c7peQoFQua22f3bEzX9GvvQj6e9h9J/vQIU5Mf26JfC4Gdm/ovWDu
+         NNiw==
+X-Gm-Message-State: AOAM532+0FwBARHZ4gPDUkcu6qwF5pzIiACXg/Hiq7V7qesdtJ4OianP
+	s6SOlzuuBgQnH1x7H4de1Ysq3ZBB
+X-Google-Smtp-Source: ABdhPJxo6vwMu5T1jCd3ePKlfu15nHs4yCppVyGgyut6kZlmLUd7MRrHj7ma0rTHGnDXZqK377rvDH34uQ==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:8428:9f56:bf21:1fd5])
+ (user=morbo job=sendgmr) by 2002:a05:622a:5d2:: with SMTP id
+ d18mr21144819qtb.154.1640744001849; Tue, 28 Dec 2021 18:13:21 -0800 (PST)
+Date: Tue, 28 Dec 2021 18:12:58 -0800
+In-Reply-To: <20211215211847.206208-1-morbo@google.com>
+Message-Id: <20211229021258.176670-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+References: <20211215211847.206208-1-morbo@google.com>
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v2] x86: use builtins to read eflags
+From: Bill Wendling <morbo@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git sched/lazymm
-head:   fbea7977edc16ae85f8e2255b084bc2403801327
-commit: 8f99be3b9978a71358e03a2bcfd4b230f32714cb [14/17] sched, exec: Factor current mm changes out from exec
-config: hexagon-randconfig-r041-20211229 (https://download.01.org/0day-ci/archive/20211229/202112290930.hCel1twi-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/commit/?id=8f99be3b9978a71358e03a2bcfd4b230f32714cb
-        git remote add luto https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git
-        git fetch --no-tags luto sched/lazymm
-        git checkout 8f99be3b9978a71358e03a2bcfd4b230f32714cb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+GCC and Clang both have builtins to read and write the EFLAGS register.
+This allows the compiler to determine the best way to generate this
+code, which can improve code generation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+chooses to be conservative in these situations, and so uses memory
+instead of registers. This is a known issue, which is currently being
+addressed.
 
-All warnings (new ones prefixed by >>):
+However, using builtins is benefiical in general, because it removes the
+burden of determining what's the way to read the flags register from the
+programmer and places it on to the compiler, which has the information
+needed to make that decision. Indeed, this piece of code has had several
+changes over the years, some of which were pinging back and forth to
+determine the correct constraints to use.
 
-   kernel/sched/core.c:3417:6: warning: no previous prototype for function 'sched_set_stop_task' [-Wmissing-prototypes]
-   void sched_set_stop_task(int cpu, struct task_struct *stop)
-        ^
-   kernel/sched/core.c:3417:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sched_set_stop_task(int cpu, struct task_struct *stop)
-   ^
-   static 
->> kernel/sched/core.c:4982:15: warning: variable 'old_active_mm' is uninitialized when used here [-Wuninitialized]
-                   activate_mm(old_active_mm, mm);
-                               ^~~~~~~~~~~~~
-   kernel/sched/core.c:4941:33: note: initialize the variable 'old_active_mm' to silence this warning
-           struct mm_struct *old_active_mm, *mm_to_drop = NULL;
-                                          ^
-                                           = NULL
-   kernel/sched/core.c:2173:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-   static inline bool rq_has_pinned_tasks(struct rq *rq)
-                      ^
-   kernel/sched/core.c:5474:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-   static inline void sched_tick_stop(int cpu) { }
-                      ^
-   kernel/sched/core.c:6202:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:6203:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-   static inline void sched_core_cpu_dying(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:9046:20: warning: unused function 'balance_hotplug_wait' [-Wunused-function]
-   static inline void balance_hotplug_wait(void)
-                      ^
-   7 warnings generated.
+With this change, Clang generates better code:
 
+Original code:
+        movq    $0, -48(%rbp)
+        #APP
+        # __raw_save_flags
+        pushfq
+        popq    -48(%rbp)
+        #NO_APP
+        movq    -48(%rbp), %rbx
 
-vim +/old_active_mm +4982 kernel/sched/core.c
+New code:
+        pushfq
+        popq    %rbx
+        #APP
 
-  4937	
-  4938	void __change_current_mm(struct mm_struct *mm, bool mm_is_brand_new)
-  4939	{
-  4940		struct task_struct *tsk = current;
-  4941		struct mm_struct *old_active_mm, *mm_to_drop = NULL;
-  4942	
-  4943		BUG_ON(!mm);	/* likely to cause corruption if we continue */
-  4944	
-  4945		/*
-  4946		 * We do not want to schedule, nor should procfs peek at current->mm
-  4947		 * while we're modifying it.  task_lock() disables preemption and
-  4948		 * locks against procfs.
-  4949		 */
-  4950		task_lock(tsk);
-  4951		/*
-  4952		 * membarrier() requires a full barrier before switching mm.
-  4953		 */
-  4954		smp_mb__after_spinlock();
-  4955	
-  4956		local_irq_disable();
-  4957	
-  4958		if (tsk->mm) {
-  4959			/* We're detaching from an old mm.  Sync stats. */
-  4960			sync_mm_rss(tsk->mm);
-  4961		} else {
-  4962			/*
-  4963			 * Switching from kernel mm to user.  Drop the old lazy
-  4964			 * mm reference.
-  4965			 */
-  4966			mm_to_drop = tsk->active_mm;
-  4967		}
-  4968	
-  4969		tsk->active_mm = mm;
-  4970		WRITE_ONCE(tsk->mm, mm);  /* membarrier reads this without locks */
-  4971		membarrier_update_current_mm(mm);
-  4972	
-  4973		if (mm_is_brand_new) {
-  4974			/*
-  4975			 * For historical reasons, some architectures want IRQs on
-  4976			 * when activate_mm() is called.  If we're going to call
-  4977			 * activate_mm(), turn on IRQs but leave preemption
-  4978			 * disabled.
-  4979			 */
-  4980			if (!IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
-  4981				local_irq_enable();
-> 4982			activate_mm(old_active_mm, mm);
-  4983			if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
-  4984				local_irq_enable();
-  4985		} else {
-  4986			switch_mm_irqs_off(old_active_mm, mm, tsk);
-  4987			local_irq_enable();
-  4988		}
-  4989	
-  4990		/* IRQs are on now.  Preemption is still disabled by task_lock(). */
-  4991	
-  4992		membarrier_finish_switch_mm(mm);
-  4993		vmacache_flush(tsk);
-  4994		task_unlock(tsk);
-  4995	
+Note that the stack slot in the original code is no longer needed in the
+new code, saving a small amount of stack space.
 
+Signed-off-by: Bill Wendling <morbo@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2: - Kept the original function to retain the out-of-line symbol.
+    - Improved the commit message.
+    - Note that I couldn't use Nick's suggestion of
+
+        return IS_ENABLED(CONFIG_X86_64) ? ...
+
+      because Clang complains about using __builtin_ia32_readeflags_u32 in
+      64-bit mode.
+---
+ arch/x86/include/asm/irqflags.h | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index c5ce9845c999..27f919ea7ac3 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -19,20 +19,11 @@
+ extern inline unsigned long native_save_fl(void);
+ extern __always_inline unsigned long native_save_fl(void)
+ {
+-	unsigned long flags;
+-
+-	/*
+-	 * "=rm" is safe here, because "pop" adjusts the stack before
+-	 * it evaluates its effective address -- this is part of the
+-	 * documented behavior of the "pop" instruction.
+-	 */
+-	asm volatile("# __raw_save_flags\n\t"
+-		     "pushf ; pop %0"
+-		     : "=rm" (flags)
+-		     : /* no input */
+-		     : "memory");
+-
+-	return flags;
++#ifdef CONFIG_X86_64
++	return __builtin_ia32_readeflags_u64();
++#else
++	return __builtin_ia32_readeflags_u32();
++#endif
+ }
+ 
+ static __always_inline void native_irq_disable(void)
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+
