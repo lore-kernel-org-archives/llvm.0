@@ -1,42 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCFE173
-	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 13:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57074173
+	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 13:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640783104; x=1672319104;
+  t=1640783704; x=1672319704;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YrJYi3rB27UVEu1poGL4tE6la3ODs9SmPbhzhaXlgQE=;
-  b=YwE6eMsO1638NLCHeXXwe6a3p/UeAdqMIvMAuBh9VA6+HHCRKtXvECZ8
-   7nb18/zfd7XRxLWCi5oezUoff2EWEKitn/ixGI4jRlrqtCBvVP7rPXpej
-   WeowqgTVeVMkx8dZyojhVpdMr7567BZN5WVeUc1RLnhTkssU/JFf+H/Vo
-   lu4LhorXublebsaEuUgZ1kXiBGup38qDQINpO8EpM5tksfjaI6j05vy2f
-   3uK0WLUmSaOZbm/nVTDIr57By+id85qGqX4K9JBK5jxPWVFdwXd9EXz9e
-   eOw3HrOl+wU0NGDLjltD0ZOq7+Sh28kbPu+RNMn1lzo7+5nWlvpzqEdFk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="241727222"
+  bh=TBG8xNNnwXlpGe2S88CDUP9cr/6jhD0IQJ/sVnn4jIo=;
+  b=TPNOVVmu9NBDy0G/NEnGCMc4LBZCLjddhMOMtVgJCWd9OPSsUqWnxygx
+   XD/OUFhJcsqyH7OIMq5KmYuj9NjfHsBecDIKGOilU9FY2QRU2yfZHC2Bc
+   afKeT3xOIm1ak6mZU4KQuCmaC7VLxZvFCL8U2GiSfFqbxMSR2dhVQ2Lbs
+   Pl+3PcE9hvnmWoVjZi9ZCRRdjKZgYxcktQ5S2+N5x+0dTr8l2qmBPByWG
+   FfELaJAekxM1JCyVN/73l5Wxe6hfHdfY/ERBVpAg442fw94Os+mKZrHRr
+   vf8DlALgJPPSR1BBVqdANuzSPmzBbWXwIMRRZZHQE3HdBFnEXPD1acfzL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304876295"
 X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="241727222"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:05:03 -0800
+   d="scan'208";a="304876295"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:15:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="468477739"
+   d="scan'208";a="619034875"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Dec 2021 05:05:01 -0800
+  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 05:15:01 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n2YdZ-0008vf-3g; Wed, 29 Dec 2021 13:05:01 +0000
-Date: Wed, 29 Dec 2021 21:04:39 +0800
+	id 1n2YnF-0008wE-8j; Wed, 29 Dec 2021 13:15:01 +0000
+Date: Wed, 29 Dec 2021 21:14:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+To: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [rmk-arm:cex7 188/188] drivers/bus/fsl-mc/fsl-mc-bus.c:169:44:
- error: no member named 'iommu_fwnode' in 'struct iommu_fwspec'
-Message-ID: <202112292120.VAwsCiNc-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [csky-linux:riscv_compat_v2_sv48_v3_xtpbmt 20/32]
+ arch/riscv/mm/init.c:588:6: warning: no previous prototype for function
+ 'pt_ops_set_early'
+Message-ID: <202112292145.5uDQRp8q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,100 +47,102 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm cex7
-head:   ddd00596d29349aec223615c42a6986f5e3ca509
-commit: ddd00596d29349aec223615c42a6986f5e3ca509 [188/188] bus: fsl-mc: add custom .dma_configure implementation
-config: arm-randconfig-c002-20211228 (https://download.01.org/0day-ci/archive/20211229/202112292120.VAwsCiNc-lkp@intel.com/config)
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_xtpbmt
+head:   29a08e898f4e552bc0d5117b437ac3073e6ebb81
+commit: 396e995ffd8ad52873006e1e8f1f6f1cd8242537 [20/32] riscv: Introduce functions to switch pt_ops
+config: riscv-randconfig-r013-20211228 (https://download.01.org/0day-ci/archive/20211229/202112292145.5uDQRp8q-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm cex7
-        git checkout ddd00596d29349aec223615c42a6986f5e3ca509
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/396e995ffd8ad52873006e1e8f1f6f1cd8242537
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_xtpbmt
+        git checkout 396e995ffd8ad52873006e1e8f1f6f1cd8242537
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/bus/fsl-mc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/bus/fsl-mc/fsl-mc-bus.c:169:44: error: no member named 'iommu_fwnode' in 'struct iommu_fwspec'
-           iommu_ops = iommu_ops_from_fwnode(fwspec->iommu_fwnode);
-                                             ~~~~~~  ^
-   drivers/bus/fsl-mc/fsl-mc-bus.c:173:39: error: no member named 'iommu_fwnode' in 'struct iommu_fwspec'
-           ret = iommu_fwspec_init(dev, fwspec->iommu_fwnode, iommu_ops);
-                                        ~~~~~~  ^
->> drivers/bus/fsl-mc/fsl-mc-bus.c:184:9: error: implicit declaration of function 'iommu_probe_device' [-Werror,-Wimplicit-function-declaration]
-                   ret = iommu_probe_device(dev);
-                         ^
-   3 errors generated.
+>> arch/riscv/mm/init.c:588:6: warning: no previous prototype for function 'pt_ops_set_early' [-Wmissing-prototypes]
+   void pt_ops_set_early(void)
+        ^
+   arch/riscv/mm/init.c:588:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void pt_ops_set_early(void)
+   ^
+   static 
+>> arch/riscv/mm/init.c:606:6: warning: no previous prototype for function 'pt_ops_set_fixmap' [-Wmissing-prototypes]
+   void pt_ops_set_fixmap(void)
+        ^
+   arch/riscv/mm/init.c:606:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void pt_ops_set_fixmap(void)
+   ^
+   static 
+>> arch/riscv/mm/init.c:620:6: warning: no previous prototype for function 'pt_ops_set_late' [-Wmissing-prototypes]
+   void pt_ops_set_late(void)
+        ^
+   arch/riscv/mm/init.c:620:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void pt_ops_set_late(void)
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +169 drivers/bus/fsl-mc/fsl-mc-bus.c
+vim +/pt_ops_set_early +588 arch/riscv/mm/init.c
 
-   139	
-   140	static int fsl_mc_dma_configure(struct device *dev)
-   141	{
-   142		struct device *dma_dev = dev;
-   143		struct fsl_mc_device *mc_dev = to_fsl_mc_device(dev);
-   144		u32 input_id = mc_dev->icid;
-   145		struct iommu_fwspec *fwspec;
-   146		const struct iommu_ops *iommu_ops;
-   147		int ret;
-   148	
-   149		/* Skip DMA setup for devices that are not DMA masters */
-   150		if (dev->type == &fsl_mc_bus_dpmcp_type ||
-   151		    dev->type == &fsl_mc_bus_dpbp_type ||
-   152		    dev->type == &fsl_mc_bus_dpcon_type ||
-   153		    dev->type == &fsl_mc_bus_dpio_type)
-   154			return 0;
-   155	
-   156		while (dev_is_fsl_mc(dma_dev))
-   157			dma_dev = dma_dev->parent;
-   158	
-   159	
-   160	#if 0
-   161		if (dev_of_node(dma_dev))
-   162			return of_dma_configure_id(dev, dma_dev->of_node, 0, &input_id);
-   163	
-   164		return acpi_dma_configure_id(dev, DEV_DMA_COHERENT, &input_id);
-   165	#else
-   166		fwspec = dev_iommu_fwspec_get(dma_dev);
-   167		if (!fwspec)
-   168			return -ENODEV;
- > 169		iommu_ops = iommu_ops_from_fwnode(fwspec->iommu_fwnode);
-   170		if (!iommu_ops)
-   171			return -ENODEV;
-   172	
-   173		ret = iommu_fwspec_init(dev, fwspec->iommu_fwnode, iommu_ops);
-   174		if (ret)
-   175			return ret;
-   176	
-   177		ret = iommu_fwspec_add_ids(dev, &input_id, 1);
-   178		if (ret) {
-   179			iommu_fwspec_free(dev);
-   180			return ret;
-   181		}
-   182	
-   183		if (!device_iommu_mapped(dev)) {
- > 184			ret = iommu_probe_device(dev);
-   185			if (ret) {
-   186				iommu_fwspec_free(dev);
-   187				return ret;
-   188			}
-   189		}
-   190	
-   191		arch_setup_dma_ops(dev, 0, *dma_dev->dma_mask + 1, iommu_ops, true);
-   192	
-   193		return 0;
-   194	#endif
-   195	}
-   196	
+   583	
+   584	/*
+   585	 * MMU is not enabled, the page tables are allocated directly using
+   586	 * early_pmd/pud/p4d and the address returned is the physical one.
+   587	 */
+ > 588	void pt_ops_set_early(void)
+   589	{
+   590		pt_ops.alloc_pte = alloc_pte_early;
+   591		pt_ops.get_pte_virt = get_pte_virt_early;
+   592	#ifndef __PAGETABLE_PMD_FOLDED
+   593		pt_ops.alloc_pmd = alloc_pmd_early;
+   594		pt_ops.get_pmd_virt = get_pmd_virt_early;
+   595	#endif
+   596	}
+   597	
+   598	/*
+   599	 * MMU is enabled but page table setup is not complete yet.
+   600	 * fixmap page table alloc functions must be used as a means to temporarily
+   601	 * map the allocated physical pages since the linear mapping does not exist yet.
+   602	 *
+   603	 * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
+   604	 * but it will be used as described above.
+   605	 */
+ > 606	void pt_ops_set_fixmap(void)
+   607	{
+   608		pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
+   609		pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
+   610	#ifndef __PAGETABLE_PMD_FOLDED
+   611		pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
+   612		pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
+   613	#endif
+   614	}
+   615	
+   616	/*
+   617	 * MMU is enabled and page table setup is complete, so from now, we can use
+   618	 * generic page allocation functions to setup page table.
+   619	 */
+ > 620	void pt_ops_set_late(void)
+   621	{
+   622		pt_ops.alloc_pte = alloc_pte_late;
+   623		pt_ops.get_pte_virt = get_pte_virt_late;
+   624	#ifndef __PAGETABLE_PMD_FOLDED
+   625		pt_ops.alloc_pmd = alloc_pmd_late;
+   626		pt_ops.get_pmd_virt = get_pmd_virt_late;
+   627	#endif
+   628	}
+   629	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
