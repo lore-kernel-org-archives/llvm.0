@@ -1,41 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D522C80
-	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 03:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0262B2C80
+	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 03:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640748818; x=1672284818;
+  t=1640749418; x=1672285418;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JXLCS/DCys6JGqJ75kjlfcZ1ICrtL2OKIvy4XxfmFYg=;
-  b=hA1Vxp9SQtwTQBGY3dnumCwcEzyyT/JRBB82JyuPwiaeKVYF0R0Tw+SM
-   EekItVZMXnQTdY6jpW/jNOkE1jRnz8lh3E3W2ZI1Lfgw6moNGkzqiigxP
-   hc6YwUbrds70VvrAQGW4J5YbiqUaTctBNGDObLI2V252nE/zvFudkFhqX
-   8+stwyoMUyhYZ4xN7q876R0PHKwPVTnVDSWj+deLkZg63eZKVCK5Ug0a/
-   irrW5/r1/DxflwcO7UoQOWxPFjc64ghE2YYDWYX/gMbW0maUTf4zgHwGX
-   k7LjOfw0soLu+vi7j2H7nNxWZVtOl4J5RboCe/eZoEaRrvCG4QyQw3S3J
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="222127419"
+  bh=gy3ovrmRBnT4Z6o9MbsJ37FAdHY2PPV6axeAn/D/VmM=;
+  b=RqdWYEupyQ8NfqZfhrpC1YQlAqy7En3YhMls8trj49Sz+3PrmZiYc4LH
+   bsbwUnXcR6G+ts5ZxSyyEornLgxAqr/iK1ac5WrWM4e4phzFWJD20vwFw
+   1ipbu21/Mr/3Bfy5Z4BI7fljw3LimlCXOo5oUbejCTZARgx6Sa4hGPB3X
+   6GAkfG0OV/Rl/ndZG2ZIs05hZ/tv222nPu+9B/WoKmjvEzqW6U4V4mjBG
+   /fra9PGFTlfdlHAbwCfafDABGaE6UstC9v1WjSFszsa5Ppuxwny1ujE94
+   RlsbNq4HIY00f0o1S/EZ1pDGQ1SmbkqWlAQzcG+DU2HiSNI0soZggyccI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304816550"
 X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="222127419"
+   d="scan'208";a="304816550"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 19:33:37 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 19:43:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="618921684"
+   d="scan'208";a="618922839"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Dec 2021 19:33:35 -0800
+  by orsmga004.jf.intel.com with ESMTP; 28 Dec 2021 19:43:36 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n2PiZ-0008M2-93; Wed, 29 Dec 2021 03:33:35 +0000
-Date: Wed, 29 Dec 2021 11:33:09 +0800
+	id 1n2PsF-0008MR-Eo; Wed, 29 Dec 2021 03:43:35 +0000
+Date: Wed, 29 Dec 2021 11:43:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v2 3/17]
- arch/mips/include/asm/compat.h:68:9: warning: 'F_GETLK64' macro redefined
-Message-ID: <202112291128.XgMeZiWI-lkp@intel.com>
+Subject: [jolsa-perf:kprobe/multi 7/13]
+ samples/kprobes/kprobe_example.c:124:6: error: no member named 'multi' in
+ 'struct kprobe'
+Message-ID: <202112291138.cVJHohUf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,136 +47,86 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v2
-head:   750f87086bdd630f80b9bc3581bc3f329ef20f53
-commit: 838b95dc803e1fba08bd1aca85bb3c40f174548c [3/17] asm-generic: fcntl: compat: Remove duplicate definitions
-config: mips-randconfig-r003-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291128.XgMeZiWI-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
+head:   774280c9bc95e4e50cda3cd09324bd03fec50b52
+commit: 2bf53e58ccdc41fb37bc2768bfa17ed9f822bf1e [7/13] samples/kprobes: Add support for multi kprobe interface
+config: i386-randconfig-a016-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291138.cVJHohUf-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/838b95dc803e1fba08bd1aca85bb3c40f174548c
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v2
-        git checkout 838b95dc803e1fba08bd1aca85bb3c40f174548c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=2bf53e58ccdc41fb37bc2768bfa17ed9f822bf1e
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf kprobe/multi
+        git checkout 2bf53e58ccdc41fb37bc2768bfa17ed9f822bf1e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/kprobes/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   error: include/uapi/asm-generic/fcntl.h: leak CONFIG_COMPAT to user-space
-   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm-generic/fcntl.h] Error 1
-   make[2]: Target '__headers' not remade because of errors.
-   make[1]: *** [Makefile:1283: headers] Error 2
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:22:
->> arch/mips/include/asm/compat.h:68:9: warning: 'F_GETLK64' macro redefined [-Wmacro-redefined]
-   #define F_GETLK64       33
-           ^
-   include/uapi/asm-generic/fcntl.h:121:9: note: previous definition is here
-   #define F_GETLK64       12      /*  using 'struct flock64' */
-           ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:22:
->> arch/mips/include/asm/compat.h:69:9: warning: 'F_SETLK64' macro redefined [-Wmacro-redefined]
-   #define F_SETLK64       34
-           ^
-   include/uapi/asm-generic/fcntl.h:122:9: note: previous definition is here
-   #define F_SETLK64       13
-           ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:22:
->> arch/mips/include/asm/compat.h:70:9: warning: 'F_SETLKW64' macro redefined [-Wmacro-redefined]
-   #define F_SETLKW64      35
-           ^
-   include/uapi/asm-generic/fcntl.h:123:9: note: previous definition is here
-   #define F_SETLKW64      14
-           ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
-   void output_ptreg_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_ptreg_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
-   void output_task_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_task_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
-   void output_thread_info_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_info_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
-   void output_thread_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
-   void output_mm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_mm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:240:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
-   void output_sc_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:240:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_sc_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
-   void output_signal_defined(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_signal_defined(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:292:6: warning: no previous prototype for function 'output_octeon_cop2_state_defines' [-Wmissing-prototypes]
-   void output_octeon_cop2_state_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:292:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_octeon_cop2_state_defines(void)
-   ^
-   static 
-   11 warnings generated.
-   clang-14: error: unsupported argument '-mfix-cn63xxp1' to option 'Wa,'
-   make[2]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1196: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> samples/kprobes/kprobe_example.c:124:6: error: no member named 'multi' in 'struct kprobe'
+                   kp.multi.symbols = (const char **) symbols;
+                   ~~ ^
+   samples/kprobes/kprobe_example.c:125:6: error: no member named 'multi' in 'struct kprobe'
+                   kp.multi.cnt = cnt;
+                   ~~ ^
+   2 errors generated.
 
 
-vim +/F_GETLK64 +68 arch/mips/include/asm/compat.h
+vim +124 samples/kprobes/kprobe_example.c
 
-^1da177e4c3f41 include/asm-mips/compat.h Linus Torvalds 2005-04-16  67  
-^1da177e4c3f41 include/asm-mips/compat.h Linus Torvalds 2005-04-16 @68  #define F_GETLK64	33
-^1da177e4c3f41 include/asm-mips/compat.h Linus Torvalds 2005-04-16 @69  #define F_SETLK64	34
-^1da177e4c3f41 include/asm-mips/compat.h Linus Torvalds 2005-04-16 @70  #define F_SETLKW64	35
-^1da177e4c3f41 include/asm-mips/compat.h Linus Torvalds 2005-04-16  71  
-
-:::::: The code at line 68 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+    98	
+    99	static int __init kprobe_init(void)
+   100	{
+   101		char *p, *tmp, **symbols = NULL;
+   102		int cnt, ret;
+   103	
+   104		kp.pre_handler = handler_pre;
+   105		kp.post_handler = handler_post;
+   106	
+   107		if (strchr(symbol, ',')) {
+   108			tmp = kstrdup(symbol, GFP_KERNEL);
+   109			if (!tmp)
+   110				return -ENOMEM;
+   111	
+   112			p = strchr(tmp, ',');
+   113			while (p) {
+   114				*p = ' ';
+   115				p = strchr(p + 1, ',');
+   116			}
+   117	
+   118			symbols = argv_split(GFP_KERNEL, tmp, &cnt);
+   119			if (!symbols) {
+   120				ret = -ENOMEM;
+   121				goto out;
+   122			}
+   123	
+ > 124			kp.multi.symbols = (const char **) symbols;
+   125			kp.multi.cnt = cnt;
+   126		}
+   127	
+   128		ret = register_kprobe(&kp);
+   129		if (ret < 0) {
+   130			pr_err("register_kprobe failed, returned %d\n", ret);
+   131			goto out;
+   132		}
+   133	
+   134		if (symbols)
+   135			pr_info("Planted multi kprobe to %s\n", symbol);
+   136		else
+   137			pr_info("Planted kprobe at %p\n", kp.addr);
+   138	
+   139	out:
+   140		kfree(tmp);
+   141		if (symbols)
+   142			argv_free(symbols);
+   143		return ret;
+   144	}
+   145	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
