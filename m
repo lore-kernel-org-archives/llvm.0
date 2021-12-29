@@ -1,90 +1,176 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBD22C80
-	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 18:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640803337; x=1672339337;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=vpfcQ1/q2nm47taBlkXSehjGLleaPk+SFjsutb+tKEU=;
-  b=e3T7jlRnskyRQraZxcfps2dq7vY6sYd4q33zVA5GkGDdoAAbhyKggLbr
-   t1adksoSL1Z1FPi5a7M0w6X2vt2xrQaCgFAnSdUKmc5slZGXl3YOt+8z/
-   BKeltND+Nk02pHb/XqVxZZ5wj8LWbAZJxZFZx25Gsed5fwt5kScPWxXyN
-   RQFmLTA9oylDYQgc7ojghon6HXJcVNhc3ny2auvZTTxB83pxpjFFLDFdR
-   pVujyxHtJgTojTGK5DPJGiU5J++IeIbEy0zIrpLSU6Lb8wDH6hZv+Sauy
-   L+qQ/WhQA4++aHZMfE9l26qSEeA3PIa1sTdH7ptNEx8VP+vf4YbhERKNX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241358741"
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="241358741"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:42:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="470418923"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 10:42:16 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n2dtv-0009KQ-Dc; Wed, 29 Dec 2021 18:42:15 +0000
-Date: Thu, 30 Dec 2021 02:41:57 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: vc_switch_off_ist()+0x28: call to
- ip_within_syscall_gap() leaves .noinstr.text section
-Message-ID: <202112300220.SJwn7P1r-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DF82C80
+	for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 19:26:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1640805965;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7X92anWu7YA4HMgaOFRPoEtvjubDlUwqFYaCnsFgT4Q=;
+	b=TGhTI2c67L/KOKblpmm7GjfA7peS1ec5ovgmnQ8WCjdh3oxRg/MfUMLbutxZpOZxksgTQB
+	/nRGhSfZuJL8j0kUli6Dk2IkSSZZ0aro8gjqM7ZWQKzFKZOjh2pVb8YtgfS5MuuiyMrG6o
+	Eo6F3kFtf3ZCES8woMpkU/ITBMnNhcs=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-XUs4xmC9OIKFiCBXmFSY5A-1; Wed, 29 Dec 2021 14:26:03 -0500
+X-MC-Unique: XUs4xmC9OIKFiCBXmFSY5A-1
+Received: by mail-qv1-f69.google.com with SMTP id fw10-20020a056214238a00b003c05d328ad2so17814280qvb.2
+        for <llvm@lists.linux.dev>; Wed, 29 Dec 2021 11:26:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=7X92anWu7YA4HMgaOFRPoEtvjubDlUwqFYaCnsFgT4Q=;
+        b=BTvVzKb4vuo/wsGuEW/XcBop2308Ju6e6zF29qTpWBZzuf0EM8Vu+ymZ9LMD7LOeK/
+         6YziRcWhtfD+I8sHsPkgBl3aTggGDIzY50X9zeK2AF9d92h+KO8/dfd/3tmxOlnUJj7g
+         FRbMuVHEzf+csNC17nYbs+g1V6PG/gVrVu403B+ZFXaktEgLrFThs7TJI9QAowJgLk+f
+         4F37hJIZeAqFVS23ny7ePJux2RWSWsEI80OD03stmR21uXkqABuPtUEpykdqUL7K6jGW
+         b5BbyaDIsdF6iKS8XxaryQCRQNpPjNxGYTixDkGud3hgeH6Us3hzQMX4/DorS0+hUzyJ
+         QPXQ==
+X-Gm-Message-State: AOAM5329xvdRYbVcorhauu2MzFA6ZP7g5eaOyngfS2AyjrP3VKmBdpXJ
+	FjVZFqGc5GVI2s3ecBf9im21qSxVwm4sUk6MHBLBzx5JPZoxpLUqapZdw8iTHqSyWvc5cBAxaMB
+	DMcYD0zxUgXuuag==
+X-Received: by 2002:a05:622a:180c:: with SMTP id t12mr24151805qtc.507.1640805963408;
+        Wed, 29 Dec 2021 11:26:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyCMkCBBIEHoU7TQXcXidUDS5rm91MbIisjUvsPSiogTt212anKiDlDRNSIU+0yzvg7HIrUDQ==
+X-Received: by 2002:a05:622a:180c:: with SMTP id t12mr24151786qtc.507.1640805963173;
+        Wed, 29 Dec 2021 11:26:03 -0800 (PST)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id p16sm15294493qtx.19.2021.12.29.11.26.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Dec 2021 11:26:02 -0800 (PST)
+Subject: Re: [PATCH] mac80211: initialize variable have_higher_than_11mbit
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org,
+ nathan@kernel.org, linville@tuxdriver.com, linux-wireless@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Linus Torvalds <torvalds@linux-foundation.org>
+References: <20211223162848.3243702-1-trix@redhat.com>
+ <CAKwvOd=dLjMAim_FRNyWegzEjy0_1vF2xVW1hNPQ55=32qO4Wg@mail.gmail.com>
+ <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
+ <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <3db47d49-68fb-c286-b237-bfce1cb0ff08@redhat.com>
+Date: Wed, 29 Dec 2021 11:26:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 
-CC: linux-kernel@vger.kernel.org
-TO: Nick Desaulniers <ndesaulniers@google.com>
-CC: Kees Cook <keescook@chromium.org>
-CC: Fangrui Song <maskray@google.com>
-CC: Miguel Ojeda <ojeda@kernel.org>
-CC: Nathan Chancellor <nathan@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e7c124bd04631973a3cc0df19ab881b56d8a2d50
-commit: 380d53c45ff21f66870ee965b62613137f9d010d compiler_attributes.h: define __no_profile, add to noinstr
-date:   6 months ago
-config: x86_64-buildonly-randconfig-r004-20211229 (https://download.01.org/0day-ci/archive/20211230/202112300220.SJwn7P1r-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=380d53c45ff21f66870ee965b62613137f9d010d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 380d53c45ff21f66870ee965b62613137f9d010d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 12/28/21 10:55 AM, Nick Desaulniers wrote:
+> On Fri, Dec 24, 2021 at 6:01 AM Tom Rix <trix@redhat.com> wrote:
+>>
+>> On 12/23/21 12:30 PM, Nick Desaulniers wrote:
+>>> On Thu, Dec 23, 2021 at 8:29 AM <trix@redhat.com> wrote:
+>>>> From: Tom Rix <trix@redhat.com>
+>>>>
+>>>> Clang static analysis reports this warnings
+>>>>
+>>>> mlme.c:5332:7: warning: Branch condition evaluates to a
+>>>>     garbage value
+>>>>       have_higher_than_11mbit)
+>>>>       ^~~~~~~~~~~~~~~~~~~~~~~
+>>>>
+>>>> have_higher_than_11mbit is only set to true some of the time in
+>>>> ieee80211_get_rates() but is checked all of the time.  So
+>>>> have_higher_than_11mbit needs to be initialized to false.
+>>> LGTM. There's only one caller of ieee80211_get_rates() today; if there
+>>> were others, they could make a similar mistake in the future. An
+>>> alternate approach: ieee80211_get_rates() could unconditionally write
+>>> false before the loop that could later write true. Then call sites
+>>> don't need to worry about this conditional assignment. Perhaps that
+>>> would be preferable? If not:
+>> The have_higher_than_11mbit variable had previously be initialized to false.
+>>
+>> The commit 5d6a1b069b7f moved the variable without initializing.
+> I'm not disagreeing with that.
+>
+> My point is that these sometimes uninitialized warnings you're
+> finding+fixing with clang static analyzer are demonstrating a
+> recurring pattern with code.
+>
+> When _not_ using the static analyzer, -Wuninitialized and
+> -Wsometimes-uninitialized work in Clang by building a control flow
+> graph, but they only analyze a function locally.
+>
+> For example, consider the following code:
+> ```
+> _Bool is_thursday(void);
+> void hello(int);
+>
+> void init (int* x) {
+>    if (is_thursday())
+>      *x = 1;
+> }
+>
+> void foo (void) {
+>    int x;
+>    init(&x);
+>    hello(x);
+> }
+> ```
+> (Clang+GCC today will warn on the above; x is considered to "escape"
+> the scope of foo as init could write the address of x to a global.
+> Instead clang's static analyzer will take the additional time to
+> analyze the callee.  But here's a spooky question: what happens when
+> init is in another translation unit? IIRC, the static analyzer doesn't
+> do cross TU analysis; I could be wrong though, I haven't run it in a
+> while.)
+>
+> My point is that you're sending patches initializing x, when I think
+> it might be nicer to instead have functions like init always write a
+> value (unconditionally, rather than conditionally).  That way other
+> callers of init don't have to worry about sometimes initialized
+> variables.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The variable is passed to only to the static function ieee80211_get_rates().
 
-All warnings (new ones prefixed by >>):
+Tom
 
-   vmlinux.o: warning: objtool: do_syscall_64()+0x46: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x53: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x53: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: vc_switch_off_ist()+0x28: call to ip_within_syscall_gap() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret()+0x29: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_task_stack()+0x10: call to task_stack_page() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack()+0xd: call to cpu_entry_stack() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x3d: call to ghcb_set_sw_exit_code() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: safe_stack_exc_vmm_communication()+0x32: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: debug_locks_off()+0x24: call to console_verbose() leaves .noinstr.text section
-   kallsyms failure: relative symbol value 0xffffffff06b3e000 out of range in relative mode
+>
+>> Tom
+>>
+>>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>>>
+>>>> Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
+>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>> ---
+>>>>    net/mac80211/mlme.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+>>>> index 51f55c4ee3c6e..766cbbc9c3a72 100644
+>>>> --- a/net/mac80211/mlme.c
+>>>> +++ b/net/mac80211/mlme.c
+>>>> @@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
+>>>>            */
+>>>>           if (new_sta) {
+>>>>                   u32 rates = 0, basic_rates = 0;
+>>>> -               bool have_higher_than_11mbit;
+>>>> +               bool have_higher_than_11mbit = false;
+>>>>                   int min_rate = INT_MAX, min_rate_index = -1;
+>>>>                   const struct cfg80211_bss_ies *ies;
+>>>>                   int shift = ieee80211_vif_get_shift(&sdata->vif);
+>>>> --
+>>>> 2.26.3
+>>>>
+>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
