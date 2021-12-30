@@ -1,152 +1,120 @@
-Received: from mail.skyhub.de (unknown [5.9.137.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0FF2C80
-	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 11:10:50 +0000 (UTC)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C816D1EC04FB;
-	Thu, 30 Dec 2021 12:10:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1640862630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=WjXaYdKmX/cmmPvuYrY2hWWHNh1ZAY2fZFweo/fg3nQ=;
-	b=oTPY28eQr2gsdWN44FWwvQo3AzqwsMEMjqP2W17h+qVzaVI/w4zw1Pk+oK6zD9/0/ax1X7
-	ahu86OoibFH24lv+h3YPgrrRta+OKlHmhVXZUip8Rhws/cSrF15Vws3iT28NEVxpQBvUI2
-	KU4KpPig8rKLV1S1VhX9WgkGdpDCAP4=
-Date: Thu, 30 Dec 2021 12:10:33 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
- to nuke pos-based search
-Message-ID: <Yc2Tqc69W9ukKDI1@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-3-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA742C80
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 12:29:57 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id a9so50077803wrr.8
+        for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 04:29:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O0+J3hfYi+tJOX87FRscUIQ71ohxgIJHCX2HAI7b8Uk=;
+        b=WMadPGKQYElHu5jMUqicwQrvbZw0wasy3D2dwh6uxHrjnJIKPJU2olLLJiUHlD3145
+         plls98wtenzGF2fKfmdY+zgaoa+jfm1UcyH2wkz5HwMtk+9/Qh9TIqO85tG2dg+DB6lC
+         +3e+sFx8vK+EaZzrlOQ4oMNMl7NxCcMoBoZJDv9wivx7eB6ftjYEV3iYCqcuggnraFTV
+         AG6lYgy2JNYCSPoWhUz1P8FK3E5ws6ZBZTMb1uJZTczp3CiqAHm9U46gHeH3dcpnqQIH
+         1tS9OsNRcHYpfa4tH+NupuN9/QJu3+dM2VWCPAjJH1oxL2Qu9yUuX6I/dXc6pxLQ1KOy
+         0KTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O0+J3hfYi+tJOX87FRscUIQ71ohxgIJHCX2HAI7b8Uk=;
+        b=4kh0HLzUu9OY5pGrQhV1zlqmROOp/H2X8qhS2Imbh5cicSt4+WHDNaetmL5AM/uc2l
+         CEgnTK9am7+D1uEhsnmvjlQ0hK5v3q2l+uT//3fRt+S1MxCt511OrU4XnJtRfjTtgcGK
+         mnqL8KKv22siQRLyqtRvVgmgvXX06EeV6jstObXLuvPsZiVaUe/XS7zpydnjvBc4oXcT
+         xbvv3eDaREj0B+eXl7M0dCWUJ/Mi1tZbZiyiPkSgl7bHY7IGYx9LDkFEwo0CcGQviwi4
+         YbRfhZlM6Kh2NjUNDg4vtTSDQZVkKg5b+o2Xaljmdk5hFpq5k3I/hrK/YZfcNfDEzrt4
+         Ueqg==
+X-Gm-Message-State: AOAM531I2u1o3v1BTF3qdAOYcyVoz15zUAGpBhtnkF0ZtRzRwOZ3q/pV
+	7Mz8CtcfQGh1dPOeSPehqsk=
+X-Google-Smtp-Source: ABdhPJyeMdqRs+cOsnbASw7H4TcBciKWFlGxLhfRAl5VE2g8s7FE8D4hxsDXVPloniZ7EO3XL58Fpg==
+X-Received: by 2002:a5d:4385:: with SMTP id i5mr24410955wrq.178.1640867396353;
+        Thu, 30 Dec 2021 04:29:56 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id o12sm23945584wrv.76.2021.12.30.04.29.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 04:29:55 -0800 (PST)
+Message-ID: <d784e170-a115-bd0a-a87c-07aed0fb73fc@gmail.com>
+Date: Thu, 30 Dec 2021 13:29:54 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211223002209.1092165-3-alexandr.lobakin@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3] drm/mediatek: Fix unused-but-set variable warning
+Content-Language: en-US
+To: Miles Chen <miles.chen@mediatek.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Jie Qiu <jie.qiu@mediatek.com>,
+ Junzhi Zhao <junzhi.zhao@mediatek.com>
+Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20211230093610.28012-1-miles.chen@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20211230093610.28012-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
 
-nuke?
 
-I think you wanna say something about avoiding position-based search if
-toolchain supports -z ...
-
-> Position-based search, which means that if we have several symbols
-> with the same name, we additionally need to provide an "index" of
-> the desired symbol, is fragile. Par exemple, it breaks when two
-				  ^^^^^^^^^^^^
-
-We already have hard time with the English in commit messages, let's
-avoid the French pls.
-
-> symbols with the same name are located in different sections.
+On 30/12/2021 10:36, Miles Chen wrote:
+> clang reports a unused-but-set variable warning:
+> drivers/gpu/drm/mediatek/mtk_cec.c:85:6: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
 > 
-> Since a while, LD has a flag `-z unique-symbol` which appends
-> numeric suffixes to the functions with the same name (in symtab
-> and strtab).
-> Check for its availability and always prefer when the livepatching
-> is on.
-
-Why only then?
-
-It looks to me like we want this unconditionally, no?
-
-> This needs a little adjustment to the modpost to make it
-> strip suffixes before adding exports.
+> In current implementation, mtk_cec_mask() writes val into target register
+> and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
+> should read a register, clean only mask bits, and update (val | mask) bits
+> to the register.
 > 
-> depmod needs some treatment as well, tho its false-positibe warnings
+> Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+> 
+> Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
+> Cc: CK Hu <ck.hu@mediatek.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
 
-Unknown word [false-positibe] in commit message, suggestions:
-        ['false-positive', 'false-positioned', 'prepositional']
+I'm still not happy with the commit subject, I think it is misleading. Clang 
+only helped to find the bug, but the we are fixing something else, that's not 
+just a clang warning. But I don't want to nit-pick too much so:
 
-Please introduce a spellchecker into your patch creation workflow.
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-> about unknown symbols are harmless and don't alter the return code.
-> And there is a bunch more livepatch code to optimize-out after
-> introducing this, but let's leave it for later.
-
-...
-
-> @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  
->  	/*
->  	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
-> -	 * otherwise ensure the symbol position count matches sympos.
-> +	 * otherwise ensure the symbol position count matches sympos. If the LD
-> +	 * `-z unique` flag is enabled, sympos checks are not relevant.
-	   ^^^^^^^^^^^
-
--z unique-symbol
-
->  	 */
-> -	if (args.addr == 0)
-> +	if (args.addr == 0) {
->  		pr_err("symbol '%s' not found in symbol table\n", name);
-> -	else if (args.count > 1 && sympos == 0) {
-> +	} else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
-> +		goto out_ok;
-
-This is silly - just do it all here.
-
-> +	} else if (args.count > 1 && sympos == 0) {
->  		pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
->  		       name, objname);
->  	} else if (sympos != args.count && sympos > 0) {
->  		pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
->  		       sympos, name, objname ? objname : "vmlinux");
->  	} else {
-> +out_ok:
->  		*addr = args.addr;
->  		return 0;
->  	}
-
-Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
-they have a look too.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> ---
+> 
+> Change since v1:
+> add Fixes tag
+> 
+> Change since v2:
+> add explanation of mtk_cec_mask()
+> 
+> Change-Id: Iec6402b0532942f4d0e8bc56817eb87b95c03fad
+> ---
+>   drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
+> index e9cef5c0c8f7..cdfa648910b2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
+>   	u32 tmp = readl(cec->regs + offset) & ~mask;
+>   
+>   	tmp |= val & mask;
+> -	writel(val, cec->regs + offset);
+> +	writel(tmp, cec->regs + offset);
+>   }
+>   
+>   void mtk_cec_set_hpd_event(struct device *dev,
+> 
