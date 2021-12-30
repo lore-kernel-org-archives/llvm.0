@@ -1,86 +1,152 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mail.skyhub.de (unknown [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B9F168
-	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 09:41:36 +0000 (UTC)
-X-UUID: a8a15c8d88434f8fa2496b7ef1ae560d-20211230
-X-UUID: a8a15c8d88434f8fa2496b7ef1ae560d-20211230
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-	(envelope-from <miles.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1140444455; Thu, 30 Dec 2021 17:36:22 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 30 Dec 2021 17:36:21 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Dec 2021 17:36:21 +0800
-From: Miles Chen <miles.chen@mediatek.com>
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
-	<p.zabel@pengutronix.de>, David Airlie <airlied@linux.ie>, Daniel Vetter
-	<daniel@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Jie Qiu <jie.qiu@mediatek.com>, Junzhi Zhao <junzhi.zhao@mediatek.com>
-CC: Miles Chen <miles.chen@mediatek.com>, Zhiqiang Lin
-	<zhiqiang.lin@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: [PATCH v3] drm/mediatek: Fix unused-but-set variable warning
-Date: Thu, 30 Dec 2021 17:36:05 +0800
-Message-ID: <20211230093610.28012-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0FF2C80
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 11:10:50 +0000 (UTC)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C816D1EC04FB;
+	Thu, 30 Dec 2021 12:10:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1640862630;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=WjXaYdKmX/cmmPvuYrY2hWWHNh1ZAY2fZFweo/fg3nQ=;
+	b=oTPY28eQr2gsdWN44FWwvQo3AzqwsMEMjqP2W17h+qVzaVI/w4zw1Pk+oK6zD9/0/ax1X7
+	ahu86OoibFH24lv+h3YPgrrRta+OKlHmhVXZUip8Rhws/cSrF15Vws3iT28NEVxpQBvUI2
+	KU4KpPig8rKLV1S1VhX9WgkGdpDCAP4=
+Date: Thu, 30 Dec 2021 12:10:33 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
+ to nuke pos-based search
+Message-ID: <Yc2Tqc69W9ukKDI1@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-3-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211223002209.1092165-3-alexandr.lobakin@intel.com>
 
-clang reports a unused-but-set variable warning:
-drivers/gpu/drm/mediatek/mtk_cec.c:85:6: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+> [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
 
-In current implementation, mtk_cec_mask() writes val into target register
-and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
-should read a register, clean only mask bits, and update (val | mask) bits
-to the register.
+nuke?
 
-Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+I think you wanna say something about avoiding position-based search if
+toolchain supports -z ...
 
-Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
-Cc: CK Hu <ck.hu@mediatek.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Position-based search, which means that if we have several symbols
+> with the same name, we additionally need to provide an "index" of
+> the desired symbol, is fragile. Par exemple, it breaks when two
+				  ^^^^^^^^^^^^
 
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+We already have hard time with the English in commit messages, let's
+avoid the French pls.
 
----
+> symbols with the same name are located in different sections.
+> 
+> Since a while, LD has a flag `-z unique-symbol` which appends
+> numeric suffixes to the functions with the same name (in symtab
+> and strtab).
+> Check for its availability and always prefer when the livepatching
+> is on.
 
-Change since v1:
-add Fixes tag
+Why only then?
 
-Change since v2:
-add explanation of mtk_cec_mask()
+It looks to me like we want this unconditionally, no?
 
-Change-Id: Iec6402b0532942f4d0e8bc56817eb87b95c03fad
----
- drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> This needs a little adjustment to the modpost to make it
+> strip suffixes before adding exports.
+> 
+> depmod needs some treatment as well, tho its false-positibe warnings
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
-index e9cef5c0c8f7..cdfa648910b2 100644
---- a/drivers/gpu/drm/mediatek/mtk_cec.c
-+++ b/drivers/gpu/drm/mediatek/mtk_cec.c
-@@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
- 	u32 tmp = readl(cec->regs + offset) & ~mask;
- 
- 	tmp |= val & mask;
--	writel(val, cec->regs + offset);
-+	writel(tmp, cec->regs + offset);
- }
- 
- void mtk_cec_set_hpd_event(struct device *dev,
+Unknown word [false-positibe] in commit message, suggestions:
+        ['false-positive', 'false-positioned', 'prepositional']
+
+Please introduce a spellchecker into your patch creation workflow.
+
+> about unknown symbols are harmless and don't alter the return code.
+> And there is a bunch more livepatch code to optimize-out after
+> introducing this, but let's leave it for later.
+
+...
+
+> @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+>  
+>  	/*
+>  	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+> -	 * otherwise ensure the symbol position count matches sympos.
+> +	 * otherwise ensure the symbol position count matches sympos. If the LD
+> +	 * `-z unique` flag is enabled, sympos checks are not relevant.
+	   ^^^^^^^^^^^
+
+-z unique-symbol
+
+>  	 */
+> -	if (args.addr == 0)
+> +	if (args.addr == 0) {
+>  		pr_err("symbol '%s' not found in symbol table\n", name);
+> -	else if (args.count > 1 && sympos == 0) {
+> +	} else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
+> +		goto out_ok;
+
+This is silly - just do it all here.
+
+> +	} else if (args.count > 1 && sympos == 0) {
+>  		pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
+>  		       name, objname);
+>  	} else if (sympos != args.count && sympos > 0) {
+>  		pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
+>  		       sympos, name, objname ? objname : "vmlinux");
+>  	} else {
+> +out_ok:
+>  		*addr = args.addr;
+>  		return 0;
+>  	}
+
+Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
+they have a look too.
+
 -- 
-2.18.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
