@@ -1,90 +1,90 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512462C82
-	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 16:12:33 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so13551585wme.4
-        for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 08:12:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0Pnjdq429wkLvZ7QQ8EgNC1pfMpkmAT54Uvk5bVoFhM=;
-        b=BEiSf4gbp1br/LVg3r+zcs+4bkXIDqrEeZ85F9p58DS3Qt02rlPTygB3F5hgf5kbTz
-         FDipKDJduJOGHsrGf8lv3+Tkw0ieW3jmAOrem+U0/Z2gGjpHDWWpM/ZM2A+k4VuSgy5A
-         GDgjKrEZj3y1iPneHT+EJOvU1dH4FFTuGbRrv4qYMN8qW/ciRXMLT+Z6/Jvfy390SZ3V
-         ElLRAc7herXxFKTThTPXr9m8FoRPtzECxfrP/S1N1vTNOZfFBKc0jgc+oX9HWBx6AsbS
-         C0J3/uGz8XIzuov5xDD+Vb4vfC4ngCdM3F1SRlgY7cMgnYt5UcKkH4/EBKlITRZpFTos
-         4zhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0Pnjdq429wkLvZ7QQ8EgNC1pfMpkmAT54Uvk5bVoFhM=;
-        b=KsE2Q/muPRC4FwY15wVgXg0CTfNmkILWWUqeQW7fyEau0xM2NXbbg22tUz/8BqQsCl
-         ZtFUhjrvnx5J8jCMsm/NpkrrXMnBU4JquCpXvrQ31IWT9gDKSHWiEDV8YUneNGdK6rGC
-         qyiEN1JjTWtZEes3JMKBQbeM3pKxTIDCI4j3MXfviVJAmdlKQVj2wpKYAZ3BAgDCd7zy
-         PFBKkQZ/YonTe2uvmmdyJZTLpUUIjONQ+YpauYHA4No9ecw1bF7uaBGWeiO7KGQarV0c
-         bpNMhbdHbD/DPdCdxQyCczm+vGqceY3g09U/2pwh+cdPdCVqK8QNBbg5KupK6ArUp50f
-         aLJg==
-X-Gm-Message-State: AOAM531mbNn95Uwgeo2DuDNXeJ7M8aNjGuodB8QoL2WkfQZOtiGbv2js
-	PywFGZ9JjyGB4y13LDPBUMY=
-X-Google-Smtp-Source: ABdhPJy2dR79PiS8oIFSey0wDOUHMJPpwdSHdt3d8X6C2mRhOqvFfHypLxgtkKGOIHePbSSjleoqZA==
-X-Received: by 2002:a7b:c958:: with SMTP id i24mr26172837wml.75.1640880751645;
-        Thu, 30 Dec 2021 08:12:31 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m17sm24300651wrw.11.2021.12.30.08.12.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 08:12:31 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	netdev@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] nfc: st21nfca: remove redundant assignment to variable i
-Date: Thu, 30 Dec 2021 16:12:30 +0000
-Message-Id: <20211230161230.428457-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4583C2C9C
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 18:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04439C36AE9;
+	Thu, 30 Dec 2021 18:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1640887842;
+	bh=wl13idcBH22Q98gEtmxIacxmyis+T8ZRvfxttNaeonI=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=qm0aWo61gjrsc6uZGJHbroRrWXDZG2l+ccokx6g7SL/wTs5B6cBWKsbKI+xFxjmnJ
+	 F6lBANDMVUaLvBjCSlW5ORtXSYuPXNvj9oLMr2DX/w2OwCFR91mg0xnlXisD/p2Atp
+	 /kKgschEwantvmMUyPNvDhZ04RR2f4v41Ymp4I4MA9KWx2P6oX0nREMeRv3GbxTk+8
+	 rjeEeH+RtY6qrU7HrGpL79CFHQ1ivZsjtsByWT7g2VjiwqBzyMIptD8HlLTNUSJCdB
+	 8j/EA+2YFmgjsULkgR++mtGYnniek6k7to7UMc3CY2kvNNM6qkP6Ni0oV2JqKTAOlB
+	 7BzUFKIrGhbwA==
+Subject: Re: [PATCH] clk: socfpga: remove redundant assignment after a mask
+ operation
+To: Colin Ian King <colin.i.king@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-clk@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20211230150321.167576-1-colin.i.king@gmail.com>
+From: Dinh Nguyen <dinguyen@kernel.org>
+Message-ID: <7f5f8143-3eae-424f-b857-b57f66c96f65@kernel.org>
+Date: Thu, 30 Dec 2021 12:10:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211230150321.167576-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Variable i is being assigned a value that is never read, the
-assignment is redundant and can be removed. Cleans up clang-scan
-build warning:
 
-drivers/nfc/st21nfca/i2c.c:319:4: warning: Value stored to 'i'
-is never read [deadcode.DeadStores]
-                        i = 0;
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/nfc/st21nfca/i2c.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 12/30/21 9:03 AM, Colin Ian King wrote:
+> The assignment operation after a & mask operation is redundant, the
+> variables being assigned are not used afterwards. Replace the &=
+> operator with just & operator.
+> 
+> Cleans up two clang-scan warnings:
+> drivers/clk/socfpga/clk-gate.c:37:10: warning: Although the value stored
+> to 'l4_src' is used in the enclosing expression, the value is never
+> actually read from 'l4_src' [deadcode.DeadStores]
+>                  return l4_src &= 0x1;
+>                         ^         ~~~
+> drivers/clk/socfpga/clk-gate.c:46:10: warning: Although the value stored
+> to 'perpll_src' is used in the enclosing expression, the value is never
+> actually read from 'perpll_src' [deadcode.DeadStores]
+>                  return perpll_src &= 0x3;
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   drivers/clk/socfpga/clk-gate.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
+> index 1ec9678d8cd3..53d6e3ec4309 100644
+> --- a/drivers/clk/socfpga/clk-gate.c
+> +++ b/drivers/clk/socfpga/clk-gate.c
+> @@ -34,7 +34,7 @@ static u8 socfpga_clk_get_parent(struct clk_hw *hwclk)
+>   
+>   	if (streq(name, SOCFPGA_L4_MP_CLK)) {
+>   		l4_src = readl(clk_mgr_base_addr + CLKMGR_L4SRC);
+> -		return l4_src &= 0x1;
+> +		return l4_src & 0x1;
+>   	}
+>   	if (streq(name, SOCFPGA_L4_SP_CLK)) {
+>   		l4_src = readl(clk_mgr_base_addr + CLKMGR_L4SRC);
+> @@ -43,7 +43,7 @@ static u8 socfpga_clk_get_parent(struct clk_hw *hwclk)
+>   
+>   	perpll_src = readl(clk_mgr_base_addr + CLKMGR_PERPLL_SRC);
+>   	if (streq(name, SOCFPGA_MMC_CLK))
+> -		return perpll_src &= 0x3;
+> +		return perpll_src & 0x3;
+>   	if (streq(name, SOCFPGA_NAND_CLK) ||
+>   	    streq(name, SOCFPGA_NAND_X_CLK))
+>   		return (perpll_src >> 2) & 3;
+> 
 
-diff --git a/drivers/nfc/st21nfca/i2c.c b/drivers/nfc/st21nfca/i2c.c
-index f126ce96a7df..05157fc0f4eb 100644
---- a/drivers/nfc/st21nfca/i2c.c
-+++ b/drivers/nfc/st21nfca/i2c.c
-@@ -315,10 +315,8 @@ static int st21nfca_hci_i2c_repack(struct sk_buff *skb)
- 		skb_pull(skb, 1);
- 
- 		r = check_crc(skb->data, skb->len);
--		if (r != 0) {
--			i = 0;
-+		if (r != 0)
- 			return -EBADMSG;
--		}
- 
- 		/* remove headbyte */
- 		skb_pull(skb, 1);
--- 
-2.33.1
-
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
