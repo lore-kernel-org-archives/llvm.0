@@ -1,90 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4583C2C9C
-	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 18:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04439C36AE9;
-	Thu, 30 Dec 2021 18:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640887842;
-	bh=wl13idcBH22Q98gEtmxIacxmyis+T8ZRvfxttNaeonI=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=qm0aWo61gjrsc6uZGJHbroRrWXDZG2l+ccokx6g7SL/wTs5B6cBWKsbKI+xFxjmnJ
-	 F6lBANDMVUaLvBjCSlW5ORtXSYuPXNvj9oLMr2DX/w2OwCFR91mg0xnlXisD/p2Atp
-	 /kKgschEwantvmMUyPNvDhZ04RR2f4v41Ymp4I4MA9KWx2P6oX0nREMeRv3GbxTk+8
-	 rjeEeH+RtY6qrU7HrGpL79CFHQ1ivZsjtsByWT7g2VjiwqBzyMIptD8HlLTNUSJCdB
-	 8j/EA+2YFmgjsULkgR++mtGYnniek6k7to7UMc3CY2kvNNM6qkP6Ni0oV2JqKTAOlB
-	 7BzUFKIrGhbwA==
-Subject: Re: [PATCH] clk: socfpga: remove redundant assignment after a mask
- operation
-To: Colin Ian King <colin.i.king@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-clk@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20211230150321.167576-1-colin.i.king@gmail.com>
-From: Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <7f5f8143-3eae-424f-b857-b57f66c96f65@kernel.org>
-Date: Thu, 30 Dec 2021 12:10:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B79B29CA
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 18:31:40 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id k69so58887649ybf.1
+        for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 10:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JP5kiPGw0N0oi5xSZm+ISguC0oX5vc7WiKHH8sRb6Bk=;
+        b=PDOo4NGA+JWALhHknpcOO+4JAgLgYO13CeQB3gQa/gjVoUYjKJ6o09cp7s2qABTIXt
+         kmo2zbQjSCl93GSBoQQvgqrZZjVONwg1DqnMmlcUFrcyhy1s+Zssb4zOhmWrc9y0HqSp
+         HSwJViWXz1iaunrmIdbPOBKG1UCeQCUFTJfb1YCp4UoTzx/aDSqJ90c/JQHbbPW2+pB6
+         /01tAa36sPtmfeo+OaWiC8vLE/xkj1F2G5V5eXZLkKKJL2nx+cyu4eWdl5JflDddcc5Z
+         ChXHcbHulpVmYI55zRdTNEhYVrGPy4EgZLgEPgli0o2fgCU+eT5h6BPQFtfut1eLkloD
+         B2Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JP5kiPGw0N0oi5xSZm+ISguC0oX5vc7WiKHH8sRb6Bk=;
+        b=tcJUqY1jfjoxHu3UbMUU6F5ybhMhay62zNup49w71tJ8F427kSRFRQGAMbUTCrVMYH
+         8ekQQ+klHw7llJdcIPa0RMATI/iFo3bmCD+aUPqYYLenbjLDecI/syXLy8fvnEZUxiHk
+         F8wo5/Xhcbf2Q+BI7zesKxy3WuV6j+PCLHmdPohzTam7QdhNOuLw/ejbFFQrnOYP2HTO
+         iC51ZkWUT56NJJmSuQD7mP2PxeNBHWfkR+urhvk2yVDBSgOP703ho4Xb1QvHMBhyEol9
+         204znuhnFsnpPfnd68avQAWNERhr3/XgILP3BENCjy0Om9NuhG7rJri3XHkn+s9QAXka
+         1tlA==
+X-Gm-Message-State: AOAM530XJv+yj1EC+xP6nTookabwLgEDdEqciRjoHjGRmmpsIcfo053I
+	FxUvCVLsVdxZSyuYbg71Fnp436jkI0G+7Z62Ucx/Fg==
+X-Google-Smtp-Source: ABdhPJy1mifAcHASiq5T0VrQGF0UUuFWmc9T30vsJuNoN6G21ys/G/ibBLAo4HPnkKhC2ktRgJEaxHdror0bkuziioM=
+X-Received: by 2002:a25:98c4:: with SMTP id m4mr39483356ybo.613.1640889098887;
+ Thu, 30 Dec 2021 10:31:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20211230150321.167576-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic>
+In-Reply-To: <Yc2Tqc69W9ukKDI1@zn.tnic>
+From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date: Thu, 30 Dec 2021 10:31:27 -0800
+Message-ID: <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
+ to nuke pos-based search
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, linux-hardening@vger.kernel.org, x86@kernel.org, 
+	Jesse Brandeburg <jesse.brandeburg@intel.com>, 
+	Kristen Carlson Accardi <kristen@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
+	kernel test robot <lkp@intel.com>, Miroslav Benes <mbenes@suse.cz>, 
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Marios Pomonis <pomonis@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+> > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+>
+> nuke?
+>
+> I think you wanna say something about avoiding position-based search if
+> toolchain supports -z ...
+>
+> > Position-based search, which means that if we have several symbols
+> > with the same name, we additionally need to provide an "index" of
+> > the desired symbol, is fragile. Par exemple, it breaks when two
+>                                   ^^^^^^^^^^^^
+>
+> We already have hard time with the English in commit messages, let's
+> avoid the French pls.
+>
+> > symbols with the same name are located in different sections.
+> >
+> > Since a while, LD has a flag `-z unique-symbol` which appends
+> > numeric suffixes to the functions with the same name (in symtab
+> > and strtab).
+> > Check for its availability and always prefer when the livepatching
+> > is on.
+>
+> Why only then?
+>
+> It looks to me like we want this unconditionally, no?
+>
+> > This needs a little adjustment to the modpost to make it
+> > strip suffixes before adding exports.
+> >
+> > depmod needs some treatment as well, tho its false-positibe warnings
+>
+> Unknown word [false-positibe] in commit message, suggestions:
+>         ['false-positive', 'false-positioned', 'prepositional']
+>
+> Please introduce a spellchecker into your patch creation workflow.
+>
+> > about unknown symbols are harmless and don't alter the return code.
+> > And there is a bunch more livepatch code to optimize-out after
+> > introducing this, but let's leave it for later.
+>
+> ...
+>
+> > @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >
+> >       /*
+> >        * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+> > -      * otherwise ensure the symbol position count matches sympos.
+> > +      * otherwise ensure the symbol position count matches sympos. If the LD
+> > +      * `-z unique` flag is enabled, sympos checks are not relevant.
+>            ^^^^^^^^^^^
+>
+> -z unique-symbol
+>
+> >        */
+> > -     if (args.addr == 0)
+> > +     if (args.addr == 0) {
+> >               pr_err("symbol '%s' not found in symbol table\n", name);
+> > -     else if (args.count > 1 && sympos == 0) {
+> > +     } else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
+> > +             goto out_ok;
+>
+> This is silly - just do it all here.
+>
+> > +     } else if (args.count > 1 && sympos == 0) {
+> >               pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
+> >                      name, objname);
+> >       } else if (sympos != args.count && sympos > 0) {
+> >               pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
+> >                      sympos, name, objname ? objname : "vmlinux");
+> >       } else {
+> > +out_ok:
+> >               *addr = args.addr;
+> >               return 0;
+> >       }
+>
+> Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
+> they have a look too.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
+>
 
+Apologies since I haven't read the patch series.
 
-On 12/30/21 9:03 AM, Colin Ian King wrote:
-> The assignment operation after a & mask operation is redundant, the
-> variables being assigned are not used afterwards. Replace the &=
-> operator with just & operator.
-> 
-> Cleans up two clang-scan warnings:
-> drivers/clk/socfpga/clk-gate.c:37:10: warning: Although the value stored
-> to 'l4_src' is used in the enclosing expression, the value is never
-> actually read from 'l4_src' [deadcode.DeadStores]
->                  return l4_src &= 0x1;
->                         ^         ~~~
-> drivers/clk/socfpga/clk-gate.c:46:10: warning: Although the value stored
-> to 'perpll_src' is used in the enclosing expression, the value is never
-> actually read from 'perpll_src' [deadcode.DeadStores]
->                  return perpll_src &= 0x3;
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   drivers/clk/socfpga/clk-gate.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
-> index 1ec9678d8cd3..53d6e3ec4309 100644
-> --- a/drivers/clk/socfpga/clk-gate.c
-> +++ b/drivers/clk/socfpga/clk-gate.c
-> @@ -34,7 +34,7 @@ static u8 socfpga_clk_get_parent(struct clk_hw *hwclk)
->   
->   	if (streq(name, SOCFPGA_L4_MP_CLK)) {
->   		l4_src = readl(clk_mgr_base_addr + CLKMGR_L4SRC);
-> -		return l4_src &= 0x1;
-> +		return l4_src & 0x1;
->   	}
->   	if (streq(name, SOCFPGA_L4_SP_CLK)) {
->   		l4_src = readl(clk_mgr_base_addr + CLKMGR_L4SRC);
-> @@ -43,7 +43,7 @@ static u8 socfpga_clk_get_parent(struct clk_hw *hwclk)
->   
->   	perpll_src = readl(clk_mgr_base_addr + CLKMGR_PERPLL_SRC);
->   	if (streq(name, SOCFPGA_MMC_CLK))
-> -		return perpll_src &= 0x3;
-> +		return perpll_src & 0x3;
->   	if (streq(name, SOCFPGA_NAND_CLK) ||
->   	    streq(name, SOCFPGA_NAND_X_CLK))
->   		return (perpll_src >> 2) & 3;
-> 
+The option does not exist in ld.lld and I am a bit concerning about
+its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+I thought that someone forwarded my comments (originally posted months
+on a feature request ago) here but seems not.
+(I am a ld.lld maintainer.)
