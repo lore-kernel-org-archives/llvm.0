@@ -1,41 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC60168
-	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 01:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA688173
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 05:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640827709; x=1672363709;
+  t=1640841760; x=1672377760;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T1BRpgtTzTMGUhrkDuKAO2kJs/QvxfkdFHstWKsnIQk=;
-  b=n/BOu5RX4oSll/pN5bda6s+8rIFpuSK5A6jpcq/dI2CshlfDoZOYEmXQ
-   9SFJi2/C9b1phKFpCyKLO02mC9gKJ2C2Wbrv+PDxC+LRbWAHDAGF/lxlU
-   dT5kN5aLjcvW0SwzlY6rrFbQJP85eCJ1Roy6Nxnz3d5NdjhTuecXA5vHR
-   gxjgRmewKXVKV4Rd2wT9ZNX7qjidEyIgF5cG4wTscAAIqTIk2vU+c+g9u
-   GP7EGC/4zzr1dJm8h7AxtYXtAZox2IkA3kd7nQ1S5Towi5KhTjCkZMkBy
-   brjkNpfgEM+uRVf6357IJJ7cglR7y15QoxXcD+jc406AsJC6mz+Bed8S4
+  bh=+KVsdUaRTKUTFwWrgJc7th2tV0XogMeKC8uZEP+TLIw=;
+  b=QX1vnrtqNsMWFZP+NgCa06Md82uGy8xCnjECdEAoXc0ZMdJKzC36dHjS
+   lfsT+kXfLb7cmHDTNGD220+lWtjCKCPOlQHazFJBnWuf+52p6aq2fpFph
+   /+Vf1fgSPzChdpZrBu5gR6cGz/HPnhp2i6imOVSQ+jEidGWYwlWwI9Fw3
+   lK9BY4Ene6lrBbMCaBfNenCjWhvmieDLBJZmfq4rUo8iEIJ6fQGDmRI+d
+   qyLfR+N8Cb9crAJeNy26CTiXl1xdAJGsas7+W5/FduAomd31/RGDqwNxd
+   rC0NN2YaOQaZCsCMsFyKyV3APHbM52OEeXpQAl/2KM8N/EVzsz5qDoe47
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="239140457"
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="265860745"
 X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="239140457"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 17:28:28 -0800
+   d="scan'208";a="265860745"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 21:22:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="510719762"
+   d="scan'208";a="470548891"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Dec 2021 17:28:27 -0800
+  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 21:22:38 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n2kF0-0009Xc-GL; Thu, 30 Dec 2021 01:28:26 +0000
-Date: Thu, 30 Dec 2021 09:27:43 +0800
+	id 1n2ntd-0009mt-O6; Thu, 30 Dec 2021 05:22:37 +0000
+Date: Thu, 30 Dec 2021 13:21:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Goldwyn Rodrigues <rgoldwyn@suse.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: drivers/net/dsa/ocelot/seville_vsc9953.c:1107:34: warning: unused
- variable 'seville_of_match'
-Message-ID: <202112300929.wXa5Kh1J-lkp@intel.com>
+Subject: [goldwynr:iomap 33/33] fs/btrfs/volumes.c:6893:23: warning: format
+ specifies type 'unsigned long' but the argument has type 'size_t' (aka
+ 'unsigned int')
+Message-ID: <202112301331.RT7JMows-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,53 +47,147 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Vladimir,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
-commit: d60bc62de4ae068ed4b215c24cdfdd5035aa986e net: dsa: seville: build as separate module
-date:   1 year, 3 months ago
-config: x86_64-randconfig-r005-20211230 (https://download.01.org/0day-ci/archive/20211230/202112300929.wXa5Kh1J-lkp@intel.com/config)
+tree:   https://github.com/goldwynr/linux iomap
+head:   30c74a8c201365178cae26d0d7aefa120c3245ab
+commit: 30c74a8c201365178cae26d0d7aefa120c3245ab [33/33] btrfs: debug patch
+config: hexagon-randconfig-r013-20211230 (https://download.01.org/0day-ci/archive/20211230/202112301331.RT7JMows-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d60bc62de4ae068ed4b215c24cdfdd5035aa986e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d60bc62de4ae068ed4b215c24cdfdd5035aa986e
+        # https://github.com/goldwynr/linux/commit/30c74a8c201365178cae26d0d7aefa120c3245ab
+        git remote add goldwynr https://github.com/goldwynr/linux
+        git fetch --no-tags goldwynr iomap
+        git checkout 30c74a8c201365178cae26d0d7aefa120c3245ab
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/ocelot/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/ocelot/seville_vsc9953.c:1107:34: warning: unused variable 'seville_of_match' [-Wunused-const-variable]
-   static const struct of_device_id seville_of_match[] = {
-                                    ^
-   1 warning generated.
+>> fs/btrfs/volumes.c:6893:23: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                   ioend->io_offset, ioend->io_size);
+                                                     ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/btrfs/volumes.c:6904:24: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                           ioend->io_offset, ioend->io_size);
+                                                             ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/btrfs/volumes.c:6910:24: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                           ioend->io_offset, ioend->io_size);
+                                                             ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/btrfs/volumes.c:6941:23: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                   ioend->io_offset, ioend->io_size);
+                                                     ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   4 warnings generated.
 
 
-vim +/seville_of_match +1107 drivers/net/dsa/ocelot/seville_vsc9953.c
+vim +6893 fs/btrfs/volumes.c
 
-84705fc165526e Maxim Kochetkov 2020-07-13  1106  
-84705fc165526e Maxim Kochetkov 2020-07-13 @1107  static const struct of_device_id seville_of_match[] = {
-84705fc165526e Maxim Kochetkov 2020-07-13  1108  	{ .compatible = "mscc,vsc9953-switch" },
-84705fc165526e Maxim Kochetkov 2020-07-13  1109  	{ },
-84705fc165526e Maxim Kochetkov 2020-07-13  1110  };
-84705fc165526e Maxim Kochetkov 2020-07-13  1111  MODULE_DEVICE_TABLE(of, seville_of_match);
-84705fc165526e Maxim Kochetkov 2020-07-13  1112  
-
-:::::: The code at line 1107 was first introduced by commit
-:::::: 84705fc165526e8e55d208b2b10a48cc720a106a net: dsa: felix: introduce support for Seville VSC9953 switch
-
-:::::: TO: Maxim Kochetkov <fido_max@inbox.ru>
-:::::: CC: David S. Miller <davem@davemloft.net>
+  6878	
+  6879	blk_status_t btrfs_map_bio(struct btrfs_fs_info *fs_info, struct bio *bio,
+  6880				   int mirror_num)
+  6881	{
+  6882		const u64 orig_logical = bio->bi_iter.bi_sector << SECTOR_SHIFT;
+  6883		const unsigned int orig_length = bio->bi_iter.bi_size;
+  6884		const enum btrfs_map_op op = btrfs_op(bio);
+  6885		u64 cur_logical = orig_logical;
+  6886		int ret;
+  6887		struct iomap_ioend *ioend = bio->bi_private;
+  6888	
+  6889		if (ioend)
+  6890			pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6891					__func__, __LINE__,
+  6892					(unsigned long)ioend, ioend->io_inode->i_ino,
+> 6893					ioend->io_offset, ioend->io_size);
+  6894	
+  6895		while (cur_logical < orig_logical + orig_length) {
+  6896			u64 map_length = orig_logical + orig_length - cur_logical;
+  6897			struct btrfs_io_context *bioc = NULL;
+  6898			struct bio *cur_bio;
+  6899	
+  6900			if (ioend)
+  6901				pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6902						__func__, __LINE__,
+  6903						(unsigned long)ioend, ioend->io_inode->i_ino,
+  6904						ioend->io_offset, ioend->io_size);
+  6905			btrfs_bio_save_iter(btrfs_bio(bio));
+  6906			if (ioend)
+  6907				pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6908						__func__, __LINE__,
+  6909						(unsigned long)ioend, ioend->io_inode->i_ino,
+  6910						ioend->io_offset, ioend->io_size);
+  6911			ret = __btrfs_map_block(fs_info, op, cur_logical, &map_length,
+  6912						&bioc, mirror_num, 1);
+  6913			if (ret)
+  6914				return errno_to_blk_status(ret);
+  6915	
+  6916			if (cur_logical + map_length < orig_logical + orig_length) {
+  6917				/*
+  6918				 * For now zoned write should never cross stripe
+  6919				 * boundary
+  6920				 */
+  6921				ASSERT(bio_op(bio) != REQ_OP_ZONE_APPEND);
+  6922	
+  6923				/* Split the bio */
+  6924				cur_bio = btrfs_bio_split(fs_info, bio, map_length);
+  6925			} else {
+  6926				/* Use the existing bio directly */
+  6927				cur_bio = bio;
+  6928			}
+  6929			btrfs_bio_counter_inc_blocked(fs_info);
+  6930			ret = submit_one_mapped_range(fs_info, cur_bio, bioc,
+  6931						      map_length, mirror_num);
+  6932			btrfs_bio_counter_dec(fs_info);
+  6933			if (ret < 0)
+  6934				return errno_to_blk_status(ret);
+  6935			cur_logical += map_length;
+  6936		}
+  6937		if (ioend)
+  6938			pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6939					__func__, __LINE__,
+  6940					(unsigned long)ioend, ioend->io_inode->i_ino,
+  6941					ioend->io_offset, ioend->io_size);
+  6942		return BLK_STS_OK;
+  6943	}
+  6944	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
