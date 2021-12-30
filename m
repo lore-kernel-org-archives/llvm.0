@@ -1,166 +1,91 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B79B29CA
-	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 18:31:40 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id k69so58887649ybf.1
-        for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 10:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JP5kiPGw0N0oi5xSZm+ISguC0oX5vc7WiKHH8sRb6Bk=;
-        b=PDOo4NGA+JWALhHknpcOO+4JAgLgYO13CeQB3gQa/gjVoUYjKJ6o09cp7s2qABTIXt
-         kmo2zbQjSCl93GSBoQQvgqrZZjVONwg1DqnMmlcUFrcyhy1s+Zssb4zOhmWrc9y0HqSp
-         HSwJViWXz1iaunrmIdbPOBKG1UCeQCUFTJfb1YCp4UoTzx/aDSqJ90c/JQHbbPW2+pB6
-         /01tAa36sPtmfeo+OaWiC8vLE/xkj1F2G5V5eXZLkKKJL2nx+cyu4eWdl5JflDddcc5Z
-         ChXHcbHulpVmYI55zRdTNEhYVrGPy4EgZLgEPgli0o2fgCU+eT5h6BPQFtfut1eLkloD
-         B2Gg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B134F29CA
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 20:06:32 +0000 (UTC)
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 32C9F3F175
+	for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 19:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1640894326;
+	bh=GNWzUrlrK9iApcC0QIt7hy4CWeyRUiCxofVD3uisya4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=IQ0XcJkyjY35RH82W+KcSDToOvW8gpc1+D8s2XE8QiRxzgBMArbosRdYWRJRr1hUM
+	 EjC13HVx4kkYU3P2gyH4FsFPUx7X8mwhrXXyg2I94H27jRDbTX2tIObJISFcWEeips
+	 tFjt+WW1y00eslzFdEZKLNsgiKXIvQFtwtcqV9esj7NwiU/T+qQWo0TMwJvK8f/10i
+	 7JwiitkuMLMLR1wgUfNbTaC3xu8zRLGZ20jSsmRgwp8IsLc2goaF8xNUPY2ejzsfZ9
+	 dQaFZoaKat4LeXcYj243dA3R087vNje3ItgKKzqwwQ23an2lIjE2TRCVqyfFfTgvT9
+	 bc6JhD1WxNlJg==
+Received: by mail-lj1-f200.google.com with SMTP id y4-20020a2e95c4000000b0022dbab5f69eso5733726ljh.14
+        for <llvm@lists.linux.dev>; Thu, 30 Dec 2021 11:58:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JP5kiPGw0N0oi5xSZm+ISguC0oX5vc7WiKHH8sRb6Bk=;
-        b=tcJUqY1jfjoxHu3UbMUU6F5ybhMhay62zNup49w71tJ8F427kSRFRQGAMbUTCrVMYH
-         8ekQQ+klHw7llJdcIPa0RMATI/iFo3bmCD+aUPqYYLenbjLDecI/syXLy8fvnEZUxiHk
-         F8wo5/Xhcbf2Q+BI7zesKxy3WuV6j+PCLHmdPohzTam7QdhNOuLw/ejbFFQrnOYP2HTO
-         iC51ZkWUT56NJJmSuQD7mP2PxeNBHWfkR+urhvk2yVDBSgOP703ho4Xb1QvHMBhyEol9
-         204znuhnFsnpPfnd68avQAWNERhr3/XgILP3BENCjy0Om9NuhG7rJri3XHkn+s9QAXka
-         1tlA==
-X-Gm-Message-State: AOAM530XJv+yj1EC+xP6nTookabwLgEDdEqciRjoHjGRmmpsIcfo053I
-	FxUvCVLsVdxZSyuYbg71Fnp436jkI0G+7Z62Ucx/Fg==
-X-Google-Smtp-Source: ABdhPJy1mifAcHASiq5T0VrQGF0UUuFWmc9T30vsJuNoN6G21ys/G/ibBLAo4HPnkKhC2ktRgJEaxHdror0bkuziioM=
-X-Received: by 2002:a25:98c4:: with SMTP id m4mr39483356ybo.613.1640889098887;
- Thu, 30 Dec 2021 10:31:38 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GNWzUrlrK9iApcC0QIt7hy4CWeyRUiCxofVD3uisya4=;
+        b=APsYRb/XeSz4gQcANGCyd5lan75QuhMeaMV4tK9INqS2Zlo7tfYq1vZDjquqVvuPQz
+         zeYn5jnCxxCEXwSlf0eV9ZEInYJN/6xm57n8kXtWCw0eLDN/uAR2KEpVbl76GS2EUtFv
+         Ny3wKMmMjqkpzt5Ezgd/7QuWs5ITmT/EPdHrNcORWIy3BpQDXX32VMR8mxCWi0BDvoN8
+         rj/lKAjI1DyugEzdVM+78B9Bp5mC+Iof6FJb1oc2scmQesjmA74Pv+h+rjnxbgFPHZNs
+         99qQHC5SpIbnF/nFl2TiVOBOMXW2zikkySnno3Jwrbkitkl5lYJ6MUmp9yYTnHoKW5fR
+         0poA==
+X-Gm-Message-State: AOAM530/b73MOKb5j50YRXjhEEabdSsWHpu0czIDAUjRcrlWPPHZAzlt
+	PcIkf8t8lPyPbPWSV/Q72DUvQP0HsS8lrntBMmVerEPYLjF9EMS6RCts425LWAp25w86B5YCnfb
+	k1JMbLFTbyzWNE7FCrT8vA+bmc+3aG88=
+X-Received: by 2002:a05:6512:2311:: with SMTP id o17mr25992431lfu.256.1640894325566;
+        Thu, 30 Dec 2021 11:58:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzSa/wf1cnt5j7jqACUSdQ38QoQdVyafz5ZdxBfdxwsi0qKJ3PwI4Qbtw2FxwfqCGrdy+92UA==
+X-Received: by 2002:a05:6512:2311:: with SMTP id o17mr25992421lfu.256.1640894325422;
+        Thu, 30 Dec 2021 11:58:45 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id z36sm2571458lfu.182.2021.12.30.11.58.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 11:58:44 -0800 (PST)
+Message-ID: <eb2f0bb7-46ee-2290-6b60-90f555e4811c@canonical.com>
+Date: Thu, 30 Dec 2021 20:58:44 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic>
-In-Reply-To: <Yc2Tqc69W9ukKDI1@zn.tnic>
-From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date: Thu, 30 Dec 2021 10:31:27 -0800
-Message-ID: <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
- to nuke pos-based search
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>, linux-hardening@vger.kernel.org, x86@kernel.org, 
-	Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-	Kristen Carlson Accardi <kristen@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
-	kernel test robot <lkp@intel.com>, Miroslav Benes <mbenes@suse.cz>, 
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Marios Pomonis <pomonis@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
-	live-patching@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] nfc: st21nfca: remove redundant assignment to variable i
+Content-Language: en-US
+To: Colin Ian King <colin.i.king@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20211230161230.428457-1-colin.i.king@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211230161230.428457-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
->
-> nuke?
->
-> I think you wanna say something about avoiding position-based search if
-> toolchain supports -z ...
->
-> > Position-based search, which means that if we have several symbols
-> > with the same name, we additionally need to provide an "index" of
-> > the desired symbol, is fragile. Par exemple, it breaks when two
->                                   ^^^^^^^^^^^^
->
-> We already have hard time with the English in commit messages, let's
-> avoid the French pls.
->
-> > symbols with the same name are located in different sections.
-> >
-> > Since a while, LD has a flag `-z unique-symbol` which appends
-> > numeric suffixes to the functions with the same name (in symtab
-> > and strtab).
-> > Check for its availability and always prefer when the livepatching
-> > is on.
->
-> Why only then?
->
-> It looks to me like we want this unconditionally, no?
->
-> > This needs a little adjustment to the modpost to make it
-> > strip suffixes before adding exports.
-> >
-> > depmod needs some treatment as well, tho its false-positibe warnings
->
-> Unknown word [false-positibe] in commit message, suggestions:
->         ['false-positive', 'false-positioned', 'prepositional']
->
-> Please introduce a spellchecker into your patch creation workflow.
->
-> > about unknown symbols are harmless and don't alter the return code.
-> > And there is a bunch more livepatch code to optimize-out after
-> > introducing this, but let's leave it for later.
->
-> ...
->
-> > @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
-> >
-> >       /*
-> >        * Ensure an address was found. If sympos is 0, ensure symbol is unique;
-> > -      * otherwise ensure the symbol position count matches sympos.
-> > +      * otherwise ensure the symbol position count matches sympos. If the LD
-> > +      * `-z unique` flag is enabled, sympos checks are not relevant.
->            ^^^^^^^^^^^
->
-> -z unique-symbol
->
-> >        */
-> > -     if (args.addr == 0)
-> > +     if (args.addr == 0) {
-> >               pr_err("symbol '%s' not found in symbol table\n", name);
-> > -     else if (args.count > 1 && sympos == 0) {
-> > +     } else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
-> > +             goto out_ok;
->
-> This is silly - just do it all here.
->
-> > +     } else if (args.count > 1 && sympos == 0) {
-> >               pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
-> >                      name, objname);
-> >       } else if (sympos != args.count && sympos > 0) {
-> >               pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
-> >                      sympos, name, objname ? objname : "vmlinux");
-> >       } else {
-> > +out_ok:
-> >               *addr = args.addr;
-> >               return 0;
-> >       }
->
-> Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
-> they have a look too.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
->
+On 30/12/2021 17:12, Colin Ian King wrote:
+> Variable i is being assigned a value that is never read, the
+> assignment is redundant and can be removed. Cleans up clang-scan
+> build warning:
+> 
+> drivers/nfc/st21nfca/i2c.c:319:4: warning: Value stored to 'i'
+> is never read [deadcode.DeadStores]
+>                         i = 0;
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/nfc/st21nfca/i2c.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
 
-Apologies since I haven't read the patch series.
 
-The option does not exist in ld.lld and I am a bit concerning about
-its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-I thought that someone forwarded my comments (originally posted months
-on a feature request ago) here but seems not.
-(I am a ld.lld maintainer.)
+
+Best regards,
+Krzysztof
