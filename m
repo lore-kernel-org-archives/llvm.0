@@ -1,96 +1,104 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EAD168
-	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 10:08:41 +0000 (UTC)
-Received: by mail-qk1-f178.google.com with SMTP id t66so13324144qkb.4
-        for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 02:08:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NsDwqT0a3hNUqKU4v2jYJjLM/HyV4fz8C5Jr5vH1eWo=;
-        b=WJqufZUIJMz/Ry44a5f4Vh2iqhbRm/tjNVoVB3JqvyZqgcEFRSPUaU3pSY41xYZ9p+
-         H2v6mKUUJX4H3k/al0FByWFFUjLX/uz+l93KdsQlpLvYrcgbzE2Gj3+ZoyCV17nN2qq3
-         YBhqiW1MOTmz/VgAYS9GIJoan5gH4nn2spUdSA0YDD3w1p6dXLN1Wlvd3YDePKdvk8PD
-         CPK3PscZropAbdWapioydQR/RZCSopeh+7PqyjjJ60JDXtZpOSV7insKfCuREGQ0Eiqt
-         FfPFNme/UsL6vIWcv6/6AX7pjRbc/H/YVb6nkVx1LJ5geqZZHEHV5Nx0M/p0U//cOL3J
-         DfAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NsDwqT0a3hNUqKU4v2jYJjLM/HyV4fz8C5Jr5vH1eWo=;
-        b=SqkNKOWB47AiaUc5ymXilAog5aViDFejDcYP7P3TJto1uHmQQyo7CXkrVF7fPayUlu
-         NHhZmMrLYdel46GMrAEIXPpXVJ86KS1pofCziOD0VSzm6bTnaDGJLN0C7vEgk68WgHSX
-         MvcJsNhXtBQfng4ol06vfAXDNYLML9qREBurQnUzXR8Pl9wzDle4tYL+PdFR/YZCHplw
-         t40a1Rf2qSp6rK2EHQWKcHTEFHZSRhW1698dz9vciyMrXAUOAwtfN8nKuWq+7rsRNyDq
-         tk0/jZRHrGtmY5thMA8IT9z5VFXJwQ0VewZPmUbabJvDz2QMgvy3zJo8ygcL46WgOsZU
-         UwxA==
-X-Gm-Message-State: AOAM532travkUuSazSB/YihX3zX1g12bzoj1QLid1TFRWBfyKQwB7FlM
-	VXngLNRsvro77YE1lFCX7YA=
-X-Google-Smtp-Source: ABdhPJwqwBpqbNnDAckOs9aKDylSND0AV7nkWJTx0l3kxiwOckUL6CQ2uGdgLEMgLLxNkRSWgQqObg==
-X-Received: by 2002:ae9:efd6:: with SMTP id d205mr21576547qkg.380.1640945321058;
-        Fri, 31 Dec 2021 02:08:41 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b2sm20457789qtq.95.2021.12.31.02.08.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 02:08:40 -0800 (PST)
-From: cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To: nathan@kernel.org,
-	ndesaulniers@google.com,
-	keescook@chromium.org
-Cc: wang.yong12@zte.com.cn,
-	xu.xin16@zte.com.cn,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] tools: compiler-gcc.h::Keep compatible with non-clang compilers.
-Date: Fri, 31 Dec 2021 10:08:33 +0000
-Message-Id: <20211231100833.590691-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB45168
+	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 10:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640945693; x=1672481693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9SVjFtwpFH3eE3tW553DPJvfT99G2uhL/beuIf3vfuY=;
+  b=T2wTgId0YvuNhZvQLPKGZNJdivJI2E9erNywluzBxPja2SZjfNzAL3v5
+   J0fUn0UcCJiwB7XI3GmwbGK+8H3dxGMoIwiW+n7I/ffOESTh95Z7n8nnh
+   m3radBgwcB72bKIf4L/VQrDDhL1G3njVB8PKSJ7it06IoMA7F6ZIEtdIm
+   +GGZp3wD0NbsuMnSCMGAHJm/NKqlXDm9cYry2UYQW3TbMor5eQyc7yf6n
+   4BJdbPgA6vl96LBG1OYr4iJbCDa3FoGydsHo06ra2qVvrB6FW7OMcaUfm
+   ovI8p6eVGxwmRqT+myKdfsT67Lfyi1z10syOUtLLSZMO6NT9MwSWA8YS6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="328131146"
+X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
+   d="scan'208";a="328131146"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 02:14:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
+   d="scan'208";a="470915852"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 02:14:50 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n3Evy-000B9o-3o; Fri, 31 Dec 2021 10:14:50 +0000
+Date: Fri, 31 Dec 2021 18:14:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [mchehab-experimental:master 115/390]
+ drivers/staging/media/atomisp//pci/isp2400_input_system_local.h:32:40:
+ warning: redefinition of typedef 'input_system_cfg2400_t' is a C11 feature
+Message-ID: <202112311809.bEKUPkjh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hi Mauro,
 
-When HOSTC = gcc (GCC) 4.8.5, there is an error occurring as follows:
-error: Undefined __has_attribute.
+FYI, the error/warning still remains.
 
-This problem is introduced by commit d0ee23f9d78be ("tools:
-compiler-gcc.h: Guard error attribute use with __has_attribute").
+tree:   https://git.linuxtv.org/mchehab/experimental.git master
+head:   68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
+commit: 4005ecee616a51cb0305d8e3664af45376e7cf65 [115/390] media: atomisp: shift some structs from input_system_local
+config: x86_64-randconfig-a014-20211231 (https://download.01.org/0day-ci/archive/20211231/202112311809.bEKUPkjh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add mchehab-experimental https://git.linuxtv.org/mchehab/experimental.git
+        git fetch --no-tags mchehab-experimental master
+        git checkout 4005ecee616a51cb0305d8e3664af45376e7cf65
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/staging/media/atomisp/
 
-To solve it, this patch is given to keep the comatibility.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Co-developed-by: wangyong <wang.yong12@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/staging/media/atomisp/pci/atomisp_cmd.c:44:
+   In file included from drivers/staging/media/atomisp//pci/atomisp_tables.h:23:
+   In file included from drivers/staging/media/atomisp//pci/sh_css_params.h:30:
+   In file included from drivers/staging/media/atomisp//pci/runtime/pipeline/interface/ia_css_pipeline.h:19:
+   In file included from drivers/staging/media/atomisp//pci/sh_css_internal.h:28:
+   In file included from drivers/staging/media/atomisp//pci/hive_isp_css_include/input_system.h:34:
+   In file included from drivers/staging/media/atomisp//pci/input_system_local.h:144:
+>> drivers/staging/media/atomisp//pci/isp2400_input_system_local.h:32:40: warning: redefinition of typedef 'input_system_cfg2400_t' is a C11 feature [-Wtypedef-redefinition]
+   typedef struct input_system_cfg2400_s           input_system_cfg2400_t;
+                                                   ^
+   drivers/staging/media/atomisp//pci/input_system_local.h:22:40: note: previous definition is here
+   typedef struct input_system_cfg2400_s           input_system_cfg2400_t;
+                                                   ^
+   1 warning generated.
+
+
+vim +/input_system_cfg2400_t +32 drivers/staging/media/atomisp//pci/isp2400_input_system_local.h
+
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_common/host/input_system_local.h Mauro Carvalho Chehab 2020-04-19  31  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_common/host/input_system_local.h Mauro Carvalho Chehab 2020-04-19 @32  typedef struct input_system_cfg2400_s		input_system_cfg2400_t;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_common/host/input_system_local.h Mauro Carvalho Chehab 2020-04-19  33  
+
+:::::: The code at line 32 was first introduced by commit
+:::::: ad85094b293e40e7a2f831b0311a389d952ebd5e Revert "media: staging: atomisp: Remove driver"
+
+:::::: TO: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
 ---
- tools/include/linux/compiler-gcc.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-index 8816f06fc6c7..7da593d3cb91 100644
---- a/tools/include/linux/compiler-gcc.h
-+++ b/tools/include/linux/compiler-gcc.h
-@@ -16,6 +16,11 @@
- # define __fallthrough __attribute__ ((fallthrough))
- #endif
- 
-+
-+#ifndef __has_attribute
-+# define __has_attribute(x) 0  /* Compatibility with non-clang compilers. */
-+#endif
-+
- #if __has_attribute(__error__)
- # define __compiletime_error(message) __attribute__((error(message)))
- #endif
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
