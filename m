@@ -1,64 +1,103 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A0A168
-	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 09:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E906F168
+	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 09:23:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640941846; x=1672477846;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=k6iD2CsmmCXpmRSNBtnKDt7eZEDt3D8xbZ03Fpz/wgI=;
-  b=hqns9XvivMBr4J9q7GDWmgAhZ7EhphxF1QKHuZ3DaGtFSRBdSTKk2PPx
-   FdUg8k6/BcTjsvz2dVmbohUidILNeyLzDK1WUxuZY1WS2ekB0qba6OhMk
-   w3zZDRe8W1mnevOC410uDyHtDwuXoOizP04UoHvxP00u7xB/ebPTQHeO0
-   o5TDbDlfYsdwid9exCrblxCRg2QYW9DCpYlMDhJTJty0/Y6kkhlc9MAXh
-   z16pxP15+Oc8QLX0LhuOAVT928hrGaShw9yTll2cr9Vp4xxSuJmeML41F
-   r9cbh1lBvNC6ZrgfsPpiNlEp5AeKwj0v1oYWS1Y1Z1ObCwLf53XUv+/y8
+  t=1640942631; x=1672478631;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m/ZWwdpwFSD3RXBuK5m304XzMdG44W7CK1OgKD20WBI=;
+  b=HLk+S36TvBSNsiBwW9P55ju/MpkPpmqtYJqO8eON+tnZjvuhrLsme0PS
+   haMlNV74iYVkKYEJ7GvaK0xNuwiq5/3R+oFWoyUDxHdji0Kcc254ppnDz
+   2fugr2szLYkGiciTMuvKdgaDjrCKBT92tlYRRdiJEvMr0X5bRXNL5vANF
+   9ThZpyXxu1RlepbUQ5vJJ3axpM9YdxpNCH+8UCpzld2Q25oIUnEvGi8DJ
+   vXl3BSREW4eJs6eVIFx1nqa/yl5eC9F5t16Q4z7muwd5NBkg+CdGxCY53
+   wREFbxxDa32fY2MnyRXWogqW/s53O0lIWFzJ46aOB0tmBpLJdSIYsnkMT
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="222464022"
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="302543731"
 X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="222464022"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 01:10:45 -0800
+   d="scan'208";a="302543731"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 01:23:51 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="687450432"
-Received: from arudakov-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.25.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 01:10:41 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Claudio Suarez <cssk@net-c.es>, kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, David Airlie <airlied@linux.ie>,
- llvm@lists.linux.dev, dri-devel@lists.freedesktop.org, Thomas Zimmermann
- <tzimmermann@suse.de>
-Subject: Re: [PATCH] drm: get rid of DRM_DEBUG_* log calls in drm core,
- files drm_{b,c}*.c
-In-Reply-To: <Yc4Q7vqVDv/UcaVA@gineta.localdomain>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <Yc2Pd/DhQ7EpD+hD@gineta.localdomain>
- <202112302236.ikd2ET5w-lkp@intel.com>
- <Yc4Q7vqVDv/UcaVA@gineta.localdomain>
-Date: Fri, 31 Dec 2021 11:10:39 +0200
-Message-ID: <875yr5jg1c.fsf@intel.com>
+   d="scan'208";a="470906358"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 01:23:50 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n3E8b-000B8K-Dh; Fri, 31 Dec 2021 09:23:49 +0000
+Date: Fri, 31 Dec 2021 17:23:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <anup.patel@wdc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 30/42]
+ drivers/irqchip/irq-riscv-imsic.c:142:30: warning: variable 'global' set but
+ not used
+Message-ID: <202112311701.yUVrwIaS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, 30 Dec 2021, Claudio Suarez <cssk@net-c.es> wrote:
-> Please, don't apply this patch. I have to review it,.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   6fa93cde61f5f84422bd3f97b9db6e2406a344dd
+commit: 608f1fa0b6d8185a467e90300c3279f63214e7b7 [30/42] irqchip: Add RISC-V incoming MSI controller driver
+config: riscv-randconfig-r042-20211231 (https://download.01.org/0day-ci/archive/20211231/202112311701.yUVrwIaS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/608f1fa0b6d8185a467e90300c3279f63214e7b7
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 608f1fa0b6d8185a467e90300c3279f63214e7b7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/irqchip/
 
-Please make sure you build with DRM_LEGACY=y to include drm_bufs.c in
-the build.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you Cc: intel-gfx@lists.freedesktop.org on the patch, you'll get
-Intel CI results on the patch too.
+All warnings (new ones prefixed by >>):
 
-BR,
-Jani.
+>> drivers/irqchip/irq-riscv-imsic.c:142:30: warning: variable 'global' set but not used [-Wunused-but-set-variable]
+           struct imsic_global_config *global;
+                                       ^
+   drivers/irqchip/irq-riscv-imsic.c:138:22: warning: unused function 'imsic_cpu_page_virt' [-Wunused-function]
+   static void __iomem *imsic_cpu_page_virt(unsigned int cpu,
+                        ^
+   2 warnings generated.
 
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+vim +/global +142 drivers/irqchip/irq-riscv-imsic.c
+
+   137	
+   138	static void __iomem *imsic_cpu_page_virt(unsigned int cpu,
+   139						 unsigned int guest_index)
+   140	{
+   141		struct imsic_handler *handler = per_cpu_ptr(&imsic_handlers, cpu);
+ > 142		struct imsic_global_config *global;
+   143		struct imsic_local_config *local;
+   144	
+   145		if (!handler || !handler->priv)
+   146			return NULL;
+   147		local = &handler->local;
+   148		global = &handler->priv->global;
+   149	
+   150		return local->msi_va + (guest_index * IMSIC_MMIO_PAGE_SZ);
+   151	}
+   152	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
