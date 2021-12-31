@@ -1,30 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C229168
-	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 16:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371A3C36AE9;
-	Fri, 31 Dec 2021 16:54:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640969664;
-	bh=rvg6wZRVQUU4lpCX5Q8pmgTeUuHLBdlRzgcEDddaL60=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tIopv7WjtNwg2I+/VhiCEmWKJA3Tp1CfYoB9KDs2x8I6fLKM/8volT7GuscQVzWs0
-	 4W609XGbmX/wgGnDbQaEZi78ZWSGGAKnaapOTTOW3B22ltwqmUndOzNxtVXNQaKX8q
-	 gq3S3GleuaHGqpUVSk8u1fvG9CXNaeb4Piqe7S3oMtRFCrmKSjgdXzLt2NsMG8CrUr
-	 BanPbFsEiEi7ytq9i7+dL0cU0jv+EME5GaLSECaJm9JmFPfUdmEYyr1CeREoPZkk9B
-	 9Pmxe0u9r58Cuv2Chi9G4xslNjW+6xAQ14SNUxoCRVzrO4B0kDE2ISiNRE8JDLSI0P
-	 cab1GSHv+NJ3g==
-Date: Fri, 31 Dec 2021 09:54:20 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: cgel.zte@gmail.com
-Cc: ndesaulniers@google.com, keescook@chromium.org, wang.yong12@zte.com.cn,
-	xu.xin16@zte.com.cn, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] tools: compiler-gcc.h::Keep compatible with
- non-clang compilers.
-Message-ID: <Yc81vBwPo/aHMfXB@archlinux-ax161>
-References: <20211231100833.590691-1-xu.xin16@zte.com.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5647168
+	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 17:19:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640971145; x=1672507145;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZgZj7WrsV28htaLbopbhpk5uh/dtLVbpOEkc116Ihiw=;
+  b=mXgG2usqj8tWSIM5UPYdWU5m6h1z8uyF1entd9xYrOQT0yfa0BJS3jB1
+   yiDQPHNeGQsYoO1t7A5Gl4BFKUgTQ5RUJmDVOrilGl0ouV/vKH9VAtNzs
+   kF9kQ12d//Hwynjr7AkpUhZT0AJlcTeTKw0xJmLJwJz+cvsEHJPh0yz2f
+   kIZYJnYLH2uE1qs4rSwz1+9E2tTnquFzWpuN8R1/yLJgHfwfOQCM2rC9C
+   7owDbhtS5ptgdKL7syIRTqbEYyCCoJFOGqrDZUgcDovk/2xr/tggHTQfX
+   8Qls2qtJGEXBLSoJWVIzC0AzbRgtHpj+lLcVKRaiuyfqnMsTFXsxnxJ5a
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="240632494"
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="240632494"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 09:19:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="470987936"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 09:19:03 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n3LYU-000BRl-Ph; Fri, 31 Dec 2021 17:19:02 +0000
+Date: Sat, 1 Jan 2022 01:18:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH net-next v3 06/11] net: dsa: realtek: add new mdio
+ interface for drivers
+Message-ID: <202201010143.Ua57feb3-lkp@intel.com>
+References: <20211231043306.12322-7-luizluca@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,65 +45,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211231100833.590691-1-xu.xin16@zte.com.cn>
+In-Reply-To: <20211231043306.12322-7-luizluca@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 31, 2021 at 10:08:33AM +0000, cgel.zte@gmail.com wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> When HOSTC = gcc (GCC) 4.8.5, there is an error occurring as follows:
-> error: Undefined __has_attribute.
-> 
-> This problem is introduced by commit d0ee23f9d78be ("tools:
-> compiler-gcc.h: Guard error attribute use with __has_attribute").
+Hi Luiz,
 
-Yes, sorry for breaking this. It has been discussed here with some ideas
-for a resolution but I never got any feedback so I never carried it
-through, thank you for picking it up.
+Thank you for the patch! Perhaps something to improve:
 
-https://lore.kernel.org/r/c1b1a299-c60d-28a4-07ab-1ecd211d6da9@i-love.sakura.ne.jp/
+[auto build test WARNING on net-next/master]
 
-This patch should probably be sent straight to Linus next time it is
-sent, as he directly applied both my commit and the one that it was
-fixing. Nick and I do not pick up patches currently although Kees might
-be willing to take this one.
+url:    https://github.com/0day-ci/linux/commits/Luiz-Angelo-Daros-de-Luca/net-dsa-realtek-smi-move-to-subdirectory/20211231-133326
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git af30f8eaa8fe4ff1987280f716309711997bd979
+config: hexagon-randconfig-r033-20211231 (https://download.01.org/0day-ci/archive/20220101/202201010143.Ua57feb3-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/98bde88720c76b12ab9ed2cfc166f65396e6e5e2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Luiz-Angelo-Daros-de-Luca/net-dsa-realtek-smi-move-to-subdirectory/20211231-133326
+        git checkout 98bde88720c76b12ab9ed2cfc166f65396e6e5e2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/dsa/realtek/
 
-> To solve it, this patch is given to keep the comatibility.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-                                               ^ compatibility
+All warnings (new ones prefixed by >>):
 
-Might be worth adding "with older GCC versions" at the end of that
-sentence.
+>> drivers/net/dsa/realtek/realtek-mdio.c:41:5: warning: no previous prototype for function 'realtek_mdio_read_reg' [-Wmissing-prototypes]
+   int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
+       ^
+   drivers/net/dsa/realtek/realtek-mdio.c:41:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
+   ^
+   static 
+   1 warning generated.
 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Co-developed-by: wangyong <wang.yong12@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->  tools/include/linux/compiler-gcc.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-> index 8816f06fc6c7..7da593d3cb91 100644
-> --- a/tools/include/linux/compiler-gcc.h
-> +++ b/tools/include/linux/compiler-gcc.h
-> @@ -16,6 +16,11 @@
->  # define __fallthrough __attribute__ ((fallthrough))
->  #endif
->  
-> +
-> +#ifndef __has_attribute
-> +# define __has_attribute(x) 0  /* Compatibility with non-clang compilers. */
 
-This comment is not really accurate; it implies that clang is the only
-one that defines __has_attribute() but GCC 5.x or newer supports
-__has_attribute().  A more accurate comment might be:
+vim +/realtek_mdio_read_reg +41 drivers/net/dsa/realtek/realtek-mdio.c
 
-/* Compatibility with GCC < 5.x */
+    40	
+  > 41	int realtek_mdio_read_reg(struct realtek_priv *priv, u32 addr, u32 *data)
+    42	{
+    43		u32 phy_id = priv->phy_id;
+    44		struct mii_bus *bus = priv->bus;
+    45	
+    46		mutex_lock(&bus->mdio_lock);
+    47	
+    48		bus->write(bus, phy_id, REALTEK_MDIO_CTRL0_REG, REALTEK_MDIO_ADDR_OP);
+    49		bus->write(bus, phy_id, REALTEK_MDIO_START_REG, REALTEK_MDIO_START_OP);
+    50		bus->write(bus, phy_id, REALTEK_MDIO_ADDRESS_REG, addr);
+    51		bus->write(bus, phy_id, REALTEK_MDIO_START_REG, REALTEK_MDIO_START_OP);
+    52		bus->write(bus, phy_id, REALTEK_MDIO_CTRL1_REG, REALTEK_MDIO_READ_OP);
+    53		bus->write(bus, phy_id, REALTEK_MDIO_START_REG, REALTEK_MDIO_START_OP);
+    54		*data = bus->read(bus, phy_id, REALTEK_MDIO_DATA_READ_REG);
+    55	
+    56		mutex_unlock(&bus->mdio_lock);
+    57	
+    58		return 0;
+    59	}
+    60	
 
-> +#endif
-> +
->  #if __has_attribute(__error__)
->  # define __compiletime_error(message) __attribute__((error(message)))
->  #endif
-> -- 
-> 2.25.1
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
