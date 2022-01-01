@@ -1,42 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75942C80
-	for <llvm@lists.linux.dev>; Sat,  1 Jan 2022 22:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2785C2C82
+	for <llvm@lists.linux.dev>; Sat,  1 Jan 2022 22:58:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641077887; x=1672613887;
+  t=1641077888; x=1672613888;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jgQubOI3SKNzWA7k79bmOtULyLmwm1J31xvIebg1f0Y=;
-  b=GaCLFqCLtvTG7oj2gyRjXGrA1qSj6evkAfBggqzT6q1HlFIx/Cy6m9en
-   Xj0Chw3ysAhsAIi70GwyZ7JCBjg+nsfdmFPussvRhHHuovVnQYE37Cn2o
-   yn892jnL+55fXno8rDTTto8Vy3XxbyyaMDWFrtTyykON7R5JLeE0m6cNR
-   nUoQZHpkKPhSdfb/rYfR7xIAjpstYqK8e8Mk4DE74uP988HJaL+d5xKnu
-   BCXj7f3ih29Qo4YT17FmlT8chNwFIPWygSr0TVii9L3oNKC6b+xBm4iVy
-   is2/20j2eG7QfJXLhvF0eeCDa2Cf5SY53hDBbuAlb8gsaZEMAbMTqmb5g
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="242134446"
+  bh=7SK0DU34lm4A76mU+OTQXk/ZoNkBeoIrXAV+IY98qgg=;
+  b=FZFaSeoy5pEDW34zH/fHjiQY/aWY1N7/k+unpmoI7ygzAOQVEljE6Zpn
+   NurzF0frVb3ErVVqNdwxv09/RM/0R2lWNxeMYcQJGExtmpVGlo728oDQd
+   bPA+yzqQYLHAdgTIdszXGZAvs4In80TzatOWV89DMrqi16N5x/1jLyavP
+   jDz21ljMfNUyT+0lUMRv8GVap1MXBKlApxulKK2Otx8oaoKBFE1uonY7Y
+   BCIGXaTgmSY+kRScPUGVJ7xzoEFxlLFxNEkF+znseLzu+qmhjJ0n5hsyV
+   9U61sadTeKpDQxoCSynIVk0F2ksfanmLMerOkzLnv5G73tnm50ccHxz/q
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="328262783"
 X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
-   d="scan'208";a="242134446"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 14:58:07 -0800
+   d="scan'208";a="328262783"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 14:58:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
-   d="scan'208";a="762142342"
+   d="scan'208";a="610412205"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Jan 2022 14:58:05 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Jan 2022 14:58:05 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n3nK9-000CrR-Be; Sat, 01 Jan 2022 22:58:05 +0000
-Date: Sun, 2 Jan 2022 06:57:57 +0800
+	id 1n3nK9-000CrP-AG; Sat, 01 Jan 2022 22:58:05 +0000
+Date: Sun, 2 Jan 2022 06:58:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [linux-next:master 4461/9897] arch/arm/mach-iop32x/irq.c:62:6:
- warning: no previous prototype for function 'iop_handle_irq'
-Message-ID: <202201020627.cJMyevvZ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miroslav Benes <mbenes@suse.cz>
+Subject: kernel/module.c:4478:14: warning: variable 'exit' set but not used
+Message-ID: <202201020600.rl5oKvlD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,71 +47,76 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   ea586a076e8aa606c59b66d86660590f18354b11
-commit: 6f5d248d05db9c4991366154f1a657a630faa583 [4461/9897] ARM: iop32x: use GENERIC_IRQ_MULTI_HANDLER
-config: arm-randconfig-r031-20220101 (https://download.01.org/0day-ci/archive/20220102/202201020627.cJMyevvZ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c054402170cd8466683a20385befc0523aba3359)
+Hi Arnd,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   278218f6778bc7d6f8b67199446c56cec7ebb841
+commit: 0d67e332e6df72f43eaa21228daa3a79e23093f3 module: fix clang CFI with MODULE_UNLOAD=n
+date:   3 months ago
+config: arm64-randconfig-r022-20220101 (https://download.01.org/0day-ci/archive/20220102/202201020600.rl5oKvlD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6f5d248d05db9c4991366154f1a657a630faa583
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 6f5d248d05db9c4991366154f1a657a630faa583
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0d67e332e6df72f43eaa21228daa3a79e23093f3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0d67e332e6df72f43eaa21228daa3a79e23093f3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-iop32x/irq.c:62:6: warning: no previous prototype for function 'iop_handle_irq' [-Wmissing-prototypes]
-   void iop_handle_irq(struct pt_regs *regs)
-        ^
-   arch/arm/mach-iop32x/irq.c:62:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void iop_handle_irq(struct pt_regs *regs)
-   ^
-   static 
+>> kernel/module.c:4478:14: warning: variable 'exit' set but not used [-Wunused-but-set-variable]
+           exitcall_t *exit;
+                       ^
    1 warning generated.
---
->> arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for function 'iop_enable_cp6' [-Wmissing-prototypes]
-   void iop_enable_cp6(void)
-        ^
-   arch/arm/mach-iop32x/cp6.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void iop_enable_cp6(void)
-   ^
-   static 
-   arch/arm/mach-iop32x/cp6.c:43:13: warning: no previous prototype for function 'iop_init_cp6_handler' [-Wmissing-prototypes]
-   void __init iop_init_cp6_handler(void)
-               ^
-   arch/arm/mach-iop32x/cp6.c:43:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init iop_init_cp6_handler(void)
-   ^
-   static 
-   2 warnings generated.
 
 
-vim +/iop_handle_irq +62 arch/arm/mach-iop32x/irq.c
+vim +/exit +4478 kernel/module.c
 
-    61	
-  > 62	void iop_handle_irq(struct pt_regs *regs)
-    63	{
-    64		u32 mask;
-    65	
-    66		iop_enable_cp6();
-    67	
-    68		do {
-    69			mask = iintsrc_read();
-    70			if (mask)
-    71				generic_handle_irq(fls(mask));
-    72		} while (mask);
-    73	}
-    74	
+^1da177e4c3f41 Linus Torvalds 2005-04-16  4473  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4474  static void cfi_init(struct module *mod)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4475  {
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4476  #ifdef CONFIG_CFI_CLANG
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4477  	initcall_t *init;
+cf68fffb66d60d Sami Tolvanen  2021-04-08 @4478  	exitcall_t *exit;
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4479  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4480  	rcu_read_lock_sched();
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4481  	mod->cfi_check = (cfi_check_fn)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4482  		find_kallsyms_symbol_value(mod, "__cfi_check");
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4483  	init = (initcall_t *)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4484  		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4485  	exit = (exitcall_t *)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4486  		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4487  	rcu_read_unlock_sched();
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4488  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4489  	/* Fix init/exit functions to point to the CFI jump table */
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4490  	if (init)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4491  		mod->init = *init;
+0d67e332e6df72 Arnd Bergmann  2021-09-27  4492  #ifdef CONFIG_MODULE_UNLOAD
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4493  	if (exit)
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4494  		mod->exit = *exit;
+0d67e332e6df72 Arnd Bergmann  2021-09-27  4495  #endif
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4496  
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4497  	cfi_module_add(mod, module_addr_min);
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4498  #endif
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4499  }
+cf68fffb66d60d Sami Tolvanen  2021-04-08  4500  
+
+:::::: The code at line 4478 was first introduced by commit
+:::::: cf68fffb66d60d96209446bfc4a15291dc5a5d41 add support for Clang CFI
+
+:::::: TO: Sami Tolvanen <samitolvanen@google.com>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
