@@ -1,190 +1,246 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B6E173
-	for <llvm@lists.linux.dev>; Sat,  1 Jan 2022 12:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641040604; x=1672576604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UFJpSOl6kq/jg+uGFajvjo0TFaEUc6qNNEzPw6RQvOA=;
-  b=E8klhjmHwV/N8UkYKLIhXxd/iaB9mUlB4T3bhL2tCVS40tfB6xNCzmh2
-   Qy+twnnXF2oNSXYdiRDwzO1xMnOsbQYvNNyOQgrmjvxptq7SuZBYCHZ74
-   BaGd35nqP/6UEjzwx43KC6SQ24eviN6ehk6mJWEz8QyIyKIjatbO024PZ
-   7ehBuK/fJYqYktBT3kGPLjlB87SxVsqNLtBvOYF9hx5fryqt01g+3tnAV
-   ivGxVx0fJdaqJyiHHvusbl7g2Syf8kGaqzY3RTlssQhg7+kR+tvs+/JDQ
-   jZa7lBJlI/DsaXsRZgMeYxk8YakhNXoYsuImMQu6i1yWP4Bt6V/y1COov
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="242098089"
-X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="242098089"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 04:36:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="687691127"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Jan 2022 04:36:40 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n3dcl-000CRY-Di; Sat, 01 Jan 2022 12:36:39 +0000
-Date: Sat, 1 Jan 2022 20:36:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
-	tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, william.roche@oracle.com,
-	Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v3 2/2] EDAC/amd64: Add new register offset support and
- related changes
-Message-ID: <202201012032.PZLw1uMC-lkp@intel.com>
-References: <20211228200615.412999-3-yazen.ghannam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EE4173
+	for <llvm@lists.linux.dev>; Sat,  1 Jan 2022 18:45:11 +0000 (UTC)
+Received: by mail-wm1-f50.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so18969381wmj.5
+        for <llvm@lists.linux.dev>; Sat, 01 Jan 2022 10:45:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:cc:message-id:subject:mime-version:list-id;
+        bh=KtQ6gV09wMzRnt0qjAalCczrS1n5SxgQ3gwefxZB1q0=;
+        b=Qjst/aHDLqxjxlzvIaQYhFPVGsL+RlBdntZj7SnCGULrAI/D/XACfetAsD0Tg2PC5E
+         /bdeZWHAwO69ad0HbOGaf+7m5HU8eulvhSbE21QDa7F2KYGP5q/tGIrRJYfh+20h2f6I
+         tKYe4S6GhtWJqA0yTIDEecFBMqKGsYNqZH7dxYZMCLV4RKfT8qBVu9ylmwLE7Peh8qx8
+         mrP3Ai9tuYhxZyB0OCAi4iv3+TZ40iq4lpNa9O1KyVvrLH1Zv8ovPvZZ6Wuo9XKUE/hB
+         nM44ovz4DvK84SvygivaDujYwhrgy9iex6n9NIoLsQ13EWOirj8bGrO/viIBbcENrPTO
+         eFZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
+         :list-id;
+        bh=KtQ6gV09wMzRnt0qjAalCczrS1n5SxgQ3gwefxZB1q0=;
+        b=6VxLLB7AiJhVS6xtHEQSLdJy5eP3aZgo3djMeNiedLzCX3Pm2YHLmcHxSbV0MF/Yqh
+         2jMbcngGCZO+G2W5/+9MscRorayafSZta40feN0GSCZB8dyI6hOelOI0yXxyRa8FAIww
+         LbqmaubwaAid1CImOu0t1T0yEcZqHVuEA/+XwVQ2nJp57V+mPMuI8YXzJGobTTCpwhlC
+         Q50Hrbg9lg1bcpL+ASPDY3oSi1DvF6EDYE8SVPUD0nvs7jBa0WAlFbwC+EnJHnTnf3QJ
+         aeHkbEKyP0Og4tcuPNbYtWmIESSAx/4nBxSRCI7AUBOK0fDZTolpulgKbcNsbWanvnyp
+         4QGA==
+X-Gm-Message-State: AOAM5333DFJpb2G8j/Q69dRAkf3RJLSHL0yNwXXi5WukTTQmFqM8/0M1
+	FvV5/Jr8bmcFu+lECYcCp911TA==
+X-Google-Smtp-Source: ABdhPJyM6lj8XHzWjNitVDtnMWQnAcf0jmA+2Ust7p9yax0IpdHzLd8mbNaosn3SCYuPFUGBb+gghw==
+X-Received: by 2002:a05:600c:2902:: with SMTP id i2mr33927942wmd.97.1641062709401;
+        Sat, 01 Jan 2022 10:45:09 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id m17sm33526470wmq.31.2022.01.01.10.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jan 2022 10:45:08 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sat, 1 Jan 2022 18:45:07 +0000 (UTC)
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, arnd@linaro.org
+Message-ID: <955016936.8500.1641062708921@jenkins.jenkins>
+Subject: [TCWG CI] Regression caused by linux: arm64: vdso32: require
+ CROSS_COMPILE_COMPAT for gcc+bfd
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211228200615.412999-3-yazen.ghannam@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_8499_1709739931.1641062707914"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-Hi Yazen,
+------=_Part_8499_1709739931.1641062707914
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I love your patch! Perhaps something to improve:
+[TCWG CI] Regression caused by linux: arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd:
+commit 1d1c25233a29cd6c9b7c19ea725461f9dc180e63
+Author: Nick Desaulniers <ndesaulniers@google.com>
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on next-20211224]
-[cannot apply to linux/master linus/master v5.16-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+    arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd
 
-url:    https://github.com/0day-ci/linux/commits/Yazen-Ghannam/AMD-Family-19h-Models-10h-1Fh-Updates/20211229-040749
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-config: x86_64-randconfig-c007-20211231 (https://download.01.org/0day-ci/archive/20220101/202201012032.PZLw1uMC-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/dfcd741f577d123f8b488cf88979d6bac6dca5da
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Yazen-Ghannam/AMD-Family-19h-Models-10h-1Fh-Updates/20211229-040749
-        git checkout dfcd741f577d123f8b488cf88979d6bac6dca5da
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/edac/
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+40
+# First few build errors in logs:
+# 00:00:35 error: unable to create target: 'No available targets are compatible with triple '
+# 00:00:35 make[1]: *** [arch/arm64/kernel/vdso32/Makefile:167: arch/arm64/kernel/vdso32/note.o] Error 1
+# 00:00:35 error: unable to create target: 'No available targets are compatible with triple '
+# 00:00:35 make[1]: *** [arch/arm64/kernel/vdso32/Makefile:169: arch/arm64/kernel/vdso32/vgettimeofday.o] Error 1
+# 00:00:35 make: *** [arch/arm64/Makefile:202: vdso_prepare] Error 2
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+from
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+22047
 
-All warnings (new ones prefixed by >>):
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
 
->> drivers/edac/amd64_edac.c:1982:52: warning: variable 'dimm' is uninitialized when used here [-Wuninitialized]
-           edac_dbg(1, "CS%d DIMM%d AddrMasks:\n", csrow_nr, dimm);
-                                                             ^~~~
-   drivers/edac/edac_mc.h:77:32: note: expanded from macro 'edac_dbg'
-                               "%s: " fmt, __func__, ##__VA_ARGS__);       \
-                                                       ^~~~~~~~~~~
-   drivers/edac/edac_mc.h:49:42: note: expanded from macro 'edac_printk'
-           printk(level "EDAC " prefix ": " fmt, ##arg)
-                                                   ^~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   drivers/edac/amd64_edac.c:1923:10: note: initialize the variable 'dimm' to silence this warning
-           int dimm, size = 0;
-                   ^
-                    = 0
-   1 warning generated.
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
 
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/build-1d1c25233a29cd6c9b7c19ea725461f9dc180e63/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/build-fb6ad5cb3b6745e7bffc5fe19b130f3594375634/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/
 
-vim +/dimm +1982 drivers/edac/amd64_edac.c
+Reproduce builds:
+<cut>
+mkdir investigate-linux-1d1c25233a29cd6c9b7c19ea725461f9dc180e63
+cd investigate-linux-1d1c25233a29cd6c9b7c19ea725461f9dc180e63
 
-94c1acf2c85b03 Aravind Gopalakrishnan 2013-04-17  1916  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1917  static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1918  				    unsigned int cs_mode, int csrow_nr)
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1919  {
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1920  	u32 addr_mask_orig, addr_mask_deinterleaved;
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1921  	u32 msb, weight, num_zero_bits;
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1922  	int cs_mask_nr = csrow_nr;
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1923  	int dimm, size = 0;
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1924  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1925  	/* No Chip Selects are enabled. */
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1926  	if (!cs_mode)
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1927  		return size;
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1928  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1929  	/* Requested size of an even CS but none are enabled. */
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1930  	if (!(cs_mode & CS_EVEN) && !(csrow_nr & 1))
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1931  		return size;
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1932  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1933  	/* Requested size of an odd CS but none are enabled. */
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1934  	if (!(cs_mode & CS_ODD) && (csrow_nr & 1))
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1935  		return size;
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1936  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1937  	/*
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1938  	 * Family 17h introduced systems with one mask per DIMM,
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1939  	 * and two Chip Selects per DIMM.
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1940  	 *
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1941  	 *	CS0 and CS1 -> MASK0 / DIMM0
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1942  	 *	CS2 and CS3 -> MASK1 / DIMM1
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1943  	 *
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1944  	 * Family 19h Model 10h introduced systems with one mask per Chip Select,
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1945  	 * and two Chip Selects per DIMM.
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1946  	 *
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1947  	 *	CS0 -> MASK0 -> DIMM0
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1948  	 *	CS1 -> MASK1 -> DIMM0
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1949  	 *	CS2 -> MASK2 -> DIMM1
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1950  	 *	CS3 -> MASK3 -> DIMM1
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1951  	 *
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1952  	 * Keep the mask number equal to the Chip Select number for newer systems,
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1953  	 * and shift the mask number for older systems.
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1954  	 */
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1955  	if (!fam_type->flags.zn_regs_v2)
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1956  		cs_mask_nr >>= 1;
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1957  
-81f5090db843be Yazen Ghannam          2019-08-22  1958  	/* Asymmetric dual-rank DIMM support. */
-81f5090db843be Yazen Ghannam          2019-08-22  1959  	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1960  		addr_mask_orig = pvt->csels[umc].csmasks_sec[cs_mask_nr];
-81f5090db843be Yazen Ghannam          2019-08-22  1961  	else
-dfcd741f577d12 Yazen Ghannam          2021-12-28  1962  		addr_mask_orig = pvt->csels[umc].csmasks[cs_mask_nr];
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1963  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1964  	/*
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1965  	 * The number of zero bits in the mask is equal to the number of bits
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1966  	 * in a full mask minus the number of bits in the current mask.
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1967  	 *
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1968  	 * The MSB is the number of bits in the full mask because BIT[0] is
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1969  	 * always 0.
-9f4873fb6af796 Yazen Ghannam          2021-10-05  1970  	 *
-9f4873fb6af796 Yazen Ghannam          2021-10-05  1971  	 * In the special 3 Rank interleaving case, a single bit is flipped
-9f4873fb6af796 Yazen Ghannam          2021-10-05  1972  	 * without swapping with the most significant bit. This can be handled
-9f4873fb6af796 Yazen Ghannam          2021-10-05  1973  	 * by keeping the MSB where it is and ignoring the single zero bit.
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1974  	 */
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1975  	msb = fls(addr_mask_orig) - 1;
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1976  	weight = hweight_long(addr_mask_orig);
-9f4873fb6af796 Yazen Ghannam          2021-10-05  1977  	num_zero_bits = msb - weight - !!(cs_mode & CS_3R_INTERLEAVE);
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1978  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1979  	/* Take the number of zero bits off from the top of the mask. */
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1980  	addr_mask_deinterleaved = GENMASK_ULL(msb - num_zero_bits, 1);
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1981  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21 @1982  	edac_dbg(1, "CS%d DIMM%d AddrMasks:\n", csrow_nr, dimm);
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1983  	edac_dbg(1, "  Original AddrMask: 0x%x\n", addr_mask_orig);
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1984  	edac_dbg(1, "  Deinterleaved AddrMask: 0x%x\n", addr_mask_deinterleaved);
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1985  
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1986  	/* Register [31:1] = Address [39:9]. Size is in kBs here. */
-e53a3b267fb0a7 Yazen Ghannam          2019-08-21  1987  	size = (addr_mask_deinterleaved >> 2) + 1;
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1988  
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1989  	/* Return size in MBs. */
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1990  	return size >> 10;
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1991  }
-f1cbbec9fce958 Yazen Ghannam          2016-11-17  1992  
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
 
+# Fetch manifests and test.sh script
+mkdir -p artifacts/manifests
+curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/manifests/build-baseline.sh --fail
+curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/manifests/build-parameters.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-lts-allmodconfig/11/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
+
+cd linux
+
+# Reproduce first_bad build
+git checkout --detach 1d1c25233a29cd6c9b7c19ea725461f9dc180e63
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach fb6ad5cb3b6745e7bffc5fe19b130f3594375634
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit 1d1c25233a29cd6c9b7c19ea725461f9dc180e63
+Author: Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue Oct 19 15:36:46 2021 -0700
+
+    arm64: vdso32: require CROSS_COMPILE_COMPAT for gcc+bfd
+    
+    commit 3e6f8d1fa18457d54b20917bd9174d27daf09ab9 upstream.
+    
+    Similar to
+    commit 231ad7f409f1 ("Makefile: infer --target from ARCH for CC=clang")
+    There really is no point in setting --target based on
+    $CROSS_COMPILE_COMPAT for clang when the integrated assembler is being
+    used, since
+    commit ef94340583ee ("arm64: vdso32: drop -no-integrated-as flag").
+    
+    Allows COMPAT_VDSO to be selected without setting $CROSS_COMPILE_COMPAT
+    when using clang and lld together.
+    
+    Before:
+    $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make -j72 LLVM=1 defconfig
+    $ grep CONFIG_COMPAT_VDSO .config
+    CONFIG_COMPAT_VDSO=y
+    $ ARCH=arm64 make -j72 LLVM=1 defconfig
+    $ grep CONFIG_COMPAT_VDSO .config
+    $
+    
+    After:
+    $ ARCH=arm64 CROSS_COMPILE_COMPAT=arm-linux-gnueabi- make -j72 LLVM=1 defconfig
+    $ grep CONFIG_COMPAT_VDSO .config
+    CONFIG_COMPAT_VDSO=y
+    $ ARCH=arm64 make -j72 LLVM=1 defconfig
+    $ grep CONFIG_COMPAT_VDSO .config
+    CONFIG_COMPAT_VDSO=y
+    
+    Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+    Suggested-by: Nathan Chancellor <nathan@kernel.org>
+    Tested-by: Nathan Chancellor <nathan@kernel.org>
+    Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+    Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+    Link: https://lore.kernel.org/r/20211019223646.1146945-5-ndesaulniers@google.com
+    Signed-off-by: Will Deacon <will@kernel.org>
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arm64/Kconfig                |  3 ++-
+ arch/arm64/kernel/vdso32/Makefile | 17 +++++------------
+ 2 files changed, 7 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index fee914c716aa..0758ea0717f9 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1264,7 +1264,8 @@ config KUSER_HELPERS
+ 
+ config COMPAT_VDSO
+ 	bool "Enable vDSO for 32-bit applications"
+-	depends on !CPU_BIG_ENDIAN && "$(CROSS_COMPILE_COMPAT)" != ""
++	depends on !CPU_BIG_ENDIAN
++	depends on (CC_IS_CLANG && LD_IS_LLD) || "$(CROSS_COMPILE_COMPAT)" != ""
+ 	select GENERIC_COMPAT_VDSO
+ 	default y
+ 	help
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index 764d1900d5aa..3514269ac75f 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -10,18 +10,15 @@ include $(srctree)/lib/vdso/Makefile
+ 
+ # Same as cc-*option, but using CC_COMPAT instead of CC
+ ifeq ($(CONFIG_CC_IS_CLANG), y)
+-CC_COMPAT_CLANG_FLAGS := --target=$(notdir $(CROSS_COMPILE_COMPAT:%-=%))
+-
+ CC_COMPAT ?= $(CC)
+-CC_COMPAT += $(CC_COMPAT_CLANG_FLAGS)
+-
+-ifneq ($(LLVM),)
+-LD_COMPAT ?= $(LD)
++CC_COMPAT += --target=arm-linux-gnueabi
+ else
+-LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)ld
++CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
+ endif
++
++ifeq ($(CONFIG_LD_IS_LLD), y)
++LD_COMPAT ?= $(LD)
+ else
+-CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
+ LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)ld
+ endif
+ 
+@@ -47,10 +44,6 @@ VDSO_CPPFLAGS += $(LINUXINCLUDE)
+ # Common C and assembly flags
+ # From top-level Makefile
+ VDSO_CAFLAGS := $(VDSO_CPPFLAGS)
+-ifneq ($(shell $(CC_COMPAT) --version 2>&1 | head -n 1 | grep clang),)
+-VDSO_CAFLAGS += --target=$(notdir $(CROSS_COMPILE_COMPAT:%-=%))
+-endif
+-
+ VDSO_CAFLAGS += $(call cc32-option,-fno-PIE)
+ ifdef CONFIG_DEBUG_INFO
+ VDSO_CAFLAGS += -g
+</cut>
+------=_Part_8499_1709739931.1641062707914--
