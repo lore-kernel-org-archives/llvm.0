@@ -1,30 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6AA173
-	for <llvm@lists.linux.dev>; Fri, 31 Dec 2021 22:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F72C36AEC;
-	Fri, 31 Dec 2021 22:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640988126;
-	bh=A7x7PdWBqcoi+hZ15G3SKeCFjNbydYvYM9peSG35voI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=spNqlz1BuwLvllg2l1Cse+pyNFqGdTr0M1Pmlr9E3BvzLZr2VZB44/LbaGjciWC8I
-	 ie/xInDnFMXUVUEd7bUINzunKQ8qoB45O1O63H7G89HGJzo8DBUNXvYWMk/mp/7jtm
-	 EESi0EFD6NruNTl/hSuKEJPyC0k7th0HZB1qLBB2KaeZmDc5GyJxyO7dkfingeeE2V
-	 3JP4oy15bYJAKJd+i37tg5y//M2+orWArVbJQuPMnnhE+uNHzluxcZhQAh64DtkpwO
-	 QYY6mVPO5eBpD1uh15hzDdjerbAPesBW1ohihloXnJ7Rh37vLtixW3nK5F3/L5tvJ8
-	 SqyDQFuASuqVw==
-Date: Fri, 31 Dec 2021 15:02:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] power: reset: ltc2952: Fix use of floating point
- literals
-Message-ID: <Yc992ncu+CbDSJJn@archlinux-ax161>
-References: <20211105152049.2522250-1-nathan@kernel.org>
- <20211116142614.ofqoox6zpn5erlc3@earth.universe>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E1C168
+	for <llvm@lists.linux.dev>; Sat,  1 Jan 2022 00:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640998582; x=1672534582;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2HFGC/OfpPDDxtoPYhmbmSb5PLrj5xh+f3NHm9mZPLI=;
+  b=RYgxrFlo4Sl0KXj4CpJVRknbkHUu+Xpu0OjKus/uB0VV8dEij4NnmCOV
+   7ucU+hfJxN1curDxPt/E+hsxvp/GXnpWSJlOWn/1yKQAUPK8r5RSmfm95
+   XzO+c2nYPQfa6uEth0yvSnVN2ncCezaUDVsqKDy0jpmgNZE1tkpzbHVqC
+   3FdWewx06U25yOfbZ5iHnpcO4TKWbiTBoZFZvv+zPTZEJRvFsu89v5sMp
+   1HoOUKVP8WR42sKmNUzpb4yahbB22ca/RYqIzJEwYEuq1D/5BDnD5ZkVY
+   tb3myuvGLDYfBVQy5dvi2mCO8DgFG7JAIrAQRPqEPeMKM3r609DLOzM6/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="242066180"
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="242066180"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 16:56:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="555148696"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Dec 2021 16:56:19 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n3Sh1-000Bqp-1S; Sat, 01 Jan 2022 00:56:19 +0000
+Date: Sat, 1 Jan 2022 08:55:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <alobakin@pm.me>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>
+Subject: drivers/net/dsa/ocelot/seville_vsc9953.c:1255:34: warning: unused
+ variable 'seville_of_match'
+Message-ID: <202201010857.K6Bw7Kem-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,95 +45,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211116142614.ofqoox6zpn5erlc3@earth.universe>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Sebastian,
+Hi Alexander,
 
-On Tue, Nov 16, 2021 at 03:26:14PM +0100, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Nov 05, 2021 at 08:20:50AM -0700, Nathan Chancellor wrote:
-> > A new commit in LLVM causes an error on the use of 'long double' when
-> > '-mno-x87' is used, which the kernel does through an alias,
-> > '-mno-80387' (see the LLVM commit below for more details around why it
-> > does this).
-> > 
-> > drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> >         data->wde_interval = 300L * 1E6L;
-> >                                   ^
-> > drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> >         data->wde_interval = 300L * 1E6L;
-> >                            ^
-> > drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> >         data->trigger_delay = ktime_set(2, 500L*1E6L);
-> >                                                ^
-> > 3 errors generated.
-> > 
-> > This happens due to the use of a 'long double' literal. The 'E6' part of
-> > '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> > it to 'long double'.
-> > 
-> > There is no visible reason for floating point values in this driver, as
-> > the values are only assigned to integer types. Use NSEC_PER_MSEC, which
-> > is the same integer value as '1E6L', to avoid changing functionality but
-> > fix the error.
-> > 
-> > Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> > Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> 
-> Thanks, queued to power-supply's fixes branch.
+First bad commit (maybe != root cause):
 
-Is there a timeline for getting this to Linus, since it has been a month
-and a half now since this was applied? It breaks several x86_64 configs
-with tip of tree clang, which harms our testing of the upcoming release,
-and other people are now tripping over this and reporting it on the LLVM
-issue tracker:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8008293888188c3923f5bd8a69370dae25ed14e5
+commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
+date:   9 months ago
+config: s390-randconfig-r044-20220101 (https://download.01.org/0day-ci/archive/20220101/202201010857.K6Bw7Kem-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/ocelot/
 
-https://github.com/llvm/llvm-project/issues/52924
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Also, I noticed that your fixes branch is not flowing into linux-next,
-meaning this is not fixed there either. Would it be possible for you to
-ask Stephen Rothwell to add it?
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Nathan
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/ocelot/seville_vsc9953.c:1255:34: warning: unused variable 'seville_of_match' [-Wunused-const-variable]
+   static const struct of_device_id seville_of_match[] = {
+                                    ^
+   21 warnings generated.
 
-> > 
-> > v1 -> v2: https://lore.kernel.org/r/20211104215047.663411-1-nathan@kernel.org/
-> > 
-> > * A separate review pointed out that NSEC_PER_MSEC is a better choice
-> >   than USEC_PER_SEC because ktime_t is nanoseconds and the few functions
-> >   that take these values work in nanoseconds. The value is the same but
-> >   the documentation is better.
-> > 
-> > * Pick up Nick's review tag.
-> > 
-> >  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
-> > index fbb344353fe4..65d9528cc989 100644
-> > --- a/drivers/power/reset/ltc2952-poweroff.c
-> > +++ b/drivers/power/reset/ltc2952-poweroff.c
-> > @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
-> >  
-> >  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
-> >  {
-> > -	data->wde_interval = 300L * 1E6L;
-> > -	data->trigger_delay = ktime_set(2, 500L*1E6L);
-> > +	data->wde_interval = 300L * NSEC_PER_MSEC;
-> > +	data->trigger_delay = ktime_set(2, 500L * NSEC_PER_MSEC);
-> >  
-> >  	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> >  	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
-> > 
-> > base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
-> > -- 
-> > 2.34.0.rc0
-> > 
 
+vim +/seville_of_match +1255 drivers/net/dsa/ocelot/seville_vsc9953.c
 
+84705fc165526e Maxim Kochetkov 2020-07-13  1254  
+84705fc165526e Maxim Kochetkov 2020-07-13 @1255  static const struct of_device_id seville_of_match[] = {
+84705fc165526e Maxim Kochetkov 2020-07-13  1256  	{ .compatible = "mscc,vsc9953-switch" },
+84705fc165526e Maxim Kochetkov 2020-07-13  1257  	{ },
+84705fc165526e Maxim Kochetkov 2020-07-13  1258  };
+84705fc165526e Maxim Kochetkov 2020-07-13  1259  MODULE_DEVICE_TABLE(of, seville_of_match);
+84705fc165526e Maxim Kochetkov 2020-07-13  1260  
+
+:::::: The code at line 1255 was first introduced by commit
+:::::: 84705fc165526e8e55d208b2b10a48cc720a106a net: dsa: felix: introduce support for Seville VSC9953 switch
+
+:::::: TO: Maxim Kochetkov <fido_max@inbox.ru>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
