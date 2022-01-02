@@ -1,42 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2785C2C82
-	for <llvm@lists.linux.dev>; Sat,  1 Jan 2022 22:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6EA2C80
+	for <llvm@lists.linux.dev>; Sun,  2 Jan 2022 05:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641077888; x=1672613888;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7SK0DU34lm4A76mU+OTQXk/ZoNkBeoIrXAV+IY98qgg=;
-  b=FZFaSeoy5pEDW34zH/fHjiQY/aWY1N7/k+unpmoI7ygzAOQVEljE6Zpn
-   NurzF0frVb3ErVVqNdwxv09/RM/0R2lWNxeMYcQJGExtmpVGlo728oDQd
-   bPA+yzqQYLHAdgTIdszXGZAvs4In80TzatOWV89DMrqi16N5x/1jLyavP
-   jDz21ljMfNUyT+0lUMRv8GVap1MXBKlApxulKK2Otx8oaoKBFE1uonY7Y
-   BCIGXaTgmSY+kRScPUGVJ7xzoEFxlLFxNEkF+znseLzu+qmhjJ0n5hsyV
-   9U61sadTeKpDQxoCSynIVk0F2ksfanmLMerOkzLnv5G73tnm50ccHxz/q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="328262783"
-X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
-   d="scan'208";a="328262783"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 14:58:07 -0800
+  t=1641101068; x=1672637068;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mZu8Nbk3CGXRAFyz9oQp7u0LNQ5MZW8iQDBKTnOS0X0=;
+  b=IcHJLCUWuN6UcHq6RhwzMl0rXc9uJiZ1QMNI+UQrjME0bIPPws4eCYYo
+   3AbOeM7FecomH0nlXuDKKsfR9nLo6lfP2LNEAPPfpBSPTcOfTEa8GxqgA
+   o25SwMQJTwBMNFzQhfVeFDLL/iy6swbCaJAb41BJrkDC4M/eWTb20nyS1
+   562+RQGKbpBwhs67PitYxEnRTTSH/LxVQrxClb84uSV8HYDInkbeZ94sy
+   i4Tu3/qIIbGlGuePWS3x8djnzguhBju5WXZu0Fn8qEhKmhBOXuUOWH7MO
+   fRGa+iIm2JTd7B8G8oegSa6O8kEfK+4Zcq7OUbLAiTt6dkTpIZNjCZJhU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="241901854"
+X-IronPort-AV: E=Sophos;i="5.88,255,1635231600"; 
+   d="scan'208";a="241901854"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 21:24:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
-   d="scan'208";a="610412205"
+X-IronPort-AV: E=Sophos;i="5.88,255,1635231600"; 
+   d="scan'208";a="469384577"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Jan 2022 14:58:05 -0800
+  by orsmga003.jf.intel.com with ESMTP; 01 Jan 2022 21:24:25 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n3nK9-000CrP-AG; Sat, 01 Jan 2022 22:58:05 +0000
-Date: Sun, 2 Jan 2022 06:58:00 +0800
+	id 1n3tM0-000D7u-O8; Sun, 02 Jan 2022 05:24:24 +0000
+Date: Sun, 2 Jan 2022 13:23:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Miroslav Benes <mbenes@suse.cz>
-Subject: kernel/module.c:4478:14: warning: variable 'exit' set but not used
-Message-ID: <202201020600.rl5oKvlD-lkp@intel.com>
+To: Martin Habets <habetsm.xilinx@gmail.com>, kuba@kernel.org,
+	jiasheng@iscas.ac.cn, davem@davemloft.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ecree.xilinx@gmail.com,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] sfc: The RX page_ring is optional
+Message-ID: <202201021335.SbR7I6ht-lkp@intel.com>
+References: <164103678041.26263.8354809911405746465.stgit@palantir17.mph.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,78 +46,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <164103678041.26263.8354809911405746465.stgit@palantir17.mph.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Arnd,
+Hi Martin,
 
-FYI, the error/warning still remains.
+I love your patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   278218f6778bc7d6f8b67199446c56cec7ebb841
-commit: 0d67e332e6df72f43eaa21228daa3a79e23093f3 module: fix clang CFI with MODULE_UNLOAD=n
-date:   3 months ago
-config: arm64-randconfig-r022-20220101 (https://download.01.org/0day-ci/archive/20220102/202201020600.rl5oKvlD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Martin-Habets/sfc-The-RX-page_ring-is-optional/20220101-194123
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e63a02348958cd7cc8c8401c94de57ad97b5d06c
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220102/202201021335.SbR7I6ht-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c054402170cd8466683a20385befc0523aba3359)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0d67e332e6df72f43eaa21228daa3a79e23093f3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0d67e332e6df72f43eaa21228daa3a79e23093f3
+        # https://github.com/0day-ci/linux/commit/162a8e2305bbbba8cd81966114ecce08790c431d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Martin-Habets/sfc-The-RX-page_ring-is-optional/20220101-194123
+        git checkout 162a8e2305bbbba8cd81966114ecce08790c431d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/module.c:4478:14: warning: variable 'exit' set but not used [-Wunused-but-set-variable]
-           exitcall_t *exit;
-                       ^
-   1 warning generated.
+>> drivers/net/ethernet/sfc/rx_common.c:120:3: error: void function 'efx_recycle_rx_pages' should not return a value [-Wreturn-type]
+                   return NULL;
+                   ^      ~~~~
+   1 error generated.
+--
+>> drivers/net/ethernet/sfc/falcon/rx.c:299:3: error: void function 'ef4_recycle_rx_pages' should not return a value [-Wreturn-type]
+                   return NULL;
+                   ^      ~~~~
+   1 error generated.
 
 
-vim +/exit +4478 kernel/module.c
+vim +/efx_recycle_rx_pages +120 drivers/net/ethernet/sfc/rx_common.c
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4473  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4474  static void cfi_init(struct module *mod)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4475  {
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4476  #ifdef CONFIG_CFI_CLANG
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4477  	initcall_t *init;
-cf68fffb66d60d Sami Tolvanen  2021-04-08 @4478  	exitcall_t *exit;
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4479  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4480  	rcu_read_lock_sched();
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4481  	mod->cfi_check = (cfi_check_fn)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4482  		find_kallsyms_symbol_value(mod, "__cfi_check");
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4483  	init = (initcall_t *)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4484  		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4485  	exit = (exitcall_t *)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4486  		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4487  	rcu_read_unlock_sched();
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4488  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4489  	/* Fix init/exit functions to point to the CFI jump table */
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4490  	if (init)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4491  		mod->init = *init;
-0d67e332e6df72 Arnd Bergmann  2021-09-27  4492  #ifdef CONFIG_MODULE_UNLOAD
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4493  	if (exit)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4494  		mod->exit = *exit;
-0d67e332e6df72 Arnd Bergmann  2021-09-27  4495  #endif
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4496  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4497  	cfi_module_add(mod, module_addr_min);
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4498  #endif
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4499  }
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4500  
-
-:::::: The code at line 4478 was first introduced by commit
-:::::: cf68fffb66d60d96209446bfc4a15291dc5a5d41 add support for Clang CFI
-
-:::::: TO: Sami Tolvanen <samitolvanen@google.com>
-:::::: CC: Kees Cook <keescook@chromium.org>
+   111	
+   112	/* Recycle the pages that are used by buffers that have just been received. */
+   113	void efx_recycle_rx_pages(struct efx_channel *channel,
+   114				  struct efx_rx_buffer *rx_buf,
+   115				  unsigned int n_frags)
+   116	{
+   117		struct efx_rx_queue *rx_queue = efx_channel_get_rx_queue(channel);
+   118	
+   119		if (unlikely(!rx_queue->page_ring))
+ > 120			return NULL;
+   121	
+   122		do {
+   123			efx_recycle_rx_page(channel, rx_buf);
+   124			rx_buf = efx_rx_buf_next(rx_queue, rx_buf);
+   125		} while (--n_frags);
+   126	}
+   127	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
