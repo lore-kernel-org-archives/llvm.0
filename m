@@ -1,47 +1,72 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B40C168
-	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 14:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA69F168
+	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 15:41:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641221266; x=1672757266;
+  t=1641224507; x=1672760507;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=znrP2i87MLLUcp7H2Vnbtzt9yBXPSnogxgYGZPk7/Eg=;
-  b=mLWL3mMBH0VdrIIU0CbZkM21Wz9AQjg3ubeZz9zbRfP1FJ+QWaa6t+g+
-   5R36RfarE5RWYkCjJo/DC23vpqnCrkbpaUBvXouXutByWSp2EskC5kjuW
-   mtLqgFVbr1fPNs0pKGsF76bDv8nU/2GSSJXxGmO81flh9q+rZS/ZzAk+X
-   gtOZyF+kF6nKYzuaASzy+gb2f2RQx9a2QKPJzuxYNq5mhSGxwIJPDKH/1
-   F12WYx3TniSph+crwl7EgalVAoCejxecD3SqzCyRK4hIwJAL/ulgd0f46
-   DLiH8kUK5bqXoWBP97pWnWgkwWYbkbhToxC9mvxZLrYj8azAeN5e94PVH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="228891847"
+  bh=g5C1DLmzAjmvh8fBdfrCcd+FGlrkD8urpR90vXZoFjU=;
+  b=HOWXC2jJcDYF8YtdbbuzddztDuoo3p+1Xs2gjCdo+QEdm6Z07LL7pPR5
+   UlbU1Iuol6e2SBi3B6N4SFkb6Gf9JoimoeSYs6dDusnOkXzcsxP1O5Q7B
+   PdNFbpHx15pfDDFzn/d/oxnYiC6rKjN0wj3peDsNDV1FRqZBhJTDqzTIp
+   gL8d6qWqoEjZJxp/cHDtiT4Ss3ASa1ouVrAaEP33g+T9hYmwEHZmTIjNi
+   c43gg66WWVFl+O43Ab2h1uOHEXi6+3z9T42DmipY7x4NaJgMY7HaCaKxy
+   p92BnzF+tbdcdHndbyU1gO1EaIChfrLnJq81OHBvLowJ7WaRqqYVkCkyi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="242034518"
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="228891847"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 06:47:45 -0800
+   d="scan'208";a="242034518"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 07:41:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="760111132"
+   d="scan'208";a="688243455"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 06:47:42 -0800
+  by orsmga005.jf.intel.com with ESMTP; 03 Jan 2022 07:41:39 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203ElfGx009815;
-	Mon, 3 Jan 2022 14:47:41 GMT
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203Ffa79022803;
+	Mon, 3 Jan 2022 15:41:36 GMT
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: cgel.zte@gmail.com
+To: Borislav Petkov <bp@alien8.de>
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        torvalds@linux-foundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org, wang.yong12@zte.com.cn,
-        xu.xin16@zte.com.cn, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] tools: compiler-gcc.h: Keep compatible with older GCC versions
-Date: Mon,  3 Jan 2022 15:46:35 +0100
-Message-Id: <20220103144635.5952-1-alexandr.lobakin@intel.com>
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+Date: Mon,  3 Jan 2022 16:40:23 +0100
+Message-Id: <20220103154023.7326-1-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220102120201.594408-1-xu.xin16@zte.com.cn>
-References: <20220102120201.594408-1-xu.xin16@zte.com.cn>
+In-Reply-To: <Yc40UKmylVh38vl5@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-4-alexandr.lobakin@intel.com> <Yc40UKmylVh38vl5@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,51 +75,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: cgel.zte@gmail.com
-Date: Sun,  2 Jan 2022 12:02:01 +0000
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 30 Dec 2021 23:36:00 +0100
 
-> From: xu xin <xu.xin16@zte.com.cn>
+> On Thu, Dec 23, 2021 at 01:21:57AM +0100, Alexander Lobakin wrote:
+> > Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
 > 
-> When HOST CC = gcc (GCC) 4.8.5, we found that there is an error occurring:
-                           ^^^^^
+> That title is kinda laconic...
 
-From [0]:
+"kallsyms: randomize /proc/kallsyms output order"?
 
-Program  Minimal version
-GNU C    5.1
-
-This applies to both HOSTCC and CC.
-
-> Undefined __has_attribute as we built the whole kernel and tools.
 > 
-> To solve this, this patch is given to keep the compatibility with older
-> GCC versions.
+> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > 
+> > This patch makes /proc/kallsyms display in a random order, rather
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Co-developed-by: wangyong <wang.yong12@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->  tools/include/linux/compiler-gcc.h | 4 ++++
->  1 file changed, 4 insertions(+)
+> Avoid having "This patch" or "This commit" in the commit message. It is
+> tautologically useless.
 > 
-> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-> index 8816f06fc6c7..333ed16b3b12 100644
-> --- a/tools/include/linux/compiler-gcc.h
-> +++ b/tools/include/linux/compiler-gcc.h
-> @@ -16,6 +16,10 @@
->  # define __fallthrough __attribute__ ((fallthrough))
->  #endif
->  
-> +#ifndef __has_attribute
-> +# define __has_attribute(x) 0  /* Compatibility with GCC versions < 5.x */
-> +#endif
-> +
->  #if __has_attribute(__error__)
->  # define __compiletime_error(message) __attribute__((error(message)))
->  #endif
+> Also, do
+> 
+> $ git grep 'This patch' Documentation/process
+> 
+> for more details.
+
+Goes straight from the original series. Worth changing anyways.
+
+> 
+> > than sorted by address in order to hide the newly randomized address
+> > layout.
+> 
+> Sorted by address?
+> 
+> My /proc/kallsyms says
+> 
+> $ awk '{ print $1 }' /proc/kallsyms | uniq -c
+>  119086 0000000000000000
+> 
+> so all the addresses are 0. Aha, and when I list them as root, only then
+> I see non-null addresses.
+> 
+> So why do we that patch at all?
+
+It displays zeros for non-roots, but the symbols are still sorted by
+their addresses. As a result, if you leak one address, you could
+determine some others.
+This is especially critical with FG-KASLR as its text layout is
+random each time and sorted /proc/kallsyms would make the entire
+feature useless.
+
+> 
+> > alobakin:
+> > Don't depend FG-KASLR and always do that for unpriviledged accesses
+> 
+> Unknown word [unpriviledged] in commit message, suggestions:
+>         ['unprivileged', 'underprivileged', 'privileged']
+
+I either have some problems with checkpatch + codespell, or they
+missed all that typos you're noticing. Thanks, and apologies =\
+
+> 
+> > as suggested by several folks.
+> > Also, introduce and use a shuffle_array() macro which shuffles an
+> > array using Fisher-Yates.
+> 
+> Fisher-Yates what?
+> 
+> /me goes and looks at the wikipedia article.
+> 
+> Aha, a Fisher-Yates shuffle algoithm.
+> 
+> Don't be afraid to explain more in your commit messages and make them
+> more reader-friendly.
+
+Sure.
+This patch initially was at the tail of the set, after the commits
+where this algo is mentioned several times in a more detailed
+manner, but I moved it to the head then as the requests for doing
+this unconditionally converted it to a pre-requisite.
+
+> 
+> > We'll make use of it several more times
+> > later on.
+> 
+> Not important for this commit.
+> 
+> ...
+> 
 > -- 
-> 2.25.1
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
-[0] https://elixir.bootlin.com/linux/v5.16-rc8/source/Documentation/process/changes.rst#L32
-
+Thanks!
 Al
