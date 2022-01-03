@@ -1,189 +1,104 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8029F2C80
-	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 16:30:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641227459; x=1672763459;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lDHyxnzBp52EBgn9DCV6gYjH1wlIV3ajsqPWDXcfpvI=;
-  b=Rra3uaGCYNghmk1NaNnF8xrzhZIakNpfQ6fC3MbFu7hbdVl/7GtigNtB
-   8L5gSrZPqXBMRIblYEw+NiWP33qtcC2snuvZYTC1CHU1ZdlGMiL9eTSBf
-   +0oxgvhh+kfBvh0biMLSlSfqJswwuQw07efGb9DzxY46T8Dilm7tAkqIU
-   uZHFcfn6tK3aiTThdGfNnMPHtSVldbOIO90Fw9KyqxFEpB1bDPXp3nYes
-   bhE9Hqn+qJjCnZQvj/gwweK2wDwfwitEBpcoh0M126YLXoYh5XqiYsTz7
-   ObY2lRKhLafJVmi4JY+a5r30BxpuJy8+Cu+K+WlyJVMOLwuedH7AvNnVm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="229397328"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="229397328"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 08:30:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="762578003"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Jan 2022 08:30:48 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203GUjIa003559;
-	Mon, 3 Jan 2022 16:30:45 GMT
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-Date: Mon,  3 Jan 2022 17:29:31 +0100
-Message-Id: <20220103162931.8132-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <Yc2Tqc69W9ukKDI1@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4222C80
+	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 16:59:25 +0000 (UTC)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C1C0D1EC01CE;
+	Mon,  3 Jan 2022 17:59:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1641229159;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=ts44VVgH9vdtQvsOCoUEuFivddAMNPUEDPS8OSJXVYg=;
+	b=nfC00FSml3Yvgxtd6HqgtS5JNr6Fc3GQM8Jd7kUwmMzWTxwFIpSWVhWlp+t04uFD+vAopj
+	Hp1ptTv1Kkc09sOxjZNrhllxxBJUSrPBfumpaXkvyRa7LH6qeYMtZ5/MtQyvWeL9ge8Xds
+	LA/roCFzE0evxqS+dGv8CFS9MHoGXBg=
+Date: Mon, 3 Jan 2022 17:59:27 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+Message-ID: <YdMrb/t2zJbpLYj0@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-4-alexandr.lobakin@intel.com>
+ <Yc40UKmylVh38vl5@zn.tnic>
+ <20220103154023.7326-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220103154023.7326-1-alexandr.lobakin@intel.com>
 
-From: Borislav Petkov <bp@alien8.de>
-Date: Thu, 30 Dec 2021 12:10:33 +0100
+On Mon, Jan 03, 2022 at 04:40:23PM +0100, Alexander Lobakin wrote:
+> "kallsyms: randomize /proc/kallsyms output order"?
 
-> On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-> 
-> nuke?
-> 
-> I think you wanna say something about avoiding position-based search if
-> toolchain supports -z ...
+Better.
 
-Correct. A "vocabulary fail" moment.
+> It displays zeros for non-roots, but the symbols are still sorted by
+> their addresses. As a result, if you leak one address, you could
+> determine some others.
 
-> 
-> > Position-based search, which means that if we have several symbols
-> > with the same name, we additionally need to provide an "index" of
-> > the desired symbol, is fragile. Par exemple, it breaks when two
-> 				  ^^^^^^^^^^^^
-> 
-> We already have hard time with the English in commit messages, let's
-> avoid the French pls.
-> 
-> > symbols with the same name are located in different sections.
-> > 
-> > Since a while, LD has a flag `-z unique-symbol` which appends
-> > numeric suffixes to the functions with the same name (in symtab
-> > and strtab).
-> > Check for its availability and always prefer when the livepatching
-> > is on.
-> 
-> Why only then?
-> 
-> It looks to me like we want this unconditionally, no?
+Because if an attacker has the corresponding vmlinux, he has the offsets
+too so, game over?
 
-To be as least invasive as possible for now. We can turn it on
-unconditionally after a while. LLD doesn't support it and this
-and there are some different opinions about unique-symbol in
-general.
-Maybe FG-KASLR builds will reveal that some of the concerns are
-true, who knows. It wouldn't need to get turned off back again
-then.
+> This is especially critical with FG-KASLR as its text layout is
+> random each time and sorted /proc/kallsyms would make the entire
+> feature useless.
 
-> 
-> > This needs a little adjustment to the modpost to make it
-> > strip suffixes before adding exports.
-> > 
-> > depmod needs some treatment as well, tho its false-positibe warnings
-> 
-> Unknown word [false-positibe] in commit message, suggestions:
->         ['false-positive', 'false-positioned', 'prepositional']
-> 
-> Please introduce a spellchecker into your patch creation workflow.
+Do you notice how exactly this needs to absolutely be in the commit
+message? Instead of that "this patch" bla which is more or less obvious.
 
-It's here, but refused to work this time or so <O> I have definitely
-run checkpatch with codespell against the series I can't recall any
-reported typos.
+IOW, always talk about *why* you're doing a change.
 
-> 
-> > about unknown symbols are harmless and don't alter the return code.
-> > And there is a bunch more livepatch code to optimize-out after
-> > introducing this, but let's leave it for later.
-> 
-> ...
-> 
-> > @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
-> >  
-> >  	/*
-> >  	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
-> > -	 * otherwise ensure the symbol position count matches sympos.
-> > +	 * otherwise ensure the symbol position count matches sympos. If the LD
-> > +	 * `-z unique` flag is enabled, sympos checks are not relevant.
-> 	   ^^^^^^^^^^^
-> 
-> -z unique-symbol
-> 
-> >  	 */
-> > -	if (args.addr == 0)
-> > +	if (args.addr == 0) {
-> >  		pr_err("symbol '%s' not found in symbol table\n", name);
-> > -	else if (args.count > 1 && sympos == 0) {
-> > +	} else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
-> > +		goto out_ok;
-> 
-> This is silly - just do it all here.
+> I either have some problems with checkpatch + codespell, or they
+> missed all that typos you're noticing. Thanks, and apologies =\
 
-Yeah, a "big brain" moment from me. Or even reset sympos to 0 when
-unique-symbol is enabled, like Mirek suggests.
+No worries, and thank python's enchant module which I use to spellcheck
+stuff.
 
-> 
-> > +	} else if (args.count > 1 && sympos == 0) {
-> >  		pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
-> >  		       name, objname);
-> >  	} else if (sympos != args.count && sympos > 0) {
-> >  		pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
-> >  		       sympos, name, objname ? objname : "vmlinux");
-> >  	} else {
-> > +out_ok:
-> >  		*addr = args.addr;
-> >  		return 0;
-> >  	}
-> 
-> Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
-> they have a look too.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+So lemme look at the actual patch then :)
 
-Thanks,
-Al
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
