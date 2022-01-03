@@ -1,97 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3832C9D
-	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 19:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86082C36AED;
-	Mon,  3 Jan 2022 19:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641238200;
-	bh=dvokqjLhkAMgI6oTtFnh4DyTIXsiamUElpYSQXUUE8s=;
-	h=From:To:Cc:Subject:Date:From;
-	b=M/B3lUNqghIAQEaMbF1k9hfF1orFX9D7i6YboiB64pjqUaDSqwcJIcMDEmQ/swGWP
-	 LShEv/UsbT7hXHKltgh7lEFMGX7WJN3aa0FNphFNHPEUcNtSgKmf9CPU7FB1QmggWe
-	 t2/5Gi7b7jEcGqiycMR441R6fjO/OSdbEloxEnRU5u491TUsvZ2KTkhM25rkM+Pl05
-	 e/ZDxrRQsbozt/z8JJpQrMCPpC/L7Yc8YoAm7/7VO4G9ulePg1BfPirzsU9J9b48SN
-	 q23EW5cylgFQaICB0H0SnObOkTFBHnKlpcttzTEsyGagRZr15U+GPBluGiQSBWglt2
-	 qyKmRkbd6s5lg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	stable@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.4] Input: touchscreen - Fix backport of a02dcde595f7cbd240ccd64de96034ad91cffc40
-Date: Mon,  3 Jan 2022 12:29:35 -0700
-Message-Id: <20220103192935.3438038-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05854168
+	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 20:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641241878; x=1672777878;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ooqjYgr+pemPCjJv2e3hsbGu5xvUqKzf072B7q5r9cs=;
+  b=OcEY/vJbr+4RhjPCGAAQ2ifOKE/5IAmk/6PKSo3zwHsDQpV03fXQfUo1
+   mfuHmkIfdW7uVWWKUQdhRbUxmh9htxMSEJwsTpPra+vLihesW78wpYMno
+   jA+1ImWyyig+UoFHb4ZgykyL1by69v8AufV+p/Yit5zXJZCGb2Wyp2tiq
+   kiyJlnpRIgwXcu+2Yh0WzPRX9WLgteg/wG27B0M1JFdtBoP1+DCpnvFKk
+   5kwdYM4WkordPf1Vjyqf4e6snBi8XJQwk11KVuXokVtP6H3eSdH8kQbbZ
+   E8Avrf+2S86LiB9t3CDQkCNmbbCG17PVLSGvWYBR46lBjnTKO7SNtxy3I
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="228935389"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="228935389"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 12:31:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="471760755"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 03 Jan 2022 12:31:14 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n4Tz7-000EP9-Dz; Mon, 03 Jan 2022 20:31:13 +0000
+Date: Tue, 4 Jan 2022 04:30:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
+Subject: drivers/usb/cdns3/cdnsp-gadget.c:1178:6: warning: variable 'temp_64'
+ set but not used
+Message-ID: <202201040405.a1EVUrln-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Upstream commit a02dcde595f7 ("Input: touchscreen - avoid bitwise vs
-logical OR warning") was applied as commit f6e9e7be9b80 ("Input:
-touchscreen - avoid bitwise vs logical OR warning") in linux-5.4.y but
-it did not properly account for commit d9265e8a878a ("Input:
-of_touchscreen - add support for touchscreen-min-x|y"), which means the
-warning mentioned in the commit message is not fully fixed:
+Hi Pawel,
 
-drivers/input/touchscreen/of_touchscreen.c:78:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/input/touchscreen/of_touchscreen.c:78:17: note: cast one or both operands to int to silence this warning
-drivers/input/touchscreen/of_touchscreen.c:92:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-y",
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/input/touchscreen/of_touchscreen.c:92:17: note: cast one or both operands to int to silence this warning
-2 warnings generated.
+FYI, the error/warning still remains.
 
-It seems like the 4.19 backport was applied to the 5.4 tree, which did
-not have any conflicts so no issue was noticed at that point.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+commit: 3d82904559f4f5a2622db1b21de3edf2eded7664 usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver
+date:   1 year ago
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220104/202201040405.a1EVUrln-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 104a827ea6de0cbe0f5faef4407552ede31d165c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d82904559f4f5a2622db1b21de3edf2eded7664
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3d82904559f4f5a2622db1b21de3edf2eded7664
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/ drivers/net/ethernet/intel/ice/ drivers/usb/cdns3/
 
-Fix up the backport to bring it more in line with the upstream version
-so that there is no warning.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: f6e9e7be9b80 ("Input: touchscreen - avoid bitwise vs logical OR warning")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/cdns3/cdnsp-gadget.c:1178:6: warning: variable 'temp_64' set but not used [-Wunused-but-set-variable]
+           u64 temp_64;
+               ^
+   1 warning generated.
+
+
+vim +/temp_64 +1178 drivers/usb/cdns3/cdnsp-gadget.c
+
+  1173	
+  1174	static int cdnsp_run(struct cdnsp_device *pdev,
+  1175			     enum usb_device_speed speed)
+  1176	{
+  1177		u32 fs_speed = 0;
+> 1178		u64 temp_64;
+  1179		u32 temp;
+  1180		int ret;
+  1181	
+  1182		temp_64 = cdnsp_read_64(&pdev->ir_set->erst_dequeue);
+  1183		temp_64 &= ~ERST_PTR_MASK;
+  1184		temp = readl(&pdev->ir_set->irq_control);
+  1185		temp &= ~IMOD_INTERVAL_MASK;
+  1186		temp |= ((IMOD_DEFAULT_INTERVAL / 250) & IMOD_INTERVAL_MASK);
+  1187		writel(temp, &pdev->ir_set->irq_control);
+  1188	
+  1189		temp = readl(&pdev->port3x_regs->mode_addr);
+  1190	
+  1191		switch (speed) {
+  1192		case USB_SPEED_SUPER_PLUS:
+  1193			temp |= CFG_3XPORT_SSP_SUPPORT;
+  1194			break;
+  1195		case USB_SPEED_SUPER:
+  1196			temp &= ~CFG_3XPORT_SSP_SUPPORT;
+  1197			break;
+  1198		case USB_SPEED_HIGH:
+  1199			break;
+  1200		case USB_SPEED_FULL:
+  1201			fs_speed = PORT_REG6_FORCE_FS;
+  1202			break;
+  1203		default:
+  1204			dev_err(pdev->dev, "invalid maximum_speed parameter %d\n",
+  1205				speed);
+  1206			fallthrough;
+  1207		case USB_SPEED_UNKNOWN:
+  1208			/* Default to superspeed. */
+  1209			speed = USB_SPEED_SUPER;
+  1210			break;
+  1211		}
+  1212	
+  1213		if (speed >= USB_SPEED_SUPER) {
+  1214			writel(temp, &pdev->port3x_regs->mode_addr);
+  1215			cdnsp_set_link_state(pdev, &pdev->usb3_port.regs->portsc,
+  1216					     XDEV_RXDETECT);
+  1217		} else {
+  1218			cdnsp_disable_port(pdev, &pdev->usb3_port.regs->portsc);
+  1219		}
+  1220	
+  1221		cdnsp_set_link_state(pdev, &pdev->usb2_port.regs->portsc,
+  1222				     XDEV_RXDETECT);
+  1223	
+  1224		cdnsp_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
+  1225	
+  1226		writel(PORT_REG6_L1_L0_HW_EN | fs_speed, &pdev->port20_regs->port_reg6);
+  1227	
+  1228		ret = cdnsp_start(pdev);
+  1229		if (ret) {
+  1230			ret = -ENODEV;
+  1231			goto err;
+  1232		}
+  1233	
+  1234		temp = readl(&pdev->op_regs->command);
+  1235		temp |= (CMD_INTE);
+  1236		writel(temp, &pdev->op_regs->command);
+  1237	
+  1238		temp = readl(&pdev->ir_set->irq_pending);
+  1239		writel(IMAN_IE_SET(temp), &pdev->ir_set->irq_pending);
+  1240	
+  1241		return 0;
+  1242	err:
+  1243		cdnsp_halt(pdev);
+  1244		return ret;
+  1245	}
+  1246	
+
 ---
- drivers/input/touchscreen/of_touchscreen.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/input/touchscreen/of_touchscreen.c b/drivers/input/touchscreen/of_touchscreen.c
-index 2962c3747adc..ed5fbcb40e3f 100644
---- a/drivers/input/touchscreen/of_touchscreen.c
-+++ b/drivers/input/touchscreen/of_touchscreen.c
-@@ -77,8 +77,8 @@ void touchscreen_parse_properties(struct input_dev *input, bool multitouch,
- 	axis = multitouch ? ABS_MT_POSITION_X : ABS_X;
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
- 						input_abs_get_min(input, axis),
--						&minimum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-size-x",
-+						&minimum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-size-x",
- 						input_abs_get_max(input,
- 								  axis) + 1,
- 						&maximum);
-@@ -91,8 +91,8 @@ void touchscreen_parse_properties(struct input_dev *input, bool multitouch,
- 	axis = multitouch ? ABS_MT_POSITION_Y : ABS_Y;
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-y",
- 						input_abs_get_min(input, axis),
--						&minimum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-size-y",
-+						&minimum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-size-y",
- 						input_abs_get_max(input,
- 								  axis) + 1,
- 						&maximum);
-
-base-commit: 4ca2eaf1d477ce4316989b22e765fb915652b86e
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
