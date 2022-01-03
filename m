@@ -1,114 +1,100 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E52173
-	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 13:55:51 +0000 (UTC)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id EDE5E2113D;
-	Mon,  3 Jan 2022 13:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1641218144; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bp7Ls3jIW7OioFy5buHPAXWHWAQcKF9WssyJmKxPbcg=;
-	b=ceCleNSEp/E5buzpPY3bEceRgi7vPX6LyXo9jAQXAaWU5s21DTY9xp4z8cl2wm9fVzILtM
-	q/8hOLECrn9dX1HxtE+Bapekrx5Yhsrxd+YNutzZwYuooC0KwhAJKjz+mxK5dQ+X0m/KQe
-	Wxk/79WuOZu7qvROwMjALGXZabC/bNI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1641218144;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bp7Ls3jIW7OioFy5buHPAXWHWAQcKF9WssyJmKxPbcg=;
-	b=zIL7Pnzdd/6fJg54rccwAz40rGXhxdEhihowTu7q3ad6bgpciI8rB5JWx8sbGxN/4/XCGN
-	CPbCrCrb0B9KjJDA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id 07708A3B81;
-	Mon,  3 Jan 2022 13:55:43 +0000 (UTC)
-Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>
-cc: Alexander Lobakin <alexandr.lobakin@intel.com>, 
-    Borislav Petkov <bp@alien8.de>, linux-hardening@vger.kernel.org, 
-    x86@kernel.org, Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-    Kristen Carlson Accardi <kristen@linux.intel.com>, 
-    Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>, 
-    Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-    Bruce Schlobohm <bruce.schlobohm@intel.com>, Jessica Yu <jeyu@kernel.org>, 
-    kernel test robot <lkp@intel.com>, 
-    Evgenii Shatokhin <eshatokhin@virtuozzo.com>, 
-    Jonathan Corbet <corbet@lwn.net>, Masahiro Yamada <masahiroy@kernel.org>, 
-    Michal Marek <michal.lkml@markovi.net>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Herbert Xu <herbert@gondor.apana.org.au>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
-    Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-    Josh Poimboeuf <jpoimboe@redhat.com>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, 
-    Marios Pomonis <pomonis@google.com>, 
-    Sami Tolvanen <samitolvanen@google.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
-    Nicolas Pitre <nico@fluxnic.net>, linux-kernel@vger.kernel.org, 
-    linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
-    live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
- to nuke pos-based search
-In-Reply-To: <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic> <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B40C168
+	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 14:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641221266; x=1672757266;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=znrP2i87MLLUcp7H2Vnbtzt9yBXPSnogxgYGZPk7/Eg=;
+  b=mLWL3mMBH0VdrIIU0CbZkM21Wz9AQjg3ubeZz9zbRfP1FJ+QWaa6t+g+
+   5R36RfarE5RWYkCjJo/DC23vpqnCrkbpaUBvXouXutByWSp2EskC5kjuW
+   mtLqgFVbr1fPNs0pKGsF76bDv8nU/2GSSJXxGmO81flh9q+rZS/ZzAk+X
+   gtOZyF+kF6nKYzuaASzy+gb2f2RQx9a2QKPJzuxYNq5mhSGxwIJPDKH/1
+   F12WYx3TniSph+crwl7EgalVAoCejxecD3SqzCyRK4hIwJAL/ulgd0f46
+   DLiH8kUK5bqXoWBP97pWnWgkwWYbkbhToxC9mvxZLrYj8azAeN5e94PVH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="228891847"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="228891847"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 06:47:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="760111132"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 06:47:42 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203ElfGx009815;
+	Mon, 3 Jan 2022 14:47:41 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: cgel.zte@gmail.com
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        torvalds@linux-foundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org, wang.yong12@zte.com.cn,
+        xu.xin16@zte.com.cn, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] tools: compiler-gcc.h: Keep compatible with older GCC versions
+Date: Mon,  3 Jan 2022 15:46:35 +0100
+Message-Id: <20220103144635.5952-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220102120201.594408-1-xu.xin16@zte.com.cn>
+References: <20220102120201.594408-1-xu.xin16@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1678380546-1741337215-1641218143=:15051"
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: cgel.zte@gmail.com
+Date: Sun,  2 Jan 2022 12:02:01 +0000
 
---1678380546-1741337215-1641218143=:15051
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
-
-> On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-
-...
-
-> Apologies since I haven't read the patch series.
+> From: xu xin <xu.xin16@zte.com.cn>
 > 
-> The option does not exist in ld.lld and I am a bit concerning about
-> its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> When HOST CC = gcc (GCC) 4.8.5, we found that there is an error occurring:
+                           ^^^^^
+
+From [0]:
+
+Program  Minimal version
+GNU C    5.1
+
+This applies to both HOSTCC and CC.
+
+> Undefined __has_attribute as we built the whole kernel and tools.
 > 
-> I thought that someone forwarded my comments (originally posted months
-> on a feature request ago) here but seems not.
-> (I am a ld.lld maintainer.)
+> To solve this, this patch is given to keep the compatibility with older
+> GCC versions.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Co-developed-by: wangyong <wang.yong12@zte.com.cn>
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> ---
+>  tools/include/linux/compiler-gcc.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
+> index 8816f06fc6c7..333ed16b3b12 100644
+> --- a/tools/include/linux/compiler-gcc.h
+> +++ b/tools/include/linux/compiler-gcc.h
+> @@ -16,6 +16,10 @@
+>  # define __fallthrough __attribute__ ((fallthrough))
+>  #endif
+>  
+> +#ifndef __has_attribute
+> +# define __has_attribute(x) 0  /* Compatibility with GCC versions < 5.x */
+> +#endif
+> +
+>  #if __has_attribute(__error__)
+>  # define __compiletime_error(message) __attribute__((error(message)))
+>  #endif
+> -- 
+> 2.25.1
 
-Do you mean 
-https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u 
-?
+[0] https://elixir.bootlin.com/linux/v5.16-rc8/source/Documentation/process/changes.rst#L32
 
-Unfortunately, it did not lead anywhere. I think that '-z unique-symbol' 
-option should work fine as long as the live patching is concerned. Maybe I 
-misunderstood but your concerns mentioned at the blog do not apply. The 
-stability is not an issue for us since we (KLP) always work with already 
-built and fixed kernel. And(at least) GCC already uses number suffices for 
-IPA clones and it has not been a problem anywhere.
-
-Am I wrong?
-
-Thanks
-
-Miroslav 
---1678380546-1741337215-1641218143=:15051--
+Al
