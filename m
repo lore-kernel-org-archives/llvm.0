@@ -1,45 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61C1168
-	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 16:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8029F2C80
+	for <llvm@lists.linux.dev>; Mon,  3 Jan 2022 16:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641226053; x=1672762053;
+  t=1641227459; x=1672763459;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rVVwDAkcOxhvyeGTJ9bFMrtt0ZWlk8cQj8m6qKDK0tg=;
-  b=Q4MthhJR1zQe30eqOwIyHpRz+CT9wodaVm6osFHhtXc6qqv5191mxGTl
-   4+Oz//fjCALn9SnTI+DxEDAjFlkbSA2tDgxjSOn9WY+DhngEZUes6g7RA
-   OMv675FQJWImM/jjAtu2vF00RBnYfofuYu5qQRj3q9yiPX8cEgyYSrI0F
-   gjXDTpAKKQfJiRKSXWCYup7ACiW57OEHGHOXV/Aw+VwJX2gK3NJ0oqjnH
-   BGkaRDaoRct0LBoP1uq9ENUN4qw6/XM+XXISuvw9B0/MzPISckCDGAvIb
-   /Ton+w1Z6flqqWgw+krVwGKw82HOyIFoT8YIpC7pqM7nuyoaEpq6y22CZ
+  bh=lDHyxnzBp52EBgn9DCV6gYjH1wlIV3ajsqPWDXcfpvI=;
+  b=Rra3uaGCYNghmk1NaNnF8xrzhZIakNpfQ6fC3MbFu7hbdVl/7GtigNtB
+   8L5gSrZPqXBMRIblYEw+NiWP33qtcC2snuvZYTC1CHU1ZdlGMiL9eTSBf
+   +0oxgvhh+kfBvh0biMLSlSfqJswwuQw07efGb9DzxY46T8Dilm7tAkqIU
+   uZHFcfn6tK3aiTThdGfNnMPHtSVldbOIO90Fw9KyqxFEpB1bDPXp3nYes
+   bhE9Hqn+qJjCnZQvj/gwweK2wDwfwitEBpcoh0M126YLXoYh5XqiYsTz7
+   ObY2lRKhLafJVmi4JY+a5r30BxpuJy8+Cu+K+WlyJVMOLwuedH7AvNnVm
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="305438053"
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="229397328"
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="305438053"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 08:07:33 -0800
+   d="scan'208";a="229397328"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 08:30:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="760128765"
+   d="scan'208";a="762578003"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 08:07:25 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 03 Jan 2022 08:30:48 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203G7Mbb027955;
-	Mon, 3 Jan 2022 16:07:22 GMT
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203GUjIa003559;
+	Mon, 3 Jan 2022 16:30:45 GMT
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Miroslav Benes <mbenes@suse.cz>
+To: Borislav Petkov <bp@alien8.de>
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
-        Borislav Petkov <bp@alien8.de>, linux-hardening@vger.kernel.org,
-        x86@kernel.org, Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Kristen Carlson Accardi <kristen@linux.intel.com>,
         Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
         Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
         Bruce Schlobohm <bruce.schlobohm@intel.com>,
         Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
         Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Masahiro Yamada <masahiroy@kernel.org>,
@@ -62,69 +62,128 @@ Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
 Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-Date: Mon,  3 Jan 2022 17:06:15 +0100
-Message-Id: <20220103160615.7904-1-alexandr.lobakin@intel.com>
+Date: Mon,  3 Jan 2022 17:29:31 +0100
+Message-Id: <20220103162931.8132-1-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic> <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com> <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
+In-Reply-To: <Yc2Tqc69W9ukKDI1@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Miroslav Benes <mbenes@suse.cz>
-Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 30 Dec 2021 12:10:33 +0100
 
-> On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
+> On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+> > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
 > 
-> > On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
-> > >
-> > > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> > > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+> nuke?
+> 
+> I think you wanna say something about avoiding position-based search if
+> toolchain supports -z ...
+
+Correct. A "vocabulary fail" moment.
+
+> 
+> > Position-based search, which means that if we have several symbols
+> > with the same name, we additionally need to provide an "index" of
+> > the desired symbol, is fragile. Par exemple, it breaks when two
+> 				  ^^^^^^^^^^^^
+> 
+> We already have hard time with the English in commit messages, let's
+> avoid the French pls.
+> 
+> > symbols with the same name are located in different sections.
+> > 
+> > Since a while, LD has a flag `-z unique-symbol` which appends
+> > numeric suffixes to the functions with the same name (in symtab
+> > and strtab).
+> > Check for its availability and always prefer when the livepatching
+> > is on.
+> 
+> Why only then?
+> 
+> It looks to me like we want this unconditionally, no?
+
+To be as least invasive as possible for now. We can turn it on
+unconditionally after a while. LLD doesn't support it and this
+and there are some different opinions about unique-symbol in
+general.
+Maybe FG-KASLR builds will reveal that some of the concerns are
+true, who knows. It wouldn't need to get turned off back again
+then.
+
+> 
+> > This needs a little adjustment to the modpost to make it
+> > strip suffixes before adding exports.
+> > 
+> > depmod needs some treatment as well, tho its false-positibe warnings
+> 
+> Unknown word [false-positibe] in commit message, suggestions:
+>         ['false-positive', 'false-positioned', 'prepositional']
+> 
+> Please introduce a spellchecker into your patch creation workflow.
+
+It's here, but refused to work this time or so <O> I have definitely
+run checkpatch with codespell against the series I can't recall any
+reported typos.
+
+> 
+> > about unknown symbols are harmless and don't alter the return code.
+> > And there is a bunch more livepatch code to optimize-out after
+> > introducing this, but let's leave it for later.
 > 
 > ...
 > 
-> > Apologies since I haven't read the patch series.
-> > 
-> > The option does not exist in ld.lld and I am a bit concerning about
-> > its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
-> > 
-> > I thought that someone forwarded my comments (originally posted months
-> > on a feature request ago) here but seems not.
-> > (I am a ld.lld maintainer.)
+> > @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >  
+> >  	/*
+> >  	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+> > -	 * otherwise ensure the symbol position count matches sympos.
+> > +	 * otherwise ensure the symbol position count matches sympos. If the LD
+> > +	 * `-z unique` flag is enabled, sympos checks are not relevant.
+> 	   ^^^^^^^^^^^
 > 
-> Do you mean 
-> https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u 
-> ?
+> -z unique-symbol
 > 
-> Unfortunately, it did not lead anywhere. I think that '-z unique-symbol' 
-> option should work fine as long as the live patching is concerned. Maybe I 
-> misunderstood but your concerns mentioned at the blog do not apply. The 
-> stability is not an issue for us since we (KLP) always work with already 
-> built and fixed kernel. And(at least) GCC already uses number suffices for 
-> IPA clones and it has not been a problem anywhere.
+> >  	 */
+> > -	if (args.addr == 0)
+> > +	if (args.addr == 0) {
+> >  		pr_err("symbol '%s' not found in symbol table\n", name);
+> > -	else if (args.count > 1 && sympos == 0) {
+> > +	} else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
+> > +		goto out_ok;
+> 
+> This is silly - just do it all here.
 
-LLD doesn't have such an option, so FG-KASLR + livepatching builds
-wouldn't be available for LLVM with the current approach (or we'd
-still need a stub that prints "FG-KASLR is not compatible with
-sympos != 0").
-Unfortunately, I discovered this a bit late, just after sending this
-revision.
+Yeah, a "big brain" moment from me. Or even reset sympos to 0 when
+unique-symbol is enabled, like Mirek suggests.
 
-OTOH, there's no easy alternative. <file + function> pair looks
-appealing, but is it even possible for now to implement in the
-kernel without much refactoring?
-
->
-> Am I wrong?
 > 
-> Thanks
+> > +	} else if (args.count > 1 && sympos == 0) {
+> >  		pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
+> >  		       name, objname);
+> >  	} else if (sympos != args.count && sympos > 0) {
+> >  		pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
+> >  		       sympos, name, objname ? objname : "vmlinux");
+> >  	} else {
+> > +out_ok:
+> >  		*addr = args.addr;
+> >  		return 0;
+> >  	}
 > 
-> Miroslav 
+> Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
+> they have a look too.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
 Thanks,
 Al
