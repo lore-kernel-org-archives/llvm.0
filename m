@@ -1,33 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814DF173
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 13:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E1BC36AE9;
-	Tue,  4 Jan 2022 13:38:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641303484;
-	bh=EdVWAtBvErepDJ7fxMKkJLBVt0sumgNOBJpCuQNcF8Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CE5yAkymGpusGm7VzvDwx/g2cCeTl4/ZO/5GPr2OrKNojV80eS1FTPrjgHoo59slU
-	 EbzT7Jrp2n19p4J0ghfZQYEfMDyUfkPRQW8VV7BsY7LBmuvryI4CeBJKvdsvnsiG+O
-	 sPOyF2ADffqVxnAK0bq+HzzFY02TUeJiRyxQe7E38ddRuNuSb7zaIyZ5yFjrh3EVg9
-	 KtzSe1VzYlKJQG+w0RfItGiVWILSW1dPR9NMo48gj4TGlc7fN31Jgbovf7u60yGwf6
-	 wduqEJaJVectzOL5vIvPpP/yopuP1u9YOfQFVA3HVRC4YcTi728AnytfhZesu8OwM4
-	 BY03hG+p/JIeg==
-Date: Tue, 4 Jan 2022 13:37:58 +0000
-From: Will Deacon <will@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Jay Chen <jkchen@linux.alibaba.com>,
-	Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [linux-next:master 6432/9897]
- drivers/perf/arm_smmuv3_pmu.c:889:34: warning: unused variable
- 'smmu_pmu_of_match'
-Message-ID: <20220104133758.GA1827@willie-the-truck>
-References: <202201041700.01KZEzhb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB4B173
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 14:05:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641305110; x=1672841110;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kz7IcHrhqo9rldSGc7LBV2XjV9nYo5yyK6exP5BDRE0=;
+  b=hhunxCvj+2h9rMAPeV7HHRCjv8+kN8pUPCK5eF6vPeVG+Z5ShklLt7if
+   MjJZmQ5SDyZsZbuV2dfgIEP6dF3+sSUmT3HUMqTbqvvqNiHgHRuzgBPCL
+   lQuaxP4KdrBCy31tvBnrgZs1cPBXHeufjpoXYd0icQBW7SiMZ9WqLltw3
+   LJG737HYbvHJjl/IhZ4vaVkB8s5F1sOr5DOzKw+PefsZwokayQ2aed2if
+   uKy40+pcb2aZzGFuxKnMwXd5dE0zTML1GJNJvfyv8dE+ySS6PRlv/6kOf
+   aooWKHYcvBY1Un+tCpAWV1cEZUjF1Qvl+7awgiYScOhX+EicPIORDbpkv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="266495852"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="266495852"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 06:04:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="472076487"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 06:04:53 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n4kQm-000FRQ-CH; Tue, 04 Jan 2022 14:04:52 +0000
+Date: Tue, 4 Jan 2022 22:04:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Subject: drivers/rtc/rtc-mxc.c:315:19: warning: cast to smaller integer type
+ 'enum imx_rtc_type' from 'const void *'
+Message-ID: <202201042126.pU52WJi5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,49 +44,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201041700.01KZEzhb-lkp@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 04, 2022 at 05:49:36PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   ea586a076e8aa606c59b66d86660590f18354b11
-> commit: 3f7be43561766b7ad91661580376913c997613d6 [6432/9897] perf/smmuv3: Add devicetree support
-> config: x86_64-buildonly-randconfig-r001-20220102 (https://download.01.org/0day-ci/archive/20220104/202201041700.01KZEzhb-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 104a827ea6de0cbe0f5faef4407552ede31d165c)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3f7be43561766b7ad91661580376913c997613d6
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout 3f7be43561766b7ad91661580376913c997613d6
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/perf/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/perf/arm_smmuv3_pmu.c:889:34: warning: unused variable 'smmu_pmu_of_match' [-Wunused-const-variable]
->    static const struct of_device_id smmu_pmu_of_match[] = {
->                                     ^
->    1 warning generated.
-> 
-> 
-> vim +/smmu_pmu_of_match +889 drivers/perf/arm_smmuv3_pmu.c
-> 
->    888	
->  > 889	static const struct of_device_id smmu_pmu_of_match[] = {
->    890		{ .compatible = "arm,smmu-v3-pmcg" },
->    891		{}
->    892	};
->    893	MODULE_DEVICE_TABLE(of, smmu_pmu_of_match);
->    894	
+Hi Alexandre,
 
-I've fixed this locally with an #ifdef CONFIG_OF around the match table.
-I'll push out a branch once I've got on top of the other pending perf
-issues.
+First bad commit (maybe != root cause):
 
-Will
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+commit: 0020868f2a7037e87d6b3b196526de2fb885830d rtc: mxc{,_v2}: enable COMPILE_TEST
+date:   1 year, 1 month ago
+config: arm64-randconfig-r005-20210928 (https://download.01.org/0day-ci/archive/20220104/202201042126.pU52WJi5-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0020868f2a7037e87d6b3b196526de2fb885830d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0020868f2a7037e87d6b3b196526de2fb885830d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/gpu/drm/radeon/ drivers/rtc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/rtc/rtc-mxc.c:315:19: warning: cast to smaller integer type 'enum imx_rtc_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +315 drivers/rtc/rtc-mxc.c
+
+fdc9f0eace99b2 Anson Huang         2020-03-16  302  
+5a167f4543e45d Greg Kroah-Hartman  2012-12-21  303  static int mxc_rtc_probe(struct platform_device *pdev)
+d00ed3cf6e5431 Daniel Mack         2009-09-22  304  {
+d00ed3cf6e5431 Daniel Mack         2009-09-22  305  	struct rtc_device *rtc;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  306  	struct rtc_plat_data *pdata = NULL;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  307  	u32 reg;
+c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  308  	unsigned long rate;
+c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  309  	int ret;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  310  
+c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  311  	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+d00ed3cf6e5431 Daniel Mack         2009-09-22  312  	if (!pdata)
+d00ed3cf6e5431 Daniel Mack         2009-09-22  313  		return -ENOMEM;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  314  
+ba7aa63000f26c Alexandre Belloni   2020-11-17 @315  	pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
+bb1d34a20d537e Shawn Guo           2012-09-15  316  
+cf37fa79a76170 Anson Huang         2019-04-01  317  	pdata->ioaddr = devm_platform_ioremap_resource(pdev, 0);
+7c1d69ee11b898 Julia Lawall        2013-09-11  318  	if (IS_ERR(pdata->ioaddr))
+7c1d69ee11b898 Julia Lawall        2013-09-11  319  		return PTR_ERR(pdata->ioaddr);
+d00ed3cf6e5431 Daniel Mack         2009-09-22  320  
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  321  	rtc = devm_rtc_allocate_device(&pdev->dev);
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  322  	if (IS_ERR(rtc))
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  323  		return PTR_ERR(rtc);
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  324  
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  325  	pdata->rtc = rtc;
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  326  	rtc->ops = &mxc_rtc_ops;
+83888df4b882d1 Alexandre Belloni   2019-04-16  327  	if (is_imx1_rtc(pdata)) {
+83888df4b882d1 Alexandre Belloni   2019-04-16  328  		struct rtc_time tm;
+83888df4b882d1 Alexandre Belloni   2019-04-16  329  
+83888df4b882d1 Alexandre Belloni   2019-04-16  330  		/* 9bit days + hours minutes seconds */
+83888df4b882d1 Alexandre Belloni   2019-04-16  331  		rtc->range_max = (1 << 9) * 86400 - 1;
+83888df4b882d1 Alexandre Belloni   2019-04-16  332  
+83888df4b882d1 Alexandre Belloni   2019-04-16  333  		/*
+83888df4b882d1 Alexandre Belloni   2019-04-16  334  		 * Set the start date as beginning of the current year. This can
+83888df4b882d1 Alexandre Belloni   2019-04-16  335  		 * be overridden using device tree.
+83888df4b882d1 Alexandre Belloni   2019-04-16  336  		 */
+83888df4b882d1 Alexandre Belloni   2019-04-16  337  		rtc_time64_to_tm(ktime_get_real_seconds(), &tm);
+83888df4b882d1 Alexandre Belloni   2019-04-16  338  		rtc->start_secs =  mktime64(tm.tm_year, 1, 1, 0, 0, 0);
+83888df4b882d1 Alexandre Belloni   2019-04-16  339  		rtc->set_start_time = true;
+83888df4b882d1 Alexandre Belloni   2019-04-16  340  	} else {
+83888df4b882d1 Alexandre Belloni   2019-04-16  341  		/* 16bit days + hours minutes seconds */
+83888df4b882d1 Alexandre Belloni   2019-04-16  342  		rtc->range_max = (1 << 16) * 86400ULL - 1;
+83888df4b882d1 Alexandre Belloni   2019-04-16  343  	}
+ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  344  
+8f5fe77828e16e Philippe Reynes     2015-07-26  345  	pdata->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
+8f5fe77828e16e Philippe Reynes     2015-07-26  346  	if (IS_ERR(pdata->clk_ipg)) {
+8f5fe77828e16e Philippe Reynes     2015-07-26  347  		dev_err(&pdev->dev, "unable to get ipg clock!\n");
+8f5fe77828e16e Philippe Reynes     2015-07-26  348  		return PTR_ERR(pdata->clk_ipg);
+49908e739e23e2 Alexander Beregalov 2010-03-05  349  	}
+d00ed3cf6e5431 Daniel Mack         2009-09-22  350  
+8f5fe77828e16e Philippe Reynes     2015-07-26  351  	ret = clk_prepare_enable(pdata->clk_ipg);
+1b3d2243d049e0 Fabio Estevam       2014-01-23  352  	if (ret)
+1b3d2243d049e0 Fabio Estevam       2014-01-23  353  		return ret;
+1b3d2243d049e0 Fabio Estevam       2014-01-23  354  
+8f5fe77828e16e Philippe Reynes     2015-07-26  355  	pdata->clk_ref = devm_clk_get(&pdev->dev, "ref");
+8f5fe77828e16e Philippe Reynes     2015-07-26  356  	if (IS_ERR(pdata->clk_ref)) {
+fdc9f0eace99b2 Anson Huang         2020-03-16  357  		clk_disable_unprepare(pdata->clk_ipg);
+8f5fe77828e16e Philippe Reynes     2015-07-26  358  		dev_err(&pdev->dev, "unable to get ref clock!\n");
+fdc9f0eace99b2 Anson Huang         2020-03-16  359  		return PTR_ERR(pdata->clk_ref);
+8f5fe77828e16e Philippe Reynes     2015-07-26  360  	}
+8f5fe77828e16e Philippe Reynes     2015-07-26  361  
+8f5fe77828e16e Philippe Reynes     2015-07-26  362  	ret = clk_prepare_enable(pdata->clk_ref);
+fdc9f0eace99b2 Anson Huang         2020-03-16  363  	if (ret) {
+fdc9f0eace99b2 Anson Huang         2020-03-16  364  		clk_disable_unprepare(pdata->clk_ipg);
+fdc9f0eace99b2 Anson Huang         2020-03-16  365  		return ret;
+fdc9f0eace99b2 Anson Huang         2020-03-16  366  	}
+fdc9f0eace99b2 Anson Huang         2020-03-16  367  
+fdc9f0eace99b2 Anson Huang         2020-03-16  368  	ret = devm_add_action_or_reset(&pdev->dev, mxc_rtc_action, pdata);
+8f5fe77828e16e Philippe Reynes     2015-07-26  369  	if (ret)
+fdc9f0eace99b2 Anson Huang         2020-03-16  370  		return ret;
+8f5fe77828e16e Philippe Reynes     2015-07-26  371  
+8f5fe77828e16e Philippe Reynes     2015-07-26  372  	rate = clk_get_rate(pdata->clk_ref);
+d00ed3cf6e5431 Daniel Mack         2009-09-22  373  
+d00ed3cf6e5431 Daniel Mack         2009-09-22  374  	if (rate == 32768)
+d00ed3cf6e5431 Daniel Mack         2009-09-22  375  		reg = RTC_INPUT_CLK_32768HZ;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  376  	else if (rate == 32000)
+d00ed3cf6e5431 Daniel Mack         2009-09-22  377  		reg = RTC_INPUT_CLK_32000HZ;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  378  	else if (rate == 38400)
+d00ed3cf6e5431 Daniel Mack         2009-09-22  379  		reg = RTC_INPUT_CLK_38400HZ;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  380  	else {
+c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  381  		dev_err(&pdev->dev, "rtc clock is not valid (%lu)\n", rate);
+fdc9f0eace99b2 Anson Huang         2020-03-16  382  		return -EINVAL;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  383  	}
+d00ed3cf6e5431 Daniel Mack         2009-09-22  384  
+d00ed3cf6e5431 Daniel Mack         2009-09-22  385  	reg |= RTC_ENABLE_BIT;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  386  	writew(reg, (pdata->ioaddr + RTC_RTCCTL));
+d00ed3cf6e5431 Daniel Mack         2009-09-22  387  	if (((readw(pdata->ioaddr + RTC_RTCCTL)) & RTC_ENABLE_BIT) == 0) {
+d00ed3cf6e5431 Daniel Mack         2009-09-22  388  		dev_err(&pdev->dev, "hardware module can't be enabled!\n");
+fdc9f0eace99b2 Anson Huang         2020-03-16  389  		return -EIO;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  390  	}
+d00ed3cf6e5431 Daniel Mack         2009-09-22  391  
+d00ed3cf6e5431 Daniel Mack         2009-09-22  392  	platform_set_drvdata(pdev, pdata);
+d00ed3cf6e5431 Daniel Mack         2009-09-22  393  
+d00ed3cf6e5431 Daniel Mack         2009-09-22  394  	/* Configure and enable the RTC */
+d00ed3cf6e5431 Daniel Mack         2009-09-22  395  	pdata->irq = platform_get_irq(pdev, 0);
+d00ed3cf6e5431 Daniel Mack         2009-09-22  396  
+d00ed3cf6e5431 Daniel Mack         2009-09-22  397  	if (pdata->irq >= 0 &&
+c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  398  	    devm_request_irq(&pdev->dev, pdata->irq, mxc_rtc_interrupt,
+c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  399  			     IRQF_SHARED, pdev->name, pdev) < 0) {
+d00ed3cf6e5431 Daniel Mack         2009-09-22  400  		dev_warn(&pdev->dev, "interrupt not available.\n");
+d00ed3cf6e5431 Daniel Mack         2009-09-22  401  		pdata->irq = -1;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  402  	}
+d00ed3cf6e5431 Daniel Mack         2009-09-22  403  
+bc0e731fc2893f Anson Huang         2019-04-11  404  	if (pdata->irq >= 0) {
+c92182ee0b5a33 Yauhen Kharuzhy     2012-01-10  405  		device_init_wakeup(&pdev->dev, 1);
+bc0e731fc2893f Anson Huang         2019-04-11  406  		ret = dev_pm_set_wake_irq(&pdev->dev, pdata->irq);
+bc0e731fc2893f Anson Huang         2019-04-11  407  		if (ret)
+bc0e731fc2893f Anson Huang         2019-04-11  408  			dev_err(&pdev->dev, "failed to enable irq wake\n");
+bc0e731fc2893f Anson Huang         2019-04-11  409  	}
+c92182ee0b5a33 Yauhen Kharuzhy     2012-01-10  410  
+fdcfd854333be5 Bartosz Golaszewski 2020-11-09  411  	ret = devm_rtc_register_device(rtc);
+d00ed3cf6e5431 Daniel Mack         2009-09-22  412  
+d00ed3cf6e5431 Daniel Mack         2009-09-22  413  	return ret;
+d00ed3cf6e5431 Daniel Mack         2009-09-22  414  }
+d00ed3cf6e5431 Daniel Mack         2009-09-22  415  
+
+:::::: The code at line 315 was first introduced by commit
+:::::: ba7aa63000f26c5a2c87d5a716601499a02a3156 rtc: mxc: use of_device_get_match_data
+
+:::::: TO: Alexandre Belloni <alexandre.belloni@bootlin.com>
+:::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
