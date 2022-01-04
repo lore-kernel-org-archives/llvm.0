@@ -1,38 +1,39 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3C1173
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 20:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62713168
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 21:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641326953; x=1672862953;
+  t=1641331216; x=1672867216;
   h=date:from:cc:subject:message-id:mime-version;
-  bh=0RmzCvcSmx3sxtJCOfYhpjfNBLHQqVqrQgy9H2lVhOQ=;
-  b=Hqws2Ftk8cxwZDESiw70xWG1phKdzYvv63GH69sgvr0d17kSFK5EM4Vp
-   WqIDpQzspTWl80I7cvTgsiRtcGHU4lRLHzruQKtxGmeR+E3SYlEYX7M4W
-   eE8tZzN+gl5pvxPuK2+y9gE90rgp+SHEYEfaanHN0Fk+mKWfOvMaSkKbN
-   8wa7zVpj9QpvRAQeIl9WLU5YccjsyaAUs7yvTKVDtrSDW3TwxYc4bK1sr
-   JOYB2UHKCjoRv6kVYXcWcfH1Rnla+I87RWkVAioQtSqJG0L7UN5d9fYhZ
-   AvaXrnv6ntYpvvpGy3BLqh0dmXYfesdek5/V6q/8fud6oM4GAAA7nIf4o
+  bh=OhBpi7LyinzcLroU3DAZqwY6tBoNRdV6K6VB+xbcl+8=;
+  b=fKBnKyxHARKPMTuG6desVDPABixC6XKZKApzEeVBBMupcHbwbNg9QVuo
+   VxOALGFsTA+cVGBzplgfPAdKlGHxjJtzQE6Fn7siYmk7zc+lf3QJshv+3
+   BbUGSUSKfm6xFkkhOuxx0djbAhZR0Sqd0+U0pRbiMrgckhq0j2ttGo5Lo
+   MPLg0C/t0lFIISd0O11V35oj87xClm8bP8iCUTqW3OCfx+Zy7gTHWfwQy
+   76yHiPyBireM6Me++b8G3eajD4F8X08BOlnrrF2aLTXIbOD3BhkbILGYZ
+   7as/+9+iWcCifbb9cYk85Q0t61h73BfNZa/vUoIrrQO4+oQ5i5nbgEP97
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="266562097"
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="305653298"
 X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="266562097"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 12:09:12 -0800
+   d="scan'208";a="305653298"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 13:20:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="472186657"
+   d="scan'208";a="526205133"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 12:09:11 -0800
+  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 13:20:13 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n4q7K-000FpK-Pt; Tue, 04 Jan 2022 20:09:10 +0000
-Date: Wed, 5 Jan 2022 04:09:04 +0800
+	id 1n4rE5-000Fsi-7g; Tue, 04 Jan 2022 21:20:13 +0000
+Date: Wed, 5 Jan 2022 05:20:03 +0800
 From: kernel test robot <lkp@intel.com>
 Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: kernel/module.c:4478:14: warning: variable 'exit' set but not used
-Message-ID: <202201050451.suerRBnx-lkp@intel.com>
+Subject: vmlinux.o: warning: objtool: __sev_get_ghcb()+0x2f: call to
+ ftrace_likely_update() leaves .noinstr.text section
+Message-ID: <202201050511.sxfEndNA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,88 +45,53 @@ Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 CC: linux-kernel@vger.kernel.org
-TO: Arnd Bergmann <arnd@arndb.de>
-CC: Jessica Yu <jeyu@kernel.org>
-CC: Sami Tolvanen <samitolvanen@google.com>
-CC: Miroslav Benes <mbenes@suse.cz>
+TO: Joerg Roedel <jroedel@suse.de>
+CC: Borislav Petkov <bp@suse.de>
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: 0d67e332e6df72f43eaa21228daa3a79e23093f3 module: fix clang CFI with MODULE_UNLOAD=n
-date:   3 months ago
-config: arm64-randconfig-r022-20220101 (https://download.01.org/0day-ci/archive/20220105/202201050451.suerRBnx-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+commit: d187f217335dba2b49fc9002aab2004e04acddee x86/sev: Make sure IRQs are disabled while GHCB is active
+date:   7 months ago
+config: x86_64-buildonly-randconfig-r003-20220102 (https://download.01.org/0day-ci/archive/20220105/202201050511.sxfEndNA-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c054402170cd8466683a20385befc0523aba3359)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0d67e332e6df72f43eaa21228daa3a79e23093f3
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d187f217335dba2b49fc9002aab2004e04acddee
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 0d67e332e6df72f43eaa21228daa3a79e23093f3
+        git checkout d187f217335dba2b49fc9002aab2004e04acddee
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
->> ld.lld: error: ./arch/arm64/kernel/vmlinux.lds:25: symbol not found: PMD_SIZE
---
->> kernel/module.c:4478:14: warning: variable 'exit' set but not used [-Wunused-but-set-variable]
-           exitcall_t *exit;
-                       ^
-   1 warning generated.
-
-
-vim +/exit +4478 kernel/module.c
-
-^1da177e4c3f415 Linus Torvalds 2005-04-16  4473  
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4474  static void cfi_init(struct module *mod)
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4475  {
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4476  #ifdef CONFIG_CFI_CLANG
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4477  	initcall_t *init;
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08 @4478  	exitcall_t *exit;
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4479  
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4480  	rcu_read_lock_sched();
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4481  	mod->cfi_check = (cfi_check_fn)
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4482  		find_kallsyms_symbol_value(mod, "__cfi_check");
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4483  	init = (initcall_t *)
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4484  		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4485  	exit = (exitcall_t *)
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4486  		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4487  	rcu_read_unlock_sched();
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4488  
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4489  	/* Fix init/exit functions to point to the CFI jump table */
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4490  	if (init)
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4491  		mod->init = *init;
-0d67e332e6df72f Arnd Bergmann  2021-09-27  4492  #ifdef CONFIG_MODULE_UNLOAD
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4493  	if (exit)
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4494  		mod->exit = *exit;
-0d67e332e6df72f Arnd Bergmann  2021-09-27  4495  #endif
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4496  
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4497  	cfi_module_add(mod, module_addr_min);
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4498  #endif
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4499  }
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  4500  
-
-:::::: The code at line 4478 was first introduced by commit
-:::::: cf68fffb66d60d96209446bfc4a15291dc5a5d41 add support for Clang CFI
-
-:::::: TO: Sami Tolvanen <samitolvanen@google.com>
-:::::: CC: Kees Cook <keescook@chromium.org>
+   vmlinux.o: warning: objtool: do_syscall_64()+0x18: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __rdgsbase_inactive()+0x2f: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive()+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x21: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug()+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi()+0xf7: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler()+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __sev_es_ist_exit()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __sev_get_ghcb()+0x2f: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __sev_put_ghcb()+0x2d: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: safe_stack_exc_vmm_communication()+0x32: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_vmm_communication()+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: match_held_lock()+0xbd: call to rcu_read_lock_any_held() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode()+0x41: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x41: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x41: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit()+0x35: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x40: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: debug_locks_off()+0x20: call to console_verbose() leaves .noinstr.text section
+   kallsyms failure: relative symbol value 0xffffffff09da9000 out of range in relative mode
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
