@@ -1,42 +1,41 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD57F168
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 21:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87922168
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 22:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641332476; x=1672868476;
+  t=1641334938; x=1672870938;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T9BvT56RPINV4ckLRfjGrNYaqipd0oVsC9VNybIQN0U=;
-  b=M+bfo74xwMd539/qp1377uhzcDt3x4l1uuFF3mlXsffBImGSj1hdf+he
-   OoMxXRQuh/k3dyNWEudX+J5caa5U8+rBmWQNLKA/Au3vNR0fQziMamPB9
-   lb92v6KPqaYLkaT4Y3biNQHI+QEuiKgUXIHz/FfX2Y0JWaEpUwBIyiUiB
-   wgTZGsnQACpRjDtTWIh2DQRoYWCRZHvElKhAnLv5G9fXnZeUEXbWQqIbn
-   /Wk/kZbawRAFO2EULx66bOvdvMsmOJNCJq1Ayc6/6O8zr8ay//YHVaVl+
-   WueqF5LPG3PIJRuQWOZTkmuMG9OttZthduWM0N8Z+Y+7PvbtsM5KxXEXf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229121114"
+  bh=doiUaCtmxcEJGCQ9a67B0IGilBF15/RhKNjWrGFLzxE=;
+  b=Trig+Lqwc6lx2Pt25FMcnwgUrZnPyDHbDPRtnmib9EiA/dc+ze88Xlpj
+   hAAqt0HyxvFGltkiUJjQ1ENDf9oE/gBgkgAIDJg2BKtcysL7kf7NdG4a4
+   XpMapP8fNxmathgDzmFZMuQzKvuYEHs1pbJHJMw97tScD16MRy2Htm/2G
+   UOOida/krUoTTzU6NfblVsEWI9QloNG9J/L4PjIaVxlftv3ZKxAiZ9YyX
+   vcO+e0IZcttKCpvnfhEdFGJKrj1wv2W3dj3DeNmFiPYpVFwNYy8nVsl5d
+   0gPc7suJAuHO999iX7vjHpgbPYe6AvUfB7+XIeHhRUy3WL4VJZ3zpAIyj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242266456"
 X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="229121114"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 13:41:16 -0800
+   d="scan'208";a="242266456"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 14:22:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="620791665"
+   d="scan'208";a="556311969"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2022 13:41:14 -0800
+  by orsmga001.jf.intel.com with ESMTP; 04 Jan 2022 14:22:15 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n4rYP-000Ftj-PM; Tue, 04 Jan 2022 21:41:13 +0000
-Date: Wed, 5 Jan 2022 05:40:27 +0800
+	id 1n4sC7-000Fwb-22; Tue, 04 Jan 2022 22:22:15 +0000
+Date: Wed, 5 Jan 2022 06:21:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-	Christoph Hellwig <hch@lst.de>
-Subject: fs/xfs/xfs_reflink.c:992:12: warning: variable 'qdelta' set but not
- used
-Message-ID: <202201050532.znucmyrH-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.self 2/2] arch/x86/events/core.c:2735:13:
+ error: use of undeclared identifier 'userpf'; did you mean 'userpg'?
+Message-ID: <202201050624.8a9rNBhb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,218 +46,87 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Darrick,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: f273387b048543f2b8b2d809cc65fca28e7788a1 xfs: refactor reflink functions to use xfs_trans_alloc_inode
-date:   11 months ago
-config: i386-randconfig-a015-20210927 (https://download.01.org/0day-ci/archive/20220105/202201050532.znucmyrH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.self
+head:   63964461fc720e883340d53a8e19345a8c2d243d
+commit: 63964461fc720e883340d53a8e19345a8c2d243d [2/2] perf: Better track self-monitoring events
+config: x86_64-randconfig-c007-20211228 (https://download.01.org/0day-ci/archive/20220105/202201050624.8a9rNBhb-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f273387b048543f2b8b2d809cc65fca28e7788a1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f273387b048543f2b8b2d809cc65fca28e7788a1
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=63964461fc720e883340d53a8e19345a8c2d243d
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.self
+        git checkout 63964461fc720e883340d53a8e19345a8c2d243d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/display/dc/ fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/xfs/xfs_reflink.c:992:12: warning: variable 'qdelta' set but not used [-Wunused-but-set-variable]
-           int64_t                 qdelta = 0;
-                                   ^
-   1 warning generated.
+>> arch/x86/events/core.c:2735:13: error: use of undeclared identifier 'userpf'; did you mean 'userpg'?
+           if (likely(userpf->cap_user_time))
+                      ^~~~~~
+                      userpg
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   arch/x86/events/core.c:2720:40: note: 'userpg' declared here
+                                  struct perf_event_mmap_page *userpg, u64 now)
+                                                               ^
+   1 error generated.
 
 
-vim +/qdelta +992 fs/xfs/xfs_reflink.c
+vim +2735 arch/x86/events/core.c
 
-   977	
-   978	/*
-   979	 * Remap the given extent into the file.  The dmap blockcount will be set to
-   980	 * the number of blocks that were actually remapped.
-   981	 */
-   982	STATIC int
-   983	xfs_reflink_remap_extent(
-   984		struct xfs_inode	*ip,
-   985		struct xfs_bmbt_irec	*dmap,
-   986		xfs_off_t		new_isize)
-   987	{
-   988		struct xfs_bmbt_irec	smap;
-   989		struct xfs_mount	*mp = ip->i_mount;
-   990		struct xfs_trans	*tp;
-   991		xfs_off_t		newlen;
- > 992		int64_t			qdelta = 0;
-   993		unsigned int		resblks;
-   994		bool			smap_real;
-   995		bool			dmap_written = xfs_bmap_is_written_extent(dmap);
-   996		int			iext_delta = 0;
-   997		int			nimaps;
-   998		int			error;
-   999	
-  1000		/*
-  1001		 * Start a rolling transaction to switch the mappings.
-  1002		 *
-  1003		 * Adding a written extent to the extent map can cause a bmbt split,
-  1004		 * and removing a mapped extent from the extent can cause a bmbt split.
-  1005		 * The two operations cannot both cause a split since they operate on
-  1006		 * the same index in the bmap btree, so we only need a reservation for
-  1007		 * one bmbt split if either thing is happening.  However, we haven't
-  1008		 * locked the inode yet, so we reserve assuming this is the case.
-  1009		 */
-  1010		resblks = XFS_EXTENTADD_SPACE_RES(mp, XFS_DATA_FORK);
-  1011		error = xfs_trans_alloc_inode(ip, &M_RES(mp)->tr_write, resblks, 0,
-  1012				false, &tp);
-  1013		if (error)
-  1014			goto out;
-  1015	
-  1016		/*
-  1017		 * Read what's currently mapped in the destination file into smap.
-  1018		 * If smap isn't a hole, we will have to remove it before we can add
-  1019		 * dmap to the destination file.
-  1020		 */
-  1021		nimaps = 1;
-  1022		error = xfs_bmapi_read(ip, dmap->br_startoff, dmap->br_blockcount,
-  1023				&smap, &nimaps, 0);
-  1024		if (error)
-  1025			goto out_cancel;
-  1026		ASSERT(nimaps == 1 && smap.br_startoff == dmap->br_startoff);
-  1027		smap_real = xfs_bmap_is_real_extent(&smap);
-  1028	
-  1029		/*
-  1030		 * We can only remap as many blocks as the smaller of the two extent
-  1031		 * maps, because we can only remap one extent at a time.
-  1032		 */
-  1033		dmap->br_blockcount = min(dmap->br_blockcount, smap.br_blockcount);
-  1034		ASSERT(dmap->br_blockcount == smap.br_blockcount);
-  1035	
-  1036		trace_xfs_reflink_remap_extent_dest(ip, &smap);
-  1037	
-  1038		/*
-  1039		 * Two extents mapped to the same physical block must not have
-  1040		 * different states; that's filesystem corruption.  Move on to the next
-  1041		 * extent if they're both holes or both the same physical extent.
-  1042		 */
-  1043		if (dmap->br_startblock == smap.br_startblock) {
-  1044			if (dmap->br_state != smap.br_state)
-  1045				error = -EFSCORRUPTED;
-  1046			goto out_cancel;
-  1047		}
-  1048	
-  1049		/* If both extents are unwritten, leave them alone. */
-  1050		if (dmap->br_state == XFS_EXT_UNWRITTEN &&
-  1051		    smap.br_state == XFS_EXT_UNWRITTEN)
-  1052			goto out_cancel;
-  1053	
-  1054		/* No reflinking if the AG of the dest mapping is low on space. */
-  1055		if (dmap_written) {
-  1056			error = xfs_reflink_ag_has_free_space(mp,
-  1057					XFS_FSB_TO_AGNO(mp, dmap->br_startblock));
-  1058			if (error)
-  1059				goto out_cancel;
-  1060		}
-  1061	
-  1062		/*
-  1063		 * Increase quota reservation if we think the quota block counter for
-  1064		 * this file could increase.
-  1065		 *
-  1066		 * If we are mapping a written extent into the file, we need to have
-  1067		 * enough quota block count reservation to handle the blocks in that
-  1068		 * extent.  We log only the delta to the quota block counts, so if the
-  1069		 * extent we're unmapping also has blocks allocated to it, we don't
-  1070		 * need a quota reservation for the extent itself.
-  1071		 *
-  1072		 * Note that if we're replacing a delalloc reservation with a written
-  1073		 * extent, we have to take the full quota reservation because removing
-  1074		 * the delalloc reservation gives the block count back to the quota
-  1075		 * count.  This is suboptimal, but the VFS flushed the dest range
-  1076		 * before we started.  That should have removed all the delalloc
-  1077		 * reservations, but we code defensively.
-  1078		 */
-  1079		if (!smap_real && dmap_written) {
-  1080			error = xfs_trans_reserve_quota_nblks(tp, ip,
-  1081					dmap->br_blockcount, 0, false);
-  1082			if (error)
-  1083				goto out_cancel;
-  1084		}
-  1085	
-  1086		if (smap_real)
-  1087			++iext_delta;
-  1088	
-  1089		if (dmap_written)
-  1090			++iext_delta;
-  1091	
-  1092		error = xfs_iext_count_may_overflow(ip, XFS_DATA_FORK, iext_delta);
-  1093		if (error)
-  1094			goto out_cancel;
-  1095	
-  1096		if (smap_real) {
-  1097			/*
-  1098			 * If the extent we're unmapping is backed by storage (written
-  1099			 * or not), unmap the extent and drop its refcount.
-  1100			 */
-  1101			xfs_bmap_unmap_extent(tp, ip, &smap);
-  1102			xfs_refcount_decrease_extent(tp, &smap);
-  1103			qdelta -= smap.br_blockcount;
-  1104		} else if (smap.br_startblock == DELAYSTARTBLOCK) {
-  1105			xfs_filblks_t	len = smap.br_blockcount;
-  1106	
-  1107			/*
-  1108			 * If the extent we're unmapping is a delalloc reservation,
-  1109			 * we can use the regular bunmapi function to release the
-  1110			 * incore state.  Dropping the delalloc reservation takes care
-  1111			 * of the quota reservation for us.
-  1112			 */
-  1113			error = __xfs_bunmapi(NULL, ip, smap.br_startoff, &len, 0, 1);
-  1114			if (error)
-  1115				goto out_cancel;
-  1116			ASSERT(len == 0);
-  1117		}
-  1118	
-  1119		/*
-  1120		 * If the extent we're sharing is backed by written storage, increase
-  1121		 * its refcount and map it into the file.
-  1122		 */
-  1123		if (dmap_written) {
-  1124			xfs_refcount_increase_extent(tp, dmap);
-  1125			xfs_bmap_map_extent(tp, ip, dmap);
-  1126			qdelta += dmap->br_blockcount;
-  1127		}
-  1128	
-  1129		xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_BCOUNT, qdelta);
-  1130	
-  1131		/* Update dest isize if needed. */
-  1132		newlen = XFS_FSB_TO_B(mp, dmap->br_startoff + dmap->br_blockcount);
-  1133		newlen = min_t(xfs_off_t, newlen, new_isize);
-  1134		if (newlen > i_size_read(VFS_I(ip))) {
-  1135			trace_xfs_reflink_update_inode_size(ip, newlen);
-  1136			i_size_write(VFS_I(ip), newlen);
-  1137			ip->i_d.di_size = newlen;
-  1138			xfs_trans_log_inode(tp, ip, XFS_ILOG_CORE);
-  1139		}
-  1140	
-  1141		/* Commit everything and unlock. */
-  1142		error = xfs_trans_commit(tp);
-  1143		goto out_unlock;
-  1144	
-  1145	out_cancel:
-  1146		xfs_trans_cancel(tp);
-  1147	out_unlock:
-  1148		xfs_iunlock(ip, XFS_ILOCK_EXCL);
-  1149	out:
-  1150		if (error)
-  1151			trace_xfs_reflink_remap_extent_error(ip, error, _RET_IP_);
-  1152		return error;
-  1153	}
-  1154	
+  2718	
+  2719	void arch_perf_update_userpage(struct perf_event *event,
+  2720				       struct perf_event_mmap_page *userpg, u64 now)
+  2721	{
+  2722		struct cyc2ns_data data;
+  2723		u64 offset;
+  2724	
+  2725		userpg->cap_user_rdpmc = !!(event->hw.flags & PERF_X86_EVENT_RDPMC_ALLOWED);
+  2726		userpg->pmc_width = x86_pmu.cntval_bits;
+  2727	
+  2728		if (unlikely(!using_native_sched_clock() || !sched_clock_stable())) {
+  2729			userpg->cap_user_time = 0;
+  2730			userpg->cap_user_time_zero = 0;
+  2731			return;
+  2732		}
+  2733	
+  2734		/* already set the time fields before */
+> 2735		if (likely(userpf->cap_user_time))
+  2736			return;
+  2737	
+  2738		cyc2ns_read_begin(&data);
+  2739	
+  2740		offset = data.cyc2ns_offset + __sched_clock_offset;
+  2741	
+  2742		/*
+  2743		 * Internal timekeeping for enabled/running/stopped times
+  2744		 * is always in the local_clock domain.
+  2745		 */
+  2746		userpg->cap_user_time = 1;
+  2747		userpg->time_mult = data.cyc2ns_mul;
+  2748		userpg->time_shift = data.cyc2ns_shift;
+  2749		userpg->time_offset = offset - now;
+  2750	
+  2751		/*
+  2752		 * cap_user_time_zero doesn't make sense when we're using a different
+  2753		 * time base for the records.
+  2754		 */
+  2755		if (!event->attr.use_clockid) {
+  2756			userpg->cap_user_time_zero = 1;
+  2757			userpg->time_zero = offset;
+  2758		}
+  2759	
+  2760		cyc2ns_read_end();
+  2761	}
+  2762	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
