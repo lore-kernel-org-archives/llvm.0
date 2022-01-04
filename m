@@ -1,43 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00FC72C80
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 11:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514A12C80
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 12:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641297170; x=1672833170;
+  t=1641297793; x=1672833793;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hcd+m9MOE6DIZiVHypfwzcN57ZrCiLG+mUEBWe8FJ0w=;
-  b=DZZq8z/Z7ODCTMLl1XErZew+L+5qebhEoUseSFg+aH22rATHRTxvFnoh
-   pWNbbLoHjvdKQ3evb1VK6SNBchG7fHy24IQLdjtjon/ZihcgBtRFdIiRL
-   VhqKDokLpBD9Nb6W+6/3OZUb1j+3TRuwsfdTofd+ytph8a6luePPpfE2N
-   dA+6mqfoFDjCQuwb9WK/nMkYDnDR7e7yr5aEKnF3ZN7m7HQpWHmdNj6fV
-   gdyVDWh/r/K8RbGavCelgim4/nWpKJjj/ysnrb2lsmV0f/S5h4Xda+JCZ
-   r2Tdq5QGizG9MQc96GAak0L3EaFLdAHtnej5DIWJ4PKzNm3AuchXFwNty
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242416822"
+  bh=RBqcC/Pk3HdipFTHsHjbbFCchxtuIng1a5gXva5O9oQ=;
+  b=GjJb0Y0Cct378nw5mjt2Zk+ypWxYz6lC0o01w5qr1jgbTcZ1IoCjAxI2
+   F2JRSjaKZpPkudz2dghCQiYCu9TNBjd/orCdyqrGZXGrKsMTozlYmOZQ8
+   KCXidqYrxTs4Fcc35YBfIwtlNeoYD3GuM4oskr6mqnaXjrKSIPg1HisZz
+   3Ui/L4X1VLza8t9fsMXvMwmO4WCPk98gkXEGnAEIfJoAiBneenQd6C8rK
+   1QV9G0liJ3kqG7IQitsm6KkH8O55UrIQAg1zRkzdk0fdKGHjxa3qIWyYO
+   V+Da+XAUQ9/LXt0l54XSGeNj3Rn9WpPtW5mXlvWH4rcOtEK2+jevIZlZt
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="328555721"
 X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="242416822"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 03:52:50 -0800
+   d="scan'208";a="328555721"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 04:02:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="620625462"
+   d="scan'208";a="512484607"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2022 03:52:47 -0800
+  by orsmga007.jf.intel.com with ESMTP; 04 Jan 2022 04:02:48 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n4iMx-000FIB-4w; Tue, 04 Jan 2022 11:52:47 +0000
-Date: Tue, 4 Jan 2022 19:52:06 +0800
+	id 1n4iWd-000FIW-CP; Tue, 04 Jan 2022 12:02:47 +0000
+Date: Tue, 4 Jan 2022 20:02:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Randy Dunlap <rdunlap@infradead.org>
+To: Daniel Palmer <daniel@0x0f.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Javier Martinez Canillas <javierm@redhat.com>
-Subject: drivers/firmware/efi/sysfb_efi.c:190:35: warning: unused variable
- 'efifb_dmi_system_table'
-Message-ID: <202201041920.mOzzco4D-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 40/86]
+ drivers/pinctrl/mstar/pinctrl-msc313.c:1339:4: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202201041942.O5N2A7qS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,323 +47,191 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Randy,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: 15d27b15de965043d6f8e23bc7f34386fcd1a772 efi: sysfb_efi: fix build when EFI is not set
-date:   5 months ago
-config: x86_64-randconfig-a016-20210927 (https://download.01.org/0day-ci/archive/20220104/202201041920.mOzzco4D-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   2269f75a5b53b9a05d21d432ad75f5e41b344814
+commit: 3eca5b0d192f13a36006eb01a71650d6a8fc6ad9 [40/86] pinctrl: mstar: msc313 pinctrl driver
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220104/202201041942.O5N2A7qS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b50fea47b6c454581fce89af359f3afe5154986c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=15d27b15de965043d6f8e23bc7f34386fcd1a772
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 15d27b15de965043d6f8e23bc7f34386fcd1a772
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/linux-chenxing/linux/commit/3eca5b0d192f13a36006eb01a71650d6a8fc6ad9
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 3eca5b0d192f13a36006eb01a71650d6a8fc6ad9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/firmware/efi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clocksource/ drivers/irqchip/ drivers/pinctrl/mstar/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/firmware/efi/sysfb_efi.c:72:6: warning: no previous prototype for function 'efifb_setup_from_dmi' [-Wmissing-prototypes]
-   void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
-        ^
-   drivers/firmware/efi/sysfb_efi.c:72:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
-   ^
-   static 
->> drivers/firmware/efi/sysfb_efi.c:190:35: warning: unused variable 'efifb_dmi_system_table' [-Wunused-const-variable]
-   static const struct dmi_system_id efifb_dmi_system_table[] __initconst = {
-                                     ^
->> drivers/firmware/efi/sysfb_efi.c:240:35: warning: unused variable 'efifb_dmi_swap_width_height' [-Wunused-const-variable]
-   static const struct dmi_system_id efifb_dmi_swap_width_height[] __initconst = {
-                                     ^
->> drivers/firmware/efi/sysfb_efi.c:331:39: warning: unused variable 'efifb_fwnode_ops' [-Wunused-const-variable]
-   static const struct fwnode_operations efifb_fwnode_ops = {
-                                         ^
-   4 warnings generated.
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:1339:4: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                           default:
+                           ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:1339:4: note: insert 'break;' to avoid fall-through
+                           default:
+                           ^
+                           break; 
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:37:27: warning: unused variable 'i2c0_groups' [-Wunused-const-variable]
+   static const char * const i2c0_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:40:18: warning: unused variable 'i2c0_values' [-Wunused-const-variable]
+   static const u16 i2c0_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:44:27: warning: unused variable 'i2c1_groups' [-Wunused-const-variable]
+   static const char * const i2c1_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:47:18: warning: unused variable 'i2c1_values' [-Wunused-const-variable]
+   static const u16 i2c1_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:51:27: warning: unused variable 'fuart_groups' [-Wunused-const-variable]
+   static const char * const fuart_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:55:18: warning: unused variable 'fuart_values' [-Wunused-const-variable]
+   static const u16 fuart_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:60:27: warning: unused variable 'uart0_groups' [-Wunused-const-variable]
+   static const char * const uart0_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:64:27: warning: unused variable 'uart1_groups' [-Wunused-const-variable]
+   static const char * const uart1_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:68:18: warning: unused variable 'uart1_values' [-Wunused-const-variable]
+   static const u16 uart1_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:73:27: warning: unused variable 'usb_groups' [-Wunused-const-variable]
+   static const char * const usb_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:76:27: warning: unused variable 'usb1_groups' [-Wunused-const-variable]
+   static const char * const usb1_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:80:27: warning: unused variable 'pwm0_groups' [-Wunused-const-variable]
+   static const char * const pwm0_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:83:18: warning: unused variable 'pwm0_values' [-Wunused-const-variable]
+   static const u16 pwm0_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:87:27: warning: unused variable 'pwm1_groups' [-Wunused-const-variable]
+   static const char * const pwm1_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:90:18: warning: unused variable 'pwm1_values' [-Wunused-const-variable]
+   static const u16 pwm1_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:94:27: warning: unused variable 'pwm2_groups' [-Wunused-const-variable]
+   static const char * const pwm2_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:97:18: warning: unused variable 'pwm2_values' [-Wunused-const-variable]
+   static const u16 pwm2_values[] = {
+                    ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:101:27: warning: unused variable 'pwm3_groups' [-Wunused-const-variable]
+   static const char * const pwm3_groups[] = {
+                             ^
+>> drivers/pinctrl/mstar/pinctrl-msc313.c:104:18: warning: unused variable 'pwm3_values' [-Wunused-const-variable]
+   static const u16 pwm3_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:108:27: warning: unused variable 'pwm4_groups' [-Wunused-const-variable]
+   static const char * const pwm4_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:111:18: warning: unused variable 'pwm4_values' [-Wunused-const-variable]
+   static const u16 pwm4_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:115:27: warning: unused variable 'pwm5_groups' [-Wunused-const-variable]
+   static const char * const pwm5_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:118:18: warning: unused variable 'pwm5_values' [-Wunused-const-variable]
+   static const u16 pwm5_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:122:27: warning: unused variable 'pwm6_groups' [-Wunused-const-variable]
+   static const char * const pwm6_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:125:18: warning: unused variable 'pwm6_values' [-Wunused-const-variable]
+   static const u16 pwm6_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:129:27: warning: unused variable 'pwm7_groups' [-Wunused-const-variable]
+   static const char * const pwm7_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:132:18: warning: unused variable 'pwm7_values' [-Wunused-const-variable]
+   static const u16 pwm7_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:136:27: warning: unused variable 'eth_groups' [-Wunused-const-variable]
+   static const char * const eth_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:139:18: warning: unused variable 'eth_values' [-Wunused-const-variable]
+   static const u16 eth_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:143:27: warning: unused variable 'jtag_groups' [-Wunused-const-variable]
+   static const char * const jtag_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:147:27: warning: unused variable 'spi0_groups' [-Wunused-const-variable]
+   static const char * const spi0_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:151:18: warning: unused variable 'spi0_values' [-Wunused-const-variable]
+   static const u16 spi0_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:155:27: warning: unused variable 'spi1_groups' [-Wunused-const-variable]
+   static const char * const spi1_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:158:18: warning: unused variable 'spi1_values' [-Wunused-const-variable]
+   static const u16 spi1_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:161:27: warning: unused variable 'sdio_groups' [-Wunused-const-variable]
+   static const char * const sdio_groups[] = {
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:164:18: warning: unused variable 'sdio_values' [-Wunused-const-variable]
+   static const u16 sdio_values[] = {
+                    ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:201:27: warning: unused variable 'sd_drivestrengths' [-Wunused-const-variable]
+   static const unsigned int sd_drivestrengths[] = {4, 8};
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:215:27: warning: unused variable 'spi0_drivestrengths' [-Wunused-const-variable]
+   static const unsigned int spi0_drivestrengths[] = {4, 8, 12, 16};
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:225:27: warning: unused variable 'i2c_drivestrengths' [-Wunused-const-variable]
+   static const unsigned int i2c_drivestrengths[] = {4, 8};
+                             ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:233:27: warning: unused variable 'sr_drivestrengths' [-Wunused-const-variable]
+   static const unsigned int sr_drivestrengths[] = {4, 8};
+                             ^
+   41 warnings generated.
 
 
-vim +/efifb_dmi_system_table +190 drivers/firmware/efi/sysfb_efi.c
+vim +1339 drivers/pinctrl/mstar/pinctrl-msc313.c
 
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   71  
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25  @72  void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   73  {
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   74  	int i;
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   75  
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   76  	for (i = 0; i < M_UNKNOWN; i++) {
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   77  		if (efifb_dmi_list[i].base != 0 &&
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   78  		    !strcmp(opt, efifb_dmi_list[i].optname)) {
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   79  			si->lfb_base = efifb_dmi_list[i].base;
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   80  			si->lfb_linelength = efifb_dmi_list[i].stride;
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   81  			si->lfb_width = efifb_dmi_list[i].width;
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   82  			si->lfb_height = efifb_dmi_list[i].height;
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   83  		}
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   84  	}
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   85  }
-21289ec02b41c4 arch/x86/kernel/sysfb_efi.c      Ard Biesheuvel           2016-04-25   86  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   87  #define choose_value(dmivalue, fwvalue, field, flags) ({	\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   88  		typeof(fwvalue) _ret_ = fwvalue;		\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   89  		if ((flags) & (field))				\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   90  			_ret_ = dmivalue;			\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   91  		else if ((fwvalue) == 0)			\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   92  			_ret_ = dmivalue;			\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   93  		_ret_;						\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   94  	})
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   95  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   96  static int __init efifb_set_system(const struct dmi_system_id *id)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   97  {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   98  	struct efifb_dmi_info *info = id->driver_data;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02   99  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  100  	if (info->base == 0 && info->height == 0 && info->width == 0 &&
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  101  	    info->stride == 0)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  102  		return 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  103  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  104  	/* Trust the bootloader over the DMI tables */
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  105  	if (screen_info.lfb_base == 0) {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  106  #if defined(CONFIG_PCI)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  107  		struct pci_dev *dev = NULL;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  108  		int found_bar = 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  109  #endif
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  110  		if (info->base) {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  111  			screen_info.lfb_base = choose_value(info->base,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  112  				screen_info.lfb_base, OVERRIDE_BASE,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  113  				info->flags);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  114  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  115  #if defined(CONFIG_PCI)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  116  			/* make sure that the address in the table is actually
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  117  			 * on a VGA device's PCI BAR */
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  118  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  119  			for_each_pci_dev(dev) {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  120  				int i;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  121  				if ((dev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  122  					continue;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  123  				for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  124  					resource_size_t start, end;
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  125  					unsigned long flags;
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  126  
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  127  					flags = pci_resource_flags(dev, i);
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  128  					if (!(flags & IORESOURCE_MEM))
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  129  						continue;
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  130  
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  131  					if (flags & IORESOURCE_UNSET)
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  132  						continue;
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  133  
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  134  					if (pci_resource_len(dev, i) == 0)
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  135  						continue;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  136  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  137  					start = pci_resource_start(dev, i);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  138  					end = pci_resource_end(dev, i);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  139  					if (screen_info.lfb_base >= start &&
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  140  					    screen_info.lfb_base < end) {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  141  						found_bar = 1;
-c10fcb14c7afd6 arch/x86/kernel/sysfb_efi.c      Wang YanQing             2016-05-05  142  						break;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  143  					}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  144  				}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  145  			}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  146  			if (!found_bar)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  147  				screen_info.lfb_base = 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  148  #endif
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  149  		}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  150  	}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  151  	if (screen_info.lfb_base) {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  152  		screen_info.lfb_linelength = choose_value(info->stride,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  153  			screen_info.lfb_linelength, OVERRIDE_STRIDE,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  154  			info->flags);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  155  		screen_info.lfb_width = choose_value(info->width,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  156  			screen_info.lfb_width, OVERRIDE_WIDTH,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  157  			info->flags);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  158  		screen_info.lfb_height = choose_value(info->height,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  159  			screen_info.lfb_height, OVERRIDE_HEIGHT,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  160  			info->flags);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  161  		if (screen_info.orig_video_isVGA == 0)
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  162  			screen_info.orig_video_isVGA = VIDEO_TYPE_EFI;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  163  	} else {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  164  		screen_info.lfb_linelength = 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  165  		screen_info.lfb_width = 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  166  		screen_info.lfb_height = 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  167  		screen_info.orig_video_isVGA = 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  168  		return 0;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  169  	}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  170  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  171  	printk(KERN_INFO "efifb: dmi detected %s - framebuffer at 0x%08x "
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  172  			 "(%dx%d, stride %d)\n", id->ident,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  173  			 screen_info.lfb_base, screen_info.lfb_width,
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  174  			 screen_info.lfb_height, screen_info.lfb_linelength);
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  175  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  176  	return 1;
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  177  }
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  178  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  179  #define EFIFB_DMI_SYSTEM_ID(vendor, name, enumid)		\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  180  	{							\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  181  		efifb_set_system,				\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  182  		name,						\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  183  		{						\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  184  			DMI_MATCH(DMI_BIOS_VENDOR, vendor),	\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  185  			DMI_MATCH(DMI_PRODUCT_NAME, name)	\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  186  		},						\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  187  		&efifb_dmi_list[enumid]				\
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  188  	}
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  189  
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02 @190  static const struct dmi_system_id efifb_dmi_system_table[] __initconst = {
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  191  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "iMac4,1", M_I17),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  192  	/* At least one of these two will be right; maybe both? */
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  193  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "iMac5,1", M_I20),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  194  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "iMac5,1", M_I20),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  195  	/* At least one of these two will be right; maybe both? */
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  196  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "iMac6,1", M_I24),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  197  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "iMac6,1", M_I24),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  198  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "iMac7,1", M_I20_SR),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  199  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "iMac8,1", M_I24_8_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  200  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "iMac10,1", M_I24_10_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  201  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "iMac11,1", M_I27_11_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  202  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "Macmini1,1", M_MINI),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  203  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "Macmini3,1", M_MINI_3_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  204  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "Macmini4,1", M_MINI_4_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  205  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBook1,1", M_MB),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  206  	/* At least one of these two will be right; maybe both? */
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  207  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBook2,1", M_MB),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  208  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBook2,1", M_MB),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  209  	/* At least one of these two will be right; maybe both? */
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  210  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBook3,1", M_MB),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  211  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBook3,1", M_MB),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  212  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBook4,1", M_MB),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  213  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBook5,1", M_MB_5_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  214  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBook6,1", M_MB_6_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  215  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBook7,1", M_MB_7_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  216  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookAir1,1", M_MBA),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  217  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookAir3,1", M_MBA_3),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  218  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBookPro1,1", M_MBP),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  219  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBookPro2,1", M_MBP_2),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  220  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBookPro2,2", M_MBP_2_2),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  221  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro2,1", M_MBP_2),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  222  	EFIFB_DMI_SYSTEM_ID("Apple Computer, Inc.", "MacBookPro3,1", M_MBP_SR),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  223  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro3,1", M_MBP_SR),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  224  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro4,1", M_MBP_4),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  225  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro5,1", M_MBP_5_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  226  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro5,2", M_MBP_5_2),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  227  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro5,3", M_MBP_5_3),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  228  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro6,1", M_MBP_6_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  229  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro6,2", M_MBP_6_2),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  230  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro7,1", M_MBP_7_1),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  231  	EFIFB_DMI_SYSTEM_ID("Apple Inc.", "MacBookPro8,2", M_MBP_8_2),
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  232  	{},
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  233  };
-2995e506276bfd arch/x86/kernel/sysfb_efi.c      David Herrmann           2013-08-02  234  
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  235  /*
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  236   * Some devices have a portrait LCD but advertise a landscape resolution (and
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  237   * pitch). We simply swap width and height for these devices so that we can
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  238   * correctly deal with some of them coming with multiple resolutions.
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  239   */
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21 @240  static const struct dmi_system_id efifb_dmi_swap_width_height[] __initconst = {
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  241  	{
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  242  		/*
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  243  		 * Lenovo MIIX310-10ICR, only some batches have the troublesome
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  244  		 * 800x1280 portrait screen. Luckily the portrait version has
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  245  		 * its own BIOS version, so we match on that.
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  246  		 */
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  247  		.matches = {
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  248  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  249  			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "MIIX 310-10ICR"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  250  			DMI_EXACT_MATCH(DMI_BIOS_VERSION, "1HCN44WW"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  251  		},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  252  	},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  253  	{
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  254  		/* Lenovo MIIX 320-10ICR with 800x1280 portrait screen */
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  255  		.matches = {
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  256  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  257  			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION,
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  258  					"Lenovo MIIX 320-10ICR"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  259  		},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  260  	},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  261  	{
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  262  		/* Lenovo D330 with 800x1280 or 1200x1920 portrait screen */
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  263  		.matches = {
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  264  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  265  			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION,
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  266  					"Lenovo ideapad D330-10IGM"),
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  267  		},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  268  	},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  269  	{},
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  270  };
-d02f1aa39189e0 arch/x86/kernel/sysfb_efi.c      Hans de Goede            2019-07-21  271  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  272  static bool efifb_overlaps_pci_range(const struct of_pci_range *range)
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  273  {
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  274  	u64 fb_base = screen_info.lfb_base;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  275  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  276  	if (screen_info.capabilities & VIDEO_CAPABILITY_64BIT_BASE)
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  277  		fb_base |= (u64)(unsigned long)screen_info.ext_lfb_base << 32;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  278  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  279  	return fb_base >= range->cpu_addr &&
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  280  	       fb_base < (range->cpu_addr + range->size);
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  281  }
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  282  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  283  static struct device_node *find_pci_overlap_node(void)
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  284  {
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  285  	struct device_node *np;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  286  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  287  	for_each_node_by_type(np, "pci") {
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  288  		struct of_pci_range_parser parser;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  289  		struct of_pci_range range;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  290  		int err;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  291  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  292  		err = of_pci_range_parser_init(&parser, np);
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  293  		if (err) {
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  294  			pr_warn("of_pci_range_parser_init() failed: %d\n", err);
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  295  			continue;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  296  		}
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  297  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  298  		for_each_of_pci_range(&parser, &range)
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  299  			if (efifb_overlaps_pci_range(&range))
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  300  				return np;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  301  	}
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  302  	return NULL;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  303  }
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  304  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  305  /*
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  306   * If the efifb framebuffer is backed by a PCI graphics controller, we have
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  307   * to ensure that this relation is expressed using a device link when
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  308   * running in DT mode, or the probe order may be reversed, resulting in a
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  309   * resource reservation conflict on the memory window that the efifb
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  310   * framebuffer steals from the PCIe host bridge.
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  311   */
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  312  static int efifb_add_links(struct fwnode_handle *fwnode)
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  313  {
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  314  	struct device_node *sup_np;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  315  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  316  	sup_np = find_pci_overlap_node();
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  317  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  318  	/*
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  319  	 * If there's no PCI graphics controller backing the efifb, we are
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  320  	 * done here.
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  321  	 */
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  322  	if (!sup_np)
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  323  		return 0;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  324  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  325  	fwnode_link_add(fwnode, of_fwnode_handle(sup_np));
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  326  	of_node_put(sup_np);
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  327  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  328  	return 0;
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  329  }
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  330  
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25 @331  static const struct fwnode_operations efifb_fwnode_ops = {
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  332  	.add_links = efifb_add_links,
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  333  };
-8633ef82f101c0 drivers/firmware/efi/sysfb_efi.c Javier Martinez Canillas 2021-06-25  334  
-
-:::::: The code at line 190 was first introduced by commit
-:::::: 2995e506276bfdc7311eb02db8b2aa1a61a4b849 x86: sysfb: move EFI quirks from efifb to sysfb
-
-:::::: TO: David Herrmann <dh.herrmann@gmail.com>
-:::::: CC: H. Peter Anvin <hpa@linux.intel.com>
+  1318	
+  1319	static int mstar_set_config(struct msc313_pinctrl *pinctrl, int pin, unsigned long config)
+  1320	{
+  1321		enum pin_config_param param = pinconf_to_config_param(config);
+  1322		u32 arg = pinconf_to_config_argument(config);
+  1323		int i;
+  1324		unsigned int mask;
+  1325		const struct msc313_pinctrl_pinconf *confpin;
+  1326	
+  1327		dev_dbg(pinctrl->dev, "setting %d:%u on pin %d\n", (int)config, (unsigned int)arg, pin);
+  1328		for (i = 0; i < pinctrl->info->npinconfs; i++) {
+  1329			if (pinctrl->info->pinconfs[i].pin == pin) {
+  1330				confpin = &pinctrl->info->pinconfs[i];
+  1331				switch (param) {
+  1332				case PIN_CONFIG_BIAS_PULL_UP:
+  1333					if (confpin->pull_en_reg != -1) {
+  1334						dev_dbg(pinctrl->dev, "setting pull up %d on pin %d\n", (int) arg, pin);
+  1335						mask = 1 << confpin->pull_en_bit;
+  1336						regmap_update_bits(pinctrl->regmap, confpin->pull_en_reg, mask, arg ? mask : 0);
+  1337					} else
+  1338						dev_info(pinctrl->dev, "pullup reg/bit isn't known for pin %d\n", pin);
+> 1339				default:
+  1340					break;
+  1341				}
+  1342				return 0;
+  1343			}
+  1344		}
+  1345		return 0;
+  1346	}
+  1347	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
