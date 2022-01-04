@@ -1,90 +1,117 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBA2168
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 09:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641289786; x=1672825786;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MThFPCVO6VOY7QqD0gaF1AAzZ1oNn5DbpKCax1Pytic=;
-  b=cguniy/lzmyDrUz/+nlCpV30KJKwusttaVygnt6C6n7ZHRwtghJf0ztu
-   1OXtAohcAuXeDYLOBlh6EcEQVi4H2E+Txt9Xnfsi6XLqnU9dkbyZxzUdI
-   I2bnmMOuwcFPEIsFh147SzLvoy0m02lFF0eO1+Oxm31fugpxfFRoQias4
-   EDYk28RZIx1yDrvW6UmEK9SR3nokMjtNJaniwg3NZd9SWcgMxl02K8Nf0
-   10Z+xunvkmSk4fT7+XWrFPWn+Hq1b5zekPti4yMcfGbpMz11J+/KD3tkn
-   PJw0inhPkXvE0dD9p7AK1+DDpKVT4Qj4NLzm3wd5JQK3866kNusZQB0A4
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222186243"
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="222186243"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 01:49:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="620590003"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2022 01:49:43 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n4gRq-000FAx-Kv; Tue, 04 Jan 2022 09:49:42 +0000
-Date: Tue, 4 Jan 2022 17:49:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Will Deacon <will@kernel.org>, Jay Chen <jkchen@linux.alibaba.com>,
-	Robin Murphy <robin.murphy@arm.com>
-Subject: [linux-next:master 6432/9897] drivers/perf/arm_smmuv3_pmu.c:889:34:
- warning: unused variable 'smmu_pmu_of_match'
-Message-ID: <202201041700.01KZEzhb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A773E168
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 10:22:05 +0000 (UTC)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.207])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JSp2P2qdDz67t3s;
+	Tue,  4 Jan 2022 17:57:49 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Tue, 4 Jan 2022 11:02:40 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 4 Jan
+ 2022 10:02:39 +0000
+Subject: Re: [PATCH v2 05/15] scsi: hisi_sas: Fix some issues related to
+ asd_sas_port->phy_list
+To: "chenxiang (M)" <chenxiang66@hisilicon.com>, Nathan Chancellor
+	<nathan@kernel.org>, "martin.petersen@oracle.com"
+	<martin.petersen@oracle.com>
+CC: "jejb@linux.ibm.com" <jejb@linux.ibm.com>, "linux-scsi@vger.kernel.org"
+	<linux-scsi@vger.kernel.org>, Linuxarm <linuxarm@huawei.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "colin.i.king@gmail.com"
+	<colin.i.king@gmail.com>
+References: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
+ <1639999298-244569-6-git-send-email-chenxiang66@hisilicon.com>
+ <Ycn3FoW9eOZNFMiL@archlinux-ax161>
+ <3d20171c-f5ac-d01e-9f0e-ba51835d68f0@hisilicon.com>
+From: John Garry <john.garry@huawei.com>
+Message-ID: <1aae302f-08d9-87e8-6e0f-4b146de8d9c9@huawei.com>
+Date: Tue, 4 Jan 2022 10:02:31 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <3d20171c-f5ac-d01e-9f0e-ba51835d68f0@hisilicon.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   ea586a076e8aa606c59b66d86660590f18354b11
-commit: 3f7be43561766b7ad91661580376913c997613d6 [6432/9897] perf/smmuv3: Add devicetree support
-config: x86_64-buildonly-randconfig-r001-20220102 (https://download.01.org/0day-ci/archive/20220104/202201041700.01KZEzhb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 104a827ea6de0cbe0f5faef4407552ede31d165c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3f7be43561766b7ad91661580376913c997613d6
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 3f7be43561766b7ad91661580376913c997613d6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/perf/
+> 
+> @Martin and @John Garry, could you have a review and consider to merge
+> following patch ?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This series has not made it to Martin's 5.17 queue, but I suggest that 
+you send it as a patch in case it does.
 
-All warnings (new ones prefixed by >>):
+> 
+> From: Xiang Chen <chenxiang66@hisilicon.com>
+> Date: Tue, 28 Dec 2021 09:40:01 +0800
+> Subject: [PATCH] scsi: libsas: Remove unused variable and check in function
+>    hisi_sas_send_ata_reset_each_phy()
 
->> drivers/perf/arm_smmuv3_pmu.c:889:34: warning: unused variable 'smmu_pmu_of_match' [-Wunused-const-variable]
-   static const struct of_device_id smmu_pmu_of_match[] = {
-                                    ^
-   1 warning generated.
+please try to condense these subjects, like just "Remove broken legacy 
+code in hisi_sas_send_ata_reset_each_phy()"
 
+Or at least remove "function", as this is obvious
 
-vim +/smmu_pmu_of_match +889 drivers/perf/arm_smmuv3_pmu.c
+> 
+> In commit 29e2bac87421 ("scsi: hisi_sas: Fix some issues related to
+> asd_sas_port->phy_list"), we use asd_sas_port->phy_mask instead of
+> accessing asd_sas_port->phy_list, and it is enough to use
+> asd_sas_port->phy_mask to check the state of phy, so removing the
 
-   888	
- > 889	static const struct of_device_id smmu_pmu_of_match[] = {
-   890		{ .compatible = "arm,smmu-v3-pmcg" },
-   891		{}
-   892	};
-   893	MODULE_DEVICE_TABLE(of, smmu_pmu_of_match);
-   894	
+/s/removing/remove/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> old and unused check.
+> 
+> Fixes: 29e2bac87421 ("scsi: hisi_sas: Fix some issues related to
+> asd_sas_port->phy_list")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+
+Colin King also reported this, so please add him.
+
+> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+> ---
+>    drivers/scsi/hisi_sas/hisi_sas_main.c | 5 -----
+>    1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c
+> b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> index f46f679fe825..a05ec7aece5a 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> @@ -1525,16 +1525,11 @@ static void
+> hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
+>           struct device *dev = hisi_hba->dev;
+>           int s = sizeof(struct host_to_dev_fis);
+>           int rc = TMF_RESP_FUNC_FAILED;
+> -       struct asd_sas_phy *sas_phy;
+>           struct ata_link *link;
+>           u8 fis[20] = {0};
+> -       u32 state;
+>           int i;
+> 
+> -       state = hisi_hba->hw->get_phys_state(hisi_hba);
+>           for (i = 0; i < hisi_hba->n_phy; i++) {
+> -               if (!(state & BIT(sas_phy->id)))
+> -                       continue;
+>                   if (!(sas_port->phy_mask & BIT(i)))
+>                           continue;
+> 
+> --
+> 2.33.0
+> 
+> 
+> 
+
