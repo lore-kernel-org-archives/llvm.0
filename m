@@ -1,42 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD2D168
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 09:29:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBA2168
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 09:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641288584; x=1672824584;
+  t=1641289786; x=1672825786;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IF6aBx/wsL2x04BFThSDT/xjTP9UTa9f9ZYFCXBOBZE=;
-  b=SAvFlFgRauWlNX7XOxftGsTTcCpn6Z0wioAZTnWnWpDbspcEin2Nd4G/
-   1Sg/lqPieJj0TNkueGvMJrKJjv/zgW3rm8I/NxZ1UF/KPKabj/g3IaiHK
-   N+R1slS7hWmgPxlEIhCrMdf8g6brH+gVyzLOM4qpYVF7XEEpWM/YJJLFi
-   VvRNisheojXHRhFlfaiF7gYxIFj3U9sMOa3NmCso6wwgmyGQobrZVZTnW
-   TiR2zk0SiGGNTL70Gm8fWcGXph95yx305YxO5rsMeFelAtSurOBfwYJme
-   hh/3YMUzvOOebloTj+YmDNqQPH4+yxqsRG0oFb1BTG7UMcHP2VvteO8P8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242146651"
+  bh=MThFPCVO6VOY7QqD0gaF1AAzZ1oNn5DbpKCax1Pytic=;
+  b=cguniy/lzmyDrUz/+nlCpV30KJKwusttaVygnt6C6n7ZHRwtghJf0ztu
+   1OXtAohcAuXeDYLOBlh6EcEQVi4H2E+Txt9Xnfsi6XLqnU9dkbyZxzUdI
+   I2bnmMOuwcFPEIsFh147SzLvoy0m02lFF0eO1+Oxm31fugpxfFRoQias4
+   EDYk28RZIx1yDrvW6UmEK9SR3nokMjtNJaniwg3NZd9SWcgMxl02K8Nf0
+   10Z+xunvkmSk4fT7+XWrFPWn+Hq1b5zekPti4yMcfGbpMz11J+/KD3tkn
+   PJw0inhPkXvE0dD9p7AK1+DDpKVT4Qj4NLzm3wd5JQK3866kNusZQB0A4
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222186243"
 X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="242146651"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 01:29:44 -0800
+   d="scan'208";a="222186243"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 01:49:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="688508189"
+   d="scan'208";a="620590003"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 Jan 2022 01:29:42 -0800
+  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2022 01:49:43 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n4g8U-000FA9-9l; Tue, 04 Jan 2022 09:29:42 +0000
-Date: Tue, 4 Jan 2022 17:29:12 +0800
+	id 1n4gRq-000FAx-Kv; Tue, 04 Jan 2022 09:49:42 +0000
+Date: Tue, 4 Jan 2022 17:49:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steve French <stfrench@microsoft.com>
+To: Jean-Philippe Brucker <jean-philippe@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>
-Subject: [mcgrof-next:20210916-firmware-builtin-v2 1565/2476]
- fs/smbfs_client/cifsroot.c:83:12: warning: no previous prototype for
- function 'cifs_root_data'
-Message-ID: <202201041758.okbqhT2i-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Will Deacon <will@kernel.org>, Jay Chen <jkchen@linux.alibaba.com>,
+	Robin Murphy <robin.murphy@arm.com>
+Subject: [linux-next:master 6432/9897] drivers/perf/arm_smmuv3_pmu.c:889:34:
+ warning: unused variable 'smmu_pmu_of_match'
+Message-ID: <202201041700.01KZEzhb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,51 +48,42 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Steve,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20210916-firmware-builtin-v2
-head:   f69194f4bcf5b301f2d169b2f036c0da4b642e53
-commit: b4a8c8f8fa8b7b86bb62257fbb27e7bde58ac97e [1565/2476] cifs: rename fs/cifs directory to fs/smbfs_client
-config: x86_64-randconfig-a003-20210928 (https://download.01.org/0day-ci/archive/20220104/202201041758.okbqhT2i-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ea586a076e8aa606c59b66d86660590f18354b11
+commit: 3f7be43561766b7ad91661580376913c997613d6 [6432/9897] perf/smmuv3: Add devicetree support
+config: x86_64-buildonly-randconfig-r001-20220102 (https://download.01.org/0day-ci/archive/20220104/202201041700.01KZEzhb-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 104a827ea6de0cbe0f5faef4407552ede31d165c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=b4a8c8f8fa8b7b86bb62257fbb27e7bde58ac97e
-        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-        git fetch --no-tags mcgrof-next 20210916-firmware-builtin-v2
-        git checkout b4a8c8f8fa8b7b86bb62257fbb27e7bde58ac97e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3f7be43561766b7ad91661580376913c997613d6
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3f7be43561766b7ad91661580376913c997613d6
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/smbfs_client/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/perf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/smbfs_client/cifsroot.c:83:12: warning: no previous prototype for function 'cifs_root_data' [-Wmissing-prototypes]
-   int __init cifs_root_data(char **dev, char **opts)
-              ^
-   fs/smbfs_client/cifsroot.c:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init cifs_root_data(char **dev, char **opts)
-   ^
-   static 
+>> drivers/perf/arm_smmuv3_pmu.c:889:34: warning: unused variable 'smmu_pmu_of_match' [-Wunused-const-variable]
+   static const struct of_device_id smmu_pmu_of_match[] = {
+                                    ^
    1 warning generated.
 
 
-vim +/cifs_root_data +83 fs/smbfs_client/cifsroot.c
+vim +/smmu_pmu_of_match +889 drivers/perf/arm_smmuv3_pmu.c
 
-8eecd1c2e5bc73 fs/cifs/cifsroot.c Paulo Alcantara (SUSE  2019-07-16  82) 
-8eecd1c2e5bc73 fs/cifs/cifsroot.c Paulo Alcantara (SUSE  2019-07-16 @83) int __init cifs_root_data(char **dev, char **opts)
-
-:::::: The code at line 83 was first introduced by commit
-:::::: 8eecd1c2e5bc73d33f3a544751305679dbf88eb4 cifs: Add support for root file systems
-
-:::::: TO: Paulo Alcantara (SUSE) <paulo@paulo.ac>
-:::::: CC: Steve French <stfrench@microsoft.com>
+   888	
+ > 889	static const struct of_device_id smmu_pmu_of_match[] = {
+   890		{ .compatible = "arm,smmu-v3-pmcg" },
+   891		{}
+   892	};
+   893	MODULE_DEVICE_TABLE(of, smmu_pmu_of_match);
+   894	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
