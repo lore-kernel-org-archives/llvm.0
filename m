@@ -1,41 +1,50 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB4B173
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 14:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554BB168
+	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 15:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641305110; x=1672841110;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kz7IcHrhqo9rldSGc7LBV2XjV9nYo5yyK6exP5BDRE0=;
-  b=hhunxCvj+2h9rMAPeV7HHRCjv8+kN8pUPCK5eF6vPeVG+Z5ShklLt7if
-   MjJZmQ5SDyZsZbuV2dfgIEP6dF3+sSUmT3HUMqTbqvvqNiHgHRuzgBPCL
-   lQuaxP4KdrBCy31tvBnrgZs1cPBXHeufjpoXYd0icQBW7SiMZ9WqLltw3
-   LJG737HYbvHJjl/IhZ4vaVkB8s5F1sOr5DOzKw+PefsZwokayQ2aed2if
-   uKy40+pcb2aZzGFuxKnMwXd5dE0zTML1GJNJvfyv8dE+ySS6PRlv/6kOf
-   aooWKHYcvBY1Un+tCpAWV1cEZUjF1Qvl+7awgiYScOhX+EicPIORDbpkv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="266495852"
+  t=1641308759; x=1672844759;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cGWYNxU7BuJESat3SiSLHAA1ihw43MeTB0P3aR0urlc=;
+  b=b9a+rqvxd926R9wllnk7VmqitC9Ld55KtePgKIwJtBSIv6akeELFj9wP
+   vNTkCtDg2XqjifoiRelmiw8TTlCgz78owpYinVxt5pzW5bedxxP6ggEMI
+   3V+BA0Q4XzbMRoUD+hVDmvW5p1GG948CgIikH1E4JYVjzXuJo7B8awve4
+   IAjic0axe3puA5pKODkzXyaK8v0aag15hXFh7u8KZ81iDWe6oQ9C89W9j
+   +1+OWmoBxPXnivpo6/xOXc9AjJRJk42Idf6t1u1iQAnejb5j81Dazy0rV
+   eibqfjoTeJhAYVdny24MRE8ktPCqPMiLjG9R++3ASu6fTJsOVejGzzqno
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229552558"
 X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="266495852"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 06:04:54 -0800
+   d="scan'208";a="229552558"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:05:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="472076487"
+   d="scan'208";a="762846629"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 06:04:53 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 04 Jan 2022 07:05:55 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n4kQm-000FRQ-CH; Tue, 04 Jan 2022 14:04:52 +0000
-Date: Tue, 4 Jan 2022 22:04:15 +0800
+	id 1n4lNq-000FVh-DS; Tue, 04 Jan 2022 15:05:54 +0000
+Date: Tue, 4 Jan 2022 23:05:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ingo Molnar <mingo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: drivers/rtc/rtc-mxc.c:315:19: warning: cast to smaller integer type
- 'enum imx_rtc_type' from 'const void *'
-Message-ID: <202201042126.pU52WJi5-lkp@intel.com>
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-arch@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] headers/deps: dcache: Move the ____cacheline_aligned
+ attribute to the head of the definition
+Message-ID: <202201042231.vdt1cNrS-lkp@intel.com>
+References: <YdQpSigW9X224obC@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,164 +53,374 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YdQpSigW9X224obC@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Alexandre,
+Hi Ingo,
 
-First bad commit (maybe != root cause):
+I love your patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: 0020868f2a7037e87d6b3b196526de2fb885830d rtc: mxc{,_v2}: enable COMPILE_TEST
-date:   1 year, 1 month ago
-config: arm64-randconfig-r005-20210928 (https://download.01.org/0day-ci/archive/20220104/202201042126.pU52WJi5-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.16-rc8 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Ingo-Molnar/headers-deps-dcache-Move-the-____cacheline_aligned-attribute-to-the-head-of-the-definition/20220104-190351
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+config: arm64-buildonly-randconfig-r004-20220104 (https://download.01.org/0day-ci/archive/20220104/202201042231.vdt1cNrS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b50fea47b6c454581fce89af359f3afe5154986c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0020868f2a7037e87d6b3b196526de2fb885830d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0020868f2a7037e87d6b3b196526de2fb885830d
+        # https://github.com/0day-ci/linux/commit/a9357af49d3cae2b1b4b8bbb7f1adf9ed381bf46
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ingo-Molnar/headers-deps-dcache-Move-the-____cacheline_aligned-attribute-to-the-head-of-the-definition/20220104-190351
+        git checkout a9357af49d3cae2b1b4b8bbb7f1adf9ed381bf46
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/gpu/drm/radeon/ drivers/rtc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/amlogic/ lib/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/rtc/rtc-mxc.c:315:19: warning: cast to smaller integer type 'enum imx_rtc_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
    1 warning generated.
+--
+   In file included from drivers/phy/amlogic/phy-meson-g12a-usb2.c:16:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   drivers/phy/amlogic/phy-meson-g12a-usb2.c:311:17: warning: cast to smaller integer type 'enum meson_soc_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           priv->soc_id = (enum meson_soc_id)of_device_get_match_data(&pdev->dev);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from lib/radix-tree.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/radix-tree.c:288:6: warning: no previous prototype for function 'radix_tree_node_rcu_free' [-Wmissing-prototypes]
+   void radix_tree_node_rcu_free(struct rcu_head *head)
+        ^
+   lib/radix-tree.c:288:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void radix_tree_node_rcu_free(struct rcu_head *head)
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from lib/test_bitops.c:9:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: error: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Werror,-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   1 error generated.
+--
+   In file included from lib/test_ida.c:10:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/test_ida.c:16:6: warning: no previous prototype for function 'ida_dump' [-Wmissing-prototypes]
+   void ida_dump(struct ida *ida) { }
+        ^
+   lib/test_ida.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ida_dump(struct ida *ida) { }
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from lib/test_printf.c:10:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/test_printf.c:157:52: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:55: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:58: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:63: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:68: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:52: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:55: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:58: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:63: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:68: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                     ~~~          ^~~~
+                                     %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:47: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                        ~~~             ^~~~
+                                        %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:53: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                           ~~~~               ^~~~~~
+                                           %#o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   14 warnings generated.
+--
+   In file included from lib/crc32test.c:28:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/crc32test.c:674:13: warning: variable 'crc' set but not used [-Wunused-but-set-variable]
+           static u32 crc;
+                      ^
+   lib/crc32test.c:754:13: warning: variable 'crc' set but not used [-Wunused-but-set-variable]
+           static u32 crc;
+                      ^
+   3 warnings generated.
+--
+   In file included from lib/test_rhashtable.c:17:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/test_rhashtable.c:451:18: warning: variable 'insert_retries' set but not used [-Wunused-but-set-variable]
+           unsigned int i, insert_retries = 0;
+                           ^
+   2 warnings generated.
+--
+   In file included from lib/devmem_is_allowed.c:11:
+   In file included from include/linux/mm.h:717:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/devmem_is_allowed.c:20:5: warning: no previous prototype for function 'devmem_is_allowed' [-Wmissing-prototypes]
+   int devmem_is_allowed(unsigned long pfn)
+       ^
+   lib/devmem_is_allowed.c:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devmem_is_allowed(unsigned long pfn)
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from lib/lz4/lz4_decompress.c:39:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   lib/lz4/lz4_decompress.c:506:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
+   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+       ^
+   lib/lz4/lz4_decompress.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:137:1: warning: attribute '__aligned__' is ignored, place it after "struct" to apply attribute to type declaration [-Wignored-attributes]
+   ____cacheline_aligned
+   ^
+   include/linux/cache.h:41:46: note: expanded from macro '____cacheline_aligned'
+   #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+                                                ^
+   1 warning generated.
+   arch/arm64/kernel/vdso/vgettimeofday.c:9:5: warning: no previous prototype for function '__kernel_clock_gettime' [-Wmissing-prototypes]
+   int __kernel_clock_gettime(clockid_t clock,
+       ^
+   arch/arm64/kernel/vdso/vgettimeofday.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __kernel_clock_gettime(clockid_t clock,
+   ^
+   static 
+   arch/arm64/kernel/vdso/vgettimeofday.c:15:5: warning: no previous prototype for function '__kernel_gettimeofday' [-Wmissing-prototypes]
+   int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
+       ^
+   arch/arm64/kernel/vdso/vgettimeofday.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
+   ^
+   static 
+   arch/arm64/kernel/vdso/vgettimeofday.c:21:5: warning: no previous prototype for function '__kernel_clock_getres' [-Wmissing-prototypes]
+   int __kernel_clock_getres(clockid_t clock_id,
+       ^
+   arch/arm64/kernel/vdso/vgettimeofday.c:21:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __kernel_clock_getres(clockid_t clock_id,
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +315 drivers/rtc/rtc-mxc.c
+vim +137 include/linux/dcache.h
 
-fdc9f0eace99b2 Anson Huang         2020-03-16  302  
-5a167f4543e45d Greg Kroah-Hartman  2012-12-21  303  static int mxc_rtc_probe(struct platform_device *pdev)
-d00ed3cf6e5431 Daniel Mack         2009-09-22  304  {
-d00ed3cf6e5431 Daniel Mack         2009-09-22  305  	struct rtc_device *rtc;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  306  	struct rtc_plat_data *pdata = NULL;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  307  	u32 reg;
-c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  308  	unsigned long rate;
-c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  309  	int ret;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  310  
-c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  311  	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-d00ed3cf6e5431 Daniel Mack         2009-09-22  312  	if (!pdata)
-d00ed3cf6e5431 Daniel Mack         2009-09-22  313  		return -ENOMEM;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  314  
-ba7aa63000f26c Alexandre Belloni   2020-11-17 @315  	pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
-bb1d34a20d537e Shawn Guo           2012-09-15  316  
-cf37fa79a76170 Anson Huang         2019-04-01  317  	pdata->ioaddr = devm_platform_ioremap_resource(pdev, 0);
-7c1d69ee11b898 Julia Lawall        2013-09-11  318  	if (IS_ERR(pdata->ioaddr))
-7c1d69ee11b898 Julia Lawall        2013-09-11  319  		return PTR_ERR(pdata->ioaddr);
-d00ed3cf6e5431 Daniel Mack         2009-09-22  320  
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  321  	rtc = devm_rtc_allocate_device(&pdev->dev);
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  322  	if (IS_ERR(rtc))
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  323  		return PTR_ERR(rtc);
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  324  
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  325  	pdata->rtc = rtc;
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  326  	rtc->ops = &mxc_rtc_ops;
-83888df4b882d1 Alexandre Belloni   2019-04-16  327  	if (is_imx1_rtc(pdata)) {
-83888df4b882d1 Alexandre Belloni   2019-04-16  328  		struct rtc_time tm;
-83888df4b882d1 Alexandre Belloni   2019-04-16  329  
-83888df4b882d1 Alexandre Belloni   2019-04-16  330  		/* 9bit days + hours minutes seconds */
-83888df4b882d1 Alexandre Belloni   2019-04-16  331  		rtc->range_max = (1 << 9) * 86400 - 1;
-83888df4b882d1 Alexandre Belloni   2019-04-16  332  
-83888df4b882d1 Alexandre Belloni   2019-04-16  333  		/*
-83888df4b882d1 Alexandre Belloni   2019-04-16  334  		 * Set the start date as beginning of the current year. This can
-83888df4b882d1 Alexandre Belloni   2019-04-16  335  		 * be overridden using device tree.
-83888df4b882d1 Alexandre Belloni   2019-04-16  336  		 */
-83888df4b882d1 Alexandre Belloni   2019-04-16  337  		rtc_time64_to_tm(ktime_get_real_seconds(), &tm);
-83888df4b882d1 Alexandre Belloni   2019-04-16  338  		rtc->start_secs =  mktime64(tm.tm_year, 1, 1, 0, 0, 0);
-83888df4b882d1 Alexandre Belloni   2019-04-16  339  		rtc->set_start_time = true;
-83888df4b882d1 Alexandre Belloni   2019-04-16  340  	} else {
-83888df4b882d1 Alexandre Belloni   2019-04-16  341  		/* 16bit days + hours minutes seconds */
-83888df4b882d1 Alexandre Belloni   2019-04-16  342  		rtc->range_max = (1 << 16) * 86400ULL - 1;
-83888df4b882d1 Alexandre Belloni   2019-04-16  343  	}
-ebc2ec4ecf1893 Alexandre Belloni   2019-04-16  344  
-8f5fe77828e16e Philippe Reynes     2015-07-26  345  	pdata->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
-8f5fe77828e16e Philippe Reynes     2015-07-26  346  	if (IS_ERR(pdata->clk_ipg)) {
-8f5fe77828e16e Philippe Reynes     2015-07-26  347  		dev_err(&pdev->dev, "unable to get ipg clock!\n");
-8f5fe77828e16e Philippe Reynes     2015-07-26  348  		return PTR_ERR(pdata->clk_ipg);
-49908e739e23e2 Alexander Beregalov 2010-03-05  349  	}
-d00ed3cf6e5431 Daniel Mack         2009-09-22  350  
-8f5fe77828e16e Philippe Reynes     2015-07-26  351  	ret = clk_prepare_enable(pdata->clk_ipg);
-1b3d2243d049e0 Fabio Estevam       2014-01-23  352  	if (ret)
-1b3d2243d049e0 Fabio Estevam       2014-01-23  353  		return ret;
-1b3d2243d049e0 Fabio Estevam       2014-01-23  354  
-8f5fe77828e16e Philippe Reynes     2015-07-26  355  	pdata->clk_ref = devm_clk_get(&pdev->dev, "ref");
-8f5fe77828e16e Philippe Reynes     2015-07-26  356  	if (IS_ERR(pdata->clk_ref)) {
-fdc9f0eace99b2 Anson Huang         2020-03-16  357  		clk_disable_unprepare(pdata->clk_ipg);
-8f5fe77828e16e Philippe Reynes     2015-07-26  358  		dev_err(&pdev->dev, "unable to get ref clock!\n");
-fdc9f0eace99b2 Anson Huang         2020-03-16  359  		return PTR_ERR(pdata->clk_ref);
-8f5fe77828e16e Philippe Reynes     2015-07-26  360  	}
-8f5fe77828e16e Philippe Reynes     2015-07-26  361  
-8f5fe77828e16e Philippe Reynes     2015-07-26  362  	ret = clk_prepare_enable(pdata->clk_ref);
-fdc9f0eace99b2 Anson Huang         2020-03-16  363  	if (ret) {
-fdc9f0eace99b2 Anson Huang         2020-03-16  364  		clk_disable_unprepare(pdata->clk_ipg);
-fdc9f0eace99b2 Anson Huang         2020-03-16  365  		return ret;
-fdc9f0eace99b2 Anson Huang         2020-03-16  366  	}
-fdc9f0eace99b2 Anson Huang         2020-03-16  367  
-fdc9f0eace99b2 Anson Huang         2020-03-16  368  	ret = devm_add_action_or_reset(&pdev->dev, mxc_rtc_action, pdata);
-8f5fe77828e16e Philippe Reynes     2015-07-26  369  	if (ret)
-fdc9f0eace99b2 Anson Huang         2020-03-16  370  		return ret;
-8f5fe77828e16e Philippe Reynes     2015-07-26  371  
-8f5fe77828e16e Philippe Reynes     2015-07-26  372  	rate = clk_get_rate(pdata->clk_ref);
-d00ed3cf6e5431 Daniel Mack         2009-09-22  373  
-d00ed3cf6e5431 Daniel Mack         2009-09-22  374  	if (rate == 32768)
-d00ed3cf6e5431 Daniel Mack         2009-09-22  375  		reg = RTC_INPUT_CLK_32768HZ;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  376  	else if (rate == 32000)
-d00ed3cf6e5431 Daniel Mack         2009-09-22  377  		reg = RTC_INPUT_CLK_32000HZ;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  378  	else if (rate == 38400)
-d00ed3cf6e5431 Daniel Mack         2009-09-22  379  		reg = RTC_INPUT_CLK_38400HZ;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  380  	else {
-c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  381  		dev_err(&pdev->dev, "rtc clock is not valid (%lu)\n", rate);
-fdc9f0eace99b2 Anson Huang         2020-03-16  382  		return -EINVAL;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  383  	}
-d00ed3cf6e5431 Daniel Mack         2009-09-22  384  
-d00ed3cf6e5431 Daniel Mack         2009-09-22  385  	reg |= RTC_ENABLE_BIT;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  386  	writew(reg, (pdata->ioaddr + RTC_RTCCTL));
-d00ed3cf6e5431 Daniel Mack         2009-09-22  387  	if (((readw(pdata->ioaddr + RTC_RTCCTL)) & RTC_ENABLE_BIT) == 0) {
-d00ed3cf6e5431 Daniel Mack         2009-09-22  388  		dev_err(&pdev->dev, "hardware module can't be enabled!\n");
-fdc9f0eace99b2 Anson Huang         2020-03-16  389  		return -EIO;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  390  	}
-d00ed3cf6e5431 Daniel Mack         2009-09-22  391  
-d00ed3cf6e5431 Daniel Mack         2009-09-22  392  	platform_set_drvdata(pdev, pdata);
-d00ed3cf6e5431 Daniel Mack         2009-09-22  393  
-d00ed3cf6e5431 Daniel Mack         2009-09-22  394  	/* Configure and enable the RTC */
-d00ed3cf6e5431 Daniel Mack         2009-09-22  395  	pdata->irq = platform_get_irq(pdev, 0);
-d00ed3cf6e5431 Daniel Mack         2009-09-22  396  
-d00ed3cf6e5431 Daniel Mack         2009-09-22  397  	if (pdata->irq >= 0 &&
-c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  398  	    devm_request_irq(&pdev->dev, pdata->irq, mxc_rtc_interrupt,
-c783a29efcbc90 Vladimir Zapolskiy  2010-04-06  399  			     IRQF_SHARED, pdev->name, pdev) < 0) {
-d00ed3cf6e5431 Daniel Mack         2009-09-22  400  		dev_warn(&pdev->dev, "interrupt not available.\n");
-d00ed3cf6e5431 Daniel Mack         2009-09-22  401  		pdata->irq = -1;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  402  	}
-d00ed3cf6e5431 Daniel Mack         2009-09-22  403  
-bc0e731fc2893f Anson Huang         2019-04-11  404  	if (pdata->irq >= 0) {
-c92182ee0b5a33 Yauhen Kharuzhy     2012-01-10  405  		device_init_wakeup(&pdev->dev, 1);
-bc0e731fc2893f Anson Huang         2019-04-11  406  		ret = dev_pm_set_wake_irq(&pdev->dev, pdata->irq);
-bc0e731fc2893f Anson Huang         2019-04-11  407  		if (ret)
-bc0e731fc2893f Anson Huang         2019-04-11  408  			dev_err(&pdev->dev, "failed to enable irq wake\n");
-bc0e731fc2893f Anson Huang         2019-04-11  409  	}
-c92182ee0b5a33 Yauhen Kharuzhy     2012-01-10  410  
-fdcfd854333be5 Bartosz Golaszewski 2020-11-09  411  	ret = devm_rtc_register_device(rtc);
-d00ed3cf6e5431 Daniel Mack         2009-09-22  412  
-d00ed3cf6e5431 Daniel Mack         2009-09-22  413  	return ret;
-d00ed3cf6e5431 Daniel Mack         2009-09-22  414  }
-d00ed3cf6e5431 Daniel Mack         2009-09-22  415  
-
-:::::: The code at line 315 was first introduced by commit
-:::::: ba7aa63000f26c5a2c87d5a716601499a02a3156 rtc: mxc: use of_device_get_match_data
-
-:::::: TO: Alexandre Belloni <alexandre.belloni@bootlin.com>
-:::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+   136	
+ > 137	____cacheline_aligned
+   138	struct dentry_operations {
+   139		int (*d_revalidate)(struct dentry *, unsigned int);
+   140		int (*d_weak_revalidate)(struct dentry *, unsigned int);
+   141		int (*d_hash)(const struct dentry *, struct qstr *);
+   142		int (*d_compare)(const struct dentry *,
+   143				unsigned int, const char *, const struct qstr *);
+   144		int (*d_delete)(const struct dentry *);
+   145		int (*d_init)(struct dentry *);
+   146		void (*d_release)(struct dentry *);
+   147		void (*d_prune)(struct dentry *);
+   148		void (*d_iput)(struct dentry *, struct inode *);
+   149		char *(*d_dname)(struct dentry *, char *, int);
+   150		struct vfsmount *(*d_automount)(struct path *);
+   151		int (*d_manage)(const struct path *, bool);
+   152		struct dentry *(*d_real)(struct dentry *, const struct inode *);
+   153	};
+   154	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
