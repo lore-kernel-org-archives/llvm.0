@@ -1,47 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F403B2C80
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 22:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641421693; x=1672957693;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6LIBXyaKFJEHPtRwlnepVZes39DKURgaN+zkOlHhy5M=;
-  b=gocYlvqr9zPXw65nsKYbo1/9zKrX5zrVXvkdUhb5FZmJs6xmChe3WFxp
-   rZrYPgxo8Ckui7l43WRRqz/Tp36JyZ4sjsrbGlgpZ0QSTq6kkOr11Dwz/
-   YXr4hf7jnE3eKCfxTs2NmpDFBQDEfXW4RGlpRHcIHwrIi6EyTl+XuqtFb
-   MKRcKACZp8nhJ8S5VykEOPVMB8awZYOcCSaXy4rF4HY95Z0ZymMX1fLSy
-   gY6ziup6pw9QX2YFsJzqYQE1oGSY+ystI82xcVdPQzjTXEAmZzhVlFgfv
-   LnUzFPTIY4ok7XGHYgbTxvWb72GcBt7i1EXwnF831XckZzJavXgiVPDcM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242503799"
-X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="242503799"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 14:27:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="470732360"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2022 14:27:55 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5El8-000H5a-Vi; Wed, 05 Jan 2022 22:27:54 +0000
-Date: Thu, 6 Jan 2022 06:27:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, list@opendingux.net,
-	Paul Cercueil <paul@crapouillou.net>,
-	Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v2 2/2] hwmon: Add "label" attribute
-Message-ID: <202201060630.vsp02mfB-lkp@intel.com>
-References: <20220105151551.20285-3-paul@crapouillou.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2989F168
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 22:33:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4498FC36AF4;
+	Wed,  5 Jan 2022 22:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1641422011;
+	bh=V+pJxEa7+aavL4U6A2VgxzbbvSp1DeQ4c/dXqTqcxLY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fWnEb653GKPS44yyddsJLus2Hz7kMix9+5exfDPx8qbDMjRFZoxDwe0+XDZgiG/+J
+	 HMlSxytT9mfEQfDkJLx6rdlxTToo962BGRW/EonZc2xxGeplYd3NIC2W4rQrnOTur7
+	 yF6SMSmYB6HIKVWhgmNAhzc7/jiaGBUGdJd4J+hLvutYzseoZZKztt9znepRfWsJs6
+	 ooLjoXCYg9ZODkwL6oZtfdfZJ7/94auTuroAU1QTlWWZ0rYyLb5rO8AaPMuM8ZEpmG
+	 9M1fN/0TPdKACh5cZE2h6ppduarqWtSXTzU6FDQtNVjkOffe6dxuVY+sOQ0LAf/5wX
+	 8ZUlLkjRmilvA==
+Date: Wed, 5 Jan 2022 15:33:26 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdYctmnM6kdN5R5s@archlinux-ax161>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,182 +45,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105151551.20285-3-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YdTpAJxgI+s9Wwgi@gmail.com>
 
-Hi Paul,
+On Wed, Jan 05, 2022 at 01:40:32AM +0100, Ingo Molnar wrote:
+> 
+> * Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > Unfortunately, while the kernel now builds, it does not boot in QEMU. I 
+> > tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if I 
+> > could reproduce that breakage there but the build errors out at that 
+> > change (I do see notes of bisection breakage in some of the commits) so I 
+> > assume that is expected.
+> 
+> Yeah, there's a breakage window on ARM64, I'll track down that 
+> bisectability bug.
+> 
+> Decoupling thread_info and task_struct incrementally, so that it bisects 
+> cleanly on all architectures, was always a big challenge. :-/
+> 
+> > There is no output, even with earlycon, so it seems like something is 
+> > going wrong in early boot code. I am not very familiar with the SCS code 
+> > so I will see if I can debug this with gdb later (I'll try to see if it 
+> > is reproducible with GCC as well; as Nick mentions, there is support 
+> > being added to it and I don't mind building from source).
+> 
+> Just to make sure: with SCS disabled the same kernel boots fine?
 
-I love your patch! Perhaps something to improve:
+Correct (thank you for making sure, I have definitely not tested that
+before...).
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on v5.16-rc8 next-20220105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64 defconfig Image.gz
 
-url:    https://github.com/0day-ci/linux/commits/Paul-Cercueil/hwmon-Add-label-attribute-v2/20220105-231930
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: arm64-randconfig-r026-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060630.vsp02mfB-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/57dab49995d01d638d9fa9aaddb5fa48e17b3c48
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Paul-Cercueil/hwmon-Add-label-attribute-v2/20220105-231930
-        git checkout 57dab49995d01d638d9fa9aaddb5fa48e17b3c48
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwmon/
+$ boot-qemu.sh -a arm64 -k .build/arm64 -t 30s
+...
+[    0.000000] Linux version 5.16.0-rc8-798083-g1755441e323b (nathan@archlinux-ax161) (ClangBuiltLinux clang version 14.0.0 (https://github.com/llvm/llvm-project 4602f4169a21e75b82261ba1599046b157d1d021), LLD 14.0.0) #1 SMP PREEMPT Wed Jan 5 21:51:29 UTC 2022
+...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64.scs defconfig
 
-All warnings (new ones prefixed by >>):
+$ scripts/config --file .build/arm64.scs/.config -e SHADOW_CALL_STACK
 
->> drivers/hwmon/hwmon.c:777:7: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (hwdev->label == NULL) {
-                       ^~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/hwmon.c:851:20: note: uninitialized use occurs here
-           hwmon_dev_release(hdev);
-                             ^~~~
-   drivers/hwmon/hwmon.c:777:3: note: remove the 'if' if its condition is always false
-                   if (hwdev->label == NULL) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/hwmon.c:773:7: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (err < 0)
-                       ^~~~~~~
-   drivers/hwmon/hwmon.c:851:20: note: uninitialized use occurs here
-           hwmon_dev_release(hdev);
-                             ^~~~
-   drivers/hwmon/hwmon.c:773:3: note: remove the 'if' if its condition is always false
-                   if (err < 0)
-                   ^~~~~~~~~~~~
-   drivers/hwmon/hwmon.c:752:21: note: initialize the variable 'hdev' to silence this warning
-           struct device *hdev;
-                              ^
-                               = NULL
-   2 warnings generated.
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64.scs olddefconfig Image.gz
+...
+qemu-system-aarch64: terminating on signal 15 from pid 690472 (timeout)
++ RET=124
++ set +x
 
+Going back to v5.16-rc8, everything works fine.
 
-vim +777 drivers/hwmon/hwmon.c
+$ boot-qemu.sh -a arm64 -k .build/arm64 -t 30s
+...
+[    0.000000] Linux version 5.16.0-rc8-795784-gc9e6606c7fe9 (nathan@archlinux-ax161) (ClangBuiltLinux clang version 14.0.0 (https://github.com/llvm/llvm-project 4602f4169a21e75b82261ba1599046b157d1d021), LLD 14.0.0) #1 SMP PREEMPT Wed Jan 5 22:27:39 UTC 2022
+...
 
-   744	
-   745	static struct device *
-   746	__hwmon_device_register(struct device *dev, const char *name, void *drvdata,
-   747				const struct hwmon_chip_info *chip,
-   748				const struct attribute_group **groups)
-   749	{
-   750		struct hwmon_device *hwdev;
-   751		const char *label;
-   752		struct device *hdev;
-   753		int i, err, id;
-   754	
-   755		/* Complain about invalid characters in hwmon name attribute */
-   756		if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
-   757			dev_warn(dev,
-   758				 "hwmon: '%s' is not a valid name attribute, please fix\n",
-   759				 name);
-   760	
-   761		id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
-   762		if (id < 0)
-   763			return ERR_PTR(id);
-   764	
-   765		hwdev = kzalloc(sizeof(*hwdev), GFP_KERNEL);
-   766		if (hwdev == NULL) {
-   767			err = -ENOMEM;
-   768			goto ida_remove;
-   769		}
-   770	
-   771		if (device_property_present(dev, "label")) {
-   772			err = device_property_read_string(dev, "label", &label);
-   773			if (err < 0)
-   774				goto free_hwmon;
-   775	
-   776			hwdev->label = kstrdup(label, GFP_KERNEL);
- > 777			if (hwdev->label == NULL) {
-   778				err = -ENOMEM;
-   779				goto free_hwmon;
-   780			}
-   781		}
-   782	
-   783		hdev = &hwdev->dev;
-   784	
-   785		if (chip) {
-   786			struct attribute **attrs;
-   787			int ngroups = 2; /* terminating NULL plus &hwdev->groups */
-   788	
-   789			if (groups)
-   790				for (i = 0; groups[i]; i++)
-   791					ngroups++;
-   792	
-   793			hwdev->groups = kcalloc(ngroups, sizeof(*groups), GFP_KERNEL);
-   794			if (!hwdev->groups) {
-   795				err = -ENOMEM;
-   796				goto free_hwmon;
-   797			}
-   798	
-   799			attrs = __hwmon_create_attrs(drvdata, chip);
-   800			if (IS_ERR(attrs)) {
-   801				err = PTR_ERR(attrs);
-   802				goto free_hwmon;
-   803			}
-   804	
-   805			hwdev->group.attrs = attrs;
-   806			ngroups = 0;
-   807			hwdev->groups[ngroups++] = &hwdev->group;
-   808	
-   809			if (groups) {
-   810				for (i = 0; groups[i]; i++)
-   811					hwdev->groups[ngroups++] = groups[i];
-   812			}
-   813	
-   814			hdev->groups = hwdev->groups;
-   815		} else {
-   816			hdev->groups = groups;
-   817		}
-   818	
-   819		hwdev->name = name;
-   820		hdev->class = &hwmon_class;
-   821		hdev->parent = dev;
-   822		hdev->of_node = dev ? dev->of_node : NULL;
-   823		hwdev->chip = chip;
-   824		dev_set_drvdata(hdev, drvdata);
-   825		dev_set_name(hdev, HWMON_ID_FORMAT, id);
-   826		err = device_register(hdev);
-   827		if (err) {
-   828			put_device(hdev);
-   829			goto ida_remove;
-   830		}
-   831	
-   832		INIT_LIST_HEAD(&hwdev->tzdata);
-   833	
-   834		if (dev && dev->of_node && chip && chip->ops->read &&
-   835		    chip->info[0]->type == hwmon_chip &&
-   836		    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
-   837			err = hwmon_thermal_register_sensors(hdev);
-   838			if (err) {
-   839				device_unregister(hdev);
-   840				/*
-   841				 * Don't worry about hwdev; hwmon_dev_release(), called
-   842				 * from device_unregister(), will free it.
-   843				 */
-   844				goto ida_remove;
-   845			}
-   846		}
-   847	
-   848		return hdev;
-   849	
-   850	free_hwmon:
-   851		hwmon_dev_release(hdev);
-   852	ida_remove:
-   853		ida_simple_remove(&hwmon_ida, id);
-   854		return ERR_PTR(err);
-   855	}
-   856	
+I don't think I will have time to look at this today but I will try
+tomorrow. Having the bisectability bug fixed would help narrow things
+down but I am almost certain it is something up with the new per_task
+infrastructure but I'll have to dig around and see if I can understand
+that first.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
