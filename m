@@ -1,42 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CD92C80
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 22:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346D92C9C
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 22:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641420417; x=1672956417;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A3S6i6P/bWmDPC68jtKB8TMGT9TJaBRTy/Rny9domTk=;
-  b=BO+47DQRmCKIGaOIVaeCsgYoAkF9g4+q9DwvNujYmBTSOOKhAIpot9uW
-   fKasz9dHIGgbSsBYGZg0PXBHwZcytDXT/n3jnPTQZYEhMGgilo3SIySM1
-   O8ww2fgTXFlnU5u32GTK05RVX/9wS3uJYDvXZG5CSGGFjBinnRzT3LoH6
-   xeYe2w8Dke7JlugFUG54tynr9pTU+BltQwR6wJjabbtOYNTrnuHNGtc/c
-   9wnVJx5EOq8EM8wRxvlM098AkMmPewN1t2bmpXwqwyY9jm4OdLOjWAAHA
-   X4HBx+rOmFrrL1NnO2R7BKTmwi/DI4BETeD4+CzPz+qB991oqHvfhISkz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223229297"
+  t=1641421693; x=1672957693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FQf/zKa8rC0Lu6XcT0yR8MM5aSgSEEOw1Ma/2F1r0lM=;
+  b=dWNY2d4+ddQuwlAr49fA9l3YuWLOCdlNd0QHFzNotLRthav4lRx+8lvX
+   KVEYHTyCU0vNqZbtRSI+Rl09JvnocbILrWYrtFlt5YG6HQ1i5AW1DbaO8
+   mYjc5yJcfGTs2Z40byCmgL2njOSqt0o7xwsbSLwZkGegARSZob4ykMr4K
+   7o7FYUmbspuEfimRNVwU1uo7xrUv7FG0NWSl0vmNtRgIs1RCuerHRw1hl
+   OzPHAH7wG6jp7MPdQRdDOtT8L50SI3crJMFUkgmP56EoQsh2dvlwuQ85c
+   B40szjM/FBN/2sQVKAsNfclxNnaEmF3lS/kWLjImhvSq+Rd/MR0+Pm5ts
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="266830540"
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="223229297"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 14:06:56 -0800
+   d="scan'208";a="266830540"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 14:28:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="689168076"
+   d="scan'208";a="488740134"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jan 2022 14:06:55 -0800
+  by orsmga002.jf.intel.com with ESMTP; 05 Jan 2022 14:28:00 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n5EQo-000H4c-Jm; Wed, 05 Jan 2022 22:06:54 +0000
-Date: Thu, 6 Jan 2022 06:06:50 +0800
+	id 1n5El9-000H5c-02; Wed, 05 Jan 2022 22:27:55 +0000
+Date: Thu, 6 Jan 2022 06:27:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:kprobe/multi 4/14]
- drivers/gpu/drm/i915/gem/i915_gem_internal.c:174:6: error: shift count >=
- width of type
-Message-ID: <202201060655.KDdXDde2-lkp@intel.com>
+To: Miaoqian Lin <linmq006@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] media: bdisp: Fix PM disable depth imbalance in
+ bdisp_probe
+Message-ID: <202201060603.USzesOiZ-lkp@intel.com>
+References: <20220105114108.10380-1-linmq006@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,177 +45,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220105114108.10380-1-linmq006@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
-head:   27d253a29de023f664387fcc049edeeaadf23c8e
-commit: fbf6ec1e4f8e6c1fed1e1d14f16595e2dc01902d [4/14] kprobe: Add support to register multiple ftrace kprobes
-config: x86_64-randconfig-r011-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060655.KDdXDde2-lkp@intel.com/config)
+Hi Miaoqian,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on v5.16-rc8]
+[also build test WARNING on next-20220105]
+[cannot apply to media-tree/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Miaoqian-Lin/media-bdisp-Fix-PM-disable-depth-imbalance-in-bdisp_probe/20220105-194236
+base:    c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+config: riscv-randconfig-r022-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060603.USzesOiZ-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=fbf6ec1e4f8e6c1fed1e1d14f16595e2dc01902d
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf kprobe/multi
-        git checkout fbf6ec1e4f8e6c1fed1e1d14f16595e2dc01902d
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/1dafbde5425a5766336413fbcab0bb191145da2e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Miaoqian-Lin/media-bdisp-Fix-PM-disable-depth-imbalance-in-bdisp_probe/20220105-194236
+        git checkout 1dafbde5425a5766336413fbcab0bb191145da2e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/platform/sti/bdisp/ drivers/media/platform/sti/hva/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_internal.c:11:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:41:
-   In file included from include/linux/backlight.h:13:
-   In file included from include/linux/fb.h:6:
-   In file included from include/linux/kgdb.h:19:
-   include/linux/kprobes.h:77:21: error: field has incomplete type 'struct ftrace_ops'
-                   struct ftrace_ops ops;
-                                     ^
-   include/linux/ftrace.h:332:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_internal.c:11:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:84:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:13:
-   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
-   drivers/gpu/drm/i915/gem/i915_gem_object.h:43:6: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-           if (overflows_type(size, obj->base.size))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_utils.h:126:32: note: expanded from macro 'overflows_type'
-           (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
-                                         ^  ~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/i915/gem/i915_gem_internal.c:174:6: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-           if (overflows_type(size, obj->base.size))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_utils.h:126:32: note: expanded from macro 'overflows_type'
-           (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
-                                         ^  ~~~~~~~~~~~~~~~~
-   3 errors generated.
---
-   In file included from drivers/gpu/drm/i915/i915_query.c:9:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:41:
-   In file included from include/linux/backlight.h:13:
-   In file included from include/linux/fb.h:6:
-   In file included from include/linux/kgdb.h:19:
-   include/linux/kprobes.h:77:21: error: field has incomplete type 'struct ftrace_ops'
-                   struct ftrace_ops ops;
-                                     ^
-   include/linux/ftrace.h:332:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   In file included from drivers/gpu/drm/i915/i915_query.c:9:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:84:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:13:
-   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
-   drivers/gpu/drm/i915/gem/i915_gem_object.h:43:6: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-           if (overflows_type(size, obj->base.size))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_utils.h:126:32: note: expanded from macro 'overflows_type'
-           (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
-                                         ^  ~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/i915/i915_query.c:512:7: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-                   if (overflows_type(item.query_id - 1, unsigned long))
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_utils.h:126:32: note: expanded from macro 'overflows_type'
-           (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
-                                         ^  ~~~~~~~~~~~~~~~~
-   3 errors generated.
---
-   In file included from drivers/gpu/drm/i915/display/intel_fb.c:9:
-   In file included from drivers/gpu/drm/i915/display/intel_display.h:28:
-   In file included from include/drm/drm_util.h:36:
-   In file included from include/linux/kgdb.h:19:
-   include/linux/kprobes.h:77:21: error: field has incomplete type 'struct ftrace_ops'
-                   struct ftrace_ops ops;
-                                     ^
-   include/linux/ftrace.h:332:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   In file included from drivers/gpu/drm/i915/display/intel_fb.c:10:
-   In file included from drivers/gpu/drm/i915/display/intel_display_types.h:47:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:84:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:13:
-   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
-   drivers/gpu/drm/i915/gem/i915_gem_object.h:43:6: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-           if (overflows_type(size, obj->base.size))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_utils.h:126:32: note: expanded from macro 'overflows_type'
-           (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
-                                         ^  ~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/i915/display/intel_fb.c:863:2: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-           assign_chk_ovf(i915, remap_info->offset, obj_offset);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_fb.c:845:28: note: expanded from macro 'assign_chk_ovf'
-           drm_WARN_ON(&(i915)->drm, overflows_type(val, var)); \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_utils.h:126:32: note: expanded from macro 'overflows_type'
-           (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
-                                         ^
-   include/drm/drm_print.h:593:19: note: expanded from macro 'drm_WARN_ON'
-           drm_WARN((drm), (x), "%s",                                      \
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:583:7: note: expanded from macro 'drm_WARN'
-           WARN(condition, "%s %s: " format,                               \
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:130:25: note: expanded from macro 'WARN'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   3 errors generated.
+>> drivers/media/platform/sti/bdisp/bdisp-v4l2.c:1399:1: warning: unused label 'disable_pm_runtime' [-Wunused-label]
+   disable_pm_runtime:
+   ^~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +174 drivers/gpu/drm/i915/gem/i915_gem_internal.c
+vim +/disable_pm_runtime +1399 drivers/media/platform/sti/bdisp/bdisp-v4l2.c
 
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  147  
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  148  /**
-40f46095db0691b drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2018-02-08  149   * i915_gem_object_create_internal: create an object with volatile pages
-40f46095db0691b drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2018-02-08  150   * @i915: the i915 device
-40f46095db0691b drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2018-02-08  151   * @size: the size in bytes of backing storage to allocate for the object
-40f46095db0691b drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2018-02-08  152   *
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  153   * Creates a new object that wraps some internal memory for private use.
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  154   * This object is not backed by swappable storage, and as such its contents
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  155   * are volatile and only valid whilst pinned. If the object is reaped by the
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  156   * shrinker, its pages and data will be discarded. Equally, it is not a full
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  157   * GEM object and so not valid for access from userspace. This makes it useful
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  158   * for hardware interfaces like ringbuffers (which are pinned from the time
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  159   * the request is written to the time the hardware stops accessing it), but
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  160   * not for contexts (which need to be preserved when not active for later
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  161   * reuse). Note that it is not cleared upon allocation.
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  162   */
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  163  struct drm_i915_gem_object *
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  164  i915_gem_object_create_internal(struct drm_i915_private *i915,
-fcd46e53449c4d6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2017-01-12  165  				phys_addr_t size)
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  166  {
-7867d709959927e drivers/gpu/drm/i915/gem/i915_gem_internal.c Chris Wilson 2019-10-22  167  	static struct lock_class_key lock_class;
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  168  	struct drm_i915_gem_object *obj;
-b8f55be64453ea7 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2017-08-11  169  	unsigned int cache_level;
-920cf4194954ec6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2016-10-28  170  
-fcd46e53449c4d6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2017-01-12  171  	GEM_BUG_ON(!size);
-bf6b2030bed9371 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2017-01-16  172  	GEM_BUG_ON(!IS_ALIGNED(size, PAGE_SIZE));
-fcd46e53449c4d6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2017-01-12  173  
-fcd46e53449c4d6 drivers/gpu/drm/i915/i915_gem_internal.c     Chris Wilson 2017-01-12 @174  	if (overflows_type(size, obj->base.size))
-
-:::::: The code at line 174 was first introduced by commit
-:::::: fcd46e53449c4d659ffbedcd2823ea2f73e39927 drm/i915: Declare i915_gem_object_create_internal() as taking phys_addr_t size
-
-:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
-:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
+  1283	
+  1284	static int bdisp_probe(struct platform_device *pdev)
+  1285	{
+  1286		struct bdisp_dev *bdisp;
+  1287		struct resource *res;
+  1288		struct device *dev = &pdev->dev;
+  1289		int ret;
+  1290	
+  1291		dev_dbg(dev, "%s\n", __func__);
+  1292	
+  1293		bdisp = devm_kzalloc(dev, sizeof(struct bdisp_dev), GFP_KERNEL);
+  1294		if (!bdisp)
+  1295			return -ENOMEM;
+  1296	
+  1297		ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
+  1298		if (ret)
+  1299			return ret;
+  1300	
+  1301		bdisp->pdev = pdev;
+  1302		bdisp->dev = dev;
+  1303		platform_set_drvdata(pdev, bdisp);
+  1304	
+  1305		if (dev->of_node)
+  1306			bdisp->id = of_alias_get_id(pdev->dev.of_node, BDISP_NAME);
+  1307		else
+  1308			bdisp->id = pdev->id;
+  1309	
+  1310		init_waitqueue_head(&bdisp->irq_queue);
+  1311		INIT_DELAYED_WORK(&bdisp->timeout_work, bdisp_irq_timeout);
+  1312		bdisp->work_queue = create_workqueue(BDISP_NAME);
+  1313	
+  1314		spin_lock_init(&bdisp->slock);
+  1315		mutex_init(&bdisp->lock);
+  1316	
+  1317		/* get resources */
+  1318		bdisp->regs = devm_platform_ioremap_resource(pdev, 0);
+  1319		if (IS_ERR(bdisp->regs)) {
+  1320			ret = PTR_ERR(bdisp->regs);
+  1321			goto err_wq;
+  1322		}
+  1323	
+  1324		bdisp->clock = devm_clk_get(dev, BDISP_NAME);
+  1325		if (IS_ERR(bdisp->clock)) {
+  1326			dev_err(dev, "failed to get clock\n");
+  1327			ret = PTR_ERR(bdisp->clock);
+  1328			goto err_wq;
+  1329		}
+  1330	
+  1331		ret = clk_prepare(bdisp->clock);
+  1332		if (ret < 0) {
+  1333			dev_err(dev, "clock prepare failed\n");
+  1334			bdisp->clock = ERR_PTR(-EINVAL);
+  1335			goto err_wq;
+  1336		}
+  1337	
+  1338		res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+  1339		if (!res) {
+  1340			dev_err(dev, "failed to get IRQ resource\n");
+  1341			ret = -EINVAL;
+  1342			goto err_clk;
+  1343		}
+  1344	
+  1345		ret = devm_request_threaded_irq(dev, res->start, bdisp_irq_handler,
+  1346						bdisp_irq_thread, IRQF_ONESHOT,
+  1347						pdev->name, bdisp);
+  1348		if (ret) {
+  1349			dev_err(dev, "failed to install irq\n");
+  1350			goto err_clk;
+  1351		}
+  1352	
+  1353		/* v4l2 register */
+  1354		ret = v4l2_device_register(dev, &bdisp->v4l2_dev);
+  1355		if (ret) {
+  1356			dev_err(dev, "failed to register\n");
+  1357			goto err_clk;
+  1358		}
+  1359	
+  1360		/* Debug */
+  1361		bdisp_debugfs_create(bdisp);
+  1362	
+  1363		/* Power management */
+  1364		pm_runtime_enable(dev);
+  1365		ret = pm_runtime_resume_and_get(dev);
+  1366		if (ret < 0) {
+  1367			dev_err(dev, "failed to set PM\n");
+  1368			goto err_remove;
+  1369		}
+  1370	
+  1371		/* Filters */
+  1372		if (bdisp_hw_alloc_filters(bdisp->dev)) {
+  1373			dev_err(bdisp->dev, "no memory for filters\n");
+  1374			ret = -ENOMEM;
+  1375			goto err_pm;
+  1376		}
+  1377	
+  1378		/* Register */
+  1379		ret = bdisp_register_device(bdisp);
+  1380		if (ret) {
+  1381			dev_err(dev, "failed to register\n");
+  1382			goto err_filter;
+  1383		}
+  1384	
+  1385		dev_info(dev, "%s%d registered as /dev/video%d\n", BDISP_NAME,
+  1386			 bdisp->id, bdisp->vdev.num);
+  1387	
+  1388		pm_runtime_put(dev);
+  1389	
+  1390		return 0;
+  1391	
+  1392	err_filter:
+  1393		bdisp_hw_free_filters(bdisp->dev);
+  1394	err_pm:
+  1395		pm_runtime_put(dev);
+  1396	err_remove:
+  1397		bdisp_debugfs_remove(bdisp);
+  1398		v4l2_device_unregister(&bdisp->v4l2_dev);
+> 1399	disable_pm_runtime:
+  1400		pm_runtime_disable(dev);
+  1401	err_clk:
+  1402		if (!IS_ERR(bdisp->clock))
+  1403			clk_unprepare(bdisp->clock);
+  1404	err_wq:
+  1405		destroy_workqueue(bdisp->work_queue);
+  1406		return ret;
+  1407	}
+  1408	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
