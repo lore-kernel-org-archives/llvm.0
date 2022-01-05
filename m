@@ -1,42 +1,48 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200342C80
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 21:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925E82C80
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 21:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641416816; x=1672952816;
+  t=1641416818; x=1672952818;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/kX3xlNKd7PQ94vZqA0I+UTYEuqsQjXl0Dmg4SBbNN0=;
-  b=b39xmj9SQmqHo81moxreXCpcgiMrJmFRTtefiG88Cv2dn7wmNO9qi3v+
-   ywpFPAxfgCCwrT/YePuvN2DDNqyf2/Jq0WhrMYuXag0okogTee7MJkRrP
-   04kwlTHuD0dhU/pRSfE4VQdjSugKi9IM4NhwxwiO5hFmNTHK35JoZwCgJ
-   o7/yRbYHZEaMyKnDukibxm/phTeXxCnaOyFOjVWuRraRl4qkSkCnsG/lH
-   N7PRTK8yWl8XOz8mwByV2wibPVGT+6qrWv16mwyUBu0eAOta3cXCbTvDf
-   krht1pfoJAQboXZ4bE01BlQ3JFTW0YkRUsDk3dBa9gBxvP6jPhvriH9th
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223220829"
+  bh=L6FP8dJmdlUmtztac4+1qDGI/UW+ITXa6OTVsEd7AIw=;
+  b=cBHoseMjEytpeLJ8FX/vTsmuWVc1fK+SAe4nXSX98BOg/r6kqhT/1cmJ
+   lKxCeUM6/XNYASjhQgmie58Zl21yIeTVrQwBdIln3UIJNd1qXH3wYpXTT
+   k8w3hx1ilrJQO2+zbBLslBQ0NqW6j/C/kwUPiN4DVfSJDv8cZEt24h4I6
+   LYFILA0hbo/Z3RF2gEAwAIh6QAHiev4PCCK+FJtGYtLMxS/fjSUgeLei/
+   3o4IjX3b+/M6dG1r6aYm4PyN/rS4cDkzMSBP5zLBb7VIZn1QbaSYBggL9
+   DMMyHhjooTqViCE+VoA0XQBiiXRZ2eaYckDYqIT/5jZOXnCJLoCaC6k9Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242332414"
 X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="223220829"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:06:55 -0800
+   d="scan'208";a="242332414"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:06:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="668235511"
+   d="scan'208";a="611596015"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Jan 2022 13:06:54 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jan 2022 13:06:54 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n5DUj-000H2m-Sb; Wed, 05 Jan 2022 21:06:53 +0000
-Date: Thu, 6 Jan 2022 05:05:52 +0800
+	id 1n5DUj-000H2k-RO; Wed, 05 Jan 2022 21:06:53 +0000
+Date: Thu, 6 Jan 2022 05:05:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miaoqian Lin <linmq006@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] media: st-delta: Fix PM disable depth imbalance in
- delta_probe
-Message-ID: <202201060446.2MV9VJaE-lkp@intel.com>
-References: <20220105115515.12196-1-linmq006@gmail.com>
+To: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Roman Bacik <roman.bacik@broadcom.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
+Message-ID: <202201060511.mczwwaNF-lkp@intel.com>
+References: <20220105093552.27542-1-pali@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,144 +51,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105115515.12196-1-linmq006@gmail.com>
+In-Reply-To: <20220105093552.27542-1-pali@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Miaoqian,
+Hi "Pali,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on v5.16-rc8 next-20220105]
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.16-rc8 next-20220105]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Miaoqian-Lin/media-st-delta-Fix-PM-disable-depth-imbalance-in-delta_probe/20220105-195600
-base:   git://linuxtv.org/media_tree.git master
-config: riscv-randconfig-r022-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060446.2MV9VJaE-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm-randconfig-r001-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060511.mczwwaNF-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/df377b6adc1cca5963348f9ac16f033e5da299cb
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Miaoqian-Lin/media-st-delta-Fix-PM-disable-depth-imbalance-in-delta_probe/20220105-195600
-        git checkout df377b6adc1cca5963348f9ac16f033e5da299cb
+        git fetch --no-tags linux-review Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
+        git checkout 8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/platform/sti/bdisp/ drivers/media/platform/sti/delta/ drivers/media/platform/sti/hva/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/platform/sti/delta/delta-v4l2.c:1901:1: warning: unused label 'disable_pm_runtime' [-Wunused-label]
-   disable_pm_runtime:
-   ^~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/pci/controller/pcie-iproc.c:798:11: error: use of undeclared identifier 'PCI_CLASS_BRIDGE_PCI_NORMAL'
+           class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+                    ^
+   1 error generated.
 
 
-vim +/disable_pm_runtime +1901 drivers/media/platform/sti/delta/delta-v4l2.c
+vim +/PCI_CLASS_BRIDGE_PCI_NORMAL +798 drivers/pci/controller/pcie-iproc.c
 
-  1812	
-  1813	static int delta_probe(struct platform_device *pdev)
-  1814	{
-  1815		struct delta_dev *delta;
-  1816		struct device *dev = &pdev->dev;
-  1817		int ret;
-  1818	
-  1819		delta = devm_kzalloc(dev, sizeof(*delta), GFP_KERNEL);
-  1820		if (!delta) {
-  1821			ret = -ENOMEM;
-  1822			goto err;
-  1823		}
-  1824	
-  1825		delta->dev = dev;
-  1826		delta->pdev = pdev;
-  1827		platform_set_drvdata(pdev, delta);
-  1828	
-  1829		mutex_init(&delta->lock);
-  1830	
-  1831		/* get clock resources */
-  1832		delta->clk_delta = devm_clk_get(dev, "delta");
-  1833		if (IS_ERR(delta->clk_delta)) {
-  1834			dev_dbg(dev, "%s can't get delta clock\n", DELTA_PREFIX);
-  1835			delta->clk_delta = NULL;
-  1836		}
-  1837	
-  1838		delta->clk_st231 = devm_clk_get(dev, "delta-st231");
-  1839		if (IS_ERR(delta->clk_st231)) {
-  1840			dev_dbg(dev, "%s can't get delta-st231 clock\n", DELTA_PREFIX);
-  1841			delta->clk_st231 = NULL;
-  1842		}
-  1843	
-  1844		delta->clk_flash_promip = devm_clk_get(dev, "delta-flash-promip");
-  1845		if (IS_ERR(delta->clk_flash_promip)) {
-  1846			dev_dbg(dev, "%s can't get delta-flash-promip clock\n",
-  1847				DELTA_PREFIX);
-  1848			delta->clk_flash_promip = NULL;
-  1849		}
-  1850	
-  1851		/* init pm_runtime used for power management */
-  1852		pm_runtime_set_autosuspend_delay(dev, DELTA_HW_AUTOSUSPEND_DELAY_MS);
-  1853		pm_runtime_use_autosuspend(dev);
-  1854		pm_runtime_set_suspended(dev);
-  1855		pm_runtime_enable(dev);
-  1856	
-  1857		/* init firmware ipc channel */
-  1858		ret = delta_ipc_init(delta);
-  1859		if (ret) {
-  1860			dev_err(delta->dev, "%s failed to initialize firmware ipc channel\n",
-  1861				DELTA_PREFIX);
-  1862			goto err;
-  1863		}
-  1864	
-  1865		/* register all available decoders */
-  1866		register_decoders(delta);
-  1867	
-  1868		/* register all supported formats */
-  1869		register_formats(delta);
-  1870	
-  1871		/* register on V4L2 */
-  1872		ret = v4l2_device_register(dev, &delta->v4l2_dev);
-  1873		if (ret) {
-  1874			dev_err(delta->dev, "%s failed to register V4L2 device\n",
-  1875				DELTA_PREFIX);
-  1876			goto err;
-  1877		}
-  1878	
-  1879		delta->work_queue = create_workqueue(DELTA_NAME);
-  1880		if (!delta->work_queue) {
-  1881			dev_err(delta->dev, "%s failed to allocate work queue\n",
-  1882				DELTA_PREFIX);
-  1883			ret = -ENOMEM;
-  1884			goto err_v4l2;
-  1885		}
-  1886	
-  1887		/* register device */
-  1888		ret = delta_register_device(delta);
-  1889		if (ret)
-  1890			goto err_work_queue;
-  1891	
-  1892		dev_info(dev, "%s %s registered as /dev/video%d\n",
-  1893			 DELTA_PREFIX, delta->vdev->name, delta->vdev->num);
-  1894	
-  1895		return 0;
-  1896	
-  1897	err_work_queue:
-  1898		destroy_workqueue(delta->work_queue);
-  1899	err_v4l2:
-  1900		v4l2_device_unregister(&delta->v4l2_dev);
-> 1901	disable_pm_runtime:
-  1902		pm_runtime_disable(dev);
-  1903	err:
-  1904		return ret;
-  1905	}
-  1906	
+   765	
+   766	static int iproc_pcie_check_link(struct iproc_pcie *pcie)
+   767	{
+   768		struct device *dev = pcie->dev;
+   769		u32 hdr_type, link_ctrl, link_status, class, val;
+   770		bool link_is_active = false;
+   771	
+   772		/*
+   773		 * PAXC connects to emulated endpoint devices directly and does not
+   774		 * have a Serdes.  Therefore skip the link detection logic here.
+   775		 */
+   776		if (pcie->ep_is_internal)
+   777			return 0;
+   778	
+   779		val = iproc_pcie_read_reg(pcie, IPROC_PCIE_LINK_STATUS);
+   780		if (!(val & PCIE_PHYLINKUP) || !(val & PCIE_DL_ACTIVE)) {
+   781			dev_err(dev, "PHY or data link is INACTIVE!\n");
+   782			return -ENODEV;
+   783		}
+   784	
+   785		/* make sure we are not in EP mode */
+   786		iproc_pci_raw_config_read32(pcie, 0, PCI_HEADER_TYPE, 1, &hdr_type);
+   787		if ((hdr_type & 0x7f) != PCI_HEADER_TYPE_BRIDGE) {
+   788			dev_err(dev, "in EP mode, hdr=%#02x\n", hdr_type);
+   789			return -EFAULT;
+   790		}
+   791	
+   792		/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
+   793	#define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
+   794	#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
+   795		iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+   796					    4, &class);
+   797		class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
+ > 798		class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+   799		iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+   800					     4, class);
+   801	
+   802		/* check link status to see if link is active */
+   803		iproc_pci_raw_config_read32(pcie, 0, IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
+   804					    2, &link_status);
+   805		if (link_status & PCI_EXP_LNKSTA_NLW)
+   806			link_is_active = true;
+   807	
+   808		if (!link_is_active) {
+   809			/* try GEN 1 link speed */
+   810	#define PCI_TARGET_LINK_SPEED_MASK	0xf
+   811	#define PCI_TARGET_LINK_SPEED_GEN2	0x2
+   812	#define PCI_TARGET_LINK_SPEED_GEN1	0x1
+   813			iproc_pci_raw_config_read32(pcie, 0,
+   814						    IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
+   815						    4, &link_ctrl);
+   816			if ((link_ctrl & PCI_TARGET_LINK_SPEED_MASK) ==
+   817			    PCI_TARGET_LINK_SPEED_GEN2) {
+   818				link_ctrl &= ~PCI_TARGET_LINK_SPEED_MASK;
+   819				link_ctrl |= PCI_TARGET_LINK_SPEED_GEN1;
+   820				iproc_pci_raw_config_write32(pcie, 0,
+   821						IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
+   822						4, link_ctrl);
+   823				msleep(100);
+   824	
+   825				iproc_pci_raw_config_read32(pcie, 0,
+   826						IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
+   827						2, &link_status);
+   828				if (link_status & PCI_EXP_LNKSTA_NLW)
+   829					link_is_active = true;
+   830			}
+   831		}
+   832	
+   833		dev_info(dev, "link: %s\n", link_is_active ? "UP" : "DOWN");
+   834	
+   835		return link_is_active ? 0 : -ENODEV;
+   836	}
+   837	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
