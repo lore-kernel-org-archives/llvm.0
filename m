@@ -1,41 +1,48 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861F62C9C
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 23:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77988168
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 00:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641425938; x=1672961938;
+  t=1641427210; x=1672963210;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XwKSTHfDu265J2P8HSUosd3Do127eVlRiq8ycaDaWDE=;
-  b=lB+nsgjtxQ7NQ/TdEW1wozN1w9PTLDpCi5Dy5ss7ZjnTWR4RwJcKwlrZ
-   WVWIBwzVgqNcIEvlFd1ASQ0kgstTlas530HGcfSAQrGGGSnv/VSd6yKmA
-   fanEXmWpbKVklaafY2GDlaE4/ipQFl7UXZTs/o05tyfI68v0DlqPPuf0g
-   6NN8RyxX5TevNvxn4llZbu7IzyoHkSeQTxhTp33+6HC/m1+H9S1Kj19dW
-   KQifBKgvh/7yD8X06SBWcGm5HCaHBhXXtRz0lmznbsz2pCKmlbgYslml6
-   Yw4r7leUcgS17UOg7gfbmpJmSTSiSXQVI84loXuH7tsyIlTIDfsE6X6HZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="303305594"
+  bh=41SQZtieL/dYlOwygcKldJKm/baNQziXhw4kXJeCPcA=;
+  b=NbPOJpnr2xNGvmNpxYHyx4maFXSZa6+X71laUxjHGWJaPfAuH+hHhFme
+   GyzbZtU4v+sEBX84WlQL7OjDHUkHRtamjNivECkW5vabbhS9WEvycXCCP
+   F/Wf7U09kbseB8AWLLL7yJ+ugjvM/nEb12Z2UEQgUTUAgKVgaEYLK3yyV
+   wuZTlEGK7l1bgESbjpuCN+C9qwjfm9HCqjICW8vPJwy6rNwNS2p0ugrJv
+   rPEYMJXw35ROwPpfUVdzO9zab0v2wLWxLDaQEfrkf3c2Mp7VMpxJggRjg
+   s2pmrnJPWi3OoKxP0UJPIzWYMz0l1/ZKV3ZLFUKO6JfJyKLV/ZgQwZuLg
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229881457"
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="303305594"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 15:38:58 -0800
+   d="scan'208";a="229881457"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 16:00:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="526746918"
+   d="scan'208";a="513194494"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 Jan 2022 15:38:56 -0800
+  by orsmga007.jf.intel.com with ESMTP; 05 Jan 2022 16:00:00 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n5Frs-000H87-2I; Wed, 05 Jan 2022 23:38:56 +0000
-Date: Thu, 6 Jan 2022 07:38:46 +0800
+	id 1n5GCF-000H9U-F1; Wed, 05 Jan 2022 23:59:59 +0000
+Date: Thu, 6 Jan 2022 07:59:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 07/35] brcmfmac: pcie: Read Apple OTP information
-Message-ID: <202201060758.hCG39IaN-lkp@intel.com>
-References: <20220104072658.69756-8-marcan@marcan.st>
+To: Miaoqian Lin <linmq006@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linmq006@gmail.com,
+	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Yannick Fertre <yannick.fertre@st.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: st-hva: Fix PM disable depth imbalance in
+ hva_hw_probe
+Message-ID: <202201060723.hf79WNhw-lkp@intel.com>
+References: <20220105113104.7783-1-linmq006@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,138 +51,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104072658.69756-8-marcan@marcan.st>
+In-Reply-To: <20220105113104.7783-1-linmq006@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Hector,
+Hi Miaoqian,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on kvalo-wireless-drivers-next/master]
-[also build test WARNING on kvalo-wireless-drivers/master rafael-pm/linux-next net-next/master net/master robh/for-next linus/master v5.16-rc8 next-20220105]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.16-rc8 next-20220105]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Hector-Martin/brcmfmac-Support-Apple-T2-and-M1-platforms/20220104-153413
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/wireless-drivers-next.git master
-config: x86_64-randconfig-r024-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060758.hCG39IaN-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Miaoqian-Lin/media-st-hva-Fix-PM-disable-depth-imbalance-in-hva_hw_probe/20220105-193232
+base:   git://linuxtv.org/media_tree.git master
+config: riscv-randconfig-r022-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060723.hf79WNhw-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e81f1e021ca0e590a603102125ba1ad03dfff42c
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/47b1ca3ed69ff8b4ac772d1630776ec5366076c1
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Hector-Martin/brcmfmac-Support-Apple-T2-and-M1-platforms/20220104-153413
-        git checkout e81f1e021ca0e590a603102125ba1ad03dfff42c
+        git fetch --no-tags linux-review Miaoqian-Lin/media-st-hva-Fix-PM-disable-depth-imbalance-in-hva_hw_probe/20220105-193232
+        git checkout 47b1ca3ed69ff8b4ac772d1630776ec5366076c1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/platform/sti/hva/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1863:20: warning: address of array 'devinfo->otp.version' will always evaluate to 'true' [-Wpointer-bool-conversion]
-               !devinfo->otp.version)
-               ~~~~~~~~~~~~~~^~~~~~~
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1862:20: warning: address of array 'devinfo->otp.vendor' will always evaluate to 'true' [-Wpointer-bool-conversion]
-               !devinfo->otp.vendor ||
-               ~~~~~~~~~~~~~~^~~~~~
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1861:20: warning: address of array 'devinfo->otp.module' will always evaluate to 'true' [-Wpointer-bool-conversion]
-           if (!devinfo->otp.module ||
-               ~~~~~~~~~~~~~~^~~~~~
-   3 warnings generated.
+>> drivers/media/platform/sti/hva/hva-hw.c:411:1: warning: unused label 'disable_pm_runtime' [-Wunused-label]
+   disable_pm_runtime:
+   ^~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +1863 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+vim +/disable_pm_runtime +411 drivers/media/platform/sti/hva/hva-hw.c
 
-  1785	
-  1786	static int
-  1787	brcmf_pcie_parse_otp_sys_vendor(struct brcmf_pciedev_info *devinfo,
-  1788					u8 *data, size_t size)
-  1789	{
-  1790		int idx = 4;
-  1791		const char *chip_params;
-  1792		const char *board_params;
-  1793		const char *p;
-  1794	
-  1795		/* 4-byte header and two empty strings */
-  1796		if (size < 6)
-  1797			return -EINVAL;
-  1798	
-  1799		if (get_unaligned_le32(data) != BRCMF_OTP_VENDOR_HDR)
-  1800			return -EINVAL;
-  1801	
-  1802		chip_params = &data[idx];
-  1803	
-  1804		/* Skip first string, including terminator */
-  1805		idx += strnlen(chip_params, size - idx) + 1;
-  1806		if (idx >= size)
-  1807			return -EINVAL;
-  1808	
-  1809		board_params = &data[idx];
-  1810	
-  1811		/* Skip to terminator of second string */
-  1812		idx += strnlen(board_params, size - idx);
-  1813		if (idx >= size)
-  1814			return -EINVAL;
-  1815	
-  1816		/* At this point both strings are guaranteed NUL-terminated */
-  1817		brcmf_dbg(PCIE, "OTP: chip_params='%s' board_params='%s'\n",
-  1818			  chip_params, board_params);
-  1819	
-  1820		p = board_params;
-  1821		while (*p) {
-  1822			char tag = *p++;
-  1823			const char *end;
-  1824			size_t len;
-  1825	
-  1826			if (tag == ' ') /* Skip extra spaces */
-  1827				continue;
-  1828	
-  1829			if (*p++ != '=') /* implicit NUL check */
-  1830				return -EINVAL;
-  1831	
-  1832			/* *p might be NUL here, if so end == p and len == 0 */
-  1833			end = strchrnul(p, ' ');
-  1834			len = end - p;
-  1835	
-  1836			/* leave 1 byte for NUL in destination string */
-  1837			if (len > (BRCMF_OTP_MAX_PARAM_LEN - 1))
-  1838				return -EINVAL;
-  1839	
-  1840			/* Copy len characters plus a NUL terminator */
-  1841			switch (tag) {
-  1842			case 'M':
-  1843				strscpy(devinfo->otp.module, p, len + 1);
-  1844				break;
-  1845			case 'V':
-  1846				strscpy(devinfo->otp.vendor, p, len + 1);
-  1847				break;
-  1848			case 'm':
-  1849				strscpy(devinfo->otp.version, p, len + 1);
-  1850				break;
-  1851			}
-  1852	
-  1853			/* Skip to space separator or NUL */
-  1854			p = end;
-  1855		}
-  1856	
-  1857		brcmf_dbg(PCIE, "OTP: module=%s vendor=%s version=%s\n",
-  1858			  devinfo->otp.module, devinfo->otp.vendor,
-  1859			  devinfo->otp.version);
-  1860	
-> 1861		if (!devinfo->otp.module ||
-> 1862		    !devinfo->otp.vendor ||
-> 1863		    !devinfo->otp.version)
-  1864			return -EINVAL;
-  1865	
-  1866		devinfo->otp.valid = true;
-  1867		return 0;
-  1868	}
-  1869	
+   297	
+   298	int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
+   299	{
+   300		struct device *dev = &pdev->dev;
+   301		struct resource *esram;
+   302		int ret;
+   303	
+   304		WARN_ON(!hva);
+   305	
+   306		/* get memory for registers */
+   307		hva->regs = devm_platform_ioremap_resource(pdev, 0);
+   308		if (IS_ERR(hva->regs)) {
+   309			dev_err(dev, "%s     failed to get regs\n", HVA_PREFIX);
+   310			return PTR_ERR(hva->regs);
+   311		}
+   312	
+   313		/* get memory for esram */
+   314		esram = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+   315		if (!esram) {
+   316			dev_err(dev, "%s     failed to get esram\n", HVA_PREFIX);
+   317			return -ENODEV;
+   318		}
+   319		hva->esram_addr = esram->start;
+   320		hva->esram_size = resource_size(esram);
+   321	
+   322		dev_info(dev, "%s     esram reserved for address: 0x%x size:%d\n",
+   323			 HVA_PREFIX, hva->esram_addr, hva->esram_size);
+   324	
+   325		/* get clock resource */
+   326		hva->clk = devm_clk_get(dev, "clk_hva");
+   327		if (IS_ERR(hva->clk)) {
+   328			dev_err(dev, "%s     failed to get clock\n", HVA_PREFIX);
+   329			return PTR_ERR(hva->clk);
+   330		}
+   331	
+   332		ret = clk_prepare(hva->clk);
+   333		if (ret < 0) {
+   334			dev_err(dev, "%s     failed to prepare clock\n", HVA_PREFIX);
+   335			hva->clk = ERR_PTR(-EINVAL);
+   336			return ret;
+   337		}
+   338	
+   339		/* get status interruption resource */
+   340		ret  = platform_get_irq(pdev, 0);
+   341		if (ret < 0)
+   342			goto err_clk;
+   343		hva->irq_its = ret;
+   344	
+   345		ret = devm_request_threaded_irq(dev, hva->irq_its, hva_hw_its_interrupt,
+   346						hva_hw_its_irq_thread,
+   347						IRQF_ONESHOT,
+   348						"hva_its_irq", hva);
+   349		if (ret) {
+   350			dev_err(dev, "%s     failed to install status IRQ 0x%x\n",
+   351				HVA_PREFIX, hva->irq_its);
+   352			goto err_clk;
+   353		}
+   354		disable_irq(hva->irq_its);
+   355	
+   356		/* get error interruption resource */
+   357		ret = platform_get_irq(pdev, 1);
+   358		if (ret < 0)
+   359			goto err_clk;
+   360		hva->irq_err = ret;
+   361	
+   362		ret = devm_request_threaded_irq(dev, hva->irq_err, hva_hw_err_interrupt,
+   363						hva_hw_err_irq_thread,
+   364						IRQF_ONESHOT,
+   365						"hva_err_irq", hva);
+   366		if (ret) {
+   367			dev_err(dev, "%s     failed to install error IRQ 0x%x\n",
+   368				HVA_PREFIX, hva->irq_err);
+   369			goto err_clk;
+   370		}
+   371		disable_irq(hva->irq_err);
+   372	
+   373		/* initialise protection mutex */
+   374		mutex_init(&hva->protect_mutex);
+   375	
+   376		/* initialise completion signal */
+   377		init_completion(&hva->interrupt);
+   378	
+   379		/* initialise runtime power management */
+   380		pm_runtime_set_autosuspend_delay(dev, AUTOSUSPEND_DELAY_MS);
+   381		pm_runtime_use_autosuspend(dev);
+   382		pm_runtime_set_suspended(dev);
+   383		pm_runtime_enable(dev);
+   384	
+   385		ret = pm_runtime_resume_and_get(dev);
+   386		if (ret < 0) {
+   387			dev_err(dev, "%s     failed to set PM\n", HVA_PREFIX);
+   388			goto err_disable;
+   389		}
+   390	
+   391		/* check IP hardware version */
+   392		hva->ip_version = hva_hw_get_ip_version(hva);
+   393	
+   394		if (hva->ip_version == HVA_VERSION_UNKNOWN) {
+   395			ret = -EINVAL;
+   396			goto err_pm;
+   397		}
+   398	
+   399		dev_info(dev, "%s     found hva device (version 0x%lx)\n", HVA_PREFIX,
+   400			 hva->ip_version);
+   401	
+   402		return 0;
+   403	
+   404	err_pm:
+   405		pm_runtime_put(dev);
+   406	err_disable:
+   407		pm_runtime_disable(dev);
+   408	err_clk:
+   409		if (hva->clk)
+   410			clk_unprepare(hva->clk);
+ > 411	disable_pm_runtime:
+   412		pm_runtime_disable(dev);
+   413		return ret;
+   414	}
+   415	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
