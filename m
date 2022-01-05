@@ -1,246 +1,258 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4A12C80
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 21:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82875C36AE9;
-	Wed,  5 Jan 2022 21:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641418945;
-	bh=7ydjhtwWAR9xWDsD6TpMgHJRhn4lOcG7aWgGBOssULk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AeqCXCqU6kWwX42g4s4wT6NBX8Obu5A7fx1bTK3k5+Ar/sotYyS+vc2QQoMoD5eLI
-	 zAwmQr1Vq5u0AIbVuFcDr45FVYyPWhV3lgCX5Onf2gZTHRRZZp14abl0/K9kg+LrAs
-	 sY8NLCc96D51zMiQkleuTnQwGlis9HKLTwYV91dopOC1gd0uxWinDz9upbDYR5BDcG
-	 JQI7yjooIvmpV6GxoGA/XLGhROlhhB/GHNzUJ7xw5hfn2ahhDHugpKyFLPU4pY2w8W
-	 lDz4xYcM6oGcD2ya7ZRUrOVTd/isRdQwwpXQTiKZS+nPMArt876UqFO0igg83J5MWJ
-	 wS0OYU5NN6vAw==
-Date: Wed, 5 Jan 2022 14:42:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdYQu9YxNw0CxJRn@archlinux-ax161>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
- <YdTvXkKFzA0pOjFf@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5BED2C80
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 21:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641419217; x=1672955217;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fnqT6abPp7rgwKt8obY3+ASiykQkENaY+AkEtrPPEmw=;
+  b=bKYWxg8YQJzRLbOjXd/AlXuTfYBk2OhShimoSuTfUrsd75qx3UXZtVPG
+   J4nNWDLTQ5DPo9yuvFV9tpJVBdkKBRRKb+JamUFadR1MOjTQMsooyKSMC
+   3DUn3SqV/R6Kznw/xYdMEzT4GImdG6buEphwmuNvc6iAFxcEUAAJBrMtG
+   TfKqqSyuHvbgopR068c5nbxWmcr2yBah13FddmD9+0x2xCQfe7jyI3WIx
+   8/r7qz0EV+Z9Btb+5qozPKWOUn1AancZYX4G7pcmsaaxHKX0N3nTC+cJD
+   cq22YnTcYLWd3G6ToG1aB/HoaJz+ixQ0ZeC5MQIyn8mLYetWbLzFBTRfT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229355833"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="229355833"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:46:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="556689773"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 05 Jan 2022 13:46:55 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n5E7S-000H46-Di; Wed, 05 Jan 2022 21:46:54 +0000
+Date: Thu, 6 Jan 2022 05:46:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@arm.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v2] ACPI: PCC: Implement OperationRegion handler for the
+ PCC Type 3 subtype
+Message-ID: <202201060524.QF2PbOn8-lkp@intel.com>
+References: <20220103155838.616580-1-sudeep.holla@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdTvXkKFzA0pOjFf@gmail.com>
+In-Reply-To: <20220103155838.616580-1-sudeep.holla@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Jan 05, 2022 at 02:07:42AM +0100, Ingo Molnar wrote:
-> 
-> * Ingo Molnar <mingo@kernel.org> wrote:
-> 
-> > 
-> > * Nathan Chancellor <nathan@kernel.org> wrote:
-> > 
-> > > > I.e. I think the bug was simply to make main.c aware of the array, now 
-> > > > that the INIT_THREAD initialization is done there.
-> > > 
-> > > Yes, that seems right.
-> > > 
-> > > Unfortunately, while the kernel now builds, it does not boot in QEMU. I 
-> > > tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if I 
-> > > could reproduce that breakage there but the build errors out at that 
-> > > change (I do see notes of bisection breakage in some of the commits) so I 
-> > > assume that is expected.
-> > 
-> > Yeah, there's a breakage window on ARM64, I'll track down that 
-> > bisectability bug.
-> 
-> I haven't fixed this ARM64 bisection breakage yet, but I've integrated & 
-> backmerged all the other fixes and changes, and pushed it out to the WIP 
-> branch:
-> 
->     # 1755441e323b per_task: Implement single template to define 'struct task_struct_per_task' fields and offsets
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-> 
-> Let me know if there's anything missing or if there's a new breakage.
+Hi Sudeep,
 
-I ended up running this through my full set of clang builds and a few
-GCC builds and found a few issues, which most of which appear to be
-compiler agnostic.
+I love your patch! Yet something to improve:
 
-This whole report is against commit 1755441e323b ("per_task: Implement
-single template to define 'struct task_struct_per_task' fields and
-offsets").
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linux/master linus/master v5.16-rc8 next-20220105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-In case it is relevant...
+url:    https://github.com/0day-ci/linux/commits/Sudeep-Holla/ACPI-PCC-Implement-OperationRegion-handler-for-the-PCC-Type-3-subtype/20220104-000003
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-randconfig-a012-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060524.QF2PbOn8-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1dbcdc47eadc8c55659410fc03d067f3438a386a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sudeep-Holla/ACPI-PCC-Implement-OperationRegion-handler-for-the-PCC-Type-3-subtype/20220104-000003
+        git checkout 1dbcdc47eadc8c55659410fc03d067f3438a386a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-$ gcc --version | head -1
-gcc (GCC) 11.2.1 20211231
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/acpi_pcc.c:53:3: error: implicit declaration of function 'acpi_ut_status_exit' [-Werror,-Wimplicit-function-declaration]
+                   return_ACPI_STATUS(AE_NO_MEMORY);
+                   ^
+   include/acpi/acoutput.h:398:19: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+                            ^
+   drivers/acpi/acpi_pcc.c:53:3: note: did you mean 'acpi_irq_stats_init'?
+   include/acpi/acoutput.h:398:19: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+                            ^
+   include/linux/acpi.h:320:6: note: 'acpi_irq_stats_init' declared here
+   void acpi_irq_stats_init(void);
+        ^
+>> drivers/acpi/acpi_pcc.c:53:3: error: use of undeclared identifier '_acpi_module_name'
+                   return_ACPI_STATUS(AE_NO_MEMORY);
+                   ^
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:36: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                             ^
+>> drivers/acpi/acpi_pcc.c:53:3: error: use of undeclared identifier '_COMPONENT'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:55: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                                                ^
+   drivers/acpi/acpi_pcc.c:66:3: error: implicit declaration of function 'acpi_ut_status_exit' [-Werror,-Wimplicit-function-declaration]
+                   return_ACPI_STATUS(AE_NOT_FOUND);
+                   ^
+   include/acpi/acoutput.h:398:19: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+                            ^
+   drivers/acpi/acpi_pcc.c:66:3: error: use of undeclared identifier '_acpi_module_name'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:36: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                             ^
+   drivers/acpi/acpi_pcc.c:66:3: error: use of undeclared identifier '_COMPONENT'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:55: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                                                ^
+   drivers/acpi/acpi_pcc.c:75:3: error: implicit declaration of function 'acpi_ut_status_exit' [-Werror,-Wimplicit-function-declaration]
+                   return_ACPI_STATUS(AE_NO_MEMORY);
+                   ^
+   include/acpi/acoutput.h:398:19: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+                            ^
+   drivers/acpi/acpi_pcc.c:75:3: error: use of undeclared identifier '_acpi_module_name'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:36: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                             ^
+   drivers/acpi/acpi_pcc.c:75:3: error: use of undeclared identifier '_COMPONENT'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:55: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                                                ^
+   drivers/acpi/acpi_pcc.c:79:2: error: implicit declaration of function 'acpi_ut_status_exit' [-Werror,-Wimplicit-function-declaration]
+           return_ACPI_STATUS(AE_OK);
+           ^
+   include/acpi/acoutput.h:398:19: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+                            ^
+   drivers/acpi/acpi_pcc.c:79:2: error: use of undeclared identifier '_acpi_module_name'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:36: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                             ^
+   drivers/acpi/acpi_pcc.c:79:2: error: use of undeclared identifier '_COMPONENT'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
+   include/acpi/acoutput.h:258:55: note: expanded from macro 'ACPI_DEBUG_PARAMETERS'
+           __LINE__, ACPI_GET_FUNCTION_NAME, _acpi_module_name, _COMPONENT
+                                                                ^
+   drivers/acpi/acpi_pcc.c:97:3: error: implicit declaration of function 'acpi_ut_status_exit' [-Werror,-Wimplicit-function-declaration]
+                   return_ACPI_STATUS(AE_ERROR);
+                   ^
+   include/acpi/acoutput.h:398:19: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+                            ^
+   drivers/acpi/acpi_pcc.c:97:3: error: use of undeclared identifier '_acpi_module_name'
+   include/acpi/acoutput.h:398:2: note: expanded from macro 'return_ACPI_STATUS'
+           ACPI_TRACE_EXIT (acpi_ut_status_exit, acpi_status, status)
+           ^
+   include/acpi/acoutput.h:375:13: note: expanded from macro 'ACPI_TRACE_EXIT'
+                   function (ACPI_DEBUG_PARAMETERS, _param); \
+                             ^
 
 
+vim +/acpi_ut_status_exit +53 drivers/acpi/acpi_pcc.c
 
-1. kernel/stackleak.c build failure:
+    42	
+    43	static acpi_status
+    44	acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
+    45				     void *handler_context,  void **region_context)
+    46	{
+    47		struct pcc_data *data;
+    48		struct acpi_pcc_info *ctx = handler_context;
+    49		struct pcc_mbox_chan *pcc_chan;
+    50	
+    51		data = kzalloc(sizeof(*data), GFP_KERNEL);
+    52		if (!data)
+  > 53			return_ACPI_STATUS(AE_NO_MEMORY);
+    54	
+    55		data->cl.rx_callback = pcc_rx_callback;
+    56		data->cl.knows_txdone = true;
+    57		data->ctx.length = ctx->length;
+    58		data->ctx.subspace_id = ctx->subspace_id;
+    59		data->ctx.internal_buffer = ctx->internal_buffer;
+    60	
+    61		init_completion(&data->done);
+    62		data->pcc_chan = pcc_mbox_request_channel(&data->cl, ctx->subspace_id);
+    63		if (IS_ERR(data->pcc_chan)) {
+    64			pr_err("Failed to find PCC channel for subspace %d\n",
+    65			       ctx->subspace_id);
+    66			return_ACPI_STATUS(AE_NOT_FOUND);
+    67		}
+    68	
+    69		pcc_chan = data->pcc_chan;
+    70		data->pcc_comm_addr = acpi_os_ioremap(pcc_chan->shmem_base_addr,
+    71						      pcc_chan->shmem_size);
+    72		if (!data->pcc_comm_addr) {
+    73			pr_err("Failed to ioremap PCC comm region mem for %d\n",
+    74			       ctx->subspace_id);
+    75			return_ACPI_STATUS(AE_NO_MEMORY);
+    76		}
+    77	
+    78		*region_context = data;
+    79		return_ACPI_STATUS(AE_OK);
+    80	}
+    81	
 
-$ make -skj"$(nproc)" ARCH=x86_64 allmodconfig kernel/stackleak.o
-kernel/stackleak.c: In function ‘stackleak_erase’:
-kernel/stackleak.c:92:13: error: implicit declaration of function ‘on_thread_stack’; did you mean ‘setup_thread_stack’? [-Werror=implicit-function-declaration]
-   92 |         if (on_thread_stack())
-      |             ^~~~~~~~~~~~~~~
-      |             setup_thread_stack
-kernel/stackleak.c:95:28: error: implicit declaration of function ‘current_top_of_stack’ [-Werror=implicit-function-declaration]
-   95 |                 boundary = current_top_of_stack();
-      |                            ^~~~~~~~~~~~~~~~~~~~
-kernel/stackleak.c: In function ‘stackleak_track_stack’:
-kernel/stackleak.c:119:14: error: implicit declaration of function ‘ALIGN’ [-Werror=implicit-function-declaration]
-  119 |         sp = ALIGN(sp, sizeof(unsigned long));
-      |              ^~~~~
-cc1: all warnings being treated as errors
-
-This is fixed with the following diff although I am unsure if that is as
-minimal as it should be.
-
-diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-index ce161a8e8d97..d67c5475183b 100644
---- a/kernel/stackleak.c
-+++ b/kernel/stackleak.c
-@@ -10,8 +10,10 @@
-  * reveal and blocks some uninitialized stack variable attacks.
-  */
- 
-+#include <asm/processor_api.h>
- #include <linux/stackleak.h>
- #include <linux/kprobes.h>
-+#include <linux/align.h>
- 
- #ifdef CONFIG_STACKLEAK_RUNTIME_DISABLE
- #include <linux/jump_label.h>
-
-
-
-2. Build failures with CONFIG_UAPI_HEADER_TEST=y and O=...
-
-This was originally reproduced with allmodconfig but this is a simpler
-reproducer I think.
-
-$ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 defconfig
-
-$ scripts/config --file .build/x86_64/.config -e HEADERS_INSTALL -e UAPI_HEADER_TEST
-
-$ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 olddefconfig usr/
-In file included from <command-line>:
-./usr/include/linux/rds.h:38:10: fatal error: uapi/linux/sockios.h: No such file or directory
-   38 | #include <uapi/linux/sockios.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/rds.hdrtest] Error 1
-In file included from ./usr/include/linux/qrtr.h:5,
-                 from <command-line>:
-./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
-    5 | #include <uapi/linux/socket_types.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-In file included from ./usr/include/linux/in.h:24,
-                 from ./usr/include/linux/nfs_mount.h:12,
-                 from <command-line>:
-./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
-    5 | #include <uapi/linux/socket_types.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/qrtr.hdrtest] Error 1
-make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/nfs_mount.hdrtest] Error 1
-...
-
-I don't see this when just building in the tree. I am guessing that
-commit f989e243f1f4 ("headers/deps: uapi/headers: Create
-usr/include/uapi symbolic link") needs to account for this?
-
-
-
-3. Build failure with CONFIG_SAMPLE_CONNECTOR=m and O=...
-
-I am guessing this has a similar root cause as above, since that commit
-mentions an error similar to this.
-
-$ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 allmodconfig samples/connector/
-In file included from /home/nathan/cbl/src/linux-fast-headers/samples/connector/ucon.c:14:
-usr/include/linux/netlink.h:5:10: fatal error: uapi/linux/types.h: No such file or directory
-    5 | #include <uapi/linux/types.h>
-      |          ^~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-
-
-
-4. modpost warning around __sw_hweight64
-
-With the first issue resolved:
-
-$ make -skj"$(nproc)" ARCH=i386 allmodconfig
-WARNING: modpost: EXPORT symbol "__sw_hweight64" [vmlinux] version ...
-Is "__sw_hweight64" prototyped in <asm/asm-prototypes.h>?
-
-
-
-5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
-
-With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
-
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
-
-$ scripts/config -e LTO_CLANG_THIN
-
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
-ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
->>> .macro __put, val, name
->>> ^
-make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
-
-I was not able to figure out the exact include chain but CONFIG_LTO
-causes asm/alternative-macros.h to be included in asm/rwonce.h, which
-eventually gets included in either asm/cache.h or asm/memory.h.
-
-I managed to solve this with the following diff but I am not sure if
-there is a better or cleaner way to do that.
-
-diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 1bce62fa908a..e19572a205d0 100644
---- a/arch/arm64/include/asm/rwonce.h
-+++ b/arch/arm64/include/asm/rwonce.h
-@@ -5,7 +5,7 @@
- #ifndef __ASM_RWONCE_H
- #define __ASM_RWONCE_H
- 
--#ifdef CONFIG_LTO
-+#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
- 
- #include <linux/compiler_types.h>
- #include <asm/alternative-macros.h>
-@@ -66,7 +66,7 @@
- })
- 
- #endif	/* !BUILD_VDSO */
--#endif	/* CONFIG_LTO */
-+#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
- 
- #include <asm-generic/rwonce.h>
- 
-
-I'll see if I can flush out any other issues.
-
-Cheers,
-Nathan
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
