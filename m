@@ -1,156 +1,167 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3212C9C
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 00:26:36 +0000 (UTC)
-Received: by mail-ed1-f44.google.com with SMTP id z29so154934296edl.7
-        for <llvm@lists.linux.dev>; Tue, 04 Jan 2022 16:26:36 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A309173
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 00:36:02 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id u25so33699397edf.1
+        for <llvm@lists.linux.dev>; Tue, 04 Jan 2022 16:36:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9qf9XO8NxG0l0bIiDjeze9dZjS/TBrojHszc0FCGLoo=;
-        b=ZOh7dbhGAkLF/DC+vGwz/AcyvHD68rMTsoe/QgGGxh3N/xi0qyytI3vM/M9wXWN2yz
-         5CgXM/absvvVtTlJEgHg3CKY2czD/d/Yyi60JDA92D06BSiFHiYH4pTOpsX1R7e9cE0N
-         qlW2EFSbarTHt0plLA4edzp0eZHzJwgT2aSYprSeHNcE5PRLZz9w2oKTp6a6xkHuupmT
-         v7OT/yVKAPzM5Dzed+S6SNml4CpttMNtVUIUMv4f8h8mLC9zeH9ONQ3c18LjRndDWwyd
-         3cJr/8ukGESXmHdh/R7+CzrUlLdQq+yy1cUcbOTYXJF2KMKHYediTXTYgfb5ET66GDZR
-         cIFA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XIYZPrPq0Nz4GldCeOXf4vMbUjZfTiGp6yytMV7qdxo=;
+        b=TCegI6SZaay1+FEoaHOJcvPlaiZc/HaZO0R7NblofrYikzDKuPbkcKQ6lS9ZVHVMZY
+         g+hDgATgLNbH1ufS9yPk4BvYicS2RtcOJ7j4/ekrdU+n+C51vdfdqKCrhxnbJXbQ+Zrd
+         KEkMcfaCS5XgU7NGHyi+ticBofbZZfRDzV5W8HIlvSGvbNmRcm+BP4tZPgbNDDznX6nz
+         NbxjVlWB/TmKyIudg6E0+IadwqWRSAwylSYhIkWMPQrMWih8fhxw8cWr26+AdpvTMUNY
+         LG3IgNErq3hppjmps/MURPw+9w/ZfnkCkHtt/fma2VV9u5Vh4/I+8tQX7YrnAEYgSmeV
+         RRvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9qf9XO8NxG0l0bIiDjeze9dZjS/TBrojHszc0FCGLoo=;
-        b=pgs6S5IaIPBZWkZ7wzj+63MMDEXJN4M0zi6tgyqmYnddya0zdbMKuyDBi5Sdcg+Us9
-         UhaU2Xp40N6kWH+y/Zyv4B1jITdo+IbR2QnfyoTf+qgUrAeqUtLPs6ghpJ2giEi1TPvg
-         W2yC09w4VTizZe2FbTUZkbQq8z28Zy166E3KClDQXer3+P1KCx52KrHG28mFepCrbiLG
-         KXFGX2wiGIiCbi7OTy1VfJobat91M/krAC8a4+2imNxvsZY8GQEQF7kYQmrOjK6awekd
-         b4o8CeyClaDOS7LElrVpF+IHj8UjxVN6NPupKIppaj38R36FP0YL7sOVz3XlsJwbrGxI
-         St3w==
-X-Gm-Message-State: AOAM531dITVvRaEw86j/qyLjei7UZCdec4O/42TGvFNLCxtUOyTuxja8
-	/3omyApFFe+JrPJT/fGQiRCROZjpKGc=
-X-Google-Smtp-Source: ABdhPJyN3XcWdnT9FolZZDyOc5hXd550GJzQEd2qLyVe4iakA0ZZvKSB9lRBXnrGv/Op6p030ehFng==
-X-Received: by 2002:a17:907:e8e:: with SMTP id ho14mr40380177ejc.118.1641342395159;
-        Tue, 04 Jan 2022 16:26:35 -0800 (PST)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=XIYZPrPq0Nz4GldCeOXf4vMbUjZfTiGp6yytMV7qdxo=;
+        b=dZYuFqbBxoU1BQZUoM3Cke0aWfUzaEKly4WeyX+2TuhMMV/PXOevDO0Jo1zkEkjQjq
+         /AiW8Asvo7FXc2QJd9nMITRqkHAIoLmyJbJY+EvqC9eJJqdNaBptd3f96xyr96LeKqOs
+         7ieZ+LPyjrSJnRu2XtPE7ntNJ7rnccolaDaRoUoE0Cxb63z3QDFxQpGvqeTqSnRR2izw
+         Hc7dOGLv3DUxDL8RYG7DFjQXdeAxXbfQqoTA8qdSCTTIJqUc8KFQGkomzLNsICZdvBC/
+         STPlLMavKwXOr8Y0yZj3OCGs7ZZT+7qM6fAbjyJH4AUMN2Q8OVmP6yt9zx8lF/0l5rq2
+         Bw5g==
+X-Gm-Message-State: AOAM530oZk9DBCbvsLWwaq2GIFTdz2bcJ0Fu6NB3xPXrd9RtgNGWE8kC
+	59MJe33n+0ebrOZy6KmRPB8=
+X-Google-Smtp-Source: ABdhPJyknKH7KOwCkxAqbHyY7hFOS8FmZBLzZP6c7qd3HC9CTMFisqGgsyXL+CmdsQyTY7s0DukAcA==
+X-Received: by 2002:a17:906:1c51:: with SMTP id l17mr39332364ejg.610.1641342960753;
+        Tue, 04 Jan 2022 16:36:00 -0800 (PST)
 Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id he13sm11767980ejc.221.2022.01.04.16.26.34
+        by smtp.gmail.com with ESMTPSA id f13sm7577520ejf.53.2022.01.04.16.35.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 16:26:34 -0800 (PST)
+        Tue, 04 Jan 2022 16:36:00 -0800 (PST)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Wed, 5 Jan 2022 01:26:32 +0100
+Date: Wed, 5 Jan 2022 01:35:58 +0100
 From: Ingo Molnar <mingo@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Ard Biesheuvel <ardb@kernel.org>,
 	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev
-Subject: [PATCH] headers/deps: Attribute placement fixes for Clang & GCC
-Message-ID: <YdTluAiCo1DIaItf@gmail.com>
+	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
+	llvm@lists.linux.dev
+Subject: [PATCH] x86/kbuild: Enable CONFIG_KALLSYMS_ALL=y in the defconfigs
+Message-ID: <YdTn7gssoMVDMgMw@gmail.com>
 References: <YdIfz+LMewetSaEB@gmail.com>
  <YdM4Z5a+SWV53yol@archlinux-ax161>
  <YdQlwnDs2N9a5Reh@gmail.com>
- <YdQpSigW9X224obC@gmail.com>
- <YdSJH7empIUq9vbE@archlinux-ax161>
- <YdTkUBSLCQv7++FN@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YdTkUBSLCQv7++FN@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdSI9LmZE+FZAi1K@archlinux-ax161>
 
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-> Ugh - so my changes there are outright buggy.
+> Good point. With my main box (AMD EPYC 7502P), with the performance governor...
 > 
-> I'm reverting all those attribute position changes as we speak ...
+> GCC:
 > 
-> I'm actually happy about this in a way, as it settles the issue nicely. 
-> :-)
+> Benchmark 1: ARCH=x86_64 defconfig (linux)
+>   Time (mean ± σ):     48.685 s ±  0.049 s    [User: 1969.835 s, System: 204.166 s]
+>   Range (min … max):   48.620 s … 48.782 s    10 runs
+> 
+> Benchmark 2: ARCH=x86_64 defconfig (linux-fast-headers)
+>   Time (mean ± σ):     46.797 s ±  0.119 s    [User: 1403.854 s, System: 154.336 s]
+>   Range (min … max):   46.620 s … 47.052 s    10 runs
+> 
+> Summary
+>   'ARCH=x86_64 defconfig (linux-fast-headers)' ran
+>     1.04 ± 0.00 times faster than 'ARCH=x86_64 defconfig (linux)'
+> 
+> LLVM:
+> 
+> Benchmark 1: ARCH=x86_64 defconfig (linux)
+>   Time (mean ± σ):     51.816 s ±  0.079 s    [User: 2208.577 s, System: 200.410 s]
+>   Range (min … max):   51.671 s … 51.900 s    10 runs
+> 
+> Benchmark 2: ARCH=x86_64 defconfig (linux-fast-headers)
+>   Time (mean ± σ):     46.806 s ±  0.062 s    [User: 1438.972 s, System: 154.846 s]
+>   Range (min … max):   46.696 s … 46.917 s    10 runs
+> 
+> Summary
+>   'ARCH=x86_64 defconfig (linux-fast-headers)' ran
+>     1.11 ± 0.00 times faster than 'ARCH=x86_64 defconfig (linux)'
+> 
+> $ rg KALLSYMS .config
+> 246:CONFIG_KALLSYMS=y
+> 247:# CONFIG_KALLSYMS_ALL is not set
+> 248:CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+> 249:CONFIG_KALLSYMS_BASE_RELATIVE=y
+> 250:CONFIG_KALLSYMS_FAST=y
+> 706:CONFIG_HAVE_OBJTOOL_KALLSYMS=y
+> 
+> It seems like everything is working right but maybe the build is so
+> short that there just is not much time for the difference to be as
+> apparent?
 
-And, by the way - by putting the attribute after the 'struct' keyword we 
-get the best of the two worlds: accidentally non-defined attribute 
-shortcuts will still result in a build error.
+Yeah, x86 defconfig doesn't have KALLSYMS_ALL - while all distro configs I 
+checked have it enabled, because it makes crash printouts / backtraces more 
+informative.
 
-Below is the fix - should be identical to yours (which was whitespace 
-mangled).
+Lockep will also enable it unconditionally.
 
-I'll backmerge these fixes to the originating commits & push out -v2 later 
-today.
+So I've applied the patch below, to make the x86 defconfig more 
+representative of what people are using in practice. This will also, as a 
+side effect, bring elapsed time improvements closer to what the underlying 
+cpu-time improvements offer, in the small-config case too.
 
 Thanks,
 
 	Ingo
+
+====================================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Wed, 5 Jan 2022 01:31:35 +0100
+Subject: [PATCH] x86/kbuild: Enable CONFIG_KALLSYMS_ALL=y in the defconfigs
+
+Most distro kernels have this option enabled, to improve debug output.
+
+Lockdep also selects it.
+
+Enable this in the defconfig kernel as well, to make it more
+representative of what people are using on x86.
+
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 ---
- include/linux/dcache.h        | 3 +--
- include/linux/fs_types.h      | 3 +--
- include/linux/netdevice_api.h | 2 +-
- include/net/xdp_types.h       | 2 +-
- 4 files changed, 4 insertions(+), 6 deletions(-)
+ arch/x86/configs/i386_defconfig   | 1 +
+ arch/x86/configs/x86_64_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index 520daf638d06..da7e77a7cede 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -127,8 +127,7 @@ enum dentry_d_lock_class
- 	DENTRY_D_LOCK_NESTED
- };
- 
--____cacheline_aligned
--struct dentry_operations {
-+struct ____cacheline_aligned dentry_operations {
- 	int (*d_revalidate)(struct dentry *, unsigned int);
- 	int (*d_weak_revalidate)(struct dentry *, unsigned int);
- 	int (*d_hash)(const struct dentry *, struct qstr *);
-diff --git a/include/linux/fs_types.h b/include/linux/fs_types.h
-index b53aadafab1b..e2e1c0827183 100644
---- a/include/linux/fs_types.h
-+++ b/include/linux/fs_types.h
-@@ -994,8 +994,7 @@ struct file_operations {
- 	int (*fadvise)(struct file *, loff_t, loff_t, int);
- } __randomize_layout;
- 
--____cacheline_aligned
--struct inode_operations {
-+struct ____cacheline_aligned inode_operations {
- 	struct dentry * (*lookup) (struct inode *,struct dentry *, unsigned int);
- 	const char * (*get_link) (struct dentry *, struct inode *, struct delayed_call *);
- 	int (*permission) (struct user_namespace *, struct inode *, int);
-diff --git a/include/linux/netdevice_api.h b/include/linux/netdevice_api.h
-index 4a8d7688e148..0e5e08dcbb2a 100644
---- a/include/linux/netdevice_api.h
-+++ b/include/linux/netdevice_api.h
-@@ -49,7 +49,7 @@
- #endif
- 
- /* This structure contains an instance of an RX queue. */
--____cacheline_aligned_in_smp struct netdev_rx_queue {
-+struct ____cacheline_aligned_in_smp netdev_rx_queue {
- 	struct xdp_rxq_info		xdp_rxq;
- #ifdef CONFIG_RPS
- 	struct rps_map __rcu		*rps_map;
-diff --git a/include/net/xdp_types.h b/include/net/xdp_types.h
-index 442028626b35..accc12372bca 100644
---- a/include/net/xdp_types.h
-+++ b/include/net/xdp_types.h
-@@ -56,7 +56,7 @@ struct xdp_mem_info {
- struct page_pool;
- 
- /* perf critical, avoid false-sharing */
--____cacheline_aligned struct xdp_rxq_info {
-+struct ____cacheline_aligned xdp_rxq_info {
- 	struct net_device *dev;
- 	u32 queue_index;
- 	u32 reg_state;
-
+diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
+index 5d97a2dfbaa7..71124cf8630c 100644
+--- a/arch/x86/configs/i386_defconfig
++++ b/arch/x86/configs/i386_defconfig
+@@ -261,3 +261,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
+ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
++CONFIG_KALLSYMS_ALL=y
+diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
+index 30ab3e582d53..92b1169ec90b 100644
+--- a/arch/x86/configs/x86_64_defconfig
++++ b/arch/x86/configs/x86_64_defconfig
+@@ -257,3 +257,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
+ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
++CONFIG_KALLSYMS_ALL=y
