@@ -1,42 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346D92C9C
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 22:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F403B2C80
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 22:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641421693; x=1672957693;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FQf/zKa8rC0Lu6XcT0yR8MM5aSgSEEOw1Ma/2F1r0lM=;
-  b=dWNY2d4+ddQuwlAr49fA9l3YuWLOCdlNd0QHFzNotLRthav4lRx+8lvX
-   KVEYHTyCU0vNqZbtRSI+Rl09JvnocbILrWYrtFlt5YG6HQ1i5AW1DbaO8
-   mYjc5yJcfGTs2Z40byCmgL2njOSqt0o7xwsbSLwZkGegARSZob4ykMr4K
-   7o7FYUmbspuEfimRNVwU1uo7xrUv7FG0NWSl0vmNtRgIs1RCuerHRw1hl
-   OzPHAH7wG6jp7MPdQRdDOtT8L50SI3crJMFUkgmP56EoQsh2dvlwuQ85c
-   B40szjM/FBN/2sQVKAsNfclxNnaEmF3lS/kWLjImhvSq+Rd/MR0+Pm5ts
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="266830540"
+  bh=6LIBXyaKFJEHPtRwlnepVZes39DKURgaN+zkOlHhy5M=;
+  b=gocYlvqr9zPXw65nsKYbo1/9zKrX5zrVXvkdUhb5FZmJs6xmChe3WFxp
+   rZrYPgxo8Ckui7l43WRRqz/Tp36JyZ4sjsrbGlgpZ0QSTq6kkOr11Dwz/
+   YXr4hf7jnE3eKCfxTs2NmpDFBQDEfXW4RGlpRHcIHwrIi6EyTl+XuqtFb
+   MKRcKACZp8nhJ8S5VykEOPVMB8awZYOcCSaXy4rF4HY95Z0ZymMX1fLSy
+   gY6ziup6pw9QX2YFsJzqYQE1oGSY+ystI82xcVdPQzjTXEAmZzhVlFgfv
+   LnUzFPTIY4ok7XGHYgbTxvWb72GcBt7i1EXwnF831XckZzJavXgiVPDcM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242503799"
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="266830540"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 14:28:03 -0800
+   d="scan'208";a="242503799"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 14:27:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="488740134"
+   d="scan'208";a="470732360"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jan 2022 14:28:00 -0800
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2022 14:27:55 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n5El9-000H5c-02; Wed, 05 Jan 2022 22:27:55 +0000
-Date: Thu, 6 Jan 2022 06:27:18 +0800
+	id 1n5El8-000H5a-Vi; Wed, 05 Jan 2022 22:27:54 +0000
+Date: Thu, 6 Jan 2022 06:27:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miaoqian Lin <linmq006@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] media: bdisp: Fix PM disable depth imbalance in
- bdisp_probe
-Message-ID: <202201060603.USzesOiZ-lkp@intel.com>
-References: <20220105114108.10380-1-linmq006@gmail.com>
+To: Paul Cercueil <paul@crapouillou.net>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, list@opendingux.net,
+	Paul Cercueil <paul@crapouillou.net>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v2 2/2] hwmon: Add "label" attribute
+Message-ID: <202201060630.vsp02mfB-lkp@intel.com>
+References: <20220105151551.20285-3-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,176 +50,181 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105114108.10380-1-linmq006@gmail.com>
+In-Reply-To: <20220105151551.20285-3-paul@crapouillou.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Miaoqian,
+Hi Paul,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on v5.16-rc8]
-[also build test WARNING on next-20220105]
-[cannot apply to media-tree/master]
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on v5.16-rc8 next-20220105]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Miaoqian-Lin/media-bdisp-Fix-PM-disable-depth-imbalance-in-bdisp_probe/20220105-194236
-base:    c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-config: riscv-randconfig-r022-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060603.USzesOiZ-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Paul-Cercueil/hwmon-Add-label-attribute-v2/20220105-231930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: arm64-randconfig-r026-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060630.vsp02mfB-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/1dafbde5425a5766336413fbcab0bb191145da2e
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/57dab49995d01d638d9fa9aaddb5fa48e17b3c48
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Miaoqian-Lin/media-bdisp-Fix-PM-disable-depth-imbalance-in-bdisp_probe/20220105-194236
-        git checkout 1dafbde5425a5766336413fbcab0bb191145da2e
+        git fetch --no-tags linux-review Paul-Cercueil/hwmon-Add-label-attribute-v2/20220105-231930
+        git checkout 57dab49995d01d638d9fa9aaddb5fa48e17b3c48
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/platform/sti/bdisp/ drivers/media/platform/sti/hva/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwmon/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/sti/bdisp/bdisp-v4l2.c:1399:1: warning: unused label 'disable_pm_runtime' [-Wunused-label]
-   disable_pm_runtime:
-   ^~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/hwmon/hwmon.c:777:7: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (hwdev->label == NULL) {
+                       ^~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/hwmon.c:851:20: note: uninitialized use occurs here
+           hwmon_dev_release(hdev);
+                             ^~~~
+   drivers/hwmon/hwmon.c:777:3: note: remove the 'if' if its condition is always false
+                   if (hwdev->label == NULL) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/hwmon.c:773:7: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (err < 0)
+                       ^~~~~~~
+   drivers/hwmon/hwmon.c:851:20: note: uninitialized use occurs here
+           hwmon_dev_release(hdev);
+                             ^~~~
+   drivers/hwmon/hwmon.c:773:3: note: remove the 'if' if its condition is always false
+                   if (err < 0)
+                   ^~~~~~~~~~~~
+   drivers/hwmon/hwmon.c:752:21: note: initialize the variable 'hdev' to silence this warning
+           struct device *hdev;
+                              ^
+                               = NULL
+   2 warnings generated.
 
 
-vim +/disable_pm_runtime +1399 drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+vim +777 drivers/hwmon/hwmon.c
 
-  1283	
-  1284	static int bdisp_probe(struct platform_device *pdev)
-  1285	{
-  1286		struct bdisp_dev *bdisp;
-  1287		struct resource *res;
-  1288		struct device *dev = &pdev->dev;
-  1289		int ret;
-  1290	
-  1291		dev_dbg(dev, "%s\n", __func__);
-  1292	
-  1293		bdisp = devm_kzalloc(dev, sizeof(struct bdisp_dev), GFP_KERNEL);
-  1294		if (!bdisp)
-  1295			return -ENOMEM;
-  1296	
-  1297		ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
-  1298		if (ret)
-  1299			return ret;
-  1300	
-  1301		bdisp->pdev = pdev;
-  1302		bdisp->dev = dev;
-  1303		platform_set_drvdata(pdev, bdisp);
-  1304	
-  1305		if (dev->of_node)
-  1306			bdisp->id = of_alias_get_id(pdev->dev.of_node, BDISP_NAME);
-  1307		else
-  1308			bdisp->id = pdev->id;
-  1309	
-  1310		init_waitqueue_head(&bdisp->irq_queue);
-  1311		INIT_DELAYED_WORK(&bdisp->timeout_work, bdisp_irq_timeout);
-  1312		bdisp->work_queue = create_workqueue(BDISP_NAME);
-  1313	
-  1314		spin_lock_init(&bdisp->slock);
-  1315		mutex_init(&bdisp->lock);
-  1316	
-  1317		/* get resources */
-  1318		bdisp->regs = devm_platform_ioremap_resource(pdev, 0);
-  1319		if (IS_ERR(bdisp->regs)) {
-  1320			ret = PTR_ERR(bdisp->regs);
-  1321			goto err_wq;
-  1322		}
-  1323	
-  1324		bdisp->clock = devm_clk_get(dev, BDISP_NAME);
-  1325		if (IS_ERR(bdisp->clock)) {
-  1326			dev_err(dev, "failed to get clock\n");
-  1327			ret = PTR_ERR(bdisp->clock);
-  1328			goto err_wq;
-  1329		}
-  1330	
-  1331		ret = clk_prepare(bdisp->clock);
-  1332		if (ret < 0) {
-  1333			dev_err(dev, "clock prepare failed\n");
-  1334			bdisp->clock = ERR_PTR(-EINVAL);
-  1335			goto err_wq;
-  1336		}
-  1337	
-  1338		res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-  1339		if (!res) {
-  1340			dev_err(dev, "failed to get IRQ resource\n");
-  1341			ret = -EINVAL;
-  1342			goto err_clk;
-  1343		}
-  1344	
-  1345		ret = devm_request_threaded_irq(dev, res->start, bdisp_irq_handler,
-  1346						bdisp_irq_thread, IRQF_ONESHOT,
-  1347						pdev->name, bdisp);
-  1348		if (ret) {
-  1349			dev_err(dev, "failed to install irq\n");
-  1350			goto err_clk;
-  1351		}
-  1352	
-  1353		/* v4l2 register */
-  1354		ret = v4l2_device_register(dev, &bdisp->v4l2_dev);
-  1355		if (ret) {
-  1356			dev_err(dev, "failed to register\n");
-  1357			goto err_clk;
-  1358		}
-  1359	
-  1360		/* Debug */
-  1361		bdisp_debugfs_create(bdisp);
-  1362	
-  1363		/* Power management */
-  1364		pm_runtime_enable(dev);
-  1365		ret = pm_runtime_resume_and_get(dev);
-  1366		if (ret < 0) {
-  1367			dev_err(dev, "failed to set PM\n");
-  1368			goto err_remove;
-  1369		}
-  1370	
-  1371		/* Filters */
-  1372		if (bdisp_hw_alloc_filters(bdisp->dev)) {
-  1373			dev_err(bdisp->dev, "no memory for filters\n");
-  1374			ret = -ENOMEM;
-  1375			goto err_pm;
-  1376		}
-  1377	
-  1378		/* Register */
-  1379		ret = bdisp_register_device(bdisp);
-  1380		if (ret) {
-  1381			dev_err(dev, "failed to register\n");
-  1382			goto err_filter;
-  1383		}
-  1384	
-  1385		dev_info(dev, "%s%d registered as /dev/video%d\n", BDISP_NAME,
-  1386			 bdisp->id, bdisp->vdev.num);
-  1387	
-  1388		pm_runtime_put(dev);
-  1389	
-  1390		return 0;
-  1391	
-  1392	err_filter:
-  1393		bdisp_hw_free_filters(bdisp->dev);
-  1394	err_pm:
-  1395		pm_runtime_put(dev);
-  1396	err_remove:
-  1397		bdisp_debugfs_remove(bdisp);
-  1398		v4l2_device_unregister(&bdisp->v4l2_dev);
-> 1399	disable_pm_runtime:
-  1400		pm_runtime_disable(dev);
-  1401	err_clk:
-  1402		if (!IS_ERR(bdisp->clock))
-  1403			clk_unprepare(bdisp->clock);
-  1404	err_wq:
-  1405		destroy_workqueue(bdisp->work_queue);
-  1406		return ret;
-  1407	}
-  1408	
+   744	
+   745	static struct device *
+   746	__hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+   747				const struct hwmon_chip_info *chip,
+   748				const struct attribute_group **groups)
+   749	{
+   750		struct hwmon_device *hwdev;
+   751		const char *label;
+   752		struct device *hdev;
+   753		int i, err, id;
+   754	
+   755		/* Complain about invalid characters in hwmon name attribute */
+   756		if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+   757			dev_warn(dev,
+   758				 "hwmon: '%s' is not a valid name attribute, please fix\n",
+   759				 name);
+   760	
+   761		id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
+   762		if (id < 0)
+   763			return ERR_PTR(id);
+   764	
+   765		hwdev = kzalloc(sizeof(*hwdev), GFP_KERNEL);
+   766		if (hwdev == NULL) {
+   767			err = -ENOMEM;
+   768			goto ida_remove;
+   769		}
+   770	
+   771		if (device_property_present(dev, "label")) {
+   772			err = device_property_read_string(dev, "label", &label);
+   773			if (err < 0)
+   774				goto free_hwmon;
+   775	
+   776			hwdev->label = kstrdup(label, GFP_KERNEL);
+ > 777			if (hwdev->label == NULL) {
+   778				err = -ENOMEM;
+   779				goto free_hwmon;
+   780			}
+   781		}
+   782	
+   783		hdev = &hwdev->dev;
+   784	
+   785		if (chip) {
+   786			struct attribute **attrs;
+   787			int ngroups = 2; /* terminating NULL plus &hwdev->groups */
+   788	
+   789			if (groups)
+   790				for (i = 0; groups[i]; i++)
+   791					ngroups++;
+   792	
+   793			hwdev->groups = kcalloc(ngroups, sizeof(*groups), GFP_KERNEL);
+   794			if (!hwdev->groups) {
+   795				err = -ENOMEM;
+   796				goto free_hwmon;
+   797			}
+   798	
+   799			attrs = __hwmon_create_attrs(drvdata, chip);
+   800			if (IS_ERR(attrs)) {
+   801				err = PTR_ERR(attrs);
+   802				goto free_hwmon;
+   803			}
+   804	
+   805			hwdev->group.attrs = attrs;
+   806			ngroups = 0;
+   807			hwdev->groups[ngroups++] = &hwdev->group;
+   808	
+   809			if (groups) {
+   810				for (i = 0; groups[i]; i++)
+   811					hwdev->groups[ngroups++] = groups[i];
+   812			}
+   813	
+   814			hdev->groups = hwdev->groups;
+   815		} else {
+   816			hdev->groups = groups;
+   817		}
+   818	
+   819		hwdev->name = name;
+   820		hdev->class = &hwmon_class;
+   821		hdev->parent = dev;
+   822		hdev->of_node = dev ? dev->of_node : NULL;
+   823		hwdev->chip = chip;
+   824		dev_set_drvdata(hdev, drvdata);
+   825		dev_set_name(hdev, HWMON_ID_FORMAT, id);
+   826		err = device_register(hdev);
+   827		if (err) {
+   828			put_device(hdev);
+   829			goto ida_remove;
+   830		}
+   831	
+   832		INIT_LIST_HEAD(&hwdev->tzdata);
+   833	
+   834		if (dev && dev->of_node && chip && chip->ops->read &&
+   835		    chip->info[0]->type == hwmon_chip &&
+   836		    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+   837			err = hwmon_thermal_register_sensors(hdev);
+   838			if (err) {
+   839				device_unregister(hdev);
+   840				/*
+   841				 * Don't worry about hwdev; hwmon_dev_release(), called
+   842				 * from device_unregister(), will free it.
+   843				 */
+   844				goto ida_remove;
+   845			}
+   846		}
+   847	
+   848		return hdev;
+   849	
+   850	free_hwmon:
+   851		hwmon_dev_release(hdev);
+   852	ida_remove:
+   853		ida_simple_remove(&hwmon_ida, id);
+   854		return ERR_PTR(err);
+   855	}
+   856	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
