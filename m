@@ -1,43 +1,46 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4834173
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 14:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0CD2C9D
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 14:28:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641392829; x=1672928829;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gUMG8gv0OpBLG8SH33/IIW2LgOlMHbclPqCUBIKm3LU=;
-  b=Sfl2tTIvDHscJLyUgnGlgIz5/7OjhC0jIFekfiIBArSAMOR6aIOJYxBb
-   FtRkr1UzRtA+O+XMxnEAPducCWhmk83x6oBy8fpf1Nwa2jh9B4uGW4mZT
-   TR3f7FHRdJIqW/kiKjpQmWhSOjur8nWaXs8UEo4T3QW5PBcjMAO7t4eCH
-   VSB1nIRQnnxO8IMzRb86N/nj9//XlH5Exd+lG3SJ4hKK1xhFm2VlimxhS
-   v/ueWFCN9/YlgbD27z+JT8BlBYxVOOIRDReEJFfIpDjdjWvwFSVd2YWrp
-   mEAFSSMzczIQBHV4tBgptf/wpOD9S2V2ooWWteqkiw1FVD8S6Yhy2Z+Ua
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223134239"
+  t=1641392903; x=1672928903;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vnFsN2Xd6VIYLzjaK59BLACJXya+VDbw2JZKFLsW7NU=;
+  b=Q3Q1VC53cAzuT3tN9CCXVrqi/DoBUl47F2vqZZ1alFirb7HJpGlJp4Wn
+   G2V5JqPcac9j81K2AZ2aVzzFT4PEOKjik40jPxH85PjwGOJ3AXsjpBmV6
+   rYGVbqMG9yXJdAI++3cHQWUtfDxyd6rYQMCZ63gTPVrJqFsd6BxC5sluQ
+   W0AjzuvtYySAuo70COoIJVuc8wG4paLH7CyrfJHVm8MXu5zE112qoFXh3
+   qMEwypsT97lR4TYIHBCQ3QYFqipP7dUU+aJJrwbHWwKoLdkYyMVki4clr
+   7FV2VMz//ZL8NrwySm1vDLb/H+USdxlEr0DYvdz8ZPMOK7H8hE6k99m9B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229771040"
 X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="223134239"
+   d="scan'208";a="229771040"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:06:45 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:16:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="556538376"
+   d="scan'208";a="556543340"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 05 Jan 2022 06:06:42 -0800
+  by orsmga001.jf.intel.com with ESMTP; 05 Jan 2022 06:16:43 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n56w6-000Gi1-AA; Wed, 05 Jan 2022 14:06:42 +0000
-Date: Wed, 5 Jan 2022 22:06:05 +0800
+	id 1n575m-000GiW-I6; Wed, 05 Jan 2022 14:16:42 +0000
+Date: Wed, 5 Jan 2022 22:16:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wang Haojun <jiangliuer01@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Jon Mason <jdmason@kudzu.us>
-Subject: [linux-next:master 10467/10864]
- drivers/ntb/hw/idt/ntb_hw_idt.c:2735:12: warning: stack frame size (1320)
- exceeds limit (1280) in 'idt_pci_probe'
-Message-ID: <202201052106.oAp1xqJt-lkp@intel.com>
+To: Miaoqian Lin <linmq006@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linmq006@gmail.com,
+	Kishon Vijay Abraham I <kishon@ti.com>,
+	Vinod Koul <vkoul@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+	Roger Quadros <rogerq@ti.com>, linux-phy@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: ti: Add missing pm_runtime_disable() in probe
+ function
+Message-ID: <202201052240.Rjl0xRWG-lkp@intel.com>
+References: <20220105090225.20507-1-linmq006@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,195 +49,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220105090225.20507-1-linmq006@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   7a769a3922d81cfc74ab4d90a9cc69485f260976
-commit: ab434f1b66e63e7946bf42b70306f7efd90fba9a [10467/10864] IDT: Fix Build warnings on some 32bit architectures.
-config: s390-buildonly-randconfig-r001-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052106.oAp1xqJt-lkp@intel.com/config)
+Hi Miaoqian,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc8 next-20220105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Miaoqian-Lin/phy-ti-Add-missing-pm_runtime_disable-in-probe-function/20220105-170334
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+config: riscv-randconfig-r013-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052240.Rjl0xRWG-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ab434f1b66e63e7946bf42b70306f7efd90fba9a
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ab434f1b66e63e7946bf42b70306f7efd90fba9a
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/dc404b65a54364bb2937baba85bb37960c514167
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Miaoqian-Lin/phy-ti-Add-missing-pm_runtime_disable-in-probe-function/20220105-170334
+        git checkout dc404b65a54364bb2937baba85bb37960c514167
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/ntb/hw/idt/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/phy/ti/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/ntb/hw/idt/ntb_hw_idt.c:53:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/ntb/hw/idt/ntb_hw_idt.c:53:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/ntb/hw/idt/ntb_hw_idt.c:53:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-                                   "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
-                                           ~~~~           ^~~~~~~~~~~~~
-                                           %d
-   drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-                                           "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
-                                                   ~~~~           ^~~~~~~~~~~~~
-                                                   %d
-   drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-                           idx, data, src, ndev->peers[src].port);
-                                      ^~~
->> drivers/ntb/hw/idt/ntb_hw_idt.c:2735:12: warning: stack frame size (1320) exceeds limit (1280) in 'idt_pci_probe' [-Wframe-larger-than]
-   static int idt_pci_probe(struct pci_dev *pdev,
-              ^
-   16 warnings generated.
+>> drivers/phy/ti/phy-am654-serdes.c:841:1: warning: unused label 'err_pm_disable' [-Wunused-label]
+   err_pm_disable:
+   ^~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/idt_pci_probe +2735 drivers/ntb/hw/idt/ntb_hw_idt.c
+vim +/err_pm_disable +841 drivers/phy/ti/phy-am654-serdes.c
 
-bf2a952d31d2cd Serge Semin 2017-04-12  2722  
-bf2a952d31d2cd Serge Semin 2017-04-12  2723  /*===========================================================================
-bf2a952d31d2cd Serge Semin 2017-04-12  2724   *                       12. PCI bus callback functions
-bf2a952d31d2cd Serge Semin 2017-04-12  2725   *===========================================================================
-bf2a952d31d2cd Serge Semin 2017-04-12  2726   */
-bf2a952d31d2cd Serge Semin 2017-04-12  2727  
-bf2a952d31d2cd Serge Semin 2017-04-12  2728  /*
-bf2a952d31d2cd Serge Semin 2017-04-12  2729   * idt_pci_probe() - PCI device probe callback
-bf2a952d31d2cd Serge Semin 2017-04-12  2730   * @pdev:	Pointer to PCI device structure
-bf2a952d31d2cd Serge Semin 2017-04-12  2731   * @id:		PCIe device custom descriptor
-bf2a952d31d2cd Serge Semin 2017-04-12  2732   *
-bf2a952d31d2cd Serge Semin 2017-04-12  2733   * Return: zero on success, otherwise negative error number
-bf2a952d31d2cd Serge Semin 2017-04-12  2734   */
-bf2a952d31d2cd Serge Semin 2017-04-12 @2735  static int idt_pci_probe(struct pci_dev *pdev,
-bf2a952d31d2cd Serge Semin 2017-04-12  2736  			 const struct pci_device_id *id)
-bf2a952d31d2cd Serge Semin 2017-04-12  2737  {
-bf2a952d31d2cd Serge Semin 2017-04-12  2738  	struct idt_ntb_dev *ndev;
-bf2a952d31d2cd Serge Semin 2017-04-12  2739  	int ret;
-bf2a952d31d2cd Serge Semin 2017-04-12  2740  
-bf2a952d31d2cd Serge Semin 2017-04-12  2741  	/* Check whether IDT PCIe-switch is properly pre-initialized */
-bf2a952d31d2cd Serge Semin 2017-04-12  2742  	ret = idt_check_setup(pdev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2743  	if (ret != 0)
-bf2a952d31d2cd Serge Semin 2017-04-12  2744  		return ret;
-bf2a952d31d2cd Serge Semin 2017-04-12  2745  
-bf2a952d31d2cd Serge Semin 2017-04-12  2746  	/* Allocate the memory for IDT NTB device data */
-bf2a952d31d2cd Serge Semin 2017-04-12  2747  	ndev = idt_create_dev(pdev, id);
-91b8246de8590b Wang Qing   2020-11-06  2748  	if (IS_ERR(ndev))
-bf2a952d31d2cd Serge Semin 2017-04-12  2749  		return PTR_ERR(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2750  
-bf2a952d31d2cd Serge Semin 2017-04-12  2751  	/* Initialize the basic PCI subsystem of the device */
-bf2a952d31d2cd Serge Semin 2017-04-12  2752  	ret = idt_init_pci(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2753  	if (ret != 0)
-bf2a952d31d2cd Serge Semin 2017-04-12  2754  		return ret;
-bf2a952d31d2cd Serge Semin 2017-04-12  2755  
-bf2a952d31d2cd Serge Semin 2017-04-12  2756  	/* Scan ports of the IDT PCIe-switch */
-bf2a952d31d2cd Serge Semin 2017-04-12  2757  	(void)idt_scan_ports(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2758  
-bf2a952d31d2cd Serge Semin 2017-04-12  2759  	/* Initialize NTB link events subsystem */
-bf2a952d31d2cd Serge Semin 2017-04-12  2760  	idt_init_link(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2761  
-bf2a952d31d2cd Serge Semin 2017-04-12  2762  	/* Initialize MWs subsystem */
-bf2a952d31d2cd Serge Semin 2017-04-12  2763  	ret = idt_init_mws(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2764  	if (ret != 0)
-bf2a952d31d2cd Serge Semin 2017-04-12  2765  		goto err_deinit_link;
-bf2a952d31d2cd Serge Semin 2017-04-12  2766  
-bf2a952d31d2cd Serge Semin 2017-04-12  2767  	/* Initialize Messaging subsystem */
-bf2a952d31d2cd Serge Semin 2017-04-12  2768  	idt_init_msg(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2769  
-aed1b7b31154bd Serge Semin 2018-07-17  2770  	/* Initialize hwmon interface */
-aed1b7b31154bd Serge Semin 2018-07-17  2771  	idt_init_temp(ndev);
-aed1b7b31154bd Serge Semin 2018-07-17  2772  
-bf2a952d31d2cd Serge Semin 2017-04-12  2773  	/* Initialize IDT interrupts handler */
-bf2a952d31d2cd Serge Semin 2017-04-12  2774  	ret = idt_init_isr(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2775  	if (ret != 0)
-bf2a952d31d2cd Serge Semin 2017-04-12  2776  		goto err_deinit_link;
-bf2a952d31d2cd Serge Semin 2017-04-12  2777  
-bf2a952d31d2cd Serge Semin 2017-04-12  2778  	/* Register IDT NTB devices on the NTB bus */
-bf2a952d31d2cd Serge Semin 2017-04-12  2779  	ret = idt_register_device(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2780  	if (ret != 0)
-bf2a952d31d2cd Serge Semin 2017-04-12  2781  		goto err_deinit_isr;
-bf2a952d31d2cd Serge Semin 2017-04-12  2782  
-bf2a952d31d2cd Serge Semin 2017-04-12  2783  	/* Initialize DebugFS info node */
-bf2a952d31d2cd Serge Semin 2017-04-12  2784  	(void)idt_init_dbgfs(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2785  
-bf2a952d31d2cd Serge Semin 2017-04-12  2786  	/* IDT PCIe-switch NTB driver is finally initialized */
-bf2a952d31d2cd Serge Semin 2017-04-12  2787  	dev_info(&pdev->dev, "IDT NTB device is ready");
-bf2a952d31d2cd Serge Semin 2017-04-12  2788  
-bf2a952d31d2cd Serge Semin 2017-04-12  2789  	/* May the force be with us... */
-bf2a952d31d2cd Serge Semin 2017-04-12  2790  	return 0;
-bf2a952d31d2cd Serge Semin 2017-04-12  2791  
-bf2a952d31d2cd Serge Semin 2017-04-12  2792  err_deinit_isr:
-bf2a952d31d2cd Serge Semin 2017-04-12  2793  	idt_deinit_isr(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2794  err_deinit_link:
-bf2a952d31d2cd Serge Semin 2017-04-12  2795  	idt_deinit_link(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2796  	idt_deinit_pci(ndev);
-bf2a952d31d2cd Serge Semin 2017-04-12  2797  
-bf2a952d31d2cd Serge Semin 2017-04-12  2798  	return ret;
-bf2a952d31d2cd Serge Semin 2017-04-12  2799  }
-bf2a952d31d2cd Serge Semin 2017-04-12  2800  
-
-:::::: The code at line 2735 was first introduced by commit
-:::::: bf2a952d31d2cd28bb3454f15645a76fda70addd NTB: Add IDT 89HPESxNTx PCIe-switches support
-
-:::::: TO: Serge Semin <fancer.lancer@gmail.com>
-:::::: CC: Jon Mason <jdmason@kudzu.us>
+   751	
+   752	static int serdes_am654_probe(struct platform_device *pdev)
+   753	{
+   754		struct phy_provider *phy_provider;
+   755		struct device *dev = &pdev->dev;
+   756		struct device_node *node = dev->of_node;
+   757		struct clk_onecell_data *clk_data;
+   758		struct serdes_am654 *am654_phy;
+   759		struct mux_control *control;
+   760		const char *clock_name;
+   761		struct regmap *regmap;
+   762		void __iomem *base;
+   763		struct phy *phy;
+   764		int ret;
+   765		int i;
+   766	
+   767		am654_phy = devm_kzalloc(dev, sizeof(*am654_phy), GFP_KERNEL);
+   768		if (!am654_phy)
+   769			return -ENOMEM;
+   770	
+   771		base = devm_platform_ioremap_resource(pdev, 0);
+   772		if (IS_ERR(base))
+   773			return PTR_ERR(base);
+   774	
+   775		regmap = devm_regmap_init_mmio(dev, base, &serdes_am654_regmap_config);
+   776		if (IS_ERR(regmap)) {
+   777			dev_err(dev, "Failed to initialize regmap\n");
+   778			return PTR_ERR(regmap);
+   779		}
+   780	
+   781		control = devm_mux_control_get(dev, NULL);
+   782		if (IS_ERR(control))
+   783			return PTR_ERR(control);
+   784	
+   785		am654_phy->dev = dev;
+   786		am654_phy->of_node = node;
+   787		am654_phy->regmap = regmap;
+   788		am654_phy->control = control;
+   789		am654_phy->type = PHY_NONE;
+   790	
+   791		ret = serdes_am654_regfield_init(am654_phy);
+   792		if (ret) {
+   793			dev_err(dev, "Failed to initialize regfields\n");
+   794			return ret;
+   795		}
+   796	
+   797		platform_set_drvdata(pdev, am654_phy);
+   798	
+   799		for (i = 0; i < SERDES_NUM_CLOCKS; i++) {
+   800			ret = of_property_read_string_index(node, "clock-output-names",
+   801							    i, &clock_name);
+   802			if (ret) {
+   803				dev_err(dev, "Failed to get clock name\n");
+   804				return ret;
+   805			}
+   806	
+   807			ret = serdes_am654_clk_register(am654_phy, clock_name, i);
+   808			if (ret) {
+   809				dev_err(dev, "Failed to initialize clock %s\n",
+   810					clock_name);
+   811				return ret;
+   812			}
+   813		}
+   814	
+   815		clk_data = &am654_phy->clk_data;
+   816		clk_data->clks = am654_phy->clks;
+   817		clk_data->clk_num = SERDES_NUM_CLOCKS;
+   818		ret = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+   819		if (ret)
+   820			return ret;
+   821	
+   822		pm_runtime_enable(dev);
+   823	
+   824		phy = devm_phy_create(dev, NULL, &ops);
+   825		if (IS_ERR(phy)) {
+   826			ret = PTR_ERR(phy);
+   827			goto clk_err;
+   828		}
+   829	
+   830		phy_set_drvdata(phy, am654_phy);
+   831		phy_provider = devm_of_phy_provider_register(dev, serdes_am654_xlate);
+   832		if (IS_ERR(phy_provider)) {
+   833			ret = PTR_ERR(phy_provider);
+   834			goto clk_err;
+   835		}
+   836	
+   837		return 0;
+   838	
+   839	clk_err:
+   840		of_clk_del_provider(node);
+ > 841	err_pm_disable:
+   842		pm_runtime_disable(dev);
+   843		return ret;
+   844	}
+   845	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
