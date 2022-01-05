@@ -1,173 +1,246 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925E82C80
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 21:06:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641416818; x=1672952818;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L6FP8dJmdlUmtztac4+1qDGI/UW+ITXa6OTVsEd7AIw=;
-  b=cBHoseMjEytpeLJ8FX/vTsmuWVc1fK+SAe4nXSX98BOg/r6kqhT/1cmJ
-   lKxCeUM6/XNYASjhQgmie58Zl21yIeTVrQwBdIln3UIJNd1qXH3wYpXTT
-   k8w3hx1ilrJQO2+zbBLslBQ0NqW6j/C/kwUPiN4DVfSJDv8cZEt24h4I6
-   LYFILA0hbo/Z3RF2gEAwAIh6QAHiev4PCCK+FJtGYtLMxS/fjSUgeLei/
-   3o4IjX3b+/M6dG1r6aYm4PyN/rS4cDkzMSBP5zLBb7VIZn1QbaSYBggL9
-   DMMyHhjooTqViCE+VoA0XQBiiXRZ2eaYckDYqIT/5jZOXnCJLoCaC6k9Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242332414"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="242332414"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:06:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="611596015"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Jan 2022 13:06:54 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5DUj-000H2k-RO; Wed, 05 Jan 2022 21:06:53 +0000
-Date: Thu, 6 Jan 2022 05:05:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Roman Bacik <roman.bacik@broadcom.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
-Message-ID: <202201060511.mczwwaNF-lkp@intel.com>
-References: <20220105093552.27542-1-pali@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4A12C80
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 21:42:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82875C36AE9;
+	Wed,  5 Jan 2022 21:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1641418945;
+	bh=7ydjhtwWAR9xWDsD6TpMgHJRhn4lOcG7aWgGBOssULk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AeqCXCqU6kWwX42g4s4wT6NBX8Obu5A7fx1bTK3k5+Ar/sotYyS+vc2QQoMoD5eLI
+	 zAwmQr1Vq5u0AIbVuFcDr45FVYyPWhV3lgCX5Onf2gZTHRRZZp14abl0/K9kg+LrAs
+	 sY8NLCc96D51zMiQkleuTnQwGlis9HKLTwYV91dopOC1gd0uxWinDz9upbDYR5BDcG
+	 JQI7yjooIvmpV6GxoGA/XLGhROlhhB/GHNzUJ7xw5hfn2ahhDHugpKyFLPU4pY2w8W
+	 lDz4xYcM6oGcD2ya7ZRUrOVTd/isRdQwwpXQTiKZS+nPMArt876UqFO0igg83J5MWJ
+	 wS0OYU5NN6vAw==
+Date: Wed, 5 Jan 2022 14:42:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdYQu9YxNw0CxJRn@archlinux-ax161>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
+ <YdTvXkKFzA0pOjFf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220105093552.27542-1-pali@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdTvXkKFzA0pOjFf@gmail.com>
 
-Hi "Pali,
+On Wed, Jan 05, 2022 at 02:07:42AM +0100, Ingo Molnar wrote:
+> 
+> * Ingo Molnar <mingo@kernel.org> wrote:
+> 
+> > 
+> > * Nathan Chancellor <nathan@kernel.org> wrote:
+> > 
+> > > > I.e. I think the bug was simply to make main.c aware of the array, now 
+> > > > that the INIT_THREAD initialization is done there.
+> > > 
+> > > Yes, that seems right.
+> > > 
+> > > Unfortunately, while the kernel now builds, it does not boot in QEMU. I 
+> > > tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if I 
+> > > could reproduce that breakage there but the build errors out at that 
+> > > change (I do see notes of bisection breakage in some of the commits) so I 
+> > > assume that is expected.
+> > 
+> > Yeah, there's a breakage window on ARM64, I'll track down that 
+> > bisectability bug.
+> 
+> I haven't fixed this ARM64 bisection breakage yet, but I've integrated & 
+> backmerged all the other fixes and changes, and pushed it out to the WIP 
+> branch:
+> 
+>     # 1755441e323b per_task: Implement single template to define 'struct task_struct_per_task' fields and offsets
+> 
+>     git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+> 
+> Let me know if there's anything missing or if there's a new breakage.
 
-I love your patch! Yet something to improve:
+I ended up running this through my full set of clang builds and a few
+GCC builds and found a few issues, which most of which appear to be
+compiler agnostic.
 
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on v5.16-rc8 next-20220105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This whole report is against commit 1755441e323b ("per_task: Implement
+single template to define 'struct task_struct_per_task' fields and
+offsets").
 
-url:    https://github.com/0day-ci/linux/commits/Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: arm-randconfig-r001-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060511.mczwwaNF-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
-        git checkout 8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+In case it is relevant...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/pci/controller/pcie-iproc.c:798:11: error: use of undeclared identifier 'PCI_CLASS_BRIDGE_PCI_NORMAL'
-           class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
-                    ^
-   1 error generated.
+$ gcc --version | head -1
+gcc (GCC) 11.2.1 20211231
 
 
-vim +/PCI_CLASS_BRIDGE_PCI_NORMAL +798 drivers/pci/controller/pcie-iproc.c
 
-   765	
-   766	static int iproc_pcie_check_link(struct iproc_pcie *pcie)
-   767	{
-   768		struct device *dev = pcie->dev;
-   769		u32 hdr_type, link_ctrl, link_status, class, val;
-   770		bool link_is_active = false;
-   771	
-   772		/*
-   773		 * PAXC connects to emulated endpoint devices directly and does not
-   774		 * have a Serdes.  Therefore skip the link detection logic here.
-   775		 */
-   776		if (pcie->ep_is_internal)
-   777			return 0;
-   778	
-   779		val = iproc_pcie_read_reg(pcie, IPROC_PCIE_LINK_STATUS);
-   780		if (!(val & PCIE_PHYLINKUP) || !(val & PCIE_DL_ACTIVE)) {
-   781			dev_err(dev, "PHY or data link is INACTIVE!\n");
-   782			return -ENODEV;
-   783		}
-   784	
-   785		/* make sure we are not in EP mode */
-   786		iproc_pci_raw_config_read32(pcie, 0, PCI_HEADER_TYPE, 1, &hdr_type);
-   787		if ((hdr_type & 0x7f) != PCI_HEADER_TYPE_BRIDGE) {
-   788			dev_err(dev, "in EP mode, hdr=%#02x\n", hdr_type);
-   789			return -EFAULT;
-   790		}
-   791	
-   792		/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
-   793	#define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
-   794	#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
-   795		iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
-   796					    4, &class);
-   797		class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
- > 798		class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
-   799		iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
-   800					     4, class);
-   801	
-   802		/* check link status to see if link is active */
-   803		iproc_pci_raw_config_read32(pcie, 0, IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
-   804					    2, &link_status);
-   805		if (link_status & PCI_EXP_LNKSTA_NLW)
-   806			link_is_active = true;
-   807	
-   808		if (!link_is_active) {
-   809			/* try GEN 1 link speed */
-   810	#define PCI_TARGET_LINK_SPEED_MASK	0xf
-   811	#define PCI_TARGET_LINK_SPEED_GEN2	0x2
-   812	#define PCI_TARGET_LINK_SPEED_GEN1	0x1
-   813			iproc_pci_raw_config_read32(pcie, 0,
-   814						    IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
-   815						    4, &link_ctrl);
-   816			if ((link_ctrl & PCI_TARGET_LINK_SPEED_MASK) ==
-   817			    PCI_TARGET_LINK_SPEED_GEN2) {
-   818				link_ctrl &= ~PCI_TARGET_LINK_SPEED_MASK;
-   819				link_ctrl |= PCI_TARGET_LINK_SPEED_GEN1;
-   820				iproc_pci_raw_config_write32(pcie, 0,
-   821						IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
-   822						4, link_ctrl);
-   823				msleep(100);
-   824	
-   825				iproc_pci_raw_config_read32(pcie, 0,
-   826						IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
-   827						2, &link_status);
-   828				if (link_status & PCI_EXP_LNKSTA_NLW)
-   829					link_is_active = true;
-   830			}
-   831		}
-   832	
-   833		dev_info(dev, "link: %s\n", link_is_active ? "UP" : "DOWN");
-   834	
-   835		return link_is_active ? 0 : -ENODEV;
-   836	}
-   837	
+1. kernel/stackleak.c build failure:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+$ make -skj"$(nproc)" ARCH=x86_64 allmodconfig kernel/stackleak.o
+kernel/stackleak.c: In function ‘stackleak_erase’:
+kernel/stackleak.c:92:13: error: implicit declaration of function ‘on_thread_stack’; did you mean ‘setup_thread_stack’? [-Werror=implicit-function-declaration]
+   92 |         if (on_thread_stack())
+      |             ^~~~~~~~~~~~~~~
+      |             setup_thread_stack
+kernel/stackleak.c:95:28: error: implicit declaration of function ‘current_top_of_stack’ [-Werror=implicit-function-declaration]
+   95 |                 boundary = current_top_of_stack();
+      |                            ^~~~~~~~~~~~~~~~~~~~
+kernel/stackleak.c: In function ‘stackleak_track_stack’:
+kernel/stackleak.c:119:14: error: implicit declaration of function ‘ALIGN’ [-Werror=implicit-function-declaration]
+  119 |         sp = ALIGN(sp, sizeof(unsigned long));
+      |              ^~~~~
+cc1: all warnings being treated as errors
+
+This is fixed with the following diff although I am unsure if that is as
+minimal as it should be.
+
+diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+index ce161a8e8d97..d67c5475183b 100644
+--- a/kernel/stackleak.c
++++ b/kernel/stackleak.c
+@@ -10,8 +10,10 @@
+  * reveal and blocks some uninitialized stack variable attacks.
+  */
+ 
++#include <asm/processor_api.h>
+ #include <linux/stackleak.h>
+ #include <linux/kprobes.h>
++#include <linux/align.h>
+ 
+ #ifdef CONFIG_STACKLEAK_RUNTIME_DISABLE
+ #include <linux/jump_label.h>
+
+
+
+2. Build failures with CONFIG_UAPI_HEADER_TEST=y and O=...
+
+This was originally reproduced with allmodconfig but this is a simpler
+reproducer I think.
+
+$ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 defconfig
+
+$ scripts/config --file .build/x86_64/.config -e HEADERS_INSTALL -e UAPI_HEADER_TEST
+
+$ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 olddefconfig usr/
+In file included from <command-line>:
+./usr/include/linux/rds.h:38:10: fatal error: uapi/linux/sockios.h: No such file or directory
+   38 | #include <uapi/linux/sockios.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/rds.hdrtest] Error 1
+In file included from ./usr/include/linux/qrtr.h:5,
+                 from <command-line>:
+./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
+    5 | #include <uapi/linux/socket_types.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from ./usr/include/linux/in.h:24,
+                 from ./usr/include/linux/nfs_mount.h:12,
+                 from <command-line>:
+./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
+    5 | #include <uapi/linux/socket_types.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/qrtr.hdrtest] Error 1
+make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/nfs_mount.hdrtest] Error 1
+...
+
+I don't see this when just building in the tree. I am guessing that
+commit f989e243f1f4 ("headers/deps: uapi/headers: Create
+usr/include/uapi symbolic link") needs to account for this?
+
+
+
+3. Build failure with CONFIG_SAMPLE_CONNECTOR=m and O=...
+
+I am guessing this has a similar root cause as above, since that commit
+mentions an error similar to this.
+
+$ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 allmodconfig samples/connector/
+In file included from /home/nathan/cbl/src/linux-fast-headers/samples/connector/ucon.c:14:
+usr/include/linux/netlink.h:5:10: fatal error: uapi/linux/types.h: No such file or directory
+    5 | #include <uapi/linux/types.h>
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+
+
+4. modpost warning around __sw_hweight64
+
+With the first issue resolved:
+
+$ make -skj"$(nproc)" ARCH=i386 allmodconfig
+WARNING: modpost: EXPORT symbol "__sw_hweight64" [vmlinux] version ...
+Is "__sw_hweight64" prototyped in <asm/asm-prototypes.h>?
+
+
+
+5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
+
+With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
+
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
+
+$ scripts/config -e LTO_CLANG_THIN
+
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
+ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
+>>> .macro __put, val, name
+>>> ^
+make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
+
+I was not able to figure out the exact include chain but CONFIG_LTO
+causes asm/alternative-macros.h to be included in asm/rwonce.h, which
+eventually gets included in either asm/cache.h or asm/memory.h.
+
+I managed to solve this with the following diff but I am not sure if
+there is a better or cleaner way to do that.
+
+diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+index 1bce62fa908a..e19572a205d0 100644
+--- a/arch/arm64/include/asm/rwonce.h
++++ b/arch/arm64/include/asm/rwonce.h
+@@ -5,7 +5,7 @@
+ #ifndef __ASM_RWONCE_H
+ #define __ASM_RWONCE_H
+ 
+-#ifdef CONFIG_LTO
++#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
+ 
+ #include <linux/compiler_types.h>
+ #include <asm/alternative-macros.h>
+@@ -66,7 +66,7 @@
+ })
+ 
+ #endif	/* !BUILD_VDSO */
+-#endif	/* CONFIG_LTO */
++#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
+ 
+ #include <asm-generic/rwonce.h>
+ 
+
+I'll see if I can flush out any other issues.
+
+Cheers,
+Nathan
