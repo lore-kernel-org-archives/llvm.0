@@ -1,41 +1,64 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87922168
-	for <llvm@lists.linux.dev>; Tue,  4 Jan 2022 22:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641334938; x=1672870938;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=doiUaCtmxcEJGCQ9a67B0IGilBF15/RhKNjWrGFLzxE=;
-  b=Trig+Lqwc6lx2Pt25FMcnwgUrZnPyDHbDPRtnmib9EiA/dc+ze88Xlpj
-   hAAqt0HyxvFGltkiUJjQ1ENDf9oE/gBgkgAIDJg2BKtcysL7kf7NdG4a4
-   XpMapP8fNxmathgDzmFZMuQzKvuYEHs1pbJHJMw97tScD16MRy2Htm/2G
-   UOOida/krUoTTzU6NfblVsEWI9QloNG9J/L4PjIaVxlftv3ZKxAiZ9YyX
-   vcO+e0IZcttKCpvnfhEdFGJKrj1wv2W3dj3DeNmFiPYpVFwNYy8nVsl5d
-   0gPc7suJAuHO999iX7vjHpgbPYe6AvUfB7+XIeHhRUy3WL4VJZ3zpAIyj
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242266456"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="242266456"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 14:22:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="556311969"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jan 2022 14:22:15 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n4sC7-000Fwb-22; Tue, 04 Jan 2022 22:22:15 +0000
-Date: Wed, 5 Jan 2022 06:21:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [peterz-queue:perf/wip.self 2/2] arch/x86/events/core.c:2735:13:
- error: use of undeclared identifier 'userpf'; did you mean 'userpg'?
-Message-ID: <202201050624.8a9rNBhb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989CE2C9C
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 00:20:36 +0000 (UTC)
+Received: by mail-ed1-f42.google.com with SMTP id o6so155018566edc.4
+        for <llvm@lists.linux.dev>; Tue, 04 Jan 2022 16:20:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IDbU1kj34UMWw/qTzlhM7eSBun7e9w/1neHTsviDCAI=;
+        b=bPPmygOAG5tVVPOwFV8D0riSscD+Im6II1WEcywcC33AefldB0PhZQvx4diULh53ih
+         qrnyuVhk0sJOjvd+jfD33OGkstu9HsWIhgniqi59UnoQhy3HSJ9RPKqJl3fVdQvofIpo
+         +yHAJVdgbgHlZINRN1Dq52wj13djpvQS4G7uCNCL64EfiNS0bXkmtuaLoOlb73rHqSXf
+         TF0RI5uWSMl2dTL7sEGYKcHbNe9pWqgjPbMLOmxH2MjMIb6Z/g4U3NY5hzR2iZrZ+Slg
+         StrPTx/RNMqAUUrDMya7lcLR7iQy+rAA9nzHnZpODOnfZxM5S5t6qqjvzZDS0/A3mh18
+         53kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=IDbU1kj34UMWw/qTzlhM7eSBun7e9w/1neHTsviDCAI=;
+        b=RkmfMYBKymZ4Eug84Y2EGhu5eJBXEht/l8esfOl3w/tGNgen9HfM8h20D8m/h861SQ
+         CsjSN3iBcnhl8YV6DMj7LeCNiA7D1T4HUYC94JGa+jCcizNRleWuqRHPfzgJHwRx5jB/
+         uih2tfBGZbsDp+h87nyiooOD1A4w8A1BQPNYrRTyhtPGzflwqjgnwTndL2PvRky9wGZQ
+         9JSWkN2CWyE+Fcjn3Wj1n3JGM6GiqddVZZCsOoj390gFAiy3dUmjNFox2/zRB5VBgG8w
+         s/jnAXxTCANtg/lrfm+eTTt7g30l+am6K54RzE9jq9Vw9Pw//jnoTOw73eRb/uhyWG9H
+         2S/w==
+X-Gm-Message-State: AOAM530Z0nezMG4uBaUEUX+K0X6bVp1hl5yxbtxhz6cpr5jrNkEf6aHO
+	ziriXShIRm1f+RiW5NXkudA=
+X-Google-Smtp-Source: ABdhPJxskks3Pd8N4UAavKBRQ9f1aed6hiyrJvAMxloD2sXbO5IBOoYHeauxTHhjrjJS4TaRCIc6SQ==
+X-Received: by 2002:a17:906:a091:: with SMTP id q17mr40602282ejy.669.1641342035022;
+        Tue, 04 Jan 2022 16:20:35 -0800 (PST)
+Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
+        by smtp.gmail.com with ESMTPSA id ky10sm9551054ejc.151.2022.01.04.16.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 16:20:34 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Wed, 5 Jan 2022 01:20:32 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev
+Subject: Re: [PATCH] headers/deps: dcache: Move the ____cacheline_aligned
+ attribute to the head of the definition
+Message-ID: <YdTkUBSLCQv7++FN@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdQpSigW9X224obC@gmail.com>
+ <YdSJH7empIUq9vbE@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,90 +67,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.self
-head:   63964461fc720e883340d53a8e19345a8c2d243d
-commit: 63964461fc720e883340d53a8e19345a8c2d243d [2/2] perf: Better track self-monitoring events
-config: x86_64-randconfig-c007-20211228 (https://download.01.org/0day-ci/archive/20220105/202201050624.8a9rNBhb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=63964461fc720e883340d53a8e19345a8c2d243d
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/wip.self
-        git checkout 63964461fc720e883340d53a8e19345a8c2d243d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/events/core.c:2735:13: error: use of undeclared identifier 'userpf'; did you mean 'userpg'?
-           if (likely(userpf->cap_user_time))
-                      ^~~~~~
-                      userpg
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   arch/x86/events/core.c:2720:40: note: 'userpg' declared here
-                                  struct perf_event_mmap_page *userpg, u64 now)
-                                                               ^
-   1 error generated.
+In-Reply-To: <YdSJH7empIUq9vbE@archlinux-ax161>
 
 
-vim +2735 arch/x86/events/core.c
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-  2718	
-  2719	void arch_perf_update_userpage(struct perf_event *event,
-  2720				       struct perf_event_mmap_page *userpg, u64 now)
-  2721	{
-  2722		struct cyc2ns_data data;
-  2723		u64 offset;
-  2724	
-  2725		userpg->cap_user_rdpmc = !!(event->hw.flags & PERF_X86_EVENT_RDPMC_ALLOWED);
-  2726		userpg->pmc_width = x86_pmu.cntval_bits;
-  2727	
-  2728		if (unlikely(!using_native_sched_clock() || !sched_clock_stable())) {
-  2729			userpg->cap_user_time = 0;
-  2730			userpg->cap_user_time_zero = 0;
-  2731			return;
-  2732		}
-  2733	
-  2734		/* already set the time fields before */
-> 2735		if (likely(userpf->cap_user_time))
-  2736			return;
-  2737	
-  2738		cyc2ns_read_begin(&data);
-  2739	
-  2740		offset = data.cyc2ns_offset + __sched_clock_offset;
-  2741	
-  2742		/*
-  2743		 * Internal timekeeping for enabled/running/stopped times
-  2744		 * is always in the local_clock domain.
-  2745		 */
-  2746		userpg->cap_user_time = 1;
-  2747		userpg->time_mult = data.cyc2ns_mul;
-  2748		userpg->time_shift = data.cyc2ns_shift;
-  2749		userpg->time_offset = offset - now;
-  2750	
-  2751		/*
-  2752		 * cap_user_time_zero doesn't make sense when we're using a different
-  2753		 * time base for the records.
-  2754		 */
-  2755		if (!event->attr.use_clockid) {
-  2756			userpg->cap_user_time_zero = 1;
-  2757			userpg->time_zero = offset;
-  2758		}
-  2759	
-  2760		cyc2ns_read_end();
-  2761	}
-  2762	
+> Nowhere does it mention that it accepts the attribute before the type 
+> keyword and neither compiler respects the attribute if it comes before 
+> the keyword but at least clang warns: https://godbolt.org/z/E9fTecKPv
+>
+> $ cat test.c
+> #include <stdio.h>
+> 
+> struct foo {
+>     int a;
+>     int b;
+> };
+> 
+> struct __attribute__ ((aligned (64))) bar {
+>     int a;
+>     int b;
+> };
+> 
+> __attribute__ ((aligned (64))) struct baz {
+>     int a;
+>     int b;
+> };
+> 
+> int main(void)
+> {
+>     printf("struct foo alignment: %zd\n", _Alignof(struct foo));
+>     printf("struct bar alignment: %zd\n", _Alignof(struct bar));
+>     printf("struct baz alignment: %zd\n", _Alignof(struct baz));
+>     return 0;
+> }
+> 
+> $ gcc --version | head -1
+> gcc (GCC) 11.2.1 20211231
+> 
+> $ gcc -std=gnu89 -Wall -Wextra test.c; and ./a.out
+> struct foo alignment: 4
+> struct bar alignment: 64
+> struct baz alignment: 4
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Ugh - so my changes there are outright buggy.
+
+I'm reverting all those attribute position changes as we speak ...
+
+I'm actually happy about this in a way, as it settles the issue nicely. :-)
+
+Thanks,
+
+	Ingo
