@@ -1,146 +1,106 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF5A168
-	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 03:25:03 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id 8so33956568pfo.4
-        for <llvm@lists.linux.dev>; Tue, 04 Jan 2022 19:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wkuN5scY3yiYZRl2fRuA4WGrOv7r3w+Jln9UFNacBQM=;
-        b=sMREvPRxGZUwa08eFtR2hiuXSNQvK2z3b4UkIDQKPgoibmig3YKSC5pe3mtAttY7h4
-         XwK6GVkzJlAQFD2wxzX0eBRmZPIqCLwyrJwVVyBuYbzzF8v1N7MwQVj3P7PuIuTVvo0A
-         rEP82aGHqFCbL7ltVQA9rwNIlRiurCUsJqIQJ75u9fKPGEUjWr+Bd51S25yKt9bNwyWq
-         rcSVy1OCjWXA6fj3PLmN+GdKcNL6LzYc5Ao8OxtZok7AYQCkWdnX56ev9cPw3c3+UGgs
-         dVVe/F8gBmvEA8sYC1WCJBKNz2MM65RNUa7GnJFiSHqVSKWr0g4rG/r7YmFBeeHCDHyO
-         Sfog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wkuN5scY3yiYZRl2fRuA4WGrOv7r3w+Jln9UFNacBQM=;
-        b=pYDk4Tn1NRLHKEJOtFUNuxQTHYZpRyZayMr5EjhipcM6vblgtlJEXjtCDxcSKkT7IG
-         i5Kt6gGpA4xReKxlfYv7aOcA2RHUwTsts2b5+Vwmi5BNHgNMNf7qV/tPyKE2ZlVLWJ1h
-         KkBDbsCBJSOOJDtXFevKPv4KRZFmxz8vZGpAkGV4qilMnMx9r4id0r8lbxNwEBhr74Pm
-         59t5bk1CNgWOryPzBR5oi+wLxLN+G2quDuuGwM0TsDVri5r6eA0pgAGonYoNhZyYgquU
-         pVJPrn6mXZD254HKkJlSl7JTSo830NKiF9/XI9qXk9Z+DVl/hvfiOKOuw3ZG2V8sZVP/
-         ORiQ==
-X-Gm-Message-State: AOAM530kgVHfgl607UMzm3kpvhE7U2C1yauXidI8azLxMIXdPeaLdpMk
-	06I7b1ZaMw7h/y7rLs7S43Yobw==
-X-Google-Smtp-Source: ABdhPJwILBGPaWIQmEOPR6iQ9ZbM+KK4UsIg1jEugYbcKOG7KIm+OYdMXveHNWvOBlsyyUCtrfOdgA==
-X-Received: by 2002:a63:8149:: with SMTP id t70mr46472429pgd.71.1641353102364;
-        Tue, 04 Jan 2022 19:25:02 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:b78:5a0b:6f2e:23e9])
-        by smtp.gmail.com with ESMTPSA id a15sm663138pjo.49.2022.01.04.19.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 19:25:02 -0800 (PST)
-Date: Tue, 4 Jan 2022 19:24:56 -0800
-From: =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Miroslav Benes <mbenes@suse.cz>, Borislav Petkov <bp@alien8.de>,
-	linux-hardening@vger.kernel.org, x86@kernel.org,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Kristen Carlson Accardi <kristen@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Bruce Schlobohm <bruce.schlobohm@intel.com>,
-	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Marios Pomonis <pomonis@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
- to nuke pos-based search
-Message-ID: <20220105032456.hs3od326sdl4zjv4@google.com>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-3-alexandr.lobakin@intel.com>
- <Yc2Tqc69W9ukKDI1@zn.tnic>
- <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
- <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
- <20220103160615.7904-1-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B2B168
+	for <llvm@lists.linux.dev>; Wed,  5 Jan 2022 03:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641354986; x=1672890986;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D5eclF4/ysYCgANbZOwUOhgfhC0pmmqGuRW80NVd8AE=;
+  b=REe0IMEwR0l/ffIL/pk5TJ25HxBfJeAYJBOja4o/D++uDF3jXRXH27Uu
+   9XLm/ucJ17PnJAJ9a7UsafwklHaBbYY2jZGtENuujdN+LQn5WabE6Q2A2
+   OQx0uz1h0y7kspvoU/szsDnawr6D5V1ynm6vWsqyKJxWhD6ND2kZzH1Jc
+   Sfa85PV6P2a3q59WeiZR6Va9Piprf1fcx2HU4HGxWyDuBR7eqVIGaWYBA
+   2FJaQ4yI+xSHLF6hYYnLFcRd+VE8h7Qxv1hSgxV+cBcjnuJwfp/vkEi/m
+   jMv7aIzpqxaiEdiGLlSEfUxp7sSvy9QBGYou3Va2dhe3TXUkssNHqbUga
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="239901504"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="239901504"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 19:56:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="556389172"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jan 2022 19:56:24 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n4xPT-000GD7-P8; Wed, 05 Jan 2022 03:56:23 +0000
+Date: Wed, 5 Jan 2022 11:55:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Collingbourne <pcc@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for
+ function 'kasan_hw_tags_enable'
+Message-ID: <202201051108.401TVotF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220103160615.7904-1-alexandr.lobakin@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 2022-01-03, Alexander Lobakin wrote:
->From: Miroslav Benes <mbenes@suse.cz>
->Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
->
->> On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
->>
->> > On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
->> > >
->> > > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
->> > > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
->>
->> ...
->>
->> > Apologies since I haven't read the patch series.
->> >
->> > The option does not exist in ld.lld and I am a bit concerning about
->> > its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
->> >
->> > I thought that someone forwarded my comments (originally posted months
->> > on a feature request ago) here but seems not.
->> > (I am a ld.lld maintainer.)
->>
->> Do you mean
->> https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
->> ?
->>
->> Unfortunately, it did not lead anywhere. I think that '-z unique-symbol'
->> option should work fine as long as the live patching is concerned. Maybe I
->> misunderstood but your concerns mentioned at the blog do not apply. The
->> stability is not an issue for us since we (KLP) always work with already
->> built and fixed kernel. And(at least) GCC already uses number suffices for
->> IPA clones and it has not been a problem anywhere.
+Hi Peter,
 
-The stability problem may not happen frequently but is possible if the
-compiler performs some IPA with new code.
+FYI, the error/warning still remains.
 
-Such disturbence is probably more likely with LTO or PGO.
-For Clang LTO, Makefile currently specifies -mllvm -import-instr-limit=5.
-If a function close to the boundary happens to cross the boundary,
-if inlined into other translation units, the stability issue may affect
-many translation units.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+commit: e5af50a5df571c1d0268b02f924de49b742c990f arm64: kasan: mte: move GCR_EL1 switch to task switch when KASAN disabled
+date:   3 months ago
+config: arm64-randconfig-r025-20220105 (https://download.01.org/0day-ci/archive/20220105/202201051108.401TVotF-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e5af50a5df571c1d0268b02f924de49b742c990f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e5af50a5df571c1d0268b02f924de49b742c990f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
->LLD doesn't have such an option, so FG-KASLR + livepatching builds
->wouldn't be available for LLVM with the current approach (or we'd
->still need a stub that prints "FG-KASLR is not compatible with
->sympos != 0").
->Unfortunately, I discovered this a bit late, just after sending this
->revision.
->
->OTOH, there's no easy alternative. <file + function> pair looks
->appealing, but is it even possible for now to implement in the
->kernel without much refactoring?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-<file + symbol> pair looks good to me and will solve the stability problem.
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for function 'kasan_hw_tags_enable' [-Wmissing-prototypes]
+   void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+               ^
+   arch/arm64/kernel/mte.c:197:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+   ^
+   static 
+   arch/arm64/kernel/mte.c:103:20: warning: unused function '__mte_enable_kernel' [-Wunused-function]
+   static inline void __mte_enable_kernel(const char *mode, unsigned long tcf)
+                      ^
+   2 warnings generated.
+
+
+vim +/kasan_hw_tags_enable +197 arch/arm64/kernel/mte.c
+
+   196	
+ > 197	void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+   198					 __le32 *updptr, int nr_inst)
+   199	{
+   200		BUG_ON(nr_inst != 1); /* Branch -> NOP */
+   201	
+   202		if (kasan_hw_tags_enabled())
+   203			*updptr = cpu_to_le32(aarch64_insn_gen_nop());
+   204	}
+   205	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
