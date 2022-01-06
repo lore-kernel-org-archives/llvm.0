@@ -1,27 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF394168
-	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 18:06:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA899C36AE3;
-	Thu,  6 Jan 2022 18:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533E7173
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 19:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C613FC36AE3;
+	Thu,  6 Jan 2022 19:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641492372;
-	bh=Q1VfLicFP8zpOZc0x3UyDr93GZKO9l78W7b0XMKymJs=;
+	s=k20201202; t=1641495750;
+	bh=IqP7QXUL9LFG3ia0D8c1Aev+d0u20cfMfNFsFYRSzQI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZozYHmcGrQwTAWDnq0B8CQhCLFYgdazLC/CH0WbdXO80wl4M0o7VJh6L6wEElIp5q
-	 TwxwKP3/Z488gLIDjeKuGkM8G4NvKG9RHmNCh6rndiiK9sxc/Sn3g6yQQnHHha/T+i
-	 sEOCq6cG+iKBg4UALcsv8ejAzcWHNLrpQ6IhvsXEB8PYtcfrjykfr3R52RLmKQKlTD
-	 Tb38SxzciLGVulZWChbfgfbAlHm6WEXp+LH7okRUd1RAKoNA/tIWqvjhT6/9zwtRCF
-	 t0lqe5Cw8z1zQQouycwaSv5C/qFNVCQ5tf52xizgndGMuYiKEXRx+Nb4leGMOka6GR
-	 rXHpYr4tMdX4g==
-Date: Thu, 6 Jan 2022 11:06:08 -0700
+	b=uOYl83ayf1ArpqJd6tWq+dd4SxlCR8MknGbybO9QqyYWlZsWoL4RH/uQioNbWcsEf
+	 pQ+FJGyV9s0IxBOoGAjHS29qc5t05qPTb/VbWIUPu1ph+Mhqv7BAeb9ju4PUqOyRV+
+	 KUysHm9TD0ci2bscMiu+VF5mXdmGAyiai1tGQ2+njzzGs8mt2pScTz6utsX4bsbkcb
+	 i2DEI5ODuDc3DWUxEBKHeQV+xoYNYd08I/bn+GDIhAWsImM0JewoW0gGcFGYtDAJ9D
+	 lVb/0DNuB03fr8k9KUUH3zvGOXHMAz1xicVapMhzeJOYudv6e+CkQXO+ZjJisjl7mj
+	 A10S2F0qHgFRA==
+Date: Thu, 6 Jan 2022 12:02:25 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: ci_notify@linaro.org
-Cc: Christoph Hellwig <hch@lst.de>, llvm@lists.linux.dev, arnd@linaro.org
-Subject: Re: [TCWG CI] Regression caused by linux: mm: simplify try_to_unuse
-Message-ID: <YdcvkPTWAklekKJd@archlinux-ax161>
-References: <16541504.9774.1641492012616@jenkins.jenkins>
+To: Samuel Zeter <samuelzeter@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
+Message-ID: <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+References: <20220106023606.283953-1-samuelzeter@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -30,42 +36,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <16541504.9774.1641492012616@jenkins.jenkins>
+In-Reply-To: <20220106023606.283953-1-samuelzeter@gmail.com>
 
-On Thu, Jan 06, 2022 at 06:00:11PM +0000, ci_notify@linaro.org wrote:
-> [TCWG CI] Regression caused by linux: mm: simplify try_to_unuse:
-> commit a1d1774f68ae83a47e9183f0ca5c0d1ce017eb9b
-> Author: Christoph Hellwig <hch@lst.de>
+On Thu, Jan 06, 2022 at 01:36:03PM +1100, Samuel Zeter wrote:
+> These are two small patches which originally dealt with
+> the problem found at:
 > 
->     mm: simplify try_to_unuse
+> https://github.com/ClangBuiltLinux/linux/issues/1364
 > 
-> Results regressed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 553
-> # First few build errors in logs:
-> # 00:00:44 mm/shmem.c:3993:5: error: conflicting types for 'shmem_unuse'
-> # 00:00:44 make[1]: *** [mm/shmem.o] Error 1
-> # 00:00:44 make: *** [mm] Error 2
+> The original steps to reproduce were:
+> $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 defconfig
+> $ scripts/config -e X86_DECODER_SELFTEST
+> $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 olddefconfig bzImage
+> 
+> Which resulted in the error:
+> arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but
+> insn_get_length() says 2
+> 
+> Upon inspection it turned out llvm-objdump was formatting its
+> output differently, which caused objdump_reformat.awk to incorrectly
+> output its values.
+> 
+> After fixing that bug, a second one was seen where the instruction
+> "wait" was incorrectly matched with "fwait", which again caused
+> insn_decoder_test to fail.
 
-Not a clang specific regression.
+Thanks a lot for sending these fixes!
 
-This was reported by Naresh Kamboju:
+I can confirm with this series and the removal of chkobjdump.awk [1] on
+top of v5.16-rc8, the insn_decoder_test now passes with LLVM 11 through
+14.
 
-https://lore.kernel.org/r/CA+G9fYvXfD3wS8eJV6A6GygqhJb3AUF9OROQAkBRRTN+thVo-g@mail.gmail.com/
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Matthew Wilcox suggested a fix up:
+For the future, I recommend putting the maintainers in the "To" field,
+rather than "Cc", to ensure they actually see it. Additionally, I see
+some small nits in the commit message that the tip maintainers might
+comment on, see
 
-https://lore.kernel.org/r/YdXYHP5gPMRzmv0B@casper.infradead.org/
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
-Andrew just needs to apply it.
+for some more info.
+
+Masami Hiramatsu originally wrote this file and has a few fixes to it
+since, adding him now for review. The original thread is available at:
+
+https://lore.kernel.org/r/20220106023606.283953-1-samuelzeter@gmail.com/
+
+[1]: https://git.kernel.org/nathan/c/2f137c324b21f1c21b8830d8896cb9957009f969
 
 Cheers,
 Nathan
