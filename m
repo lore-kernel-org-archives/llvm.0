@@ -1,41 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C988B168
-	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 16:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575AC168
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 17:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641487646; x=1673023646;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kR/Qtye1XgIUh4qwCireXAnZ1oDQXh5Sr+ZrCoT9KgU=;
-  b=mxw6JbeD4F10G/qiRaMBOYgjsCe7p4vj7CLbvlN1YGx+Zh3vV+sip1Bj
-   7UjFmG3t4HowKLk+aOhKq7P+2oQP5UFs/LugVn+zprnjAA6+6BBS8FlRP
-   EK5zsg5wUHsOsquzKhbQvmtUaFG7b884E33s9jQo4rtfSStDFjgZ0ZKvs
-   ASo4aWTAdDYTkfSVbMXs1sNUi3hnWcQ2fo+3fek+DEPWwqm8NZx7qgONG
-   EF7yoSCxyb5MLLcUjkTkwbkbdiFEksPVnFwRWspcEx5oH/PGch2rTcgO4
-   8w7cOQbcmgZKJVwmFl0rtOBvAs2Y4CvllYP5zvIT3eEF1OoYqxsWa3myF
+  t=1641491308; x=1673027308;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=L69EiUxvnkMtOLzS9y6Y326FWiPueb6iTyzdswTejP8=;
+  b=OnS24ajdcYW1YwColUdUbE/ShSzHpJV9iKtB1r3MeEuhSLVMOptOEQSw
+   yf3g4oIchnqB3Fy6qYe56E37mNDQyhTjuU3tiQOvp+56IZUuTg32f2r3D
+   dGt4L7DJslt34vOq72aZpdyj9vyIsdO03dtRRuAWnczguW7Mv9feZYTg4
+   /SSMbxiP1vqG9GcIu0RjW5e6+J5u56gh8ID/zzYcGJZYscmabKM3X92GT
+   vSNE717abqBnQMRn3PCk/GrecRcj+ALwNTu67mYZnWOyh1qpGvcOEYn0k
+   uXKNefHMedmmcmuSNrSKVJlVnIAcBFw/5/nFQlNd6NQmPhd3OTs9E7D+4
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242645488"
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223388090"
 X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="242645488"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 08:47:26 -0800
+   d="scan'208";a="223388090"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 09:48:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="472994562"
+   d="scan'208";a="621592276"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jan 2022 08:47:24 -0800
+  by orsmga004.jf.intel.com with ESMTP; 06 Jan 2022 09:48:25 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n5VvA-000HnV-9a; Thu, 06 Jan 2022 16:47:24 +0000
-Date: Fri, 7 Jan 2022 00:46:53 +0800
+	id 1n5WsD-000HpS-85; Thu, 06 Jan 2022 17:48:25 +0000
+Date: Fri, 7 Jan 2022 01:47:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Sung <penmount.touch@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] Add serial device bus support to penmount serial driver.
-Message-ID: <202201070052.PIaq47mt-lkp@intel.com>
-References: <1641463060-6602-1-git-send-email-penmount.touch@gmail.com>
+To: Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [anna-nfs:linux-next 12/21] fs/nfs/callback_xdr.c:274:8: warning:
+ result of comparison of constant 658812288346769700 with expression of type
+ 'uint32_t' (aka 'unsigned int') is always false
+Message-ID: <202201070108.OWIDTV5G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,102 +46,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1641463060-6602-1-git-send-email-penmount.touch@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi John,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on hid/for-next linux/master linus/master v5.16-rc8 next-20220105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/John-Sung/Add-serial-device-bus-support-to-penmount-serial-driver/20220106-175910
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: x86_64-randconfig-a001-20220106 (https://download.01.org/0day-ci/archive/20220107/202201070052.PIaq47mt-lkp@intel.com/config)
+tree:   git://git.linux-nfs.org/projects/anna/linux-nfs.git linux-next
+head:   3e0a5877834cb4899478873b0f6ccc604ab33d28
+commit: 9c2f14caf2bfc8b25b9d755aa77a37355d00c7ce [12/21] NFSv4.1: Fix uninitialised variable in devicenotify
+config: x86_64-buildonly-randconfig-r001-20220106 (https://download.01.org/0day-ci/archive/20220107/202201070108.OWIDTV5G-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/053957cedaa900325f45620717607b464f532b54
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review John-Sung/Add-serial-device-bus-support-to-penmount-serial-driver/20220106-175910
-        git checkout 053957cedaa900325f45620717607b464f532b54
+        git remote add anna-nfs git://git.linux-nfs.org/projects/anna/linux-nfs.git
+        git fetch --no-tags anna-nfs linux-next
+        git checkout 9c2f14caf2bfc8b25b9d755aa77a37355d00c7ce
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/touchscreen/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/ sound/x86/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/input/touchscreen/penmount.c:257:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-           int err;
-               ^
+>> fs/nfs/callback_xdr.c:274:8: warning: result of comparison of constant 658812288346769700 with expression of type 'uint32_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (n > ULONG_MAX / sizeof(*args->devs)) {
+               ~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/err +257 drivers/input/touchscreen/penmount.c
+vim +274 fs/nfs/callback_xdr.c
 
-ee4799997950e8 Rick Koch  2006-08-05  246  
-ee4799997950e8 Rick Koch  2006-08-05  247  /*
-ee4799997950e8 Rick Koch  2006-08-05  248   * pm_connect() is the routine that is called when someone adds a
-21ae508bab28c2 John Sung  2011-09-09  249   * new serio device that supports PenMount protocol and registers it as
-ee4799997950e8 Rick Koch  2006-08-05  250   * an input device.
-ee4799997950e8 Rick Koch  2006-08-05  251   */
-053957cedaa900 John Sung  2022-01-06  252  static struct pm * pm_driver_init(struct device * dev, const struct pm_device_conf * conf, char *phys)
-ee4799997950e8 Rick Koch  2006-08-05  253  {
-053957cedaa900 John Sung  2022-01-06  254  	struct pm *pm = NULL;
-ee4799997950e8 Rick Koch  2006-08-05  255  	struct input_dev *input_dev;
-90aba7d8b155c2 John Sung  2011-09-09  256  	int max_x, max_y;
-ee4799997950e8 Rick Koch  2006-08-05 @257  	int err;
-ee4799997950e8 Rick Koch  2006-08-05  258  
-ee4799997950e8 Rick Koch  2006-08-05  259  	pm = kzalloc(sizeof(struct pm), GFP_KERNEL);
-ee4799997950e8 Rick Koch  2006-08-05  260  	input_dev = input_allocate_device();
-ee4799997950e8 Rick Koch  2006-08-05  261  	if (!pm || !input_dev) {
-ee4799997950e8 Rick Koch  2006-08-05  262  		err = -ENOMEM;
-ee4799997950e8 Rick Koch  2006-08-05  263  		goto fail1;
-ee4799997950e8 Rick Koch  2006-08-05  264  	}
-ee4799997950e8 Rick Koch  2006-08-05  265  	
-ee4799997950e8 Rick Koch  2006-08-05  266  	pm->dev = input_dev;	
-ee4799997950e8 Rick Koch  2006-08-05  267  
-21ae508bab28c2 John Sung  2011-09-09  268  	input_dev->name = "PenMount Serial TouchScreen";
-053957cedaa900 John Sung  2022-01-06  269  	input_dev->phys = phys;
-ee4799997950e8 Rick Koch  2006-08-05  270  	input_dev->id.bustype = BUS_RS232;
-ee4799997950e8 Rick Koch  2006-08-05  271  	input_dev->id.vendor = SERIO_PENMOUNT;
-ee4799997950e8 Rick Koch  2006-08-05  272  	input_dev->id.product = 0;
-ee4799997950e8 Rick Koch  2006-08-05  273  	input_dev->id.version = 0x0100;
-053957cedaa900 John Sung  2022-01-06  274  	input_dev->dev.parent = dev;
-ee4799997950e8 Rick Koch  2006-08-05  275  
-7b19ada2ed3c1e Jiri Slaby 2007-10-18  276  	input_dev->evbit[0] = BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
-7b19ada2ed3c1e Jiri Slaby 2007-10-18  277  	input_dev->keybit[BIT_WORD(BTN_TOUCH)] = BIT_MASK(BTN_TOUCH);
-c42e2e406ad49f John Sung  2011-09-09  278  
-053957cedaa900 John Sung  2022-01-06  279  	pm->conf = conf;
-053957cedaa900 John Sung  2022-01-06  280  	input_dev->id.product = conf->productid;
-053957cedaa900 John Sung  2022-01-06  281  	max_x = max_y = conf->max;
-90aba7d8b155c2 John Sung  2011-09-09  282  
-90aba7d8b155c2 John Sung  2011-09-09  283  	input_set_abs_params(pm->dev, ABS_X, 0, max_x, 0, 0);
-90aba7d8b155c2 John Sung  2011-09-09  284  	input_set_abs_params(pm->dev, ABS_Y, 0, max_y, 0, 0);
-90aba7d8b155c2 John Sung  2011-09-09  285  
-053957cedaa900 John Sung  2022-01-06  286  	if (pm->conf->maxcontacts > 1) {
-053957cedaa900 John Sung  2022-01-06  287  		input_mt_init_slots(pm->dev, pm->conf->maxcontacts, 0);
-90aba7d8b155c2 John Sung  2011-09-09  288  		input_set_abs_params(pm->dev,
-90aba7d8b155c2 John Sung  2011-09-09  289  				     ABS_MT_POSITION_X, 0, max_x, 0, 0);
-90aba7d8b155c2 John Sung  2011-09-09  290  		input_set_abs_params(pm->dev,
-90aba7d8b155c2 John Sung  2011-09-09  291  				     ABS_MT_POSITION_Y, 0, max_y, 0, 0);
-90aba7d8b155c2 John Sung  2011-09-09  292  	}
-053957cedaa900 John Sung  2022-01-06  293  	return pm;
-053957cedaa900 John Sung  2022-01-06  294  	
-053957cedaa900 John Sung  2022-01-06  295   fail1:	
-053957cedaa900 John Sung  2022-01-06  296  	if (input_dev) input_free_device(input_dev);
-053957cedaa900 John Sung  2022-01-06  297  	if (pm) kfree(pm);
-053957cedaa900 John Sung  2022-01-06  298  	return NULL;
-053957cedaa900 John Sung  2022-01-06  299  }
-053957cedaa900 John Sung  2022-01-06  300  
+f2a625616045fe Fred Isaman       2011-01-06  254  
+1be5683b03a766 Marc Eshel        2011-05-22  255  static
+1be5683b03a766 Marc Eshel        2011-05-22  256  __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+1be5683b03a766 Marc Eshel        2011-05-22  257  				struct xdr_stream *xdr,
+f4dac4ade5ba4e Christoph Hellwig 2017-05-11  258  				void *argp)
+1be5683b03a766 Marc Eshel        2011-05-22  259  {
+f4dac4ade5ba4e Christoph Hellwig 2017-05-11  260  	struct cb_devicenotifyargs *args = argp;
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  261  	uint32_t tmp, n, i;
+1be5683b03a766 Marc Eshel        2011-05-22  262  	__be32 *p;
+1be5683b03a766 Marc Eshel        2011-05-22  263  	__be32 status = 0;
+1be5683b03a766 Marc Eshel        2011-05-22  264  
+1be5683b03a766 Marc Eshel        2011-05-22  265  	/* Num of device notifications */
+eb72f484a5eb94 Chuck Lever       2019-02-11  266  	p = xdr_inline_decode(xdr, sizeof(uint32_t));
+1be5683b03a766 Marc Eshel        2011-05-22  267  	if (unlikely(p == NULL)) {
+1be5683b03a766 Marc Eshel        2011-05-22  268  		status = htonl(NFS4ERR_BADXDR);
+1be5683b03a766 Marc Eshel        2011-05-22  269  		goto out;
+1be5683b03a766 Marc Eshel        2011-05-22  270  	}
+1be5683b03a766 Marc Eshel        2011-05-22  271  	n = ntohl(*p++);
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  272  	if (n == 0)
+1be5683b03a766 Marc Eshel        2011-05-22  273  		goto out;
+363e0df057ea8d Dan Carpenter     2012-01-12 @274  	if (n > ULONG_MAX / sizeof(*args->devs)) {
+363e0df057ea8d Dan Carpenter     2012-01-12  275  		status = htonl(NFS4ERR_BADXDR);
+363e0df057ea8d Dan Carpenter     2012-01-12  276  		goto out;
+363e0df057ea8d Dan Carpenter     2012-01-12  277  	}
+1be5683b03a766 Marc Eshel        2011-05-22  278  
+a4f743a6bb2016 Trond Myklebust   2015-02-11  279  	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+1be5683b03a766 Marc Eshel        2011-05-22  280  	if (!args->devs) {
+1be5683b03a766 Marc Eshel        2011-05-22  281  		status = htonl(NFS4ERR_DELAY);
+1be5683b03a766 Marc Eshel        2011-05-22  282  		goto out;
+1be5683b03a766 Marc Eshel        2011-05-22  283  	}
+1be5683b03a766 Marc Eshel        2011-05-22  284  
+1be5683b03a766 Marc Eshel        2011-05-22  285  	/* Decode each dev notification */
+1be5683b03a766 Marc Eshel        2011-05-22  286  	for (i = 0; i < n; i++) {
+1be5683b03a766 Marc Eshel        2011-05-22  287  		struct cb_devicenotifyitem *dev = &args->devs[i];
+1be5683b03a766 Marc Eshel        2011-05-22  288  
+eb72f484a5eb94 Chuck Lever       2019-02-11  289  		p = xdr_inline_decode(xdr, (4 * sizeof(uint32_t)) +
+eb72f484a5eb94 Chuck Lever       2019-02-11  290  				      NFS4_DEVICEID4_SIZE);
+1be5683b03a766 Marc Eshel        2011-05-22  291  		if (unlikely(p == NULL)) {
+1be5683b03a766 Marc Eshel        2011-05-22  292  			status = htonl(NFS4ERR_BADXDR);
+1be5683b03a766 Marc Eshel        2011-05-22  293  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  294  		}
+1be5683b03a766 Marc Eshel        2011-05-22  295  
+1be5683b03a766 Marc Eshel        2011-05-22  296  		tmp = ntohl(*p++);	/* bitmap size */
+1be5683b03a766 Marc Eshel        2011-05-22  297  		if (tmp != 1) {
+1be5683b03a766 Marc Eshel        2011-05-22  298  			status = htonl(NFS4ERR_INVAL);
+1be5683b03a766 Marc Eshel        2011-05-22  299  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  300  		}
+1be5683b03a766 Marc Eshel        2011-05-22  301  		dev->cbd_notify_type = ntohl(*p++);
+1be5683b03a766 Marc Eshel        2011-05-22  302  		if (dev->cbd_notify_type != NOTIFY_DEVICEID4_CHANGE &&
+1be5683b03a766 Marc Eshel        2011-05-22  303  		    dev->cbd_notify_type != NOTIFY_DEVICEID4_DELETE) {
+1be5683b03a766 Marc Eshel        2011-05-22  304  			status = htonl(NFS4ERR_INVAL);
+1be5683b03a766 Marc Eshel        2011-05-22  305  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  306  		}
+1be5683b03a766 Marc Eshel        2011-05-22  307  
+1be5683b03a766 Marc Eshel        2011-05-22  308  		tmp = ntohl(*p++);	/* opaque size */
+1be5683b03a766 Marc Eshel        2011-05-22  309  		if (((dev->cbd_notify_type == NOTIFY_DEVICEID4_CHANGE) &&
+1be5683b03a766 Marc Eshel        2011-05-22  310  		     (tmp != NFS4_DEVICEID4_SIZE + 8)) ||
+1be5683b03a766 Marc Eshel        2011-05-22  311  		    ((dev->cbd_notify_type == NOTIFY_DEVICEID4_DELETE) &&
+1be5683b03a766 Marc Eshel        2011-05-22  312  		     (tmp != NFS4_DEVICEID4_SIZE + 4))) {
+1be5683b03a766 Marc Eshel        2011-05-22  313  			status = htonl(NFS4ERR_INVAL);
+1be5683b03a766 Marc Eshel        2011-05-22  314  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  315  		}
+1be5683b03a766 Marc Eshel        2011-05-22  316  		dev->cbd_layout_type = ntohl(*p++);
+1be5683b03a766 Marc Eshel        2011-05-22  317  		memcpy(dev->cbd_dev_id.data, p, NFS4_DEVICEID4_SIZE);
+1be5683b03a766 Marc Eshel        2011-05-22  318  		p += XDR_QUADLEN(NFS4_DEVICEID4_SIZE);
+1be5683b03a766 Marc Eshel        2011-05-22  319  
+1be5683b03a766 Marc Eshel        2011-05-22  320  		if (dev->cbd_layout_type == NOTIFY_DEVICEID4_CHANGE) {
+eb72f484a5eb94 Chuck Lever       2019-02-11  321  			p = xdr_inline_decode(xdr, sizeof(uint32_t));
+1be5683b03a766 Marc Eshel        2011-05-22  322  			if (unlikely(p == NULL)) {
+1be5683b03a766 Marc Eshel        2011-05-22  323  				status = htonl(NFS4ERR_BADXDR);
+1be5683b03a766 Marc Eshel        2011-05-22  324  				goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  325  			}
+1be5683b03a766 Marc Eshel        2011-05-22  326  			dev->cbd_immediate = ntohl(*p++);
+1be5683b03a766 Marc Eshel        2011-05-22  327  		} else {
+1be5683b03a766 Marc Eshel        2011-05-22  328  			dev->cbd_immediate = 0;
+1be5683b03a766 Marc Eshel        2011-05-22  329  		}
+1be5683b03a766 Marc Eshel        2011-05-22  330  
+1be5683b03a766 Marc Eshel        2011-05-22  331  		dprintk("%s: type %d layout 0x%x immediate %d\n",
+1be5683b03a766 Marc Eshel        2011-05-22  332  			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
+1be5683b03a766 Marc Eshel        2011-05-22  333  			dev->cbd_immediate);
+1be5683b03a766 Marc Eshel        2011-05-22  334  	}
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  335  	args->ndevs = n;
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  336  	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  337  	return 0;
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  338  err:
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  339  	kfree(args->devs);
+1be5683b03a766 Marc Eshel        2011-05-22  340  out:
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  341  	args->devs = NULL;
+9c2f14caf2bfc8 Trond Myklebust   2022-01-03  342  	args->ndevs = 0;
+1be5683b03a766 Marc Eshel        2011-05-22  343  	dprintk("%s: status %d ndevs %d\n",
+1be5683b03a766 Marc Eshel        2011-05-22  344  		__func__, ntohl(status), args->ndevs);
+1be5683b03a766 Marc Eshel        2011-05-22  345  	return status;
+1be5683b03a766 Marc Eshel        2011-05-22  346  }
+1be5683b03a766 Marc Eshel        2011-05-22  347  
+
+:::::: The code at line 274 was first introduced by commit
+:::::: 363e0df057ea8da539645fe4c3c227e3d44054cc nfs: check for integer overflow in decode_devicenotify_args()
+
+:::::: TO: Dan Carpenter <dan.carpenter@oracle.com>
+:::::: CC: Trond Myklebust <Trond.Myklebust@netapp.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
