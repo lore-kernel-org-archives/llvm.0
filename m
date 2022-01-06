@@ -1,55 +1,41 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4980F168
-	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 23:23:52 +0000 (UTC)
-Received: by mail-pg1-f174.google.com with SMTP id f5so3887165pgk.12
-        for <llvm@lists.linux.dev>; Thu, 06 Jan 2022 15:23:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tA6UK24AjxIZbFxR8bfz/TxU3vWQsg6ckR6coRFMG9M=;
-        b=hpqplUo9NjouO1Uj3U3bTzajcYggQzKmWFru89eqsz9f5u1Peh4w1SJiVhTz8GId2h
-         b2jESvhCWATWnf/bGxEIVV2c80pnBKhgnKqSvteuQMtIzwEnriEWQKdYQ26+J73rm1KK
-         h/IoHYX5zWfyTl5/M2nPICXemTvSH/f4kQBxX+FkhnLq701WrzqudFEJU61jDXuRPXkp
-         Kla8GUuZACOR45U8GoVpI4gqU22nnEC07VaPHpULxKIxD2jDGe/JpRwGa+OWL6P1Rw4l
-         nxCq6CuV0NaYDqaQ7+bKMNrbnWvXDnCdsWSqQQ5FlRsiTMplDyH9yBWZBi+4NXqwyVIa
-         Omsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tA6UK24AjxIZbFxR8bfz/TxU3vWQsg6ckR6coRFMG9M=;
-        b=Ffv9WpQxDzjSFa+XXyxINkUUiZMpv4ixP7tpSezvLZFZolXBqKr+GwIuQwFtJpIqgy
-         vXvxBHA9DjD8anhJK0r4ljWTTmuqlIG6lHYoWtnrM7m7DZVuExdubvYtNE6YcAN4ps90
-         tfIKZiu7IzhJcH9MDPiAB4XrIhCl4cKQxZDrsZGBlJIxqkfsucQ4GIuBndceQnq6pXJp
-         D0tO8ZHTibeXy0MdN/cVtBlgvZQeQno5Eel2cLshCH2SmJw9CdJ9GtdoVYXKVErTFbhq
-         S+OjSG6s0OmqdBF/chNREhS6d5VWR1dWi2dEN5BHTxo4b2KXYxlNc3Ik72kIL7mL8LMY
-         2X7A==
-X-Gm-Message-State: AOAM530WOLwe+0kb4bH3i6n7zwSp/K3rWLHK+Io3wxfUWNK2xeDC4nn+
-	YG6hBkrH+t/WuCTQh5PbTY0=
-X-Google-Smtp-Source: ABdhPJzLjNEAnwHzhwbXnJoVtPzugA8gFSrPCQmEtpnU8iJMKCVbIym3jojydUwKQyOgfeulw1Pucw==
-X-Received: by 2002:a63:3509:: with SMTP id c9mr51184737pga.332.1641511431800;
-        Thu, 06 Jan 2022 15:23:51 -0800 (PST)
-Received: from szeter (n220-236-173-54.sbr3.nsw.optusnet.com.au. [220.236.173.54])
-        by smtp.gmail.com with ESMTPSA id i17sm3424104pfk.44.2022.01.06.15.23.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 15:23:51 -0800 (PST)
-Date: Fri, 7 Jan 2022 10:23:07 +1100
-From: Samuel Zeter <samuelzeter@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
-Message-ID: <Ydd522/ivtZunIXl@szeter>
-References: <20220106023606.283953-1-samuelzeter@gmail.com>
- <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB301168
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 23:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641513276; x=1673049276;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ev/jufds9gXwyD6IAz7KwS8ATTwmnx3cOp5OJdNQ5Gs=;
+  b=SvL+RDhu7yHtUwtTbdaswK/BGm6OCvoe+08u/GJ/VIz/26P2Dbjhy9Z0
+   2BUOnq12TbFFUWGZukDgpz2w/kn8URqoiOldaB85GSB0MOzYdEw+JsXdJ
+   a3lxbSRqjVh3eChiDyeaycTaD/oGOZH6DPCV8f/B1Q8YLRBqoivodR0qn
+   11eUkL0QBPQkduP/9yErYXF2rb+V33LVUp7enIVk6icMSCjKGbuJZc/2W
+   f7DHI7I6tj8jPqOufAuMR74rF8dL6+Civi8D1fmx4MiLymmUIdIjeN78+
+   YbqkyjiZZa+opazc9ksXKJPtUwHzlFWNguwXIkoEbYgYI/1Nf5SQH7j/V
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="267056171"
+X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
+   d="scan'208";a="267056171"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 15:54:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
+   d="scan'208";a="527171640"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Jan 2022 15:54:34 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n5caX-000I5z-E1; Thu, 06 Jan 2022 23:54:33 +0000
+Date: Fri, 7 Jan 2022 07:54:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mark:kvm/entry-rework 1/5] include/linux/kvm_host.h:434:30: error:
+ use of undeclared identifier 'CALLER_ADDR0'
+Message-ID: <202201070726.gjZvQM6R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,18 +44,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Thanks for the feedback, Nathan.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
+head:   8d884276f428cde5dbdcf197ba94ed5b2461c4c1
+commit: 0515c622963b34a5fc0aeee6dbd18f47b7e40563 [1/5] kvm: add exit_to_guest_mode() and enter_from_guest_mode()
+config: s390-alldefconfig (https://download.01.org/0day-ci/archive/20220107/202201070726.gjZvQM6R-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=0515c622963b34a5fc0aeee6dbd18f47b7e40563
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark kvm/entry-rework
+        git checkout 0515c622963b34a5fc0aeee6dbd18f47b7e40563
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
 
-> For the future, I recommend putting the maintainers in the "To" field,
-> rather than "Cc", to ensure they actually see it. Additionally, I see
-> some small nits in the commit message that the tip maintainers might
-> comment on, see
-> 
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
-> 
-Thanks for the link, I missed that one. What were the nits apparent to you
-in the commit message?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sam.
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:35:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:35:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:35:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+>> include/linux/kvm_host.h:434:30: error: use of undeclared identifier 'CALLER_ADDR0'
+           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+                                       ^
+   include/linux/kvm_host.h:438:22: error: use of undeclared identifier 'CALLER_ADDR0'
+           lockdep_hardirqs_on(CALLER_ADDR0);
+                               ^
+   include/linux/kvm_host.h:502:23: error: use of undeclared identifier 'CALLER_ADDR0'
+           lockdep_hardirqs_off(CALLER_ADDR0);
+                                ^
+   12 warnings and 3 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1197: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/CALLER_ADDR0 +434 include/linux/kvm_host.h
+
+   413	
+   414	/**
+   415	 * exit_to_guest_mode - Fixup state when exiting to guest mode
+   416	 *
+   417	 * This is analagous to exit_to_user_mode(), and ensures we perform the
+   418	 * following in order:
+   419	 *
+   420	 * 1) Trace interrupts on state
+   421	 * 2) Invoke context tracking if enabled to adjust RCU state
+   422	 * 3) Tell lockdep that interrupts are enabled
+   423	 *
+   424	 * Invoked from architecture specific code as the last step before entering a
+   425	 * guest. Must be invoked with interrupts disabled and the caller must be
+   426	 * non-instrumentable.
+   427	 *
+   428	 * This must be called after guest_timing_enter_irqoff().
+   429	 */
+   430	static __always_inline void exit_to_guest_mode(void)
+   431	{
+   432		instrumentation_begin();
+   433		trace_hardirqs_on_prepare();
+ > 434		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+   435		instrumentation_end();
+   436	
+   437		guest_context_enter_irqoff();
+   438		lockdep_hardirqs_on(CALLER_ADDR0);
+   439	}
+   440	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
