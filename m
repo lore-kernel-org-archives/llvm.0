@@ -1,143 +1,87 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8322CA3
-	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 06:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641449234; x=1672985234;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7AkrZf7HriC31XhCU+7euIHqwBZbtNb8QCpPnoeBj8s=;
-  b=mCFbcY3xn8M82v3Y9bEtI/ey/FTrdx/7xTx9zaPD9b+UZldgqway8VO0
-   32lqKPEJJ+ZH7oSJIMhOTSECa3XRufMKrlYOzGtgPAibgqjkcuNjNgtDX
-   OoJoSs0d2Ih5NTxwz91ant0HDZlHMxVUph6E1qdlZDgX6x8wCSt76xxcb
-   to5eWdt85grjrNR+SAVb8GFriFT/YELoi6wEc5LHNO8Gz1mnZxpbe+Lfs
-   HWbvTavGDFSI/MvgDWJAOni7JnlnlwPiko06liiJXESIM/namVb6r5KHe
-   edOFrS4NwwLmqVReseAueJaBq7QzOTBa5fP1RWobtvy0yPFK40qt5WKzI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="240145322"
-X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="240145322"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 22:07:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="472770884"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Jan 2022 22:07:07 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5LvX-000HOd-25; Thu, 06 Jan 2022 06:07:07 +0000
-Date: Thu, 6 Jan 2022 14:06:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Brian Silverman <brian.silverman@bluerivertech.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA
- devices
-Message-ID: <202201061251.9fCLutdh-lkp@intel.com>
-References: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECE7168
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 06:25:12 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id x194so1755419pgx.4
+        for <llvm@lists.linux.dev>; Wed, 05 Jan 2022 22:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lJpNPWZbNxA6hjcR5adyIR3AyFHec39t6NTKjP75kD0=;
+        b=ih4/ZHixgiiP8sfoqrZeTYEItZ2rUUhJEaElVwE21+BvDJJaayvcAt8PMTcR8thCXH
+         qJITdYvB1B1MEh67ZdsV/UDDztEa2IRGvDwxLBb8DGWGIiUbeIr4TZfreHcWBX2C0leo
+         I38Ep0uh+4b3sl8ZtTPU5Wefe+ApdKKZMU2GL9Ae5D/HzkRNpG1f6ZP3i2YgWVpmbP4h
+         wpGF2ttGseoXMFdq+RL06iN9PPJrdzbjQtymstX5p+hQJwPOnKXjrwmYR3xZCGkIHCQf
+         PWcOducPqBGl6EbqH5ir4Opj8mPzmTV+/r29nVBWa8DscrimLmWHAtOnArBTLiWQslyZ
+         WToA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lJpNPWZbNxA6hjcR5adyIR3AyFHec39t6NTKjP75kD0=;
+        b=fiKdI24xFsYCXnB0C2WRLSncF5yMDWbKcmOGmG4iumeXvGYGyH9TVRNLqRKYXwpgoq
+         r78Fc42zDq+I2G/ex6DBWXi7lmr0y2m+ZrdJ+NUdBuoAB9N60ogx+Pe49Fl3poBLUyn0
+         pTjvyX7O1nBucLGZbfYuFDodIBoSIJiJytZRAyzBwBtBB8DqptaG2zlDhNRbe/gfdV3J
+         +vPCi0t/ZGThTEYB4wIIehCxqZAOBq/PBzxfynejQd5U2MXPBVePYrBHzq55oBsnDDv6
+         8B9yJ4lFYB+xhcGuIL1TeU8yh6JcZPptEV+upprVij5eYQWt7Jub0A48VjVtswwBrp9n
+         zMrA==
+X-Gm-Message-State: AOAM532WmTGCRAqRmwJzR++Y/8c8aW3hbzKbuNKh0/GPicmB9IT2ukEo
+	G9l2iKFLhgjnomZ8ei4U4S0=
+X-Google-Smtp-Source: ABdhPJy26nZrNTcpuyuraN+LWje2VVKmMlB5uMW4T//o5qWordaPb+KlHt5kkJ+r1dMbf6LxO69nQA==
+X-Received: by 2002:a63:751b:: with SMTP id q27mr51270111pgc.184.1641450311864;
+        Wed, 05 Jan 2022 22:25:11 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id z18sm1103889pfe.146.2022.01.05.22.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 22:25:11 -0800 (PST)
+From: xu xin <cgel.zte@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To: alexandr.lobakin@intel.com
+Cc: cgel.zte@gmail.com,
+	ndesaulniers@google.com,
+	keescook@chromium.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nathan@kernel.org,
+	torvalds@linux-foundation.org,
+	xu.xin16@zte.com.cn
+Subject: Re: [PATCH linux-next] tools: compiler-gcc.h: Keep compatible with older GCC versions
+Date: Thu,  6 Jan 2022 06:25:08 +0000
+Message-Id: <20220106062508.619587-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220103144635.5952-1-alexandr.lobakin@intel.com>
+References: <20220103144635.5952-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Brian,
+> GNU C    5.1
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on mkl-can-next/testing]
-[also build test ERROR on v5.16-rc8 next-20220105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> This applies to both HOSTCC and CC.
 
-url:    https://github.com/0day-ci/linux/commits/Brian-Silverman/can-m_can-Add-driver-for-M_CAN-hardware-in-NVIDIA-devices/20220106-082838
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-config: i386-randconfig-a012-20220105
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3c5bcd8d6834eb3e2ac215c9aa35b662aca84aac
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Brian-Silverman/can-m_can-Add-driver-for-M_CAN-hardware-in-NVIDIA-devices/20220106-082838
-        git checkout 3c5bcd8d6834eb3e2ac215c9aa35b662aca84aac
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386  randconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=i386 
+> > Undefined __has_attribute as we built the whole kernel and tools.
+> > 
+> > To solve this, this patch is given to keep the compatibility with older
+> > GCC versions.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, but I think this error is a little unfriendly to users using a 
+lower version of host GCC when cross compiling. 
 
-All errors (new ones prefixed by >>):
+Perhaps "#if gcc_version > = 51000" could be added to avoid the error 
+'Undefined __has_attribute' 
 
->> drivers/net/can/m_can/Kconfig:29: syntax error
-   drivers/net/can/m_can/Kconfig:28: unknown statement "---help---"
-   drivers/net/can/m_can/Kconfig:29:warning: ignoring unsupported character ','
-   drivers/net/can/m_can/Kconfig:29: unknown statement "Say"
-   drivers/net/can/m_can/Kconfig:30:warning: ignoring unsupported character '.'
-   drivers/net/can/m_can/Kconfig:30: unknown statement "with"
-   drivers/net/can/m_can/Kconfig:31:warning: ignoring unsupported character '/'
-   drivers/net/can/m_can/Kconfig:31: unknown statement "This"
-   drivers/net/can/m_can/Kconfig:32: unknown statement "controller"
-   drivers/net/can/m_can/Kconfig:33:warning: ignoring unsupported character '.'
-   drivers/net/can/m_can/Kconfig:33: unknown statement "processor"
-   make[2]: *** [scripts/kconfig/Makefile:77: oldconfig] Error 1
-   make[1]: *** [Makefile:619: oldconfig] Error 2
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'oldconfig' not remade because of errors.
---
->> drivers/net/can/m_can/Kconfig:29: syntax error
-   drivers/net/can/m_can/Kconfig:28: unknown statement "---help---"
-   drivers/net/can/m_can/Kconfig:29:warning: ignoring unsupported character ','
-   drivers/net/can/m_can/Kconfig:29: unknown statement "Say"
-   drivers/net/can/m_can/Kconfig:30:warning: ignoring unsupported character '.'
-   drivers/net/can/m_can/Kconfig:30: unknown statement "with"
-   drivers/net/can/m_can/Kconfig:31:warning: ignoring unsupported character '/'
-   drivers/net/can/m_can/Kconfig:31: unknown statement "This"
-   drivers/net/can/m_can/Kconfig:32: unknown statement "controller"
-   drivers/net/can/m_can/Kconfig:33:warning: ignoring unsupported character '.'
-   drivers/net/can/m_can/Kconfig:33: unknown statement "processor"
-   make[2]: *** [scripts/kconfig/Makefile:77: olddefconfig] Error 1
-   make[1]: *** [Makefile:619: olddefconfig] Error 2
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'olddefconfig' not remade because of errors.
+or we can add `#error "hostcc don't support _has_attribute` to remind
+the user of the cause of the error.
 
+Or just use my previous patch.
 
-vim +29 drivers/net/can/m_can/Kconfig
+I hope we can do something here to promote the situation as Nathan talked
+before:
 
-     9	
-    10	config CAN_M_CAN_PCI
-    11		tristate "Generic PCI Bus based M_CAN driver"
-    12		depends on PCI
-    13		help
-    14		  Say Y here if you want to support Bosch M_CAN controller connected
-    15		  to the pci bus.
-    16	
-    17	config CAN_M_CAN_PLATFORM
-    18		tristate "Bosch M_CAN support for io-mapped devices"
-    19		depends on HAS_IOMEM
-    20		help
-    21		  Say Y here if you want support for IO Mapped Bosch M_CAN controller.
-    22		  This support is for devices that have the Bosch M_CAN controller
-    23		  IP embedded into the device and the IP is IO Mapped to the processor.
-    24	
-    25	config CAN_M_CAN_TEGRA
-    26		tristate "Bosch M_CAN support for io-mapped devices on NVIDIA Tegra"
-    27		depends on HAS_IOMEM
-    28		---help---
-  > 29		  Say Y here if you want support for IO Mapped Bosch M_CAN controller,
-    30		  with additional NVIDIA Tegra-specific glue logic.
-    31		  This support is for Tegra devices that have the Bosch M_CAN/M_TTCAN
-    32			controller IP embedded into the device and the IP is IO Mapped to the
-    33			processor.
-    34	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+https://lore.kernel.org/all/91B93D4D-BEC8-4ACD-B71F-27C54D8B1B78@kernel.org/
