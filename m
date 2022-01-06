@@ -1,241 +1,2428 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A60D2C80;
-	Thu,  6 Jan 2022 21:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641502893; x=1673038893;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MExrm/ErUuEdtAK9P7TMNk3mOSTTZQ4Fo8qfxxOVe5E=;
-  b=AJ7SOiwh9OI44LYoGdIyMtpxvC0ERbqdxlt4ZuL/P76vUKEEUt9BWL+X
-   Floj+Ag/vsfwzVuvnHSfUdskTXQqn+Xjt9fH7b1jDxa4yJJyf2V8bFZMj
-   K/5WIAmOipl5c5pvE+Al4cRWWm3oUUCiHI8+rED+r9g9tswJbtBrs1C5O
-   dg58uLPNlJLLVTKKxxXHYrb/R3rfync/SFvE7hafdKaTqptv5knhs/nu0
-   14lfLmqn1f7pEI5MBQDk6X+uGu9KKVFXbETEnUXBYp+SEA8DHAfFozuIZ
-   qzj5Y9qQfPRQnajs36jYM9GvcDtTbeWJCGhDkZHsmAv74Fde7X/E289Fe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242691678"
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="242691678"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 13:01:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="557044627"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 06 Jan 2022 13:01:30 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5Zt3-000Hxc-CF; Thu, 06 Jan 2022 21:01:29 +0000
-Date: Fri, 7 Jan 2022 05:00:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: "F.A.Sulaiman" <asha.16@itfac.mrt.ac.lk>, gregkh@linuxfoundation.org,
-	fabioaiuto83@gmail.com, marcocesati@gmail.com,
-	dan.carpenter@oracle.com, hdegoede@redhat.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"F.A.Sulaiman" <asha.16@itfac.mrt.ac.lk>,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rtl8723bs: fix memory leak error
-Message-ID: <202201070423.WeoyORXE-lkp@intel.com>
-References: <20220105123447.24674-1-asha.16@itfac.mrt.ac.lk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B132C80
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 21:46:29 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id s1so3737131pga.5
+        for <llvm@lists.linux.dev>; Thu, 06 Jan 2022 13:46:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=DDnKUdqn52I/wpbtWAMqMWbm6rxRvFTtwDC+we+acwQ=;
+        b=ebnpvNODo9PGfEbq9hjxMzPUtvXyrGRBxbbHoJwxnC27eF4qjFU47Fq3Kab3+esl3y
+         cuMaQ9SPsrNw0RVmVIF60ZA0otBd6a6b3mGS/8ClCZ4iQvgMVrn0OZ0Y+IisiZun8JvU
+         MYXBg/zJLz+4dqmGWwEJGPLOodHj2qiPWkZUkxPhB/1xnTIYsb+fMqnF6tJKFFo+lp++
+         5xHMJ0uxyuT2l4Y6Qnj0DPCJT2Ux16f0orl8bQdzxoJZQEUUg+KjsDeASlb8oRaYsDCX
+         N2EEQwbraKzX+4YeeTPUJ1uAkkdpBIpkv+Pzcv0YJJqiD9acdUJffXs5ez5a9GlDuKHo
+         pM3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=DDnKUdqn52I/wpbtWAMqMWbm6rxRvFTtwDC+we+acwQ=;
+        b=euctRsWu6LwKeMNjnh/qqnfBjIHhC5NJEzpeuhLtTGUinFDdoyIHTuC14jN//HtsEF
+         tCxJ2j9JI4DRolIXyEwTc52UwtxgEPRiu5kIclX9l5hvXrg8jXEd1jwUtLFe7qgVE40c
+         9kCEQJulv9HrB3Ol66oRei3fXL4wie+6Wa5fEoezY+XqakJc2Y4YDQ5lmvNIszJ6id4D
+         fPfPccewxxD7erSYo5DSdpw1b9dCpk6nkvQiRloRH0ing2PpUrR9LoZSyxGJIFRtRVVI
+         VvZt+C4UaugeVHpuG6AoREo7avqRG8SgxI/e5txB1R/t8ajRXCs9nnBt2m8kuM4DCq4O
+         rcbg==
+X-Gm-Message-State: AOAM5318hpNKNyAyMdJTzjszZPUuhqcxvhOh1PxnHKFxSdSRGvTFTnhI
+	m/kxlzG29wgJ4eN+l4UhqzDeW7TnladZ8b5+
+X-Google-Smtp-Source: ABdhPJyTdVbdj4TWb85CZXw8p5LyNwwhnStB66T+lda5sU1CMQsAhRZn3eaIlWJW6DkoviU36PdnPA==
+X-Received: by 2002:aa7:928e:0:b0:4ba:fa67:d87 with SMTP id j14-20020aa7928e000000b004bafa670d87mr61775699pfa.41.1641505586917;
+        Thu, 06 Jan 2022 13:46:26 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c24sm2723107pgm.67.2022.01.06.13.46.26
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 13:46:26 -0800 (PST)
+Message-ID: <61d76332.1c69fb81.82540.7538@mx.google.com>
+Date: Thu, 06 Jan 2022 13:46:26 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105123447.24674-1-asha.16@itfac.mrt.ac.lk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20220106
+X-Kernelci-Branch: master
+Subject: next/master build: 226 builds: 18 failed, 208 passed, 215 errors,
+ 63 warnings (next-20220106)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi "F.A.Sulaiman",
+next/master build: 226 builds: 18 failed, 208 passed, 215 errors, 63 warnin=
+gs (next-20220106)
 
-Thank you for the patch! Perhaps something to improve:
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220106/
 
-[auto build test WARNING on staging/staging-testing]
-[also build test WARNING on v5.16-rc8 next-20220106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Tree: next
+Branch: master
+Git Describe: next-20220106
+Git Commit: 3770333b3f8cb7c9110889853afaa49777c26ea7
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-url:    https://github.com/0day-ci/linux/commits/F-A-Sulaiman/rtl8723bs-fix-memory-leak-error/20220105-203752
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 0640d18b15d86ab76275e63f36f5841db5f52e74
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220107/202201070423.WeoyORXE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1a1faafe5fcac0069aad1036ce1757e87ba847d3
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review F-A-Sulaiman/rtl8723bs-fix-memory-leak-error/20220105-203752
-        git checkout 1a1faafe5fcac0069aad1036ce1757e87ba847d3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/staging/rtl8723bs/ fs/xfs/
+Build Failures Detected:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+arm64:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-All warnings (new ones prefixed by >>):
+arm:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_SMP=3Dn: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
->> drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c:421:1: warning: unused label 'release_fw1' [-Wunused-label]
-   release_fw1:
-   ^~~~~~~~~~~~
-   drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c:957:5: warning: variable 'hoffset' set but not used [-Wunused-but-set-variable]
-           u8 hoffset = 0, hworden = 0;
-              ^
-   drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c:1050:5: warning: variable 'hoffset' set but not used [-Wunused-but-set-variable]
-           u8 hoffset = 0, hworden = 0;
-              ^
-   3 warnings generated.
+i386:
+    allmodconfig: (clang-14) FAIL
 
+mips:
+    bigsur_defconfig: (gcc-10) FAIL
+    cavium_octeon_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    sb1250_swarm_defconfig: (gcc-10) FAIL
 
-vim +/release_fw1 +421 drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
+x86_64:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-554c0a3abf216c Hans de Goede  2017-03-29  286  
-554c0a3abf216c Hans de Goede  2017-03-29  287  /*  */
-554c0a3abf216c Hans de Goede  2017-03-29  288  /* 	Description: */
-554c0a3abf216c Hans de Goede  2017-03-29  289  /* 		Download 8192C firmware code. */
-554c0a3abf216c Hans de Goede  2017-03-29  290  /*  */
-554c0a3abf216c Hans de Goede  2017-03-29  291  /*  */
-554c0a3abf216c Hans de Goede  2017-03-29  292  s32 rtl8723b_FirmwareDownload(struct adapter *padapter, bool  bUsedWoWLANFw)
-554c0a3abf216c Hans de Goede  2017-03-29  293  {
-554c0a3abf216c Hans de Goede  2017-03-29  294  	s32 rtStatus = _SUCCESS;
-554c0a3abf216c Hans de Goede  2017-03-29  295  	u8 write_fw = 0;
-554c0a3abf216c Hans de Goede  2017-03-29  296  	unsigned long fwdl_start_time;
-554c0a3abf216c Hans de Goede  2017-03-29  297  	struct hal_com_data *pHalData = GET_HAL_DATA(padapter);
-554c0a3abf216c Hans de Goede  2017-03-29  298  	struct rt_firmware *pFirmware;
-554c0a3abf216c Hans de Goede  2017-03-29  299  	struct rt_firmware *pBTFirmware;
-554c0a3abf216c Hans de Goede  2017-03-29  300  	struct rt_firmware_hdr *pFwHdr = NULL;
-554c0a3abf216c Hans de Goede  2017-03-29  301  	u8 *pFirmwareBuf;
-554c0a3abf216c Hans de Goede  2017-03-29  302  	u32 FirmwareLen;
-554c0a3abf216c Hans de Goede  2017-03-29  303  	const struct firmware *fw;
-554c0a3abf216c Hans de Goede  2017-03-29  304  	struct device *device = dvobj_to_dev(padapter->dvobj);
-554c0a3abf216c Hans de Goede  2017-03-29  305  	u8 *fwfilepath;
-554c0a3abf216c Hans de Goede  2017-03-29  306  	struct dvobj_priv *psdpriv = padapter->dvobj;
-554c0a3abf216c Hans de Goede  2017-03-29  307  	struct debug_priv *pdbgpriv = &psdpriv->drv_dbg;
-554c0a3abf216c Hans de Goede  2017-03-29  308  	u8 tmp_ps;
-554c0a3abf216c Hans de Goede  2017-03-29  309  
-554c0a3abf216c Hans de Goede  2017-03-29  310  	pFirmware = kzalloc(sizeof(struct rt_firmware), GFP_KERNEL);
-7e2b0aaec63351 Larry Finger   2017-04-08  311  	if (!pFirmware)
-7e2b0aaec63351 Larry Finger   2017-04-08  312  		return _FAIL;
-554c0a3abf216c Hans de Goede  2017-03-29  313  	pBTFirmware = kzalloc(sizeof(struct rt_firmware), GFP_KERNEL);
-7e2b0aaec63351 Larry Finger   2017-04-08  314  	if (!pBTFirmware) {
-7e2b0aaec63351 Larry Finger   2017-04-08  315  		kfree(pFirmware);
-7e2b0aaec63351 Larry Finger   2017-04-08  316  		return _FAIL;
-554c0a3abf216c Hans de Goede  2017-03-29  317  	}
-554c0a3abf216c Hans de Goede  2017-03-29  318  	tmp_ps = rtw_read8(padapter, 0xa3);
-554c0a3abf216c Hans de Goede  2017-03-29  319  	tmp_ps &= 0xf8;
-554c0a3abf216c Hans de Goede  2017-03-29  320  	tmp_ps |= 0x02;
-554c0a3abf216c Hans de Goede  2017-03-29  321  	/* 1. write 0xA3[:2:0] = 3b'010 */
-554c0a3abf216c Hans de Goede  2017-03-29  322  	rtw_write8(padapter, 0xa3, tmp_ps);
-554c0a3abf216c Hans de Goede  2017-03-29  323  	/* 2. read power_state = 0xA0[1:0] */
-554c0a3abf216c Hans de Goede  2017-03-29  324  	tmp_ps = rtw_read8(padapter, 0xa0);
-554c0a3abf216c Hans de Goede  2017-03-29  325  	tmp_ps &= 0x03;
-709c8e49b51c37 Fabio Aiuto    2021-04-07  326  	if (tmp_ps != 0x01)
-554c0a3abf216c Hans de Goede  2017-03-29  327  		pdbgpriv->dbg_downloadfw_pwr_state_cnt++;
-554c0a3abf216c Hans de Goede  2017-03-29  328  
-554c0a3abf216c Hans de Goede  2017-03-29  329  	fwfilepath = "rtlwifi/rtl8723bs_nic.bin";
-554c0a3abf216c Hans de Goede  2017-03-29  330  
-b388285205609c Colin Ian King 2017-04-11  331  	pr_info("rtl8723bs: acquire FW from file:%s\n", fwfilepath);
-554c0a3abf216c Hans de Goede  2017-03-29  332  
-554c0a3abf216c Hans de Goede  2017-03-29  333  	rtStatus = request_firmware(&fw, fwfilepath, device);
-554c0a3abf216c Hans de Goede  2017-03-29  334  	if (rtStatus) {
-554c0a3abf216c Hans de Goede  2017-03-29  335  		pr_err("Request firmware failed with error 0x%x\n", rtStatus);
-554c0a3abf216c Hans de Goede  2017-03-29  336  		rtStatus = _FAIL;
-554c0a3abf216c Hans de Goede  2017-03-29  337  		goto exit;
-554c0a3abf216c Hans de Goede  2017-03-29  338  	}
-554c0a3abf216c Hans de Goede  2017-03-29  339  
-554c0a3abf216c Hans de Goede  2017-03-29  340  	if (!fw) {
-554c0a3abf216c Hans de Goede  2017-03-29  341  		pr_err("Firmware %s not available\n", fwfilepath);
-554c0a3abf216c Hans de Goede  2017-03-29  342  		rtStatus = _FAIL;
-554c0a3abf216c Hans de Goede  2017-03-29  343  		goto exit;
-554c0a3abf216c Hans de Goede  2017-03-29  344  	}
-554c0a3abf216c Hans de Goede  2017-03-29  345  
-554c0a3abf216c Hans de Goede  2017-03-29  346  	if (fw->size > FW_8723B_SIZE) {
-554c0a3abf216c Hans de Goede  2017-03-29  347  		rtStatus = _FAIL;
-554c0a3abf216c Hans de Goede  2017-03-29  348  		goto exit;
-554c0a3abf216c Hans de Goede  2017-03-29  349  	}
-554c0a3abf216c Hans de Goede  2017-03-29  350  
-93998817a169c0 Quytelda Kahja 2018-05-22  351  	pFirmware->fw_buffer_sz = kmemdup(fw->data, fw->size, GFP_KERNEL);
-93998817a169c0 Quytelda Kahja 2018-05-22  352  	if (!pFirmware->fw_buffer_sz) {
-554c0a3abf216c Hans de Goede  2017-03-29  353  		rtStatus = _FAIL;
-554c0a3abf216c Hans de Goede  2017-03-29  354  		goto exit;
-554c0a3abf216c Hans de Goede  2017-03-29  355  	}
-554c0a3abf216c Hans de Goede  2017-03-29  356  
-93998817a169c0 Quytelda Kahja 2018-05-22  357  	pFirmware->fw_length = fw->size;
-554c0a3abf216c Hans de Goede  2017-03-29  358  	release_firmware(fw);
-93998817a169c0 Quytelda Kahja 2018-05-22  359  	if (pFirmware->fw_length > FW_8723B_SIZE) {
-554c0a3abf216c Hans de Goede  2017-03-29  360  		rtStatus = _FAIL;
-79df841b435018 Fabio Aiuto    2021-04-15  361  		netdev_emerg(padapter->pnetdev,
-79df841b435018 Fabio Aiuto    2021-04-15  362  			     "Firmware size:%u exceed %u\n",
-79df841b435018 Fabio Aiuto    2021-04-15  363  			     pFirmware->fw_length, FW_8723B_SIZE);
-1a1faafe5fcac0 F.A.Sulaiman   2022-01-05  364  		goto exit;
-554c0a3abf216c Hans de Goede  2017-03-29  365  	}
-554c0a3abf216c Hans de Goede  2017-03-29  366  
-93998817a169c0 Quytelda Kahja 2018-05-22  367  	pFirmwareBuf = pFirmware->fw_buffer_sz;
-93998817a169c0 Quytelda Kahja 2018-05-22  368  	FirmwareLen = pFirmware->fw_length;
-554c0a3abf216c Hans de Goede  2017-03-29  369  
-554c0a3abf216c Hans de Goede  2017-03-29  370  	/*  To Check Fw header. Added by tynli. 2009.12.04. */
-554c0a3abf216c Hans de Goede  2017-03-29  371  	pFwHdr = (struct rt_firmware_hdr *)pFirmwareBuf;
-554c0a3abf216c Hans de Goede  2017-03-29  372  
-699ad73456d6c9 Quytelda Kahja 2018-05-22  373  	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->version);
-699ad73456d6c9 Quytelda Kahja 2018-05-22  374  	pHalData->FirmwareSubVersion = le16_to_cpu(pFwHdr->subversion);
-699ad73456d6c9 Quytelda Kahja 2018-05-22  375  	pHalData->FirmwareSignature = le16_to_cpu(pFwHdr->signature);
-554c0a3abf216c Hans de Goede  2017-03-29  376  
-554c0a3abf216c Hans de Goede  2017-03-29  377  	if (IS_FW_HEADER_EXIST_8723B(pFwHdr)) {
-554c0a3abf216c Hans de Goede  2017-03-29  378  		/*  Shift 32 bytes for FW header */
-554c0a3abf216c Hans de Goede  2017-03-29  379  		pFirmwareBuf = pFirmwareBuf + 32;
-554c0a3abf216c Hans de Goede  2017-03-29  380  		FirmwareLen = FirmwareLen - 32;
-554c0a3abf216c Hans de Goede  2017-03-29  381  	}
-554c0a3abf216c Hans de Goede  2017-03-29  382  
-554c0a3abf216c Hans de Goede  2017-03-29  383  	/*  Suggested by Filen. If 8051 is running in RAM code, driver should inform Fw to reset by itself, */
-554c0a3abf216c Hans de Goede  2017-03-29  384  	/*  or it will cause download Fw fail. 2010.02.01. by tynli. */
-554c0a3abf216c Hans de Goede  2017-03-29  385  	if (rtw_read8(padapter, REG_MCUFWDL) & RAM_DL_SEL) { /* 8051 RAM code */
-554c0a3abf216c Hans de Goede  2017-03-29  386  		rtw_write8(padapter, REG_MCUFWDL, 0x00);
-554c0a3abf216c Hans de Goede  2017-03-29  387  		rtl8723b_FirmwareSelfReset(padapter);
-554c0a3abf216c Hans de Goede  2017-03-29  388  	}
-554c0a3abf216c Hans de Goede  2017-03-29  389  
-554c0a3abf216c Hans de Goede  2017-03-29  390  	_FWDownloadEnable(padapter, true);
-554c0a3abf216c Hans de Goede  2017-03-29  391  	fwdl_start_time = jiffies;
-554c0a3abf216c Hans de Goede  2017-03-29  392  	while (
-554c0a3abf216c Hans de Goede  2017-03-29  393  		!padapter->bDriverStopped &&
-554c0a3abf216c Hans de Goede  2017-03-29  394  		!padapter->bSurpriseRemoved &&
-554c0a3abf216c Hans de Goede  2017-03-29  395  		(write_fw++ < 3 || jiffies_to_msecs(jiffies - fwdl_start_time) < 500)
-554c0a3abf216c Hans de Goede  2017-03-29  396  	) {
-554c0a3abf216c Hans de Goede  2017-03-29  397  		/* reset FWDL chksum */
-554c0a3abf216c Hans de Goede  2017-03-29  398  		rtw_write8(padapter, REG_MCUFWDL, rtw_read8(padapter, REG_MCUFWDL)|FWDL_ChkSum_rpt);
-554c0a3abf216c Hans de Goede  2017-03-29  399  
-554c0a3abf216c Hans de Goede  2017-03-29  400  		rtStatus = _WriteFW(padapter, pFirmwareBuf, FirmwareLen);
-554c0a3abf216c Hans de Goede  2017-03-29  401  		if (rtStatus != _SUCCESS)
-554c0a3abf216c Hans de Goede  2017-03-29  402  			continue;
-554c0a3abf216c Hans de Goede  2017-03-29  403  
-554c0a3abf216c Hans de Goede  2017-03-29  404  		rtStatus = polling_fwdl_chksum(padapter, 5, 50);
-554c0a3abf216c Hans de Goede  2017-03-29  405  		if (rtStatus == _SUCCESS)
-554c0a3abf216c Hans de Goede  2017-03-29  406  			break;
-554c0a3abf216c Hans de Goede  2017-03-29  407  	}
-554c0a3abf216c Hans de Goede  2017-03-29  408  	_FWDownloadEnable(padapter, false);
-554c0a3abf216c Hans de Goede  2017-03-29  409  	if (_SUCCESS != rtStatus)
-554c0a3abf216c Hans de Goede  2017-03-29  410  		goto fwdl_stat;
-554c0a3abf216c Hans de Goede  2017-03-29  411  
-554c0a3abf216c Hans de Goede  2017-03-29  412  	rtStatus = _FWFreeToGo(padapter, 10, 200);
-554c0a3abf216c Hans de Goede  2017-03-29  413  	if (_SUCCESS != rtStatus)
-554c0a3abf216c Hans de Goede  2017-03-29  414  		goto fwdl_stat;
-554c0a3abf216c Hans de Goede  2017-03-29  415  
-554c0a3abf216c Hans de Goede  2017-03-29  416  fwdl_stat:
-554c0a3abf216c Hans de Goede  2017-03-29  417  
-554c0a3abf216c Hans de Goede  2017-03-29  418  exit:
-93998817a169c0 Quytelda Kahja 2018-05-22  419  	kfree(pFirmware->fw_buffer_sz);
-554c0a3abf216c Hans de Goede  2017-03-29  420  	kfree(pFirmware);
-7e2b0aaec63351 Larry Finger   2017-04-08 @421  release_fw1:
-554c0a3abf216c Hans de Goede  2017-03-29  422  	kfree(pBTFirmware);
-554c0a3abf216c Hans de Goede  2017-03-29  423  	return rtStatus;
-554c0a3abf216c Hans de Goede  2017-03-29  424  }
-554c0a3abf216c Hans de Goede  2017-03-29  425  
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+    allmodconfig (gcc-10): 1 error, 1 warning
+    allmodconfig (clang-14): 1 error
+    defconfig (clang-14): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-14): 3 warnings
+
+arm:
+    allmodconfig (clang-14): 5 errors, 16 warnings
+    allmodconfig (gcc-10): 179 errors, 2 warnings
+    aspeed_g5_defconfig (clang-14): 10 warnings
+    at91_dt_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (clang-14): 10 warnings
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 2 warni=
+ngs
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 errors
+    qcom_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+    allmodconfig (clang-14): 11 errors, 1 warning
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 2 warnings
+    bigsur_defconfig (gcc-10): 1 error
+    cavium_octeon_defconfig (gcc-10): 1 error, 1 warning
+    ci20_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 1 error
+    decstation_defconfig (gcc-10): 1 error
+    decstation_r4k_defconfig (gcc-10): 1 error
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    mtx1_defconfig (gcc-10): 3 warnings
+    sb1250_swarm_defconfig (gcc-10): 1 error
+
+riscv:
+
+x86_64:
+    allmodconfig (clang-14): 3 errors, 1 warning
+    allmodconfig (gcc-10): 2 errors
+    x86_64_defconfig (clang-14): 1 warning
+    x86_64_defconfig+debug (gcc-10): 2 warnings
+
+Errors summary:
+
+    3    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of =
+read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sa=
+s_phy' is uninitialized when used here [-Werror,-Wuninitialized]
+    2    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignm=
+ent of read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    irq-gic-v3-its.c:(.text+0x14b8): undefined reference to `cpus_boot=
+ed_once_mask'
+    1    include/asm-generic/div64.h:222:28: error: comparison of distinct =
+pointer types lacks a cast [-Werror]
+    1    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%=
+d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 h=
+as type =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+    1    drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression r=
+equires  'long double' type support, but target 'x86_64-unknown-linux-gnu' =
+does not support it
+    1    drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression r=
+equires  'long double' type support, but target 'x86_64-unknown-linux-gnu' =
+does not support it
+    1    drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression r=
+equires  'long double' type support, but target 'x86_64-unknown-linux-gnu' =
+does not support it
+    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment disc=
+ards =E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3D=
+discarded-qualifiers]
+    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assigning to 'c=
+onst char **' from 'const char *const *' discards qualifiers [-Werror,-Winc=
+ompatible-pointer-types-discards-qualifiers]
+    1    drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1070:2: err=
+or: comparison of distinct pointer types ('typeof ((rtt_avg)) *' (aka 'long=
+ long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Werror,-Wcompare=
+-distinct-pointer-types]
+    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
+ size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-large=
+r-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml2=
+1_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1212) exceeds limit (1024) in 'DIS=
+PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
+ion' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dm=
+l20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1356) exceeds limit (1024) in 'd=
+ml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1564) exceeds limit (1024) in 'dml2=
+0_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml=
+20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCa=
+lculation' [-Werror,-Wframe-larger-than]
+    1    drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of =
+=E2=80=98trace_ata_bmdma_stop=E2=80=99 from incompatible pointer type [-Wer=
+ror=3Dincompatible-pointer-types]
+    1    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limi=
+t (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    1    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14bc): undefined=
+ reference to `cpus_booted_once_mask'
+    1    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly r=
+equires more registers than available
+    1    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least v=
+ersion 4.6 of GCC [-Werror,-W#warnings]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+    1    /tmp/cccSMyIO.s:7953: Error: invalid literal constant: pool needs =
+to be closer
+    1    /tmp/cccSMyIO.s:516: Error: invalid literal constant: pool needs t=
+o be closer
+    1    /tmp/cccSMyIO.s:45396: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:45337: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:45275: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:45180: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:44662: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:44603: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:44541: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:44444: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:44081: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:44022: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:43962: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:43872: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:43647: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:43588: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:43521: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:43421: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42975: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42930: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42683: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42624: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42557: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42457: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:42012: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:41967: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:41308: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:41249: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:41189: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:41099: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40836: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40777: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40715: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40621: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40397: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40338: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40271: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:40173: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39968: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39909: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39847: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39753: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39569: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39510: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39443: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39343: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39099: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:39040: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38980: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38876: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38638: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38579: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38512: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38414: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38154: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38095: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:38028: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37932: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37716: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37657: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37595: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37500: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37302: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37243: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37176: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:37080: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:36902: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:36843: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:36781: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:36685: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:36053: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35994: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35932: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35837: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35658: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35599: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35532: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35436: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35282: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35223: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35157: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:35060: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34915: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34856: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34790: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34693: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34529: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34470: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34403: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34307: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34106: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:34047: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33985: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33889: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33723: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33664: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33597: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33498: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33346: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33287: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33221: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:33124: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32970: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32911: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32849: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32752: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32623: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32564: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32502: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32407: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32251: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32192: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32129: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:32034: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31896: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31837: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31775: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31680: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31539: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31480: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31420: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31331: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31181: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31122: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:31060: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30971: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30876: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30817: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30757: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30668: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30531: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30472: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30410: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30315: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30176: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30117: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:30055: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29966: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29878: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29819: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29759: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29670: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29518: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29459: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29397: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29302: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29195: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29136: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:29076: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28986: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28688: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28628: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28568: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28476: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28403: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28343: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28283: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28193: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28120: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28060: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:28000: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27915: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27843: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27783: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27723: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27639: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27570: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27511: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27451: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:27367: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:25858: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:17767: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:17706: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:13629: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:13529: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:12239: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/cccSMyIO.s:12199: Error: invalid literal constant: pool needs=
+ to be closer
+
+Warnings summary:
+
+    24   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    4    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize th=
+e variable 'sas_phy' to silence this warning
+    3    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    3    cc1: all warnings being treated as errors
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 2 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+    2    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable '=
+sas_phy' is uninitialized when used here [-Wuninitialized]
+    2    1 warning generated.
+    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
+ instruction
+    1    lib/test_printf.c:247: warning: "PTR" redefined
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
+a: call to do_strncpy_from_user() with UACCESS enabled
+    1    drivers/net/ethernet/allwinner/sun4i-emac.c:922:64: warning: forma=
+t =E2=80=98%u=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=
+=99, but argument 4 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=
+=98long long unsigned int=E2=80=99} [-Wformat=3D]
+    1    drivers/net/ethernet/allwinner/sun4i-emac.c:922:53: warning: forma=
+t =E2=80=98%x=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=
+=99, but argument 3 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=
+=98long long unsigned int=E2=80=99} [-Wformat=3D]
+    1    cc1: some warnings being treated as errors
+    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
+hrough to next function startup_64_setup_env()
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    #warning This code requires at least version 4.6 of GCC
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    lib/test_printf.c:247: warning: "PTR" redefined
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-14) =E2=80=94 FAIL, 11 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requir=
+es more registers than available
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy=
+' is uninitialized when used here [-Werror,-Wuninitialized]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml20_DI=
+SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
+tion' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1356) exceeds limit (1024) in 'dml20v=
+2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
+culation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1212) exceeds limit (1024) in 'DISPCLKD=
+PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
+[-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1564) exceeds limit (1024) in 'dml20_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml21_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dml20v2=
+_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
+mismatches
+
+Errors:
+    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment discards =
+=E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3Ddisca=
+rded-qualifiers]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 3 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requir=
+es  'long double' type support, but target 'x86_64-unknown-linux-gnu' does =
+not support it
+    drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requir=
+es  'long double' type support, but target 'x86_64-unknown-linux-gnu' does =
+not support it
+    drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requir=
+es  'long double' type support, but target 'x86_64-unknown-linux-gnu' does =
+not support it
+
+Warnings:
+    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
+h to next function startup_64_setup_env()
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 5 errors, 16 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least versio=
+n 4.6 of GCC [-Werror,-W#warnings]
+    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (10=
+24) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
+ (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-tha=
+n]
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy=
+' is uninitialized when used here [-Werror,-Wuninitialized]
+    drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1070:2: error: c=
+omparison of distinct pointer types ('typeof ((rtt_avg)) *' (aka 'long long=
+ *') and 'uint64_t *' (aka 'unsigned long long *')) [-Werror,-Wcompare-dist=
+inct-pointer-types]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    #warning This code requires at least version 4.6 of GCC
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assigning to 'const =
+char **' from 'const char *const *' discards qualifiers [-Werror,-Wincompat=
+ible-pointer-types-discards-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 179 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    /tmp/cccSMyIO.s:516: Error: invalid literal constant: pool needs to be =
+closer
+    /tmp/cccSMyIO.s:7953: Error: invalid literal constant: pool needs to be=
+ closer
+    /tmp/cccSMyIO.s:12199: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:12239: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:13529: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:13629: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:17706: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:17767: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:25858: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27367: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27451: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27511: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27570: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27639: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27723: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27783: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27843: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:27915: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28000: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28060: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28120: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28193: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28283: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28343: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28403: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28476: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28568: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28628: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28688: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:28986: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29076: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29136: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29195: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29302: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29397: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29459: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29518: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29670: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29759: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29819: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29878: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:29966: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30055: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30117: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30176: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30315: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30410: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30472: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30531: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30668: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30757: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30817: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30876: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:30971: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31060: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31122: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31181: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31331: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31420: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31480: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31539: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31680: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31775: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31837: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:31896: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32034: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32129: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32192: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32251: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32407: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32502: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32564: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32623: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32752: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32849: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32911: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:32970: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33124: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33221: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33287: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33346: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33498: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33597: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33664: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33723: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33889: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:33985: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34047: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34106: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34307: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34403: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34470: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34529: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34693: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34790: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34856: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:34915: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35060: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35157: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35223: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35282: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35436: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35532: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35599: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35658: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35837: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35932: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:35994: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:36053: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:36685: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:36781: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:36843: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:36902: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37080: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37176: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37243: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37302: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37500: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37595: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37657: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37716: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:37932: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38028: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38095: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38154: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38414: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38512: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38579: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38638: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38876: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:38980: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39040: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39099: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39343: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39443: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39510: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39569: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39753: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39847: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39909: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:39968: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40173: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40271: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40338: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40397: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40621: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40715: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40777: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:40836: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:41099: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:41189: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:41249: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:41308: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:41967: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42012: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42457: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42557: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42624: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42683: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42930: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:42975: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:43421: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:43521: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:43588: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:43647: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:43872: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:43962: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:44022: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:44081: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:44444: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:44541: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:44603: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:44662: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:45180: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:45275: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:45337: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/cccSMyIO.s:45396: Error: invalid literal constant: pool needs to b=
+e closer
+    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+    include/asm-generic/div64.h:222:28: error: comparison of distinct point=
+er types lacks a cast [-Werror]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, =
+0 section mismatches
+
+Errors:
+    drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of =E2=
+=80=98trace_ata_bmdma_stop=E2=80=99 from incompatible pointer type [-Werror=
+=3Dincompatible-pointer-types]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings=
+, 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable 'sas_p=
+hy' is uninitialized when used here [-Wuninitialized]
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable 'sas_p=
+hy' is uninitialized when used here [-Wuninitialized]
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 2 warnings, 0 section mismatches
+
+Warnings:
+    drivers/net/ethernet/allwinner/sun4i-emac.c:922:53: warning: format =E2=
+=80=98%x=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, =
+but argument 3 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=98lon=
+g long unsigned int=E2=80=99} [-Wformat=3D]
+    drivers/net/ethernet/allwinner/sun4i-emac.c:922:64: warning: format =E2=
+=80=98%u=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, =
+but argument 4 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=98lon=
+g long unsigned int=E2=80=99} [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0=
+ warnings, 0 section mismatches
+
+Errors:
+    irq-gic-v3-its.c:(.text+0x14b8): undefined reference to `cpus_booted_on=
+ce_mask'
+    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14bc): undefined refe=
+rence to `cpus_booted_once_mask'
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, =
+0 section mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
+ruction
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
+trnlen_user() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+For more info write to <info@kernelci.org>
