@@ -1,2428 +1,575 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B132C80
-	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 21:46:29 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id s1so3737131pga.5
-        for <llvm@lists.linux.dev>; Thu, 06 Jan 2022 13:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=DDnKUdqn52I/wpbtWAMqMWbm6rxRvFTtwDC+we+acwQ=;
-        b=ebnpvNODo9PGfEbq9hjxMzPUtvXyrGRBxbbHoJwxnC27eF4qjFU47Fq3Kab3+esl3y
-         cuMaQ9SPsrNw0RVmVIF60ZA0otBd6a6b3mGS/8ClCZ4iQvgMVrn0OZ0Y+IisiZun8JvU
-         MYXBg/zJLz+4dqmGWwEJGPLOodHj2qiPWkZUkxPhB/1xnTIYsb+fMqnF6tJKFFo+lp++
-         5xHMJ0uxyuT2l4Y6Qnj0DPCJT2Ux16f0orl8bQdzxoJZQEUUg+KjsDeASlb8oRaYsDCX
-         N2EEQwbraKzX+4YeeTPUJ1uAkkdpBIpkv+Pzcv0YJJqiD9acdUJffXs5ez5a9GlDuKHo
-         pM3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=DDnKUdqn52I/wpbtWAMqMWbm6rxRvFTtwDC+we+acwQ=;
-        b=euctRsWu6LwKeMNjnh/qqnfBjIHhC5NJEzpeuhLtTGUinFDdoyIHTuC14jN//HtsEF
-         tCxJ2j9JI4DRolIXyEwTc52UwtxgEPRiu5kIclX9l5hvXrg8jXEd1jwUtLFe7qgVE40c
-         9kCEQJulv9HrB3Ol66oRei3fXL4wie+6Wa5fEoezY+XqakJc2Y4YDQ5lmvNIszJ6id4D
-         fPfPccewxxD7erSYo5DSdpw1b9dCpk6nkvQiRloRH0ing2PpUrR9LoZSyxGJIFRtRVVI
-         VvZt+C4UaugeVHpuG6AoREo7avqRG8SgxI/e5txB1R/t8ajRXCs9nnBt2m8kuM4DCq4O
-         rcbg==
-X-Gm-Message-State: AOAM5318hpNKNyAyMdJTzjszZPUuhqcxvhOh1PxnHKFxSdSRGvTFTnhI
-	m/kxlzG29wgJ4eN+l4UhqzDeW7TnladZ8b5+
-X-Google-Smtp-Source: ABdhPJyTdVbdj4TWb85CZXw8p5LyNwwhnStB66T+lda5sU1CMQsAhRZn3eaIlWJW6DkoviU36PdnPA==
-X-Received: by 2002:aa7:928e:0:b0:4ba:fa67:d87 with SMTP id j14-20020aa7928e000000b004bafa670d87mr61775699pfa.41.1641505586917;
-        Thu, 06 Jan 2022 13:46:26 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c24sm2723107pgm.67.2022.01.06.13.46.26
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 13:46:26 -0800 (PST)
-Message-ID: <61d76332.1c69fb81.82540.7538@mx.google.com>
-Date: Thu, 06 Jan 2022 13:46:26 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19052168
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 22:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641508415; x=1673044415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g0hxPNB8lYSFLH56ZxJAo1cZH2PLI5TOJWjnmA+HpPE=;
+  b=el0HZaZ96f83byP4RYw9+QeOcUwKaOIA1GG2CUwSAG9BZgF5DgcxwD6N
+   /QdnxW+jWT1qvME0l5YL4PaKkXjeH01Cd4MVHmFTyaZLJR9v22vPzOiJC
+   kjjoatFzwUNwmLHMZEnlV1N6zpN/BUoJjrtN6QenqomvlcSlNP5qAUvJC
+   RYF7dbgf/m6/jei+lvxYjBJCD9ia5TLY22ZzZyRHr1eYzjLZ8+uECHRb2
+   ezPS4Edl1ZqzuanDJvXayYZhJZjdiWvIE1pe3unKg8WvshOQFbmMdwx+k
+   78N5t+LR3T0TC8tthP5ZBtDkGUIXbWWhe6eYS3Mv4qzKr7/sBfBDfxP1q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242707490"
+X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
+   d="scan'208";a="242707490"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 14:33:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
+   d="scan'208";a="621674464"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 Jan 2022 14:33:32 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n5bK8-000I2j-5U; Thu, 06 Jan 2022 22:33:32 +0000
+Date: Fri, 7 Jan 2022 06:32:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: trix@redhat.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] netfilter: extend CONFIG_NF_CONNTRACK compile time checks
+Message-ID: <202201070628.TYEi5Ci1-lkp@intel.com>
+References: <20211225173744.3318250-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20220106
-X-Kernelci-Branch: master
-Subject: next/master build: 226 builds: 18 failed, 208 passed, 215 errors,
- 63 warnings (next-20220106)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 226 builds: 18 failed, 208 passed, 215 errors, 63 warnin=
-gs (next-20220106)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220106/
-
-Tree: next
-Branch: master
-Git Describe: next-20220106
-Git Commit: 3770333b3f8cb7c9110889853afaa49777c26ea7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-
-arm:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-    multi_v7_defconfig+CONFIG_SMP=3Dn: (gcc-10) FAIL
-    qcom_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-14) FAIL
-
-mips:
-    bigsur_defconfig: (gcc-10) FAIL
-    cavium_octeon_defconfig: (gcc-10) FAIL
-    decstation_64_defconfig: (gcc-10) FAIL
-    decstation_defconfig: (gcc-10) FAIL
-    decstation_r4k_defconfig: (gcc-10) FAIL
-    ip27_defconfig: (gcc-10) FAIL
-    ip28_defconfig: (gcc-10) FAIL
-    sb1250_swarm_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-    allmodconfig (gcc-10): 1 error, 1 warning
-    allmodconfig (clang-14): 1 error
-    defconfig (clang-14): 3 warnings
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-14): 3 warnings
-
-arm:
-    allmodconfig (clang-14): 5 errors, 16 warnings
-    allmodconfig (gcc-10): 179 errors, 2 warnings
-    aspeed_g5_defconfig (clang-14): 10 warnings
-    at91_dt_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (clang-14): 10 warnings
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 2 warni=
-ngs
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 errors
-    qcom_defconfig (gcc-10): 1 error
-    rpc_defconfig (gcc-10): 2 errors
-
-i386:
-    allmodconfig (clang-14): 11 errors, 1 warning
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 2 warnings
-    bigsur_defconfig (gcc-10): 1 error
-    cavium_octeon_defconfig (gcc-10): 1 error, 1 warning
-    ci20_defconfig (gcc-10): 1 warning
-    decstation_64_defconfig (gcc-10): 1 error
-    decstation_defconfig (gcc-10): 1 error
-    decstation_r4k_defconfig (gcc-10): 1 error
-    fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
-    mtx1_defconfig (gcc-10): 3 warnings
-    sb1250_swarm_defconfig (gcc-10): 1 error
-
-riscv:
-
-x86_64:
-    allmodconfig (clang-14): 3 errors, 1 warning
-    allmodconfig (gcc-10): 2 errors
-    x86_64_defconfig (clang-14): 1 warning
-    x86_64_defconfig+debug (gcc-10): 2 warnings
-
-Errors summary:
-
-    3    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of =
-read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-    2    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sa=
-s_phy' is uninitialized when used here [-Werror,-Wuninitialized]
-    2    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignm=
-ent of read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
-:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
-irectory
-    1    irq-gic-v3-its.c:(.text+0x14b8): undefined reference to `cpus_boot=
-ed_once_mask'
-    1    include/asm-generic/div64.h:222:28: error: comparison of distinct =
-pointer types lacks a cast [-Werror]
-    1    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%=
-d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 h=
-as type =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
-    1    drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression r=
-equires  'long double' type support, but target 'x86_64-unknown-linux-gnu' =
-does not support it
-    1    drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression r=
-equires  'long double' type support, but target 'x86_64-unknown-linux-gnu' =
-does not support it
-    1    drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression r=
-equires  'long double' type support, but target 'x86_64-unknown-linux-gnu' =
-does not support it
-    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment disc=
-ards =E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3D=
-discarded-qualifiers]
-    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assigning to 'c=
-onst char **' from 'const char *const *' discards qualifiers [-Werror,-Winc=
-ompatible-pointer-types-discards-qualifiers]
-    1    drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1070:2: err=
-or: comparison of distinct pointer types ('typeof ((rtt_avg)) *' (aka 'long=
- long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Werror,-Wcompare=
--distinct-pointer-types]
-    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
- size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-large=
-r-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
-calc_31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in 'd=
-ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
-calc_30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in 'd=
-ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
-calc_21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'd=
-ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
-a_21.c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml2=
-1_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
-a_21.c:1466:13: error: stack frame size (1212) exceeds limit (1024) in 'DIS=
-PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
-ion' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dm=
-l20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20v2.c:1145:13: error: stack frame size (1356) exceeds limit (1024) in 'd=
-ml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
-ceCalculation' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20.c:3286:6: error: stack frame size (1564) exceeds limit (1024) in 'dml2=
-0_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20.c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml=
-20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCa=
-lculation' [-Werror,-Wframe-larger-than]
-    1    drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of =
-=E2=80=98trace_ata_bmdma_stop=E2=80=99 from incompatible pointer type [-Wer=
-ror=3Dincompatible-pointer-types]
-    1    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limi=
-t (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-    1    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14bc): undefined=
- reference to `cpus_booted_once_mask'
-    1    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly r=
-equires more registers than available
-    1    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least v=
-ersion 4.6 of GCC [-Werror,-W#warnings]
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
-efined reference to `drm_panel_dp_aux_backlight'
-    1    /tmp/cccSMyIO.s:7953: Error: invalid literal constant: pool needs =
-to be closer
-    1    /tmp/cccSMyIO.s:516: Error: invalid literal constant: pool needs t=
-o be closer
-    1    /tmp/cccSMyIO.s:45396: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:45337: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:45275: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:45180: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:44662: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:44603: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:44541: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:44444: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:44081: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:44022: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:43962: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:43872: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:43647: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:43588: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:43521: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:43421: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42975: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42930: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42683: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42624: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42557: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42457: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:42012: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:41967: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:41308: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:41249: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:41189: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:41099: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40836: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40777: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40715: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40621: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40397: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40338: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40271: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:40173: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39968: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39909: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39847: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39753: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39569: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39510: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39443: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39343: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39099: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:39040: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38980: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38876: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38638: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38579: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38512: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38414: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38154: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38095: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:38028: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37932: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37716: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37657: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37595: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37500: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37302: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37243: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37176: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:37080: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:36902: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:36843: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:36781: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:36685: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:36053: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35994: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35932: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35837: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35658: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35599: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35532: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35436: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35282: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35223: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35157: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:35060: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34915: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34856: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34790: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34693: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34529: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34470: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34403: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34307: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34106: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:34047: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33985: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33889: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33723: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33664: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33597: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33498: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33346: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33287: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33221: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:33124: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32970: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32911: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32849: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32752: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32623: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32564: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32502: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32407: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32251: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32192: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32129: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:32034: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31896: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31837: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31775: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31680: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31539: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31480: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31420: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31331: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31181: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31122: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:31060: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30971: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30876: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30817: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30757: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30668: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30531: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30472: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30410: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30315: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30176: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30117: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:30055: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29966: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29878: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29819: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29759: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29670: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29518: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29459: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29397: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29302: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29195: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29136: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:29076: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28986: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28688: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28628: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28568: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28476: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28403: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28343: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28283: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28193: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28120: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28060: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:28000: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27915: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27843: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27783: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27723: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27639: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27570: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27511: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27451: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:27367: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:25858: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:17767: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:17706: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:13629: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:13529: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:12239: Error: invalid literal constant: pool needs=
- to be closer
-    1    /tmp/cccSMyIO.s:12199: Error: invalid literal constant: pool needs=
- to be closer
-
-Warnings summary:
-
-    24   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    4    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize th=
-e variable 'sas_phy' to silence this warning
-    3    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
-    3    cc1: all warnings being treated as errors
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    2    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=
-=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 2 has t=
-ype =E2=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
-    2    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable '=
-sas_phy' is uninitialized when used here [-Wuninitialized]
-    2    1 warning generated.
-    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
- instruction
-    1    lib/test_printf.c:247: warning: "PTR" redefined
-    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
- do_strnlen_user() with UACCESS enabled
-    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
-a: call to do_strncpy_from_user() with UACCESS enabled
-    1    drivers/net/ethernet/allwinner/sun4i-emac.c:922:64: warning: forma=
-t =E2=80=98%u=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=
-=99, but argument 4 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=
-=98long long unsigned int=E2=80=99} [-Wformat=3D]
-    1    drivers/net/ethernet/allwinner/sun4i-emac.c:922:53: warning: forma=
-t =E2=80=98%x=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=
-=99, but argument 3 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=
-=98long long unsigned int=E2=80=99} [-Wformat=3D]
-    1    cc1: some warnings being treated as errors
-    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
-hrough to next function startup_64_setup_env()
-    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
-_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
-ld not have leading "0x"
-    1    #warning This code requires at least version 4.6 of GCC
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-    lib/test_printf.c:247: warning: "PTR" redefined
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-14) =E2=80=94 FAIL, 11 errors, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requir=
-es more registers than available
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy=
-' is uninitialized when used here [-Werror,-Wuninitialized]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
-21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'dml_rq=
-_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
-30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in 'dml_rq=
-_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
-31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in 'dml_rq=
-_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
-c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml20_DI=
-SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
-tion' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
-2.c:1145:13: error: stack frame size (1356) exceeds limit (1024) in 'dml20v=
-2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
-culation' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
-c:1466:13: error: stack frame size (1212) exceeds limit (1024) in 'DISPCLKD=
-PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
-[-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
-c:3286:6: error: stack frame size (1564) exceeds limit (1024) in 'dml20_Mod=
-eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
-c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml21_Mod=
-eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
-2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dml20v2=
-_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-
-Warnings:
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
-iable 'sas_phy' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
-mismatches
-
-Errors:
-    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment discards =
-=E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3Ddisca=
-rded-qualifiers]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 3 errors, 1 warning, 0 sect=
-ion mismatches
-
-Errors:
-    drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requir=
-es  'long double' type support, but target 'x86_64-unknown-linux-gnu' does =
-not support it
-    drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requir=
-es  'long double' type support, but target 'x86_64-unknown-linux-gnu' does =
-not support it
-    drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requir=
-es  'long double' type support, but target 'x86_64-unknown-linux-gnu' does =
-not support it
-
-Warnings:
-    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
-h to next function startup_64_setup_env()
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-14) =E2=80=94 FAIL, 5 errors, 16 warnings, 0 secti=
-on mismatches
-
-Errors:
-    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least versio=
-n 4.6 of GCC [-Werror,-W#warnings]
-    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (10=
-24) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
- (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-tha=
-n]
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy=
-' is uninitialized when used here [-Werror,-Wuninitialized]
-    drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1070:2: error: c=
-omparison of distinct pointer types ('typeof ((rtt_avg)) *' (aka 'long long=
- *') and 'uint64_t *' (aka 'unsigned long long *')) [-Werror,-Wcompare-dist=
-inct-pointer-types]
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    #warning This code requires at least version 4.6 of GCC
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
-iable 'sas_phy' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assigning to 'const =
-char **' from 'const char *const *' discards qualifiers [-Werror,-Wincompat=
-ible-pointer-types-discards-qualifiers]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 179 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    /tmp/cccSMyIO.s:516: Error: invalid literal constant: pool needs to be =
-closer
-    /tmp/cccSMyIO.s:7953: Error: invalid literal constant: pool needs to be=
- closer
-    /tmp/cccSMyIO.s:12199: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:12239: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:13529: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:13629: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:17706: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:17767: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:25858: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27367: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27451: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27511: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27570: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27639: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27723: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27783: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27843: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:27915: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28000: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28060: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28120: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28193: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28283: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28343: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28403: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28476: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28568: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28628: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28688: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:28986: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29076: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29136: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29195: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29302: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29397: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29459: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29518: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29670: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29759: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29819: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29878: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:29966: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30055: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30117: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30176: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30315: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30410: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30472: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30531: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30668: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30757: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30817: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30876: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:30971: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31060: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31122: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31181: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31331: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31420: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31480: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31539: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31680: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31775: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31837: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:31896: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32034: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32129: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32192: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32251: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32407: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32502: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32564: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32623: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32752: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32849: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32911: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:32970: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33124: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33221: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33287: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33346: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33498: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33597: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33664: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33723: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33889: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:33985: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34047: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34106: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34307: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34403: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34470: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34529: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34693: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34790: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34856: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:34915: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35060: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35157: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35223: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35282: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35436: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35532: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35599: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35658: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35837: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35932: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:35994: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:36053: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:36685: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:36781: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:36843: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:36902: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37080: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37176: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37243: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37302: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37500: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37595: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37657: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37716: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:37932: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38028: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38095: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38154: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38414: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38512: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38579: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38638: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38876: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:38980: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39040: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39099: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39343: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39443: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39510: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39569: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39753: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39847: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39909: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:39968: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40173: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40271: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40338: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40397: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40621: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40715: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40777: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:40836: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:41099: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:41189: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:41249: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:41308: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:41967: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42012: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42457: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42557: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42624: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42683: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42930: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:42975: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:43421: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:43521: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:43588: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:43647: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:43872: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:43962: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:44022: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:44081: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:44444: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:44541: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:44603: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:44662: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:45180: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:45275: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:45337: Error: invalid literal constant: pool needs to b=
-e closer
-    /tmp/cccSMyIO.s:45396: Error: invalid literal constant: pool needs to b=
-e closer
-    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%d=E2=
-=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 has t=
-ype =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
-    include/asm-generic/div64.h:222:28: error: comparison of distinct point=
-er types lacks a cast [-Werror]
-
-Warnings:
-    cc1: all warnings being treated as errors
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
-expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
-=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
-f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, =
-0 section mismatches
-
-Errors:
-    drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of =E2=
-=80=98trace_ata_bmdma_stop=E2=80=99 from incompatible pointer type [-Werror=
-=3Dincompatible-pointer-types]
-
-Warnings:
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
-ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
-t have leading "0x"
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
- 0 section mismatches
-
-Errors:
-    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings=
-, 0 section mismatches
-
-Errors:
-    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
- mismatches
-
-Warnings:
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable 'sas_p=
-hy' is uninitialized when used here [-Wuninitialized]
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
-iable 'sas_phy' to silence this warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
-rors, 3 warnings, 0 section mismatches
-
-Warnings:
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable 'sas_p=
-hy' is uninitialized when used here [-Wuninitialized]
-    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
-iable 'sas_phy' to silence this warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
-    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
-    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
-expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
-=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
- section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 2 warnings, 0 section mismatches
-
-Warnings:
-    drivers/net/ethernet/allwinner/sun4i-emac.c:922:53: warning: format =E2=
-=80=98%x=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, =
-but argument 3 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=98lon=
-g long unsigned int=E2=80=99} [-Wformat=3D]
-    drivers/net/ethernet/allwinner/sun4i-emac.c:922:64: warning: format =E2=
-=80=98%u=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, =
-but argument 4 has type =E2=80=98resource_size_t=E2=80=99 {aka =E2=80=98lon=
-g long unsigned int=E2=80=99} [-Wformat=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0=
- warnings, 0 section mismatches
-
-Errors:
-    irq-gic-v3-its.c:(.text+0x14b8): undefined reference to `cpus_booted_on=
-ce_mask'
-    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14bc): undefined refe=
-rence to `cpus_booted_once_mask'
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
-d reference to `drm_panel_dp_aux_backlight'
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, =
-0 section mismatches
-
-Errors:
-    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
-f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
-ruction
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
-ll to do_strncpy_from_user() with UACCESS enabled
-    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
-trnlen_user() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211225173744.3318250-1-trix@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on nf-next/master]
+[also build test WARNING on nf/master v5.16-rc8 next-20220105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/trix-redhat-com/netfilter-extend-CONFIG_NF_CONNTRACK-compile-time-checks/20211226-013859
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf-next.git master
+config: riscv-randconfig-c006-20220102 (https://download.01.org/0day-ci/archive/20220107/202201070628.TYEi5Ci1-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 104a827ea6de0cbe0f5faef4407552ede31d165c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/af999786d4f517635dbdb5f6d75e68bdcb5f7cb1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review trix-redhat-com/netfilter-extend-CONFIG_NF_CONNTRACK-compile-time-checks/20211226-013859
+        git checkout af999786d4f517635dbdb5f6d75e68bdcb5f7cb1
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/netfilter/nfnetlink_queue.c:393:23: warning: variable 'nfnl_ct' set but not used [-Wunused-but-set-variable]
+           struct nfnl_ct_hook *nfnl_ct;
+                                ^
+   net/netfilter/nfnetlink_queue.c:1178:23: warning: variable 'nfnl_ct' set but not used [-Wunused-but-set-variable]
+           struct nfnl_ct_hook *nfnl_ct;
+                                ^
+   2 warnings generated.
+
+
+clang-analyzer warnings: (new ones prefixed by >>)
+                          ^
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^~~~~~~~~~
+   drivers/staging/axis-fifo/axis-fifo.c:552:10: note: '?' condition is true
+                   copy = min(words_to_write, WRITE_BUF_SIZE);
+                          ^
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^
+   drivers/staging/axis-fifo/axis-fifo.c:554:7: note: Calling 'copy_from_user'
+                   if (copy_from_user(tmp_buf, buf + copied * sizeof(u32),
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/uaccess.h:191:13: note: Calling 'check_copy_size'
+           if (likely(check_copy_size(to, n, false)))
+                      ^
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   include/linux/thread_info.h:207:15: note: Assuming 'sz' is >= 0
+           if (unlikely(sz >= 0 && sz < bytes)) {
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/thread_info.h:207:15: note: Left side of '&&' is true
+           if (unlikely(sz >= 0 && sz < bytes)) {
+                        ^
+   include/linux/thread_info.h:207:26: note: Assuming 'sz' is < 'bytes', which participates in a condition later
+           if (unlikely(sz >= 0 && sz < bytes)) {
+                                   ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/thread_info.h:207:2: note: Taking true branch
+           if (unlikely(sz >= 0 && sz < bytes)) {
+           ^
+   include/linux/thread_info.h:208:3: note: Taking true branch
+                   if (!__builtin_constant_p(bytes))
+                   ^
+   include/linux/uaccess.h:191:13: note: Returning from 'check_copy_size'
+           if (likely(check_copy_size(to, n, false)))
+                      ^
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   include/linux/uaccess.h:191:2: note: Taking false branch
+           if (likely(check_copy_size(to, n, false)))
+           ^
+   include/linux/uaccess.h:193:2: note: Returning without writing to '*to'
+           return n;
+           ^
+   include/linux/uaccess.h:193:2: note: Returning value (loaded from 'n'), which participates in a condition later
+           return n;
+           ^~~~~~~~
+   drivers/staging/axis-fifo/axis-fifo.c:554:7: note: Returning from 'copy_from_user'
+                   if (copy_from_user(tmp_buf, buf + copied * sizeof(u32),
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/axis-fifo/axis-fifo.c:554:7: note: Assuming the condition is false
+                   if (copy_from_user(tmp_buf, buf + copied * sizeof(u32),
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/axis-fifo/axis-fifo.c:554:3: note: Taking false branch
+                   if (copy_from_user(tmp_buf, buf + copied * sizeof(u32),
+                   ^
+   drivers/staging/axis-fifo/axis-fifo.c:561:8: note: The value 0 is assigned to 'i'
+                   for (i = 0; i < copy; i++)
+                        ^~~~~
+   drivers/staging/axis-fifo/axis-fifo.c:561:15: note: 'i' is < 'copy'
+                   for (i = 0; i < copy; i++)
+                               ^
+   drivers/staging/axis-fifo/axis-fifo.c:561:3: note: Loop condition is true.  Entering loop body
+                   for (i = 0; i < copy; i++)
+                   ^
+   drivers/staging/axis-fifo/axis-fifo.c:562:4: note: 1st function call argument is an uninitialized value
+                           iowrite32(tmp_buf[i], fifo->base_addr +
+                           ^         ~~~~~~~~~~
+   include/asm-generic/io.h:759:19: note: expanded from macro 'iowrite32'
+   #define iowrite32 iowrite32
+                     ^
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+>> net/netfilter/nfnetlink_queue.c:446:2: warning: Value stored to 'nfnl_ct' is never read [clang-analyzer-deadcode.DeadStores]
+           nfnl_ct = rcu_dereference(nfnl_ct_hook);
+           ^
+   net/netfilter/nfnetlink_queue.c:446:2: note: Value stored to 'nfnl_ct' is never read
+   net/netfilter/nfnetlink_queue.c:1202:2: warning: Value stored to 'nfnl_ct' is never read [clang-analyzer-deadcode.DeadStores]
+           nfnl_ct = rcu_dereference(nfnl_ct_hook);
+           ^
+   net/netfilter/nfnetlink_queue.c:1202:2: note: Value stored to 'nfnl_ct' is never read
+   Suppressed 5 warnings (3 in non-user code, 2 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   4 warnings generated.
+   net/netfilter/nfnetlink_log.c:574:45: warning: Access to field 'type' results in a dereference of a null pointer (loaded from field 'dev') [clang-analyzer-core.NullDereference]
+                   if (nla_put_be16(inst->skb, NFULA_HWTYPE, htons(skb->dev->type)) ||
+                                                             ^
+   include/linux/byteorder/generic.h:141:18: note: expanded from macro 'htons'
+   #define htons(x) ___htons(x)
+                    ^        ~
+   include/linux/byteorder/generic.h:135:21: note: expanded from macro '___htons'
+   #define ___htons(x) __cpu_to_be16(x)
+                       ^             ~
+   include/uapi/linux/byteorder/little_endian.h:41:43: note: expanded from macro '__cpu_to_be16'
+   #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
+                                             ^         ~
+   include/uapi/linux/swab.h:105:31: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+                                        ^~
+   net/netfilter/nfnetlink_log.c:466:28: note: '?' condition is false
+                              0, pf, NFNETLINK_V0, htons(inst->group_num));
+                                                   ^
+   include/linux/byteorder/generic.h:141:18: note: expanded from macro 'htons'
+   #define htons(x) ___htons(x)
+                    ^
+   include/linux/byteorder/generic.h:135:21: note: expanded from macro '___htons'
+   #define ___htons(x) __cpu_to_be16(x)
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:41:43: note: expanded from macro '__cpu_to_be16'
+   #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
+                                             ^
+   include/uapi/linux/swab.h:105:3: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+            ^
+   net/netfilter/nfnetlink_log.c:464:8: note: Calling 'nfnl_msg_put'
+           nlh = nfnl_msg_put(inst->skb, 0, 0,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/netfilter/nfnetlink.h:86:8: note: Calling 'nlmsg_put'
+           nlh = nlmsg_put(skb, portid, seq, type, sizeof(struct nfgenmsg), flags);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:917:15: note: Assuming the condition is false
+           if (unlikely(skb_tailroom(skb) < nlmsg_total_size(payload)))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/net/netlink.h:917:2: note: Taking false branch
+           if (unlikely(skb_tailroom(skb) < nlmsg_total_size(payload)))
+           ^
+   include/net/netlink.h:920:2: note: Returning pointer, which participates in a condition later
+           return __nlmsg_put(skb, portid, seq, type, payload, flags);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/netfilter/nfnetlink.h:86:8: note: Returning from 'nlmsg_put'
+           nlh = nlmsg_put(skb, portid, seq, type, sizeof(struct nfgenmsg), flags);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/netfilter/nfnetlink.h:87:6: note: Assuming 'nlh' is non-null, which participates in a condition later
+           if (!nlh)
+               ^~~~
+   include/linux/netfilter/nfnetlink.h:87:2: note: Taking false branch
+           if (!nlh)
+           ^
+   include/linux/netfilter/nfnetlink.h:92:2: note: Returning pointer (loaded from 'nlh'), which participates in a condition later
+           return nlh;
+           ^~~~~~~~~~
+   net/netfilter/nfnetlink_log.c:464:8: note: Returning from 'nfnl_msg_put'
+           nlh = nfnl_msg_put(inst->skb, 0, 0,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nfnetlink_log.c:467:7: note: 'nlh' is non-null
+           if (!nlh)
+                ^~~
+   net/netfilter/nfnetlink_log.c:467:2: note: Taking false branch
+           if (!nlh)
+           ^
+   net/netfilter/nfnetlink_log.c:474:6: note: Assuming the condition is false
+           if (nla_put(inst->skb, NFULA_PACKET_HDR, sizeof(pmsg), &pmsg))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nfnetlink_log.c:474:2: note: Taking false branch
+           if (nla_put(inst->skb, NFULA_PACKET_HDR, sizeof(pmsg), &pmsg))
+           ^
+   net/netfilter/nfnetlink_log.c:477:6: note: Assuming 'prefix' is null
+           if (prefix &&
+               ^~~~~~
+   net/netfilter/nfnetlink_log.c:477:13: note: Left side of '&&' is false
+           if (prefix &&
+                      ^
+   net/netfilter/nfnetlink_log.c:481:6: note: Assuming 'indev' is non-null
+           if (indev) {
+               ^~~~~
+   net/netfilter/nfnetlink_log.c:481:2: note: Taking true branch
+           if (indev) {
+           ^
+   net/netfilter/nfnetlink_log.c:484:6: note: '?' condition is false
+                                    htonl(indev->ifindex)))
+                                    ^
+--
+                                         ^
+   include/linux/container_of.h:17:41: note: expanded from macro 'container_of'
+   #define container_of(ptr, type, member) ({                              \
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c:2190:13: note: Calling 'rt6_nexthop'
+                   nexthop = rt6_nexthop(container_of(dst, struct rt6_info, dst),
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/ip6_route.h:297:6: note: Access to field 'rt6i_flags' results in a dereference of a null pointer (loaded from variable 'rt')
+           if (rt->rt6i_flags & RTF_GATEWAY)
+               ^~
+   net/core/filter.c:1736:2: warning: Null pointer passed as 1st argument to memory set function [clang-analyzer-unix.cstring.NullArg]
+           memset(to, 0, len);
+           ^
+   net/core/filter.c:10286:57: note: Passing value via 3rd parameter 'to'
+           return ____bpf_skb_load_bytes(reuse_kern->skb, offset, to, len);
+                                                                  ^~
+   net/core/filter.c:10286:9: note: Calling '____bpf_skb_load_bytes'
+           return ____bpf_skb_load_bytes(reuse_kern->skb, offset, to, len);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c:1725:15: note: Assuming 'offset' is <= 65535
+           if (unlikely(offset > 0xffff))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1725:2: note: Taking false branch
+           if (unlikely(offset > 0xffff))
+           ^
+   net/core/filter.c:1729:15: note: Assuming 'ptr' is null
+           if (unlikely(!ptr))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1729:2: note: Taking true branch
+           if (unlikely(!ptr))
+           ^
+   net/core/filter.c:1730:3: note: Control jumps to line 1736
+                   goto err_clear;
+                   ^
+   net/core/filter.c:1736:2: note: Null pointer passed as 1st argument to memory set function
+           memset(to, 0, len);
+           ^      ~~
+   net/core/filter.c:1770:2: warning: Null pointer passed as 1st argument to memory set function [clang-analyzer-unix.cstring.NullArg]
+           memset(to, 0, len);
+           ^      ~~
+   net/core/filter.c:1756:15: note: Assuming 'offset' is <= 65535
+           if (unlikely(offset > 0xffff))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1756:2: note: Taking false branch
+           if (unlikely(offset > 0xffff))
+           ^
+   net/core/filter.c:1759:15: note: Assuming field 'skb' is non-null
+           if (unlikely(!ctx->skb))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1759:2: note: Taking false branch
+           if (unlikely(!ctx->skb))
+           ^
+   net/core/filter.c:1763:15: note: Assuming 'ptr' is null
+           if (unlikely(!ptr))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1763:2: note: Taking true branch
+           if (unlikely(!ptr))
+           ^
+   net/core/filter.c:1764:3: note: Control jumps to line 1770
+                   goto err_clear;
+                   ^
+   net/core/filter.c:1770:2: note: Null pointer passed as 1st argument to memory set function
+           memset(to, 0, len);
+           ^      ~~
+   Suppressed 4 warnings (4 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   5 warnings generated.
+   net/netfilter/nfnetlink.c:429:4: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
+                           err = -EINTR;
+                           ^     ~~~~~~
+   net/netfilter/nfnetlink.c:429:4: note: Value stored to 'err' is never read
+                           err = -EINTR;
+                           ^     ~~~~~~
+   net/netfilter/nfnetlink.c:436:3: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
+                   err = 0;
+                   ^     ~
+   net/netfilter/nfnetlink.c:436:3: note: Value stored to 'err' is never read
+                   err = 0;
+                   ^     ~
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+>> net/netfilter/nfnetlink_queue.c:446:2: warning: Value stored to 'nfnl_ct' is never read [clang-analyzer-deadcode.DeadStores]
+           nfnl_ct = rcu_dereference(nfnl_ct_hook);
+           ^
+   net/netfilter/nfnetlink_queue.c:446:2: note: Value stored to 'nfnl_ct' is never read
+   net/netfilter/nfnetlink_queue.c:1202:2: warning: Value stored to 'nfnl_ct' is never read [clang-analyzer-deadcode.DeadStores]
+           nfnl_ct = rcu_dereference(nfnl_ct_hook);
+           ^
+   net/netfilter/nfnetlink_queue.c:1202:2: note: Value stored to 'nfnl_ct' is never read
+   Suppressed 5 warnings (3 in non-user code, 2 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   4 warnings generated.
+   net/netfilter/nfnetlink_log.c:574:45: warning: Access to field 'type' results in a dereference of a null pointer (loaded from field 'dev') [clang-analyzer-core.NullDereference]
+                   if (nla_put_be16(inst->skb, NFULA_HWTYPE, htons(skb->dev->type)) ||
+                                                             ^
+   include/linux/byteorder/generic.h:141:18: note: expanded from macro 'htons'
+   #define htons(x) ___htons(x)
+                    ^        ~
+   include/linux/byteorder/generic.h:135:21: note: expanded from macro '___htons'
+   #define ___htons(x) __cpu_to_be16(x)
+                       ^             ~
+   include/uapi/linux/byteorder/little_endian.h:41:43: note: expanded from macro '__cpu_to_be16'
+   #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
+                                             ^         ~
+   include/uapi/linux/swab.h:105:31: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+                                        ^~
+   net/netfilter/nfnetlink_log.c:466:28: note: '?' condition is false
+                              0, pf, NFNETLINK_V0, htons(inst->group_num));
+                                                   ^
+   include/linux/byteorder/generic.h:141:18: note: expanded from macro 'htons'
+   #define htons(x) ___htons(x)
+                    ^
+   include/linux/byteorder/generic.h:135:21: note: expanded from macro '___htons'
+   #define ___htons(x) __cpu_to_be16(x)
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:41:43: note: expanded from macro '__cpu_to_be16'
+   #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
+                                             ^
+   include/uapi/linux/swab.h:105:3: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+            ^
+   net/netfilter/nfnetlink_log.c:464:8: note: Calling 'nfnl_msg_put'
+           nlh = nfnl_msg_put(inst->skb, 0, 0,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/netfilter/nfnetlink.h:86:8: note: Calling 'nlmsg_put'
+           nlh = nlmsg_put(skb, portid, seq, type, sizeof(struct nfgenmsg), flags);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:917:15: note: Assuming the condition is false
+           if (unlikely(skb_tailroom(skb) < nlmsg_total_size(payload)))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/net/netlink.h:917:2: note: Taking false branch
+           if (unlikely(skb_tailroom(skb) < nlmsg_total_size(payload)))
+           ^
+   include/net/netlink.h:920:2: note: Returning pointer, which participates in a condition later
+           return __nlmsg_put(skb, portid, seq, type, payload, flags);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/netfilter/nfnetlink.h:86:8: note: Returning from 'nlmsg_put'
+           nlh = nlmsg_put(skb, portid, seq, type, sizeof(struct nfgenmsg), flags);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/netfilter/nfnetlink.h:87:6: note: Assuming 'nlh' is non-null, which participates in a condition later
+           if (!nlh)
+               ^~~~
+   include/linux/netfilter/nfnetlink.h:87:2: note: Taking false branch
+           if (!nlh)
+           ^
+   include/linux/netfilter/nfnetlink.h:92:2: note: Returning pointer (loaded from 'nlh'), which participates in a condition later
+           return nlh;
+           ^~~~~~~~~~
+   net/netfilter/nfnetlink_log.c:464:8: note: Returning from 'nfnl_msg_put'
+           nlh = nfnl_msg_put(inst->skb, 0, 0,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nfnetlink_log.c:467:7: note: 'nlh' is non-null
+           if (!nlh)
+                ^~~
+   net/netfilter/nfnetlink_log.c:467:2: note: Taking false branch
+           if (!nlh)
+           ^
+   net/netfilter/nfnetlink_log.c:474:6: note: Assuming the condition is false
+           if (nla_put(inst->skb, NFULA_PACKET_HDR, sizeof(pmsg), &pmsg))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nfnetlink_log.c:474:2: note: Taking false branch
+           if (nla_put(inst->skb, NFULA_PACKET_HDR, sizeof(pmsg), &pmsg))
+           ^
+   net/netfilter/nfnetlink_log.c:477:6: note: Assuming 'prefix' is null
+           if (prefix &&
+               ^~~~~~
+   net/netfilter/nfnetlink_log.c:477:13: note: Left side of '&&' is false
+           if (prefix &&
+                      ^
+   net/netfilter/nfnetlink_log.c:481:6: note: Assuming 'indev' is non-null
+           if (indev) {
+               ^~~~~
+   net/netfilter/nfnetlink_log.c:481:2: note: Taking true branch
+           if (indev) {
+           ^
+   net/netfilter/nfnetlink_log.c:484:6: note: '?' condition is false
+                                    htonl(indev->ifindex)))
+                                    ^
+
+vim +/nfnl_ct +393 net/netfilter/nfnetlink_queue.c
+
+15824ab29f364ab net/netfilter/nfnetlink_queue.c      Stephane Bryant       2016-03-26  373  
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  374  static struct sk_buff *
+7433268783eda21 net/netfilter/nfnetlink_queue_core.c Gao feng              2013-09-23  375  nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+5863702a3421b0d net/netfilter/nfnetlink_queue.c      Eric Dumazet          2011-07-19  376  			   struct nf_queue_entry *entry,
+5863702a3421b0d net/netfilter/nfnetlink_queue.c      Eric Dumazet          2011-07-19  377  			   __be32 **packet_id_ptr)
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  378  {
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  379  	size_t size;
+c5b0db3263b9252 net/netfilter/nfnetlink_queue.c      Florian Westphal      2016-02-18  380  	size_t data_len = 0, cap_len = 0;
+af2806f8f90a150 net/netfilter/nfnetlink_queue_core.c Thomas Graf           2013-12-13  381  	unsigned int hlen = 0;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  382  	struct sk_buff *skb;
+5863702a3421b0d net/netfilter/nfnetlink_queue.c      Eric Dumazet          2011-07-19  383  	struct nlattr *nla;
+5863702a3421b0d net/netfilter/nfnetlink_queue.c      Eric Dumazet          2011-07-19  384  	struct nfqnl_msg_packet_hdr *pmsg;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  385  	struct nlmsghdr *nlh;
+3e4ead4fe5d0d9f net/netfilter/nfnetlink_queue.c      Jesper Juhl           2006-01-05  386  	struct sk_buff *entskb = entry->skb;
+3e4ead4fe5d0d9f net/netfilter/nfnetlink_queue.c      Jesper Juhl           2006-01-05  387  	struct net_device *indev;
+3e4ead4fe5d0d9f net/netfilter/nfnetlink_queue.c      Jesper Juhl           2006-01-05  388  	struct net_device *outdev;
+af999786d4f5176 net/netfilter/nfnetlink_queue.c      Tom Rix               2021-12-25  389  #if IS_ENABLED(CONFIG_NF_CONNTRACK)
+9cb0176654a7dc3 net/netfilter/nfnetlink_queue.c      Pablo Neira Ayuso     2012-06-07  390  	struct nf_conn *ct = NULL;
+b43c2793f5e9910 net/netfilter/nfnetlink_queue.c      Florian Westphal      2021-11-26  391  	enum ip_conntrack_info ctinfo = 0;
+af999786d4f5176 net/netfilter/nfnetlink_queue.c      Tom Rix               2021-12-25  392  #endif
+a4b4766c3cebb40 net/netfilter/nfnetlink_queue.c      Ken-ichirou MATSUZAWA 2015-10-05 @393  	struct nfnl_ct_hook *nfnl_ct;
+496e4ae7dc944fa net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-06-29  394  	bool csum_verify;
+ef493bd930ae482 net/netfilter/nfnetlink_queue_core.c Roman Kubiak          2015-06-12  395  	char *secdata = NULL;
+ef493bd930ae482 net/netfilter/nfnetlink_queue_core.c Roman Kubiak          2015-06-12  396  	u32 seclen = 0;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  397  
+573ce260b385a4d net/netfilter/nfnetlink_queue_core.c Hong zhi guo          2013-03-27  398  	size = nlmsg_total_size(sizeof(struct nfgenmsg))
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  399  		+ nla_total_size(sizeof(struct nfqnl_msg_packet_hdr))
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  400  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  401  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+1109a90c01177e8 net/netfilter/nfnetlink_queue_core.c Pablo Neira Ayuso     2014-10-01  402  #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  403  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  404  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+fbcd923c3e0c8ec net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  405  #endif
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  406  		+ nla_total_size(sizeof(u_int32_t))	/* mark */
+df6fb868d611868 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2007-09-28  407  		+ nla_total_size(sizeof(struct nfqnl_msg_packet_hw))
+7237190df8c4129 net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-04-19  408  		+ nla_total_size(sizeof(u_int32_t))	/* skbinfo */
+ae08ce0021087a5 net/netfilter/nfnetlink_queue_core.c Eric Dumazet          2013-03-17  409  		+ nla_total_size(sizeof(u_int32_t));	/* cap_len */
+ae08ce0021087a5 net/netfilter/nfnetlink_queue_core.c Eric Dumazet          2013-03-17  410  
+2456e855354415b net/netfilter/nfnetlink_queue.c      Thomas Gleixner       2016-12-25  411  	if (entskb->tstamp)
+ae08ce0021087a5 net/netfilter/nfnetlink_queue_core.c Eric Dumazet          2013-03-17  412  		size += nla_total_size(sizeof(struct nfqnl_msg_packet_timestamp));
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  413  
+15824ab29f364ab net/netfilter/nfnetlink_queue.c      Stephane Bryant       2016-03-26  414  	size += nfqnl_get_bridge_size(entry);
+15824ab29f364ab net/netfilter/nfnetlink_queue.c      Stephane Bryant       2016-03-26  415  
+1d1de89b9a4746f net/netfilter/nfnetlink_queue_core.c David S. Miller       2015-04-03  416  	if (entry->state.hook <= NF_INET_FORWARD ||
+1d1de89b9a4746f net/netfilter/nfnetlink_queue_core.c David S. Miller       2015-04-03  417  	   (entry->state.hook == NF_INET_POST_ROUTING && entskb->sk == NULL))
+496e4ae7dc944fa net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-06-29  418  		csum_verify = !skb_csum_unnecessary(entskb);
+496e4ae7dc944fa net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-06-29  419  	else
+496e4ae7dc944fa net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-06-29  420  		csum_verify = false;
+496e4ae7dc944fa net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-06-29  421  
+1d1de89b9a4746f net/netfilter/nfnetlink_queue_core.c David S. Miller       2015-04-03  422  	outdev = entry->state.out;
+3e4ead4fe5d0d9f net/netfilter/nfnetlink_queue.c      Jesper Juhl           2006-01-05  423  
+14cd5d4a0125f64 net/netfilter/nfnetlink_queue.c      Mark Rutland          2017-10-23  424  	switch ((enum nfqnl_config_mode)READ_ONCE(queue->copy_mode)) {
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  425  	case NFQNL_COPY_META:
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  426  	case NFQNL_COPY_NONE:
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  427  		break;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  428  
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  429  	case NFQNL_COPY_PACKET:
+00bd1cc24a7dd29 net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-04-19  430  		if (!(queue->flags & NFQA_CFG_F_GSO) &&
+00bd1cc24a7dd29 net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-04-19  431  		    entskb->ip_summed == CHECKSUM_PARTIAL &&
+c463ac972315a0c net/netfilter/nfnetlink_queue.c      Eric Dumazet          2010-06-09  432  		    skb_checksum_help(entskb))
+e7dfb09a3624a32 net/netfilter/nfnetlink_queue.c      Patrick McHardy       2005-09-06  433  			return NULL;
+c463ac972315a0c net/netfilter/nfnetlink_queue.c      Eric Dumazet          2010-06-09  434  
+14cd5d4a0125f64 net/netfilter/nfnetlink_queue.c      Mark Rutland          2017-10-23  435  		data_len = READ_ONCE(queue->copy_range);
+9cefbbc9c8f9abe net/netfilter/nfnetlink_queue_core.c Florian Westphal      2013-06-04  436  		if (data_len > entskb->len)
+3e4ead4fe5d0d9f net/netfilter/nfnetlink_queue.c      Jesper Juhl           2006-01-05  437  			data_len = entskb->len;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  438  
+af2806f8f90a150 net/netfilter/nfnetlink_queue_core.c Thomas Graf           2013-12-13  439  		hlen = skb_zerocopy_headlen(entskb);
+af2806f8f90a150 net/netfilter/nfnetlink_queue_core.c Thomas Graf           2013-12-13  440  		hlen = min_t(unsigned int, hlen, data_len);
+ae08ce0021087a5 net/netfilter/nfnetlink_queue_core.c Eric Dumazet          2013-03-17  441  		size += sizeof(struct nlattr) + hlen;
+6ee584be3ee30f7 net/netfilter/nfnetlink_queue_core.c Pablo Neira Ayuso     2012-09-24  442  		cap_len = entskb->len;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  443  		break;
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  444  	}
+7af4cc3fa158ff1 net/netfilter/nfnetlink_queue.c      Harald Welte          2005-08-09  445  
+a4b4766c3cebb40 net/netfilter/nfnetlink_queue.c      Ken-ichirou MATSUZAWA 2015-10-05 @446  	nfnl_ct = rcu_dereference(nfnl_ct_hook);
+8e662164abb4a8f net/netfilter/nfnetlink_queue.c      Arnd Bergmann         2015-11-19  447  
 
 ---
-For more info write to <info@kernelci.org>
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
