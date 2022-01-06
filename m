@@ -1,157 +1,177 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB7E173
-	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 06:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C5C173
+	for <llvm@lists.linux.dev>; Thu,  6 Jan 2022 06:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641451690; x=1672987690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gZ+KzonPfA+AjRn0t63liO2/72tGush2C7Tjs/Z9Z6g=;
-  b=WxUdxEhhyXEId0us8W+LtlsR+XCnZHPEW3YuBdsIG/4fBu01aNjevu3Q
-   4PrNJWXFU6glehG9VjRMKZfEhkrNCT3fL26lynHTEZvItQ4TJU3toWCHH
-   J5dmY+3Q2zCWw1rZxRSduemdLx6O2f7WnHVtTdnGSqGHmYPCq4ya2zvuL
-   a45SxlvE3tta1w4+//wOMoypq5xCbT1rs+yA9SFSfA2yfO4RZzJaSy1rn
-   itieYssPohSwS7KOpE3oW3TV0i0dzAghK5FpKTvL97fwDuvpMd5hpSVU0
-   NGIXZmdC7iiypjvpsSFo38NKUXxXtyj7z8HNqJ1IT1fHUk9CUPL0OsKdP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242560392"
+  t=1641452263; x=1672988263;
+  h=subject:to:cc:references:from:message-id:date:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=4uAiPQESJSqbRdbCyGUMv4zNYyFVIwIIuy1nRnGCTW4=;
+  b=kf2QINe0Mp0Ovz1mttpMQ62iw/E7k/lDgbxRpblDJQ5NcriaLobKtthD
+   6/4Ug4MAJXl3fKMgP6spLUPegzSm9GzFDfqWiBrbs2nWaM2OUcjUM5rjN
+   3xLn5qRMhTtDBCudDELBGD+2kkM747uqD/vxqTfGmLsOaRYKijuLds2Zw
+   GaqYDA0V+xr67fh83bwNcUpsTFwaL4AzDNd97CLVCPJxQYA7rRmeA+krO
+   RJnpqcYxqptXkBJ6QxmPl/QHk3RPBF6++SDH35uCmKTDNZIW2Xdgw88Bj
+   YkFz5QHrmuyX0arxPDEys7Paoh18e4q5n33u5qFgZonv+mn5h39hvmlQe
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223289637"
 X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="242560392"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 22:48:09 -0800
+   d="scan'208";a="223289637"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 22:57:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="689297133"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jan 2022 22:48:08 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5MZD-000HQN-U3; Thu, 06 Jan 2022 06:48:07 +0000
-Date: Thu, 6 Jan 2022 14:47:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC 15/16] sched/fair: Account kthread runtime debt for CFS
- bandwidth
-Message-ID: <202201061412.xko6OiVF-lkp@intel.com>
-References: <20220106004656.126790-16-daniel.m.jordan@oracle.com>
+   d="scan'208";a="621425495"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 05 Jan 2022 22:57:31 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 22:57:31 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 5 Jan 2022 22:57:31 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 5 Jan 2022 22:57:30 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jTXv1DEScEWp+ujbY9zqZT450rstB2lCdsMlHDaF0wqH2+I+r1x+wH0owcJlTOcKyGx5iyn9tiCz8GS2xQmq+fGfxYvfz1J/80Tifc9NbJ8KNQNWs8Cj25yEX9W8c9RAqBWD1TJMgZ4YmiDfrMuqGQj9KaUiCUeCLot+KMGl7L5MsAnqjND4h96e2IZcqagbQi3T8HR53kopb2D5g4aW92odQR6L/I5bK9pQRlCQ9Sz2wANW9BKFGSOqdgQmHHcyRs3R3fdtz/r7xVupDaH4zEg8LZ41YhlL1uZX86Fl1v1H4nVQVAYSp7dMqVqH3U6y/ppKsNzhQ/wKVRfXlysTqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tejIBnB/RRN+5RGUMxGXp9kIjwgmuAkJLcCLWXdMAvQ=;
+ b=oShX7Zfbrsib7GYgIo0YJfKOJ96sQuFK8mQ9K8BH88/lb1aQ4nwZAxE3SLtBQl2D9HCe1aCPfz1EHjyHR77rkZAEtVrEIW4eUY64sXFNAfq3UlDvtlRnZZFA6/DZ1VQrl307Z4jCDDis6z8VDNbNQ9TfpiSg0B5q8NKGYiAs1q04VFd0+H89w4LKwcll2mwZEGtnTIfnsFfgTov+IynkejjCQmCy48H3OL7Mi8qtgD3Is2KQL7umwV/zsNQ20yNsBjkOBFJJkoI+nZcQfhyuop6JcBKE+w71GwgWz2lXnldUla84tvlL4waXF55kxgdzFgoS8CasrgmbOhiI2oetOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+ by MWHPR1101MB2206.namprd11.prod.outlook.com (2603:10b6:301:51::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Thu, 6 Jan
+ 2022 06:56:59 +0000
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::99e7:e9ce:ff26:49cb]) by CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::99e7:e9ce:ff26:49cb%7]) with mapi id 15.20.4867.009; Thu, 6 Jan 2022
+ 06:56:59 +0000
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+To: Borislav Petkov <bp@alien8.de>
+CC: Marco Elver <elver@google.com>, Carel Si <beibei.si@intel.com>, "Joerg
+ Roedel" <jroedel@suse.de>, LKML <linux-kernel@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>, "lkp@lists.01.org" <lkp@lists.01.org>, lkp
+	<lkp@intel.com>, "bfields@fieldses.org" <bfields@fieldses.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com> <YbyIJYzqtHPKRMFt@zn.tnic>
+ <20211221143153.GA4676@linux.intel.com>
+ <CANpmjNO4hs1B9eDY9edGGOXY45a8smdtYfYfbDRnGWSYch4wGg@mail.gmail.com>
+ <YcHxKzB3WPurKlZ9@zn.tnic> <a5cb8140-5834-7649-e629-f2775cf5b9a9@intel.com>
+ <YdWCstlEW6k45+hH@zn.tnic> <fa2f7d50-5226-726d-a9ad-2c42cb5c4054@intel.com>
+ <YdW3a3dUfi5pBaiH@zn.tnic>
+From: Yin Fengwei <fengwei.yin@intel.com>
+Message-ID: <0736f5f9-b38f-27e9-58da-b71a596c498e@intel.com>
+Date: Thu, 6 Jan 2022 14:56:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+In-Reply-To: <YdW3a3dUfi5pBaiH@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR06CA0153.apcprd06.prod.outlook.com
+ (2603:1096:1:1f::31) To CO1PR11MB4820.namprd11.prod.outlook.com
+ (2603:10b6:303:6f::8)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106004656.126790-16-daniel.m.jordan@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cfeb92be-849d-4eab-6133-08d9d0e1bc2b
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2206:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <MWHPR1101MB22062AB3BDC978F6E03CD05DEE4C9@MWHPR1101MB2206.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ozw2u3Jt+GIWDyKzZ/+47IzHhVWtLCgPcid086byeGNqpErMxxt41f0ywUHhnAEARLIcYpaRFbz/cR0z3OrrV1XEUBIu/rREmwLDKUhcwniViZ/WpIHL0urWyfxMS1XsusZCQZ+Wde25JSxL3Uz94J/oF+59/RfPyPiyMyViNAvIaWq1YavDbTjRwp5K4LM5gjmkXJJ30L78TeTTwcwMf2Z0Afm0xEukpnvhfHCa1nGWoGxrOPvQKtZqGzTklb5wLMwu1sPuqQL5qYvlThDtMSLUc6YA/7i73d4OCFv/2J77bKiCcUVYxJwYZ0CK7wyy/t8F0c6h4einF9m7dkGhqJ33+1bNtV2FJ1J3bigNsJjdc4CdtIiT3zm77W/DeWV9rUbWej1mJUXRQid78L0xsmgvkjzmKOtLSSASL+bxH4VcV8REXmdXci7xNVgFv8qn1x0Gz/VlNJ8xsF9t62OpA1STKKcnVBMSfcs9p1r/x0M6l4QBrZPlzBi7CRdd0okL5x+m5ME0Sey9NU7+DdVcD1btywK1uiB+IZr9+pintvbNU6fP3Q+C0WdLA5Pdeh4suQBrNynrqoeO/kYKqbu/SZ8HeE+SWqbkVJiJS97sckiJ06+sI3V2g7QkUi3pgBKYu4T8Yob6kT8DeAEZiPsbz2+uY0HZ4TThVqFX4yT1Nt1v/Met6fXaG/4rK6BenReX7YlcXJW1nH+hgCv2ruyD0Gmw7G1kTKvRwCM7Pbsg5Z49SE4LoN2NK90an8hcd/n0lMmTXIESYPrmpY8oVoqRL/yxXd0/E3gwhAqK1GxpKtXcfLW4Klkih6Ej4jc1SynN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(6512007)(26005)(86362001)(186003)(54906003)(82960400001)(53546011)(6506007)(5660300002)(36756003)(508600001)(316002)(2616005)(4744005)(8676002)(6916009)(31686004)(8936002)(966005)(6486002)(6666004)(66946007)(66556008)(66476007)(2906002)(4326008)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U2VPWnBVSEZzdFBJU3NEYmx3akI1UXYxc1d4Tzg1NWpCY05zQTA3WUVNR21j?=
+ =?utf-8?B?Wm1kOFFwT3JxZUtwUzIvUlp5TEFWcHVDcnlZbWtvTG5Xajc4QXlHbUlDM3lw?=
+ =?utf-8?B?K2pBUU5YdXBHL3dsQzdFZk5wZFhvTHc5K3BvUVNEaGkwZHBQSWJBZ1VsZWxt?=
+ =?utf-8?B?SGkyZlhJVmp1SExGVDA2dlFPbEttdDNKWHpiY0xxVWgxN0dzTVRxOTlmZ3BY?=
+ =?utf-8?B?OEV5R3ZKLzFEcmlPOG93RkpVd3psaXM1OFphZ3pFaUtER3J3dWNsQmZSY3I3?=
+ =?utf-8?B?eEVCNHJZUHBRdVByK3RnUjFuMDY4L3F5N2F5b1ZiaXlFejF1VFRMdDVDRkxZ?=
+ =?utf-8?B?TVQraUF0MUxMaXhScUFOVk5na3ZNaFBvZisxMCtjcVJtN2k0MnZ1azlOT0lw?=
+ =?utf-8?B?MjdIbzNqbXVodjdCakJ6L1dBT2F2QWJ6dTJYTXVITjdPcjJOY25vbTdEVDlm?=
+ =?utf-8?B?b3BnV2pEa1Bnbm1qVUtySXJuaTlQNUQ0KzNzSDhOdDdIaW0wUEZTT09Fd3lG?=
+ =?utf-8?B?cGtCUThubTlSeG9xZTNRaUo4NWpZQlpWd2F3QjUySno0aHdpdXc4U3hsRGV2?=
+ =?utf-8?B?L3FGUGVPY2NUQkVuK00zQVVXK2FDYlRxVnRhVXFJd0pvemVXR2Z6TjhMWGh0?=
+ =?utf-8?B?aXNGRVo5dmhlZk1vYm9XN3hPT3RSUEwyaEhOUjBJcEJ2L3MyNFFkQjZXN3Mr?=
+ =?utf-8?B?MnhuWWQvZWtJK0tjcnIzZGtJV2xVMnJYQlVYdjNveVkrNDVtdkE2OHg5TTUr?=
+ =?utf-8?B?UXBmRmFsSDI4ajdxL1NCeWcvUVUvV0RRdG53T0RlbFhOcXVRTjg2NTAxK29N?=
+ =?utf-8?B?dEVPblo3WTRNZnpUSENLZE5FUWV3Z09ETlJjUkdFZkxPaFZZcmVlWGh5NDUz?=
+ =?utf-8?B?VElTak9ZdFZuSGpBMXBtZ3RJaXlvZVRTUzNBUFVBcHI5NzlLczBnUGxGRjB3?=
+ =?utf-8?B?anUrNE9yRmZHc1luR2ZEVVg1b29YY1E3SGNYeE9uczROYkpVTUJjNTlLbk9S?=
+ =?utf-8?B?ay9nQW1jU3cyakZnajJMdC9XbmtJUEFOU1dPd212WmliRllmT2hZM3FrZE0y?=
+ =?utf-8?B?bEdpNml0M2tIYVhTRGFOL2pjaFR1OXIzaXdiaFRFL0pCZnE1L0V3MWN5TWZS?=
+ =?utf-8?B?QzV0b1NEMWNYbVJBcTdWQmN0M2x1NklHSlJoMFlzcjlNeEVvRHU4dEgxKzVV?=
+ =?utf-8?B?OXJHMUZpdE1STFlmamhJbFJUcVYzUjVUK3FaUUsyQ2xvcVpQaVJKaDMvaFBl?=
+ =?utf-8?B?L25RM3NmbEkwQmVveU01R2E3VHRRNHo3bi96ZXZ4S2xxdnA1RFB2cXI5bXAr?=
+ =?utf-8?B?VzA1WmZIN2FuN29rZWhjcTlLdDl5eFRZVDBmeGhPUytFbmY5VjNZSkN0RHg2?=
+ =?utf-8?B?VDdObVhiL0pTbENxTkxDdTBGbDh2ZTR6d21rd2FnazdQM2EwZmV5d25uU2hw?=
+ =?utf-8?B?TUw5Q1NUVWNEbG5OeVJpc3hXM1h2Q0pkc080eXZOcGlONlV0NnpzeXBBdjRk?=
+ =?utf-8?B?VnlzNWtNY1laaUhxWG9aM1FBVWJ5NFhtZnovZ2JBTExzZURmZjZ3YmlaRkxu?=
+ =?utf-8?B?ZW0yMWV4a2FTUjFmR2VzY0ZZb0JPVk8wcU1mdHlvZ2FqdVZMQXFEQTlSUUpQ?=
+ =?utf-8?B?VFZEc3lUQkE1OERVRG5LVUQxMndtNzJqcGlIV0FHbnhpVHZFWFExUVRQaVRG?=
+ =?utf-8?B?U0IxWktqYk9TbzZkSnIzVFpSSGhpQVp1ZE1uQnR1dUdPRzdRY1d6U0xxVDNw?=
+ =?utf-8?B?VjRTKzFzZEhaamZib3E3aGh0aldzbEd2emx3NVRpRmZwYTlXZWR5TmhySml3?=
+ =?utf-8?B?ODRPM1VlbVpPMnFzVGVpUE9Da1Npd1l2YTZrZER1UDVvbHRsVnVBc3Y0SEVh?=
+ =?utf-8?B?VVhhYlNkRkNoMmROVmU2U2hOVkc0SU5zOEZ3SVBtTmp2akNGTHRRTzgxU244?=
+ =?utf-8?B?bFNWelplaGRTR3ZCSWd3MEdlUmwyemdNTGlqZHpDcVdpQnI5eVN2cm5CQmJs?=
+ =?utf-8?B?RnQ0em9lWXpSVkRUUGRtWHcreHlaQ09aMVREZEU3d3dLYVkzMHJPUjZ0akZq?=
+ =?utf-8?B?SURZekpRRExFbW9xT0pDdDBQMFAxL2hrVTVaNWFpd2k4Q1c5MCt0bkQ3NUFT?=
+ =?utf-8?B?K1JxM3piQ3lHb2pLMDFBNVpiN2Q3bWczald0T0xNZE11c2R1NVRCcUhYZnFt?=
+ =?utf-8?Q?lBn5eutN2Glon8uIw2/hCns=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfeb92be-849d-4eab-6133-08d9d0e1bc2b
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 06:56:59.5197
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 31NNVz5fTsZTvqhLd2qf13v65uMGUOCUGORFhAWX9gAfx6pX9hJfhEdaT7nkX/tGZ/W9m4IomPX9VYkbS/3YmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2206
+X-OriginatorOrg: intel.com
 
-Hi Daniel,
+Hi Boris,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on 7d2a07b769330c34b4deabeed939325c77a7ec2f]
+On 1/5/22 11:21 PM, Borislav Petkov wrote:
+> ... yap, and because fixing it this way is easy, I've already queued the
+> __no_profile solution:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/mm&id=b64dfcde1ca9cb82e38e573753f0c0db8fb841c2
+This fixing is good to me.
 
-url:    https://github.com/0day-ci/linux/commits/Daniel-Jordan/padata-vfio-sched-Multithreaded-VFIO-page-pinning/20220106-084934
-base:   7d2a07b769330c34b4deabeed939325c77a7ec2f
-config: hexagon-buildonly-randconfig-r001-20220105 (https://download.01.org/0day-ci/archive/20220106/202201061412.xko6OiVF-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4c1eb3c284a7aac84110e319700d89e847dd0874
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Daniel-Jordan/padata-vfio-sched-Multithreaded-VFIO-page-pinning/20220106-084934
-        git checkout 4c1eb3c284a7aac84110e319700d89e847dd0874
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+Just a little concern: if people need to add function in the future,
+if he/she is not using clang-14, it's possible that he/she misses the
+__no_profile and triggers this kind of issue again.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/sched/core.c:3282:13: warning: variable 'rq' set but not used [-Wunused-but-set-variable]
-           struct rq *rq;
-                      ^
->> kernel/sched/core.c:10199:6: warning: no previous prototype for function 'cpu_cgroup_remote_begin' [-Wmissing-prototypes]
-   void cpu_cgroup_remote_begin(struct task_struct *p,
-        ^
-   kernel/sched/core.c:10199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cpu_cgroup_remote_begin(struct task_struct *p,
-   ^
-   static 
->> kernel/sched/core.c:10216:6: warning: no previous prototype for function 'cpu_cgroup_remote_charge' [-Wmissing-prototypes]
-   void cpu_cgroup_remote_charge(struct task_struct *p,
-        ^
-   kernel/sched/core.c:10216:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cpu_cgroup_remote_charge(struct task_struct *p,
-   ^
-   static 
-   kernel/sched/core.c:3272:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-   static inline bool rq_has_pinned_tasks(struct rq *rq)
-                      ^
-   kernel/sched/core.c:5123:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-   static inline void sched_tick_start(int cpu) { }
-                      ^
-   kernel/sched/core.c:5124:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-   static inline void sched_tick_stop(int cpu) { }
-                      ^
-   kernel/sched/core.c:5853:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-   static inline void sched_core_cpu_starting(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:5854:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:5855:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-   static inline void sched_core_cpu_dying(unsigned int cpu) {}
-                      ^
-   9 warnings generated.
+It may not be a big problem (we will capture it in our test. :)). Thanks.
 
 
-vim +/cpu_cgroup_remote_begin +10199 kernel/sched/core.c
+Regards
+Yin, Fengwei
 
- 10185	
- 10186	/**
- 10187	 * cpu_cgroup_remote_begin - begin charging p's CPU usage to a remote css
- 10188	 * @p: the kernel thread whose CPU usage should be accounted
- 10189	 * @css: the css to which the CPU usage should be accounted
- 10190	 *
- 10191	 * Begin charging a kernel thread's CPU usage to a remote (non-root) task group
- 10192	 * to account CPU time that the kernel thread spends working on behalf of the
- 10193	 * group.  Pair with at least one subsequent call to cpu_cgroup_remote_charge()
- 10194	 * to complete the charge.
- 10195	 *
- 10196	 * Supports CFS bandwidth and cgroup2 CPU accounting stats but not weight-based
- 10197	 * control for now.
- 10198	 */
- 10199	void cpu_cgroup_remote_begin(struct task_struct *p,
- 10200				     struct cgroup_subsys_state *css)
- 10201	{
- 10202		if (p->sched_class == &fair_sched_class)
- 10203			cpu_cgroup_remote_begin_fair(p, css_tg(css));
- 10204	}
- 10205	
- 10206	/**
- 10207	 * cpu_cgroup_remote_charge - account p's CPU usage to a remote css
- 10208	 * @p: the kernel thread whose CPU usage should be accounted
- 10209	 * @css: the css to which the CPU usage should be accounted
- 10210	 *
- 10211	 * Account a kernel thread's CPU usage to a remote (non-root) task group.  Pair
- 10212	 * with a previous call to cpu_cgroup_remote_begin() with the same @p and @css.
- 10213	 * This may be invoked multiple times after the initial
- 10214	 * cpu_cgroup_remote_begin() to account additional CPU usage.
- 10215	 */
- 10216	void cpu_cgroup_remote_charge(struct task_struct *p,
- 10217				      struct cgroup_subsys_state *css)
- 10218	{
- 10219		if (p->sched_class == &fair_sched_class)
- 10220			cpu_cgroup_remote_charge_fair(p, css_tg(css));
- 10221	}
- 10222	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Thanks.
