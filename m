@@ -1,77 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62637173
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 18:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370CAC36AE0;
-	Fri,  7 Jan 2022 18:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641580409;
-	bh=/O1V8c1GBTvHNkBLACc6ZOiDCdYgbkOd1VzcLgA42jQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=M0Y7keVE7rrIVFdBNO2atcUnhA56BhFQhTy1L6AXowSSUPb//mMnH+ghuIu4c+CIx
-	 6k1rIi6UQXJrePHrjoTP3MLNOnTYDSjqB/hFxeMY4Udoqwp/XR2JXDnLCY2hjSUBVb
-	 NWrJ3WqCpMws10Xc8E4w5B2Y8vqEHKQfnS6WvMlzEP7TIXR+0XeFBW8pC+/aJ45O8w
-	 BMplBOHZuxZKI5Y1YuF8gZYj3TYx6yxT1tvktM2GWiKOhMxIk7khsKD4td8WjgnSwF
-	 pNmdl10WxB9p4LY7d6rQiAUBqYdf2zBOWCe7I1UV5/yH8uCchTmkvWN41cJw2eJmQC
-	 vchUXo9JjGqPQ==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] clk: visconti: Remove pointless NULL check in visconti_pll_add_lookup()
-Date: Fri,  7 Jan 2022 11:33:03 -0700
-Message-Id: <20220107183303.2337676-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A05D173
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 18:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641580706; x=1673116706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aX0BdEbcfDa/OSEf5GO2WFRe0rvp1OkSlWcNIZx/r10=;
+  b=LXYp7tddrk+8RbQ3ZJmJvHOslmWG7WE7akktO6bUXUOTH2opskcglvWG
+   Li8djmIZysIwk2cSKFTzQnuIlFMflqoi0vcFR/AtL6jItsIug+0M4M7o8
+   nuBLNFTO8Q+O0amS+oTNmWsg8E2S9nM0Tkvi56LTXVtpB36nSmy14gqeG
+   k8kAsYW2wxex9iJfoIVjW9SDH8AGYvKVE6vfJyngcDwHDQb6xLdVLkKEm
+   gJN7GUo5VpzThF30OhSRnyoquHEUXkzinQlb67B0/eFw8GT4dab1a/rwa
+   6os3/M/x1SaiozhfWfpvuuqb0AM6URKa0P9ylv16yENwGNmSRrJgCA/Yk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="242869134"
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="242869134"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 10:37:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="622014628"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 07 Jan 2022 10:37:07 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n5u6s-000Ivw-Uq; Fri, 07 Jan 2022 18:37:06 +0000
+Date: Sat, 8 Jan 2022 02:36:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Michal Suchanek <msuchanek@suse.de>, kexec@lists.infradead.org,
+	Philipp Rudo <prudo@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>,
+	Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+	linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] kexec_file: Don't opencode appended signature
+ verification.
+Message-ID: <202201080202.yy2w2Wmg-lkp@intel.com>
+References: <378d956adfa3be2a6d95a71391b4bb2f7458ada3.1641555875.git.msuchanek@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <378d956adfa3be2a6d95a71391b4bb2f7458ada3.1641555875.git.msuchanek@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Clang warns:
+Hi Michal,
 
-drivers/clk/visconti/pll.c:292:20: warning: address of array 'ctx->clk_data.hws' will always evaluate to 'true' [-Wpointer-bool-conversion]
-        if (ctx->clk_data.hws && id)
-            ~~~~~~~~~~~~~~^~~ ~~
-1 warning generated.
+Thank you for the patch! Yet something to improve:
 
-This array cannot be NULL if ctx is not NULL, which is allocated in
-visconti_init_pll(), so just remove the check, which matches other clk
-drivers.
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on s390/features linus/master jeyu/modules-next v5.16-rc8 next-20220106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Fixes: b4cbe606dc36 ("clk: visconti: Add support common clock driver and reset driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1564
+url:    https://github.com/0day-ci/linux/commits/Michal-Suchanek/KEXEC_SIG-with-appended-signature/20220107-195818
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: hexagon-randconfig-r016-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080202.yy2w2Wmg-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/c59400c94a653abe5a5fbfd5bc166bd3ac1ebb41
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michal-Suchanek/KEXEC_SIG-with-appended-signature/20220107-195818
+        git checkout c59400c94a653abe5a5fbfd5bc166bd3ac1ebb41
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/module.c:2898:40: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'size_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+                   err = verify_appended_signature(mod, &info->len,
+                                                        ^~~~~~~~~~
+   include/linux/verification.h:63:57: note: passing argument to parameter 'len' here
+   int verify_appended_signature(const void *data, size_t *len, struct key *trusted_keys,
+                                                           ^
+   kernel/module.c:4804:6: warning: no previous prototype for function 'module_layout' [-Wmissing-prototypes]
+   void module_layout(struct module *mod,
+        ^
+   kernel/module.c:4804:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void module_layout(struct module *mod,
+   ^
+   static 
+   1 warning and 1 error generated.
+
+
+vim +2898 kernel/module.c
+
+  2880	
+  2881	#ifdef CONFIG_MODULE_SIG
+  2882	static int module_sig_check(struct load_info *info, int flags)
+  2883	{
+  2884		int err = -ENODATA;
+  2885		const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+  2886		const char *reason;
+  2887		const void *mod = info->hdr;
+  2888	
+  2889		/*
+  2890		 * Require flags == 0, as a module with version information
+  2891		 * removed is no longer the module that was signed
+  2892		 */
+  2893		if (flags == 0 &&
+  2894		    info->len > markerlen &&
+  2895		    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+  2896			/* We truncate the module to discard the signature */
+  2897			info->len -= markerlen;
+> 2898			err = verify_appended_signature(mod, &info->len,
+  2899							VERIFY_USE_SECONDARY_KEYRING, "module");
+  2900			if (!err) {
+  2901				info->sig_ok = true;
+  2902				return 0;
+  2903			}
+  2904		}
+  2905	
+  2906		/*
+  2907		 * We don't permit modules to be loaded into the trusted kernels
+  2908		 * without a valid signature on them, but if we're not enforcing,
+  2909		 * certain errors are non-fatal.
+  2910		 */
+  2911		switch (err) {
+  2912		case -ENODATA:
+  2913			reason = "unsigned module";
+  2914			break;
+  2915		case -ENOPKG:
+  2916			reason = "module with unsupported crypto";
+  2917			break;
+  2918		case -ENOKEY:
+  2919			reason = "module with unavailable key";
+  2920			break;
+  2921	
+  2922		default:
+  2923			/*
+  2924			 * All other errors are fatal, including lack of memory,
+  2925			 * unparseable signatures, and signature check failures --
+  2926			 * even if signatures aren't required.
+  2927			 */
+  2928			return err;
+  2929		}
+  2930	
+  2931		if (is_module_sig_enforced()) {
+  2932			pr_notice("Loading of %s is rejected\n", reason);
+  2933			return -EKEYREJECTED;
+  2934		}
+  2935	
+  2936		return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+  2937	}
+  2938	#else /* !CONFIG_MODULE_SIG */
+  2939	static int module_sig_check(struct load_info *info, int flags)
+  2940	{
+  2941		return 0;
+  2942	}
+  2943	#endif /* !CONFIG_MODULE_SIG */
+  2944	
+
 ---
- drivers/clk/visconti/pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/visconti/pll.c b/drivers/clk/visconti/pll.c
-index 3b6e88bb73d5..a2398bc6c6e4 100644
---- a/drivers/clk/visconti/pll.c
-+++ b/drivers/clk/visconti/pll.c
-@@ -289,7 +289,7 @@ static void visconti_pll_add_lookup(struct visconti_pll_provider *ctx,
- 				    struct clk_hw *hw_clk,
- 				    unsigned int id)
- {
--	if (ctx->clk_data.hws && id)
-+	if (id)
- 		ctx->clk_data.hws[id] = hw_clk;
- }
- 
-
-base-commit: 70faf946ad975c64efb2eb809f9139f304a494b0
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
