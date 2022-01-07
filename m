@@ -1,42 +1,49 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6252C80
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 14:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A1E2C80
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 14:15:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641564302; x=1673100302;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7eWu09XADEqxLJDJVmQpenOapTBEM9BgCiub39ILhco=;
-  b=b/eJgZxRo+uYW23TVm8SznSjz5CI9kEEimM3N4ZAlEPbhSbHURr/Kr5n
-   wbdKcolEw/PC5yY55h9UxcHROXKw/STxBwlvSqI94navRjbG0c2y6vlWu
-   V0E1N1diYLc/C4mzF3fsIr8Wxo73Zob3s8dF7v+4/pR9bwaJaCC0GJRIf
-   bVsfRfXAcCCUKj5wF9mtBSU0ZQI3BiyMuwmwY5CHBY2RAvupmBzCwDPwP
-   9/1/L2bNZuMd7rWihye8wZ10QnYaHv6KowxiahKtYu9S0Nc3LCcPRdY9/
-   2VN2oSnW5vqRFmoL5mVbALwQJOfPf6h1tGOkWZ8sfhNrA3V42Je4WVTrf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="223566994"
+  t=1641564903; x=1673100903;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QGn+yGeVoCBsRYC4Z0Q2iIHTyTv3rgfF0gDAaX5K5mc=;
+  b=SDxtl3RAUWipaOvHwzqDPK9nxAoK4UziNXW570bAOp7Lgh8zdJMDFu5F
+   rncIuTA/HhXr+ZJ/yqZTP4cb7MzMU9P895HjdF2ZfHeJ0rlu/JlsgjyLE
+   7YYXmWS9cRKTXvNF4uLMFETayZHawyTuVZYg72xzAXxck9i2ur5Fmpt4V
+   bddj7vYeOXwDaXUtdIJIJkL6PfXMIdAe8cgRslphWmpc5rvXckT8VFLwa
+   Bh+wcg5qSFHRZdRAItwJ5F1R55wf/C8s888v99NvmWvs/C4fYFAdxQ+pK
+   iitbZFcmyY6YAmcOeJmcQlhtVFjnyz8HHjyPs06pCeDU/sBSaOFGTYRIy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="306238198"
 X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="223566994"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 06:05:01 -0800
+   d="scan'208";a="306238198"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 06:15:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="473327120"
+   d="scan'208";a="489297945"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jan 2022 06:04:59 -0800
+  by orsmga002.jf.intel.com with ESMTP; 07 Jan 2022 06:14:59 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n5prW-000IkS-Rk; Fri, 07 Jan 2022 14:04:58 +0000
-Date: Fri, 7 Jan 2022 22:04:26 +0800
+	id 1n5q1C-000Ika-TU; Fri, 07 Jan 2022 14:14:58 +0000
+Date: Fri, 7 Jan 2022 22:14:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Huang Pei <huangpei@loongson.cn>
+To: Hongchen Zhang <zhanghongchen@loongson.cn>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Al Viro <viro@zeniv.linux.org.uk>, Ye Guojin <ye.guojin@zte.com.cn>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [linux-next:master 10655/11234] lib/test_printf.c:247:9: warning:
- 'PTR' macro redefined
-Message-ID: <202201072233.KPabxSoa-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH] signal: strict valid signal check
+Message-ID: <202201072220.gCthUkw6-lkp@intel.com>
+References: <1641530757-3835-1-git-send-email-zhanghongchen@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,147 +52,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1641530757-3835-1-git-send-email-zhanghongchen@loongson.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3770333b3f8cb7c9110889853afaa49777c26ea7
-commit: f0b7ddbd794bdffade370f22bb7a774002208ef4 [10655/11234] MIPS: retire "asm/llsc.h"
-config: mips-randconfig-r021-20220106 (https://download.01.org/0day-ci/archive/20220107/202201072233.KPabxSoa-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
+Hi Hongchen,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master hnaz-mm/master v5.16-rc8 next-20220106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Hongchen-Zhang/signal-strict-valid-signal-check/20220107-124756
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+config: hexagon-randconfig-r041-20220107 (https://download.01.org/0day-ci/archive/20220107/202201072220.gCthUkw6-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=f0b7ddbd794bdffade370f22bb7a774002208ef4
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout f0b7ddbd794bdffade370f22bb7a774002208ef4
+        # https://github.com/0day-ci/linux/commit/d6ab2033eb509bf064e07f58074e58562098dfcc
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Hongchen-Zhang/signal-strict-valid-signal-check/20220107-124756
+        git checkout d6ab2033eb509bf064e07f58074e58562098dfcc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   lib/test_printf.c:157:52: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                  ~~~~                       ^
-                                  %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:55: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                       ~~~~                     ^
-                                       %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:58: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                            ~~~~                   ^~~
-                                            %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:63: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                                 ~~~~                   ^~~
-                                                 %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:68: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                                      ~~~~                   ^~
-                                                      %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:52: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                  ~~~~                       ^
-                                  %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:55: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                       ~~~~                     ^
-                                       %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:58: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                            ~~~~                   ^~~
-                                            %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:63: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                                 ~~~~                   ^~~
-                                                 %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:68: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                                      ~~~~                   ^~
-                                                      %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:159:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-                                     ~~~          ^~~~
-                                     %o
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:159:47: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-                                        ~~~             ^~~~
-                                        %o
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:159:53: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-                                           ~~~~               ^~~~~~
-                                           %#o
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
->> lib/test_printf.c:247:9: warning: 'PTR' macro redefined [-Wmacro-redefined]
-   #define PTR ((void *)0x456789ab)
-           ^
-   arch/mips/include/asm/asm.h:288:9: note: previous definition is here
-   #define PTR             .word
-           ^
-   14 warnings generated.
+   In file included from drivers/tty/tty_io.c:71:
+>> include/linux/signal.h:277:16: error: implicit declaration of function 'min' [-Werror,-Wimplicit-function-declaration]
+           return sig <= min(_NSIG, 127) ? 1 : 0;
+                         ^
+   1 error generated.
 
 
-vim +/PTR +247 lib/test_printf.c
+vim +/min +277 include/linux/signal.h
 
-ad67b74d2469d9 Tobin C. Harding 2017-11-01  245  
-ad67b74d2469d9 Tobin C. Harding 2017-11-01  246  #define PTR_WIDTH 8
-ad67b74d2469d9 Tobin C. Harding 2017-11-01 @247  #define PTR ((void *)0x456789ab)
-ad67b74d2469d9 Tobin C. Harding 2017-11-01  248  #define PTR_STR "456789ab"
-ce041c43f22298 Thierry Escande  2018-06-13  249  #define PTR_VAL_NO_CRNG "(ptrval)"
-3e5903eb9cff70 Petr Mladek      2019-04-17  250  #define ZEROS ""
-7bd57fbc4a4dde Ilya Dryomov     2020-05-19  251  #define ONES ""
-ad67b74d2469d9 Tobin C. Harding 2017-11-01  252  
-
-:::::: The code at line 247 was first introduced by commit
-:::::: ad67b74d2469d9b82aaa572d76474c95bc484d57 printk: hash addresses printed with %p
-
-:::::: TO: Tobin C. Harding <me@tobin.cc>
-:::::: CC: Tobin C. Harding <me@tobin.cc>
+   269	
+   270	/* Test if 'sig' is valid signal. Use this instead of testing _NSIG directly */
+   271	static inline int valid_signal(unsigned long sig)
+   272	{
+   273		/* max usable signal number is limited by both _NSIG and task's
+   274		 * exit_code, and the max available signal number encoded in
+   275		 * task's exit_code is 127.
+   276		 */
+ > 277		return sig <= min(_NSIG, 127) ? 1 : 0;
+   278	}
+   279	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
