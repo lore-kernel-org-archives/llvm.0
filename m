@@ -1,95 +1,110 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E5129CA
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 09:01:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641546062; x=1673082062;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j7A4O0UTzUY86Hb7QTpTewvFDFLlSiE7gOqw7j3u7a8=;
-  b=VCVn5d8y9sJRIeTvrcjvQTjn5fsudvcwj0tMUKlUSS6Qx04pXFQEYNUm
-   dCwOZXjt2yRNXI7qkfv0okgfjNgDO7GKSKFgHxrk6SePMQSgXVbrliVcz
-   Db/7dFF5/yjjfs3dcpvS8Yzlih+kRZRUzMQRGlgOfxnd7YntfqAsOMHBH
-   QOKWDYXvnzX3euAMSJuGkO89bgyPl3qd7HIZraIuXIa8HGefsUX4H0rc3
-   iMWEIreZgfYDtdkNaSC8oFGOjlv4nwU057gbnRNtwFks3Z7Vo396UhOsr
-   vAD2akbyRwMn+Rhc164s3j6/D07dcqbIyvHfx6277vWzVnAMEmi0e4Wk/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="230177252"
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="230177252"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 01:00:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="612131053"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jan 2022 01:00:46 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5l77-000ITc-Pn; Fri, 07 Jan 2022 09:00:45 +0000
-Date: Fri, 7 Jan 2022 17:00:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
- function 'kasan_tag_mismatch'
-Message-ID: <202201071631.N1iQYfX7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95691168
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 11:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD17C36AE5;
+	Fri,  7 Jan 2022 11:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1641556385;
+	bh=kGoHdE1Wj8WtjSJazDojfeiiHBy4qOQlGDZqw0KXhC4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZWdH02fXJmMCI8eDJtQ5AcxwUaCqMbgd4BPFS8vcD6k9WUGc9KfHgeR5rR0YxRJ93
+	 GhzNO0+kTuIT2qHd35eyDdvaOvfdLda7D4My1sx9X58djvHQ2yg0Q+JrpFGCgwPQfX
+	 cBBInBjMSjUwoOs7v822ucOFh2qSfE5fPys+PQ1SZOmxhiyRbXTe8yMaIOt+Y2t0SE
+	 8b53QAAXrVM4NnXzkckdH2QVtOTAjwgo9dtq6OK97fbdrubsj8FOOL37pCKojItHOs
+	 CW58of9OUtq887I7+myWwAcDvATJemDhxajt1rbd3nSLHwq2uw8rnIRpIYP4pNenoU
+	 uNZ2SI9T1vX0w==
+Date: Fri, 7 Jan 2022 20:52:59 +0900
+From: Masami Hiramatsu <mhiramat@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Samuel Zeter <samuelzeter@gmail.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Nick Desaulniers
+ <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
+Message-Id: <20220107205259.e66ff1bd90ac218611bf1178@kernel.org>
+In-Reply-To: <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+References: <20220106023606.283953-1-samuelzeter@gmail.com>
+	<Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Peter,
+Hi Samuel and Nathan,
 
-FYI, the error/warning still remains.
+Thanks for working on this issue. I didn't noticed that the llvm has
+this difference. Anyway both patches look good to me.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ddec8ed2d4905d0967ce2ec432e440e582aa52c6
-commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
-date:   8 months ago
-config: arm64-randconfig-r021-20220107 (https://download.01.org/0day-ci/archive/20220107/202201071631.N1iQYfX7-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/kasan/
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+for this series.
 
-All warnings (new ones prefixed by >>):
+And if you resend it, please add "x86@kernel.org" to Cc.
 
->> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-        ^
-   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-   ^
-   static 
-   1 warning generated.
+Thank you!
+
+On Thu, 6 Jan 2022 12:02:25 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
+
+> On Thu, Jan 06, 2022 at 01:36:03PM +1100, Samuel Zeter wrote:
+> > These are two small patches which originally dealt with
+> > the problem found at:
+> > 
+> > https://github.com/ClangBuiltLinux/linux/issues/1364
+> > 
+> > The original steps to reproduce were:
+> > $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 defconfig
+> > $ scripts/config -e X86_DECODER_SELFTEST
+> > $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 olddefconfig bzImage
+> > 
+> > Which resulted in the error:
+> > arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but
+> > insn_get_length() says 2
+> > 
+> > Upon inspection it turned out llvm-objdump was formatting its
+> > output differently, which caused objdump_reformat.awk to incorrectly
+> > output its values.
+> > 
+> > After fixing that bug, a second one was seen where the instruction
+> > "wait" was incorrectly matched with "fwait", which again caused
+> > insn_decoder_test to fail.
+> 
+> Thanks a lot for sending these fixes!
+> 
+> I can confirm with this series and the removal of chkobjdump.awk [1] on
+> top of v5.16-rc8, the insn_decoder_test now passes with LLVM 11 through
+> 14.
+> 
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> For the future, I recommend putting the maintainers in the "To" field,
+> rather than "Cc", to ensure they actually see it. Additionally, I see
+> some small nits in the commit message that the tip maintainers might
+> comment on, see
+> 
+> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
+> 
+> for some more info.
+> 
+> Masami Hiramatsu originally wrote this file and has a few fixes to it
+> since, adding him now for review. The original thread is available at:
+> 
+> https://lore.kernel.org/r/20220106023606.283953-1-samuelzeter@gmail.com/
+> 
+> [1]: https://git.kernel.org/nathan/c/2f137c324b21f1c21b8830d8896cb9957009f969
+> 
+> Cheers,
+> Nathan
 
 
-vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
-
-   210	
- > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
