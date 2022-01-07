@@ -1,49 +1,38 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B96168
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 11:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF50168
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 12:24:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641556714; x=1673092714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EdSqS4VAyQDEtNmAwMFPIrwHE7KgmcEsvaxdDJqC04A=;
-  b=EYEapJBaskHXfatOtARIVbsP6dRBEgvpu/KQfHS9w0M0U8JeHqsH7rAQ
-   CEnM4XC+ynk1TJuHlMeJC6xHmK7H9OQTFhKYcxwytkUlw2jBvMHQhdqbl
-   udePKmwnuz1JQzEiSIdvWxYjGwy2fklOUXeLvjmMUE6gZMNO21e7kuo5K
-   c2hQwI1wNa6jxekv0XhqmU9kKiY2Cq/XONKGwB3Exo02i4v0I6tIuHipX
-   IEtNQMXqWR2AHH/ZQtDM1ejQNqPs+CSSKLP57g7QfcHlRBKfNQ7vnq0L5
-   cMdcslXbgF/eIMJAIirKeQNnZzuQ+DL9sZy7MWLcBVxguhRLj8XS04Bfh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="303600988"
+  t=1641558248; x=1673094248;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=xg39QIhkC+DwoQ5dfoQmwxUJnabfoqeV/hoRP1e7e38=;
+  b=JAFHVgpTgzYYcZfH6G1vV5rfEvGIypbrYfDqFdCaQim1Si2QtO+PeuHm
+   8BnWPDk5ZDwMaz5yf0QJ/03DHG8gG6nKo2FbujCy/TEFAjug1bSbpFBbH
+   grKj210R6Gmcn2g0g5zD++m75x0FFUrXidImb050PZZt2NznxE4hOj3AE
+   BUfxldBqbsInjkcMNcjYFMSace1D4bWEQltsNjp1h6OlJ/1SzvXpUWDd7
+   8gHuV4e43CX50pBQw8pkHG0NsI0toydJ3yIx53wg3eAja7HtcLqumPz9I
+   oaGW4gSOq4MarhI5wvglWycNNA5BxzzU6qEwAcURUX8C8gM7SB/MB2dgW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="223552658"
 X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="303600988"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 03:58:34 -0800
+   d="scan'208";a="223552658"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 04:24:07 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="557243987"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 03:58:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1n5nru-007Mat-Eu;
-	Fri, 07 Jan 2022 13:57:14 +0200
-Date: Fri, 7 Jan 2022 13:57:14 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v1 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
-Message-ID: <YdgqmvBTQ2vZAjsn@smile.fi.intel.com>
-References: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
- <202201060932.tcQFIVfQ-lkp@intel.com>
+   d="scan'208";a="489277860"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 07 Jan 2022 04:24:06 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n5oHj-000Ifg-Sd; Fri, 07 Jan 2022 12:23:55 +0000
+Date: Fri, 7 Jan 2022 20:23:00 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: ld.lld: error: section .dynamic file range overlaps with .text
+Message-ID: <202201072047.0pSp9Xjg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,48 +41,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201060932.tcQFIVfQ-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Jan 06, 2022 at 09:11:47AM +0800, kernel test robot wrote:
-> Hi Andy,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on mtd/mtd/next]
-> [also build test WARNING on mtd/mtd/fixes char-misc/char-misc-testing linus/master v5.16-rc8 next-20220105]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/nvmem-core-Remove-unused-devm_nvmem_unregister/20220104-213933
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
-> config: mips-randconfig-r002-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060932.tcQFIVfQ-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://github.com/0day-ci/linux/commit/7877de3d47433a75d2beea38b696b3c4fde62082
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Andy-Shevchenko/nvmem-core-Remove-unused-devm_nvmem_unregister/20220104-213933
->         git checkout 7877de3d47433a75d2beea38b696b3c4fde62082
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/nvmem/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/nvmem/core.c:946:12: warning: unused function 'devm_nvmem_match'
+CC: linux-kernel@vger.kernel.org
+TO: Tong Tiangen <tongtiangen@huawei.com>
+CC: Palmer Dabbelt <palmerdabbelt@google.com>
 
-Ah, even more to clean up ;)
+Hi Tong,
 
--- 
-With Best Regards,
-Andy Shevchenko
+FYI, the error/warning still remains.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ddec8ed2d4905d0967ce2ec432e440e582aa52c6
+commit: dffe11e280a42c2501e5b0cdebd85a77f539bb05 riscv/vdso: Add support for time namespaces
+date:   3 months ago
+config: riscv-buildonly-randconfig-r001-20220107 (https://download.01.org/0day-ci/archive/20220107/202201072047.0pSp9Xjg-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dffe11e280a42c2501e5b0cdebd85a77f539bb05
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dffe11e280a42c2501e5b0cdebd85a77f539bb05
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: section .dynamic file range overlaps with .text
+   >>> .dynamic range is [0x7D0, 0x8FF]
+   >>> .text range is [0x800, 0x182F]
+--
+>> ld.lld: error: section .text file range overlaps with _ftrace_annotated_branch
+   >>> .text range is [0x800, 0x182F]
+   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
+--
+>> ld.lld: error: section .dynamic virtual address range overlaps with .text
+   >>> .dynamic range is [0x7D0, 0x8FF]
+   >>> .text range is [0x800, 0x182F]
+--
+>> ld.lld: error: section .text virtual address range overlaps with _ftrace_annotated_branch
+   >>> .text range is [0x800, 0x182F]
+   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
+--
+>> ld.lld: error: section .dynamic load address range overlaps with .text
+   >>> .dynamic range is [0x7D0, 0x8FF]
+   >>> .text range is [0x800, 0x182F]
+--
+>> ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
+   >>> .text range is [0x800, 0x182F]
+   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
+--
+>> ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
+   >>> .text range is [0x800, 0x182F]
+   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
+--
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts
+>> ld.lld: error: section .dynamic file range overlaps with .text
+   >>> .dynamic range is [0x7D0, 0x8FF]
+   >>> .text range is [0x800, 0x182F]
+--
+>> ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
+   >>> .text range is [0x800, 0x182F]
+   >>> _ftrace_annotated_branch range is [0x900, 0xC5F]
+   llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
