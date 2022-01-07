@@ -1,110 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95691168
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 11:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD17C36AE5;
-	Fri,  7 Jan 2022 11:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641556385;
-	bh=kGoHdE1Wj8WtjSJazDojfeiiHBy4qOQlGDZqw0KXhC4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZWdH02fXJmMCI8eDJtQ5AcxwUaCqMbgd4BPFS8vcD6k9WUGc9KfHgeR5rR0YxRJ93
-	 GhzNO0+kTuIT2qHd35eyDdvaOvfdLda7D4My1sx9X58djvHQ2yg0Q+JrpFGCgwPQfX
-	 cBBInBjMSjUwoOs7v822ucOFh2qSfE5fPys+PQ1SZOmxhiyRbXTe8yMaIOt+Y2t0SE
-	 8b53QAAXrVM4NnXzkckdH2QVtOTAjwgo9dtq6OK97fbdrubsj8FOOL37pCKojItHOs
-	 CW58of9OUtq887I7+myWwAcDvATJemDhxajt1rbd3nSLHwq2uw8rnIRpIYP4pNenoU
-	 uNZ2SI9T1vX0w==
-Date: Fri, 7 Jan 2022 20:52:59 +0900
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Samuel Zeter <samuelzeter@gmail.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Nick Desaulniers
- <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
-Message-Id: <20220107205259.e66ff1bd90ac218611bf1178@kernel.org>
-In-Reply-To: <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
-References: <20220106023606.283953-1-samuelzeter@gmail.com>
-	<Ydc8wUjX4hnHg7ZE@archlinux-ax161>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B96168
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 11:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641556714; x=1673092714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EdSqS4VAyQDEtNmAwMFPIrwHE7KgmcEsvaxdDJqC04A=;
+  b=EYEapJBaskHXfatOtARIVbsP6dRBEgvpu/KQfHS9w0M0U8JeHqsH7rAQ
+   CEnM4XC+ynk1TJuHlMeJC6xHmK7H9OQTFhKYcxwytkUlw2jBvMHQhdqbl
+   udePKmwnuz1JQzEiSIdvWxYjGwy2fklOUXeLvjmMUE6gZMNO21e7kuo5K
+   c2hQwI1wNa6jxekv0XhqmU9kKiY2Cq/XONKGwB3Exo02i4v0I6tIuHipX
+   IEtNQMXqWR2AHH/ZQtDM1ejQNqPs+CSSKLP57g7QfcHlRBKfNQ7vnq0L5
+   cMdcslXbgF/eIMJAIirKeQNnZzuQ+DL9sZy7MWLcBVxguhRLj8XS04Bfh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="303600988"
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="303600988"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 03:58:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="557243987"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 03:58:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1n5nru-007Mat-Eu;
+	Fri, 07 Jan 2022 13:57:14 +0200
+Date: Fri, 7 Jan 2022 13:57:14 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH v1 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
+Message-ID: <YdgqmvBTQ2vZAjsn@smile.fi.intel.com>
+References: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
+ <202201060932.tcQFIVfQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201060932.tcQFIVfQ-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Samuel and Nathan,
+On Thu, Jan 06, 2022 at 09:11:47AM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on mtd/mtd/next]
+> [also build test WARNING on mtd/mtd/fixes char-misc/char-misc-testing linus/master v5.16-rc8 next-20220105]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/nvmem-core-Remove-unused-devm_nvmem_unregister/20220104-213933
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
+> config: mips-randconfig-r002-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060932.tcQFIVfQ-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mips-linux-gnu
+>         # https://github.com/0day-ci/linux/commit/7877de3d47433a75d2beea38b696b3c4fde62082
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Andy-Shevchenko/nvmem-core-Remove-unused-devm_nvmem_unregister/20220104-213933
+>         git checkout 7877de3d47433a75d2beea38b696b3c4fde62082
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/nvmem/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/nvmem/core.c:946:12: warning: unused function 'devm_nvmem_match'
 
-Thanks for working on this issue. I didn't noticed that the llvm has
-this difference. Anyway both patches look good to me.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-for this series.
-
-And if you resend it, please add "x86@kernel.org" to Cc.
-
-Thank you!
-
-On Thu, 6 Jan 2022 12:02:25 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
-
-> On Thu, Jan 06, 2022 at 01:36:03PM +1100, Samuel Zeter wrote:
-> > These are two small patches which originally dealt with
-> > the problem found at:
-> > 
-> > https://github.com/ClangBuiltLinux/linux/issues/1364
-> > 
-> > The original steps to reproduce were:
-> > $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 defconfig
-> > $ scripts/config -e X86_DECODER_SELFTEST
-> > $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 olddefconfig bzImage
-> > 
-> > Which resulted in the error:
-> > arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but
-> > insn_get_length() says 2
-> > 
-> > Upon inspection it turned out llvm-objdump was formatting its
-> > output differently, which caused objdump_reformat.awk to incorrectly
-> > output its values.
-> > 
-> > After fixing that bug, a second one was seen where the instruction
-> > "wait" was incorrectly matched with "fwait", which again caused
-> > insn_decoder_test to fail.
-> 
-> Thanks a lot for sending these fixes!
-> 
-> I can confirm with this series and the removal of chkobjdump.awk [1] on
-> top of v5.16-rc8, the insn_decoder_test now passes with LLVM 11 through
-> 14.
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> For the future, I recommend putting the maintainers in the "To" field,
-> rather than "Cc", to ensure they actually see it. Additionally, I see
-> some small nits in the commit message that the tip maintainers might
-> comment on, see
-> 
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
-> 
-> for some more info.
-> 
-> Masami Hiramatsu originally wrote this file and has a few fixes to it
-> since, adding him now for review. The original thread is available at:
-> 
-> https://lore.kernel.org/r/20220106023606.283953-1-samuelzeter@gmail.com/
-> 
-> [1]: https://git.kernel.org/nathan/c/2f137c324b21f1c21b8830d8896cb9957009f969
-> 
-> Cheers,
-> Nathan
-
+Ah, even more to clean up ;)
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+With Best Regards,
+Andy Shevchenko
+
+
