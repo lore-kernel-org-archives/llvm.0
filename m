@@ -1,216 +1,124 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D4829CA
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 21:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641589228; x=1673125228;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j6VO1WYtmm2unFIVNrzNjDUk4iO7/jjuRqisic4oG6o=;
-  b=YgZfDxuExtC46nHBtle2Bnbd0NJqZne1wmq0HwFAUCiqTyLIagbBnBh6
-   Taxt6ugTVgpwvBanNiSAOvQR/2+Iril3KV/hIcpdmFvP7nNkXEX06y1s9
-   a8G1iXCeA8MzDootzZ/En4GMG7yPIwolx2j4VUOXnB5YMbkVxjWmkRadP
-   hfP+AR3K3VA4ZP2pwF0bJp2eKzUc6IDPqWGFsNrxZE+N1rTTxj9rsicOb
-   RUazy66BBqATTpF0fCsNY6hSaf+IOg/JF552n2Y5jR6RcZ3dHuhf+91ho
-   wnnCFw+oJWJhN9pac4CoNC8q6mQg8IU1fWVCC95yMcGEuQx4oarTl4XLB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="243140048"
-X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
-   d="scan'208";a="243140048"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 13:00:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
-   d="scan'208";a="471425315"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 13:00:15 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5wLP-000J20-2s; Fri, 07 Jan 2022 21:00:15 +0000
-Date: Sat, 8 Jan 2022 04:59:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>, smfrench@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, nspmangalore@gmail.com,
-	dhowells@redhat.com, jlayton@kernel.org, linux-cifs@vger.kernel.org,
-	linux-cachefs@redhat.com
-Subject: Re: [PATCH 3/3] cifs: Eliminate cifs_readdata::pages
-Message-ID: <202201080434.84lhmayM-lkp@intel.com>
-References: <164149195200.2867367.8652749735914667514.stgit@warthog.procyon.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E7A29CA
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 21:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1641590041;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CoxKyAZnnR3hc0Xq4/bujSICkBAnBdTmtPeVb0xDLIM=;
+	b=cOMd6MdCRu5plr7S3JoxJBpcfumIqCRpSeGmnqO7M3n0g556XlPEU0PbyDETWCSspkZMAA
+	Owysu/fx4pPUxcbxIwalXZIvP8dUnrJ6WoCHYR65Bd07wgSrhrLFPQzk3T3ya3/4UELiUi
+	VYx24BCJLtQz0l5S4d4IcEhfDk80KvM=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-CykstN1xN36Mpg5V4gTPqw-1; Fri, 07 Jan 2022 16:13:59 -0500
+X-MC-Unique: CykstN1xN36Mpg5V4gTPqw-1
+Received: by mail-ot1-f69.google.com with SMTP id a89-20020a9d2662000000b005909e4d9585so458188otb.18
+        for <llvm@lists.linux.dev>; Fri, 07 Jan 2022 13:13:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CoxKyAZnnR3hc0Xq4/bujSICkBAnBdTmtPeVb0xDLIM=;
+        b=t6jPZ6JNVwuz6Q9+U85ls+gsplUEyXLPZRqBDDa4fWvAhr0Vt4pkYB0/XcNCR7/5BM
+         68BCKJ95tdX1R+fdREdYQCdLnT5aPMkWA8eXao51f/Wup4gZOEsIIdC7H8DbDM/CqMdX
+         3dHyHLnKAK+aBCOc0PYlfUEXVr60vcKN0WpSnwRr5oAtR7W3z8tuXTJSEUJHt0fNTX9Z
+         dkFawOcAuTF6e37lJu6gZay/vLs44f0DRDNV5GfEayhV+rdW4wlD3VIb9b5ba0eMSLji
+         4i11eJT8joSY1kbxYQUAt/FsHczu4eW6+bFu+PCBkvl/zVd5V4jqZBKEmAOWoCNeRGem
+         FxOQ==
+X-Gm-Message-State: AOAM530RK5+Yj2Tmhl5u04wU6NVCA9uxHE6Iy6iofaV2DwMNgb/yovab
+	GP1Kz04Zl34K/RkHAE+IwWoqSHnKpXHxr9QZqDTFxm2xKb7NX+k/SWOU9qA+L+4WbY17db87akL
+	FKImYVMLctxBDtg==
+X-Received: by 2002:a05:6830:34a3:: with SMTP id c35mr46669377otu.379.1641590038532;
+        Fri, 07 Jan 2022 13:13:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJygIGgpJ6DCegCd7Ncbdf1YNgwG/+5B2jrt7mHpcIrnWFgKCg/rH7tBIAGfsm+B/wdvFZl52Q==
+X-Received: by 2002:a05:6830:34a3:: with SMTP id c35mr46669365otu.379.1641590038351;
+        Fri, 07 Jan 2022 13:13:58 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id g61sm1111592otg.43.2022.01.07.13.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 13:13:57 -0800 (PST)
+From: trix@redhat.com
+To: mst@redhat.com,
+	jasowang@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	elic@nvidia.com,
+	parav@nvidia.com,
+	si-wei.liu@oracle.com,
+	xieyongji@bytedance.com
+Cc: virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] vdpa/mlx5: fix error handling in mlx5_vdpa_dev_add()
+Date: Fri,  7 Jan 2022 13:13:52 -0800
+Message-Id: <20220107211352.3940570-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164149195200.2867367.8652749735914667514.stgit@warthog.procyon.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-Hi David,
+From: Tom Rix <trix@redhat.com>
 
-I love your patch! Perhaps something to improve:
+Clang build fails with
+mlx5_vnet.c:2574:6: error: variable 'mvdev' is used uninitialized whenever
+  'if' condition is true
+        if (!ndev->vqs || !ndev->event_cbs) {
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mlx5_vnet.c:2660:14: note: uninitialized use occurs here
+        put_device(&mvdev->vdev.dev);
+                    ^~~~~
+This because mvdev is set after trying to allocate ndev->vqs,event_cbs.
+So move the allocation to after mvdev is set but before the arrays
+are used in init_mvqs()
 
-[auto build test WARNING on next-20220105]
-[cannot apply to cifs/for-next linus/master v5.16-rc8 v5.16-rc7 v5.16-rc6 v5.16-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/David-Howells/cifs-Use-netfslib/20220107-025845
-base:    7a769a3922d81cfc74ab4d90a9cc69485f260976
-config: hexagon-randconfig-r023-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080434.84lhmayM-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ed7e6fa413c08f7992992e2282f64df2a6894f10
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review David-Howells/cifs-Use-netfslib/20220107-025845
-        git checkout ed7e6fa413c08f7992992e2282f64df2a6894f10
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/cifs/ kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   fs/cifs/smb2ops.c:4437:39: error: no member named 'rq_npages' in 'struct smb_rqst'
-                   sg_len += rqst[i].rq_nvec + rqst[i].rq_npages;
-                                               ~~~~~~~ ^
-   fs/cifs/smb2ops.c:4456:27: error: no member named 'rq_npages' in 'struct smb_rqst'
-                   for (j = 0; j < rqst[i].rq_npages; j++) {
-                                   ~~~~~~~ ^
-   fs/cifs/smb2ops.c:4459:4: error: implicit declaration of function 'rqst_page_get_length' [-Werror,-Wimplicit-function-declaration]
-                           rqst_page_get_length(&rqst[i], j, &len, &offset);
-                           ^
-   fs/cifs/smb2ops.c:4460:36: error: no member named 'rq_pages' in 'struct smb_rqst'
-                           sg_set_page(&sg[idx++], rqst[i].rq_pages[j], len, offset);
-                                                   ~~~~~~~ ^
-   fs/cifs/smb2ops.c:4663:4: error: must use 'struct' tag to refer to type 'page'
-                           page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-                           ^
-                           struct 
-   fs/cifs/smb2ops.c:4663:9: error: expected identifier or '('
-                           page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-                                ^
-   fs/cifs/smb2ops.c:4664:29: error: use of undeclared identifier 'page'
-                           if (!xa_store(buffer, j, page, gfp))
-                                                    ^
-   fs/cifs/smb2ops.c:4664:35: error: use of undeclared identifier 'gfp'
-                           if (!xa_store(buffer, j, page, gfp))
-                                                          ^
->> fs/cifs/smb2ops.c:4667:10: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof ((1UL << 18)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(size, PAGE_SIZE);
-                                 ^~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4668:28: error: use of undeclared identifier 'page'; did you mean 'pages'?
-                           if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-                                                   ^~~~
-                                                   pages
-   fs/cifs/smb2ops.c:4644:16: note: 'pages' declared here
-           struct page **pages;
-                         ^
-   fs/cifs/smb2ops.c:4718:7: error: no member named 'rq_pages' in 'struct smb_rqst'
-           rqst.rq_pages = pages;
-           ~~~~ ^
-   fs/cifs/smb2ops.c:4719:7: error: no member named 'rq_npages' in 'struct smb_rqst'
-           rqst.rq_npages = npages;
-           ~~~~ ^
-   fs/cifs/smb2ops.c:4720:7: error: no member named 'rq_pagesz' in 'struct smb_rqst'
-           rqst.rq_pagesz = PAGE_SIZE;
-           ~~~~ ^
-   fs/cifs/smb2ops.c:4721:7: error: no member named 'rq_tailsz' in 'struct smb_rqst'
-           rqst.rq_tailsz = (page_data_size % PAGE_SIZE) ? : PAGE_SIZE;
-           ~~~~ ^
-   1 warning and 13 errors generated.
-
-
-vim +4667 fs/cifs/smb2ops.c
-
-  4626	
-  4627	/*
-  4628	 * This function will initialize new_rq and encrypt the content.
-  4629	 * The first entry, new_rq[0], only contains a single iov which contains
-  4630	 * a smb2_transform_hdr and is pre-allocated by the caller.
-  4631	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
-  4632	 *
-  4633	 * The end result is an array of smb_rqst structures where the first structure
-  4634	 * only contains a single iov for the transform header which we then can pass
-  4635	 * to crypt_message().
-  4636	 *
-  4637	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
-  4638	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
-  4639	 */
-  4640	static int
-  4641	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
-  4642			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
-  4643	{
-  4644		struct page **pages;
-  4645		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
-  4646		unsigned int npages;
-  4647		unsigned int orig_len = 0;
-  4648		int i, j;
-  4649		int rc = -ENOMEM;
-  4650	
-  4651		for (i = 1; i < num_rqst; i++) {
-  4652			struct smb_rqst *old = &old_rq[i - 1];
-  4653			struct smb_rqst *new = &new_rq[i];
-  4654			struct xarray *buffer = &new->rq_buffer;
-  4655			unsigned int npages;
-  4656			size_t size = iov_iter_count(&old->rq_iter), seg;
-  4657	
-  4658			orig_len += size;
-  4659			xa_init(buffer);
-  4660	
-  4661			npages = DIV_ROUND_UP(size, PAGE_SIZE);
-  4662			for (j = 0; j < npages; j++) {
-  4663				page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-  4664				if (!xa_store(buffer, j, page, gfp))
-  4665					goto err_free;
-  4666	
-> 4667				seg = min(size, PAGE_SIZE);
-  4668				if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-  4669					rc = -EFAULT;
-  4670					goto err_free;
-  4671				}
-  4672			}
-  4673	
-  4674			new->rq_iov = old->rq_iov;
-  4675			new->rq_nvec = old->rq_nvec;
-  4676		}
-  4677	
-  4678		/* fill the 1st iov with a transform header */
-  4679		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
-  4680	
-  4681		rc = crypt_message(server, num_rqst, new_rq, 1);
-  4682		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
-  4683		if (rc)
-  4684			goto err_free;
-  4685	
-  4686		return rc;
-  4687	
-  4688	err_free:
-  4689		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
-  4690		return rc;
-  4691	}
-  4692	
-
+Fixes: 7620d51af29a ("vdpa/mlx5: Support configuring max data virtqueue")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index b564c70475815..37220f6db7ad7 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -2569,16 +2569,18 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 	if (IS_ERR(ndev))
+ 		return PTR_ERR(ndev);
+ 
++	ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
++	ndev->mvdev.max_vqs = max_vqs;
++	mvdev = &ndev->mvdev;
++	mvdev->mdev = mdev;
++
+ 	ndev->vqs = kcalloc(max_vqs, sizeof(*ndev->vqs), GFP_KERNEL);
+ 	ndev->event_cbs = kcalloc(max_vqs + 1, sizeof(*ndev->event_cbs), GFP_KERNEL);
+ 	if (!ndev->vqs || !ndev->event_cbs) {
+ 		err = -ENOMEM;
+ 		goto err_alloc;
+ 	}
+-	ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
+-	ndev->mvdev.max_vqs = max_vqs;
+-	mvdev = &ndev->mvdev;
+-	mvdev->mdev = mdev;
++
+ 	init_mvqs(ndev);
+ 	mutex_init(&ndev->reslock);
+ 	config = &ndev->config;
+-- 
+2.26.3
+
