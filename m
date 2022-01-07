@@ -1,42 +1,33 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FD82C9C
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 17:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641576965; x=1673112965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ybpt3GN3O6dZRkPTwfxRATn7d1hk335MJIDTcfvh1Ko=;
-  b=i5GgklaSHK7NnPe8bUVBtZiq2uUgiAjF8rOJax3Ba36jO6tdnU66mQuF
-   B1ZhupGbGUY4dTrLaZIdYcYOai1VeuqY/aG1N/yK0pHTCqeIMGawwPe0m
-   tGm2uN87XOgy7Berm4RkVDblnoqyp5g0oBZ2pm7rN8xNxwjsSf/oDjLE/
-   od6AVVnPY+LHkKsWWmwAIUKCTqITIWAdj4sXIs68N2AY6N1h4DNhK2I4B
-   zyANVD9WuXFe5tzQHnlGDv+oJ6JmWdfkxLXD8vaExbDbwwiqZ7344iy3H
-   8zy5jDKJ7lcFZeukks9trMgKhEP/d/GM838jIl5Hk8iPFk4FFByd2CuBG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="240454440"
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="240454440"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 09:33:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="471369128"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 09:33:05 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5t6u-000Itu-Vz; Fri, 07 Jan 2022 17:33:04 +0000
-Date: Sat, 8 Jan 2022 01:32:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 3/3] cifs: Eliminate pages list from cifs_readdata,
- cifs_writedata and smb_rqst
-Message-ID: <202201080142.Tton1sB4-lkp@intel.com>
-References: <164150476548.2994594.12291632629854686642.stgit@warthog.procyon.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C8B2C9C
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 18:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4241DC36AE0;
+	Fri,  7 Jan 2022 18:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1641578506;
+	bh=+qjyaVvD6yhc1kx5AMm5KRGcMtQ7L9xt6eaIskMzOus=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uFPvoDCzdbKjY/3u++IKiLESOg+fEWpwIojSiJHH9L94FEtweCzMRaDfJodymtsNQ
+	 Wu8nDhYkKAvNg/h0dt45WIRN/gGWbmK5Gpi06ZkIwJmKYHWYm1hZ5naQmm4ara1jAP
+	 B7zXamkBar38fhkXLROUMYvlT9bnN5rwEF6d8B0lRPif5BUZ2W1QCi+dcFDFBl3sH9
+	 30efSquzsmsD+jKQ6mgI/xhlIG6rl/Jjq+oQ74euNKqK6S/nHGP/4d+lC+hjqBRviV
+	 1Pp1uOqJTfqu168n8NpAkm1TeYrHjLk+wOAwn01hrg2FD9lzq6i//M9MaDzTnNIx1B
+	 +zj4HBOeDLZgw==
+Date: Fri, 7 Jan 2022 11:01:42 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Eli Cohen <elic@nvidia.com>
+Cc: mst@redhat.com, jasowang@redhat.com,
+	virtualization@lists.linux-foundation.org, lvivier@redhat.com,
+	eperezma@redhat.com, llvm@lists.linux.dev,
+	Si-Wei Liu <si-wei.liu@oracle.com>
+Subject: Re: [PATCH v7 07/14] vdpa/mlx5: Support configuring max data
+ virtqueue
+Message-ID: <YdiABvwrK3WxfHqb@archlinux-ax161>
+References: <20220105114646.577224-1-elic@nvidia.com>
+ <20220105114646.577224-8-elic@nvidia.com>
+ <99150f0c-6814-a0cc-8640-aa8014af6ed0@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,202 +36,186 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164150476548.2994594.12291632629854686642.stgit@warthog.procyon.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <99150f0c-6814-a0cc-8640-aa8014af6ed0@oracle.com>
 
-Hi David,
+Apologies if this reply is somewhat mangled. This patch did not appear
+to make it to the mailing list so I had to use another reply that did to
+base it on.
 
-I love your patch! Perhaps something to improve:
+> On 1/5/2022 3:46 AM, Eli Cohen wrote:
+> Check whether the max number of data virtqueue pairs was provided when a
+> adding a new device and verify the new value does not exceed device
+> capabilities.
+> 
+> In addition, change the arrays holding virtqueue and callback contexts
+> to be dynamically allocated.
+> 
+> Signed-off-by: Eli Cohen <elic@nvidia.com>
+> ---
+> v6 -> v7:
+> 1. Evaluate RQT table size based on config.max_virtqueue_pairs.
+> 
+>   drivers/vdpa/mlx5/net/mlx5_vnet.c | 51 ++++++++++++++++++++++---------
+>   1 file changed, 37 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 4a2149f70f1e..d4720444bf78 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -131,11 +131,6 @@ struct mlx5_vdpa_virtqueue {
+>   	struct mlx5_vq_restore_info ri;
+>   };
+> -/* We will remove this limitation once mlx5_vdpa_alloc_resources()
+> - * provides for driver space allocation
+> - */
+> -#define MLX5_MAX_SUPPORTED_VQS 16
+> -
+>   static bool is_index_valid(struct mlx5_vdpa_dev *mvdev, u16 idx)
+>   {
+>   	if (unlikely(idx > mvdev->max_idx))
+> @@ -148,8 +143,8 @@ struct mlx5_vdpa_net {
+>   	struct mlx5_vdpa_dev mvdev;
+>   	struct mlx5_vdpa_net_resources res;
+>   	struct virtio_net_config config;
+> -	struct mlx5_vdpa_virtqueue vqs[MLX5_MAX_SUPPORTED_VQS];
+> -	struct vdpa_callback event_cbs[MLX5_MAX_SUPPORTED_VQS + 1];
+> +	struct mlx5_vdpa_virtqueue *vqs;
+> +	struct vdpa_callback *event_cbs;
+>   	/* Serialize vq resources creation and destruction. This is required
+>   	 * since memory map might change and we need to destroy and create
+> @@ -1218,7 +1213,7 @@ static void suspend_vqs(struct mlx5_vdpa_net *ndev)
+>   {
+>   	int i;
+> -	for (i = 0; i < MLX5_MAX_SUPPORTED_VQS; i++)
+> +	for (i = 0; i < ndev->mvdev.max_vqs; i++)
+>   		suspend_vq(ndev, &ndev->vqs[i]);
+>   }
+> @@ -1244,8 +1239,14 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+>   	void *in;
+>   	int i, j;
+>   	int err;
+> +	int num;
+> -	max_rqt = min_t(int, MLX5_MAX_SUPPORTED_VQS / 2,
+> +	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+> +		num = 1;
+> +	else
+> +		num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
+> +
+> +	max_rqt = min_t(int, roundup_pow_of_two(num),
+>   			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
+>   	if (max_rqt < 1)
+>   		return -EOPNOTSUPP;
+> @@ -1262,7 +1263,7 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+>   	MLX5_SET(rqtc, rqtc, rqt_max_size, max_rqt);
+>   	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+>   	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
+> -		list[i] = cpu_to_be32(ndev->vqs[j % ndev->mvdev.max_vqs].virtq_id);
+> +		list[i] = cpu_to_be32(ndev->vqs[j % (2 * num)].virtq_id);
+>   	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
+>   	err = mlx5_vdpa_create_rqt(&ndev->mvdev, in, inlen, &ndev->res.rqtn);
+> @@ -2220,7 +2221,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+>   	clear_vqs_ready(ndev);
+>   	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+>   	ndev->mvdev.status = 0;
+> -	memset(ndev->event_cbs, 0, sizeof(ndev->event_cbs));
+> +	memset(ndev->event_cbs, 0, sizeof(*ndev->event_cbs) * (mvdev->max_vqs + 1));
+>   	ndev->mvdev.actual_features = 0;
+>   	++mvdev->generation;
+>   	if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
+> @@ -2293,6 +2294,8 @@ static void mlx5_vdpa_free(struct vdpa_device *vdev)
+>   	}
+>   	mlx5_vdpa_free_resources(&ndev->mvdev);
+>   	mutex_destroy(&ndev->reslock);
+> +	kfree(ndev->event_cbs);
+> +	kfree(ndev->vqs);
+>   }
+>   static struct vdpa_notification_area mlx5_get_vq_notification(struct vdpa_device *vdev, u16 idx)
+> @@ -2538,15 +2541,33 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+>   		return -EOPNOTSUPP;
+>   	}
+> -	/* we save one virtqueue for control virtqueue should we require it */
+>   	max_vqs = MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues);
+> -	max_vqs = min_t(u32, max_vqs, MLX5_MAX_SUPPORTED_VQS);
+> +	if (max_vqs < 2) {
+> +		dev_warn(mdev->device,
+> +			 "%d virtqueues are supported. At least 2 are required\n",
+> +			 max_vqs);
+> +		return -EAGAIN;
+> +	}
+> +
+> +	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP)) {
+> +		if (add_config->net.max_vq_pairs > max_vqs / 2)
+> +			return -EINVAL;
+> +		max_vqs = min_t(u32, max_vqs, 2 * add_config->net.max_vq_pairs);
+> +	} else {
+> +		max_vqs = 2;
+> +	}
+>   	ndev = vdpa_alloc_device(struct mlx5_vdpa_net, mvdev.vdev, mdev->device, &mlx5_vdpa_ops,
+>   				 name, false);
+>   	if (IS_ERR(ndev))
+>   		return PTR_ERR(ndev);
+> +	ndev->vqs = kcalloc(max_vqs, sizeof(*ndev->vqs), GFP_KERNEL);
+> +	ndev->event_cbs = kcalloc(max_vqs + 1, sizeof(*ndev->event_cbs), GFP_KERNEL);
+> +	if (!ndev->vqs || !ndev->event_cbs) {
+> +		err = -ENOMEM;
+> +		goto err_alloc;
+> +	}
 
-[auto build test WARNING on next-20220106]
-[cannot apply to cifs/for-next linus/master v5.16-rc8 v5.16-rc7 v5.16-rc6 v5.16-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Clang warns:
 
-url:    https://github.com/0day-ci/linux/commits/David-Howells/cifs-In-progress-conversion-to-use-iov_iters-instead-of-page-lists/20220107-053700
-base:    3770333b3f8cb7c9110889853afaa49777c26ea7
-config: i386-randconfig-r026-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080142.Tton1sB4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/259db76d15582dcfb2436b4f3a39a18c2bae00a6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review David-Howells/cifs-In-progress-conversion-to-use-iov_iters-instead-of-page-lists/20220107-053700
-        git checkout 259db76d15582dcfb2436b4f3a39a18c2bae00a6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/i810/ drivers/i2c/busses/ drivers/pci/endpoint/functions/ fs/cifs/ sound/pci/
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2574:6: error: variable 'mvdev' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+        if (!ndev->vqs || !ndev->event_cbs) {
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2660:14: note: uninitialized use occurs here
+        put_device(&mvdev->vdev.dev);
+                    ^~~~~
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2574:2: note: remove the 'if' if its condition is always false
+        if (!ndev->vqs || !ndev->event_cbs) {
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2574:6: error: variable 'mvdev' is used uninitialized whenever '||' condition is true [-Werror,-Wsometimes-uninitialized]
+        if (!ndev->vqs || !ndev->event_cbs) {
+            ^~~~~~~~~~
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2660:14: note: uninitialized use occurs here
+        put_device(&mvdev->vdev.dev);
+                    ^~~~~
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2574:6: note: remove the '||' if its condition is always false
+        if (!ndev->vqs || !ndev->event_cbs) {
+            ^~~~~~~~~~~~~
+drivers/vdpa/mlx5/net/mlx5_vnet.c:2534:29: note: initialize the variable 'mvdev' to silence this warning
+        struct mlx5_vdpa_dev *mvdev;
+                                   ^
+                                    = NULL
+2 errors generated.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I was going to send a patch just moving "err_alloc" right above "return err;"
+but I don't think that is a proper fix. I think this patch is going to
+result in memory leaks on the err_mpfs and err_mtu paths, as ndev->vqs
+and ndev->event_cbs will have been allocated but they are only cleaned
+up in mlx5_vdpa_free_resources(). Additionally, I don't think the
+results of these allocations should be checked together, because one
+could succeed and the other could fail, meaning one needs to be cleaned
+up while the other doesn't.
 
-All warnings (new ones prefixed by >>):
+Cheers,
+Nathan
 
->> fs/cifs/file.c:2435:7: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   if (len < max_len)
-                       ^~~
-   fs/cifs/file.c:2385:30: note: initialize the variable 'len' to silence this warning
-           unsigned int xid, wsize, len, max_len;
-                                       ^
-                                        = 0
-   1 warning generated.
---
->> fs/cifs/smb2ops.c:4681:10: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(size, PAGE_SIZE);
-                                 ^~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4912:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (rdata->result != 0) {
-                       ^~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4941:9: note: uninitialized use occurs here
-           return length;
-                  ^~~~~~
-   fs/cifs/smb2ops.c:4912:3: note: remove the 'if' if its condition is always true
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4811:12: note: initialize the variable 'length' to silence this warning
-           int length;
-                     ^
-                      = 0
-   2 warnings generated.
-
-
-vim +/len +2435 fs/cifs/file.c
-
-  2369	
-  2370	/*
-  2371	 * Write back the locked page and any subsequent non-locked dirty pages.
-  2372	 */
-  2373	static ssize_t cifs_write_back_from_locked_folio(struct address_space *mapping,
-  2374							 struct writeback_control *wbc,
-  2375							 struct folio *folio,
-  2376							 loff_t start, loff_t end)
-  2377	{
-  2378		struct inode *inode = mapping->host;
-  2379		struct TCP_Server_Info *server;
-  2380		struct cifs_writedata *wdata;
-  2381		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-  2382		struct cifs_credits credits_on_stack;
-  2383		struct cifs_credits *credits = &credits_on_stack;
-  2384		struct cifsFileInfo *cfile = NULL;
-  2385		unsigned int xid, wsize, len, max_len;
-  2386		loff_t i_size = i_size_read(inode);
-  2387		long count = wbc->nr_to_write;
-  2388		int rc;
-  2389	
-  2390		if (folio_start_writeback(folio))
-  2391			BUG();
-  2392	
-  2393		count -= folio_nr_pages(folio);
-  2394	
-  2395		xid = get_xid();
-  2396		server = cifs_pick_channel(cifs_sb_master_tcon(cifs_sb)->ses);
-  2397	
-  2398		rc = cifs_get_writable_file(CIFS_I(inode), FIND_WR_ANY, &cfile);
-  2399		if (rc) {
-  2400			cifs_dbg(VFS, "No writable handle in writepages rc=%d\n", rc);
-  2401			goto err_xid;
-  2402		}
-  2403	
-  2404		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->wsize,
-  2405						   &wsize, credits);
-  2406		if (rc != 0)
-  2407			goto err_close;
-  2408	
-  2409		wdata = cifs_writedata_alloc(cifs_writev_complete);
-  2410		if (!wdata) {
-  2411			rc = -ENOMEM;
-  2412			goto err_uncredit;
-  2413		}
-  2414	
-  2415		wdata->sync_mode = wbc->sync_mode;
-  2416		wdata->offset = folio_pos(folio);
-  2417		wdata->pid = wdata->cfile->pid;
-  2418		wdata->credits = credits_on_stack;
-  2419		wdata->cfile = cfile;
-  2420		wdata->server = server;
-  2421		cfile = NULL;
-  2422	
-  2423		/* Find all consecutive lockable dirty pages, stopping when we find a
-  2424		 * page that is not immediately lockable, is not dirty or is missing,
-  2425		 * or we reach the end of the range.
-  2426		 */
-  2427		if (start < i_size) {
-  2428			/* Trim the write to the EOF; the extra data is ignored.  Also
-  2429			 * put an upper limit on the size of a single storedata op.
-  2430			 */
-  2431			max_len = wsize;
-  2432			max_len = min_t(unsigned long long, max_len, end - start + 1);
-  2433			max_len = min_t(unsigned long long, max_len, i_size - start);
-  2434	
-> 2435			if (len < max_len)
-  2436				cifs_extend_writeback(mapping, &count, start,
-  2437						      max_len, &len);
-  2438			len = min_t(loff_t, len, max_len);
-  2439		}
-  2440	
-  2441		wdata->bytes = len;
-  2442	
-  2443		/* We now have a contiguous set of dirty pages, each with writeback
-  2444		 * set; the first page is still locked at this point, but all the rest
-  2445		 * have been unlocked.
-  2446		 */
-  2447		folio_unlock(folio);
-  2448	
-  2449		if (start < i_size) {
-  2450			iov_iter_xarray(&wdata->iter, WRITE, &mapping->i_pages, start, len);
-  2451	
-  2452			rc = adjust_credits(wdata->server, &wdata->credits, wdata->bytes);
-  2453			if (rc)
-  2454				goto err_wdata;
-  2455	
-  2456			if (wdata->cfile->invalidHandle)
-  2457				rc = -EAGAIN;
-  2458			else
-  2459				rc = wdata->server->ops->async_writev(wdata,
-  2460								      cifs_writedata_release);
-  2461		} else {
-  2462			/* The dirty region was entirely beyond the EOF. */
-  2463			rc = 0;
-  2464		}
-  2465	
-  2466	err_wdata:
-  2467		kref_put(&wdata->refcount, cifs_writedata_release);
-  2468	err_uncredit:
-  2469		add_credits_and_wake_if(server, credits, 0);
-  2470	err_close:
-  2471		if (cfile)
-  2472			cifsFileInfo_put(cfile);
-  2473	err_xid:
-  2474		free_xid(xid);
-  2475		if (rc == 0) {
-  2476			cifs_pages_written_back(inode, start, len);
-  2477			wbc->nr_to_write = count;
-  2478		} else if (is_retryable_error(rc)) {
-  2479			cifs_pages_write_redirty(inode, start, len);
-  2480		} else {
-  2481			cifs_pages_write_failed(inode, start, len);
-  2482			mapping_set_error(mapping, rc);
-  2483		}
-  2484		/* Indication to update ctime and mtime as close is deferred */
-  2485		set_bit(CIFS_INO_MODIFIED_ATTR, &CIFS_I(inode)->flags);
-  2486		return rc;
-  2487	}
-  2488	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>   	ndev->mvdev.max_vqs = max_vqs;
+>   	mvdev = &ndev->mvdev;
+>   	mvdev->mdev = mdev;
+> @@ -2627,6 +2648,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+>   		mlx5_mpfs_del_mac(pfmdev, config->mac);
+>   err_mtu:
+>   	mutex_destroy(&ndev->reslock);
+> +err_alloc:
+>   	put_device(&mvdev->vdev.dev);
+>   	return err;
+>   }
+> @@ -2669,7 +2691,8 @@ static int mlx5v_probe(struct auxiliary_device *adev,
+>   	mgtdev->mgtdev.ops = &mdev_ops;
+>   	mgtdev->mgtdev.device = mdev->device;
+>   	mgtdev->mgtdev.id_table = id_table;
+> -	mgtdev->mgtdev.config_attr_mask = BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR);
+> +	mgtdev->mgtdev.config_attr_mask = BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR) |
+> +					  BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP);
+>   	mgtdev->madev = madev;
+>   	err = vdpa_mgmtdev_register(&mgtdev->mgtdev);
