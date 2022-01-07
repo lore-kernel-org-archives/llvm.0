@@ -1,35 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EE8168
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 00:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 361A8C36AE0;
-	Fri,  7 Jan 2022 00:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9430C168
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 00:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48A0C36AE0;
+	Fri,  7 Jan 2022 00:29:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641514592;
-	bh=OfWvjgMz/3A2cIrWooPNudV7uT9VchsrhR5VhQdH8dY=;
+	s=k20201202; t=1641515397;
+	bh=M3mrcT+U5cdZQDBW8NCmphpUOXO8xVPjUm5lYYznGwA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=soRh/bTmEiDBwxCHqevgGU3/fdavQHU24UxRQTjfUtXb7JO/wMUwf48N1HOl/IH3n
-	 VU2yg3yrwiQDFjhMs47yHKhbqolAHqGBOl/0pyvo24POpX7YLDzbXkZz0Rpg/ufW2C
-	 nZvMnM9ocIgL7yr2Q4IeS3c2zwuHCzj3TF84A9oo5k5X0Zq01bpcoGHUwCuXCMPSsH
-	 4DQFGtRINjGlkGuiHQQqKZUJFucR+J+Bu/gm3E6qyIv2cghrXZfQ79BJvbvR0BecEk
-	 XyGzG4Bg6BdzgkMI0Tm+0dnqcT4De+LebwYHo01kwobUBqPnldzGPq0OF/4aJ9O4z5
-	 MdsHT4qeNKfJw==
-Date: Thu, 6 Jan 2022 17:16:27 -0700
+	b=Ux3csKe+KPRbeb7ePa8llBLIiCdHhj3h6PmMNe5t5m8AAHVHmquJAbqdBQO4GMQJc
+	 mR/+4i0+T3kmT6rqaGSEUM/QZzj0QCE09+XdiGJxO+wW6FaDhzg1rqUCM+s0hKVxOy
+	 LMG3gbdrrop+cA6oS+UFr6b4XAlG65O06Q5kXymuaOKyQkKJVlikbZIBCcLd0XHBs0
+	 SG3IIIZPtREjqsoxlg9kqDaC2RE1rCnIm6An0tO0bsJ4Zh9Q0nfeWEgwk0sGl4okct
+	 45ZCYjCKSsxuwNepPG0SfgYC8Ni8JRzi4Y7hA2F0jBrQswYG4saFHgOXsJtn8FeVRY
+	 cL0F2xnbixo4w==
+Date: Thu, 6 Jan 2022 17:29:52 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Samuel Zeter <samuelzeter@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
-Message-ID: <YdeGWyzvsXxntcAT@archlinux-ax161>
-References: <20220106023606.283953-1-samuelzeter@gmail.com>
- <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
- <Ydd522/ivtZunIXl@szeter>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdeJgJFRRsIb9pah@archlinux-ax161>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,29 +43,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ydd522/ivtZunIXl@szeter>
+In-Reply-To: <YdQlwnDs2N9a5Reh@gmail.com>
 
-On Fri, Jan 07, 2022 at 10:23:07AM +1100, Samuel Zeter wrote:
-> Thanks for the feedback, Nathan.
+On Tue, Jan 04, 2022 at 11:47:30AM +0100, Ingo Molnar wrote:
+> > > With the fast-headers kernel that's down to ~36,000 lines of code, 
+> > > almost a factor of 3 reduction:
+> > > 
+> > >   # fast-headers-v1:
+> > >   kepler:~/mingo.tip.git> wc -l kernel/pid.i
+> > >   35941 kernel/pid.i
+> > 
+> > Coming from someone who often has to reduce a preprocessed kernel source 
+> > file with creduce/cvise to report compiler bugs, this will be a very 
+> > welcomed change, as those tools will have to do less work, and I can get 
+> > my reports done faster.
 > 
-> > For the future, I recommend putting the maintainers in the "To" field,
-> > rather than "Cc", to ensure they actually see it. Additionally, I see
-> > some small nits in the commit message that the tip maintainers might
-> > comment on, see
-> > 
-> > https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
-> > 
-> Thanks for the link, I missed that one. What were the nits apparent to you
-> in the commit message?
+> That's nice, didn't think of that side effect.
+> 
+> Could you perhaps measure this too, to see how much of a benefit it is?
 
-I primarily just saw a couple instances of "This patch", which is
-frowned upon in the main submitting patches document:
+As it turns out, I got an opportunity to measure this sooner rather than
+later [1]. Using cvise [2] with an identical set of toolchains and
+interestingness test [3], reducing net/core/skbuff.c took significantly
+less time with the version from the fast-headers tree.
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#submittingpatches
+v5.16-rc8:
 
-I thought I saw something else but upon further inspection, I didn't.
-It is minor enough that I would wait for further review comments from
-others to submit a v2.
+$ wc -l skbuff.i
+105135 skbuff.i
+
+$ time cvise test.fish skbuff.i
+...
+________________________________________________________
+Executed in  114.02 mins    fish           external
+   usr time  1180.43 mins   69.29 millis  1180.43 mins
+   sys time  229.80 mins  248.11 millis  229.79 mins
+
+fast-headers:
+
+$ wc -l skbuff.i
+78765 skbuff.i
+
+$ time cvise test.fish skbuff.i
+...
+________________________________________________________
+Executed in   47.38 mins    fish           external
+   usr time  620.17 mins   32.78 millis  620.17 mins
+   sys time  123.70 mins  122.38 millis  123.70 mins
+
+I was not expecting that much of a difference but it somewhat makes
+sense, as the tool spends less time eliminated unused code and the
+compiler invocations will be incrementally quicker as the input becomes
+smaller.
+
+[1]: https://github.com/ClangBuiltLinux/linux/issues/1563
+[2]: https://github.com/marxin/cvise
+[3]: https://github.com/nathanchance/creduce-files/tree/61056fd763ae3bfb53ff0ae4c1d95550c7c0a5b7/cbl-1563
 
 Cheers,
 Nathan
