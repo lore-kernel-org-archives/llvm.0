@@ -1,115 +1,134 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A21173
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 19:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641582489; x=1673118489;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1ximh22MyQvZLz4L9vpGsuaQggghrD58iTFillYV5oM=;
-  b=Ivi6jzzO1vkSd5uTq+nUT7hSgIug2qW3JiFU2hStsD0JGlEy7oTN2YON
-   RKr5/hUB5+uHtCE+0RYCb/EruF01ewWSrhED2pusR+MoazWzUEcQNvJRJ
-   PUUvhJL2kMz/hkS8UZhncKlTebeicT7uCFFuKQF+AbITA3FJ0QGh6GADa
-   m5ZEzYecj72n+aYzZsHgvq5AdwiV6Y0hvpsxmky6KnfDUbaRls0RDSYOS
-   cSH5IpzIwUi0RJudhkTnMmgwpyahHE4YfpMDytRK7G1if/ihPwl0+Fszq
-   Az6eZeydgLJN7Qkg2F1P6g99DblSMK9OnTJY+x0ccszBy961kQ62h0rMx
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="242875235"
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="242875235"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 11:08:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="473409617"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jan 2022 11:08:08 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n5uat-000Ix7-Ge; Fri, 07 Jan 2022 19:08:07 +0000
-Date: Sat, 8 Jan 2022 03:07:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm:net-queue 128/174] drivers/net/dsa/mt7530.c:3060:32: error: no
- member named 'pcs_ops' in 'struct mt7530_priv'
-Message-ID: <202201080355.pMKHutjh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB764173
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 19:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3DDC36AE9;
+	Fri,  7 Jan 2022 19:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1641584634;
+	bh=3ReycX2PmwqL8N5r5obhn2BQBzx0StuQjWOgoCkzjTg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=g2keSuf4cMWXwPuCTD0CXq/i07A34+fzYW+SiqaBpryXa3ZouwEi5Ger2a26eSQAa
+	 sYyGQdtYiFYYmnEAGSU/bcbXr85Zj6nIOaqP4Z7xQr+nAqy+phyBrMoi6LLBFg2v68
+	 llt3q9hjNxxNrbwf/xb8+fDAvDmAh1/PB1WLeOM0LdkAWZqMGrP5S3Sf8LCDF2k57r
+	 KlPlNW5H4Yc8a2nncHxLJXBK1lVT/lbs8YAPsg9Rgw13HHiJzJn1swbJ4lP7LLDgpv
+	 01GzVx+zjOpncwEZtfXXR50nBsPzbqHGgtVQS9m6kE91nObUGKYSpVA+DGHq5RhW82
+	 QaEH7LxIGASSw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH RFC 4.9 0/5] Fix booting arm64 big endian with QEMU 5.0.0+
+Date: Fri,  7 Jan 2022 12:43:30 -0700
+Message-Id: <20220107194335.3090066-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git net-queue
-head:   9ceab2608ffe3f543e1118044bc86bc6ccb93255
-commit: 0ecdf3ab2ae1d35480614337758d8db5060885cf [128/174] net: dsa: mt7530: partially convert to phylink_pcs  *EXPERIMENTAL*
-config: i386-randconfig-a005-20220106 (https://download.01.org/0day-ci/archive/20220108/202201080355.pMKHutjh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add arm git://git.armlinux.org.uk/~rmk/linux-arm.git
-        git fetch --no-tags arm net-queue
-        git checkout 0ecdf3ab2ae1d35480614337758d8db5060885cf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hello everyone,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+After upgrading the version of QEMU used in our CI from 4.2.0 to 6.2.0,
+I noticed that our 4.9 arm64 big endian builds stopped booting properly.
+This is not something that is clang specific, I could reproduce it with
+GCC 8.3.0 (the rootfs is at [1]).
 
-All errors (new ones prefixed by >>):
+$ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- distclean defconfig
 
-   drivers/net/dsa/mt7530.c:3026:18: error: incompatible function pointer types initializing 'int (*)(struct phylink_pcs *, unsigned long *, const struct phylink_link_state *)' with an expression of type 'void (struct phylink_pcs *, unsigned long *, const struct phylink_link_state *)' [-Werror,-Wincompatible-function-pointer-types]
-           .pcs_validate = mt753x_pcs_validate,
-                           ^~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/mt7530.c:3033:18: error: incompatible function pointer types initializing 'int (*)(struct phylink_pcs *, unsigned long *, const struct phylink_link_state *)' with an expression of type 'void (struct phylink_pcs *, unsigned long *, const struct phylink_link_state *)' [-Werror,-Wincompatible-function-pointer-types]
-           .pcs_validate = mt753x_pcs_validate,
-                           ^~~~~~~~~~~~~~~~~~~
->> drivers/net/dsa/mt7530.c:3060:32: error: no member named 'pcs_ops' in 'struct mt7530_priv'
-                   priv->pcs[i].pcs.ops = priv->pcs_ops;
-                                          ~~~~  ^
-   3 errors generated.
+$ scripts/config -e CPU_BIG_ENDIAN
+
+$ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- olddefconfig Image.gz
+
+$ qemu-system-aarch64 \
+    -initrd rootfs.cpio \
+    -append 'console=ttyAMA0 earlycon' \
+    -cpu max \
+    -machine virt,gic-version=max \
+    -machine virtualization=true \
+    -display none \
+    -kernel arch/arm64/boot/Image.gz \
+    -m 512m \
+    -nodefaults \
+    -serial mon:stdio
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 4.9.296 (nathan@archlinux-ax161) (gcc version 8.3.0 (Debian 8.3.0-2) ) #1 SMP PREEMPT Fri Jan 7 19:10:49 UTC 2022
+...
+[    0.773924] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[    0.773924]
+[    0.776016] CPU: 0 PID: 1 Comm: init Not tainted 4.9.296 #1
+[    0.776149] Hardware name: linux,dummy-virt (DT)
+[    0.776375] Call trace:
+[    0.777063] [<ffff000008088ba0>] dump_backtrace+0x0/0x1b0
+[    0.777293] [<ffff000008088d64>] show_stack+0x14/0x20
+[    0.777420] [<ffff0000088c2d18>] dump_stack+0x98/0xb8
+[    0.777555] [<ffff0000088c0ee8>] panic+0x11c/0x278
+[    0.777684] [<ffff0000080c4d20>] do_exit+0x940/0x970
+[    0.777816] [<ffff0000080c4db8>] do_group_exit+0x38/0xa0
+[    0.777974] [<ffff0000080cf698>] get_signal+0xb8/0x678
+[    0.778111] [<ffff000008087ca8>] do_signal+0xd8/0x9b0
+[    0.778248] [<ffff0000080888dc>] do_notify_resume+0x8c/0xa8
+[    0.778392] [<ffff000008082ff4>] work_pending+0x8/0x10
+[    0.778790] Kernel Offset: disabled
+[    0.778891] Memory Limit: none
+[    0.779241] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+I ended up bisecting QEMU down to cd3f80aba0 ("target/arm: Enable
+ARMv8.1-VHE in -cpu max") [2], which did not seem obviously broken. I
+noticed that our 4.14 builds were fine so I ended up doing a reverse
+bisect down to commit ec347012bbec ("arm64: sysreg: Move to use
+definitions for all the SCTLR bits"). Getting that change to apply
+cleanly involved applying the three other arm64 patches in this series
+and making it build properly required the BUILD_BUG_ON header split
+(including bug.h might have been sufficient but I did not want to risk
+any further breakage). I searched through mainline to see if there were
+any fixes commits that I missed and I did not find any.
+
+I am not sure if this series would be acceptable in 4.9, hence the RFC
+tag. If not, I am happy to just spin down our boot tests of arm64 big
+endian on 4.9, which is not a super valuable target, but I figured I
+would send the series and let others decide!
+
+[1]: https://github.com/ClangBuiltLinux/boot-utils/tree/6cfa15992d375dfb874ca0677abdaebfba4f74e6/images/arm64be
+[2]: https://gitlab.com/qemu-project/qemu/-/commit/cd3f80aba0c559a6291f7c3e686422b15381f6b7
+
+Cheers,
+Nathan
+
+Ian Abbott (1):
+  bug: split BUILD_BUG stuff out into <linux/build_bug.h>
+
+James Morse (1):
+  arm64: sysreg: Move to use definitions for all the SCTLR bits
+
+Mark Rutland (2):
+  arm64: reduce el2_setup branching
+  arm64: move !VHE work to end of el2_setup
+
+Stefan Traby (1):
+  arm64: Remove a redundancy in sysreg.h
+
+ arch/arm64/include/asm/sysreg.h | 69 +++++++++++++++++++++++++--
+ arch/arm64/kernel/head.S        | 49 ++++++++-----------
+ arch/arm64/mm/proc.S            | 24 +---------
+ include/linux/bug.h             | 72 +---------------------------
+ include/linux/build_bug.h       | 84 +++++++++++++++++++++++++++++++++
+ 5 files changed, 170 insertions(+), 128 deletions(-)
+ create mode 100644 include/linux/build_bug.h
 
 
-vim +3060 drivers/net/dsa/mt7530.c
+base-commit: 710bf39c7aec32641ea63f6593db1df8c3e4a4d7
+-- 
+2.34.1
 
-  3039	
-  3040	static int
-  3041	mt753x_setup(struct dsa_switch *ds)
-  3042	{
-  3043		struct mt7530_priv *priv = ds->priv;
-  3044		int ret = priv->info->sw_setup(ds);
-  3045		int i;
-  3046	
-  3047		if (ret)
-  3048			return ret;
-  3049	
-  3050		ret = mt7530_setup_irq(priv);
-  3051		if (ret)
-  3052			return ret;
-  3053	
-  3054		ret = mt7530_setup_mdio(priv);
-  3055		if (ret && priv->irq)
-  3056			mt7530_free_irq_common(priv);
-  3057	
-  3058		/* Initialise the PCS devices */
-  3059		for (i = 0; i < priv->ds->num_ports; i++) {
-> 3060			priv->pcs[i].pcs.ops = priv->pcs_ops;
-  3061			priv->pcs[i].priv = priv;
-  3062			priv->pcs[i].port = i;
-  3063		}
-  3064	
-  3065		return ret;
-  3066	}
-  3067	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
