@@ -1,124 +1,279 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E7A29CA
-	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 21:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1641590041;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CoxKyAZnnR3hc0Xq4/bujSICkBAnBdTmtPeVb0xDLIM=;
-	b=cOMd6MdCRu5plr7S3JoxJBpcfumIqCRpSeGmnqO7M3n0g556XlPEU0PbyDETWCSspkZMAA
-	Owysu/fx4pPUxcbxIwalXZIvP8dUnrJ6WoCHYR65Bd07wgSrhrLFPQzk3T3ya3/4UELiUi
-	VYx24BCJLtQz0l5S4d4IcEhfDk80KvM=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-CykstN1xN36Mpg5V4gTPqw-1; Fri, 07 Jan 2022 16:13:59 -0500
-X-MC-Unique: CykstN1xN36Mpg5V4gTPqw-1
-Received: by mail-ot1-f69.google.com with SMTP id a89-20020a9d2662000000b005909e4d9585so458188otb.18
-        for <llvm@lists.linux.dev>; Fri, 07 Jan 2022 13:13:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CoxKyAZnnR3hc0Xq4/bujSICkBAnBdTmtPeVb0xDLIM=;
-        b=t6jPZ6JNVwuz6Q9+U85ls+gsplUEyXLPZRqBDDa4fWvAhr0Vt4pkYB0/XcNCR7/5BM
-         68BCKJ95tdX1R+fdREdYQCdLnT5aPMkWA8eXao51f/Wup4gZOEsIIdC7H8DbDM/CqMdX
-         3dHyHLnKAK+aBCOc0PYlfUEXVr60vcKN0WpSnwRr5oAtR7W3z8tuXTJSEUJHt0fNTX9Z
-         dkFawOcAuTF6e37lJu6gZay/vLs44f0DRDNV5GfEayhV+rdW4wlD3VIb9b5ba0eMSLji
-         4i11eJT8joSY1kbxYQUAt/FsHczu4eW6+bFu+PCBkvl/zVd5V4jqZBKEmAOWoCNeRGem
-         FxOQ==
-X-Gm-Message-State: AOAM530RK5+Yj2Tmhl5u04wU6NVCA9uxHE6Iy6iofaV2DwMNgb/yovab
-	GP1Kz04Zl34K/RkHAE+IwWoqSHnKpXHxr9QZqDTFxm2xKb7NX+k/SWOU9qA+L+4WbY17db87akL
-	FKImYVMLctxBDtg==
-X-Received: by 2002:a05:6830:34a3:: with SMTP id c35mr46669377otu.379.1641590038532;
-        Fri, 07 Jan 2022 13:13:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJygIGgpJ6DCegCd7Ncbdf1YNgwG/+5B2jrt7mHpcIrnWFgKCg/rH7tBIAGfsm+B/wdvFZl52Q==
-X-Received: by 2002:a05:6830:34a3:: with SMTP id c35mr46669365otu.379.1641590038351;
-        Fri, 07 Jan 2022 13:13:58 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id g61sm1111592otg.43.2022.01.07.13.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 13:13:57 -0800 (PST)
-From: trix@redhat.com
-To: mst@redhat.com,
-	jasowang@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	elic@nvidia.com,
-	parav@nvidia.com,
-	si-wei.liu@oracle.com,
-	xieyongji@bytedance.com
-Cc: virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] vdpa/mlx5: fix error handling in mlx5_vdpa_dev_add()
-Date: Fri,  7 Jan 2022 13:13:52 -0800
-Message-Id: <20220107211352.3940570-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EE329CA
+	for <llvm@lists.linux.dev>; Fri,  7 Jan 2022 21:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641590479; x=1673126479;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZL87D5+MkhP7YBVzAQ1i5Bw8Dr5C7yowJOzzOxLI7Ns=;
+  b=GylpZpUfGXnh/GYXkNh0gDXKahY4PbG0z4KenE/vZ2xbVEkTfPq8oJbk
+   JFDRFu1N2t0oqb+wO4rhxjUN7hnO0E8KiuKgyDWxYO9Tlh94ieGcuS1BR
+   tQsyBdni34oF2xMHWrKilSDAQJ2N+u+bIB1GKGmVpggDvsj56TI6QV6nl
+   HMdX5mJRrDJxT9Ua2Iyg+xDT2pkInVdvPRDIbA+QUVeFH6D5ynhrKKUXK
+   QDxZo0uFMEwUYU35EbpVs/udylz74rvPk11WC/SXPM5PsZgY4LLOkRpIf
+   g8vRqyvlczQjz7OQ6qY/4S+wrw8W+5PNQbPFdeB2rxfu/hwtpjQr6asbw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="329286660"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="329286660"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 13:21:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="471430143"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 13:21:16 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n5wfj-000J3I-P6; Fri, 07 Jan 2022 21:21:15 +0000
+Date: Sat, 8 Jan 2022 05:20:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>, smfrench@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, nspmangalore@gmail.com,
+	dhowells@redhat.com, jlayton@kernel.org, linux-cifs@vger.kernel.org,
+	linux-cachefs@redhat.com
+Subject: Re: [PATCH 3/3] cifs: Eliminate cifs_readdata::pages
+Message-ID: <202201080540.7GY9DVWv-lkp@intel.com>
+References: <164149195200.2867367.8652749735914667514.stgit@warthog.procyon.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164149195200.2867367.8652749735914667514.stgit@warthog.procyon.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+Hi David,
 
-Clang build fails with
-mlx5_vnet.c:2574:6: error: variable 'mvdev' is used uninitialized whenever
-  'if' condition is true
-        if (!ndev->vqs || !ndev->event_cbs) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mlx5_vnet.c:2660:14: note: uninitialized use occurs here
-        put_device(&mvdev->vdev.dev);
-                    ^~~~~
-This because mvdev is set after trying to allocate ndev->vqs,event_cbs.
-So move the allocation to after mvdev is set but before the arrays
-are used in init_mvqs()
+I love your patch! Yet something to improve:
 
-Fixes: 7620d51af29a ("vdpa/mlx5: Support configuring max data virtqueue")
-Signed-off-by: Tom Rix <trix@redhat.com>
+[auto build test ERROR on next-20220105]
+[cannot apply to cifs/for-next linus/master v5.16-rc8 v5.16-rc7 v5.16-rc6 v5.16-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/David-Howells/cifs-Use-netfslib/20220107-025845
+base:    7a769a3922d81cfc74ab4d90a9cc69485f260976
+config: x86_64-randconfig-r021-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080540.7GY9DVWv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ed7e6fa413c08f7992992e2282f64df2a6894f10
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review David-Howells/cifs-Use-netfslib/20220107-025845
+        git checkout ed7e6fa413c08f7992992e2282f64df2a6894f10
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> fs/cifs/file.c:2435:7: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
+                   if (len < max_len)
+                       ^~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   fs/cifs/file.c:2385:30: note: initialize the variable 'len' to silence this warning
+           unsigned int xid, wsize, len, max_len;
+                                       ^
+                                        = 0
+   1 warning generated.
+--
+>> fs/cifs/cifsencrypt.c:66:24: error: no member named 'rq_npages' in 'struct smb_rqst'
+           for (i = 0; i < rqst->rq_npages; i++) {
+                           ~~~~  ^
+>> fs/cifs/cifsencrypt.c:70:3: error: implicit declaration of function 'rqst_page_get_length' [-Werror,-Wimplicit-function-declaration]
+                   rqst_page_get_length(rqst, i, &len, &offset);
+                   ^
+>> fs/cifs/cifsencrypt.c:72:31: error: no member named 'rq_pages' in 'struct smb_rqst'
+                   kaddr = (char *) kmap(rqst->rq_pages[i]) + offset;
+                                         ~~~~  ^
+   fs/cifs/cifsencrypt.c:78:17: error: no member named 'rq_pages' in 'struct smb_rqst'
+                           kunmap(rqst->rq_pages[i]);
+                                  ~~~~  ^
+   fs/cifs/cifsencrypt.c:82:16: error: no member named 'rq_pages' in 'struct smb_rqst'
+                   kunmap(rqst->rq_pages[i]);
+                          ~~~~  ^
+   5 errors generated.
+--
+>> fs/cifs/smb2ops.c:4437:39: error: no member named 'rq_npages' in 'struct smb_rqst'
+                   sg_len += rqst[i].rq_nvec + rqst[i].rq_npages;
+                                               ~~~~~~~ ^
+   fs/cifs/smb2ops.c:4456:27: error: no member named 'rq_npages' in 'struct smb_rqst'
+                   for (j = 0; j < rqst[i].rq_npages; j++) {
+                                   ~~~~~~~ ^
+>> fs/cifs/smb2ops.c:4459:4: error: implicit declaration of function 'rqst_page_get_length' [-Werror,-Wimplicit-function-declaration]
+                           rqst_page_get_length(&rqst[i], j, &len, &offset);
+                           ^
+>> fs/cifs/smb2ops.c:4460:36: error: no member named 'rq_pages' in 'struct smb_rqst'
+                           sg_set_page(&sg[idx++], rqst[i].rq_pages[j], len, offset);
+                                                   ~~~~~~~ ^
+>> fs/cifs/smb2ops.c:4663:4: error: must use 'struct' tag to refer to type 'page'
+                           page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
+                           ^
+                           struct 
+>> fs/cifs/smb2ops.c:4663:9: error: expected identifier or '('
+                           page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
+                                ^
+>> fs/cifs/smb2ops.c:4664:29: error: use of undeclared identifier 'page'
+                           if (!xa_store(buffer, j, page, gfp))
+                                                    ^
+>> fs/cifs/smb2ops.c:4664:35: error: use of undeclared identifier 'gfp'
+                           if (!xa_store(buffer, j, page, gfp))
+                                                          ^
+>> fs/cifs/smb2ops.c:4664:29: error: use of undeclared identifier 'page'
+                           if (!xa_store(buffer, j, page, gfp))
+                                                    ^
+>> fs/cifs/smb2ops.c:4664:35: error: use of undeclared identifier 'gfp'
+                           if (!xa_store(buffer, j, page, gfp))
+                                                          ^
+>> fs/cifs/smb2ops.c:4664:29: error: use of undeclared identifier 'page'
+                           if (!xa_store(buffer, j, page, gfp))
+                                                    ^
+>> fs/cifs/smb2ops.c:4664:35: error: use of undeclared identifier 'gfp'
+                           if (!xa_store(buffer, j, page, gfp))
+                                                          ^
+   fs/cifs/smb2ops.c:4668:28: error: use of undeclared identifier 'page'; did you mean 'pages'?
+                           if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
+                                                   ^~~~
+                                                   pages
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   fs/cifs/smb2ops.c:4644:16: note: 'pages' declared here
+           struct page **pages;
+                         ^
+   fs/cifs/smb2ops.c:4668:28: error: use of undeclared identifier 'page'; did you mean 'pages'?
+                           if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
+                                                   ^~~~
+                                                   pages
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^
+   fs/cifs/smb2ops.c:4644:16: note: 'pages' declared here
+           struct page **pages;
+                         ^
+   fs/cifs/smb2ops.c:4668:28: error: use of undeclared identifier 'page'; did you mean 'pages'?
+                           if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
+                                                   ^~~~
+                                                   pages
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^
+   fs/cifs/smb2ops.c:4644:16: note: 'pages' declared here
+           struct page **pages;
+                         ^
+   fs/cifs/smb2ops.c:4718:7: error: no member named 'rq_pages' in 'struct smb_rqst'
+           rqst.rq_pages = pages;
+           ~~~~ ^
+   fs/cifs/smb2ops.c:4719:7: error: no member named 'rq_npages' in 'struct smb_rqst'
+           rqst.rq_npages = npages;
+           ~~~~ ^
+>> fs/cifs/smb2ops.c:4720:7: error: no member named 'rq_pagesz' in 'struct smb_rqst'
+           rqst.rq_pagesz = PAGE_SIZE;
+           ~~~~ ^
+>> fs/cifs/smb2ops.c:4721:7: error: no member named 'rq_tailsz' in 'struct smb_rqst'
+           rqst.rq_tailsz = (page_data_size % PAGE_SIZE) ? : PAGE_SIZE;
+           ~~~~ ^
+   19 errors generated.
+
+
+vim +66 fs/cifs/cifsencrypt.c
+
+^1da177e4c3f41 Linus Torvalds     2005-04-16  26  
+16c568efff82e4 Al Viro            2015-11-12  27  int __cifs_calc_signature(struct smb_rqst *rqst,
+16c568efff82e4 Al Viro            2015-11-12  28  			struct TCP_Server_Info *server, char *signature,
+16c568efff82e4 Al Viro            2015-11-12  29  			struct shash_desc *shash)
+84afc29b185334 Steve French       2005-12-02  30  {
+e9917a000fcc37 Steve French       2006-03-31  31  	int i;
+307fbd31b61623 Shirish Pargaonkar 2010-10-21  32  	int rc;
+bf5ea0e2f29b00 Jeff Layton        2012-09-18  33  	struct kvec *iov = rqst->rq_iov;
+bf5ea0e2f29b00 Jeff Layton        2012-09-18  34  	int n_vec = rqst->rq_nvec;
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  35  	int is_smb2 = server->vals->header_preamble_size == 0;
+84afc29b185334 Steve French       2005-12-02  36  
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  37  	/* iov[0] is actual data and not the rfc1002 length for SMB2+ */
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  38  	if (is_smb2) {
+83ffdeadb46b61 Paulo Alcantara    2018-06-15  39  		if (iov[0].iov_len <= 4)
+83ffdeadb46b61 Paulo Alcantara    2018-06-15  40  			return -EIO;
+83ffdeadb46b61 Paulo Alcantara    2018-06-15  41  		i = 0;
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  42  	} else {
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  43  		if (n_vec < 2 || iov[0].iov_len != 4)
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  44  			return -EIO;
+83ffdeadb46b61 Paulo Alcantara    2018-06-15  45  		i = 1; /* skip rfc1002 length */
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  46  	}
+c713c8770fa5bf Ronnie Sahlberg    2018-06-12  47  
+83ffdeadb46b61 Paulo Alcantara    2018-06-15  48  	for (; i < n_vec; i++) {
+745542e210b3b1 Jeff Layton        2007-11-03  49  		if (iov[i].iov_len == 0)
+745542e210b3b1 Jeff Layton        2007-11-03  50  			continue;
+e9917a000fcc37 Steve French       2006-03-31  51  		if (iov[i].iov_base == NULL) {
+f96637be081141 Joe Perches        2013-05-04  52  			cifs_dbg(VFS, "null iovec entry\n");
+e9917a000fcc37 Steve French       2006-03-31  53  			return -EIO;
+745542e210b3b1 Jeff Layton        2007-11-03  54  		}
+83ffdeadb46b61 Paulo Alcantara    2018-06-15  55  
+16c568efff82e4 Al Viro            2015-11-12  56  		rc = crypto_shash_update(shash,
+307fbd31b61623 Shirish Pargaonkar 2010-10-21  57  					 iov[i].iov_base, iov[i].iov_len);
+14cae3243b555a Shirish Pargaonkar 2011-06-20  58  		if (rc) {
+f96637be081141 Joe Perches        2013-05-04  59  			cifs_dbg(VFS, "%s: Could not update with payload\n",
+14cae3243b555a Shirish Pargaonkar 2011-06-20  60  				 __func__);
+14cae3243b555a Shirish Pargaonkar 2011-06-20  61  			return rc;
+14cae3243b555a Shirish Pargaonkar 2011-06-20  62  		}
+14cae3243b555a Shirish Pargaonkar 2011-06-20  63  	}
+84afc29b185334 Steve French       2005-12-02  64  
+fb308a6f22f7f4 Jeff Layton        2012-09-18  65  	/* now hash over the rq_pages array */
+fb308a6f22f7f4 Jeff Layton        2012-09-18 @66  	for (i = 0; i < rqst->rq_npages; i++) {
+4c0d2a5a64332c Long Li            2018-05-30  67  		void *kaddr;
+4c0d2a5a64332c Long Li            2018-05-30  68  		unsigned int len, offset;
+16c568efff82e4 Al Viro            2015-11-12  69  
+4c0d2a5a64332c Long Li            2018-05-30 @70  		rqst_page_get_length(rqst, i, &len, &offset);
+4c0d2a5a64332c Long Li            2018-05-30  71  
+4c0d2a5a64332c Long Li            2018-05-30 @72  		kaddr = (char *) kmap(rqst->rq_pages[i]) + offset;
+16c568efff82e4 Al Viro            2015-11-12  73  
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  74  		rc = crypto_shash_update(shash, kaddr, len);
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  75  		if (rc) {
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  76  			cifs_dbg(VFS, "%s: Could not update with payload\n",
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  77  				 __func__);
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  78  			kunmap(rqst->rq_pages[i]);
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  79  			return rc;
+a12d0c590cc7ae Paulo Alcantara    2018-06-23  80  		}
+fb308a6f22f7f4 Jeff Layton        2012-09-18  81  
+fb308a6f22f7f4 Jeff Layton        2012-09-18  82  		kunmap(rqst->rq_pages[i]);
+fb308a6f22f7f4 Jeff Layton        2012-09-18  83  	}
+fb308a6f22f7f4 Jeff Layton        2012-09-18  84  
+16c568efff82e4 Al Viro            2015-11-12  85  	rc = crypto_shash_final(shash, signature);
+14cae3243b555a Shirish Pargaonkar 2011-06-20  86  	if (rc)
+16c568efff82e4 Al Viro            2015-11-12  87  		cifs_dbg(VFS, "%s: Could not generate hash\n", __func__);
+84afc29b185334 Steve French       2005-12-02  88  
+307fbd31b61623 Shirish Pargaonkar 2010-10-21  89  	return rc;
+84afc29b185334 Steve French       2005-12-02  90  }
+84afc29b185334 Steve French       2005-12-02  91  
+
 ---
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index b564c70475815..37220f6db7ad7 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -2569,16 +2569,18 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	if (IS_ERR(ndev))
- 		return PTR_ERR(ndev);
- 
-+	ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
-+	ndev->mvdev.max_vqs = max_vqs;
-+	mvdev = &ndev->mvdev;
-+	mvdev->mdev = mdev;
-+
- 	ndev->vqs = kcalloc(max_vqs, sizeof(*ndev->vqs), GFP_KERNEL);
- 	ndev->event_cbs = kcalloc(max_vqs + 1, sizeof(*ndev->event_cbs), GFP_KERNEL);
- 	if (!ndev->vqs || !ndev->event_cbs) {
- 		err = -ENOMEM;
- 		goto err_alloc;
- 	}
--	ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
--	ndev->mvdev.max_vqs = max_vqs;
--	mvdev = &ndev->mvdev;
--	mvdev->mdev = mdev;
-+
- 	init_mvqs(ndev);
- 	mutex_init(&ndev->reslock);
- 	config = &ndev->config;
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
