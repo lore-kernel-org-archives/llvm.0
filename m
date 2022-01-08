@@ -1,41 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA22C2CA1
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 05:57:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD482CA5
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 05:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641621460; x=1673157460;
+  t=1641621461; x=1673157461;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MEGEe2TO5CsDXt6MmyOuchwrcEJD4yCS+7s06ztTcaE=;
-  b=TJbT+rq4L5N6+I34nc5M5wIm0Q6kDFAW9ihnmVoy1uVL6JDqCuR9ZfTo
-   0+ceRy0zS8xxg9F/+LQVwCr4j7b3s8gSEZBCsjEQRnBZwXR3VxeDrWlZ9
-   giLb1AbC/OC0zQvZp6zkDNTWc0V22hZZELaxzaOFaFYI0XeUTuXK1qNNu
-   AUc0U4Tf/4NTMcsgJaM/PXCCl4pOJ4LONNkhz9hfFDKJG1C+QaP4ZJhfz
-   3lzPTvBdDLag4IPb4ktckjWnCltoNnprG/on9REwBZftG/H0SPKoY0XPl
-   R1bwcrX3IH0r5XNWYQ4GOG+7TP+m8v9WPcde930dbEa+1FwUZpreuxbyI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="230328761"
+  bh=lNvr8jIgepuRJoPzPtge/mB0j3ubsvTEUNrtNXk8cy4=;
+  b=MogwWcLGnae2xeY4wxumwjaL5JMt/eIdUY1QP7bPonNO14TlAnufHGb4
+   IksKUxIrpXUxxpZtMycadnkcsE9MkqUkGsm4Al1W224+FtXvOjKHcTVFp
+   l79P5G9k/zcEpJ99oHzvtSdPyPTgHqYHhn0UwG+xaTBUO0Ch+P26FoBp/
+   BW4aim/wLOTgNKrP8DBbgzqDUwjF7LmGAigAZ/pX8cv7GwB2BnD4YASQL
+   BcuzMBOAyh+fDkx7qJ0OwFmlOUq1qshYEHgYOcHJNO+pjMj4oQ8FasvC4
+   ooWVGkt4S6ZJbAveo+c++RZfzuZmfRx4C++wAruELzcvTdz98BFvGpvRX
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="267297879"
 X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="230328761"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 21:57:40 -0800
+   d="scan'208";a="267297879"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 21:57:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="473573738"
+   d="scan'208";a="622155751"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jan 2022 21:57:39 -0800
+  by orsmga004.jf.intel.com with ESMTP; 07 Jan 2022 21:57:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n64jS-0000J2-Cg; Sat, 08 Jan 2022 05:57:38 +0000
-Date: Sat, 8 Jan 2022 13:56:52 +0800
+	id 1n64jS-0000J7-EO; Sat, 08 Jan 2022 05:57:38 +0000
+Date: Sat, 8 Jan 2022 13:56:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Kelly Rossmoyer <krossmo@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 104/2372] init/main.c:884:13: warning: no
- previous prototype for function 'init_per_task_early'
-Message-ID: <202201081348.mrJjpM8b-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android11-kiwi-5.4
+ 2422/9999] kernel/power/wakeup_reason.c:199:6: warning: no previous
+ prototype for function '__log_abort_or_abnormal_wake'
+Message-ID: <202201081335.QloPko7J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,53 +47,70 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   67f8f45b4d0cf00f8e53fc1c2b50c67608ede063
-commit: eefe4b7749e3afbf9a5cb237cfb3727701126996 [104/2372] headers/deps: cpusets: Move task_struct::mems_allowed_seq to per_task()
-config: i386-randconfig-r014-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081348.mrJjpM8b-lkp@intel.com/config)
+Hi Kelly,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android11-kiwi-5.4
+head:   7d1d5848183bd1d9086d0572f9af431d3ded407f
+commit: 189ced91cd7b0e440b0be876406fd36313a11c3f [2422/9999] ANDROID: power: wakeup_reason: wake reason enhancements
+config: x86_64-randconfig-a014-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081335.QloPko7J-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=eefe4b7749e3afbf9a5cb237cfb3727701126996
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout eefe4b7749e3afbf9a5cb237cfb3727701126996
+        # https://github.com/ammarfaizi2/linux-block/commit/189ced91cd7b0e440b0be876406fd36313a11c3f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android11-kiwi-5.4
+        git checkout 189ced91cd7b0e440b0be876406fd36313a11c3f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/power/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   init/main.c:783:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
+>> kernel/power/wakeup_reason.c:199:6: warning: no previous prototype for function '__log_abort_or_abnormal_wake' [-Wmissing-prototypes]
+   void __log_abort_or_abnormal_wake(bool abort, const char *fmt, va_list args)
+        ^
+   kernel/power/wakeup_reason.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __log_abort_or_abnormal_wake(bool abort, const char *fmt, va_list args)
    ^
    static 
->> init/main.c:884:13: warning: no previous prototype for function 'init_per_task_early' [-Wmissing-prototypes]
-   void __init init_per_task_early(void)
-               ^
-   init/main.c:884:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_per_task_early(void)
+   kernel/power/wakeup_reason.c:378:12: warning: no previous prototype for function 'wakeup_reason_init' [-Wmissing-prototypes]
+   int __init wakeup_reason_init(void)
+              ^
+   kernel/power/wakeup_reason.c:378:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init wakeup_reason_init(void)
    ^
    static 
    2 warnings generated.
 
 
-vim +/init_per_task_early +884 init/main.c
+vim +/__log_abort_or_abnormal_wake +199 kernel/power/wakeup_reason.c
 
-   883	
- > 884	void __init init_per_task_early(void)
-   885	{
-   886	#ifdef CONFIG_POSIX_TIMERS
-   887		per_task(&init_task, posix_cputimers) = (struct posix_cputimers) __INIT_CPU_TIMERS(init_task);
-   888	#endif
-   889	
+   198	
+ > 199	void __log_abort_or_abnormal_wake(bool abort, const char *fmt, va_list args)
+   200	{
+   201		unsigned long flags;
+   202	
+   203		spin_lock_irqsave(&wakeup_reason_lock, flags);
+   204	
+   205		/* Suspend abort or abnormal wake reason has already been logged. */
+   206		if (suspend_abort || abnormal_wake) {
+   207			spin_unlock_irqrestore(&wakeup_reason_lock, flags);
+   208			return;
+   209		}
+   210	
+   211		suspend_abort = abort;
+   212		abnormal_wake = !abort;
+   213		vsnprintf(non_irq_wake_reason, MAX_SUSPEND_ABORT_LEN, fmt, args);
+   214	
+   215		spin_unlock_irqrestore(&wakeup_reason_lock, flags);
+   216	}
+   217	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
