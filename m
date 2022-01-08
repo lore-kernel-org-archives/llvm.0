@@ -1,91 +1,100 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC23E2C9C
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 02:22:32 +0000 (UTC)
-Received: by mail-pg1-f169.google.com with SMTP id s1so7268756pga.5
-        for <llvm@lists.linux.dev>; Fri, 07 Jan 2022 18:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=kGrdecSC3sPdHtWn9polPOvxxPNBR4DlkW3QJLsVlic=;
-        b=KPgC6CipYjBN1/pAogCBoywf5xWdGJ/B9J1tE0Hjb5fDeS78+bRTKYKFp+dRTA50iR
-         jO8NboZ1pDij5ZzWF1Bd/xLD8gjq3VCnc3rgCrlYet288M2HgQnc+N3crLRiaMjABrJ9
-         GkBSXOqYM8tqEIG0zIOr5Mc6CBrdse+Mp8jQ10jmIqqKBrO/CDmWYjPAIfIRciBdMAMs
-         j44VKzPle4WaUYSt/LQcPDR5GZF6ZVyzVFs5U/gvy1macxEh/jf0mRblD/Nr0dSMtBa2
-         GkIKnNiSwbsZ/5wmDRnVM/hew30R1R9C/M7XRdzFVpFqBIS15pX4Uatv61K+MF2WHRqz
-         h+xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kGrdecSC3sPdHtWn9polPOvxxPNBR4DlkW3QJLsVlic=;
-        b=Z8b75D8e/AJxrq2omNpEPhG359GufQPGCx37BtY18DpVryqvxdVL/ct00N9FDRPNs5
-         fVQKkYLkyyWI2LAolKEEFGMZlcUBm9BdgP0j5k0hzERILMBt0xr25fH3YWGX2lqS81dU
-         ZnKm+P8ylt3jFvOusw/2R3pze+NBensvsmPHjbjhMMxosX24QBANZL7waMTI4KyNGib6
-         +jyfahJbMMGmaTteVPzMafAK9OZMhrBvA0UM3zKEPisiI0XD4gTZQOJoVHTIN9Y5WikG
-         PUBymWOKRR7plDLJH/RTXDaIIq8lkwH9dJyAq38HLu7sDnwMzXag/cij8AicNbs3GVO6
-         PY4A==
-X-Gm-Message-State: AOAM533+h8H+e4+jqbRryKgmdUhBhjzSxJGacc9bSfmX4ZBQ7F8TX7eM
-	E6aEmC8SK3TvVmOivImEYiKVuQ==
-X-Google-Smtp-Source: ABdhPJxCSy6VDT37VYN49wFdKlTjPScq9HkyQDn/tBoXW63qDWHpTqEY0bRELQJ9YMLrm9tBHwPbEw==
-X-Received: by 2002:a63:af1c:: with SMTP id w28mr54159096pge.372.1641608552345;
-        Fri, 07 Jan 2022 18:22:32 -0800 (PST)
-Received: from localhost.localdomain (c-98-35-249-89.hsd1.ca.comcast.net. [98.35.249.89])
-        by smtp.gmail.com with ESMTPSA id w2sm169050pgt.93.2022.01.07.18.22.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Jan 2022 18:22:31 -0800 (PST)
-From: "Yichun Zhang (agentzh)" <yichun@openresty.com>
-To: yichun@openresty.com
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] bpf: btf: Fix a var size check in validator
-Date: Fri,  7 Jan 2022 18:22:12 -0800
-Message-Id: <20220108022212.962-1-yichun@openresty.com>
-X-Mailer: git-send-email 2.17.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05377173
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 03:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641611734; x=1673147734;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sA1uQT+E+/oT1FwTrF/qRTED0E8Q8lKdTIYCP54Z5a4=;
+  b=m01z/tWwgXErUUZZaGAaG6vilxyzo3Qwi5DPB6G7xNWgUDIfYeGkMSMu
+   dqzqO9NK1+S+7Uq4HJ5geh8vlBTc/+jHnEVTZxKODCoD/tXX6whU2b/SE
+   Al9h19JOaZxVQBcxHkwnCaZGFQDhCDeUD6Xduk0aAIDM343NLA3K7iOMy
+   6+6m6ZI+qIL9av/xRZqlx9oBXkonQzjxSU0gKurvzBXkevAsbd3OtTB84
+   B9HTVyd3Z4/2j7B4mBxoqfqnMNYANkbUlVJ1zaorq9Qi4SpY6Wmpz+T30
+   He2q2Sa0iJWGa1iaZ0LmZpcIbV0MuwWAG0aWx2O1caqd8zaqbah+GY3sk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="243177399"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="243177399"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 19:15:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="557459520"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Jan 2022 19:15:32 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n62CZ-0000D5-Gr; Sat, 08 Jan 2022 03:15:31 +0000
+Date: Sat, 8 Jan 2022 11:14:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.01.04a 55/55] kernel/time/timer.c:1776:6:
+ warning: no previous prototype for function 'tick_setup_sched_timer_dump'
+Message-ID: <202201081127.geEljsMv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-The btf validator should croak when the variable size is larger than
-its type size, not less. The LLVM optimizer may use smaller sizes for
-the C type.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.01.04a
+head:   64595d0dff992756e8c6d53c0e9f1e3e50c451f7
+commit: 64595d0dff992756e8c6d53c0e9f1e3e50c451f7 [55/55] squash! EXP timers: Non-nohz_full last-resort jiffies update on IRQ entry
+config: hexagon-randconfig-r011-20220108 (https://download.01.org/0day-ci/archive/20220108/202201081127.geEljsMv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=64595d0dff992756e8c6d53c0e9f1e3e50c451f7
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu dev.2022.01.04a
+        git checkout 64595d0dff992756e8c6d53c0e9f1e3e50c451f7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
 
-We ran into this issue with real-world BPF programs emitted by the
-latest version of Clang/LLVM.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: 1dc92851849cc ("bpf: kernel side support for BTF Var and DataSec")
-Signed-off-by: Yichun Zhang (agentzh) <yichun@openresty.com>
+All warnings (new ones prefixed by >>):
+
+>> kernel/time/timer.c:1776:6: warning: no previous prototype for function 'tick_setup_sched_timer_dump' [-Wmissing-prototypes]
+   void tick_setup_sched_timer_dump(void)
+        ^
+   kernel/time/timer.c:1776:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tick_setup_sched_timer_dump(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/tick_setup_sched_timer_dump +1776 kernel/time/timer.c
+
+  1775	
+> 1776	void tick_setup_sched_timer_dump(void)
+  1777	{
+  1778		int cpu;
+  1779		int j = jiffies;
+  1780	
+  1781		pr_alert("%s state", __func__);
+  1782		for_each_possible_cpu(cpu)
+  1783			pr_cont(" j/c %x/%d %c",
+  1784				(int)(j - per_cpu(tick_setup_sched_timer_jiffies, cpu)) & 0xfff,
+  1785				per_cpu(tick_setup_sched_timer_jiffies_count, cpu),
+  1786				".H"[per_cpu(tick_setup_sched_timer_help_needed, cpu)]);
+  1787		pr_cont("\n");
+  1788	}
+  1789	
+
 ---
- kernel/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 9bdb03767db5..2a6967b13ce1 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3696,7 +3696,7 @@ static int btf_datasec_resolve(struct btf_verifier_env *env,
- 			return -EINVAL;
- 		}
- 
--		if (vsi->size < type_size) {
-+		if (vsi->size > type_size) {
- 			btf_verifier_log_vsi(env, v->t, vsi, "Invalid size");
- 			return -EINVAL;
- 		}
--- 
-2.17.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
