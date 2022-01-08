@@ -1,170 +1,192 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E031168
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 10:32:36 +0000 (UTC)
-Received: by mail-wr1-f43.google.com with SMTP id s1so16075660wra.6
-        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 02:32:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Ncm4vmIPrAny4fGOw23lDSiniXeSKXz2SDH9h4DiGpQ=;
-        b=pQKGP4xhv2CT1d4x871Y4t7neNth9UmkrfMmE9N+lgS0o+4gh/xxpUG7B2xORbN9nN
-         8qisKFePxYHrlI8AhVdagU1jZfR8JvJ/fuLyESZqDm2dtv7pMktpp9dHjerRnoeKfVd/
-         EfbCgNnhHdlpBuu7qrsCNIR5qi5LiPr/QHQdCHME1EzEiQl9IzScw/jDPh2puf8qdp97
-         y0pnphQjBT+I3E0wqZMEG78B8+7vFjOUPqjK/PsgajLMIWR+opVUao+v4IheS0LFWbfg
-         5hXpL9PaUnqYwufkXHDyQjI00SoBDIZu5R1cZ1qvQMOMkcvGDSd7Qlmv06o+kyZx/hLc
-         OEbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Ncm4vmIPrAny4fGOw23lDSiniXeSKXz2SDH9h4DiGpQ=;
-        b=COb4nNFcNqEsmWMLBVrRrUaARPls+ROypVQPOzieiGcHtYBvkWkIkjqMCRbtHxbqZP
-         ZpagSEUekgR0VsA/BQkuDESefXqpLYFtSYazXuFC6N2xlrO5Rmfv42JUYDLpWwbB16+v
-         Y3FW9ZEqiKnpmq9fMr2Md0dTcuz9POFM9jL27gfLAIKCEFsQ9dvvkHhRE4+6V7PmoNQf
-         KLOlS8G4JnuM/0B+vVpIr4D7lqN3G07ickxEMvAWvkxlNVCf8A2xH53edwl5qazLbFEE
-         vRyEzBWd+AKVZRhEHW1EB6d17reX3XLybtGdzWgtvxLsE84d83pYDSdGyhEIEjj+YEI1
-         bZKg==
-X-Gm-Message-State: AOAM531Z/MlVjnM0pDmBLn2XLoy0HVEILdG37/OLy9o5dR0NHNczNYps
-	0y/Uwo7RRni2HBBV0I+qqEY=
-X-Google-Smtp-Source: ABdhPJxXWLbG3api22n+vh1gpH2oSN+reaVhu6VdmRxg5GCcIzVKg9VGsTEE8dzOa8JYR4B/M/c2nw==
-X-Received: by 2002:adf:ee50:: with SMTP id w16mr4510251wro.270.1641637954786;
-        Sat, 08 Jan 2022 02:32:34 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id l8sm1264937wrv.25.2022.01.08.02.32.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 02:32:34 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Sat, 8 Jan 2022 11:32:31 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
-	llvm@lists.linux.dev
-Subject: [PATCH] headers/deps: Add header dependencies to .c files:
- <linux/ptrace_api.h>
-Message-ID: <YdloP5TfDSTURAh3@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
- <YdTvXkKFzA0pOjFf@gmail.com>
- <YdYQu9YxNw0CxJRn@archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6442CA7
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 10:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641638033; x=1673174033;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8i8meYvM7Pc9WBjaIEqKunyyiCLshVy33yOHH3UFVmw=;
+  b=Crt+qi8zgWQYPn0qCMmXJFAVunGDXnEi70SlIGIBMe1gIr5f0OLzKduG
+   rDoU49gDRag1FhcSypRUSxuwiuP9KlGKiSkTWbDfxI6SXUq9d5XVXO/J4
+   WBktMmHp5jv6LxUDSKNQl4MGAWcddpcTZ1Py8SHl6OOUDUSrIkqdv0W5X
+   Q1twe/pRU9zs7N8oGn8CWdZQWfFUHwUBM94epHqgVkndTKCXrxjECbgg7
+   Yuy0mqmIOiSJBPSnrZczR3HShPVJtVE7LDWh+92el/utVd/2m5zK14xL+
+   EulTwv/BsvhLBU9dj8WGcKXDiD+QiV8iXhz8F0WMeknbt+B2/XviWZ/l9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="329347299"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="329347299"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 02:33:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="612424201"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Jan 2022 02:33:51 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n692k-0000W7-NG; Sat, 08 Jan 2022 10:33:50 +0000
+Date: Sat, 8 Jan 2022 18:33:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Petr Mladek <pmladek@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: drivers/media/v4l2-core/v4l2-ioctl.c:303:28: warning: taking address
+ of packed member 'pixelformat' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+Message-ID: <202201081852.uTfBqS4b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi Sakari,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
+commit: e927e1e0f0dd3e353d5556503a71484008692c82 v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+date:   11 months ago
+config: mips-buildonly-randconfig-r002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081852.uTfBqS4b-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e927e1e0f0dd3e353d5556503a71484008692c82
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e927e1e0f0dd3e353d5556503a71484008692c82
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/media/v4l2-core/ fs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/v4l2-core/v4l2-ioctl.c:303:28: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                           mp->width, mp->height, &mp->pixelformat,
+                                                   ^~~~~~~~~~~~~~~
+   include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-ioctl.c:347:37: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_sdr_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+                                                     ^~~~~~~~~~~~~~~~
+   include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-ioctl.c:353:5: warning: taking address of packed member 'dataformat' of class or structure 'v4l2_meta_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                           &meta->dataformat, meta->buffersize);
+                            ^~~~~~~~~~~~~~~~
+   include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+   3 warnings generated.
 
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
+vim +303 drivers/media/v4l2-core/v4l2-ioctl.c
 
-> 1. kernel/stackleak.c build failure:
-> 
-> $ make -skj"$(nproc)" ARCH=x86_64 allmodconfig kernel/stackleak.o
-> kernel/stackleak.c: In function ‘stackleak_erase’:
-> kernel/stackleak.c:92:13: error: implicit declaration of function ‘on_thread_stack’; did you mean ‘setup_thread_stack’? [-Werror=implicit-function-declaration]
+   273	
+   274	static void v4l_print_format(const void *arg, bool write_only)
+   275	{
+   276		const struct v4l2_format *p = arg;
+   277		const struct v4l2_pix_format *pix;
+   278		const struct v4l2_pix_format_mplane *mp;
+   279		const struct v4l2_vbi_format *vbi;
+   280		const struct v4l2_sliced_vbi_format *sliced;
+   281		const struct v4l2_window *win;
+   282		const struct v4l2_sdr_format *sdr;
+   283		const struct v4l2_meta_format *meta;
+   284		u32 planes;
+   285		unsigned i;
+   286	
+   287		pr_cont("type=%s", prt_names(p->type, v4l2_type_names));
+   288		switch (p->type) {
+   289		case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+   290		case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+   291			pix = &p->fmt.pix;
+   292			pr_cont(", width=%u, height=%u, pixelformat=%p4cc, field=%s, bytesperline=%u, sizeimage=%u, colorspace=%d, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+   293				pix->width, pix->height, &pix->pixelformat,
+   294				prt_names(pix->field, v4l2_field_names),
+   295				pix->bytesperline, pix->sizeimage,
+   296				pix->colorspace, pix->flags, pix->ycbcr_enc,
+   297				pix->quantization, pix->xfer_func);
+   298			break;
+   299		case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+   300		case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+   301			mp = &p->fmt.pix_mp;
+   302			pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+ > 303				mp->width, mp->height, &mp->pixelformat,
+   304				prt_names(mp->field, v4l2_field_names),
+   305				mp->colorspace, mp->num_planes, mp->flags,
+   306				mp->ycbcr_enc, mp->quantization, mp->xfer_func);
+   307			planes = min_t(u32, mp->num_planes, VIDEO_MAX_PLANES);
+   308			for (i = 0; i < planes; i++)
+   309				printk(KERN_DEBUG "plane %u: bytesperline=%u sizeimage=%u\n", i,
+   310						mp->plane_fmt[i].bytesperline,
+   311						mp->plane_fmt[i].sizeimage);
+   312			break;
+   313		case V4L2_BUF_TYPE_VIDEO_OVERLAY:
+   314		case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY:
+   315			win = &p->fmt.win;
+   316			/* Note: we can't print the clip list here since the clips
+   317			 * pointer is a userspace pointer, not a kernelspace
+   318			 * pointer. */
+   319			pr_cont(", wxh=%dx%d, x,y=%d,%d, field=%s, chromakey=0x%08x, clipcount=%u, clips=%p, bitmap=%p, global_alpha=0x%02x\n",
+   320				win->w.width, win->w.height, win->w.left, win->w.top,
+   321				prt_names(win->field, v4l2_field_names),
+   322				win->chromakey, win->clipcount, win->clips,
+   323				win->bitmap, win->global_alpha);
+   324			break;
+   325		case V4L2_BUF_TYPE_VBI_CAPTURE:
+   326		case V4L2_BUF_TYPE_VBI_OUTPUT:
+   327			vbi = &p->fmt.vbi;
+   328			pr_cont(", sampling_rate=%u, offset=%u, samples_per_line=%u, sample_format=%p4cc, start=%u,%u, count=%u,%u\n",
+   329				vbi->sampling_rate, vbi->offset,
+   330				vbi->samples_per_line, &vbi->sample_format,
+   331				vbi->start[0], vbi->start[1],
+   332				vbi->count[0], vbi->count[1]);
+   333			break;
+   334		case V4L2_BUF_TYPE_SLICED_VBI_CAPTURE:
+   335		case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
+   336			sliced = &p->fmt.sliced;
+   337			pr_cont(", service_set=0x%08x, io_size=%d\n",
+   338					sliced->service_set, sliced->io_size);
+   339			for (i = 0; i < 24; i++)
+   340				printk(KERN_DEBUG "line[%02u]=0x%04x, 0x%04x\n", i,
+   341					sliced->service_lines[0][i],
+   342					sliced->service_lines[1][i]);
+   343			break;
+   344		case V4L2_BUF_TYPE_SDR_CAPTURE:
+   345		case V4L2_BUF_TYPE_SDR_OUTPUT:
+   346			sdr = &p->fmt.sdr;
+ > 347			pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+   348			break;
+   349		case V4L2_BUF_TYPE_META_CAPTURE:
+   350		case V4L2_BUF_TYPE_META_OUTPUT:
+   351			meta = &p->fmt.meta;
+   352			pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+ > 353				&meta->dataformat, meta->buffersize);
+   354			break;
+   355		}
+   356	}
+   357	
 
-So it turns out that my build environment didn't have the stackleak code 
-enabled at all:
-
-  kepler:~/mingo.tip.git> make ARCH=x86_64 allmodconfig
-  #
-  # configuration written to .config
-  #
-  kepler:~/mingo.tip.git> grep -E 'STACKLEAK|GCC_PLUGIN' .config
-  CONFIG_HAVE_ARCH_STACKLEAK=y
-  CONFIG_HAVE_GCC_PLUGINS=y
-
-... because it failed this condition:
-
- menuconfig GCC_PLUGINS
- ...
-        depends on $(success,test -e $(shell,$(CC) -print-file-name=plugin)/include/plugin-version.h)
-
-... because there were no plugin headers:
-
-  kepler:~/mingo.tip.git> gcc -print-file-name=plugin
-  /usr/lib/gcc/x86_64-linux-gnu/10/plugin
-
-  kepler:~/mingo.tip.git> ls $(gcc -print-file-name=plugin)/include/
-  ls: cannot access '/usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/': No such file or directory
-
-... because I needed to install the plugin-development packages for gcc-10.
-
-After installing those I have stackleak:
-
-  kepler:~/mingo.tip.git> grep STACKLEAK .config
-  CONFIG_HAVE_ARCH_STACKLEAK=y
-  CONFIG_GCC_PLUGIN_STACKLEAK=y
-  CONFIG_STACKLEAK_TRACK_MIN_SIZE=100
-  CONFIG_STACKLEAK_METRICS=y
-  CONFIG_STACKLEAK_RUNTIME_DISABLE=y
-
-and was able to reproduce your build failure. :-)
-
-> This is fixed with the following diff although I am unsure if that is as
-> minimal as it should be.
-> 
-> diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-> index ce161a8e8d97..d67c5475183b 100644
-> --- a/kernel/stackleak.c
-> +++ b/kernel/stackleak.c
-> @@ -10,8 +10,10 @@
->   * reveal and blocks some uninitialized stack variable attacks.
->   */
->  
-> +#include <asm/processor_api.h>
->  #include <linux/stackleak.h>
->  #include <linux/kprobes.h>
-> +#include <linux/align.h>
-
-Yeah - I used a simpler & more generic header: <linux/ptrace_api.h> - see 
-the patch below.
-
-But your solution is functionally equivalent. This fix will be included in 
--v2, hopefully released later today.
-
-Thanks,
-
-	Ingo
-
-===============>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Sat, 8 Jan 2022 11:29:17 +0100
-Subject: [PATCH] headers/deps: Add header dependencies to .c files: <linux/ptrace_api.h>
-
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
 ---
- kernel/stackleak.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-index ce161a8e8d97..fde49e2f209a 100644
---- a/kernel/stackleak.c
-+++ b/kernel/stackleak.c
-@@ -10,6 +10,7 @@
-  * reveal and blocks some uninitialized stack variable attacks.
-  */
- 
-+#include <linux/ptrace_api.h>
- #include <linux/stackleak.h>
- #include <linux/kprobes.h>
- 
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
