@@ -1,64 +1,60 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8708D173
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 14:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE58A173
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 15:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1641652406;
+	s=mimecast20190719; t=1641654603;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=OTEoDAXesUBrrz0y7VX933AG7BpNKcC+21DOjfav4eQ=;
-	b=D8gXXWgNZ9DXSTSo8jnij07qMUPZo2/0FiqVRLFwDwkykv+EEA/7U34K4Kp1UW0P+yFI6/
-	9EBB53xD436eSkw3uJf16DajLWoZcLja3tCaRtVCwtQKJWglccmMO5QBqR5phGFh/JqQWt
-	WedKsW8qkgYNw8hTNW+cHioaY8F3/u8=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=U169cYgO0bm4HCQJMyoMslqnpI+Gi+7C/va2IkqTrGk=;
+	b=YgPNWlLaqYqLP0rUDyxAJSRP+SOWCfvNEaHrD807DYwnyFQPvf1FfdA8yGmqKS4FbHtHX9
+	HBZaSae1d680o1gROD6tPLPzHOwift8BgogkbTSWsiITU4b8/ntl9UJOwgxG23w4S7bSNh
+	vl3/VDl7lyZx6e5ojomZ0an5BsxL52o=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-509-ch4ogGsYO9G5f81J_jYtrA-1; Sat, 08 Jan 2022 09:33:25 -0500
-X-MC-Unique: ch4ogGsYO9G5f81J_jYtrA-1
-Received: by mail-oo1-f69.google.com with SMTP id v30-20020a4a9761000000b002daad3afaf6so5980540ooi.18
-        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 06:33:25 -0800 (PST)
+ us-mta-192-pNV-RY4GPh6sv_KUkBnH3Q-1; Sat, 08 Jan 2022 10:10:00 -0500
+X-MC-Unique: pNV-RY4GPh6sv_KUkBnH3Q-1
+Received: by mail-oi1-f199.google.com with SMTP id n2-20020acaef02000000b002c6c1c37a03so6205226oih.21
+        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 07:10:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OTEoDAXesUBrrz0y7VX933AG7BpNKcC+21DOjfav4eQ=;
-        b=KPOLCMQhTwoRZP3bvoLrT48aptPQVJPwBV2EG6tXYoRXSZb+EeQgbwT9voJnvXMnMS
-         6O9sOKQ91zf+7scwp5osJGN5FedZEnEOOkhJ5S1X8+kJdQ9nVYfQ6ApQZVoayaKnvvGn
-         U1Ol9oOshEGg8REFhpLwWePLjO0t4k/ZjlztSXJJ5HasgPW0QHJ9WFGglBLo3MiqwU2J
-         U1PIziNKo4X+Tk2SSN4Dwq5+zJfx/ruJj55YjvWPNf+RitH/duCUTHz6kZXfTDxDWOwB
-         scBcD4iwlNaO34zaCdLw1avpBbDmyaU2ryUfybL0LrS2qxCHS6hE2ND7Q3gSPbvuSST6
-         7kXw==
-X-Gm-Message-State: AOAM530p5oxA1UWoJNvFwg7PTgl6YJQRi2v9yJWh4H1S9J5q+TFqSP3Z
-	FecL0j2t2RJq7HqdI4UAnil3nrMUGE1EbAIsMCrGOvfsyHfcOa1sK+auOHYfEuro12gDCwUHD2y
-	PQdTVoZq4FIoeiw==
-X-Received: by 2002:a9d:d68:: with SMTP id 95mr46520900oti.188.1641652404373;
-        Sat, 08 Jan 2022 06:33:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrzTGEeaVMK49HTR2/2D3npJiXwy7xQHcIPlSumyPxfb0SUfpPiLi4GiaG2GrUwzY6o8mW7Q==
-X-Received: by 2002:a9d:d68:: with SMTP id 95mr46520883oti.188.1641652404104;
-        Sat, 08 Jan 2022 06:33:24 -0800 (PST)
+        bh=U169cYgO0bm4HCQJMyoMslqnpI+Gi+7C/va2IkqTrGk=;
+        b=EVZH3N8T9eVx9E77Ka9b/6V5F3DjYVq8ZvsX9776TqUMfjBtETQmogqBDYoJyOCZRo
+         OA6LocrGpRV14WcRJ9LbVnYA5XJte164d5XPFFuiMAuk/fy1graZl6DG7bvr34bTRhzC
+         FryE37irZ9e6qrOYQNuOfSa587XOeqSSF0YfP4CrSmJx0k6tsh5960s60LqGbsvAC2yv
+         mH+/cS3GoU4qAsz5wF8yruFzOp+YDgFmLS+RWCdByygIpMA7cXi7L34xzA0HpNuJEqIB
+         553e3+aGHrC910NIOeTb/3RKZM61pyeXGkJS9XqhiWjV8dm+elGOkNhW8lBPi1L/Fmc4
+         c14Q==
+X-Gm-Message-State: AOAM533wfzfZjBb9KulyjLplGljC2Ceec04TotB//uhVcO7jcccpIIm4
+	DP4LjqbYisDx6bQC8OIoU/4uE86AEXWvjKqdZYn0NNBoRA+j2iqyX+0LkdmTCSWFwD8cAvOdUUi
+	vKnCU2rCQjdLsMw==
+X-Received: by 2002:a9d:d67:: with SMTP id 94mr47473295oti.156.1641654599569;
+        Sat, 08 Jan 2022 07:09:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRTLAixm2+kpq1Ek12ZorOxtE4fuJpDVvDT4q2xl3gRi5czVDxU4IDwGgLDNGQUDPeCsGqYg==
+X-Received: by 2002:a9d:d67:: with SMTP id 94mr47473290oti.156.1641654599386;
+        Sat, 08 Jan 2022 07:09:59 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id r37sm353568otv.54.2022.01.08.06.33.22
+        by smtp.gmail.com with ESMTPSA id c10sm371225ots.73.2022.01.08.07.09.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 06:33:23 -0800 (PST)
+        Sat, 08 Jan 2022 07:09:58 -0800 (PST)
 From: trix@redhat.com
-To: wg@grandegger.com,
-	mkl@pengutronix.de,
-	davem@davemloft.net,
-	kuba@kernel.org,
+To: vitor.soares@synopsys.com,
+	alexandre.belloni@bootlin.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	mailhol.vincent@wanadoo.fr,
-	stefan.maetje@esd.eu
-Cc: linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
+	bbrezillon@kernel.org
+Cc: linux-i3c@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] can: janz-ican3: initialize dlc variable
-Date: Sat,  8 Jan 2022 06:33:19 -0800
-Message-Id: <20220108143319.3986923-1-trix@redhat.com>
+Subject: [PATCH] i3c: master: dw: check return of dw_i3c_master_get_free_pos()
+Date: Sat,  8 Jan 2022 07:09:48 -0800
+Message-Id: <20220108150948.3988790-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -76,35 +72,35 @@ Content-Type: text/plain; charset="US-ASCII"
 From: Tom Rix <trix@redhat.com>
 
 Clang static analysis reports this problem
-janz-ican3.c:1311:2: warning: Undefined or garbage value returned to caller
-        return dlc;
-        ^~~~~~~~~~
+dw-i3c-master.c:799:9: warning: The result of the left shift is
+  undefined because the left operand is negative
+                      COMMAND_PORT_DEV_INDEX(pos) |
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-dlc is only set with this conditional
-	if (!(cf->can_id & CAN_RTR_FLAG))
-		dlc = cf->len;
+pos can be negative because dw_i3c_master_get_free_pos() can return an
+error.  So check for an error.
 
-But is always returned.  So initialize dlc to 0.
-
-Fixes: cc4b08c31b5c ("can: do not increase tx_bytes statistics for RTR frames")
+Fixes: 1dd728f5d4d4 ("i3c: master: Add driver for Synopsys DesignWare IP")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/net/can/janz-ican3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i3c/master/dw-i3c-master.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/can/janz-ican3.c b/drivers/net/can/janz-ican3.c
-index 5b677af5f2a41..808c105cf8f7e 100644
---- a/drivers/net/can/janz-ican3.c
-+++ b/drivers/net/can/janz-ican3.c
-@@ -1285,7 +1285,7 @@ static unsigned int ican3_get_echo_skb(struct ican3_dev *mod)
- {
- 	struct sk_buff *skb = skb_dequeue(&mod->echoq);
- 	struct can_frame *cf;
--	u8 dlc;
-+	u8 dlc = 0;
+diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i3c-master.c
+index 03a368da51b95..51a8608203de7 100644
+--- a/drivers/i3c/master/dw-i3c-master.c
++++ b/drivers/i3c/master/dw-i3c-master.c
+@@ -793,6 +793,10 @@ static int dw_i3c_master_daa(struct i3c_master_controller *m)
+ 		return -ENOMEM;
  
- 	/* this should never trigger unless there is a driver bug */
- 	if (!skb) {
+ 	pos = dw_i3c_master_get_free_pos(master);
++	if (pos < 0) {
++		dw_i3c_master_free_xfer(xfer);
++		return pos;
++	}
+ 	cmd = &xfer->cmds[0];
+ 	cmd->cmd_hi = 0x1;
+ 	cmd->cmd_lo = COMMAND_PORT_DEV_COUNT(master->maxdevs - pos) |
 -- 
 2.26.3
 
