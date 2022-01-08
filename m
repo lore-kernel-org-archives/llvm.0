@@ -1,235 +1,170 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9A52CA5
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 08:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641631309; x=1673167309;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=egy9t3JfjOLC7tOKyDwth+qSX+cwX9921WGNnK9m/mE=;
-  b=a8nCg9fiDjksPhYdYjP1SKDxozCV0O7fJ4Yjlqbco8lMpqWSHQ0gm+Jb
-   yEIn/RyfpBdnyFIcZkJkDXjp+Y+KSpr2gnuZgF25ONwhtxIYHXe85Mnz1
-   qznp7JpAQUujx8yaQOJgxKfHB5r7H90B8i4wkR6SV94fnINl+hTYPdQJG
-   i9XPbMnvLw7BxQOSGDKU1LrDHicuPb1CS+2FE/HM7cJAaykWEHKPhOllk
-   qO1ENeNDIgxaZlNhPX35lrQhaivJhD5sz8kcWvknHFC1dg/8oboU1yjo2
-   +S5VOGS9vDncq1tIS4q2n7e7/TNiLVPKFuJs1xWWjBjKH9z4m3xDZSYj6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="242796916"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="242796916"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 00:41:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="612410772"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jan 2022 00:41:45 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n67IG-0000QJ-GS; Sat, 08 Jan 2022 08:41:44 +0000
-Date: Sat, 8 Jan 2022 16:41:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, kvalo@codeaurora.org,
-	linux-wireless@vger.kernel.org, wcn36xx@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, loic.poulain@linaro.org,
-	benl@squareup.com, bryan.odonoghue@linaro.org
-Subject: Re: [PATCH 3/4] wcn36xx: Track SNR and RSSI for each RX frame
-Message-ID: <202201081611.NwbnsnbW-lkp@intel.com>
-References: <20220107153323.1807905-4-bryan.odonoghue@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E031168
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 10:32:36 +0000 (UTC)
+Received: by mail-wr1-f43.google.com with SMTP id s1so16075660wra.6
+        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 02:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Ncm4vmIPrAny4fGOw23lDSiniXeSKXz2SDH9h4DiGpQ=;
+        b=pQKGP4xhv2CT1d4x871Y4t7neNth9UmkrfMmE9N+lgS0o+4gh/xxpUG7B2xORbN9nN
+         8qisKFePxYHrlI8AhVdagU1jZfR8JvJ/fuLyESZqDm2dtv7pMktpp9dHjerRnoeKfVd/
+         EfbCgNnhHdlpBuu7qrsCNIR5qi5LiPr/QHQdCHME1EzEiQl9IzScw/jDPh2puf8qdp97
+         y0pnphQjBT+I3E0wqZMEG78B8+7vFjOUPqjK/PsgajLMIWR+opVUao+v4IheS0LFWbfg
+         5hXpL9PaUnqYwufkXHDyQjI00SoBDIZu5R1cZ1qvQMOMkcvGDSd7Qlmv06o+kyZx/hLc
+         OEbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Ncm4vmIPrAny4fGOw23lDSiniXeSKXz2SDH9h4DiGpQ=;
+        b=COb4nNFcNqEsmWMLBVrRrUaARPls+ROypVQPOzieiGcHtYBvkWkIkjqMCRbtHxbqZP
+         ZpagSEUekgR0VsA/BQkuDESefXqpLYFtSYazXuFC6N2xlrO5Rmfv42JUYDLpWwbB16+v
+         Y3FW9ZEqiKnpmq9fMr2Md0dTcuz9POFM9jL27gfLAIKCEFsQ9dvvkHhRE4+6V7PmoNQf
+         KLOlS8G4JnuM/0B+vVpIr4D7lqN3G07ickxEMvAWvkxlNVCf8A2xH53edwl5qazLbFEE
+         vRyEzBWd+AKVZRhEHW1EB6d17reX3XLybtGdzWgtvxLsE84d83pYDSdGyhEIEjj+YEI1
+         bZKg==
+X-Gm-Message-State: AOAM531Z/MlVjnM0pDmBLn2XLoy0HVEILdG37/OLy9o5dR0NHNczNYps
+	0y/Uwo7RRni2HBBV0I+qqEY=
+X-Google-Smtp-Source: ABdhPJxXWLbG3api22n+vh1gpH2oSN+reaVhu6VdmRxg5GCcIzVKg9VGsTEE8dzOa8JYR4B/M/c2nw==
+X-Received: by 2002:adf:ee50:: with SMTP id w16mr4510251wro.270.1641637954786;
+        Sat, 08 Jan 2022 02:32:34 -0800 (PST)
+Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
+        by smtp.gmail.com with ESMTPSA id l8sm1264937wrv.25.2022.01.08.02.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 02:32:34 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Sat, 8 Jan 2022 11:32:31 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
+	llvm@lists.linux.dev
+Subject: [PATCH] headers/deps: Add header dependencies to .c files:
+ <linux/ptrace_api.h>
+Message-ID: <YdloP5TfDSTURAh3@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
+ <YdTvXkKFzA0pOjFf@gmail.com>
+ <YdYQu9YxNw0CxJRn@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220107153323.1807905-4-bryan.odonoghue@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-Hi Bryan,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on kvalo-wireless-drivers-next/master]
-[also build test WARNING on kvalo-ath/ath-next next-20220107]
-[cannot apply to kvalo-wireless-drivers/master v5.16-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Bryan-O-Donoghue/wcn36xx-Add-spectrum-survey-reporting/20220107-233226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/wireless-drivers-next.git master
-config: riscv-randconfig-r042-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081611.NwbnsnbW-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7fa379bc4e1728cf4e30f1f9de93bea0f520e37b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Bryan-O-Donoghue/wcn36xx-Add-spectrum-survey-reporting/20220107-233226
-        git checkout 7fa379bc4e1728cf4e30f1f9de93bea0f520e37b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/wireless/ath/wcn36xx/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/ath/wcn36xx/main.c:22:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:36:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/net/wireless/ath/wcn36xx/main.c:22:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/net/wireless/ath/wcn36xx/main.c:22:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/net/wireless/ath/wcn36xx/main.c:1600:3: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   ret -= ENOMEM;
-                   ^~~
-   drivers/net/wireless/ath/wcn36xx/main.c:1567:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   8 warnings generated.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
 
 
-vim +/ret +1600 drivers/net/wireless/ath/wcn36xx/main.c
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-  1561	
-  1562	static int wcn36xx_probe(struct platform_device *pdev)
-  1563	{
-  1564		struct ieee80211_hw *hw;
-  1565		struct wcn36xx *wcn;
-  1566		void *wcnss;
-  1567		int ret;
-  1568		const u8 *addr;
-  1569		int n_channels;
-  1570	
-  1571		wcn36xx_dbg(WCN36XX_DBG_MAC, "platform probe\n");
-  1572	
-  1573		wcnss = dev_get_drvdata(pdev->dev.parent);
-  1574	
-  1575		hw = ieee80211_alloc_hw(sizeof(struct wcn36xx), &wcn36xx_ops);
-  1576		if (!hw) {
-  1577			wcn36xx_err("failed to alloc hw\n");
-  1578			ret = -ENOMEM;
-  1579			goto out_err;
-  1580		}
-  1581		platform_set_drvdata(pdev, hw);
-  1582		wcn = hw->priv;
-  1583		wcn->hw = hw;
-  1584		wcn->dev = &pdev->dev;
-  1585		wcn->first_boot = true;
-  1586		mutex_init(&wcn->conf_mutex);
-  1587		mutex_init(&wcn->hal_mutex);
-  1588		mutex_init(&wcn->scan_lock);
-  1589		__skb_queue_head_init(&wcn->amsdu);
-  1590	
-  1591		wcn->hal_buf = devm_kmalloc(wcn->dev, WCN36XX_HAL_BUF_SIZE, GFP_KERNEL);
-  1592		if (!wcn->hal_buf) {
-  1593			ret = -ENOMEM;
-  1594			goto out_wq;
-  1595		}
-  1596	
-  1597		n_channels = wcn_band_2ghz.n_channels + wcn_band_5ghz.n_channels;
-  1598		wcn->chan_survey = devm_kmalloc(wcn->dev, n_channels, GFP_KERNEL);
-  1599		if (!wcn->chan_survey) {
-> 1600			ret -= ENOMEM;
-  1601			goto out_wq;
-  1602		}
-  1603	
-  1604		ret = dma_set_mask_and_coherent(wcn->dev, DMA_BIT_MASK(32));
-  1605		if (ret < 0) {
-  1606			wcn36xx_err("failed to set DMA mask: %d\n", ret);
-  1607			goto out_wq;
-  1608		}
-  1609	
-  1610		wcn->nv_file = WLAN_NV_FILE;
-  1611		ret = of_property_read_string(wcn->dev->parent->of_node, "firmware-name", &wcn->nv_file);
-  1612		if (ret < 0 && ret != -EINVAL) {
-  1613			wcn36xx_err("failed to read \"firmware-name\" property: %d\n", ret);
-  1614			goto out_wq;
-  1615		}
-  1616	
-  1617		wcn->smd_channel = qcom_wcnss_open_channel(wcnss, "WLAN_CTRL", wcn36xx_smd_rsp_process, hw);
-  1618		if (IS_ERR(wcn->smd_channel)) {
-  1619			wcn36xx_err("failed to open WLAN_CTRL channel\n");
-  1620			ret = PTR_ERR(wcn->smd_channel);
-  1621			goto out_wq;
-  1622		}
-  1623	
-  1624		addr = of_get_property(pdev->dev.of_node, "local-mac-address", &ret);
-  1625		if (addr && ret != ETH_ALEN) {
-  1626			wcn36xx_err("invalid local-mac-address\n");
-  1627			ret = -EINVAL;
-  1628			goto out_destroy_ept;
-  1629		} else if (addr) {
-  1630			wcn36xx_info("mac address: %pM\n", addr);
-  1631			SET_IEEE80211_PERM_ADDR(wcn->hw, addr);
-  1632		}
-  1633	
-  1634		ret = wcn36xx_platform_get_resources(wcn, pdev);
-  1635		if (ret)
-  1636			goto out_destroy_ept;
-  1637	
-  1638		wcn36xx_init_ieee80211(wcn);
-  1639		ret = ieee80211_register_hw(wcn->hw);
-  1640		if (ret)
-  1641			goto out_unmap;
-  1642	
-  1643		return 0;
-  1644	
-  1645	out_unmap:
-  1646		iounmap(wcn->ccu_base);
-  1647		iounmap(wcn->dxe_base);
-  1648	out_destroy_ept:
-  1649		rpmsg_destroy_ept(wcn->smd_channel);
-  1650	out_wq:
-  1651		ieee80211_free_hw(hw);
-  1652	out_err:
-  1653		return ret;
-  1654	}
-  1655	
+> 1. kernel/stackleak.c build failure:
+> 
+> $ make -skj"$(nproc)" ARCH=x86_64 allmodconfig kernel/stackleak.o
+> kernel/stackleak.c: In function ‘stackleak_erase’:
+> kernel/stackleak.c:92:13: error: implicit declaration of function ‘on_thread_stack’; did you mean ‘setup_thread_stack’? [-Werror=implicit-function-declaration]
 
+So it turns out that my build environment didn't have the stackleak code 
+enabled at all:
+
+  kepler:~/mingo.tip.git> make ARCH=x86_64 allmodconfig
+  #
+  # configuration written to .config
+  #
+  kepler:~/mingo.tip.git> grep -E 'STACKLEAK|GCC_PLUGIN' .config
+  CONFIG_HAVE_ARCH_STACKLEAK=y
+  CONFIG_HAVE_GCC_PLUGINS=y
+
+... because it failed this condition:
+
+ menuconfig GCC_PLUGINS
+ ...
+        depends on $(success,test -e $(shell,$(CC) -print-file-name=plugin)/include/plugin-version.h)
+
+... because there were no plugin headers:
+
+  kepler:~/mingo.tip.git> gcc -print-file-name=plugin
+  /usr/lib/gcc/x86_64-linux-gnu/10/plugin
+
+  kepler:~/mingo.tip.git> ls $(gcc -print-file-name=plugin)/include/
+  ls: cannot access '/usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/': No such file or directory
+
+... because I needed to install the plugin-development packages for gcc-10.
+
+After installing those I have stackleak:
+
+  kepler:~/mingo.tip.git> grep STACKLEAK .config
+  CONFIG_HAVE_ARCH_STACKLEAK=y
+  CONFIG_GCC_PLUGIN_STACKLEAK=y
+  CONFIG_STACKLEAK_TRACK_MIN_SIZE=100
+  CONFIG_STACKLEAK_METRICS=y
+  CONFIG_STACKLEAK_RUNTIME_DISABLE=y
+
+and was able to reproduce your build failure. :-)
+
+> This is fixed with the following diff although I am unsure if that is as
+> minimal as it should be.
+> 
+> diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+> index ce161a8e8d97..d67c5475183b 100644
+> --- a/kernel/stackleak.c
+> +++ b/kernel/stackleak.c
+> @@ -10,8 +10,10 @@
+>   * reveal and blocks some uninitialized stack variable attacks.
+>   */
+>  
+> +#include <asm/processor_api.h>
+>  #include <linux/stackleak.h>
+>  #include <linux/kprobes.h>
+> +#include <linux/align.h>
+
+Yeah - I used a simpler & more generic header: <linux/ptrace_api.h> - see 
+the patch below.
+
+But your solution is functionally equivalent. This fix will be included in 
+-v2, hopefully released later today.
+
+Thanks,
+
+	Ingo
+
+===============>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Sat, 8 Jan 2022 11:29:17 +0100
+Subject: [PATCH] headers/deps: Add header dependencies to .c files: <linux/ptrace_api.h>
+
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ kernel/stackleak.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+index ce161a8e8d97..fde49e2f209a 100644
+--- a/kernel/stackleak.c
++++ b/kernel/stackleak.c
+@@ -10,6 +10,7 @@
+  * reveal and blocks some uninitialized stack variable attacks.
+  */
+ 
++#include <linux/ptrace_api.h>
+ #include <linux/stackleak.h>
+ #include <linux/kprobes.h>
+ 
