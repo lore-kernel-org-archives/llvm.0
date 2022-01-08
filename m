@@ -1,50 +1,66 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC33168
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 11:03:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641639836; x=1673175836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cI5lIDdhogBwStWiVae+zo7CMgHiA7QbJeKQbKjxHAw=;
-  b=b70udXPqUWf2KEGqQk0bVYZVvnPulx36O360M5GiHlmjQm4JZw/Dp/Ux
-   lten1OsQW43v9P5zvY+deUAI3gXcDl9kDNi4IHDbsiht3MGOEFIEtoyyn
-   7Cj+en5fU7e7xcbFhUlvfcqKu+HoV7q55Y1Su3JQ0h72IkJP63iIijX8V
-   AL8QrBErY2FJWc5sVo+ePD0YSs9LuYJpJvnbeZmE7qzOjKaiMzeMS2b1l
-   DNb9SNYRPODe6QJw8tcf6hCrdu2ZDs0P4g4r+VupjjwwDsC6PZGSTHMrj
-   ULpiomcJjZAygXk12JKel+7PxBDQmCQl+SAq5Zlj9PNSvG6Xk4XLZj/Ia
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="243204827"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="243204827"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 03:03:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="473623032"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jan 2022 03:03:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n69Vn-0000YZ-Ju; Sat, 08 Jan 2022 11:03:51 +0000
-Date: Sat, 8 Jan 2022 19:03:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Don <joshdon@google.com>, Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Ingo Molnar <mingo@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8810168
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 11:08:29 +0000 (UTC)
+Received: by mail-wr1-f52.google.com with SMTP id l25so5314211wrb.13
+        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 03:08:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QEd7jShQk1ml/OyAi/kpMudTLo3rO1TWVpy7f9K8afc=;
+        b=bMgpN08rni6AurnSOUKC9hTpgCbtphQymgTmu+WqvnMnSiD88yJYICu51fRcP6Q5LU
+         ZeLmWdmsQcj71iv//LrobynxxsVgN88HwmnvHu9ZuK744sikFEKVvoCpGe/gESYJflAg
+         3kZK/W9LumTPVAgLJ9xK40y4MoYEZuepKrzS9SYbfuwk+JKIY8LeoRPDiuIdD6p7y4i/
+         MFnsXgM9McX3pHsHZ0TcRLdQOuSD8GYoq+1zsVGNifB7vkpvKdMHIPApQ5MkGuiNnh6v
+         L+9lOoTJi4+15cvANwgqCloJQPRUwY5iE3oq3tBfdZmKZN/O5iYZ1EvXWtEpX7bzQ3A7
+         3IwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=QEd7jShQk1ml/OyAi/kpMudTLo3rO1TWVpy7f9K8afc=;
+        b=sw0MDRpsyYmI8rOxb4/CQSmdNh9Nd28JKex/EO/ksS8xXrjDsOQaLqS53wFsEGoX3W
+         HC2ndbtPEgENBrnemMtkr9CWsyN/6uvvXcVeBjCRvWCzza7YzFoxMxwBUZXtCmILXObJ
+         vGyVWVdMBcATHGvsfLk5lO6ZvlFQFh0cH9hCYPf//Kwgi3U3jUBhGhvFiL4Alp4IlJd1
+         O0POp3Q2wexWY16If+Y6DlJE53HIK+mWbmvjJGj4opOWLOkivMR/o44UoM9qqVGySEmX
+         txMMDEvboXXAwAfTsxWyi94Q+VRuUsxzVgAGZX0ZR5kagigpEpCaNBW2EHpG2TQMfyv+
+         6FnA==
+X-Gm-Message-State: AOAM530c+EYICV6WNvOtIO0CxY/GU420Dcuhn8KL68uaXigc2kf3e39W
+	Kus/CmI1plEAqk6bJk8Ev8E=
+X-Google-Smtp-Source: ABdhPJwnsz6GcODYiRzSMmaPUkZdoCsUYOGKtkSZsehdoKS7bUE4455GcXP3luYqUcXtqbLpkH0DPA==
+X-Received: by 2002:a5d:53c2:: with SMTP id a2mr13050516wrw.154.1641640107930;
+        Sat, 08 Jan 2022 03:08:27 -0800 (PST)
+Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
+        by smtp.gmail.com with ESMTPSA id m6sm1535455wrx.36.2022.01.08.03.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 03:08:27 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Sat, 8 Jan 2022 12:08:24 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>
-Subject: Re: [PATCH 1/2] cgroup: add cpu.stat_percpu
-Message-ID: <202201081834.qK6yea4m-lkp@intel.com>
-References: <20220107234138.1765668-1-joshdon@google.com>
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Al Viro <viro@zeniv.linux.org.uk>,
+	llvm@lists.linux.dev
+Subject: [PATCH] FIX: headers/deps: uapi/headers: Create usr/include/uapi
+ symbolic link
+Message-ID: <YdlwqFQCJpYiDfRR@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
+ <YdTvXkKFzA0pOjFf@gmail.com>
+ <YdYQu9YxNw0CxJRn@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,113 +69,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107234138.1765668-1-joshdon@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-Hi Josh,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tj-cgroup/for-next]
-[also build test ERROR on tip/sched/core tip/master v5.16-rc8 next-20220107]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Josh-Don/cgroup-add-cpu-stat_percpu/20220108-074316
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-config: x86_64-randconfig-a014-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081834.qK6yea4m-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d70517c43ca623321dcca220ce4c9b93059dc763
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Josh-Don/cgroup-add-cpu-stat_percpu/20220108-074316
-        git checkout d70517c43ca623321dcca220ce4c9b93059dc763
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> kernel/cgroup/rstat.c:519:9: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
-                  ^
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-           DEFINE_PER_CPU_SECTION(type, name, "")
-           ^
-   include/linux/percpu-defs.h:93:2: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-           __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;                   \
-           ^
-   include/linux/percpu-defs.h:54:2: note: expanded from macro '__PCPU_DUMMY_ATTRS'
-           __section(".discard") __attribute__((unused))
-           ^
-   include/linux/compiler_attributes.h:276:56: note: expanded from macro '__section'
-   #define __section(section)              __attribute__((__section__(section)))
-                                                          ^
->> kernel/cgroup/rstat.c:519:9: error: non-extern declaration of '__pcpu_unique_cached_percpu_stats' follows extern declaration
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-           DEFINE_PER_CPU_SECTION(type, name, "")
-           ^
-   include/linux/percpu-defs.h:93:26: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-           __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;                   \
-                                   ^
-   <scratch space>:66:1: note: expanded from here
-   __pcpu_unique_cached_percpu_stats
-   ^
-   kernel/cgroup/rstat.c:519:9: note: previous declaration is here
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-           DEFINE_PER_CPU_SECTION(type, name, "")
-           ^
-   include/linux/percpu-defs.h:92:33: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-           extern __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;            \
-                                          ^
-   <scratch space>:65:1: note: expanded from here
-   __pcpu_unique_cached_percpu_stats
-   ^
->> kernel/cgroup/rstat.c:519:9: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
-                  ^
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-           DEFINE_PER_CPU_SECTION(type, name, "")
-           ^
-   include/linux/percpu-defs.h:95:2: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-           __PCPU_ATTRS(sec) __weak __typeof__(type) name
-           ^
-   include/linux/percpu-defs.h:50:26: note: expanded from macro '__PCPU_ATTRS'
-           __percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))     \
-                                   ^
->> kernel/cgroup/rstat.c:519:49: error: non-extern declaration of 'cached_percpu_stats' follows extern declaration
-           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
-                                                          ^
-   kernel/cgroup/rstat.c:519:49: note: previous declaration is here
->> kernel/cgroup/rstat.c:519:9: error: weak declaration cannot have internal linkage
-           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
-                  ^
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-           DEFINE_PER_CPU_SECTION(type, name, "")
-           ^
-   include/linux/percpu-defs.h:95:20: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-           __PCPU_ATTRS(sec) __weak __typeof__(type) name
-                             ^
-   include/linux/compiler_attributes.h:315:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   5 errors generated.
+In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
 
 
-vim +/__section__ +519 kernel/cgroup/rstat.c
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-   515	
-   516	void cgroup_base_stat_percpu_cputime_show(struct seq_file *seq)
-   517	{
-   518		static DEFINE_MUTEX(mutex);
- > 519		static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
+> 2. Build failures with CONFIG_UAPI_HEADER_TEST=y and O=...
+> 
+> This was originally reproduced with allmodconfig but this is a simpler
+> reproducer I think.
+> 
+> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 defconfig
+> 
+> $ scripts/config --file .build/x86_64/.config -e HEADERS_INSTALL -e UAPI_HEADER_TEST
+> 
+> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 olddefconfig usr/
+
+The simplified & scripted reproducer is very useful, thanks a ton!
+
+> In file included from <command-line>:
+> ./usr/include/linux/rds.h:38:10: fatal error: uapi/linux/sockios.h: No such file or directory
+>    38 | #include <uapi/linux/sockios.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/rds.hdrtest] Error 1
+> In file included from ./usr/include/linux/qrtr.h:5,
+>                  from <command-line>:
+> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
+>     5 | #include <uapi/linux/socket_types.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> In file included from ./usr/include/linux/in.h:24,
+>                  from ./usr/include/linux/nfs_mount.h:12,
+>                  from <command-line>:
+> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
+>     5 | #include <uapi/linux/socket_types.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/qrtr.hdrtest] Error 1
+> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/nfs_mount.hdrtest] Error 1
+> ...
+> 
+> I don't see this when just building in the tree. I am guessing that
+> commit f989e243f1f4 ("headers/deps: uapi/headers: Create
+> usr/include/uapi symbolic link") needs to account for this?
+
+Yeah. Here's my second attempt that creates the symlink as the 
+header-install make process, as it should - also pushed out into 
+sched/headers.
+
+(My Makefile-fu isn't overly powerful though, so this is just an attempt.)
+
+This fix will be backmerged into f989e243f1f4 in -v2.
+
+Thanks,
+
+	Ingo
+
+=========================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Sat, 8 Jan 2022 12:05:57 +0100
+Subject: [PATCH] FIX: f989e243f1f4 headers/deps: uapi/headers: Create usr/include/uapi symbolic link
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ scripts/Makefile.headersinst | 3 +++
+ usr/include/uapi             | 1 -
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/Makefile.headersinst b/scripts/Makefile.headersinst
+index 029d85bb0b23..8ac831458143 100644
+--- a/scripts/Makefile.headersinst
++++ b/scripts/Makefile.headersinst
+@@ -78,6 +78,9 @@ existing-headers := $(filter $(old-headers), $(all-headers))
+ 
+ -include $(foreach f,$(existing-headers),$(dir $(f)).$(notdir $(f)).cmd)
+ 
++# link the <uapi/*> namespace:
++LINK := $(shell ln -sf ../include $(objtree)/$(dst)/uapi)
++
+ PHONY += FORCE
+ FORCE:
+ 
+diff --git a/usr/include/uapi b/usr/include/uapi
+deleted file mode 120000
+index f5030fe88998..000000000000
+--- a/usr/include/uapi
++++ /dev/null
+@@ -1 +0,0 @@
+-../include
+\ No newline at end of file
