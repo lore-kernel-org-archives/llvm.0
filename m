@@ -1,42 +1,50 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEEB168
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 10:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC33168
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 11:03:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641638634; x=1673174634;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6YbQrnMcQA5+BPCkyY5BHW2Z3rlPfkppDF4M7vJLRLk=;
-  b=Ko+JQ6EICpxW8WTV+nzS4tDXa52evseB4OTk9sDWkrQwjLum6LNwU0pb
-   BF7BNZgH4M0YgrKC4ruQb4b0bH0ryusmWZWrPjuWICLAeovTZfhIjySCQ
-   QgfQksk9H3Ml7HgVyoAkZhS2nQHke3SayF6TxAHwbZVhaux9WJp4xWs2a
-   eGu98/RimHk5500rAw+3itAVuOZfXoOCWHsuteSU94OFDzl4quIpzYCOe
-   LdUXF2ZOvnjquqCc8OExONzhg3ZYspkvZcz9iNny2mtJ/MjKV+Y+SIbQS
-   iuD5DnOxQABRnG5KZHtdGh76JEVk4w5OwFs+GNVhVMn/O/1IRehxbkAKv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="242803736"
+  t=1641639836; x=1673175836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cI5lIDdhogBwStWiVae+zo7CMgHiA7QbJeKQbKjxHAw=;
+  b=b70udXPqUWf2KEGqQk0bVYZVvnPulx36O360M5GiHlmjQm4JZw/Dp/Ux
+   lten1OsQW43v9P5zvY+deUAI3gXcDl9kDNi4IHDbsiht3MGOEFIEtoyyn
+   7Cj+en5fU7e7xcbFhUlvfcqKu+HoV7q55Y1Su3JQ0h72IkJP63iIijX8V
+   AL8QrBErY2FJWc5sVo+ePD0YSs9LuYJpJvnbeZmE7qzOjKaiMzeMS2b1l
+   DNb9SNYRPODe6QJw8tcf6hCrdu2ZDs0P4g4r+VupjjwwDsC6PZGSTHMrj
+   ULpiomcJjZAygXk12JKel+7PxBDQmCQl+SAq5Zlj9PNSvG6Xk4XLZj/Ia
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="243204827"
 X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="242803736"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 02:43:53 -0800
+   d="scan'208";a="243204827"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 03:03:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="690072772"
+   d="scan'208";a="473623032"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Jan 2022 02:43:51 -0800
+  by orsmga006.jf.intel.com with ESMTP; 08 Jan 2022 03:03:52 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n69CR-0000XI-1n; Sat, 08 Jan 2022 10:43:51 +0000
-Date: Sat, 8 Jan 2022 18:43:23 +0800
+	id 1n69Vn-0000YZ-Ju; Sat, 08 Jan 2022 11:03:51 +0000
+Date: Sat, 8 Jan 2022 19:03:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pintu Kumar <quic_pintu@quicinc.com>
+To: Josh Don <joshdon@google.com>, Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>,
-	Pintu Agarwal <pintu.ping@gmail.com>
-Subject: include/uapi/linux/sysinfo.h:23:10: error: array is too large
- (18446744073709551608 elements)
-Message-ID: <202201081822.SPIpoaId-lkp@intel.com>
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>
+Subject: Re: [PATCH 1/2] cgroup: add cpu.stat_percpu
+Message-ID: <202201081834.qK6yea4m-lkp@intel.com>
+References: <20220107234138.1765668-1-joshdon@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,74 +53,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220107234138.1765668-1-joshdon@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220108-020953/Pintu-Kumar/sysinfo-include-availram-field-in-sysinfo-struct/20220106-233557
-head:   85f46444fa2eff4f03aeb701d44edd62af00ee44
-commit: 85f46444fa2eff4f03aeb701d44edd62af00ee44 sysinfo: include availram field in sysinfo struct
-date:   17 hours ago
-config: s390-randconfig-r015-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081822.SPIpoaId-lkp@intel.com/config)
+Hi Josh,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on tj-cgroup/for-next]
+[also build test ERROR on tip/sched/core tip/master v5.16-rc8 next-20220107]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Josh-Don/cgroup-add-cpu-stat_percpu/20220108-074316
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
+config: x86_64-randconfig-a014-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081834.qK6yea4m-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/85f46444fa2eff4f03aeb701d44edd62af00ee44
+        # https://github.com/0day-ci/linux/commit/d70517c43ca623321dcca220ce4c9b93059dc763
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220108-020953/Pintu-Kumar/sysinfo-include-availram-field-in-sysinfo-struct/20220106-233557
-        git checkout 85f46444fa2eff4f03aeb701d44edd62af00ee44
+        git fetch --no-tags linux-review Josh-Don/cgroup-add-cpu-stat_percpu/20220108-074316
+        git checkout d70517c43ca623321dcca220ce4c9b93059dc763
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/bounds.c:10:
-   In file included from include/linux/page-flags.h:10:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/s390/include/asm/bug.h:68:
-   In file included from include/asm-generic/bug.h:22:
-   In file included from include/linux/printk.h:9:
-   In file included from include/linux/cache.h:5:
-   In file included from include/uapi/linux/kernel.h:5:
->> include/uapi/linux/sysinfo.h:23:10: error: array is too large (18446744073709551608 elements)
-           char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1197: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> kernel/cgroup/rstat.c:519:9: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
+           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
+                  ^
+   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
+           DEFINE_PER_CPU_SECTION(type, name, "")
+           ^
+   include/linux/percpu-defs.h:93:2: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
+           __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;                   \
+           ^
+   include/linux/percpu-defs.h:54:2: note: expanded from macro '__PCPU_DUMMY_ATTRS'
+           __section(".discard") __attribute__((unused))
+           ^
+   include/linux/compiler_attributes.h:276:56: note: expanded from macro '__section'
+   #define __section(section)              __attribute__((__section__(section)))
+                                                          ^
+>> kernel/cgroup/rstat.c:519:9: error: non-extern declaration of '__pcpu_unique_cached_percpu_stats' follows extern declaration
+   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
+           DEFINE_PER_CPU_SECTION(type, name, "")
+           ^
+   include/linux/percpu-defs.h:93:26: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
+           __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;                   \
+                                   ^
+   <scratch space>:66:1: note: expanded from here
+   __pcpu_unique_cached_percpu_stats
+   ^
+   kernel/cgroup/rstat.c:519:9: note: previous declaration is here
+   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
+           DEFINE_PER_CPU_SECTION(type, name, "")
+           ^
+   include/linux/percpu-defs.h:92:33: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
+           extern __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;            \
+                                          ^
+   <scratch space>:65:1: note: expanded from here
+   __pcpu_unique_cached_percpu_stats
+   ^
+>> kernel/cgroup/rstat.c:519:9: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
+           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
+                  ^
+   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
+           DEFINE_PER_CPU_SECTION(type, name, "")
+           ^
+   include/linux/percpu-defs.h:95:2: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
+           __PCPU_ATTRS(sec) __weak __typeof__(type) name
+           ^
+   include/linux/percpu-defs.h:50:26: note: expanded from macro '__PCPU_ATTRS'
+           __percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))     \
+                                   ^
+>> kernel/cgroup/rstat.c:519:49: error: non-extern declaration of 'cached_percpu_stats' follows extern declaration
+           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
+                                                          ^
+   kernel/cgroup/rstat.c:519:49: note: previous declaration is here
+>> kernel/cgroup/rstat.c:519:9: error: weak declaration cannot have internal linkage
+           static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
+                  ^
+   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
+           DEFINE_PER_CPU_SECTION(type, name, "")
+           ^
+   include/linux/percpu-defs.h:95:20: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
+           __PCPU_ATTRS(sec) __weak __typeof__(type) name
+                             ^
+   include/linux/compiler_attributes.h:315:56: note: expanded from macro '__weak'
+   #define __weak                          __attribute__((__weak__))
+                                                          ^
+   5 errors generated.
 
 
-vim +23 include/uapi/linux/sysinfo.h
+vim +/__section__ +519 kernel/cgroup/rstat.c
 
-     6	
-     7	#define SI_LOAD_SHIFT	16
-     8	struct sysinfo {
-     9		__kernel_long_t uptime;		/* Seconds since boot */
-    10		__kernel_ulong_t loads[3];	/* 1, 5, and 15 minute load averages */
-    11		__kernel_ulong_t totalram;	/* Total usable main memory size */
-    12		__kernel_ulong_t freeram;	/* Available memory size */
-    13		__kernel_ulong_t sharedram;	/* Amount of shared memory */
-    14		__kernel_ulong_t bufferram;	/* Memory used by buffers */
-    15		__kernel_ulong_t totalswap;	/* Total swap space size */
-    16		__kernel_ulong_t freeswap;	/* swap space still available */
-    17		__u16 procs;		   	/* Number of current processes */
-    18		__u16 pad;		   	/* Explicit padding for m68k */
-    19		__kernel_ulong_t totalhigh;	/* Total high memory size */
-    20		__kernel_ulong_t freehigh;	/* Available high memory size */
-    21		__u32 mem_unit;			/* Memory unit size in bytes */
-    22		__kernel_ulong_t availram;	/* Memory available for allocation */
-  > 23		char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];	/* Padding: libc5 uses this.. */
-    24	};
-    25	
+   515	
+   516	void cgroup_base_stat_percpu_cputime_show(struct seq_file *seq)
+   517	{
+   518		static DEFINE_MUTEX(mutex);
+ > 519		static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
