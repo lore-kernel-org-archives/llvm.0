@@ -1,63 +1,64 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A642C80
-	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 14:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8708D173
+	for <llvm@lists.linux.dev>; Sat,  8 Jan 2022 14:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1641650883;
+	s=mimecast20190719; t=1641652406;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=PocnGmnCbMvgl/mM4UqClsCjrZwW9G0adKzchgFrwe0=;
-	b=LNCA0KDbpkdr03Wse0eE8VVY0zl/D8qtrXjQqV/vXlSGmDSxkS4vxjjMi0oouBOqIasBg1
-	0AjKke83OnvYiWIwtR2aDNGlRWA05vNohF4TtYSHCRhS7nlVHj+DscoI46+/PDlrZhYqES
-	ttGOD8P42il65/NExG0ttdw603Aus2Y=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=OTEoDAXesUBrrz0y7VX933AG7BpNKcC+21DOjfav4eQ=;
+	b=D8gXXWgNZ9DXSTSo8jnij07qMUPZo2/0FiqVRLFwDwkykv+EEA/7U34K4Kp1UW0P+yFI6/
+	9EBB53xD436eSkw3uJf16DajLWoZcLja3tCaRtVCwtQKJWglccmMO5QBqR5phGFh/JqQWt
+	WedKsW8qkgYNw8hTNW+cHioaY8F3/u8=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-6_R3Ga5zNV2BykHdF89JaQ-1; Sat, 08 Jan 2022 09:08:02 -0500
-X-MC-Unique: 6_R3Ga5zNV2BykHdF89JaQ-1
-Received: by mail-oi1-f197.google.com with SMTP id n2-20020aca5902000000b002c6ee7caa53so6211169oib.20
-        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 06:08:02 -0800 (PST)
+ us-mta-509-ch4ogGsYO9G5f81J_jYtrA-1; Sat, 08 Jan 2022 09:33:25 -0500
+X-MC-Unique: ch4ogGsYO9G5f81J_jYtrA-1
+Received: by mail-oo1-f69.google.com with SMTP id v30-20020a4a9761000000b002daad3afaf6so5980540ooi.18
+        for <llvm@lists.linux.dev>; Sat, 08 Jan 2022 06:33:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=PocnGmnCbMvgl/mM4UqClsCjrZwW9G0adKzchgFrwe0=;
-        b=IQuxMcM2w0VqR6oQa6wgX9TFvW2lyFh5cyOeQAYZgikfweVtfyB3bCZSkhgtWFId8T
-         8tBnNGbI+u3W+KFrYAq9AuDnvQni+QL6YsaBlRofIrHwVs1A9ilnNINGkga7YJJecnRo
-         S0timA3PcIRWAQjRX8xslSvuUvcJClRcJa67mGpZM6r5aVS+0s6qde/sVKFDVths7Oic
-         W0IfVdQUCCrgZ3JYuy6x2ivfnellP+ewsiosaijOfKxoJwVXDbAtfnO9pUZgIYLGMeld
-         zfM7hLX6Y2h1ykTzCf5qpCwQAlTHgqse8vUdzc/6M3cneeCPCepB2qSeAgm/SU5tyV4Y
-         GRrQ==
-X-Gm-Message-State: AOAM530eqGgshw8l7EwjoiEHTRVgCJenIf+Lxwf8vEm8evuLSlYhLYSf
-	dAqpu+sq/d5GHP4R+EIckNdfQNIkUlYNLDd/6E96hP3XCNXA28w+cwc57e7KLh1d7k4cOAMDge+
-	GJePM5Yrq6IkQ7w==
-X-Received: by 2002:a4a:da59:: with SMTP id f25mr43483454oou.46.1641650881981;
-        Sat, 08 Jan 2022 06:08:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxLFcO/UPfE7QdAafOO6wi0ODe4Q/vmKo+QUX+NZH/NVBUk5VTc2tOqw3QSi/spK+bC/u82nA==
-X-Received: by 2002:a4a:da59:: with SMTP id f25mr43483434oou.46.1641650881740;
-        Sat, 08 Jan 2022 06:08:01 -0800 (PST)
+        bh=OTEoDAXesUBrrz0y7VX933AG7BpNKcC+21DOjfav4eQ=;
+        b=KPOLCMQhTwoRZP3bvoLrT48aptPQVJPwBV2EG6tXYoRXSZb+EeQgbwT9voJnvXMnMS
+         6O9sOKQ91zf+7scwp5osJGN5FedZEnEOOkhJ5S1X8+kJdQ9nVYfQ6ApQZVoayaKnvvGn
+         U1Ol9oOshEGg8REFhpLwWePLjO0t4k/ZjlztSXJJ5HasgPW0QHJ9WFGglBLo3MiqwU2J
+         U1PIziNKo4X+Tk2SSN4Dwq5+zJfx/ruJj55YjvWPNf+RitH/duCUTHz6kZXfTDxDWOwB
+         scBcD4iwlNaO34zaCdLw1avpBbDmyaU2ryUfybL0LrS2qxCHS6hE2ND7Q3gSPbvuSST6
+         7kXw==
+X-Gm-Message-State: AOAM530p5oxA1UWoJNvFwg7PTgl6YJQRi2v9yJWh4H1S9J5q+TFqSP3Z
+	FecL0j2t2RJq7HqdI4UAnil3nrMUGE1EbAIsMCrGOvfsyHfcOa1sK+auOHYfEuro12gDCwUHD2y
+	PQdTVoZq4FIoeiw==
+X-Received: by 2002:a9d:d68:: with SMTP id 95mr46520900oti.188.1641652404373;
+        Sat, 08 Jan 2022 06:33:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyrzTGEeaVMK49HTR2/2D3npJiXwy7xQHcIPlSumyPxfb0SUfpPiLi4GiaG2GrUwzY6o8mW7Q==
+X-Received: by 2002:a9d:d68:: with SMTP id 95mr46520883oti.188.1641652404104;
+        Sat, 08 Jan 2022 06:33:24 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id i27sm348535ots.49.2022.01.08.06.08.00
+        by smtp.gmail.com with ESMTPSA id r37sm353568otv.54.2022.01.08.06.33.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 06:08:01 -0800 (PST)
+        Sat, 08 Jan 2022 06:33:23 -0800 (PST)
 From: trix@redhat.com
-To: james.schulman@cirrus.com,
-	david.rhodes@cirrus.com,
-	tanureal@opensource.cirrus.com,
-	perex@perex.cz,
-	tiwai@suse.com,
+To: wg@grandegger.com,
+	mkl@pengutronix.de,
+	davem@davemloft.net,
+	kuba@kernel.org,
 	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com,
+	ndesaulniers@google.com,
+	mailhol.vincent@wanadoo.fr,
+	stefan.maetje@esd.eu
+Cc: linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ALSA: hda: cs35l41: fix double free in cs35l41_hda_probe()
-Date: Sat,  8 Jan 2022 06:07:56 -0800
-Message-Id: <20220108140756.3985487-1-trix@redhat.com>
+Subject: [PATCH] can: janz-ican3: initialize dlc variable
+Date: Sat,  8 Jan 2022 06:33:19 -0800
+Message-Id: <20220108143319.3986923-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -75,54 +76,35 @@ Content-Type: text/plain; charset="US-ASCII"
 From: Tom Rix <trix@redhat.com>
 
 Clang static analysis reports this problem
-cs35l41_hda.c:501:2: warning: Attempt to free released memory
-        kfree(acpi_hw_cfg);
-        ^~~~~~~~~~~~~~~~~~
+janz-ican3.c:1311:2: warning: Undefined or garbage value returned to caller
+        return dlc;
+        ^~~~~~~~~~
 
-This second free happens in the function's error handler which
-is normally ok but acpi_hw_cfg is freed in the non error case
-when it is still possible to have an error.
+dlc is only set with this conditional
+	if (!(cf->can_id & CAN_RTR_FLAG))
+		dlc = cf->len;
 
-Consolidate the frees.
+But is always returned.  So initialize dlc to 0.
 
-Fixes: 7b2f3eb492da ("ALSA: hda: cs35l41: Add support for CS35L41 in HDA systems")
+Fixes: cc4b08c31b5c ("can: do not increase tx_bytes statistics for RTR frames")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- sound/pci/hda/cs35l41_hda.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/can/janz-ican3.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index aa5bb6977792c..265ace98965f5 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -476,7 +476,6 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
- 	ret = cs35l41_hda_apply_properties(cs35l41, acpi_hw_cfg);
- 	if (ret)
- 		goto err;
--	kfree(acpi_hw_cfg);
+diff --git a/drivers/net/can/janz-ican3.c b/drivers/net/can/janz-ican3.c
+index 5b677af5f2a41..808c105cf8f7e 100644
+--- a/drivers/net/can/janz-ican3.c
++++ b/drivers/net/can/janz-ican3.c
+@@ -1285,7 +1285,7 @@ static unsigned int ican3_get_echo_skb(struct ican3_dev *mod)
+ {
+ 	struct sk_buff *skb = skb_dequeue(&mod->echoq);
+ 	struct can_frame *cf;
+-	u8 dlc;
++	u8 dlc = 0;
  
- 	if (cs35l41->reg_seq->probe) {
- 		ret = regmap_register_patch(cs35l41->regmap, cs35l41->reg_seq->probe,
-@@ -495,13 +494,14 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
- 
- 	dev_info(cs35l41->dev, "Cirrus Logic CS35L41 (%x), Revision: %02X\n", regid, reg_revid);
- 
--	return 0;
--
- err:
- 	kfree(acpi_hw_cfg);
--	if (!cs35l41->vspk_always_on)
--		gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
--	gpiod_put(cs35l41->reset_gpio);
-+
-+	if (unlikely(ret)) {
-+		if (!cs35l41->vspk_always_on)
-+			gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
-+		gpiod_put(cs35l41->reset_gpio);
-+	}
- 
- 	return ret;
- }
+ 	/* this should never trigger unless there is a driver bug */
+ 	if (!skb) {
 -- 
 2.26.3
 
