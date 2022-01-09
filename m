@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A25C2C9D
-	for <llvm@lists.linux.dev>; Sun,  9 Jan 2022 13:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7398C36AEB;
-	Sun,  9 Jan 2022 13:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B832C9D
+	for <llvm@lists.linux.dev>; Sun,  9 Jan 2022 13:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2769EC36AED;
+	Sun,  9 Jan 2022 13:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1641733661;
-	bh=Mp1UIDE+AHNBJcUVhc8wQHDdUlejQjJxr5jRVWoSUNc=;
+	s=korg; t=1641733669;
+	bh=Q0NgM//5V1y957MIzzCyo9ZSojnXHk06TQdjHp9Ivrg=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=k6N4AP4bqYhdIQEXI7zEhZjsaKbY8Azou9HLYqeBGdXCAccYv+t7WPMjUM2feBQw9
-	 JuFpH5GgTfXKRkD75pzjelelGu6jsuXUStUtQOEtEAhthN3XLZftSTccgtz0oaG3C0
-	 VeTvIssbnDuQiKGnPWYeu71GLl3UYfDiFwdXdBgk=
-Subject: Patch "arm64: move !VHE work to end of el2_setup" has been added to the 4.9-stable tree
+	b=jwH2+XI4Rta8mJyZ4pScnAOTmzizKg4JXrcH3qxb1MweM/zYy0w3SJAuSpBAVGwSr
+	 soIN5YJVxzkvUnfffamr4eeO6qHEacHy6dPa4Rj3TBvCz9o8yelQkJVsEjZqgYc1ry
+	 za92xq8vFB8R/d/CkX5XS8h63ometHlzE8eoSOD8=
+Subject: Patch "arm64: reduce el2_setup branching" has been added to the 4.9-stable tree
 To: catalin.marinas@arm.com,gregkh@linuxfoundation.org,linux-arm-kernel@lists.infradead.org,llvm@lists.linux.dev,marc.zyngier@arm.com,mark.rutland@arm.com,maz@kernel.org,nathan@kernel.org,ndesaulniers@google.com,sashal@kernel.org,will.deacon@arm.com,will@kernel.org
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
 Date: Sun, 09 Jan 2022 14:07:38 +0100
-In-Reply-To: <20220107194335.3090066-5-nathan@kernel.org>
-Message-ID: <1641733658197117@kroah.com>
+In-Reply-To: <20220107194335.3090066-4-nathan@kernel.org>
+Message-ID: <1641733658226222@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,13 +33,13 @@ X-Patchwork-Hint: ignore
 
 This is a note to let you know that I've just added the patch titled
 
-    arm64: move !VHE work to end of el2_setup
+    arm64: reduce el2_setup branching
 
 to the 4.9-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
-     arm64-move-vhe-work-to-end-of-el2_setup.patch
+     arm64-reduce-el2_setup-branching.patch
 and it can be found in the queue-4.9 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
@@ -48,23 +48,23 @@ please let <stable@vger.kernel.org> know about it.
 
 From foo@baz Sun Jan  9 01:56:51 PM CET 2022
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri,  7 Jan 2022 12:43:34 -0700
-Subject: arm64: move !VHE work to end of el2_setup
+Date: Fri,  7 Jan 2022 12:43:33 -0700
+Subject: arm64: reduce el2_setup branching
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org, llvm@lists.linux.dev
-Message-ID: <20220107194335.3090066-5-nathan@kernel.org>
+Message-ID: <20220107194335.3090066-4-nathan@kernel.org>
 
 From: Mark Rutland <mark.rutland@arm.com>
 
-commit d61c97a7773d0848b4bf5c4697855c7ce117362c upstream.
+commit 3ad47d055aa88d9f4189253f5b5c485f4c4626b2 upstream.
 
-We only need to initialise sctlr_el1 if we're installing an EL2 stub, so
-we may as well defer this until we're doing so. Similarly, we can defer
-intialising CPTR_EL2 until then, as we do not access any trapped
-functionality as part of el2_setup.
+The early el2_setup code is a little convoluted, with two branches where
+one would do. This makes the code more painful to read than is
+necessary.
 
-This patch modified el2_setup accordingly, allowing us to remove a
-branch and simplify the code flow.
+We can remove a branch and simplify the logic by moving the early return
+in the booted-at-EL1 case earlier in the function. This separates it
+from all the setup logic that only makes sense for EL2.
 
 Acked-by: Marc Zyngier <marc.zyngier@arm.com>
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
@@ -73,62 +73,40 @@ Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/head.S |   37 +++++++++++++++++--------------------
- 1 file changed, 17 insertions(+), 20 deletions(-)
+ arch/arm64/kernel/head.S |   15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 --- a/arch/arm64/kernel/head.S
 +++ b/arch/arm64/kernel/head.S
-@@ -553,26 +553,6 @@ set_hcr:
- 	msr	vpidr_el2, x0
- 	msr	vmpidr_el2, x1
- 
--	/*
--	 * When VHE is not in use, early init of EL2 and EL1 needs to be
--	 * done here.
--	 * When VHE _is_ in use, EL1 will not be used in the host and
--	 * requires no configuration, and all non-hyp-specific EL2 setup
--	 * will be done via the _EL1 system register aliases in __cpu_setup.
--	 */
--	cbnz	x2, 1f
--
--	/* sctlr_el1 */
--	mov	x0, #0x0800			// Set/clear RES{1,0} bits
--CPU_BE(	movk	x0, #0x33d0, lsl #16	)	// Set EE and E0E on BE systems
--CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// Clear EE and E0E on LE systems
--	msr	sctlr_el1, x0
--
--	/* Coprocessor traps. */
--	mov	x0, #0x33ff
--	msr	cptr_el2, x0			// Disable copro. traps to EL2
--1:
--
- #ifdef CONFIG_COMPAT
- 	msr	hstr_el2, xzr			// Disable CP15 traps to EL2
- #endif
-@@ -598,6 +578,23 @@ CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// C
+@@ -489,13 +489,8 @@ ENTRY(el2_setup)
+ 	msr	SPsel, #1			// We want to use SP_EL{1,2}
+ 	mrs	x0, CurrentEL
+ 	cmp	x0, #CurrentEL_EL2
+-	b.ne	1f
+-	mrs	x0, sctlr_el2
+-CPU_BE(	orr	x0, x0, #(1 << 25)	)	// Set the EE bit for EL2
+-CPU_LE(	bic	x0, x0, #(1 << 25)	)	// Clear the EE bit for EL2
+-	msr	sctlr_el2, x0
+-	b	2f
+-1:	mrs	x0, sctlr_el1
++	b.eq	1f
++	mrs	x0, sctlr_el1
+ CPU_BE(	orr	x0, x0, #(3 << 24)	)	// Set the EE and E0E bits for EL1
+ CPU_LE(	bic	x0, x0, #(3 << 24)	)	// Clear the EE and E0E bits for EL1
+ 	msr	sctlr_el1, x0
+@@ -503,7 +498,11 @@ CPU_LE(	bic	x0, x0, #(3 << 24)	)	// Clea
+ 	isb
  	ret
  
- install_el2_stub:
-+	/*
-+	 * When VHE is not in use, early init of EL2 and EL1 needs to be
-+	 * done here.
-+	 * When VHE _is_ in use, EL1 will not be used in the host and
-+	 * requires no configuration, and all non-hyp-specific EL2 setup
-+	 * will be done via the _EL1 system register aliases in __cpu_setup.
-+	 */
-+	/* sctlr_el1 */
-+	mov	x0, #0x0800			// Set/clear RES{1,0} bits
-+CPU_BE(	movk	x0, #0x33d0, lsl #16	)	// Set EE and E0E on BE systems
-+CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// Clear EE and E0E on LE systems
-+	msr	sctlr_el1, x0
+-2:
++1:	mrs	x0, sctlr_el2
++CPU_BE(	orr	x0, x0, #(1 << 25)	)	// Set the EE bit for EL2
++CPU_LE(	bic	x0, x0, #(1 << 25)	)	// Clear the EE bit for EL2
++	msr	sctlr_el2, x0
 +
-+	/* Coprocessor traps. */
-+	mov	x0, #0x33ff
-+	msr	cptr_el2, x0			// Disable copro. traps to EL2
-+
- 	/* Hypervisor stub */
- 	adrp	x0, __hyp_stub_vectors
- 	add	x0, x0, #:lo12:__hyp_stub_vectors
+ #ifdef CONFIG_ARM64_VHE
+ 	/*
+ 	 * Check for VHE being present. For the rest of the EL2 setup,
 
 
 Patches currently in stable-queue which might be from nathan@kernel.org are
