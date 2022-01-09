@@ -1,107 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D8A2C9D
-	for <llvm@lists.linux.dev>; Sun,  9 Jan 2022 12:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851E2C36AED;
-	Sun,  9 Jan 2022 12:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A25C2C9D
+	for <llvm@lists.linux.dev>; Sun,  9 Jan 2022 13:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7398C36AEB;
+	Sun,  9 Jan 2022 13:07:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1641733102;
-	bh=AWQgXlavyPt2CPbhhZna9wMYGhSB95KVcO0k8/Mhzmo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WXeVbzAIKzN3pNVRLmXLM2MWQLa1x9eJVBUi1oXVA7puBsXd1ZhtdIITc4/Seoev1
-	 bHwbHIiTf1l7D47fOwbxN08qv9iGvmYPxo/KSfeD5wqCW2JVCantp95ikHHaiH4gfV
-	 L+7vck7C2l4EwODEIZFzBhJMLpiBfzpJG0bOI60Q=
-Date: Sun, 9 Jan 2022 13:58:19 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH RFC 4.9 0/5] Fix booting arm64 big endian with QEMU 5.0.0+
-Message-ID: <Ydrb604dRBdB9xmq@kroah.com>
-References: <20220107194335.3090066-1-nathan@kernel.org>
+	s=korg; t=1641733661;
+	bh=Mp1UIDE+AHNBJcUVhc8wQHDdUlejQjJxr5jRVWoSUNc=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:From;
+	b=k6N4AP4bqYhdIQEXI7zEhZjsaKbY8Azou9HLYqeBGdXCAccYv+t7WPMjUM2feBQw9
+	 JuFpH5GgTfXKRkD75pzjelelGu6jsuXUStUtQOEtEAhthN3XLZftSTccgtz0oaG3C0
+	 VeTvIssbnDuQiKGnPWYeu71GLl3UYfDiFwdXdBgk=
+Subject: Patch "arm64: move !VHE work to end of el2_setup" has been added to the 4.9-stable tree
+To: catalin.marinas@arm.com,gregkh@linuxfoundation.org,linux-arm-kernel@lists.infradead.org,llvm@lists.linux.dev,marc.zyngier@arm.com,mark.rutland@arm.com,maz@kernel.org,nathan@kernel.org,ndesaulniers@google.com,sashal@kernel.org,will.deacon@arm.com,will@kernel.org
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Sun, 09 Jan 2022 14:07:38 +0100
+In-Reply-To: <20220107194335.3090066-5-nathan@kernel.org>
+Message-ID: <1641733658197117@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107194335.3090066-1-nathan@kernel.org>
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore 
 
-On Fri, Jan 07, 2022 at 12:43:30PM -0700, Nathan Chancellor wrote:
-> Hello everyone,
-> 
-> After upgrading the version of QEMU used in our CI from 4.2.0 to 6.2.0,
-> I noticed that our 4.9 arm64 big endian builds stopped booting properly.
-> This is not something that is clang specific, I could reproduce it with
-> GCC 8.3.0 (the rootfs is at [1]).
-> 
-> $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- distclean defconfig
-> 
-> $ scripts/config -e CPU_BIG_ENDIAN
-> 
-> $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- olddefconfig Image.gz
-> 
-> $ qemu-system-aarch64 \
->     -initrd rootfs.cpio \
->     -append 'console=ttyAMA0 earlycon' \
->     -cpu max \
->     -machine virt,gic-version=max \
->     -machine virtualization=true \
->     -display none \
->     -kernel arch/arm64/boot/Image.gz \
->     -m 512m \
->     -nodefaults \
->     -serial mon:stdio
-> [    0.000000] Booting Linux on physical CPU 0x0
-> [    0.000000] Linux version 4.9.296 (nathan@archlinux-ax161) (gcc version 8.3.0 (Debian 8.3.0-2) ) #1 SMP PREEMPT Fri Jan 7 19:10:49 UTC 2022
-> ...
-> [    0.773924] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> [    0.773924]
-> [    0.776016] CPU: 0 PID: 1 Comm: init Not tainted 4.9.296 #1
-> [    0.776149] Hardware name: linux,dummy-virt (DT)
-> [    0.776375] Call trace:
-> [    0.777063] [<ffff000008088ba0>] dump_backtrace+0x0/0x1b0
-> [    0.777293] [<ffff000008088d64>] show_stack+0x14/0x20
-> [    0.777420] [<ffff0000088c2d18>] dump_stack+0x98/0xb8
-> [    0.777555] [<ffff0000088c0ee8>] panic+0x11c/0x278
-> [    0.777684] [<ffff0000080c4d20>] do_exit+0x940/0x970
-> [    0.777816] [<ffff0000080c4db8>] do_group_exit+0x38/0xa0
-> [    0.777974] [<ffff0000080cf698>] get_signal+0xb8/0x678
-> [    0.778111] [<ffff000008087ca8>] do_signal+0xd8/0x9b0
-> [    0.778248] [<ffff0000080888dc>] do_notify_resume+0x8c/0xa8
-> [    0.778392] [<ffff000008082ff4>] work_pending+0x8/0x10
-> [    0.778790] Kernel Offset: disabled
-> [    0.778891] Memory Limit: none
-> [    0.779241] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> 
-> I ended up bisecting QEMU down to cd3f80aba0 ("target/arm: Enable
-> ARMv8.1-VHE in -cpu max") [2], which did not seem obviously broken. I
-> noticed that our 4.14 builds were fine so I ended up doing a reverse
-> bisect down to commit ec347012bbec ("arm64: sysreg: Move to use
-> definitions for all the SCTLR bits"). Getting that change to apply
-> cleanly involved applying the three other arm64 patches in this series
-> and making it build properly required the BUILD_BUG_ON header split
-> (including bug.h might have been sufficient but I did not want to risk
-> any further breakage). I searched through mainline to see if there were
-> any fixes commits that I missed and I did not find any.
-> 
-> I am not sure if this series would be acceptable in 4.9, hence the RFC
-> tag. If not, I am happy to just spin down our boot tests of arm64 big
-> endian on 4.9, which is not a super valuable target, but I figured I
-> would send the series and let others decide!
-> 
-> [1]: https://github.com/ClangBuiltLinux/boot-utils/tree/6cfa15992d375dfb874ca0677abdaebfba4f74e6/images/arm64be
-> [2]: https://gitlab.com/qemu-project/qemu/-/commit/cd3f80aba0c559a6291f7c3e686422b15381f6b7
 
-Seems sane, having build coverage for 4.9 for the next year is always
-good to keep going.  I'll queue these up now, thanks!
+This is a note to let you know that I've just added the patch titled
 
-greg k-h
+    arm64: move !VHE work to end of el2_setup
+
+to the 4.9-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+
+The filename of the patch is:
+     arm64-move-vhe-work-to-end-of-el2_setup.patch
+and it can be found in the queue-4.9 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From foo@baz Sun Jan  9 01:56:51 PM CET 2022
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri,  7 Jan 2022 12:43:34 -0700
+Subject: arm64: move !VHE work to end of el2_setup
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org, llvm@lists.linux.dev
+Message-ID: <20220107194335.3090066-5-nathan@kernel.org>
+
+From: Mark Rutland <mark.rutland@arm.com>
+
+commit d61c97a7773d0848b4bf5c4697855c7ce117362c upstream.
+
+We only need to initialise sctlr_el1 if we're installing an EL2 stub, so
+we may as well defer this until we're doing so. Similarly, we can defer
+intialising CPTR_EL2 until then, as we do not access any trapped
+functionality as part of el2_setup.
+
+This patch modified el2_setup accordingly, allowing us to remove a
+branch and simplify the code flow.
+
+Acked-by: Marc Zyngier <marc.zyngier@arm.com>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Will Deacon <will.deacon@arm.com>
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm64/kernel/head.S |   37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
+
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -553,26 +553,6 @@ set_hcr:
+ 	msr	vpidr_el2, x0
+ 	msr	vmpidr_el2, x1
+ 
+-	/*
+-	 * When VHE is not in use, early init of EL2 and EL1 needs to be
+-	 * done here.
+-	 * When VHE _is_ in use, EL1 will not be used in the host and
+-	 * requires no configuration, and all non-hyp-specific EL2 setup
+-	 * will be done via the _EL1 system register aliases in __cpu_setup.
+-	 */
+-	cbnz	x2, 1f
+-
+-	/* sctlr_el1 */
+-	mov	x0, #0x0800			// Set/clear RES{1,0} bits
+-CPU_BE(	movk	x0, #0x33d0, lsl #16	)	// Set EE and E0E on BE systems
+-CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// Clear EE and E0E on LE systems
+-	msr	sctlr_el1, x0
+-
+-	/* Coprocessor traps. */
+-	mov	x0, #0x33ff
+-	msr	cptr_el2, x0			// Disable copro. traps to EL2
+-1:
+-
+ #ifdef CONFIG_COMPAT
+ 	msr	hstr_el2, xzr			// Disable CP15 traps to EL2
+ #endif
+@@ -598,6 +578,23 @@ CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// C
+ 	ret
+ 
+ install_el2_stub:
++	/*
++	 * When VHE is not in use, early init of EL2 and EL1 needs to be
++	 * done here.
++	 * When VHE _is_ in use, EL1 will not be used in the host and
++	 * requires no configuration, and all non-hyp-specific EL2 setup
++	 * will be done via the _EL1 system register aliases in __cpu_setup.
++	 */
++	/* sctlr_el1 */
++	mov	x0, #0x0800			// Set/clear RES{1,0} bits
++CPU_BE(	movk	x0, #0x33d0, lsl #16	)	// Set EE and E0E on BE systems
++CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// Clear EE and E0E on LE systems
++	msr	sctlr_el1, x0
++
++	/* Coprocessor traps. */
++	mov	x0, #0x33ff
++	msr	cptr_el2, x0			// Disable copro. traps to EL2
++
+ 	/* Hypervisor stub */
+ 	adrp	x0, __hyp_stub_vectors
+ 	add	x0, x0, #:lo12:__hyp_stub_vectors
+
+
+Patches currently in stable-queue which might be from nathan@kernel.org are
+
+queue-4.9/arm64-sysreg-move-to-use-definitions-for-all-the-sctlr-bits.patch
+queue-4.9/bug-split-build_bug-stuff-out-into-linux-build_bug.h.patch
+queue-4.9/arm64-move-vhe-work-to-end-of-el2_setup.patch
+queue-4.9/arm64-remove-a-redundancy-in-sysreg.h.patch
+queue-4.9/arm64-reduce-el2_setup-branching.patch
