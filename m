@@ -1,117 +1,136 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E00168
-	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 12:21:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641817313; x=1673353313;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gmL3tKEUDF2ZwVHFtsNVYcZn2op8HEU3muwCY7UW7MI=;
-  b=UkCo8/NOLEw711ztfdWuo8X6QEEUi3a2H7BX/YdI5QmNRV+SCEaOIkPD
-   er0VJj1XDUq8o2TGr4qk1BA8GdOgGWF/WqllWXhQ68viS47iI9gJ/aJsQ
-   DAK3TsqCzmG6t/6Rfgo2Is63Owyff+Fv5xF30ngdhOZ83Q6lWTIRYYsff
-   kf1JsIt6DK3sfkfBvNt+JivVDaQngeExy7FhnLzSNYiOvznepujv60Kun
-   /hZR2HqLm6V/zWAy3ZgvKWd2eDbIXjuOyRBi9gv8hqw0Ni7PCzFWm4n14
-   CxkyI7mf4r1yzEUbU89pylA1o2sLacIixPGTUWTJ8INjxWYUYS048FkG+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="230553255"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="230553255"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 04:21:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="669436824"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Jan 2022 04:21:46 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n6tgI-0003JN-16; Mon, 10 Jan 2022 12:21:46 +0000
-Date: Mon, 10 Jan 2022 20:21:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Colin Xu <colin.xu@intel.com>
-Subject: drivers/gpu/drm/i915/gvt/gtt.c:1152: warning: This comment starts
- with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202201102031.xPWND4ZH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0EF2CA1
+	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 13:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1641822186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pWO8bUpZLUYe86Yo5GKizn940aDxxY2uX8Eua9eNw/E=;
+	b=P8VDKf7md9bsBvDsZtM031TnKTLl7el8b5jHdHXIah7mKnQxQo6kKI+LFXqt8fDk06g/tX
+	2uP+VOVzObhPltjUlqRbb17iC6lbW5cuhWjxTwhiRWlZ2s8Xz/d7w1t/B8zgOIck6Tph7i
+	BRRaSW3xgesCGL05CcsAKXFgCYVtP+Q=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-416-p5hwaESsPdSW9bzLnZC0Eg-1; Mon, 10 Jan 2022 08:43:05 -0500
+X-MC-Unique: p5hwaESsPdSW9bzLnZC0Eg-1
+Received: by mail-oi1-f197.google.com with SMTP id p203-20020acaf1d4000000b002c660fc9a2eso9996320oih.9
+        for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 05:43:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pWO8bUpZLUYe86Yo5GKizn940aDxxY2uX8Eua9eNw/E=;
+        b=GMM+efI226RJAhjKNyv1hEvOFfiuHRjJgvIXQCePWMTyW4QFzxFsvbH95GFnvQOtKp
+         NtVA0ClD35jsAG81Eex9hnPKn9xbFU62FIrESbHqP63a3bFo4lU0U/vt+MrfQro3m1C+
+         6lHjzDmjaE2YSs5pSp6mzUc7jL7dc5TL8p+bor6kgxk0YBTgyM2ZriKyVUTYKgPt9jx8
+         O9/7pj430IlkI35e63FpBCYsOs4RE4Jtmox/4+7iVqUWHe7tabzsgQH3H2rxFkd0s5ZM
+         NxkfvX7qkCaxtIUqJetviXpp5XJoJYhErDyCDaZC7m7pEQgLLkxYn4JfmwAhW+xWBl2u
+         UI9g==
+X-Gm-Message-State: AOAM533nQcoWE9b9QtH750euN/cl2RRaovhiszZLbXDfE35BhggXy8Lh
+	XsOPGN+cCiy9euH4UFoy99nhescTu9TVa/twhQU7whPXVU1dY74pl0VF3kVqdOsnc9MaZJCetrl
+	Mho/ZBkddzs4JXXvKsX+8jTN+pE8wkar8Ygb1f7IBxWDdDIfBWW+5OCJ8YZgW
+X-Received: by 2002:a05:6830:4034:: with SMTP id i20mr7351290ots.243.1641822184558;
+        Mon, 10 Jan 2022 05:43:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwra7ExUsBTMUvid99Z4eMEaJDEt12JpY0FwhcWLFMOignU8NPtKadY96Va2EYt/fw8qI/dxQ==
+X-Received: by 2002:a05:6830:4034:: with SMTP id i20mr7351243ots.243.1641822183935;
+        Mon, 10 Jan 2022 05:43:03 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id z19sm661908oid.57.2022.01.10.05.43.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 05:43:03 -0800 (PST)
+Subject: Re: [PATCH] net: ethernet: mtk_eth_soc: fix error checking in
+ mtk_mac_config()
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+ Mark-MC.Lee@mediatek.com, davem@davemloft.net, matthias.bgg@gmail.com,
+ linux@armlinux.org.uk, nathan@kernel.org, ndesaulniers@google.com,
+ opensource@vdorst.com, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220108155003.3991055-1-trix@redhat.com>
+ <20220109164333.61dc2e89@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <f3025d42-6ff0-8880-c0e6-3ee45a8556f7@redhat.com>
+Date: Mon, 10 Jan 2022 05:43:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-Hi Zhenyu,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   df0cc57e057f18e44dac8e6c18aba47ab53202f9
-commit: 145e06b58f8625becc61792a0554726314297a85 drm/i915/gvt: Move mdev attribute groups into kvmgt module
-date:   8 months ago
-config: x86_64-randconfig-a016-20210927 (https://download.01.org/0day-ci/archive/20220110/202201102031.xPWND4ZH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145e06b58f8625becc61792a0554726314297a85
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 145e06b58f8625becc61792a0554726314297a85
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gvt/gtt.c:1152: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Check if can do 2M page
-   drivers/gpu/drm/i915/gvt/gtt.c:2209: warning: expecting prototype for intel_vgpu_emulate_gtt_mmio_read(). Prototype was for intel_vgpu_emulate_ggtt_mmio_read() instead
+In-Reply-To: <20220109164333.61dc2e89@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 
 
-vim +1152 drivers/gpu/drm/i915/gvt/gtt.c
+On 1/9/22 4:43 PM, Jakub Kicinski wrote:
+> On Sat,  8 Jan 2022 07:50:03 -0800 trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Clang static analysis reports this problem
+>> mtk_eth_soc.c:394:7: warning: Branch condition evaluates
+>>    to a garbage value
+>>                  if (err)
+>>                      ^~~
+>>
+>> err is not initialized and only conditionally set.
+>> Check err consistently with the rest of mtk_mac_config(),
+>> after even possible setting.
+>>
+>> Fixes: 7e538372694b ("net: ethernet: mediatek: Re-add support SGMII")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/net/ethernet/mediatek/mtk_eth_soc.c | 12 +++++++-----
+>>   1 file changed, 7 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+>> index b67b4323cff08..a27e548488584 100644
+>> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+>> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+>> @@ -385,14 +385,16 @@ static void mtk_mac_config(struct phylink_config *config, unsigned int mode,
+>>   		       0 : mac->id;
+>>   
+>>   		/* Setup SGMIISYS with the determined property */
+>> -		if (state->interface != PHY_INTERFACE_MODE_SGMII)
+>> +		if (state->interface != PHY_INTERFACE_MODE_SGMII) {
+>>   			err = mtk_sgmii_setup_mode_force(eth->sgmii, sid,
+>>   							 state);
+>> -		else if (phylink_autoneg_inband(mode))
+>> +			if (err)
+>> +				goto init_err;
+>> +		} else if (phylink_autoneg_inband(mode)) {
+>>   			err = mtk_sgmii_setup_mode_an(eth->sgmii, sid);
+>> -
+>> -		if (err)
+>> -			goto init_err;
+>> +			if (err)
+>> +				goto init_err;
+>> +		}
+>>   
+>>   		regmap_update_bits(eth->ethsys, ETHSYS_SYSCFG0,
+>>   				   SYSCFG0_SGMII_MASK, val);
+> Why not init err to 0 before the if or add an else err = 0; branch?
 
-2707e44466881d Zhi Wang          2016-03-28  1150  
-b901b252b6cf5c Changbin Du       2018-05-15  1151  /**
-a752b070a67823 Zhenyu Wang       2018-07-31 @1152   * Check if can do 2M page
-a752b070a67823 Zhenyu Wang       2018-07-31  1153   * @vgpu: target vgpu
-a752b070a67823 Zhenyu Wang       2018-07-31  1154   * @entry: target pfn's gtt entry
-a752b070a67823 Zhenyu Wang       2018-07-31  1155   *
-9317f356df83a5 Bhaskar Chowdhury 2021-02-22  1156   * Return 1 if 2MB huge gtt shadowing is possible, 0 if miscondition,
-9317f356df83a5 Bhaskar Chowdhury 2021-02-22  1157   * negative if found err.
-b901b252b6cf5c Changbin Du       2018-05-15  1158   */
-b901b252b6cf5c Changbin Du       2018-05-15  1159  static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
-b901b252b6cf5c Changbin Du       2018-05-15  1160  	struct intel_gvt_gtt_entry *entry)
-b901b252b6cf5c Changbin Du       2018-05-15  1161  {
-b901b252b6cf5c Changbin Du       2018-05-15  1162  	struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
-b901b252b6cf5c Changbin Du       2018-05-15  1163  	unsigned long pfn;
-b901b252b6cf5c Changbin Du       2018-05-15  1164  
-a61ac1e75105a0 Chris Wilson      2020-03-06  1165  	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
-b901b252b6cf5c Changbin Du       2018-05-15  1166  		return 0;
-b901b252b6cf5c Changbin Du       2018-05-15  1167  
-b901b252b6cf5c Changbin Du       2018-05-15  1168  	pfn = intel_gvt_hypervisor_gfn_to_mfn(vgpu, ops->get_pfn(entry));
-b901b252b6cf5c Changbin Du       2018-05-15  1169  	if (pfn == INTEL_GVT_INVALID_ADDR)
-b901b252b6cf5c Changbin Du       2018-05-15  1170  		return -EINVAL;
-b901b252b6cf5c Changbin Du       2018-05-15  1171  
-b901b252b6cf5c Changbin Du       2018-05-15  1172  	return PageTransHuge(pfn_to_page(pfn));
-b901b252b6cf5c Changbin Du       2018-05-15  1173  }
-b901b252b6cf5c Changbin Du       2018-05-15  1174  
+This is the way I would have preferred to do it but the function's 
+existing error handling does it this way.
 
-:::::: The code at line 1152 was first introduced by commit
-:::::: a752b070a67823174565322cc48b2668daf9a8da drm/i915/gvt: Fix function comment doc errors
+I'll respin the patch.
 
-:::::: TO: Zhenyu Wang <zhenyuw@linux.intel.com>
-:::::: CC: Zhenyu Wang <zhenyuw@linux.intel.com>
+Tom
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+>
+
