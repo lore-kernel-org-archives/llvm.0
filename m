@@ -1,48 +1,39 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C672CA1
-	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 13:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4E12CA1
+	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 14:16:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641822902; x=1673358902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cicLgHiEPGQOrIjOfgQxMbxQzmM/uxWwtuhfal7Bd1E=;
-  b=RV9w3h5YLKb0fQsezk6H+TVgvtg2POfb2gE3tTh9DeWqPfeyEV3150Ew
-   ug29tEtAQhcmFfFucYEGRS/zn9KNuJ5JrVcuA+M7K2/tPxAZvPIpP29RV
-   Uc3ni8H7Uhpg0x+iPtQwEerXTo7HooTCHfcIllet1PeDFIqVFR0TEa4QE
-   HuVe1JMMRdbAWbE4rnZ+gM+38nN98+wIKMapR5btpvHB0gIbyYnej75KJ
-   0pM6LH4LMQ5CfQdGy3t5eO1dfEfElvjD7nXtQRYtjGlsq/VA2TA7JnSiD
-   fHHLKu++CpYsAkRWPJBjuEvCVqmdLg93ZXqBd55LZdZel/39k/XGBcDZa
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="223209389"
+  t=1641824175; x=1673360175;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Hb69bOJVrrE5GCSxx0fIGPj4KZNgq3EghWRwECcme2Q=;
+  b=YCdWClpWvaM9U2c0JqaqTuQ8vgK2NbH1vqmzs7QeCxhoAE4SPoIuVDTN
+   ItjtZyk869kmHOsha8vhLn684ct2Dztg0rJuyNzOvtQxynowONvaw86XX
+   gAfoavEKtifSlbh71scnivPgWO4CoGQ5wjRnOzsS2eQkQqpw46yDaZez4
+   Gc4gQezP7uC5UGGO0tMogh+stHFQMx58W+Wpzx/b0o3Mm75oR4//MoQ5x
+   +jK2L82KRfDH8IsygFJmOZU2Ptskbi2wb2mn9aEN4MvX6QuNHpbFmn2p1
+   GfpYpQGr2WGatykqpNlK2p5zNyK9FiA0mPcQ8k1tSdM9S4B3e7MNTnFYa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="240784440"
 X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="223209389"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 05:55:02 -0800
+   d="scan'208";a="240784440"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 06:15:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="764520088"
+   d="scan'208";a="622685325"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jan 2022 05:54:59 -0800
+  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 06:14:59 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n6v8U-0003ZZ-I4; Mon, 10 Jan 2022 13:54:58 +0000
-Date: Mon, 10 Jan 2022 21:54:13 +0800
+	id 1n6vRr-0003ag-3C; Mon, 10 Jan 2022 14:14:59 +0000
+Date: Mon, 10 Jan 2022 22:14:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
-	Tomer Maimon <tmaimon77@gmail.com>, Joel Stanley <joel@jms.id.au>,
-	linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Avi Fishman <avifishman70@gmail.com>
-Subject: Re: [PATCH v4 5/9] pinctrl: nuvoton: Add driver for WPCM450
-Message-ID: <202201102127.3Rm7ZYyP-lkp@intel.com>
-References: <20220109173000.1242703-6-j.neuschaefer@gmx.net>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: arch/x86/kernel/devicetree.o: warning: objtool:
+ early_init_dt_add_memory_arch()+0x9: unreachable instruction
+Message-ID: <202201102203.bIHqlkiR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,69 +42,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220109173000.1242703-6-j.neuschaefer@gmx.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "Jonathan,
+CC: linux-kernel@vger.kernel.org
+TO: Rob Herring <robh@kernel.org>
+CC: Borislav Petkov <bp@suse.de>
+CC: Frank Rowand <frank.rowand@sony.com>
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v5.16 next-20220110]
-[cannot apply to linusw-pinctrl/devel]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jonathan-Neusch-fer/Nuvoton-WPCM450-pinctrl-and-GPIO-driver/20220110-013733
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-randconfig-r014-20220109 (https://download.01.org/0day-ci/archive/20220110/202201102127.3Rm7ZYyP-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   df0cc57e057f18e44dac8e6c18aba47ab53202f9
+commit: f2739ca15c414ebad88f4333e3186fd4144c1753 x86/of: Kill unused early_init_dt_scan_chosen_arch()
+date:   3 months ago
+config: x86_64-buildonly-randconfig-r001-20220108 (https://download.01.org/0day-ci/archive/20220110/202201102203.bIHqlkiR-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/e62ece12931654ffea372713cc39fd64779c8b4a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jonathan-Neusch-fer/Nuvoton-WPCM450-pinctrl-and-GPIO-driver/20220110-013733
-        git checkout e62ece12931654ffea372713cc39fd64779c8b4a
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f2739ca15c414ebad88f4333e3186fd4144c1753
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f2739ca15c414ebad88f4333e3186fd4144c1753
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/nuvoton/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:1564:41: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-           dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
-                                           ~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                           %lu
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:46:25: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +1564 drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1559  
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1560  static int npcm7xx_get_groups_count(struct pinctrl_dev *pctldev)
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1561  {
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1562  	struct npcm7xx_pinctrl *npcm = pinctrl_dev_get_drvdata(pctldev);
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1563  
-3b588e43ee5c7a Tomer Maimon 2018-08-08 @1564  	dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1565  	return ARRAY_SIZE(npcm7xx_groups);
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1566  }
-3b588e43ee5c7a Tomer Maimon 2018-08-08  1567  
+>> arch/x86/kernel/devicetree.o: warning: objtool: early_init_dt_add_memory_arch()+0x9: unreachable instruction
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
