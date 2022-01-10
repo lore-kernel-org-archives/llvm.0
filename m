@@ -1,206 +1,166 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3C9173
-	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 21:22:58 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id j11so49117369lfg.3
-        for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 13:22:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413062CA1
+	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 23:12:27 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id i31so49888412lfv.10
+        for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 15:12:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gD7CSDwfxy/Lif/7IpTLd88iEhqR78uzddJXBpdBxoI=;
-        b=J7l6MTe7Bv1qp+GA1nNeDfDzSVvgtYWd5VNznpN9Y2YSIsJyb6QDDwTf1NsqpGsDIW
-         eHPdcQz5lB2cZ9Mauqv4YsF60i2viwrvzLwCGAm+0sGEk55WL9gCZYmM89KyPUDF3C7A
-         dLLZY4GsiCuH2gfj8vYzfU/5ud7lpj9Mvf2bpVWJxJpJgtvxLnRX7T0rtCVh37UYFNqo
-         rHPoL0My+JOlDorgaXhXV8tnrS4zwry4BtrTjwpmts5MLCTw7M4mpxlwJIFdiMKIXXZn
-         9BoL7RDYDVGOg+1xMUMx/yOBOAieHPv2O1QRYfuCJ0EHb079ElSHhDEg4hA5jJSgXrds
-         dxig==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=oEylbjmXS8n0jIhiDpJJ6W1qy0sFrwfhJUGK1ITijYY=;
+        b=AHNsDrCyhR5bh1Pb4SBWxVKDKtF85SHcP8rw6FLLKCZ1qTjim4KF1jlK3AtRGnCDGc
+         b9+HZrNBBQhioYEucZlhNMR6lPdcZVt2M3EGl9dxkDdhhPZy8mfzLMCVsASK8ym7940Y
+         mI2XUaDw1h+/B1PqZVWqYBMzGNjx+0ob41q9cmtdAoJT0h9kbyqlmqwfM9cZjHmUG2LY
+         1HOAoF7K36rT/VzqL5vDjYQ5F7iRlYpGNqXWKuYF8iP8aAo1PFdaZbvG//R5wte8XnRY
+         HuskKYNmQssx2gjzhToIW7xADqRbgIoE9aMYkyH91LgeKnNg5O/cqmHCp6DUFfIrAj5D
+         Iemg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gD7CSDwfxy/Lif/7IpTLd88iEhqR78uzddJXBpdBxoI=;
-        b=wzAkW9nL0W98QqPSFBZCdruX/J3xnGpdpD7t9hS0foU662gBMDmND0glyXImNy4rHk
-         Rh60hwYNNFIxDTzaqbXXSjb7juhVV7s+LDaxnsdXV4TTwvQ8g0kPHb+9BWhM6LG0VZ+K
-         wWykSdcvyYqthCmDFJGFDBZCCXZy6Xc8Wq88u9h5EU/JIX/labeTnZuGyqw1Sj6Ugzai
-         e5CZVGkjtfR4wZqmp/vu9AQzbKnHJAGn8hkqY+xZ6XZnCcaG+UErhob7kbWOMyOX/pvC
-         hneSQ83klAb59ArhHPhqpIuB0icnpnGzKViaNY9UEVMUJej8UEcErFu8iiRq6Mycz2Dn
-         eyQw==
-X-Gm-Message-State: AOAM533plIKRfGsWgvwShQZPMJFoPf0cqRF8DPpY7ZiZV174FyOa+3W3
-	ldO4AM8sdKVZB/UGtXjbOOWGciPzA4WQsSUurMtbbw==
-X-Google-Smtp-Source: ABdhPJzLjIY8fVRDt8uU5TNENsCoG+YvyzB8/FtAQ+ws5z4mSnYa4ns1JadsuKfZW2ucp34oTJJ8E7ncPRGtz6qLoWE=
-X-Received: by 2002:a05:6512:1192:: with SMTP id g18mr738593lfr.523.1641849776060;
- Mon, 10 Jan 2022 13:22:56 -0800 (PST)
+         :message-id:subject:to;
+        bh=oEylbjmXS8n0jIhiDpJJ6W1qy0sFrwfhJUGK1ITijYY=;
+        b=x7M1eSIBN18l4KPfXXhLnG6/t6OeWhcovGNmJeHvi+YcXCEAS3V/HoqVlfI9GSod2/
+         8qwDMJW/b1KDKI+hsQr57qT3aLhXuqcK5Yf0d+I6hCBIsavRQP5ikFUnSwDoilBM+QjU
+         3obXosV9wBtpni5L/0IbFh/J/0NnzHGu1+4Rg67xNYGvbVXeF8WMkeH5o7QrlW5xfIIj
+         zveBWR+jGljifFep/GcxRjtevHVQXoevpMFuAgOtYPr7unTwIw7RaHtPKWq0e2HtN3Mn
+         Sg7M84ZNfclK6ooR+iOeTVUb+ssTbdv/dKEkXS1sMfZPFH/GZrwq1kpKT6O5CIonPtDx
+         15ow==
+X-Gm-Message-State: AOAM533SEgD5QsiHGKK37Spq95R2fSv007JlV1sqpI3PcLuXQe65c8w/
+	zHq/K4XOGdDQlgXmb0SMbdwIgM0ytIgTeSafds2naGlLUTI=
+X-Google-Smtp-Source: ABdhPJzRlqTrS4oGR25cOpcT15/S2W03HKgTyr0FgD57RiV3ioL1D8AU52pmi8yfAhPIKsehcbzMN+zRs8HhnXMxwsg=
+X-Received: by 2002:a2e:b5c9:: with SMTP id g9mr6781ljn.339.1641856343892;
+ Mon, 10 Jan 2022 15:12:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202201081852.uTfBqS4b-lkp@intel.com> <CAHp75VfS-4B1AwzawCR7VVAxopK6ACcY63ig07OqY32MswfoOQ@mail.gmail.com>
- <CAKwvOdk9XFOL2RAh5+FKWMR9jWFwrS=J+ogwUPj5OOLXcr-iSQ@mail.gmail.com> <YdybwqL1NtF39Wyd@smile.fi.intel.com>
-In-Reply-To: <YdybwqL1NtF39Wyd@smile.fi.intel.com>
+References: <20220110224656.266536-1-sakari.ailus@linux.intel.com> <CAKwvOdnfX1DzgkzCPY7N4LiJDJTGxsKNQbRMmmkt7o5z5O-W9w@mail.gmail.com>
+In-Reply-To: <CAKwvOdnfX1DzgkzCPY7N4LiJDJTGxsKNQbRMmmkt7o5z5O-W9w@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 10 Jan 2022 13:22:43 -0800
-Message-ID: <CAKwvOdnAXBLE-MjMS6=0jZmkK_3MYTxD2OQjdnxbcnTL9rH_fw@mail.gmail.com>
-Subject: Re: drivers/media/v4l2-core/v4l2-ioctl.c:303:28: warning: taking
- address of packed member 'pixelformat' of class or structure
- 'v4l2_pix_format_mplane' may result in an unaligned pointer value
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, Nick Desaulniers <nick.desaulniers@gmail.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Petr Mladek <pmladek@suse.com>, Roman Lebedev <lebedev.ri@gmail.com>, 
-	Richard Smith <richard@metafoo.co.uk>
+Date: Mon, 10 Jan 2022 15:12:12 -0800
+Message-ID: <CAKwvOdmcLo5D05pue4WgkgXxfD=21YaRoPLPYg8DogX9=-rUwQ@mail.gmail.com>
+Subject: Fwd: [PATCH 1/1] v4l: Avoid unaligned access warnings when printing
+ 4cc modifiers
+To: llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jan 10, 2022 at 12:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Jan 10, 2022 at 11:44:12AM -0800, Nick Desaulniers wrote:
-> > On Sun, Jan 9, 2022 at 6:26 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > +Nick Desaulniers
-> > >
-> > > Any ideas on how to fix this?
-> >
-> > Not obviously.
->
-> Thanks for looking into this!
->
-> > This code probably will trigger a splat when run with
-> > UBSan though.
-> >
-> > I'm curious if the structure needs to be packed for interfacing with
-> > hardware or some ABI, or whether we could add an explicit alignment to
-> > the member if that would be ok (which may add back some padding)?
->
-> Looking into it I think removing packed attribute brings a regression
-> immediately on 64-bit platforms since u32 member followed by u8.
->
-> > Otherwise, I suspect to actually access this properly we may have
-> > macros for performing underaligned loads and stores?  I suspect you'd
-> > read potentially unaligned data into an aligned copy, then do
-> > operations on that, at which point printing the address of the copy is
-> > legal, but perhaps useless.
->
-> Current code does this:
->
->         val = *fourcc & ~BIT(31);
->         ...
->         for (i = 0; i < sizeof(*fourcc); i++) {
->         ...
->         strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
->         ...
->         p = special_hex_number(p, output + sizeof(output) - 2, *fourcc, sizeof(u32));
->
-> If unaligned access is not good it will crash on some architectures AFAIU.
->
-> So, it should use get_unaligned() in the first place.
+---------- Forwarded message ---------
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, Jan 10, 2022 at 3:11 PM
+Subject: Re: [PATCH 1/1] v4l: Avoid unaligned access warnings when
+printing 4cc modifiers
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: <linux-media@vger.kernel.org>, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com>, <hverkuil@xs4all.nl>
 
-Regardless of your unaligned access patch
-(https://lore.kernel.org/lkml/20220110205049.11696-1-andriy.shevchenko@linux.intel.com/),
-taking the address of a packed member will still have a warning:
-https://godbolt.org/z/8r1rcocPY
 
-So it looks like packing a struct sets the alignment of members to 1,
-ie. under-aligning them.  You need to restore the alignment of the
-members you plan to take the address of.
+On Mon, Jan 10, 2022 at 2:48 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Pointers V4L2 pixelformat and dataformat fields in a few packed structs
+> are directly passed to printk family of functions.
 
-ie.
+I would rephrase the below statement...
 
-struct w {
-  char x, y, z;
-} __attribute__((packed));
+> This could result in an
+> unaligned access albeit no such possibility appears to exist at the
+> moment i.e. this clang warning appears to be a false positive.
 
-is equivalent in layout and alignment to:
+...to:
 
-struct w {
-  char __attribute__((aligned(1))) x;
-  char __attribute__((aligned(1))) y;
-  char __attribute__((aligned(1))) z;
-} __attribute__((aligned(1)));
+warning: taking address of packed member 'pixelformat' of class or
+structure 'v4l2_pix_format_mplane' may result in an unaligned pointer
+value [-Waddress-of-packed-member]
 
-For `struct v4l2_pix_format_mplane` we probably want the trailing
-char's to have alignment 1, rather than every member. We can either be
-explicit with __aligned(1) on them, or __aligned(4) on the uint
-members and retain __packed.
+The warning is correct; because `struct v4l2_pix_format_mplane` is
+__packed, it's members also have __aligned(1).  Taking the address of
+such members results in the use of underaligned pointers which is UB
+and may be caught by UBSAN or fault on architectures without unaligned
+loads should the struct instance happen to be allocated without any
+natural alignment.
 
 >
-> > Perhaps:
-> >
-> > -       __u32                           pixelformat;
-> > +       __u32                           pixelformat __aligned(4);
+> Address the warning by copying the pixelformat or dataformat value to a
+> local variable first.
 >
-> This looks weird, however I can't immediately see any side effects of it.
-> What if the address of the entire structure is unaligned, would we have a
-> gap here? In any case I wouldn't go this way.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: e927e1e0f0dd ("v4l: ioctl: Use %p4cc printk modifier to print FourCC codes")
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+> Hi Andy, Nick,
 >
-> >         __u32                           field;
-> >         __u32                           colorspace;
-> >
-> > Perhaps we could tighten up this warning in clang; we don't have any
-> > holes before this member, so I _wouldn't_ have assumed
-> > __attribute__((packed)) would have caused the address of pixelformat
-> > member of an instance of struct v4l2_pix_format_mplane to ever be
-> > underaligned.
-> >
-> > > On Sun, Jan 9, 2022 at 3:53 PM kernel test robot <lkp@intel.com> wrote:
-> > > >
-> > > > Hi Sakari,
-> > > >
-> > > > FYI, the error/warning still remains.
-> > > >
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
-> > > > commit: e927e1e0f0dd3e353d5556503a71484008692c82 v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
-> > > > date:   11 months ago
-> > > > config: mips-buildonly-randconfig-r002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081852.uTfBqS4b-lkp@intel.com/config)
-> > > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # install mips cross compiling tool for clang build
-> > > >         # apt-get install binutils-mips-linux-gnu
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e927e1e0f0dd3e353d5556503a71484008692c82
-> > > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > > >         git fetch --no-tags linus master
-> > > >         git checkout e927e1e0f0dd3e353d5556503a71484008692c82
-> > > >         # save the config file to linux build tree
-> > > >         mkdir build_dir
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/media/v4l2-core/ fs/
-> > > >
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All warnings (new ones prefixed by >>):
-> > > >
-> > > > >> drivers/media/v4l2-core/v4l2-ioctl.c:303:28: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> > > >                            mp->width, mp->height, &mp->pixelformat,
-> > > >                                                    ^~~~~~~~~~~~~~~
-> > > >    include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
-> > > >            printk(KERN_CONT fmt, ##__VA_ARGS__)
-> > > >                                    ^~~~~~~~~~~
-> > > > >> drivers/media/v4l2-core/v4l2-ioctl.c:347:37: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_sdr_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> > > >                    pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
-> > > >                                                      ^~~~~~~~~~~~~~~~
-> > > >    include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
-> > > >            printk(KERN_CONT fmt, ##__VA_ARGS__)
-> > > >                                    ^~~~~~~~~~~
-> > > > >> drivers/media/v4l2-core/v4l2-ioctl.c:353:5: warning: taking address of packed member 'dataformat' of class or structure 'v4l2_meta_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> > > >                            &meta->dataformat, meta->buffersize);
-> > > >                             ^~~~~~~~~~~~~~~~
-> > > >    include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
-> > > >            printk(KERN_CONT fmt, ##__VA_ARGS__)
+> How about this one?
 >
+> I believe it does address the clang warning although I haven't tested it.
+
+LGTM. Thanks Sakari and Andy for pursuing this. Just a minor nit on my
+side about the framing of this warning being a false positive; I don't
+think it is.  With that amended,
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Kind regards,
+> Sakari
+>
+>  drivers/media/v4l2-core/v4l2-ioctl.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 9ac557b8e146..642cb90f457c 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -279,8 +279,8 @@ static void v4l_print_format(const void *arg, bool write_only)
+>         const struct v4l2_vbi_format *vbi;
+>         const struct v4l2_sliced_vbi_format *sliced;
+>         const struct v4l2_window *win;
+> -       const struct v4l2_sdr_format *sdr;
+>         const struct v4l2_meta_format *meta;
+> +       u32 pixelformat;
+>         u32 planes;
+>         unsigned i;
+>
+> @@ -299,8 +299,9 @@ static void v4l_print_format(const void *arg, bool write_only)
+>         case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>         case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+>                 mp = &p->fmt.pix_mp;
+> +               pixelformat = mp->pixelformat;
+>                 pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+> -                       mp->width, mp->height, &mp->pixelformat,
+> +                       mp->width, mp->height, &pixelformat,
+>                         prt_names(mp->field, v4l2_field_names),
+>                         mp->colorspace, mp->num_planes, mp->flags,
+>                         mp->ycbcr_enc, mp->quantization, mp->xfer_func);
+> @@ -343,14 +344,15 @@ static void v4l_print_format(const void *arg, bool write_only)
+>                 break;
+>         case V4L2_BUF_TYPE_SDR_CAPTURE:
+>         case V4L2_BUF_TYPE_SDR_OUTPUT:
+> -               sdr = &p->fmt.sdr;
+> -               pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+> +               pixelformat = p->fmt.sdr.pixelformat;
+> +               pr_cont(", pixelformat=%p4cc\n", &pixelformat);
+>                 break;
+>         case V4L2_BUF_TYPE_META_CAPTURE:
+>         case V4L2_BUF_TYPE_META_OUTPUT:
+>                 meta = &p->fmt.meta;
+> +               pixelformat = meta->dataformat;
+>                 pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+> -                       &meta->dataformat, meta->buffersize);
+> +                       &pixelformat, meta->buffersize);
+>                 break;
+>         }
+>  }
 > --
-> With Best Regards,
-> Andy Shevchenko
+> 2.30.2
 >
->
+
+
+--
+Thanks,
+~Nick Desaulniers
 
 
 -- 
