@@ -1,78 +1,69 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4E12CA1
-	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 14:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641824175; x=1673360175;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Hb69bOJVrrE5GCSxx0fIGPj4KZNgq3EghWRwECcme2Q=;
-  b=YCdWClpWvaM9U2c0JqaqTuQ8vgK2NbH1vqmzs7QeCxhoAE4SPoIuVDTN
-   ItjtZyk869kmHOsha8vhLn684ct2Dztg0rJuyNzOvtQxynowONvaw86XX
-   gAfoavEKtifSlbh71scnivPgWO4CoGQ5wjRnOzsS2eQkQqpw46yDaZez4
-   Gc4gQezP7uC5UGGO0tMogh+stHFQMx58W+Wpzx/b0o3Mm75oR4//MoQ5x
-   +jK2L82KRfDH8IsygFJmOZU2Ptskbi2wb2mn9aEN4MvX6QuNHpbFmn2p1
-   GfpYpQGr2WGatykqpNlK2p5zNyK9FiA0mPcQ8k1tSdM9S4B3e7MNTnFYa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="240784440"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="240784440"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 06:15:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="622685325"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 06:14:59 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n6vRr-0003ag-3C; Mon, 10 Jan 2022 14:14:59 +0000
-Date: Mon, 10 Jan 2022 22:14:38 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: arch/x86/kernel/devicetree.o: warning: objtool:
- early_init_dt_add_memory_arch()+0x9: unreachable instruction
-Message-ID: <202201102203.bIHqlkiR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B412C9C
+	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 15:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85884C36AE5;
+	Mon, 10 Jan 2022 15:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1641827264;
+	bh=GV9T4EeYhVeOdH8blTnq/mluaQjNNqLiGaxvHrb6ETQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Tlr+AlrEQh8a/qpelHZeMQw0GCxJGcspjeLlUBLajX72rUx7/V9IE3RXpgsvY+2ND
+	 7Df/K1wu4bCFTysfyVcFY8FV9zXM4M5GtR3/IsPX+rUub7tDu4XIesDUHjGMwmHL+Q
+	 SYqypf/Eka8HkGhZnSuk9D8UzUt1amqi5IADle37tk4tWwYqMhCSGsAulcmGALgbdQ
+	 /x1ljllMQNKmnwj5WgW1fG+oMFIDU2h1JHFEq5NofN8tKY1za4JfbcK2RtZAZkEBvx
+	 t+Cl278+V/cJQCltDP6oAHpmTwNSA/x6dCXyxuR8onBYykWYaqeO8Awt9Xo8mHHklv
+	 Wlyi8KcSuXOkA==
+Date: Mon, 10 Jan 2022 16:07:39 +0100
+From: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Linux Media Mailing List <linux-media@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [GIT PULL for v5.17-rc1] New year's media updates
+Message-ID: <20220110160739.735f1b49@coco.lan>
+In-Reply-To: <YdNEQbgpBJP2lIiP@archlinux-ax161>
+References: <20220101024250.39c9b5b6@coco.lan>
+	<YdNEQbgpBJP2lIiP@archlinux-ax161>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Rob Herring <robh@kernel.org>
-CC: Borislav Petkov <bp@suse.de>
-CC: Frank Rowand <frank.rowand@sony.com>
+Em Mon, 3 Jan 2022 11:45:21 -0700
+Nathan Chancellor <nathan@kernel.org> escreveu:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   df0cc57e057f18e44dac8e6c18aba47ab53202f9
-commit: f2739ca15c414ebad88f4333e3186fd4144c1753 x86/of: Kill unused early_init_dt_scan_chosen_arch()
-date:   3 months ago
-config: x86_64-buildonly-randconfig-r001-20220108 (https://download.01.org/0day-ci/archive/20220110/202201102203.bIHqlkiR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f2739ca15c414ebad88f4333e3186fd4144c1753
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f2739ca15c414ebad88f4333e3186fd4144c1753
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+> Hi Mauro,
+> 
+> On Sat, Jan 01, 2022 at 02:42:50AM +0100, Mauro Carvalho Chehab wrote:
+> >       media: atomisp: shift some structs from input_system_local  
+> 
+> Please consider applying my patch that fixes this one to avoid breaking
+> certain distribution configurations when CONFIG_WERROR is enabled:
+> 
+> https://lore.kernel.org/r/20211227164243.2329724-1-nathan@kernel.org/
+> 
+> I know there has not been much time between when I sent it and now but
+> there have been two reports about it from the kernel test robot (one was
+> back in November) and it is rather noisy in a build.
+> 
+> https://lore.kernel.org/r/202111182229.beNw3l9E-lkp@intel.com/
+> https://lore.kernel.org/r/202112311809.bEKUPkjh-lkp@intel.com/
+> 
+> If it cannot be applied now because the tag has been created and the
+> pull has been sent, could you make sure it makes it in a fixes pull
+> request?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sure, thanks for reminding me about that. I just added it today to
+media-stage. I'll send upstream either during the merge window or as
+a fix just afterwards.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/devicetree.o: warning: objtool: early_init_dt_add_memory_arch()+0x9: unreachable instruction
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Mauro
