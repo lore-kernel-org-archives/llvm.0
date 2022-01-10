@@ -1,115 +1,80 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF108173
-	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 09:59:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641808767; x=1673344767;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jtxGF8+W87i7UvUUkf2/7RJIhcg8mD0uZbLWoozdIdA=;
-  b=Ya1mMIydXGQaPJPThqhKfaO06Zo2vVr8SgiIE18Od7ELMOnKqlRcJX1m
-   YbPF1FRf99js6J8uGcAigOPtVl0L19Yi3PaDF3PDMvS5VJKB60aBvshtl
-   Ygv31JBEhZ2jBRksDrOHSDoHjPvqayHEuxkBJU5Xr4DtF7zMMjllWOZ1A
-   6K/jwH8ZwiR5GnaLliQQazZLoxol7fIbSuuRMM+0OblXVi4SDY7fiHOgv
-   qoTPc1kEpLhv6vxs4ArGehdkIG39VX7cr7SRL7/y37DLDgW9QZ/4ErQG5
-   lf1CQRshzhPClYWDTHQF4VqSF90Km/hg4D2V5qQTylZB5KVqYvQ2PY7fb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="329535826"
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="329535826"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 01:59:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="472022254"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Jan 2022 01:59:25 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n6rSX-0002lq-0F; Mon, 10 Jan 2022 09:59:25 +0000
-Date: Mon, 10 Jan 2022 17:58:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arunpravin <Arunpravin.PaneerSelvam@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v7 6/6] drm/amdgpu: add drm buddy support to amdgpu
-Message-ID: <202201101727.lThEC1FU-lkp@intel.com>
-References: <20220109141951.134432-6-Arunpravin.PaneerSelvam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED443173
+	for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 10:23:00 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id w16so51481230edc.11
+        for <llvm@lists.linux.dev>; Mon, 10 Jan 2022 02:23:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M0nrXkjvT8Y2JTsBxE15ySAcNK2QPiRrQi7yxt+5z/k=;
+        b=bZfdedTaBlISxsnA+HjOnZ2STTnliWILpWqzvyQ6qQWMHBDbqJEEzOrRd7Z209N+wV
+         Pt7u7gf1aCvV8qAsRsq66SlB7ZDSM81mOI0eXQscqDfQv76/Retg+8ieV2cdXTVCUNjb
+         g4vH1O+eIUoj+skY/jI67sxujc+a9xhj6NpSqTtbfLNAVq+qdFEeEDKW3F6/f4alCMU8
+         8L29OhGE3C74CBXs0JFnCg3y8HxUbE/DzEziHguagP7ZjFEC8l2IaEP/MmuLunKjutas
+         4ep7CN06F9nNM9u7F+wgRgi2rt+tZT+31rYGvYIdT1lKg5Mp1aohyE5cQW58dtnP3Qos
+         qAUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M0nrXkjvT8Y2JTsBxE15ySAcNK2QPiRrQi7yxt+5z/k=;
+        b=Wv17GA8L/YkRI+nPASD0yKg8bsok7VIAPZ0fEnhN0OYVEZeKlxkNwgwttMu1qmhzAm
+         b2rjWg14guz3eEWdjtGGcY3T64QKEITy6yRKe5cwdGuuPA/OXo5dBfAOwMi+UNevPHzd
+         c+Qgcfi4z0nAuQ4uKtWTs832uTXMKOys3liTgIKDWfwP0M/SV/0CynpaOOmXwVqbAYql
+         a9+VcIUHkGiPe8sOf2Z42NXDOwSWx+eeZA5NPjtQxuQPaVGmYsGlNX5EYAgM8gqtQDk5
+         pZiJIK7oLvKdr33dfD5rNidg7tG+mzBg+Ox46QNLMSGK0WgnO413LGGBs13FFzxk2cCJ
+         AYRw==
+X-Gm-Message-State: AOAM530BoXet6rZ50hbPt0wn5iasdE0sFRuQ+VHHz6uJdE+dXSo7WdQp
+	1klJ51DWS8lgQAHde7Gy1WrCZ3DCpejrwX5E9J8=
+X-Google-Smtp-Source: ABdhPJwECqRHbXYE3+1gJLeWik7SnLbktBiu0AZzxvMVObvaegtHQCjFwf0DmV1UNgLl9J6yU9U5sFqr0U6pNjyMLGM=
+X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr57649438ejc.497.1641810179272;
+ Mon, 10 Jan 2022 02:22:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220109141951.134432-6-Arunpravin.PaneerSelvam@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220108140756.3985487-1-trix@redhat.com> <CAHp75VfbSmgeyi=8q1_he7mpGrNxYAOewKYWD=h8BSuxz2XWOw@mail.gmail.com>
+ <0c0926d9-9b72-1519-7e22-e90ffc229940@redhat.com>
+In-Reply-To: <0c0926d9-9b72-1519-7e22-e90ffc229940@redhat.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 10 Jan 2022 12:21:11 +0200
+Message-ID: <CAHp75VdJOzYR0HsZ2LWn-iAMwcM3s0NNDKQdXZZudcEB9RwE9A@mail.gmail.com>
+Subject: Re: [PATCH] ALSA: hda: cs35l41: fix double free in cs35l41_hda_probe()
+To: Tom Rix <trix@redhat.com>
+Cc: "james.schulman@cirrus.com" <james.schulman@cirrus.com>, 
+	"david.rhodes@cirrus.com" <david.rhodes@cirrus.com>, 
+	"tanureal@opensource.cirrus.com" <tanureal@opensource.cirrus.com>, "perex@perex.cz" <perex@perex.cz>, 
+	"tiwai@suse.com" <tiwai@suse.com>, "nathan@kernel.org" <nathan@kernel.org>, 
+	"ndesaulniers@google.com" <ndesaulniers@google.com>, 
+	"alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>, 
+	"patches@opensource.cirrus.com" <patches@opensource.cirrus.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arunpravin,
+On Mon, Jan 10, 2022 at 2:37 AM Tom Rix <trix@redhat.com> wrote:
+> On 1/9/22 2:33 PM, Andy Shevchenko wrote:
+> On Saturday, January 8, 2022, <trix@redhat.com> wrote:
 
-Thank you for the patch! Perhaps something to improve:
+...
 
-[auto build test WARNING on 5313fb2c779f74bc5083e9d3738d9b2c2ebe0aa4]
+>> +       if (unlikely(ret)) {
+>
+> This is double weird. First of all, wtf unlikely is here? Second, I commented on the patch that does something with this driver and pointed out to the return 0 in some cases. This one seems a band aid.
+>
+> Unlikely to have an error.
 
-url:    https://github.com/0day-ci/linux/commits/Arunpravin/drm-move-the-buddy-allocator-from-i915-into-common-drm/20220109-222233
-base:   5313fb2c779f74bc5083e9d3738d9b2c2ebe0aa4
-config: riscv-randconfig-r042-20220109 (https://download.01.org/0day-ci/archive/20220110/202201101727.lThEC1FU-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/851f609d90fe77055b3c45169a1ddd469d5ae8ab
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Arunpravin/drm-move-the-buddy-allocator-from-i915-into-common-drm/20220109-222233
-        git checkout 851f609d90fe77055b3c45169a1ddd469d5ae8ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+We don't use likely() and unlikely() here and there, you need to
+provide a very good justification of its use.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For the record, I forwarded you my review against the code where you
+can find much more issues with it that are subject to fix / amend.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_buddy.c:764:6: warning: no previous prototype for function 'drm_buddy_module_exit' [-Wmissing-prototypes]
-   void drm_buddy_module_exit(void)
-        ^
-   drivers/gpu/drm/drm_buddy.c:764:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void drm_buddy_module_exit(void)
-   ^
-   static 
->> drivers/gpu/drm/drm_buddy.c:769:12: warning: no previous prototype for function 'drm_buddy_module_init' [-Wmissing-prototypes]
-   int __init drm_buddy_module_init(void)
-              ^
-   drivers/gpu/drm/drm_buddy.c:769:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init drm_buddy_module_init(void)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/drm_buddy_module_exit +764 drivers/gpu/drm/drm_buddy.c
-
-47666a7da23e2e Arunpravin 2022-01-09  763  
-47666a7da23e2e Arunpravin 2022-01-09 @764  void drm_buddy_module_exit(void)
-47666a7da23e2e Arunpravin 2022-01-09  765  {
-47666a7da23e2e Arunpravin 2022-01-09  766  	kmem_cache_destroy(slab_blocks);
-47666a7da23e2e Arunpravin 2022-01-09  767  }
-47666a7da23e2e Arunpravin 2022-01-09  768  
-47666a7da23e2e Arunpravin 2022-01-09 @769  int __init drm_buddy_module_init(void)
-47666a7da23e2e Arunpravin 2022-01-09  770  {
-47666a7da23e2e Arunpravin 2022-01-09  771  	slab_blocks = KMEM_CACHE(drm_buddy_block, 0);
-47666a7da23e2e Arunpravin 2022-01-09  772  	if (!slab_blocks)
-47666a7da23e2e Arunpravin 2022-01-09  773  		return -ENOMEM;
-47666a7da23e2e Arunpravin 2022-01-09  774  
-47666a7da23e2e Arunpravin 2022-01-09  775  	return 0;
-47666a7da23e2e Arunpravin 2022-01-09  776  }
-47666a7da23e2e Arunpravin 2022-01-09  777  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+With Best Regards,
+Andy Shevchenko
