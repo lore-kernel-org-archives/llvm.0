@@ -1,60 +1,95 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DCC2C9D
-	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 23:55:08 +0000 (UTC)
-Received: by mail-oi1-f176.google.com with SMTP id w188so5459714oiw.13
-        for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 15:55:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0072C9D
+	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 23:55:36 +0000 (UTC)
+Received: by mail-wr1-f41.google.com with SMTP id h10so7116646wrb.1
+        for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 15:55:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sg4haoVhGfqcJy96RZDuqpK7b4znU/XZS/3LD4XsYVA=;
-        b=I4rXHfEehYuHdlJpaeZurJZYw5gDLaE799m0bfrKRzkZmzrhNkpxhPechTauENI8sx
-         V8goHj+N+YuzZU7iBnEsyJnfVNlUF7uvT8uoO67R0Uoolqaad6WDk5w27mq7JCiOFhcV
-         SF44GUvT9mS7pIvXQm3IZ5PU6p6jGEFKT0V+lbbuwWssAdZ3iI38cUdXOUvIVhr8YvjO
-         zHhngs5MSQdbe8FejqsIKtkPiQRnDEhw3sBtHaCqixorS0+9tI2sEL4KJDKtDUXEaDx5
-         Tyids01cGJQuyeOk7aqWpoj9anotIOolDlxp591zft+bwrYP+6Ia1qUG1nf0UCcXqjYR
-         NLiA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZrJnoV8ByVp01mrwYzfs3BpkSmN3S2DUUHlhgKf3S44=;
+        b=VVT0NC1971pm7KJrYLjrND6wXdnBy4Fkz/NuATd6EdPB7ByJKyrJ0afI5SGvvRXz2X
+         50ZqJy4nI9D9gJBtTUBrkaRKLvs9lZsw5k29MfgIoIu5wR7NJXXhceHyij6sn3KnQo/v
+         101KK4ILIIy9LNQeBHo7LoBE3TeEu/FT99q1PtGFVefk/+mPyV1iHV6Swr0omhaMw/Wm
+         cT2vOaYP996ZtAtk9NTEToEVNxMldvHLfoatdCFTpGTecvpuAY03QbV2xg5TnDohKGub
+         EdYZ6tp6FS33cpLf7vvHzAxFOW6TTtRuqqce6e3+xxDWJJ5G8V5ZzlaPKylbuHWMkf/I
+         N0Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sg4haoVhGfqcJy96RZDuqpK7b4znU/XZS/3LD4XsYVA=;
-        b=qFah5XYiZNXTYTJlUun3ZA3JvnazcGVGXwZvlFsfkGzAn9E4VH0XtBQr6xPS6tKQOI
-         4/k1ORXWHNK2smh11CK05E9aPrrOrBeUkxZ5dhXlLCtpQRlkEcVbOyvBei/9VMTV6Rf8
-         eSYhTUIUcikGbDEyhcJh6gN3n9v21oJ6QUGDDruTYqVc4nw/Wz4on2+VOcvnqXhi06G0
-         7Qf+18yz+qNKnFhFT1+0vhxNTxyhQCx040BP/K2ji5Cun8aLbQOMoxBxcXyEEzSpajqZ
-         kIrbvlTjUmU2iJowbdbAg5A0+4i+YczwZ5rBB34s3nwzhZoYP6/XAH3onv+B5ituOnjs
-         WUgg==
-X-Gm-Message-State: AOAM531eBHSG/JUoWlzmuOxOcR82/Jg4m6nwNBCui3zivEIZkbj3yuyd
-	GGyCwBnC1VfYs3CTvLfScXF5S491Z2ZeX/A3oyLUQQ==
-X-Google-Smtp-Source: ABdhPJy+r8906AoK0fKTATnHiiCVWoA19BvOjlPlJLpsbdB7zRsAFkb/Ek5aDFN2Tx7ZSZSiZpsQlTw7NGn9EQ2mKJk=
-X-Received: by 2002:a54:4613:: with SMTP id p19mr1316839oip.162.1642031707215;
- Wed, 12 Jan 2022 15:55:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZrJnoV8ByVp01mrwYzfs3BpkSmN3S2DUUHlhgKf3S44=;
+        b=UHzKHlrgSSxu7iDwlHLlRZfKj2w7HzCtVMqcrWZ99Cra4nFebHvkiTkeGX7IQeqbu1
+         18tM+hW5jHduMTNK27TlUV5UP01Y3O3HQPV/fAbzMjMIPMPm+2u5eP4SzAf8MfEo7Z1G
+         +R46yU+TdneMJM0MGDaagCCD7yLWUOD3CwG7biZZowQC4f5F0G03zkKL7e63xxZ6baoR
+         SVVoana9TOSdnrGFQPPelACJCEnMerskSWWSJZEgYR1uTdaV8xS8cGiRVebUkxKpmhP6
+         vl+RAgM2TPSYKh6QYLBo53DaBlAIPPQO3AR3HrlW+U9dzGTtwzsiFV7Z8w3Na6Rk9PDI
+         FhMw==
+X-Gm-Message-State: AOAM5325te6/hBvO7eaNErrbG/V7VEU3OKmIEHTzjidXGKUSzAVvCj4y
+	fAy3DhCuCtUMYwT6NsZxYD8=
+X-Google-Smtp-Source: ABdhPJy8XX5/dFYxJ5mkFUXKlNg3U36B1VmjIA6pRqoybdXmuNWLWzgHhjNNEEC94ODARsOq6v3/Hg==
+X-Received: by 2002:a05:6000:1787:: with SMTP id e7mr1711033wrg.31.1642031734649;
+        Wed, 12 Jan 2022 15:55:34 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id o8sm1337903wry.20.2022.01.12.15.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 15:55:34 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Chas Williams <3chas3@gmail.com>,
+	linux-atm-general@lists.sourceforge.net,
+	netdev@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] atm: iphase: remove redundant pointer skb
+Date: Wed, 12 Jan 2022 23:55:33 +0000
+Message-Id: <20220112235533.1281944-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202201130136.7675O5xx-lkp@intel.com>
-In-Reply-To: <202201130136.7675O5xx-lkp@intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 13 Jan 2022 00:54:55 +0100
-Message-ID: <CACRpkdb=604wtkcfY_DeSWDj1ojsPm2pZpGVrvVwMjp7=fi2sg@mail.gmail.com>
-Subject: Re: arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous
- prototype for function 'ixp4xx_pci_write'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 12, 2022 at 6:23 PM kernel test robot <lkp@intel.com> wrote:
+The pointer skb is redundant, it is assigned a value that is never
+read and hence can be removed. Cleans up clang scan warning:
 
-> FYI, the error/warning still remains.
+drivers/atm/iphase.c:205:18: warning: Although the value stored
+to 'skb' is used in the enclosing expression, the value is never
+actually read from 'skb' [deadcode.DeadStores]
 
-This code is about to get deleted in the next kernel cycle.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/atm/iphase.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/atm/iphase.c b/drivers/atm/iphase.c
+index bc8e8d9f176b..3e726ee91fdc 100644
+--- a/drivers/atm/iphase.c
++++ b/drivers/atm/iphase.c
+@@ -178,7 +178,6 @@ static void ia_hack_tcq(IADEV *dev) {
+ 
+ static u16 get_desc (IADEV *dev, struct ia_vcc *iavcc) {
+   u_short 		desc_num, i;
+-  struct sk_buff        *skb;
+   struct ia_vcc         *iavcc_r = NULL; 
+   unsigned long delta;
+   static unsigned long timer = 0;
+@@ -202,8 +201,7 @@ static u16 get_desc (IADEV *dev, struct ia_vcc *iavcc) {
+            else 
+               dev->ffL.tcq_rd -= 2;
+            *(u_short *)(dev->seg_ram + dev->ffL.tcq_rd) = i+1;
+-           if (!(skb = dev->desc_tbl[i].txskb) || 
+-                          !(iavcc_r = dev->desc_tbl[i].iavcc))
++           if (!dev->desc_tbl[i].txskb || !(iavcc_r = dev->desc_tbl[i].iavcc))
+               printk("Fatal err, desc table vcc or skb is NULL\n");
+            else 
+               iavcc_r->vc_desc_cnt--;
+-- 
+2.33.1
+
