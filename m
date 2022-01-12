@@ -1,42 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6A82C9C
-	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 13:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEFC29CA
+	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 13:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641992706; x=1673528706;
+  t=1641994609; x=1673530609;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T/nZJpDrhFZpXzN0a8FTvEPzmmZJ6uW8zk0Ak+sujE8=;
-  b=dl+7t/dIDy5Kz/hY0sjfrQ0i3glDJYtHroc6jrgZ/qI68wwOxRYAzwfS
-   H8WswVBMV7Bj97eWyOSlDlGlADeDavZ/nomkqVuENE558AqBiN4m9pQOi
-   rCmWgfpoX+Qzops+nOeHNnLEnM44nWFP8fxumPr3zQsfcOL0nSxGWMIa2
-   5qCmvRV/Cy37GgXKTtpMvCIVAAmZohxx8dq+QDaqHKs2wrZVvKNkEhcxM
-   XXo8W9XKlaWlfsNEZ3YxJxo0xH7S9w0XhyFxs/dD/hMTFhZw4Kw10cnE7
-   N5i3e3gxQ43M3B+d9i5MjMcuRBUS58wun72rv0bwTlEPT4IPMTmcgFe7x
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="242544977"
+  bh=Y15fyvFsXPPjrxE4U3JxxUpz4g4dVIRVvVS6UW8aFic=;
+  b=hPv1oQ+1jgrZMkLVSSxMdQqOSWmTIP+KRuoLBObHeY0+sBenJHrBNZhf
+   mtAau5eNqDFLZx8Rvmoen+ONK6dzpmSH04811lIYJEbySFKvmSS9gwc4H
+   nJYcNj1dZG/XzJpcQcEXKu+Fx/LIr277yiPXbWkjO6YhVHgPZlUmwU1qj
+   p1ijjPL6Us5/6N7nUFkM+HnC8InrtZnY4Tbk9h+L7XKRL3+XrrDF9dlxw
+   v1pVojfc1Y0J3//MTnj5KAT2TBsSjgfoqXIbeyxHiT3pSG8twXvQqFaws
+   d+PBYaLo8LTevJnqPwPGwoJGov0qAb6tx0YIkJNIKQ/OKeQXmpMWa5FGM
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="241287652"
 X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="242544977"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:04:48 -0800
+   d="scan'208";a="241287652"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:36:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="474899818"
+   d="scan'208";a="576552091"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jan 2022 05:04:46 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jan 2022 05:36:47 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n7dIz-0005pF-TE; Wed, 12 Jan 2022 13:04:45 +0000
-Date: Wed, 12 Jan 2022 21:04:34 +0800
+	id 1n7dnz-0005rV-8z; Wed, 12 Jan 2022 13:36:47 +0000
+Date: Wed, 12 Jan 2022 21:36:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Olga Kornievskaia <kolga@netapp.com>
+To: Daniel Palmer <daniel@0x0f.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [linux-next:master 11662/12034] fs/nfs/nfs4proc.c:4008:5: warning:
- no previous prototype for function 'nfs4_discover_trunking'
-Message-ID: <202201122054.45b1t1el-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 52/82] drivers/mtd/spi-nor/zbit.c:13:8:
+ error: too many arguments provided to function-like macro invocation
+Message-ID: <202201122102.bNB0eDU9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,59 +46,61 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   32ce2abb03cfae17a9eb42bd6b1b619b72f23f20
-commit: 82ebfb0d633383ee00156e2b5bfa9ddf8c550b65 [11662/12034] NFSv4.1 query for fs_location attr on a new file system
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220112/202201122054.45b1t1el-lkp@intel.com/config)
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   18ce00127e968c06cc0fe1157d36858f59272624
+commit: 9994994d1139138f2b0ce3ffbaec1c3d1471c7e2 [52/82] mtd: spi-nor: Add support for ZB25VQ128
+config: arm-randconfig-r006-20220112 (https://download.01.org/0day-ci/archive/20220112/202201122102.bNB0eDU9-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244dd2913a43a200f5a6544d424cdc37b771028b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=82ebfb0d633383ee00156e2b5bfa9ddf8c550b65
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 82ebfb0d633383ee00156e2b5bfa9ddf8c550b65
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/linux-chenxing/linux/commit/9994994d1139138f2b0ce3ffbaec1c3d1471c7e2
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 9994994d1139138f2b0ce3ffbaec1c3d1471c7e2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/nfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mtd/spi-nor/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/nfs/nfs4proc.c:4008:5: warning: no previous prototype for function 'nfs4_discover_trunking' [-Wmissing-prototypes]
-   int nfs4_discover_trunking(struct nfs_server *server, struct nfs_fh *fhandle)
-       ^
-   fs/nfs/nfs4proc.c:4008:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int nfs4_discover_trunking(struct nfs_server *server, struct nfs_fh *fhandle)
-   ^
-   static 
-   1 warning generated.
+>> drivers/mtd/spi-nor/zbit.c:13:8: error: too many arguments provided to function-like macro invocation
+                               SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
+                               ^
+   drivers/mtd/spi-nor/core.h:427:9: note: macro 'INFO' defined here
+   #define INFO(_jedec_id, _ext_id, _sector_size, _n_sectors)              \
+           ^
+>> drivers/mtd/spi-nor/zbit.c:12:17: error: use of undeclared identifier 'INFO'
+           { "zb25vq128", INFO(0x5e4018, 0, 64 * 1024, 256,
+                          ^
+>> drivers/mtd/spi-nor/zbit.c:20:12: error: invalid application of 'sizeof' to an incomplete type 'const struct flash_info[]'
+           .nparts = ARRAY_SIZE(zbit_parts),
+                     ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:46:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   3 errors generated.
 
 
-vim +/nfs4_discover_trunking +4008 fs/nfs/nfs4proc.c
+vim +13 drivers/mtd/spi-nor/zbit.c
 
-  4007	
-> 4008	int nfs4_discover_trunking(struct nfs_server *server, struct nfs_fh *fhandle)
-  4009	{
-  4010		struct nfs4_exception exception = {
-  4011			.interruptible = true,
-  4012		};
-  4013		struct nfs_client *clp = server->nfs_client;
-  4014		int err = 0;
-  4015	
-  4016		if (!nfs4_has_session(clp))
-  4017			goto out;
-  4018		do {
-  4019			err = nfs4_handle_exception(server,
-  4020					_nfs4_discover_trunking(server, fhandle),
-  4021					&exception);
-  4022		} while (exception.retry);
-  4023	out:
-  4024		return err;
-  4025	}
-  4026	
+     9	
+    10	static const struct flash_info zbit_parts[] = {
+    11		/* zbit */
+  > 12		{ "zb25vq128", INFO(0x5e4018, 0, 64 * 1024, 256,
+  > 13				    SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
+    14				    SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB) },
+    15	};
+    16	
+    17	const struct spi_nor_manufacturer spi_nor_zbit = {
+    18		.name = "zbit",
+    19		.parts = zbit_parts,
+  > 20		.nparts = ARRAY_SIZE(zbit_parts),
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
