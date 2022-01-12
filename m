@@ -1,99 +1,60 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B962C9D
-	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 23:34:57 +0000 (UTC)
-Received: by mail-wr1-f53.google.com with SMTP id a5so7025992wrh.5
-        for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 15:34:57 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DCC2C9D
+	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 23:55:08 +0000 (UTC)
+Received: by mail-oi1-f176.google.com with SMTP id w188so5459714oiw.13
+        for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 15:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3DEFgBCX906ok4X/wdH2dxwVHpxsjiS6oUvaGjRJjSc=;
-        b=e9IAmlaSjuYmaF9CmGYif8YYLo6UNV3nMGK3jnmOsCdkSHfSTMAEAv2Ra4qJjr0NE/
-         zahrF5w/PN6y+8Eb/frfktMb/xueFL+wxRRN2R/EKKmVeg6VJ7OwPGl7UyEbwGFE+R07
-         7wsLAOO8ebbFowfkS9p9MEzKjBQQ2wz4LoM0PvPAo6zKPj56ueOHHWNWsTQux55UEtUJ
-         bGzUoHAZo99kaLq6IajDlHYr6mpB64hNiLV2xqPeVP6O/BMFBPsJALc60mzqLlgIVnCf
-         j7EKQ/2Ko2XyM9AKKM2D1nhiqucm6fymtLaWuuI7uilmjtqmpqcJEoTg/Bc9j+R03j2M
-         iGsA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sg4haoVhGfqcJy96RZDuqpK7b4znU/XZS/3LD4XsYVA=;
+        b=I4rXHfEehYuHdlJpaeZurJZYw5gDLaE799m0bfrKRzkZmzrhNkpxhPechTauENI8sx
+         V8goHj+N+YuzZU7iBnEsyJnfVNlUF7uvT8uoO67R0Uoolqaad6WDk5w27mq7JCiOFhcV
+         SF44GUvT9mS7pIvXQm3IZ5PU6p6jGEFKT0V+lbbuwWssAdZ3iI38cUdXOUvIVhr8YvjO
+         zHhngs5MSQdbe8FejqsIKtkPiQRnDEhw3sBtHaCqixorS0+9tI2sEL4KJDKtDUXEaDx5
+         Tyids01cGJQuyeOk7aqWpoj9anotIOolDlxp591zft+bwrYP+6Ia1qUG1nf0UCcXqjYR
+         NLiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3DEFgBCX906ok4X/wdH2dxwVHpxsjiS6oUvaGjRJjSc=;
-        b=rLJC9yzKr411ns4KaW3gToeVBKBxZRguB7Td5pu6rYCs3RXZCPz6RYxM7zQZwV0hnd
-         6dbBDQO/T/5maedOhqvqzSOSb7qevG+nx5i2BNnZPTM/uRTIjVtAPg5a5JOnWHClS1f1
-         PdDG9zMvQYaRp/NrDgbiZdJlza6kD2Sq9yrFOsdjsIEtPBETIklGUdsZ6oVKGXswTiSw
-         w9GyhBzRxfM7LQ1vG5kxmr7hts7XcOGW79AriTXU5RCEwZn++j0JCwiDj3YfIyMLDVOe
-         AR3FpEOqMTQk8H+FwZZQCWXP49Mo4sHdxyhyseMFtHFRWlGXGSCjAroq/NXZTh9fN72h
-         memA==
-X-Gm-Message-State: AOAM531tRklExzFbf5nXxjUL7HM0OTjCGSnfOMh6lQax/bO7nEvQ4M55
-	1nBJ4wy3kFupi1jrjj6IYHY=
-X-Google-Smtp-Source: ABdhPJxeMow1qP7JNTiHjKD4H5i8qsaxLomu8bgbsOMr814izohrtas13g4czBsvmKybVqg0ZNUM3A==
-X-Received: by 2002:a5d:5282:: with SMTP id c2mr1705884wrv.580.1642030495750;
-        Wed, 12 Jan 2022 15:34:55 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id x6sm1051652wrt.58.2022.01.12.15.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 15:34:55 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] crypto: asymmetric_keys: remove redundant pointer secs
-Date: Wed, 12 Jan 2022 23:34:54 +0000
-Message-Id: <20220112233454.1207944-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sg4haoVhGfqcJy96RZDuqpK7b4znU/XZS/3LD4XsYVA=;
+        b=qFah5XYiZNXTYTJlUun3ZA3JvnazcGVGXwZvlFsfkGzAn9E4VH0XtBQr6xPS6tKQOI
+         4/k1ORXWHNK2smh11CK05E9aPrrOrBeUkxZ5dhXlLCtpQRlkEcVbOyvBei/9VMTV6Rf8
+         eSYhTUIUcikGbDEyhcJh6gN3n9v21oJ6QUGDDruTYqVc4nw/Wz4on2+VOcvnqXhi06G0
+         7Qf+18yz+qNKnFhFT1+0vhxNTxyhQCx040BP/K2ji5Cun8aLbQOMoxBxcXyEEzSpajqZ
+         kIrbvlTjUmU2iJowbdbAg5A0+4i+YczwZ5rBB34s3nwzhZoYP6/XAH3onv+B5ituOnjs
+         WUgg==
+X-Gm-Message-State: AOAM531eBHSG/JUoWlzmuOxOcR82/Jg4m6nwNBCui3zivEIZkbj3yuyd
+	GGyCwBnC1VfYs3CTvLfScXF5S491Z2ZeX/A3oyLUQQ==
+X-Google-Smtp-Source: ABdhPJy+r8906AoK0fKTATnHiiCVWoA19BvOjlPlJLpsbdB7zRsAFkb/Ek5aDFN2Tx7ZSZSiZpsQlTw7NGn9EQ2mKJk=
+X-Received: by 2002:a54:4613:: with SMTP id p19mr1316839oip.162.1642031707215;
+ Wed, 12 Jan 2022 15:55:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <202201130136.7675O5xx-lkp@intel.com>
+In-Reply-To: <202201130136.7675O5xx-lkp@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 13 Jan 2022 00:54:55 +0100
+Message-ID: <CACRpkdb=604wtkcfY_DeSWDj1ojsPm2pZpGVrvVwMjp7=fi2sg@mail.gmail.com>
+Subject: Re: arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous
+ prototype for function 'ixp4xx_pci_write'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The pointer secs is assigned a value but it is never read. The
-pointer is redundant and can be removed. Cleans up clang scan
-warning:
+On Wed, Jan 12, 2022 at 6:23 PM kernel test robot <lkp@intel.com> wrote:
 
-crypto/asymmetric_keys/verify_pefile.c:113:14: warning: Although
-the value stored to 'secs' is used in the enclosing expression,
-the value is never actually read from 'secs' [deadcode.DeadStores]
+> FYI, the error/warning still remains.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- crypto/asymmetric_keys/verify_pefile.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This code is about to get deleted in the next kernel cycle.
 
-diff --git a/crypto/asymmetric_keys/verify_pefile.c b/crypto/asymmetric_keys/verify_pefile.c
-index 7553ab18db89..a660e4d68d50 100644
---- a/crypto/asymmetric_keys/verify_pefile.c
-+++ b/crypto/asymmetric_keys/verify_pefile.c
-@@ -28,7 +28,7 @@ static int pefile_parse_binary(const void *pebuf, unsigned int pelen,
- 	const struct pe32plus_opt_hdr *pe64;
- 	const struct data_directory *ddir;
- 	const struct data_dirent *dde;
--	const struct section_header *secs, *sec;
-+	const struct section_header *sec;
- 	size_t cursor, datalen = pelen;
- 
- 	kenter("");
-@@ -110,7 +110,7 @@ static int pefile_parse_binary(const void *pebuf, unsigned int pelen,
- 	ctx->n_sections = pe->sections;
- 	if (ctx->n_sections > (ctx->header_size - cursor) / sizeof(*sec))
- 		return -ELIBBAD;
--	ctx->secs = secs = pebuf + cursor;
-+	ctx->secs = pebuf + cursor;
- 
- 	return 0;
- }
--- 
-2.33.1
-
+Yours,
+Linus Walleij
