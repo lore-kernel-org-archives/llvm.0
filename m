@@ -1,49 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FB3173
-	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 20:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA4A173
+	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 20:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642020352; x=1673556352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3bd0+kvppXqt1g9WkYwL2BkeZvx2WQ/v4buHeuWib6I=;
-  b=YHaxIoM+ZPFfbjShYZ4IGN4DQoJpacf1SkctzY2MAox0Tzy5AJGTEdoq
-   NpMIB5FZXNdNbMwFmtkVoYjGUD6ivAtKuXI0F/AmO8ER1QzRSDxMzWmmb
-   jlObdp2bdYu0rtk7ponhLtFrkg0Esh/IIXc47Wdya4U37xQ/sQFa5VVa5
-   oPIaWKpmcJApNVN6vm7wCg3/akAwjlxBN3ye51CZhVO3VfFO6736SN6bR
-   uxVrMzFyW5DVyYKAzsxME2NJVGRftlmmYYYfeMJ+DOXxa2uzIr0KZ42ei
-   3F6waERrcvZtrAsuJ7B25pegbomQHZ00vrbKsbx9fzdcDozTWqzrzdIUK
+  t=1642020436; x=1673556436;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ro7YmMLSyQHR9qpLTfejuLr2mkbV2K976zCOwg1xLm4=;
+  b=Us8/+Qf7Zx/vcQs4zA2pzy9H3fhcItp01rCUc6NN748grImLHsfA2BI4
+   4rK5Q/LpNAjOiGYdNueVike/Q8isI5OyILgikNsVybLgfB9+R9pFEpxeL
+   AIlnaSM6R62c9GvWG2XvJj01UGmAuQ5ajgplOJ6bAkaSetLi4TwdaJckE
+   Jh1ZlS0txonQaPlDvhL1qsgpqcQaxvStsql+MX+05z6YB3p9zlHOetGDh
+   b5rcsHPOotwSVVQSw0Q2dhg4Gv3hGHB4VmZpBcK62FrD/bNNhUF6WfHSw
+   aNiwrOR+Ktw329sAdPG6e6baasBdcLxlusG6nufgfCJidp+3bxPvSbQcI
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="241406501"
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307199222"
 X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="241406501"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 12:45:50 -0800
+   d="scan'208";a="307199222"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 12:47:15 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="691533858"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 12:45:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1n7kTx-009vDY-L5;
-	Wed, 12 Jan 2022 22:44:33 +0200
-Date: Wed, 12 Jan 2022 22:44:33 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-	Linus Walleij <linus.walleij@linaro.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v3] pinctrl: baytrail: Clear direct_irq_en flag on broken
- configs
-Message-ID: <Yd89sQz8L/KJ4BXA@smile.fi.intel.com>
-References: <20220107234456.148389-1-hdegoede@redhat.com>
- <202201090203.kgCw6bSd-lkp@intel.com>
- <eb4ef470-cfaf-13be-cb66-ca38c1a85a23@redhat.com>
+   d="scan'208";a="670285600"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2022 12:47:13 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n7kWX-0006O1-C3; Wed, 12 Jan 2022 20:47:13 +0000
+Date: Thu, 13 Jan 2022 04:46:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nava kishore Manne <nava.manne@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [xilinx-xlnx:master 269/326]
+ include/linux/firmware/xlnx-zynqmp.h:1244:5: warning: no previous prototype
+ for function 'zynqmp_pm_get_meta_header'
+Message-ID: <202201130455.ASiUDDqB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,32 +47,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eb4ef470-cfaf-13be-cb66-ca38c1a85a23@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Jan 12, 2022 at 08:58:00PM +0100, Hans de Goede wrote:
-> On 1/8/22 19:54, kernel test robot wrote:
+tree:   https://github.com/Xilinx/linux-xlnx master
+head:   6a698dbaaf0e6caa053476c2f661b36885a0ce30
+commit: 22272cc48b5399af99792722fa7004735b769e0a [269/326] firmware: xilinx: Add support to get the image meta-header info
+config: hexagon-randconfig-r041-20220112 (https://download.01.org/0day-ci/archive/20220113/202201130455.ASiUDDqB-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244dd2913a43a200f5a6544d424cdc37b771028b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/22272cc48b5399af99792722fa7004735b769e0a
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx master
+        git checkout 22272cc48b5399af99792722fa7004735b769e0a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-> >>> drivers/pinctrl/intel/pinctrl-baytrail.c:1483:58: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-> >                    dev_dbg(vg->dev, "Pin %i: uses direct IRQ %ld\n", pin, match - direct_irq);
-> >                                                              ~~~          ^~~~~~~~~~~~~~~~~~
-> >                                                              %d
-> >    include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-> >                    dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-> >                                                        ~~~     ^~~~~~~~~~~
-> >    include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-> >                    _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-> >                                            ~~~    ^~~~~~~~~~~
-> >    1 warning generated.
-> 
-> Hmm, ok. so x86_64 needs a %ld for the pointer arithmic result on i386 needs a %d
-> without the 'l' what fun. I'll just store it in a temp int variable in the next
-> version.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Why not to use uintptr_t and corresponding specifier (or ptrdiff_t)?
+All warnings (new ones prefixed by >>):
 
--- 
-With Best Regards,
-Andy Shevchenko
+   In file included from drivers/fpga/zynqmp-fpga.c:14:
+>> include/linux/firmware/xlnx-zynqmp.h:1244:5: warning: no previous prototype for function 'zynqmp_pm_get_meta_header' [-Wmissing-prototypes]
+   int zynqmp_pm_get_meta_header(const u64 src, const u64 dst,
+       ^
+   include/linux/firmware/xlnx-zynqmp.h:1244:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int zynqmp_pm_get_meta_header(const u64 src, const u64 dst,
+   ^
+   static 
+   include/linux/firmware/xlnx-zynqmp.h:1212:12: warning: unused function 'zynqmp_pm_sec_read_reg' [-Wunused-function]
+   static int zynqmp_pm_sec_read_reg(u32 node_id, u32 offset, u32 *ret_value)
+              ^
+   include/linux/firmware/xlnx-zynqmp.h:1217:12: warning: unused function 'zynqmp_pm_sec_mask_write_reg' [-Wunused-function]
+   static int zynqmp_pm_sec_mask_write_reg(const u32 node_id, const u32 offset,
+              ^
+   3 warnings generated.
 
 
+vim +/zynqmp_pm_get_meta_header +1244 include/linux/firmware/xlnx-zynqmp.h
+
+  1243	
+> 1244	int zynqmp_pm_get_meta_header(const u64 src, const u64 dst,
+  1245				      const u32 size, u32 *count)
+  1246	{
+  1247		return -ENODEV;
+  1248	}
+  1249	#endif
+  1250	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
