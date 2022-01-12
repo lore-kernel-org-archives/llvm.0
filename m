@@ -1,41 +1,41 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEFC29CA
-	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 13:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619B82C82
+	for <llvm@lists.linux.dev>; Wed, 12 Jan 2022 15:19:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641994609; x=1673530609;
+  t=1642000797; x=1673536797;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y15fyvFsXPPjrxE4U3JxxUpz4g4dVIRVvVS6UW8aFic=;
-  b=hPv1oQ+1jgrZMkLVSSxMdQqOSWmTIP+KRuoLBObHeY0+sBenJHrBNZhf
-   mtAau5eNqDFLZx8Rvmoen+ONK6dzpmSH04811lIYJEbySFKvmSS9gwc4H
-   nJYcNj1dZG/XzJpcQcEXKu+Fx/LIr277yiPXbWkjO6YhVHgPZlUmwU1qj
-   p1ijjPL6Us5/6N7nUFkM+HnC8InrtZnY4Tbk9h+L7XKRL3+XrrDF9dlxw
-   v1pVojfc1Y0J3//MTnj5KAT2TBsSjgfoqXIbeyxHiT3pSG8twXvQqFaws
-   d+PBYaLo8LTevJnqPwPGwoJGov0qAb6tx0YIkJNIKQ/OKeQXmpMWa5FGM
+  bh=h8ls+oVuaFbFTtUpRnfkoRc16g9QZfj/QoL+F0BHQ/Q=;
+  b=Xtm6cmg0C5Mr8LqJwlZ7Go9MgDwAxKroo2Wg1Chodbo0YYy/sQWkZssD
+   EWKfcAos96gddQUj+9fi0b4VvsSBGKMhgZKS3lW0HJK+u+wmazS1daV3P
+   cYrVBku+9gd4CMBKo9az7aZFW7v5nuiD7j2EjHAEQwI1k/Xx87qzDgFPy
+   So8bXq/IZ23w6XWuDdPczKfW9vkdtSDq+eWk2ZLPNqH281wblLlC204nL
+   GnlDQOTnbgp1oXxkKeHAF7aZb+tu9ZxbtGs9asDy6uooCtLFrjXx0Bbnc
+   +isM5nxBmhAET+Y0J240Xb/h4u4b4ceuuNJdulyXtrVvuc5LaFtVarqgF
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="241287652"
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="224449698"
 X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="241287652"
+   d="scan'208";a="224449698"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:36:49 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 07:19:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="576552091"
+   d="scan'208";a="576575950"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jan 2022 05:36:47 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jan 2022 07:19:55 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n7dnz-0005rV-8z; Wed, 12 Jan 2022 13:36:47 +0000
-Date: Wed, 12 Jan 2022 21:36:03 +0800
+	id 1n7fPm-00060T-TQ; Wed, 12 Jan 2022 15:19:54 +0000
+Date: Wed, 12 Jan 2022 23:19:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Palmer <daniel@0x0f.com>
+To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 52/82] drivers/mtd/spi-nor/zbit.c:13:8:
- error: too many arguments provided to function-like macro invocation
-Message-ID: <202201122102.bNB0eDU9-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [dlemoal-libata:for-next 85/106] drivers/ata/ahci_st.c:233:34:
+ warning: unused variable 'st_ahci_match'
+Message-ID: <202201122335.B7ADTynl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,61 +46,52 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   18ce00127e968c06cc0fe1157d36858f59272624
-commit: 9994994d1139138f2b0ce3ffbaec1c3d1471c7e2 [52/82] mtd: spi-nor: Add support for ZB25VQ128
-config: arm-randconfig-r006-20220112 (https://download.01.org/0day-ci/archive/20220112/202201122102.bNB0eDU9-lkp@intel.com/config)
+Hi Damien,
+
+First bad commit (maybe != root cause):
+
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git for-next
+head:   7914e9624dd7ce17d3d3b1dcd6c3fe5d366b228c
+commit: 3e7a673b5674512efdcd9ec5ff154ee697c3f7ef [85/106] ata: ahci_st: add compile test support
+config: hexagon-buildonly-randconfig-r005-20220112 (https://download.01.org/0day-ci/archive/20220112/202201122335.B7ADTynl-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244dd2913a43a200f5a6544d424cdc37b771028b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/linux-chenxing/linux/commit/9994994d1139138f2b0ce3ffbaec1c3d1471c7e2
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 9994994d1139138f2b0ce3ffbaec1c3d1471c7e2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git/commit/?id=3e7a673b5674512efdcd9ec5ff154ee697c3f7ef
+        git remote add dlemoal-libata git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git
+        git fetch --no-tags dlemoal-libata for-next
+        git checkout 3e7a673b5674512efdcd9ec5ff154ee697c3f7ef
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mtd/spi-nor/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/mtd/spi-nor/zbit.c:13:8: error: too many arguments provided to function-like macro invocation
-                               SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
-                               ^
-   drivers/mtd/spi-nor/core.h:427:9: note: macro 'INFO' defined here
-   #define INFO(_jedec_id, _ext_id, _sector_size, _n_sectors)              \
-           ^
->> drivers/mtd/spi-nor/zbit.c:12:17: error: use of undeclared identifier 'INFO'
-           { "zb25vq128", INFO(0x5e4018, 0, 64 * 1024, 256,
-                          ^
->> drivers/mtd/spi-nor/zbit.c:20:12: error: invalid application of 'sizeof' to an incomplete type 'const struct flash_info[]'
-           .nparts = ARRAY_SIZE(zbit_parts),
-                     ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:46:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   3 errors generated.
+>> drivers/ata/ahci_st.c:233:34: warning: unused variable 'st_ahci_match' [-Wunused-const-variable]
+   static const struct of_device_id st_ahci_match[] = {
+                                    ^
+   1 warning generated.
 
 
-vim +13 drivers/mtd/spi-nor/zbit.c
+vim +/st_ahci_match +233 drivers/ata/ahci_st.c
 
-     9	
-    10	static const struct flash_info zbit_parts[] = {
-    11		/* zbit */
-  > 12		{ "zb25vq128", INFO(0x5e4018, 0, 64 * 1024, 256,
-  > 13				    SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
-    14				    SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB) },
-    15	};
-    16	
-    17	const struct spi_nor_manufacturer spi_nor_zbit = {
-    18		.name = "zbit",
-    19		.parts = zbit_parts,
-  > 20		.nparts = ARRAY_SIZE(zbit_parts),
+76884cb2f7da52 Lee Jones    2014-02-26  232  
+09de99db23df55 Kiran Padwal 2014-07-22 @233  static const struct of_device_id st_ahci_match[] = {
+76884cb2f7da52 Lee Jones    2014-02-26  234  	{ .compatible = "st,ahci", },
+76884cb2f7da52 Lee Jones    2014-02-26  235  	{},
+76884cb2f7da52 Lee Jones    2014-02-26  236  };
+76884cb2f7da52 Lee Jones    2014-02-26  237  MODULE_DEVICE_TABLE(of, st_ahci_match);
+76884cb2f7da52 Lee Jones    2014-02-26  238  
+
+:::::: The code at line 233 was first introduced by commit
+:::::: 09de99db23df55c7415d110f6c62281dedd77384 ahci: st: Make of_device_id array const
+
+:::::: TO: Kiran Padwal <kiran.padwal21@gmail.com>
+:::::: CC: Tejun Heo <tj@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
