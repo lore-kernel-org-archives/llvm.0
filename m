@@ -1,132 +1,65 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1C12C82
-	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 12:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642076208; x=1673612208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=roiXvwsCJ2r/QnoW//F6QW3xaSm4lbYiofK086ssinA=;
-  b=LEstYqmxo9vBytHTlFdkKgiooxMpwWuw4U2T3fXYqHxGYavUyR+DzazG
-   zGnc9VCMeqZFbDzsqG5WgO4dw2yvPBYBmsmk4adQ340WHgrHEqyYmF1t2
-   0arNkpu2cUWma8m8F0Q/X0so2Q6Gr1r87tRP7JhlOiQJcK5lnpVVgbLXx
-   M63CmkYnntnHHJfkhlRvjitv8jqMfqKwOfDpNOLCQVyIw3JpmPb1JyYTV
-   +o9T2dojnUbg3NEJZMwV+qbkTVPETp2wA+NLRq0pvCxqswl8ijrnYRDyq
-   /222AV0uCUhViVckVAE3pYubc/61skQ3cg6YQRtE3Au/8pqOS9eWMgXiG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242812090"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="242812090"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 04:16:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="515907378"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 13 Jan 2022 04:16:46 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n7z25-0007Av-Dg; Thu, 13 Jan 2022 12:16:45 +0000
-Date: Thu, 13 Jan 2022 20:16:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiao Yang <yangx.jy@fujitsu.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v2 2/2] RDMA/rxe: Support RDMA Atomic Write operation
-Message-ID: <202201132027.agYTyFRu-lkp@intel.com>
-References: <20220113030350.2492841-3-yangx.jy@fujitsu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B95729CA
+	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 13:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CAE1AC36AED;
+	Thu, 13 Jan 2022 13:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642078811;
+	bh=Pcp2+IA9W2UqzZ3KCK/QZsr41sDDGaYv1iGIzsGnkLs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=s8ZP0yPIW7qxXczd2S0UYyU9alNOJpDj7xal5H32hGZOLikRbL6oSOjundaYXguca
+	 6ECNw+vcRp5DZgPzNmIYJ63V8/K9ECuePte7DoUrzbcfoIrLbvBR102G0W+2CoII5O
+	 dOOtAfXFPh2ewin57jcaRutJdz+2oOPChOUq5Zxn2skN5SeVTSbh30OiqNC/HyMu/a
+	 J/fcLVP5n9O8AFm3UgHCKaO6GGUgiBs4tDWXotU1JzlT0rFYGuf7wrei7Ti0Pqp9GE
+	 qUpw5l747cYcgJmd4pdsLHAWEmnW56HuUEuO0qDUJzw1FFoafGQtE0r/jlDDB5Ixbv
+	 pSgRgE9hX1dNg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B627AF6078E;
+	Thu, 13 Jan 2022 13:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113030350.2492841-3-yangx.jy@fujitsu.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] atm: iphase: remove redundant pointer skb
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <164207881173.26897.4543675322027026942.git-patchwork-notify@kernel.org>
+Date: Thu, 13 Jan 2022 13:00:11 +0000
+References: <20220112235533.1281944-1-colin.i.king@gmail.com>
+In-Reply-To: <20220112235533.1281944-1-colin.i.king@gmail.com>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: 3chas3@gmail.com, linux-atm-general@lists.sourceforge.net,
+ netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-Hi Xiao,
+Hello:
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on v5.16]
-[also build test ERROR on next-20220113]
-[cannot apply to rdma/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-url:    https://github.com/0day-ci/linux/commits/Xiao-Yang/RDMA-rxe-Add-RDMA-Atomic-Write-operation/20220113-110548
-base:    df0cc57e057f18e44dac8e6c18aba47ab53202f9
-config: riscv-randconfig-r035-20220113 (https://download.01.org/0day-ci/archive/20220113/202201132027.agYTyFRu-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/4294d58609cfb4c296c7937eafd58e044a4d81c6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Xiao-Yang/RDMA-rxe-Add-RDMA-Atomic-Write-operation/20220113-110548
-        git checkout 4294d58609cfb4c296c7937eafd58e044a4d81c6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/infiniband/sw/rxe/
+On Wed, 12 Jan 2022 23:55:33 +0000 you wrote:
+> The pointer skb is redundant, it is assigned a value that is never
+> read and hence can be removed. Cleans up clang scan warning:
+> 
+> drivers/atm/iphase.c:205:18: warning: Although the value stored
+> to 'skb' is used in the enclosing expression, the value is never
+> actually read from 'skb' [deadcode.DeadStores]
+> 
+> [...]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Here is the summary with links:
+  - atm: iphase: remove redundant pointer skb
+    https://git.kernel.org/netdev/net/c/d7b430341102
 
-All errors (new ones prefixed by >>):
-
->> drivers/infiniband/sw/rxe/rxe_resp.c:606:2: error: call to __compiletime_assert_499 declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-           smp_store_release(dst, *src);
-           ^
-   include/asm-generic/barrier.h:162:2: note: expanded from macro 'smp_store_release'
-           compiletime_assert_atomic_type(*p);                             \
-           ^
-   include/linux/compiler_types.h:338:2: note: expanded from macro 'compiletime_assert_atomic_type'
-           compiletime_assert(__native_word(t),                            \
-           ^
-   include/linux/compiler_types.h:335:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:323:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:316:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:165:1: note: expanded from here
-   __compiletime_assert_499
-   ^
-   1 error generated.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-vim +/error +606 drivers/infiniband/sw/rxe/rxe_resp.c
-
-   593	
-   594	static enum resp_states process_atomic_write(struct rxe_qp *qp,
-   595						     struct rxe_pkt_info *pkt)
-   596	{
-   597		struct rxe_mr *mr = qp->resp.mr;
-   598	
-   599		u64 *src = payload_addr(pkt);
-   600	
-   601		u64 *dst = iova_to_vaddr(mr, qp->resp.va + qp->resp.offset, sizeof(u64));
-   602		if (!dst || (uintptr_t)dst & 7)
-   603			return RESPST_ERR_MISALIGNED_ATOMIC;
-   604	
-   605		/* Do atomic write after all prior operations have completed */
- > 606		smp_store_release(dst, *src);
-   607	
-   608		/* decrease resp.resid to zero */
-   609		qp->resp.resid -= sizeof(u64);
-   610	
-   611		return RESPST_NONE;
-   612	}
-   613	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
