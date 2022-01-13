@@ -1,28 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682A12C80
-	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 22:38:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC01C36AEA;
-	Thu, 13 Jan 2022 22:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1642113489;
-	bh=hSiG7bEIE6f2ls+SRvE8tud+DdeYxjWeZLU3ejJ90xo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=eGBrBy/EvJuK2T5/qpXQLUtaFScljNnlaUUTYx2/x4Q8SgOfzAJib8zJrNZ9vt1Fb
-	 qr7cYd1XpsKzW+T8GXQKIDu17nacA5MRHJiu9tyaVBniRU+2hGe+C9H2yTn/roaUz5
-	 0YbMhRWIj2S7BIShA/wrTsYGU31VU9gIGWOWx29ZTeZJF8cOw20O7NLDqujb5qHcnD
-	 +CzYbMpvOU1yEOi2N1H0KHHe0X+k/8YYMY4g2TvIAa09xoaNU45YJ/RE22lPnJTaHz
-	 fglHh7F+a6HVkKDCoQYrRQW3UvWm4LzUb351+JB/OJ6BVKYtXVlesV64JWj47rkWqi
-	 JeEEqb/DkuzqA==
-Date: Thu, 13 Jan 2022 15:38:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Patches for clang and CONFIG_WERROR (arm64/x86_64)
-Message-ID: <YeCpzLnfA+g+u3Id@archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5232C80
+	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 23:46:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642117576; x=1673653576;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jXQMqB5M1B1k0ZRciPQ8qceliwv38BwKOA73t7XuYu8=;
+  b=OyOU5vLXjWbNdS7z9dmMk+DEimyHEwfqw8sSooj1UCxf8Lnx7VdIPJ7C
+   V+XcwfKOVn1HU2YSndWQ7U2dxGBkWz/6EmAiy+HwqKGqS84gX+eh3WLMT
+   jC8VpXeZeULfMfQ8pQYtkTpgcgBWRVSjFpgSex/mudhcD5evcOxR2qMOI
+   t3QK+PA1y6L+XeIy1Q0TzvKL1jAPESODDqbV0WB0W1DTtH0fHi3eoPPxK
+   N5FpHkLcHwBuyVN18kJfq00zb6mxnfTAuuoV18qPRE2qwW4hFt6YO2wbY
+   b85gKfHcxSck/qTLRbxnHnridNqvFmbpAHlsXJPzGmSMZil+7D9iWPIiq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="231488300"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="231488300"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 15:46:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="473436275"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 13 Jan 2022 15:46:14 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n89nJ-0007mw-NR; Thu, 13 Jan 2022 23:46:13 +0000
+Date: Fri, 14 Jan 2022 07:45:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [ebiggers:blk-crypto-sysfs-testing 4/4]
+ drivers/block/virtio_blk.c:763:5: error: no member named 'crypto_profile' in
+ 'struct request_queue'
+Message-ID: <202201140721.JP8Zzews-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,25 +45,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Greg and Sasha,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git blk-crypto-sysfs-testing
+head:   59eaf05f0496aed45c6825a931254a94381d36ac
+commit: 59eaf05f0496aed45c6825a931254a94381d36ac [4/4] virtio-blk: add fake crypto profile for testing
+config: hexagon-randconfig-r045-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140721.JP8Zzews-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=59eaf05f0496aed45c6825a931254a94381d36ac
+        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+        git fetch --no-tags ebiggers blk-crypto-sysfs-testing
+        git checkout 59eaf05f0496aed45c6825a931254a94381d36ac
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/
 
-Please consider applying the following commits to allow arm64 and x86_64
-allmodconfig to compile with CONFIG_WERROR enabled with clang-11 through
-clang-14 (the currently supported releases upstream).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-502408a61f4b ("staging: wlan-ng: Avoid bitwise vs logical OR warning in hfa384x_usb_throttlefn()") [5.15, 5.10, 5.4, 4.19, 4.14, 4.9]
-2e70570656ad ("drm/i915: Avoid bitwise vs logical OR warning in snb_wm_latency_quirk()") [5.16, 5.15, 5.10, 5.4, 4.19, 4.14, 4.9, 4.4]
-144779edf598 ("staging: greybus: fix stack size warning with UBSAN") [5.16, 5.15, 5.10, 5.4]
+All errors (new ones prefixed by >>):
 
-I primarily care about 5.16 and 5.15, as those are the releases that
-have CONFIG_WERROR, but I included all the versions that those patches
-should apply cleanly to, as they do fix warnings in the build that
-people might see, although I don't think they are worth backporting
-further manually until someone complains. 502408a61f4b is already in
-5.16.
+>> drivers/block/virtio_blk.c:763:5: error: no member named 'crypto_profile' in 'struct request_queue'
+           q->crypto_profile = profile;
+           ~  ^
+   1 error generated.
 
-If there are any issues or objections, please let me know!
 
-Cheers,
-Nathan
+vim +763 drivers/block/virtio_blk.c
+
+   751	
+   752	static void virtblk_add_crypto_profile(struct request_queue *q)
+   753	{
+   754		struct blk_crypto_profile *profile;
+   755	
+   756		profile = kzalloc(sizeof(*profile), GFP_KERNEL);
+   757	
+   758		blk_crypto_profile_init(profile, 32);
+   759		profile->modes_supported[BLK_ENCRYPTION_MODE_AES_256_XTS] =
+   760			4096 | 8192;
+   761		profile->max_dun_bytes_supported = 8;
+   762	
+ > 763		q->crypto_profile = profile;
+   764	}
+   765	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
