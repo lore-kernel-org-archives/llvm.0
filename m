@@ -1,155 +1,229 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF45168
-	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 14:58:06 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::227])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 70A0AE198C
-	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 14:52:06 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 696502000F;
-	Thu, 13 Jan 2022 14:51:56 +0000 (UTC)
-Date: Thu, 13 Jan 2022 15:51:54 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt
- <stefan@datenfreihafen.org>, linux-wpan@vger.kernel.org, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
- Michael Hennerich <michael.hennerich@analog.com>, Harry Morris
- <h.morris@cascoda.com>, Varka Bhadram <varkabhadram@gmail.com>, Xue Liu
- <liuxuenetmail@gmail.com>
-Subject: Re: [wpan-next v2 19/27] net: ieee802154: Full PAN management
-Message-ID: <20220113155154.243c36ad@xps13>
-In-Reply-To: <202201130436.44AM2OXA-lkp@intel.com>
-References: <20220112173312.764660-20-miquel.raynal@bootlin.com>
-	<202201130436.44AM2OXA-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FC92C9D
+	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 17:11:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642093871; x=1673629871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+EsZd0J4xiNzwCb2fQyrrRASaxOmaG7d7v72/15Or94=;
+  b=XL6Um4lX+Zf4E15EvEWRgGtryQ9wkPYYAk6IALDW63RScjzQB4JZkiWe
+   /eNBnADc4hQk/5uvhMSUWb1Y6uonh3RBmLqzRVmB7V+Lf32YoXXLVw6Mg
+   lPUkmgfKsCucwU4jLRaxQT1cRTEMONwGs2U7YRdzMXC3afOWD9ssmVSlS
+   ijmOPfJpRkPvmyYSvQzU3ihmzw8S3DebFesqtB1mS6AniROvV48ITnvpi
+   ztl5T054QyTLrKjUkUq6n5XrrlhgmqOxB6/YIBTMmrXjd3b49N0xSNozo
+   DBssecbOs3+UvGoJJMbLJJRJs/okSWPHyceFKOv9R2zwCVez60cKFgjfz
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="244013277"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="244013277"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 09:11:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="559170492"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Jan 2022 09:10:58 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n83cn-0007U2-VT; Thu, 13 Jan 2022 17:10:57 +0000
+Date: Fri, 14 Jan 2022 01:10:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jaroslav Kysela <perex@perex.cz>,
+	ALSA development <alsa-devel@alsa-project.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Takashi Iwai <tiwai@suse.de>,
+	Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: Re: [PATCH] ALSA: pcm: accept the OPEN state for snd_pcm_stop()
+Message-ID: <202201140042.ARpH6f9U-lkp@intel.com>
+References: <20220113113130.1961332-1-perex@perex.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113113130.1961332-1-perex@perex.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+Hi Jaroslav,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on v5.16 next-20220113]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jaroslav-Kysela/ALSA-pcm-accept-the-OPEN-state-for-snd_pcm_stop/20220113-193304
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: hexagon-randconfig-r013-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140042.ARpH6f9U-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/18b89b55d815ee4e4f78fa96507d2ad7a03c9c8c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jaroslav-Kysela/ALSA-pcm-accept-the-OPEN-state-for-snd_pcm_stop/20220113-193304
+        git checkout 18b89b55d815ee4e4f78fa96507d2ad7a03c9c8c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/core/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/core/pcm_native.c:691:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           case SNDRV_PCM_STATE_SETUP:
+           ^
+   sound/core/pcm_native.c:691:2: note: insert 'break;' to avoid fall-through
+           case SNDRV_PCM_STATE_SETUP:
+           ^
+           break; 
+   1 warning generated.
 
 
-lkp@intel.com wrote on Thu, 13 Jan 2022 04:46:11 +0800:
+vim +691 sound/core/pcm_native.c
 
-> Hi Miquel,
->=20
-> I love your patch! Yet something to improve:
->=20
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v5.16 next-20220112]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->=20
-> url:    https://github.com/0day-ci/linux/commits/Miquel-Raynal/IEEE-802-1=
-5-4-scan-support/20220113-013731
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t daadb3bd0e8d3e317e36bc2c1542e86c528665e5
-> config: riscv-randconfig-r042-20220112 (https://download.01.org/0day-ci/a=
-rchive/20220113/202201130436.44AM2OXA-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244d=
-d2913a43a200f5a6544d424cdc37b771028b)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://github.com/0day-ci/linux/commit/9c8fbd918a704432bbf6cdc=
-e1d111e9002c756b4
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Miquel-Raynal/IEEE-802-15-4-scan=
--support/20220113-013731
->         git checkout 9c8fbd918a704432bbf6cdce1d111e9002c756b4
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash net/ieee802154/
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
-> >> net/ieee802154/nl802154.c:1613:8: error: implicit declaration of funct=
-ion 'nl802154_prepare_wpan_dev_dump' [-Werror,-Wimplicit-function-declarati=
-on] =20
->            err =3D nl802154_prepare_wpan_dev_dump(skb, cb, &rdev, &wpan_d=
-ev);
->                  ^
-> >> net/ieee802154/nl802154.c:1637:2: error: implicit declaration of funct=
-ion 'nl802154_finish_wpan_dev_dump' [-Werror,-Wimplicit-function-declaratio=
-n] =20
->            nl802154_finish_wpan_dev_dump(rdev);
+60f96aaecb19ca2 Takashi Sakamoto  2017-06-09  674  
+877211f5e1b1196 Takashi Iwai      2005-11-17  675  static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
+877211f5e1b1196 Takashi Iwai      2005-11-17  676  			     struct snd_pcm_hw_params *params)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  677  {
+877211f5e1b1196 Takashi Iwai      2005-11-17  678  	struct snd_pcm_runtime *runtime;
+9442e691e4aec85 Takashi Iwai      2006-09-30  679  	int err, usecs;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  680  	unsigned int bits;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  681  	snd_pcm_uframes_t frames;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  682  
+7eaa943c8ed8e91 Takashi Iwai      2008-08-08  683  	if (PCM_RUNTIME_CHECK(substream))
+7eaa943c8ed8e91 Takashi Iwai      2008-08-08  684  		return -ENXIO;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  685  	runtime = substream->runtime;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  686  	snd_pcm_stream_lock_irq(substream);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  687  	switch (runtime->status->state) {
+^1da177e4c3f415 Linus Torvalds    2005-04-16  688  	case SNDRV_PCM_STATE_OPEN:
+18b89b55d815ee4 Jaroslav Kysela   2022-01-13  689  		if (atomic_read(&substream->queued_hw_free))
+18b89b55d815ee4 Jaroslav Kysela   2022-01-13  690  			goto __badfd;
+^1da177e4c3f415 Linus Torvalds    2005-04-16 @691  	case SNDRV_PCM_STATE_SETUP:
+^1da177e4c3f415 Linus Torvalds    2005-04-16  692  	case SNDRV_PCM_STATE_PREPARED:
+^1da177e4c3f415 Linus Torvalds    2005-04-16  693  		break;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  694  	default:
+18b89b55d815ee4 Jaroslav Kysela   2022-01-13  695  __badfd:
+^1da177e4c3f415 Linus Torvalds    2005-04-16  696  		snd_pcm_stream_unlock_irq(substream);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  697  		return -EBADFD;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  698  	}
+^1da177e4c3f415 Linus Torvalds    2005-04-16  699  	snd_pcm_stream_unlock_irq(substream);
+8eeaa2f9e06dcfb Takashi Iwai      2014-02-10  700  #if IS_ENABLED(CONFIG_SND_PCM_OSS)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  701  	if (!substream->oss.oss)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  702  #endif
+9c323fcbc51493f Takashi Iwai      2006-04-28  703  		if (atomic_read(&substream->mmap_count))
+^1da177e4c3f415 Linus Torvalds    2005-04-16  704  			return -EBADFD;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  705  
+29bb274e9497466 Takashi Iwai      2021-02-06  706  	snd_pcm_sync_stop(substream, true);
+1e850beea2781d3 Takashi Iwai      2019-11-17  707  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  708  	params->rmask = ~0U;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  709  	err = snd_pcm_hw_refine(substream, params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  710  	if (err < 0)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  711  		goto _error;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  712  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  713  	err = snd_pcm_hw_params_choose(substream, params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  714  	if (err < 0)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  715  		goto _error;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  716  
+f9a076bff053100 Takashi Sakamoto  2017-06-09  717  	err = fixup_unreferenced_params(substream, params);
+f9a076bff053100 Takashi Sakamoto  2017-06-09  718  	if (err < 0)
+f9a076bff053100 Takashi Sakamoto  2017-06-09  719  		goto _error;
+f9a076bff053100 Takashi Sakamoto  2017-06-09  720  
+0dba808eae2627f Takashi Iwai      2019-11-17  721  	if (substream->managed_buffer_alloc) {
+0dba808eae2627f Takashi Iwai      2019-11-17  722  		err = snd_pcm_lib_malloc_pages(substream,
+0dba808eae2627f Takashi Iwai      2019-11-17  723  					       params_buffer_bytes(params));
+0dba808eae2627f Takashi Iwai      2019-11-17  724  		if (err < 0)
+0dba808eae2627f Takashi Iwai      2019-11-17  725  			goto _error;
+0dba808eae2627f Takashi Iwai      2019-11-17  726  		runtime->buffer_changed = err > 0;
+0dba808eae2627f Takashi Iwai      2019-11-17  727  	}
+0dba808eae2627f Takashi Iwai      2019-11-17  728  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  729  	if (substream->ops->hw_params != NULL) {
+^1da177e4c3f415 Linus Torvalds    2005-04-16  730  		err = substream->ops->hw_params(substream, params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  731  		if (err < 0)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  732  			goto _error;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  733  	}
+^1da177e4c3f415 Linus Torvalds    2005-04-16  734  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  735  	runtime->access = params_access(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  736  	runtime->format = params_format(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  737  	runtime->subformat = params_subformat(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  738  	runtime->channels = params_channels(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  739  	runtime->rate = params_rate(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  740  	runtime->period_size = params_period_size(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  741  	runtime->periods = params_periods(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  742  	runtime->buffer_size = params_buffer_size(params);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  743  	runtime->info = params->info;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  744  	runtime->rate_num = params->rate_num;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  745  	runtime->rate_den = params->rate_den;
+ab69a4904b5dd4d Clemens Ladisch   2010-11-15  746  	runtime->no_period_wakeup =
+ab69a4904b5dd4d Clemens Ladisch   2010-11-15  747  			(params->info & SNDRV_PCM_INFO_NO_PERIOD_WAKEUP) &&
+ab69a4904b5dd4d Clemens Ladisch   2010-11-15  748  			(params->flags & SNDRV_PCM_HW_PARAMS_NO_PERIOD_WAKEUP);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  749  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  750  	bits = snd_pcm_format_physical_width(runtime->format);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  751  	runtime->sample_bits = bits;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  752  	bits *= runtime->channels;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  753  	runtime->frame_bits = bits;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  754  	frames = 1;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  755  	while (bits % 8 != 0) {
+^1da177e4c3f415 Linus Torvalds    2005-04-16  756  		bits *= 2;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  757  		frames *= 2;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  758  	}
+^1da177e4c3f415 Linus Torvalds    2005-04-16  759  	runtime->byte_align = bits / 8;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  760  	runtime->min_align = frames;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  761  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  762  	/* Default sw params */
+^1da177e4c3f415 Linus Torvalds    2005-04-16  763  	runtime->tstamp_mode = SNDRV_PCM_TSTAMP_NONE;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  764  	runtime->period_step = 1;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  765  	runtime->control->avail_min = runtime->period_size;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  766  	runtime->start_threshold = 1;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  767  	runtime->stop_threshold = runtime->buffer_size;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  768  	runtime->silence_threshold = 0;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  769  	runtime->silence_size = 0;
+ead4046b2fdfd69 Clemens Ladisch   2010-05-21  770  	runtime->boundary = runtime->buffer_size;
+ead4046b2fdfd69 Clemens Ladisch   2010-05-21  771  	while (runtime->boundary * 2 <= LONG_MAX - runtime->buffer_size)
+ead4046b2fdfd69 Clemens Ladisch   2010-05-21  772  		runtime->boundary *= 2;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  773  
+add9d56d7b37815 Takashi Iwai      2019-12-11  774  	/* clear the buffer for avoiding possible kernel info leaks */
+618de0f4ef11acd Takashi Iwai      2020-12-18  775  	if (runtime->dma_area && !substream->ops->copy_user) {
+618de0f4ef11acd Takashi Iwai      2020-12-18  776  		size_t size = runtime->dma_bytes;
+618de0f4ef11acd Takashi Iwai      2020-12-18  777  
+618de0f4ef11acd Takashi Iwai      2020-12-18  778  		if (runtime->info & SNDRV_PCM_INFO_MMAP)
+618de0f4ef11acd Takashi Iwai      2020-12-18  779  			size = PAGE_ALIGN(size);
+618de0f4ef11acd Takashi Iwai      2020-12-18  780  		memset(runtime->dma_area, 0, size);
+618de0f4ef11acd Takashi Iwai      2020-12-18  781  	}
+add9d56d7b37815 Takashi Iwai      2019-12-11  782  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  783  	snd_pcm_timer_resolution_change(substream);
+9b0573c07f278e9 Takashi Iwai      2012-10-12  784  	snd_pcm_set_state(substream, SNDRV_PCM_STATE_SETUP);
+9442e691e4aec85 Takashi Iwai      2006-09-30  785  
+5371a79be97caac Rafael J. Wysocki 2020-02-12  786  	if (cpu_latency_qos_request_active(&substream->latency_pm_qos_req))
+5371a79be97caac Rafael J. Wysocki 2020-02-12  787  		cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
+137c171cf7ecf62 Takashi Iwai      2021-06-08  788  	usecs = period_to_usecs(runtime);
+137c171cf7ecf62 Takashi Iwai      2021-06-08  789  	if (usecs >= 0)
+5371a79be97caac Rafael J. Wysocki 2020-02-12  790  		cpu_latency_qos_add_request(&substream->latency_pm_qos_req,
+5371a79be97caac Rafael J. Wysocki 2020-02-12  791  					    usecs);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  792  	return 0;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  793   _error:
+25985edcedea639 Lucas De Marchi   2011-03-30  794  	/* hardware might be unusable from this time,
+^1da177e4c3f415 Linus Torvalds    2005-04-16  795  	   so we force application to retry to set
+^1da177e4c3f415 Linus Torvalds    2005-04-16  796  	   the correct hardware parameter settings */
+9b0573c07f278e9 Takashi Iwai      2012-10-12  797  	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  798  	if (substream->ops->hw_free != NULL)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  799  		substream->ops->hw_free(substream);
+0dba808eae2627f Takashi Iwai      2019-11-17  800  	if (substream->managed_buffer_alloc)
+0dba808eae2627f Takashi Iwai      2019-11-17  801  		snd_pcm_lib_free_pages(substream);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  802  	return err;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  803  }
+^1da177e4c3f415 Linus Torvalds    2005-04-16  804  
 
-These two helpers were defined within the experimental section. I will
-move them out of this section now that they have other users than
-experimental code.
-
->            ^
->    net/ieee802154/nl802154.c:1637:2: note: did you mean 'nl802154_prepare=
-_wpan_dev_dump'?
->    net/ieee802154/nl802154.c:1613:8: note: 'nl802154_prepare_wpan_dev_dum=
-p' declared here
->            err =3D nl802154_prepare_wpan_dev_dump(skb, cb, &rdev, &wpan_d=
-ev);
->                  ^
->    2 errors generated.
->=20
->=20
-> vim +/nl802154_prepare_wpan_dev_dump +1613 net/ieee802154/nl802154.c
->=20
->   1605=09
->   1606	static int nl802154_dump_pans(struct sk_buff *skb, struct netlink_=
-callback *cb)
->   1607	{
->   1608		struct cfg802154_registered_device *rdev;
->   1609		struct cfg802154_internal_pan *pan;
->   1610		struct wpan_dev *wpan_dev;
->   1611		int err;
->   1612=09
-> > 1613		err =3D nl802154_prepare_wpan_dev_dump(skb, cb, &rdev, &wpan_dev)=
-; =20
->   1614		if (err)
->   1615			return err;
->   1616=09
->   1617		spin_lock_bh(&rdev->pan_lock);
->   1618=09
->   1619		if (cb->args[2])
->   1620			goto out;
->   1621=09
->   1622		cb->seq =3D rdev->pan_generation;
->   1623=09
->   1624		ieee802154_for_each_pan(pan, rdev) {
->   1625			err =3D nl802154_send_pan_info(skb, cb, cb->nlh->nlmsg_seq,
->   1626						     NLM_F_MULTI, rdev, wpan_dev, pan);
->   1627			if (err < 0)
->   1628				goto out_err;
->   1629		}
->   1630=09
->   1631		cb->args[2] =3D 1;
->   1632	out:
->   1633		err =3D skb->len;
->   1634	out_err:
->   1635		spin_unlock_bh(&rdev->pan_lock);
->   1636=09
-> > 1637		nl802154_finish_wpan_dev_dump(rdev); =20
->   1638=09
->   1639		return err;
->   1640	}
->   1641=09
->=20
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
-
-Thanks,
-Miqu=C3=A8l
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
