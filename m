@@ -1,193 +1,75 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF292C9C
-	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 19:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642102624; x=1673638624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tmQdaddTQy4M3QPtJvf6Gb+BdoWKR5LylqYri9DYkQE=;
-  b=PR083AszWusbdW180OC354w7zHk7QkUTVGIC8Kaidnmj/FsxwF1zqPK9
-   HCi8SmYFupy0reX9+NYS4q/tFlEZF4rLFzHH364aqGduS4P2Z/3Cwl7Mx
-   jMbhcZb22rpCL2o5c0m11P5rKw2Y3EvwnEfH3gc/Fr0BuQDawMopi0jzZ
-   d9BQTtQMuiUNadKkRxTNyjbjirMNwCXUkW0jWepxsLtON4PiT/wGz1NIj
-   TtKlwxaZ/lzOvjgxAWcyxmBb5KyeG+s201jw2KOAipNzKMHWR9BK2x/Pv
-   fQ9gC9yKJ2XmZ+PCDQRQjlaWOByBCIiekSFYRrmkR8Y9AlidPTrlsrDZY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224079695"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="224079695"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 11:37:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="623974182"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jan 2022 11:37:01 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n85u8-0007a7-Mh; Thu, 13 Jan 2022 19:37:00 +0000
-Date: Fri, 14 Jan 2022 03:36:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Gao <chao.gao@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:tdx/guest-rebased 105/133] kernel/dma/swiotlb.c:320:14:
- warning: incompatible integer to pointer conversion assigning to 'unsigned
- long *' from 'int'
-Message-ID: <202201140332.Rabd9rIb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A59B2C9C
+	for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 20:00:37 +0000 (UTC)
+Received: by mail-io1-f43.google.com with SMTP id p7so9939144iod.2
+        for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 12:00:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=zpxRDMDpjP0eyt7BG8eM1po5m9+B41KQmJKORqe0L/s=;
+        b=TjiTCQj2jJ7CoQ8GnN2iLukX9BxHsjzpLEYpz6iZ8+YquZUwRx6w7Vu0FMHHioZotw
+         yDBEcF+ZPmiDEqdk94DCGJ8rkkVXDfdkugYUFtIOAWYI84MmArCHsdM40U/JWzuec3xi
+         Nmn0DIz5szn0lGVn+2q+HySl2RCTv4z4/jnlMz48nGfth4S2qFbWQefRebpO+RHhNNBg
+         0DE5cTCgccLLLgWfF9asCn4aX8ndeNhFVb7MSW8eieDk4nF/SfWU1xwkxSVIZd3P+6TP
+         91BeYao6JNv2FN74KGaflTpdVzsK0qW4fYozPSqPKdcsn4AkbkPWpFTKNGkXTC42hqiC
+         KbkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=zpxRDMDpjP0eyt7BG8eM1po5m9+B41KQmJKORqe0L/s=;
+        b=KyoqwQyOSO7IqCHGgZcuJGE6IouVT4lCUrlI9kWKZc8IZ+60EwzyCls6tKAtYVuR7U
+         912xendtA9bpr9wmpjlCVeVgn0JqirnuaY7xKlF4t904TgsB6oizi/23jYty2dnr1j+Y
+         URZU4SGh0FE1DENcOvR2NGlgpXrS+7M5nme/Wk1S68BxZVL4ue8dsG3dxfeA7gGuT1v/
+         4xM0MWK/ubUTolTbd6WqJDiUm7FfoVXe1txEvhnpisXSExuD4VBAEm/DUVafwIecvFNu
+         aDXU2qEmaSJN+HeceddS7zIAtluRJPSesmbF6deg/BrQaVQN2bamMAezbh/2JRtTjT1C
+         prcg==
+X-Gm-Message-State: AOAM5320Auh8umJ4YyLPPwSLRcjw+BfECa+MzDFuHjzvp5HD+aekkr2p
+	Dj5gNsOgDlvMemyQpjakE6ktug==
+X-Google-Smtp-Source: ABdhPJy93FHoGOJVPE1DdunyieZI/cMIH71wQsT32PPznbncX4AFfK4i6YqaBGZuoilCs5lGW3zZmw==
+X-Received: by 2002:a05:6602:2f0e:: with SMTP id q14mr2974399iow.75.1642104037044;
+        Thu, 13 Jan 2022 12:00:37 -0800 (PST)
+Received: from x1.localdomain ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id s6sm3483277ild.5.2022.01.13.12.00.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 12:00:36 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: linux-kernel@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>, linux-block@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20220113001432.1331871-1-colin.i.king@gmail.com>
+References: <20220113001432.1331871-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH] loop: remove redundant initialization of pointer node
+Message-Id: <164210403642.172421.8237866191152253472.b4-ty@kernel.dk>
+Date: Thu, 13 Jan 2022 13:00:36 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/intel/tdx.git tdx/guest-rebased
-head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
-commit: 64f46677f0bd4db290a0c6be857c6fd8db39324b [105/133] swiotlb: use bitmap to track free slots
-config: s390-randconfig-r033-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140332.Rabd9rIb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel/tdx/commit/64f46677f0bd4db290a0c6be857c6fd8db39324b
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx tdx/guest-rebased
-        git checkout 64f46677f0bd4db290a0c6be857c6fd8db39324b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/dma/
+On Thu, 13 Jan 2022 00:14:32 +0000, Colin Ian King wrote:
+> The pointer node is being initialized with a value that is never
+> read, it is being re-assigned the same value a little futher on.
+> Remove the redundant initialization. Cleans up clang scan warning:
+> 
+> drivers/block/loop.c:823:19: warning: Value stored to 'node' during
+> its initialization is never read [deadcode.DeadStores]
+> 
+> [...]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied, thanks!
 
-All warnings (new ones prefixed by >>):
+[1/1] loop: remove redundant initialization of pointer node
+      commit: 413ec8057bc3d368574abd05dd27e747063b2f59
 
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   kernel/dma/swiotlb.c:320:16: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                         ^
-   kernel/dma/swiotlb.c:320:16: note: did you mean 'vzalloc'?
-   include/linux/vmalloc.h:140:14: note: 'vzalloc' declared here
-   extern void *vzalloc(unsigned long size) __alloc_size(1);
-                ^
->> kernel/dma/swiotlb.c:320:14: warning: incompatible integer to pointer conversion assigning to 'unsigned long *' from 'int' [-Wint-conversion]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/dma/swiotlb.c:324:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-                   kfree(mem->bitmap);
-                   ^
-   kernel/dma/swiotlb.c:324:3: note: did you mean 'vfree'?
-   include/linux/vmalloc.h:155:13: note: 'vfree' declared here
-   extern void vfree(const void *addr);
-               ^
-   13 warnings and 2 errors generated.
+Best regards,
+-- 
+Jens Axboe
 
 
-vim +320 kernel/dma/swiotlb.c
-
-   306	
-   307	int
-   308	swiotlb_late_init_with_tbl(char *tlb, unsigned long nslabs)
-   309	{
-   310		struct io_tlb_mem *mem = &io_tlb_default_mem;
-   311		unsigned long bytes = nslabs << IO_TLB_SHIFT;
-   312	
-   313		if (swiotlb_force == SWIOTLB_NO_FORCE)
-   314			return 0;
-   315	
-   316		/* protect against double initialization */
-   317		if (WARN_ON_ONCE(mem->nslabs))
-   318			return -ENOMEM;
-   319	
- > 320		mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-   321		mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
-   322			get_order(array_size(sizeof(*mem->slots), nslabs)));
-   323		if (!mem->slots || !mem->bitmap) {
-   324			kfree(mem->bitmap);
-   325			kfree(mem->slots);
-   326			return -ENOMEM;
-   327		}
-   328	
-   329		set_memory_decrypted((unsigned long)tlb, bytes >> PAGE_SHIFT);
-   330		swiotlb_init_io_tlb_mem(mem, virt_to_phys(tlb), nslabs, true);
-   331	
-   332		swiotlb_print_info();
-   333		swiotlb_set_max_segment(mem->nslabs << IO_TLB_SHIFT);
-   334		return 0;
-   335	}
-   336	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
