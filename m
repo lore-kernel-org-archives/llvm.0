@@ -1,195 +1,221 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60BD173
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 21:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642195769; x=1673731769;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eL8cbg/YE44wHLkkTQqnQq0nvxsy4VO/CjAQAKS5k2A=;
-  b=AxIt8mhVdffCWjN+mHqMlZ0Rl5qgAqtjFpXTMBrqHFWZKKAtDXqiXDWK
-   ImcA6RTHq9N8vRCwoHn9pAL720hvJk3NmMgp/7CTKFwNWaGut29297mF2
-   lsijSjZz/Ioli+XyInDq1A7qqWCaA3NAUHGm0s+1Z6HPwfk4iWkCkIpkJ
-   MwW90G6FaUcX2RtomzvGR2Pvpan6Mm+SucFL15TqUO9x6+9TO5WWhqmMs
-   70IIxAWNA09o99wiP0HwiYp8fdbcJI47hMogCQdzjrcQBzg12044IhllO
-   30OB/7D5Fbh9nrrLmV3xfpTDj4FmGaM17Q4q9dc6YIyPM0GWKGu9iX0Wo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="305063906"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="305063906"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 13:29:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="670977644"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jan 2022 13:29:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n8U8U-00090x-PZ; Fri, 14 Jan 2022 21:29:26 +0000
-Date: Sat, 15 Jan 2022 05:28:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jammy Huang <jammy_huang@aspeedtech.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:for-v5.18f 76/82]
- drivers/media/platform/aspeed-video.c:977:5: warning: format specifies type
- 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long
- long')
-Message-ID: <202201150524.D0pO65rp-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9500173
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 21:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB69C36AE5;
+	Fri, 14 Jan 2022 21:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642197495;
+	bh=Jr2Ws/7KkYBcH0vohjYnfd7dG+f39RHSmRkVh2v3P7g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XEaY6vYuBVWQqB25SsYheOYw6RMoQv9SkZdketD5hGkYl2XfRkvBMGqwYx2qIYXNQ
+	 sX9Bf7yLoFo0rLIxgw2E5KscruN2r4JzkyuWJaiIB/57nnR7vIfOAcd4YtYQjWrWut
+	 OW78h2w411h8aK3n6rd8kU500lVFgEThfIZucnkTEpgimTirE5IfYkCUlI8SAV8t5A
+	 JDtFWvOEpVEj7TVI1z1aKD5nD07NTodcRjHD4jI2/6n4dolHTLQ4yfcuF4upda3Atv
+	 nOAqdVEptZ/xd9zRfmlhMVls+2PitALnp61iDJERXNjSKn7HnL1MEgVp3ekaqqgT74
+	 b/2aEkakjWNbA==
+Date: Fri, 14 Jan 2022 14:58:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
+	llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
+ __COUNTER__
+Message-ID: <YeHx8qaHiJie3xdL@archlinux-ax161>
+References: <20220114010526.1776605-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220114010526.1776605-1-ndesaulniers@google.com>
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18f
-head:   97dd85f0caf1ad96c275147583c46f8ee12308fc
-commit: 63c049607882d11ee1cce0c739113c8dfd7fed02 [76/82] media: aspeed: add more debug log messages
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220115/202201150524.D0pO65rp-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.18f
-        git checkout 63c049607882d11ee1cce0c739113c8dfd7fed02
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/platform/
+On Thu, Jan 13, 2022 at 05:05:26PM -0800, Nick Desaulniers wrote:
+> commit dcce50e6cc4d ("compiler.h: Fix annotation macro misplacement with Clang")
+> mentions:
+> 
+> > 'volatile' is ignored for some reason and Clang feels free to move the
+> > reachable() annotation away from its intended location.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Perhaps it is worth mentioning in the next paragraph that this does not
+contradict GCC's own documentation that you link to below, which
+mentions that asm volatile statements can be reordered.
 
-All warnings (new ones prefixed by >>):
+"Note that the compiler can move even volatile asm instructions relative
+to other code, including across jump instructions."
 
->> drivers/media/platform/aspeed-video.c:977:5: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-                            video->srcs[0].dma, video->srcs[0].size);
-                            ^~~~~~~~~~~~~~~~~~
-   include/media/v4l2-common.h:74:42: note: expanded from macro 'v4l2_dbg'
-                           v4l2_printk(KERN_DEBUG, dev, fmt , ## arg);     \
-                                                        ~~~      ^~~
-   include/media/v4l2-common.h:58:44: note: expanded from macro 'v4l2_printk'
-           printk(level "%s: " fmt, (dev)->name , ## arg)
-                               ~~~                   ^~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/media/platform/aspeed-video.c:979:5: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-                            video->srcs[1].dma, video->srcs[1].size);
-                            ^~~~~~~~~~~~~~~~~~
-   include/media/v4l2-common.h:74:42: note: expanded from macro 'v4l2_dbg'
-                           v4l2_printk(KERN_DEBUG, dev, fmt , ## arg);     \
-                                                        ~~~      ^~~
-   include/media/v4l2-common.h:58:44: note: expanded from macro 'v4l2_printk'
-           printk(level "%s: " fmt, (dev)->name , ## arg)
-                               ~~~                   ^~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/media/platform/aspeed-video.c:1806:25: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-                    VE_JPEG_HEADER_SIZE, video->jpeg.dma);
-                                         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                    ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   3 warnings generated.
+No strong opinion though.
 
+> Indeed, volatile is not a compiler barrier. Particularly once `-march=`
+> flags are used under certain configs, LLVM's machine-scheduler can be
+> observed moving instructions across the asm statement meant to point to
+> known reachable or unreachable code, as reported by 0day bot.
+> 
+> Prefer a memory clobber which is a compiler barrier that prevents these
+> re-orderings and remove the volatile qualifier.
+> 
+> Looking closer, the use of __COUNTER__ seems to have been used to
+> prevent de-duplication of these asm statements. The GCC manual mentions:
+> 
+> > Under certain circumstances, GCC may duplicate (or remove duplicates
+> > of) your assembly code when optimizing. This can lead to unexpected
+> > duplicate symbol errors during compilation if your asm code defines
+> > symbols or labels. Using ‘%=’ (see AssemblerTemplate) may help resolve
+> > this problem.
+> >
+> > ‘%=’ Outputs a number that is unique to each instance of the asm
+> > statement in the entire compilation. This option is useful when
+> > creating local labels and referring to them multiple times in a single
+> > template that generates multiple assembler instructions.
+> 
+> commit 3d1e236022cc ("objtool: Prevent GCC from merging annotate_unreachable()")
+> 
+> Mentions that
+> 
+> > The inline asm ‘%=’ token could be used for that, but unfortunately
+> > older versions of GCC don't support it.
+> 
+> From testing all versions of GCC available on godbolt.org, GCC 4.1+
+> seems to support 4.1. Since the minimum supported version of GCC at the
+> moment is GCC 5.1, it sounds like this is no longer a concern.
+> 
+> Prefer the %= assembler template to having to stringify __COUNTER__.
+> 
+> This commit is effectively a revert of the following commits:
+> commit dcce50e6cc4d ("compiler.h: Fix annotation macro misplacement with Clang")
+> commit f1069a8756b9 ("compiler.h: Avoid using inline asm operand modifiers")
+> commit c199f64ff93c ("instrumentation.h: Avoid using inline asm operand modifiers")
+> commit d0c2e691d1cb ("objtool: Add a comment for the unreachable annotation macros")
+> commit ec1e1b610917 ("objtool: Prevent GCC from merging annotate_unreachable(), take 2")
+> commit 3d1e236022cc ("objtool: Prevent GCC from merging annotate_unreachable()")
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1566
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
+> Link: https://lore.kernel.org/llvm/202112080834.XFYU8b5Q-lkp@intel.com/
+> Link: https://lore.kernel.org/llvm/202111300857.IyINAyJk-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> Debugged-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-vim +977 drivers/media/platform/aspeed-video.c
+This resolves the original spew of warnings and does not regress a
+couple of other configurations that I tested.
 
-   916	
-   917	static void aspeed_video_set_resolution(struct aspeed_video *video)
-   918	{
-   919		struct v4l2_bt_timings *act = &video->active_timings;
-   920		unsigned int size = act->width * act->height;
-   921	
-   922		/* Set capture/compression frame sizes */
-   923		aspeed_video_calc_compressed_size(video, size);
-   924	
-   925		if (video->active_timings.width == 1680) {
-   926			/*
-   927			 * This is a workaround to fix a silicon bug on A1 and A2
-   928			 * revisions. Since it doesn't break capturing operation of
-   929			 * other revisions, use it for all revisions without checking
-   930			 * the revision ID. It picked 1728 which is a very next
-   931			 * 64-pixels aligned value to 1680 to minimize memory bandwidth
-   932			 * and to get better access speed from video engine.
-   933			 */
-   934			aspeed_video_write(video, VE_CAP_WINDOW,
-   935					   1728 << 16 | act->height);
-   936			size += (1728 - 1680) * video->active_timings.height;
-   937		} else {
-   938			aspeed_video_write(video, VE_CAP_WINDOW,
-   939					   act->width << 16 | act->height);
-   940		}
-   941		aspeed_video_write(video, VE_COMP_WINDOW,
-   942				   act->width << 16 | act->height);
-   943		aspeed_video_write(video, VE_SRC_SCANLINE_OFFSET, act->width * 4);
-   944	
-   945		/* Don't use direct mode below 1024 x 768 (irqs don't fire) */
-   946		if (size < DIRECT_FETCH_THRESHOLD) {
-   947			v4l2_dbg(1, debug, &video->v4l2_dev, "Capture: Sync Mode\n");
-   948			aspeed_video_write(video, VE_TGS_0,
-   949					   FIELD_PREP(VE_TGS_FIRST,
-   950						      video->frame_left - 1) |
-   951					   FIELD_PREP(VE_TGS_LAST,
-   952						      video->frame_right));
-   953			aspeed_video_write(video, VE_TGS_1,
-   954					   FIELD_PREP(VE_TGS_FIRST, video->frame_top) |
-   955					   FIELD_PREP(VE_TGS_LAST,
-   956						      video->frame_bottom + 1));
-   957			aspeed_video_update(video, VE_CTRL, 0, VE_CTRL_INT_DE);
-   958		} else {
-   959			v4l2_dbg(1, debug, &video->v4l2_dev, "Capture: Direct Mode\n");
-   960			aspeed_video_update(video, VE_CTRL, 0, VE_CTRL_DIRECT_FETCH);
-   961		}
-   962	
-   963		size *= 4;
-   964	
-   965		if (size != video->srcs[0].size) {
-   966			if (video->srcs[0].size)
-   967				aspeed_video_free_buf(video, &video->srcs[0]);
-   968			if (video->srcs[1].size)
-   969				aspeed_video_free_buf(video, &video->srcs[1]);
-   970	
-   971			if (!aspeed_video_alloc_buf(video, &video->srcs[0], size))
-   972				goto err_mem;
-   973			if (!aspeed_video_alloc_buf(video, &video->srcs[1], size))
-   974				goto err_mem;
-   975	
-   976			v4l2_dbg(1, debug, &video->v4l2_dev, "src buf0 addr(%#x) size(%d)\n",
- > 977				 video->srcs[0].dma, video->srcs[0].size);
-   978			v4l2_dbg(1, debug, &video->v4l2_dev, "src buf1 addr(%#x) size(%d)\n",
-   979				 video->srcs[1].dma, video->srcs[1].size);
-   980			aspeed_video_write(video, VE_SRC0_ADDR, video->srcs[0].dma);
-   981			aspeed_video_write(video, VE_SRC1_ADDR, video->srcs[1].dma);
-   982		}
-   983	
-   984		return;
-   985	
-   986	err_mem:
-   987		dev_err(video->dev, "Failed to allocate source buffers\n");
-   988	
-   989		if (video->srcs[0].size)
-   990			aspeed_video_free_buf(video, &video->srcs[0]);
-   991	}
-   992	
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Not sure I am qualified enough to give a reviewed-by.
+
+> ---
+>  include/linux/compiler.h        | 31 +++++++++++--------------------
+>  include/linux/instrumentation.h | 24 ++++++++++--------------
+>  2 files changed, 21 insertions(+), 34 deletions(-)
+> 
+> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> index 429dcebe2b99..3ac21b888d20 100644
+> --- a/include/linux/compiler.h
+> +++ b/include/linux/compiler.h
+> @@ -108,30 +108,21 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>  # define barrier_before_unreachable() do { } while (0)
+>  #endif
+>  
+> -/* Unreachable code */
+> +/* These macros help objtool understand GCC code flow for unreachable code. */
+>  #ifdef CONFIG_STACK_VALIDATION
+> -/*
+> - * These macros help objtool understand GCC code flow for unreachable code.
+> - * The __COUNTER__ based labels are a hack to make each instance of the macros
+> - * unique, to convince GCC not to merge duplicate inline asm statements.
+> - */
+> -#define __stringify_label(n) #n
+> -
+> -#define __annotate_reachable(c) ({					\
+> -	asm volatile(__stringify_label(c) ":\n\t"			\
+> -		     ".pushsection .discard.reachable\n\t"		\
+> -		     ".long " __stringify_label(c) "b - .\n\t"		\
+> -		     ".popsection\n\t" : : "i" (c));			\
+> +#define annotate_reachable() ({			\
+> +	asm (".Lreachable%=:\n\t"			\
+> +	     ".pushsection .discard.reachable\n\t"	\
+> +	     ".long .Lreachable%= - .\n\t"		\
+> +	     ".popsection\n\t" ::: "memory");		\
+>  })
+> -#define annotate_reachable() __annotate_reachable(__COUNTER__)
+>  
+> -#define __annotate_unreachable(c) ({					\
+> -	asm volatile(__stringify_label(c) ":\n\t"			\
+> -		     ".pushsection .discard.unreachable\n\t"		\
+> -		     ".long " __stringify_label(c) "b - .\n\t"		\
+> -		     ".popsection\n\t" : : "i" (c));			\
+> +#define annotate_unreachable() ({			\
+> +	asm (".Lunreachable%=:\n\t"			\
+> +	     ".pushsection .discard.unreachable\n\t"	\
+> +	     ".long .Lunreachable%= - .\n\t"		\
+> +	     ".popsection\n\t" ::: "memory");		\
+>  })
+> -#define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+>  
+>  #define ASM_UNREACHABLE							\
+>  	"999:\n\t"							\
+> diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
+> index 24359b4a9605..0dae9c08764f 100644
+> --- a/include/linux/instrumentation.h
+> +++ b/include/linux/instrumentation.h
+> @@ -4,16 +4,13 @@
+>  
+>  #if defined(CONFIG_DEBUG_ENTRY) && defined(CONFIG_STACK_VALIDATION)
+>  
+> -#include <linux/stringify.h>
+> -
+>  /* Begin/end of an instrumentation safe region */
+> -#define __instrumentation_begin(c) ({					\
+> -	asm volatile(__stringify(c) ": nop\n\t"				\
+> -		     ".pushsection .discard.instr_begin\n\t"		\
+> -		     ".long " __stringify(c) "b - .\n\t"		\
+> -		     ".popsection\n\t" : : "i" (c));			\
+> +#define instrumentation_begin() ({			\
+> +	asm (".Linstbegin%=: nop\n\t"			\
+> +	     ".pushsection .discard.instr_begin\n\t"	\
+> +	     ".long .Linstbegin%= - .\n\t"		\
+> +	     ".popsection\n\t" ::: "memory");		\
+>  })
+> -#define instrumentation_begin() __instrumentation_begin(__COUNTER__)
+>  
+>  /*
+>   * Because instrumentation_{begin,end}() can nest, objtool validation considers
+> @@ -46,13 +43,12 @@
+>   * To avoid this, have _end() be a NOP instruction, this ensures it will be
+>   * part of the condition block and does not escape.
+>   */
+> -#define __instrumentation_end(c) ({					\
+> -	asm volatile(__stringify(c) ": nop\n\t"				\
+> -		     ".pushsection .discard.instr_end\n\t"		\
+> -		     ".long " __stringify(c) "b - .\n\t"		\
+> -		     ".popsection\n\t" : : "i" (c));			\
+> +#define instrumentation_end() ({			\
+> +	asm (".Linstend%=: nop\n\t"			\
+> +	     ".pushsection .discard.instr_end\n\t"	\
+> +	     ".long .Linstend%= - .\n\t"		\
+> +	     ".popsection\n\t" ::: "memory");		\
+>  })
+> -#define instrumentation_end() __instrumentation_end(__COUNTER__)
+>  #else
+>  # define instrumentation_begin()	do { } while(0)
+>  # define instrumentation_end()		do { } while(0)
+> 
+> base-commit: dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
+> -- 
+> 2.34.1.703.g22d0c6ccf7-goog
+> 
