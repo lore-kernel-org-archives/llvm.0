@@ -1,42 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E68168
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 15:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34768168
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 15:31:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642174211; x=1673710211;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5MEenRgsV99RuDIwkigMcLewxKs9xAK/aqCyfI/OXvA=;
-  b=AE9WL0q5m6pMmmEaysUs5SGS24YAzTIC4DCNXgyCMg0BlfUzJLCZNf3+
-   mCtkPwEk8QEKZrOL0mZBhnA2h6G+iHzYfjaaiaDrVFkAdBAdijELnVsmu
-   iKDJT24PLM0f6AKChcQlH8lALJ5UPpLYlxd0PJWvoNFHhb7NDEHR81ab9
-   GluJhVG2iemHWQzqMGTiE38Uk6zymsYkywPhMPGKenyEj4mAKTHMFvX4J
-   ANn1LXk5dablId8za1nih6oQwFlPZAr8xCKMH25ggIb8sTaJum0jfLcKG
-   AJrriSMs0WY3t7hZxVoWrEc1X/y2KXLrFd0UNPgGWDuxT253WAcoS1lIs
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="243079847"
+  t=1642174271; x=1673710271;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bSAWpk5exUrvJwtynC+kso0YpwfyiIgSS+oWwpLGr6U=;
+  b=lkLrYJnY68XgB5Kc38EeVor4zCvBBFznVd+hbyPYGALIfDgN1V29WgXL
+   dMtwEDsM/Yfo/N9X24/zbvdGLKoawk9aQKz29vzCBvDeolHEQf+y2G3ic
+   FkpFjJaBqJgW4jDv8TjjAV0JjQ8AGPA2WivS5McLzeTV9xizYKU1j4v6y
+   +shRQBtJ8pEQFpCkvUXYwfOhN8EZMDMS6I5MyvUT+mPtgTC9wCOkk58s7
+   ZiQYGsk6dmtOkQLYLL42nefWbHk89xbGuJ3a23So9Ba02QgFsnujF5814
+   HaZPpe2fVeZjkPr+COGisAE/cL7epaXwIj4h2feOe3nkeaQDpxqxKj1c+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244060158"
 X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="243079847"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:30:10 -0800
+   d="scan'208";a="244060158"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:31:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="516431451"
+   d="scan'208";a="594068436"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 07:30:09 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jan 2022 07:31:09 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n8OWm-0008gh-K2; Fri, 14 Jan 2022 15:30:08 +0000
-Date: Fri, 14 Jan 2022 23:30:05 +0800
+	id 1n8OXk-0008gv-Lg; Fri, 14 Jan 2022 15:31:08 +0000
+Date: Fri, 14 Jan 2022 23:30:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Beau Belgrave <beaub@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v9 01/12] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <202201142322.DpkhCCS2-lkp@intel.com>
-References: <20220111172602.2513-2-beaub@linux.microsoft.com>
+To: Piyush Mehta <piyush.mehta@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:master 157/326] ld.lld: error: undefined symbol:
+ dwc3_host_wakeup_capable
+Message-ID: <202201142314.1HlCefr5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,49 +45,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111172602.2513-2-beaub@linux.microsoft.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Beau,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on 85c62c8c3749eec02ba81217bdcac26867dc262e]
-
-url:    https://github.com/0day-ci/linux/commits/Beau-Belgrave/user_events-Enable-user-processes-to-create-and-write-to-trace-events/20220112-014042
-base:   85c62c8c3749eec02ba81217bdcac26867dc262e
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220114/202201142322.DpkhCCS2-lkp@intel.com/config)
+tree:   https://github.com/Xilinx/linux-xlnx master
+head:   6a698dbaaf0e6caa053476c2f661b36885a0ce30
+commit: 5b2efd9328312427b7830d41ce3c8dfec63457eb [157/326] usb: xhci-plat: Add remote wakeup support for xilinx
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220114/202201142314.1HlCefr5-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/a5a2d34cbaeb90d281d8c13c753f4aaaa447ec11
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Beau-Belgrave/user_events-Enable-user-processes-to-create-and-write-to-trace-events/20220112-014042
-        git checkout a5a2d34cbaeb90d281d8c13c753f4aaaa447ec11
+        # https://github.com/Xilinx/linux-xlnx/commit/5b2efd9328312427b7830d41ce3c8dfec63457eb
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx master
+        git checkout 5b2efd9328312427b7830d41ce3c8dfec63457eb
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/ sound/soc/sof/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/trace/trace_events_user.c:1027:14: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return NULL + (*pos == 0);
-                  ~~~~ ^
-   1 warning generated.
-
-
-vim +1027 kernel/trace/trace_events_user.c
-
-  1024	
-  1025	static void *user_seq_start(struct seq_file *m, loff_t *pos)
-  1026	{
-> 1027		return NULL + (*pos == 0);
-  1028	}
-  1029	
+>> ld.lld: error: undefined symbol: dwc3_host_wakeup_capable
+   >>> referenced by xhci-plat.c:94 (drivers/usb/host/xhci-plat.c:94)
+   >>>               usb/host/xhci-plat.o:(xhci_plat_probe) in archive drivers/built-in.a
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
