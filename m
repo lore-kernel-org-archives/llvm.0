@@ -1,42 +1,31 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34768168
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 15:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642174271; x=1673710271;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bSAWpk5exUrvJwtynC+kso0YpwfyiIgSS+oWwpLGr6U=;
-  b=lkLrYJnY68XgB5Kc38EeVor4zCvBBFznVd+hbyPYGALIfDgN1V29WgXL
-   dMtwEDsM/Yfo/N9X24/zbvdGLKoawk9aQKz29vzCBvDeolHEQf+y2G3ic
-   FkpFjJaBqJgW4jDv8TjjAV0JjQ8AGPA2WivS5McLzeTV9xizYKU1j4v6y
-   +shRQBtJ8pEQFpCkvUXYwfOhN8EZMDMS6I5MyvUT+mPtgTC9wCOkk58s7
-   ZiQYGsk6dmtOkQLYLL42nefWbHk89xbGuJ3a23So9Ba02QgFsnujF5814
-   HaZPpe2fVeZjkPr+COGisAE/cL7epaXwIj4h2feOe3nkeaQDpxqxKj1c+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244060158"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="244060158"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:31:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="594068436"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jan 2022 07:31:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n8OXk-0008gv-Lg; Fri, 14 Jan 2022 15:31:08 +0000
-Date: Fri, 14 Jan 2022 23:30:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Piyush Mehta <piyush.mehta@xilinx.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211D5168
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 16:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07ECC36AE5;
+	Fri, 14 Jan 2022 16:29:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642177750;
+	bh=yXvKRHzb5B3RUpCqG1Tqdd2cjnWxwJXNHkuQFu0N6KE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aKn4eP9I0HtLLZcQOGtWjNKdBLbr/vIeU93h3cYlqWNwFt3XciihXnB7VP3zti4u6
+	 ktS7xI0Zb3UqRZ/W6u6w6snlfnqXc7tB7W/lxZb7HsAz7cd0RG9ZAdnnuUgyYcJX1x
+	 xARkHFDqlpG7aqbV7SfVkOGx/GnisExN1NqXyd6d+fWHUq3okSQjUfeBj3ocChYwnU
+	 3LIFTv/yuiiJ85fE9e1cHK5V24ENOuM5uSG47k+itycRSt50a/La+42OA26T5VRAfo
+	 UqLEvcRu4bhfluZ7bfdrDi1kyFfLziYWq7obAIwAAiXUZW2Gq4bpFMW4BfMKNjfI/s
+	 qJsvirjmgXAyw==
+Date: Fri, 14 Jan 2022 09:29:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Beau Belgrave <beaub@linux.microsoft.com>,
+	Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:master 157/326] ld.lld: error: undefined symbol:
- dwc3_host_wakeup_capable
-Message-ID: <202201142314.1HlCefr5-lkp@intel.com>
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 01/12] user_events: Add minimal support for
+ trace_event into ftrace
+Message-ID: <YeGk0nIH9x91k01I@archlinux-ax161>
+References: <20220111172602.2513-2-beaub@linux.microsoft.com>
+ <202201142322.DpkhCCS2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,33 +34,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202201142322.DpkhCCS2-lkp@intel.com>
 
-tree:   https://github.com/Xilinx/linux-xlnx master
-head:   6a698dbaaf0e6caa053476c2f661b36885a0ce30
-commit: 5b2efd9328312427b7830d41ce3c8dfec63457eb [157/326] usb: xhci-plat: Add remote wakeup support for xilinx
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220114/202201142314.1HlCefr5-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/5b2efd9328312427b7830d41ce3c8dfec63457eb
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx master
-        git checkout 5b2efd9328312427b7830d41ce3c8dfec63457eb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Fri, Jan 14, 2022 at 11:30:05PM +0800, kernel test robot wrote:
+> Hi Beau,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on 85c62c8c3749eec02ba81217bdcac26867dc262e]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Beau-Belgrave/user_events-Enable-user-processes-to-create-and-write-to-trace-events/20220112-014042
+> base:   85c62c8c3749eec02ba81217bdcac26867dc262e
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220114/202201142322.DpkhCCS2-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/a5a2d34cbaeb90d281d8c13c753f4aaaa447ec11
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Beau-Belgrave/user_events-Enable-user-processes-to-create-and-write-to-trace-events/20220112-014042
+>         git checkout a5a2d34cbaeb90d281d8c13c753f4aaaa447ec11
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/ sound/soc/sof/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/trace/trace_events_user.c:1027:14: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            return NULL + (*pos == 0);
+>                   ~~~~ ^
+>    1 warning generated.
+> 
+> 
+> vim +1027 kernel/trace/trace_events_user.c
+> 
+>   1024	
+>   1025	static void *user_seq_start(struct seq_file *m, loff_t *pos)
+>   1026	{
+> > 1027		return NULL + (*pos == 0);
+>   1028	}
+>   1029	
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Arnd, it looks like [1] never got picked up? That would help solve
+this, as this function is the same as single_start(). Should it be
+resent or pinged?
 
-All errors (new ones prefixed by >>):
+[1]: https://lore.kernel.org/r/20201028151202.3074398-1-arnd@kernel.org/
 
->> ld.lld: error: undefined symbol: dwc3_host_wakeup_capable
-   >>> referenced by xhci-plat.c:94 (drivers/usb/host/xhci-plat.c:94)
-   >>>               usb/host/xhci-plat.o:(xhci_plat_probe) in archive drivers/built-in.a
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
