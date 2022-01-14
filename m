@@ -1,90 +1,75 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2DA29CA
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 13:15:47 +0000 (UTC)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailout.nyi.internal (Postfix) with ESMTP id A14385C00F7;
-	Fri, 14 Jan 2022 08:15:46 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 14 Jan 2022 08:15:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type:content-transfer-encoding; s=fm1; bh=
-	s5NFdGeraYGYTX3ECjtHqze22e4ZVJLmziZZwnrxWWM=; b=GGN2/Gvz4mBeyZjM
-	vjwimBFMpu4PtmKqqjU+o3wIQaWlHGWWuvDLjKXBvTngtWyzUJPHbbTpdGfaXCCy
-	4gnE48eqkq+phV7VfGYB/A57ZFojatRPmPKE9Fh1PRFzbQGLGcrtkDmlvh03KJuI
-	gDHKnIdtjFTALtC66IyriL0DLpuBFVQL5ICeHrHdeRrm8PRvj/r8GPzfzsu5w7/u
-	Cp1kTZE6CgQqamNyBZY44ZLnDtCLtziNtsHfJC/t02hYt3gY76todU68iZvmR2SV
-	mqi1YAkjN06FPdXW5iSlCSFizxxgH0KwBYrFpz27AChN4ja+50ID66lq04oxI0rZ
-	CRWg1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:date:from:in-reply-to:message-id:mime-version:references
-	:subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; bh=s5NFdGeraYGYTX3ECjtHqze22e4ZVJLmziZZwnrxW
-	WM=; b=HXb+LuFjDml9IjOqxx2b0V0UO6VA23X9lx3HUjXQLZbnYjHEwC8IQMeHk
-	9hyyc74cC9t0p/s7jGxraxrkD+mi6IwR2rM22RNz6eN+WjyOOxwI/RORzlg85ISs
-	YKFLqh8FdRu3S8jFTzlMpIgC8Pkf/1KqIt2BLMLY6uZ2JUXbpEBRj3T5dWu6PwBk
-	T1IjuAaOAalCEa3NfUUCIhZi4QuaWskes+V+r3MKyUoFfSiuek3hr32MueekS98W
-	Zlr0d1FAZvk+v9Us1HZ48Z0VJXM6kSABN4LCm503clcnjXHbEpve7utvjmW1Z1CD
-	Jfizu05ABQYm5fl3TyOc2qUz6hHYw==
-X-ME-Sender: <xms:gnfhYR7NwbZ0CTHeNs2lZUNrp_5gL0kPTcZpXHPtsQKNLkM-q7J5nw>
-    <xme:gnfhYe5la1LUv18QPQeCxt5IWEmwi4f-GLhi4f5aZ1r-DLZBSRH_ZrDTBlu8JEBA3
-    Hsyw-lGBIVBTsg2WaM>
-X-ME-Received: <xmr:gnfhYYeSFugeAdIdFy_AmTOm-7AwKCLjuJELyRVhT8cgiH8kJ1WAy8t_T_faQB5VOQQbU_HND91vvy7uoncsBLLarEXKt2MYY_OqJ5g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdehgdehudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffjeejvddvudduteehhfefhfefgeei
-    keeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:gnfhYaIZmYQXwzmixXpeGkZBD-37ZscbQHEK4VlLwhpjlXpQgcpbfA>
-    <xmx:gnfhYVI601t0OKv85yuKIGioKXjDl9X3J6uVCg4ajGM0dyLXZlBpPg>
-    <xmx:gnfhYTwd1D_ETMsl190ge5AGlkkALdaH_i6DRkCXvsn6Yqwq_WgEZg>
-    <xmx:gnfhYc8qu1dYTSLag23s-JnP_eDpLuroYvbHQoZy-qvjRW2mXkaSoQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Jan 2022 08:15:45 -0500 (EST)
-From: Maxime Ripard <maxime@cerno.tech>
-To: Emma Anholt <emma@anholt.net>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@linux.ie>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	dri-devel@lists.freedesktop.org
-Cc: Maxime Ripard <maxime@cerno.tech>,
-	kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: (subset) [PATCH] drm/vc4: remove redundant assignment of variable size
-Date: Fri, 14 Jan 2022 14:15:43 +0100
-Message-Id: <164216613944.47574.10826927845700954933.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112232036.1182846-1-colin.i.king@gmail.com>
-References: <20220112232036.1182846-1-colin.i.king@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB7329CA
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 13:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642168150; x=1673704150;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=k6iPnGzDUUcdtMRiUl1y99z2KXez7zcf2T+HnGSIahw=;
+  b=FXqcfhzIGR/w6uMTADnfYEDtzD2dRSD6A+KKZQ0bayR3G5GfXahnlJO3
+   zhhY9S4lUzAbfGe/1NtGyL9wjxKmHtQplcyCKCaWAMWdu5pRP/3gHOQOz
+   +T57AudRRE33AJqgxSpSVuxSyHDSZUhXDOicJbFfZNxFyBf3gzfoTv6Gv
+   TDPHyZg9Ez6E5IE7o9FpaYSHK5AOufEcrSwKtFs43Ka+1j+G5E1XAORGl
+   5Eps0tm8rSs15jyMBGh9m2PuPQeb2KyBh/x/WV6pt7u/Y1iw5hLXUHU6P
+   VgB8wgowqLB7oLRajW8DyGWie6WaaxMCTO2Ixz1rG/aJxxh3YDuOx3kJu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244447597"
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="244447597"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 05:49:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="765920045"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Jan 2022 05:49:08 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n8Mx0-0008cP-NK; Fri, 14 Jan 2022 13:49:06 +0000
+Date: Fri, 14 Jan 2022 21:48:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Piyush Mehta <piyush.mehta@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:master 157/326] ERROR: modpost:
+ "dwc3_host_wakeup_capable" [drivers/usb/host/xhci-plat-hcd.ko] undefined!
+Message-ID: <202201142131.Ms9Tqhl7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, 12 Jan 2022 23:20:36 +0000, Colin Ian King wrote:
-> The variable 'size' is being assigned a value that is never read,
-> the assignment is redundant and can be removed. Cleans up clang-scan
-> warning:
-> 
-> drivers/gpu/drm/vc4/vc4_bo.c:358:2: warning: Value stored to 'size'
-> is never read [deadcode.DeadStores]
->         size = roundup(size, PAGE_SIZE);
-> 
-> [...]
+tree:   https://github.com/Xilinx/linux-xlnx master
+head:   6a698dbaaf0e6caa053476c2f661b36885a0ce30
+commit: 5b2efd9328312427b7830d41ce3c8dfec63457eb [157/326] usb: xhci-plat: Add remote wakeup support for xilinx
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220114/202201142131.Ms9Tqhl7-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/5b2efd9328312427b7830d41ce3c8dfec63457eb
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx master
+        git checkout 5b2efd9328312427b7830d41ce3c8dfec63457eb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Applied to drm/drm-misc (drm-misc-next).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks!
-Maxime
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "dwc3_host_wakeup_capable" [drivers/usb/host/xhci-plat-hcd.ko] undefined!
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
