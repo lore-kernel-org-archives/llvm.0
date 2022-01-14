@@ -1,53 +1,39 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CEC2C9C
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 16:59:03 +0000 (UTC)
-Received: by mail-wr1-f51.google.com with SMTP id h10so16658867wrb.1
-        for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 08:59:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tg4oCMG6li+TDjSwe6u86VlYXa8liJ00jWszISs+oTI=;
-        b=XEOBIwW/kQkclrF8e9c9xVwCab3wDlckLrQdSpSP8Q6g248n17tpuLNk/YrLR5DN5G
-         polByyx+FxbcK+p4gvaiqo0wiHU6seMH9LcQqa7YxAMPHhQcjYrh6Vgp7B4/6dVr6OKN
-         TU6gfhObqGnrBwxCL2NDWL66X4p7lARMmmf0Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=tg4oCMG6li+TDjSwe6u86VlYXa8liJ00jWszISs+oTI=;
-        b=5ulSibp2yCzzEZckCKVEcpEMTPvtrbe3Bn2F1WgkujTBL7VpwmBIEzg5aq7D5QAlNB
-         Lc1JcaBN16M/kCDukUI+/tMFppqTbzFvgeHpH9bWmLXBDw65V06lcH6HQBJSdjwq8Mq5
-         J+VlZ2OxUUagUtSrIHt7SzbuCGFQ3qXJA1fsw6KlfLu1A4EKYrEfLAU+J4tV7c6OfY09
-         kCW+f4mKKZFx68hImufw9RjwCqj8w3K5WhvyAzDDm+QYLrgn2Jh64pzbkXLhsqM79SZh
-         Eb/ylFzp12Hfm1FERqyEwYifCgWOZ/60c4Xe/hJ02wh+dGCdKvWsO0mSGhz9y3EwbKsA
-         QisA==
-X-Gm-Message-State: AOAM530Y7Opdqx0vFpkC39VWRO3XanWsxCg9oVzB74UjhRcuFYaj/uuL
-	Y/4LoPDHtyEhBDoLcGthVZB48w==
-X-Google-Smtp-Source: ABdhPJyKiq9MKoMx2tCGoLdeoS50UBy5IjTi4zD8ToVwJYkKEf3eHDu/vOLA1ET+NX5npL0uE0wh8w==
-X-Received: by 2002:a5d:6903:: with SMTP id t3mr8826258wru.353.1642179541790;
-        Fri, 14 Jan 2022 08:59:01 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id u17sm1549490wrt.37.2022.01.14.08.59.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:59:01 -0800 (PST)
-Date: Fri, 14 Jan 2022 17:58:59 +0100
-From: Daniel Vetter <daniel@ffwll.ch>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] video: fbdev: s3c-fb: remove redundant initialization of
- pointer bufs
-Message-ID: <YeGr01WGTSy+PYXr@phenom.ffwll.local>
-Mail-Followup-To: Colin Ian King <colin.i.king@gmail.com>,
-	Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211230160626.404072-1-colin.i.king@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E5F2C9C
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 17:23:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642180998; x=1673716998;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=mz9zH21YxTT9UWVLd/KOjlHtdvSVX52nGwyeSqKshqc=;
+  b=cVq5sBLpmZyxUV53mIjFImI2rON7sIYzYn9Isdy7et/dHWNQ7c95pIej
+   HWdmZZVV3PMEnoHmPdG6r0eNKsP4UM/cigxncRNQkzDDEPfbfKhCkjblK
+   NTsVHso1PymM5RHDWqGc4VWEo+hI+PPHgaLzKSlYTL2ox8ATMjgYFs2F/
+   AQkDDoElDk4SMY/iSNgGfYuR95R8r9LtnwJreIKjpkBWK8OiOyVeyo4cU
+   1gCs3mGWdXNddovHMs90C/gQEGSBdCAFoPk4iO85R98oNQpzcHvlcvdt8
+   GEXaW9RB4eJlTJso88X0FGwz/7c6pIawYkKXZ89Rz+s64bZ1KAX/5Cw0d
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="224975818"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="224975818"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:23:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="516468053"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 09:23:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n8QIG-0008pc-GM; Fri, 14 Jan 2022 17:23:16 +0000
+Date: Sat, 15 Jan 2022 01:22:18 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 3/3] dmaengine: sf-pdma: Get number of channel by
+ device tree
+Message-ID: <202201150129.P4syQvOh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,45 +42,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230160626.404072-1-colin.i.king@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Dec 30, 2021 at 04:06:26PM +0000, Colin Ian King wrote:
-> Pointer bufs is being initialized with a value that is never read, it
-> is being re-assigned with a different value later on. The assignment
-> is redundant and can be removed. Cleans up clang-scan warning:
-> 
-> drivers/video/fbdev/s3c-fb.c:492:16: warning: Value stored to 'buf'
-> during its initialization is never read [deadcode.DeadStores]
->         void __iomem *buf = regs;
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+In-Reply-To: <91a8fb6dff811b36db951ee98d955ad14a2a30eb.1642151791.git.zong.li@sifive.com>
+References: <91a8fb6dff811b36db951ee98d955ad14a2a30eb.1642151791.git.zong.li@sifive.com>
+TO: Zong Li <zong.li@sifive.com>
+TO: robh+dt@kernel.org
+TO: paul.walmsley@sifive.com
+TO: palmer@dabbelt.com
+TO: aou@eecs.berkeley.edu
+TO: krzysztof.kozlowski@canonical.com
+TO: conor.dooley@microchip.com
+TO: geert@linux-m68k.org
+TO: bin.meng@windriver.com
+TO: green.wan@sifive.com
+TO: vkoul@kernel.org
 
-Both of your dead store fixes queued up in drm-misc-next for 5.18.
--Daniel
+Hi Zong,
 
-> ---
->  drivers/video/fbdev/s3c-fb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
-> index 3b134e1bbc38..68408c499627 100644
-> --- a/drivers/video/fbdev/s3c-fb.c
-> +++ b/drivers/video/fbdev/s3c-fb.c
-> @@ -489,7 +489,7 @@ static int s3c_fb_set_par(struct fb_info *info)
->  	struct s3c_fb_win *win = info->par;
->  	struct s3c_fb *sfb = win->parent;
->  	void __iomem *regs = sfb->regs;
-> -	void __iomem *buf = regs;
-> +	void __iomem *buf;
->  	int win_no = win->index;
->  	u32 alpha = 0;
->  	u32 data;
-> -- 
-> 2.33.1
-> 
+Thank you for the patch! Perhaps something to improve:
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on v5.16]
+[cannot apply to robh/for-next next-20220114]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Zong-Li/Determine-the-number-of-DMA-channels-by-dma-channels-property/20220114-172017
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220115/202201150129.P4syQvOh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/efa33512fd463fd6e29750992df1d40513eb5a7c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Zong-Li/Determine-the-number-of-DMA-channels-by-dma-channels-property/20220114-172017
+        git checkout efa33512fd463fd6e29750992df1d40513eb5a7c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/dma/sf-pdma/sf-pdma.o: warning: objtool: dma_cookie_complete()+0x40: unreachable instruction
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
