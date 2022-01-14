@@ -1,42 +1,50 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE25D2C82
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 06:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27702C82
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 06:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642142610; x=1673678610;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C6gi/Lo3Wvj+j+/Qd+tWFYEYVfcNt7kby4wAhJCBil8=;
-  b=R14FqASgm/3JLcUa+CZFRqz+KwEKnl9w2bFXTGgCdiTYdHQlm/NLg81e
-   XI6RPUuo5Ujj6MpAvAyuahZb4dkze4m3QDNgsZlbhSSwZ1V0awl3/VGrL
-   kBJqLnM+aBpcTpJXTa3ZYjPwByTXQvHik3RwRDAru3oIVTRASOH9TEZj0
-   EGLHx7GhEbQLKP2DEegsmwVvgMDT+eqAl0iSLOLaohU+g57wewXSHvuRy
-   uQIL2tpURQAPWEKm/gJV4TFSvwiMzCYQKL8tf/MoTEfjbJxtykOAPc+PI
-   lMX5SdQxLasnOslkLqUpQMssejgFdUVO47CePX8U68NC2QLTRqkdrnl2I
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="231543120"
+  t=1642143212; x=1673679212;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XR0DPoYW/drq7biMjiY+mWsMAbXR7X6sLupRmBeS/Cs=;
+  b=LnlvNjmwCH4nYwCYyj2B+UkpnEkXtqybS0l1n0aV+2PzycNvrGBVAnmQ
+   WV0PKIJyfiJUc/vbxC6gnRbN65cpZD7esnuehKBI89JwpdSOy/7uqNVj2
+   AoXu2hV6WAv2PqGf42SeVHGsrITJepyi7vHBox0tQufDGM/48pwXZc2Yv
+   RxTGqnGJ5LgIWt0+NZlmSg/H4Xlv0pQKygduE82qPigm5OSnPC9Md4zRt
+   RklEpbMDfasSAIrBCmgtQGFZNKrmD+9bQioI2KzjkvMQp5vhA8OX6HiTK
+   mPr4xyQIWl70EtFGSmMGLDwhPx69Ykfw9/BFK1MBeuYFaNA+peJ4uo11y
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="268557795"
 X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="231543120"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:43:30 -0800
+   d="scan'208";a="268557795"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:53:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="577202093"
+   d="scan'208";a="559380376"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Jan 2022 22:43:28 -0800
+  by orsmga001.jf.intel.com with ESMTP; 13 Jan 2022 22:53:29 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n8GJ6-0008Ct-6s; Fri, 14 Jan 2022 06:43:28 +0000
-Date: Fri, 14 Jan 2022 14:42:52 +0800
+	id 1n8GSm-0008DT-G9; Fri, 14 Jan 2022 06:53:28 +0000
+Date: Fri, 14 Jan 2022 14:53:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, peppe.cavallaro@st.com,
+	alexandre.torgue@foss.st.com, joabreu@synopsys.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jens-wiklander-tee:testing/tuxbuild 6/13]
- drivers/tee/tee_shm.c:52:17: warning: no previous prototype for function
- 'shm_alloc_helper'
-Message-ID: <202201141435.ogrNv2hr-lkp@intel.com>
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
+ on a Dell hardware
+Message-ID: <202201141429.5HZ7UZB6-lkp@intel.com>
+References: <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,91 +53,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   http://git.linaro.org/people/jens.wiklander/linux-tee testing/tuxbuild
-head:   9ea0d125d4c9a4144b8641c454e97406b483722d
-commit: b056eac4e504db8ee3fb03b4d13f1c9f2653bee8 [6/13] tee: replace tee_shm_alloc()
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220114/202201141435.ogrNv2hr-lkp@intel.com/config)
+Hi Kai-Heng,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16 next-20220113]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Kai-Heng-Feng/net-phy-marvell-Use-BIT-macro-for-flags/20220114-120936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fb3b0673b7d5b477ed104949450cd511337ba3c6
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220114/202201141429.5HZ7UZB6-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add jens-wiklander-tee http://git.linaro.org/people/jens.wiklander/linux-tee
-        git fetch --no-tags jens-wiklander-tee testing/tuxbuild
-        git checkout b056eac4e504db8ee3fb03b4d13f1c9f2653bee8
+        # https://github.com/0day-ci/linux/commit/83e7c70ef5632f6b94caf8221a20db0881ee6ce2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kai-Heng-Feng/net-phy-marvell-Use-BIT-macro-for-flags/20220114-120936
+        git checkout 83e7c70ef5632f6b94caf8221a20db0881ee6ce2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tee/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/tee/tee_shm.c:52:17: warning: no previous prototype for function 'shm_alloc_helper' [-Wmissing-prototypes]
-   struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
-                   ^
-   drivers/tee/tee_shm.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
-   ^
-   static 
+>> drivers/net/phy/marvell.c:755:27: warning: result of comparison of constant -1 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
+           if (priv->led_def_config == -1)
+               ~~~~~~~~~~~~~~~~~~~~ ^  ~~
    1 warning generated.
 
 
-vim +/shm_alloc_helper +52 drivers/tee/tee_shm.c
+vim +755 drivers/net/phy/marvell.c
 
-    51	
-  > 52	struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
-    53					 size_t align, u32 flags, int id)
-    54	{
-    55		struct tee_device *teedev = ctx->teedev;
-    56		struct tee_shm *shm;
-    57		void *ret;
-    58		int rc;
-    59	
-    60		if (!tee_device_get(teedev))
-    61			return ERR_PTR(-EINVAL);
-    62	
-    63		if (!teedev->pool) {
-    64			/* teedev has been detached from driver */
-    65			ret = ERR_PTR(-EINVAL);
-    66			goto err_dev_put;
-    67		}
-    68	
-    69		shm = kzalloc(sizeof(*shm), GFP_KERNEL);
-    70		if (!shm) {
-    71			ret = ERR_PTR(-ENOMEM);
-    72			goto err_dev_put;
-    73		}
-    74	
-    75		refcount_set(&shm->refcount, 1);
-    76		shm->flags = flags;
-    77		shm->id = id;
-    78	
-    79		/*
-    80		 * We're assigning this as it is needed if the shm is to be
-    81		 * registered. If this function returns OK then the caller expected
-    82		 * to call teedev_ctx_get() or clear shm->ctx in case it's not
-    83		 * needed any longer.
-    84		 */
-    85		shm->ctx = ctx;
-    86	
-    87		rc = teedev->pool->ops->alloc(teedev->pool, shm, size, align);
-    88		if (rc) {
-    89			ret = ERR_PTR(rc);
-    90			goto err_kfree;
-    91		}
-    92	
-    93		teedev_ctx_get(ctx);
-    94		return shm;
-    95	err_kfree:
-    96		kfree(shm);
-    97	err_dev_put:
-    98		tee_device_put(teedev);
-    99		return ret;
-   100	}
-   101	
+   749	
+   750	static void marvell_config_led(struct phy_device *phydev)
+   751	{
+   752		struct marvell_priv *priv = phydev->priv;
+   753		int err;
+   754	
+ > 755		if (priv->led_def_config == -1)
+   756			return;
+   757	
+   758		if (priv->led_def_config)
+   759			goto write;
+   760	
+   761		if (phydev->dev_flags & MARVELL_PHY_USE_PRESET_LED) {
+   762			priv->led_def_config = phy_read_paged(phydev, MII_MARVELL_LED_PAGE,
+   763							      MII_PHY_LED_CTRL);
+   764			if (priv->led_def_config < 0) {
+   765				priv->led_def_config = -1;
+   766				return;
+   767			}
+   768		} else {
+   769			switch (MARVELL_PHY_FAMILY_ID(phydev->phy_id)) {
+   770			/* Default PHY LED config: LED[0] .. Link, LED[1] .. Activity */
+   771			case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1121R):
+   772			case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1318S):
+   773				priv->led_def_config = MII_88E1121_PHY_LED_DEF;
+   774				break;
+   775			/* Default PHY LED config:
+   776			 * LED[0] .. 1000Mbps Link
+   777			 * LED[1] .. 100Mbps Link
+   778			 * LED[2] .. Blink, Activity
+   779			 */
+   780			case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1510):
+   781				if (phydev->dev_flags & MARVELL_PHY_LED0_LINK_LED1_ACTIVE)
+   782					priv->led_def_config = MII_88E1510_PHY_LED0_LINK_LED1_ACTIVE;
+   783				else
+   784					priv->led_def_config = MII_88E1510_PHY_LED_DEF;
+   785				break;
+   786			default:
+   787				priv->led_def_config = -1;
+   788				return;
+   789			}
+   790		}
+   791	
+   792	write:
+   793		err = phy_write_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL,
+   794				      priv->led_def_config);
+   795		if (err < 0)
+   796			phydev_warn(phydev, "Fail to config marvell phy LED.\n");
+   797	}
+   798	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
