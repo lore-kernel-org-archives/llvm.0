@@ -1,96 +1,90 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B95AF29CA
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 12:37:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642163873; x=1673699873;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+tI1YiGuy+svjnvQcW47NrzwkaMl0BBQKleSydyar/U=;
-  b=GUbPUynUbeqHUbHx7dqsZwn9AT/aB0JWhMWO7peTi78CThRgv1WyjuGj
-   KByYNlo5CsWsyKZT18g9fMHeA+HijIgcFnvY1FuY4FlIGs9FRyLA3tV8t
-   DK76qIAoUJsaGbugg1FTAf40AqSE0MwblZPOvD5XhvgZpnYfbPeqe8YUW
-   d6abm3wlgu+cDa/iyUrf7UryWY4nbPk5JLTQw0wQHTK0m//7+p5PZraps
-   LdynGcgeDG0nV55OJ9C5cr3RE9W5kxqKLe/hhHvFv77LE2K3/i4EyP6fa
-   5oOyR2dZO3jSlbszXtQP28lAhG7mq7S5ygZGfnDkQhu9QOwQmudO5rJ3n
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224219857"
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="224219857"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 04:37:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="491507519"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jan 2022 04:37:51 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n8Lq2-0008Wq-V6; Fri, 14 Jan 2022 12:37:50 +0000
-Date: Fri, 14 Jan 2022 20:37:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 921/2382] ./usr/include/linux/rds.h:38:10: fatal
- error: 'uapi/linux/sockios.h' file not found
-Message-ID: <202201142031.bnR0Yamb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2DA29CA
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 13:15:47 +0000 (UTC)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.nyi.internal (Postfix) with ESMTP id A14385C00F7;
+	Fri, 14 Jan 2022 08:15:46 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 14 Jan 2022 08:15:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-type:content-transfer-encoding; s=fm1; bh=
+	s5NFdGeraYGYTX3ECjtHqze22e4ZVJLmziZZwnrxWWM=; b=GGN2/Gvz4mBeyZjM
+	vjwimBFMpu4PtmKqqjU+o3wIQaWlHGWWuvDLjKXBvTngtWyzUJPHbbTpdGfaXCCy
+	4gnE48eqkq+phV7VfGYB/A57ZFojatRPmPKE9Fh1PRFzbQGLGcrtkDmlvh03KJuI
+	gDHKnIdtjFTALtC66IyriL0DLpuBFVQL5ICeHrHdeRrm8PRvj/r8GPzfzsu5w7/u
+	Cp1kTZE6CgQqamNyBZY44ZLnDtCLtziNtsHfJC/t02hYt3gY76todU68iZvmR2SV
+	mqi1YAkjN06FPdXW5iSlCSFizxxgH0KwBYrFpz27AChN4ja+50ID66lq04oxI0rZ
+	CRWg1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:date:from:in-reply-to:message-id:mime-version:references
+	:subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; bh=s5NFdGeraYGYTX3ECjtHqze22e4ZVJLmziZZwnrxW
+	WM=; b=HXb+LuFjDml9IjOqxx2b0V0UO6VA23X9lx3HUjXQLZbnYjHEwC8IQMeHk
+	9hyyc74cC9t0p/s7jGxraxrkD+mi6IwR2rM22RNz6eN+WjyOOxwI/RORzlg85ISs
+	YKFLqh8FdRu3S8jFTzlMpIgC8Pkf/1KqIt2BLMLY6uZ2JUXbpEBRj3T5dWu6PwBk
+	T1IjuAaOAalCEa3NfUUCIhZi4QuaWskes+V+r3MKyUoFfSiuek3hr32MueekS98W
+	Zlr0d1FAZvk+v9Us1HZ48Z0VJXM6kSABN4LCm503clcnjXHbEpve7utvjmW1Z1CD
+	Jfizu05ABQYm5fl3TyOc2qUz6hHYw==
+X-ME-Sender: <xms:gnfhYR7NwbZ0CTHeNs2lZUNrp_5gL0kPTcZpXHPtsQKNLkM-q7J5nw>
+    <xme:gnfhYe5la1LUv18QPQeCxt5IWEmwi4f-GLhi4f5aZ1r-DLZBSRH_ZrDTBlu8JEBA3
+    Hsyw-lGBIVBTsg2WaM>
+X-ME-Received: <xmr:gnfhYYeSFugeAdIdFy_AmTOm-7AwKCLjuJELyRVhT8cgiH8kJ1WAy8t_T_faQB5VOQQbU_HND91vvy7uoncsBLLarEXKt2MYY_OqJ5g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdehgdehudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffjeejvddvudduteehhfefhfefgeei
+    keeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:gnfhYaIZmYQXwzmixXpeGkZBD-37ZscbQHEK4VlLwhpjlXpQgcpbfA>
+    <xmx:gnfhYVI601t0OKv85yuKIGioKXjDl9X3J6uVCg4ajGM0dyLXZlBpPg>
+    <xmx:gnfhYTwd1D_ETMsl190ge5AGlkkALdaH_i6DRkCXvsn6Yqwq_WgEZg>
+    <xmx:gnfhYc8qu1dYTSLag23s-JnP_eDpLuroYvbHQoZy-qvjRW2mXkaSoQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Jan 2022 08:15:45 -0500 (EST)
+From: Maxime Ripard <maxime@cerno.tech>
+To: Emma Anholt <emma@anholt.net>,
+	Maxime Ripard <mripard@kernel.org>,
+	David Airlie <airlied@linux.ie>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	dri-devel@lists.freedesktop.org
+Cc: Maxime Ripard <maxime@cerno.tech>,
+	kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: (subset) [PATCH] drm/vc4: remove redundant assignment of variable size
+Date: Fri, 14 Jan 2022 14:15:43 +0100
+Message-Id: <164216613944.47574.10826927845700954933.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220112232036.1182846-1-colin.i.king@gmail.com>
+References: <20220112232036.1182846-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   1a880941a087613ed42f77001229edfcf75ea8a5
-commit: 9242d9709c29db37d2bc947467661f1817d0f8a6 [921/2382] headers/deps: Add header dependencies to .h files: <uapi/linux/sockios.h>
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220114/202201142031.bnR0Yamb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=9242d9709c29db37d2bc947467661f1817d0f8a6
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 9242d9709c29db37d2bc947467661f1817d0f8a6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, 12 Jan 2022 23:20:36 +0000, Colin Ian King wrote:
+> The variable 'size' is being assigned a value that is never read,
+> the assignment is redundant and can be removed. Cleans up clang-scan
+> warning:
+> 
+> drivers/gpu/drm/vc4/vc4_bo.c:358:2: warning: Value stored to 'size'
+> is never read [deadcode.DeadStores]
+>         size = roundup(size, PAGE_SIZE);
+> 
+> [...]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied to drm/drm-misc (drm-misc-next).
 
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/linux/rds.h:38:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/kcm.h:18:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/if_tunnel.h:5:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/x25.h:15:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks!
+Maxime
