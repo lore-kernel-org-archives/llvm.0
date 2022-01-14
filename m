@@ -1,192 +1,239 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633FB29CA
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 00:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642121848; x=1673657848;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5zlHbZlCHZs666H8cOGG7rweh70YY57ByrZiK4jMcZk=;
-  b=MHuxm95SW4gMAT/9XN8eyh5w9FvL3a/q82hTnv+rOpjcav/8V0Sg2hf9
-   wMT2tj3dBv17t0ZZ+UkV2DxRtxNysGuy2kq/dkLJtkF8PaqrBJWbxk5l8
-   +t6M/RZhXannbJX6c2/mY7L5qRP9EwGTFcI9npAoGOqT9qHnRMFsLyHmo
-   8IO8lBe2IZx0js4QZCuQvIK0u8Rs+zhjTARHt0GyCYPkFiAtOgllUumqn
-   b0PkBOPM59SaYlIo6Zrw9YZzBWsDHAY+xJ9hQ3mbNNK8eE4IS+k2lMG+O
-   0/ZyfEPFiJKRYxQ6+nalKHAUQ6MDZYUK0aYYyEnc4GwJ1NNTu6AP1UC/f
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="330501066"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="330501066"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 16:57:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="475566017"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2022 16:57:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n8Au3-0007qt-Gg; Fri, 14 Jan 2022 00:57:15 +0000
-Date: Fri, 14 Jan 2022 08:56:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Gao <chao.gao@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:tdx/guest-rebased 105/133] kernel/dma/swiotlb.c:320:16:
- error: implicit declaration of function 'kzalloc'
-Message-ID: <202201140844.HLn72YTB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E3729CA
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 01:05:41 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id n2-20020a255902000000b0060f9d75eafeso15213312ybb.1
+        for <llvm@lists.linux.dev>; Thu, 13 Jan 2022 17:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=RjuCZT+fganksUH5bZr8Uzcs2rZgf01j4qeqplouvck=;
+        b=gplty4vC9Qp82EmqfWUAyNzxihehA43QUhaIY8nNE1aTpoQBlccBDXy+GdrdCm3yHn
+         EYWNpdWXvP1LAHuKXlkdU4varqVeYOr3dHgXMjv0J0U+GQTyENOvwBx3zkedL5Im9aQ3
+         N4zLrnXZQp8a7QlWbskS+s4bqY9yPBk1T1dAUbqo278Yy0akx/prt0AYuqteCfDMj4fc
+         seajGMLzTQ9XPyMCN7ph7s39JfqR50B+BBGwsvyeMM4/pqVhGCkSus/4tcERAh1k+rGJ
+         iBNYClp+GEvcegHc2ZoCP464AMnA9my+XZxSgGHNbKNZbpstp8/A1O9bPcUD4zLdANPH
+         z8ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=RjuCZT+fganksUH5bZr8Uzcs2rZgf01j4qeqplouvck=;
+        b=x6WKLMvI0hvHpA7HKpNXLv55ckhBVJ4QRn55qAF7q7cWOsx1cxpXe5Yhim3ZNOG4iY
+         pegZRYCvKdqHGYAg05RPhLYUxlf/t++v4c1P3F9qEZ01QQTgD0MVmusWPxP+C6JXTEmk
+         9wQt+Qtss5Cl+G1O/P8Kj+Dg012BtPPUNWMOonTakRWjcp6AWNeANYzBW10kQAVG0QSl
+         WGChdGHFzozhmOY0/J2XH79UtCupNO2foeIrrbs1XARm06oSjiuT30//mdH1TGyyWBP7
+         FuQCBhJqKWT2tZv/gLpVAkDI67u/bXmQgbQ1nBTALWq0j1URS+NbhGnVtGpilNeLstVA
+         YQfg==
+X-Gm-Message-State: AOAM53177U+sk9Q4EJaMdnAjdmBYT4l0VMJEjaMsF2uQCE9qGUoGIrey
+	e6xAYxx1JY30OgJbAanWm0WrOb+/jFVRVDqHGFI=
+X-Google-Smtp-Source: ABdhPJyZGMiaifrbpM7MJsw+b0l19q3DqEXoclLAvnHFEi7vqUgBAQeUbyNjqXYm+fwMKvr+uc5+6OZ8tFWhEOJmnXg=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:cae2:dbc1:f963:5489])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:3b49:: with SMTP id
+ i70mr9172098yba.712.1642122340417; Thu, 13 Jan 2022 17:05:40 -0800 (PST)
+Date: Thu, 13 Jan 2022 17:05:26 -0800
+Message-Id: <20220114010526.1776605-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1642122325; l=6868;
+ s=20211004; h=from:subject; bh=JVcfRmXkwlckyWvO0KJ0DMWB85z7efazeg6STr6lLYU=;
+ b=Szmw4L8Ugr0cfksSUemebgNv/yVMV+yPIO7/p5Rlj2o0kl5blBBzDi+89M6aQ00/WGR2baRiADP/
+ xhThZ13aDiPW1K8XAbd0IVzKjVprCpl5FQ0SIuNrsZA2Sv1s5En/
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>
+Cc: Vasily Gorbik <gor@linux.ibm.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Ingo Molnar <mingo@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org, llvm@lists.linux.dev, 
+	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, kernel test robot <lkp@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel/tdx.git tdx/guest-rebased
-head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
-commit: 64f46677f0bd4db290a0c6be857c6fd8db39324b [105/133] swiotlb: use bitmap to track free slots
-config: s390-randconfig-r033-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140844.HLn72YTB-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel/tdx/commit/64f46677f0bd4db290a0c6be857c6fd8db39324b
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx tdx/guest-rebased
-        git checkout 64f46677f0bd4db290a0c6be857c6fd8db39324b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+commit dcce50e6cc4d ("compiler.h: Fix annotation macro misplacement with Cl=
+ang")
+mentions:
 
-If you fix the issue, kindly add following tag as appropriate
+> 'volatile' is ignored for some reason and Clang feels free to move the
+> reachable() annotation away from its intended location.
+
+Indeed, volatile is not a compiler barrier. Particularly once `-march=3D`
+flags are used under certain configs, LLVM's machine-scheduler can be
+observed moving instructions across the asm statement meant to point to
+known reachable or unreachable code, as reported by 0day bot.
+
+Prefer a memory clobber which is a compiler barrier that prevents these
+re-orderings and remove the volatile qualifier.
+
+Looking closer, the use of __COUNTER__ seems to have been used to
+prevent de-duplication of these asm statements. The GCC manual mentions:
+
+> Under certain circumstances, GCC may duplicate (or remove duplicates
+> of) your assembly code when optimizing. This can lead to unexpected
+> duplicate symbol errors during compilation if your asm code defines
+> symbols or labels. Using =E2=80=98%=3D=E2=80=99 (see AssemblerTemplate) m=
+ay help resolve
+> this problem.
+>
+> =E2=80=98%=3D=E2=80=99 Outputs a number that is unique to each instance o=
+f the asm
+> statement in the entire compilation. This option is useful when
+> creating local labels and referring to them multiple times in a single
+> template that generates multiple assembler instructions.
+
+commit 3d1e236022cc ("objtool: Prevent GCC from merging annotate_unreachabl=
+e()")
+
+Mentions that
+
+> The inline asm =E2=80=98%=3D=E2=80=99 token could be used for that, but u=
+nfortunately
+> older versions of GCC don't support it.
+
+From testing all versions of GCC available on godbolt.org, GCC 4.1+
+seems to support 4.1. Since the minimum supported version of GCC at the
+moment is GCC 5.1, it sounds like this is no longer a concern.
+
+Prefer the %=3D assembler template to having to stringify __COUNTER__.
+
+This commit is effectively a revert of the following commits:
+commit dcce50e6cc4d ("compiler.h: Fix annotation macro misplacement with Cl=
+ang")
+commit f1069a8756b9 ("compiler.h: Avoid using inline asm operand modifiers"=
+)
+commit c199f64ff93c ("instrumentation.h: Avoid using inline asm operand mod=
+ifiers")
+commit d0c2e691d1cb ("objtool: Add a comment for the unreachable annotation=
+ macros")
+commit ec1e1b610917 ("objtool: Prevent GCC from merging annotate_unreachabl=
+e(), take 2")
+commit 3d1e236022cc ("objtool: Prevent GCC from merging annotate_unreachabl=
+e()")
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1566
+Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
+Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplat=
+e
+Link: https://lore.kernel.org/llvm/202112080834.XFYU8b5Q-lkp@intel.com/
+Link: https://lore.kernel.org/llvm/202111300857.IyINAyJk-lkp@intel.com/
 Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/dma/swiotlb.c:320:16: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                         ^
-   kernel/dma/swiotlb.c:320:16: note: did you mean 'vzalloc'?
-   include/linux/vmalloc.h:140:14: note: 'vzalloc' declared here
-   extern void *vzalloc(unsigned long size) __alloc_size(1);
-                ^
-   kernel/dma/swiotlb.c:320:14: warning: incompatible integer to pointer conversion assigning to 'unsigned long *' from 'int' [-Wint-conversion]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/dma/swiotlb.c:324:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-                   kfree(mem->bitmap);
-                   ^
-   kernel/dma/swiotlb.c:324:3: note: did you mean 'vfree'?
-   include/linux/vmalloc.h:155:13: note: 'vfree' declared here
-   extern void vfree(const void *addr);
-               ^
-   13 warnings and 2 errors generated.
-
-
-vim +/kzalloc +320 kernel/dma/swiotlb.c
-
-   306	
-   307	int
-   308	swiotlb_late_init_with_tbl(char *tlb, unsigned long nslabs)
-   309	{
-   310		struct io_tlb_mem *mem = &io_tlb_default_mem;
-   311		unsigned long bytes = nslabs << IO_TLB_SHIFT;
-   312	
-   313		if (swiotlb_force == SWIOTLB_NO_FORCE)
-   314			return 0;
-   315	
-   316		/* protect against double initialization */
-   317		if (WARN_ON_ONCE(mem->nslabs))
-   318			return -ENOMEM;
-   319	
- > 320		mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-   321		mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
-   322			get_order(array_size(sizeof(*mem->slots), nslabs)));
-   323		if (!mem->slots || !mem->bitmap) {
- > 324			kfree(mem->bitmap);
-   325			kfree(mem->slots);
-   326			return -ENOMEM;
-   327		}
-   328	
-   329		set_memory_decrypted((unsigned long)tlb, bytes >> PAGE_SHIFT);
-   330		swiotlb_init_io_tlb_mem(mem, virt_to_phys(tlb), nslabs, true);
-   331	
-   332		swiotlb_print_info();
-   333		swiotlb_set_max_segment(mem->nslabs << IO_TLB_SHIFT);
-   334		return 0;
-   335	}
-   336	
-
+Debugged-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/compiler.h        | 31 +++++++++++--------------------
+ include/linux/instrumentation.h | 24 ++++++++++--------------
+ 2 files changed, 21 insertions(+), 34 deletions(-)
+
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 429dcebe2b99..3ac21b888d20 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -108,30 +108,21 @@ void ftrace_likely_update(struct ftrace_likely_data *=
+f, int val,
+ # define barrier_before_unreachable() do { } while (0)
+ #endif
+=20
+-/* Unreachable code */
++/* These macros help objtool understand GCC code flow for unreachable code=
+. */
+ #ifdef CONFIG_STACK_VALIDATION
+-/*
+- * These macros help objtool understand GCC code flow for unreachable code=
+.
+- * The __COUNTER__ based labels are a hack to make each instance of the ma=
+cros
+- * unique, to convince GCC not to merge duplicate inline asm statements.
+- */
+-#define __stringify_label(n) #n
+-
+-#define __annotate_reachable(c) ({					\
+-	asm volatile(__stringify_label(c) ":\n\t"			\
+-		     ".pushsection .discard.reachable\n\t"		\
+-		     ".long " __stringify_label(c) "b - .\n\t"		\
+-		     ".popsection\n\t" : : "i" (c));			\
++#define annotate_reachable() ({			\
++	asm (".Lreachable%=3D:\n\t"			\
++	     ".pushsection .discard.reachable\n\t"	\
++	     ".long .Lreachable%=3D - .\n\t"		\
++	     ".popsection\n\t" ::: "memory");		\
+ })
+-#define annotate_reachable() __annotate_reachable(__COUNTER__)
+=20
+-#define __annotate_unreachable(c) ({					\
+-	asm volatile(__stringify_label(c) ":\n\t"			\
+-		     ".pushsection .discard.unreachable\n\t"		\
+-		     ".long " __stringify_label(c) "b - .\n\t"		\
+-		     ".popsection\n\t" : : "i" (c));			\
++#define annotate_unreachable() ({			\
++	asm (".Lunreachable%=3D:\n\t"			\
++	     ".pushsection .discard.unreachable\n\t"	\
++	     ".long .Lunreachable%=3D - .\n\t"		\
++	     ".popsection\n\t" ::: "memory");		\
+ })
+-#define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+=20
+ #define ASM_UNREACHABLE							\
+ 	"999:\n\t"							\
+diff --git a/include/linux/instrumentation.h b/include/linux/instrumentatio=
+n.h
+index 24359b4a9605..0dae9c08764f 100644
+--- a/include/linux/instrumentation.h
++++ b/include/linux/instrumentation.h
+@@ -4,16 +4,13 @@
+=20
+ #if defined(CONFIG_DEBUG_ENTRY) && defined(CONFIG_STACK_VALIDATION)
+=20
+-#include <linux/stringify.h>
+-
+ /* Begin/end of an instrumentation safe region */
+-#define __instrumentation_begin(c) ({					\
+-	asm volatile(__stringify(c) ": nop\n\t"				\
+-		     ".pushsection .discard.instr_begin\n\t"		\
+-		     ".long " __stringify(c) "b - .\n\t"		\
+-		     ".popsection\n\t" : : "i" (c));			\
++#define instrumentation_begin() ({			\
++	asm (".Linstbegin%=3D: nop\n\t"			\
++	     ".pushsection .discard.instr_begin\n\t"	\
++	     ".long .Linstbegin%=3D - .\n\t"		\
++	     ".popsection\n\t" ::: "memory");		\
+ })
+-#define instrumentation_begin() __instrumentation_begin(__COUNTER__)
+=20
+ /*
+  * Because instrumentation_{begin,end}() can nest, objtool validation cons=
+iders
+@@ -46,13 +43,12 @@
+  * To avoid this, have _end() be a NOP instruction, this ensures it will b=
+e
+  * part of the condition block and does not escape.
+  */
+-#define __instrumentation_end(c) ({					\
+-	asm volatile(__stringify(c) ": nop\n\t"				\
+-		     ".pushsection .discard.instr_end\n\t"		\
+-		     ".long " __stringify(c) "b - .\n\t"		\
+-		     ".popsection\n\t" : : "i" (c));			\
++#define instrumentation_end() ({			\
++	asm (".Linstend%=3D: nop\n\t"			\
++	     ".pushsection .discard.instr_end\n\t"	\
++	     ".long .Linstend%=3D - .\n\t"		\
++	     ".popsection\n\t" ::: "memory");		\
+ })
+-#define instrumentation_end() __instrumentation_end(__COUNTER__)
+ #else
+ # define instrumentation_begin()	do { } while(0)
+ # define instrumentation_end()		do { } while(0)
+
+base-commit: dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
+--=20
+2.34.1.703.g22d0c6ccf7-goog
+
