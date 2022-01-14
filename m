@@ -1,25 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD492C9C
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 05:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CF7C36AEA;
-	Fri, 14 Jan 2022 05:47:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1642139272;
-	bh=eQXa6hAHJhyiYZJp5AEoSs2yfnLtUwwLOnpf5PkEyf0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QSabnljZJI7Nk0Z17Zx1vx7Yre+esB9FhNsBSVhu9/0bpZxxCXLtsUtbKxg9ZABLe
-	 At3jycpxjC+GMIhSZId+UCTm20ItALOrlexSthQB/FwuJlovgp9k5235qwzEZOs38b
-	 jjhcG2dncFJofqInUG7GKX474h6+FQVha1wCemoE=
-Date: Fri, 14 Jan 2022 06:47:49 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: Patches for clang and CONFIG_WERROR (arm64/x86_64)
-Message-ID: <YeEOheVsAKHH0WQe@kroah.com>
-References: <YeCpzLnfA+g+u3Id@archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742BB2C9C
+	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 06:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642140750; x=1673676750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iH2bAUjpJnt2I7vkj9k8oAio1FRAu/W0AFiLzFSvBWA=;
+  b=gIY55ZRFKbs6BNXDf4JKGEvPHVpr75jKqHLCs7iWydabcp3RycvqNioW
+   s39n6yPtDJ7yOhNEc3WC/yPgFNIDzTO4S9FDOxkcIyy1v/awtxGLKDkh6
+   sBgay2tsiPq4L3sSZDl3s6+K2vLu1u8CR027bHKxvZ+6bb5uO3mHz09U6
+   WUvfJf0S9WeWwQi0OsJ+RaTxLtTnAe8TibE+HWJ4OdHQapCy4tGKcgHnE
+   xy4zt/zsOdjYqt7q0ydjLPc6qLwS//vdD8bj1m3/L+Noes3BvEU211SbM
+   C74aHXZa/MWnv6IhNWFZtG6XJuQZsFbD96lbrEVzGrfsgMYMF28fUefSb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="307533856"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="307533856"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:12:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="614241326"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jan 2022 22:12:28 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n8Fp5-0008Ba-HV; Fri, 14 Jan 2022 06:12:27 +0000
+Date: Fri, 14 Jan 2022 14:12:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: kernel/time/hrtimer.c:650:19: warning: unused function
+ 'hrtimer_hres_active'
+Message-ID: <202201141442.FVgxOEDt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -28,26 +44,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YeCpzLnfA+g+u3Id@archlinux-ax161>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Jan 13, 2022 at 03:38:04PM -0700, Nathan Chancellor wrote:
-> Hi Greg and Sasha,
-> 
-> Please consider applying the following commits to allow arm64 and x86_64
-> allmodconfig to compile with CONFIG_WERROR enabled with clang-11 through
-> clang-14 (the currently supported releases upstream).
-> 
-> 502408a61f4b ("staging: wlan-ng: Avoid bitwise vs logical OR warning in hfa384x_usb_throttlefn()") [5.15, 5.10, 5.4, 4.19, 4.14, 4.9]
-> 2e70570656ad ("drm/i915: Avoid bitwise vs logical OR warning in snb_wm_latency_quirk()") [5.16, 5.15, 5.10, 5.4, 4.19, 4.14, 4.9, 4.4]
-> 144779edf598 ("staging: greybus: fix stack size warning with UBSAN") [5.16, 5.15, 5.10, 5.4]
-> 
-> I primarily care about 5.16 and 5.15, as those are the releases that
-> have CONFIG_WERROR, but I included all the versions that those patches
-> should apply cleanly to, as they do fix warnings in the build that
-> people might see, although I don't think they are worth backporting
-> further manually until someone complains. 502408a61f4b is already in
-> 5.16.
+Hi Thomas,
 
-All now queued up, thanks.
+FYI, the error/warning still remains.
 
-greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fb3b0673b7d5b477ed104949450cd511337ba3c6
+commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
+date:   5 months ago
+config: mips-randconfig-r032-20220114 (https://download.01.org/0day-ci/archive/20220114/202201141442.FVgxOEDt-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/time/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
+   static inline int hrtimer_hres_active(void)
+   ^
+   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-82c8aca934/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch include kernel nr_bisected scripts source usr
+
+
+vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
+
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
+
+:::::: The code at line 650 was first introduced by commit
+:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
+
+:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
