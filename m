@@ -1,42 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23B229CA
-	for <llvm@lists.linux.dev>; Sat, 15 Jan 2022 14:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4562168
+	for <llvm@lists.linux.dev>; Sat, 15 Jan 2022 16:04:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642256524; x=1673792524;
+  t=1642262649; x=1673798649;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N0fB5+2LlGwFz+nC626bb9OcnsTLxVoOh1VGivG/Iwg=;
-  b=dRis9zdtyS8lwYT7C2lqNo58jPLDXy1h0KUP21svKECpqeE8pfJ9GRqd
-   s1xxX4wdOdPp52YIQRCggf2vU6JkY5DwUBSzy2hHhI8WdD0nSYY+oJtPB
-   kQE/Q2feNM8rV5JfB4nw4txWE6GkmNu4DcxFtIDatn2FNpBxM/vVRfNCY
-   9VsjlCxKpq5XQZPo3h7NKyU3NgEY6ktV8a0/BBmD87IT2nXJ2pEGkcsXY
-   cGIcCLqbx1FdDuZ3A2g4MZlh7AjtQBZTZRAIyVl2FiDR4VfHAsXge7vLG
-   iXxg2tbrHWgUYTJSdPUMsjcGV29Bccaldk2g164uc7Yn4avla/xHMn8tW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="231767730"
+  bh=Rs4GPCKQxNaL4kGleAkZBSPLl3NhvNHqHaaIf9SwIcc=;
+  b=bqq6OBA0Bs5QAwgN5Ip/CYGwaLknAm7VB/p960b/escGlZmXxFBe2K7Z
+   n7kb+Loa0tb3KN8ugiXnnLncP4mYDYRD+omBD505yTP9mb7Pc8iJ1qoZv
+   3Dy9NBgK7xbPZhp9kyQ8BuQ+E3OdetsoQZUSvOmSEC5sZcnM7Q4wKnko7
+   /570z/WSIPS/m3StSwYe9BRoiYNgxExJ8VGPgLu5DJHVD69UAZUxtCsAu
+   2tQVeBqPzPE3bQoqRLVt5P3jRsRXWjjQX2Z7vxL4RiNqc9GPV2Rs2sZu1
+   T7KZjTPaL9klARMbu5KZ6+l5nCXVrG9uQ3//rRkleS+ZOwvZWZHLNIVTI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="225105955"
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="231767730"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 06:22:04 -0800
+   d="scan'208";a="225105955"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 08:04:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="559822118"
+   d="scan'208";a="624713173"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 15 Jan 2022 06:22:02 -0800
+  by orsmga004.jf.intel.com with ESMTP; 15 Jan 2022 08:04:07 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n8jwQ-0009sm-8P; Sat, 15 Jan 2022 14:22:02 +0000
-Date: Sat, 15 Jan 2022 22:21:35 +0800
+	id 1n8lXD-000A1k-0j; Sat, 15 Jan 2022 16:04:07 +0000
+Date: Sun, 16 Jan 2022 00:03:07 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1595/2384]
- ./usr/include/linux/if_link.h:5:10: fatal error: 'uapi/linux/netlink.h' file
- not found
-Message-ID: <202201152228.l7UYAZdZ-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1684/2384] arch/mips/kernel/rtlx.c:345:46:
+ error: unknown type name 'poll_table'
+Message-ID: <202201152345.4hznmFMe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,32 +48,86 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: 60d16930c980493906092825024aebd0235c0f37 [1595/2384] headers/deps: net: Optimize <uapi/linux/if_link.h>
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220115/202201152228.l7UYAZdZ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+commit: 4e8d31a2893e3ef566a2e9860e746519711a0ed3 [1684/2384] headers/deps: tracing: Optimize <linux/ring_buffer.h>'s header dependencies, remove <linux/poll.h>
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20220115/202201152345.4hznmFMe-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 650fc40b6d8d9a5869b4fca525d5f237b0ee2803)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=60d16930c980493906092825024aebd0235c0f37
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4e8d31a2893e3ef566a2e9860e746519711a0ed3
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 60d16930c980493906092825024aebd0235c0f37
+        git checkout 4e8d31a2893e3ef566a2e9860e746519711a0ed3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/if_arp.h:27:
-   In file included from ./usr/include/linux/netdevice.h:32:
->> ./usr/include/linux/if_link.h:5:10: fatal error: 'uapi/linux/netlink.h' file not found
-   #include <uapi/linux/netlink.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from arch/mips/kernel/rtlx.c:14:
+   In file included from include/linux/fs_api.h:2:
+   In file included from include/linux/fs.h:6:
+   include/linux/wait_bit.h:35:19: error: expected ';' after top level declarator
+   extern void __init wait_bit_init(void);
+                     ^
+                     ;
+>> arch/mips/kernel/rtlx.c:345:46: error: unknown type name 'poll_table'
+   static __poll_t file_poll(struct file *file, poll_table *wait)
+                                                ^
+>> arch/mips/kernel/rtlx.c:350:2: error: implicit declaration of function 'poll_wait' [-Werror,-Wimplicit-function-declaration]
+           poll_wait(file, &channel_wqs[minor].rt_queue, wait);
+           ^
+>> arch/mips/kernel/rtlx.c:358:11: error: use of undeclared identifier 'EPOLLIN'
+                   mask |= EPOLLIN | EPOLLRDNORM;
+                           ^
+>> arch/mips/kernel/rtlx.c:358:21: error: use of undeclared identifier 'EPOLLRDNORM'
+                   mask |= EPOLLIN | EPOLLRDNORM;
+                                     ^
+>> arch/mips/kernel/rtlx.c:362:11: error: use of undeclared identifier 'EPOLLOUT'
+                   mask |= EPOLLOUT | EPOLLWRNORM;
+                           ^
+>> arch/mips/kernel/rtlx.c:362:22: error: use of undeclared identifier 'EPOLLWRNORM'
+                   mask |= EPOLLOUT | EPOLLWRNORM;
+                                      ^
+   7 errors generated.
+
+
+vim +/poll_table +345 arch/mips/kernel/rtlx.c
+
+2600990e640e3b Ralf Baechle   2006-04-05  344  
+8b9aab09aaf390 Al Viro        2017-07-02 @345  static __poll_t file_poll(struct file *file, poll_table *wait)
+2600990e640e3b Ralf Baechle   2006-04-05  346  {
+496ad9aa8ef448 Al Viro        2013-01-23  347  	int minor = iminor(file_inode(file));
+8b9aab09aaf390 Al Viro        2017-07-02  348  	__poll_t mask = 0;
+2600990e640e3b Ralf Baechle   2006-04-05  349  
+2600990e640e3b Ralf Baechle   2006-04-05 @350  	poll_wait(file, &channel_wqs[minor].rt_queue, wait);
+2600990e640e3b Ralf Baechle   2006-04-05  351  	poll_wait(file, &channel_wqs[minor].lx_queue, wait);
+2600990e640e3b Ralf Baechle   2006-04-05  352  
+2600990e640e3b Ralf Baechle   2006-04-05  353  	if (rtlx == NULL)
+2600990e640e3b Ralf Baechle   2006-04-05  354  		return 0;
+2600990e640e3b Ralf Baechle   2006-04-05  355  
+2600990e640e3b Ralf Baechle   2006-04-05  356  	/* data available to read? */
+2600990e640e3b Ralf Baechle   2006-04-05  357  	if (rtlx_read_poll(minor, 0))
+a9a08845e9acbd Linus Torvalds 2018-02-11 @358  		mask |= EPOLLIN | EPOLLRDNORM;
+2600990e640e3b Ralf Baechle   2006-04-05  359  
+2600990e640e3b Ralf Baechle   2006-04-05  360  	/* space to write */
+2600990e640e3b Ralf Baechle   2006-04-05  361  	if (rtlx_write_poll(minor))
+a9a08845e9acbd Linus Torvalds 2018-02-11 @362  		mask |= EPOLLOUT | EPOLLWRNORM;
+2600990e640e3b Ralf Baechle   2006-04-05  363  
+2600990e640e3b Ralf Baechle   2006-04-05  364  	return mask;
+2600990e640e3b Ralf Baechle   2006-04-05  365  }
+2600990e640e3b Ralf Baechle   2006-04-05  366  
+
+:::::: The code at line 345 was first introduced by commit
+:::::: 8b9aab09aaf390b868359b9365b667cf6506473c mips: annotate ->poll() instances
+
+:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
+:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
