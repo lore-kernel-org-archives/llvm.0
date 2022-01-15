@@ -1,221 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9500173
-	for <llvm@lists.linux.dev>; Fri, 14 Jan 2022 21:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB69C36AE5;
-	Fri, 14 Jan 2022 21:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1642197495;
-	bh=Jr2Ws/7KkYBcH0vohjYnfd7dG+f39RHSmRkVh2v3P7g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XEaY6vYuBVWQqB25SsYheOYw6RMoQv9SkZdketD5hGkYl2XfRkvBMGqwYx2qIYXNQ
-	 sX9Bf7yLoFo0rLIxgw2E5KscruN2r4JzkyuWJaiIB/57nnR7vIfOAcd4YtYQjWrWut
-	 OW78h2w411h8aK3n6rd8kU500lVFgEThfIZucnkTEpgimTirE5IfYkCUlI8SAV8t5A
-	 JDtFWvOEpVEj7TVI1z1aKD5nD07NTodcRjHD4jI2/6n4dolHTLQ4yfcuF4upda3Atv
-	 nOAqdVEptZ/xd9zRfmlhMVls+2PitALnp61iDJERXNjSKn7HnL1MEgVp3ekaqqgT74
-	 b/2aEkakjWNbA==
-Date: Fri, 14 Jan 2022 14:58:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
-	llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
- __COUNTER__
-Message-ID: <YeHx8qaHiJie3xdL@archlinux-ax161>
-References: <20220114010526.1776605-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980812C80
+	for <llvm@lists.linux.dev>; Sat, 15 Jan 2022 00:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=2mqBbyqPOMHZqHggqyUH6GbMfzYEQBdKVqUlGLMWERU=; b=sfWo13HQ1+/KvXiefW4bzQVrM7
+	7T/mHPmfuRtk7uZ7MXUNyjo3GYnmhgYkQ7FOCMP8AtN7KpMX0wBjU8zOgnNIO3KAPdUIdd70TDK5Z
+	/kDBLIak/q2HYqj6dLS/SK/jwi3jhyBIp87+4LYs4as/c02+9tI0fnBQICet/mBeG1Wsh0vw43WNj
+	+ZuSgfnSYpfYBylKEKukhIl5aCso74FVObwcLbhyHotV2WCYkl0dn2YAGSY3ZwRaXIwyyhuxJbcJD
+	6hLjTyYZOA8yZLxavmhHPaQ0igURTQFZqEjIWEIe2mYV9PVLmp6xJueXd+QGBUDAgktHmPHjSP7w+
+	zFY1DxOw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1n8WaO-006CoU-Bf; Sat, 15 Jan 2022 00:06:25 +0000
+Message-ID: <f9336852-d741-5483-a6f5-3cd05b233022@infradead.org>
+Date: Fri, 14 Jan 2022 16:06:19 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220114010526.1776605-1-ndesaulniers@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: drivers/firmware/efi/sysfb_efi.c:190:35: warning: unused variable
+ 'efifb_dmi_system_table'
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ David Herrmann <dh.herrmann@gmail.com>
+References: <202201041920.mOzzco4D-lkp@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202201041920.mOzzco4D-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 13, 2022 at 05:05:26PM -0800, Nick Desaulniers wrote:
-> commit dcce50e6cc4d ("compiler.h: Fix annotation macro misplacement with Clang")
-> mentions:
-> 
-> > 'volatile' is ignored for some reason and Clang feels free to move the
-> > reachable() annotation away from its intended location.
+Hi lkp robot,
 
-Perhaps it is worth mentioning in the next paragraph that this does not
-contradict GCC's own documentation that you link to below, which
-mentions that asm volatile statements can be reordered.
+I have a metaquestion, please:
 
-"Note that the compiler can move even volatile asm instructions relative
-to other code, including across jump instructions."
 
-No strong opinion though.
-
-> Indeed, volatile is not a compiler barrier. Particularly once `-march=`
-> flags are used under certain configs, LLVM's machine-scheduler can be
-> observed moving instructions across the asm statement meant to point to
-> known reachable or unreachable code, as reported by 0day bot.
+On 1/4/22 03:52, kernel test robot wrote:
+> Hi Randy,
 > 
-> Prefer a memory clobber which is a compiler barrier that prevents these
-> re-orderings and remove the volatile qualifier.
+> FYI, the error/warning still remains.
 > 
-> Looking closer, the use of __COUNTER__ seems to have been used to
-> prevent de-duplication of these asm statements. The GCC manual mentions:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+> commit: 15d27b15de965043d6f8e23bc7f34386fcd1a772 efi: sysfb_efi: fix build when EFI is not set
+> date:   5 months ago
+> config: x86_64-randconfig-a016-20210927 (https://download.01.org/0day-ci/archive/20220104/202201041920.mOzzco4D-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=15d27b15de965043d6f8e23bc7f34386fcd1a772
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 15d27b15de965043d6f8e23bc7f34386fcd1a772
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/firmware/efi/
 > 
-> > Under certain circumstances, GCC may duplicate (or remove duplicates
-> > of) your assembly code when optimizing. This can lead to unexpected
-> > duplicate symbol errors during compilation if your asm code defines
-> > symbols or labels. Using ‘%=’ (see AssemblerTemplate) may help resolve
-> > this problem.
-> >
-> > ‘%=’ Outputs a number that is unique to each instance of the asm
-> > statement in the entire compilation. This option is useful when
-> > creating local labels and referring to them multiple times in a single
-> > template that generates multiple assembler instructions.
-> 
-> commit 3d1e236022cc ("objtool: Prevent GCC from merging annotate_unreachable()")
-> 
-> Mentions that
-> 
-> > The inline asm ‘%=’ token could be used for that, but unfortunately
-> > older versions of GCC don't support it.
-> 
-> From testing all versions of GCC available on godbolt.org, GCC 4.1+
-> seems to support 4.1. Since the minimum supported version of GCC at the
-> moment is GCC 5.1, it sounds like this is no longer a concern.
-> 
-> Prefer the %= assembler template to having to stringify __COUNTER__.
-> 
-> This commit is effectively a revert of the following commits:
-> commit dcce50e6cc4d ("compiler.h: Fix annotation macro misplacement with Clang")
-> commit f1069a8756b9 ("compiler.h: Avoid using inline asm operand modifiers")
-> commit c199f64ff93c ("instrumentation.h: Avoid using inline asm operand modifiers")
-> commit d0c2e691d1cb ("objtool: Add a comment for the unreachable annotation macros")
-> commit ec1e1b610917 ("objtool: Prevent GCC from merging annotate_unreachable(), take 2")
-> commit 3d1e236022cc ("objtool: Prevent GCC from merging annotate_unreachable()")
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1566
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
-> Link: https://lore.kernel.org/llvm/202112080834.XFYU8b5Q-lkp@intel.com/
-> Link: https://lore.kernel.org/llvm/202111300857.IyINAyJk-lkp@intel.com/
+> If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
-> Debugged-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/firmware/efi/sysfb_efi.c:72:6: warning: no previous prototype for function 'efifb_setup_from_dmi' [-Wmissing-prototypes]
+>    void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
+>         ^
+>    drivers/firmware/efi/sysfb_efi.c:72:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
+>    ^
+>    static 
+>>> drivers/firmware/efi/sysfb_efi.c:190:35: warning: unused variable 'efifb_dmi_system_table' [-Wunused-const-variable]
+>    static const struct dmi_system_id efifb_dmi_system_table[] __initconst = {
+>                                      ^
+>>> drivers/firmware/efi/sysfb_efi.c:240:35: warning: unused variable 'efifb_dmi_swap_width_height' [-Wunused-const-variable]
+>    static const struct dmi_system_id efifb_dmi_swap_width_height[] __initconst = {
+>                                      ^
+>>> drivers/firmware/efi/sysfb_efi.c:331:39: warning: unused variable 'efifb_fwnode_ops' [-Wunused-const-variable]
+>    static const struct fwnode_operations efifb_fwnode_ops = {
+>                                          ^
+>    4 warnings generated.
+> 
+> 
+> vim +/efifb_dmi_system_table +190 drivers/firmware/efi/sysfb_efi.c
+> 
 
-This resolves the original spew of warnings and does not regress a
-couple of other configurations that I tested.
+[snip]
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Why is the patch committer (David Herrmann) not cc-ed on your original email?
+(I am adding him now.)
 
-Not sure I am qualified enough to give a reviewed-by.
+bu I have seen this multiple times, where the TO: person (below) is not cc-ed
+on the problem email.  I don't understand.
 
+> 
+> :::::: The code at line 190 was first introduced by commit
+> :::::: 2995e506276bfdc7311eb02db8b2aa1a61a4b849 x86: sysfb: move EFI quirks from efifb to sysfb
+> 
+> :::::: TO: David Herrmann <dh.herrmann@gmail.com>
+> :::::: CC: H. Peter Anvin <hpa@linux.intel.com>
+> 
 > ---
->  include/linux/compiler.h        | 31 +++++++++++--------------------
->  include/linux/instrumentation.h | 24 ++++++++++--------------
->  2 files changed, 21 insertions(+), 34 deletions(-)
-> 
-> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> index 429dcebe2b99..3ac21b888d20 100644
-> --- a/include/linux/compiler.h
-> +++ b/include/linux/compiler.h
-> @@ -108,30 +108,21 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
->  # define barrier_before_unreachable() do { } while (0)
->  #endif
->  
-> -/* Unreachable code */
-> +/* These macros help objtool understand GCC code flow for unreachable code. */
->  #ifdef CONFIG_STACK_VALIDATION
-> -/*
-> - * These macros help objtool understand GCC code flow for unreachable code.
-> - * The __COUNTER__ based labels are a hack to make each instance of the macros
-> - * unique, to convince GCC not to merge duplicate inline asm statements.
-> - */
-> -#define __stringify_label(n) #n
-> -
-> -#define __annotate_reachable(c) ({					\
-> -	asm volatile(__stringify_label(c) ":\n\t"			\
-> -		     ".pushsection .discard.reachable\n\t"		\
-> -		     ".long " __stringify_label(c) "b - .\n\t"		\
-> -		     ".popsection\n\t" : : "i" (c));			\
-> +#define annotate_reachable() ({			\
-> +	asm (".Lreachable%=:\n\t"			\
-> +	     ".pushsection .discard.reachable\n\t"	\
-> +	     ".long .Lreachable%= - .\n\t"		\
-> +	     ".popsection\n\t" ::: "memory");		\
->  })
-> -#define annotate_reachable() __annotate_reachable(__COUNTER__)
->  
-> -#define __annotate_unreachable(c) ({					\
-> -	asm volatile(__stringify_label(c) ":\n\t"			\
-> -		     ".pushsection .discard.unreachable\n\t"		\
-> -		     ".long " __stringify_label(c) "b - .\n\t"		\
-> -		     ".popsection\n\t" : : "i" (c));			\
-> +#define annotate_unreachable() ({			\
-> +	asm (".Lunreachable%=:\n\t"			\
-> +	     ".pushsection .discard.unreachable\n\t"	\
-> +	     ".long .Lunreachable%= - .\n\t"		\
-> +	     ".popsection\n\t" ::: "memory");		\
->  })
-> -#define annotate_unreachable() __annotate_unreachable(__COUNTER__)
->  
->  #define ASM_UNREACHABLE							\
->  	"999:\n\t"							\
-> diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
-> index 24359b4a9605..0dae9c08764f 100644
-> --- a/include/linux/instrumentation.h
-> +++ b/include/linux/instrumentation.h
-> @@ -4,16 +4,13 @@
->  
->  #if defined(CONFIG_DEBUG_ENTRY) && defined(CONFIG_STACK_VALIDATION)
->  
-> -#include <linux/stringify.h>
-> -
->  /* Begin/end of an instrumentation safe region */
-> -#define __instrumentation_begin(c) ({					\
-> -	asm volatile(__stringify(c) ": nop\n\t"				\
-> -		     ".pushsection .discard.instr_begin\n\t"		\
-> -		     ".long " __stringify(c) "b - .\n\t"		\
-> -		     ".popsection\n\t" : : "i" (c));			\
-> +#define instrumentation_begin() ({			\
-> +	asm (".Linstbegin%=: nop\n\t"			\
-> +	     ".pushsection .discard.instr_begin\n\t"	\
-> +	     ".long .Linstbegin%= - .\n\t"		\
-> +	     ".popsection\n\t" ::: "memory");		\
->  })
-> -#define instrumentation_begin() __instrumentation_begin(__COUNTER__)
->  
->  /*
->   * Because instrumentation_{begin,end}() can nest, objtool validation considers
-> @@ -46,13 +43,12 @@
->   * To avoid this, have _end() be a NOP instruction, this ensures it will be
->   * part of the condition block and does not escape.
->   */
-> -#define __instrumentation_end(c) ({					\
-> -	asm volatile(__stringify(c) ": nop\n\t"				\
-> -		     ".pushsection .discard.instr_end\n\t"		\
-> -		     ".long " __stringify(c) "b - .\n\t"		\
-> -		     ".popsection\n\t" : : "i" (c));			\
-> +#define instrumentation_end() ({			\
-> +	asm (".Linstend%=: nop\n\t"			\
-> +	     ".pushsection .discard.instr_end\n\t"	\
-> +	     ".long .Linstend%= - .\n\t"		\
-> +	     ".popsection\n\t" ::: "memory");		\
->  })
-> -#define instrumentation_end() __instrumentation_end(__COUNTER__)
->  #else
->  # define instrumentation_begin()	do { } while(0)
->  # define instrumentation_end()		do { } while(0)
-> 
-> base-commit: dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
-> -- 
-> 2.34.1.703.g22d0c6ccf7-goog
-> 
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+thanks.
+-- 
+~Randy
