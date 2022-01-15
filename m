@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A114C168
-	for <llvm@lists.linux.dev>; Sat, 15 Jan 2022 03:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5A92CA1
+	for <llvm@lists.linux.dev>; Sat, 15 Jan 2022 07:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642217260; x=1673753260;
+  t=1642231909; x=1673767909;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KtX/m3iD5cCcMBA/Oy+QXSR/jnlYUIePE33O64k+zp0=;
-  b=SK9WrSw5LtzZoDnN46UHchSfkqG4LNpvmsgTEtusUrIWIqKizI3P88xG
-   FeY52su9o5ayDfTvc5NOmuCl7pFWf9/7pugprZ/vYGynSS6NYQ9JR/OnV
-   /FKbusaS3teGx7ZckEgI2uFSLWdyBLlOnDQNXQm1VIAmAO5KWG7+XDd2f
-   ul2e2LOo0GhlEBGg+Q5fZG2RJ64ILhGrBRWpkQYZUH1Xs3MZVYEnoZq5j
-   Me0yepzS6N3CsEfgciScr7ZGJTPDVHzrndGAR1FpLosHRlYu/TUxzUH55
-   3hSXLFDSqRz7yk7qrIqjK5KAxSCyZa9rvleISm+7C0KJGbA5O9xJCMRgv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="224356813"
+  bh=1oUULl2+pZo/eWRUTBNn4f22ShUKxXWI6Y03z2SYvMg=;
+  b=VfxLI+5pafaIwbwW6Nx0bv1ONUhvIKind7JsNHY9h5RraKntGI6nRFmy
+   c/fTRasVb/SWfEydlNCFTs6q9oUB0KrvG/DpPaHkCbYheyfOKOhHsRzto
+   6UaqYw0bv4oEh1wrUo/ieAnN3UFQNAOZTjCD1DL87+I9fqHTPyds/04Kh
+   WZUitoAqBZgJV5FQHPSX+5PROAjnLNMpa8mkNQ4kM3MYpnMO82mHXdH3D
+   tVs+19EkEBccehy23HuVyEt7pjhWHr8mtzhhTKaPRAJRBzTpfYCc/g4pf
+   UnsioCzCJ0ZQ3r0LuW8O1ZG39ZTrHNV98KiWB811F9mYaJe7eSdPpLuto
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="241949369"
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="224356813"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 19:27:40 -0800
+   d="scan'208";a="241949369"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 23:31:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="475999001"
+   d="scan'208";a="559734366"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jan 2022 19:27:38 -0800
+  by orsmga001.jf.intel.com with ESMTP; 14 Jan 2022 23:31:47 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n8Zj8-0009Ke-8j; Sat, 15 Jan 2022 03:27:38 +0000
-Date: Sat, 15 Jan 2022 11:27:16 +0800
+	id 1n8dXO-0009VA-MY; Sat, 15 Jan 2022 07:31:46 +0000
+Date: Sat, 15 Jan 2022 15:31:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1559/2384]
- ./usr/include/linux/socket.h:5:10: fatal error: 'uapi/linux/socket_types.h'
- file not found
-Message-ID: <202201151153.jUgRmbQJ-lkp@intel.com>
+Subject: [peterz-queue:x86/wip.ibt 7/15] arch/x86/kernel/setup.c:65:1:
+ warning: 'nocf_check' attribute ignored; use -fcf-protection to enable the
+ attribute
+Message-ID: <202201151505.wRwvYlwh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,33 +47,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: 4d279aea908260eca25d06d817422f7b820a790f [1559/2384] headers/deps: net: Split <linux/socket_types.h> out of <linux/socket.h>
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220115/202201151153.jUgRmbQJ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   7b31f08c5f3fb5f3cfd75deb24787569f35315d5
+commit: e4b4623dc6a99968ab59ea14cdae2c7a09924838 [7/15] x86: Don't generate ENDBR in .discard.text
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220115/202201151505.wRwvYlwh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4d279aea908260eca25d06d817422f7b820a790f
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 4d279aea908260eca25d06d817422f7b820a790f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=e4b4623dc6a99968ab59ea14cdae2c7a09924838
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout e4b4623dc6a99968ab59ea14cdae2c7a09924838
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ arch/x86/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/rdma/rdma_user_cm.h:38:
->> ./usr/include/linux/socket.h:5:10: fatal error: 'uapi/linux/socket_types.h' file not found
-   #include <uapi/linux/socket_types.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> arch/x86/kernel/setup.c:65:1: warning: 'nocf_check' attribute ignored; use -fcf-protection to enable the attribute [-Wignored-attributes]
+   RESERVE_BRK(dmi_alloc, 65536);
+   ^
+   arch/x86/include/asm/setup.h:122:56: note: expanded from macro 'RESERVE_BRK'
+           static void __section(".discard.text") __attribute__((nocf_check)) __used notrace               \
+                                                                 ^
+   1 warning generated.
+--
+>> arch/x86/mm/init.c:178:1: warning: 'nocf_check' attribute ignored; use -fcf-protection to enable the attribute [-Wignored-attributes]
+   RESERVE_BRK(early_pgt_alloc, INIT_PGT_BUF_SIZE);
+   ^
+   arch/x86/include/asm/setup.h:122:56: note: expanded from macro 'RESERVE_BRK'
+           static void __section(".discard.text") __attribute__((nocf_check)) __used notrace               \
+                                                                 ^
+   1 warning generated.
+
+
+vim +/nocf_check +65 arch/x86/kernel/setup.c
+
+2b72394e408964 Pekka Enberg                  2009-04-28  63  
+e808bae2407a08 Thadeu Lima de Souza Cascardo 2010-02-09  64  #ifdef CONFIG_DMI
+796216a57fe45c Jeremy Fitzhardinge           2009-03-12 @65  RESERVE_BRK(dmi_alloc, 65536);
+e808bae2407a08 Thadeu Lima de Souza Cascardo 2010-02-09  66  #endif
+796216a57fe45c Jeremy Fitzhardinge           2009-03-12  67  
+c0b5842a457d44 Ingo Molnar                   2009-01-27  68  
+
+:::::: The code at line 65 was first introduced by commit
+:::::: 796216a57fe45c04adc35bda1f0782efec78a713 x86: allow extend_brk users to reserve brk space
+
+:::::: TO: Jeremy Fitzhardinge <jeremy.fitzhardinge@citrix.com>
+:::::: CC: H. Peter Anvin <hpa@zytor.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
