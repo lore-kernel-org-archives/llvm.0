@@ -1,79 +1,95 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC602C82
-	for <llvm@lists.linux.dev>; Sun, 16 Jan 2022 03:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642304331; x=1673840331;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=82Yhw20nnkzurgz2MQxUvFN3bM7YTd6lLh9md2QUsNo=;
-  b=Btv7iZ/bSIsQuUrubgVsy60qDx/HbJgJeTN1fEWx6/eWzufq+mzmif6P
-   Bu698GCGf//vNdOiwQEDsOkVyAgfErsD4j4xQ7iLc3I4RUiqkwPd3LqHj
-   13HfqA/wH+5buwefn6xEagsHV8enAefCSYFpwaOsSgMcOlb5t79RYoFpe
-   dOdFSO4I6erMj2w4AKxmV/ceHJmXy6KL8R7VNhzySE41ZFMmiPICVQnNW
-   5MMCAgzvNlIeNAu7nwycmtPu3mLwAk/l/jWbJ0US80z+/PA0h2Y7bM4jY
-   b/0EzYHSEXuPIUfxELkWN+coOYfdpM7SgSXeaGDQCooM1FltrQrYHYDtO
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="244654586"
-X-IronPort-AV: E=Sophos;i="5.88,292,1635231600"; 
-   d="scan'208";a="244654586"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 19:38:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,292,1635231600"; 
-   d="scan'208";a="692686765"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jan 2022 19:38:47 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n8wNS-000AQb-RS; Sun, 16 Jan 2022 03:38:46 +0000
-Date: Sun, 16 Jan 2022 11:38:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1942/2384]
- ./usr/include/linux/neighbour.h:5:10: fatal error: 'uapi/linux/types.h' file
- not found
-Message-ID: <202201161121.JU52U7sL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18BA168
+	for <llvm@lists.linux.dev>; Sun, 16 Jan 2022 03:59:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D903EC36AE9;
+	Sun, 16 Jan 2022 03:59:21 +0000 (UTC)
+Date: Sat, 15 Jan 2022 22:59:20 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Yinan Liu <yinan@linux.alibaba.com>, linux-kernel@vger.kernel.org, Ingo
+ Molnar <mingo@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ kernel test robot <lkp@intel.com>, kernel test robot
+ <oliver.sang@intel.com>, llvm@lists.linux.dev
+Subject: Re: [for-next][PATCH 10/31] scripts: ftrace - move the
+ sort-processing in ftrace_init
+Message-ID: <20220115225920.0e5939aa@gandalf.local.home>
+In-Reply-To: <YeMwNEfNaGErFthk@archlinux-ax161>
+References: <20220111173030.999527342@goodmis.org>
+	<20220111173115.079437896@goodmis.org>
+	<YeMwNEfNaGErFthk@archlinux-ax161>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: 57aa2dcd6f974cdffe2dcc9e9dd7b9c6379d1183 [1942/2384] headers/deps: net: Optimize <uapi/linux/neighbour.h> dependencies
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220116/202201161121.JU52U7sL-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=57aa2dcd6f974cdffe2dcc9e9dd7b9c6379d1183
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 57aa2dcd6f974cdffe2dcc9e9dd7b9c6379d1183
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Sat, 15 Jan 2022 13:36:04 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Hi Steven and Yinan,
+> 
+> On Tue, Jan 11, 2022 at 12:30:41PM -0500, Steven Rostedt wrote:
+> > From: Yinan Liu <yinan@linux.alibaba.com>
+> > 
+> > When the kernel starts, the initialization of ftrace takes
+> > up a portion of the time (approximately 6~8ms) to sort mcount
+> > addresses. We can save this time by moving mcount-sorting to
+> > compile time.
+> > 
+> > Link: https://lkml.kernel.org/r/20211212113358.34208-2-yinan@linux.alibaba.com
+> > 
+> > Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > Signed-off-by: Steven Rostedt <rostedt@goodmis.org>  
+> 
+> This change as commit 72b3942a173c ("scripts: ftrace - move the
+> sort-processing in ftrace_init") in -next causes a bunch of warnings at
+> the beginning of the build when using clang as the host compiler:
+> 
 
-All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/neighbour.h:5:10: fatal error: 'uapi/linux/types.h' file not found
-   #include <uapi/linux/types.h>
-            ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+> 
+> Should mcount_sort_thread be zero initialized or is there something else
+> going on here? I am currently hunting down a bunch of other regressions
+> so apologies for just the report rather than a patch to fix it.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Can this really happen? We have:
+
+        if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
+                fprintf(stderr,
+                        "pthread_create mcount_sort_thread failed '%s': %s\n",
+                        strerror(errno), fname);
+                goto out;
+        }
+[..]
+
+        if (mcount_sort_thread) {
+                void *retval = NULL;
+                /* wait for mcount sort done */
+                rc = pthread_join(mcount_sort_thread, &retval);
+                if (rc) {
+                        fprintf(stderr,
+                                "pthread_join failed '%s': %s\n",
+                                strerror(errno), fname);
+                } else if (retval) {
+                        rc = -1;
+                        fprintf(stderr,
+                                "failed to sort mcount '%s': %s\n",
+                                (char *)retval, fname);
+                }
+        }
+
+Shouldn't the pthread_create() initialize it? And I'm not even sure if we
+need that if statement?
+
+Or is there a path to get there without pthread_create() initializing it?
+
+-- Steve
+
