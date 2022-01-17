@@ -1,41 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0A12C9D
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 13:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19BD2C9D
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 13:59:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642427918; x=1673963918;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5eGULNquc8PWrPd6ybyqgziUKXX4BtpHOyNvbgPQrek=;
-  b=FAt1DpUet12bsLC1EiHuR4Gbv9+lSYLQaWyBgjJEpBsCN72zo/9iB0Lx
-   GbZ8mOW+GK/XLldkO7TYHlPC8AW79D0pp70T2DdS7mKjFux7ivJQVPf6n
-   zCmwRhw5VzfVtx9wCorKT66qxrhuJUg4KBxtuOoyAbtUX2SMJfKfUeeps
-   0StnxAHZLr8libh469MdeDI4ofxkAEQaAbFu/bZR/eI1Y0JdbmgzFlWwn
-   OMGBM6f2l75JvHvVQpU+4BeW3Pt4wNGaHidWgZrgXpfLL25HRl0tj7l7U
-   g74IvunIyE2GQbltRL6gehqqU7xdSQdzigzjCjKZpoJXQmvoY78HZnv8d
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="243450017"
+  t=1642427977; x=1673963977;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nUTI6TSIGCNjVrAj/+Eq8/FbWle+3ts+TKvR57bt9w0=;
+  b=kypbJcBLIVbjmkhKrs8AMlC7VzAwnjeB5yNusGouOG/5z0K2lQlqblmd
+   91ms+f2cp7aRGbwoH40ppA279TTOR01qF3sMYtvkiR/rLe1cCenlpe7eX
+   2y0ugWVhQEUy7QQELMqmEFe9nWHa1LbZoG2S6bQjvbi3Rau3ZAuqTgPrE
+   oFXgwHVPOl8d/kIxdLedR6am1Cn1AaRkUMs5hTofFieRz0UAwtX1nr01s
+   wY53NTHPP9u/BLce4xTHwr/e0cya+5te7RUUGoooIHQUJ14WjmLRg3ey/
+   9+6guFrZHJFEOHE9k5rYLoPps6AfYsFJn1XsptxdewKnzXQpPFDAV0xkW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="224606502"
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="243450017"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:58:37 -0800
+   d="scan'208";a="224606502"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:59:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="474461925"
+   d="scan'208";a="625195366"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jan 2022 05:58:35 -0800
+  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2022 05:59:35 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n9SWo-000BbD-Vy; Mon, 17 Jan 2022 13:58:34 +0000
-Date: Mon, 17 Jan 2022 21:58:30 +0800
+	id 1n9SXn-000Bbb-3x; Mon, 17 Jan 2022 13:59:35 +0000
+Date: Mon, 17 Jan 2022 21:58:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Milind Changire <milindchangire@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 1/1] ceph: add getvxattr op
-Message-ID: <202201171943.GKWl1yqQ-lkp@intel.com>
-References: <20220117034747.22229-2-mchangir@redhat.com>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_linecards 13/56]
+ drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:744:21: error: implicit
+ declaration of function 'vmalloc'
+Message-ID: <202201172052.Gp63bQmd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,134 +45,191 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220117034747.22229-2-mchangir@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Milind,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on ceph-client/for-linus]
-[also build test WARNING on v5.16 next-20220117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Milind-Changire/ceph-add-getvxattr-op-support/20220117-114947
-base:   https://github.com/ceph/ceph-client.git for-linus
-config: x86_64-randconfig-a006-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171943.GKWl1yqQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   f53503fb3489103cf72bc705b0e49e4853e5d485
+commit: 53d54437e55ccd600a39e5dd5227d163b3ead000 [13/56] mlxsw: core_linecards: Add line card objects and implement provisioning
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220117/202201172052.Gp63bQmd-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 650fc40b6d8d9a5869b4fca525d5f237b0ee2803)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ed42f71060fc0c0c0c43a582f0bb817713836ddb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Milind-Changire/ceph-add-getvxattr-op-support/20220117-114947
-        git checkout ed42f71060fc0c0c0c43a582f0bb817713836ddb
+        # https://github.com/jpirko/linux_mlxsw/commit/53d54437e55ccd600a39e5dd5227d163b3ead000
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout 53d54437e55ccd600a39e5dd5227d163b3ead000
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/ceph/inode.c:2326:53: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-           dout("do_getvxattr xattr_value_len:%u, size:%u\n", xattr_value_len, size);
-                                              ~~              ^~~~~~~~~~~~~~~
-                                              %lu
-   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
-   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
-                                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/ceph/inode.c:2326:70: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-           dout("do_getvxattr xattr_value_len:%u, size:%u\n", xattr_value_len, size);
-                                                       ~~                      ^~~~
-                                                       %lu
-   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
-   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
-                                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:425:26: warning: variable 'linecards' set but not used [-Wunused-but-set-variable]
+           struct mlxsw_linecards *linecards;
+                                   ^
+>> drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:744:21: error: implicit declaration of function 'vmalloc' [-Werror,-Wimplicit-function-declaration]
+           types_info->data = vmalloc(types_info->data_size);
+                              ^
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:744:19: warning: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+           types_info->data = vmalloc(types_info->data_size);
+                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:772:2: error: implicit declaration of function 'vfree' [-Werror,-Wimplicit-function-declaration]
+           vfree(types_info->data);
+           ^
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:783:2: error: implicit declaration of function 'vfree' [-Werror,-Wimplicit-function-declaration]
+           vfree(types_info->data);
+           ^
+>> drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:806:14: error: implicit declaration of function 'vzalloc' [-Werror,-Wimplicit-function-declaration]
+           linecards = vzalloc(struct_size(linecards, linecards, slot_count));
+                       ^
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:806:12: warning: incompatible integer to pointer conversion assigning to 'struct mlxsw_linecards *' from 'int' [-Wint-conversion]
+           linecards = vzalloc(struct_size(linecards, linecards, slot_count));
+                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:842:2: error: implicit declaration of function 'vfree' [-Werror,-Wimplicit-function-declaration]
+           vfree(linecards);
+           ^
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:860:2: error: implicit declaration of function 'vfree' [-Werror,-Wimplicit-function-declaration]
+           vfree(linecards);
+           ^
+   3 warnings and 6 errors generated.
 
 
-vim +2326 fs/ceph/inode.c
+vim +/vmalloc +744 drivers/net/ethernet/mellanox/mlxsw/core_linecards.c
 
-  2293	
-  2294	int ceph_do_getvxattr(struct inode *inode, const char *name, void *value,
-  2295			      size_t size)
-  2296	{
-  2297		struct ceph_fs_client *fsc = ceph_sb_to_client(inode->i_sb);
-  2298		struct ceph_mds_client *mdsc = fsc->mdsc;
-  2299		struct ceph_mds_request *req;
-  2300		int mode = USE_AUTH_MDS;
-  2301		int err;
-  2302		char *xattr_value;
-  2303		size_t xattr_value_len;
-  2304	
-  2305		req = ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETVXATTR, mode);
-  2306		if (IS_ERR(req)) {
-  2307			err = -ENOMEM;
-  2308			goto out;
-  2309		}
-  2310	
-  2311		req->r_path2 = kstrdup(name, GFP_NOFS);
-  2312		if (!req->r_path2) {
-  2313			err = -ENOMEM;
-  2314			goto put;
-  2315		}
-  2316	
-  2317		ihold(inode);
-  2318		req->r_inode = inode;
-  2319		err = ceph_mdsc_do_request(mdsc, NULL, req);
-  2320		if (err < 0)
-  2321			goto put;
-  2322	
-  2323		xattr_value = req->r_reply_info.xattr_info.xattr_value;
-  2324		xattr_value_len = req->r_reply_info.xattr_info.xattr_value_len;
-  2325	
-> 2326		dout("do_getvxattr xattr_value_len:%u, size:%u\n", xattr_value_len, size);
-  2327	
-  2328		err = xattr_value_len;
-  2329		if (size == 0)
-  2330			goto put;
-  2331	
-  2332		if (xattr_value_len > size) {
-  2333			err = -ERANGE;
-  2334			goto put;
-  2335		}
-  2336	
-  2337		memcpy(value, xattr_value, xattr_value_len);
-  2338	put:
-  2339		ceph_mdsc_put_request(req);
-  2340	out:
-  2341		dout("do_getvxattr result=%d\n", err);
-  2342		return err;
-  2343	}
-  2344	
+   717	
+   718	static int mlxsw_linecard_types_init(struct mlxsw_core *mlxsw_core,
+   719					     struct mlxsw_linecards *linecards)
+   720	{
+   721		struct mlxsw_linecard_types_info *types_info;
+   722		const char *lc_ini_bundle_filename;
+   723		const struct firmware *firmware;
+   724		int err;
+   725	
+   726		lc_ini_bundle_filename = mlxsw_core_lc_ini_bundle_filename(mlxsw_core);
+   727		if (!lc_ini_bundle_filename)
+   728			return 0;
+   729	
+   730		err = request_firmware_direct(&firmware, lc_ini_bundle_filename,
+   731					      linecards->bus_info->dev);
+   732		if (err) {
+   733			dev_warn(linecards->bus_info->dev, "Could not request linecards INI file \"%s\", provisioning will not be possible\n",
+   734				 lc_ini_bundle_filename);
+   735			return 0;
+   736		}
+   737	
+   738		types_info = kzalloc(sizeof(*types_info), GFP_KERNEL);
+   739		if (!types_info)
+   740			return -ENOMEM;
+   741		linecards->types_info = types_info;
+   742	
+   743		types_info->data_size = firmware->size;
+ > 744		types_info->data = vmalloc(types_info->data_size);
+   745		if (!types_info->data) {
+   746			err = -ENOMEM;
+   747			goto err_data_alloc;
+   748		}
+   749		memcpy(types_info->data, firmware->data, types_info->data_size);
+   750		release_firmware(firmware);
+   751	
+   752		err = mlxsw_linecard_types_file_validate(linecards, types_info);
+   753		if (err) {
+   754			err = 0;
+   755			goto err_type_file_file_validate;
+   756		}
+   757	
+   758		types_info->ini_files = kmalloc_array(types_info->count,
+   759						      sizeof(struct mlxsw_linecard_ini_file),
+   760						      GFP_KERNEL);
+   761		if (!types_info->ini_files) {
+   762			err = -ENOMEM;
+   763			goto err_ini_files_alloc;
+   764		}
+   765	
+   766		mlxsw_linecard_types_file_parse(types_info);
+   767	
+   768		return 0;
+   769	
+   770	err_ini_files_alloc:
+   771	err_type_file_file_validate:
+ > 772		vfree(types_info->data);
+   773	err_data_alloc:
+   774		kfree(types_info);
+   775		return err;
+   776	}
+   777	
+   778	static void mlxsw_linecard_types_fini(struct mlxsw_linecards *linecards)
+   779	{
+   780		struct mlxsw_linecard_types_info *types_info = linecards->types_info;
+   781	
+   782		kfree(types_info->ini_files);
+   783		vfree(types_info->data);
+   784		kfree(types_info);
+   785	}
+   786	
+   787	int mlxsw_linecards_init(struct mlxsw_core *mlxsw_core,
+   788				 const struct mlxsw_bus_info *bus_info)
+   789	{
+   790		char mgpir_pl[MLXSW_REG_MGPIR_LEN];
+   791		struct mlxsw_linecards *linecards;
+   792		u8 slot_count;
+   793		int err;
+   794		int i;
+   795	
+   796		mlxsw_reg_mgpir_pack(mgpir_pl, 0);
+   797		err = mlxsw_reg_query(mlxsw_core, MLXSW_REG(mgpir), mgpir_pl);
+   798		if (err)
+   799			return err;
+   800	
+   801		mlxsw_reg_mgpir_unpack(mgpir_pl, NULL, NULL, NULL,
+   802				       NULL, &slot_count);
+   803		if (!slot_count)
+   804			return 0;
+   805	
+ > 806		linecards = vzalloc(struct_size(linecards, linecards, slot_count));
+   807		if (!linecards)
+   808			return -ENOMEM;
+   809		linecards->count = slot_count;
+   810		linecards->mlxsw_core = mlxsw_core;
+   811		linecards->bus_info = bus_info;
+   812	
+   813		err = mlxsw_linecard_types_init(mlxsw_core, linecards);
+   814		if (err)
+   815			goto err_types_init;
+   816	
+   817		err = mlxsw_core_traps_register(mlxsw_core, mlxsw_linecard_listener,
+   818						ARRAY_SIZE(mlxsw_linecard_listener),
+   819						mlxsw_core);
+   820		if (err)
+   821			goto err_traps_register;
+   822	
+   823		mlxsw_core_linecards_set(mlxsw_core, linecards);
+   824	
+   825		for (i = 0; i < linecards->count; i++) {
+   826			err = mlxsw_linecard_init(mlxsw_core, linecards, i + 1);
+   827			if (err)
+   828				goto err_linecard_init;
+   829		}
+   830	
+   831		return 0;
+   832	
+   833	err_linecard_init:
+   834		for (i--; i >= 0; i--)
+   835			mlxsw_linecard_fini(mlxsw_core, linecards, i + 1);
+   836		mlxsw_core_traps_unregister(mlxsw_core, mlxsw_linecard_listener,
+   837					    ARRAY_SIZE(mlxsw_linecard_listener),
+   838					    mlxsw_core);
+   839	err_traps_register:
+   840		mlxsw_linecard_types_fini(linecards);
+   841	err_types_init:
+   842		vfree(linecards);
+   843	
+   844		return err;
+   845	}
+   846	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
