@@ -1,41 +1,41 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A686168
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 10:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3F6168
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 10:52:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642415493; x=1673951493;
+  t=1642416735; x=1673952735;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DLt/oq7kjKruuc4+LDlZyKeZllSdx75zWhl5DKre2hQ=;
-  b=JQG8kFM4nrvfAUr5gk2GZMl27YgW5tLfcX6dqEVedg8xzoSgaoEScxpg
-   LzEyzjru2/OxoQUaDYwUvJ3AdidF0PiATQvhN0PKUgzKMigSV9TeL07Hp
-   yCnKesyY2uDlLo7kO2D0lka5lWws/Z/IhZbXJq/DN83siUsZr/ML5rzk3
-   DCan76L0JArKYUV2CSuokljAMgkvYuRPn29yhG29YuGtLO20Jlw81IbEu
-   eFgyvzyehrYTupSmwaAR+K9DS8pZ1vkZ6lD1PuhYwuyxnIUY65EJGC2TK
-   IRcNlf75raZHZ/0lMabYF9FvNVs8sRNO8LOr8d4nX2rNQV+KZHlTd04ID
+  bh=36H2drjwpOY4IU2f8ScW/ajOBwnGkRxRYemk8d7v1T4=;
+  b=eG/K4KKBcOsGTmVJtkRrX6aa3kTTLVGD1597vmIuA6lFnzva0aGsWO8R
+   HMms2iJaNGPIdsjYjmI8qJ9PUFR7MuENDSZ6CjX1eGJykbjCEznjPz7IW
+   p9ODaBhPaUBJ8W+7EhiA4XphsZGDgwT3qbwI40/yC31T/SaicLwD2Pa4E
+   6o5s6TRwVzLT4Cv385jx5Q0qhJ0kqE1lifsS8D6IErPXlgvFEX2j6HwWB
+   9GyzJrlkZWO41CMcvtws2eVt3jV6piu25cHWUyhIVeLXSp0NqKY/1XrmO
+   eu2XmaYbQs66VAOds0oUFj++i9jPWfPwlLtFYLLeQI505Gxo+aEfUT0aO
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="224578307"
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244558689"
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="224578307"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:31:32 -0800
+   d="scan'208";a="244558689"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:51:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="476601332"
+   d="scan'208";a="693032267"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2022 02:31:31 -0800
+  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 02:51:31 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n9PIQ-000BTk-Is; Mon, 17 Jan 2022 10:31:30 +0000
-Date: Mon, 17 Jan 2022 18:30:40 +0800
+	id 1n9Pbm-000BUN-QQ; Mon, 17 Jan 2022 10:51:30 +0000
+Date: Mon, 17 Jan 2022 18:51:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
+To: Roger Quadros <rogerq@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 28/30] drivers/tty/mxser.c:1745:30: warning: unused
- variable 'mxser_ops'
-Message-ID: <202201171837.2mMV7e7n-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: ERROR: modpost: "gpmc_omap_get_nand_ops"
+ [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
+Message-ID: <202201171805.5HeoR4rS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,58 +46,37 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   f297a9ec220495933237083fbf2333eca65eb9b4
-commit: c2f304d1e4750e106a884544dfd7539b4853edf5 [28/30] mxser: switch to uart_driver
-config: arm-randconfig-r003-20220116 (https://download.01.org/0day-ci/archive/20220117/202201171837.2mMV7e7n-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0c947b893d69231a9add855939da7c66237ab44f
+commit: dbcb124acebd8148e9e858a231f1798956dd3ca6 mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
+date:   4 weeks ago
+config: arm64-randconfig-r001-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171805.5HeoR4rS-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=c2f304d1e4750e106a884544dfd7539b4853edf5
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout c2f304d1e4750e106a884544dfd7539b4853edf5
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dbcb124acebd8148e9e858a231f1798956dd3ca6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dbcb124acebd8148e9e858a231f1798956dd3ca6
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/tty/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/tty/mxser.c:1745:30: warning: unused variable 'mxser_ops' [-Wunused-const-variable]
-   static const struct uart_ops mxser_ops = {
-                                ^
-   1 warning generated.
+>> ERROR: modpost: "gpmc_omap_get_nand_ops" [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
 
-
-vim +/mxser_ops +1745 drivers/tty/mxser.c
-
-  1744	
-> 1745	static const struct uart_ops mxser_ops = {
-  1746		.tx_empty       = mxser_tx_empty,
-  1747		//.get_mctrl      = mxser_get_mctrl,
-  1748		//.set_mctrl      = mxser_set_mctrl,
-  1749		.stop_tx        = mxser_stop_tx,
-  1750		.start_tx       = mxser_start_tx,
-  1751		.stop_rx        = mxser_stop_rx,
-  1752		.break_ctl      = mxser_break_ctl,
-  1753		.startup        = mxser_startup,
-  1754		.shutdown       = mxser_shutdown,
-  1755		.set_termios    = mxser_set_termios,
-  1756		//.pm             = mxser_pm,
-  1757		//.type           = mxser_type,
-  1758		//.release_port   = mxser_release_port,
-  1759		//.request_port   = mxser_request_port,
-  1760		//.config_port    = mxser_config_port,
-  1761		//.verify_port    = mxser_verify_port,
-  1762	};
-  1763	
-  1764	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP_GPMC
+   Depends on MEMORY && OF_ADDRESS
+   Selected by
+   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST && HAS_IOMEM && ARCH_K3
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
