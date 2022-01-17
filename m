@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8635E2C80
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 17:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13ED0C36AE7;
-	Mon, 17 Jan 2022 17:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124B62C80
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 17:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD07C36AE7;
+	Mon, 17 Jan 2022 17:06:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1642439142;
+	s=k20201202; t=1642439188;
 	bh=Qf6XnIzeElSZlaTPE0+w9iFReX52uTDmquC2axMPOMY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iuCJ0SOcfP+v3FQviXSl9z/GVwRQIUir1AZqWR6l3tVt3VIysIala/WoLEJk1BWF3
-	 jRHpYmiosjMNFDiedODr1uEEdZnYgCxVcW3J+pdU+4BzrRO4rHD4QXS/9DosHiHa01
-	 r2DKYO055Wu1vvc5ZlSqrj+c2Y+N0VbmckhUCCg2u0xviJsdiG/EgRGwOQt0g+Ms+z
-	 0uG8jZN8XA8a9gtLVP4cfm/UgtjAs2oIZVsJPy2lQBDMIBv2XseNWu2hZFTs3z6xUt
-	 ARxFAt7XpjrRyNqbv8y8HSil0om1lVmgAfGJY72Y/uIzHaMaMWIqle9JzlnZyNw2QJ
-	 36PonuXPJf/4w==
+	b=mO1fbs8MCjjFXMrSB6wTJbQF7lPzs45Fi5idJqinTrlTwbvVqDGg9lCAT9wJ3N8Ys
+	 ku7nCrWQi3M4A5BAmGJrupXgmQ7NGRpxukh20UXPXhmGz3FbOXd2AgPe0iKQVIMBbr
+	 BTjwLc3rIJFdJ/xZZwfu/FHaAaSIA/oa1z5akWNXe7y7jL8cXMpbyF/2rAJmS6qkDf
+	 guENBhA0rCR6Xrv+L9o5dWewX4KTctN03zctCta8dXoN0fivPRme07+MmPuZyF3qUk
+	 LocCj5bf56VRWZNmAI8+dX78+8Lpae0E4XbRw06a+h/z9atkk/1O4FFgiF6X6Pgzjb
+	 jxEqDEwu28nhQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -27,12 +27,12 @@ Cc: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
 	freifunk@adrianschmutzler.de,
 	linux-mips@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 19/21] MIPS: Octeon: Fix build errors using clang
-Date: Mon, 17 Jan 2022 12:04:51 -0500
-Message-Id: <20220117170454.1472347-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 15/17] MIPS: Octeon: Fix build errors using clang
+Date: Mon, 17 Jan 2022 12:05:49 -0500
+Message-Id: <20220117170551.1472640-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220117170454.1472347-1-sashal@kernel.org>
-References: <20220117170454.1472347-1-sashal@kernel.org>
+In-Reply-To: <20220117170551.1472640-1-sashal@kernel.org>
+References: <20220117170551.1472640-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
