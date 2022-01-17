@@ -1,41 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F7929CA
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 20:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6069173
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 20:57:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642451269; x=1673987269;
+  t=1642453071; x=1673989071;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6J7EAmc3BVCdekV+9fAAd4SfvYLQlJjb0v5rHGXaptc=;
-  b=kN+7rvC3fpZ8sEv3gydCBFKLKWSGump5nd1C7PrhUP5/ZZMHWs0kekH8
-   j0myBaUgX/ytXYUH9W8Ovvs00JQ/lF/QsHb+1TklEmi4t18jOrv7TJJtg
-   OCo7PfHlt/J4dpq+hlyjL6nXECh+OEjSh10ovP9SkgQ5yaRFrR0RYayls
-   /k0IJNFRNVIbt92jrq4sPw+p+Hryxq1szJvfmcXH+Zquo3ndXsC/A2kww
-   dJBYkxZH9Ei0WYl4hIcS2OI3P8Efg/ZuGeeArq4MOC2ZyOufrqV912zz9
-   KH/JfOWPYjXVzOYwidjI99CirC22SySCae2Ul6yW6apLkjhIVEQeavX0Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="269067368"
+  bh=Ze1TtS9EWwk598oqZ++lM0WsAz2TsJLsrHKqp+Xs6NQ=;
+  b=MMIal9oFJ++h7DuOL64pMUw03LwYpqexO4SGCs9XknunGc8vojfJW4sL
+   Sgx5TIMITo95M+4Gx/jLHU9D1bUStl0bZzl5dXNYqABAxOXgMC1Dc2ck0
+   VJFbISC4g9hP2FXHA3S2VqgVSKbaABtS/bBJ9F28yoa/RZe1/qh1jEoWk
+   JsRRcx2WfqFb1wOzJKbkmw4dSDKa+kj2uy/okpkXTHC3EXx6U8uPp0MAT
+   W4hITqN//oq0mf4QnhRDXBcvzblbO/sOFzGGSq8TQDeZ3WEvTpDxEe+pI
+   vlUIfseYByuBJsP5P8Mx5MWjWt3Yq1YT4kJUnB/awlL66T/QKwYN7gTbz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="305424999"
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="269067368"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:27:48 -0800
+   d="scan'208";a="305424999"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:57:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="625289742"
+   d="scan'208";a="476760990"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2022 12:27:47 -0800
+  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2022 12:57:49 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n9YbS-000Bqo-Nm; Mon, 17 Jan 2022 20:27:46 +0000
-Date: Tue, 18 Jan 2022 04:26:51 +0800
+	id 1n9Z4W-000Brv-HR; Mon, 17 Jan 2022 20:57:48 +0000
+Date: Tue, 18 Jan 2022 04:57:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>
+To: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [drm-misc:drm-misc-next 3/5] ld.lld: error: undefined symbol:
- drm_dp_calc_pbn_mode
-Message-ID: <202201180447.2T9OteXU-lkp@intel.com>
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending 283/294]
+ drivers/net/wireless/ath/ath11k/pci_cmn.c:185:10: warning: variable 'val' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <202201180419.pxOIAhwJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,55 +48,89 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   032a125904995985334766911de9e26ee2bbd646
-commit: adb9d5a2cc77e8aefe98fe4c11656c5b7025c248 [3/5] drm/dp: Move DisplayPort helpers into separate helper module
-config: hexagon-randconfig-r041-20220116 (https://download.01.org/0day-ci/archive/20220118/202201180447.2T9OteXU-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+head:   8415824bf3ea5c313f15b902497cd2834c01e78e
+commit: f38b44f68cd13a37d90c62863250c16b951e202e [283/294] ath11k: Add register access logic for WCN6750
+config: arm64-randconfig-r011-20220116 (https://download.01.org/0day-ci/archive/20220118/202201180419.pxOIAhwJ-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout adb9d5a2cc77e8aefe98fe4c11656c5b7025c248
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/f38b44f68cd13a37d90c62863250c16b951e202e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
+        git checkout f38b44f68cd13a37d90c62863250c16b951e202e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: drm_dp_calc_pbn_mode
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
-   >>> referenced 7 more times
---
->> ld.lld: error: undefined symbol: drm_dp_encode_sideband_req
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_dp_decode_sideband_req
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_dp_dump_sideband_msg_req_body
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced 1 more times
+>> drivers/net/wireless/ath/ath11k/pci_cmn.c:185:10: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   } else if (ab->bus_params.ops.window_read32) {
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/pci_cmn.c:195:9: note: uninitialized use occurs here
+           return val;
+                  ^~~
+   drivers/net/wireless/ath/ath11k/pci_cmn.c:185:10: note: remove the 'if' if its condition is always true
+                   } else if (ab->bus_params.ops.window_read32) {
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   drivers/net/wireless/ath/ath11k/pci_cmn.c:168:9: note: initialize the variable 'val' to silence this warning
+           u32 val, window_start;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +185 drivers/net/wireless/ath/ath11k/pci_cmn.c
+
+   165	
+   166	u32 ath11k_pci_read32(struct ath11k_base *ab, u32 offset)
+   167	{
+   168		u32 val, window_start;
+   169	
+   170		/* for offset beyond BAR + 4K - 32, may
+   171		 * need to wakeup the device to access.
+   172		 */
+   173		if (test_bit(ATH11K_FLAG_DEVICE_INIT_DONE, &ab->dev_flags) &&
+   174		    offset >= ATH11K_PCI_ACCESS_ALWAYS_OFF &&
+   175		    ab->bus_params.ops.wakeup)
+   176			ab->bus_params.ops.wakeup(ab);
+   177	
+   178		if (offset < ATH11K_PCI_WINDOW_START) {
+   179			val = ioread32(ab->mem + offset);
+   180		} else {
+   181			if (ab->bus_params.static_window_map) {
+   182				window_start = ath11k_pci_get_window_start(ab, offset);
+   183				val = ioread32(ab->mem + window_start +
+   184					       (offset & ATH11K_PCI_WINDOW_RANGE_MASK));
+ > 185			} else if (ab->bus_params.ops.window_read32) {
+   186				val = ab->bus_params.ops.window_read32(ab, offset);
+   187			}
+   188		}
+   189	
+   190		if (test_bit(ATH11K_FLAG_DEVICE_INIT_DONE, &ab->dev_flags) &&
+   191		    offset >= ATH11K_PCI_ACCESS_ALWAYS_OFF &&
+   192		    ab->bus_params.ops.release)
+   193			ab->bus_params.ops.release(ab);
+   194	
+   195		return val;
+   196	}
+   197	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
