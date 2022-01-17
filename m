@@ -1,103 +1,240 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FA12C82
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 01:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A0D2C80
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 03:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642382193; x=1673918193;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=hoK3fTeWhCyqNmt3Ie1Ok7THuuhISXUqxwf6Q5YCOKQ=;
-  b=E/i35cycFsYq3tEv8+dsFSkBWCY31gArzJ3V+y5mwvV1vtZ5dVilUwkt
-   2Ix6YiYPxDts3nLhAFuxEWfi6viMb7a0LBydm0G2BVcA7swFyxJ/0N6mR
-   mmBtchOkdkRvPurgPD6Ju1tJGy8+orO3D+AZaeTW1Z7P4MSnyPhKKe9wT
-   QdTb+4Tkqo4QVPHktFc/KjhHYDz9zE2lw1D99LmF7O1QogL9UfEPboRit
-   ZujYEV3VJpakdb4GmOjVTc5o4Xiab0+PP8Y56nYjwP6wvze6bjbi80aRt
-   E6ypClONukvP9IahrWS5PQq1c+FITlusldErYzJD8Thw+l/9f8dXD/EYr
+  t=1642390885; x=1673926885;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BTnjIY3zcb179ObENt7eweJVpmgKCsSQpmjGZJTzHXU=;
+  b=KIK/4gZ9gvKQTzpXpP1DzWsTaohrs7eH8kdRkZD+Y7SYXY6EcP2vIMkk
+   KMPUDCfIhUt4ND/MVTxgdSkUu/JEzqchO4My0evdoEAGrTrtpd5Pdf8Hx
+   K0v/h+KTq70NnTg1/IYjP26ZMFhhS9mWgnb9zrkNqpoaAsht6Vg10um8W
+   xS6VC1alFYvpSxxsSEClEUQlvxbbWudJCTs9REUXFNoBGApS2BQKXYrG/
+   J/og0x8Rz/PcW6pdy4e8VvbP6lzrZrrpCBzvF1eNM+KhXqDabaWe1kln0
+   TlpxocikZpmEEQ1IQqgRoZDMqWj/UfFqMAXYvVumM+GJOCVVZyHAnaRHC
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244726480"
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="268920008"
 X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="244726480"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 17:16:33 -0800
+   d="scan'208";a="268920008"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 19:41:24 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="531133039"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.175.229]) ([10.249.175.229])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 17:16:30 -0800
-Subject: Re: [kbuild-all] Re: drivers/firmware/efi/sysfb_efi.c:190:35:
- warning: unused variable 'efifb_dmi_system_table'
-To: Randy Dunlap <rdunlap@infradead.org>, kernel test robot <lkp@intel.com>
+   d="scan'208";a="614926282"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jan 2022 19:41:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n9ItW-000BE5-V8; Mon, 17 Jan 2022 03:41:22 +0000
+Date: Mon, 17 Jan 2022 11:40:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
- Javier Martinez Canillas <javierm@redhat.com>,
- David Herrmann <dh.herrmann@gmail.com>
-References: <202201041920.mOzzco4D-lkp@intel.com>
- <f9336852-d741-5483-a6f5-3cd05b233022@infradead.org>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <3731657b-a4d6-b7e3-007d-76e70a01628a@intel.com>
-Date: Mon, 17 Jan 2022 09:16:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 168/2384]
+ include/linux/sched/affinity.h:32:9: error: incomplete definition of type
+ 'struct task_struct'
+Message-ID: <202201171113.5k8tKBGY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <f9336852-d741-5483-a6f5-3cd05b233022@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 92675dd8b872d91539f60f7dc7ddf7e2a1c70361 [168/2384] headers/deps: Move CPU affinity APIs from <linux/sched.h> to <linux/sched/affinity.h>
+config: i386-randconfig-a014-20220109 (https://download.01.org/0day-ci/archive/20220117/202201171113.5k8tKBGY-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=92675dd8b872d91539f60f7dc7ddf7e2a1c70361
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 92675dd8b872d91539f60f7dc7ddf7e2a1c70361
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: the mingo-tip/sched/headers HEAD 4c707c1c0de83967079b4e385012fa5b00e2cd11 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   In file included from lib/syscall.c:2:
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   include/linux/sched/affinity.h:38:11: error: incomplete definition of type 'struct task_struct'
+           WARN_ON(p->user_cpus_ptr);
+                   ~^
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   4 errors generated.
+--
+>> kernel/sched/core.c:3571:9: error: implicit declaration of function 'set_cpus_allowed_ptr' [-Werror,-Wimplicit-function-declaration]
+           return set_cpus_allowed_ptr(p, new_mask);
+                  ^
+   kernel/sched/core.c:3571:9: note: did you mean '__set_cpus_allowed_ptr'?
+   kernel/sched/core.c:3567:19: note: '__set_cpus_allowed_ptr' declared here
+   static inline int __set_cpus_allowed_ptr(struct task_struct *p,
+                     ^
+>> kernel/sched/core.c:8017:11: error: implicit declaration of function 'dl_task_check_affinity' [-Werror,-Wimplicit-function-declaration]
+           retval = dl_task_check_affinity(p, new_mask);
+                    ^
+   kernel/sched/core.c:9369:13: warning: no previous prototype for function 'per_task_init' [-Wmissing-prototypes]
+   void __init per_task_init(void)
+               ^
+   kernel/sched/core.c:9369:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init per_task_init(void)
+   ^
+   static 
+   1 warning and 2 errors generated.
+--
+   In file included from arch/x86/kernel/cpu/resctrl/pseudo_lock.c:14:
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   include/linux/sched/affinity.h:38:11: error: incomplete definition of type 'struct task_struct'
+           WARN_ON(p->user_cpus_ptr);
+                   ~^
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   In file included from arch/x86/kernel/cpu/resctrl/pseudo_lock.c:20:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 4 errors generated.
 
 
+vim +32 include/linux/sched/affinity.h
 
-On 1/15/2022 8:06 AM, Randy Dunlap wrote:
-> Hi lkp robot,
-> 
-> I have a metaquestion, please:
-> 
-> 
-> On 1/4/22 03:52, kernel test robot wrote:
->> Hi Randy,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
->> commit: 15d27b15de965043d6f8e23bc7f34386fcd1a772 efi: sysfb_efi: fix build when EFI is not set
+     9	
+    10	extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+    11	extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed);
+    12	#ifdef CONFIG_SMP
+    13	extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
+    14	extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
+    15	extern int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node);
+    16	extern void release_user_cpus_ptr(struct task_struct *p);
+    17	extern int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask);
+    18	extern void force_compatible_cpus_allowed_ptr(struct task_struct *p);
+    19	extern void relax_compatible_cpus_allowed_ptr(struct task_struct *p);
+    20	#else
+    21	static inline void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+    22	{
+    23	}
+    24	static inline int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask)
+    25	{
+    26		if (!cpumask_test_cpu(0, new_mask))
+    27			return -EINVAL;
+    28		return 0;
+    29	}
+    30	static inline int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node)
+    31	{
+  > 32		if (src->user_cpus_ptr)
+    33			return -EINVAL;
+    34		return 0;
+    35	}
+    36	static inline void release_user_cpus_ptr(struct task_struct *p)
+    37	{
+    38		WARN_ON(p->user_cpus_ptr);
+    39	}
+    40	
 
->>
-> 
-> [snip]
-> 
-> Why is the patch committer (David Herrmann) not cc-ed on your original email?
-> (I am adding him now.)
-> 
-> bu I have seen this multiple times, where the TO: person (below) is not cc-ed
-> on the problem email.  I don't understand.
-
-Hi Randy,
-
-The lkp robot sent the report to the people mentioned in the first bad
-commit (15d27b15de) from bisection, the below commit (2995e50627) is
-from git blame (drivers/firmware/efi/sysfb_efi.c:190), sometimes the
-commits are not the same.
-
-Best Regards,
-Rong Chen
-
-> 
->>
->> :::::: The code at line 190 was first introduced by commit
->> :::::: 2995e506276bfdc7311eb02db8b2aa1a61a4b849 x86: sysfb: move EFI quirks from efifb to sysfb
->>
->> :::::: TO: David Herrmann <dh.herrmann@gmail.com>
->> :::::: CC: H. Peter Anvin <hpa@linux.intel.com>
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
-> thanks.
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
