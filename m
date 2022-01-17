@@ -1,137 +1,274 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6069173
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 20:57:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642453071; x=1673989071;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ze1TtS9EWwk598oqZ++lM0WsAz2TsJLsrHKqp+Xs6NQ=;
-  b=MMIal9oFJ++h7DuOL64pMUw03LwYpqexO4SGCs9XknunGc8vojfJW4sL
-   Sgx5TIMITo95M+4Gx/jLHU9D1bUStl0bZzl5dXNYqABAxOXgMC1Dc2ck0
-   VJFbISC4g9hP2FXHA3S2VqgVSKbaABtS/bBJ9F28yoa/RZe1/qh1jEoWk
-   JsRRcx2WfqFb1wOzJKbkmw4dSDKa+kj2uy/okpkXTHC3EXx6U8uPp0MAT
-   W4hITqN//oq0mf4QnhRDXBcvzblbO/sOFzGGSq8TQDeZ3WEvTpDxEe+pI
-   vlUIfseYByuBJsP5P8Mx5MWjWt3Yq1YT4kJUnB/awlL66T/QKwYN7gTbz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="305424999"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="305424999"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:57:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="476760990"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2022 12:57:49 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n9Z4W-000Brv-HR; Mon, 17 Jan 2022 20:57:48 +0000
-Date: Tue, 18 Jan 2022 04:57:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [ammarfaizi2-block:kvalo/ath/pending 283/294]
- drivers/net/wireless/ath/ath11k/pci_cmn.c:185:10: warning: variable 'val' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202201180419.pxOIAhwJ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E4C173
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 21:08:03 +0000 (UTC)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8A55D1EC02DD;
+	Mon, 17 Jan 2022 22:07:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1642453677;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=x9mhOj3OPp7/NgS1SucK0b8bM2kZIWpEaBWAuEEfK7Q=;
+	b=OX/VTbG+FiU93UTSILFiausMlqvvqzxTUgh0Kj76IqmgR/Wy6aYQcr0wD46a1hc5INwd5V
+	4eg/6JP4DWLADsHqp4CoaG38ua8jQ/Jeq2Bju6aML1420SCC2A5w8uPfG2aUq9zTV2eSj3
+	QqqJKJ3A5ygnp2E3zCvzN+GKaLD23N8=
+Date: Mon, 17 Jan 2022 22:08:00 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: linux-hardening@vger.kernel.org, x86@kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Kristen Carlson Accardi <kristen@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	Bruce Schlobohm <bruce.schlobohm@intel.com>,
+	Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Marios Pomonis <pomonis@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v9 04/15] arch: introduce ASM function sections
+Message-ID: <YeXasIO5ArXxtw1J@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-5-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211223002209.1092165-5-alexandr.lobakin@intel.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
-head:   8415824bf3ea5c313f15b902497cd2834c01e78e
-commit: f38b44f68cd13a37d90c62863250c16b951e202e [283/294] ath11k: Add register access logic for WCN6750
-config: arm64-randconfig-r011-20220116 (https://download.01.org/0day-ci/archive/20220118/202201180419.pxOIAhwJ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/f38b44f68cd13a37d90c62863250c16b951e202e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
-        git checkout f38b44f68cd13a37d90c62863250c16b951e202e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
+On Thu, Dec 23, 2021 at 01:21:58AM +0100, Alexander Lobakin wrote:
+> Sometimes it is useful to create a separate section for every
+> function (symbol in general) to be able then to selectively merge
+> them back into on or several others. This is how DCE and a part of
+		 ^^
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+"one"
 
-All warnings (new ones prefixed by >>):
+DCE == Dead Code Elimination?
 
->> drivers/net/wireless/ath/ath11k/pci_cmn.c:185:10: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   } else if (ab->bus_params.ops.window_read32) {
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath11k/pci_cmn.c:195:9: note: uninitialized use occurs here
-           return val;
-                  ^~~
-   drivers/net/wireless/ath/ath11k/pci_cmn.c:185:10: note: remove the 'if' if its condition is always true
-                   } else if (ab->bus_params.ops.window_read32) {
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/net/wireless/ath/ath11k/pci_cmn.c:168:9: note: initialize the variable 'val' to silence this warning
-           u32 val, window_start;
-                  ^
-                   = 0
-   1 warning generated.
+In any case, write it out first please and then use the abbreviation.
+
+> LTO work.
+
+I would've said that too but that one at least has a Kconfig entry which
+explains what it is so no need.
+
+/me looks further
+
+Aha there is LD_DEAD_CODE_DATA_ELIMINATION. So connect the two pls.
+
+> Currently, only C functions are in scope
+
+You mean, currently this is done only for C functions? The "in scope"
+formulation sounds weird.
+
+> and the compilers are able to do this automatically when
+> `-ffunction-section` is specified.
+
+-ffunction-sections, plural.
+
+> Add a basic infra for supporting ASM function sections. If any of
+
+yah s/ASM/asm/g. It's not like it is an acronym or so.
+
+and also, you should explain that "asm function sections" means "put a
+function symbol defined in asm, into a separate section".
+
+> the required build options (DCE, LTO, FG-KASLR later) is on and
+> the target architecture claims it supports them, all ASM functions
+> and "code" will be placed into separate named sections by default.
+> This is achieved using --sectname-subst GAS flag which will then
+> substitute "%S" in a .pushsection or .section directive with the
+
+Thanks for explaining this. The gas manpage is very, hm, verbose
+<sarcarstic eyeroll> ;-\:
+
+"       --sectname-subst
+           Honor substitution sequences in section names.
+"
 
 
-vim +185 drivers/net/wireless/ath/ath11k/pci_cmn.c
+...
 
-   165	
-   166	u32 ath11k_pci_read32(struct ath11k_base *ab, u32 offset)
-   167	{
-   168		u32 val, window_start;
-   169	
-   170		/* for offset beyond BAR + 4K - 32, may
-   171		 * need to wakeup the device to access.
-   172		 */
-   173		if (test_bit(ATH11K_FLAG_DEVICE_INIT_DONE, &ab->dev_flags) &&
-   174		    offset >= ATH11K_PCI_ACCESS_ALWAYS_OFF &&
-   175		    ab->bus_params.ops.wakeup)
-   176			ab->bus_params.ops.wakeup(ab);
-   177	
-   178		if (offset < ATH11K_PCI_WINDOW_START) {
-   179			val = ioread32(ab->mem + offset);
-   180		} else {
-   181			if (ab->bus_params.static_window_map) {
-   182				window_start = ath11k_pci_get_window_start(ab, offset);
-   183				val = ioread32(ab->mem + window_start +
-   184					       (offset & ATH11K_PCI_WINDOW_RANGE_MASK));
- > 185			} else if (ab->bus_params.ops.window_read32) {
-   186				val = ab->bus_params.ops.window_read32(ab, offset);
-   187			}
-   188		}
-   189	
-   190		if (test_bit(ATH11K_FLAG_DEVICE_INIT_DONE, &ab->dev_flags) &&
-   191		    offset >= ATH11K_PCI_ACCESS_ALWAYS_OFF &&
-   192		    ab->bus_params.ops.release)
-   193			ab->bus_params.ops.release(ab);
-   194	
-   195		return val;
-   196	}
-   197	
+> diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+> index dbf8506decca..0c0ddf4429dc 100644
+> --- a/include/linux/linkage.h
+> +++ b/include/linux/linkage.h
+> @@ -73,6 +73,37 @@
+>  #define __ALIGN_STR	".align 4,0x90"
+>  #endif
+>  
+> +/*
+> + * Allow ASM symbols to have their own unique sections if they are being
+> + * generated by the compiler for C functions (DCE, LTO).
+> + */
+> +#if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
+> +    ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
+> +     (defined(CONFIG_LTO_CLANG)))
+> +
+> +#define SYM_PUSH_SECTION(name)				\
+> +	.pushsection %S.name, "ax"
+> +
+> +#define SYM_POP_SECTION()				\
+> +	.popsection
+> +
+> +#define __ASM_PUSH_SECTION(name)			\
+> +	".pushsection %S." name ", \"ax\""
+> +
+> +#else /* Just .text */
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Just .text?
+
+> +
+> +#define SYM_PUSH_SECTION(name)
+> +#define SYM_POP_SECTION()
+> +#define __ASM_PUSH_SECTION(name)
+> +
+> +#endif /* Just .text */
+> +
+> +#define ASM_PUSH_SECTION(name)				\
+> +	__ASM_PUSH_SECTION(__stringify(name))
+> +
+> +#define ASM_POP_SECTION()				\
+> +	__stringify(SYM_POP_SECTION())
+> +
+>  #ifdef __ASSEMBLY__
+>  
+>  /* SYM_T_FUNC -- type used by assembler to mark functions */
+> @@ -209,6 +240,15 @@
+>  	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+>  #endif
+>  
+> +/*
+> + * SYM_FUNC_START_WEAK -- use where there are two global names for one
+
+SYM_FUNC_START_WEAK_ALIAS
+
+> + * function, and one of them is weak
+> + */
+> +#ifndef SYM_FUNC_START_WEAK_ALIAS
+> +#define SYM_FUNC_START_WEAK_ALIAS(name)			\
+> +	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
+> +#endif
+> +
+>  /*
+>   * SYM_FUNC_START_ALIAS -- use where there are two global names for one
+>   * function
+> @@ -225,12 +265,24 @@
+>   * later.
+>   */
+>  #define SYM_FUNC_START(name)				\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+> +	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+> +#endif
+> +
+> +/*
+> + * SYM_FUNC_START_SECT -- use for global functions, will be conditionally
+> + * placed into a section specified in the second argument
+> + */
+> +#ifndef SYM_FUNC_START_SECT
+> +#define SYM_FUNC_START_SECT(name, to)			\
+
+			      (name, sect)
+
+"to" reads kinda unclear what it is supposed to mean.
+
+
+> +	SYM_PUSH_SECTION(to) ASM_NL			\
+>  	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+>  #endif
+>  
+>  /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
+>  #ifndef SYM_FUNC_START_NOALIGN
+>  #define SYM_FUNC_START_NOALIGN(name)			\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+>  	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
+>  #endif
+>  
+> @@ -238,24 +290,38 @@
+>  #ifndef SYM_FUNC_START_LOCAL
+>  /* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
+>  #define SYM_FUNC_START_LOCAL(name)			\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+>  	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+>  #endif
+>  
+>  /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
+>  #ifndef SYM_FUNC_START_LOCAL_NOALIGN
+>  #define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+> +	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+> +#endif
+> +
+> +/*
+> + * SYM_FUNC_START_LOCAL_NOALIGN_SECT -- use for local functions, w/o alignment,
+> + * will be conditionally placed into a section specified in the second argument
+> + */
+> +#ifndef SYM_FUNC_START_LOCAL_NOALIGN_SECT
+> +#define SYM_FUNC_START_LOCAL_NOALIGN_SECT(name, to)	\
+
+Ditto. And so on below.
+
+...
+
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 37926d19a74a..3babc0aeac61 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1386,6 +1386,17 @@ config CC_OPTIMIZE_FOR_SIZE
+>  
+>  endchoice
+>  
+> +config HAVE_ASM_FUNCTION_SECTIONS
+> +	depends on ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
+> +	depends on $(cc-option,-Wa$(comma)--sectname-subst)
+> +	def_bool y
+> +	help
+> +	  This enables ASM function sections if both architecture
+> +	  and toolchain supports that. It allows creating a separate
+
+"... support it."
+
+> +	  .text section for each ASM function in order to improve
+
+s/.text // - the section name is specified by the macro arg.
+
+> +	  DCE and LTO (works the same way as -ffunction-sections for
+> +	  C code).
+> +
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
