@@ -1,141 +1,178 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF58D2C9D
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 13:13:48 +0000 (UTC)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EDB8B3F1C8
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 13:08:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642424902;
-	bh=e08JKMUCF9rkW7h8herQx6Sp+GfYHkpXq4pM7aKk9D8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=JCS971oYpLCicqRde2+c/8NwgD5ACT+QtHobGIeb3zlJPMma4iY/zxG3IKuCEUsDF
-	 FO+6OLSMO7zu0LJVPbB08PSrgEsfzKLEvasU+iW493lH5T0KqupFG1+xTuu3UttZNP
-	 TocpZLkyk9kVMQ5ULCGkej8nGShFfT6ev5CZ6do5zvcY2Hb0AgW3HAQ3O48+mfEMib
-	 3JXmrZisG+YnhN3pl87qDlvL+oWCoLG5gQC/zTfpHxkCYn2QPSdY5qW4v2WyLA503b
-	 B8/FeJc004hoc1zprZIbX73Bb4h8KOXEjUsH2BKQBUCSKT3+QUUtntUbNIM+APAkTT
-	 KhKOLPgYfLaNw==
-Received: by mail-ed1-f69.google.com with SMTP id g2-20020a50ee02000000b0040217f163ffso4267158eds.3
-        for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 05:08:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e08JKMUCF9rkW7h8herQx6Sp+GfYHkpXq4pM7aKk9D8=;
-        b=giBfYdFhbqe8pctI9jkJ7/PGm47LREtcfHCMrRPVcfh98kll+0cZKMbPyFQTSGPCeL
-         4E01RNyRcsUe970v91DQKxGMXvhNzwayiOZS+93zrDhN5PHxc+veKQB6ySM6M5wd+awZ
-         J+0SiBjkLCe/ZAZk2aPw8nwoZgbqb8NF8FuMBxYajGZ3FHusSnMdwbCBxqA9q4CoZD7c
-         q1eSRXh7oQCqv+3pMS5EfRgWzbMr7EfsCWJC/17ERxfBVzFL8qJWmIy1evni/65Ocqt3
-         aryEJqf6WC26oi4sTk+awzlo43kmDLx/ZuJn9BhzjtygYGm+Qfh0ZUPogxJXAgJ7TS5h
-         LMdw==
-X-Gm-Message-State: AOAM530wZagife0us1zLeM1rZNmsGEvrRHC72MArzHMqA5674bJY2Fij
-	0UudJGl+s50qV3sgfVHGAKOBpYJJBXW4Uq0l9fcc+1A5CggXfa8R9GImWpiIixpPjW+SbsBLShu
-	EH1IZ52Ho3ZlOJSm2v02GtSYmlkIp++0=
-X-Received: by 2002:a50:eacb:: with SMTP id u11mr20647272edp.290.1642424902564;
-        Mon, 17 Jan 2022 05:08:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwaB8f22s1yf7HiR470gf2zwStoCK0L+L42jchbE9hJLljq12+sbh42N7thqto1gshz4ZpU+w==
-X-Received: by 2002:a50:eacb:: with SMTP id u11mr20647256edp.290.1642424902353;
-        Mon, 17 Jan 2022 05:08:22 -0800 (PST)
-Received: from [192.168.0.37] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id vr3sm4408676ejb.107.2022.01.17.05.08.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 05:08:21 -0800 (PST)
-Message-ID: <57ad6f87-2198-92c6-8c26-f5b5a8d8a354@canonical.com>
-Date: Mon, 17 Jan 2022 14:08:21 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0A12C9D
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 13:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642427918; x=1673963918;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5eGULNquc8PWrPd6ybyqgziUKXX4BtpHOyNvbgPQrek=;
+  b=FAt1DpUet12bsLC1EiHuR4Gbv9+lSYLQaWyBgjJEpBsCN72zo/9iB0Lx
+   GbZ8mOW+GK/XLldkO7TYHlPC8AW79D0pp70T2DdS7mKjFux7ivJQVPf6n
+   zCmwRhw5VzfVtx9wCorKT66qxrhuJUg4KBxtuOoyAbtUX2SMJfKfUeeps
+   0StnxAHZLr8libh469MdeDI4ofxkAEQaAbFu/bZR/eI1Y0JdbmgzFlWwn
+   OMGBM6f2l75JvHvVQpU+4BeW3Pt4wNGaHidWgZrgXpfLL25HRl0tj7l7U
+   g74IvunIyE2GQbltRL6gehqqU7xdSQdzigzjCjKZpoJXQmvoY78HZnv8d
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="243450017"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="243450017"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:58:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="474461925"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Jan 2022 05:58:35 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n9SWo-000BbD-Vy; Mon, 17 Jan 2022 13:58:34 +0000
+Date: Mon, 17 Jan 2022 21:58:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Milind Changire <milindchangire@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v2 1/1] ceph: add getvxattr op
+Message-ID: <202201171943.GKWl1yqQ-lkp@intel.com>
+References: <20220117034747.22229-2-mchangir@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: ERROR: modpost: "gpmc_omap_get_nand_ops"
- [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
-Content-Language: en-US
-To: Roger Quadros <rogerq@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org
-References: <202201171805.5HeoR4rS-lkp@intel.com>
- <232ecd71-c4f8-6272-9a1e-91372763c3f5@kernel.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <232ecd71-c4f8-6272-9a1e-91372763c3f5@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117034747.22229-2-mchangir@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 17/01/2022 13:35, Roger Quadros wrote:
-> Hi,
-> 
-> On 17/01/2022 12:51, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   0c947b893d69231a9add855939da7c66237ab44f
->> commit: dbcb124acebd8148e9e858a231f1798956dd3ca6 mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
->> date:   4 weeks ago
->> config: arm64-randconfig-r001-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171805.5HeoR4rS-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
->> reproduce (this is a W=1 build):
->>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         # install arm64 cross compiling tool for clang build
->>         # apt-get install binutils-aarch64-linux-gnu
->>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dbcb124acebd8148e9e858a231f1798956dd3ca6
->>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>         git fetch --no-tags linus master
->>         git checkout dbcb124acebd8148e9e858a231f1798956dd3ca6
->>         # save the config file to linux build tree
->>         mkdir build_dir
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>, old ones prefixed by <<):
->>
->>>> ERROR: modpost: "gpmc_omap_get_nand_ops" [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
-> 
-> The issue is that CONFIG_MEMORY is not set so OMAP_GPMC driver is not built causing the above undefined symbol error.
-> 
->>
->> Kconfig warnings: (for reference only)
->>    WARNING: unmet direct dependencies detected for OMAP_GPMC
->>    Depends on MEMORY && OF_ADDRESS
->>    Selected by
->>    - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST && HAS_IOMEM && ARCH_K3
->>
-> 
-> A possible fix would be to select MEMORY along with OMAP_GPMC at the below location
-> 
-> config MTD_NAND_OMAP2
->         tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
->         depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
->         depends on HAS_IOMEM
-> 	select MEMORY
-> ^^
->         select OMAP_GPMC if ARCH_K3 
->         help
->           Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
->           and Keystone platforms.
-> 
-> 
-> Is this OK?
+Hi Milind,
 
-Instead rather "select MEMORY if ARCH_K3"?
+Thank you for the patch! Perhaps something to improve:
 
-However I had impression that selecting a user-visible options is
-discouraged, especially from within the drivers. What I would expect is
-to select it from the machine/architecture code like you did before [1]
-but was rejected by Nishanth.
+[auto build test WARNING on ceph-client/for-linus]
+[also build test WARNING on v5.16 next-20220117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-https://lore.kernel.org/linux-devicetree/20211217161417.q2qwwlki7oieqzjd@headlock/
+url:    https://github.com/0day-ci/linux/commits/Milind-Changire/ceph-add-getvxattr-op-support/20220117-114947
+base:   https://github.com/ceph/ceph-client.git for-linus
+config: x86_64-randconfig-a006-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171943.GKWl1yqQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ed42f71060fc0c0c0c43a582f0bb817713836ddb
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Milind-Changire/ceph-add-getvxattr-op-support/20220117-114947
+        git checkout ed42f71060fc0c0c0c43a582f0bb817713836ddb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ceph/
 
-In such case, your choice (with if ARCH...?) seems sensible.
-MTD_NAND_FSL_IFC already does it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Krzysztof
+All warnings (new ones prefixed by >>):
+
+>> fs/ceph/inode.c:2326:53: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+           dout("do_getvxattr xattr_value_len:%u, size:%u\n", xattr_value_len, size);
+                                              ~~              ^~~~~~~~~~~~~~~
+                                              %lu
+   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
+   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
+                                        ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/ceph/inode.c:2326:70: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+           dout("do_getvxattr xattr_value_len:%u, size:%u\n", xattr_value_len, size);
+                                                       ~~                      ^~~~
+                                                       %lu
+   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
+   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
+                                        ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +2326 fs/ceph/inode.c
+
+  2293	
+  2294	int ceph_do_getvxattr(struct inode *inode, const char *name, void *value,
+  2295			      size_t size)
+  2296	{
+  2297		struct ceph_fs_client *fsc = ceph_sb_to_client(inode->i_sb);
+  2298		struct ceph_mds_client *mdsc = fsc->mdsc;
+  2299		struct ceph_mds_request *req;
+  2300		int mode = USE_AUTH_MDS;
+  2301		int err;
+  2302		char *xattr_value;
+  2303		size_t xattr_value_len;
+  2304	
+  2305		req = ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETVXATTR, mode);
+  2306		if (IS_ERR(req)) {
+  2307			err = -ENOMEM;
+  2308			goto out;
+  2309		}
+  2310	
+  2311		req->r_path2 = kstrdup(name, GFP_NOFS);
+  2312		if (!req->r_path2) {
+  2313			err = -ENOMEM;
+  2314			goto put;
+  2315		}
+  2316	
+  2317		ihold(inode);
+  2318		req->r_inode = inode;
+  2319		err = ceph_mdsc_do_request(mdsc, NULL, req);
+  2320		if (err < 0)
+  2321			goto put;
+  2322	
+  2323		xattr_value = req->r_reply_info.xattr_info.xattr_value;
+  2324		xattr_value_len = req->r_reply_info.xattr_info.xattr_value_len;
+  2325	
+> 2326		dout("do_getvxattr xattr_value_len:%u, size:%u\n", xattr_value_len, size);
+  2327	
+  2328		err = xattr_value_len;
+  2329		if (size == 0)
+  2330			goto put;
+  2331	
+  2332		if (xattr_value_len > size) {
+  2333			err = -ERANGE;
+  2334			goto put;
+  2335		}
+  2336	
+  2337		memcpy(value, xattr_value, xattr_value_len);
+  2338	put:
+  2339		ceph_mdsc_put_request(req);
+  2340	out:
+  2341		dout("do_getvxattr result=%d\n", err);
+  2342		return err;
+  2343	}
+  2344	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
