@@ -1,101 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBD12C9D
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 12:35:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B0DC36AE7;
-	Mon, 17 Jan 2022 12:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6102C9D
+	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 13:00:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7707C36AE7;
+	Mon, 17 Jan 2022 13:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1642422920;
-	bh=rid0/aiRZx6t3QXeqWiL2VjrsinUHZKuBq6XLd0Ck5A=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=uaJtp9LsuREZAqeLpZCNVcnAHek5+pHr1D93EIfP0qwaRRtkNTzkY1DO7Z4orZJ11
-	 rzGg+tpFbfPjBa2xUBITNnF5G2ChFmc71hUpLOKDkcXA004tEtn0eWDWPyOe7n3cWC
-	 Y++fREZo3LBJ0B1qUxIPXIheub0p6rtV3Kmz/eza1JJwzcQEmclesjL7dta2BnKfuG
-	 FN6XUNtesOw48Y3W68M3jY+0U3fNZWPrK9ueh8dPQTPyrPolt8wRhVOdX97b2Xd4ZG
-	 y7VolqA/J6cmJ3XwOwI5i6qfmQ1ukj570KbTN1sJNKGHpeCtCzWL5jPrwt6F0I/hME
-	 fUj+k5dP6pqew==
-Subject: Re: ERROR: modpost: "gpmc_omap_get_nand_ops"
- [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
-To: kernel test robot <lkp@intel.com>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-References: <202201171805.5HeoR4rS-lkp@intel.com>
-From: Roger Quadros <rogerq@kernel.org>
-Message-ID: <232ecd71-c4f8-6272-9a1e-91372763c3f5@kernel.org>
-Date: Mon, 17 Jan 2022 14:35:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	s=k20201202; t=1642424430;
+	bh=3S0Ctk48yPY97wks1dFDFxCroL+JI9L03ZRiPTjDIP0=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=vHcl/fastd0J7QDqzul7f7BJIM6UUDwlRAL6kbYsf86E724PGa5b9JOZZNL6mlauz
+	 AnAn5jxA8O4OXwZWpAO0ZoIRb0UCJQ/5P1o7DRv/VQLjgMGC6Q2fck23u84squf0/k
+	 bkvsQ/3HY00untoCkCH2Ue5egj/aiiRmDDmt+P+CtZHijve+FmiJGNSkI3q/ch6iFQ
+	 mqqNCSv8ixjWr0IKzdiXFGcyTjrNzOoRaPwVO2KQ6D5KzM9JQyDVu+tq3EfY9dXvR9
+	 6xoHbvckOOtN2ChG1ATEy1DQui8RY/8lNt11PIHBFKD7aJVwIrFS+YruGfBm7C171O
+	 9bytcJg9wepZA==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202201171805.5HeoR4rS-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] ath11k: fix error handling in
+ ath11k_qmi_assign_target_mem_chunk()
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220116144206.399385-1-trix@redhat.com>
+References: <20220116144206.399385-1-trix@redhat.com>
+To: trix@redhat.com
+Cc: davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
+ ndesaulniers@google.com, akolli@codeaurora.org, ath11k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164242442618.16718.73054650971271178.kvalo@kernel.org>
+Date: Mon, 17 Jan 2022 13:00:27 +0000 (UTC)
 
-Hi,
+trix@redhat.com wrote:
 
-On 17/01/2022 12:51, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   0c947b893d69231a9add855939da7c66237ab44f
-> commit: dbcb124acebd8148e9e858a231f1798956dd3ca6 mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
-> date:   4 weeks ago
-> config: arm64-randconfig-r001-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171805.5HeoR4rS-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dbcb124acebd8148e9e858a231f1798956dd3ca6
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout dbcb124acebd8148e9e858a231f1798956dd3ca6
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> From: Tom Rix <trix@redhat.com>
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> Clang static analysis reports this problem
+> qmi.c:1935:5: warning: Undefined or garbage value returned to caller
+>   return ret;
+>   ^~~~~~~~~~
 > 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> ret is uninitialized.  When of_parse_phandle() fails, garbage is
+> returned.  So return -EINVAL.
 > 
->>> ERROR: modpost: "gpmc_omap_get_nand_ops" [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
+> Fixes: 6ac04bdc5edb ("ath11k: Use reserved host DDR addresses from DT for PCI devices")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-The issue is that CONFIG_MEMORY is not set so OMAP_GPMC driver is not built causing the above undefined symbol error.
+I just applied a fix from Dan:
 
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for OMAP_GPMC
->    Depends on MEMORY && OF_ADDRESS
->    Selected by
->    - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST && HAS_IOMEM && ARCH_K3
-> 
+https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=ath-next&id=c9b41832dc08
 
-A possible fix would be to select MEMORY along with OMAP_GPMC at the below location
+Patch set to Superseded.
 
-config MTD_NAND_OMAP2
-        tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
-        depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
-        depends on HAS_IOMEM
-	select MEMORY
-^^
-        select OMAP_GPMC if ARCH_K3 
-        help
-          Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
-          and Keystone platforms.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220116144206.399385-1-trix@redhat.com/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-Is this OK?
-
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
-
-cheers,
--roger
