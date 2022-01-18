@@ -1,42 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A582C9C
-	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 18:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C728C2C9E
+	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 18:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642530066; x=1674066066;
+  t=1642531927; x=1674067927;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mDfn1FpOw7NLcGoQ7zlzVgfDXagzmr6ntkFGvUWdi6U=;
-  b=QWBV/R9msggTLeEZFArFNu8/Gx4kkSN/rmU95y5VMI6PFHDAMgH3/iQj
-   Y69lIOrSqiAAVIdLX/HYYh3CnIwJ25XuQSz9IODzGlRMBx9zAPPPIaW3l
-   JRrLUNA5idWVJfUFNmbqJTCZZNYPEEJry966WjpHRnfVG4x32cvvUCBqx
-   8bQ8DMOcPH7qfUz7poesHe4CvkN0Su7EE1EHGPXwtAhz2dbQ3QwUqS3aj
-   fjeLXT0q8oyR9uWLtcX99pt/f+PoJd43MpRTZ2KyclezEB7vSd1VhO4Lk
-   Quwod9sO/bp6XYCHwfr4NcE7uI5wrIGXpnDklze9v6jhHZR0MG8WSmTZ6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="308220339"
+  bh=+klORxsX0yp8ZJQTooOCq8M2oqxHKFaKz44SypuiMpU=;
+  b=QSqFR+heXMgdfj2QhRXonWJX4GFkvTZjG+kxw1CZpRlqsSF15yOJVh+g
+   2z16v4PquI1f7wsimJlpoGdexGlBztdWmVZ3tkKjGMSBWlQG3slV5iq2i
+   3akJ050f65kAM9+SbXzeRIdHUITZ+zHGrtVrYOQGchwsh5mV+VPzuR82J
+   wo8eEKnUic7awxoxjG1wgSd8rFtSGPnwPLJBrkLuzIzmGVHJ7daMWy6+m
+   mI7QRZJgXXAghtpNB7b1GjG7/g3OItL/DM92Zoi0B14LAPpmTAXUhVq7h
+   Qx5nbD9WTaBNhtfDdHtSjkqOZE4+POammAYemWl6lyZn26HritpVr25/G
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="269272716"
 X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="308220339"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 10:21:05 -0800
+   d="scan'208";a="269272716"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 10:52:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="531905962"
+   d="scan'208";a="517875175"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jan 2022 10:21:04 -0800
+  by orsmga007.jf.intel.com with ESMTP; 18 Jan 2022 10:52:05 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n9t6N-000CpT-Cy; Tue, 18 Jan 2022 18:21:03 +0000
-Date: Wed, 19 Jan 2022 02:20:53 +0800
+	id 1n9taO-000CrM-MW; Tue, 18 Jan 2022 18:52:04 +0000
+Date: Wed, 19 Jan 2022 02:51:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
+To: Heiko Stuebner <heiko@sntech.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 10/31] drivers/tty/serial/uartlite.c:508:37: error:
- incompatible function pointer types passing 'void (struct uart_port *, int)'
- to parameter of type 'void (*)(struct uart_port *, char)'
-Message-ID: <202201190250.HH3mpoB9-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [csky-linux:riscv_compat_v2_sv48_v3_mmind_pbmt 40/44]
+ arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature'
+ set but not used
+Message-ID: <202201190211.LvmwaVLe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,74 +47,43 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   0ecc0cdeaabd6b08ef3ec6dfaf724139031c00b8
-commit: 2258e16ea4fe67f9700294b439b7aa1669aef643 [10/31] serial: make uart_console_write->putchar's character a char
-config: i386-randconfig-a002-20220117 (https://download.01.org/0day-ci/archive/20220119/202201190250.HH3mpoB9-lkp@intel.com/config)
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_mmind_pbmt
+head:   b28a50c03a72c48d3895320bdd0757e0a8acb881
+commit: 414a3c26e45780d9f957d3721666dfe099b8643c [40/44] riscv: add cpufeature handling via alternatives
+config: riscv-randconfig-r026-20220116 (https://download.01.org/0day-ci/archive/20220119/202201190211.LvmwaVLe-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=2258e16ea4fe67f9700294b439b7aa1669aef643
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout 2258e16ea4fe67f9700294b439b7aa1669aef643
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/414a3c26e45780d9f957d3721666dfe099b8643c
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_mmind_pbmt
+        git checkout 414a3c26e45780d9f957d3721666dfe099b8643c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/tty/serial/uartlite.c:508:37: error: incompatible function pointer types passing 'void (struct uart_port *, int)' to parameter of type 'void (*)(struct uart_port *, char)' [-Werror,-Wincompatible-function-pointer-types]
-           uart_console_write(port, s, count, ulite_console_putchar);
-                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/serial_core.h:402:11: note: passing argument to parameter 'putchar' here
-                           void (*putchar)(struct uart_port *, char));
-                                  ^
-   1 error generated.
+>> arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature' set but not used [-Wunused-but-set-variable]
+           u32 cpu_apply_feature = 0;
+               ^
+   1 warning generated.
 
 
-vim +508 drivers/tty/serial/uartlite.c
+vim +/cpu_apply_feature +185 arch/riscv/kernel/cpufeature.c
 
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  490  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  491  static void ulite_console_write(struct console *co, const char *s,
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  492  				unsigned int count)
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  493  {
-deeb33e8fdd834 drivers/tty/serial/uartlite.c Shubhrajyoti Datta 2018-08-06  494  	struct uart_port *port = console_port;
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  495  	unsigned long flags;
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  496  	unsigned int ier;
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  497  	int locked = 1;
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  498  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  499  	if (oops_in_progress) {
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  500  		locked = spin_trylock_irqsave(&port->lock, flags);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  501  	} else
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  502  		spin_lock_irqsave(&port->lock, flags);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  503  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  504  	/* save and disable interrupt */
-6d53c3b71d32da drivers/tty/serial/uartlite.c Michal Simek       2013-02-11  505  	ier = uart_in32(ULITE_STATUS, port) & ULITE_STATUS_IE;
-6d53c3b71d32da drivers/tty/serial/uartlite.c Michal Simek       2013-02-11  506  	uart_out32(0, ULITE_CONTROL, port);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  507  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06 @508  	uart_console_write(port, s, count, ulite_console_putchar);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  509  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  510  	ulite_console_wait_tx(port);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  511  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  512  	/* restore interrupt state */
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  513  	if (ier)
-6d53c3b71d32da drivers/tty/serial/uartlite.c Michal Simek       2013-02-11  514  		uart_out32(ULITE_CONTROL_IE, ULITE_CONTROL, port);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  515  
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  516  	if (locked)
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  517  		spin_unlock_irqrestore(&port->lock, flags);
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  518  }
-238b8721a554a3 drivers/serial/uartlite.c     Peter Korsgaard    2006-12-06  519  
-
-:::::: The code at line 508 was first introduced by commit
-:::::: 238b8721a554a33a451a3f13bdb5be8fe5cfc927 [PATCH] serial uartlite driver
-
-:::::: TO: Peter Korsgaard <jacmet@sunsite.dk>
-:::::: CC: Linus Torvalds <torvalds@woody.osdl.org>
+   180	
+   181	void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
+   182					 unsigned int stage)
+   183	{
+   184		u32 cpu_req_feature = cpufeature_probe(stage);
+ > 185		u32 cpu_apply_feature = 0;
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
