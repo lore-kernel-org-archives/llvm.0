@@ -1,40 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7FD2C82;
-	Tue, 18 Jan 2022 02:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC02C36AEB;
-	Tue, 18 Jan 2022 02:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5112C82
+	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 02:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695A1C36AEB;
+	Tue, 18 Jan 2022 02:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1642473196;
-	bh=Fhv3mi1Mm8uNIIYwqjQOhdSly4zsT0G1KS4gJQ8MreU=;
+	s=k20201202; t=1642473283;
+	bh=4HZ6twDd3uZBRGOAKOIYoZ/dW23vMiKEUWjChiDBfqo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Vo+ZnX33RbOO/TC2GPPU0bgyj8sJErxMVlgX/U5k3pRuL02NUZNuKc4cC5z7oINqM
-	 BC+reprJzj6G/oxzjIxVwseEuvoPftWWeXh4lNM7U04zfnJVFZgfbpHzXf31iRm/Gy
-	 Ayza1WM5x0wG7H20kFB/mvIwHolnKzeX+2muIdR4S0WOIKPle6sXGYWjW/AHbbeGt2
-	 a6FQC4fzpcJjGyx80JlYjoCDqhPnw91+BdLnRKo1ZIBKAmiku5GizCRT0f5lZ4KALB
-	 lzDvAKIuE6WPKuVtsWz7WOZjvS3HquJ9XqnUbs8lw+NHQvzwZofG8w1KNubiIOjvMR
-	 2EbW0SwidDK3Q==
+	b=BjWJSsKNinuypfGubENNVWFqa2Knj31uyNh+EqF5y6ebVyCjbRWKApp1g5isVcXgR
+	 39XFbK0s4tfS386Suk4GNIuSPqLLn4SrYpB1YP8m30WcKbPF8w5O2dCHgs1Lm25YUJ
+	 96sCHoc2Lj75yt5+SbYKcTa9EcGp1SBz/RWO7nkolNvrAp43Pc6sGml9XntyBUKl1p
+	 jhQhmhgIygpdqsk2IFoOnwGuOYRiJLhVVEtN4JPYj6lGmSbSCV0P1s4DXUQkiBsN77
+	 j6soXLtgQoFMbYtMlbo5FpAu+sNRrA186t16FGF4ifa7sKbSGBCnCcSRpAk/PJC6bo
+	 SnncHYAekzW8g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+Cc: Yang Li <yang.lee@linux.alibaba.com>,
+	Abaci Robot <abaci@linux.alibaba.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
 	Sasha Levin <sashal@kernel.org>,
-	mchehab@kernel.org,
-	gregkh@linuxfoundation.org,
+	harry.wentland@amd.com,
+	sunpeng.li@amd.com,
+	Rodrigo.Siqueira@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
 	ndesaulniers@google.com,
-	drv@mailo.com,
-	abaci-bugfix@linux.alibaba.com,
-	robert.foss@linaro.org,
-	dingxiang@cmss.chinamobile.com,
-	colin.i.king@googlemail.com,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
+	nicholas.kazlauskas@amd.com,
+	Anson.Jacob@amd.com,
+	aric.cyr@amd.com,
+	Jun.Lei@amd.com,
+	michael.strauss@amd.com,
+	meenakshikumar.somasundaram@amd.com,
+	haonan.wang2@amd.com,
+	Martin.Leung@amd.com,
+	Jimmy.Kizito@amd.com,
+	Wayne.Lin@amd.com,
+	Eric.Yang2@amd.com,
+	lee.jones@linaro.org,
+	Lewis.Huang@amd.com,
+	roy.chan@amd.com,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 021/188] media: atomisp: handle errors at sh_css_create_isp_params()
-Date: Mon, 17 Jan 2022 21:29:05 -0500
-Message-Id: <20220118023152.1948105-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 052/188] drm/amd/display: check top_pipe_to_program pointer
+Date: Mon, 17 Jan 2022 21:29:36 -0500
+Message-Id: <20220118023152.1948105-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
 References: <20220118023152.1948105-1-sashal@kernel.org>
@@ -48,51 +64,45 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Yang Li <yang.lee@linux.alibaba.com>
 
-[ Upstream commit 58043dbf6d1ae9deab4f5aa1e039c70112017682 ]
+[ Upstream commit a689e8d1f80012f90384ebac9dcfac4201f9f77e ]
 
-The succ var tracks memory allocation erros on this function.
+Clang static analysis reports this error
 
-Fix it, in order to stop this W=1 Werror in clang:
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2870:7: warning:
+Dereference of null pointer [clang-analyzer-core.NullDereference]
+                if
+(top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
+                    ^
 
-drivers/staging/media/atomisp/pci/sh_css_params.c:2430:7: error: variable 'succ' set but not used [-Werror,-Wunused-but-set-variable]
-        bool succ = true;
-             ^
+top_pipe_to_program being NULL is caught as an error
+But then it is used to report the error.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+So add a check before using it.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/sh_css_params.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index dbd3bfe3d343c..ccc0078795648 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -2431,7 +2431,7 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
- 	unsigned int i;
- 	struct sh_css_ddr_address_map *ddr_ptrs;
- 	struct sh_css_ddr_address_map_size *ddr_ptrs_size;
--	int err = 0;
-+	int err;
- 	size_t params_size;
- 	struct ia_css_isp_parameters *params =
- 	kvmalloc(sizeof(struct ia_css_isp_parameters), GFP_KERNEL);
-@@ -2473,7 +2473,11 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
- 	succ &= (ddr_ptrs->macc_tbl != mmgr_NULL);
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index c798c65d42765..1860ccc3f4f2c 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -2703,7 +2703,8 @@ static void commit_planes_for_stream(struct dc *dc,
+ #endif
  
- 	*isp_params_out = params;
--	return err;
-+
-+	if (!succ)
-+		return -ENOMEM;
-+
-+	return 0;
- }
- 
- static bool
+ 	if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
+-		if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
++		if (top_pipe_to_program &&
++			top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
+ 			if (should_use_dmub_lock(stream->link)) {
+ 				union dmub_hw_lock_flags hw_locks = { 0 };
+ 				struct dmub_hw_lock_inst_flags inst_flags = { 0 };
 -- 
 2.34.1
 
