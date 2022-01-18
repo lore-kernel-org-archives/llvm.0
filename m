@@ -1,575 +1,1867 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2290A2C9C
-	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 03:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642477443; x=1674013443;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JIZt+BBPCrKRvIyvCxVNyN5k2B+dinlbHL5UaLyC6RQ=;
-  b=GZYelPLm/LjweIkKcBl6Sz1zccWM0i0vuHHSbVzd3NdkS7g6WvMZFcPd
-   obMlZVhBa7gGWXU00NxLuPnKPlkogoqTftDN1eSeempF1crBRzxW4Dn7H
-   /A5qG1qyCQH5X/LhBh5ZUcbKMPBd/7fY34nm2uHzF2rbUhu1XZ9JWmM0N
-   kupRaaV+3KiC2J45t5HvN20ONbKqecZuwXgEyhh37CLxoG4EqyKa81t3m
-   uYe1+VwWd4VFOvVbd2d9XsJP+1FvDEv/QJwYoNzD+FnJgmgZN5KjxTx91
-   US4OiPB8+OyQAwBDW6wmF+euQ1t17+78ieMEZ9fLfahd7VhHpbengR0j5
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="305464789"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="305464789"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 19:44:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="517611852"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 19:44:00 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n9fPb-000C7i-Ng; Tue, 18 Jan 2022 03:43:59 +0000
-Date: Tue, 18 Jan 2022 11:43:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:2106:13:
- warning: stack frame size (2136) exceeds limit (2048) in
- 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
-Message-ID: <202201181113.zMONHfro-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DA6173
+	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 05:50:40 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id i65so12149940pfc.9
+        for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 21:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=A1fmI9DG3drVKviifUS8UVfFrndkWRIrefFhokhAvuA=;
+        b=D8OIgWk5xM7jeetghj3zU47yXD0TUiLSykGZOnu2E8ydj0efMlfC1SD/y0HF+cZUVJ
+         MHT+EXOgTaWo6a6C1XmsrVtfOyEjvnHYlWUMRMFJaDnR2GT1mRrySvF9hkq152HPxulJ
+         c29Bq+h1ZPlfI7ZGPCaLfJLbv3olaeVdKkIm5Yr6vRTiPVODQGQD/rVfRnYUnHU9Sd8j
+         dmeKqedsDlZjdJTPz+Z/AWbahOmiOFmW0rA5xqbzDN0/1Yd7of0lfcF0xYn0tSNurNa0
+         YjyD96Wh/sIeqEOi7BthL+bJnFS35sTolqET8P4/aXTUIJCEXbfhFgpKREafcNxYPZBn
+         gDAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=A1fmI9DG3drVKviifUS8UVfFrndkWRIrefFhokhAvuA=;
+        b=A4+2rQBpXrpQBuJhnxdcmg7PFombduyBOcFsiTkTesKsGz5Q2GyxejO4EILR90HhTA
+         rmqep8nAkClJ3wfoLzNaxkcP6ffb6D0Bqm2BeW11hf9XY9lgxD7BsikuFGxEc3Qr7VYS
+         9wBbFsiIpkzby9bDLbpjw0ir4gXXJcZO4SDB+A2kJ/o4UQYEvXqe5QIkLYgdoj+HX7Wq
+         aRrxXNBwBZD3ozlUmmzwICdFx88SYqgBdxU9sVK9j2Hz/YDbcoBk8i1Fw/afVlpn3kHi
+         JlrKL8lzHDezi11D37aSEIm7hPRcuxb4jpHcuUSQfK4d6mvSF7+ztJnQie2RC6+UQ8Wh
+         7Glg==
+X-Gm-Message-State: AOAM5316eGLI3zwbaeA9IEoaBPhr9WSYYFieLexl5N4TO3T6/NixzqiS
+	wfg+oRxZonNk+zTzzYHtl8CzRg6aPOIFawnL
+X-Google-Smtp-Source: ABdhPJyJ3IfnLszo8wj2o50cdk9OrbViLEC8IyvP5bUWqUQ5aqba6raFPF9FOTxmoiij+5wZ7C+rvQ==
+X-Received: by 2002:a63:a846:: with SMTP id i6mr21988726pgp.317.1642485038606;
+        Mon, 17 Jan 2022 21:50:38 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o15sm12584300pfg.176.2022.01.17.21.50.37
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 21:50:38 -0800 (PST)
+Message-ID: <61e6552e.1c69fb81.68510.261d@mx.google.com>
+Date: Mon, 17 Jan 2022 21:50:38 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20220118
+X-Kernelci-Branch: master
+Subject: next/master build: 224 builds: 20 failed, 204 passed, 35 errors,
+ 122 warnings (next-20220118)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Alex,
+next/master build: 224 builds: 20 failed, 204 passed, 35 errors, 122 warnin=
+gs (next-20220118)
 
-First bad commit (maybe != root cause):
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220118/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0c947b893d69231a9add855939da7c66237ab44f
-commit: 8fe44c080a53ac0ccbe88053a2e40f9acca33091 drm/amdgpu/display: fold DRM_AMD_DC_DCN3_1 into DRM_AMD_DC_DCN
-date:   7 months ago
-config: x86_64-randconfig-r004-20220117 (https://download.01.org/0day-ci/archive/20220118/202201181113.zMONHfro-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fe44c080a53ac0ccbe88053a2e40f9acca33091
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8fe44c080a53ac0ccbe88053a2e40f9acca33091
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Tree: next
+Branch: master
+Git Describe: next-20220118
+Git Commit: 6f59bc242877fcb9c9a5136ea62d383fce5615df
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Build Failures Detected:
 
-All warnings (new ones prefixed by >>):
+arm64:
+    allmodconfig: (clang-14) FAIL
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:2106:13: warning: stack frame size (2136) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wframe-larger-than]
-   static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(struct display_mode_lib *mode_lib)
-               ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3957:6: warning: stack frame size (3384) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-   void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        ^
-   2 warnings generated.
+arm:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_SMP=3Dn: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    spear3xx_defconfig: (gcc-10) FAIL
+    spear6xx_defconfig: (gcc-10) FAIL
+    tct_hammer_defconfig: (gcc-10) FAIL
 
+i386:
+    allmodconfig: (clang-14) FAIL
 
-vim +/DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation +2106 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c
+mips:
+    bigsur_defconfig: (gcc-10) FAIL
+    cavium_octeon_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    sb1250_swarm_defconfig: (gcc-10) FAIL
 
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2105  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19 @2106  static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(struct display_mode_lib *mode_lib)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2107  {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2108  	struct vba_vars_st *v = &mode_lib->vba;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2109  	unsigned int j, k;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2110  	double HostVMInefficiencyFactor = 1.0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2111  	bool NoChromaPlanes = true;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2112  	int ReorderBytes;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2113  	double VMDataOnlyReturnBW;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2114  	double MaxTotalRDBandwidth = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2115  	int PrefetchMode = v->PrefetchModePerState[v->VoltageLevel][v->maxMpcComb];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2116  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2117  	v->WritebackDISPCLK = 0.0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2118  	v->DISPCLKWithRamping = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2119  	v->DISPCLKWithoutRamping = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2120  	v->GlobalDPPCLK = 0.0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2121  	/* DAL custom code: need to update ReturnBW in case min dcfclk is overriden */
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2122  	{
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2123  	double IdealFabricAndSDPPortBandwidthPerState = dml_min(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2124  			v->ReturnBusWidth * v->DCFCLKState[v->VoltageLevel][v->maxMpcComb],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2125  			v->FabricClockPerState[v->VoltageLevel] * v->FabricDatapathToDCNDataReturn);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2126  	double IdealDRAMBandwidthPerState = v->DRAMSpeedPerState[v->VoltageLevel] * v->NumberOfChannels * v->DRAMChannelWidth;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2127  	if (v->HostVMEnable != true) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2128  		v->ReturnBW = dml_min(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2129  				IdealFabricAndSDPPortBandwidthPerState * v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2130  				IdealDRAMBandwidthPerState * v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyPixelDataOnly / 100.0);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2131  	} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2132  		v->ReturnBW = dml_min(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2133  				IdealFabricAndSDPPortBandwidthPerState * v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2134  				IdealDRAMBandwidthPerState * v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyPixelMixedWithVMData / 100.0);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2135  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2136  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2137  	/* End DAL custom code */
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2138  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2139  	// DISPCLK and DPPCLK Calculation
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2140  	//
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2141  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2142  		if (v->WritebackEnable[k]) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2143  			v->WritebackDISPCLK = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2144  					v->WritebackDISPCLK,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2145  					dml31_CalculateWriteBackDISPCLK(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2146  							v->WritebackPixelFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2147  							v->PixelClock[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2148  							v->WritebackHRatio[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2149  							v->WritebackVRatio[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2150  							v->WritebackHTaps[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2151  							v->WritebackVTaps[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2152  							v->WritebackSourceWidth[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2153  							v->WritebackDestinationWidth[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2154  							v->HTotal[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2155  							v->WritebackLineBufferSize));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2156  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2157  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2158  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2159  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2160  		if (v->HRatio[k] > 1) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2161  			v->PSCL_THROUGHPUT_LUMA[k] = dml_min(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2162  					v->MaxDCHUBToPSCLThroughput,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2163  					v->MaxPSCLToLBThroughput * v->HRatio[k] / dml_ceil(v->htaps[k] / 6.0, 1));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2164  		} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2165  			v->PSCL_THROUGHPUT_LUMA[k] = dml_min(v->MaxDCHUBToPSCLThroughput, v->MaxPSCLToLBThroughput);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2166  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2167  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2168  		v->DPPCLKUsingSingleDPPLuma = v->PixelClock[k]
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2169  				* dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2170  						v->vtaps[k] / 6.0 * dml_min(1.0, v->HRatio[k]),
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2171  						dml_max(v->HRatio[k] * v->VRatio[k] / v->PSCL_THROUGHPUT_LUMA[k], 1.0));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2172  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2173  		if ((v->htaps[k] > 6 || v->vtaps[k] > 6) && v->DPPCLKUsingSingleDPPLuma < 2 * v->PixelClock[k]) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2174  			v->DPPCLKUsingSingleDPPLuma = 2 * v->PixelClock[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2175  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2176  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2177  		if ((v->SourcePixelFormat[k] != dm_420_8 && v->SourcePixelFormat[k] != dm_420_10 && v->SourcePixelFormat[k] != dm_420_12
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2178  				&& v->SourcePixelFormat[k] != dm_rgbe_alpha)) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2179  			v->PSCL_THROUGHPUT_CHROMA[k] = 0.0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2180  			v->DPPCLKUsingSingleDPP[k] = v->DPPCLKUsingSingleDPPLuma;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2181  		} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2182  			if (v->HRatioChroma[k] > 1) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2183  				v->PSCL_THROUGHPUT_CHROMA[k] = dml_min(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2184  						v->MaxDCHUBToPSCLThroughput,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2185  						v->MaxPSCLToLBThroughput * v->HRatioChroma[k] / dml_ceil(v->HTAPsChroma[k] / 6.0, 1.0));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2186  			} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2187  				v->PSCL_THROUGHPUT_CHROMA[k] = dml_min(v->MaxDCHUBToPSCLThroughput, v->MaxPSCLToLBThroughput);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2188  			}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2189  			v->DPPCLKUsingSingleDPPChroma = v->PixelClock[k]
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2190  					* dml_max3(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2191  							v->VTAPsChroma[k] / 6.0 * dml_min(1.0, v->HRatioChroma[k]),
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2192  							v->HRatioChroma[k] * v->VRatioChroma[k] / v->PSCL_THROUGHPUT_CHROMA[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2193  							1.0);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2194  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2195  			if ((v->HTAPsChroma[k] > 6 || v->VTAPsChroma[k] > 6) && v->DPPCLKUsingSingleDPPChroma < 2 * v->PixelClock[k]) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2196  				v->DPPCLKUsingSingleDPPChroma = 2 * v->PixelClock[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2197  			}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2198  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2199  			v->DPPCLKUsingSingleDPP[k] = dml_max(v->DPPCLKUsingSingleDPPLuma, v->DPPCLKUsingSingleDPPChroma);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2200  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2201  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2202  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2203  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2204  		if (v->BlendingAndTiming[k] != k)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2205  			continue;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2206  		if (v->ODMCombineEnabled[k] == dm_odm_combine_mode_4to1) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2207  			v->DISPCLKWithRamping = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2208  					v->DISPCLKWithRamping,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2209  					v->PixelClock[k] / 4 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2210  							* (1 + v->DISPCLKRampingMargin / 100));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2211  			v->DISPCLKWithoutRamping = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2212  					v->DISPCLKWithoutRamping,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2213  					v->PixelClock[k] / 4 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2214  		} else if (v->ODMCombineEnabled[k] == dm_odm_combine_mode_2to1) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2215  			v->DISPCLKWithRamping = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2216  					v->DISPCLKWithRamping,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2217  					v->PixelClock[k] / 2 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2218  							* (1 + v->DISPCLKRampingMargin / 100));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2219  			v->DISPCLKWithoutRamping = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2220  					v->DISPCLKWithoutRamping,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2221  					v->PixelClock[k] / 2 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2222  		} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2223  			v->DISPCLKWithRamping = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2224  					v->DISPCLKWithRamping,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2225  					v->PixelClock[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100) * (1 + v->DISPCLKRampingMargin / 100));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2226  			v->DISPCLKWithoutRamping = dml_max(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2227  					v->DISPCLKWithoutRamping,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2228  					v->PixelClock[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2229  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2230  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2231  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2232  	v->DISPCLKWithRamping = dml_max(v->DISPCLKWithRamping, v->WritebackDISPCLK);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2233  	v->DISPCLKWithoutRamping = dml_max(v->DISPCLKWithoutRamping, v->WritebackDISPCLK);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2234  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2235  	ASSERT(v->DISPCLKDPPCLKVCOSpeed != 0);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2236  	v->DISPCLKWithRampingRoundedToDFSGranularity = RoundToDFSGranularityUp(v->DISPCLKWithRamping, v->DISPCLKDPPCLKVCOSpeed);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2237  	v->DISPCLKWithoutRampingRoundedToDFSGranularity = RoundToDFSGranularityUp(v->DISPCLKWithoutRamping, v->DISPCLKDPPCLKVCOSpeed);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2238  	v->MaxDispclkRoundedToDFSGranularity = RoundToDFSGranularityDown(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2239  			v->soc.clock_limits[v->soc.num_states - 1].dispclk_mhz,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2240  			v->DISPCLKDPPCLKVCOSpeed);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2241  	if (v->DISPCLKWithoutRampingRoundedToDFSGranularity > v->MaxDispclkRoundedToDFSGranularity) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2242  		v->DISPCLK_calculated = v->DISPCLKWithoutRampingRoundedToDFSGranularity;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2243  	} else if (v->DISPCLKWithRampingRoundedToDFSGranularity > v->MaxDispclkRoundedToDFSGranularity) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2244  		v->DISPCLK_calculated = v->MaxDispclkRoundedToDFSGranularity;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2245  	} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2246  		v->DISPCLK_calculated = v->DISPCLKWithRampingRoundedToDFSGranularity;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2247  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2248  	v->DISPCLK = v->DISPCLK_calculated;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2249  	DTRACE("   dispclk_mhz (calculated) = %f", v->DISPCLK_calculated);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2250  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2251  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2252  		v->DPPCLK_calculated[k] = v->DPPCLKUsingSingleDPP[k] / v->DPPPerPlane[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2253  		v->GlobalDPPCLK = dml_max(v->GlobalDPPCLK, v->DPPCLK_calculated[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2254  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2255  	v->GlobalDPPCLK = RoundToDFSGranularityUp(v->GlobalDPPCLK, v->DISPCLKDPPCLKVCOSpeed);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2256  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2257  		v->DPPCLK_calculated[k] = v->GlobalDPPCLK / 255 * dml_ceil(v->DPPCLK_calculated[k] * 255.0 / v->GlobalDPPCLK, 1);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2258  		DTRACE("   dppclk_mhz[%i] (calculated) = %f", k, v->DPPCLK_calculated[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2259  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2260  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2261  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2262  		v->DPPCLK[k] = v->DPPCLK_calculated[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2263  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2264  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2265  	// Urgent and B P-State/DRAM Clock Change Watermark
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2266  	DTRACE("   dcfclk_mhz         = %f", v->DCFCLK);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2267  	DTRACE("   return_bus_bw      = %f", v->ReturnBW);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2268  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2269  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2270  		CalculateBytePerPixelAnd256BBlockSizes(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2271  				v->SourcePixelFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2272  				v->SurfaceTiling[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2273  				&v->BytePerPixelY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2274  				&v->BytePerPixelC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2275  				&v->BytePerPixelDETY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2276  				&v->BytePerPixelDETC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2277  				&v->BlockHeight256BytesY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2278  				&v->BlockHeight256BytesC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2279  				&v->BlockWidth256BytesY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2280  				&v->BlockWidth256BytesC[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2281  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2282  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2283  	CalculateSwathWidth(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2284  			false,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2285  			v->NumberOfActivePlanes,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2286  			v->SourcePixelFormat,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2287  			v->SourceScan,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2288  			v->ViewportWidth,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2289  			v->ViewportHeight,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2290  			v->SurfaceWidthY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2291  			v->SurfaceWidthC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2292  			v->SurfaceHeightY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2293  			v->SurfaceHeightC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2294  			v->ODMCombineEnabled,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2295  			v->BytePerPixelY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2296  			v->BytePerPixelC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2297  			v->BlockHeight256BytesY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2298  			v->BlockHeight256BytesC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2299  			v->BlockWidth256BytesY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2300  			v->BlockWidth256BytesC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2301  			v->BlendingAndTiming,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2302  			v->HActive,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2303  			v->HRatio,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2304  			v->DPPPerPlane,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2305  			v->SwathWidthSingleDPPY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2306  			v->SwathWidthSingleDPPC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2307  			v->SwathWidthY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2308  			v->SwathWidthC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2309  			v->dummyinteger3,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2310  			v->dummyinteger4,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2311  			v->swath_width_luma_ub,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2312  			v->swath_width_chroma_ub);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2313  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2314  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2315  		v->ReadBandwidthPlaneLuma[k] = v->SwathWidthSingleDPPY[k] * v->BytePerPixelY[k] / (v->HTotal[k] / v->PixelClock[k])
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2316  				* v->VRatio[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2317  		v->ReadBandwidthPlaneChroma[k] = v->SwathWidthSingleDPPC[k] * v->BytePerPixelC[k] / (v->HTotal[k] / v->PixelClock[k])
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2318  				* v->VRatioChroma[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2319  		DTRACE("   read_bw[%i] = %fBps", k, v->ReadBandwidthPlaneLuma[k] + v->ReadBandwidthPlaneChroma[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2320  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2321  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2322  	// DCFCLK Deep Sleep
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2323  	CalculateDCFCLKDeepSleep(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2324  			mode_lib,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2325  			v->NumberOfActivePlanes,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2326  			v->BytePerPixelY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2327  			v->BytePerPixelC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2328  			v->VRatio,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2329  			v->VRatioChroma,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2330  			v->SwathWidthY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2331  			v->SwathWidthC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2332  			v->DPPPerPlane,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2333  			v->HRatio,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2334  			v->HRatioChroma,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2335  			v->PixelClock,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2336  			v->PSCL_THROUGHPUT_LUMA,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2337  			v->PSCL_THROUGHPUT_CHROMA,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2338  			v->DPPCLK,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2339  			v->ReadBandwidthPlaneLuma,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2340  			v->ReadBandwidthPlaneChroma,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2341  			v->ReturnBusWidth,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2342  			&v->DCFCLKDeepSleep);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2343  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2344  	// DSCCLK
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2345  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2346  		if ((v->BlendingAndTiming[k] != k) || !v->DSCEnabled[k]) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2347  			v->DSCCLK_calculated[k] = 0.0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2348  		} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2349  			if (v->OutputFormat[k] == dm_420)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2350  				v->DSCFormatFactor = 2;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2351  			else if (v->OutputFormat[k] == dm_444)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2352  				v->DSCFormatFactor = 1;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2353  			else if (v->OutputFormat[k] == dm_n422)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2354  				v->DSCFormatFactor = 2;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2355  			else
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2356  				v->DSCFormatFactor = 1;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2357  			if (v->ODMCombineEnabled[k] == dm_odm_combine_mode_4to1)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2358  				v->DSCCLK_calculated[k] = v->PixelClockBackEnd[k] / 12 / v->DSCFormatFactor
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2359  						/ (1 - v->DISPCLKDPPCLKDSCCLKDownSpreading / 100);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2360  			else if (v->ODMCombineEnabled[k] == dm_odm_combine_mode_2to1)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2361  				v->DSCCLK_calculated[k] = v->PixelClockBackEnd[k] / 6 / v->DSCFormatFactor
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2362  						/ (1 - v->DISPCLKDPPCLKDSCCLKDownSpreading / 100);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2363  			else
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2364  				v->DSCCLK_calculated[k] = v->PixelClockBackEnd[k] / 3 / v->DSCFormatFactor
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2365  						/ (1 - v->DISPCLKDPPCLKDSCCLKDownSpreading / 100);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2366  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2367  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2368  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2369  	// DSC Delay
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2370  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2371  		double BPP = v->OutputBpp[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2372  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2373  		if (v->DSCEnabled[k] && BPP != 0) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2374  			if (v->ODMCombineEnabled[k] == dm_odm_combine_mode_disabled) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2375  				v->DSCDelay[k] = dscceComputeDelay(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2376  						v->DSCInputBitPerComponent[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2377  						BPP,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2378  						dml_ceil((double) v->HActive[k] / v->NumberOfDSCSlices[k], 1),
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2379  						v->NumberOfDSCSlices[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2380  						v->OutputFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2381  						v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2382  			} else if (v->ODMCombineEnabled[k] == dm_odm_combine_mode_2to1) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2383  				v->DSCDelay[k] = 2
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2384  						* (dscceComputeDelay(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2385  								v->DSCInputBitPerComponent[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2386  								BPP,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2387  								dml_ceil((double) v->HActive[k] / v->NumberOfDSCSlices[k], 1),
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2388  								v->NumberOfDSCSlices[k] / 2.0,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2389  								v->OutputFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2390  								v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2391  			} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2392  				v->DSCDelay[k] = 4
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2393  						* (dscceComputeDelay(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2394  								v->DSCInputBitPerComponent[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2395  								BPP,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2396  								dml_ceil((double) v->HActive[k] / v->NumberOfDSCSlices[k], 1),
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2397  								v->NumberOfDSCSlices[k] / 4.0,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2398  								v->OutputFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2399  								v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]));
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2400  			}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2401  			v->DSCDelay[k] = v->DSCDelay[k] * v->PixelClock[k] / v->PixelClockBackEnd[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2402  		} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2403  			v->DSCDelay[k] = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2404  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2405  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2406  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2407  	for (k = 0; k < v->NumberOfActivePlanes; ++k)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2408  		for (j = 0; j < v->NumberOfActivePlanes; ++j) // NumberOfPlanes
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2409  			if (j != k && v->BlendingAndTiming[k] == j && v->DSCEnabled[j])
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2410  				v->DSCDelay[k] = v->DSCDelay[j];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2411  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2412  	// Prefetch
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2413  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2414  		unsigned int PDEAndMetaPTEBytesFrameY;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2415  		unsigned int PixelPTEBytesPerRowY;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2416  		unsigned int MetaRowByteY;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2417  		unsigned int MetaRowByteC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2418  		unsigned int PDEAndMetaPTEBytesFrameC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2419  		unsigned int PixelPTEBytesPerRowC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2420  		bool PTEBufferSizeNotExceededY;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2421  		bool PTEBufferSizeNotExceededC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2422  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2423  		if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2424  				|| v->SourcePixelFormat[k] == dm_rgbe_alpha) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2425  			if ((v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12) && v->SourceScan[k] != dm_vert) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2426  				v->PTEBufferSizeInRequestsForLuma = (v->PTEBufferSizeInRequestsLuma + v->PTEBufferSizeInRequestsChroma) / 2;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2427  				v->PTEBufferSizeInRequestsForChroma = v->PTEBufferSizeInRequestsForLuma;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2428  			} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2429  				v->PTEBufferSizeInRequestsForLuma = v->PTEBufferSizeInRequestsLuma;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2430  				v->PTEBufferSizeInRequestsForChroma = v->PTEBufferSizeInRequestsChroma;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2431  			}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2432  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2433  			PDEAndMetaPTEBytesFrameC = CalculateVMAndRowBytes(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2434  					mode_lib,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2435  					v->DCCEnable[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2436  					v->BlockHeight256BytesC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2437  					v->BlockWidth256BytesC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2438  					v->SourcePixelFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2439  					v->SurfaceTiling[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2440  					v->BytePerPixelC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2441  					v->SourceScan[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2442  					v->SwathWidthC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2443  					v->ViewportHeightChroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2444  					v->GPUVMEnable,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2445  					v->HostVMEnable,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2446  					v->HostVMMaxNonCachedPageTableLevels,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2447  					v->GPUVMMinPageSize,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2448  					v->HostVMMinPageSize,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2449  					v->PTEBufferSizeInRequestsForChroma,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2450  					v->PitchC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2451  					v->DCCMetaPitchC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2452  					&v->MacroTileWidthC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2453  					&MetaRowByteC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2454  					&PixelPTEBytesPerRowC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2455  					&PTEBufferSizeNotExceededC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2456  					&v->dpte_row_width_chroma_ub[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2457  					&v->dpte_row_height_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2458  					&v->meta_req_width_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2459  					&v->meta_req_height_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2460  					&v->meta_row_width_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2461  					&v->meta_row_height_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2462  					&v->dummyinteger1,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2463  					&v->dummyinteger2,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2464  					&v->PixelPTEReqWidthC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2465  					&v->PixelPTEReqHeightC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2466  					&v->PTERequestSizeC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2467  					&v->dpde0_bytes_per_frame_ub_c[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2468  					&v->meta_pte_bytes_per_frame_ub_c[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2469  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2470  			v->PrefetchSourceLinesC[k] = CalculatePrefetchSourceLines(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2471  					mode_lib,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2472  					v->VRatioChroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2473  					v->VTAPsChroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2474  					v->Interlace[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2475  					v->ProgressiveToInterlaceUnitInOPP,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2476  					v->SwathHeightC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2477  					v->ViewportYStartC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2478  					&v->VInitPreFillC[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2479  					&v->MaxNumSwathC[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2480  		} else {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2481  			v->PTEBufferSizeInRequestsForLuma = v->PTEBufferSizeInRequestsLuma + v->PTEBufferSizeInRequestsChroma;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2482  			v->PTEBufferSizeInRequestsForChroma = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2483  			PixelPTEBytesPerRowC = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2484  			PDEAndMetaPTEBytesFrameC = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2485  			MetaRowByteC = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2486  			v->MaxNumSwathC[k] = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2487  			v->PrefetchSourceLinesC[k] = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2488  		}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2489  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2490  		PDEAndMetaPTEBytesFrameY = CalculateVMAndRowBytes(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2491  				mode_lib,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2492  				v->DCCEnable[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2493  				v->BlockHeight256BytesY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2494  				v->BlockWidth256BytesY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2495  				v->SourcePixelFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2496  				v->SurfaceTiling[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2497  				v->BytePerPixelY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2498  				v->SourceScan[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2499  				v->SwathWidthY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2500  				v->ViewportHeight[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2501  				v->GPUVMEnable,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2502  				v->HostVMEnable,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2503  				v->HostVMMaxNonCachedPageTableLevels,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2504  				v->GPUVMMinPageSize,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2505  				v->HostVMMinPageSize,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2506  				v->PTEBufferSizeInRequestsForLuma,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2507  				v->PitchY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2508  				v->DCCMetaPitchY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2509  				&v->MacroTileWidthY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2510  				&MetaRowByteY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2511  				&PixelPTEBytesPerRowY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2512  				&PTEBufferSizeNotExceededY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2513  				&v->dpte_row_width_luma_ub[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2514  				&v->dpte_row_height[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2515  				&v->meta_req_width[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2516  				&v->meta_req_height[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2517  				&v->meta_row_width[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2518  				&v->meta_row_height[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2519  				&v->vm_group_bytes[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2520  				&v->dpte_group_bytes[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2521  				&v->PixelPTEReqWidthY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2522  				&v->PixelPTEReqHeightY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2523  				&v->PTERequestSizeY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2524  				&v->dpde0_bytes_per_frame_ub_l[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2525  				&v->meta_pte_bytes_per_frame_ub_l[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2526  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2527  		v->PrefetchSourceLinesY[k] = CalculatePrefetchSourceLines(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2528  				mode_lib,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2529  				v->VRatio[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2530  				v->vtaps[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2531  				v->Interlace[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2532  				v->ProgressiveToInterlaceUnitInOPP,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2533  				v->SwathHeightY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2534  				v->ViewportYStartY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2535  				&v->VInitPreFillY[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2536  				&v->MaxNumSwathY[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2537  		v->PixelPTEBytesPerRow[k] = PixelPTEBytesPerRowY + PixelPTEBytesPerRowC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2538  		v->PDEAndMetaPTEBytesFrame[k] = PDEAndMetaPTEBytesFrameY + PDEAndMetaPTEBytesFrameC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2539  		v->MetaRowByte[k] = MetaRowByteY + MetaRowByteC;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2540  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2541  		CalculateRowBandwidth(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2542  				v->GPUVMEnable,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2543  				v->SourcePixelFormat[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2544  				v->VRatio[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2545  				v->VRatioChroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2546  				v->DCCEnable[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2547  				v->HTotal[k] / v->PixelClock[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2548  				MetaRowByteY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2549  				MetaRowByteC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2550  				v->meta_row_height[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2551  				v->meta_row_height_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2552  				PixelPTEBytesPerRowY,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2553  				PixelPTEBytesPerRowC,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2554  				v->dpte_row_height[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2555  				v->dpte_row_height_chroma[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2556  				&v->meta_row_bw[k],
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2557  				&v->dpte_row_bw[k]);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2558  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2559  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2560  	v->TotalDCCActiveDPP = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2561  	v->TotalActiveDPP = 0;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2562  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2563  		v->TotalActiveDPP = v->TotalActiveDPP + v->DPPPerPlane[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2564  		if (v->DCCEnable[k])
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2565  			v->TotalDCCActiveDPP = v->TotalDCCActiveDPP + v->DPPPerPlane[k];
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2566  		if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2567  				|| v->SourcePixelFormat[k] == dm_rgbe_alpha)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2568  			NoChromaPlanes = false;
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2569  	}
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2570  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2571  	ReorderBytes = v->NumberOfChannels
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2572  			* dml_max3(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2573  					v->UrgentOutOfOrderReturnPerChannelPixelDataOnly,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2574  					v->UrgentOutOfOrderReturnPerChannelPixelMixedWithVMData,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2575  					v->UrgentOutOfOrderReturnPerChannelVMDataOnly);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2576  
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2577  	VMDataOnlyReturnBW = dml_min(
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2578  			dml_min(v->ReturnBusWidth * v->DCFCLK, v->FabricClock * v->FabricDatapathToDCNDataReturn)
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2579  					* v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2580  			v->DRAMSpeed * v->NumberOfChannels * v->DRAMChannelWidth
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2581  					* v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyVMDataOnly / 100.0);
-74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  2582  
+x86_64:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-:::::: The code at line 2106 was first introduced by commit
-:::::: 74458c081fcfb0423877e630de2746daefdb16e4 drm/amd/display: Add DCN3.1 DML calculation support
+Errors and Warnings Detected:
 
-:::::: TO: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+arc:
+
+arm64:
+    allmodconfig (clang-14): 1 error, 9 warnings
+
+arm:
+    allmodconfig (gcc-10): 1 error, 1 warning
+    allmodconfig (clang-14): 3 errors, 24 warnings
+    aspeed_g5_defconfig (clang-14): 19 warnings
+    at91_dt_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (clang-14): 10 warnings
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 errors
+    qcom_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+    spear3xx_defconfig (gcc-10): 1 error
+    spear6xx_defconfig (gcc-10): 1 error
+    tct_hammer_defconfig (gcc-10): 1 error
+
+i386:
+    allmodconfig (clang-14): 11 errors, 9 warnings
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 2 warnings
+    bigsur_defconfig (gcc-10): 1 error
+    cavium_octeon_defconfig (gcc-10): 1 error, 1 warning
+    ci20_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 1 error
+    decstation_defconfig (gcc-10): 1 error
+    decstation_r4k_defconfig (gcc-10): 1 error
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    mtx1_defconfig (gcc-10): 3 warnings
+    sb1250_swarm_defconfig (gcc-10): 1 error
+
+riscv:
+
+x86_64:
+    allmodconfig (clang-14): 1 error, 36 warnings
+    allmodconfig (gcc-10): 2 errors
+    x86_64_defconfig (clang-14): 1 warning
+    x86_64_defconfig+debug (gcc-10): 2 warnings
+
+Errors summary:
+
+    3    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of =
+read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    3    drivers/hv/vmbus_drv.c:2082:29: error: shift count >=3D width of t=
+ype [-Werror,-Wshift-count-overflow]
+    2    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignm=
+ent of read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    2    /tmp/kci/linux/build/../include/net/tcp.h:1378: undefined referenc=
+e to `__sk_defer_free_flush'
+    1    sock.c:(.text+0x40a8): undefined reference to `__sk_defer_free_flu=
+sh'
+    1    irq-gic-v3-its.c:(.text+0x14d0): undefined reference to `cpus_boot=
+ed_once_mask'
+    1    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%=
+d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 h=
+as type =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
+ size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-large=
+r-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml2=
+1_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1212) exceeds limit (1024) in 'DIS=
+PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
+ion' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dm=
+l20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1356) exceeds limit (1024) in 'd=
+ml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1564) exceeds limit (1024) in 'dml2=
+0_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml=
+20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCa=
+lculation' [-Werror,-Wframe-larger-than]
+    1    drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of =
+=E2=80=98trace_ata_bmdma_stop=E2=80=99 from incompatible pointer type [-Wer=
+ror=3Dincompatible-pointer-types]
+    1    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limi=
+t (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    1    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14d4): undefined=
+ reference to `cpus_booted_once_mask'
+    1    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly r=
+equires more registers than available
+    1    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least v=
+ersion 4.6 of GCC [-Werror,-W#warnings]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+
+Warnings summary:
+
+    24   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    20   scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever '||' condition is true [-Wsometimes-uninitia=
+lized]
+    10   scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitia=
+lized]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    9    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_=
+sort_thread' to silence this warning
+    4    6 warnings generated.
+    3    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever '||' condition is true [-Wsometimes-uninitia=
+lized]
+    2    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 2 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to mem=
+cpy() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() le=
+aves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_start()+0x44: call to __kasan_che=
+ck_write() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_severity_amd()+0x5e: call to mce_=
+severity_amd_smca() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_read_aux()+0x4b: call to mca_msr_=
+reg() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_sta=
+ck_page() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_en=
+try_stack() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_syscall_64()+0x44: call to memset(=
+) leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_machine_check()+0x137: call to mce=
+_no_way_out() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_int80_syscall_32()+0x52: call to m=
+emset() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x36: call to memcpy=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa1: call to memcpy=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to=
+ ghcb_set_sw_exit_code() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x52: call to =
+memset() leaves .noinstr.text section
+    1    scripts/sorttable.h:370:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitia=
+lized]
+    1    scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitia=
+lized]
+    1    scripts/sorttable.h:353:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever '||' condition is true [-Wsometimes-uninitia=
+lized]
+    1    scripts/sorttable.h:353:6: warning: variable 'mcount_sort_thread' =
+is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitia=
+lized]
+    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
+ instruction
+    1    lib/test_printf.c:247: warning: "PTR" redefined
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
+a: call to do_strncpy_from_user() with UACCESS enabled
+    1    drivers/soc/qcom/rpmh-rsc.o: warning: objtool: rpmh_rsc_write_ctrl=
+_data() falls through to next function trace_raw_output_rpmh_tx_done()
+    1    drivers/scsi/mpi3mr/mpi3mr_fw.o: warning: objtool: mpi3mr_op_reque=
+st_post() falls through to next function mpi3mr_check_rh_fault_ioc()
+    1    drivers/net/ethernet/wiznet/w5100.o: warning: objtool: w5100_tx_sk=
+b() falls through to next function w5100_get_drvinfo()
+    1    drivers/net/ethernet/wiznet/w5100.o: warning: objtool: w5100_rx_sk=
+b() falls through to next function w5100_mmio_probe()
+    1    drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_=
+power_state() falls through to next function sumo_dpm_post_set_power_state()
+    1    cc1: some warnings being treated as errors
+    1    cc1: all warnings being treated as errors
+    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
+hrough to next function startup_64_setup_env()
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    :288:30: note: initialize the variable 'mcount_sort_thread' to sil=
+ence this warning
+    1    12 warnings generated.
+    1    #warning This code requires at least version 4.6 of GCC
+
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text+0x156257): Section mismatch in r=
+eference from the function __next_node() to the variable .init.data:numa_no=
+des_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x1561e2): Section mismatch in r=
+eference from the function test_bit() to the variable .init.data:numa_nodes=
+_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x1561ce): Section mismatch in r=
+eference from the function test_bit() to the variable .init.data:numa_nodes=
+_parsed
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    lib/test_printf.c:247: warning: "PTR" redefined
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 1 error, 36 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/hv/vmbus_drv.c:2082:29: error: shift count >=3D width of type [=
+-Werror,-Wshift-count-overflow]
+
+Warnings:
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:370:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:353:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:353:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    12 warnings generated.
+    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
+h to next function startup_64_setup_env()
+    vmlinux.o: warning: objtool: do_syscall_64()+0x44: call to memset() lea=
+ves .noinstr.text section
+    vmlinux.o: warning: objtool: do_int80_syscall_32()+0x52: call to memset=
+() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x52: call to memse=
+t() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves =
+.noinstr.text section
+    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to memcpy()=
+ leaves .noinstr.text section
+    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset() le=
+aves .noinstr.text section
+    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_pa=
+ge() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_s=
+tack() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_read_aux()+0x4b: call to mca_msr_reg()=
+ leaves .noinstr.text section
+    vmlinux.o: warning: objtool: do_machine_check()+0x137: call to mce_no_w=
+ay_out() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_start()+0x44: call to __kasan_check_wr=
+ite() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_severity_amd()+0x5e: call to mce_sever=
+ity_amd_smca() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to ghcb=
+_set_sw_exit_code() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa1: call to memcpy() le=
+aves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x36: call to memcpy() le=
+aves .noinstr.text section
+    drivers/soc/qcom/rpmh-rsc.o: warning: objtool: rpmh_rsc_write_ctrl_data=
+() falls through to next function trace_raw_output_rpmh_tx_done()
+    drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_power=
+_state() falls through to next function sumo_dpm_post_set_power_state()
+    drivers/scsi/mpi3mr/mpi3mr_fw.o: warning: objtool: mpi3mr_op_request_po=
+st() falls through to next function mpi3mr_check_rh_fault_ioc()
+    drivers/net/ethernet/wiznet/w5100.o: warning: objtool: w5100_tx_skb() f=
+alls through to next function w5100_get_drvinfo()
+    drivers/net/ethernet/wiznet/w5100.o: warning: objtool: w5100_rx_skb() f=
+alls through to next function w5100_mmio_probe()
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text+0x1561ce): Section mismatch in refere=
+nce from the function test_bit() to the variable .init.data:numa_nodes_pars=
+ed
+    WARNING: modpost: vmlinux.o(.text+0x1561e2): Section mismatch in refere=
+nce from the function test_bit() to the variable .init.data:numa_nodes_pars=
+ed
+    WARNING: modpost: vmlinux.o(.text+0x156257): Section mismatch in refere=
+nce from the function __next_node() to the variable .init.data:numa_nodes_p=
+arsed
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 1 error, 9 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/hv/vmbus_drv.c:2082:29: error: shift count >=3D width of type [=
+-Werror,-Wshift-count-overflow]
+
+Warnings:
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    6 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-14) =E2=80=94 FAIL, 11 errors, 9 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requir=
+es more registers than available
+    drivers/hv/vmbus_drv.c:2082:29: error: shift count >=3D width of type [=
+-Werror,-Wshift-count-overflow]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml20_DI=
+SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
+tion' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1356) exceeds limit (1024) in 'dml20v=
+2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
+culation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1212) exceeds limit (1024) in 'DISPCLKD=
+PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
+[-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1564) exceeds limit (1024) in 'dml20_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml21_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dml20v2=
+_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    6 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 3 errors, 24 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least versio=
+n 4.6 of GCC [-Werror,-W#warnings]
+    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (10=
+24) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
+ (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-tha=
+n]
+
+Warnings:
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    :288:30: note: initialize the variable 'mcount_sort_thread' to silence =
+this warning
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    6 warnings generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    #warning This code requires at least version 4.6 of GCC
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 19 warnings, =
+0 section mismatches
+
+Warnings:
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is us=
+ed uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_=
+thread' to silence this warning
+    6 warnings generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, =
+0 section mismatches
+
+Errors:
+    drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of =E2=
+=80=98trace_ata_bmdma_stop=E2=80=99 from incompatible pointer type [-Werror=
+=3Dincompatible-pointer-types]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings=
+, 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0=
+ warnings, 0 section mismatches
+
+Errors:
+    irq-gic-v3-its.c:(.text+0x14d0): undefined reference to `cpus_booted_on=
+ce_mask'
+    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14d4): undefined refe=
+rence to `cpus_booted_once_mask'
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, =
+0 section mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    /tmp/kci/linux/build/../include/net/tcp.h:1378: undefined reference to =
+`__sk_defer_free_flush'
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    /tmp/kci/linux/build/../include/net/tcp.h:1378: undefined reference to =
+`__sk_defer_free_flush'
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    sock.c:(.text+0x40a8): undefined reference to `__sk_defer_free_flush'
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
+ruction
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
+trnlen_user() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+For more info write to <info@kernelci.org>
