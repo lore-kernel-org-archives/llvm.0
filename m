@@ -1,141 +1,98 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688A6168
-	for <llvm@lists.linux.dev>; Mon, 17 Jan 2022 23:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642463464; x=1673999464;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=W/OuCgoqu37a7VgbzR2DZsid0yUDKtKBAyBhCX5zKGg=;
-  b=Xy8XjGpu9Dij5d5LNfbDMqt78QYwYxNw1FWTkBnCxFmcTXtg6bVxNQV8
-   oRrtXRfB8B6NnfpKtFaLPFXM0hmnyYxuo9lFeVVZdLzL/gSiMMH9Bkzrh
-   LAEt7pQ17z2b1RGIqECa9SWpADJhPUP5d2AD+Ovi/afd2v7uU/jp7eC/i
-   m/bDFFTi2HbU9xxrFdYP0UUhdd7Bh7Wg1HHuTA3qZtACjWtQpChE6o0oq
-   ZzzPJBG7MEjVwyXXYB6ZYda0jhIbSahsOOwW7n4UwNF9DY7QERJ9SuKlK
-   6VrF2OGRPohcg4wzrKw4OFbi4gls5hAGbmyZ/KR321u1ztZ8N7P525qm2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244902981"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="244902981"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 15:50:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="560491132"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jan 2022 15:50:54 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n9bm1-000ByZ-TG; Mon, 17 Jan 2022 23:50:53 +0000
-Date: Tue, 18 Jan 2022 07:50:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 21/24]
- fs/netfs/read_helper.c:971:14: warning: variable 'folio' is uninitialized
- when used here
-Message-ID: <202201180713.iy4mum5Q-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD97F2C9D;
+	Tue, 18 Jan 2022 02:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 125FBC36AE3;
+	Tue, 18 Jan 2022 02:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642472483;
+	bh=Fhv3mi1Mm8uNIIYwqjQOhdSly4zsT0G1KS4gJQ8MreU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Bhi0MQl6T7QsaBu/6e/sw1uhSYYZbGx5h064E+1KuxC3aRHuW5KKiNDm1nUm5h8dB
+	 JWExtmN0oPXBrQlK9TmWeSnZK7w0D98VwFVjSe3xjkxpoeI0o/1Np/O/VFrf9oqNRO
+	 9EzcSfNAVz+p4GXvtlt1ptLzfSayrDIwex+mbuqfbw5InH09BWi+r4+lLGUvvIe9+k
+	 E9aC21juFq1/S1b2jYIq+IIEe0w0hLt11YwKU3//VD9i1hmcsz/2HYntvyIrZShEIl
+	 pC6X6sZxHlLrI/FNFQZM5kNOle7FKLdiMeoRi5b4Ui0zNYPrktnyS9ZM4/U83W7aI/
+	 WqCD47Lk/18Dw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	mchehab@kernel.org,
+	gregkh@linuxfoundation.org,
+	ndesaulniers@google.com,
+	drv@mailo.com,
+	robert.foss@linaro.org,
+	colin.i.king@googlemail.com,
+	dingxiang@cmss.chinamobile.com,
+	abaci-bugfix@linux.alibaba.com,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.16 027/217] media: atomisp: handle errors at sh_css_create_isp_params()
+Date: Mon, 17 Jan 2022 21:16:30 -0500
+Message-Id: <20220118021940.1942199-27-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220118021940.1942199-1-sashal@kernel.org>
+References: <20220118021940.1942199-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   e450b62f32df4384c141a6a382811b3fe5723bad
-commit: 814cca7df840c441b1ac007bcb3eb8bfaeacb13f [21/24] cifs: Support fscache rewrite
-config: arm-s3c2410_defconfig (https://download.01.org/0day-ci/archive/20220118/202201180713.iy4mum5Q-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/814cca7df840c441b1ac007bcb3eb8bfaeacb13f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout 814cca7df840c441b1ac007bcb3eb8bfaeacb13f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/netfs/
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[ Upstream commit 58043dbf6d1ae9deab4f5aa1e039c70112017682 ]
 
-All warnings (new ones prefixed by >>):
+The succ var tracks memory allocation erros on this function.
 
->> fs/netfs/read_helper.c:971:14: warning: variable 'folio' is uninitialized when used here [-Wuninitialized]
-                           folio_put(folio);
-                                     ^~~~~
-   fs/netfs/read_helper.c:920:21: note: initialize the variable 'folio' to silence this warning
-           struct folio *folio;
-                              ^
-                               = NULL
-   fs/netfs/read_helper.c:1267:7: error: implicit declaration of function 'netfs_is_cache_enabled' [-Werror,-Wimplicit-function-declaration]
-           if (!netfs_is_cache_enabled(ctx) &&
-                ^
-   1 warning and 1 error generated.
+Fix it, in order to stop this W=1 Werror in clang:
 
+drivers/staging/media/atomisp/pci/sh_css_params.c:2430:7: error: variable 'succ' set but not used [-Werror,-Wunused-but-set-variable]
+        bool succ = true;
+             ^
 
-vim +/folio +971 fs/netfs/read_helper.c
-
-e6b340ed3634bb David Howells 2021-07-09  935  
-e6b340ed3634bb David Howells 2021-07-09  936  	ret = netfs_rreq_add_folios_to_buffer(rreq, want_index, have_index - 1,
-e6b340ed3634bb David Howells 2021-07-09  937  					      gfp_mask);
-e6b340ed3634bb David Howells 2021-07-09  938  	if (ret < 0)
-e6b340ed3634bb David Howells 2021-07-09  939  		return ret;
-e6b340ed3634bb David Howells 2021-07-09  940  	have_folios += have_index - want_index;
-e6b340ed3634bb David Howells 2021-07-09  941  
-e6b340ed3634bb David Howells 2021-07-09  942  	ret = netfs_rreq_add_folios_to_buffer(rreq, have_index + have_folios,
-e6b340ed3634bb David Howells 2021-07-09  943  					      want_index + want_folios - 1,
-e6b340ed3634bb David Howells 2021-07-09  944  					      gfp_mask);
-e6b340ed3634bb David Howells 2021-07-09  945  	if (ret < 0)
-e6b340ed3634bb David Howells 2021-07-09  946  		return ret;
-e6b340ed3634bb David Howells 2021-07-09  947  
-e6b340ed3634bb David Howells 2021-07-09  948  	/* Transfer the folios proposed by the VM into the buffer and take refs
-e6b340ed3634bb David Howells 2021-07-09  949  	 * on them.  The locks will be dropped in netfs_rreq_unlock().
-e6b340ed3634bb David Howells 2021-07-09  950  	 */
-e6b340ed3634bb David Howells 2021-07-09  951  	if (ractl) {
-e6b340ed3634bb David Howells 2021-07-09  952  		while ((folio = readahead_folio(ractl))) {
-e6b340ed3634bb David Howells 2021-07-09  953  			folio_get(folio);
-e6b340ed3634bb David Howells 2021-07-09  954  			if (folio == keep)
-e6b340ed3634bb David Howells 2021-07-09  955  				folio_get(folio);
-e6b340ed3634bb David Howells 2021-07-09  956  			ret = xa_insert_set_mark(&rreq->buffer,
-e6b340ed3634bb David Howells 2021-07-09  957  						 folio_index(folio), folio,
-e6b340ed3634bb David Howells 2021-07-09  958  						 XA_MARK_0, gfp_mask);
-e6b340ed3634bb David Howells 2021-07-09  959  			if (ret < 0) {
-e6b340ed3634bb David Howells 2021-07-09  960  				if (folio != keep)
-e6b340ed3634bb David Howells 2021-07-09  961  					folio_unlock(folio);
-e6b340ed3634bb David Howells 2021-07-09  962  				folio_put(folio);
-e6b340ed3634bb David Howells 2021-07-09  963  				return ret;
-e6b340ed3634bb David Howells 2021-07-09  964  			}
-e6b340ed3634bb David Howells 2021-07-09  965  		}
-e6b340ed3634bb David Howells 2021-07-09  966  	} else {
-e6b340ed3634bb David Howells 2021-07-09  967  		folio_get(keep);
-e6b340ed3634bb David Howells 2021-07-09  968  		ret = xa_insert_set_mark(&rreq->buffer, keep->index, keep,
-e6b340ed3634bb David Howells 2021-07-09  969  					 XA_MARK_0, gfp_mask);
-e6b340ed3634bb David Howells 2021-07-09  970  		if (ret < 0) {
-e6b340ed3634bb David Howells 2021-07-09 @971  			folio_put(folio);
-e6b340ed3634bb David Howells 2021-07-09  972  			return ret;
-e6b340ed3634bb David Howells 2021-07-09  973  		}
-e6b340ed3634bb David Howells 2021-07-09  974  	}
-e6b340ed3634bb David Howells 2021-07-09  975  	return 0;
-e6b340ed3634bb David Howells 2021-07-09  976  }
-e6b340ed3634bb David Howells 2021-07-09  977  
-
-:::::: The code at line 971 was first introduced by commit
-:::::: e6b340ed3634bb80396afb564c499eebdeff601f netfs: Use a buffer in netfs_read_request and add pages to it
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/staging/media/atomisp/pci/sh_css_params.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index dbd3bfe3d343c..ccc0078795648 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -2431,7 +2431,7 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
+ 	unsigned int i;
+ 	struct sh_css_ddr_address_map *ddr_ptrs;
+ 	struct sh_css_ddr_address_map_size *ddr_ptrs_size;
+-	int err = 0;
++	int err;
+ 	size_t params_size;
+ 	struct ia_css_isp_parameters *params =
+ 	kvmalloc(sizeof(struct ia_css_isp_parameters), GFP_KERNEL);
+@@ -2473,7 +2473,11 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
+ 	succ &= (ddr_ptrs->macc_tbl != mmgr_NULL);
+ 
+ 	*isp_params_out = params;
+-	return err;
++
++	if (!succ)
++		return -ENOMEM;
++
++	return 0;
+ }
+ 
+ static bool
+-- 
+2.34.1
+
