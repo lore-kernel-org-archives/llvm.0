@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2482C82
-	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 19:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04A92CA5
+	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 20:55:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642535588; x=1674071588;
+  t=1642539309; x=1674075309;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bmkhJ3hfdkqX9gTyRZeGjmj/hhGAD7otGNfXIM5kISo=;
-  b=kPl11OUc5nwCxwN5N10vHhrTOhd4b9PfIFm7JTadP2697xU0lKt7xvAi
-   VOnznOCUNmhoV85JpUeCdF1YdApX/05TdE15AtoDIeFzaS6ZXWCYCruzo
-   HdPAbhAL/bVSK3GfRx1nwLqII4mDo4lQSAm3Sot3cqa9WDN9oF3UwyC6X
-   xZ7p+2NkruZypbfSmkPZv5nf4yPjgzMxx0l114b50glWRRT4EqFWMmFRo
-   moRUwRkGkTEjQpw0a+KBWZKSIA3sMdAdjD2ZGm7NM/yQs5LBtZTa086QS
-   tCe46F5FnE5vE2Stya6HunsAQJnHpO67jtgnVdKXJCGWBTaqhjsRLJDKZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="224879864"
+  bh=c0Wx0qMDMQrNOCbtVuALSnZvEEoaR+sAHxwWQ9xljOY=;
+  b=ZZbHYq2fGKmHOl2IYpFavLVvGhmRs65SXXfNR5SjJEF62apVWp4cPKpt
+   Qav5nBZ8RVNbGRLRwxPD4bM/LXM4kMbtcM0B/EaSA8tWsG0HTZOlCrUuu
+   Phta/mBQWNz7pF5XKl/fPAkdm+v/XU5AScayJ9OtNPMM2Ky48tDEx3Gi4
+   V4o+69NOrnJ1CRpPSXoth96ALeFGfMDFx6FT18qiijbr+O8EcDl2j61k8
+   lxXYFB+WmDxtCuO/iF3Ieh6jmmmoI/VB7QsH6XGteMMHBP0HSHW1IYYlf
+   iXaKNUbh7uT5jTlWOG+iCPFQSokj+cvqQCzVUEDcqBD+/26W3IdV76B4W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="305645267"
 X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="224879864"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 11:53:08 -0800
+   d="scan'208";a="305645267"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 12:55:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="477105195"
+   d="scan'208";a="474893151"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jan 2022 11:53:06 -0800
+  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2022 12:55:07 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1n9uXS-000CuB-0D; Tue, 18 Jan 2022 19:53:06 +0000
-Date: Wed, 19 Jan 2022 03:52:48 +0800
+	id 1n9vVT-000Cx3-9D; Tue, 18 Jan 2022 20:55:07 +0000
+Date: Wed, 19 Jan 2022 04:54:23 +0800
 From: kernel test robot <lkp@intel.com>
 To: Matteo Croce <mcroce@microsoft.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
 	Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive-5.16.y 20/80] mm/kasan/shadow.c:63:7: warning: no
- previous prototype for function 'memcpy'
-Message-ID: <202201190301.Vaw8aZi3-lkp@intel.com>
+Subject: [esmil:visionfive-5.16.y 22/80] mm/kasan/shadow.c:42:7: warning: no
+ previous prototype for function 'memset'
+Message-ID: <202201190447.MTj18zPA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,18 +49,18 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   https://github.com/esmil/linux visionfive-5.16.y
 head:   eeeb46a916e77aecbe1699537a5592746f3130f6
-commit: e23a963f827f203e0ce13cc69ac7ac8562c90585 [20/80] riscv: optimized memcpy
-config: riscv-randconfig-c006-20220118 (https://download.01.org/0day-ci/archive/20220119/202201190301.Vaw8aZi3-lkp@intel.com/config)
+commit: 6348ed9f5269d38acf552123e96766aa2eb0fd7e [22/80] riscv: optimized memset
+config: riscv-randconfig-c006-20220118 (https://download.01.org/0day-ci/archive/20220119/202201190447.MTj18zPA-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/e23a963f827f203e0ce13cc69ac7ac8562c90585
+        # https://github.com/esmil/linux/commit/6348ed9f5269d38acf552123e96766aa2eb0fd7e
         git remote add esmil https://github.com/esmil/linux
         git fetch --no-tags esmil visionfive-5.16.y
-        git checkout e23a963f827f203e0ce13cc69ac7ac8562c90585
+        git checkout 6348ed9f5269d38acf552123e96766aa2eb0fd7e
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash mm/kasan/
@@ -70,31 +70,37 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/kasan/shadow.c:63:7: warning: no previous prototype for function 'memcpy' [-Wmissing-prototypes]
+>> mm/kasan/shadow.c:42:7: warning: no previous prototype for function 'memset' [-Wmissing-prototypes]
+   void *memset(void *addr, int c, size_t len)
+         ^
+   mm/kasan/shadow.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *memset(void *addr, int c, size_t len)
+   ^
+   static 
+   mm/kasan/shadow.c:63:7: warning: no previous prototype for function 'memcpy' [-Wmissing-prototypes]
    void *memcpy(void *dest, const void *src, size_t len)
          ^
    mm/kasan/shadow.c:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    void *memcpy(void *dest, const void *src, size_t len)
    ^
    static 
-   1 warning generated.
+   2 warnings generated.
 
 
-vim +/memcpy +63 mm/kasan/shadow.c
+vim +/memset +42 mm/kasan/shadow.c
 
-bb359dbcb70085 Andrey Konovalov 2020-12-22  61  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  62  #undef memcpy
-bb359dbcb70085 Andrey Konovalov 2020-12-22 @63  void *memcpy(void *dest, const void *src, size_t len)
-bb359dbcb70085 Andrey Konovalov 2020-12-22  64  {
-f00748bfa0246c Andrey Konovalov 2021-02-24  65  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
-f00748bfa0246c Andrey Konovalov 2021-02-24  66  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-bb359dbcb70085 Andrey Konovalov 2020-12-22  67  		return NULL;
-bb359dbcb70085 Andrey Konovalov 2020-12-22  68  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  69  	return __memcpy(dest, src, len);
-bb359dbcb70085 Andrey Konovalov 2020-12-22  70  }
-bb359dbcb70085 Andrey Konovalov 2020-12-22  71  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  40  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  41  #undef memset
+bb359dbcb70085 Andrey Konovalov 2020-12-22 @42  void *memset(void *addr, int c, size_t len)
+bb359dbcb70085 Andrey Konovalov 2020-12-22  43  {
+f00748bfa0246c Andrey Konovalov 2021-02-24  44  	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
+bb359dbcb70085 Andrey Konovalov 2020-12-22  45  		return NULL;
+bb359dbcb70085 Andrey Konovalov 2020-12-22  46  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  47  	return __memset(addr, c, len);
+bb359dbcb70085 Andrey Konovalov 2020-12-22  48  }
+bb359dbcb70085 Andrey Konovalov 2020-12-22  49  
 
-:::::: The code at line 63 was first introduced by commit
+:::::: The code at line 42 was first introduced by commit
 :::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
 
 :::::: TO: Andrey Konovalov <andreyknvl@google.com>
