@@ -1,111 +1,108 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04A92CA5
-	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 20:55:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642539309; x=1674075309;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c0Wx0qMDMQrNOCbtVuALSnZvEEoaR+sAHxwWQ9xljOY=;
-  b=ZZbHYq2fGKmHOl2IYpFavLVvGhmRs65SXXfNR5SjJEF62apVWp4cPKpt
-   Qav5nBZ8RVNbGRLRwxPD4bM/LXM4kMbtcM0B/EaSA8tWsG0HTZOlCrUuu
-   Phta/mBQWNz7pF5XKl/fPAkdm+v/XU5AScayJ9OtNPMM2Ky48tDEx3Gi4
-   V4o+69NOrnJ1CRpPSXoth96ALeFGfMDFx6FT18qiijbr+O8EcDl2j61k8
-   lxXYFB+WmDxtCuO/iF3Ieh6jmmmoI/VB7QsH6XGteMMHBP0HSHW1IYYlf
-   iXaKNUbh7uT5jTlWOG+iCPFQSokj+cvqQCzVUEDcqBD+/26W3IdV76B4W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="305645267"
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="305645267"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 12:55:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="474893151"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2022 12:55:07 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1n9vVT-000Cx3-9D; Tue, 18 Jan 2022 20:55:07 +0000
-Date: Wed, 19 Jan 2022 04:54:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matteo Croce <mcroce@microsoft.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive-5.16.y 22/80] mm/kasan/shadow.c:42:7: warning: no
- previous prototype for function 'memset'
-Message-ID: <202201190447.MTj18zPA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D7B168
+	for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 23:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1642546891;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=imSbjfG3HpJVgHUztBteAKnTWeE4AQAds5w4lniIVaU=;
+	b=JjrdY7syLxAs813NukDRZQrI09x0KHgxeVf3kDfGhCQdagEPvqP8k6dBYDJ9maO9trylYq
+	hiwS0PH/HFpVLhikdEl/J8SSZ+Y8BsxtXaaG93v3Sn8qNG+btRfdEXKvZNaw0cyNvKmY1i
+	6tbPI8MHSVOGZ9ugPw+ZvvpWPQlQ+4Y=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-582-GncstkAAMnmdEKtU2E0lfQ-1; Tue, 18 Jan 2022 18:01:25 -0500
+X-MC-Unique: GncstkAAMnmdEKtU2E0lfQ-1
+Received: by mail-qv1-f70.google.com with SMTP id ib7-20020a0562141c8700b0040812bc4425so698292qvb.16
+        for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 15:01:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=imSbjfG3HpJVgHUztBteAKnTWeE4AQAds5w4lniIVaU=;
+        b=2OiVSfV77XJtmKrGedmyPiu2eK95gICbUcjHTDYG5VR4A7CJRlJioAKJYNzFzU7V+6
+         7yxClres7M7akEz3wOSjije7lJ+V2xHHwhRd0ls8N65ddUgmf31LMPOucs7bK3B24FPd
+         Cu3kdIyjEiXvtrVkCvQZx8ijyTwCoZtBmhztW2S7k9dORKVf6CED64AdoEmQlZnvZLnN
+         RzyoMgcWodVlU7yyzxtD88+ozc26oOoT+4FNlmjcJWAAOwkxejCgBWYfjLa3E8VP7Fve
+         zOJXCmTAA9rdVlejYb6ho40MrrNakmHGjgGW3gKagigGNSYyQQfnTQlq1XiQdS16lex5
+         DwcA==
+X-Gm-Message-State: AOAM530ZnGJ1ByOfvR0mGvfzFejRqOx5LOc1ZBHgJuSTT2yV0HORtn+I
+	1YxHwil2r7tc0eZ//RTTCOZZ+z8ishNqtBVPzytgHR4JV5Vwr857Eyl2hFxdkUT1tcUC+oRPHQW
+	7dAASzRV3DpB1/g==
+X-Received: by 2002:ac8:57d6:: with SMTP id w22mr9729196qta.167.1642546884605;
+        Tue, 18 Jan 2022 15:01:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxyQ926lYNQFaaESs3XDeB0TGuTp5YmiFt/PM6FFwVllm13rgEx76LTNmglnZnmxg9ERdqTBA==
+X-Received: by 2002:ac8:57d6:: with SMTP id w22mr9729170qta.167.1642546884378;
+        Tue, 18 Jan 2022 15:01:24 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::c])
+        by smtp.gmail.com with ESMTPSA id i5sm4598139qkn.19.2022.01.18.15.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 15:01:23 -0800 (PST)
+Date: Tue, 18 Jan 2022 15:01:20 -0800
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
+	llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
+ __COUNTER__
+Message-ID: <20220118230120.pivvson7qekfiqic@treble>
+References: <20220114010526.1776605-1-ndesaulniers@google.com>
+ <YeQei0xNzMq7bFdg@zn.tnic>
+ <20220118192256.jzk5dnceeusq7x7u@treble>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20220118192256.jzk5dnceeusq7x7u@treble>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/esmil/linux visionfive-5.16.y
-head:   eeeb46a916e77aecbe1699537a5592746f3130f6
-commit: 6348ed9f5269d38acf552123e96766aa2eb0fd7e [22/80] riscv: optimized memset
-config: riscv-randconfig-c006-20220118 (https://download.01.org/0day-ci/archive/20220119/202201190447.MTj18zPA-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/6348ed9f5269d38acf552123e96766aa2eb0fd7e
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive-5.16.y
-        git checkout 6348ed9f5269d38acf552123e96766aa2eb0fd7e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash mm/kasan/
+On Tue, Jan 18, 2022 at 11:22:59AM -0800, Josh Poimboeuf wrote:
+> On Sun, Jan 16, 2022 at 02:32:59PM +0100, Borislav Petkov wrote:
+> > so I like the local label and how it is more readable this way.
+> > 
+> > So, provided the memory clobber works (I wonder here if Josh has some
+> > concrete failing cases which could be tested with your version) and
+> > after the nitpicks have been addressed
+> > 
+> > Acked-by: Borislav Petkov <bp@suse.de>
+> 
+> I think Nick was already able to recreate the original issue.  I'll run
+> it through some more testing.
+> 
+> I wanted to make this change years ago, but couldn't because of legacy
+> toolchains.  Here's hoping this is the final solution for those @#$%^
+> macros.
+> 
+> Boris, thanks for looping Nick in, I should have done so to begin with.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Apparently this patch isn't going to work after all :-(
 
-All warnings (new ones prefixed by >>):
+  https://lkml.kernel.org/r/202201190632.lhlaiCBk-lkp@intel.com
 
->> mm/kasan/shadow.c:42:7: warning: no previous prototype for function 'memset' [-Wmissing-prototypes]
-   void *memset(void *addr, int c, size_t len)
-         ^
-   mm/kasan/shadow.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *memset(void *addr, int c, size_t len)
-   ^
-   static 
-   mm/kasan/shadow.c:63:7: warning: no previous prototype for function 'memcpy' [-Wmissing-prototypes]
-   void *memcpy(void *dest, const void *src, size_t len)
-         ^
-   mm/kasan/shadow.c:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *memcpy(void *dest, const void *src, size_t len)
-   ^
-   static 
-   2 warnings generated.
+With the two WARN_ONs in media_request_object_complete(), GCC apparently
+considers the two reachable() asm statements as duplicates, and it
+removes the second one.
 
+-- 
+Josh
 
-vim +/memset +42 mm/kasan/shadow.c
-
-bb359dbcb70085 Andrey Konovalov 2020-12-22  40  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  41  #undef memset
-bb359dbcb70085 Andrey Konovalov 2020-12-22 @42  void *memset(void *addr, int c, size_t len)
-bb359dbcb70085 Andrey Konovalov 2020-12-22  43  {
-f00748bfa0246c Andrey Konovalov 2021-02-24  44  	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
-bb359dbcb70085 Andrey Konovalov 2020-12-22  45  		return NULL;
-bb359dbcb70085 Andrey Konovalov 2020-12-22  46  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  47  	return __memset(addr, c, len);
-bb359dbcb70085 Andrey Konovalov 2020-12-22  48  }
-bb359dbcb70085 Andrey Konovalov 2020-12-22  49  
-
-:::::: The code at line 42 was first introduced by commit
-:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
-
-:::::: TO: Andrey Konovalov <andreyknvl@google.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
