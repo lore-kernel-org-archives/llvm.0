@@ -1,47 +1,41 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31F12C80
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 16:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D001F29CA
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 19:03:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642610258; x=1674146258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qsg5yYZeqEXKNTcPd+VbPYg9nPFZfX5hlmIWtJ9zrsA=;
-  b=IA5rN0sZKamXHPhVfK6Nx32/ZK7CdVTUn4cMwGcaMOfepyuiIgOpZCi0
-   Yxi8qzCG6hZMLTHlnXOmPWc5NPJHk2dKZS0yqjA/Gu7NuCxznGYRhHA74
-   C6IGyWvdHlWtjp2JvkU1OCyv5+M73TyYBZ7E/yo9EtdpRnG7cJGU8HcDn
-   XevxZd4TBA3Y5KXWXaXrX2a7iwz0XJfqJqFZDGujuJ7xrD+KQr3JHGHFl
-   iwGLc1LTnFthY6Z7f1fespWjjngUT1vA3Llt0YhG3JSo2+NqokIImDan2
-   DvjRCqfcWM72YLWh88xcQUDl4eh9KvBmbr8I7W/sVqLjkLKHEXliJm+Mt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245064552"
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="245064552"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 08:37:38 -0800
+  t=1642618982; x=1674154982;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hA94tR9E+EV8Zk26TRDkNjpj0VOtO/hCsQLa9GYFpqU=;
+  b=YB6xzflSf/Z/HpTKTS3ZU0jkk2scSy65zvR1ishbNCrXiXLvyMNJqBlu
+   YRtUrjZ1/ruVFW4JlJIRttruo8LaHD4h9PdrIjUGK7FCujXMC9dDd8PUE
+   +yv1aSt15N4fKITfxpE6FyD4QRiwe/YGD/p5aOjLvbI8O+e1UH7Z1Ttso
+   87TywrV5bnT52Gd34DK4VAMYGOYJj4MqSdv8VQIPUiTXTv4cLSeqtPxeM
+   yuAOCwwVfuApNX5wSZvjYCgt2zsbS0Kcrj7CrNM5XfTRxWP3yTqWOPIaj
+   iIeA6+P6AME7IOrMSvLoQrUwF3LEdslZhgOc0dHYGC2+7ORRdNJuf8Cfl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225829836"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="225829836"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:18:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="493084022"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="561132325"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2022 08:37:35 -0800
+  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2022 10:18:37 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nADxm-000De3-Tf; Wed, 19 Jan 2022 16:37:34 +0000
-Date: Thu, 20 Jan 2022 00:37:12 +0800
+	id 1nAFXY-000DgZ-H6; Wed, 19 Jan 2022 18:18:36 +0000
+Date: Thu, 20 Jan 2022 02:18:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Xin Ji <xji@analogixsemi.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, bliang@analogixsemi.com,
-	qwen@analogixsemi.com, jli@analogixsemi.com,
-	Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <202201200042.BIqTHWGV-lkp@intel.com>
-References: <20220119110141.1020452-2-xji@analogixsemi.com>
+To: Joerg Schambacher <joerg@hifiberry.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: sound/soc/codecs/tas5754m.c:246:7: warning: variable 'ret' is used
+ uninitialized whenever switch case is taken
+Message-ID: <202201200259.nNgbKOJd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,64 +44,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119110141.1020452-2-xji@analogixsemi.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Xin,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on robh/for-next peter-chen-usb/for-usb-next v5.16 next-20220118]
-[cannot apply to balbi-usb/testing/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220119-190352
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220120/202201200042.BIqTHWGV-lkp@intel.com/config)
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220119-210919/Joerg-Schambacher/ASoC-adds-component-driver-for-TAS575xM-digital-amplifiers/20220110-164852
+head:   05b8bf5544bc621031f5a0a6bdf1ac6468a7367b
+commit: 05b8bf5544bc621031f5a0a6bdf1ac6468a7367b ASoC: adds component driver for TAS575xM digital amplifiers
+date:   5 hours ago
+config: riscv-randconfig-c006-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200259.nNgbKOJd-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/760b0d28447fcaef7a39a20ebce9a4fb96cc0c7d
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/05b8bf5544bc621031f5a0a6bdf1ac6468a7367b
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220119-190352
-        git checkout 760b0d28447fcaef7a39a20ebce9a4fb96cc0c7d
+        git fetch --no-tags linux-review UPDATE-20220119-210919/Joerg-Schambacher/ASoC-adds-component-driver-for-TAS575xM-digital-amplifiers/20220110-164852
+        git checkout 05b8bf5544bc621031f5a0a6bdf1ac6468a7367b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/typec/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash sound/soc/codecs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/usb/typec/anx7411.c:835:6: warning: no previous prototype for function 'anx7411_port_unregister_altmodes' [-Wmissing-prototypes]
-   void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
-        ^
-   drivers/usb/typec/anx7411.c:835:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
-   ^
-   static 
-   1 warning generated.
+>> sound/soc/codecs/tas5754m.c:246:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case SND_SOC_BIAS_ON:
+                ^~~~~~~~~~~~~~~
+   sound/soc/codecs/tas5754m.c:267:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas5754m.c:247:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case SND_SOC_BIAS_PREPARE:
+                ^~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas5754m.c:267:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas5754m.c:242:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
-vim +/anx7411_port_unregister_altmodes +835 drivers/usb/typec/anx7411.c
+vim +/ret +246 sound/soc/codecs/tas5754m.c
 
-   834	
- > 835	void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
-   836	{
-   837		int i;
-   838	
-   839		for (i = 0; i < MAX_ALTMODE; i++)
-   840			if (adev[i]) {
-   841				typec_unregister_altmode(adev[i]);
-   842				adev[i] = NULL;
-   843			}
-   844	}
-   845	
+   236	
+   237	static int tas5754m_set_bias_level(struct snd_soc_component *component,
+   238					   enum snd_soc_bias_level level)
+   239	{
+   240		struct tas5754m_priv *tas5754m =
+   241					snd_soc_component_get_drvdata(component);
+   242		int ret;
+   243	
+   244		switch (level) {
+   245		default:
+ > 246		case SND_SOC_BIAS_ON:
+   247		case SND_SOC_BIAS_PREPARE:
+   248			break;
+   249	
+   250		case SND_SOC_BIAS_STANDBY:
+   251			ret = regmap_update_bits(tas5754m->regmap,
+   252					TAS5754M_POWER, TAS5754M_RQST, 0);
+   253			if (ret)
+   254				dev_err(component->dev,
+   255					"Failed to remove standby: %d\n", ret);
+   256			break;
+   257	
+   258		case SND_SOC_BIAS_OFF:
+   259			ret = regmap_update_bits(tas5754m->regmap,
+   260					TAS5754M_POWER, TAS5754M_RQST, TAS5754M_RQST);
+   261			if (ret)
+   262				dev_err(component->dev,
+   263					"Failed to request standby: %d\n", ret);
+   264			break;
+   265		}
+   266	
+   267		return ret;
+   268	}
+   269	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
