@@ -1,41 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D001F29CA
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 19:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE13A29CA
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 19:13:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642618982; x=1674154982;
+  t=1642619623; x=1674155623;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hA94tR9E+EV8Zk26TRDkNjpj0VOtO/hCsQLa9GYFpqU=;
-  b=YB6xzflSf/Z/HpTKTS3ZU0jkk2scSy65zvR1ishbNCrXiXLvyMNJqBlu
-   YRtUrjZ1/ruVFW4JlJIRttruo8LaHD4h9PdrIjUGK7FCujXMC9dDd8PUE
-   +yv1aSt15N4fKITfxpE6FyD4QRiwe/YGD/p5aOjLvbI8O+e1UH7Z1Ttso
-   87TywrV5bnT52Gd34DK4VAMYGOYJj4MqSdv8VQIPUiTXTv4cLSeqtPxeM
-   yuAOCwwVfuApNX5wSZvjYCgt2zsbS0Kcrj7CrNM5XfTRxWP3yTqWOPIaj
-   iIeA6+P6AME7IOrMSvLoQrUwF3LEdslZhgOc0dHYGC2+7ORRdNJuf8Cfl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225829836"
+  bh=a7kJT8WZQ6q10SnbggD7Ch7bg5HxbpRC2T1+XzhMwz4=;
+  b=EQRz/+yfIP9DI/4gyWqaOgZbfTlRQQOjY4CMwyFMETM/P4ahYsOmakDw
+   sMfc1s6xC1PTMAE0CpI0owA9yVp6rfCKwJy6qAetEMWnMpsWwEqwy1rKA
+   Fne7ikjkZXI+B5P9LZcMoDgAW5PBmhj4RP8mupWWwvVswzrSgQvQxDESm
+   cP2xFHVyFHO8goRsOZFJsa4r3z2rnoEH0N3zbE2OiuLI4JXTe8taB0/BA
+   XkrFy2xnsVWd4eWcScZub1yt8qH6QD5x3shbpd3rmfXnhTzuW8bB/7Y9h
+   yWk68sp2mZOV48Nqb8RVEuc+Aw+ugrCHRQ3ZZhGAc1zfciGF/7T9jVHiV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="308500320"
 X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="225829836"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:18:38 -0800
+   d="scan'208";a="308500320"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:39:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="561132325"
+   d="scan'208";a="518286091"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2022 10:18:37 -0800
+  by orsmga007.jf.intel.com with ESMTP; 19 Jan 2022 10:39:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAFXY-000DgZ-H6; Wed, 19 Jan 2022 18:18:36 +0000
-Date: Thu, 20 Jan 2022 02:18:26 +0800
+	id 1nAFru-000Dh1-TV; Wed, 19 Jan 2022 18:39:38 +0000
+Date: Thu, 20 Jan 2022 02:38:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joerg Schambacher <joerg@hifiberry.com>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: sound/soc/codecs/tas5754m.c:246:7: warning: variable 'ret' is used
- uninitialized whenever switch case is taken
-Message-ID: <202201200259.nNgbKOJd-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [ardb:for-kernelci 10/36] ld.lld: error: undefined symbol:
+ generic_handle_arch_irq
+Message-ID: <202201200205.1qfWfUJ7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,85 +47,32 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220119-210919/Joerg-Schambacher/ASoC-adds-component-driver-for-TAS575xM-digital-amplifiers/20220110-164852
-head:   05b8bf5544bc621031f5a0a6bdf1ac6468a7367b
-commit: 05b8bf5544bc621031f5a0a6bdf1ac6468a7367b ASoC: adds component driver for TAS575xM digital amplifiers
-date:   5 hours ago
-config: riscv-randconfig-c006-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200259.nNgbKOJd-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
+head:   d2dc6a5332403ee74fe236e13ee12eb472028523
+commit: b101e912429f59169f78d933ba2b7e546b3af4c0 [10/36] ARM: remove old-style irq entry
+config: arm-randconfig-r023-20220117 (https://download.01.org/0day-ci/archive/20220120/202201200205.1qfWfUJ7-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/05b8bf5544bc621031f5a0a6bdf1ac6468a7367b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220119-210919/Joerg-Schambacher/ASoC-adds-component-driver-for-TAS575xM-digital-amplifiers/20220110-164852
-        git checkout 05b8bf5544bc621031f5a0a6bdf1ac6468a7367b
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=b101e912429f59169f78d933ba2b7e546b3af4c0
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb for-kernelci
+        git checkout b101e912429f59169f78d933ba2b7e546b3af4c0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/tas5754m.c:246:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case SND_SOC_BIAS_ON:
-                ^~~~~~~~~~~~~~~
-   sound/soc/codecs/tas5754m.c:267:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   sound/soc/codecs/tas5754m.c:247:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case SND_SOC_BIAS_PREPARE:
-                ^~~~~~~~~~~~~~~~~~~~
-   sound/soc/codecs/tas5754m.c:267:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   sound/soc/codecs/tas5754m.c:242:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   2 warnings generated.
-
-
-vim +/ret +246 sound/soc/codecs/tas5754m.c
-
-   236	
-   237	static int tas5754m_set_bias_level(struct snd_soc_component *component,
-   238					   enum snd_soc_bias_level level)
-   239	{
-   240		struct tas5754m_priv *tas5754m =
-   241					snd_soc_component_get_drvdata(component);
-   242		int ret;
-   243	
-   244		switch (level) {
-   245		default:
- > 246		case SND_SOC_BIAS_ON:
-   247		case SND_SOC_BIAS_PREPARE:
-   248			break;
-   249	
-   250		case SND_SOC_BIAS_STANDBY:
-   251			ret = regmap_update_bits(tas5754m->regmap,
-   252					TAS5754M_POWER, TAS5754M_RQST, 0);
-   253			if (ret)
-   254				dev_err(component->dev,
-   255					"Failed to remove standby: %d\n", ret);
-   256			break;
-   257	
-   258		case SND_SOC_BIAS_OFF:
-   259			ret = regmap_update_bits(tas5754m->regmap,
-   260					TAS5754M_POWER, TAS5754M_RQST, TAS5754M_RQST);
-   261			if (ret)
-   262				dev_err(component->dev,
-   263					"Failed to request standby: %d\n", ret);
-   264			break;
-   265		}
-   266	
-   267		return ret;
-   268	}
-   269	
+>> ld.lld: error: undefined symbol: generic_handle_arch_irq
+   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
+   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
