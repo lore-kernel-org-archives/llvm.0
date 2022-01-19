@@ -1,86 +1,160 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FA62CA7
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 22:56:36 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so5484307wmb.1
-        for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 14:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GSd02jBcb0jQ7RFJ96vFIu10kcuFdGI3D3TahyBUmhw=;
-        b=NH6kgTlJGInhDsdPsMG2Rx77cwDs75i48T84WLDaZd1kpGpDbXFF+eylTQFpmQGR5c
-         Ji6yZAZsdrYVbj4Aau2iX9HSwmitdCXXN37gRgMofTZvd7Gfl6CL6Z0a7nwXNLcKy6zE
-         hTv0qoubohVCd2+lsGj4XlK0EAnDFRiRi/H1+9j5fC3BtheES6yh5ALrOBZajHldhCjd
-         0qWdOpbG4zSyDTike6sK+NmqLNmKof03IhGPt73kxr4jVNvOqxm2vtXzRCz+XsdsR5fT
-         ARBpYobdKVyXTFUK4c0vt0gfnta9vu9PZtXLc5m/xsw47BxS5jqZ65e4cgDHtb1bzxRH
-         hN8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GSd02jBcb0jQ7RFJ96vFIu10kcuFdGI3D3TahyBUmhw=;
-        b=3gsfjDbY6qNaiMJUCM4toJI5EklafNAOKXF06ecXH2HoWLfXp4fBjctclhrMdmgtH9
-         SXHs7fmBjvDXSelttcv7QSzuwYqBtzZL0f+o5PpRbQCFCLSVpaTpeCBt1LkIXXfBE49X
-         j9HZo0/viZgA6f0LjkFxkWmUcC+VVhE/iEpX8lG5XqUf82HXuT8FZKCOkcLjMZgPSSAi
-         prGLXrMDixZlB9b7+vpRecLRMLWR2xFxd8RPnnGW7uBkqqYycYVSE3Fx5QMN5vasMIIM
-         3FXytOpf/+n3fcJKWtdwGRumnXEisgbY77caK6Q1xVfJqfHYfrEcsjgFK1ItVt7tI2Wh
-         KZPw==
-X-Gm-Message-State: AOAM532tPWBRBiKyi/yQBLRgxYjqg5v3tn1HOIk9vOBksVe6kH31uv1N
-	UaG5QaqMD9aQ7qOUWODUuH6x9XTvCuK9uA==
-X-Google-Smtp-Source: ABdhPJwgYA5WZCznkbGu1gMfdgrKvSIe7e9u/EucbW88FoMfiygX866seOD/FSFRR+SJ0j8XdFs+Hw==
-X-Received: by 2002:a5d:6da2:: with SMTP id u2mr18562326wrs.453.1642632995199;
-        Wed, 19 Jan 2022 14:56:35 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id o33sm12359980wms.3.2022.01.19.14.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 14:56:34 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>,
-	linux-fsdevel@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] pipe: remove redundant assignment to pointer buf
-Date: Wed, 19 Jan 2022 22:56:33 +0000
-Message-Id: <20220119225633.147658-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0682CA7
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 23:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA78C004E1;
+	Wed, 19 Jan 2022 23:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642633735;
+	bh=QTKHn4Wool6GWwOwKqjEm+TWC3X4GTauJMrreTZbgTU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C+05iH4oJGO/396eleoANsH+yhRmco0H4a00oigax0iHe4MHaU8ILSVtBrV5RWu1x
+	 lLtI6+pOFijSa580nfnuce9ov/AcZivjrkkCHxjAB8OCQwQvrvMBH/n/waYhlkc+qh
+	 MpuNmbGUcGWDKSkDEgnB9GBVsV6zsWowznf79y94rJR7ssBEmpLfrXBoY3Fc73Fx1Z
+	 oZShqamcZUMETYt4sTheCRlIOWGQ2ngYVDQFZ29MrvUiEI6LgxfTIYzDqZ6plZlSyD
+	 RarvVr4Q3PuFtoZHVjd23UBNzZnrzEHx0+giKjMnyU1DdAtBY1Tik8Rz7AY3WpEOQf
+	 DKfIMCS3EPLnA==
+Date: Wed, 19 Jan 2022 16:08:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
+Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Cezary Rojewski <cezary.rojewski@intel.com>
+Subject: Re: [PATCH] Makefile: Fix build with scan-build
+Message-ID: <YeiaAgQ+gbZYTMwD@archlinux-ax161>
+References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
+ <YeiAa/eCxVZC+QbS@archlinux-ax161>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YeiAa/eCxVZC+QbS@archlinux-ax161>
 
-The pointer buf is being assigned a value that is never read, it is
-being re-assigned later on closer to where is it required to be set.
-The assignment is redundant and can be removed. Cleans up clang
-scan build warning:
+On Wed, Jan 19, 2022 at 02:19:39PM -0700, Nathan Chancellor wrote:
+> On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
+> > When building kernel with scan-build for analysis:
+> > $ scan-build make defconfig
+> > $ scan-build make menuconfig # disable RETPOLINE
+> > $ scan-build make -j16 bindeb-pkg
+> > since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+> > it fails with:
+> >   CC      scripts/mod/empty.o
+> > could not find clang line
+> > make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+> > 
+> > Seems like changes to how -fconserve-stack support was detected broke
+> > build with scan-build. Revert part of mentioned commit which changed
+> > that.
+> > 
+> > Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+> > CC: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> > Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+> > ---
+> >  Makefile | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index 765115c99655..1174ccd182f5 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
+> >  KBUILD_CFLAGS  += -fno-stack-check
+> >  
+> >  # conserve stack if available
+> > -ifdef CONFIG_CC_IS_GCC
+> > -KBUILD_CFLAGS   += -fconserve-stack
+> > -endif
+> > +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
+> >  
+> >  # Prohibit date/time macros, which would make the build non-deterministic
+> >  KBUILD_CFLAGS   += -Werror=date-time
+> > -- 
+> > 2.25.1
+> > 
+> 
+> Okay, I think I understand why this happens...
+> 
+> scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
+> code with a compiler [2] then runs clang for the static analyzer [3].
+> The problem is that the default compiler for ccc-analyzer is GCC, which
+> means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
+> but not clang will cause the clang analyzer part of ccc-analyzer to
+> error because ccc-analyzer just passes all '-f' flags along [4].
+> 
+> Prior to 7d73c3e9c514, there was no error because cc-option would run
+> the flag against ccc-analyzer, which would error out for the reason I
+> just described, which would prevent the flag from getting added to
+> KBUILD_CFLAGS.
+> 
+> Now, -fconserve-stack gets passed along to both gcc and clang but clang
+> does not recognize it and errors out.
+> 
+> This should be fixed in clang, which already has the machinery to
+> recognize but ignore GCC flags for compatibility reasons (which is
+> probably how gcc and clang can use the same flags). I have pushed a
+> patch to Phabricator for review:
+> 
+> https://reviews.llvm.org/D117717
+> 
+> You need to disable CONFIG_RETPOLINE for the same reason but I don't
+> think working around that in clang is as simple.
+> 
+> Until that fix can proliferate through distributions and such, this is
+> not an unreasonable workaround (unless Masahiro or Nick have a better
+> idea) but I would really like a comment so that we can revert this once
+> that fix is more widely available (it is unlikely that clang will
+> actually support this option).
+> 
+> [1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
+> [2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
+> [3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
+> [4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
 
-fs/pipe.c:490:24: warning: Value stored to 'buf' during its
-initialization is never read [deadcode.DeadStores]
+Thinking more about this after Fangrui commented on the clang patch
+above, using scan-build with GCC as the compiler is going to be hard to
+support, as we are basically trying to support using two different
+compilers with a unified set of '-f' flags, which I see as problematic
+for a few reasons.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/pipe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+1. It restricts our ability to do cc-option cleanups like Nick did.
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index cc28623a67b6..d19229df66ee 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -487,7 +487,7 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 		head = pipe->head;
- 		if (!pipe_full(head, pipe->tail, pipe->max_usage)) {
- 			unsigned int mask = pipe->ring_size - 1;
--			struct pipe_buffer *buf = &pipe->bufs[head & mask];
-+			struct pipe_buffer *buf;
- 			struct page *page = pipe->tmp_page;
- 			int copied;
- 
--- 
-2.33.1
+We should be eliminating cc-option calls that we know are specific to
+one compiler because checking the Kconfig variables (CONFIG_CC_IS_...)
+is much cheaper than invoking the compiler.
 
+2. Necessary GCC specific flags will get dropped.
+
+Adding back the call to cc-option will allow the build to succeed but it
+drops the flag from KBUILD_CFLAGS. If there were ever a time where an
+'-f' flag was needed to get a working kernel with GCC, it would not get
+added because clang would reject it.
+
+We already have a static-analyzer target that requires using CC=clang so
+I think there is some precedent here to say we require the kernel to be
+built with clang to use the static analyzer. The fact that it did prior
+to 7d73c3e9c514 can just be chalked up to luck.
+
+$ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+
+would be the equivalent command to the original patch.
+
+You can still use scan-build with the '--use-cc=clang' flag, which will
+use clang for the compilation and analysis, if you so prefer.
+
+Masahiro and Nick may have further thoughts and I am open to other
+opinions but my vote is to say this is an issue we won't fix or
+workaround.
+
+Cheers,
+Nathan
