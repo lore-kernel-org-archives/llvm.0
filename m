@@ -1,43 +1,43 @@
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19092CA3
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 03:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE9D2CA3
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 04:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642563137; x=1674099137;
+  t=1642565543; x=1674101543;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NWb6o10YkMR7sZLMPrRdvgZA0dRx9dnvTEsr5v2wEKM=;
-  b=nWbPZcdKOoGY++PQaTAoaVfFM26ldHZpfJemSJsoCFV/2PrPsYyTigWf
-   gE7dygi4jBryCIgC3SI2badKe4wXo9mmksWhwWxbwm3BKbPrGemzSPYz/
-   m3CFmJmfpuBYcOblsdB98e2mgwvGyBu/w6+ULpD17p3TmhcUTDa/jctNE
-   JaS7TmVTQOyKfNZRnG4WHcl0HsNzjWlGoPErrSTMglkLJy2bzvtac3erI
-   NbtcLrAdS3B5+1kvXq+1GDpttvhC0QXEsm8eYp/v1f6BS0+XO2OsR4hDy
-   inG3gFCEqU8XgkN3cgGUu9s/FDElgULMzyhLy+UZ5J/FeNhsQrZjWv2+c
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269360413"
+  bh=VZR2h/GvwBVB0YEd59gL2smSoKa+1JdaUfOKC6US0qc=;
+  b=OVrP3XA2MokCW11HJRIMeDGDbV24i/QPkQDygF0+NtYWMwhjz3Sry3B2
+   ChtnG2AmSfxZw7ywJfQYCJOVmi+jfIp9YxUvyjp8bC28DQCVONRXN2jLG
+   Ujqe1ld0mkWPiLus4PQmiR9D2/LHrb9Yo//ezpDdfaTtVhya75nOEk2aZ
+   WFkwgHW9Wslhu/e66BoUwNv6VebIxpdqJuyAj9iPjl68MranEuTseJmTY
+   dueSla6O5/fjsqEJIn0B2xSvHXgyooPvRkNgjuxQNpfS862oQvf57BDd2
+   81Y8MBy9a0fZqjoNbheUPo8AJUaf1UPPXfPJSEeSpSGujrilKkyLaSThu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269365037"
 X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="269360413"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 19:32:17 -0800
+   d="scan'208";a="269365037"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 20:12:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="595267684"
+   d="scan'208";a="492892905"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Jan 2022 19:32:15 -0800
+  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2022 20:12:18 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nA1hm-000DCi-TM; Wed, 19 Jan 2022 03:32:14 +0000
-Date: Wed, 19 Jan 2022 11:31:22 +0800
+	id 1nA2KY-000DF5-0p; Wed, 19 Jan 2022 04:12:18 +0000
+Date: Wed, 19 Jan 2022 12:12:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+To: mziya <Mohammadzafar.ziya@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-sv48 7/9] WARNING: modpost:
- vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function
- pt_ops_set_early() to the function .init.text:alloc_pte_early()
-Message-ID: <202201191139.HXrwZv5w-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	"Stanley.Yang" <Stanley.Yang@amd.com>
+Subject: [agd5f:drm-next 56/91] drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:11:
+ warning: variable 'umc_reg_offset' set but not used
+Message-ID: <202201191214.xx7M9Hem-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,46 +48,64 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-sv48
-head:   d87f3297c62644624bcb8efcb519a2e28d684b45
-commit: dee563c628683ce1fab7d0267ad96fc7d8503965 [7/9] riscv: Implement sv48 support
-config: riscv-randconfig-r042-20220116 (https://download.01.org/0day-ci/archive/20220119/202201191139.HXrwZv5w-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   e23fcf632883babbea03fc27f7993e151969b652
+commit: c34242eea16f7d973501267142dd340cad3caeec [56/91] drm/amdgpu: add new query interface for umc_v8_7 block
+config: i386-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220119/202201191214.xx7M9Hem-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/dee563c628683ce1fab7d0267ad96fc7d8503965
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-sv48
-        git checkout dee563c628683ce1fab7d0267ad96fc7d8503965
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout c34242eea16f7d973501267142dd340cad3caeec
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function pt_ops_set_early() to the function .init.text:alloc_pte_early()
-The function pt_ops_set_early() references
-the function __init alloc_pte_early().
-This is often because pt_ops_set_early lacks a __init
-annotation or the annotation of alloc_pte_early is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xb1f8): Section mismatch in reference from the function pt_ops_set_late() to the function .init.text:alloc_pte_late()
-The function pt_ops_set_late() references
-the function __init alloc_pte_late().
-This is often because pt_ops_set_late lacks a __init
-annotation or the annotation of alloc_pte_late is wrong.
+>> drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:11: warning: variable 'umc_reg_offset' set but not used [-Wunused-but-set-variable]
+           uint32_t umc_reg_offset  = 0;
+                    ^
+   1 warning generated.
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function pt_ops_set_early() to the variable .init.data:_pt_ops.1
-<< WARNING: modpost: vmlinux.o(.text+0xb208): Section mismatch in reference from the function pt_ops_set_late() to the variable .init.data:_pt_ops.1
-<< WARNING: modpost: vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function pt_ops_set_early() to the variable .init.data:_pt_ops.1
-<< WARNING: modpost: vmlinux.o(.text+0xb208): Section mismatch in reference from the function pt_ops_set_late() to the variable .init.data:_pt_ops.1
+
+vim +/umc_reg_offset +97 drivers/gpu/drm/amd/amdgpu/umc_v8_7.c
+
+    89	
+    90	static void umc_v8_7_ecc_info_query_ras_error_count(struct amdgpu_device *adev,
+    91						void *ras_error_status)
+    92	{
+    93		struct ras_err_data *err_data = (struct ras_err_data *)ras_error_status;
+    94	
+    95		uint32_t umc_inst        = 0;
+    96		uint32_t ch_inst         = 0;
+  > 97		uint32_t umc_reg_offset  = 0;
+    98		uint32_t channel_index   = 0;
+    99	
+   100		/* TODO: driver needs to toggle DF Cstate to ensure
+   101		 * safe access of UMC registers. Will add the protection
+   102		 */
+   103		LOOP_UMC_INST_AND_CH(umc_inst, ch_inst) {
+   104			umc_reg_offset = get_umc_v8_7_reg_offset(adev,
+   105								umc_inst,
+   106								ch_inst);
+   107			channel_index = get_umc_v8_7_channel_index(adev,
+   108								umc_inst,
+   109								ch_inst);
+   110			umc_v8_7_ecc_info_query_correctable_error_count(adev,
+   111								channel_index,
+   112								&(err_data->ce_count));
+   113			umc_v8_7_ecc_info_querry_uncorrectable_error_count(adev,
+   114								channel_index,
+   115								&(err_data->ue_count));
+   116		}
+   117	}
+   118	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
