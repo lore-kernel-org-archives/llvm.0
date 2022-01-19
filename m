@@ -1,93 +1,68 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB492CA3
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 13:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642600331; x=1674136331;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V6xj/70rR9995gOWyZ2fhDWt5YCJUunhJStJfwvw0ds=;
-  b=DKHHpUbEqvEjU/V1Iz1xgFXUZte565243i2U63lIuLrW/VYbVp52KazR
-   Pr8hvFKdLmm3sR1Bx5Ms4IXIS56KCCAih+yOSaM1V5B8O5zRGr/fE+ZmQ
-   jgY4GpNM/dXd+tB97uqVFlYLQEvwXgBF27EwZTEFHYanFtG7F4oJJACUj
-   RB/pBOlCpZ2Yzz8gR8Y0PBcju4++BnrN5WOG7xmsC2xQTP/tgKAoOXuTV
-   CWAFNz5B+W2AlFXsGE834xHP+yQzATxSRj91hiO6lw32ldxAdkmf8j1dd
-   GTvf7L/7GVI6/2fBsCG2r3auJAJIaovINzqEgfuM4MHZ2slXVmemQOs6f
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="305799510"
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="305799510"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 05:52:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="477379673"
-Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2022 05:52:07 -0800
-From: =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= <amadeuszx.slawinski@linux.intel.com>
-To: linux-kbuild@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Cezary Rojewski <cezary.rojewski@intel.com>,
-	=?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= <amadeuszx.slawinski@linux.intel.com>
-Subject: [PATCH] Makefile: Fix build with scan-build
-Date: Wed, 19 Jan 2022 14:51:47 +0100
-Message-Id: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068FD2C82
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 14:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 95D49C340E1;
+	Wed, 19 Jan 2022 14:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642603209;
+	bh=G4p5XIvQTrhdr3/JW6GjIPyASfXW3iBFXQuSMUg6NWw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UZziCWkZS3z0auxlo1XPtzsME24/xtB56O9k6KtXefhkVKcbd2AhUO+JkJYp1dz84
+	 dA5vgiyCMYbeCks2l3cvKtZdXPEzHMxtHGYhkbBaUcCK2GvxCKe8KTpvgiEKe9l+8f
+	 rIWSZgJYIR1U763dmusMDlLXXu2OjdlVWrpYVHH2vnzU0Jj+DFbXb5jssW0kt3rSJT
+	 6s3TIaLU+MTdNMuzz0eN6FlW51j/s7e7aiKmNsOv11gHodUCbb2ldbD8fcdheww52I
+	 fR/8GJ3O4+mJIvw4FPfSZtZRDG1GTzhRgGWtomDvxVlKN1ppDdlOWITFoCAg2dcoyF
+	 cVozd2l7LMsAQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7DDADF6079A;
+	Wed, 19 Jan 2022 14:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: mscc: ocelot: fix using match before it is set
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <164260320951.14096.15974915502034156396.git-patchwork-notify@kernel.org>
+Date: Wed, 19 Jan 2022 14:40:09 +0000
+References: <20220118134110.591613-1-trix@redhat.com>
+In-Reply-To: <20220118134110.591613-1-trix@redhat.com>
+To: Tom Rix <trix@redhat.com>
+Cc: vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+ alexandre.belloni@bootlin.com, davem@davemloft.net, kuba@kernel.org,
+ nathan@kernel.org, ndesaulniers@google.com, xiaoliang.yang_1@nxp.com,
+ UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-When building kernel with scan-build for analysis:
-$ scan-build make defconfig
-$ scan-build make menuconfig # disable RETPOLINE
-$ scan-build make -j16 bindeb-pkg
-since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-it fails with:
-  CC      scripts/mod/empty.o
-could not find clang line
-make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+Hello:
 
-Seems like changes to how -fconserve-stack support was detected broke
-build with scan-build. Revert part of mentioned commit which changed
-that.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-CC: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
----
- Makefile | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Tue, 18 Jan 2022 05:41:10 -0800 you wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this issue
+> ocelot_flower.c:563:8: warning: 1st function call argument
+>   is an uninitialized value
+>     !is_zero_ether_addr(match.mask->dst)) {
+>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> [...]
 
-diff --git a/Makefile b/Makefile
-index 765115c99655..1174ccd182f5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
- KBUILD_CFLAGS  += -fno-stack-check
- 
- # conserve stack if available
--ifdef CONFIG_CC_IS_GCC
--KBUILD_CFLAGS   += -fconserve-stack
--endif
-+KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
- 
- # Prohibit date/time macros, which would make the build non-deterministic
- KBUILD_CFLAGS   += -Werror=date-time
+Here is the summary with links:
+  - net: mscc: ocelot: fix using match before it is set
+    https://git.kernel.org/netdev/net/c/baa59504c1cd
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
