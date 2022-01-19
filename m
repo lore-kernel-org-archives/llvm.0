@@ -1,41 +1,47 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6512C82
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 16:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31F12C80
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 16:37:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642608457; x=1674144457;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xbh6oY7x3+ATxewkND+lIO4cNUs8cLzZEMO58y889FM=;
-  b=Ak71vVGMwu/ltquvZafGLhfHE79atsqlWO3W/jJhGCWaVXFgHPd/EKPe
-   JBmgJVaP1IlMI67dGVBa5Iqn8tX43XSBsVU4sdGCsy9GdtUuhK3NLEenD
-   xkRh0caz/NYo5LS0+aQ/46YKUZTW2usbucR0NAh/jx7V9dO3dIijCczVC
-   H0PYcTrXALpch3ufa46NAq7Hid2eneiw7ceOJLmcWtAFWsJwJGjRHELsQ
-   yjwE/xQXhN9b5dYxbKU0VWKbxi7TxDnAJ2c5Kt16cMA//gsz5ar9t3+2R
-   lOjGAuqL93TaqGUTPlMvbVumdU2H/8wdyrlSm4ljJryZWwxAerJFZzdHP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232463726"
+  t=1642610258; x=1674146258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qsg5yYZeqEXKNTcPd+VbPYg9nPFZfX5hlmIWtJ9zrsA=;
+  b=IA5rN0sZKamXHPhVfK6Nx32/ZK7CdVTUn4cMwGcaMOfepyuiIgOpZCi0
+   Yxi8qzCG6hZMLTHlnXOmPWc5NPJHk2dKZS0yqjA/Gu7NuCxznGYRhHA74
+   C6IGyWvdHlWtjp2JvkU1OCyv5+M73TyYBZ7E/yo9EtdpRnG7cJGU8HcDn
+   XevxZd4TBA3Y5KXWXaXrX2a7iwz0XJfqJqFZDGujuJ7xrD+KQr3JHGHFl
+   iwGLc1LTnFthY6Z7f1fespWjjngUT1vA3Llt0YhG3JSo2+NqokIImDan2
+   DvjRCqfcWM72YLWh88xcQUDl4eh9KvBmbr8I7W/sVqLjkLKHEXliJm+Mt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245064552"
 X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="232463726"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 08:07:36 -0800
+   d="scan'208";a="245064552"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 08:37:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="578856437"
+   d="scan'208";a="493084022"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jan 2022 08:07:34 -0800
+  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2022 08:37:35 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nADUk-000Dci-7Z; Wed, 19 Jan 2022 16:07:34 +0000
-Date: Thu, 20 Jan 2022 00:06:42 +0800
+	id 1nADxm-000De3-Tf; Wed, 19 Jan 2022 16:37:34 +0000
+Date: Thu, 20 Jan 2022 00:37:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hou Tao <houtao1@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Subject: net/bpf/bpf_dummy_struct_ops.c:122:6: error: unexpected token,
- expected comma
-Message-ID: <202201200024.lLbhNvJC-lkp@intel.com>
+To: Xin Ji <xji@analogixsemi.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, bliang@analogixsemi.com,
+	qwen@analogixsemi.com, jli@analogixsemi.com,
+	Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
+ support
+Message-ID: <202201200042.BIqTHWGV-lkp@intel.com>
+References: <20220119110141.1020452-2-xji@analogixsemi.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,118 +50,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220119110141.1020452-2-xji@analogixsemi.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
-commit: c196906d50e360d82ed9aa5596a9d0ce89b7ab78 bpf: Add dummy BPF STRUCT_OPS for test purpose
-date:   3 months ago
-config: mips-randconfig-r003-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200024.lLbhNvJC-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+Hi Xin,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on robh/for-next peter-chen-usb/for-usb-next v5.16 next-20220118]
+[cannot apply to balbi-usb/testing/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220119-190352
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220120/202201200042.BIqTHWGV-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c196906d50e360d82ed9aa5596a9d0ce89b7ab78
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c196906d50e360d82ed9aa5596a9d0ce89b7ab78
+        # https://github.com/0day-ci/linux/commit/760b0d28447fcaef7a39a20ebce9a4fb96cc0c7d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220119-190352
+        git checkout 760b0d28447fcaef7a39a20ebce9a4fb96cc0c7d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/ mm// net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/typec/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/bpf/bpf_dummy_struct_ops.c:122:6: error: unexpected token, expected comma
-           if (put_user(prog_ret, &uattr->test.retval))
-               ^
-   arch/mips/include/asm/uaccess.h:112:33: note: expanded from macro 'put_user'
-           access_ok(__p, sizeof(*__p)) ? __put_user((x), __p) : -EFAULT;  \
-                                          ^
-   arch/mips/include/asm/uaccess.h:177:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sw, __pu_ptr);                      \
-                                  ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
->> net/bpf/bpf_dummy_struct_ops.c:122:6: error: invalid operand for instruction
-           if (put_user(prog_ret, &uattr->test.retval))
-               ^
-   arch/mips/include/asm/uaccess.h:112:33: note: expanded from macro 'put_user'
-           access_ok(__p, sizeof(*__p)) ? __put_user((x), __p) : -EFAULT;  \
-                                          ^
-   arch/mips/include/asm/uaccess.h:177:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sw, __pu_ptr);                      \
-                                  ^
-   <inline asm>:4:11: note: instantiated into assembly here
-           swe $19, 0($2)
-                    ^
-   2 errors generated.
+>> drivers/usb/typec/anx7411.c:835:6: warning: no previous prototype for function 'anx7411_port_unregister_altmodes' [-Wmissing-prototypes]
+   void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
+        ^
+   drivers/usb/typec/anx7411.c:835:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +122 net/bpf/bpf_dummy_struct_ops.c
+vim +/anx7411_port_unregister_altmodes +835 drivers/usb/typec/anx7411.c
 
-    74	
-    75	int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
-    76				    union bpf_attr __user *uattr)
-    77	{
-    78		const struct bpf_struct_ops *st_ops = &bpf_bpf_dummy_ops;
-    79		const struct btf_type *func_proto;
-    80		struct bpf_dummy_ops_test_args *args;
-    81		struct bpf_tramp_progs *tprogs;
-    82		void *image = NULL;
-    83		unsigned int op_idx;
-    84		int prog_ret;
-    85		int err;
-    86	
-    87		if (prog->aux->attach_btf_id != st_ops->type_id)
-    88			return -EOPNOTSUPP;
-    89	
-    90		func_proto = prog->aux->attach_func_proto;
-    91		args = dummy_ops_init_args(kattr, btf_type_vlen(func_proto));
-    92		if (IS_ERR(args))
-    93			return PTR_ERR(args);
-    94	
-    95		tprogs = kcalloc(BPF_TRAMP_MAX, sizeof(*tprogs), GFP_KERNEL);
-    96		if (!tprogs) {
-    97			err = -ENOMEM;
-    98			goto out;
-    99		}
-   100	
-   101		image = bpf_jit_alloc_exec(PAGE_SIZE);
-   102		if (!image) {
-   103			err = -ENOMEM;
-   104			goto out;
-   105		}
-   106		set_vm_flush_reset_perms(image);
-   107	
-   108		op_idx = prog->expected_attach_type;
-   109		err = bpf_struct_ops_prepare_trampoline(tprogs, prog,
-   110							&st_ops->func_models[op_idx],
-   111							image, image + PAGE_SIZE);
-   112		if (err < 0)
-   113			goto out;
-   114	
-   115		set_memory_ro((long)image, 1);
-   116		set_memory_x((long)image, 1);
-   117		prog_ret = dummy_ops_call_op(image, args);
-   118	
-   119		err = dummy_ops_copy_args(args);
-   120		if (err)
-   121			goto out;
- > 122		if (put_user(prog_ret, &uattr->test.retval))
-   123			err = -EFAULT;
-   124	out:
-   125		kfree(args);
-   126		bpf_jit_free_exec(image);
-   127		kfree(tprogs);
-   128		return err;
-   129	}
-   130	
+   834	
+ > 835	void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
+   836	{
+   837		int i;
+   838	
+   839		for (i = 0; i < MAX_ALTMODE; i++)
+   840			if (adev[i]) {
+   841				typec_unregister_altmode(adev[i]);
+   842				adev[i] = NULL;
+   843			}
+   844	}
+   845	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
