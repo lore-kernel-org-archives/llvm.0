@@ -1,41 +1,46 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E4D2C82
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 07:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29158173
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 09:16:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642576887; x=1674112887;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U9Cs0/eYhOxqWtZtqx6m6V7eRm9ZISPAQYWTdhpFB4M=;
-  b=Nsgb3AcHIhFpUmQd/BoWhgOh42DBBUtZYw7BSHQDQw4N08ESagIaHzZc
-   rYSOJxAzQDRYMhRewaW8TDwnqP1YYscv4uwLVvvsKTOMZu2eImPJBQqo6
-   ouxEyy16TpfMChqad5oEJHGjYIf/pwJzSFpMj6PeaL67QdDllu1azfWQS
-   Z5uVyq2hR4dwb90gzygrBR7952dxul38i1WV32TQVKLPTqoSAL+fAVOO2
-   hZVxZz6SR2VbDxCq/sc0DqDDCpRYe+2dsHq2V/I15KfAnD0o9ha/cvHBR
-   uozJGgvV3XkHrEbuYihOAuD4hYlUcTzTDns3IaT/+xVJhD3nvCkXbYlpt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232367402"
+  t=1642583815; x=1674119815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T5k5+aL/Td18XDwN5Hgq2WXf3US5aHXEp9ssQzoBTQA=;
+  b=PDyUQHDF6SL78ub9w59FDyAFJTna80cNeZ5qffudTIScQEYvmQVpbPi1
+   yKnWksK1HohVVnbzBrEU50lNhbNF/T4JnAQkjBxwrutBWJKMTDoixwRCG
+   tpUguRKnAeyXUFcK9VWpfQhxaIMqWLkmtFSvGYqjhOPNh0N+sww30po+J
+   AmGieYLtKjwdnUFsMtt8jh4puO3omVjUZiLtT7bYro/p4zHMAGpJb9YoM
+   ffGjzI7Ri2he6nDpu5Loo23iEYUgvWIkmvlatyqrTrNtWNQBlkLwdLFOu
+   MSyfzUBddu54vT/wXPfFq9e6dR6eGXMyQ/vtPSDsQ+xmlyXmBOL6G/d8K
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="308365007"
 X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="232367402"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:21:23 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="308365007"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 01:16:54 -0800
 X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="532150752"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jan 2022 23:21:21 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nA5HV-000DMj-51; Wed, 19 Jan 2022 07:21:21 +0000
-Date: Wed, 19 Jan 2022 15:20:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matteo Croce <mcroce@microsoft.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 21/80] ld.lld: error: duplicate symbol: memset
-Message-ID: <202201191516.DcDnH6lu-lkp@intel.com>
+   d="scan'208";a="475070518"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 01:16:53 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+	by paasikivi.fi.intel.com (Postfix) with SMTP id 0112E203C8;
+	Wed, 19 Jan 2022 11:16:51 +0200 (EET)
+Date: Wed, 19 Jan 2022 11:16:50 +0200
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: "Tu, ShawnX" <shawnx.tu@intel.com>
+Cc: lkp <lkp@intel.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [sailus-media-tree:master 15/16]
+ drivers/media/i2c/hi847.c:2700:35: error: incompatible pointer types passing
+ 'struct v4l2_subdev_pad_config *' to parameter of type 'struct
+ v4l2_subdev_state *'
+Message-ID: <YefXAutAzAtffdpf@paasikivi.fi.intel.com>
+References: <202201141739.Q7kFIE7g-lkp@intel.com>
+ <3e680a691f9543fabf4b2cdc5de2bf6d@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,37 +49,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <3e680a691f9543fabf4b2cdc5de2bf6d@intel.com>
 
-tree:   https://github.com/esmil/linux visionfive
-head:   e46c3a7e373e6faa03399f1a41c29cf7546c37cb
-commit: 55f013c0bc3e224cf34271c3cc11f7443b11553f [21/80] riscv: optimized memset
-config: riscv-randconfig-r042-20220118 (https://download.01.org/0day-ci/archive/20220119/202201191516.DcDnH6lu-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/55f013c0bc3e224cf34271c3cc11f7443b11553f
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 55f013c0bc3e224cf34271c3cc11f7443b11553f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hi Shawn,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Jan 19, 2022 at 03:06:09AM +0000, Tu, ShawnX wrote:
+> Hi Sakari,
+> 
+> It has uploaded fixed V2 patch to the server.
+> * [PATCH v2] media: hi847: Add support for Hi-847 sensor
+> https://github.com/0day-ci/linux/commits/Shawnx-Tu/media-hi847-Add-support-for-Hi-847-sensor/20220113-120102
+> 
+> But I still see the lkp build error message and use previous V1 patch to build.
+> Could you help to check? If needs to fix the driver, I'll upload new one.
 
-All errors (new ones prefixed by >>):
+I've replaced the earlier one by v2 in my tree.
 
->> ld.lld: error: duplicate symbol: memset
-   >>> defined at shadow.c
-   >>> kasan/shadow.o:(memset) in archive mm/built-in.a
-   >>> defined at string.c
-   >>> string.o:(.text+0x1398) in archive lib/lib.a
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Sakari Ailus
