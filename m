@@ -1,138 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09E1168
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 00:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1642550617;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tVYvA6k75j8gln9tRsgy3BBh8Hq7EurwC1H6Kup6Uac=;
-	b=gExhNam4AYtmen0v6gWmmyvSyQ8NIuTJvwu75AL7BD2ADE7pZqdlbgkQw8Exc/BW9YBYuC
-	tba6QOb+GWu2xB3/Tk7S/czdKFHl8XQGG7efPrVJB6fT6tQptnJHzJuWAtr5F5h9wq5zQJ
-	0y+hM/pYNz9HlsYSgkcuoJrjwXIGn90=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-7WVbKfBKO12OoK7BwrLKfg-1; Tue, 18 Jan 2022 19:03:36 -0500
-X-MC-Unique: 7WVbKfBKO12OoK7BwrLKfg-1
-Received: by mail-oi1-f200.google.com with SMTP id j126-20020acaeb84000000b002c90b1bb864so533651oih.3
-        for <llvm@lists.linux.dev>; Tue, 18 Jan 2022 16:03:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tVYvA6k75j8gln9tRsgy3BBh8Hq7EurwC1H6Kup6Uac=;
-        b=dETVPnZFh48N9r9IT4gTkrmfOTKtSJhpS3wQFzZUcN2yNNGlIKv9yoSKQf9XlDE0pl
-         ArSHNt4A81y/kI8vFzIfKH2egxk7RLRL3jhhSXPDtLyT51QbIVUCdfIJkpMi58kDthIG
-         PDQznslgM5rlL2Z53LwxDsvv7fFx0CaAMBCwJIOKDcSEgAjBTvoq7TnNTWzeE0PPOvNH
-         KKiFe66nnJMPVFvQ9/oild1S1NnnkQ+8ug53X3SWu+VNRbovKKgJWNHDulUb1Ym3BuJn
-         4HhJBkw9ae9lmgQcifAcKXh7xb/chfRQxQjTYJ09a+34X2koyy9ZcAPIhwAeASJbg8OF
-         nRUg==
-X-Gm-Message-State: AOAM531GOgKfy8xiWCLbpfNnPF975IhZj/0jWiBwoUUMvz1CwNeFbk86
-	/QLUG4JewvJ55TNckKihMia76F3W6bAv5wh9HteH+YSAdH3mnsyB4+Twv2n21NkmWv1pu0RKUNQ
-	mR8tehmw/JROg6Q==
-X-Received: by 2002:a05:6830:2785:: with SMTP id x5mr22537877otu.187.1642550616002;
-        Tue, 18 Jan 2022 16:03:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwFSVupUWPVUpDZy728lBKKhw+a+1HU1Pevbh8pLavUmbWJOKEDeq0ntl5K4b6WWPcLn98w6Q==
-X-Received: by 2002:a05:6830:2785:: with SMTP id x5mr22537853otu.187.1642550615767;
-        Tue, 18 Jan 2022 16:03:35 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::c])
-        by smtp.gmail.com with ESMTPSA id ay40sm9106563oib.1.2022.01.18.16.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 16:03:35 -0800 (PST)
-Date: Tue, 18 Jan 2022 16:03:27 -0800
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
-	llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
- __COUNTER__
-Message-ID: <20220119000327.oapghqad4lebnsra@treble>
-References: <20220114010526.1776605-1-ndesaulniers@google.com>
- <YeQei0xNzMq7bFdg@zn.tnic>
- <20220118192256.jzk5dnceeusq7x7u@treble>
- <20220118230120.pivvson7qekfiqic@treble>
- <YedOLva0zos3A1JE@zn.tnic>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0FE173
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 00:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642553954; x=1674089954;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Mu4lZTU1RSlvlw4Mq8oI2HoHgVbxoDGDrDQ9dFwGk2s=;
+  b=VK6W3Bh2fpP6IFJ3C5vBGh7YmlR1OQ6EpLZI3nuezTJXj9RBxDwDA3lQ
+   TOlqO2FIPw2UkEbFUQcEA1/KOc+hLhxLPkVYoc63EsZtwOfUx/rn7xRP3
+   WNlF9K9fmfQiTKYAg17GNNptK9VZuPQdLYmpFReedCzUWQk65iZIv5lGN
+   GARNOa7wDTdViKd/doHgNfgonh/fadJheoshQFqBOEOMwpsu0t5XtCdjB
+   Ht6Qr4Mr8BOC92woWSA1T8ghRWL2BGYVavpQANcqj+9d57iJ8ERGpvXa9
+   oEsWn/sZ0herl2QEwF6M/HuR2LfbMm7hhQfsgvCZV1zSALQxTf/H2vDmQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="308294334"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="308294334"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 16:59:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="532031592"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 18 Jan 2022 16:59:12 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1n9zJg-000D5W-4y; Wed, 19 Jan 2022 00:59:12 +0000
+Date: Wed, 19 Jan 2022 08:58:53 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 12073/12461] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function update_iter: .text+0x11dc):
+ relocation R_RISCV_PCREL_HI20 out of range: -524582 is not in [-524288,
+ 524287]; references kallsyms_names
+Message-ID: <202201190810.SMzRmKCt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YedOLva0zos3A1JE@zn.tnic>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Jan 19, 2022 at 12:33:02AM +0100, Borislav Petkov wrote:
-> On Tue, Jan 18, 2022 at 03:01:20PM -0800, Josh Poimboeuf wrote:
-> > With the two WARN_ONs in media_request_object_complete(), GCC apparently
-> > considers the two reachable() asm statements as duplicates, and it
-> > removes the second one.
-> 
-> Could that be the same thing:
-> 
-> net/xfrm/xfrm_output.o: warning: objtool: xfrm_output_resume()+0x2e0: unreachable instruction
-> 
-> I see two WARN_ONs in asm output there too...
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Hans de Goede <hdegoede@redhat.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
 
-If one of the '__bug_table' asm snippets isn't immediately followed by
-the .L[un]reachable asm, then yeah, it's the same issue.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6f59bc242877fcb9c9a5136ea62d383fce5615df
+commit: 23636544a3a42f5884e73233778934b501f96af9 [12073/12461] proc: make the proc_create[_data]() stubs static inlines
+config: riscv-randconfig-r012-20220116 (https://download.01.org/0day-ci/archive/20220119/202201190810.SMzRmKCt-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=23636544a3a42f5884e73233778934b501f96af9
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 23636544a3a42f5884e73233778934b501f96af9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For example it's supposed to look something like this:
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function update_iter: .text+0x11dc): relocation R_RISCV_PCREL_HI20 out of range: -524582 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function update_iter: .text+0x11ec): relocation R_RISCV_PCREL_HI20 out of range: -524582 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
 
-# 472 "net/xfrm/xfrm_output.c" 1
-	1:	.byte 0x0f, 0x0b
-.pushsection __bug_table,"aw"
-2:	.long 1b - 2b	# bug_entry::bug_addr
-	.long .LC4 - 2b	# bug_entry::file	#
-	.word 472	# bug_entry::line	#
-	.word 2307	# bug_entry::flags	#
-	.org 2b+12	#
-.popsection
-# 0 "" 2
-# 472 "net/xfrm/xfrm_output.c" 1
-	.Lreachable1666:
-	.pushsection .discard.reachable
-	.long .Lreachable1666 - .
-	.popsection
-
-
-NOT just this:
-
-
-# 472 "net/xfrm/xfrm_output.c" 1
-	1:	.byte 0x0f, 0x0b
-.pushsection __bug_table,"aw"
-2:	.long 1b - 2b	# bug_entry::bug_addr
-	.long .LC4 - 2b	# bug_entry::file	#
-	.word 472	# bug_entry::line	#
-	.word 2307	# bug_entry::flags	#
-	.org 2b+12	#
-.popsection
-# some other code here...
-
-
-There's a bunch of those throughout the code base.  The current
-annotate_[un]reachable() implementations are carefully written to avoid
-that happening.
-
--- 
-Josh
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
