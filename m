@@ -1,123 +1,188 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C472CA7
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 21:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3949C004E1;
-	Wed, 19 Jan 2022 21:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1642627184;
-	bh=rDBAnFk6DtskFzUgU67bbBE23M0Z4VZbBDCK8RsVWHk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TbX9wnTelCF2Npo6lzljQ9/WleD2L6+9VdFH2ul05p9mj69dYgKddHvG1wjdVFrrr
-	 xvlv7hYQrM0ZbIDxZaTqcWHgnSY7BOl47u6ZDnwTdu7pm+CRE37IokCNJeMaecZTRe
-	 J8lbxgnvG/Ga5hzhsSJAeUyq8sFVgrIVDTwT3hQST5DV5LubwSrTCR2cE/Cd1vRzih
-	 I1q+4VjuQbAr9x27NzcN17ekUnIH9VhSUMpOxZ2xCcelyy124XFlr2A2l4r6wz7bzB
-	 Jj3bTrnuJ4i0WdPiB+1SQmQPH8YM68nYCn9I0Xd6ZLon4XGIxnFYh4pdWtKRJx/UQE
-	 VKIzWE13rBsmw==
-Date: Wed, 19 Jan 2022 14:19:39 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
-Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Cezary Rojewski <cezary.rojewski@intel.com>
-Subject: Re: [PATCH] Makefile: Fix build with scan-build
-Message-ID: <YeiAa/eCxVZC+QbS@archlinux-ax161>
-References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061CB173
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 21:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642629367; x=1674165367;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=otFg3swqPlUELCxL5/8SOVueOWKX3jF6HqiI/xk8r4Q=;
+  b=iuCBnd0tQv/7i/ckQQX1dSZEJQG3AUOf/58zXd+zeVKk8Xq83VT/AEor
+   ur/lTIaa06Eg4+c1fsyuh6DdVrhfv4CRx0RNDI+5hpcJqtssaoubcYauL
+   JpB8vnny89swieGe9jpo+IumTbWqMmaANh1j4UDhT/GX4VOUCnjees401
+   HNs2dCwEyiCtP6+6sLxRNUHhuKef3dduWFsS3nNyzCyskLiuf+bnBHAck
+   CgppmiHeDcoHbcPlDwjCxXnwEQaKCroOf9ZYjlcayYJnJl6Pi7bCNl+jN
+   YQbr/mB+DajPB3PKsoNoIIeMcRP1LMEWLOZvmLNBTUpr/XWQAotZONxHF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269598666"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="269598666"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 13:55:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="477548959"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2022 13:55:42 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nAIvd-000DmU-Ea; Wed, 19 Jan 2022 21:55:41 +0000
+Date: Thu, 20 Jan 2022 05:54:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andreas Gruenbacher <agruenba@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: mm/gup.c:1674:16: error: unexpected token, expected comma
+Message-ID: <202201200528.F5X9Vnfb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
-> When building kernel with scan-build for analysis:
-> $ scan-build make defconfig
-> $ scan-build make menuconfig # disable RETPOLINE
-> $ scan-build make -j16 bindeb-pkg
-> since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-> it fails with:
->   CC      scripts/mod/empty.o
-> could not find clang line
-> make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
-> 
-> Seems like changes to how -fconserve-stack support was detected broke
-> build with scan-build. Revert part of mentioned commit which changed
-> that.
-> 
-> Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-> CC: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> ---
->  Makefile | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 765115c99655..1174ccd182f5 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
->  KBUILD_CFLAGS  += -fno-stack-check
->  
->  # conserve stack if available
-> -ifdef CONFIG_CC_IS_GCC
-> -KBUILD_CFLAGS   += -fconserve-stack
-> -endif
-> +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
->  
->  # Prohibit date/time macros, which would make the build non-deterministic
->  KBUILD_CFLAGS   += -Werror=date-time
-> -- 
-> 2.25.1
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
+commit: bb523b406c849eef8f265a07cd7f320f1f177743 gup: Turn fault_in_pages_{readable,writeable} into fault_in_{readable,writeable}
+date:   3 months ago
+config: mips-randconfig-r003-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200528.F5X9Vnfb-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb523b406c849eef8f265a07cd7f320f1f177743
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bb523b406c849eef8f265a07cd7f320f1f177743
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Okay, I think I understand why this happens...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
-code with a compiler [2] then runs clang for the static analyzer [3].
-The problem is that the default compiler for ccc-analyzer is GCC, which
-means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
-but not clang will cause the clang analyzer part of ccc-analyzer to
-error because ccc-analyzer just passes all '-f' flags along [4].
+All errors (new ones prefixed by >>):
 
-Prior to 7d73c3e9c514, there was no error because cc-option would run
-the flag against ccc-analyzer, which would error out for the reason I
-just described, which would prevent the flag from getting added to
-KBUILD_CFLAGS.
+>> mm/gup.c:1674:16: error: unexpected token, expected comma
+                   if (unlikely(__put_user(0, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
+                   __put_data_asm(user_sb, __pu_ptr);                      \
+                                  ^
+   <inline asm>:3:10: note: instantiated into assembly here
+           .set    eva
+                      ^
+>> mm/gup.c:1674:16: error: invalid operand for instruction
+                   if (unlikely(__put_user(0, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
+                   __put_data_asm(user_sb, __pu_ptr);                      \
+                                  ^
+   <inline asm>:4:10: note: instantiated into assembly here
+           sbe $0, 0($17)
+                   ^
+   mm/gup.c:1682:16: error: unexpected token, expected comma
+                   if (unlikely(__put_user(0, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
+                   __put_data_asm(user_sb, __pu_ptr);                      \
+                                  ^
+   <inline asm>:3:10: note: instantiated into assembly here
+           .set    eva
+                      ^
+   mm/gup.c:1682:16: error: invalid operand for instruction
+                   if (unlikely(__put_user(0, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
+                   __put_data_asm(user_sb, __pu_ptr);                      \
+                                  ^
+   <inline asm>:4:10: note: instantiated into assembly here
+           sbe $0, 0($2)
+                   ^
+   mm/gup.c:1710:16: error: unexpected token, expected comma
+                   if (unlikely(__get_user(c, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lb, __gu_ptr);                 \
+                                       ^
+   <inline asm>:3:10: note: instantiated into assembly here
+           .set    eva
+                      ^
+   mm/gup.c:1710:16: error: invalid operand for instruction
+                   if (unlikely(__get_user(c, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lb, __gu_ptr);                 \
+                                       ^
+   <inline asm>:4:10: note: instantiated into assembly here
+           lbe $3, 0($17)
+                   ^
+   mm/gup.c:1718:16: error: unexpected token, expected comma
+                   if (unlikely(__get_user(c, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lb, __gu_ptr);                 \
+                                       ^
+   <inline asm>:3:10: note: instantiated into assembly here
+           .set    eva
+                      ^
+   mm/gup.c:1718:16: error: invalid operand for instruction
+                   if (unlikely(__get_user(c, uaddr) != 0))
+                                ^
+   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lb, __gu_ptr);                 \
+                                       ^
+   <inline asm>:4:10: note: instantiated into assembly here
+           lbe $5, 0($2)
+                   ^
+   8 errors generated.
 
-Now, -fconserve-stack gets passed along to both gcc and clang but clang
-does not recognize it and errors out.
 
-This should be fixed in clang, which already has the machinery to
-recognize but ignore GCC flags for compatibility reasons (which is
-probably how gcc and clang can use the same flags). I have pushed a
-patch to Phabricator for review:
+vim +1674 mm/gup.c
 
-https://reviews.llvm.org/D117717
+  1658	
+  1659	/**
+  1660	 * fault_in_writeable - fault in userspace address range for writing
+  1661	 * @uaddr: start of address range
+  1662	 * @size: size of address range
+  1663	 *
+  1664	 * Returns the number of bytes not faulted in (like copy_to_user() and
+  1665	 * copy_from_user()).
+  1666	 */
+  1667	size_t fault_in_writeable(char __user *uaddr, size_t size)
+  1668	{
+  1669		char __user *start = uaddr, *end;
+  1670	
+  1671		if (unlikely(size == 0))
+  1672			return 0;
+  1673		if (!PAGE_ALIGNED(uaddr)) {
+> 1674			if (unlikely(__put_user(0, uaddr) != 0))
+  1675				return size;
+  1676			uaddr = (char __user *)PAGE_ALIGN((unsigned long)uaddr);
+  1677		}
+  1678		end = (char __user *)PAGE_ALIGN((unsigned long)start + size);
+  1679		if (unlikely(end < start))
+  1680			end = NULL;
+  1681		while (uaddr != end) {
+  1682			if (unlikely(__put_user(0, uaddr) != 0))
+  1683				goto out;
+  1684			uaddr += PAGE_SIZE;
+  1685		}
+  1686	
+  1687	out:
+  1688		if (size > uaddr - start)
+  1689			return size - (uaddr - start);
+  1690		return 0;
+  1691	}
+  1692	EXPORT_SYMBOL(fault_in_writeable);
+  1693	
 
-You need to disable CONFIG_RETPOLINE for the same reason but I don't
-think working around that in clang is as simple.
-
-Until that fix can proliferate through distributions and such, this is
-not an unreasonable workaround (unless Masahiro or Nick have a better
-idea) but I would really like a comment so that we can revert this once
-that fix is more widely available (it is unlikely that clang will
-actually support this option).
-
-[1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
-[2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
-[3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
-[4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
-
-Cheers,
-Nathan
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
