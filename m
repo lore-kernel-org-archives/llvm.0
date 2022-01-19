@@ -1,87 +1,129 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070BA173
-	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 10:01:33 +0000 (UTC)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 03A201EC03AD;
-	Wed, 19 Jan 2022 11:01:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1642586487;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=+sw16Zul1vvekfBj0LiJt53AfIehF1UvXy7HEV0NUk8=;
-	b=sNg5oKZ5eGyh5FUA+/j6KEJRvWtedXw7LRPzpsyxJscN/2mXH2VhGn6kHPdRn4g4LaFn6f
-	vDUqOxtCAdn1B+CU+RUA5bLMjGKrCmccBjfZ0AIsww/6V4MiIUmra8qPqiHVjwYyfmuA2u
-	ps4ZUa6XHh1iytjaugb2xDgVZQUx/Y4=
-Date: Wed, 19 Jan 2022 11:01:21 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
-	llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
- __COUNTER__
-Message-ID: <YefhcXouSQwETTvl@zn.tnic>
-References: <20220114010526.1776605-1-ndesaulniers@google.com>
- <YeQei0xNzMq7bFdg@zn.tnic>
- <20220118192256.jzk5dnceeusq7x7u@treble>
- <20220118230120.pivvson7qekfiqic@treble>
- <YedOLva0zos3A1JE@zn.tnic>
- <20220119000327.oapghqad4lebnsra@treble>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C734E168
+	for <llvm@lists.linux.dev>; Wed, 19 Jan 2022 12:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642594470; x=1674130470;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JoykHqTRCK3NznH7cESEkZESjiRiipnRIDgctDCMhxM=;
+  b=KA5BvUvhdfMwmkWTTRKtCzAq9wHSWy8oqFrsiqP9xJIfcOLwZhtgXs0Q
+   yIyq4AqRf6kreeTleDwLx/9WDl/BqW4MIQudVa8zwYKOW25w0ZlMLCXtA
+   ylEH23ra+6T3+evPRhtyjXvhS946BwropTNgXYABVXSTJ4m4H1yjysLgd
+   HmQlINsXXb10HPjl10CwptLJ6dkfoA4p28GZsd3GidDTsJ3MTqK/MR4ao
+   1yNGfeYdWhgol2sjUuhNC+FFFvXpaNk9/RxhsG1bE6chrRUnawm3jDxj+
+   5NoJ04PqsQ7nFloJmqm5oqTexPcwfHc2zd9ej5n3MiX9qi89Dn2F3GQtV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225725382"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="225725382"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 04:14:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="693757771"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 19 Jan 2022 04:14:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nA9r8-000DW1-UJ; Wed, 19 Jan 2022 12:14:26 +0000
+Date: Wed, 19 Jan 2022 20:13:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeremy Kerr <jk@codeconstruct.com.au>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: net/mctp/af_mctp.c:259:6: error: unexpected token, expected comma
+Message-ID: <202201192005.O7wDT8RE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119000327.oapghqad4lebnsra@treble>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 18, 2022 at 04:03:27PM -0800, Josh Poimboeuf wrote:
-> If one of the '__bug_table' asm snippets isn't immediately followed by
-> the .L[un]reachable asm, then yeah, it's the same issue.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
+commit: 99ce45d5e7dbde399997a630f45ac9f654fa4bcc mctp: Implement extended addressing
+date:   3 months ago
+config: mips-randconfig-r003-20220118 (https://download.01.org/0day-ci/archive/20220119/202201192005.O7wDT8RE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=99ce45d5e7dbde399997a630f45ac9f654fa4bcc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 99ce45d5e7dbde399997a630f45ac9f654fa4bcc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/ mm// net/
 
-Found one.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-AFAICT, that's the WARN_ON_ONCE(1) catch-all in the default: label of
-the switch-case in nf_hook(). That thing is followed by other gunk and
-no *reachable label near it.
+All errors (new ones prefixed by >>):
 
-Damn - that was too good to be true. Gotta love those compilers. :-P
+>> net/mctp/af_mctp.c:259:6: error: unexpected token, expected comma
+           if (get_user(len, optlen))
+               ^
+   arch/mips/include/asm/uaccess.h:138:33: note: expanded from macro 'get_user'
+           access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :           \
+                                          ^
+   arch/mips/include/asm/uaccess.h:224:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lw, __gu_ptr);                 \
+                                       ^
+   <inline asm>:3:10: note: instantiated into assembly here
+           .set    eva
+                      ^
+>> net/mctp/af_mctp.c:259:6: error: invalid operand for instruction
+           if (get_user(len, optlen))
+               ^
+   arch/mips/include/asm/uaccess.h:138:33: note: expanded from macro 'get_user'
+           access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :           \
+                                          ^
+   arch/mips/include/asm/uaccess.h:224:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lw, __gu_ptr);                 \
+                                       ^
+   <inline asm>:4:10: note: instantiated into assembly here
+           lwe $2, 0($20)
+                   ^
+   2 errors generated.
 
-# ./include/linux/netfilter.h:252: 		WARN_ON_ONCE(1);
-#APP
-# 252 "./include/linux/netfilter.h" 1
-	1:	.byte 0x0f, 0x0b
-.pushsection __bug_table,"aw"
-2:	.long 1b - 2b	# bug_entry::bug_addr
-	.long .LC5 - 2b	# bug_entry::file	#
-	.word 252	# bug_entry::line	#
-	.word 2307	# bug_entry::flags	#
-	.org 2b+12	#
-.popsection
-# 0 "" 2
-#NO_APP
-	.p2align 4,,3
-	jmp	.L344	#
-.L265:
-# ./include/linux/netfilter.h:229: 		hook_head = rcu_dereference(net->nf.hooks_ipv4[hook]);
 
--- 
-Regards/Gruss,
-    Boris.
+vim +259 net/mctp/af_mctp.c
 
-https://people.kernel.org/tglx/notes-about-netiquette
+   249	
+   250	static int mctp_getsockopt(struct socket *sock, int level, int optname,
+   251				   char __user *optval, int __user *optlen)
+   252	{
+   253		struct mctp_sock *msk = container_of(sock->sk, struct mctp_sock, sk);
+   254		int len, val;
+   255	
+   256		if (level != SOL_MCTP)
+   257			return -EINVAL;
+   258	
+ > 259		if (get_user(len, optlen))
+   260			return -EFAULT;
+   261	
+   262		if (optname == MCTP_OPT_ADDR_EXT) {
+   263			if (len != sizeof(int))
+   264				return -EINVAL;
+   265			val = !!msk->addr_ext;
+   266			if (copy_to_user(optval, &val, len))
+   267				return -EFAULT;
+   268			return 0;
+   269		}
+   270	
+   271		return -EINVAL;
+   272	}
+   273	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
