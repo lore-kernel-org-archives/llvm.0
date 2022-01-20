@@ -1,42 +1,48 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6DC6173
-	for <llvm@lists.linux.dev>; Thu, 20 Jan 2022 17:16:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CC7173
+	for <llvm@lists.linux.dev>; Thu, 20 Jan 2022 17:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642698991; x=1674234991;
+  t=1642700177; x=1674236177;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HtY7FVe4fREWkUe+/uU1sssk4Lk0PvtlSis/lZ7izsM=;
-  b=bEwsliFyU/HW4iQRvO4Rhn2sbsFSxra7dO+lhcTbUmo236wBjCn6rjKT
-   nmvu4fVJYdRA6A/7YibN8wDADh3wpKZOaZiKmujyWulLVXgk1JYVDPmqn
-   aiqqFMwin8bIxFhIV7ukmI2sFiKNYyYfLZHfOy5k6yoMDMuLIZbgc+OYz
-   JxVXt6SrMI/6U2BDfdVQ4hFNhWtLc7CwlB0tfRsN/hMdhOzErU0noOCVc
-   pOYcTtaGs8TPJOGo8QF3RgjjXz3wr3U/OXAZ0VQ7ka6i8BSFlVH+qyvn2
-   2TdrUERkTAl8drvONQIov4AvmN3ZCZmlUDSrzKk19xDte+Wj5b13gqq5V
+  bh=+dYWYcsVjO72w3HaxwuCXXUjMt6guX+HVrSAVR0okx0=;
+  b=gqKmMJUsz8E8pg9vATKjG2dYiWmVtYntfM27mT1b+QRjl0cCBEIoPhP9
+   TXLUGilorRohf8Vxc4HCU3pK82xlBGw9/Swa/h1sNIYxV71DUhPMRudAH
+   sc2R7bg+XyeqRphnMfXRYVZDWDmBam+ybRak+UuiTcU+O/iMSSyyrAX6G
+   5FKlTsj66thDkuGA2Ww9W3p5W3i81c6nmziarIA1SwMLbMkRyAtWpa+LP
+   WVaORfAS6iaPW1yEkfaQy/tOe9AdyZjaJnuR2e/dyKP42p0JfZq/EKz3K
+   QJQvtBiMk/jSajxBFX5+cE59Q53lMeVeAftbOXeYFtQuFbyH9Qu3xi0tM
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245601238"
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="245601238"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:16:13 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225387980"
+X-IronPort-AV: E=Sophos;i="5.88,303,1635231600"; 
+   d="scan'208";a="225387980"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:36:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="622985642"
+X-IronPort-AV: E=Sophos;i="5.88,303,1635231600"; 
+   d="scan'208";a="626391000"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jan 2022 09:16:12 -0800
+  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2022 09:36:13 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAb2h-000EVa-MW; Thu, 20 Jan 2022 17:16:11 +0000
-Date: Fri, 21 Jan 2022 01:15:31 +0800
+	id 1nAbM5-000EWZ-1L; Thu, 20 Jan 2022 17:36:13 +0000
+Date: Fri, 21 Jan 2022 01:35:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stefan Binding <sbinding@opensource.cirrus.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v4 2/9] spi: Create helper API to lookup ACPI info for
- spi device
-Message-ID: <202201210136.gwZmTll9-lkp@intel.com>
-References: <20220120134326.5295-3-sbinding@opensource.cirrus.com>
+To: Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+	John Stultz <john.stultz@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-m68k@lists.linux-m68k.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v11 3/5] rtc: goldfish: use gf_ioread32()/gf_iowrite32()
+Message-ID: <202201210103.XWJt8hcA-lkp@intel.com>
+References: <20220120080347.1595379-4-laurent@vivier.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,33 +51,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220120134326.5295-3-sbinding@opensource.cirrus.com>
+In-Reply-To: <20220120080347.1595379-4-laurent@vivier.eu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stefan,
+Hi Laurent,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on next-20220120]
-[also build test ERROR on v5.16]
-[cannot apply to broonie-spi/for-next rafael-pm/linux-next tiwai-sound/for-next linus/master v5.16 v5.16-rc8 v5.16-rc7]
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linux/master linus/master v5.16 next-20220120]
+[cannot apply to geert-m68k/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Stefan-Binding/Support-Spi-in-i2c-multi-instantiate-driver/20220120-214608
-base:    7fc5253f5a13271e9df35d6b936ff97b74540a59
-config: riscv-randconfig-r042-20220120 (https://download.01.org/0day-ci/archive/20220121/202201210136.gwZmTll9-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: riscv-randconfig-r042-20220120 (https://download.01.org/0day-ci/archive/20220121/202201210103.XWJt8hcA-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/aedf84002ec1568907471591915e28bed40e8f9a
+        # https://github.com/0day-ci/linux/commit/82ea64fc7cab43e258085769ed1d90b0685bf091
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Binding/Support-Spi-in-i2c-multi-instantiate-driver/20220120-214608
-        git checkout aedf84002ec1568907471591915e28bed40e8f9a
+        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
+        git checkout 82ea64fc7cab43e258085769ed1d90b0685bf091
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/rtc/
@@ -81,27 +87,109 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/rtc/rtc-rv3029c2.c:13:
->> include/linux/spi/spi.h:769:1: error: expected identifier or '('
-   {
-   ^
-   1 error generated.
+>> drivers/rtc/rtc-goldfish.c:44:18: error: implicit declaration of function 'gf_ioread32' [-Werror,-Wimplicit-function-declaration]
+           rtc_alarm_low = gf_ioread32(base + TIMER_ALARM_LOW);
+                           ^
+   drivers/rtc/rtc-goldfish.c:44:18: note: did you mean 'ioread32'?
+   include/asm-generic/io.h:726:19: note: 'ioread32' declared here
+   static inline u32 ioread32(const volatile void __iomem *addr)
+                     ^
+   include/asm-generic/io.h:725:18: note: expanded from macro 'ioread32'
+   #define ioread32 ioread32
+                    ^
+>> drivers/rtc/rtc-goldfish.c:74:3: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+                   gf_iowrite32((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+                   ^
+   drivers/rtc/rtc-goldfish.c:74:3: note: did you mean 'iowrite32'?
+   include/asm-generic/io.h:760:20: note: 'iowrite32' declared here
+   static inline void iowrite32(u32 value, volatile void __iomem *addr)
+                      ^
+   include/asm-generic/io.h:759:19: note: expanded from macro 'iowrite32'
+   #define iowrite32 iowrite32
+                     ^
+   drivers/rtc/rtc-goldfish.c:83:20: error: implicit declaration of function 'gf_ioread32' [-Werror,-Wimplicit-function-declaration]
+                   rtc_status_reg = gf_ioread32(base + TIMER_ALARM_STATUS);
+                                    ^
+   drivers/rtc/rtc-goldfish.c:85:4: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+                           gf_iowrite32(1, base + TIMER_CLEAR_ALARM);
+                           ^
+   drivers/rtc/rtc-goldfish.c:101:3: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+                   gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+                   ^
+   drivers/rtc/rtc-goldfish.c:113:2: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+           gf_iowrite32(1, base + TIMER_CLEAR_INTERRUPT);
+           ^
+   drivers/rtc/rtc-goldfish.c:131:13: error: implicit declaration of function 'gf_ioread32' [-Werror,-Wimplicit-function-declaration]
+           time_low = gf_ioread32(base + TIMER_TIME_LOW);
+                      ^
+   drivers/rtc/rtc-goldfish.c:152:2: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+           gf_iowrite32((now64 >> 32), base + TIMER_TIME_HIGH);
+           ^
+   8 errors generated.
 
 
-vim +769 include/linux/spi/spi.h
+vim +/gf_ioread32 +44 drivers/rtc/rtc-goldfish.c
 
-   762	
-   763	#if IS_ENABLED(CONFIG_ACPI)
-   764	extern struct spi_device *acpi_spi_device_alloc(struct spi_controller *ctlr,
-   765							struct acpi_device *adev);
-   766	#else
-   767	static inline struct spi_device *acpi_spi_device_alloc(struct spi_controller *ctlr,
-   768							       struct acpi_device *adev);
- > 769	{
-   770		return ERR_PTR(-EOPNOTSUPP);
-   771	}
-   772	#endif
-   773	
+    31	
+    32	static int goldfish_rtc_read_alarm(struct device *dev,
+    33					   struct rtc_wkalrm *alrm)
+    34	{
+    35		u64 rtc_alarm;
+    36		u64 rtc_alarm_low;
+    37		u64 rtc_alarm_high;
+    38		void __iomem *base;
+    39		struct goldfish_rtc *rtcdrv;
+    40	
+    41		rtcdrv = dev_get_drvdata(dev);
+    42		base = rtcdrv->base;
+    43	
+  > 44		rtc_alarm_low = gf_ioread32(base + TIMER_ALARM_LOW);
+    45		rtc_alarm_high = gf_ioread32(base + TIMER_ALARM_HIGH);
+    46		rtc_alarm = (rtc_alarm_high << 32) | rtc_alarm_low;
+    47	
+    48		do_div(rtc_alarm, NSEC_PER_SEC);
+    49		memset(alrm, 0, sizeof(struct rtc_wkalrm));
+    50	
+    51		rtc_time64_to_tm(rtc_alarm, &alrm->time);
+    52	
+    53		if (gf_ioread32(base + TIMER_ALARM_STATUS))
+    54			alrm->enabled = 1;
+    55		else
+    56			alrm->enabled = 0;
+    57	
+    58		return 0;
+    59	}
+    60	
+    61	static int goldfish_rtc_set_alarm(struct device *dev,
+    62					  struct rtc_wkalrm *alrm)
+    63	{
+    64		struct goldfish_rtc *rtcdrv;
+    65		u64 rtc_alarm64;
+    66		u64 rtc_status_reg;
+    67		void __iomem *base;
+    68	
+    69		rtcdrv = dev_get_drvdata(dev);
+    70		base = rtcdrv->base;
+    71	
+    72		if (alrm->enabled) {
+    73			rtc_alarm64 = rtc_tm_to_time64(&alrm->time) * NSEC_PER_SEC;
+  > 74			gf_iowrite32((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+    75			gf_iowrite32(rtc_alarm64, base + TIMER_ALARM_LOW);
+    76			gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+    77		} else {
+    78			/*
+    79			 * if this function was called with enabled=0
+    80			 * then it could mean that the application is
+    81			 * trying to cancel an ongoing alarm
+    82			 */
+    83			rtc_status_reg = gf_ioread32(base + TIMER_ALARM_STATUS);
+    84			if (rtc_status_reg)
+    85				gf_iowrite32(1, base + TIMER_CLEAR_ALARM);
+    86		}
+    87	
+    88		return 0;
+    89	}
+    90	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
