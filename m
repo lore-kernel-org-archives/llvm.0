@@ -1,42 +1,49 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8464173
-	for <llvm@lists.linux.dev>; Thu, 20 Jan 2022 06:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA6829CA
+	for <llvm@lists.linux.dev>; Thu, 20 Jan 2022 07:31:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642659656; x=1674195656;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lfcXF0n+wgORhFZstyBmo8jXXAAoJUjEVyLoYX4m4HU=;
-  b=P67e5lgnSOeu4th4BtYRAPLppo4XoOhAeRhBF9jHywu26wBHeYGVoaJn
-   2EbNeAng/yhyPdnKfBDHbyqba//sNKnYrJ7dyVdAqQoIhsqt3FQc1Vmdr
-   /Uf4wRD298huojMNmIC0oAMYPD5siybpeTXxtMGvOYLREl5G+J7N8mcDS
-   q5JjFyKet/TAWYSD/fhuMrZIqh0uTEWXDkW8kFxnJ321YHWiLDokqkywV
-   vMgUKetImA2yLyYXv3PmLBTVXBJwT3YY+/GnR6DDkbf31H6q8L+Fhk7JW
-   o7ogi2VIWHqi8ol2no4tmidgy7e5uEp6QDi+Iy+yV0bruQakHGiITdQhd
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="308617729"
+  t=1642663917; x=1674199917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7VYqLA8ntt7Lp1slrzIzKJovESqU7n1mPeZ9Fqm4IB8=;
+  b=V+cI2lBg588Kf45OyAZ/EXUzXnORV8Fl5g0IjPBpgvsTM1OFrWuYwOy6
+   YVcyqmW2knOC2BlOCZuc711ZnjXIujGH8t0YKysD7bmg6r0BgUwxaktpx
+   PXWBEH2oc/wmY2835KDBcp9RURalCprhMpHYVu/aR0rgnqOyB91CjCtbb
+   QSjpu2TXMaBdX2D/cYuhtsQhCJlOT86618yEmWdThZJ47Yz8v8urNnbBL
+   o/FDArcyUfZSICs9E/LB/29pVT4cFf7f9OYfQebF0RJpwvDycWbSMk7pk
+   KGg8cUeMEktsYEFYTBbjv1HLIOrcyEXDOXbxh9gfdNYFU46pmJNVCBvO7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="244113121"
 X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="308617729"
+   d="scan'208";a="244113121"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 22:20:54 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 23:31:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="475414110"
+   d="scan'208";a="475430889"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2022 22:20:52 -0800
+  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2022 23:31:53 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAQoV-000E4L-Hv; Thu, 20 Jan 2022 06:20:51 +0000
-Date: Thu, 20 Jan 2022 14:20:39 +0800
+	id 1nARvE-000E73-RZ; Thu, 20 Jan 2022 07:31:52 +0000
+Date: Thu, 20 Jan 2022 15:31:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Guangming <Guangming.Cao@mediatek.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	linux-wpan@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/dma-buf/heaps/system_heap.c:357:10: warning: incompatible
- integer to pointer conversion returning 'int' from a function with result
- type 'struct dma_buf *'
-Message-ID: <202201201459.LzpimBE3-lkp@intel.com>
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, Xue Liu <liuxuenetmail@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Harry Morris <harrymorris12@gmail.com>,
+	David Girault <david.girault@qorvo.com>
+Subject: Re: [wpan-next 5/9] net: ieee802154: ca8210: Stop leaking skb's
+Message-ID: <202201201557.38baVRVX-lkp@intel.com>
+References: <20220120003645.308498-6-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,132 +52,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220120003645.308498-6-miquel.raynal@bootlin.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
-head:   d6d3f09d899553b1100b195a91a8f718d1bd6bc2
-commit: d6d3f09d899553b1100b195a91a8f718d1bd6bc2 dma-buf: system_heap: Add a size check for allocation
-date:   3 hours ago
-config: x86_64-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220120/202201201459.LzpimBE3-lkp@intel.com/config)
+Hi Miquel,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.16 next-20220120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Miquel-Raynal/ieee802154-A-bunch-of-fixes/20220120-083906
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1d1df41c5a33359a00e919d54eaebfb789711fdc
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220120/202201201557.38baVRVX-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+        # https://github.com/0day-ci/linux/commit/77d3026b30aff560ef269d03aecc09f8c46a9173
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
-        git checkout d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+        git fetch --no-tags linux-review Miquel-Raynal/ieee802154-A-bunch-of-fixes/20220120-083906
+        git checkout 77d3026b30aff560ef269d03aecc09f8c46a9173
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/heaps/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ieee802154/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/dma-buf/heaps/system_heap.c:357:10: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct dma_buf *' [-Wint-conversion]
-                   return -EINVAL;
-                          ^~~~~~~
-   1 warning generated.
+>> drivers/net/ieee802154/ca8210.c:1775:22: error: use of undeclared identifier 'atusb'
+                           dev_kfree_skb_any(atusb->tx_skb);
+                                             ^
+   1 error generated.
 
 
-vim +357 drivers/dma-buf/heaps/system_heap.c
+vim +/atusb +1775 drivers/net/ieee802154/ca8210.c
 
-   334	
-   335	static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
-   336						    unsigned long len,
-   337						    unsigned long fd_flags,
-   338						    unsigned long heap_flags)
-   339	{
-   340		struct system_heap_buffer *buffer;
-   341		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-   342		unsigned long size_remaining = len;
-   343		unsigned int max_order = orders[0];
-   344		struct dma_buf *dmabuf;
-   345		struct sg_table *table;
-   346		struct scatterlist *sg;
-   347		struct list_head pages;
-   348		struct page *page, *tmp_page;
-   349		int i, ret = -ENOMEM;
-   350	
-   351		/*
-   352		 * Size check. The "len" should be less than totalram since system_heap
-   353		 * memory is comes from system. Adding check here can prevent consuming
-   354		 * too much time for invalid allocations.
-   355		 */
-   356		if (len >> PAGE_SHIFT > totalram_pages())
- > 357			return -EINVAL;
-   358		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-   359		if (!buffer)
-   360			return ERR_PTR(-ENOMEM);
-   361	
-   362		INIT_LIST_HEAD(&buffer->attachments);
-   363		mutex_init(&buffer->lock);
-   364		buffer->heap = heap;
-   365		buffer->len = len;
-   366	
-   367		INIT_LIST_HEAD(&pages);
-   368		i = 0;
-   369		while (size_remaining > 0) {
-   370			/*
-   371			 * Avoid trying to allocate memory if the process
-   372			 * has been killed by SIGKILL
-   373			 */
-   374			if (fatal_signal_pending(current)) {
-   375				ret = -EINTR;
-   376				goto free_buffer;
-   377			}
-   378	
-   379			page = alloc_largest_available(size_remaining, max_order);
-   380			if (!page)
-   381				goto free_buffer;
-   382	
-   383			list_add_tail(&page->lru, &pages);
-   384			size_remaining -= page_size(page);
-   385			max_order = compound_order(page);
-   386			i++;
-   387		}
-   388	
-   389		table = &buffer->sg_table;
-   390		if (sg_alloc_table(table, i, GFP_KERNEL))
-   391			goto free_buffer;
-   392	
-   393		sg = table->sgl;
-   394		list_for_each_entry_safe(page, tmp_page, &pages, lru) {
-   395			sg_set_page(sg, page, page_size(page), 0);
-   396			sg = sg_next(sg);
-   397			list_del(&page->lru);
-   398		}
-   399	
-   400		/* create the dmabuf */
-   401		exp_info.exp_name = dma_heap_get_name(heap);
-   402		exp_info.ops = &system_heap_buf_ops;
-   403		exp_info.size = buffer->len;
-   404		exp_info.flags = fd_flags;
-   405		exp_info.priv = buffer;
-   406		dmabuf = dma_buf_export(&exp_info);
-   407		if (IS_ERR(dmabuf)) {
-   408			ret = PTR_ERR(dmabuf);
-   409			goto free_pages;
-   410		}
-   411		return dmabuf;
-   412	
-   413	free_pages:
-   414		for_each_sgtable_sg(table, sg, i) {
-   415			struct page *p = sg_page(sg);
-   416	
-   417			__free_pages(p, compound_order(p));
-   418		}
-   419		sg_free_table(table);
-   420	free_buffer:
-   421		list_for_each_entry_safe(page, tmp_page, &pages, lru)
-   422			__free_pages(page, compound_order(page));
-   423		kfree(buffer);
-   424	
-   425		return ERR_PTR(ret);
-   426	}
-   427	
+  1737	
+  1738	/**
+  1739	 * ca8210_async_xmit_complete() - Called to announce that an asynchronous
+  1740	 *                                transmission has finished
+  1741	 * @hw:          ieee802154_hw of ca8210 that has finished exchange
+  1742	 * @msduhandle:  Identifier of transmission that has completed
+  1743	 * @status:      Returned 802.15.4 status code of the transmission
+  1744	 *
+  1745	 * Return: 0 or linux error code
+  1746	 */
+  1747	static int ca8210_async_xmit_complete(
+  1748		struct ieee802154_hw  *hw,
+  1749		u8                     msduhandle,
+  1750		u8                     status)
+  1751	{
+  1752		struct ca8210_priv *priv = hw->priv;
+  1753	
+  1754		if (priv->nextmsduhandle != msduhandle) {
+  1755			dev_err(
+  1756				&priv->spi->dev,
+  1757				"Unexpected msdu_handle on data confirm, Expected %d, got %d\n",
+  1758				priv->nextmsduhandle,
+  1759				msduhandle
+  1760			);
+  1761			return -EIO;
+  1762		}
+  1763	
+  1764		priv->async_tx_pending = false;
+  1765		priv->nextmsduhandle++;
+  1766	
+  1767		if (status) {
+  1768			dev_err(
+  1769				&priv->spi->dev,
+  1770				"Link transmission unsuccessful, status = %d\n",
+  1771				status
+  1772			);
+  1773			if (status != MAC_TRANSACTION_OVERFLOW) {
+  1774				ieee802154_wake_queue(priv->hw);
+> 1775				dev_kfree_skb_any(atusb->tx_skb);
+  1776				return 0;
+  1777			}
+  1778		}
+  1779		ieee802154_xmit_complete(priv->hw, priv->tx_skb, true);
+  1780	
+  1781		return 0;
+  1782	}
+  1783	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
