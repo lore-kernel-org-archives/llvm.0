@@ -1,104 +1,156 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8E72C80
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 13:45:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1642772741;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=17q/M65gYgBO/SPoZzHGwbDSkKeNitT4nImp6fFN+Jg=;
-	b=Q/vkBAnXGEevucxZzohFCiJVUCHw6vqpSmY0pP3Cwptz/hBYEV6Rrgcxb4n6ZIQVnE8ESt
-	1sP0Lgk21QAXg0qp3wmeWRklbJ5k2JNbSYafM2ppnpWS4KnwqC06J1CGUkX8BhNVlGWIZz
-	Muaqzt5VU7flPV6iWeMbfa5TYUB26RQ=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-QET4UNFONYehsbAZrIvFXQ-1; Fri, 21 Jan 2022 08:45:40 -0500
-X-MC-Unique: QET4UNFONYehsbAZrIvFXQ-1
-Received: by mail-ot1-f71.google.com with SMTP id v22-20020a0568301bd600b00590a8d65e0fso5516297ota.4
-        for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 05:45:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17q/M65gYgBO/SPoZzHGwbDSkKeNitT4nImp6fFN+Jg=;
-        b=H6Qx4RL8YMr6DBzqkFd1wokiLH/ezRpZs7ES4NCFP5Jn/Mw5/aGlhgVF9eCoLmbpQb
-         Z16vFW5lxf0YbwVJAuvnq5UyRxZvxfQ4kExAhuFvQy5YqBGQE7sy1sYcMxizxBUXl17N
-         b9uw/j2uZbh0JByfBpDL63m/GdKk3zz7InNkIKgzzzuXmO2UXeH+Rf52Z2dj5h3Vk23c
-         legeXJm3oBN9L8rEivsDdWTo7Elyvyr0LbWL9nDvz1EqBbY2pPi0CJT7PLhh0eEa4LKt
-         MaAKW2YKZEe2/3+YUi1xCQvltl1UEFI+hle3I/FDGKxdf6IhgmAu9O695RbWzeu2ikRO
-         UkVg==
-X-Gm-Message-State: AOAM530yYGoekwA4TJPsb64l3StMfIgG4ISJh7B47oTO1N9yTYnK8k70
-	uqatMff0amc+hQYhvAlcapX8gnwCHIF4YjCDrvQZSvSdX1mnBctE+1SUHMWkJ8Z+SxCwdgnm/+M
-	HvcpFTu1FJUZvbw==
-X-Received: by 2002:aca:741:: with SMTP id 62mr570974oih.87.1642772739433;
-        Fri, 21 Jan 2022 05:45:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz9SguOPBXUy11/Do9O3kCGX1ZokLcCXVsUAdxGjD9Ol9xJN2frusYOCbndlnUNmcESN2jJZw==
-X-Received: by 2002:aca:741:: with SMTP id 62mr570954oih.87.1642772739225;
-        Fri, 21 Jan 2022 05:45:39 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id m5sm1349202oiw.30.2022.01.21.05.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 05:45:38 -0800 (PST)
-From: trix@redhat.com
-To: clm@fb.com,
-	josef@toxicpanda.com,
-	dsterba@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	anand.jain@oracle.com
-Cc: linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] btrfs: initialize variable cancel
-Date: Fri, 21 Jan 2022 05:45:22 -0800
-Message-Id: <20220121134522.832207-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7FC2C80
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 13:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642773362; x=1674309362;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=glBKrFmNXN2Uw4BPraItAz1gZf/We2C1C2ZEL9VbfT4=;
+  b=JboM89piDd23IbM38hzYYbyqucGlHQSDQm6Jorh0uBdr93Vk2mum1CdK
+   G0tZ32wBD66zWL44hnmDzYXKyf2IsKA0GpT5Uv3KkB2astzRjZTLBjNr9
+   kH5wnY3KCtXEjjNnGTtv1PTNl/jWeaLVVEOPBURSYQ5z3fjY2KE1hOkwN
+   /VUVDxilojUNdwQMsA+cqDZM8byhnwlUHtoM1Y4jsJix6FI85AG7uw4qz
+   U/P/m0WM8oUp/Vo8kfmIRr0fQpouKviBM3p1xXvArEIddMzxyjOzMEajt
+   CuO73pCQ/mjYcOj0MGyI/Pd1pt+txYjRaH3m1gnGVrwgNXeAVBZNQelhe
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245603423"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="245603423"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 05:55:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="694643733"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Jan 2022 05:55:47 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nAuOJ-000FLJ-8z; Fri, 21 Jan 2022 13:55:47 +0000
+Date: Fri, 21 Jan 2022 21:55:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robert Beckett <bob.beckett@collabora.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v3 3/5] drm/i915: support 64K GTT pages for discrete cards
+Message-ID: <202201212115.DdoJRHbQ-lkp@intel.com>
+References: <20220120203721.632424-4-bob.beckett@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120203721.632424-4-bob.beckett@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+Hi Robert,
 
-Clang static analysis reports this problem
-ioctl.c:3333:8: warning: 3rd function call argument is an
-  uninitialized value
-    ret = exclop_start_or_cancel_reloc(fs_info,
+Thank you for the patch! Perhaps something to improve:
 
-cancel is only set in one branch of an if-check and is
-always used.  So initialize to false.
+[auto build test WARNING on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next airlied/drm-next v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Fixes: 1a15eb724aae ("btrfs: use btrfs_get_dev_args_from_path in dev removal ioctls")
-Signed-off-by: Tom Rix <trix@redhat.com>
+url:    https://github.com/0day-ci/linux/commits/Robert-Beckett/discrete-card-64K-page-support/20220121-044244
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220121/202201212115.DdoJRHbQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7547f27d09bac4e34155aca7ed017c04b7531e52
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Robert-Beckett/discrete-card-64K-page-support/20220121-044244
+        git checkout 7547f27d09bac4e34155aca7ed017c04b7531e52
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_object.c:807:
+>> drivers/gpu/drm/i915/gem/selftests/huge_pages.c:1508:10: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+                   return err;
+                          ^~~
+   drivers/gpu/drm/i915/gem/selftests/huge_pages.c:1485:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +/err +1508 drivers/gpu/drm/i915/gem/selftests/huge_pages.c
+
+  1480	
+  1481	static int igt_ppgtt_compact(void *arg)
+  1482	{
+  1483		struct drm_i915_private *i915 = arg;
+  1484		struct drm_i915_gem_object *obj;
+  1485		int err;
+  1486	
+  1487		/*
+  1488		 * Simple test to catch issues with compact 64K pages -- since the pt is
+  1489		 * compacted to 256B that gives us 32 entries per pt, however since the
+  1490		 * backing page for the pt is 4K, any extra entries we might incorrectly
+  1491		 * write out should be ignored by the HW. If ever hit such a case this
+  1492		 * test should catch it since some of our writes would land in scratch.
+  1493		 */
+  1494	
+  1495		if (!HAS_64K_PAGES(i915)) {
+  1496			pr_info("device lacks compact 64K page support, skipping\n");
+  1497			return 0;
+  1498		}
+  1499	
+  1500		if (!HAS_LMEM(i915)) {
+  1501			pr_info("device lacks LMEM support, skipping\n");
+  1502			return 0;
+  1503		}
+  1504	
+  1505		/* We want the range to cover multiple page-table boundaries. */
+  1506		obj = i915_gem_object_create_lmem(i915, SZ_4M, 0);
+  1507		if (IS_ERR(obj))
+> 1508			return err;
+  1509	
+  1510		err = i915_gem_object_pin_pages_unlocked(obj);
+  1511		if (err)
+  1512			goto out_put;
+  1513	
+  1514		if (obj->mm.page_sizes.phys < I915_GTT_PAGE_SIZE_64K) {
+  1515			pr_info("LMEM compact unable to allocate huge-page(s)\n");
+  1516			goto out_unpin;
+  1517		}
+  1518	
+  1519		/*
+  1520		 * Disable 2M GTT pages by forcing the page-size to 64K for the GTT
+  1521		 * insertion.
+  1522		 */
+  1523		obj->mm.page_sizes.sg = I915_GTT_PAGE_SIZE_64K;
+  1524	
+  1525		err = igt_write_huge(i915, obj);
+  1526		if (err)
+  1527			pr_err("LMEM compact write-huge failed\n");
+  1528	
+  1529	out_unpin:
+  1530		i915_gem_object_unpin_pages(obj);
+  1531	out_put:
+  1532		i915_gem_object_put(obj);
+  1533	
+  1534		if (err == -ENOMEM)
+  1535			err = 0;
+  1536	
+  1537		return err;
+  1538	}
+  1539	
+
 ---
- fs/btrfs/ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 190ad8af4f45a..26e82379747f8 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -3308,7 +3308,7 @@ static long btrfs_ioctl_rm_dev(struct file *file, void __user *arg)
- 	struct block_device *bdev = NULL;
- 	fmode_t mode;
- 	int ret;
--	bool cancel;
-+	bool cancel = false;
- 
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EPERM;
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
