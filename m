@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E3E2C82
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 05:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8232C82
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 05:56:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642743935; x=1674279935;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9AFjsQwnq71ZKVcQbr/PgUR4rcFsq8t1JsO+lJC77f0=;
-  b=hDxt5pRnwTtwi8Cn53pAUloBsHhX9kI3jg39sXis3Lb6eWy9nKZbMC79
-   WD4W5BUyb9n0uB69ofI6RXmh+hPhSLsMQUxfG6LzMORQWdcAd5hYdTrh0
-   M7+P8NoDIyrRhIaR/KpCZ8rGNlttIEB7ogeSidEA4mcTKmOrjcptRyyRe
-   3Us2HpfepOaz/urD73OIecYvnRX8rrkerYImrMys0ueEetM43pGupWotG
-   +S9um/UUXY00/LGtPd3IbT7O0yhQ1cUFBX4scIuG79B+1AKjyUUZVFuj/
-   ajY/KFllOfiKpfMly57w7jXc0/vr0n4+gU8BEafx2349zDPwOCKhKbQdT
+  t=1642744596; x=1674280596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zpNm2Ggem8XpBfHfA1dmrV91N9MOBYjEMGPmDHp5OUc=;
+  b=I7AVbg6mBjXjfG9LDaLxvGClz5wTZYRGQxjmgU81FdMhp63nx1ARMocV
+   m+WOWI1ThywL2sNC89zUGkwpbrGC5KaHFDwWNFBIAXIP2+mrbGbX9/1pR
+   7QmvVY3YUCr4Vxr5Ty7vOEiRhlTOmezTkSpJs5XSUHkk/s9wBmOD5KtDq
+   HO5p8Ny0lxo6PDJ7GNa8Sf+n6meciiSbfZhbitRk/sG/aCIZa4x5ruIL1
+   Iqv/bppM0HY/blMK0sA+DWEtBWvcSNSBxlSaUMD8/DGYNJ91C857uvdKx
+   sBceOXrQLWTZQ3eb3RaJeDF9Oiiw7aDsUK4aG5cGgp2KsyZcogaW5L3gp
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="306297167"
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="269992542"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="306297167"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 21:45:35 -0800
+   d="scan'208";a="269992542"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 21:56:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="478123902"
+   d="scan'208";a="626622213"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2022 21:45:33 -0800
+  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2022 21:56:33 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAmjt-000EyA-2l; Fri, 21 Jan 2022 05:45:33 +0000
-Date: Fri, 21 Jan 2022 13:45:27 +0800
+	id 1nAmuX-000EyX-5X; Fri, 21 Jan 2022 05:56:33 +0000
+Date: Fri, 21 Jan 2022 13:55:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:master 173/395]
- drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of
- function 'FIELD_PREP'
-Message-ID: <202201211331.u58BkUAq-lkp@intel.com>
+To: Matthew Brost <matthew.brost@intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [Intel-gfx] [PATCH] drm/i915/guc: Don't check CT descriptor
+ status before CT write / read
+Message-ID: <202201211310.Npkld1YY-lkp@intel.com>
+References: <20220120182413.8074-1-matthew.brost@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,146 +46,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220120182413.8074-1-matthew.brost@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Shubhrajyoti,
+Hi Matthew,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Yet something to improve:
 
-tree:   https://github.com/Xilinx/linux-xlnx master
-head:   6057b70444aa27680466a4b33d68b18f415d495b
-commit: bf7387ee9a75c2a390b19f63c47076344e664b86 [173/395] clocking-wizard: Support higher frequency accuracy
-config: i386-randconfig-a015-20211031 (https://download.01.org/0day-ci/archive/20220121/202201211331.u58BkUAq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82ed106567063ea269c6d5669278b733e173a42f)
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-tip/drm-tip drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next v5.16 next-20220121]
+[cannot apply to airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Matthew-Brost/drm-i915-guc-Don-t-check-CT-descriptor-status-before-CT-write-read/20220121-023033
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a005-20220117 (https://download.01.org/0day-ci/archive/20220121/202201211310.Npkld1YY-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/bf7387ee9a75c2a390b19f63c47076344e664b86
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx master
-        git checkout bf7387ee9a75c2a390b19f63c47076344e664b86
+        # https://github.com/0day-ci/linux/commit/0311a8b0f99c50ab1a666a5cdbe2b1a0a2c3c71d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Matthew-Brost/drm-i915-guc-Don-t-check-CT-descriptor-status-before-CT-write-read/20220121-023033
+        git checkout 0311a8b0f99c50ab1a666a5cdbe2b1a0a2c3c71d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/clk-xlnx-clock-wizard.c:324:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-                 ^
->> drivers/clk/clk-xlnx-clock-wizard.c:392:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-               ^
-   2 errors generated.
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c:469:1: error: unused label 'corrupted' [-Werror,-Wunused-label]
+   corrupted:
+   ^~~~~~~~~~
+   1 error generated.
 
 
-vim +/FIELD_PREP +324 drivers/clk/clk-xlnx-clock-wizard.c
+vim +/corrupted +469 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c
 
-   301	
-   302	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
-   303					       unsigned long parent_rate)
-   304	{
-   305		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   306		u32 reg, pre;
-   307		u16 retries;
-   308		int err;
-   309		u64 vco_freq, rate_div, f, clockout0_div;
-   310	
-   311		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
-   312		if (err)
-   313			pr_err("failed to get divisors\n");
-   314	
-   315		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
-   316		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   317	
-   318		clockout0_div = rate_div / WZRD_FRAC_POINTS;
-   319	
-   320		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   321		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
-   322		f = f & WZRD_CLKOUT_FRAC_MASK;
-   323	
- > 324		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-   325		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
-   326	
-   327		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
-   328		/* Set divisor and clear phase offset */
-   329		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
-   330		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
-   331		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
-   332		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
-   333		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
-   334		/* Check status register */
-   335		retries = WZRD_DR_NUM_RETRIES;
-   336		while (retries--) {
-   337			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
-   338								WZRD_DR_LOCK_BIT_MASK)
-   339				break;
-   340		}
-   341	
-   342		if (!retries)
-   343			return -ETIMEDOUT;
-   344	
-   345		/* Initiate reconfiguration */
-   346		writel(WZRD_DR_BEGIN_DYNA_RECONF,
-   347		       divider->base + WZRD_DR_INIT_REG_OFFSET);
-   348	
-   349		/* Check status register */
-   350		retries = WZRD_DR_NUM_RETRIES;
-   351		while (retries--) {
-   352			if (readl(divider->base + WZRD_DR_STATUS_REG_OFFSET) &
-   353								WZRD_DR_LOCK_BIT_MASK)
-   354				break;
-   355		}
-   356	
-   357		if (!retries)
-   358			return -ETIMEDOUT;
-   359	
-   360		return 0;
-   361	}
-   362	
-   363	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
-   364					unsigned long parent_rate)
-   365	{
-   366		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   367		unsigned long flags = 0;
-   368		int ret;
-   369	
-   370		if (divider->lock)
-   371			spin_lock_irqsave(divider->lock, flags);
-   372		else
-   373			__acquire(divider->lock);
-   374	
-   375		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
-   376	
-   377		if (divider->lock)
-   378			spin_unlock_irqrestore(divider->lock, flags);
-   379		else
-   380			__release(divider->lock);
-   381	
-   382		return ret;
-   383	}
-   384	
-   385	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
-   386						      unsigned long parent_rate)
-   387	{
-   388		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   389		u32 m, d, o, div, reg, f;
-   390	
-   391		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
- > 392		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   393		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
-   394		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
-   395		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   396		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
-   397	
-   398		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
-   399		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
-   400				divider->flags, divider->width);
-   401	}
-   402	
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  422  
+1d407096002beca drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2018-03-26  423  	/*
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  424  	 * dw0: CT header (including fence)
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  425  	 * dw1: HXG header (including action code)
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  426  	 * dw2+: action data
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  427  	 */
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  428  	header = FIELD_PREP(GUC_CTB_MSG_0_FORMAT, GUC_CTB_FORMAT_HXG) |
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  429  		 FIELD_PREP(GUC_CTB_MSG_0_NUM_DWORDS, len) |
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  430  		 FIELD_PREP(GUC_CTB_MSG_0_FENCE, fence);
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  431  
+1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  432  	type = (flags & INTEL_GUC_CT_SEND_NB) ? GUC_HXG_TYPE_EVENT :
+1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  433  		GUC_HXG_TYPE_REQUEST;
+1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  434  	hxg = FIELD_PREP(GUC_HXG_MSG_0_TYPE, type) |
+1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  435  		FIELD_PREP(GUC_HXG_EVENT_MSG_0_ACTION |
+1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  436  			   GUC_HXG_EVENT_MSG_0_DATA0, action[0]);
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  437  
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  438  	CT_DEBUG(ct, "writing (tail %u) %*ph %*ph %*ph\n",
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  439  		 tail, 4, &header, 4, &hxg, 4 * (len - 1), &action[1]);
+0a015ff9730c169 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2018-03-26  440  
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  441  	cmds[tail] = header;
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  442  	tail = (tail + 1) % size;
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  443  
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  444  	cmds[tail] = hxg;
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  445  	tail = (tail + 1) % size;
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  446  
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  447  	for (i = 1; i < len; i++) {
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  448  		cmds[tail] = action[i];
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  449  		tail = (tail + 1) % size;
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  450  	}
+4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20  451  	GEM_BUG_ON(tail > size);
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  452  
+d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  453  	/*
+d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  454  	 * make sure H2G buffer update and LRC tail update (if this triggering a
+d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  455  	 * submission) are visible before updating the descriptor tail
+d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  456  	 */
+6b540bf6f14362a drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-10-14  457  	intel_guc_write_barrier(ct_to_guc(ct));
+d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  458  
+75452167a2794c3 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  459  	/* update local copies */
+75452167a2794c3 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  460  	ctb->tail = tail;
+f4eb1f3fe94683c drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-21  461  	GEM_BUG_ON(atomic_read(&ctb->space) < len + GUC_CTB_HDR_LEN);
+f4eb1f3fe94683c drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-21  462  	atomic_sub(len + GUC_CTB_HDR_LEN, &ctb->space);
+75452167a2794c3 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  463  
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  464  	/* now update descriptor */
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  465  	WRITE_ONCE(desc->tail, tail);
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  466  
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  467  	return 0;
+4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20  468  
+4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20 @469  corrupted:
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  470  	CT_ERROR(ct, "Corrupted descriptor head=%u tail=%u status=%#x\n",
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  471  		 desc->head, desc->tail, desc->status);
+572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  472  	ctb->broken = true;
+4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20  473  	return -EPIPE;
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  474  }
+f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  475  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
