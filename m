@@ -1,152 +1,250 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7541173
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 16:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642783206; x=1674319206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wy8KvC+qP9LJLqxszBR4Lznvgde40sWScqOt94GUNwE=;
-  b=NQKp0m3jpL/54pvpYAVUBdbYHK2mD6IEw9PVVEuQjeygknTz9W7gIl3y
-   IszQg4CVYdu+67TI+QW5/heb4daWNJSRuWe3NUSgjVjAvYFOIKI2m6TvO
-   gXQ+MegUNhfv3AJdsEiW4iYfkKDtbinJtSqw8M0WPBVn5B7R3kyy54eq2
-   EKdPox87G7oexRPHkRK3TbVhFLBgF5LJv/tPEz/Wqag/bpXzQJn1YbH4j
-   sngEIVq5IqN/Fzq4lX1pboU4YNphFvZqN4pLef3RrX3On0Ex54We6H/PL
-   HQ+gb+X8AYqjV4Jta+rBxxpDIkrxRucA0CGkFfVajcjw0NyUXRGSrrLHz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244515636"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="244515636"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 08:39:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="623374207"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jan 2022 08:38:58 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nAwwD-000FUO-IF; Fri, 21 Jan 2022 16:38:57 +0000
-Date: Sat, 22 Jan 2022 00:38:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pratyush Yadav <p.yadav@ti.com>, Vinod Koul <vkoul@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pratyush Yadav <p.yadav@ti.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Kishon Vijay Abraham I <kishon@ti.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Swapnil Jakhade <sjakhade@cadence.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] phy: cadence: Add Cadence D-PHY Rx driver
-Message-ID: <202201220002.AYMD2qX0-lkp@intel.com>
-References: <20220121093849.3218092-2-p.yadav@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF19173
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 16:47:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 125BAC340E1;
+	Fri, 21 Jan 2022 16:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642783661;
+	bh=9SrU/k0LYSbwZ45aZAjqd2SKBGAW7Vh9alM4dD37sbg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qMYtagzIGQr/lfivcHg49J0wf1BV6l1mX7RaeZ/zV75FCANUIBHcGavQwwtvZACHo
+	 N6uS7d2X3/esU4RMY3eyLvQftKlfcarZ2M6IifPtOxTKJSd0UtsttGn6qv/0szYzl2
+	 s6XaD/U19LIEqjEs2kEl7PlTD9kZCQ94CQaIEAmRsybRfOyems1gOivR0O0JP5+GwA
+	 IsBR/WOHtr2SKVisyT+9MPz4kdEzRkeKuCL1kh4/5w0Hg8riJsYIsalweCVsBf8j0C
+	 PEzLrmeDfepQbXSFup4h7v4ultxmNHEmJH6YKPGcxVSNHQUrZUJSOFwtUKYamCXMg4
+	 +djmJ8r93smPA==
+Date: Fri, 21 Jan 2022 09:47:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
+Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Cezary Rojewski <cezary.rojewski@intel.com>
+Subject: Re: [PATCH] Makefile: Fix build with scan-build
+Message-ID: <YerjqBrxXwjMzCRZ@archlinux-ax161>
+References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
+ <YeiAa/eCxVZC+QbS@archlinux-ax161>
+ <YeiaAgQ+gbZYTMwD@archlinux-ax161>
+ <5f5bd99e-4bd3-bc88-b6c5-e414a6608a96@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220121093849.3218092-2-p.yadav@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5f5bd99e-4bd3-bc88-b6c5-e414a6608a96@linux.intel.com>
 
-Hi Pratyush,
+On Fri, Jan 21, 2022 at 12:20:39PM +0100, Amadeusz Sławiński wrote:
+> On 1/20/2022 12:08 AM, Nathan Chancellor wrote:
+> > On Wed, Jan 19, 2022 at 02:19:39PM -0700, Nathan Chancellor wrote:
+> > > On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
+> > > > When building kernel with scan-build for analysis:
+> > > > $ scan-build make defconfig
+> > > > $ scan-build make menuconfig # disable RETPOLINE
+> > > > $ scan-build make -j16 bindeb-pkg
+> > > > since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+> > > > it fails with:
+> > > >    CC      scripts/mod/empty.o
+> > > > could not find clang line
+> > > > make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+> > > > 
+> > > > Seems like changes to how -fconserve-stack support was detected broke
+> > > > build with scan-build. Revert part of mentioned commit which changed
+> > > > that.
+> > > > 
+> > > > Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+> > > > CC: Nick Desaulniers <ndesaulniers@google.com>
+> > > > Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> > > > Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+> > > > ---
+> > > >   Makefile | 4 +---
+> > > >   1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/Makefile b/Makefile
+> > > > index 765115c99655..1174ccd182f5 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
+> > > >   KBUILD_CFLAGS  += -fno-stack-check
+> > > >   # conserve stack if available
+> > > > -ifdef CONFIG_CC_IS_GCC
+> > > > -KBUILD_CFLAGS   += -fconserve-stack
+> > > > -endif
+> > > > +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
+> > > >   # Prohibit date/time macros, which would make the build non-deterministic
+> > > >   KBUILD_CFLAGS   += -Werror=date-time
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > > 
+> > > Okay, I think I understand why this happens...
+> > > 
+> > > scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
+> > > code with a compiler [2] then runs clang for the static analyzer [3].
+> > > The problem is that the default compiler for ccc-analyzer is GCC, which
+> > > means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
+> > > but not clang will cause the clang analyzer part of ccc-analyzer to
+> > > error because ccc-analyzer just passes all '-f' flags along [4].
+> > > 
+> > > Prior to 7d73c3e9c514, there was no error because cc-option would run
+> > > the flag against ccc-analyzer, which would error out for the reason I
+> > > just described, which would prevent the flag from getting added to
+> > > KBUILD_CFLAGS.
+> > > 
+> > > Now, -fconserve-stack gets passed along to both gcc and clang but clang
+> > > does not recognize it and errors out.
+> > > 
+> > > This should be fixed in clang, which already has the machinery to
+> > > recognize but ignore GCC flags for compatibility reasons (which is
+> > > probably how gcc and clang can use the same flags). I have pushed a
+> > > patch to Phabricator for review:
+> > > 
+> > > https://reviews.llvm.org/D117717
+> > > 
+> > > You need to disable CONFIG_RETPOLINE for the same reason but I don't
+> > > think working around that in clang is as simple.
+> > > 
+> > > Until that fix can proliferate through distributions and such, this is
+> > > not an unreasonable workaround (unless Masahiro or Nick have a better
+> > > idea) but I would really like a comment so that we can revert this once
+> > > that fix is more widely available (it is unlikely that clang will
+> > > actually support this option).
+> > > 
+> > > [1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
+> > > [2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
+> > > [3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
+> > > [4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
+> > 
+> > Thinking more about this after Fangrui commented on the clang patch
+> > above, using scan-build with GCC as the compiler is going to be hard to
+> > support, as we are basically trying to support using two different
+> > compilers with a unified set of '-f' flags, which I see as problematic
+> > for a few reasons.
+> > 
+> > 1. It restricts our ability to do cc-option cleanups like Nick did.
+> > 
+> > We should be eliminating cc-option calls that we know are specific to
+> > one compiler because checking the Kconfig variables (CONFIG_CC_IS_...)
+> > is much cheaper than invoking the compiler.
+> > 
+> > 2. Necessary GCC specific flags will get dropped.
+> > 
+> > Adding back the call to cc-option will allow the build to succeed but it
+> > drops the flag from KBUILD_CFLAGS. If there were ever a time where an
+> > '-f' flag was needed to get a working kernel with GCC, it would not get
+> > added because clang would reject it.
+> > 
+> > We already have a static-analyzer target that requires using CC=clang so
+> > I think there is some precedent here to say we require the kernel to be
+> > built with clang to use the static analyzer. The fact that it did prior
+> > to 7d73c3e9c514 can just be chalked up to luck.
+> > 
+> > $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+> > 
+> > would be the equivalent command to the original patch.
+> > 
+> > You can still use scan-build with the '--use-cc=clang' flag, which will
+> > use clang for the compilation and analysis, if you so prefer.
+> > 
+> > Masahiro and Nick may have further thoughts and I am open to other
+> > opinions but my vote is to say this is an issue we won't fix or
+> > workaround.
+> > 
+> > Cheers,
+> > Nathan
+> 
+> 
+> Thank you for detailed explanation. Well I guess question then is: how much
+> scan-build is supported? And if it should even support mixing clang and gcc?
+> Alternatively maybe use clang as default if CC environment variable is not
+> set?
 
-I love your patch! Perhaps something to improve:
+It probably shouldn't, as least not in the way that it currently does.
+Someone on the LLVM review I created suggested it should add a filter
+for flags that clang does not support from GCC. I think changing the
+default would be another good fix but doesn't fix the issue if someone
+does actually wants to use GCC for building.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v5.16 next-20220121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> What I like about scan-build is that it generates html report file.
 
-url:    https://github.com/0day-ci/linux/commits/Pratyush-Yadav/Rx-mode-support-for-Cadence-DPHY/20220121-174104
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220122/202201220002.AYMD2qX0-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/a27020695f773ffff7f462e53f7ff7ca39109cd0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pratyush-Yadav/Rx-mode-support-for-Cadence-DPHY/20220121-174104
-        git checkout a27020695f773ffff7f462e53f7ff7ca39109cd0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/meson/ drivers/phy/cadence/
+Ah, that is a good point.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> '--use-cc=clang' worked fine for me.
+> 
+> I've also tried
+> > $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+> although there seems to be no static-analyzer target, I guess you meant
+> clang-analyzer instead, but although it seems to generate a lot of text on
+> terminal, it doesn't seem that useful to me. Not sure if this is expected?
 
-All warnings (new ones prefixed by >>):
+Yes, my apologies, it should have been clang-analyzer.
 
->> drivers/phy/cadence/cdns-dphy-rx.c:223:46: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                   dev_err(dev, "Failed to create PHY: %d\n", PTR_ERR(dphy->phy));
-                                                       ~~     ^~~~~~~~~~~~~~~~~~
-                                                       %ld
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/phy/cadence/cdns-dphy-rx.c:231:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                           PTR_ERR(provider));
-                           ^~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   2 warnings generated.
+> Quoting a piece of log:
+> ./include/linux/xarray.h:54:2: error: expected '(' after 'asm'
+> [clang-diagnostic-error]
+>         WARN_ON((long)v < 0);
+>         ^
+> ./include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+>                 __WARN();                                               \
+>                 ^
+> ./include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+> #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+>                                 ^
+> ./arch/x86/include/asm/bug.h:79:2: note: expanded from macro '__WARN_FLAGS'
+>         _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));           \
+>         ^
+> ./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
+>         asm_inline volatile("1:\t" ins "\n"                             \
+>         ^
+> ./include/linux/compiler_types.h:281:24: note: expanded from macro
+> 'asm_inline'
+> #define asm_inline asm __inline
+>                        ^
+> ./include/linux/xarray.h:1616:2: error: expected '(' after 'asm'
+> [clang-diagnostic-error]
+>         BUG_ON(order > 0);
+>         ^
+> ./include/asm-generic/bug.h:65:57: note: expanded from macro 'BUG_ON'
+> #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+>                                                         ^
+> ./arch/x86/include/asm/bug.h:66:2: note: expanded from macro 'BUG'
+>         _BUG_FLAGS(ASM_UD2, 0);                                 \
+>         ^
+> ./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
+>         asm_inline volatile("1:\t" ins "\n"                             \
+>         ^
+> ./include/linux/compiler_types.h:281:24: note: expanded from macro
+> 'asm_inline'
+> #define asm_inline asm __inline
+>                        ^
+> Found compiler error(s).
+> 21 errors generated.
+> Error while processing /home/xxxxxxxx/linux/drivers/hid/hid-ezkey.c.
+> error: too many errors emitted, stopping now [clang-diagnostic-error]
+> error: unknown argument: '-fno-stack-clash-protection'
+> [clang-diagnostic-error]
+> error: unknown warning option '-Wno-frame-address'; did you mean
+> '-Wno-address'? [clang-diagnostic-unknown-warning-option]
+> error: unknown warning option '-Wno-pointer-to-enum-cast'; did you mean
+> '-Wno-pointer-compare'? [clang-diagnostic-unknown-warning-option]
+> 
+> 
+> Unless I did something wrong, this doesn't seem that useful to me compared
+> to what I get from scan-build?
 
+I do not see that error but I have little experience with running the
+clang-analyzer target. It might be due to a difference between
+scan-build and clang-tidy? Regardless, it seems like you prefer reading
+the HTML report, so sticking with scan-build with the '--use-cc=clang'
+flag will be the way to go.
 
-vim +223 drivers/phy/cadence/cdns-dphy-rx.c
-
-   203	
-   204	static int cdns_dphy_rx_probe(struct platform_device *pdev)
-   205	{
-   206		struct device *dev = &pdev->dev;
-   207		struct phy_provider *provider;
-   208		struct cdns_dphy_rx *dphy;
-   209	
-   210		dphy = devm_kzalloc(dev, sizeof(*dphy), GFP_KERNEL);
-   211		if (!dphy)
-   212			return -ENOMEM;
-   213	
-   214		dev_set_drvdata(dev, dphy);
-   215		dphy->dev = dev;
-   216	
-   217		dphy->regs = devm_platform_ioremap_resource(pdev, 0);
-   218		if (IS_ERR(dphy->regs))
-   219			return PTR_ERR(dphy->regs);
-   220	
-   221		dphy->phy = devm_phy_create(dev, NULL, &cdns_dphy_rx_ops);
-   222		if (IS_ERR(dphy->phy)) {
- > 223			dev_err(dev, "Failed to create PHY: %d\n", PTR_ERR(dphy->phy));
-   224			return PTR_ERR(dphy->phy);
-   225		}
-   226	
-   227		phy_set_drvdata(dphy->phy, dphy);
-   228		provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-   229		if (IS_ERR(provider)) {
-   230			dev_err(dev, "Failed to register PHY provider: %d\n",
-   231				PTR_ERR(provider));
-   232			return PTR_ERR(provider);
-   233		}
-   234	
-   235		return 0;
-   236	}
-   237	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
