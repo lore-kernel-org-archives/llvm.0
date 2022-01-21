@@ -1,450 +1,963 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C188129CA
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 00:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642724276; x=1674260276;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lrAbD2UBE56ko9dBCfVyCmV2sNMRWfCr9MAKgCa/8qo=;
-  b=f4EQdNtuhYH0MWqO4DFXx52LglVdtLb4gN9prIRpZXoNL9jmGFiJvE8q
-   WgjaaOoUFS3KjeWQKatAtAglBurg2naTgqnZ8Blel3YRozR5ydFIXlHqb
-   2yKV6t6YwAATDX5GW4Upx4WuSnJVr/sGUguI50qz8AteWMpR7c74i0go2
-   23exb9cOnRxc5JkGjSi1fPYa7ESE80Z5YsgLLceqr0XUh1mbKLteH8cOZ
-   kVl5eLTB7OtcMnISZ3sJrlACMOOocg0I1Mh/mX8zTH5wdXJdk4aoNaGRf
-   NfmJzDDjopar11zUojhRWLktUzu8qpX9pDzen7oUmrENNENBvLICeJR6a
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245309200"
-X-IronPort-AV: E=Sophos;i="5.88,303,1635231600"; 
-   d="scan'208";a="245309200"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 16:17:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,303,1635231600"; 
-   d="scan'208";a="694443790"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jan 2022 16:17:23 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nAhcI-000EjG-V9; Fri, 21 Jan 2022 00:17:22 +0000
-Date: Fri, 21 Jan 2022 08:16:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ramalingam C <ramalingam.c@intel.com>,
-	intel-gfx <intel-gfx@lists.freedesktop.org>,
-	dri-devel <dri-devel@lists.freedesktop.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Matthew Auld <matthew.auld@intel.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: Add needs_compact_pt flag
-Message-ID: <202201210857.CAeUyl4W-lkp@intel.com>
-References: <20220120162102.10652-1-ramalingam.c@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E760F173
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 00:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1642726713;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6OmtV++ATqGFZRstrp5a8I3cIVC5y7kasX8QlhhGwzY=;
+	b=JUlTcluuU+QorCe2dms3j13QLk2y0UWg8xe/LO1ycW3dchfc+7y3gfdf0vEhF/ryl5RjA8
+	IqXwgU6NvUct6s82jXjDEXJCEQeS9VKprM6au+xPe7FJnWAv5rKqLTij/Ul6lTGWlUD90Q
+	pGhA6hamSLyo93AMu34+OR8bPbft2Rc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467--ZHP7N1mOy-x7YrjJQBwLQ-1; Thu, 20 Jan 2022 19:58:26 -0500
+X-MC-Unique: -ZHP7N1mOy-x7YrjJQBwLQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D00CA8145E0
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 00:58:25 +0000 (UTC)
+Received: from [172.64.3.54] (unknown [10.30.32.237])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BDFF8108D4;
+	Fri, 21 Jan 2022 00:58:24 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220120162102.10652-1-ramalingam.c@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-Hi Ramalingam,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-tip/drm-tip drm-exynos/exynos-drm-next drm/drm-next next-20220120]
-[cannot apply to tegra-drm/drm/tegra/for-next airlied/drm-next v5.16]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Ramalingam-C/drm-i915-Add-needs_compact_pt-flag/20220121-002256
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220121/202201210857.CAeUyl4W-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/cf1a6660ac07b3b3618b35dccab57042d592ea2c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ramalingam-C/drm-i915-Add-needs_compact_pt-flag/20220121-002256
-        git checkout cf1a6660ac07b3b3618b35dccab57042d592ea2c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
->> drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:12:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_gem.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
-   drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_vma.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
->> drivers/gpu/drm/i915/gt/uc/intel_guc.h:20:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_utils.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   drivers/gpu/drm/i915/gt/uc/intel_guc.h:21:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_vma.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
->> drivers/gpu/drm/i915/gt/uc/intel_uc.h:10:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_guc_rc.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:11:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_guc_submission.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:12:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_guc_slpc.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_huc.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_gt_types.h:18:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:14:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_params.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
->> drivers/gpu/drm/i915/gt/intel_gt_types.h:20:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_vma.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:21:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_engine_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:22:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_gt_buffer_pool_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:23:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_llc_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:24:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_reset_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:25:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_rc6_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:26:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_rps_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:27:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_migrate_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:28:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_wakeref.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/i915_config.c:6:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:83:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine.h:18:
-   drivers/gpu/drm/i915/gt/intel_gt_types.h:29:2: error: embedding a #include directive within macro arguments is not supported
-   #include "pxp/intel_pxp_types.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
---
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
->> drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:12:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_gem.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_guc.h:19:
-   drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_vma.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
->> drivers/gpu/drm/i915/gt/uc/intel_guc.h:20:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_utils.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9:
-   drivers/gpu/drm/i915/gt/uc/intel_guc.h:21:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_vma.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
->> drivers/gpu/drm/i915/gt/uc/intel_uc.h:10:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_guc_rc.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:11:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_guc_submission.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:12:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_guc_slpc.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_huc.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:12:
-   drivers/gpu/drm/i915/gt/uc/intel_uc.h:14:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_params.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
->> drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_uc_debugfs.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
->> drivers/gpu/drm/i915/intel_device_info.h:201:25: error: unterminated function-like macro invocation
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   drivers/gpu/drm/i915/intel_device_info.h:200:9: note: macro 'DEFINE_FLAG' defined here
-   #define DEFINE_FLAG(name) u8 name:1
-           ^
->> drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:59:2: error: expected '}'
-   }
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:179:26: note: to match this '{'
-   struct intel_device_info {
-                            ^
->> drivers/gpu/drm/i915/gt/uc/intel_uc_debugfs.c:59:2: error: expected ';' after struct
-   }
-    ^
-   13 errors generated.
---
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:11:
->> drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:12:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_gem.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   In file included from drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:11:
-   drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_vma.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
->> drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:12:2: error: embedding a #include directive within macro arguments is not supported
-   #include "intel_uc_fw_abi.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:13:2: error: embedding a #include directive within macro arguments is not supported
-   #include "i915_drv.h"
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:201:25: note: expansion of macro 'DEFINE_FLAG' requested here
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
->> drivers/gpu/drm/i915/intel_device_info.h:201:25: error: unterminated function-like macro invocation
-           DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-                                  ^
-   drivers/gpu/drm/i915/intel_device_info.h:200:9: note: macro 'DEFINE_FLAG' defined here
-   #define DEFINE_FLAG(name) u8 name:1
-           ^
->> drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:794:2: error: expected '}'
-   }
-    ^
-   drivers/gpu/drm/i915/intel_device_info.h:179:26: note: to match this '{'
-   struct intel_device_info {
-                            ^
->> drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:794:2: error: expected ';' after struct
-   }
-    ^
-   7 errors generated.
-..
+From: CKI Project <cki-project@redhat.com>
+To: skt-results-master@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?q?=F0=9F=92=A5?= PANICKED: Test report for kernel 5.16.0
+ (mainline.kernel.org-clang, e3a8b6a1)
+Date: Fri, 21 Jan 2022 00:58:23 -0000
+CC: Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>,
+ Jan Stancek <jstancek@redhat.com>, Xiaowu Wu <xiawu@redhat.com>,
+ Baoquan He <bhe@redhat.com>, Bruno Goncalves <bgoncalv@redhat.com>,
+ Guangwu Zhang <guazhang@redhat.com>, Jiri Dluhos <jdluhos@redhat.com>,
+ Hangbin Liu <haliu@redhat.com>, Milos Malik <mmalik@redhat.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>
+Message-ID: <cki.FDNM9WLI4XYC92KOS083@redhat.com>
+X-Gitlab-Pipeline-ID: 450055599
+X-Gitlab-Url: https://gitlab.com
+X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/450055599?=
+X-DataWarehouse-Checkout-IID: 29456
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +201 drivers/gpu/drm/i915/intel_device_info.h
 
-a5b7ef27da60c90 José Roberto de Souza  2021-10-19  178  
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  179  struct intel_device_info {
-a5b7ef27da60c90 José Roberto de Souza  2021-10-19  180  	struct ip_version graphics;
-a5b7ef27da60c90 José Roberto de Souza  2021-10-19  181  	struct ip_version media;
-93babb061e2ab5e Lucas De Marchi        2021-04-12  182  
-792592e72aba416 Daniele Ceraolo Spurio 2020-07-07  183  	intel_engine_mask_t platform_engine_mask; /* Engines supported by the HW */
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  184  
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  185  	enum intel_platform platform;
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  186  
-31a02eb70b8d9e6 Michael J. Ruhl        2020-04-17  187  	unsigned int dma_mask_size; /* available DMA address bits */
-31a02eb70b8d9e6 Michael J. Ruhl        2020-04-17  188  
-cbecbccaa120fd9 Chris Wilson           2019-03-14  189  	enum intel_ppgtt_type ppgtt_type;
-cbecbccaa120fd9 Chris Wilson           2019-03-14  190  	unsigned int ppgtt_size; /* log2, e.g. 31/32/48 bits */
-cbecbccaa120fd9 Chris Wilson           2019-03-14  191  
-4552f50a439c36f Tvrtko Ursulin         2018-02-22  192  	unsigned int page_sizes; /* page sizes supported by the HW */
-3aae9d08532c8e5 Abdiel Janulgue        2019-10-18  193  
-3aae9d08532c8e5 Abdiel Janulgue        2019-10-18  194  	u32 memory_regions; /* regions supported by the HW */
-4552f50a439c36f Tvrtko Ursulin         2018-02-22  195  
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  196  	u32 display_mmio_offset;
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  197  
-938c778f6a22fa1 John Harrison          2021-07-23  198  	u8 gt; /* GT number, 0 if undefined */
-938c778f6a22fa1 John Harrison          2021-07-23  199  
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  200  #define DEFINE_FLAG(name) u8 name:1
-b978520d1e35b99 Michal Wajdeczko       2017-12-21 @201  	DEV_INFO_FOR_EACH_FLAG(DEFINE_FLAG);
-b978520d1e35b99 Michal Wajdeczko       2017-12-21  202  #undef DEFINE_FLAG
-d53db442db36fdb José Roberto de Souza  2018-11-30  203  
-d53db442db36fdb José Roberto de Souza  2018-11-30  204  	struct {
-4df9c1ae7a4bb93 Lucas De Marchi        2021-04-12  205  		u8 ver;
-a5b7ef27da60c90 José Roberto de Souza  2021-10-19  206  		u8 rel;
-01eb15c9165e416 Matt Roper             2021-03-19  207  
-6678916dfa01251 Ville Syrjälä          2021-12-10  208  		u8 pipe_mask;
-6678916dfa01251 Ville Syrjälä          2021-12-10  209  		u8 cpu_transcoder_mask;
-6678916dfa01251 Ville Syrjälä          2021-12-10  210  		u8 abox_mask;
-6678916dfa01251 Ville Syrjälä          2021-12-10  211  
+Check out this report and any autotriaged failures in our web dashboard:
+    https://datawarehouse.cki-project.org/kcidb/checkouts/29456
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hello,
+
+We ran automated tests on a recent commit from this kernel tree:
+
+       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git
+            Commit: e3a8b6a1e70c - Merge tag 'slab-for-5.17-part2' of git:/=
+/git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab
+
+The results of these automated tests are provided below.
+
+    Overall result: FAILED (see details below)
+             Merge: OK
+           Compile: OK
+ Selftests compile: FAILED
+             Tests: PANICKED
+    Targeted tests: NO
+
+All kernel binaries, config files, and logs are available for download here=
+:
+
+  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
+fix=3Ddatawarehouse-public/2022/01/18/450055599
+
+One or more kernel tests failed:
+
+    s390x:
+     =E2=9D=8C LTP - fs
+     =E2=9D=8C kdump - sysrq-c
+
+    aarch64:
+     =E2=9D=8C LTP - syscalls
+     =F0=9F=92=A5 LTP - fs
+     =F0=9F=92=A5 Reboot test
+
+    x86_64 (debug):
+     =E2=9D=8C LTP - fs
+     =E2=9D=8C storage: dm/common
+
+    x86_64:
+     =E2=9D=8C selinux-policy: serge-testsuite
+
+We hope that these logs can help you find the problem quickly. For the full
+detail on our testing procedures, please scroll to the bottom of this messa=
+ge.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
+Compile testing
+---------------
+
+We compiled the kernel for 5 architectures:
+
+    aarch64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    ppc64le:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    s390x:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+
+We built the following selftests:
+
+  x86_64:
+      net: OK
+      bpf: fail
+      seccomp: OK
+      lkdtm: OK
+      install and packaging: OK
+
+You can find the full log (build-selftests.log) in the artifact storage abo=
+ve.
+
+
+Hardware testing
+----------------
+We booted each kernel and ran the following tests:
+
+  aarch64:
+    Host 1:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 ACPI enabled test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9D=8C LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =F0=9F=92=A5 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
+e test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 2:
+       =E2=9C=85 Boot test
+       =F0=9F=92=A5 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
+ numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+
+    Host 5:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 Networking bridge: sanity - mlx5
+       =E2=9C=85 Ethernet drivers sanity - mlx5
+
+    Host 6:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 7:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 8:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+  ppc64le:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+  s390x:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 3:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9D=8C LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 5:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9D=8C kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 7:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+  x86_64 (debug):
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9D=8C LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9C=85 CIFS Connectathon
+       =E2=9C=85 POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9D=8C storage: dm/common
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9C=85 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9D=8C kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
+e test
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 storage: software RAID testing
+       =E2=9C=85 Storage: swraid mdadm raid_module test
+       =E2=9C=85 stress: stress-ng - interrupt
+       =E2=9C=85 stress: stress-ng - cpu
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
+
+  x86_64:
+    Host 1:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+
+    Host 2:
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
+rding
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
+est_progs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
+e test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - srp
+
+    Host 5:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9C=85 Boot test
+       =E2=9C=85 Reboot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9D=8C selinux-policy: serge-testsuite
+       =E2=9C=85 Storage blktests - blk
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - interrupt
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
+ numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage nvdimm ndctl test s=
+uite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - os
+
+    Host 6:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xarray-idr-radixtree-test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
+rding
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
+est_progs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformanc=
+e test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 audit: audit testsuite test
+
+  Test sources: https://gitlab.com/cki-project/kernel-tests
+    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
+ existing tests!
+
+Aborted tests
+-------------
+Tests that didn't complete running successfully are marked with =E2=9A=A1=
+=E2=9A=A1=E2=9A=A1.
+If this was caused by an infrastructure issue, we try to mark that
+explicitly in the report.
+
+Waived tests
+------------
+If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
+uch tests are
+executed but their results are not taken into account. Tests are waived whe=
+n
+their results are not reliable enough, e.g. when they're just introduced or=
+ are
+being fixed.
+
+Testing timeout
+---------------
+We aim to provide a report within reasonable timeframe. Tests that haven't
+finished running yet are marked with =E2=8F=B1.
+Targeted tests
+--------------
+Test runs for patches always include a set of base tests, plus some
+tests chosen based on the file paths modified by the patch. The latter
+are called "targeted tests". If no targeted tests are run, that means
+no patch-specific tests are available. Please, consider contributing a
+targeted test for related patches to increase test coverage. See
+https://docs.engineering.redhat.com/x/_wEZB for more details.
+
