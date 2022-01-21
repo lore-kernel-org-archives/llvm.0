@@ -1,20 +1,41 @@
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A74173
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 10:24:29 +0000 (UTC)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 9573310008D; Fri, 21 Jan 2022 10:15:00 +0000 (UTC)
-Date: Fri, 21 Jan 2022 10:15:00 +0000
-From: Sean Young <sean@mess.org>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-media@vger.kernel.org, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org
-Subject: Re: [PATCH 1/2] media: rc-core: rename ir_raw_event_reset to
- ir_raw_event_overflow
-Message-ID: <YeqHpGe61ApoeYHX@gofer.mess.org>
-References: <20220120161614.328202-1-sean@mess.org>
- <202201211605.1ccb0HNg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87A5168
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 10:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642761104; x=1674297104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iNMjUOoNbkmcwszSVpY5v4bFEePSXx0Jcm5LdIJu0ZA=;
+  b=eKvH1bndK6xpQzCTzi1i1CCd/sGARGeM6Psg43ErrGHpH7etqFy2/21N
+   KjMJ8TwJYqcKXcH/5vxe2vFcs1SsAmfEgeIGPMMIYBVk41Zikq64teDXW
+   KxhgDIgC3jMC7jGrSW/Gk+gEccJLFQiFbsgUMQqqCZPyW6XYEBacTu1e/
+   +/NXm7e2mVdeCDObVrCNDT8J/NWcDDaIy/2WlmK2ZpWWoNsf/woN3WIdQ
+   puw7n79ZdGPS00m7BHzCsvLqaHRgMyNefVFNYlK4DhX9hDZ+vFPK/t8Ag
+   EmMgomsX37unmf30pCqcJ5DSRgUUdnR9ThiLbqc5PfouZzBYCSfVc1tCw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="226300770"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="226300770"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 02:31:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="478202827"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2022 02:31:42 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nArCn-000FCB-Rv; Fri, 21 Jan 2022 10:31:41 +0000
+Date: Fri, 21 Jan 2022 18:31:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robert Beckett <bob.beckett@collabora.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v3 3/5] drm/i915: support 64K GTT pages for discrete cards
+Message-ID: <202201211804.7ErZmoIV-lkp@intel.com>
+References: <20220120203721.632424-4-bob.beckett@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -23,56 +44,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201211605.1ccb0HNg-lkp@intel.com>
+In-Reply-To: <20220120203721.632424-4-bob.beckett@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Bot,
+Hi Robert,
 
-On Fri, Jan 21, 2022 at 04:59:50PM +0800, kernel test robot wrote:
-> Hi Sean,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on media-tree/master]
-> [also build test ERROR on next-20220121]
-> [cannot apply to sunxi/sunxi/for-next v5.16]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Sean-Young/media-rc-core-rename-ir_raw_event_reset-to-ir_raw_event_overflow/20220121-001937
-> base:   git://linuxtv.org/media_tree.git master
-> config: hexagon-randconfig-r041-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211605.1ccb0HNg-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/5b0115b915832b54ebe085c923d73209b1abb364
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Sean-Young/media-rc-core-rename-ir_raw_event_reset-to-ir_raw_event_overflow/20220121-001937
->         git checkout 5b0115b915832b54ebe085c923d73209b1abb364
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/rc/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/media/rc/mtk-cir.c:220:2: error: implicit declaration of function 'ir_raw_event_reset' [-Werror,-Wimplicit-function-declaration]
->            ir_raw_event_reset(ir->rc);
->            ^
->    drivers/media/rc/mtk-cir.c:220:2: note: did you mean 'ir_raw_event_store'?
->    include/media/rc-core.h:317:5: note: 'ir_raw_event_store' declared here
->    int ir_raw_event_store(struct rc_dev *dev, struct ir_raw_event *ev);
->        ^
->    1 error generated.
+Thank you for the patch! Yet something to improve:
 
-This patch depends on:
+[auto build test ERROR on drm-tip/drm-tip]
+[cannot apply to drm-intel/for-linux-next v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-https://patchwork.linuxtv.org/project/linux-media/patch/20220114150353.195192-2-sean@mess.org/
+url:    https://github.com/0day-ci/linux/commits/Robert-Beckett/discrete-card-64K-page-support/20220121-044244
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a005-20220117 (https://download.01.org/0day-ci/archive/20220121/202201211804.7ErZmoIV-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7547f27d09bac4e34155aca7ed017c04b7531e52
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Robert-Beckett/discrete-card-64K-page-support/20220121-044244
+        git checkout 7547f27d09bac4e34155aca7ed017c04b7531e52
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-With that patch it should build fine.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/i915/gem/i915_gem_object.c:807:
+>> drivers/gpu/drm/i915/gem/selftests/huge_pages.c:1508:10: error: variable 'err' is uninitialized when used here [-Werror,-Wuninitialized]
+                   return err;
+                          ^~~
+   drivers/gpu/drm/i915/gem/selftests/huge_pages.c:1485:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_CS35L41_SPI
+   Depends on SOUND && !UML && SND && SND_SOC && SPI_MASTER
+   Selected by
+   - SND_SOC_AMD_VANGOGH_MACH && SOUND && !UML && SND && SND_SOC && SND_SOC_AMD_ACP5x && I2C
 
 
-Sean
+vim +/err +1508 drivers/gpu/drm/i915/gem/selftests/huge_pages.c
+
+  1480	
+  1481	static int igt_ppgtt_compact(void *arg)
+  1482	{
+  1483		struct drm_i915_private *i915 = arg;
+  1484		struct drm_i915_gem_object *obj;
+  1485		int err;
+  1486	
+  1487		/*
+  1488		 * Simple test to catch issues with compact 64K pages -- since the pt is
+  1489		 * compacted to 256B that gives us 32 entries per pt, however since the
+  1490		 * backing page for the pt is 4K, any extra entries we might incorrectly
+  1491		 * write out should be ignored by the HW. If ever hit such a case this
+  1492		 * test should catch it since some of our writes would land in scratch.
+  1493		 */
+  1494	
+  1495		if (!HAS_64K_PAGES(i915)) {
+  1496			pr_info("device lacks compact 64K page support, skipping\n");
+  1497			return 0;
+  1498		}
+  1499	
+  1500		if (!HAS_LMEM(i915)) {
+  1501			pr_info("device lacks LMEM support, skipping\n");
+  1502			return 0;
+  1503		}
+  1504	
+  1505		/* We want the range to cover multiple page-table boundaries. */
+  1506		obj = i915_gem_object_create_lmem(i915, SZ_4M, 0);
+  1507		if (IS_ERR(obj))
+> 1508			return err;
+  1509	
+  1510		err = i915_gem_object_pin_pages_unlocked(obj);
+  1511		if (err)
+  1512			goto out_put;
+  1513	
+  1514		if (obj->mm.page_sizes.phys < I915_GTT_PAGE_SIZE_64K) {
+  1515			pr_info("LMEM compact unable to allocate huge-page(s)\n");
+  1516			goto out_unpin;
+  1517		}
+  1518	
+  1519		/*
+  1520		 * Disable 2M GTT pages by forcing the page-size to 64K for the GTT
+  1521		 * insertion.
+  1522		 */
+  1523		obj->mm.page_sizes.sg = I915_GTT_PAGE_SIZE_64K;
+  1524	
+  1525		err = igt_write_huge(i915, obj);
+  1526		if (err)
+  1527			pr_err("LMEM compact write-huge failed\n");
+  1528	
+  1529	out_unpin:
+  1530		i915_gem_object_unpin_pages(obj);
+  1531	out_put:
+  1532		i915_gem_object_put(obj);
+  1533	
+  1534		if (err == -ENOMEM)
+  1535			err = 0;
+  1536	
+  1537		return err;
+  1538	}
+  1539	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
