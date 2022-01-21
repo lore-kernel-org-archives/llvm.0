@@ -1,43 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8232C82
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 05:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C0C2C82
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 06:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642744596; x=1674280596;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zpNm2Ggem8XpBfHfA1dmrV91N9MOBYjEMGPmDHp5OUc=;
-  b=I7AVbg6mBjXjfG9LDaLxvGClz5wTZYRGQxjmgU81FdMhp63nx1ARMocV
-   m+WOWI1ThywL2sNC89zUGkwpbrGC5KaHFDwWNFBIAXIP2+mrbGbX9/1pR
-   7QmvVY3YUCr4Vxr5Ty7vOEiRhlTOmezTkSpJs5XSUHkk/s9wBmOD5KtDq
-   HO5p8Ny0lxo6PDJ7GNa8Sf+n6meciiSbfZhbitRk/sG/aCIZa4x5ruIL1
-   Iqv/bppM0HY/blMK0sA+DWEtBWvcSNSBxlSaUMD8/DGYNJ91C857uvdKx
-   sBceOXrQLWTZQ3eb3RaJeDF9Oiiw7aDsUK4aG5cGgp2KsyZcogaW5L3gp
+  t=1642745197; x=1674281197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e/8uyym0uhWCi8SRLUHjGGsGS5s34qYC/OWRPWJ7tec=;
+  b=M94M+gT2XOlL2YUehndnVPSGfLHn55S7uwIAjui+9aIWdaUBRZw1R78I
+   BEnN2LLWXY+5Xrf1P/ZuChoBVgxGL89vOtqZOFEEXeRvtw+RbGoyEKhvI
+   G/TWWkOZRoxh+Vn8NVyKIEsqoN35Tnkx0CzCcvyo13zVfMtkXoZ/i7F0M
+   ln7BgrdOPTNmtVL3LIFxTRvg+CsTX4ZrIegkYGgS3/TLwSIzvDJuux22B
+   9c5k6MZKTwZL6gAalTPO9zg+QV56PHFLk3z301qIle25VOSUr9kCtMDYf
+   RaJAyPQUjzxGJUkQFSSRjbt+nGoolrBDUTGrDKYuRLrhvY2jxhAMHgDlt
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="269992542"
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308905224"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="269992542"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 21:56:35 -0800
+   d="scan'208";a="308905224"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:06:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="626622213"
+   d="scan'208";a="561753487"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2022 21:56:33 -0800
+  by orsmga001.jf.intel.com with ESMTP; 20 Jan 2022 22:06:34 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAmuX-000EyX-5X; Fri, 21 Jan 2022 05:56:33 +0000
-Date: Fri, 21 Jan 2022 13:55:43 +0800
+	id 1nAn4D-000Ez6-Do; Fri, 21 Jan 2022 06:06:33 +0000
+Date: Fri, 21 Jan 2022 14:06:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matthew Brost <matthew.brost@intel.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/guc: Don't check CT descriptor
- status before CT write / read
-Message-ID: <202201211310.Npkld1YY-lkp@intel.com>
-References: <20220120182413.8074-1-matthew.brost@intel.com>
+To: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar
+ within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed
+ union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to
+ 'struct dw_edma_v0_ch_regs' being packed, wh...
+Message-ID: <202201211416.lYF8kJns-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,102 +46,238 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220120182413.8074-1-matthew.brost@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Matthew,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-tip/drm-tip drm-exynos/exynos-drm-next drm/drm-next tegra-drm/drm/tegra/for-next v5.16 next-20220121]
-[cannot apply to airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Matthew-Brost/drm-i915-guc-Don-t-check-CT-descriptor-status-before-CT-write-read/20220121-023033
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: i386-randconfig-a005-20220117 (https://download.01.org/0day-ci/archive/20220121/202201211310.Npkld1YY-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2c271fe77d52a0555161926c232cd5bc07178b39
+commit: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
+date:   10 months ago
+config: arm-randconfig-r001-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211416.lYF8kJns-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0311a8b0f99c50ab1a666a5cdbe2b1a0a2c3c71d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Matthew-Brost/drm-i915-guc-Don-t-check-CT-descriptor-status-before-CT-write-read/20220121-023033
-        git checkout 0311a8b0f99c50ab1a666a5cdbe2b1a0a2c3c71d
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04e0a39fc10f82a71b84af73351333b184cee578
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 04e0a39fc10f82a71b84af73351333b184cee578
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c:469:1: error: unused label 'corrupted' [-Werror,-Wunused-label]
-   corrupted:
-   ^~~~~~~~~~
-   1 error generated.
+   In file included from drivers/dma/dw-edma/dw-edma-v0-core.c:13:
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } sar;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:44:4: warning: field dar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:38:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } dar;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:51:4: warning: field llp within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:45:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } llp;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:172:4: warning: field rd_err_status within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:166:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_err_status;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:182:4: warning: field rd_done_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:176:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_done_imwr;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:189:4: warning: field rd_abort_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:183:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_abort_imwr;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:71:4: warning: field wr_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:65:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } wr_engine_hshake_cnt;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:79:4: warning: field rd_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:73:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_engine_hshake_cnt;
+             ^
+   8 warnings generated.
 
 
-vim +/corrupted +469 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c
+vim +37 drivers/dma/dw-edma/dw-edma-v0-regs.h
 
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  422  
-1d407096002beca drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2018-03-26  423  	/*
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  424  	 * dw0: CT header (including fence)
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  425  	 * dw1: HXG header (including action code)
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  426  	 * dw2+: action data
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  427  	 */
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  428  	header = FIELD_PREP(GUC_CTB_MSG_0_FORMAT, GUC_CTB_FORMAT_HXG) |
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  429  		 FIELD_PREP(GUC_CTB_MSG_0_NUM_DWORDS, len) |
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  430  		 FIELD_PREP(GUC_CTB_MSG_0_FENCE, fence);
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  431  
-1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  432  	type = (flags & INTEL_GUC_CT_SEND_NB) ? GUC_HXG_TYPE_EVENT :
-1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  433  		GUC_HXG_TYPE_REQUEST;
-1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  434  	hxg = FIELD_PREP(GUC_HXG_MSG_0_TYPE, type) |
-1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  435  		FIELD_PREP(GUC_HXG_EVENT_MSG_0_ACTION |
-1681924d8bdeb24 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  436  			   GUC_HXG_EVENT_MSG_0_DATA0, action[0]);
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  437  
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  438  	CT_DEBUG(ct, "writing (tail %u) %*ph %*ph %*ph\n",
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  439  		 tail, 4, &header, 4, &hxg, 4 * (len - 1), &action[1]);
-0a015ff9730c169 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2018-03-26  440  
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  441  	cmds[tail] = header;
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  442  	tail = (tail + 1) % size;
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  443  
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  444  	cmds[tail] = hxg;
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  445  	tail = (tail + 1) % size;
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  446  
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  447  	for (i = 1; i < len; i++) {
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  448  		cmds[tail] = action[i];
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  449  		tail = (tail + 1) % size;
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  450  	}
-4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20  451  	GEM_BUG_ON(tail > size);
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  452  
-d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  453  	/*
-d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  454  	 * make sure H2G buffer update and LRC tail update (if this triggering a
-d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  455  	 * submission) are visible before updating the descriptor tail
-d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  456  	 */
-6b540bf6f14362a drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-10-14  457  	intel_guc_write_barrier(ct_to_guc(ct));
-d35ca600873eebc drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-06-02  458  
-75452167a2794c3 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  459  	/* update local copies */
-75452167a2794c3 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  460  	ctb->tail = tail;
-f4eb1f3fe94683c drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-21  461  	GEM_BUG_ON(atomic_read(&ctb->space) < len + GUC_CTB_HDR_LEN);
-f4eb1f3fe94683c drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-21  462  	atomic_sub(len + GUC_CTB_HDR_LEN, &ctb->space);
-75452167a2794c3 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Matthew Brost    2021-07-08  463  
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  464  	/* now update descriptor */
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  465  	WRITE_ONCE(desc->tail, tail);
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  466  
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  467  	return 0;
-4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20  468  
-4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20 @469  corrupted:
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  470  	CT_ERROR(ct, "Corrupted descriptor head=%u tail=%u status=%#x\n",
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  471  		 desc->head, desc->tail, desc->status);
-572f2a5cd9742c5 drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2021-06-15  472  	ctb->broken = true;
-4c22abfbcb8456d drivers/gpu/drm/i915/gt/uc/intel_guc_ct.c Michal Wajdeczko 2020-01-20  473  	return -EPIPE;
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  474  }
-f8a58d639dd95b0 drivers/gpu/drm/i915/intel_guc_ct.c       Michal Wajdeczko 2017-05-26  475  
+    26	
+    27	struct dw_edma_v0_ch_regs {
+    28		u32 ch_control1;				/* 0x000 */
+    29		u32 ch_control2;				/* 0x004 */
+    30		u32 transfer_size;				/* 0x008 */
+    31		union {
+    32			u64 reg;				/* 0x00c..0x010 */
+    33			struct {
+    34				u32 lsb;			/* 0x00c */
+    35				u32 msb;			/* 0x010 */
+    36			};
+  > 37		} sar;
+    38		union {
+    39			u64 reg;				/* 0x014..0x018 */
+    40			struct {
+    41				u32 lsb;			/* 0x014 */
+    42				u32 msb;			/* 0x018 */
+    43			};
+  > 44		} dar;
+    45		union {
+    46			u64 reg;				/* 0x01c..0x020 */
+    47			struct {
+    48				u32 lsb;			/* 0x01c */
+    49				u32 msb;			/* 0x020 */
+    50			};
+  > 51		} llp;
+    52	} __packed;
+    53	
+    54	struct dw_edma_v0_ch {
+    55		struct dw_edma_v0_ch_regs wr;			/* 0x200 */
+    56		u32 padding_1[55];				/* [0x224..0x2fc] */
+    57		struct dw_edma_v0_ch_regs rd;			/* 0x300 */
+    58		u32 padding_2[55];				/* [0x324..0x3fc] */
+    59	} __packed;
+    60	
+    61	struct dw_edma_v0_unroll {
+    62		u32 padding_1;					/* 0x0f8 */
+    63		u32 wr_engine_chgroup;				/* 0x100 */
+    64		u32 rd_engine_chgroup;				/* 0x104 */
+    65		union {
+    66			u64 reg;				/* 0x108..0x10c */
+    67			struct {
+    68				u32 lsb;			/* 0x108 */
+    69				u32 msb;			/* 0x10c */
+    70			};
+  > 71		} wr_engine_hshake_cnt;
+    72		u32 padding_2[2];				/* [0x110..0x114] */
+    73		union {
+    74			u64 reg;				/* 0x120..0x124 */
+    75			struct {
+    76				u32 lsb;			/* 0x120 */
+    77				u32 msb;			/* 0x124 */
+    78			};
+  > 79		} rd_engine_hshake_cnt;
+    80		u32 padding_3[2];				/* [0x120..0x124] */
+    81		u32 wr_ch0_pwr_en;				/* 0x128 */
+    82		u32 wr_ch1_pwr_en;				/* 0x12c */
+    83		u32 wr_ch2_pwr_en;				/* 0x130 */
+    84		u32 wr_ch3_pwr_en;				/* 0x134 */
+    85		u32 wr_ch4_pwr_en;				/* 0x138 */
+    86		u32 wr_ch5_pwr_en;				/* 0x13c */
+    87		u32 wr_ch6_pwr_en;				/* 0x140 */
+    88		u32 wr_ch7_pwr_en;				/* 0x144 */
+    89		u32 padding_4[8];				/* [0x148..0x164] */
+    90		u32 rd_ch0_pwr_en;				/* 0x168 */
+    91		u32 rd_ch1_pwr_en;				/* 0x16c */
+    92		u32 rd_ch2_pwr_en;				/* 0x170 */
+    93		u32 rd_ch3_pwr_en;				/* 0x174 */
+    94		u32 rd_ch4_pwr_en;				/* 0x178 */
+    95		u32 rd_ch5_pwr_en;				/* 0x18c */
+    96		u32 rd_ch6_pwr_en;				/* 0x180 */
+    97		u32 rd_ch7_pwr_en;				/* 0x184 */
+    98		u32 padding_5[30];				/* [0x188..0x1fc] */
+    99		struct dw_edma_v0_ch ch[EDMA_V0_MAX_NR_CH];	/* [0x200..0x1120] */
+   100	} __packed;
+   101	
+   102	struct dw_edma_v0_legacy {
+   103		u32 viewport_sel;				/* 0x0f8 */
+   104		struct dw_edma_v0_ch_regs ch;			/* [0x100..0x120] */
+   105	} __packed;
+   106	
+   107	struct dw_edma_v0_regs {
+   108		/* eDMA global registers */
+   109		u32 ctrl_data_arb_prior;			/* 0x000 */
+   110		u32 padding_1;					/* 0x004 */
+   111		u32 ctrl;					/* 0x008 */
+   112		u32 wr_engine_en;				/* 0x00c */
+   113		u32 wr_doorbell;				/* 0x010 */
+   114		u32 padding_2;					/* 0x014 */
+   115		union {
+   116			u64 reg;				/* 0x018..0x01c */
+   117			struct {
+   118				u32 lsb;			/* 0x018 */
+   119				u32 msb;			/* 0x01c */
+   120			};
+   121		} wr_ch_arb_weight;
+   122		u32 padding_3[3];				/* [0x020..0x028] */
+   123		u32 rd_engine_en;				/* 0x02c */
+   124		u32 rd_doorbell;				/* 0x030 */
+   125		u32 padding_4;					/* 0x034 */
+   126		union {
+   127			u64 reg;				/* 0x038..0x03c */
+   128			struct {
+   129				u32 lsb;			/* 0x038 */
+   130				u32 msb;			/* 0x03c */
+   131			};
+   132		} rd_ch_arb_weight;
+   133		u32 padding_5[3];				/* [0x040..0x048] */
+   134		/* eDMA interrupts registers */
+   135		u32 wr_int_status;				/* 0x04c */
+   136		u32 padding_6;					/* 0x050 */
+   137		u32 wr_int_mask;				/* 0x054 */
+   138		u32 wr_int_clear;				/* 0x058 */
+   139		u32 wr_err_status;				/* 0x05c */
+   140		union {
+   141			u64 reg;				/* 0x060..0x064 */
+   142			struct {
+   143				u32 lsb;			/* 0x060 */
+   144				u32 msb;			/* 0x064 */
+   145			};
+   146		} wr_done_imwr;
+   147		union {
+   148			u64 reg;				/* 0x068..0x06c */
+   149			struct {
+   150				u32 lsb;			/* 0x068 */
+   151				u32 msb;			/* 0x06c */
+   152			};
+   153		} wr_abort_imwr;
+   154		u32 wr_ch01_imwr_data;				/* 0x070 */
+   155		u32 wr_ch23_imwr_data;				/* 0x074 */
+   156		u32 wr_ch45_imwr_data;				/* 0x078 */
+   157		u32 wr_ch67_imwr_data;				/* 0x07c */
+   158		u32 padding_7[4];				/* [0x080..0x08c] */
+   159		u32 wr_linked_list_err_en;			/* 0x090 */
+   160		u32 padding_8[3];				/* [0x094..0x09c] */
+   161		u32 rd_int_status;				/* 0x0a0 */
+   162		u32 padding_9;					/* 0x0a4 */
+   163		u32 rd_int_mask;				/* 0x0a8 */
+   164		u32 rd_int_clear;				/* 0x0ac */
+   165		u32 padding_10;					/* 0x0b0 */
+   166		union {
+   167			u64 reg;				/* 0x0b4..0x0b8 */
+   168			struct {
+   169				u32 lsb;			/* 0x0b4 */
+   170				u32 msb;			/* 0x0b8 */
+   171			};
+ > 172		} rd_err_status;
+   173		u32 padding_11[2];				/* [0x0bc..0x0c0] */
+   174		u32 rd_linked_list_err_en;			/* 0x0c4 */
+   175		u32 padding_12;					/* 0x0c8 */
+   176		union {
+   177			u64 reg;				/* 0x0cc..0x0d0 */
+   178			struct {
+   179				u32 lsb;			/* 0x0cc */
+   180				u32 msb;			/* 0x0d0 */
+   181			};
+ > 182		} rd_done_imwr;
+   183		union {
+   184			u64 reg;				/* 0x0d4..0x0d8 */
+   185			struct {
+   186				u32 lsb;			/* 0x0d4 */
+   187				u32 msb;			/* 0x0d8 */
+   188			};
+ > 189		} rd_abort_imwr;
+   190		u32 rd_ch01_imwr_data;				/* 0x0dc */
+   191		u32 rd_ch23_imwr_data;				/* 0x0e0 */
+   192		u32 rd_ch45_imwr_data;				/* 0x0e4 */
+   193		u32 rd_ch67_imwr_data;				/* 0x0e8 */
+   194		u32 padding_13[4];				/* [0x0ec..0x0f8] */
+   195		/* eDMA channel context grouping */
+   196		union dw_edma_v0_type {
+   197			struct dw_edma_v0_legacy legacy;	/* [0x0f8..0x120] */
+   198			struct dw_edma_v0_unroll unroll;	/* [0x0f8..0x1120] */
+   199		} type;
+   200	} __packed;
+   201	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
