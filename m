@@ -1,43 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08582CA7
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 08:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DAB29CA
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 08:19:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642752590; x=1674288590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OQeW5rUFYNb1LuME3+2ja/Sqh0ku+Ix4Xf4t/BS3sDs=;
-  b=n91gvqQChsD09Um2sp62tFCmHje38aw/DnLuQ/IgX97e8CcGaHAMt3bD
-   3XT5FnbK4ucKpUxtCnFOJRy9Qaw5cLUTvE81kL19IqR7x5iXIi+fDRLy8
-   D7n2ondpdsS3Mv5gcxJKkYxQCL8GKORjvszoQHeQ2wdQUH9/oWICasscN
-   pEz9Y1wg5lK6Kg1MRApfSis8KGMt1o1ydH7pJpIyMC8CPG88ZOQF1QhoC
-   O0van4WscSzS76w/8+16K4tOwogqeUOtfPgymth38GdiqhU3gZQxMXCfi
-   JFvCogSccnalmbK+KJ6o41whxSH5wLEVEPFBQTqS5If88reJqZjigASVF
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="306319471"
+  t=1642753185; x=1674289185;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pMiHjvl84QjMhHNHxc4MDB2pjg1jVB5PbjyIBBA0x0o=;
+  b=W31IHBWv5lLFWrAzr1XYWSdujHd4Iar/FbgIpJ364j5kzt9NcGVVRkFe
+   6gZK7+x+Op/fkYl4OyEBCgwOT9ogN5Ogm01ZTTaD5oLeKLXhWJK/u8KmS
+   XnaUzgMjxVa9n8LlUQMQiY10GIMeYGb3hZrdLTlsTi1vd6xbC4pGDN3VI
+   Dc6UgA+drtKa/rysbxYYvGHsvGStVv+HukMzPHWBdSHRjtiomqHUuMhdC
+   DdCLxPiJpvMVnSbuuu0EdsyhlVDa29KI3+Qakv//mz8amxhsEYOnorQQN
+   RwaVOoG4ZXhyqWd1PZuDpt9Vbl9fXoG4t7yIX5Dzh2cIUnMcb8+RK4fBq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="232957366"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="306319471"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:09:42 -0800
+   d="scan'208";a="232957366"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:19:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="579529041"
+   d="scan'208";a="478165440"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2022 00:09:39 -0800
+  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2022 00:19:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAozK-000F5O-6L; Fri, 21 Jan 2022 08:09:38 +0000
-Date: Fri, 21 Jan 2022 16:08:43 +0800
+	id 1nAp90-000F6R-Fu; Fri, 21 Jan 2022 08:19:38 +0000
+Date: Fri, 21 Jan 2022 16:19:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: ycaibb <ycaibb@gmail.com>, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-	dsahern@kernel.org, kuba@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ycaibb@gmail.com
-Subject: Re: [PATCH] net: missing lock releases in ipmr_base.c
-Message-ID: <202201211524.XaQUNPO4-lkp@intel.com>
-References: <20220121032210.5829-1-ycaibb@gmail.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-move-scsi-pointer 25/45]
+ drivers/scsi/megaraid.c:1075:9: warning: variable 'scb' is uninitialized
+ when used here
+Message-ID: <202201211656.z3YanySW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,86 +45,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121032210.5829-1-ycaibb@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi ycaibb,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master horms-ipvs/master linus/master v5.16 next-20220121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
-config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220121/202201211524.XaQUNPO4-lkp@intel.com/config)
+tree:   https://github.com/bvanassche/linux scsi-move-scsi-pointer
+head:   1f9cda056e9fc3b2f08455c8ab1a2d85b52df093
+commit: 7f5c4ca6df22ad432a2631b6cdd374f40a249746 [25/45] megaraid: Stop using the SCSI pointer
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220121/202201211656.z3YanySW-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/33b03feacaf2155323b031274d2d67dab0cf561c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
-        git checkout 33b03feacaf2155323b031274d2d67dab0cf561c
+        # https://github.com/bvanassche/linux/commit/7f5c4ca6df22ad432a2631b6cdd374f40a249746
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-move-scsi-pointer
+        git checkout 7f5c4ca6df22ad432a2631b6cdd374f40a249746
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/ipv4/ipmr_base.c:158:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-                           return mfc;
-                           ^
-   net/ipv4/ipmr_base.c:156:3: note: previous statement is here
-                   if (pos-- == 0)
-                   ^
-   net/ipv4/ipmr_base.c:166:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-                           return mfc;
-                           ^
-   net/ipv4/ipmr_base.c:164:3: note: previous statement is here
-                   if (pos-- == 0)
-                   ^
-   2 warnings generated.
+>> drivers/scsi/megaraid.c:1075:9: warning: variable 'scb' is uninitialized when used here [-Wuninitialized]
+                   if (!(scb->state & SCB_ISSUED) && issue_scb(adapter, scb) != 0)
+                         ^~~
+   drivers/scsi/megaraid.c:1073:13: note: initialize the variable 'scb' to silence this warning
+                   scb_t *scb;
+                             ^
+                              = NULL
+   1 warning generated.
 
 
-vim +/if +158 net/ipv4/ipmr_base.c
+vim +/scb +1075 drivers/scsi/megaraid.c
 
-3feda6b46f7347 Yuval Mintz 2018-02-28  146  
-c8d61968032654 Yuval Mintz 2018-02-28  147  void *mr_mfc_seq_idx(struct net *net,
-c8d61968032654 Yuval Mintz 2018-02-28  148  		     struct mr_mfc_iter *it, loff_t pos)
-c8d61968032654 Yuval Mintz 2018-02-28  149  {
-c8d61968032654 Yuval Mintz 2018-02-28  150  	struct mr_table *mrt = it->mrt;
-c8d61968032654 Yuval Mintz 2018-02-28  151  	struct mr_mfc *mfc;
-c8d61968032654 Yuval Mintz 2018-02-28  152  
-c8d61968032654 Yuval Mintz 2018-02-28  153  	rcu_read_lock();
-c8d61968032654 Yuval Mintz 2018-02-28  154  	it->cache = &mrt->mfc_cache_list;
-c8d61968032654 Yuval Mintz 2018-02-28  155  	list_for_each_entry_rcu(mfc, &mrt->mfc_cache_list, list)
-c8d61968032654 Yuval Mintz 2018-02-28  156  		if (pos-- == 0)
-33b03feacaf215 Ryan Cai    2022-01-21  157  			rcu_read_unlock();
-c8d61968032654 Yuval Mintz 2018-02-28 @158  			return mfc;
-c8d61968032654 Yuval Mintz 2018-02-28  159  	rcu_read_unlock();
-c8d61968032654 Yuval Mintz 2018-02-28  160  
-c8d61968032654 Yuval Mintz 2018-02-28  161  	spin_lock_bh(it->lock);
-c8d61968032654 Yuval Mintz 2018-02-28  162  	it->cache = &mrt->mfc_unres_queue;
-c8d61968032654 Yuval Mintz 2018-02-28  163  	list_for_each_entry(mfc, it->cache, list)
-c8d61968032654 Yuval Mintz 2018-02-28  164  		if (pos-- == 0)
-33b03feacaf215 Ryan Cai    2022-01-21  165  			spin_unlock_bh(it->lock);
-c8d61968032654 Yuval Mintz 2018-02-28  166  			return mfc;
-c8d61968032654 Yuval Mintz 2018-02-28  167  	spin_unlock_bh(it->lock);
-c8d61968032654 Yuval Mintz 2018-02-28  168  
-c8d61968032654 Yuval Mintz 2018-02-28  169  	it->cache = NULL;
-c8d61968032654 Yuval Mintz 2018-02-28  170  	return NULL;
-c8d61968032654 Yuval Mintz 2018-02-28  171  }
-c8d61968032654 Yuval Mintz 2018-02-28  172  EXPORT_SYMBOL(mr_mfc_seq_idx);
-c8d61968032654 Yuval Mintz 2018-02-28  173  
+  1065	
+  1066	static void
+  1067	__mega_runpendq(adapter_t *adapter)
+  1068	{
+  1069		struct megaraid_cmd_priv *pos, *next;
+  1070	
+  1071		/* Issue all pending commands to the card */
+  1072		list_for_each_entry_safe(pos, next, &adapter->pending_list, entry) {
+  1073			scb_t *scb;
+  1074	
+> 1075			if (!(scb->state & SCB_ISSUED) && issue_scb(adapter, scb) != 0)
+  1076				return;
+  1077		}
+  1078	}
+  1079	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
