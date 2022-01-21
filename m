@@ -1,42 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A300E29CA
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 08:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08582CA7
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 08:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642752580; x=1674288580;
+  t=1642752590; x=1674288590;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4yBx8LdBo+vXMgx9kJkilhCP8msDKPnUTq6/VkqwpmU=;
-  b=VxxYdwB/J/SerO6cuGaRw9+FU0jiYqrICGey0Rwf/+nOFG6qkyJHH6Rh
-   CjRNlxHrJ7q60sNMZfWcnrNe5G12r2nJOQkx7zdpFo/U7yhXp0/Bquth6
-   FOyTx7XrKi5VdSlHd3aQkgu3CDFOgtIW4G0KlD9s1+vlC7QnM5mmm32aL
-   LIiheIhXyHcOzkyeNmDXyzGQd13UPxXqlB1srkmFFhnH+VjGPtbjKT54D
-   nTXwZOkp6vuk9MO3j0aUZjM49zJ+/GWAGQOOAxbnfQb7BSNP80Wp9MLf7
-   pbbK5qGPdzV3SdWKTITwzzhvl8trQk1Th9Ur9XZojUAfwwIXpP0GuZKZ4
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="226270061"
+  bh=OQeW5rUFYNb1LuME3+2ja/Sqh0ku+Ix4Xf4t/BS3sDs=;
+  b=n91gvqQChsD09Um2sp62tFCmHje38aw/DnLuQ/IgX97e8CcGaHAMt3bD
+   3XT5FnbK4ucKpUxtCnFOJRy9Qaw5cLUTvE81kL19IqR7x5iXIi+fDRLy8
+   D7n2ondpdsS3Mv5gcxJKkYxQCL8GKORjvszoQHeQ2wdQUH9/oWICasscN
+   pEz9Y1wg5lK6Kg1MRApfSis8KGMt1o1ydH7pJpIyMC8CPG88ZOQF1QhoC
+   O0van4WscSzS76w/8+16K4tOwogqeUOtfPgymth38GdiqhU3gZQxMXCfi
+   JFvCogSccnalmbK+KJ6o41whxSH5wLEVEPFBQTqS5If88reJqZjigASVF
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="306319471"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="226270061"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:09:40 -0800
+   d="scan'208";a="306319471"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:09:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="561784554"
+   d="scan'208";a="579529041"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Jan 2022 00:09:38 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2022 00:09:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAozK-000F5Q-6r; Fri, 21 Jan 2022 08:09:38 +0000
-Date: Fri, 21 Jan 2022 16:08:49 +0800
+	id 1nAozK-000F5O-6L; Fri, 21 Jan 2022 08:09:38 +0000
+Date: Fri, 21 Jan 2022 16:08:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH] drm: allow passing a real encoder object for wb
- connector
-Message-ID: <202201211623.L8JFrG3B-lkp@intel.com>
-References: <1642732195-25349-1-git-send-email-quic_abhinavk@quicinc.com>
+To: ycaibb <ycaibb@gmail.com>, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+	dsahern@kernel.org, kuba@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ycaibb@gmail.com
+Subject: Re: [PATCH] net: missing lock releases in ipmr_base.c
+Message-ID: <202201211524.XaQUNPO4-lkp@intel.com>
+References: <20220121032210.5829-1-ycaibb@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,54 +46,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1642732195-25349-1-git-send-email-quic_abhinavk@quicinc.com>
+In-Reply-To: <20220121032210.5829-1-ycaibb@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Abhinav,
+Hi ycaibb,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next tegra-drm/drm/tegra/for-next v5.16 next-20220121]
-[cannot apply to airlied/drm-next]
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master horms-ipvs/master linus/master v5.16 next-20220121]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Abhinav-Kumar/drm-allow-passing-a-real-encoder-object-for-wb-connector/20220121-103231
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-randconfig-r005-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211623.L8JFrG3B-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220121/202201211524.XaQUNPO4-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ce1d81913d9146f6e753c39f41929266a5885f99
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/33b03feacaf2155323b031274d2d67dab0cf561c
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Abhinav-Kumar/drm-allow-passing-a-real-encoder-object-for-wb-connector/20220121-103231
-        git checkout ce1d81913d9146f6e753c39f41929266a5885f99
+        git fetch --no-tags linux-review ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
+        git checkout 33b03feacaf2155323b031274d2d67dab0cf561c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/vkms/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/vkms/vkms_writeback.c:143:38: error: member reference type 'struct drm_encoder *' is a pointer; did you mean to use '->'?
-           vkmsdev->output.wb_connector.encoder.possible_crtcs = 1;
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-                                               ->
-   1 error generated.
+>> net/ipv4/ipmr_base.c:158:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                           return mfc;
+                           ^
+   net/ipv4/ipmr_base.c:156:3: note: previous statement is here
+                   if (pos-- == 0)
+                   ^
+   net/ipv4/ipmr_base.c:166:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                           return mfc;
+                           ^
+   net/ipv4/ipmr_base.c:164:3: note: previous statement is here
+                   if (pos-- == 0)
+                   ^
+   2 warnings generated.
 
 
-vim +143 drivers/gpu/drm/vkms/vkms_writeback.c
+vim +/if +158 net/ipv4/ipmr_base.c
 
-dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  138  
-dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  139  int vkms_enable_writeback_connector(struct vkms_device *vkmsdev)
-dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  140  {
-dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  141  	struct drm_writeback_connector *wb = &vkmsdev->output.wb_connector;
-dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30  142  
-dbd9d80c1b2e03 Rodrigo Siqueira 2020-08-30 @143  	vkmsdev->output.wb_connector.encoder.possible_crtcs = 1;
+3feda6b46f7347 Yuval Mintz 2018-02-28  146  
+c8d61968032654 Yuval Mintz 2018-02-28  147  void *mr_mfc_seq_idx(struct net *net,
+c8d61968032654 Yuval Mintz 2018-02-28  148  		     struct mr_mfc_iter *it, loff_t pos)
+c8d61968032654 Yuval Mintz 2018-02-28  149  {
+c8d61968032654 Yuval Mintz 2018-02-28  150  	struct mr_table *mrt = it->mrt;
+c8d61968032654 Yuval Mintz 2018-02-28  151  	struct mr_mfc *mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  152  
+c8d61968032654 Yuval Mintz 2018-02-28  153  	rcu_read_lock();
+c8d61968032654 Yuval Mintz 2018-02-28  154  	it->cache = &mrt->mfc_cache_list;
+c8d61968032654 Yuval Mintz 2018-02-28  155  	list_for_each_entry_rcu(mfc, &mrt->mfc_cache_list, list)
+c8d61968032654 Yuval Mintz 2018-02-28  156  		if (pos-- == 0)
+33b03feacaf215 Ryan Cai    2022-01-21  157  			rcu_read_unlock();
+c8d61968032654 Yuval Mintz 2018-02-28 @158  			return mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  159  	rcu_read_unlock();
+c8d61968032654 Yuval Mintz 2018-02-28  160  
+c8d61968032654 Yuval Mintz 2018-02-28  161  	spin_lock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  162  	it->cache = &mrt->mfc_unres_queue;
+c8d61968032654 Yuval Mintz 2018-02-28  163  	list_for_each_entry(mfc, it->cache, list)
+c8d61968032654 Yuval Mintz 2018-02-28  164  		if (pos-- == 0)
+33b03feacaf215 Ryan Cai    2022-01-21  165  			spin_unlock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  166  			return mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  167  	spin_unlock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  168  
+c8d61968032654 Yuval Mintz 2018-02-28  169  	it->cache = NULL;
+c8d61968032654 Yuval Mintz 2018-02-28  170  	return NULL;
+c8d61968032654 Yuval Mintz 2018-02-28  171  }
+c8d61968032654 Yuval Mintz 2018-02-28  172  EXPORT_SYMBOL(mr_mfc_seq_idx);
+c8d61968032654 Yuval Mintz 2018-02-28  173  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
