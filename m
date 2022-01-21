@@ -1,153 +1,245 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8895168
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 11:13:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24DCF168
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 11:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642763625; x=1674299625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6/XoDsiAEGuHpK+jGVoHx897KAxeOEzK5nRuOM7D7XQ=;
-  b=mkWRjHR3zBGUkmTl2mmmnH20rh+6uRM7kKb91LCU8/in+fRq8DjLf1Bt
-   Q0+s/uDloxFagmQLzMjmTrPAYxX5V8/RUmhdkinfKCKfx6Zf93NP2+yY9
-   owiAwIydjTJxuV3QqayPGvndWTSjKgF6p1JKrHgyrUQzPILNmXR4z5i08
-   DqC8pFTBs/9VZQbHE1N801g3Bj6sC3WV6r8FVd2z4Y/FgJsuoNX/5tLVO
-   bbpZt3CHHdt7pQ9YglWAbs40Rso0n7fQNfkw6v+BbSJ/F4lr5kV9XEA/l
-   nBr74QSsLwnOzfhOSs4VuwmXHbltAsNsc731Zq5hicQUS+wQEzvID0CoO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331983752"
+  t=1642764045; x=1674300045;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1u0nHFXfG+BVntQg3FNmo1FKS8s1BanQMwZYnZzKw4k=;
+  b=ZwXtO8gEddu2DqI1zikuxvBRKJ7PI7r7Sq4MlB7m9FVVPAPtANd99/FV
+   MLgzFj/0sGUPzX8a/Mm66an9Rkj0mH8Pyxx5L5Ya6ksRH6f5+Stl82uaK
+   qPV05KyPk/1FsI75cbHPmUz5NQPN/xfUlqDk/3QihGN2I5YJ3WpwjpnHX
+   Z23kTA1KolJOwzNS0ZGTNu28i0Ca3IUmaGuO4CX+5cOBf4H4DYcQQK/Va
+   Vj4bNb9YycWGMBpBp2E8ZB5ARlR7+X0W9k9ibiVhI/oaOehrpzAMH+hbN
+   C9bQhtJTz7a4WwAc5pNWdxlYH1ux++ie+nsw/WCFs+bSFSaud2f1+3o/h
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308962240"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="331983752"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 03:13:44 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="308962240"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 03:20:44 -0800
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="561843357"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Jan 2022 03:13:43 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nArrS-000FEB-UM; Fri, 21 Jan 2022 11:13:42 +0000
-Date: Fri, 21 Jan 2022 19:12:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Robert Beckett <bob.beckett@collabora.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v3 4/5] drm/i915: add gtt misalignment test
-Message-ID: <202201211905.O4FxXbsX-lkp@intel.com>
-References: <20220120203721.632424-5-bob.beckett@collabora.com>
+   d="scan'208";a="533236153"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.237.180.112]) ([10.237.180.112])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 03:20:41 -0800
+Message-ID: <5f5bd99e-4bd3-bc88-b6c5-e414a6608a96@linux.intel.com>
+Date: Fri, 21 Jan 2022 12:20:39 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120203721.632424-5-bob.beckett@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] Makefile: Fix build with scan-build
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+ Michal Marek <michal.lkml@markovi.net>,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Cezary Rojewski <cezary.rojewski@intel.com>
+References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
+ <YeiAa/eCxVZC+QbS@archlinux-ax161> <YeiaAgQ+gbZYTMwD@archlinux-ax161>
+From: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
+ <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <YeiaAgQ+gbZYTMwD@archlinux-ax161>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Robert,
+On 1/20/2022 12:08 AM, Nathan Chancellor wrote:
+> On Wed, Jan 19, 2022 at 02:19:39PM -0700, Nathan Chancellor wrote:
+>> On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
+>>> When building kernel with scan-build for analysis:
+>>> $ scan-build make defconfig
+>>> $ scan-build make menuconfig # disable RETPOLINE
+>>> $ scan-build make -j16 bindeb-pkg
+>>> since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+>>> it fails with:
+>>>    CC      scripts/mod/empty.o
+>>> could not find clang line
+>>> make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+>>>
+>>> Seems like changes to how -fconserve-stack support was detected broke
+>>> build with scan-build. Revert part of mentioned commit which changed
+>>> that.
+>>>
+>>> Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+>>> CC: Nick Desaulniers <ndesaulniers@google.com>
+>>> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+>>> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+>>> ---
+>>>   Makefile | 4 +---
+>>>   1 file changed, 1 insertion(+), 3 deletions(-)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index 765115c99655..1174ccd182f5 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
+>>>   KBUILD_CFLAGS  += -fno-stack-check
+>>>   
+>>>   # conserve stack if available
+>>> -ifdef CONFIG_CC_IS_GCC
+>>> -KBUILD_CFLAGS   += -fconserve-stack
+>>> -endif
+>>> +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
+>>>   
+>>>   # Prohibit date/time macros, which would make the build non-deterministic
+>>>   KBUILD_CFLAGS   += -Werror=date-time
+>>> -- 
+>>> 2.25.1
+>>>
+>>
+>> Okay, I think I understand why this happens...
+>>
+>> scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
+>> code with a compiler [2] then runs clang for the static analyzer [3].
+>> The problem is that the default compiler for ccc-analyzer is GCC, which
+>> means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
+>> but not clang will cause the clang analyzer part of ccc-analyzer to
+>> error because ccc-analyzer just passes all '-f' flags along [4].
+>>
+>> Prior to 7d73c3e9c514, there was no error because cc-option would run
+>> the flag against ccc-analyzer, which would error out for the reason I
+>> just described, which would prevent the flag from getting added to
+>> KBUILD_CFLAGS.
+>>
+>> Now, -fconserve-stack gets passed along to both gcc and clang but clang
+>> does not recognize it and errors out.
+>>
+>> This should be fixed in clang, which already has the machinery to
+>> recognize but ignore GCC flags for compatibility reasons (which is
+>> probably how gcc and clang can use the same flags). I have pushed a
+>> patch to Phabricator for review:
+>>
+>> https://reviews.llvm.org/D117717
+>>
+>> You need to disable CONFIG_RETPOLINE for the same reason but I don't
+>> think working around that in clang is as simple.
+>>
+>> Until that fix can proliferate through distributions and such, this is
+>> not an unreasonable workaround (unless Masahiro or Nick have a better
+>> idea) but I would really like a comment so that we can revert this once
+>> that fix is more widely available (it is unlikely that clang will
+>> actually support this option).
+>>
+>> [1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
+>> [2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
+>> [3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
+>> [4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
+> 
+> Thinking more about this after Fangrui commented on the clang patch
+> above, using scan-build with GCC as the compiler is going to be hard to
+> support, as we are basically trying to support using two different
+> compilers with a unified set of '-f' flags, which I see as problematic
+> for a few reasons.
+> 
+> 1. It restricts our ability to do cc-option cleanups like Nick did.
+> 
+> We should be eliminating cc-option calls that we know are specific to
+> one compiler because checking the Kconfig variables (CONFIG_CC_IS_...)
+> is much cheaper than invoking the compiler.
+> 
+> 2. Necessary GCC specific flags will get dropped.
+> 
+> Adding back the call to cc-option will allow the build to succeed but it
+> drops the flag from KBUILD_CFLAGS. If there were ever a time where an
+> '-f' flag was needed to get a working kernel with GCC, it would not get
+> added because clang would reject it.
+> 
+> We already have a static-analyzer target that requires using CC=clang so
+> I think there is some precedent here to say we require the kernel to be
+> built with clang to use the static analyzer. The fact that it did prior
+> to 7d73c3e9c514 can just be chalked up to luck.
+> 
+> $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+> 
+> would be the equivalent command to the original patch.
+> 
+> You can still use scan-build with the '--use-cc=clang' flag, which will
+> use clang for the compilation and analysis, if you so prefer.
+> 
+> Masahiro and Nick may have further thoughts and I am open to other
+> opinions but my vote is to say this is an issue we won't fix or
+> workaround.
+> 
+> Cheers,
+> Nathan
 
-Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on drm-tip/drm-tip]
-[cannot apply to drm-intel/for-linux-next v5.16 next-20220121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thank you for detailed explanation. Well I guess question then is: how 
+much scan-build is supported? And if it should even support mixing clang 
+and gcc? Alternatively maybe use clang as default if CC environment 
+variable is not set?
+What I like about scan-build is that it generates html report file.
 
-url:    https://github.com/0day-ci/linux/commits/Robert-Beckett/discrete-card-64K-page-support/20220121-044244
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a005-20220117 (https://download.01.org/0day-ci/archive/20220121/202201211905.O4FxXbsX-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e7a6d547c26b78357dbad93dc9d8df90bc51d025
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Robert-Beckett/discrete-card-64K-page-support/20220121-044244
-        git checkout e7a6d547c26b78357dbad93dc9d8df90bc51d025
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+'--use-cc=clang' worked fine for me.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I've also tried
+ > $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+although there seems to be no static-analyzer target, I guess you meant 
+clang-analyzer instead, but although it seems to generate a lot of text 
+on terminal, it doesn't seem that useful to me. Not sure if this is 
+expected?
 
-All errors (new ones prefixed by >>):
+Quoting a piece of log:
+./include/linux/xarray.h:54:2: error: expected '(' after 'asm' 
+[clang-diagnostic-error]
+         WARN_ON((long)v < 0);
+         ^
+./include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+                 __WARN();                                               \
+                 ^
+./include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+#define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+                                 ^
+./arch/x86/include/asm/bug.h:79:2: note: expanded from macro '__WARN_FLAGS'
+         _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));           \
+         ^
+./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
+         asm_inline volatile("1:\t" ins "\n"                             \
+         ^
+./include/linux/compiler_types.h:281:24: note: expanded from macro 
+'asm_inline'
+#define asm_inline asm __inline
+                        ^
+./include/linux/xarray.h:1616:2: error: expected '(' after 'asm' 
+[clang-diagnostic-error]
+         BUG_ON(order > 0);
+         ^
+./include/asm-generic/bug.h:65:57: note: expanded from macro 'BUG_ON'
+#define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                                         ^
+./arch/x86/include/asm/bug.h:66:2: note: expanded from macro 'BUG'
+         _BUG_FLAGS(ASM_UD2, 0);                                 \
+         ^
+./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
+         asm_inline volatile("1:\t" ins "\n"                             \
+         ^
+./include/linux/compiler_types.h:281:24: note: expanded from macro 
+'asm_inline'
+#define asm_inline asm __inline
+                        ^
+Found compiler error(s).
+21 errors generated.
+Error while processing /home/xxxxxxxx/linux/drivers/hid/hid-ezkey.c.
+error: too many errors emitted, stopping now [clang-diagnostic-error]
+error: unknown argument: '-fno-stack-clash-protection' 
+[clang-diagnostic-error]
+error: unknown warning option '-Wno-frame-address'; did you mean 
+'-Wno-address'? [clang-diagnostic-unknown-warning-option]
+error: unknown warning option '-Wno-pointer-to-enum-cast'; did you mean 
+'-Wno-pointer-compare'? [clang-diagnostic-unknown-warning-option]
 
-   In file included from drivers/gpu/drm/i915/i915_gem_gtt.c:296:
->> drivers/gpu/drm/i915/selftests/i915_gem_gtt.c:1146:49: error: implicit conversion from enumeration type 'enum intel_region_id' to different enumeration type 'enum intel_memory_type' [-Werror,-Wenum-conversion]
-                   u64 min_alignment = i915_vm_min_alignment(vm, id);
-                                       ~~~~~~~~~~~~~~~~~~~~~     ^~
-   1 error generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_CS35L41_SPI
-   Depends on SOUND && !UML && SND && SND_SOC && SPI_MASTER
-   Selected by
-   - SND_SOC_AMD_VANGOGH_MACH && SOUND && !UML && SND && SND_SOC && SND_SOC_AMD_ACP5x && I2C
+Unless I did something wrong, this doesn't seem that useful to me 
+compared to what I get from scan-build?
 
-
-vim +1146 drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-
-  1131	
-  1132	static int misaligned_pin(struct i915_address_space *vm,
-  1133				  u64 hole_start, u64 hole_end,
-  1134				  unsigned long end_time)
-  1135	{
-  1136		struct intel_memory_region *mr;
-  1137		enum intel_region_id id;
-  1138		unsigned long flags = PIN_OFFSET_FIXED | PIN_USER;
-  1139		int err = 0;
-  1140		u64 hole_size = hole_end - hole_start;
-  1141	
-  1142		if (i915_is_ggtt(vm))
-  1143			flags |= PIN_GLOBAL;
-  1144	
-  1145		for_each_memory_region(mr, vm->i915, id) {
-> 1146			u64 min_alignment = i915_vm_min_alignment(vm, id);
-  1147			u64 size = min_alignment;
-  1148			u64 addr = round_up(hole_start + (hole_size / 2), min_alignment);
-  1149	
-  1150			/* we can't test < 4k alignment due to flags being encoded in lower bits */
-  1151			if (min_alignment != I915_GTT_PAGE_SIZE_4K) {
-  1152				err = misaligned_case(vm, mr, addr + (min_alignment / 2), size, flags);
-  1153				/* misaligned should error with -EINVAL*/
-  1154				if (!err)
-  1155					err = -EBADSLT;
-  1156				if (err != -EINVAL)
-  1157					return err;
-  1158			}
-  1159	
-  1160			/* test for vma->size expansion to min page size */
-  1161			err = misaligned_case(vm, mr, addr, PAGE_SIZE, flags);
-  1162			if (min_alignment > hole_size) {
-  1163				if (!err)
-  1164					err = -EBADSLT;
-  1165				else if (err == -ENOSPC)
-  1166					err = 0;
-  1167			}
-  1168			if (err)
-  1169				return err;
-  1170	
-  1171			/* test for intermediate size not expanding vma->size for large alignments */
-  1172			err = misaligned_case(vm, mr, addr, size / 2, flags);
-  1173			if (min_alignment > hole_size) {
-  1174				if (!err)
-  1175					err = -EBADSLT;
-  1176				else if (err == -ENOSPC)
-  1177					err = 0;
-  1178			}
-  1179			if (err)
-  1180				return err;
-  1181		}
-  1182	
-  1183		return 0;
-  1184	}
-  1185	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Amadeusz
