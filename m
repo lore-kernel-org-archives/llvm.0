@@ -1,245 +1,208 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24DCF168
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 11:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540452C80
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 13:04:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642764045; x=1674300045;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1u0nHFXfG+BVntQg3FNmo1FKS8s1BanQMwZYnZzKw4k=;
-  b=ZwXtO8gEddu2DqI1zikuxvBRKJ7PI7r7Sq4MlB7m9FVVPAPtANd99/FV
-   MLgzFj/0sGUPzX8a/Mm66an9Rkj0mH8Pyxx5L5Ya6ksRH6f5+Stl82uaK
-   qPV05KyPk/1FsI75cbHPmUz5NQPN/xfUlqDk/3QihGN2I5YJ3WpwjpnHX
-   Z23kTA1KolJOwzNS0ZGTNu28i0Ca3IUmaGuO4CX+5cOBf4H4DYcQQK/Va
-   Vj4bNb9YycWGMBpBp2E8ZB5ARlR7+X0W9k9ibiVhI/oaOehrpzAMH+hbN
-   C9bQhtJTz7a4WwAc5pNWdxlYH1ux++ie+nsw/WCFs+bSFSaud2f1+3o/h
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308962240"
+  t=1642770288; x=1674306288;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1C0k9IhwCqDdYN6Kj6ECxuU5bhHFRYzk9LBYr/DIoQI=;
+  b=Ad3GVBA7mZTxfCd6dnzRY72iV0PjKP5tXSYR06goTp8P20LLAmg8pZ9A
+   RpM7eLgGzmQKXrHvH6ZelhBHYerT6O/KRY+HzLrMMfHoV1r+0BvLFdstO
+   7gHc79jOjMkJN0Oh53I48OcQlyVass3eyF35LLcf1FGEqBzR1sCc6Pwvq
+   5Ukm+e/vcC3JcJYEu/gWCEZblr6F0Ps8DJJHP2AcOUEJun6bpGMQIlgU+
+   tfsgOycHmzXoSrxBHLgmCXGDa0zPMo2+J4P7Bl2SLpiWrCSlxwQpxK0VH
+   EGyYiORgivS08w8QpSB2cxj50+dFhSjUiDCbVKmq5nqSRLdJkTqAtyLfx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331999108"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="308962240"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 03:20:44 -0800
+   d="scan'208";a="331999108"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 05:04:47 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="533236153"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.237.180.112]) ([10.237.180.112])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 03:20:41 -0800
-Message-ID: <5f5bd99e-4bd3-bc88-b6c5-e414a6608a96@linux.intel.com>
-Date: Fri, 21 Jan 2022 12:20:39 +0100
+   d="scan'208";a="475938084"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Jan 2022 05:04:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nAtav-000FJO-2v; Fri, 21 Jan 2022 13:04:45 +0000
+Date: Fri, 21 Jan 2022 21:04:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v3 3/5] powerpc/vdso: Merge vdso64 and vdso32 into a
+ single directory
+Message-ID: <202201212112.bkq4ClWB-lkp@intel.com>
+References: <4dbe05cc130f6a0858d09ac72e436c373cb08b70.1642759506.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] Makefile: Fix build with scan-build
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
- Michal Marek <michal.lkml@markovi.net>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Cezary Rojewski <cezary.rojewski@intel.com>
-References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
- <YeiAa/eCxVZC+QbS@archlinux-ax161> <YeiaAgQ+gbZYTMwD@archlinux-ax161>
-From: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
- <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <YeiaAgQ+gbZYTMwD@archlinux-ax161>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4dbe05cc130f6a0858d09ac72e436c373cb08b70.1642759506.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 1/20/2022 12:08 AM, Nathan Chancellor wrote:
-> On Wed, Jan 19, 2022 at 02:19:39PM -0700, Nathan Chancellor wrote:
->> On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
->>> When building kernel with scan-build for analysis:
->>> $ scan-build make defconfig
->>> $ scan-build make menuconfig # disable RETPOLINE
->>> $ scan-build make -j16 bindeb-pkg
->>> since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
->>> it fails with:
->>>    CC      scripts/mod/empty.o
->>> could not find clang line
->>> make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
->>>
->>> Seems like changes to how -fconserve-stack support was detected broke
->>> build with scan-build. Revert part of mentioned commit which changed
->>> that.
->>>
->>> Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
->>> CC: Nick Desaulniers <ndesaulniers@google.com>
->>> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
->>> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
->>> ---
->>>   Makefile | 4 +---
->>>   1 file changed, 1 insertion(+), 3 deletions(-)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index 765115c99655..1174ccd182f5 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
->>>   KBUILD_CFLAGS  += -fno-stack-check
->>>   
->>>   # conserve stack if available
->>> -ifdef CONFIG_CC_IS_GCC
->>> -KBUILD_CFLAGS   += -fconserve-stack
->>> -endif
->>> +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
->>>   
->>>   # Prohibit date/time macros, which would make the build non-deterministic
->>>   KBUILD_CFLAGS   += -Werror=date-time
->>> -- 
->>> 2.25.1
->>>
->>
->> Okay, I think I understand why this happens...
->>
->> scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
->> code with a compiler [2] then runs clang for the static analyzer [3].
->> The problem is that the default compiler for ccc-analyzer is GCC, which
->> means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
->> but not clang will cause the clang analyzer part of ccc-analyzer to
->> error because ccc-analyzer just passes all '-f' flags along [4].
->>
->> Prior to 7d73c3e9c514, there was no error because cc-option would run
->> the flag against ccc-analyzer, which would error out for the reason I
->> just described, which would prevent the flag from getting added to
->> KBUILD_CFLAGS.
->>
->> Now, -fconserve-stack gets passed along to both gcc and clang but clang
->> does not recognize it and errors out.
->>
->> This should be fixed in clang, which already has the machinery to
->> recognize but ignore GCC flags for compatibility reasons (which is
->> probably how gcc and clang can use the same flags). I have pushed a
->> patch to Phabricator for review:
->>
->> https://reviews.llvm.org/D117717
->>
->> You need to disable CONFIG_RETPOLINE for the same reason but I don't
->> think working around that in clang is as simple.
->>
->> Until that fix can proliferate through distributions and such, this is
->> not an unreasonable workaround (unless Masahiro or Nick have a better
->> idea) but I would really like a comment so that we can revert this once
->> that fix is more widely available (it is unlikely that clang will
->> actually support this option).
->>
->> [1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
->> [2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
->> [3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
->> [4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
-> 
-> Thinking more about this after Fangrui commented on the clang patch
-> above, using scan-build with GCC as the compiler is going to be hard to
-> support, as we are basically trying to support using two different
-> compilers with a unified set of '-f' flags, which I see as problematic
-> for a few reasons.
-> 
-> 1. It restricts our ability to do cc-option cleanups like Nick did.
-> 
-> We should be eliminating cc-option calls that we know are specific to
-> one compiler because checking the Kconfig variables (CONFIG_CC_IS_...)
-> is much cheaper than invoking the compiler.
-> 
-> 2. Necessary GCC specific flags will get dropped.
-> 
-> Adding back the call to cc-option will allow the build to succeed but it
-> drops the flag from KBUILD_CFLAGS. If there were ever a time where an
-> '-f' flag was needed to get a working kernel with GCC, it would not get
-> added because clang would reject it.
-> 
-> We already have a static-analyzer target that requires using CC=clang so
-> I think there is some precedent here to say we require the kernel to be
-> built with clang to use the static analyzer. The fact that it did prior
-> to 7d73c3e9c514 can just be chalked up to luck.
-> 
-> $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
-> 
-> would be the equivalent command to the original patch.
-> 
-> You can still use scan-build with the '--use-cc=clang' flag, which will
-> use clang for the compilation and analysis, if you so prefer.
-> 
-> Masahiro and Nick may have further thoughts and I am open to other
-> opinions but my vote is to say this is an issue we won't fix or
-> workaround.
-> 
-> Cheers,
-> Nathan
+Hi Christophe,
 
+I love your patch! Yet something to improve:
 
-Thank you for detailed explanation. Well I guess question then is: how 
-much scan-build is supported? And if it should even support mixing clang 
-and gcc? Alternatively maybe use clang as default if CC environment 
-variable is not set?
-What I like about scan-build is that it generates html report file.
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-'--use-cc=clang' worked fine for me.
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-vdso-augment-VDSO32-functions-to-support-64-bits-build/20220121-180748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-randconfig-r021-20220120 (https://download.01.org/0day-ci/archive/20220121/202201212112.bkq4ClWB-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/0day-ci/linux/commit/c972dc96e668e5c689a217abaeaba246147a8666
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-vdso-augment-VDSO32-functions-to-support-64-bits-build/20220121-180748
+        git checkout c972dc96e668e5c689a217abaeaba246147a8666
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-I've also tried
- > $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
-although there seems to be no static-analyzer target, I guess you meant 
-clang-analyzer instead, but although it seems to generate a lot of text 
-on terminal, it doesn't seem that useful to me. Not sure if this is 
-expected?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Quoting a piece of log:
-./include/linux/xarray.h:54:2: error: expected '(' after 'asm' 
-[clang-diagnostic-error]
-         WARN_ON((long)v < 0);
-         ^
-./include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
-                 __WARN();                                               \
-                 ^
-./include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
-#define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-                                 ^
-./arch/x86/include/asm/bug.h:79:2: note: expanded from macro '__WARN_FLAGS'
-         _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));           \
-         ^
-./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
-         asm_inline volatile("1:\t" ins "\n"                             \
-         ^
-./include/linux/compiler_types.h:281:24: note: expanded from macro 
-'asm_inline'
-#define asm_inline asm __inline
-                        ^
-./include/linux/xarray.h:1616:2: error: expected '(' after 'asm' 
-[clang-diagnostic-error]
-         BUG_ON(order > 0);
-         ^
-./include/asm-generic/bug.h:65:57: note: expanded from macro 'BUG_ON'
-#define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-                                                         ^
-./arch/x86/include/asm/bug.h:66:2: note: expanded from macro 'BUG'
-         _BUG_FLAGS(ASM_UD2, 0);                                 \
-         ^
-./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
-         asm_inline volatile("1:\t" ins "\n"                             \
-         ^
-./include/linux/compiler_types.h:281:24: note: expanded from macro 
-'asm_inline'
-#define asm_inline asm __inline
-                        ^
-Found compiler error(s).
-21 errors generated.
-Error while processing /home/xxxxxxxx/linux/drivers/hid/hid-ezkey.c.
-error: too many errors emitted, stopping now [clang-diagnostic-error]
-error: unknown argument: '-fno-stack-clash-protection' 
-[clang-diagnostic-error]
-error: unknown warning option '-Wno-frame-address'; did you mean 
-'-Wno-address'? [clang-diagnostic-unknown-warning-option]
-error: unknown warning option '-Wno-pointer-to-enum-cast'; did you mean 
-'-Wno-pointer-compare'? [clang-diagnostic-unknown-warning-option]
+All errors (new ones prefixed by >>):
+
+   arch/powerpc/include/asm/io.h:557:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:198:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:558:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:200:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:559:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:202:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:560:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:204:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:561:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   6 warnings generated.
+>> arch/powerpc/kernel/vdso/gettimeofday.S:75:8: error: unsupported directive '.stabs'
+   .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; _restgpr_31_x:
+          ^
+   arch/powerpc/kernel/vdso/gettimeofday.S:76:8: error: unsupported directive '.stabs'
+   .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32gpr_31_x; _rest32gpr_31_x:
+          ^
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:71: arch/powerpc/kernel/vdso/gettimeofday-32.o] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-Unless I did something wrong, this doesn't seem that useful to me 
-compared to what I get from scan-build?
+vim +75 arch/powerpc/kernel/vdso/gettimeofday.S
 
-Cheers,
-Amadeusz
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  70  
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  71  /* Routines for restoring integer registers, called by the compiler.  */
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  72  /* Called with r11 pointing to the stack header word of the caller of the */
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09  73  /* function, just beyond the end of the integer restore area.  */
+fe1b4be04d2583 arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2022-01-21  74  #ifndef __powerpc64__
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy 2021-03-09 @75  _GLOBAL(_restgpr_31_x)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
