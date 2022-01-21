@@ -1,45 +1,46 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F7229CA
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 06:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1D229CA
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 06:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642747065; x=1674283065;
+  t=1642747659; x=1674283659;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PrB7+txqACOqvxAdRJEN6Ri06z0Sf+hn/heR9Ndq8fo=;
-  b=PLJ8aGfxnIjmNwzLvBvaQoqXf1t1KTo7URsVM1Or67QtB/E7g5zernes
-   OWn8NhbxTjNUmKv500PTmzahz1i8GKG3ayMkDQxEDZD+nyTG+B8O4ZCyo
-   fd2HHxHn/xCsBpJchCo1/Gs+x4zpgB3gROcxEqZzI0jCcH8xCxvYOk47A
-   q0R9KJG8fBFpTaLafg4qkz/hwqlqmla5QSvyW6TNTucPyAjpt2sX0IqZ6
-   /1wfS/ILgksQo1dagWM32T4ogMP6VJptyYMT4UJWHSx7IVHGOrhV8xuS8
-   2DY+Zfstj4jKckdp9fjlzRzsBYLuzxr1ayHzoNLhrEofdCoXUFiFEU6uu
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308911041"
+  bh=2Z2Q5NbDptKHesj9kA2fhmfkV9D++wKqxn0cl9MoG4w=;
+  b=KESEbidaGTnAHH2iIvUsOA9A2hjMPTzO2YYD8lG7FC4rkHXmN2yXSFJJ
+   4guoUtVLPAO6FI5Ow0EIcZQdmy2P+641kv4SuaL2A3f8wCoHAjYMzgkcf
+   2shTaiCBaurO8Cyi45qv1gLhUdp3ZD2Cu/hL/LVUWRUpcZgVzIMK5is5v
+   QM5EsOjPtbkzTgsgYwP1XIK2kp9QhYUFFE+3x0e22l1gUIUXpwNYtWwQi
+   9fjM/K5Bb3LCEPeRw8eH0cHB21sNzXbuaxIZZmh5DWOELHXpOff4I7wMC
+   fp07AHM4DxpQ2qoBiyyJS3wfL73vBYVndQIFhDg5Bmjm9im19tzQqOuNS
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331932269"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="308911041"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:37:38 -0800
+   d="scan'208";a="331932269"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:47:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="616400090"
+   d="scan'208";a="561763638"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2022 22:37:35 -0800
+  by orsmga001.jf.intel.com with ESMTP; 20 Jan 2022 22:47:35 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAnYE-000F0y-Qp; Fri, 21 Jan 2022 06:37:34 +0000
-Date: Fri, 21 Jan 2022 14:36:51 +0800
+	id 1nAnhv-000F1j-0q; Fri, 21 Jan 2022 06:47:35 +0000
+Date: Fri, 21 Jan 2022 14:47:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhenwei pi <pizhenwei@bytedance.com>, mst@redhat.com,
-	arei.gonglei@huawei.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jasowang@redhat.com,
-	virtualization@lists.linux-foundation.org,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	helei.sig11@bytedance.com, zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 3/3] virtio-crypto: implement RSA algorithm
-Message-ID: <202201211427.TgczsUOo-lkp@intel.com>
-References: <20220121022438.1042547-4-pizhenwei@bytedance.com>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, andrew@lunn.ch,
+	hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <202201211407.0fB4ltJZ-lkp@intel.com>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,91 +49,206 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121022438.1042547-4-pizhenwei@bytedance.com>
+In-Reply-To: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi zhenwei,
+Hi Kai-Heng,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master linux/master linus/master v5.16 next-20220121]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16 next-20220121]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: hexagon-randconfig-r026-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211427.TgczsUOo-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
+url:    https://github.com/0day-ci/linux/commits/Kai-Heng-Feng/net-phy-marvell-Honor-phy-LED-set-by-system-firmware-on-a-Dell-hardware/20220120-132020
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1d1df41c5a33359a00e919d54eaebfb789711fdc
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220121/202201211407.0fB4ltJZ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fa1045d13dd16399ab0287c599719a977892cf05
+        # https://github.com/0day-ci/linux/commit/7556c47e56e3c39c1b4ddb5a8171f943b10be919
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
-        git checkout fa1045d13dd16399ab0287c599719a977892cf05
+        git fetch --no-tags linux-review Kai-Heng-Feng/net-phy-marvell-Honor-phy-LED-set-by-system-firmware-on-a-Dell-hardware/20220120-132020
+        git checkout 7556c47e56e3c39c1b4ddb5a8171f943b10be919
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/crypto/virtio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:5: warning: no previous prototype for function 'virtio_crypto_rsa_do_req' [-Wmissing-prototypes]
-   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-       ^
-   drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-   ^
-   static 
+>> drivers/net/phy/phy_device.c:1465:24: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+                   phydev->dev_flags |= (u32)dmi->driver_data;
+                                        ^~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/virtio_crypto_rsa_do_req +276 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
+vim +1465 drivers/net/phy/phy_device.c
 
-   275	
- > 276	int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-   277	{
-   278		struct akcipher_request *req = container_of(vreq, struct akcipher_request, base);
-   279		struct virtio_crypto_akcipher_request *vc_akcipher_req = akcipher_request_ctx(req);
-   280		struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-   281		struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
-   282		struct virtio_crypto *vcrypto = ctx->vcrypto;
-   283		struct data_queue *data_vq = vc_req->dataq;
-   284		struct virtio_crypto_op_header *header;
-   285		struct virtio_crypto_akcipher_data_req *akcipher_req;
-   286		int ret;
-   287	
-   288		vc_req->sgs = NULL;
-   289		vc_req->req_data = kzalloc_node(sizeof(*vc_req->req_data),
-   290			GFP_KERNEL, dev_to_node(&vcrypto->vdev->dev));
-   291		if (!vc_req->req_data)
-   292			return -ENOMEM;
-   293	
-   294		/* build request header */
-   295		header = &vc_req->req_data->header;
-   296		header->opcode = cpu_to_le32(vc_akcipher_req->opcode);
-   297		header->algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-   298		header->session_id = cpu_to_le64(ctx->session_id);
-   299	
-   300		/* build request akcipher data */
-   301		akcipher_req = &vc_req->req_data->u.akcipher_req;
-   302		akcipher_req->para.src_data_len = cpu_to_le32(req->src_len);
-   303		akcipher_req->para.dst_data_len = cpu_to_le32(req->dst_len);
-   304	
-   305		ret = __virtio_crypto_akcipher_do_req(vc_akcipher_req, req, data_vq);
-   306		if (ret < 0) {
-   307			kfree_sensitive(vc_req->req_data);
-   308			vc_req->req_data = NULL;
-   309			return ret;
-   310		}
-   311	
-   312		return 0;
-   313	}
-   314	
+  1360	
+  1361	/**
+  1362	 * phy_attach_direct - attach a network device to a given PHY device pointer
+  1363	 * @dev: network device to attach
+  1364	 * @phydev: Pointer to phy_device to attach
+  1365	 * @flags: PHY device's dev_flags
+  1366	 * @interface: PHY device's interface
+  1367	 *
+  1368	 * Description: Called by drivers to attach to a particular PHY
+  1369	 *     device. The phy_device is found, and properly hooked up
+  1370	 *     to the phy_driver.  If no driver is attached, then a
+  1371	 *     generic driver is used.  The phy_device is given a ptr to
+  1372	 *     the attaching device, and given a callback for link status
+  1373	 *     change.  The phy_device is returned to the attaching driver.
+  1374	 *     This function takes a reference on the phy device.
+  1375	 */
+  1376	int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
+  1377			      u32 flags, phy_interface_t interface)
+  1378	{
+  1379		struct mii_bus *bus = phydev->mdio.bus;
+  1380		struct device *d = &phydev->mdio.dev;
+  1381		struct module *ndev_owner = NULL;
+  1382		const struct dmi_system_id *dmi;
+  1383		bool using_genphy = false;
+  1384		int err;
+  1385	
+  1386		/* For Ethernet device drivers that register their own MDIO bus, we
+  1387		 * will have bus->owner match ndev_mod, so we do not want to increment
+  1388		 * our own module->refcnt here, otherwise we would not be able to
+  1389		 * unload later on.
+  1390		 */
+  1391		if (dev)
+  1392			ndev_owner = dev->dev.parent->driver->owner;
+  1393		if (ndev_owner != bus->owner && !try_module_get(bus->owner)) {
+  1394			phydev_err(phydev, "failed to get the bus module\n");
+  1395			return -EIO;
+  1396		}
+  1397	
+  1398		get_device(d);
+  1399	
+  1400		/* Assume that if there is no driver, that it doesn't
+  1401		 * exist, and we should use the genphy driver.
+  1402		 */
+  1403		if (!d->driver) {
+  1404			if (phydev->is_c45)
+  1405				d->driver = &genphy_c45_driver.mdiodrv.driver;
+  1406			else
+  1407				d->driver = &genphy_driver.mdiodrv.driver;
+  1408	
+  1409			using_genphy = true;
+  1410		}
+  1411	
+  1412		if (!try_module_get(d->driver->owner)) {
+  1413			phydev_err(phydev, "failed to get the device driver module\n");
+  1414			err = -EIO;
+  1415			goto error_put_device;
+  1416		}
+  1417	
+  1418		if (using_genphy) {
+  1419			err = d->driver->probe(d);
+  1420			if (err >= 0)
+  1421				err = device_bind_driver(d);
+  1422	
+  1423			if (err)
+  1424				goto error_module_put;
+  1425		}
+  1426	
+  1427		if (phydev->attached_dev) {
+  1428			dev_err(&dev->dev, "PHY already attached\n");
+  1429			err = -EBUSY;
+  1430			goto error;
+  1431		}
+  1432	
+  1433		phydev->phy_link_change = phy_link_change;
+  1434		if (dev) {
+  1435			phydev->attached_dev = dev;
+  1436			dev->phydev = phydev;
+  1437	
+  1438			if (phydev->sfp_bus_attached)
+  1439				dev->sfp_bus = phydev->sfp_bus;
+  1440			else if (dev->sfp_bus)
+  1441				phydev->is_on_sfp_module = true;
+  1442		}
+  1443	
+  1444		/* Some Ethernet drivers try to connect to a PHY device before
+  1445		 * calling register_netdevice() -> netdev_register_kobject() and
+  1446		 * does the dev->dev.kobj initialization. Here we only check for
+  1447		 * success which indicates that the network device kobject is
+  1448		 * ready. Once we do that we still need to keep track of whether
+  1449		 * links were successfully set up or not for phy_detach() to
+  1450		 * remove them accordingly.
+  1451		 */
+  1452		phydev->sysfs_links = false;
+  1453	
+  1454		phy_sysfs_create_links(phydev);
+  1455	
+  1456		if (!phydev->attached_dev) {
+  1457			err = sysfs_create_file(&phydev->mdio.dev.kobj,
+  1458						&dev_attr_phy_standalone.attr);
+  1459			if (err)
+  1460				phydev_err(phydev, "error creating 'phy_standalone' sysfs entry\n");
+  1461		}
+  1462	
+  1463		dmi = dmi_first_match(platform_flags);
+  1464		if (dmi)
+> 1465			phydev->dev_flags |= (u32)dmi->driver_data;
+  1466	
+  1467		phydev->dev_flags |= flags;
+  1468	
+  1469		phydev->interface = interface;
+  1470	
+  1471		phydev->state = PHY_READY;
+  1472	
+  1473		/* Port is set to PORT_TP by default and the actual PHY driver will set
+  1474		 * it to different value depending on the PHY configuration. If we have
+  1475		 * the generic PHY driver we can't figure it out, thus set the old
+  1476		 * legacy PORT_MII value.
+  1477		 */
+  1478		if (using_genphy)
+  1479			phydev->port = PORT_MII;
+  1480	
+  1481		/* Initial carrier state is off as the phy is about to be
+  1482		 * (re)initialized.
+  1483		 */
+  1484		if (dev)
+  1485			netif_carrier_off(phydev->attached_dev);
+  1486	
+  1487		/* Do initial configuration here, now that
+  1488		 * we have certain key parameters
+  1489		 * (dev_flags and interface)
+  1490		 */
+  1491		err = phy_init_hw(phydev);
+  1492		if (err)
+  1493			goto error;
+  1494	
+  1495		err = phy_disable_interrupts(phydev);
+  1496		if (err)
+  1497			return err;
+  1498	
+  1499		phy_resume(phydev);
+  1500		phy_led_triggers_register(phydev);
+  1501	
+  1502		return err;
+  1503	
+  1504	error:
+  1505		/* phy_detach() does all of the cleanup below */
+  1506		phy_detach(phydev);
+  1507		return err;
+  1508	
+  1509	error_module_put:
+  1510		module_put(d->driver->owner);
+  1511	error_put_device:
+  1512		put_device(d);
+  1513		if (ndev_owner != bus->owner)
+  1514			module_put(bus->owner);
+  1515		return err;
+  1516	}
+  1517	EXPORT_SYMBOL(phy_attach_direct);
+  1518	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
