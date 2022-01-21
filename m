@@ -1,104 +1,222 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C48C2C80
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 14:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF762C80
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 14:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642773967; x=1674309967;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=69sgSZz7lyieU1mkFLPQfUU9GE2k09qc14bQ2+FZAuE=;
-  b=EviG6x9MeFpdhvh5IRR0YRNdcjcmuusouMmf1rKskq8piHPHlQrpu7DU
-   RKWpeoUP9F3wqZYUUcxZQqtr8VcV10JGVaAe8faykfAGMqEsloNTJO19X
-   k9e6u5fl/TQAmjjgX4eRy99EgF+6T+PoAsAJ10GdLPd1aRlDLKCflboL6
-   k1D2sjDxjnThvNj+LM5y8ZeCgbdtFtmFOJ4r1XaXLwcepVhYIkqgF0ZqL
-   4gUIvryL5rVy09LExeMQVkVBvZNIk7mUm5Bga+LCAJoFmEEBavDwJF6hC
-   gGkJiDTdAt+d2P9hJFhlRWVYEa23oY0Mr9L3IhIsrWxXlwnoFmRka9sDK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="243251659"
+  t=1642774612; x=1674310612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vTQH54AYg2pzcg7t+1Zr9OpTMSKBzcFnOwMKSyQjRRY=;
+  b=L4SECBu/9uoDoNOKlOi6lg/6qgcUwK/RHp4VU5FuQMD1rWWbYxghH5r0
+   JWFMfEsXXqzQ7L8elOaRSVDpG3ZrFZKLri2VTVULqN4XkDzO35PtNFRXu
+   hI12aSWIDbwD2WM3SCMd9fOymF1QT4vK5FsaG04MqW8hRr9eorzChmdxi
+   nHI5l7f3pHRGJj+mB/WQPWsJfqG4XTA6rxKP+a19/IZFA17f9ADIiXxnz
+   1juw5zCOljGMYVuBxx9Jku3cuxwiH4JzAGqajnMFQhvKrqWFz/FWyhQxy
+   cFiOvIsotOJPIPwCfkesPgZ3qhfMak3yEBf86QUZNi8JztEsbRE00Fmh+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308987461"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="243251659"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 06:05:49 -0800
+   d="scan'208";a="308987461"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 06:16:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="672951934"
+   d="scan'208";a="533287638"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jan 2022 06:05:48 -0800
+  by orsmga008.jf.intel.com with ESMTP; 21 Jan 2022 06:16:49 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAuXz-000FMH-Vf; Fri, 21 Jan 2022 14:05:47 +0000
-Date: Fri, 21 Jan 2022 22:05:28 +0800
+	id 1nAuie-000FMx-AE; Fri, 21 Jan 2022 14:16:48 +0000
+Date: Fri, 21 Jan 2022 22:15:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"masahiroy@kernel.org" <masahiroy@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/080-wifi 11/39]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c:74:10: warning:
- variable 'len' set but not used
-Message-ID: <202201212104.gFjUBTm8-lkp@intel.com>
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v3 4/5] powerpc/vdso: Remove cvdso_call_time macro
+Message-ID: <202201212229.iBniex24-lkp@intel.com>
+References: <2ddc46d3a6d2996c56547039709e171b0ed2ec46.1642759506.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <2ddc46d3a6d2996c56547039709e171b0ed2ec46.1642759506.git.christophe.leroy@csgroup.eu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   1753101ce16367deadb5ec5ab5dc7ab4894649bf
-commit: cc44c86950084bc3437485288390841cf117c0d1 [11/39] brcmfmac: of: Use devm_kstrdup for board_type & check for errors
-config: x86_64-randconfig-a003-20220117 (https://download.01.org/0day-ci/archive/20220121/202201212104.gFjUBTm8-lkp@intel.com/config)
+Hi Christophe,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-vdso-augment-VDSO32-functions-to-support-64-bits-build/20220121-180748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-randconfig-r021-20220120 (https://download.01.org/0day-ci/archive/20220121/202201212229.iBniex24-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/cc44c86950084bc3437485288390841cf117c0d1
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout cc44c86950084bc3437485288390841cf117c0d1
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/0day-ci/linux/commit/09651dc41aab619a025925ace9f5b81e478e7334
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-vdso-augment-VDSO32-functions-to-support-64-bits-build/20220121-180748
+        git checkout 09651dc41aab619a025925ace9f5b81e478e7334
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c:74:10: warning: variable 'len' set but not used [-Wunused-but-set-variable]
-                   int i, len;
-                          ^
-   1 warning generated.
+   arch/powerpc/include/asm/io.h:557:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:198:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:558:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:200:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:559:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:202:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:560:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:204:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:561:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   6 warnings generated.
+>> arch/powerpc/kernel/vdso/gettimeofday.S:68:2: error: invalid instruction
+    cvdso_call_time __c_kernel_time
+    ^
+   arch/powerpc/kernel/vdso/gettimeofday.S:75:8: error: unsupported directive '.stabs'
+   .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; _restgpr_31_x:
+          ^
+   arch/powerpc/kernel/vdso/gettimeofday.S:76:8: error: unsupported directive '.stabs'
+   .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32gpr_31_x; _rest32gpr_31_x:
+          ^
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:71: arch/powerpc/kernel/vdso/gettimeofday-32.o] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/len +74 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
+vim +68 arch/powerpc/kernel/vdso/gettimeofday.S
 
-1a3ac5c651a0c85 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Shawn Guo        2021-04-17  60  
-e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  61  void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
-e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  62  		    struct brcmf_mp_device *settings)
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  63  {
-e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  64  	struct brcmfmac_sdio_pd *sdio = &settings->bus.sdio;
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  65  	struct device_node *root, *np = dev->of_node;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  66  	int irq;
-1a3ac5c651a0c85 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Shawn Guo        2021-04-17  67  	int err;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  68  	u32 irqf;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  69  	u32 val;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  70  
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  71  	/* Set board-type to the first string of the machine compatible prop */
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  72  	root = of_find_node_by_path("/");
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  73  	if (root) {
-29e354ebeeecaee drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Matthias Brugger 2020-07-01 @74  		int i, len;
-
-:::::: The code at line 74 was first introduced by commit
-:::::: 29e354ebeeecaee979e6fe22cd6272682d7552c9 brcmfmac: Transform compatible string for FW loading
-
-:::::: TO: Matthias Brugger <mbrugger@suse.com>
-:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+a7f290dad32ee3 arch/powerpc/kernel/vdso32/gettimeofday.S Benjamin Herrenschmidt 2005-11-11  59  
+a7f290dad32ee3 arch/powerpc/kernel/vdso32/gettimeofday.S Benjamin Herrenschmidt 2005-11-11  60  
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  61  /*
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  62   * Exact prototype of time()
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  63   *
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  64   * time_t time(time *t);
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  65   *
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  66   */
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  67  V_FUNCTION_BEGIN(__kernel_time)
+ab037dd87a2f94 arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy       2020-11-27 @68  	cvdso_call_time __c_kernel_time
+fcb41a2030abe0 arch/powerpc/kernel/vdso32/gettimeofday.S Adhemerval Zanella     2013-04-22  69  V_FUNCTION_END(__kernel_time)
+08c18b63d9656e arch/powerpc/kernel/vdso32/gettimeofday.S Christophe Leroy       2021-03-09  70  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
