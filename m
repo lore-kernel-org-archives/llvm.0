@@ -1,44 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FBB2C82
-	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 06:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F7229CA
+	for <llvm@lists.linux.dev>; Fri, 21 Jan 2022 06:37:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642746458; x=1674282458;
+  t=1642747065; x=1674283065;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YQMYaqZekK6rqxAXwRluzCH/6citvMVqzHOYp90jFrI=;
-  b=kwo6wcPKsZb5piltxl9qFbuIMBWTKrLRICpeF35al8MOsHZaYcM8MvE5
-   4AKxGvFb1UCkg/3qyEResY2GdiMOOxFepZFIY9jabcnaU/uOtRxvgDbOz
-   k2OMsiA/5vKZLZNeaDMOWvnMd0J3/n4XySc4wwxmIlewXrD1kvN2A0xgQ
-   vTo11Irk5I7Id9LYbsAHFQRFz/amM7Xen3KCYD7HxRJQqX2NdmAKL4Ddg
-   PP5I+PjzZs/SudBx/Ye0gx9SqokoQAtGit7ZG1OpRShyzcpTUt60+8co6
-   cAbFNEt22/wlmbVSCHHhgAJYTcCXp+6069VTlQ6xiqtYWT9irF9SRZdOa
+  bh=PrB7+txqACOqvxAdRJEN6Ri06z0Sf+hn/heR9Ndq8fo=;
+  b=PLJ8aGfxnIjmNwzLvBvaQoqXf1t1KTo7URsVM1Or67QtB/E7g5zernes
+   OWn8NhbxTjNUmKv500PTmzahz1i8GKG3ayMkDQxEDZD+nyTG+B8O4ZCyo
+   fd2HHxHn/xCsBpJchCo1/Gs+x4zpgB3gROcxEqZzI0jCcH8xCxvYOk47A
+   q0R9KJG8fBFpTaLafg4qkz/hwqlqmla5QSvyW6TNTucPyAjpt2sX0IqZ6
+   /1wfS/ILgksQo1dagWM32T4ogMP6VJptyYMT4UJWHSx7IVHGOrhV8xuS8
+   2DY+Zfstj4jKckdp9fjlzRzsBYLuzxr1ayHzoNLhrEofdCoXUFiFEU6uu
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245797306"
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308911041"
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="245797306"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:27:37 -0800
+   d="scan'208";a="308911041"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:37:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="765609208"
+   d="scan'208";a="616400090"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Jan 2022 22:27:34 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2022 22:37:35 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nAnOX-000F0B-Qk; Fri, 21 Jan 2022 06:27:33 +0000
-Date: Fri, 21 Jan 2022 14:26:32 +0800
+	id 1nAnYE-000F0y-Qp; Fri, 21 Jan 2022 06:37:34 +0000
+Date: Fri, 21 Jan 2022 14:36:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: ycaibb <ycaibb@gmail.com>, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-	dsahern@kernel.org, kuba@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-	songliubraving@fb.com, yhs@fb.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] inet: missing lock releases in udp.c
-Message-ID: <202201211410.CFe494On-lkp@intel.com>
-References: <20220121031553.5342-1-ycaibb@gmail.com>
+To: zhenwei pi <pizhenwei@bytedance.com>, mst@redhat.com,
+	arei.gonglei@huawei.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jasowang@redhat.com,
+	virtualization@lists.linux-foundation.org,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	helei.sig11@bytedance.com, zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 3/3] virtio-crypto: implement RSA algorithm
+Message-ID: <202201211427.TgczsUOo-lkp@intel.com>
+References: <20220121022438.1042547-4-pizhenwei@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,88 +48,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121031553.5342-1-ycaibb@gmail.com>
+In-Reply-To: <20220121022438.1042547-4-pizhenwei@bytedance.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi ycaibb,
+Hi zhenwei,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master horms-ipvs/master linus/master v5.16 next-20220121]
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master linux/master linus/master v5.16 next-20220121]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/ycaibb/inet-missing-lock-releases-in-udp-c/20220121-111922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
-config: mips-cu1000-neo_defconfig (https://download.01.org/0day-ci/archive/20220121/202201211410.CFe494On-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: hexagon-randconfig-r026-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211427.TgczsUOo-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/1b84613d303e1496ea759aa171b7b36dfd8f26c3
+        # https://github.com/0day-ci/linux/commit/fa1045d13dd16399ab0287c599719a977892cf05
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review ycaibb/inet-missing-lock-releases-in-udp-c/20220121-111922
-        git checkout 1b84613d303e1496ea759aa171b7b36dfd8f26c3
+        git fetch --no-tags linux-review zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
+        git checkout fa1045d13dd16399ab0287c599719a977892cf05
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/crypto/virtio/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/ipv4/udp.c:2979:5: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-                                   goto found;
-                                   ^
-   net/ipv4/udp.c:2976:4: note: previous statement is here
-                           if (afinfo->family == AF_UNSPEC ||
-                           ^
+>> drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:5: warning: no previous prototype for function 'virtio_crypto_rsa_do_req' [-Wmissing-prototypes]
+   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
+       ^
+   drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
+   ^
+   static 
    1 warning generated.
 
 
-vim +/if +2979 net/ipv4/udp.c
+vim +/virtio_crypto_rsa_do_req +276 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
 
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2952  
-645ca708f936b2f Eric Dumazet      2008-10-29  2953  static struct sock *udp_get_first(struct seq_file *seq, int start)
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2954  {
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2955  	struct sock *sk;
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2956  	struct udp_seq_afinfo *afinfo;
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2957  	struct udp_iter_state *state = seq->private;
-6f191efe48af62d Denis V. Lunev    2008-03-28  2958  	struct net *net = seq_file_net(seq);
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2959  
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2960  	if (state->bpf_seq_afinfo)
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2961  		afinfo = state->bpf_seq_afinfo;
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2962  	else
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2963  		afinfo = PDE_DATA(file_inode(seq->file));
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2964  
-a3d2599b24462c7 Christoph Hellwig 2018-04-10  2965  	for (state->bucket = start; state->bucket <= afinfo->udp_table->mask;
-f86dcc5aa8c7908 Eric Dumazet      2009-10-07  2966  	     ++state->bucket) {
-a3d2599b24462c7 Christoph Hellwig 2018-04-10  2967  		struct udp_hslot *hslot = &afinfo->udp_table->hash[state->bucket];
-f86dcc5aa8c7908 Eric Dumazet      2009-10-07  2968  
-ca065d0cf80fa54 Eric Dumazet      2016-04-01  2969  		if (hlist_empty(&hslot->head))
-f86dcc5aa8c7908 Eric Dumazet      2009-10-07  2970  			continue;
-f86dcc5aa8c7908 Eric Dumazet      2009-10-07  2971  
-645ca708f936b2f Eric Dumazet      2008-10-29  2972  		spin_lock_bh(&hslot->lock);
-ca065d0cf80fa54 Eric Dumazet      2016-04-01  2973  		sk_for_each(sk, &hslot->head) {
-878628fbf2589eb YOSHIFUJI Hideaki 2008-03-26  2974  			if (!net_eq(sock_net(sk), net))
-a91275eff43a527 Daniel Lezcano    2008-03-21  2975  				continue;
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2976  			if (afinfo->family == AF_UNSPEC ||
-9e8ca27afab6c92 Yonghong Song     2020-06-23  2977  			    sk->sk_family == afinfo->family)
-1b84613d303e149 Ryan Cai          2022-01-21  2978  				spin_unlock_bh(&hslot->lock);
-^1da177e4c3f415 Linus Torvalds    2005-04-16 @2979  				goto found;
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2980  		}
-645ca708f936b2f Eric Dumazet      2008-10-29  2981  		spin_unlock_bh(&hslot->lock);
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2982  	}
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2983  	sk = NULL;
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2984  found:
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2985  	return sk;
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2986  }
-^1da177e4c3f415 Linus Torvalds    2005-04-16  2987  
+   275	
+ > 276	int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
+   277	{
+   278		struct akcipher_request *req = container_of(vreq, struct akcipher_request, base);
+   279		struct virtio_crypto_akcipher_request *vc_akcipher_req = akcipher_request_ctx(req);
+   280		struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
+   281		struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
+   282		struct virtio_crypto *vcrypto = ctx->vcrypto;
+   283		struct data_queue *data_vq = vc_req->dataq;
+   284		struct virtio_crypto_op_header *header;
+   285		struct virtio_crypto_akcipher_data_req *akcipher_req;
+   286		int ret;
+   287	
+   288		vc_req->sgs = NULL;
+   289		vc_req->req_data = kzalloc_node(sizeof(*vc_req->req_data),
+   290			GFP_KERNEL, dev_to_node(&vcrypto->vdev->dev));
+   291		if (!vc_req->req_data)
+   292			return -ENOMEM;
+   293	
+   294		/* build request header */
+   295		header = &vc_req->req_data->header;
+   296		header->opcode = cpu_to_le32(vc_akcipher_req->opcode);
+   297		header->algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
+   298		header->session_id = cpu_to_le64(ctx->session_id);
+   299	
+   300		/* build request akcipher data */
+   301		akcipher_req = &vc_req->req_data->u.akcipher_req;
+   302		akcipher_req->para.src_data_len = cpu_to_le32(req->src_len);
+   303		akcipher_req->para.dst_data_len = cpu_to_le32(req->dst_len);
+   304	
+   305		ret = __virtio_crypto_akcipher_do_req(vc_akcipher_req, req, data_vq);
+   306		if (ret < 0) {
+   307			kfree_sensitive(vc_req->req_data);
+   308			vc_req->req_data = NULL;
+   309			return ret;
+   310		}
+   311	
+   312		return 0;
+   313	}
+   314	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
