@@ -1,41 +1,50 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09738173
-	for <llvm@lists.linux.dev>; Sat, 22 Jan 2022 10:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30792168
+	for <llvm@lists.linux.dev>; Sat, 22 Jan 2022 10:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642847076; x=1674383076;
+  t=1642848278; x=1674384278;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WvE2CnsRiJUJrpU9vwIhU471o/ysBDGjJVQN/FzNE4E=;
-  b=NBI9XtK8RdxX18ewKNt1VM+gyksUkDvYpy1uR8ay4QRU94qvxBz8dAEw
-   E6FOaPycWgQ6KqFjl66oeOklVQjEj2+RjFJ0pDmDPNJojQ2AVgDMQZc7J
-   SX4O/tWILtlxYzRXGGOTa13K+pbQSiK9lXMqk02JMwtXfgytcVv41vjIB
-   DPesL+smzyfsAWhI3Pj3/TBWU2uIsXX2xpVDSmQARO9/zU6g6A77GrZkS
-   KOIawRp3o8NqadaacpqIRGEHwMibId4U/uzAI+ARz3t4r3ft9AgNhduuA
-   hw+f7sWNADxfrePErCSqW7XzVKpRmC/48RHu2FmHP5dPDQWxSCaYpoU6s
+  bh=+QvsIxeGcYkl/A1U5Osq5yeMqcCLUOrLGPqPG8HZ4+E=;
+  b=mYu8Ja1JkPpSFZNwwFbBGY/r9ugsgK0AT9XX/0omMed78S/h2e7aEhzO
+   guOUioF+oEPNPctWKTGLYfE2pLSVWNGiB/s6D5dD00eRpKnVzaoBB8MHc
+   3tkwqyDlc5szZRFiD5vM0+RGT7KCcRTl8P/1VO3t7YDXJaitTsp5a4gJz
+   9kQcbSnwC6E0pfjLSM/Ssy3ifWP3ud8W40btXeBfWJW9sY+hiFV7HGR/g
+   ezOiTzo/RUKI9z4O76a8Eo3PW/mOdPka+HkyaXBuA/0BkHpy60BAdlwYG
+   w0KOyNm5s+1uFc/f4KLthb1+tPeG8hpx/MRx76KfYixP/6GXHEmuy2hs8
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="246030399"
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="309138718"
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="246030399"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 02:24:35 -0800
+   d="scan'208";a="309138718"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 02:44:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="494118899"
+   d="scan'208";a="579872984"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Jan 2022 02:24:33 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jan 2022 02:44:34 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nBDZQ-000GIh-KC; Sat, 22 Jan 2022 10:24:32 +0000
-Date: Sat, 22 Jan 2022 18:23:53 +0800
+	id 1nBDsn-000GJM-SW; Sat, 22 Jan 2022 10:44:33 +0000
+Date: Sat, 22 Jan 2022 18:44:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Claudius Heine <ch@denx.de>
+To: Quinn Tran <qutran@marvell.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: sound/soc/codecs/tlv320aic32x4.c:1202:18: warning: cast to smaller
- integer type 'enum aic32x4_type' from 'void *'
-Message-ID: <202201221803.QYOgJpDv-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Hannes Reinecke <hare@suse.de>,
+	Himanshu Madhani <himanshu.madhani@oracle.com>,
+	Larry Wisneski <Larry.Wisneski@marvell.com>,
+	Duane Grigsby <duane.grigsby@marvell.com>,
+	Rick Hicksted Jr <rhicksted@marvell.com>,
+	Nilesh Javali <njavali@marvell.com>
+Subject: drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid
+ within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is
+ usually due to 'struct app_pinfo_req' being packed, which can lead to
+ unaligned accesses
+Message-ID: <202201221855.aplqWaqk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,124 +55,60 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Claudius,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   9b57f458985742bd1c585f4c7f36d04634ce1143
-commit: 688d47cdd9344b1485eb28c2a7aa99743ed529a3 ASoC: tlv320aic32x4: add type to device private data struct
-date:   7 months ago
-config: x86_64-randconfig-a005-20211116 (https://download.01.org/0day-ci/archive/20220122/202201221803.QYOgJpDv-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+commit: 7878f22a2e03b69baf792f74488962981a1c9547 scsi: qla2xxx: edif: Add getfcinfo and statistic bsgs
+date:   6 months ago
+config: arm-randconfig-r036-20220122 (https://download.01.org/0day-ci/archive/20220122/202201221855.aplqWaqk-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=688d47cdd9344b1485eb28c2a7aa99743ed529a3
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7878f22a2e03b69baf792f74488962981a1c9547
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 688d47cdd9344b1485eb28c2a7aa99743ed529a3
+        git checkout 7878f22a2e03b69baf792f74488962981a1c9547
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vdso/ arch/x86/lib/ arch/x86/platform/pvh/ drivers/acpi/ kernel/bpf/ sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> sound/soc/codecs/tlv320aic32x4.c:1202:18: warning: cast to smaller integer type 'enum aic32x4_type' from 'void *' [-Wvoid-pointer-to-enum-cast]
-           aic32x4->type = (enum aic32x4_type)dev_get_drvdata(dev);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
+   In file included from drivers/scsi/qla2xxx/qla_def.h:34:
+   include/uapi/scsi/scsi_bsg_fc.h:280:4: warning: field rqst_data within 'struct fc_bsg_request' is less aligned than 'union (unnamed union at include/uapi/scsi/scsi_bsg_fc.h:271:2)' and is usually due to 'struct fc_bsg_request' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rqst_data;
+             ^
+   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
+   In file included from drivers/scsi/qla2xxx/qla_def.h:74:
+   In file included from drivers/scsi/qla2xxx/qla_bsg.h:298:
+>> drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is usually due to 'struct app_pinfo_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           port_id_t remote_pid;
+                     ^
+   2 warnings generated.
 
 
-vim +1202 sound/soc/codecs/tlv320aic32x4.c
+vim +93 drivers/scsi/qla2xxx/qla_edif_bsg.h
 
-  1185	
-  1186	int aic32x4_probe(struct device *dev, struct regmap *regmap)
-  1187	{
-  1188		struct aic32x4_priv *aic32x4;
-  1189		struct aic32x4_pdata *pdata = dev->platform_data;
-  1190		struct device_node *np = dev->of_node;
-  1191		int ret;
-  1192	
-  1193		if (IS_ERR(regmap))
-  1194			return PTR_ERR(regmap);
-  1195	
-  1196		aic32x4 = devm_kzalloc(dev, sizeof(struct aic32x4_priv),
-  1197					   GFP_KERNEL);
-  1198		if (aic32x4 == NULL)
-  1199			return -ENOMEM;
-  1200	
-  1201		aic32x4->dev = dev;
-> 1202		aic32x4->type = (enum aic32x4_type)dev_get_drvdata(dev);
-  1203	
-  1204		dev_set_drvdata(dev, aic32x4);
-  1205	
-  1206		if (pdata) {
-  1207			aic32x4->power_cfg = pdata->power_cfg;
-  1208			aic32x4->swapdacs = pdata->swapdacs;
-  1209			aic32x4->micpga_routing = pdata->micpga_routing;
-  1210			aic32x4->rstn_gpio = pdata->rstn_gpio;
-  1211			aic32x4->mclk_name = "mclk";
-  1212		} else if (np) {
-  1213			ret = aic32x4_parse_dt(aic32x4, np);
-  1214			if (ret) {
-  1215				dev_err(dev, "Failed to parse DT node\n");
-  1216				return ret;
-  1217			}
-  1218		} else {
-  1219			aic32x4->power_cfg = 0;
-  1220			aic32x4->swapdacs = false;
-  1221			aic32x4->micpga_routing = 0;
-  1222			aic32x4->rstn_gpio = -1;
-  1223			aic32x4->mclk_name = "mclk";
-  1224		}
-  1225	
-  1226		if (gpio_is_valid(aic32x4->rstn_gpio)) {
-  1227			ret = devm_gpio_request_one(dev, aic32x4->rstn_gpio,
-  1228					GPIOF_OUT_INIT_LOW, "tlv320aic32x4 rstn");
-  1229			if (ret != 0)
-  1230				return ret;
-  1231		}
-  1232	
-  1233		ret = aic32x4_setup_regulators(dev, aic32x4);
-  1234		if (ret) {
-  1235			dev_err(dev, "Failed to setup regulators\n");
-  1236			return ret;
-  1237		}
-  1238	
-  1239		if (gpio_is_valid(aic32x4->rstn_gpio)) {
-  1240			ndelay(10);
-  1241			gpio_set_value_cansleep(aic32x4->rstn_gpio, 1);
-  1242			mdelay(1);
-  1243		}
-  1244	
-  1245		ret = regmap_write(regmap, AIC32X4_RESET, 0x01);
-  1246		if (ret)
-  1247			goto err_disable_regulators;
-  1248	
-  1249		ret = aic32x4_register_clocks(dev, aic32x4->mclk_name);
-  1250		if (ret)
-  1251			goto err_disable_regulators;
-  1252	
-  1253		ret = devm_snd_soc_register_component(dev,
-  1254				&soc_component_dev_aic32x4, &aic32x4_dai, 1);
-  1255		if (ret) {
-  1256			dev_err(dev, "Failed to register component\n");
-  1257			goto err_disable_regulators;
-  1258		}
-  1259	
-  1260		return 0;
-  1261	
-  1262	err_disable_regulators:
-  1263		aic32x4_disable_regulators(aic32x4);
-  1264	
-  1265		return ret;
-  1266	}
-  1267	EXPORT_SYMBOL(aic32x4_probe);
-  1268	
+7ebb336e45ef1c Quinn Tran 2021-06-23  89  
+7ebb336e45ef1c Quinn Tran 2021-06-23  90  struct app_pinfo_req {
+7ebb336e45ef1c Quinn Tran 2021-06-23  91  	struct app_id app_info;
+7ebb336e45ef1c Quinn Tran 2021-06-23  92  	uint8_t	 num_ports;
+7ebb336e45ef1c Quinn Tran 2021-06-23 @93  	port_id_t remote_pid;
+7ebb336e45ef1c Quinn Tran 2021-06-23  94  	uint8_t	 reserved[VND_CMD_APP_RESERVED_SIZE];
+7ebb336e45ef1c Quinn Tran 2021-06-23  95  } __packed;
+7ebb336e45ef1c Quinn Tran 2021-06-23  96  
+
+:::::: The code at line 93 was first introduced by commit
+:::::: 7ebb336e45ef1ce23462c3bbd03779929008901f scsi: qla2xxx: edif: Add start + stop bsgs
+
+:::::: TO: Quinn Tran <qutran@marvell.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
