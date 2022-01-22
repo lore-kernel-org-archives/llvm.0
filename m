@@ -1,34 +1,34 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE43429CA
-	for <llvm@lists.linux.dev>; Sat, 22 Jan 2022 15:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A696D2CA7
+	for <llvm@lists.linux.dev>; Sat, 22 Jan 2022 15:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642864545; x=1674400545;
+  t=1642866405; x=1674402405;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y64DV0fpvypyUXq8xjG5o5VCjdZ5CkiIjSBGB0PigBY=;
-  b=OVA8AElMHVwsin/MBqxi5+VLRUgwXuSuUwQOQZLoOUGqaVqTIobEa0+9
-   NpQdWNhKKWeM016KGQlJdLc4ag+vx9p1eQK5bI2BUsVAIAice4U/F8IR9
-   q1NKzcOX+SLwGOgEuOs3lLmAbNdAvEIQa7C9whPF/2W0iyjqiHn/ufiWD
-   VRK5uIcKesYFrKJx2Dj59u5Cdqg22tK8aJCx98pH14yMbaIcD2/07jZUZ
-   uXTjrFUuRXOfrnQe2/5aKBxKqi08jYQkyzM0klU7l+wd1QkSzHy7YorKj
-   4aY3ryJmB59T7tEjy4JwxIhUuS1ZbDn9WUmI69xhLYW7QNc8/+fFjdNL/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="246047188"
+  bh=3fQYjG67Q8nFzNITh6l5ntrDGpTwyY1xfN+uUa/j/Ps=;
+  b=L8yv3ASjf5tijqeJrkDoFPdAtPW88oGBCBupmLazY1EdoQhZ0bB/6Uwa
+   D+c++U2Z0WsUZXLyaHMXNo4mM11/izMy5F+vN3ePrmmKAGby/MFVtB1gi
+   k7ahuMkSO5Zlg77Fs66N6LQafv3mPDpKfuG3yrX6GFygh5dFiSeyXSYT9
+   tSpN0nl1QCYh5JraBMVaDMQoubu8EZuAb5TgjKMOdW16Vht3cZR/rrOyE
+   JGOfoUpMEgUKTGKxgcQB1MrLSUpm0rrz1YxNfHamuTqL4XGNUgl/Q+WXp
+   ZMX3gNNRd4vmBVsH0Cg3V8vsoW/ZEDsq3YTQ3oyFDKEKCfYgyAjsuIT00
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="226505584"
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="246047188"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 07:15:45 -0800
+   d="scan'208";a="226505584"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 07:46:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="478565276"
+   d="scan'208";a="476265484"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jan 2022 07:15:42 -0800
+  by orsmga003.jf.intel.com with ESMTP; 22 Jan 2022 07:46:42 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nBI7B-000GWz-7Y; Sat, 22 Jan 2022 15:15:41 +0000
-Date: Sat, 22 Jan 2022 23:15:39 +0800
+	id 1nBIbB-000GYF-PT; Sat, 22 Jan 2022 15:46:41 +0000
+Date: Sat, 22 Jan 2022 23:46:20 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dan Williams <dan.j.williams@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -38,9 +38,9 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Ben Widawsky <ben.widawsky@intel.com>,
 	Dan Williams <dan.j.williams@intel.com>,
 	linux-kernel@vger.kernel.org
-Subject: [cxl:preview 34/53] drivers/cxl/cxl.h:285:17: warning: declaration
- of 'struct pci_bus' will not be visible outside of this function
-Message-ID: <202201222345.9wJm6Bcm-lkp@intel.com>
+Subject: [cxl:preview 34/53] drivers/cxl/core/pci.c:48:31: error: use of
+ undeclared identifier 'CXL_REGLOC_RBI_COMPONENT'
+Message-ID: <202201222342.XT0vW1nO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,65 +54,97 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
 head:   e675fabdbbcdb6e32dba688a20fb0bd42e0e2d5d
 commit: 2b7a34a480122fb652df99554f6d59c5d9f3ef24 [34/53] cxl/core: Generalize dport enumeration in the core
-config: riscv-randconfig-r042-20220122 (https://download.01.org/0day-ci/archive/20220122/202201222345.9wJm6Bcm-lkp@intel.com/config)
+config: mips-randconfig-c004-20220120 (https://download.01.org/0day-ci/archive/20220122/202201222342.XT0vW1nO-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
         # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=2b7a34a480122fb652df99554f6d59c5d9f3ef24
         git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
         git fetch --no-tags cxl preview
         git checkout 2b7a34a480122fb652df99554f6d59c5d9f3ef24
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/cxl/core/pmem.c:6:
-   In file included from drivers/cxl/cxlmem.h:7:
->> drivers/cxl/cxl.h:285:17: warning: declaration of 'struct pci_bus' will not be visible outside of this function [-Wvisibility]
-                                 struct pci_bus *bus);
+>> drivers/cxl/core/pci.c:48:31: error: use of undeclared identifier 'CXL_REGLOC_RBI_COMPONENT'
+           rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
                                         ^
-   1 warning generated.
+>> drivers/cxl/core/pci.c:55:8: error: implicit declaration of function 'cxl_regmap_to_base' [-Werror,-Wimplicit-function-declaration]
+                                      cxl_regmap_to_base(pdev, &map));
+                                      ^
+>> drivers/cxl/core/pci.c:76:5: warning: no previous prototype for function 'devm_cxl_port_enumerate_dports' [-Wmissing-prototypes]
+   int devm_cxl_port_enumerate_dports(struct device *host, struct cxl_port *port)
+       ^
+   drivers/cxl/core/pci.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_cxl_port_enumerate_dports(struct device *host, struct cxl_port *port)
+   ^
+   static 
+   1 warning and 2 errors generated.
 
 
-vim +285 drivers/cxl/cxl.h
+vim +/CXL_REGLOC_RBI_COMPONENT +48 drivers/cxl/core/pci.c
 
-24be641caabe25 Ben Widawsky 2021-12-01  281  
-42c377a63d21df Dan Williams 2022-01-05  282  bool is_cxl_port(struct device *dev);
-4812be97c015bd Dan Williams 2021-06-09  283  struct cxl_port *to_cxl_port(struct device *dev);
-7237f27228ec66 Dan Williams 2022-01-18  284  int devm_cxl_register_pci_bus(struct device *host, struct device *uport,
-7237f27228ec66 Dan Williams 2022-01-18 @285  			      struct pci_bus *bus);
-7237f27228ec66 Dan Williams 2022-01-18  286  struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port);
-4812be97c015bd Dan Williams 2021-06-09  287  struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
-4812be97c015bd Dan Williams 2021-06-09  288  				   resource_size_t component_reg_phys,
-4812be97c015bd Dan Williams 2021-06-09  289  				   struct cxl_port *parent_port);
-3c39e157b25e0c Dan Williams 2022-01-18  290  struct cxl_port *find_cxl_root(struct device *dev);
-2b7a34a480122f Dan Williams 2022-01-18  291  struct cxl_dport *devm_cxl_add_dport(struct device *host, struct cxl_port *port,
-2b7a34a480122f Dan Williams 2022-01-18  292  				     struct device *dport, int port_id,
-2b7a34a480122f Dan Williams 2022-01-18  293  				     resource_size_t component_reg_phys);
-40ba17afdfabb0 Dan Williams 2021-06-09  294  struct cxl_decoder *to_cxl_decoder(struct device *dev);
-8fdcb1704f61a8 Dan Williams 2021-06-15  295  bool is_root_decoder(struct device *dev);
-42c377a63d21df Dan Williams 2022-01-05  296  bool is_cxl_decoder(struct device *dev);
-24be641caabe25 Ben Widawsky 2021-12-01  297  struct cxl_decoder *cxl_root_decoder_alloc(struct cxl_port *port,
-24be641caabe25 Ben Widawsky 2021-12-01  298  					   unsigned int nr_targets);
-24be641caabe25 Ben Widawsky 2021-12-01  299  struct cxl_decoder *cxl_switch_decoder_alloc(struct cxl_port *port,
-24be641caabe25 Ben Widawsky 2021-12-01  300  					     unsigned int nr_targets);
-48667f676189ec Dan Williams 2021-09-21  301  int cxl_decoder_add(struct cxl_decoder *cxld, int *target_map);
-48667f676189ec Dan Williams 2021-09-21  302  int cxl_decoder_autoremove(struct device *host, struct cxl_decoder *cxld);
-40ba17afdfabb0 Dan Williams 2021-06-09  303  
-
-:::::: The code at line 285 was first introduced by commit
-:::::: 7237f27228ec660f73924f38e553e1d2b2ff65c4 cxl/port: Introduce cxl_port_to_pci_bus()
-
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Dan Williams <dan.j.williams@intel.com>
+    24	
+    25	static int match_add_dports(struct pci_dev *pdev, void *data)
+    26	{
+    27		struct cxl_walk_context *ctx = data;
+    28		struct cxl_port *port = ctx->port;
+    29		struct device *host = ctx->host;
+    30		struct pci_bus *bus = ctx->bus;
+    31		int type = pci_pcie_type(pdev);
+    32		struct cxl_register_map map;
+    33		int match_type = ctx->type;
+    34		struct cxl_dport *dport;
+    35		u32 lnkcap, port_num;
+    36		int rc;
+    37	
+    38		if (pdev->bus != bus)
+    39			return 0;
+    40		if (!pci_is_pcie(pdev))
+    41			return 0;
+    42		if (type != match_type)
+    43			return 0;
+    44		if (pci_read_config_dword(pdev, pci_pcie_cap(pdev) + PCI_EXP_LNKCAP,
+    45					  &lnkcap) != PCIBIOS_SUCCESSFUL)
+    46			return 0;
+    47	
+  > 48		rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
+    49		if (rc)
+    50			dev_dbg(&port->dev, "failed to find component registers\n");
+    51	
+    52		port_num = FIELD_GET(PCI_EXP_LNKCAP_PN, lnkcap);
+    53		cxl_device_lock(&port->dev);
+    54		dport = devm_cxl_add_dport(host, port, &pdev->dev, port_num,
+  > 55					   cxl_regmap_to_base(pdev, &map));
+    56		cxl_device_unlock(&port->dev);
+    57		if (IS_ERR(dport)) {
+    58			ctx->error = PTR_ERR(dport);
+    59			return PTR_ERR(dport);
+    60		}
+    61		ctx->count++;
+    62	
+    63		dev_dbg(&port->dev, "add dport%d: %s\n", port_num, dev_name(&pdev->dev));
+    64	
+    65		return 0;
+    66	}
+    67	
+    68	/**
+    69	 * devm_cxl_port_enumerate_dports - enumerate downstream ports of the upstream port
+    70	 * @host: devm context
+    71	 * @port: cxl_port whose ->uport is the upstream of dports to be enumerated
+    72	 *
+    73	 * Returns a positive number of dports enumerated or a negative error
+    74	 * code.
+    75	 */
+  > 76	int devm_cxl_port_enumerate_dports(struct device *host, struct cxl_port *port)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
