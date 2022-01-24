@@ -1,35 +1,35 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8712CA7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EF52CA8
 	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 22:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643063113; x=1674599113;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gs5uFgkarw9TrpxSXanR98HstBe7M+jbd4pZwSe/TDA=;
-  b=VdWT0AUzMikZIGTEhF1+d4nt9Iy5Xw3bRC8BTx0QGvkYmukwgi5bSqMQ
-   Q/X4jHAgVsVRxu8d7e5h15CrCTMkB8nDG3kktCdiVfAeorVX7IKjRDsmK
-   jBCM9ATBU7Xj71DicFMFnzk24Cqz4Jez5oZlmfv5YP/RleO4aGgJX6Iq7
-   ipnVBOQXKYkI8kba83jA68K7E6EE3VVQLCQFjJ2L6ETVk77+moJKIMq3a
-   5QJ0TIEuhLwUFtiG66HRjNL0JTCkTF+TNIPDW5DuqDkvDiPQzZhpbT0R0
-   NylQQ2i2yODDKJ3Y902gR/a+pBwsL8PnlaGRR0FXQVDGzSNKeQ57Rn3yg
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="309481659"
+  bh=eThUF4pkPELvLwLaXV2tV81aUqgFxt2NJFDyVuk8E9o=;
+  b=ZgKmWW3icpHfl7avIJKehmE5SVqk7+gUGKBYaDJKRNIt1ZabSLq/QCdu
+   o0bqKpWLt2tYCMXb4vNZz72bDCigYtQAZzXvq+VS4jlPs52v8X/6nGoxa
+   igYNREOUT9YcrvmBcpzgS8ImlVmyUeGkQFZth+Iess8VSPt3UQ0761UK7
+   hr5TMU0Dv/KeELFzYGSGm9MqH7z10bhq94fj+7MHDgCisQGL2ZGBQpIRs
+   vy7j7tqV+u7G71M2eXpR9NYd4h+aOGGO1pNdGqgZQW8/qWClGNY1zJS7J
+   1EpxySAqoq1JCE+BJZrNWKlje+wVbgF6YPW88b3dAWv8Ql4o/ZKSf/Pu/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="306877363"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="309481659"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:25:12 -0800
+   d="scan'208";a="306877363"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:25:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="627671702"
+   d="scan'208";a="673775609"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 14:25:10 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2022 14:25:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nC7lt-000J0O-QV; Mon, 24 Jan 2022 22:25:09 +0000
-Date: Tue, 25 Jan 2022 06:24:44 +0800
+	id 1nC7lu-000J0g-03; Mon, 24 Jan 2022 22:25:10 +0000
+Date: Tue, 25 Jan 2022 06:24:41 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jeffrey Ji <jeffreyjilinux@gmail.com>,
 	Eric Dumazet <edumazet@google.com>,
@@ -39,7 +39,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	netdev@vger.kernel.org, jeffreyjilinux@gmail.com,
 	jeffreyji <jeffreyji@google.com>
 Subject: Re: [PATCH net-next] net-core: add InMacErrors counter
-Message-ID: <202201250449.tTXEfxm8-lkp@intel.com>
+Message-ID: <202201250416.QEl2tmqY-lkp@intel.com>
 References: <20220122000301.1872828-1-jeffreyji@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,20 +60,18 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/0day-ci/linux/commits/Jeffrey-Ji/net-core-add-InMacErrors-counter/20220122-080455
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
-config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20220125/202201250449.tTXEfxm8-lkp@intel.com/config)
+config: x86_64-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220125/202201250416.QEl2tmqY-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
         # https://github.com/0day-ci/linux/commit/f8ea346d278c116f830459bae2a910fdc5e96a35
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Jeffrey-Ji/net-core-add-InMacErrors-counter/20220122-080455
         git checkout f8ea346d278c116f830459bae2a910fdc5e96a35
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv6/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/ipv6/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
