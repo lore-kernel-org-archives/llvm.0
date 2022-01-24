@@ -1,41 +1,46 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15612CA7
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 22:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8712CA7
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 22:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643063056; x=1674599056;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3N1rOH/n5U+DV/i45Ypybc1hX3etL99kR0C3wf0uhE8=;
-  b=AmsJCoYozi5dCLetA0DiqihL97TUulfsRH3NBmGyHmdUkgXtgV6RdOol
-   Oe2KKh56D1yUMySRbNUxgq6citcAPZMXybHMnvVJQRlzR0TNK2Vockwc6
-   MuhjWf1ImdSlplblxkospjLqZVUGTNoR7iMTJktz3HxVncPim7pH/wPdy
-   lq1aBaC44J6WmGzzwU1cIjQdlPMS1QklQ9RqO2X+x3RHOSKkGMlKod3+u
-   uOjHglXUKBsKXjEzXE08SY2VcvvvPSWrr0Ed97qwGEUfgcnrCrrhhdLw4
-   tWqtdhbTFzPce9Ie4CrMpMWZBKKfqSkC+zLD+N+EgnGX41NLKkwNhlQvk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="246380146"
+  t=1643063113; x=1674599113;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gs5uFgkarw9TrpxSXanR98HstBe7M+jbd4pZwSe/TDA=;
+  b=VdWT0AUzMikZIGTEhF1+d4nt9Iy5Xw3bRC8BTx0QGvkYmukwgi5bSqMQ
+   Q/X4jHAgVsVRxu8d7e5h15CrCTMkB8nDG3kktCdiVfAeorVX7IKjRDsmK
+   jBCM9ATBU7Xj71DicFMFnzk24Cqz4Jez5oZlmfv5YP/RleO4aGgJX6Iq7
+   ipnVBOQXKYkI8kba83jA68K7E6EE3VVQLCQFjJ2L6ETVk77+moJKIMq3a
+   5QJ0TIEuhLwUFtiG66HRjNL0JTCkTF+TNIPDW5DuqDkvDiPQzZhpbT0R0
+   NylQQ2i2yODDKJ3Y902gR/a+pBwsL8PnlaGRR0FXQVDGzSNKeQ57Rn3yg
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="309481659"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="246380146"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:24:16 -0800
+   d="scan'208";a="309481659"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:25:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="624244847"
+   d="scan'208";a="627671702"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2022 14:24:10 -0800
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 14:25:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nC7kv-000IzT-Og; Mon, 24 Jan 2022 22:24:09 +0000
-Date: Tue, 25 Jan 2022 06:23:27 +0800
+	id 1nC7lt-000J0O-QV; Mon, 24 Jan 2022 22:25:09 +0000
+Date: Tue, 25 Jan 2022 06:24:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Emil Renner Berthing <kernel@esmil.dk>
+To: Jeffrey Ji <jeffreyjilinux@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [esmil:visionfive 59/63] drivers/soc/sifive/sifive_l2_cache.c:158:3:
- error: implicit declaration of function 'writeq'
-Message-ID: <202201250552.SryPX3ni-lkp@intel.com>
+	Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, jeffreyjilinux@gmail.com,
+	jeffreyji <jeffreyji@google.com>
+Subject: Re: [PATCH net-next] net-core: add InMacErrors counter
+Message-ID: <202201250449.tTXEfxm8-lkp@intel.com>
+References: <20220122000301.1872828-1-jeffreyji@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,87 +49,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220122000301.1872828-1-jeffreyji@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/esmil/linux visionfive
-head:   fdbe623707a8f3f9b9d2cb3c4c240299a12b8302
-commit: c17f07c367229d46348e9005d004d8b3416637bc [59/63] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
-config: riscv-randconfig-r015-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250552.SryPX3ni-lkp@intel.com/config)
+Hi Jeffrey,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Jeffrey-Ji/net-core-add-InMacErrors-counter/20220122-080455
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20220125/202201250449.tTXEfxm8-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/c17f07c367229d46348e9005d004d8b3416637bc
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout c17f07c367229d46348e9005d004d8b3416637bc
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/f8ea346d278c116f830459bae2a910fdc5e96a35
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jeffrey-Ji/net-core-add-InMacErrors-counter/20220122-080455
+        git checkout f8ea346d278c116f830459bae2a910fdc5e96a35
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv6/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/soc/sifive/sifive_l2_cache.c:158:3: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
-                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-                   ^
-   drivers/soc/sifive/sifive_l2_cache.c:148:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> net/ipv6/ip6_input.c:153:24: warning: variable 'idev' is uninitialized when used here [-Wuninitialized]
+                   __IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
+                                        ^~~~
+   include/net/ipv6.h:256:26: note: expanded from macro '__IP6_INC_STATS'
+                   _DEVINC(net, ipv6, __, idev, field)
+                                          ^~~~
+   include/net/ipv6.h:211:29: note: expanded from macro '_DEVINC'
+           struct inet6_dev *_idev = (idev);                               \
+                                      ^~~~
+   net/ipv6/ip6_input.c:150:24: note: initialize the variable 'idev' to silence this warning
+           struct inet6_dev *idev;
+                                 ^
+                                  = NULL
+   1 warning generated.
 
 
-vim +/writeq +158 drivers/soc/sifive/sifive_l2_cache.c
+vim +/idev +153 net/ipv6/ip6_input.c
 
-a967a289f16969 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  126  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  #ifdef CONFIG_SIFIVE_L2_FLUSH
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  	unsigned long line;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  	if(!l2_base) {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  		return;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	/* TODO: if (len == 0), skipping flush or going on? */
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  	if(!len) {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  		return;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  142  
-0684fe29f5de5f drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
-0684fe29f5de5f drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
-0684fe29f5de5f drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  145  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	/* make sure the address is in the range */
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  148  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  149  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-b5cf3456431952 drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  150  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		     start, len);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  		return;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	mb();	/* sync */
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	for (line = start; line < start + len;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  157  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @158  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  		mb();
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  }
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  #endif
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  164  
-
-:::::: The code at line 158 was first introduced by commit
-:::::: c6649e71d37210bc4c33eada849aeda98c823de9 sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-
-:::::: TO: Tom <support@vamrs.com>
-:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
+   144	
+   145	static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
+   146					    struct net *net)
+   147	{
+   148		const struct ipv6hdr *hdr;
+   149		u32 pkt_len;
+   150		struct inet6_dev *idev;
+   151	
+   152		if (skb->pkt_type == PACKET_OTHERHOST) {
+ > 153			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
+   154			kfree_skb(skb);
+   155			return NULL;
+   156		}
+   157	
+   158		rcu_read_lock();
+   159	
+   160		idev = __in6_dev_get(skb->dev);
+   161	
+   162		__IP6_UPD_PO_STATS(net, idev, IPSTATS_MIB_IN, skb->len);
+   163	
+   164		if ((skb = skb_share_check(skb, GFP_ATOMIC)) == NULL ||
+   165		    !idev || unlikely(idev->cnf.disable_ipv6)) {
+   166			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INDISCARDS);
+   167			goto drop;
+   168		}
+   169	
+   170		memset(IP6CB(skb), 0, sizeof(struct inet6_skb_parm));
+   171	
+   172		/*
+   173		 * Store incoming device index. When the packet will
+   174		 * be queued, we cannot refer to skb->dev anymore.
+   175		 *
+   176		 * BTW, when we send a packet for our own local address on a
+   177		 * non-loopback interface (e.g. ethX), it is being delivered
+   178		 * via the loopback interface (lo) here; skb->dev = loopback_dev.
+   179		 * It, however, should be considered as if it is being
+   180		 * arrived via the sending interface (ethX), because of the
+   181		 * nature of scoping architecture. --yoshfuji
+   182		 */
+   183		IP6CB(skb)->iif = skb_valid_dst(skb) ? ip6_dst_idev(skb_dst(skb))->dev->ifindex : dev->ifindex;
+   184	
+   185		if (unlikely(!pskb_may_pull(skb, sizeof(*hdr))))
+   186			goto err;
+   187	
+   188		hdr = ipv6_hdr(skb);
+   189	
+   190		if (hdr->version != 6)
+   191			goto err;
+   192	
+   193		__IP6_ADD_STATS(net, idev,
+   194				IPSTATS_MIB_NOECTPKTS +
+   195					(ipv6_get_dsfield(hdr) & INET_ECN_MASK),
+   196				max_t(unsigned short, 1, skb_shinfo(skb)->gso_segs));
+   197		/*
+   198		 * RFC4291 2.5.3
+   199		 * The loopback address must not be used as the source address in IPv6
+   200		 * packets that are sent outside of a single node. [..]
+   201		 * A packet received on an interface with a destination address
+   202		 * of loopback must be dropped.
+   203		 */
+   204		if ((ipv6_addr_loopback(&hdr->saddr) ||
+   205		     ipv6_addr_loopback(&hdr->daddr)) &&
+   206		    !(dev->flags & IFF_LOOPBACK) &&
+   207		    !netif_is_l3_master(dev))
+   208			goto err;
+   209	
+   210		/* RFC4291 Errata ID: 3480
+   211		 * Interface-Local scope spans only a single interface on a
+   212		 * node and is useful only for loopback transmission of
+   213		 * multicast.  Packets with interface-local scope received
+   214		 * from another node must be discarded.
+   215		 */
+   216		if (!(skb->pkt_type == PACKET_LOOPBACK ||
+   217		      dev->flags & IFF_LOOPBACK) &&
+   218		    ipv6_addr_is_multicast(&hdr->daddr) &&
+   219		    IPV6_ADDR_MC_SCOPE(&hdr->daddr) == 1)
+   220			goto err;
+   221	
+   222		/* If enabled, drop unicast packets that were encapsulated in link-layer
+   223		 * multicast or broadcast to protected against the so-called "hole-196"
+   224		 * attack in 802.11 wireless.
+   225		 */
+   226		if (!ipv6_addr_is_multicast(&hdr->daddr) &&
+   227		    (skb->pkt_type == PACKET_BROADCAST ||
+   228		     skb->pkt_type == PACKET_MULTICAST) &&
+   229		    idev->cnf.drop_unicast_in_l2_multicast)
+   230			goto err;
+   231	
+   232		/* RFC4291 2.7
+   233		 * Nodes must not originate a packet to a multicast address whose scope
+   234		 * field contains the reserved value 0; if such a packet is received, it
+   235		 * must be silently dropped.
+   236		 */
+   237		if (ipv6_addr_is_multicast(&hdr->daddr) &&
+   238		    IPV6_ADDR_MC_SCOPE(&hdr->daddr) == 0)
+   239			goto err;
+   240	
+   241		/*
+   242		 * RFC4291 2.7
+   243		 * Multicast addresses must not be used as source addresses in IPv6
+   244		 * packets or appear in any Routing header.
+   245		 */
+   246		if (ipv6_addr_is_multicast(&hdr->saddr))
+   247			goto err;
+   248	
+   249		skb->transport_header = skb->network_header + sizeof(*hdr);
+   250		IP6CB(skb)->nhoff = offsetof(struct ipv6hdr, nexthdr);
+   251	
+   252		pkt_len = ntohs(hdr->payload_len);
+   253	
+   254		/* pkt_len may be zero if Jumbo payload option is present */
+   255		if (pkt_len || hdr->nexthdr != NEXTHDR_HOP) {
+   256			if (pkt_len + sizeof(struct ipv6hdr) > skb->len) {
+   257				__IP6_INC_STATS(net,
+   258						idev, IPSTATS_MIB_INTRUNCATEDPKTS);
+   259				goto drop;
+   260			}
+   261			if (pskb_trim_rcsum(skb, pkt_len + sizeof(struct ipv6hdr))) {
+   262				__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
+   263				goto drop;
+   264			}
+   265			hdr = ipv6_hdr(skb);
+   266		}
+   267	
+   268		if (hdr->nexthdr == NEXTHDR_HOP) {
+   269			if (ipv6_parse_hopopts(skb) < 0) {
+   270				__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
+   271				rcu_read_unlock();
+   272				return NULL;
+   273			}
+   274		}
+   275	
+   276		rcu_read_unlock();
+   277	
+   278		/* Must drop socket now because of tproxy. */
+   279		if (!skb_sk_is_prefetched(skb))
+   280			skb_orphan(skb);
+   281	
+   282		return skb;
+   283	err:
+   284		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
+   285	drop:
+   286		rcu_read_unlock();
+   287		kfree_skb(skb);
+   288		return NULL;
+   289	}
+   290	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
