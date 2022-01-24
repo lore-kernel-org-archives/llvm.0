@@ -1,109 +1,124 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3B32C82
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 13:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643032187; x=1674568187;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SZOZaltlzRkEFvk7iyPFTYTArEs+caDEG/8y0bOW5QQ=;
-  b=jBaYD5WBGXQqsavxFF8qSKv9xVcYAGK7XRJ08NG6B2ncbqAZP5P4pR5K
-   Bsx1IQVOsS9RTldhjnaIenkiXGYlwFZNLJaPazSUrrIZPlTG4//DjePzu
-   ugiBNYXDBrthX0zfwZ3yqXwAduHJkmyqwSrPEUhXWgN5l8qhub9UbWxKs
-   Sb7Q3XGOkYIQg784DcZztWZKO19oxTxFmK5jfWxA7GzlHz+OyT6jJc4RS
-   C2F8CevCfc5S16B15Ro6DofXJr5H4AjJ6HaPxL+6uyDTW9KdIb+zgvp1m
-   lPM/4Dj0YWUFclkDzqWnID42Lw788V+nIC69gKnKLEqWSufQVwkMguVfT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="243641923"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="243641923"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:49:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="673628194"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2022 05:49:42 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nBzj4-000IPB-6r; Mon, 24 Jan 2022 13:49:42 +0000
-Date: Mon, 24 Jan 2022 21:49:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
-	lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
-	andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Subject: Re: [PATCH V1 2/6] iio: accel: sca3300: Add interface for operation
- modes.
-Message-ID: <202201242108.VNQCotc3-lkp@intel.com>
-References: <20220124093912.2429190-3-Qing-wu.Li@leica-geosystems.com.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017C82C82
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 13:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1643032416;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=10jjCwVWraQntNdBxVG806Q7wvKbwg1gvSBpyTQbEiA=;
+	b=bWwcQEWzyo8mRI1CeRBHfSSyFDZvcWTNg5VZ/PZN6Q1+2alvTV+8PtSJiG+tzsqS6eJpNo
+	emJL5aqSET2F5RbTBgAmkywKh6U8+4lJKtQ8lfOYuPj+V+4zfs6vMcHRD1EN81VMBU1NGs
+	HtvhCqM0hAYMEFd2cK0hIrNcRGwgtk4=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-cu51ZdyCNimOX32s4nFHvQ-1; Mon, 24 Jan 2022 08:53:34 -0500
+X-MC-Unique: cu51ZdyCNimOX32s4nFHvQ-1
+Received: by mail-oi1-f200.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso9101140oif.23
+        for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 05:53:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=10jjCwVWraQntNdBxVG806Q7wvKbwg1gvSBpyTQbEiA=;
+        b=o9hNOn3g6GIbvz+BB0zu1vZwIjdVdxz7DhSNQ82gW6SkhlCubXO5q99KtIycVWchBt
+         sU96Y0G/I2lYC4YEoIuPxs+AqDHuw7wHuYe2R587G0vIbDAGuzE30IYFv0xbKVsZAYU8
+         qPwR8Z2/O4oi7bdnXb5S65mr+vCYCgwubK5kZhK8WKYxNWI5oMO47MUAWAe81mEUVGJQ
+         BFBZF5ouQPzdFz9zXwGpABgk2XEUV0an+MAflbvUwIJfhCfDI+Ufd0GaF7Ejew+Nk03I
+         bWdEoeXJBwadzn/xiDMN1TDq05hUGoEc0gau5qmp+PvOMmafWv2m1MGlPasvKFPYK8XW
+         PjPA==
+X-Gm-Message-State: AOAM5324MDRx/riOlzEGnRzk6SZeYj61OFXO2VIEs79A9OumnBmL+54b
+	xtn9uEgSxIACXUaBP5oldLADKgQbUQgaSyDj4Bs+ABLcvQw0OSNhJ3LDWt+QNCOgVzQG5Yk7+ay
+	BHry/1QPIelnLqw==
+X-Received: by 2002:a4a:d095:: with SMTP id i21mr3016410oor.66.1643032414028;
+        Mon, 24 Jan 2022 05:53:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwXcXYp8AXPTplh6to4AiTnWP2fz7OgXjj9IzEQpUNCJmvn968uNUEQkbgSQYBOEJwbNzIXMA==
+X-Received: by 2002:a4a:d095:: with SMTP id i21mr3016389oor.66.1643032413803;
+        Mon, 24 Jan 2022 05:53:33 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id v26sm1881619ooq.20.2022.01.24.05.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 05:53:33 -0800 (PST)
+From: trix@redhat.com
+To: evan.quan@amd.com,
+	alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	lijo.lazar@amd.com,
+	darren.powell@amd.com,
+	guchun.chen@amd.com,
+	Arunpravin.PaneerSelvam@amd.com,
+	andrey.grodzovsky@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/pm: set min,max to 0 if there is no get_dpm_ultimate_freq function
+Date: Mon, 24 Jan 2022 05:52:59 -0800
+Message-Id: <20220124135259.1057828-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124093912.2429190-3-Qing-wu.Li@leica-geosystems.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-Hi LI,
+From: Tom Rix <trix@redhat.com>
 
-Thank you for the patch! Yet something to improve:
+clang static analysis reports this represenative problem
+amdgpu_smu.c:144:18: warning: The left operand of '*' is a garbage value
+        return clk_freq * 100;
+               ~~~~~~~~ ^
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+If there is no get_dpm_ultimate_freq function,
+smu_get_dpm_freq_range returns success without setting the
+output min,max parameters.  Because this is an extern function,
+set the min,max to 0 when there is no get_dpm_ultimate_freq.
 
-url:    https://github.com/0day-ci/linux/commits/LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: hexagon-randconfig-r033-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242108.VNQCotc3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1521580933c9c08143fc14b23a363eb7961d4520
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-        git checkout 1521580933c9c08143fc14b23a363eb7961d4520
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/accel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/accel/sca3300.c:74:53: error: too few arguments provided to function-like macro invocation
-           IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-                                                              ^
-   include/linux/iio/iio.h:112:9: note: macro 'IIO_ENUM_AVAILABLE' defined here
-   #define IIO_ENUM_AVAILABLE(_name, _shared, _e) \
-           ^
->> drivers/iio/accel/sca3300.c:74:2: error: use of undeclared identifier 'IIO_ENUM_AVAILABLE'
-           IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-           ^
-   2 errors generated.
-
-
-vim +74 drivers/iio/accel/sca3300.c
-
-    71	
-    72	static const struct iio_chan_spec_ext_info sca3300_ext_info[] = {
-    73		IIO_ENUM("op_mode", IIO_SHARED_BY_DIR, &sca3300_op_mode_enum),
-  > 74		IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-    75		{ }
-    76	};
-    77	
-
+Fixes: e5ef784b1e17 ("drm/amd/powerplay: revise calling chain on retrieving frequency range")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+index 5ace30434e603..35fbe51f52eaa 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+@@ -121,11 +121,17 @@ int smu_get_dpm_freq_range(struct smu_context *smu,
+ 	if (!min && !max)
+ 		return -EINVAL;
+ 
+-	if (smu->ppt_funcs->get_dpm_ultimate_freq)
++	if (smu->ppt_funcs->get_dpm_ultimate_freq) {
+ 		ret = smu->ppt_funcs->get_dpm_ultimate_freq(smu,
+ 							    clk_type,
+ 							    min,
+ 							    max);
++	} else {
++		if (min)
++			*min = 0;
++		if (max)
++			*max = 0;
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.26.3
+
