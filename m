@@ -1,46 +1,35 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EF52CA8
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 22:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643063113; x=1674599113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eThUF4pkPELvLwLaXV2tV81aUqgFxt2NJFDyVuk8E9o=;
-  b=ZgKmWW3icpHfl7avIJKehmE5SVqk7+gUGKBYaDJKRNIt1ZabSLq/QCdu
-   o0bqKpWLt2tYCMXb4vNZz72bDCigYtQAZzXvq+VS4jlPs52v8X/6nGoxa
-   igYNREOUT9YcrvmBcpzgS8ImlVmyUeGkQFZth+Iess8VSPt3UQ0761UK7
-   hr5TMU0Dv/KeELFzYGSGm9MqH7z10bhq94fj+7MHDgCisQGL2ZGBQpIRs
-   vy7j7tqV+u7G71M2eXpR9NYd4h+aOGGO1pNdGqgZQW8/qWClGNY1zJS7J
-   1EpxySAqoq1JCE+BJZrNWKlje+wVbgF6YPW88b3dAWv8Ql4o/ZKSf/Pu/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="306877363"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="306877363"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:25:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="673775609"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2022 14:25:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nC7lu-000J0g-03; Mon, 24 Jan 2022 22:25:10 +0000
-Date: Tue, 25 Jan 2022 06:24:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeffrey Ji <jeffreyjilinux@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, jeffreyjilinux@gmail.com,
-	jeffreyji <jeffreyji@google.com>
-Subject: Re: [PATCH net-next] net-core: add InMacErrors counter
-Message-ID: <202201250416.QEl2tmqY-lkp@intel.com>
-References: <20220122000301.1872828-1-jeffreyji@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EAA29CA
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 22:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044CAC340E4;
+	Mon, 24 Jan 2022 22:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643063870;
+	bh=NCaWYrHkERR44+5mwSclgHhGj+DTbNbJmLpD16QOgeM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iiCiO0HApZEkNWUc62lC5Bhf9G3iV8eCGzQTJl0193RSrzGAD0zAhUEW5xPzIAS61
+	 z4cH+ceAUQPPG+3KGWrFD4SuOBd4PnnEblnMz5ZoTHfppYeSxhzjXyAbybAhXRFKUX
+	 k+b9CtdJfZf8rpBPgqTzK7l8cbcEMV965Zziv9sGnxVI7w19IcnNS61tOsofepkMLw
+	 M6SK/5VbxGu2JDgEDppSYk/SLIWyKLF7q1dNmxIagfW7mAslgpkdlZFQCNHK009SO7
+	 obJVFJ9MgtfAg7vPeKWE1ytnPC073uLi3yU+dYnfNEUB6NRr3lZf5YBbqtAZUyPdRz
+	 1fH6zLrVfv/5A==
+Date: Mon, 24 Jan 2022 15:37:46 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Wrap -mno-branch-likely with
+ cc-option
+Message-ID: <Ye8qOloosgFyY8v8@archlinux-ax161>
+References: <20220120214001.1879469-1-nathan@kernel.org>
+ <20220120214001.1879469-2-nathan@kernel.org>
+ <CAKwvOdmTBUcre5+=kopcyAv3q=55=Z5O65QHmvy3Ra2JqgLNHw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,201 +38,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220122000301.1872828-1-jeffreyji@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdmTBUcre5+=kopcyAv3q=55=Z5O65QHmvy3Ra2JqgLNHw@mail.gmail.com>
 
-Hi Jeffrey,
+On Mon, Jan 24, 2022 at 12:40:58PM -0800, Nick Desaulniers wrote:
+> On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > This flag is not supported by clang, which results in a warning:
+> >
+> >   clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+> >
+> > This breaks cc-option, which adds -Werror to make this warning fatal and
+> > catch flags that are not supported. Wrap the flag in cc-option so that
+> > it does not cause cc-option to fail, which can cause randconfigs to be
+> > really noisy.
+> >
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> We should convert more of these tests to Kconfig checks that run once
+> per configuration, rather than multiple times for a build. IIRC Linus
+> mentioned this somewhere...yeah, the -Wimplicit-fallthrough patches.
+> See
+> dee2b702bcf06 ("kconfig: Add support for -Wimplicit-fallthrough")
+> 
+> I wonder if we can check ARCH or SUBARCH in Kconfig to limit invoking
+> the tool under test for certain arch specific command line flags?
+> 
+> I'll take this patch over such a larger change, but I think towards
+> the goal of speeding up already configured builds, we eventually want
+> to be migrating cc-option and ld-option checks to Kconfig.
+> 
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Thank you for the patch! Perhaps something to improve:
+Something like this appears to work, if that is more preferrable?
 
-[auto build test WARNING on net-next/master]
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 058446f01487..a27a3ade810e 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3232,3 +3232,9 @@ endmenu
+ source "arch/mips/kvm/Kconfig"
+ 
+ source "arch/mips/vdso/Kconfig"
++
++config CC_MNO_BRANCH_LIKELY
++	string
++	default "-mno-branch-likely"
++	depends on MACH_LOONGSON64 || MACH_LOONGSON2EF
++	depends on $(cc-option,-mno-branch-likely)
+diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
+index 50e659aca543..66ed09581417 100644
+--- a/arch/mips/loongson2ef/Platform
++++ b/arch/mips/loongson2ef/Platform
+@@ -41,6 +41,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
+ # Loongson Machines' Support
+ #
+ 
+-cflags-$(CONFIG_MACH_LOONGSON2EF) += -I$(srctree)/arch/mips/include/asm/mach-loongson2ef -mno-branch-likely
++cflags-$(CONFIG_MACH_LOONGSON2EF) += -I$(srctree)/arch/mips/include/asm/mach-loongson2ef $(CONFIG_CC_MNO_BRANCH_LIKELY)
+ load-$(CONFIG_LEMOTE_FULOONG2E) += 0xffffffff80100000
+ load-$(CONFIG_LEMOTE_MACH2F) += 0xffffffff80200000
+diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+index 3e660d6d3c2b..88fbdfe9ffcc 100644
+--- a/arch/mips/loongson64/Platform
++++ b/arch/mips/loongson64/Platform
+@@ -33,5 +33,5 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
+ # Loongson Machines' Support
+ #
+ 
+-cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
++cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 $(CONFIG_CC_MNO_BRANCH_LIKELY)
+ load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
 
-url:    https://github.com/0day-ci/linux/commits/Jeffrey-Ji/net-core-add-InMacErrors-counter/20220122-080455
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
-config: x86_64-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220125/202201250416.QEl2tmqY-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f8ea346d278c116f830459bae2a910fdc5e96a35
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jeffrey-Ji/net-core-add-InMacErrors-counter/20220122-080455
-        git checkout f8ea346d278c116f830459bae2a910fdc5e96a35
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/ipv6/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv6/ip6_input.c:153:24: warning: variable 'idev' is uninitialized when used here [-Wuninitialized]
-                   __IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
-                                        ^~~~
-   include/net/ipv6.h:256:26: note: expanded from macro '__IP6_INC_STATS'
-                   _DEVINC(net, ipv6, __, idev, field)
-                                          ^~~~
-   include/net/ipv6.h:211:29: note: expanded from macro '_DEVINC'
-           struct inet6_dev *_idev = (idev);                               \
-                                      ^~~~
-   net/ipv6/ip6_input.c:150:24: note: initialize the variable 'idev' to silence this warning
-           struct inet6_dev *idev;
-                                 ^
-                                  = NULL
-   1 warning generated.
-
-
-vim +/idev +153 net/ipv6/ip6_input.c
-
-   144	
-   145	static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
-   146					    struct net *net)
-   147	{
-   148		const struct ipv6hdr *hdr;
-   149		u32 pkt_len;
-   150		struct inet6_dev *idev;
-   151	
-   152		if (skb->pkt_type == PACKET_OTHERHOST) {
- > 153			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
-   154			kfree_skb(skb);
-   155			return NULL;
-   156		}
-   157	
-   158		rcu_read_lock();
-   159	
-   160		idev = __in6_dev_get(skb->dev);
-   161	
-   162		__IP6_UPD_PO_STATS(net, idev, IPSTATS_MIB_IN, skb->len);
-   163	
-   164		if ((skb = skb_share_check(skb, GFP_ATOMIC)) == NULL ||
-   165		    !idev || unlikely(idev->cnf.disable_ipv6)) {
-   166			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INDISCARDS);
-   167			goto drop;
-   168		}
-   169	
-   170		memset(IP6CB(skb), 0, sizeof(struct inet6_skb_parm));
-   171	
-   172		/*
-   173		 * Store incoming device index. When the packet will
-   174		 * be queued, we cannot refer to skb->dev anymore.
-   175		 *
-   176		 * BTW, when we send a packet for our own local address on a
-   177		 * non-loopback interface (e.g. ethX), it is being delivered
-   178		 * via the loopback interface (lo) here; skb->dev = loopback_dev.
-   179		 * It, however, should be considered as if it is being
-   180		 * arrived via the sending interface (ethX), because of the
-   181		 * nature of scoping architecture. --yoshfuji
-   182		 */
-   183		IP6CB(skb)->iif = skb_valid_dst(skb) ? ip6_dst_idev(skb_dst(skb))->dev->ifindex : dev->ifindex;
-   184	
-   185		if (unlikely(!pskb_may_pull(skb, sizeof(*hdr))))
-   186			goto err;
-   187	
-   188		hdr = ipv6_hdr(skb);
-   189	
-   190		if (hdr->version != 6)
-   191			goto err;
-   192	
-   193		__IP6_ADD_STATS(net, idev,
-   194				IPSTATS_MIB_NOECTPKTS +
-   195					(ipv6_get_dsfield(hdr) & INET_ECN_MASK),
-   196				max_t(unsigned short, 1, skb_shinfo(skb)->gso_segs));
-   197		/*
-   198		 * RFC4291 2.5.3
-   199		 * The loopback address must not be used as the source address in IPv6
-   200		 * packets that are sent outside of a single node. [..]
-   201		 * A packet received on an interface with a destination address
-   202		 * of loopback must be dropped.
-   203		 */
-   204		if ((ipv6_addr_loopback(&hdr->saddr) ||
-   205		     ipv6_addr_loopback(&hdr->daddr)) &&
-   206		    !(dev->flags & IFF_LOOPBACK) &&
-   207		    !netif_is_l3_master(dev))
-   208			goto err;
-   209	
-   210		/* RFC4291 Errata ID: 3480
-   211		 * Interface-Local scope spans only a single interface on a
-   212		 * node and is useful only for loopback transmission of
-   213		 * multicast.  Packets with interface-local scope received
-   214		 * from another node must be discarded.
-   215		 */
-   216		if (!(skb->pkt_type == PACKET_LOOPBACK ||
-   217		      dev->flags & IFF_LOOPBACK) &&
-   218		    ipv6_addr_is_multicast(&hdr->daddr) &&
-   219		    IPV6_ADDR_MC_SCOPE(&hdr->daddr) == 1)
-   220			goto err;
-   221	
-   222		/* If enabled, drop unicast packets that were encapsulated in link-layer
-   223		 * multicast or broadcast to protected against the so-called "hole-196"
-   224		 * attack in 802.11 wireless.
-   225		 */
-   226		if (!ipv6_addr_is_multicast(&hdr->daddr) &&
-   227		    (skb->pkt_type == PACKET_BROADCAST ||
-   228		     skb->pkt_type == PACKET_MULTICAST) &&
-   229		    idev->cnf.drop_unicast_in_l2_multicast)
-   230			goto err;
-   231	
-   232		/* RFC4291 2.7
-   233		 * Nodes must not originate a packet to a multicast address whose scope
-   234		 * field contains the reserved value 0; if such a packet is received, it
-   235		 * must be silently dropped.
-   236		 */
-   237		if (ipv6_addr_is_multicast(&hdr->daddr) &&
-   238		    IPV6_ADDR_MC_SCOPE(&hdr->daddr) == 0)
-   239			goto err;
-   240	
-   241		/*
-   242		 * RFC4291 2.7
-   243		 * Multicast addresses must not be used as source addresses in IPv6
-   244		 * packets or appear in any Routing header.
-   245		 */
-   246		if (ipv6_addr_is_multicast(&hdr->saddr))
-   247			goto err;
-   248	
-   249		skb->transport_header = skb->network_header + sizeof(*hdr);
-   250		IP6CB(skb)->nhoff = offsetof(struct ipv6hdr, nexthdr);
-   251	
-   252		pkt_len = ntohs(hdr->payload_len);
-   253	
-   254		/* pkt_len may be zero if Jumbo payload option is present */
-   255		if (pkt_len || hdr->nexthdr != NEXTHDR_HOP) {
-   256			if (pkt_len + sizeof(struct ipv6hdr) > skb->len) {
-   257				__IP6_INC_STATS(net,
-   258						idev, IPSTATS_MIB_INTRUNCATEDPKTS);
-   259				goto drop;
-   260			}
-   261			if (pskb_trim_rcsum(skb, pkt_len + sizeof(struct ipv6hdr))) {
-   262				__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-   263				goto drop;
-   264			}
-   265			hdr = ipv6_hdr(skb);
-   266		}
-   267	
-   268		if (hdr->nexthdr == NEXTHDR_HOP) {
-   269			if (ipv6_parse_hopopts(skb) < 0) {
-   270				__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-   271				rcu_read_unlock();
-   272				return NULL;
-   273			}
-   274		}
-   275	
-   276		rcu_read_unlock();
-   277	
-   278		/* Must drop socket now because of tproxy. */
-   279		if (!skb_sk_is_prefetched(skb))
-   280			skb_orphan(skb);
-   281	
-   282		return skb;
-   283	err:
-   284		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-   285	drop:
-   286		rcu_read_unlock();
-   287		kfree_skb(skb);
-   288		return NULL;
-   289	}
-   290	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > ---
+> >  arch/mips/loongson64/Platform | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+> > index 981d3abc150e..acf9edc9b15d 100644
+> > --- a/arch/mips/loongson64/Platform
+> > +++ b/arch/mips/loongson64/Platform
+> > @@ -26,5 +26,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
+> >  # Loongson Machines' Support
+> >  #
+> >
+> > -cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
+> > +cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64
+> > +cflags-$(CONFIG_MACH_LOONGSON64) += $(call cc-option,-mno-branch-likely)
+> >  load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
+> > --
+> > 2.34.1
+> >
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
