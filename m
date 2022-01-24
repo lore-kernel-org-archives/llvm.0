@@ -1,46 +1,50 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A68C29CA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A822CA7
 	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 15:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643036511; x=1674572511;
+  t=1643036512; x=1674572512;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=U5+2B1K3W3IFZkkkXP6UpfPqyxgzDs+3P45zPwQ+azc=;
-  b=KPCuJ8zOS8YfDRSR7EfzvOV5xDtkeRa+z4w0XZG+RiYWqxQSW/XDYHlC
-   wWYy0Qc7TJi+TW+Js3TCbwV5cKrZ1Ycr40EeZ+6unmABeWAVI3Aaachkv
-   ME6yintU+/DAfEQQ9/sMLAulV4X592AOWfvgB4fnw0YiBPZDG+pLVinMO
-   DkcCWpiR7R1z8Srp8oTOCOQ2V2x6iNI+Z2LgwiGj8saUh+McREwHUoMh/
-   EyhpLg6CN+ByQHd0tgQYwIF0PzTpYnVfSZ6fScknbwCh63ZOK+lxC1G9W
-   5C8yImDI953hb9NkVy4e1O9GHi8t/a6hZJ6D0b5mQeH1OtRJ8912eOohf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="226734370"
+  bh=QfWyV+HXtcs6rILaxpwLONmm+UzDSrHuA/oNh1yavC0=;
+  b=QMkGmTG0q9JTnCWV8KTaJohkIQbWxWmzOVeHKgCNuqdc0t6ZMYCtMLbX
+   WrOomsork84uNVvDGscck1G66Uf5p/Wp0fhZJTZ2twx44ZmkUkXjuJRpt
+   TqaITvGkfVqs86Irz1KtCbu5LNgAp76G7mhnJGAZI+318pdRamwBCHJxU
+   elpARXaze99WiPnekewR5YyJdW9G2meO3ot5gY3YTqogcK2kDSd2HcFqx
+   XjxzygUnJBWanQbTwMTw39h9urfMFMqo26K5xOfLLItgSq9mHBSUeLTU+
+   +bhg5X6Q6p93EsNC+W2MnU+j+G3SX63Q6HnK5xXRCyslLt703FJnrcjmR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245843596"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="226734370"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:01:50 -0800
+   d="scan'208";a="245843596"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:01:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="476742920"
+   d="scan'208";a="596809947"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2022 07:01:47 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 24 Jan 2022 07:01:47 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nC0qo-000IUc-GH; Mon, 24 Jan 2022 15:01:46 +0000
-Date: Mon, 24 Jan 2022 23:01:23 +0800
+	id 1nC0qo-000IUh-Iq; Mon, 24 Jan 2022 15:01:46 +0000
+Date: Mon, 24 Jan 2022 23:01:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
-	lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
-	andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Hao Xu <haoxu@linux.alibaba.com>, netdev@vger.kernel.org,
+	io-uring@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Subject: Re: [PATCH V1 3/6] iio: accel: sca3300: modified to support multi
- chips
-Message-ID: <202201242207.0V8eUHu2-lkp@intel.com>
-References: <20220124093912.2429190-4-Qing-wu.Li@leica-geosystems.com.cn>
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+	David Ahern <dsahern@kernel.org>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>
+Subject: Re: [PATCH 3/3] io_uring: zerocopy receive
+Message-ID: <202201242233.64QOWQZ1-lkp@intel.com>
+References: <20220124094320.900713-4-haoxu@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,216 +53,224 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124093912.2429190-4-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220124094320.900713-4-haoxu@linux.alibaba.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi LI,
+Hi Hao,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on v5.17-rc1 next-20220124]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc1 next-20220124]
+[cannot apply to horms-ipvs/master]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: hexagon-randconfig-r033-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242207.0V8eUHu2-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Hao-Xu/io_uring-zerocopy-receive/20220124-174546
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+config: s390-buildonly-randconfig-r004-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242233.64QOWQZ1-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7dc3bc68cdfcb252dd79fea28a5e944d76784fe8
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/295704165d394635876364522d3ac1451b62da66
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-        git checkout 7dc3bc68cdfcb252dd79fea28a5e944d76784fe8
+        git fetch --no-tags linux-review Hao-Xu/io_uring-zerocopy-receive/20220124-174546
+        git checkout 295704165d394635876364522d3ac1451b62da66
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/accel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/iio/accel/sca3300.c:74:53: error: too few arguments provided to function-like macro invocation
-           IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-                                                              ^
-   include/linux/iio/iio.h:112:9: note: macro 'IIO_ENUM_AVAILABLE' defined here
-   #define IIO_ENUM_AVAILABLE(_name, _shared, _e) \
-           ^
-   drivers/iio/accel/sca3300.c:74:2: error: use of undeclared identifier 'IIO_ENUM_AVAILABLE'
-           IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-           ^
->> drivers/iio/accel/sca3300.c:185:17: warning: incompatible pointer to integer conversion initializing 'unsigned long' with an expression of type 'const unsigned long[2]' [-Wint-conversion]
-                   .scan_masks = sca3300_scan_masks,
-                                 ^~~~~~~~~~~~~~~~~~
->> drivers/iio/accel/sca3300.c:307:13: warning: comparison between pointer and integer ('int' and 'const int *') [-Wpointer-integer-compare]
-                           if ((val == sca3300_accel_scale[data->chip_info->chip_type][0]) &&
-                                ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/accel/sca3300.c:308:14: warning: comparison between pointer and integer ('int' and 'const int *') [-Wpointer-integer-compare]
-                               (val2 == sca3300_accel_scale[data->chip_info->chip_type][1]))
-                                ~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iio/accel/sca3300.c:422:36: warning: incompatible integer to pointer conversion assigning to 'const unsigned long *' from 'const unsigned long'; take the address with & [-Wint-conversion]
-                           indio_dev->available_scan_masks = sca3300_chip_info_tbl[i].scan_masks;
-                                                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                             &
-   4 warnings and 2 errors generated.
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> fs/io_uring.c:6639:10: error: implicit declaration of function 'io_recvzc_prep' [-Werror,-Wimplicit-function-declaration]
+                   return io_recvzc_prep(req, sqe);
+                          ^
+   fs/io_uring.c:6639:10: note: did you mean 'io_recvmsg_prep'?
+   fs/io_uring.c:5462:1: note: 'io_recvmsg_prep' declared here
+   IO_NETOP_PREP_ASYNC(recvmsg);
+   ^
+   fs/io_uring.c:5454:38: note: expanded from macro 'IO_NETOP_PREP_ASYNC'
+   #define IO_NETOP_PREP_ASYNC(op)                                         \
+                                                                           ^
+   fs/io_uring.c:5449:12: note: expanded from macro '\
+   IO_NETOP_PREP'
+   static int io_##op##_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe) \
+              ^
+   <scratch space>:22:1: note: expanded from here
+   io_recvmsg_prep
+   ^
+>> fs/io_uring.c:6924:9: error: implicit declaration of function 'io_recvzc' [-Werror,-Wimplicit-function-declaration]
+                   ret = io_recvzc(req, issue_flags);
+                         ^
+   fs/io_uring.c:6924:9: note: did you mean 'io_recv'?
+   fs/io_uring.c:5466:1: note: 'io_recv' declared here
+   IO_NETOP_FN(recv);
+   ^
+   fs/io_uring.c:5442:12: note: expanded from macro 'IO_NETOP_FN'
+   static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
+              ^
+   <scratch space>:34:1: note: expanded from here
+   io_recv
+   ^
+   12 warnings and 2 errors generated.
 
 
-vim +185 drivers/iio/accel/sca3300.c
+vim +/io_recvzc_prep +6639 fs/io_uring.c
 
-   177	
-   178	static const struct sca3300_chip_info sca3300_chip_info_tbl[] = {
-   179		[CHIP_SCA3300] = {
-   180			.chip_type = CHIP_SCA3300,
-   181			.name = "sca3300",
-   182			.chip_id = 0x51,
-   183			.channels = sca3300_channels,
-   184			.num_channels = ARRAY_SIZE(sca3300_channels),
- > 185			.scan_masks = sca3300_scan_masks,
-   186		},
-   187	};
-   188	
-   189	DECLARE_CRC8_TABLE(sca3300_crc_table);
-   190	
-   191	static int sca3300_transfer(struct sca3300_data *sca_data, int *val)
-   192	{
-   193		/* Consecutive requests min. 10 us delay (Datasheet section 5.1.2) */
-   194		struct spi_delay delay = { .value = 10, .unit = SPI_DELAY_UNIT_USECS };
-   195		int32_t ret;
-   196		int rs;
-   197		u8 crc;
-   198		struct spi_transfer xfers[2] = {
-   199			{
-   200				.tx_buf = sca_data->txbuf,
-   201				.len = ARRAY_SIZE(sca_data->txbuf),
-   202				.delay = delay,
-   203				.cs_change = 1,
-   204			},
-   205			{
-   206				.rx_buf = sca_data->rxbuf,
-   207				.len = ARRAY_SIZE(sca_data->rxbuf),
-   208				.delay = delay,
-   209			}
-   210		};
-   211	
-   212		/* inverted crc value as described in device data sheet */
-   213		crc = ~crc8(sca3300_crc_table, &sca_data->txbuf[0], 3, CRC8_INIT_VALUE);
-   214		sca_data->txbuf[3] = crc;
-   215	
-   216		ret = spi_sync_transfer(sca_data->spi, xfers, ARRAY_SIZE(xfers));
-   217		if (ret) {
-   218			dev_err(&sca_data->spi->dev,
-   219				"transfer error, error: %d\n", ret);
-   220			return -EIO;
-   221		}
-   222	
-   223		crc = ~crc8(sca3300_crc_table, &sca_data->rxbuf[0], 3, CRC8_INIT_VALUE);
-   224		if (sca_data->rxbuf[3] != crc) {
-   225			dev_err(&sca_data->spi->dev, "CRC checksum mismatch");
-   226			return -EIO;
-   227		}
-   228	
-   229		/* get return status */
-   230		rs = sca_data->rxbuf[0] & SCA3300_MASK_RS_STATUS;
-   231		if (rs == SCA3300_VALUE_RS_ERROR)
-   232			ret = -EINVAL;
-   233	
-   234		*val = sign_extend32(get_unaligned_be16(&sca_data->rxbuf[1]), 15);
-   235	
-   236		return ret;
-   237	}
-   238	
-   239	static int sca3300_error_handler(struct sca3300_data *sca_data)
-   240	{
-   241		int ret;
-   242		int val;
-   243	
-   244		mutex_lock(&sca_data->lock);
-   245		sca_data->txbuf[0] = SCA3300_REG_STATUS << 2;
-   246		ret = sca3300_transfer(sca_data, &val);
-   247		mutex_unlock(&sca_data->lock);
-   248		/*
-   249		 * Return status error is cleared after reading status register once,
-   250		 * expect EINVAL here.
-   251		 */
-   252		if (ret != -EINVAL) {
-   253			dev_err(&sca_data->spi->dev,
-   254				"error reading device status: %d\n", ret);
-   255			return ret;
-   256		}
-   257	
-   258		dev_err(&sca_data->spi->dev, "device status: 0x%lx\n",
-   259			val & SCA3300_STATUS_MASK);
-   260	
-   261		return 0;
-   262	}
-   263	
-   264	static int sca3300_read_reg(struct sca3300_data *sca_data, u8 reg, int *val)
-   265	{
-   266		int ret;
-   267	
-   268		mutex_lock(&sca_data->lock);
-   269		sca_data->txbuf[0] = reg << 2;
-   270		ret = sca3300_transfer(sca_data, val);
-   271		mutex_unlock(&sca_data->lock);
-   272		if (ret != -EINVAL)
-   273			return ret;
-   274	
-   275		return sca3300_error_handler(sca_data);
-   276	}
-   277	
-   278	static int sca3300_write_reg(struct sca3300_data *sca_data, u8 reg, int val)
-   279	{
-   280		int reg_val = 0;
-   281		int ret;
-   282	
-   283		mutex_lock(&sca_data->lock);
-   284		/* BIT(7) for write operation */
-   285		sca_data->txbuf[0] = BIT(7) | (reg << 2);
-   286		put_unaligned_be16(val, &sca_data->txbuf[1]);
-   287		ret = sca3300_transfer(sca_data, &reg_val);
-   288		mutex_unlock(&sca_data->lock);
-   289		if (ret != -EINVAL)
-   290			return ret;
-   291	
-   292		return sca3300_error_handler(sca_data);
-   293	}
-   294	
-   295	static int sca3300_write_raw(struct iio_dev *indio_dev,
-   296				     struct iio_chan_spec const *chan,
-   297				     int val, int val2, long mask)
-   298	{
-   299		struct sca3300_data *data = iio_priv(indio_dev);
-   300		int reg_val;
-   301		int ret;
-   302		int i;
-   303	
-   304		switch (mask) {
-   305		case IIO_CHAN_INFO_SCALE:
-   306			for (i = 0; i < OP_MOD_CNT; i++) {
- > 307				if ((val == sca3300_accel_scale[data->chip_info->chip_type][0]) &&
-   308				    (val2 == sca3300_accel_scale[data->chip_info->chip_type][1]))
-   309					return sca3300_write_reg(data, SCA3300_REG_MODE, i);
-   310			}
-   311			return -EINVAL;
-   312		case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
-   313			ret = sca3300_read_reg(data, SCA3300_REG_MODE, &reg_val);
-   314			if (ret)
-   315				return ret;
-   316			/* freq. change is possible only for mode 3 and 4 */
-   317			if (reg_val == 2 && val == sca3300_lp_freq[data->chip_info->chip_type][3])
-   318				return sca3300_write_reg(data, SCA3300_REG_MODE, 3);
-   319			if (reg_val == 3 && val == sca3300_lp_freq[data->chip_info->chip_type][2])
-   320				return sca3300_write_reg(data, SCA3300_REG_MODE, 2);
-   321			return -EINVAL;
-   322		default:
-   323			return -EINVAL;
-   324		}
-   325	}
-   326	
+  6560	
+  6561	static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+  6562	{
+  6563		switch (req->opcode) {
+  6564		case IORING_OP_NOP:
+  6565			return 0;
+  6566		case IORING_OP_READV:
+  6567		case IORING_OP_READ_FIXED:
+  6568		case IORING_OP_READ:
+  6569			return io_read_prep(req, sqe);
+  6570		case IORING_OP_WRITEV:
+  6571		case IORING_OP_WRITE_FIXED:
+  6572		case IORING_OP_WRITE:
+  6573			return io_write_prep(req, sqe);
+  6574		case IORING_OP_POLL_ADD:
+  6575			return io_poll_add_prep(req, sqe);
+  6576		case IORING_OP_POLL_REMOVE:
+  6577			return io_poll_update_prep(req, sqe);
+  6578		case IORING_OP_FSYNC:
+  6579			return io_fsync_prep(req, sqe);
+  6580		case IORING_OP_SYNC_FILE_RANGE:
+  6581			return io_sfr_prep(req, sqe);
+  6582		case IORING_OP_SENDMSG:
+  6583		case IORING_OP_SEND:
+  6584			return io_sendmsg_prep(req, sqe);
+  6585		case IORING_OP_RECVMSG:
+  6586		case IORING_OP_RECV:
+  6587			return io_recvmsg_prep(req, sqe);
+  6588		case IORING_OP_CONNECT:
+  6589			return io_connect_prep(req, sqe);
+  6590		case IORING_OP_TIMEOUT:
+  6591			return io_timeout_prep(req, sqe, false);
+  6592		case IORING_OP_TIMEOUT_REMOVE:
+  6593			return io_timeout_remove_prep(req, sqe);
+  6594		case IORING_OP_ASYNC_CANCEL:
+  6595			return io_async_cancel_prep(req, sqe);
+  6596		case IORING_OP_LINK_TIMEOUT:
+  6597			return io_timeout_prep(req, sqe, true);
+  6598		case IORING_OP_ACCEPT:
+  6599			return io_accept_prep(req, sqe);
+  6600		case IORING_OP_FALLOCATE:
+  6601			return io_fallocate_prep(req, sqe);
+  6602		case IORING_OP_OPENAT:
+  6603			return io_openat_prep(req, sqe);
+  6604		case IORING_OP_CLOSE:
+  6605			return io_close_prep(req, sqe);
+  6606		case IORING_OP_FILES_UPDATE:
+  6607			return io_rsrc_update_prep(req, sqe);
+  6608		case IORING_OP_STATX:
+  6609			return io_statx_prep(req, sqe);
+  6610		case IORING_OP_FADVISE:
+  6611			return io_fadvise_prep(req, sqe);
+  6612		case IORING_OP_MADVISE:
+  6613			return io_madvise_prep(req, sqe);
+  6614		case IORING_OP_OPENAT2:
+  6615			return io_openat2_prep(req, sqe);
+  6616		case IORING_OP_EPOLL_CTL:
+  6617			return io_epoll_ctl_prep(req, sqe);
+  6618		case IORING_OP_SPLICE:
+  6619			return io_splice_prep(req, sqe);
+  6620		case IORING_OP_PROVIDE_BUFFERS:
+  6621			return io_provide_buffers_prep(req, sqe);
+  6622		case IORING_OP_REMOVE_BUFFERS:
+  6623			return io_remove_buffers_prep(req, sqe);
+  6624		case IORING_OP_TEE:
+  6625			return io_tee_prep(req, sqe);
+  6626		case IORING_OP_SHUTDOWN:
+  6627			return io_shutdown_prep(req, sqe);
+  6628		case IORING_OP_RENAMEAT:
+  6629			return io_renameat_prep(req, sqe);
+  6630		case IORING_OP_UNLINKAT:
+  6631			return io_unlinkat_prep(req, sqe);
+  6632		case IORING_OP_MKDIRAT:
+  6633			return io_mkdirat_prep(req, sqe);
+  6634		case IORING_OP_SYMLINKAT:
+  6635			return io_symlinkat_prep(req, sqe);
+  6636		case IORING_OP_LINKAT:
+  6637			return io_linkat_prep(req, sqe);
+  6638		case IORING_OP_RECVZC:
+> 6639			return io_recvzc_prep(req, sqe);
+  6640		}
+  6641	
+  6642		printk_once(KERN_WARNING "io_uring: unhandled opcode %d\n",
+  6643				req->opcode);
+  6644		return -EINVAL;
+  6645	}
+  6646	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
