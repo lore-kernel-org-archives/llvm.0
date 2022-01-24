@@ -1,42 +1,41 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BF7173
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 08:56:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B4F173
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 08:57:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643014605; x=1674550605;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8KWZWe8Dnwx+WCvocNmPzE0rw+O2BB2c35CaycEx1Js=;
-  b=JeshFOnzk1WJBV0OZTItRg5xEscSEa1jJ44ge/YBqJvPRac5jQQNnC6R
-   eB3W3lqNAe5IIUwzUnrcUcJGEMRBe/1jHf6PBb35RmZR4k7Yq1y5kYEYe
-   V7bCqkUWk7adVX/CycpmU+2N4Iy/yFBExNbfRoFD7+WTUqY0X9tu3s3MG
-   QLPUif7pABTcfpMUWoYmylleKH2SYq8Pb6emca5Yt0XH09ImIiwSPvbE3
-   mLvEwLaROH/EfxloscPFXmYYTpeT4cxyA7oYHnxOcD4zvS2/PBreLfh4x
-   eJigER6HV3Eun46Q1liLvqQTH/vuWeOIYNdexAY4YwDrR0fs65brVLPs9
+  t=1643014649; x=1674550649;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7sd5PogBaRcqPkb30zcpAbnKRuKI3zOjGkgVhLXRSEw=;
+  b=biBVvbX8hDe6K7Wefve+VTplHJo6/o8kKP/ZKgRZExNzXC5H5bxZ7hMK
+   Bwq/R5OJDZ8gB/S9l8Rtw3YqxnEXiqfyY/aFVjNX3xHkj0dIOug4iuBty
+   HwgRQlqcPJn4Vu6NkyHJ05pdoUWepDPimj5Hzodgo5yZ1M3Zp6GHTGsWW
+   ZxnbPoWHG8fGvEyisq9Du4W24rBgnsIemKEexkpOn95ptXPUbSN7m3nCz
+   S0kIIPi2j+I1yAwsWWup6ffNR/J4T08siJdhdMRla66pwLNZnnt0W+D1e
+   AwFizaK1lN+jm5kgRguAUzhOceoE/1QNpEyM6hHA+qcmRqgfGLhI5VsrG
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="225979260"
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245944956"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="225979260"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:56:41 -0800
+   d="scan'208";a="245944956"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:57:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="617168099"
+   d="scan'208";a="768614027"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2022 00:56:26 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2022 00:57:26 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nBv9E-000I3p-GW; Mon, 24 Jan 2022 08:56:24 +0000
-Date: Mon, 24 Jan 2022 16:56:19 +0800
+	id 1nBvAC-000I3x-HA; Mon, 24 Jan 2022 08:57:24 +0000
+Date: Mon, 24 Jan 2022 16:56:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-gpio@vger.kernel.org
-Subject: [linusw-gpio:gpio-descriptors-spi 10/10]
- drivers/spi/spi-st-ssc4.c:176:17: error: no member named 'cs_gpio' in
- 'struct spi_device'; did you mean 'cs_gpiod'?
-Message-ID: <202201241627.wcbRmB9C-lkp@intel.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC V1 01/11] perf: Consolidate branch sample filter helpers
+Message-ID: <202201241639.ksLTFBFO-lkp@intel.com>
+References: <1642998653-21377-2-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,156 +44,211 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1642998653-21377-2-git-send-email-anshuman.khandual@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git gpio-descriptors-spi
-head:   b91ec14d0a206a5f58d8df605e7b5fe31a62a7ea
-commit: b91ec14d0a206a5f58d8df605e7b5fe31a62a7ea [10/10] spi: Retire legacy GPIO handling
-config: hexagon-randconfig-r045-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241627.wcbRmB9C-lkp@intel.com/config)
+Hi Anshuman,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on tip/master linux/master linus/master v5.17-rc1 next-20220124]
+[cannot apply to tip/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220124-123403
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: hexagon-randconfig-r031-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241639.ksLTFBFO-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9006bf424847bf91f0a624ffc27ad165c7b804c4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git/commit/?id=b91ec14d0a206a5f58d8df605e7b5fe31a62a7ea
-        git remote add linusw-gpio https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
-        git fetch --no-tags linusw-gpio gpio-descriptors-spi
-        git checkout b91ec14d0a206a5f58d8df605e7b5fe31a62a7ea
+        # https://github.com/0day-ci/linux/commit/896e736b386a6365048d447a32149f03c2544d47
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220124-123403
+        git checkout 896e736b386a6365048d447a32149f03c2544d47
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/spi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash arch/hexagon/mm/ drivers/char/ fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All error/warnings (new ones prefixed by >>):
 
->> drivers/spi/spi-st-ssc4.c:176:17: error: no member named 'cs_gpio' in 'struct spi_device'; did you mean 'cs_gpiod'?
-           gpio_free(spi->cs_gpio);
-                          ^~~~~~~
-                          cs_gpiod
-   include/linux/spi/spi.h:185:20: note: 'cs_gpiod' declared here
-           struct gpio_desc        *cs_gpiod;      /* chip select gpio desc */
-                                    ^
-   drivers/spi/spi-st-ssc4.c:186:16: error: no member named 'cs_gpio' in 'struct spi_device'; did you mean 'cs_gpiod'?
-           int cs = spi->cs_gpio;
-                         ^~~~~~~
-                         cs_gpiod
-   include/linux/spi/spi.h:185:20: note: 'cs_gpiod' declared here
-           struct gpio_desc        *cs_gpiod;      /* chip select gpio desc */
-                                    ^
->> drivers/spi/spi-st-ssc4.c:186:6: warning: incompatible pointer to integer conversion initializing 'int' with an expression of type 'struct gpio_desc *' [-Wint-conversion]
-           int cs = spi->cs_gpio;
-               ^    ~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+   In file included from arch/hexagon/mm/vm_fault.c:21:
+>> include/linux/perf_event.h:1653:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1658:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1663:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1668:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+                  ~~~~~  ^
+   arch/hexagon/mm/vm_fault.c:36:6: warning: no previous prototype for function 'do_page_fault' [-Wmissing-prototypes]
+   void do_page_fault(unsigned long address, long cause, struct pt_regs *regs)
+        ^
+   arch/hexagon/mm/vm_fault.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void do_page_fault(unsigned long address, long cause, struct pt_regs *regs)
+   ^
+   static 
+   arch/hexagon/mm/vm_fault.c:162:6: warning: no previous prototype for function 'read_protection_fault' [-Wmissing-prototypes]
+   void read_protection_fault(struct pt_regs *regs)
+        ^
+   arch/hexagon/mm/vm_fault.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void read_protection_fault(struct pt_regs *regs)
+   ^
+   static 
+   arch/hexagon/mm/vm_fault.c:169:6: warning: no previous prototype for function 'write_protection_fault' [-Wmissing-prototypes]
+   void write_protection_fault(struct pt_regs *regs)
+        ^
+   arch/hexagon/mm/vm_fault.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void write_protection_fault(struct pt_regs *regs)
+   ^
+   static 
+   arch/hexagon/mm/vm_fault.c:176:6: warning: no previous prototype for function 'execute_protection_fault' [-Wmissing-prototypes]
+   void execute_protection_fault(struct pt_regs *regs)
+        ^
+   arch/hexagon/mm/vm_fault.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void execute_protection_fault(struct pt_regs *regs)
+   ^
+   static 
+   4 warnings and 4 errors generated.
+--
+   In file included from fs/binfmt_misc.c:27:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1653:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1658:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1663:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1668:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+                  ~~~~~  ^
+   4 errors generated.
+--
+   In file included from fs/d_path.c:2:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1653:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1658:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1663:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1668:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+                  ~~~~~  ^
+   fs/d_path.c:318:7: warning: no previous prototype for function 'simple_dname' [-Wmissing-prototypes]
+   char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+         ^
+   fs/d_path.c:318:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+   ^
+   static 
+   1 warning and 4 errors generated.
+--
+   In file included from fs/statfs.c:2:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1653:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1658:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1663:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1668:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+                  ~~~~~  ^
+>> fs/statfs.c:131:3: warning: 'memcpy' will always overflow; destination buffer has size 64, but size argument is 88 [-Wfortify-source]
+                   memcpy(&buf, st, sizeof(*st));
+                   ^
+   1 warning and 4 errors generated.
+--
+   In file included from fs/aio.c:20:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1653:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1658:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1663:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1668:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+                  ~~~~~  ^
+   In file included from fs/aio.c:29:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 4 errors generated.
+--
+   In file included from drivers/char/random.c:335:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1653:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1658:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1663:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+                  ~~~~~  ^
+   include/linux/perf_event.h:1668:16: error: no member named 'attr' in 'struct perf_event'
+           return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+                  ~~~~~  ^
+>> drivers/char/random.c:1257:41: warning: shift count >= width of type [-Wshift-count-overflow]
+           c_high = (sizeof(cycles) > 4) ? cycles >> 32 : 0;
+                                                  ^  ~~
+   drivers/char/random.c:1258:35: warning: shift count >= width of type [-Wshift-count-overflow]
+           j_high = (sizeof(now) > 4) ? now >> 32 : 0;
+                                            ^  ~~
+   drivers/char/random.c:2272:6: warning: no previous prototype for function 'add_hwgenerator_randomness' [-Wmissing-prototypes]
+   void add_hwgenerator_randomness(const char *buffer, size_t count,
+        ^
+   drivers/char/random.c:2272:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void add_hwgenerator_randomness(const char *buffer, size_t count,
+   ^
+   static 
+   3 warnings and 4 errors generated.
 
 
-vim +176 drivers/spi/spi-st-ssc4.c
+vim +1653 include/linux/perf_event.h
 
-9e862375c5420a3 Lee Jones 2014-12-09  173  
-9e862375c5420a3 Lee Jones 2014-12-09  174  static void spi_st_cleanup(struct spi_device *spi)
-9e862375c5420a3 Lee Jones 2014-12-09  175  {
-42531686639d6a3 Axel Lin  2016-06-05 @176  	gpio_free(spi->cs_gpio);
-9e862375c5420a3 Lee Jones 2014-12-09  177  }
-9e862375c5420a3 Lee Jones 2014-12-09  178  
-9e862375c5420a3 Lee Jones 2014-12-09  179  /* the spi->mode bits understood by this driver: */
-9e862375c5420a3 Lee Jones 2014-12-09  180  #define MODEBITS  (SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST | SPI_LOOP | SPI_CS_HIGH)
-9e862375c5420a3 Lee Jones 2014-12-09  181  static int spi_st_setup(struct spi_device *spi)
-9e862375c5420a3 Lee Jones 2014-12-09  182  {
-9e862375c5420a3 Lee Jones 2014-12-09  183  	struct spi_st *spi_st = spi_master_get_devdata(spi->master);
-9e862375c5420a3 Lee Jones 2014-12-09  184  	u32 spi_st_clk, sscbrg, var;
-9e862375c5420a3 Lee Jones 2014-12-09  185  	u32 hz = spi->max_speed_hz;
-9e862375c5420a3 Lee Jones 2014-12-09 @186  	int cs = spi->cs_gpio;
-9e862375c5420a3 Lee Jones 2014-12-09  187  	int ret;
-9e862375c5420a3 Lee Jones 2014-12-09  188  
-9e862375c5420a3 Lee Jones 2014-12-09  189  	if (!hz)  {
-9e862375c5420a3 Lee Jones 2014-12-09  190  		dev_err(&spi->dev, "max_speed_hz unspecified\n");
-9e862375c5420a3 Lee Jones 2014-12-09  191  		return -EINVAL;
-9e862375c5420a3 Lee Jones 2014-12-09  192  	}
-9e862375c5420a3 Lee Jones 2014-12-09  193  
-9e862375c5420a3 Lee Jones 2014-12-09  194  	if (!gpio_is_valid(cs)) {
-9e862375c5420a3 Lee Jones 2014-12-09  195  		dev_err(&spi->dev, "%d is not a valid gpio\n", cs);
-9e862375c5420a3 Lee Jones 2014-12-09  196  		return -EINVAL;
-9e862375c5420a3 Lee Jones 2014-12-09  197  	}
-9e862375c5420a3 Lee Jones 2014-12-09  198  
-42531686639d6a3 Axel Lin  2016-06-05  199  	ret = gpio_request(cs, dev_name(&spi->dev));
-42531686639d6a3 Axel Lin  2016-06-05  200  	if (ret) {
-9e862375c5420a3 Lee Jones 2014-12-09  201  		dev_err(&spi->dev, "could not request gpio:%d\n", cs);
-42531686639d6a3 Axel Lin  2016-06-05  202  		return ret;
-9e862375c5420a3 Lee Jones 2014-12-09  203  	}
-9e862375c5420a3 Lee Jones 2014-12-09  204  
-9e862375c5420a3 Lee Jones 2014-12-09  205  	ret = gpio_direction_output(cs, spi->mode & SPI_CS_HIGH);
-9e862375c5420a3 Lee Jones 2014-12-09  206  	if (ret)
-42531686639d6a3 Axel Lin  2016-06-05  207  		goto out_free_gpio;
-9e862375c5420a3 Lee Jones 2014-12-09  208  
-9e862375c5420a3 Lee Jones 2014-12-09  209  	spi_st_clk = clk_get_rate(spi_st->clk);
-9e862375c5420a3 Lee Jones 2014-12-09  210  
-9e862375c5420a3 Lee Jones 2014-12-09  211  	/* Set SSC_BRF */
-9e862375c5420a3 Lee Jones 2014-12-09  212  	sscbrg = spi_st_clk / (2 * hz);
-9e862375c5420a3 Lee Jones 2014-12-09  213  	if (sscbrg < 0x07 || sscbrg > BIT(16)) {
-9e862375c5420a3 Lee Jones 2014-12-09  214  		dev_err(&spi->dev,
-9e862375c5420a3 Lee Jones 2014-12-09  215  			"baudrate %d outside valid range %d\n", sscbrg, hz);
-42531686639d6a3 Axel Lin  2016-06-05  216  		ret = -EINVAL;
-42531686639d6a3 Axel Lin  2016-06-05  217  		goto out_free_gpio;
-9e862375c5420a3 Lee Jones 2014-12-09  218  	}
-9e862375c5420a3 Lee Jones 2014-12-09  219  
-9e862375c5420a3 Lee Jones 2014-12-09  220  	spi_st->baud = spi_st_clk / (2 * sscbrg);
-9e862375c5420a3 Lee Jones 2014-12-09  221  	if (sscbrg == BIT(16)) /* 16-bit counter wraps */
-9e862375c5420a3 Lee Jones 2014-12-09  222  		sscbrg = 0x0;
-9e862375c5420a3 Lee Jones 2014-12-09  223  
-9e862375c5420a3 Lee Jones 2014-12-09  224  	writel_relaxed(sscbrg, spi_st->base + SSC_BRG);
-9e862375c5420a3 Lee Jones 2014-12-09  225  
-9e862375c5420a3 Lee Jones 2014-12-09  226  	dev_dbg(&spi->dev,
-9e862375c5420a3 Lee Jones 2014-12-09  227  		"setting baudrate:target= %u hz, actual= %u hz, sscbrg= %u\n",
-9e862375c5420a3 Lee Jones 2014-12-09  228  		hz, spi_st->baud, sscbrg);
-9e862375c5420a3 Lee Jones 2014-12-09  229  
-9e862375c5420a3 Lee Jones 2014-12-09  230  	/* Set SSC_CTL and enable SSC */
-9e862375c5420a3 Lee Jones 2014-12-09  231  	var = readl_relaxed(spi_st->base + SSC_CTL);
-9e862375c5420a3 Lee Jones 2014-12-09  232  	var |= SSC_CTL_MS;
-9e862375c5420a3 Lee Jones 2014-12-09  233  
-9e862375c5420a3 Lee Jones 2014-12-09  234  	if (spi->mode & SPI_CPOL)
-9e862375c5420a3 Lee Jones 2014-12-09  235  		var |= SSC_CTL_PO;
-9e862375c5420a3 Lee Jones 2014-12-09  236  	else
-9e862375c5420a3 Lee Jones 2014-12-09  237  		var &= ~SSC_CTL_PO;
-9e862375c5420a3 Lee Jones 2014-12-09  238  
-9e862375c5420a3 Lee Jones 2014-12-09  239  	if (spi->mode & SPI_CPHA)
-9e862375c5420a3 Lee Jones 2014-12-09  240  		var |= SSC_CTL_PH;
-9e862375c5420a3 Lee Jones 2014-12-09  241  	else
-9e862375c5420a3 Lee Jones 2014-12-09  242  		var &= ~SSC_CTL_PH;
-9e862375c5420a3 Lee Jones 2014-12-09  243  
-9e862375c5420a3 Lee Jones 2014-12-09  244  	if ((spi->mode & SPI_LSB_FIRST) == 0)
-9e862375c5420a3 Lee Jones 2014-12-09  245  		var |= SSC_CTL_HB;
-9e862375c5420a3 Lee Jones 2014-12-09  246  	else
-9e862375c5420a3 Lee Jones 2014-12-09  247  		var &= ~SSC_CTL_HB;
-9e862375c5420a3 Lee Jones 2014-12-09  248  
-9e862375c5420a3 Lee Jones 2014-12-09  249  	if (spi->mode & SPI_LOOP)
-9e862375c5420a3 Lee Jones 2014-12-09  250  		var |= SSC_CTL_LPB;
-9e862375c5420a3 Lee Jones 2014-12-09  251  	else
-9e862375c5420a3 Lee Jones 2014-12-09  252  		var &= ~SSC_CTL_LPB;
-9e862375c5420a3 Lee Jones 2014-12-09  253  
-9e862375c5420a3 Lee Jones 2014-12-09  254  	var &= ~SSC_CTL_DATA_WIDTH_MSK;
-9e862375c5420a3 Lee Jones 2014-12-09  255  	var |= (spi->bits_per_word - 1);
-9e862375c5420a3 Lee Jones 2014-12-09  256  
-9e862375c5420a3 Lee Jones 2014-12-09  257  	var |= SSC_CTL_EN_TX_FIFO | SSC_CTL_EN_RX_FIFO;
-9e862375c5420a3 Lee Jones 2014-12-09  258  	var |= SSC_CTL_EN;
-9e862375c5420a3 Lee Jones 2014-12-09  259  
-9e862375c5420a3 Lee Jones 2014-12-09  260  	writel_relaxed(var, spi_st->base + SSC_CTL);
-9e862375c5420a3 Lee Jones 2014-12-09  261  
-9e862375c5420a3 Lee Jones 2014-12-09  262  	/* Clear the status register */
-9e862375c5420a3 Lee Jones 2014-12-09  263  	readl_relaxed(spi_st->base + SSC_RBUF);
-9e862375c5420a3 Lee Jones 2014-12-09  264  
-9e862375c5420a3 Lee Jones 2014-12-09  265  	return 0;
-42531686639d6a3 Axel Lin  2016-06-05  266  
-42531686639d6a3 Axel Lin  2016-06-05  267  out_free_gpio:
-42531686639d6a3 Axel Lin  2016-06-05  268  	gpio_free(cs);
-42531686639d6a3 Axel Lin  2016-06-05  269  	return ret;
-9e862375c5420a3 Lee Jones 2014-12-09  270  }
-9e862375c5420a3 Lee Jones 2014-12-09  271  
-
-:::::: The code at line 176 was first introduced by commit
-:::::: 42531686639d6a3fe49518f2baca3f7256708242 spi: st-ssc4: Fix misuse of devm_gpio_request/devm_gpio_free APIs
-
-:::::: TO: Axel Lin <axel.lin@ingics.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+  1650	
+  1651	static inline bool branch_sample_no_flags(const struct perf_event *event)
+  1652	{
+> 1653		return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+  1654	}
+  1655	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
