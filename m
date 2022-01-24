@@ -1,46 +1,31 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336F7173
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 16:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643042701; x=1674578701;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aM9YJcSBXC3yFsRIAO+XebEgJNs0dEaVhB0zbDtZ3xQ=;
-  b=htuVKGBmdDBB1FW9PTRnnk+UaidyJUFnheeppiCxE6/MKzu2LKL5su/3
-   mf/kM/PdJi/tlS+yLS2oNq2SjlHFrJkAanXbXTOkQ6pNyX6qkQsFis1MY
-   WCOHCoIG46Qvnf7Ya0VdQv80ZpUl4WdGI/sPBFpm4sQPK39DtJlx6QAPo
-   TChSO5XsPYhYF0+Va4RElKOaCjqKGAnXOnm341fg3VNVTsp1YouPQJNNu
-   0kTQPeXb+BITrVQ9UpAAtaO8FEmojTE6dq2+N+i6mInuPwXO6LvETHoMj
-   lBEPBFnVQGTj4SLwGHmNUIVXK7Oa6lkrEXU18U4bI/E3KbbGcuVWPi5cz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="306803366"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="306803366"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:44:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="627562188"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 08:44:56 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nC2Sd-000Icf-Q6; Mon, 24 Jan 2022 16:44:55 +0000
-Date: Tue, 25 Jan 2022 00:44:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ronak Vijay Raheja <rraheja@codeaurora.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Macpaul Lin <macpaul.lin@mediatek.com>,
-	Jack Pham <jackp@codeaurora.org>,
-	Eddie Hung <eddie.hung@mediatek.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
- 2301/9999] drivers/usb/gadget/configfs.c:1620:2: error: implicit declaration
- of function 'acc_disconnect'
-Message-ID: <202201250013.vOmQcvaI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17D4173
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 17:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B5CC340E5;
+	Mon, 24 Jan 2022 17:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643046092;
+	bh=m7yPjYBJToplRJdYzEt7/9EfxmLG6PmjsXG/AvgQC8c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=esoRmQ5UrtkmRkcVg7w1dPm78wLUFkXx1e6hL9wijhrRAB+XmBv4zUDUFN/LdKnCI
+	 u/B937JgzuWLNOVWecvtCzNUd7kX6gErRQgIGq5XB1sfStCc8Stg1T1T1a6WChjZ3Y
+	 i8fltceG8/cvS4/9m6vT7f0uAu530ISGC2AMpXlXmXVNyxMqKf0Rj31P87XKUeVa66
+	 6wEx44b7vCp51IIkIFGPDCAltZ7HZrtb5v+LgRoV/jnp1Lz5tyHuPb4A8HORiERgtM
+	 UGtc2mcUrrUUxEbzTGQhIUOVEbhKTmi6v1pYngc6c7tim8w3I6sToHwni4FMXwYVtl
+	 aZ2OQhgB4ZXcg==
+Date: Mon, 24 Jan 2022 10:41:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: fs/ntfs3/fsntfs.c:2248:41: warning: taking address of packed
+ member 'de' of class or structure 'NTFS_DE_SII' may result in an unaligned
+ pointer value
+Message-ID: <Ye7kyA3yJupMLSD2@archlinux-ax161>
+References: <202201242326.uQ3OazUi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,71 +34,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202201242326.uQ3OazUi-lkp@intel.com>
 
-Hi Ronak,
+On Mon, Jan 24, 2022 at 11:21:59PM +0800, kernel test robot wrote:
+> Hi Konstantin,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+> commit: 6e5be40d32fb1907285277c02e74493ed43d77fe fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
+> date:   5 months ago
+> config: mips-buildonly-randconfig-r001-20220122 (https://download.01.org/0day-ci/archive/20220124/202201242326.uQ3OazUi-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mips-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5be40d32fb1907285277c02e74493ed43d77fe
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 6e5be40d32fb1907285277c02e74493ed43d77fe
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ntfs3/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    fs/ntfs3/fsntfs.c:1874:9: warning: variable 'cnt' set but not used [-Wunused-but-set-variable]
+>            size_t cnt, off;
+>                   ^
+> >> fs/ntfs3/fsntfs.c:2248:41: warning: taking address of packed member 'de' of class or structure 'NTFS_DE_SII' may result in an unaligned pointer value [-Waddress-of-packed-member]
+>            err = indx_insert_entry(indx_sii, ni, &sii_e.de, NULL, NULL);
+>                                                   ^~~~~~~~
+>    2 warnings generated.
 
-FYI, the error/warning still remains.
+This warning has the same root cause as
+https://lore.kernel.org/r/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
-head:   eb69f26fe8e2177cfb7cbf859a23fc5ac59cacb7
-commit: 80fef39de7e9dbe706d0cbc820a09b5c05dc366f [2301/9999] ANDROID: usb: gadget: Resolve NULL pointer dereference in composite_disconnect
-config: arm64-randconfig-r021-20220120 (https://download.01.org/0day-ci/archive/20220125/202201250013.vOmQcvaI-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/80fef39de7e9dbe706d0cbc820a09b5c05dc366f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
-        git checkout 80fef39de7e9dbe706d0cbc820a09b5c05dc366f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/gadget/
+Intel folks, would it be possible to limit instances of
+-Waddress-of-packed-member with mips randconfigs to our mailing list for
+the reason I note in the link above?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/gadget/configfs.c:1620:2: error: implicit declaration of function 'acc_disconnect' [-Werror,-Wimplicit-function-declaration]
-           acc_disconnect();
-           ^
-   1 error generated.
-
-
-vim +/acc_disconnect +1620 drivers/usb/gadget/configfs.c
-
-  1603	
-  1604	static void configfs_composite_disconnect(struct usb_gadget *gadget)
-  1605	{
-  1606		struct usb_composite_dev *cdev;
-  1607		struct gadget_info *gi;
-  1608		unsigned long flags;
-  1609	
-  1610		cdev = get_gadget_data(gadget);
-  1611		if (!cdev)
-  1612			return;
-  1613	
-  1614	#ifdef CONFIG_USB_CONFIGFS_F_ACC
-  1615		/*
-  1616		 * accessory HID support can be active while the
-  1617		 * accessory function is not actually enabled,
-  1618		 * so we need to inform it when we are disconnected.
-  1619		 */
-> 1620		acc_disconnect();
-  1621	#endif
-  1622		gi = container_of(cdev, struct gadget_info, cdev);
-  1623		spin_lock_irqsave(&gi->spinlock, flags);
-  1624		cdev = get_gadget_data(gadget);
-  1625		if (!cdev || gi->unbind) {
-  1626			spin_unlock_irqrestore(&gi->spinlock, flags);
-  1627			return;
-  1628		}
-  1629	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Nathan
