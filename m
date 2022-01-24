@@ -1,50 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A822CA7
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 15:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E5B29CA
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 15:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643036512; x=1674572512;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QfWyV+HXtcs6rILaxpwLONmm+UzDSrHuA/oNh1yavC0=;
-  b=QMkGmTG0q9JTnCWV8KTaJohkIQbWxWmzOVeHKgCNuqdc0t6ZMYCtMLbX
-   WrOomsork84uNVvDGscck1G66Uf5p/Wp0fhZJTZ2twx44ZmkUkXjuJRpt
-   TqaITvGkfVqs86Irz1KtCbu5LNgAp76G7mhnJGAZI+318pdRamwBCHJxU
-   elpARXaze99WiPnekewR5YyJdW9G2meO3ot5gY3YTqogcK2kDSd2HcFqx
-   XjxzygUnJBWanQbTwMTw39h9urfMFMqo26K5xOfLLItgSq9mHBSUeLTU+
-   +bhg5X6Q6p93EsNC+W2MnU+j+G3SX63Q6HnK5xXRCyslLt703FJnrcjmR
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245843596"
+  t=1643037774; x=1674573774;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rXIHO8mrtbACJRHFdE5xZ/YAqokB/xA2xxdRZnT/oOo=;
+  b=giUiTE9nHofb9DBV0nxf30xSI11ZznJate1wAqjDbxg9fyhBJyONCnDd
+   6cXqLTQseH3bjP0Ethz+RnTrwUe/+U52ZpvSLLwU2UY2UFsxK4assuFZW
+   Blrdc8WD5UgPy/nY+VfZIul1Wg2SQZHYMbwI4044nNN4fkSkWtKFhNh2B
+   0al+RrdXOUCJz96/9P6U3eytxVcdbQ73tO/kFX4rqGk+elewb6SKSaud/
+   26g8h8sc4F1/0myngza5KmSAD8yXfx/E3g/48Rc62e786I3a/z/91RExE
+   eB/P7QfCWXA8jCJ2cjHEPWUgxHACG9HV49ulYHMpTUBidnnH23NUzM3LE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246286136"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="245843596"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:01:50 -0800
+   d="scan'208";a="246286136"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:22:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="596809947"
+   d="scan'208";a="627530194"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Jan 2022 07:01:47 -0800
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 07:22:51 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nC0qo-000IUh-Iq; Mon, 24 Jan 2022 15:01:46 +0000
-Date: Mon, 24 Jan 2022 23:01:26 +0800
+	id 1nC1BD-000IW6-1j; Mon, 24 Jan 2022 15:22:51 +0000
+Date: Mon, 24 Jan 2022 23:21:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hao Xu <haoxu@linux.alibaba.com>, netdev@vger.kernel.org,
-	io-uring@vger.kernel.org
+To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-	David Ahern <dsahern@kernel.org>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>
-Subject: Re: [PATCH 3/3] io_uring: zerocopy receive
-Message-ID: <202201242233.64QOWQZ1-lkp@intel.com>
-References: <20220124094320.900713-4-haoxu@linux.alibaba.com>
+	linux-kernel@vger.kernel.org
+Subject: fs/ntfs3/fsntfs.c:2248:41: warning: taking address of packed member
+ 'de' of class or structure 'NTFS_DE_SII' may result in an unaligned pointer
+ value
+Message-ID: <202201242326.uQ3OazUi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,224 +45,268 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124094320.900713-4-haoxu@linux.alibaba.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Hao,
+Hi Konstantin,
 
-Thank you for the patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc1 next-20220124]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Hao-Xu/io_uring-zerocopy-receive/20220124-174546
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-config: s390-buildonly-randconfig-r004-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242233.64QOWQZ1-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+commit: 6e5be40d32fb1907285277c02e74493ed43d77fe fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
+date:   5 months ago
+config: mips-buildonly-randconfig-r001-20220122 (https://download.01.org/0day-ci/archive/20220124/202201242326.uQ3OazUi-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/295704165d394635876364522d3ac1451b62da66
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Hao-Xu/io_uring-zerocopy-receive/20220124-174546
-        git checkout 295704165d394635876364522d3ac1451b62da66
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5be40d32fb1907285277c02e74493ed43d77fe
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6e5be40d32fb1907285277c02e74493ed43d77fe
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ntfs3/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/io_uring.c:60:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from fs/io_uring.c:60:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from fs/io_uring.c:60:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> fs/io_uring.c:6639:10: error: implicit declaration of function 'io_recvzc_prep' [-Werror,-Wimplicit-function-declaration]
-                   return io_recvzc_prep(req, sqe);
-                          ^
-   fs/io_uring.c:6639:10: note: did you mean 'io_recvmsg_prep'?
-   fs/io_uring.c:5462:1: note: 'io_recvmsg_prep' declared here
-   IO_NETOP_PREP_ASYNC(recvmsg);
-   ^
-   fs/io_uring.c:5454:38: note: expanded from macro 'IO_NETOP_PREP_ASYNC'
-   #define IO_NETOP_PREP_ASYNC(op)                                         \
-                                                                           ^
-   fs/io_uring.c:5449:12: note: expanded from macro '\
-   IO_NETOP_PREP'
-   static int io_##op##_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe) \
-              ^
-   <scratch space>:22:1: note: expanded from here
-   io_recvmsg_prep
-   ^
->> fs/io_uring.c:6924:9: error: implicit declaration of function 'io_recvzc' [-Werror,-Wimplicit-function-declaration]
-                   ret = io_recvzc(req, issue_flags);
-                         ^
-   fs/io_uring.c:6924:9: note: did you mean 'io_recv'?
-   fs/io_uring.c:5466:1: note: 'io_recv' declared here
-   IO_NETOP_FN(recv);
-   ^
-   fs/io_uring.c:5442:12: note: expanded from macro 'IO_NETOP_FN'
-   static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
-              ^
-   <scratch space>:34:1: note: expanded from here
-   io_recv
-   ^
-   12 warnings and 2 errors generated.
+   fs/ntfs3/fsntfs.c:1874:9: warning: variable 'cnt' set but not used [-Wunused-but-set-variable]
+           size_t cnt, off;
+                  ^
+>> fs/ntfs3/fsntfs.c:2248:41: warning: taking address of packed member 'de' of class or structure 'NTFS_DE_SII' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           err = indx_insert_entry(indx_sii, ni, &sii_e.de, NULL, NULL);
+                                                  ^~~~~~~~
+   2 warnings generated.
 
 
-vim +/io_recvzc_prep +6639 fs/io_uring.c
+vim +2248 fs/ntfs3/fsntfs.c
 
-  6560	
-  6561	static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-  6562	{
-  6563		switch (req->opcode) {
-  6564		case IORING_OP_NOP:
-  6565			return 0;
-  6566		case IORING_OP_READV:
-  6567		case IORING_OP_READ_FIXED:
-  6568		case IORING_OP_READ:
-  6569			return io_read_prep(req, sqe);
-  6570		case IORING_OP_WRITEV:
-  6571		case IORING_OP_WRITE_FIXED:
-  6572		case IORING_OP_WRITE:
-  6573			return io_write_prep(req, sqe);
-  6574		case IORING_OP_POLL_ADD:
-  6575			return io_poll_add_prep(req, sqe);
-  6576		case IORING_OP_POLL_REMOVE:
-  6577			return io_poll_update_prep(req, sqe);
-  6578		case IORING_OP_FSYNC:
-  6579			return io_fsync_prep(req, sqe);
-  6580		case IORING_OP_SYNC_FILE_RANGE:
-  6581			return io_sfr_prep(req, sqe);
-  6582		case IORING_OP_SENDMSG:
-  6583		case IORING_OP_SEND:
-  6584			return io_sendmsg_prep(req, sqe);
-  6585		case IORING_OP_RECVMSG:
-  6586		case IORING_OP_RECV:
-  6587			return io_recvmsg_prep(req, sqe);
-  6588		case IORING_OP_CONNECT:
-  6589			return io_connect_prep(req, sqe);
-  6590		case IORING_OP_TIMEOUT:
-  6591			return io_timeout_prep(req, sqe, false);
-  6592		case IORING_OP_TIMEOUT_REMOVE:
-  6593			return io_timeout_remove_prep(req, sqe);
-  6594		case IORING_OP_ASYNC_CANCEL:
-  6595			return io_async_cancel_prep(req, sqe);
-  6596		case IORING_OP_LINK_TIMEOUT:
-  6597			return io_timeout_prep(req, sqe, true);
-  6598		case IORING_OP_ACCEPT:
-  6599			return io_accept_prep(req, sqe);
-  6600		case IORING_OP_FALLOCATE:
-  6601			return io_fallocate_prep(req, sqe);
-  6602		case IORING_OP_OPENAT:
-  6603			return io_openat_prep(req, sqe);
-  6604		case IORING_OP_CLOSE:
-  6605			return io_close_prep(req, sqe);
-  6606		case IORING_OP_FILES_UPDATE:
-  6607			return io_rsrc_update_prep(req, sqe);
-  6608		case IORING_OP_STATX:
-  6609			return io_statx_prep(req, sqe);
-  6610		case IORING_OP_FADVISE:
-  6611			return io_fadvise_prep(req, sqe);
-  6612		case IORING_OP_MADVISE:
-  6613			return io_madvise_prep(req, sqe);
-  6614		case IORING_OP_OPENAT2:
-  6615			return io_openat2_prep(req, sqe);
-  6616		case IORING_OP_EPOLL_CTL:
-  6617			return io_epoll_ctl_prep(req, sqe);
-  6618		case IORING_OP_SPLICE:
-  6619			return io_splice_prep(req, sqe);
-  6620		case IORING_OP_PROVIDE_BUFFERS:
-  6621			return io_provide_buffers_prep(req, sqe);
-  6622		case IORING_OP_REMOVE_BUFFERS:
-  6623			return io_remove_buffers_prep(req, sqe);
-  6624		case IORING_OP_TEE:
-  6625			return io_tee_prep(req, sqe);
-  6626		case IORING_OP_SHUTDOWN:
-  6627			return io_shutdown_prep(req, sqe);
-  6628		case IORING_OP_RENAMEAT:
-  6629			return io_renameat_prep(req, sqe);
-  6630		case IORING_OP_UNLINKAT:
-  6631			return io_unlinkat_prep(req, sqe);
-  6632		case IORING_OP_MKDIRAT:
-  6633			return io_mkdirat_prep(req, sqe);
-  6634		case IORING_OP_SYMLINKAT:
-  6635			return io_symlinkat_prep(req, sqe);
-  6636		case IORING_OP_LINKAT:
-  6637			return io_linkat_prep(req, sqe);
-  6638		case IORING_OP_RECVZC:
-> 6639			return io_recvzc_prep(req, sqe);
-  6640		}
-  6641	
-  6642		printk_once(KERN_WARNING "io_uring: unhandled opcode %d\n",
-  6643				req->opcode);
-  6644		return -EINVAL;
-  6645	}
-  6646	
+82cae269cfa953 Konstantin Komarov 2021-08-13  2075  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2076  /*
+82cae269cfa953 Konstantin Komarov 2021-08-13  2077   * ntfs_insert_security
+82cae269cfa953 Konstantin Komarov 2021-08-13  2078   *
+82cae269cfa953 Konstantin Komarov 2021-08-13  2079   * inserts security descriptor into $Secure::SDS
+82cae269cfa953 Konstantin Komarov 2021-08-13  2080   *
+82cae269cfa953 Konstantin Komarov 2021-08-13  2081   * SECURITY Descriptor Stream data is organized into chunks of 256K bytes
+82cae269cfa953 Konstantin Komarov 2021-08-13  2082   * and it contains a mirror copy of each security descriptor.  When writing
+82cae269cfa953 Konstantin Komarov 2021-08-13  2083   * to a security descriptor at location X, another copy will be written at
+82cae269cfa953 Konstantin Komarov 2021-08-13  2084   * location (X+256K).
+82cae269cfa953 Konstantin Komarov 2021-08-13  2085   * When writing a security descriptor that will cross the 256K boundary,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2086   * the pointer will be advanced by 256K to skip
+82cae269cfa953 Konstantin Komarov 2021-08-13  2087   * over the mirror portion.
+82cae269cfa953 Konstantin Komarov 2021-08-13  2088   */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2089  int ntfs_insert_security(struct ntfs_sb_info *sbi,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2090  			 const struct SECURITY_DESCRIPTOR_RELATIVE *sd,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2091  			 u32 size_sd, __le32 *security_id, bool *inserted)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2092  {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2093  	int err, diff;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2094  	struct ntfs_inode *ni = sbi->security.ni;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2095  	struct ntfs_index *indx_sdh = &sbi->security.index_sdh;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2096  	struct ntfs_index *indx_sii = &sbi->security.index_sii;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2097  	struct NTFS_DE_SDH *e;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2098  	struct NTFS_DE_SDH sdh_e;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2099  	struct NTFS_DE_SII sii_e;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2100  	struct SECURITY_HDR *d_security;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2101  	u32 new_sec_size = size_sd + SIZEOF_SECURITY_HDR;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2102  	u32 aligned_sec_size = Quad2Align(new_sec_size);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2103  	struct SECURITY_KEY hash_key;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2104  	struct ntfs_fnd *fnd_sdh = NULL;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2105  	const struct INDEX_ROOT *root_sdh;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2106  	const struct INDEX_ROOT *root_sii;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2107  	u64 mirr_off, new_sds_size;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2108  	u32 next, left;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2109  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2110  	static_assert((1 << Log2OfSecurityDescriptorsBlockSize) ==
+82cae269cfa953 Konstantin Komarov 2021-08-13  2111  		      SecurityDescriptorsBlockSize);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2112  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2113  	hash_key.hash = security_hash(sd, size_sd);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2114  	hash_key.sec_id = SECURITY_ID_INVALID;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2115  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2116  	if (inserted)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2117  		*inserted = false;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2118  	*security_id = SECURITY_ID_INVALID;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2119  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2120  	/* Allocate a temporal buffer*/
+82cae269cfa953 Konstantin Komarov 2021-08-13  2121  	d_security = ntfs_zalloc(aligned_sec_size);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2122  	if (!d_security)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2123  		return -ENOMEM;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2124  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2125  	mutex_lock_nested(&ni->ni_lock, NTFS_INODE_MUTEX_SECURITY);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2126  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2127  	fnd_sdh = fnd_get();
+82cae269cfa953 Konstantin Komarov 2021-08-13  2128  	if (!fnd_sdh) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2129  		err = -ENOMEM;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2130  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2131  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2132  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2133  	root_sdh = indx_get_root(indx_sdh, ni, NULL, NULL);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2134  	if (!root_sdh) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2135  		err = -EINVAL;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2136  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2137  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2138  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2139  	root_sii = indx_get_root(indx_sii, ni, NULL, NULL);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2140  	if (!root_sii) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2141  		err = -EINVAL;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2142  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2143  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2144  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2145  	/*
+82cae269cfa953 Konstantin Komarov 2021-08-13  2146  	 * Check if such security already exists
+82cae269cfa953 Konstantin Komarov 2021-08-13  2147  	 * use "SDH" and hash -> to get the offset in "SDS"
+82cae269cfa953 Konstantin Komarov 2021-08-13  2148  	 */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2149  	err = indx_find(indx_sdh, ni, root_sdh, &hash_key, sizeof(hash_key),
+82cae269cfa953 Konstantin Komarov 2021-08-13  2150  			&d_security->key.sec_id, &diff, (struct NTFS_DE **)&e,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2151  			fnd_sdh);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2152  	if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2153  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2154  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2155  	while (e) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2156  		if (le32_to_cpu(e->sec_hdr.size) == new_sec_size) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2157  			err = ntfs_read_run_nb(sbi, &ni->file.run,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2158  					       le64_to_cpu(e->sec_hdr.off),
+82cae269cfa953 Konstantin Komarov 2021-08-13  2159  					       d_security, new_sec_size, NULL);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2160  			if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2161  				goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2162  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2163  			if (le32_to_cpu(d_security->size) == new_sec_size &&
+82cae269cfa953 Konstantin Komarov 2021-08-13  2164  			    d_security->key.hash == hash_key.hash &&
+82cae269cfa953 Konstantin Komarov 2021-08-13  2165  			    !memcmp(d_security + 1, sd, size_sd)) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2166  				*security_id = d_security->key.sec_id;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2167  				/*such security already exists*/
+82cae269cfa953 Konstantin Komarov 2021-08-13  2168  				err = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2169  				goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2170  			}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2171  		}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2172  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2173  		err = indx_find_sort(indx_sdh, ni, root_sdh,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2174  				     (struct NTFS_DE **)&e, fnd_sdh);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2175  		if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2176  			goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2177  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2178  		if (!e || e->key.hash != hash_key.hash)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2179  			break;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2180  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2181  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2182  	/* Zero unused space */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2183  	next = sbi->security.next_off & (SecurityDescriptorsBlockSize - 1);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2184  	left = SecurityDescriptorsBlockSize - next;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2185  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2186  	/* Zero gap until SecurityDescriptorsBlockSize */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2187  	if (left < new_sec_size) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2188  		/* zero "left" bytes from sbi->security.next_off */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2189  		sbi->security.next_off += SecurityDescriptorsBlockSize + left;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2190  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2191  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2192  	/* Zero tail of previous security */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2193  	//used = ni->vfs_inode.i_size & (SecurityDescriptorsBlockSize - 1);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2194  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2195  	/*
+82cae269cfa953 Konstantin Komarov 2021-08-13  2196  	 * Example:
+82cae269cfa953 Konstantin Komarov 2021-08-13  2197  	 * 0x40438 == ni->vfs_inode.i_size
+82cae269cfa953 Konstantin Komarov 2021-08-13  2198  	 * 0x00440 == sbi->security.next_off
+82cae269cfa953 Konstantin Komarov 2021-08-13  2199  	 * need to zero [0x438-0x440)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2200  	 * if (next > used) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2201  	 *  u32 tozero = next - used;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2202  	 *  zero "tozero" bytes from sbi->security.next_off - tozero
+82cae269cfa953 Konstantin Komarov 2021-08-13  2203  	 */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2204  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2205  	/* format new security descriptor */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2206  	d_security->key.hash = hash_key.hash;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2207  	d_security->key.sec_id = cpu_to_le32(sbi->security.next_id);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2208  	d_security->off = cpu_to_le64(sbi->security.next_off);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2209  	d_security->size = cpu_to_le32(new_sec_size);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2210  	memcpy(d_security + 1, sd, size_sd);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2211  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2212  	/* Write main SDS bucket */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2213  	err = ntfs_sb_write_run(sbi, &ni->file.run, sbi->security.next_off,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2214  				d_security, aligned_sec_size);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2215  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2216  	if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2217  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2218  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2219  	mirr_off = sbi->security.next_off + SecurityDescriptorsBlockSize;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2220  	new_sds_size = mirr_off + aligned_sec_size;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2221  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2222  	if (new_sds_size > ni->vfs_inode.i_size) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  2223  		err = attr_set_size(ni, ATTR_DATA, SDS_NAME,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2224  				    ARRAY_SIZE(SDS_NAME), &ni->file.run,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2225  				    new_sds_size, &new_sds_size, false, NULL);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2226  		if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2227  			goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2228  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  2229  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2230  	/* Write copy SDS bucket */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2231  	err = ntfs_sb_write_run(sbi, &ni->file.run, mirr_off, d_security,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2232  				aligned_sec_size);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2233  	if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2234  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2235  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2236  	/* Fill SII entry */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2237  	sii_e.de.view.data_off =
+82cae269cfa953 Konstantin Komarov 2021-08-13  2238  		cpu_to_le16(offsetof(struct NTFS_DE_SII, sec_hdr));
+82cae269cfa953 Konstantin Komarov 2021-08-13  2239  	sii_e.de.view.data_size = cpu_to_le16(SIZEOF_SECURITY_HDR);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2240  	sii_e.de.view.res = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2241  	sii_e.de.size = cpu_to_le16(SIZEOF_SII_DIRENTRY);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2242  	sii_e.de.key_size = cpu_to_le16(sizeof(d_security->key.sec_id));
+82cae269cfa953 Konstantin Komarov 2021-08-13  2243  	sii_e.de.flags = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2244  	sii_e.de.res = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2245  	sii_e.sec_id = d_security->key.sec_id;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2246  	memcpy(&sii_e.sec_hdr, d_security, SIZEOF_SECURITY_HDR);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2247  
+82cae269cfa953 Konstantin Komarov 2021-08-13 @2248  	err = indx_insert_entry(indx_sii, ni, &sii_e.de, NULL, NULL);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2249  	if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2250  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2251  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2252  	/* Fill SDH entry */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2253  	sdh_e.de.view.data_off =
+82cae269cfa953 Konstantin Komarov 2021-08-13  2254  		cpu_to_le16(offsetof(struct NTFS_DE_SDH, sec_hdr));
+82cae269cfa953 Konstantin Komarov 2021-08-13  2255  	sdh_e.de.view.data_size = cpu_to_le16(SIZEOF_SECURITY_HDR);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2256  	sdh_e.de.view.res = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2257  	sdh_e.de.size = cpu_to_le16(SIZEOF_SDH_DIRENTRY);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2258  	sdh_e.de.key_size = cpu_to_le16(sizeof(sdh_e.key));
+82cae269cfa953 Konstantin Komarov 2021-08-13  2259  	sdh_e.de.flags = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2260  	sdh_e.de.res = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2261  	sdh_e.key.hash = d_security->key.hash;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2262  	sdh_e.key.sec_id = d_security->key.sec_id;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2263  	memcpy(&sdh_e.sec_hdr, d_security, SIZEOF_SECURITY_HDR);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2264  	sdh_e.magic[0] = cpu_to_le16('I');
+82cae269cfa953 Konstantin Komarov 2021-08-13  2265  	sdh_e.magic[1] = cpu_to_le16('I');
+82cae269cfa953 Konstantin Komarov 2021-08-13  2266  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2267  	fnd_clear(fnd_sdh);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2268  	err = indx_insert_entry(indx_sdh, ni, &sdh_e.de, (void *)(size_t)1,
+82cae269cfa953 Konstantin Komarov 2021-08-13  2269  				fnd_sdh);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2270  	if (err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2271  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2272  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2273  	*security_id = d_security->key.sec_id;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2274  	if (inserted)
+82cae269cfa953 Konstantin Komarov 2021-08-13  2275  		*inserted = true;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2276  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2277  	/* Update Id and offset for next descriptor */
+82cae269cfa953 Konstantin Komarov 2021-08-13  2278  	sbi->security.next_id += 1;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2279  	sbi->security.next_off += aligned_sec_size;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2280  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2281  out:
+82cae269cfa953 Konstantin Komarov 2021-08-13  2282  	fnd_put(fnd_sdh);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2283  	mark_inode_dirty(&ni->vfs_inode);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2284  	ni_unlock(ni);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2285  	ntfs_free(d_security);
+82cae269cfa953 Konstantin Komarov 2021-08-13  2286  
+82cae269cfa953 Konstantin Komarov 2021-08-13  2287  	return err;
+82cae269cfa953 Konstantin Komarov 2021-08-13  2288  }
+82cae269cfa953 Konstantin Komarov 2021-08-13  2289  
+
+:::::: The code at line 2248 was first introduced by commit
+:::::: 82cae269cfa953032fbb8980a7d554d60fb00b17 fs/ntfs3: Add initialization of super block
+
+:::::: TO: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+:::::: CC: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
