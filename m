@@ -1,115 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F04168
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 20:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1643055500;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LK256wQogjCX5wa9UmsP7s8Vi1buTBnWqTcBCjO4e1M=;
-	b=L/XLgTOZ0Kvqjw+/FggItrh1/yqVyFyY9IXNh5vV4NQJTPN+g/tHTT1EFnjtAyEJpbvhtd
-	9rX6TXm4j6JcLztDa8QAIHS9+PWbfycxEewcYMoR2h3tL8AOEc2brxKMWuxA1mOOr8sxCs
-	mkcY9NIwD2imFRNDOUEUeZytHDi5q34=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-353-mi0PjpS-OvuoABu5WTkYRg-1; Mon, 24 Jan 2022 15:18:19 -0500
-X-MC-Unique: mi0PjpS-OvuoABu5WTkYRg-1
-Received: by mail-oi1-f197.google.com with SMTP id bj34-20020a05680819a200b002cd0daa8c77so2719783oib.13
-        for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 12:18:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90177168
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 20:21:22 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id x11so52387067lfa.2
+        for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 12:21:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wyMvRdYooGkNnpiPbja1/uSfdA1/U9snsdIqkkHvJEc=;
+        b=htyyJ1Z3GRsmUZan58N3Prr0pEBcELIKOR7HkjpOyyQX11oHKKsVhGziUzHRAk9gAQ
+         qKIJ1la4FQPjdeduY0TumzsXC1keATPYK+6nRTIgrBg2Yx3j+qLswnmWYNKKkUD32SGa
+         NEUVgy1cbCWp9ftv9S/S5W24Xf77OuvIUUPVXQgqfByM1wogeIS6Un6jOyUF9MMCkpXG
+         teWa0koFmo2WyVhH9ii5kbYSuulkh24QTq4DkaKRlSHApSrAqcmB2KzC4vQu8X9FU9gv
+         2EOV8xLbbtvhhc9TN8f/mQhQ6bw3lBLH/4ZukkYU7sfiq5QPCY/xyIFbbSA1hYPq/sPZ
+         OO2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LK256wQogjCX5wa9UmsP7s8Vi1buTBnWqTcBCjO4e1M=;
-        b=O+ZMimbAxAXcIcBxM/nrb1KSc6roY1obqFyHNmL6g/cPY7gSLUfFp6av6eE/zdB4e4
-         HEaN2VqboSXLflB6YJLnqibKLXo78k8LRRF9GuC5sHhTAnR9d7d+HyJszWKC+c6kfEji
-         6zLgs95YHphHlmHA1Ca77R00wQY2ryOlLX0CJ5WDF8dup45gXojBCuUXNNUHUzGf5mbo
-         KnbLhVGyAjy5v3vUte+oulKxiK03JLlFp5KzrcZR0cRHnMapWK7ADdEgE08GNxi0c3l/
-         j+cbFCSyWi2Cp1VcbuDqR4E4ZUjJsaxMGQDjds+HxDy9dakh84nEoJaEo1q0SLD99VfB
-         LHoQ==
-X-Gm-Message-State: AOAM531LFFA3KKpFbKH+jk5CgEsddCxVmUR7nrh1Uqg2AL4UbU1Zqiil
-	eeQIcr3aHKSziP1W8I0qfQaoWA6b2GfVx13eeAGPovVZ4qySA1Eb40aC0KnsIfZ7orRbakuiBs+
-	KczMMaYvJjO8DSw==
-X-Received: by 2002:a9d:d08:: with SMTP id 8mr13197876oti.334.1643055498334;
-        Mon, 24 Jan 2022 12:18:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyTEn4ya3/5eCInZIkS/C/4U2Q9wOWBRRyxGnlMA9linsmQiFFzkE//YKVVW2gVtrkOgoqmKw==
-X-Received: by 2002:a9d:d08:: with SMTP id 8mr13197856oti.334.1643055498138;
-        Mon, 24 Jan 2022 12:18:18 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bk23sm6235774oib.23.2022.01.24.12.18.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 12:18:17 -0800 (PST)
-From: trix@redhat.com
-To: evan.quan@amd.com,
-	alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	lijo.lazar@amd.com,
-	darren.powell@amd.com,
-	guchun.chen@amd.com,
-	Arunpravin.PaneerSelvam@amd.com,
-	andrey.grodzovsky@amd.com
-Cc: amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] drm/amd/pm: return -ENOTSUPP if there is no get_dpm_ultimate_freq function
-Date: Mon, 24 Jan 2022 12:18:12 -0800
-Message-Id: <20220124201812.1078824-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wyMvRdYooGkNnpiPbja1/uSfdA1/U9snsdIqkkHvJEc=;
+        b=RHHFhHWIHkWaUenoS8ImJWMJfjdMmQNdCgJuda5Zo6MA1my3bndjsfpjXNBFU1EoDI
+         So+m2dTWwcEm4WA12saVlD8PB7Kh1cDHCKFxKVJNr6oWvGY9xyUsf2XFnOWn29wY544w
+         +QTTj44UQE4rynimvviQTnwykznrBex57I2wxbVkV9JA0S7EihhqxxEsEh3TcpXZPaRX
+         l66SVbSq7WP1mvigBLUD3HCTMPoeYTvZXn5MkRHn3lx1hKsdQ/kvm3dxbDEIdChD37AU
+         OmLo8XlBd1+h4iP42XC0gmRD5X9Vb3/n51JQoRXZXMnShttcmofeEpzv/hjoApk81IzE
+         KAbg==
+X-Gm-Message-State: AOAM532cWoM6P0MbXZfBa0J8H9K0n3Bbc1dKTgpPxuHq9XObgmvgH7gf
+	G5ep8yshvXz9y3qulkPXDjd0pwoyoJnwSEfdJ9htkg==
+X-Google-Smtp-Source: ABdhPJzNbWHLfVK0G4oHmQubeJbQeEM15S/l2in0t/MpUPzxIWlbk0Bzs9ERTx3WfdkjIX9h30ubfENOdawlZCrT2bU=
+X-Received: by 2002:a19:ad02:: with SMTP id t2mr14058303lfc.82.1643055680456;
+ Mon, 24 Jan 2022 12:21:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+References: <20220119224628.123084-1-colin.i.king@gmail.com>
+In-Reply-To: <20220119224628.123084-1-colin.i.king@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 24 Jan 2022 12:21:07 -0800
+Message-ID: <CAKwvOdnMibw77AvvWw7seB2PPamS_OLMUarSjdsa4w4OP1isKg@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: remove redundant assignment to reg
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Xinhui.Pan@amd.com, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Tom Rix <trix@redhat.com>
+On Wed, Jan 19, 2022 at 2:46 PM Colin Ian King <colin.i.king@gmail.com> wrote:
+>
+> The pointer reg is being assigned a value that is not read, the
+> exit path via label 'out' never accesses it. The assignment is
+> redundant and can be removed.
+>
+> Cleans up clang scan build warning:
+> drivers/gpu/drm/radeon/radeon_object.c:570:3: warning: Value
+> stored to 'reg' is never read [deadcode.DeadStores]
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-clang static analysis reports this represenative problem
-amdgpu_smu.c:144:18: warning: The left operand of '*' is a garbage value
-        return clk_freq * 100;
-               ~~~~~~~~ ^
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-If there is no get_dpm_ultimate_freq function,
-smu_get_dpm_freq_range returns success without setting the
-output min,max parameters.  So return an -ENOTSUPP error.
+> ---
+>  drivers/gpu/drm/radeon/radeon_object.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_object.c b/drivers/gpu/drm/radeon/radeon_object.c
+> index 56ede9d63b12..87536d205593 100644
+> --- a/drivers/gpu/drm/radeon/radeon_object.c
+> +++ b/drivers/gpu/drm/radeon/radeon_object.c
+> @@ -567,7 +567,6 @@ int radeon_bo_get_surface_reg(struct radeon_bo *bo)
+>                 return 0;
+>
+>         if (bo->surface_reg >= 0) {
+> -               reg = &rdev->surface_regs[bo->surface_reg];
+>                 i = bo->surface_reg;
+>                 goto out;
+>         }
+> --
+> 2.33.1
+>
+>
 
-Fixes: e5ef784b1e17 ("drm/amd/powerplay: revise calling chain on retrieving frequency range")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: return error instead of initializing min/max
 
-drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-index 5ace30434e603..264eb09ccfd51 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-@@ -116,7 +116,7 @@ int smu_get_dpm_freq_range(struct smu_context *smu,
- 			   uint32_t *min,
- 			   uint32_t *max)
- {
--	int ret = 0;
-+	int ret = -ENOTSUPP;
- 
- 	if (!min && !max)
- 		return -EINVAL;
 -- 
-2.26.3
-
+Thanks,
+~Nick Desaulniers
