@@ -1,41 +1,49 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE6B173
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 10:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A48B168
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 11:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643018423; x=1674554423;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I9ASTMkJBZh1dnZeeM7ClIkGGamrhZ4TzmARTN6rzk4=;
-  b=P1lAV00c31r4jGkTNDYQN1j5NhCDbHWoyU47I0ygsjJSEmUbYKxao4A9
-   RqoZptq4/RUxdqv1/VxOf+4MZyQu7WWLCpmmvXpX0HPnukZAYvHRGjDz8
-   qTS2d2d4mrXzXHPkYU+uIkbcNhdeWgcpiI+y1/zBhnNlfK0d3ptR4eNeX
-   5O8ivKRfY3W11H+iUSbzbR3htiBDFU97mKBrYWhj9XjW9gOToClrNMwI8
-   ShpmI5IKn6uklLY0yLpusi3m4vHRUdV0MiseyC8B7/95fGj6Ymje0U9W3
-   cT1L/HyGK1Y25+7Cs3gJBR+ct9GisiSPDNqOdHvhlYxdrSz+hO6Burca7
+  t=1643024502; x=1674560502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qSwxcSWc61GCN/jeYgEf7uRAI0O6FiXI5qymb1AvrOY=;
+  b=B1ixWgMgdaeKc340do+YY8dOXT5AS8oKjA/dZ5BUFs0YCIf2SD3o+YLD
+   mqv31BRxY7L00ZI0vY8TbiXR80/z6QQr57LHMzMKsADE7DGidJGVz/0rK
+   uNvkjz7T4ESMtBV270I6bZIeoB2su5TYgKhYukj+Z90EWQNj3wqIgk7mT
+   jMi2aNpp3G4Ni3r1anM/cHqjvZrmuz95usATUSN7VHHflauV8AJb3oaq5
+   kOmpPGEJSJlirR/TJMjQ8rDTm6K+9zJRQnuNpAkvyftYcICAYo/AJep3m
+   oBBi2rTFHMXm1m9y2qKoRz1tXUEMe5DO53iLq9VhGII0l5Ws5rH5XMxSv
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245956145"
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="226006144"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="245956145"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 01:59:30 -0800
+   d="scan'208";a="226006144"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 03:41:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="695369016"
+   d="scan'208";a="476691737"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 01:59:29 -0800
+  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2022 03:41:38 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nBw8G-000I9K-R5; Mon, 24 Jan 2022 09:59:28 +0000
-Date: Mon, 24 Jan 2022 17:58:44 +0800
+	id 1nBxj7-000IFp-Tr; Mon, 24 Jan 2022 11:41:37 +0000
+Date: Mon, 24 Jan 2022 19:40:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
+To: Tong Zhang <ztong0001@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/pci/controller/pcie-mt7621.c:549:34: warning: unused
- variable 'mt7621_pcie_ids'
-Message-ID: <202201241754.igtHzgHv-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Tong Zhang <ztong0001@gmail.com>
+Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
+Message-ID: <202201241937.i9KSsyAj-lkp@intel.com>
+References: <20220124003342.1457437-1-ztong0001@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,56 +52,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220124003342.1457437-1-ztong0001@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: 87c71931633bd15e9cfd51d4a4d9cd685e8cdb55 Merge branch 'pci/driver-cleanup'
-date:   11 days ago
-config: mips-randconfig-r031-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241754.igtHzgHv-lkp@intel.com/config)
+Hi Tong,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc1 next-20220124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/binfmt_misc-fix-crash-when-load-unload-module/20220124-083500
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+config: riscv-randconfig-r001-20220123 (https://download.01.org/0day-ci/archive/20220124/202201241937.i9KSsyAj-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=87c71931633bd15e9cfd51d4a4d9cd685e8cdb55
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 87c71931633bd15e9cfd51d4a4d9cd685e8cdb55
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/d649008f3214eb4d94760873831ef5e53c292976
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tong-Zhang/binfmt_misc-fix-crash-when-load-unload-module/20220124-083500
+        git checkout d649008f3214eb4d94760873831ef5e53c292976
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/controller/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/pci/controller/pcie-mt7621.c:112:20: warning: unused function 'pcie_rmw' [-Wunused-function]
-   static inline void pcie_rmw(struct mt7621_pcie *pcie, u32 reg, u32 clr, u32 set)
-                      ^
->> drivers/pci/controller/pcie-mt7621.c:549:34: warning: unused variable 'mt7621_pcie_ids' [-Wunused-const-variable]
-   static const struct of_device_id mt7621_pcie_ids[] = {
-                                    ^
-   2 warnings generated.
+>> fs/binfmt_misc.c:828:21: error: incompatible pointer types assigning to 'struct ctl_table_header *' from 'struct sysctl_header *' [-Werror,-Wincompatible-pointer-types]
+           binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/mt7621_pcie_ids +549 drivers/pci/controller/pcie-mt7621.c
+vim +828 fs/binfmt_misc.c
 
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  548  
-4793895f597d42e drivers/pci/controller/pcie-mt7621.c    Bjorn Helgaas 2021-12-22 @549  static const struct of_device_id mt7621_pcie_ids[] = {
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  550  	{ .compatible = "mediatek,mt7621-pci" },
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  551  	{},
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  552  };
-4793895f597d42e drivers/pci/controller/pcie-mt7621.c    Bjorn Helgaas 2021-12-22  553  MODULE_DEVICE_TABLE(of, mt7621_pcie_ids);
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  554  
-
-:::::: The code at line 549 was first introduced by commit
-:::::: 4793895f597d42eb54a0f54711b61263b6a8dd03 PCI: mt7621: Rename mt7621_pci_ to mt7621_pcie_
-
-:::::: TO: Bjorn Helgaas <bhelgaas@google.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+   821	
+   822	static int __init init_misc_binfmt(void)
+   823	{
+   824		int err = register_filesystem(&bm_fs_type);
+   825		if (!err)
+   826			insert_binfmt(&misc_format);
+   827	
+ > 828		binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+   829		if (!binfmt_misc_header) {
+   830			pr_warn("Failed to create fs/binfmt_misc sysctl mount point");
+   831			return -ENOMEM;
+   832		}
+   833		return 0;
+   834	}
+   835	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
