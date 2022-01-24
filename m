@@ -1,133 +1,278 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C66168
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 19:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643052310; x=1674588310;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kw/Pqxn4zzEA3FRO8NnV1FqsGwZ/uPeuzfjR4yCnkRg=;
-  b=l6eFG9EffzwRfoqzc5Z99OmB83oNfsV0FBPwA9fc0YrPRWWfMhbcCi8E
-   xoMyYzrKvTi4bhqtcexp+qxSaxagjNGzrLCR5ChgC6rAOH0oLomINsAqd
-   /bOwuj59FUIvccsm6opYh4hZDW4I8IZid6fjHGol0ji/SrFwA2lA4IuuJ
-   DxJOys/w3h7q44TMzdtB4FVkYjw/fsQ6TZZEMmu8k7+ASZuWR4q4f4lPv
-   krrNx0qbHbd0/mYoMhSnRPfcGDO/DnNF2vuRMUryPclTVNOdmorOB9MlS
-   0afUXmzxa5NYJdUV7z8AFJ2AKfwYl6f/MKyBNc5V1LrImvOAt8eQpd5hK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="306843200"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="306843200"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 11:25:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="624197286"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2022 11:25:05 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nC4xa-000IoX-Ry; Mon, 24 Jan 2022 19:25:02 +0000
-Date: Tue, 25 Jan 2022 03:24:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Emil Renner Berthing <kernel@esmil.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [esmil:visionfive 59/63]
- drivers/soc/sifive/sifive_l2_cache.c:148:19: warning: result of comparison
- of constant 36507222016 with expression of type 'unsigned long' is always
- false
-Message-ID: <202201250206.q2ugUJBE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEA9168
+	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 19:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8ECC340E5;
+	Mon, 24 Jan 2022 19:29:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PPnruihN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1643052554;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YfXcMYvtLUn7d14Gnis94IiLaEOFq0Ds4XfgcosuDFQ=;
+	b=PPnruihNHl9OeIN5HrkdQeki0Sje9B7XzWOIi+7Lux+sPDqXhAyi5IpauqszZQIyDXjM7t
+	2V1BDCV/8UBfpDNIdua3bl16nyWv+KpP30lNfLqUlnAk8y0X3+p6JE9cEvAsfvzkGyOVry
+	TJUeCr8WMNCaftd8cw/0IoCCj8B6NhM=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5b3516fc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+	Mon, 24 Jan 2022 19:29:14 +0000 (UTC)
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Miles Chen <miles.chen@mediatek.com>,
+	Ard Biesheuvel <ardb@kernel.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to compression function for Clang CFI
+Date: Mon, 24 Jan 2022 20:28:49 +0100
+Message-Id: <20220124192849.14755-1-Jason@zx2c4.com>
+In-Reply-To: <20220119135450.564115-1-Jason@zx2c4.com>
+References: <20220119135450.564115-1-Jason@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/esmil/linux visionfive
-head:   fdbe623707a8f3f9b9d2cb3c4c240299a12b8302
-commit: c17f07c367229d46348e9005d004d8b3416637bc [59/63] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
-config: riscv-randconfig-r015-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250206.q2ugUJBE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/c17f07c367229d46348e9005d004d8b3416637bc
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout c17f07c367229d46348e9005d004d8b3416637bc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
+blake2s_compress_generic is weakly aliased by blake2s_generic. The
+current harness for function selection uses a function pointer, which is
+ordinarily inlined and resolved at compile time. But when Clang's CFI is
+enabled, CFI still triggers when making an indirect call via a weak
+symbol. This seems like a bug in Clang's CFI, as though it's bucketing
+weak symbols and strong symbols differently. It also only seems to
+trigger when "full LTO" mode is used, rather than "thin LTO".
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
+[    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
+[    0.000000][    T0] Hardware name: MT6873 (DT)
+[    0.000000][    T0] Call trace:
+[    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
+[    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
+[    0.000000][    T0]  panic+0x194/0x464
+[    0.000000][    T0]  __cfi_check_fail+0x54/0x58
+[    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
+[    0.000000][    T0]  blake2s_update+0x14c/0x178
+[    0.000000][    T0]  _extract_entropy+0xf4/0x29c
+[    0.000000][    T0]  crng_initialize_primary+0x24/0x94
+[    0.000000][    T0]  rand_initialize+0x2c/0x6c
+[    0.000000][    T0]  start_kernel+0x2f8/0x65c
+[    0.000000][    T0]  __primary_switched+0xc4/0x7be4
+[    0.000000][    T0] Rebooting in 5 seconds..
 
-All warnings (new ones prefixed by >>):
+Nonetheless, the function pointer method isn't so terrific anyway, so
+this patch replaces it with a simple boolean, which also gets inlined
+away. This successfully works around the Clang bug.
 
-   drivers/soc/sifive/sifive_l2_cache.c:158:3: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
-                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-                   ^
->> drivers/soc/sifive/sifive_l2_cache.c:148:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+In general, I'm not too keen on all of the indirection involved here; it
+clearly does more harm than good. Hopefully the whole thing can get
+cleaned up down the road when lib/crypto is overhauled more
+comprehensively. But for now, we go with a simple bandaid.
 
-
-vim +148 drivers/soc/sifive/sifive_l2_cache.c
-
-a967a289f16969 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  126  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  #ifdef CONFIG_SIFIVE_L2_FLUSH
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  	unsigned long line;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  	if(!l2_base) {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  		return;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	/* TODO: if (len == 0), skipping flush or going on? */
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  	if(!len) {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  		return;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  142  
-0684fe29f5de5f drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
-0684fe29f5de5f drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
-0684fe29f5de5f drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  145  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	/* make sure the address is in the range */
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @148  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  149  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-b5cf3456431952 drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  150  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		     start, len);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  		return;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	mb();	/* sync */
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	for (line = start; line < start + len;
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  157  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  158  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  		mb();
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  	}
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  }
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  #endif
-c6649e71d37210 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  164  
-
-:::::: The code at line 148 was first introduced by commit
-:::::: c6649e71d37210bc4c33eada849aeda98c823de9 sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-
-:::::: TO: Tom <support@vamrs.com>
-:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
-
+Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
+Reported-by: Miles Chen <miles.chen@mediatek.com>
+Tested-by: Miles Chen <miles.chen@mediatek.com>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1567
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes v1->v2:
+- Wrapped columns at 80 for Eric.
+
+ arch/arm/crypto/blake2s-shash.c   |  4 ++--
+ arch/x86/crypto/blake2s-shash.c   |  4 ++--
+ crypto/blake2s_generic.c          |  4 ++--
+ include/crypto/internal/blake2s.h | 40 +++++++++++++++++++------------
+ lib/crypto/blake2s.c              |  4 ++--
+ 5 files changed, 33 insertions(+), 23 deletions(-)
+
+diff --git a/arch/arm/crypto/blake2s-shash.c b/arch/arm/crypto/blake2s-shash.c
+index 17c1c3bfe2f5..763c73beea2d 100644
+--- a/arch/arm/crypto/blake2s-shash.c
++++ b/arch/arm/crypto/blake2s-shash.c
+@@ -13,12 +13,12 @@
+ static int crypto_blake2s_update_arm(struct shash_desc *desc,
+ 				     const u8 *in, unsigned int inlen)
+ {
+-	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
++	return crypto_blake2s_update(desc, in, inlen, false);
+ }
+ 
+ static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
+ {
+-	return crypto_blake2s_final(desc, out, blake2s_compress);
++	return crypto_blake2s_final(desc, out, false);
+ }
+ 
+ #define BLAKE2S_ALG(name, driver_name, digest_size)			\
+diff --git a/arch/x86/crypto/blake2s-shash.c b/arch/x86/crypto/blake2s-shash.c
+index f9e2fecdb761..59ae28abe35c 100644
+--- a/arch/x86/crypto/blake2s-shash.c
++++ b/arch/x86/crypto/blake2s-shash.c
+@@ -18,12 +18,12 @@
+ static int crypto_blake2s_update_x86(struct shash_desc *desc,
+ 				     const u8 *in, unsigned int inlen)
+ {
+-	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
++	return crypto_blake2s_update(desc, in, inlen, false);
+ }
+ 
+ static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
+ {
+-	return crypto_blake2s_final(desc, out, blake2s_compress);
++	return crypto_blake2s_final(desc, out, false);
+ }
+ 
+ #define BLAKE2S_ALG(name, driver_name, digest_size)			\
+diff --git a/crypto/blake2s_generic.c b/crypto/blake2s_generic.c
+index 72fe480f9bd6..5f96a21f8788 100644
+--- a/crypto/blake2s_generic.c
++++ b/crypto/blake2s_generic.c
+@@ -15,12 +15,12 @@
+ static int crypto_blake2s_update_generic(struct shash_desc *desc,
+ 					 const u8 *in, unsigned int inlen)
+ {
+-	return crypto_blake2s_update(desc, in, inlen, blake2s_compress_generic);
++	return crypto_blake2s_update(desc, in, inlen, true);
+ }
+ 
+ static int crypto_blake2s_final_generic(struct shash_desc *desc, u8 *out)
+ {
+-	return crypto_blake2s_final(desc, out, blake2s_compress_generic);
++	return crypto_blake2s_final(desc, out, true);
+ }
+ 
+ #define BLAKE2S_ALG(name, driver_name, digest_size)			\
+diff --git a/include/crypto/internal/blake2s.h b/include/crypto/internal/blake2s.h
+index d39cfa0d333e..52363eee2b20 100644
+--- a/include/crypto/internal/blake2s.h
++++ b/include/crypto/internal/blake2s.h
+@@ -24,14 +24,11 @@ static inline void blake2s_set_lastblock(struct blake2s_state *state)
+ 	state->f[0] = -1;
+ }
+ 
+-typedef void (*blake2s_compress_t)(struct blake2s_state *state,
+-				   const u8 *block, size_t nblocks, u32 inc);
+-
+ /* Helper functions for BLAKE2s shared by the library and shash APIs */
+ 
+-static inline void __blake2s_update(struct blake2s_state *state,
+-				    const u8 *in, size_t inlen,
+-				    blake2s_compress_t compress)
++static __always_inline void
++__blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen,
++		 bool force_generic)
+ {
+ 	const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
+ 
+@@ -39,7 +36,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
+ 		return;
+ 	if (inlen > fill) {
+ 		memcpy(state->buf + state->buflen, in, fill);
+-		(*compress)(state, state->buf, 1, BLAKE2S_BLOCK_SIZE);
++		if (force_generic)
++			blake2s_compress_generic(state, state->buf, 1,
++						 BLAKE2S_BLOCK_SIZE);
++		else
++			blake2s_compress(state, state->buf, 1,
++					 BLAKE2S_BLOCK_SIZE);
+ 		state->buflen = 0;
+ 		in += fill;
+ 		inlen -= fill;
+@@ -47,7 +49,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
+ 	if (inlen > BLAKE2S_BLOCK_SIZE) {
+ 		const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
+ 		/* Hash one less (full) block than strictly possible */
+-		(*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
++		if (force_generic)
++			blake2s_compress_generic(state, in, nblocks - 1,
++						 BLAKE2S_BLOCK_SIZE);
++		else
++			blake2s_compress(state, in, nblocks - 1,
++					 BLAKE2S_BLOCK_SIZE);
+ 		in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
+ 		inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
+ 	}
+@@ -55,13 +62,16 @@ static inline void __blake2s_update(struct blake2s_state *state,
+ 	state->buflen += inlen;
+ }
+ 
+-static inline void __blake2s_final(struct blake2s_state *state, u8 *out,
+-				   blake2s_compress_t compress)
++static __always_inline void
++__blake2s_final(struct blake2s_state *state, u8 *out, bool force_generic)
+ {
+ 	blake2s_set_lastblock(state);
+ 	memset(state->buf + state->buflen, 0,
+ 	       BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
+-	(*compress)(state, state->buf, 1, state->buflen);
++	if (force_generic)
++		blake2s_compress_generic(state, state->buf, 1, state->buflen);
++	else
++		blake2s_compress(state, state->buf, 1, state->buflen);
+ 	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
+ 	memcpy(out, state->h, state->outlen);
+ }
+@@ -99,20 +109,20 @@ static inline int crypto_blake2s_init(struct shash_desc *desc)
+ 
+ static inline int crypto_blake2s_update(struct shash_desc *desc,
+ 					const u8 *in, unsigned int inlen,
+-					blake2s_compress_t compress)
++					bool force_generic)
+ {
+ 	struct blake2s_state *state = shash_desc_ctx(desc);
+ 
+-	__blake2s_update(state, in, inlen, compress);
++	__blake2s_update(state, in, inlen, force_generic);
+ 	return 0;
+ }
+ 
+ static inline int crypto_blake2s_final(struct shash_desc *desc, u8 *out,
+-				       blake2s_compress_t compress)
++				       bool force_generic)
+ {
+ 	struct blake2s_state *state = shash_desc_ctx(desc);
+ 
+-	__blake2s_final(state, out, compress);
++	__blake2s_final(state, out, force_generic);
+ 	return 0;
+ }
+ 
+diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
+index 9364f79937b8..c71c09621c09 100644
+--- a/lib/crypto/blake2s.c
++++ b/lib/crypto/blake2s.c
+@@ -18,14 +18,14 @@
+ 
+ void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
+ {
+-	__blake2s_update(state, in, inlen, blake2s_compress);
++	__blake2s_update(state, in, inlen, false);
+ }
+ EXPORT_SYMBOL(blake2s_update);
+ 
+ void blake2s_final(struct blake2s_state *state, u8 *out)
+ {
+ 	WARN_ON(IS_ENABLED(DEBUG) && !out);
+-	__blake2s_final(state, out, blake2s_compress);
++	__blake2s_final(state, out, false);
+ 	memzero_explicit(state, sizeof(*state));
+ }
+ EXPORT_SYMBOL(blake2s_final);
+-- 
+2.34.1
+
