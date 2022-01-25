@@ -1,39 +1,37 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46AF2C80
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 05:21:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643088085; x=1674624085;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=MuRN4vXJImW+mAHxTGU7cgYIDYGXTp4xZXv9wsTH3hA=;
-  b=arWOVkjsuHKtfhBFdos9+hVSnhJiCcsLBNZaeTX8wz0Z0SasU9tEPR8X
-   k/fsPzg0tR3Mh22oY5/++f5Mb7WiJY4TsJJQwtVHzJ8EG1XzjfxumdaDS
-   nttkWz5e0UpG2fJHc+2BA9FqvdR1Ned/ycHDfPoQ0ef2ycT3TB3KTDOv9
-   iQvgDmu4uOn6IHyYMzUpBEB7FmDaWaWu0BA8P19zEkuFMdFVTGxAsr8cL
-   Gnqygomthai55x/uG2q9cBFQkBOom0iR5rO/5EA1gjWuKY+ooLFRy6cK1
-   JlTjOupGkn14ozO/m2xMNPHmWmvdz4wK1+EG4rWIviz9CVOGZFgmdiO8f
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243821589"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="243821589"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 21:21:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="562917269"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2022 21:21:24 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCEGh-000JO5-8e; Tue, 25 Jan 2022 05:21:23 +0000
-Date: Tue, 25 Jan 2022 13:21:20 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [chrome-os:chromeos-5.10 9798/9999] ld.lld: error: assignment to
- symbol __pecoff_data_size does not converge
-Message-ID: <202201251303.zNHGRlTj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE80C29CA
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 06:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A039C340E0;
+	Tue, 25 Jan 2022 06:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643092844;
+	bh=Lwx8mO5mMqVbKGdRGLJ5Wq0V96nxImmH2K5npNDXyPo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aDYbJ54OdpYQH01sLWo6acgjo8qZxxsj5hf0BEz/3pM17AdmYDd79I60lzTIhUpBK
+	 tZ/Zd0fkpj1zZVVnwb8BY7KdPS6sn/d8iGvu3AGEeoa8s5JGpLsc/+8QoBTSn5sy4K
+	 87ue1vH1zG2J+UYhwUx8uABQlsy4hNN5IXf1XY2azdir6SF+kaA/SlosgGa2efuaF1
+	 dIS+zic5ikcm9DkMo/w3YJOlOas99uUHjhYpq45XLImKkrP2s48ipbUuHkqZ+T5XT0
+	 RNiRAINIfyy47CjENgEG8forPLg5AJ7Rng/PFlnhr63dgLAxKNdpQ53/wntdqWq2Oa
+	 QILBRw3Jb5mgA==
+Date: Mon, 24 Jan 2022 22:40:42 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Miles Chen <miles.chen@mediatek.com>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
+ compression function for Clang CFI
+Message-ID: <Ye+bam3aSIjz8n9E@sol.localdomain>
+References: <20220119135450.564115-1-Jason@zx2c4.com>
+ <20220124192849.14755-1-Jason@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,35 +40,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220124192849.14755-1-Jason@zx2c4.com>
 
-TO: cros-kernel-buildreports@googlegroups.com
-TO: Guenter Roeck <groeck@google.com>
+On Mon, Jan 24, 2022 at 08:28:49PM +0100, Jason A. Donenfeld wrote:
+> blake2s_compress_generic is weakly aliased by blake2s_generic. The
 
-tree:   https://chromium.googlesource.com/chromiumos/third_party/kernel chromeos-5.10
-head:   26a3cf7b7d542f4ff85e2855ab69140bff097a50
-commit: 5e4124c4f0737b68cd385b1d22ebc24ca06a8288 [9798/9999] FROMLIST: mailbox: mediatek: add support for adsp mailbox controller
-config: arm64-randconfig-r013-20220120 (https://download.01.org/0day-ci/archive/20220125/202201251303.zNHGRlTj-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add chrome-os https://chromium.googlesource.com/chromiumos/third_party/kernel
-        git fetch --no-tags chrome-os chromeos-5.10
-        git checkout 5e4124c4f0737b68cd385b1d22ebc24ca06a8288
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Don't you mean "weakly aliased by blake2s_compress"?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
+> Reported-by: Miles Chen <miles.chen@mediatek.com>
+> Tested-by: Miles Chen <miles.chen@mediatek.com>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1567
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
 
-All errors (new ones prefixed by >>):
+Otherwise this looks fine, though it's unfortunate this is needed.  You can add:
 
->> ld.lld: error: assignment to symbol __pecoff_data_size does not converge
+	Reviewed-by: Eric Biggers <ebiggers@google.com>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Changes v1->v2:
+> - Wrapped columns at 80 for Eric.
+
+It is the recommended coding style, so not just for me :-)
+
+- Eric
