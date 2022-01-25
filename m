@@ -1,37 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE80C29CA
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 06:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A039C340E0;
-	Tue, 25 Jan 2022 06:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643092844;
-	bh=Lwx8mO5mMqVbKGdRGLJ5Wq0V96nxImmH2K5npNDXyPo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aDYbJ54OdpYQH01sLWo6acgjo8qZxxsj5hf0BEz/3pM17AdmYDd79I60lzTIhUpBK
-	 tZ/Zd0fkpj1zZVVnwb8BY7KdPS6sn/d8iGvu3AGEeoa8s5JGpLsc/+8QoBTSn5sy4K
-	 87ue1vH1zG2J+UYhwUx8uABQlsy4hNN5IXf1XY2azdir6SF+kaA/SlosgGa2efuaF1
-	 dIS+zic5ikcm9DkMo/w3YJOlOas99uUHjhYpq45XLImKkrP2s48ipbUuHkqZ+T5XT0
-	 RNiRAINIfyy47CjENgEG8forPLg5AJ7Rng/PFlnhr63dgLAxKNdpQ53/wntdqWq2Oa
-	 QILBRw3Jb5mgA==
-Date: Mon, 24 Jan 2022 22:40:42 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Miles Chen <miles.chen@mediatek.com>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
- compression function for Clang CFI
-Message-ID: <Ye+bam3aSIjz8n9E@sol.localdomain>
-References: <20220119135450.564115-1-Jason@zx2c4.com>
- <20220124192849.14755-1-Jason@zx2c4.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8877129CA
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 07:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643097453; x=1674633453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=swqy1u1fp3tFKjcJHevUX3nODbFo1mlg9GM3+xBJ+U4=;
+  b=Ulr0V1YKb4X5brfuS7WGEzoZiEW9gQqMdh9hy8UgPiu5bmaZYdddhVAx
+   r+RqULpgg9Z2ycAMoPvm60+IftSOM1pZcvNRkvt3SsaMZ2NJT76QkG8/G
+   AAHh5vmjLLplgHw8KOImyCuo3+VOyJ12iNhOdl13UTOL1EtNYx171a1vv
+   2GoiWk+w4QC+UyCeh0N0x9brsf6LVU+cl8+LAUpALJyweuFc5qO8JJbr5
+   JUG8LehJqadFWHZzeVDwLqY02RUTKsu0tHi9skcLV6ydOOT471vrc8uTf
+   ySMjkYuxF4updweAIoDM5xy3oNt8OpSawUpuEui8UufdrOaMjz4+Tw+sV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="233615395"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="233615395"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 23:57:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="494913235"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 24 Jan 2022 23:57:31 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCGhm-000JYL-Fj; Tue, 25 Jan 2022 07:57:30 +0000
+Date: Tue, 25 Jan 2022 15:56:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Evan Quan <evan.quan@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Lijo Lazar <lijo.lazar@amd.com>
+Subject: [linux-next:master 550/1252]
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
+ warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
+ aligned than 'PPTable_t' and is usually due to 'struct
+ smu_11_0_powerplay_table' being packed, which can lea...
+Message-ID: <202201251530.UEfWRPS9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,31 +49,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124192849.14755-1-Jason@zx2c4.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Jan 24, 2022 at 08:28:49PM +0100, Jason A. Donenfeld wrote:
-> blake2s_compress_generic is weakly aliased by blake2s_generic. The
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   74e5dee6a5b9683e4e78aad784c6c807833cb89b
+commit: 837d542a09cd533055423dfca7e621a9c1d13c5b [550/1252] drm/amd/pm: relocate the power related headers
+config: arm-randconfig-r001-20220118 (https://download.01.org/0day-ci/archive/20220125/202201251530.UEfWRPS9-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Don't you mean "weakly aliased by blake2s_compress"?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
-> Reported-by: Miles Chen <miles.chen@mediatek.com>
-> Tested-by: Miles Chen <miles.chen@mediatek.com>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1567
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
+All warnings (new ones prefixed by >>):
 
-Otherwise this looks fine, though it's unfortunate this is needed.  You can add:
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
+                     ^
+   1 warning generated.
 
-	Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-> Changes v1->v2:
-> - Wrapped columns at 80 for Eric.
+vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
 
-It is the recommended coding style, so not just for me :-)
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
+4b2bb705a0b72f drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
+73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
+2dd1209e576068 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
 
-- Eric
+:::::: The code at line 163 was first introduced by commit
+:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
+
+:::::: TO: Huang Rui <ray.huang@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
