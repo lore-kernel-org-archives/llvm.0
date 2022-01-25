@@ -1,96 +1,167 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DBD29CA
-	for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 23:38:53 +0000 (UTC)
-Received: by mail-lj1-f169.google.com with SMTP id e9so1990340ljq.1
-        for <llvm@lists.linux.dev>; Mon, 24 Jan 2022 15:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FIP6niwFiCcE5eTqnTDWmb/wrXropuAeXBH8bjmRfkM=;
-        b=VrwRqbW7mgBywTPgKBmLBf5J1mchIOr7JqxAATJJaO2MOs9YuCVpjjVNXEzsBml+wp
-         ado8O/B5hhh9+WaOXej80757SD6Mzhj0G7C9BhHFXNvvFWjgiuy15dPxWN9LkKSG3U+6
-         gpE+me8Rw51avTJbIfG4JbHAU8GoEKfJyjejlkHSYuh6vLn6mpXNjFiANAPJrwEoxGwG
-         4pZ3FS3eS7llLKrv/WOiSSLxAyUYewvLJ1UbGnehniTPMJrS/per8DLCYHyAVFn10Dcp
-         0zR68towoUo99m4ogkP8Pl1ssg2Dnq6HhdFZ0vu0iKYz6Qr7WmpUyHrojf5yKD7d03V8
-         fGqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FIP6niwFiCcE5eTqnTDWmb/wrXropuAeXBH8bjmRfkM=;
-        b=Aa5zA9WXr9r4y+MAvgFq2raZ+CtMOdQsSwFePMLSlIRF60D9C+AGX0vKYFnG+FJxWN
-         XlQdN34DdmlugPtRq9mHUjQHYMUK/jkGDPX69Ef72U5dY3RTFJ3pJUE8ouQyg7MTjgJx
-         YAnbN2tUjwDqES5agaQo3f37MEQvIOiDxYIn4hGvW7GUIknb9vLPFRhG2uxgKeKHC+R1
-         llqPrsSd7T56Q55UaqtBU6dyMkznj3r/+dJ8LviVP49EKkioFc67EaB0IY3OVRJ0E7S3
-         df0qOzmfwz0+V3A+DvtrnxHD1W7G04GpmBl0dJAC8eVHTHA4a/603lt8MiMlq8ygsCtr
-         RWvA==
-X-Gm-Message-State: AOAM533MoMpaTmWVbUHlAlfEezBtf9s+7cD1uzfFSKc/5xc26OTQzofP
-	gqucogIo48TMlWlwytXM/Z3/Oix56D/jxguY2V/dFg==
-X-Google-Smtp-Source: ABdhPJxzHN2oG34NI+OLkIh9cUsniM7MENh8SCt8InminhPjzFucnqpWLiy0Rn4gHwCa+ALqvnw7k5IqoQt/rLjLGHg=
-X-Received: by 2002:a2e:9654:: with SMTP id z20mr12950862ljh.526.1643067531477;
- Mon, 24 Jan 2022 15:38:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A333429CA
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 00:03:54 +0000 (UTC)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailout.nyi.internal (Postfix) with ESMTP id 6F7365C0062;
+	Mon, 24 Jan 2022 19:03:53 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Mon, 24 Jan 2022 19:03:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm1; bh=xrVlhzn9aqAvyt
+	XYY/7c6YYYVRGhNM6WvivtbLM07nw=; b=iq7pi02PS8sL3wMUrWNyF5p7h24mDK
+	sM3thbyjTfoF7TylAYssOVXZtD9s+jCqJ0TwGcUTBTEHbmCJtTzqeh0ZC7PGZdnC
+	DnvYqeLd13a5LAWuX15LfuI3UAEyCfpLWDZokM1cXwVr1grQiM/pPVZ+hK9Nq1we
+	miFX4xyrtWqIYb/xhy9xnTs5ZnZqcBdxOuA9bO3gxhjAeuSwvb+RzDyTfuv22Cny
+	Jx4wt3qz5Df1pHMIfkK4UH6kwVMuBXc3hEJ2RThHzpUC8eCEZxWcOfB7kQ5XYmXZ
+	hp6F19TgshFiN/QqifsCsc0g/eKlYYxRno1UCJbqcG15SlVJRJIn2OWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; bh=xrVlhzn9aqAvytXYY/7c6YYYVRGhNM6WvivtbLM07
+	nw=; b=aN0JG3UjJA56Pt3PMsJFofak4UiP4GBcbYFIt+naPgqfyYg/s4cPGtPyo
+	YnNhdaT7JclRWvreVn2Jf+JudWggWln8T/T3X4sZu0scOCtI1bnTQDIZbJTzS072
+	7Jl9ntDcFEyKkWfnFP6brtx+WDW7l6MLYG6d1gLckM9r9venKRZj5iz1oBAAE8e5
+	JBQWDCOYI93f7AvVQxjl+YhqXMySbTs0UbAVy4ARvsmYcHMXTU3mb1XMIYI7vmp2
+	sWc4XfmI9pVaIgXxuLGMQKk9b40UWuFCbHU4ym6vQNBDaGfDF5Sv2036QrToO+Zl
+	OeJYPtp/VUvb2bnuA5JJ3QfFNqUhA==
+X-ME-Sender: <xms:aT7vYQy7RALPBf3IQRAxeZXGRB5ziOOcPbJybZbHOBS7jhK2O94REQ>
+    <xme:aT7vYUSIVtYt8J3NH4EyjNQYvD3oRGuVIZ-rwanFt7S_ytctiUACJZ3Eq_UHzxRU7
+    jr6ZMV1HxN-J8f-hXY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdekgdduiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
+    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
+    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:aT7vYSV1VY_-rDLXexeWyX8qYkX78SD2hCk_PvuHn80ggXwsQMEfvg>
+    <xmx:aT7vYeiKoSdInKeM3dd12OH62u5k8MciwxOfivc5lGWbKXlJaxYSKQ>
+    <xmx:aT7vYSBZuHwpGZxH-MRl3r5m0Ei-Xc5gicij4-B48qOGw0VG9PZNZg>
+    <xmx:aT7vYV_ro25vKsYJago2ixa0Ls4DLvaiunrlEiYT-WB6Mf6u_VamDw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 154A5FA0AA6; Mon, 24 Jan 2022 19:03:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4585-ga9d9773056-fm-20220113.001-ga9d97730
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220114010526.1776605-1-ndesaulniers@google.com>
- <YeQei0xNzMq7bFdg@zn.tnic> <20220118192256.jzk5dnceeusq7x7u@treble>
- <20220118230120.pivvson7qekfiqic@treble> <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
-In-Reply-To: <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 24 Jan 2022 15:38:38 -0800
-Message-ID: <CAKwvOdm+pnKb2PU7H5W1ks8eFd3DPEtN5kzjhnz5TLLwpBLOsA@mail.gmail.com>
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
-To: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>
-Cc: Vasily Gorbik <gor@linux.ibm.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Ingo Molnar <mingo@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org, llvm@lists.linux.dev, 
-	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Message-Id: <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
+In-Reply-To: 
+ <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
+References: <20220120214001.1879469-1-nathan@kernel.org>
+ <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
+Date: Tue, 25 Jan 2022 00:03:32 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Huacai Chen" <chenhuacai@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 24, 2022 at 3:26 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+
+
+=E5=9C=A82022=E5=B9=B41=E6=9C=8824=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=888:31=EF=BC=8CNick Desaulniers=E5=86=99=E9=81=93=EF=BC=9A
+> On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> =
+wrote:
+>>
+>> This Makefile checks that GCC is 4.9 or newer, which is redundant aft=
+er
+>> commit 76ae847497bc ("Documentation: raise minimum supported version =
+of
+>> GCC to 5.1"), so cc-option can be removed.
+>>
+>> Clang does not support -march=3Dloongson3a so it needs to continue to=
+ use
+>> -march=3Dmips64r2, along with binutils less than 2.25, so check that =
+both
+>> GCC and binutils 2.25 or newer are being used before using
+>> -march=3Dloongson3a. These flags do not need to be checked with cc-op=
+tion
+>> anymore because all GCC versions support -march=3Dloongson3a and
+>> -march=3Dmips64r2 and all clang versions support -march=3Dmips64r2.
+>>
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 >
-> On Tue, Jan 18, 2022 at 3:01 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> >
-> > Apparently this patch isn't going to work after all :-(
-> >
-> >   https://lkml.kernel.org/r/202201190632.lhlaiCBk-lkp@intel.com
+> Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
+> all for `-march=3Dloongson3a` AFAICT, though that question is orthogon=
+al
+> to this patch. Perhaps the Loongson or MIPS maintainers know more?
+> Otherwise seems like most uses of _MIPS_ISA can either be deleted or
+> simplified now.
+
+This is because earlier GCC mistakenly set loongson3a to MIPS64 not MIPS=
+64R2.
+
+But given that it's earlier than the minimal requirement GCC of kernel t=
+oday, I think it should be safe to just move the whole logic.
+
+Thanks.
+
 >
-> I noticed in that report and
-> https://lore.kernel.org/lkml/202201190702.XNSXrMTK-lkp@intel.com/
-> that gcc-9 was used.  I wonder if %= has been fixed in gcc-10+? Have
-> there been other reports with gcc-10+ for my patch?
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 >
-> Boris' case of xfrm_output_resume is yet a third case; Boris, what
-> version of gcc did you spot that with?
+>> ---
+>>  arch/mips/loongson64/Platform | 13 +++----------
+>>  1 file changed, 3 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Pla=
+tform
+>> index 3e660d6d3c2b..981d3abc150e 100644
+>> --- a/arch/mips/loongson64/Platform
+>> +++ b/arch/mips/loongson64/Platform
+>> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     +=3D -Wa,--tr=
+ap
+>>  # by GAS.  The cc-option can't probe for this behaviour so -march=3D=
+loongson3a
+>>  # can't easily be used safely within the kbuild framework.
+>>  #
+>> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
+>> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
+>> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
+>> -      $(call cc-option,-march=3Dloongson3a -U_MIPS_ISA -D_MIPS_ISA=3D=
+_MIPS_ISA_MIPS64)
+>> -  else
+>> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
+>> -      $(call cc-option,-march=3Dmips64r2,-mips64r2 -U_MIPS_ISA -D_MI=
+PS_ISA=3D_MIPS_ISA_MIPS64)
+>> -  endif
+>> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
+>> +  cflags-$(CONFIG_CPU_LOONGSON64) +=3D -march=3Dloongson3a -U_MIPS_I=
+SA -D_MIPS_ISA=3D_MIPS_ISA_MIPS64
+>>  else
+>> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
+>> -      $(call cc-option,-march=3Dmips64r2,-mips64r2 -U_MIPS_ISA -D_MI=
+PS_ISA=3D_MIPS_ISA_MIPS64)
+>> +  cflags-$(CONFIG_CPU_LOONGSON64) +=3D -march=3Dmips64r2
+>>  endif
+>>
+>>  # Some -march=3D flags enable MMI instructions, and GCC complains ab=
+out that
+>>
+>> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
+>> --
+>> 2.34.1
+>>
 >
-> If this is fixed in gcc-10, then we can probably add a comment with a
-> FIXME link to the issue or commit to replace __COUNTER__ with %= one
-> day.  If not, then we can probably come up with a reduced test case
-> for the GCC devs to take a look at, then add the FIXME comment to
-> kernel sources.
+>
+> --=20
+> Thanks,
+> ~Nick Desaulniers
 
-
-$ wget https://download.01.org/0day-ci/archive/20220119/202201190702.XNSXrMTK-lkp@intel.com/config
--O .config
-$ make -j72 -s olddefconfig drivers/net/wireless/mac80211_hwsim.o
-drivers/net/wireless/mac80211_hwsim.o: warning: objtool:
-mac80211_hwsim_tx()+0x9aa: unreachable instruction
-$ gcc --version
-gcc (Debian 11.2.0-12) 11.2.0
-
-:(
-
-Let me see if I can come up with a reduced test case that I will
-report upstream to https://gcc.gnu.org/bugzilla/.
--- 
-Thanks,
-~Nick Desaulniers
+--=20
+- Jiaxun
