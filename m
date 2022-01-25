@@ -1,82 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E239B168
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 18:55:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F77C340E7
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 18:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643136949;
-	bh=5F88GmWg6j8n65h4aHguokjv0SXNemVtjdZvA3vQSR0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HYXw9yyYMOYOQFW5JAu9FQGi6OKCuSXgz2IcXwffpRMwNxY6O2YXJftvb2Zdhw+Fq
-	 COKdYx0YTka0gidwppTRt7UV+k0jAseafhKubtkxncLHmxdLKZ3LRf5J54t2+fiCv4
-	 TJ4jJq0jFlXloRENmgQGKu9Ir2y+UNHk4Oabnym6mVhNkNczbe5CE0Xn4TncxC1DZU
-	 U3uA+LkYhF5Nvu1nHhH6OLNuPf4CNNR5CCPTiXsfcqjdz2a1kqmCUkz/x8kXs8jk6o
-	 BPyO/7tXKPrJDu5N0ziIwzQRdoUuc11Sui2Lt0XfWwiLoOJglaI8X5r5OTqHc0vpgg
-	 H2slYyPr0mYWA==
-Received: by mail-wr1-f52.google.com with SMTP id l25so21599647wrb.13
-        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 10:55:49 -0800 (PST)
-X-Gm-Message-State: AOAM532HgGuz1Ck/FW7GP7tOX0+m4pKFasTEVjuLdPRp3e10y/kHo1a1
-	xHF1gYlAidg1XXeKGRSot1AU4O2Rze06zIChBQY=
-X-Google-Smtp-Source: ABdhPJwpdk/Qdpw6Sj4wAwpVxIyxJ3kXP/wMgvaY/3Jr+vWqqP8fbDCWTH9NwCkO0JgEWjapsYOf18VdKvPBUSZayOM=
-X-Received: by 2002:a5d:4944:: with SMTP id r4mr19661667wrs.550.1643136947873;
- Tue, 25 Jan 2022 10:55:47 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A8C2CA7
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 19:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643138299; x=1674674299;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FwntuYkMFyXC8A/fT+dSEYw/mEXLQW02at8ETMVlkJY=;
+  b=ThmMtzwF3Z0JTRyWVZauJkTCKzTQCT7fdKKbA6+LE7okohkGvpSljU9W
+   ymQLfDajq+38VksM6soXksmYNLtYhSimXytiT7zYhXCh0pCWNs6f468Rh
+   xo75pbr9+bFkuSsj6ZrdH5E3j8/30YB6TNCwzdz+2vmkdESFOBYf/H5zG
+   ITDtl9eFSh9ZHS+NsqBFLG7m5e5tniAh5uWPuAqj83d1aSOn+PIDL0ozG
+   TpA+A44mIPeoUT2Bhk+Fdc8ZRq42lCjNwWZISl6lwxlrmL9Fjp3rbsnJG
+   aVqaNGSjyvGkXvMUmgZwi8Ft9KKL7mD9biVPZUvxD5kO2kj6NfU9IzrrJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307109781"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="307109781"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 11:18:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="624579555"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Jan 2022 11:18:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCRKa-000KMG-Dn; Tue, 25 Jan 2022 19:18:16 +0000
+Date: Wed, 26 Jan 2022 03:17:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhu Lingshan <lingshan.zhu@intel.com>, mst@redhat.com,
+	jasowang@redhat.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	Zhu Lingshan <lingshan.zhu@intel.com>
+Subject: Re: [PATCH V2 3/4] vhost_vdpa: don't setup irq offloading when
+ irq_num < 0
+Message-ID: <202201260245.1yTB6YwE-lkp@intel.com>
+References: <20220125091744.115996-4-lingshan.zhu@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211021142516.1843042-1-ardb@kernel.org> <YfBGg+zmIlHmTIm/@dev-arch.archlinux-ax161>
-In-Reply-To: <YfBGg+zmIlHmTIm/@dev-arch.archlinux-ax161>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 25 Jan 2022 19:55:37 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFgcoWU2XnL-arTKoA0Sk2AoQVjZ-xVLryGR=fkS89FVA@mail.gmail.com>
-Message-ID: <CAMj1kXFgcoWU2XnL-arTKoA0Sk2AoQVjZ-xVLryGR=fkS89FVA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: stackprotector: prefer compiler for TLS based
- per-task protector
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125091744.115996-4-lingshan.zhu@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, 25 Jan 2022 at 19:50, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Oct 21, 2021 at 04:25:16PM +0200, Ard Biesheuvel wrote:
-> > Currently, we implement the per-task stack protector for ARM using a GCC
-> > plugin, due to lack of native compiler support. However, work is
-> > underway to get this implemented in the compiler, which means we will be
-> > able to deprecate the GCC plugin at some point.
-> >
-> > In the meantime, we will need to support both, where the native compiler
-> > implementation is obviously preferred. So let's wire this up in Kconfig
-> > and the Makefile.
-> >
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
->
-> I see this patch in the KSPP tree as commit 151bbc8be85e ("ARM:
-> stackprotector: prefer compiler for TLS based per-task protector"),
-> which breaks booting aspeed_g5_defconfig in QEMU with clang-14. It seems
-> like this patch depends on Ard's patch "ARM: decompressor: disable stack
-> protector" [1]; applying that on top of next-20220125 allows me to boot
-> again.
->
-> This patch is still queued up in Russell's devel-stable branch as
-> commit f05eb1d24eb5 ("ARM: stackprotector: prefer compiler for TLS based
-> per-task protector") so perhaps this patch should be dropped from the
-> KSPP tree? I assume once Ard's recent fixes series [2] is applied to
-> devel-stable, it will be added back to for-next?
->
-> [1]: https://lore.kernel.org/r/20220124174744.1054712-9-ardb@kernel.org/
-> [2]: https://lore.kernel.org/r/20220125091453.1475246-1-ardb@kernel.org/
->
+Hi Zhu,
 
-Yeah. better drop it from KSPP.
+Thank you for the patch! Perhaps something to improve:
 
-The problem is that the compiler version of the per-task
-stackprotector feature does not get disabled when building the
-decompressor, which means it ends up dereferencing bogus TLS register
-values.
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on horms-ipvs/master linus/master v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Zhu-Lingshan/vDPA-ifcvf-implement-shared-IRQ-feature/20220125-174020
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+config: arm-randconfig-c002-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260245.1yTB6YwE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/9242eae873643db8562d24857da7d05a2950ecfe
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Zhu-Lingshan/vDPA-ifcvf-implement-shared-IRQ-feature/20220125-174020
+        git checkout 9242eae873643db8562d24857da7d05a2950ecfe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/vhost/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/vhost/vdpa.c:99:6: warning: variable 'irq' is uninitialized when used here [-Wuninitialized]
+           if (irq < 0)
+               ^~~
+   drivers/vhost/vdpa.c:94:14: note: initialize the variable 'irq' to silence this warning
+           int ret, irq;
+                       ^
+                        = 0
+   1 warning generated.
+
+
+vim +/irq +99 drivers/vhost/vdpa.c
+
+    88	
+    89	static void vhost_vdpa_setup_vq_irq(struct vhost_vdpa *v, u16 qid)
+    90	{
+    91		struct vhost_virtqueue *vq = &v->vqs[qid];
+    92		const struct vdpa_config_ops *ops = v->vdpa->config;
+    93		struct vdpa_device *vdpa = v->vdpa;
+    94		int ret, irq;
+    95	
+    96		if (!ops->get_vq_irq)
+    97			return;
+    98	
+  > 99		if (irq < 0)
+   100			return;
+   101	
+   102		irq = ops->get_vq_irq(vdpa, qid);
+   103		irq_bypass_unregister_producer(&vq->call_ctx.producer);
+   104		if (!vq->call_ctx.ctx || irq < 0)
+   105			return;
+   106	
+   107		vq->call_ctx.producer.token = vq->call_ctx.ctx;
+   108		vq->call_ctx.producer.irq = irq;
+   109		ret = irq_bypass_register_producer(&vq->call_ctx.producer);
+   110		if (unlikely(ret))
+   111			dev_info(&v->dev, "vq %u, irq bypass producer (token %p) registration fails, ret =  %d\n",
+   112				 qid, vq->call_ctx.producer.token, ret);
+   113	}
+   114	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
