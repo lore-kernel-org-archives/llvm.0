@@ -1,131 +1,152 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E91529CA
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 00:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643070437; x=1674606437;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xADFYjtp43qyO+CIOIsghZgbI9d5poWSqca6xjSn2SY=;
-  b=FbUJIULGdmjcF1cVDCinYvHVqRN1tOFf97oOOqkBkurxgxgKWyjJKZ/V
-   KEM5U/ORC3AtrXHAyCWz3uoRg8Dwdft74CLTnAmViACP0j/+axx2210PQ
-   U7iySn0gB0U5RzaRMUt88hNw70KjKuwSc43bdeSBmsCeiGQmlAmgaKiYP
-   coPOPyhjPcxgvWr8ivOezm4PKRxNgNzss/zs4ToMqCxYBNhOqJHI+F2Z4
-   T5sTKDJfzYoidQ+R2HJkaHiKeThwcBZ36GUtltW4747sGE4qXd7+Hes3y
-   lItdeST+j175eXcKEtapTIQcuaQSC4KfOTQOyju37xk6c6EMmjj5EW4XY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270623765"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="270623765"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 16:27:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="580573139"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2022 16:27:14 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nC9g2-000J6t-CL; Tue, 25 Jan 2022 00:27:14 +0000
-Date: Tue, 25 Jan 2022 08:26:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stephen Dickey <quic_dickey@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 2898/2936] kernel/sched/sched.h:1553:15: error: must use 'struct' tag to
- refer to type 'rq'
-Message-ID: <202201250831.PBiV30bo-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECB82CA3
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 01:25:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA3EC340E4;
+	Tue, 25 Jan 2022 01:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643073943;
+	bh=UqSazjT8UyPJQUEShMssyVrpCVBuSCCA0ELCO1ImzW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nSPlo4OqUozVEIEmdVIKHI2ituuKy/T67z+vMSJCANyJDo1i9UEiHVgcXdaJoBb21
+	 +IC0jCGd4z2K5cmdJUAkNCvBoTKpcxOvRb+O123AGD3pN8xGq8H0a/DQyblEniCliv
+	 gtH/07yXTnvS1+f83chvkucTrBmANoikqXruRDY3xfeTXVa03CP9CIWD/RsawFtVpo
+	 CqX9i6NOSAl076Tuw/3zvh8I5Snjvr6YUoXlCJ2Qra2fUcDiAn0NPIu/l6xnbMLcC6
+	 JQWCGI2K9x6Y7d+/g8JDPyoXeHjCb3M4siP7I9HQ5el5tcKlyczpH+9l9gHSnduBps
+	 48S3SKGI/lWOQ==
+Date: Mon, 24 Jan 2022 18:25:39 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
+Message-ID: <Ye9Rk4y9Ck7Bg5pv@dev-arch.archlinux-ax161>
+References: <20220120214001.1879469-1-nathan@kernel.org>
+ <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
+ <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   b7e4947b29bb8d0351c581d9365780d9b6f4d702
-commit: 50f5345c8756129044a3246800f51f04ae2f55b0 [2898/2936] ANDROID: __migrate_task header
-config: arm-randconfig-r003-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250831.PBiV30bo-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/50f5345c8756129044a3246800f51f04ae2f55b0
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 50f5345c8756129044a3246800f51f04ae2f55b0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/
+On Tue, Jan 25, 2022 at 12:03:32AM +0000, Jiaxun Yang wrote:
+> 
+> 
+> 在2022年1月24日一月 下午8:31，Nick Desaulniers写道：
+> > On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >>
+> >> This Makefile checks that GCC is 4.9 or newer, which is redundant after
+> >> commit 76ae847497bc ("Documentation: raise minimum supported version of
+> >> GCC to 5.1"), so cc-option can be removed.
+> >>
+> >> Clang does not support -march=loongson3a so it needs to continue to use
+> >> -march=mips64r2, along with binutils less than 2.25, so check that both
+> >> GCC and binutils 2.25 or newer are being used before using
+> >> -march=loongson3a. These flags do not need to be checked with cc-option
+> >> anymore because all GCC versions support -march=loongson3a and
+> >> -march=mips64r2 and all clang versions support -march=mips64r2.
+> >>
+> >> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
+> > all for `-march=loongson3a` AFAICT, though that question is orthogonal
+> > to this patch. Perhaps the Loongson or MIPS maintainers know more?
+> > Otherwise seems like most uses of _MIPS_ISA can either be deleted or
+> > simplified now.
+> 
+> This is because earlier GCC mistakenly set loongson3a to MIPS64 not MIPS64R2.
+> 
+> But given that it's earlier than the minimal requirement GCC of kernel today, I think it should be safe to just move the whole logic.
+> 
+> Thanks.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So something like this (completely untested)?
 
-All errors (new ones prefixed by >>):
+diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+index 3e660d6d3c2b..36ab2fe00835 100644
+--- a/arch/mips/loongson64/Platform
++++ b/arch/mips/loongson64/Platform
+@@ -5,24 +5,9 @@
+ 
+ cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
+ 
+-#
+-# binutils from v2.25 on and gcc starting from v4.9.0 treat -march=loongson3a
+-# as MIPS64 R2; older versions as just R1.  This leaves the possibility open
+-# that GCC might generate R2 code for -march=loongson3a which then is rejected
+-# by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
+-# can't easily be used safely within the kbuild framework.
+-#
+-ifeq ($(call cc-ifversion, -ge, 0409, y), y)
+-  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
+-    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+-      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+-  else
+-    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+-      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+-  endif
+-else
+-    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+-      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
++ifdef CONFIG_CPU_LOONGSON64
++cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
++cflags-$(CONFIG_CC_IS_GCC) += -march=loongson3a
+ endif
+ 
+ # Some -march= flags enable MMI instructions, and GCC complains about that
 
-   In file included from kernel/sched/core.c:13:
->> kernel/sched/sched.h:1553:15: error: must use 'struct' tag to refer to type 'rq'
-   static inline rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
-                 ^
-                 struct 
-   1 error generated.
---
-   In file included from kernel/sched/fair.c:23:
->> kernel/sched/sched.h:1553:15: error: must use 'struct' tag to refer to type 'rq'
-   static inline rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
-                 ^
-                 struct 
-   kernel/sched/fair.c:628:5: warning: no previous prototype for function 'sched_update_scaling' [-Wmissing-prototypes]
-   int sched_update_scaling(void)
-       ^
-   kernel/sched/fair.c:628:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_update_scaling(void)
-   ^
-   static 
-   kernel/sched/fair.c:4494:6: warning: no previous prototype for function 'set_next_entity' [-Wmissing-prototypes]
-   void set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
-        ^
-   kernel/sched/fair.c:4494:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
-   ^
-   static 
-   2 warnings and 1 error generated.
---
-   In file included from kernel/sched/rt.c:6:
->> kernel/sched/sched.h:1553:15: error: must use 'struct' tag to refer to type 'rq'
-   static inline rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
-                 ^
-                 struct 
-   kernel/sched/rt.c:677:6: warning: no previous prototype for function 'sched_rt_bandwidth_account' [-Wmissing-prototypes]
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-        ^
-   kernel/sched/rt.c:677:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-   ^
-   static 
-   1 warning and 1 error generated.
-
-
-vim +1553 kernel/sched/sched.h
-
-  1548	
-  1549	#ifdef CONFIG_SMP
-  1550	extern struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
-  1551					 struct task_struct *p, int dest_cpu);
-  1552	#else /* !CONFIG_SMP */
-> 1553	static inline rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
-  1554					 struct task_struct *p, int dest_cpu) { return rq; }
-  1555	#endif
-  1556	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> >> ---
+> >>  arch/mips/loongson64/Platform | 13 +++----------
+> >>  1 file changed, 3 insertions(+), 10 deletions(-)
+> >>
+> >> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+> >> index 3e660d6d3c2b..981d3abc150e 100644
+> >> --- a/arch/mips/loongson64/Platform
+> >> +++ b/arch/mips/loongson64/Platform
+> >> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     += -Wa,--trap
+> >>  # by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
+> >>  # can't easily be used safely within the kbuild framework.
+> >>  #
+> >> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
+> >> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
+> >> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+> >> -      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+> >> -  else
+> >> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+> >> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+> >> -  endif
+> >> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
+> >> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64
+> >>  else
+> >> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+> >> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+> >> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=mips64r2
+> >>  endif
+> >>
+> >>  # Some -march= flags enable MMI instructions, and GCC complains about that
+> >>
+> >> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
+> >> --
+> >> 2.34.1
+> >>
+> >
+> >
+> > -- 
+> > Thanks,
+> > ~Nick Desaulniers
+> 
+> -- 
+> - Jiaxun
