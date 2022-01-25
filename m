@@ -1,42 +1,50 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5832CA7
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 21:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052C22CA7
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 21:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643145624; x=1674681624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1mC3jvFOz6BcF/JErbN9jY4zCH09JH3fVuzVeAT3IJ8=;
-  b=IuSCT4+pMNSsjWYxFK7HjJUwopo+y7CxrcBRY+GRMfDAf67OvWExTa/1
-   DcykAB6ZH2MEhr4K1tQOOT3rrGNyXTqaNHZmWO5B+WRlWb2TLEPUcYmkh
-   Io2P5rOOwVy10dmPRBXm6HWNq8HU1oZ9QiI3Bhm2Tvc1G5ckPi6ia9vPM
-   q4eies72tVyf+Xbij1xwXoDfBAIhmx/haeFANzrRoPZ22useb+Vfb4G98
-   oEwVNeUMx197fgWZU6Ft3qv3Q9UEt42xoyeb3v+S+nyLxk522GaA54hBW
-   SVWVINk6qr7MiqG+kiIzY6LBwe8tUkP65EVGKJMk4iQLwrCF/V2wdaX7L
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="245252930"
+  t=1643146249; x=1674682249;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XowxNXgoa7qTiYGMsiGyGW3OfOAW78GHgwKP30yaINQ=;
+  b=NW8Qzm+AVgv9nHX+eXzXom6dn0LFkuLqkHxjjWl6RerjF6g3VSeQdmb/
+   gaWJzxwYRq9UAaIn5OLxph4VZBgrV1dUr8ARNyo4xRXmFIK7klZNVzTfv
+   0/FVWJ8Tr0BwrzpJknUfxbhE8OBde29KNFMlO6w7OkmSezLufL8XPqlRL
+   24CvdVW7PgmIctWyXQuCCXAhgmpOPuEge/p70CwIF4P8Hnx6/RY+vl8lw
+   AIvetcjSo2Vw/F6p+6woxVyyAhBv6EeTMZ2Gy/5JKSXE88uWkjui3hEBD
+   mX3FhdEdwhpx9d7ox40JuvRD4dbkJ8w0LllwOLfNCarcSAQYBOqSFYsrH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332773682"
 X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="245252930"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 13:20:24 -0800
+   d="scan'208";a="332773682"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 13:30:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="695991612"
+   d="scan'208";a="617760902"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2022 13:20:22 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2022 13:30:22 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCTEj-000KRq-Ms; Tue, 25 Jan 2022 21:20:21 +0000
-Date: Wed, 26 Jan 2022 05:19:59 +0800
+	id 1nCTOP-000KS4-P7; Tue, 25 Jan 2022 21:30:21 +0000
+Date: Wed, 26 Jan 2022 05:30:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
+To: Jisheng Zhang <jszhang@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexandre Ghiti <alexandre.ghiti@canonical.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mark:linkage/alias-rework 2/7]
- arch/arm/mach-omap1/ams-delta-fiq-handler.S:272:5: error: expected absolute
- expression
-Message-ID: <202201260540.vObCbIBt-lkp@intel.com>
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] riscv: convert pgtable_l4_enabled to static key
+Message-ID: <202201260555.SwYGWcoq-lkp@intel.com>
+References: <20220125165036.987-4-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,154 +53,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220125165036.987-4-jszhang@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
-head:   a024fcf01f6ed383d5d22d6784fbba21ac0f4d2a
-commit: 18767f88b5593b40e521c45b58af8c0ea7953927 [2/7] linkage: add SYM_{ENTRY,START,END}_AT()
-config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220126/202201260540.vObCbIBt-lkp@intel.com/config)
+Hi Jisheng,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jisheng-Zhang/unified-way-to-use-static-key-and-optimize-pgtable_l4_enabled/20220126-010230
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git a08b41ab9e2e468647f78eb17c28e29b93006394
+config: riscv-randconfig-r012-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260555.SwYGWcoq-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=18767f88b5593b40e521c45b58af8c0ea7953927
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark linkage/alias-rework
-        git checkout 18767f88b5593b40e521c45b58af8c0ea7953927
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/6822380e5bcac6d3edfa5d0723d829db8ec28405
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jisheng-Zhang/unified-way-to-use-static-key-and-optimize-pgtable_l4_enabled/20220126-010230
+        git checkout 6822380e5bcac6d3edfa5d0723d829db8ec28405
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> arch/arm/mach-omap1/ams-delta-fiq-handler.S:272:5: error: expected absolute expression
-   .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
-       ^
->> arch/arm/mach-omap1/ams-delta-fiq-handler.S:273:2: error: .err encountered
-    .err
-    ^
+>> arch/riscv/mm/init.c:691:6: error: implicit declaration of function 'system_supports_sv48' [-Werror,-Wimplicit-function-declaration]
+           if (system_supports_sv48()) {
+               ^
+   arch/riscv/mm/init.c:721:13: warning: no previous prototype for function 'pt_ops_set_early' [-Wmissing-prototypes]
+   void __init pt_ops_set_early(void)
+               ^
+   arch/riscv/mm/init.c:721:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init pt_ops_set_early(void)
+   ^
+   static 
+   arch/riscv/mm/init.c:741:13: warning: no previous prototype for function 'pt_ops_set_fixmap' [-Wmissing-prototypes]
+   void __init pt_ops_set_fixmap(void)
+               ^
+   arch/riscv/mm/init.c:741:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init pt_ops_set_fixmap(void)
+   ^
+   static 
+   arch/riscv/mm/init.c:757:13: warning: no previous prototype for function 'pt_ops_set_late' [-Wmissing-prototypes]
+   void __init pt_ops_set_late(void)
+               ^
+   arch/riscv/mm/init.c:757:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init pt_ops_set_late(void)
+   ^
+   static 
+   3 warnings and 1 error generated.
 
 
-vim +272 arch/arm/mach-omap1/ams-delta-fiq-handler.S
+vim +/system_supports_sv48 +691 arch/riscv/mm/init.c
 
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  167  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  168  	@ r8 still contains GPIO input bits
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  169  	ands r8, r8, #KEYBRD_DATA_MASK		@ is keyboard data line low?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  170  	ldreq r8, [r9, #BUF_KEY]		@ yes - fetch collected so far,
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  171  	orreq r8, r8, r10			@ set 1 at current mask position
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  172  	streq r8, [r9, #BUF_KEY]		@ and save back
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  173  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  174  	mov r10, r10, lsl #1			@ shift mask left
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  175  	bics r10, r10, #0x800			@ have we got all the bits?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  176  	strne r10, [r9, #BUF_MASK]		@ not yet - store the mask
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  177  	bne restart				@ and restart
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  178  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  179  	@ r10 already contains 0, reuse it
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  180  	str r10, [r9, #BUF_STATE]		@ reset state to start
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  181  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  182  	@ Key done - restore interrupt mask
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  183  	ldr r10, [r9, #BUF_GPIO_INT_MASK]	@ fetch saved mask
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  184  	and r11, r11, r10			@ unmask all saved as unmasked
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  185  	str r11, [r12, #OMAP1510_GPIO_INT_MASK]	@ restore into the mask register
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  186  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  187  	@ Try appending the keycode to the circular buffer
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  188  	ldr r10, [r9, #BUF_KEYS_CNT]		@ get saved keystrokes count
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  189  	ldr r8, [r9, #BUF_BUF_LEN]		@ get buffer size
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  190  	cmp r10, r8				@ is buffer full?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  191  	beq hksw				@ yes - key lost, next source
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  192  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  193  	add r10, r10, #1			@ incremet keystrokes counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  194  	str r10, [r9, #BUF_KEYS_CNT]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  195  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  196  	ldr r10, [r9, #BUF_TAIL_OFFSET]		@ get buffer tail offset
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  197  	@ r8 already contains buffer size
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  198  	cmp r10, r8				@ end of buffer?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  199  	moveq r10, #0				@ yes - rewind to buffer start
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  200  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  201  	ldr r12, [r9, #BUF_BUFFER_START]	@ get buffer start address
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  202  	add r12, r12, r10, LSL #2		@ calculate buffer tail address
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  203  	ldr r8, [r9, #BUF_KEY]			@ get last keycode
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  204  	str r8, [r12]				@ append it to the buffer tail
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  205  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  206  	add r10, r10, #1			@ increment buffer tail offset
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  207  	str r10, [r9, #BUF_TAIL_OFFSET]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  208  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  209  	ldr r10, [r9, #BUF_CNT_INT_KEY]		@ increment interrupts counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  210  	add r10, r10, #1
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  211  	str r10, [r9, #BUF_CNT_INT_KEY]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  212  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  213  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  214  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  215  hksw:	@Is hook switch interrupt requested?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  216  	tst r13, #HOOK_SWITCH_MASK 		@ is hook switch status bit set?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  217  	beq mdm					@ no - try next source
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  218  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  219  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  220  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  221  	@ Hook switch interrupt FIQ mode simple handler
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  222  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  223  	@ Don't toggle active edge, the switch always bounces
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  224  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  225  	@ Increment hook switch interrupt counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  226  	ldr r10, [r9, #BUF_CNT_INT_HSW]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  227  	add r10, r10, #1
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  228  	str r10, [r9, #BUF_CNT_INT_HSW]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  229  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  230  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  231  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  232  mdm:	@Is it a modem interrupt?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  233  	tst r13, #MODEM_IRQ_MASK 		@ is modem status bit set?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  234  	beq irq					@ no - check for next interrupt
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  235  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  236  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  237  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  238  	@ Modem FIQ mode interrupt handler stub
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  239  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  240  	@ Increment modem interrupt counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  241  	ldr r10, [r9, #BUF_CNT_INT_MDM]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  242  	add r10, r10, #1
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  243  	str r10, [r9, #BUF_CNT_INT_MDM]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  244  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  245  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  246  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  247  irq:	@ Place deferred_fiq interrupt request
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  248  	ldr r12, deferred_fiq_ih_base		@ set pointer to IRQ handler
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  249  	mov r10, #DEFERRED_FIQ_MASK		@ set deferred_fiq bit
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  250  	str r10, [r12, #IRQ_ISR_REG_OFFSET] 	@ place it in the ISR register
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  251  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  252  	ldr r12, omap1510_gpio_base		@ set pointer back to GPIO bank
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  253  	b restart				@ check for next GPIO interrupt
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  254  	@@@@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  255  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  256  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  257  /*
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  258   * Virtual addresses for IO
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  259   */
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  260  omap_ih1_base:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  261  	.word OMAP1_IO_ADDRESS(OMAP_IH1_BASE)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  262  deferred_fiq_ih_base:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  263  	.word OMAP1_IO_ADDRESS(DEFERRED_FIQ_IH_BASE)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  264  omap1510_gpio_base:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  265  	.word OMAP1_IO_ADDRESS(OMAP1510_GPIO_BASE)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  266  qwerty_fiqin_end:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  267  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  268  /*
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  269   * Check the size of the FIQ,
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  270   * it cannot go beyond 0xffff0200, and is copied to 0xffff001c
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  271   */
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28 @272  .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28 @273  	.err
-
-:::::: The code at line 272 was first introduced by commit
-:::::: 60c3bf3f1215453a4f30f0b91db7fd301d558693 OMAP1: Amstrad Delta: add FIQ handler for serial keyboardport interrupt processing
-
-:::::: TO: Janusz Krzysztofik <jkrzyszt@tis.icnet.pl>
-:::::: CC: Tony Lindgren <tony@atomide.com>
+   675	
+   676	/*
+   677	 * Setup a 4MB mapping that encompasses the device tree: for 64-bit kernel,
+   678	 * this means 2 PMD entries whereas for 32-bit kernel, this is only 1 PGDIR
+   679	 * entry.
+   680	 */
+   681	static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
+   682	{
+   683	#ifndef CONFIG_BUILTIN_DTB
+   684		uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
+   685	
+   686		create_pgd_mapping(early_pg_dir, DTB_EARLY_BASE_VA,
+   687				   IS_ENABLED(CONFIG_64BIT) ? early_dtb_pgd_next : pa,
+   688				   PGDIR_SIZE,
+   689				   IS_ENABLED(CONFIG_64BIT) ? PAGE_TABLE : PAGE_KERNEL);
+   690	
+ > 691		if (system_supports_sv48()) {
+   692			create_pud_mapping(early_dtb_pud, DTB_EARLY_BASE_VA,
+   693					   (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
+   694		}
+   695	
+   696		if (IS_ENABLED(CONFIG_64BIT)) {
+   697			create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA,
+   698					   pa, PMD_SIZE, PAGE_KERNEL);
+   699			create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA + PMD_SIZE,
+   700					   pa + PMD_SIZE, PMD_SIZE, PAGE_KERNEL);
+   701		}
+   702	
+   703		dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PMD_SIZE - 1));
+   704	#else
+   705		/*
+   706		 * For 64-bit kernel, __va can't be used since it would return a linear
+   707		 * mapping address whereas dtb_early_va will be used before
+   708		 * setup_vm_final installs the linear mapping. For 32-bit kernel, as the
+   709		 * kernel is mapped in the linear mapping, that makes no difference.
+   710		 */
+   711		dtb_early_va = kernel_mapping_pa_to_va(XIP_FIXUP(dtb_pa));
+   712	#endif
+   713	
+   714		dtb_early_pa = dtb_pa;
+   715	}
+   716	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
