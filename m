@@ -1,174 +1,122 @@
-Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [5.45.198.250])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDF62C82
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 08:08:56 +0000 (UTC)
-Received: from vla1-d53b4f396d89.qloud-c.yandex.net (vla1-d53b4f396d89.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:b8c:0:640:d53b:4f39])
-	by forward500j.mail.yandex.net (Yandex) with ESMTP id 748156CB6689;
-	Tue, 25 Jan 2022 11:01:08 +0300 (MSK)
-Received: from vla1-62318bfe5573.qloud-c.yandex.net (vla1-62318bfe5573.qloud-c.yandex.net [2a02:6b8:c0d:3819:0:640:6231:8bfe])
-	by vla1-d53b4f396d89.qloud-c.yandex.net (mxback/Yandex) with ESMTP id pNAwKE7dnK-17d8u1YQ;
-	Tue, 25 Jan 2022 11:01:08 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1643097668;
-	bh=q9aiavGIEsjbNTguZm0W5pY728tsRKPQNL57qb/RJnA=;
-	h=In-Reply-To:Subject:To:From:References:Date:Message-ID:Cc;
-	b=FcSm1notg3awy/NpOlZDklhUfmE4arK/fI6+B9/ury8N/qa7hpcSzj1jJGVSfeCLT
-	 syMQDpKguyReiAdhZpVjwp4KEMJRHu4XaZdpqXHQ9YS2zJBPef9BHcirc4sKVcmWQK
-	 7ZBq+XmpKRNQ3x5x7xmd87n9vKAKAGFfF0JBDcbI=
-Authentication-Results: vla1-d53b4f396d89.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by vla1-62318bfe5573.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id yIWdB9Nobz-17IiQ4Sd;
-	Tue, 25 Jan 2022 11:01:07 +0300
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client certificate not present)
-X-Yandex-Fwd: 2
-Date: Tue, 25 Jan 2022 11:01:06 +0300
-From: Nikita Shubin <nikita.shubin@maquefel.me>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, Alexander
- Sverdlin <alexander.sverdlin@gmail.com>, kernel test robot
- <yujie.liu@intel.com>, Nathan Huckleberry <nhuck@google.com>, Philip Li
- <philip.li@intel.com>
-Subject: Re: arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
- after it is freed [clang-analyzer-unix.Malloc]
-Message-ID: <20220125110106.7043f846@redslave.neermore.group>
-In-Reply-To: <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
-References: <202201200359.lTk9zHg4-lkp@intel.com>
-	<39230575-13ea-7384-71bc-2aac1fa2edb8@intel.com>
-	<CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5FB2CA3
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 08:38:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643099934; x=1674635934;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NHLvk2Fxtqipkr7bYbTQ1H648fwihIa5MUSjSjqjR/Q=;
+  b=Ffzle4vVgao7LhSrPlg/w4UHX4sdIqaTBhr2yoM5Y1+Cw4EslWA3pkyq
+   dKWNm0hnsBYCIm6CufndHU0QMbgoN3C6WM+y3oJmfpkQTaQq5HJcoeSYq
+   pm/AcecTcnEZ+4c65U+oIq+FpIBAQwZzgMiLrhxypzWj7MTFdIJg7d8zV
+   PpoSMs90+NmKK95N/qysgmHQ77EEAbK55s31qvJdJF5oGKsARVE8HTXOF
+   SmWsGueX5rWi0latdbybdFwDAizweCN0u1x5/mrx13v6+XipkKSxpKic0
+   M5v9qc/7HRcTjWJCv7H9XyM/2BXG/ayAwzvriPWG8W5zMVYrplY0+2L8j
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332608158"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="332608158"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 00:38:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="477032902"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 00:38:32 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCHLT-000JaE-Hl; Tue, 25 Jan 2022 08:38:31 +0000
+Date: Tue, 25 Jan 2022 16:37:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 155/162]
+ arch/x86/kvm/mmu/tdp_mmu.c:774:32: warning: operator '?:' has lower
+ precedence than '|'; '|' will be evaluated first
+Message-ID: <202201251603.34lAUK9o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hello Nick,
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   9ba9d8e36b0fa25f5f20109a0ae61619a421f550
+commit: 6d8632a26d7060510bfe4fbb3011c2d6e2d2f079 [155/162] KVM, x86/tdp_mmu: optimize remote tlb flush
+config: x86_64-randconfig-a015-20220124 (https://download.01.org/0day-ci/archive/20220125/202201251603.34lAUK9o-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/6d8632a26d7060510bfe4fbb3011c2d6e2d2f079
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 6d8632a26d7060510bfe4fbb3011c2d6e2d2f079
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-On Mon, 24 Jan 2022 13:50:02 -0800
-Nick Desaulniers <ndesaulniers@google.com> wrote:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> On Wed, Jan 19, 2022 at 5:46 PM kernel test robot
-> <yujie.liu@intel.com> wrote:
-> >
-> > tree:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > master head:   1d1df41c5a33359a00e919d54eaebfb789711fdc commit:
-> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert
-> > in-place to COMMON_CLK date:   3 months ago config:
-> > arm-randconfig-c002-20220118
-> > (https://download.01.org/0day-ci/archive/20220120/202201200359.lTk9zHg4-lkp@intel.com/config)
-> > compiler: clang version 14.0.0
-> > (https://github.com/llvm/llvm-project
-> > 5f782d25a742302d25ef3c8b84b54f7483c2deb9) reproduce (this is a W=1
-> > build): wget
-> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> > -O ~/bin/make.cross chmod +x ~/bin/make.cross # install arm cross
-> > compiling tool for clang build # apt-get install
-> > binutils-arm-linux-gnueabi #
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-> > git remote add linus
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > git fetch --no-tags linus master git checkout
-> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 # save the config file to
-> > linux build tree COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
-> > make.cross ARCH=arm clang-analyzer  
-> 
-> Hey! This check finally caught something that looks legit! Cool to see
-> 0day bot running clang-analyzer, too!
-> Nikita, can you PTAL?
+All warnings (new ones prefixed by >>):
 
-Of course, i thought Alexander Sverdlin - already took care of it, he
-is really fast and fires patches before i even realize what happens.
+>> arch/x86/kvm/mmu/tdp_mmu.c:774:32: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
+                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   arch/x86/kvm/mmu/tdp_mmu.c:774:32: note: place parentheses around the '|' expression to silence this warning
+                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+                                                ^
+                                               )
+   arch/x86/kvm/mmu/tdp_mmu.c:774:32: note: place parentheses around the '?:' expression to evaluate it first
+                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+                                                ^
+                   (                                                   )
+   1 warning generated.
 
-Alexander have you already taken care of it ? If not it's my turn to
-clear my own mess.
 
-> 
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> >
-> > clang-analyzer warnings: (new ones prefixed by >>)
-> >  
-> >  >> arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
-> >  >> after it is freed [clang-analyzer-unix.Malloc]  
-> >             return &psc->hw;
-> >             ^
-> >     arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
-> >             if (IS_ERR(clk))
-> >             ^
-> >     arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
-> >                     kfree(psc);
-> >                     ^~~~~~~~~~
-> >     arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after
-> > it is freed return &psc->hw;
-> >             ^      ~~~~~~~~  
-> >  >> arch/arm/mach-ep93xx/clock.c:484:2: warning: Value stored to
-> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
-> >             hw = clk_hw_register_fixed_factor(NULL, "uart",
-> > "xtali", 0, 1, clk_uart_div); ^
-> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  
-> >  >> arch/arm/mach-ep93xx/clock.c:612:2: warning: Value stored to
-> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
-> >             hw = clk_hw_register_fixed_factor(NULL, "usb_clk",
-> > "pll2", 0, 1, clk_usb_div); ^
-> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > vim +154 arch/arm/mach-ep93xx/clock.c
-> >
-> > ff05c0330b9880 Hartley Sweeten 2009-05-07  125
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  126  static struct
-> > clk_hw *ep93xx_clk_register_gate(const char *name, 9645ccc7bd7a16
-> > Nikita Shubin   2021-10-18  127
-> >  const char *parent_name, 9645ccc7bd7a16 Nikita Shubin   2021-10-18
-> >  128                                      void __iomem *reg,
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  129
-> >                 u8 bit_idx) 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  130  { 9645ccc7bd7a16 Nikita Shubin   2021-10-18  131
-> >        struct clk_init_data init; 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  132          struct clk_psc *psc; 9645ccc7bd7a16 Nikita
-> > Shubin   2021-10-18  133          struct clk *clk; 9645ccc7bd7a16
-> > Nikita Shubin   2021-10-18  134 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  135          psc = kzalloc(sizeof(*psc), GFP_KERNEL);
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  136          if (!psc)
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  137
-> > return ERR_PTR(-ENOMEM); 9645ccc7bd7a16 Nikita Shubin   2021-10-18
-> > 138 9645ccc7bd7a16 Nikita Shubin   2021-10-18  139
-> > init.name = name; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  140
-> >       init.ops = &clk_ep93xx_gate_ops; 9645ccc7bd7a16 Nikita Shubin
-> >   2021-10-18  141          init.flags = CLK_SET_RATE_PARENT;
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  142
-> > init.parent_names = (parent_name ? &parent_name : NULL);
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  143
-> > init.num_parents = (parent_name ? 1 : 0); 9645ccc7bd7a16 Nikita
-> > Shubin   2021-10-18  144 9645ccc7bd7a16 Nikita Shubin   2021-10-18
-> > 145          psc->reg = reg; 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  146          psc->bit_idx = bit_idx; 9645ccc7bd7a16
-> > Nikita Shubin   2021-10-18  147          psc->hw.init = &init;
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  148          psc->lock =
-> > &clk_lock; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  149
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  150          clk =
-> > clk_register(NULL, &psc->hw); 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  151          if (IS_ERR(clk)) 9645ccc7bd7a16 Nikita
-> > Shubin   2021-10-18  152                  kfree(psc);  
-> 
-> probably should `return ERR_CAST(clk);` ?
-> 
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  153
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18 @154          return
-> > &psc->hw; ff05c0330b9880 Hartley Sweeten 2009-05-07  155  }
-> > ff05c0330b9880 Hartley Sweeten 2009-05-07  156
-> >
-> > ---
-> > 0-DAY CI Kernel Test Service, Intel Corporation
-> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> >  
-> 
-> 
+vim +774 arch/x86/kvm/mmu/tdp_mmu.c
 
+   745	
+   746	#define tdp_root_for_each_pte(_iter, _root, _start, _end) \
+   747		for_each_tdp_pte(_iter, _root->spt, _root->role.level, _start, _end)
+   748	
+   749	/*
+   750	 * Note temporarily blocked private SPTE is consider as valid leaf,
+   751	 * although !is_shadow_present_pte() returns true for it, since the
+   752	 * target page (which the mapping maps to ) is still there.
+   753	 */
+   754	#define tdp_root_for_each_leaf_pte(_iter, _root, _start, _end)	\
+   755		tdp_root_for_each_pte(_iter, _root, _start, _end)		\
+   756			if ((!is_shadow_present_pte(_iter.old_spte) &&		\
+   757				!is_zapped_private_pte(_iter.old_spte)) ||	\
+   758			    !is_last_spte(_iter.old_spte, _iter.level))		\
+   759				continue;					\
+   760			else
+   761	
+   762	#define tdp_mmu_for_each_pte(_iter, _mmu, _private, _start, _end)	\
+   763		for_each_tdp_pte(_iter,						\
+   764			__va((_private) ? _mmu->private_root_hpa : _mmu->root_hpa),	\
+   765			 _mmu->shadow_root_level, _start, _end)
+   766	
+   767	static u64 zapped_private_spte(struct kvm *kvm, const struct tdp_iter *iter)
+   768	{
+   769		if (!kvm_gfn_stolen_mask(kvm))
+   770			return shadow_init_value;
+   771	
+   772		return shadow_init_value | SPTE_PRIVATE_ZAPPED |
+   773			(spte_to_pfn(iter->old_spte) << PAGE_SHIFT) |
+ > 774			is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
+   775	}
+   776	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
