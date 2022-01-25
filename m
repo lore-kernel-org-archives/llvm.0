@@ -1,94 +1,75 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C0B29CA
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 23:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643153607; x=1674689607;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EU2b9JrQJH1OK/v9lhZZ3ztptNc+djvb662UR9+9vBo=;
-  b=aoZXed9oVmJnAUzq7DTVO3rv+vJeqdOMbGCYQV16tEr4i5kIYwS4NHJH
-   SeB9Evk9HTnMeCC4ETWZAJj+P+UpbLSdAxd5cRRkSE3W31dNicepuMm4S
-   jSgSck/t4VRlMPPCVQleBdj9oPpr7g5xwcE1nYdR0wGOWy9drBzZixlpi
-   JexyDSSXMIHV+yVHIU2LvdDXCxKIf21HPEz4rQnI9SMd2BFwMehGaONtX
-   w6Fmr/wRXpWnEmApcQpHc50+Uj/E3DVDmrWXzvSYIoGsLWqOvRRhqUBJf
-   KW0BtDMJo23P6oX4SgEiKFNiFFrJItjc9WVnh5J4cEjaxPaZb/Iz5kJSJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307155644"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="307155644"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 15:33:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="479691392"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 15:33:25 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCVJU-000KYR-RR; Tue, 25 Jan 2022 23:33:24 +0000
-Date: Wed, 26 Jan 2022 07:32:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.16 4/137]
- arch/x86/kernel/cpu/resctrl/core.c:417:6: warning: no previous prototype for
- function 'domain_free'
-Message-ID: <202201260732.58wp6s70-lkp@intel.com>
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C821129CA
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 00:02:42 +0000 (UTC)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 20PNVUiB032739;
+	Tue, 25 Jan 2022 17:31:30 -0600
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 20PNVSKH032738;
+	Tue, 25 Jan 2022 17:31:28 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Tue, 25 Jan 2022 17:31:28 -0600
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
+        llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
+Message-ID: <20220125233128.GT614@gate.crashing.org>
+References: <20220114010526.1776605-1-ndesaulniers@google.com> <YeQei0xNzMq7bFdg@zn.tnic> <20220118192256.jzk5dnceeusq7x7u@treble> <20220118230120.pivvson7qekfiqic@treble> <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: 22965510f006f9207f1615ffb3543c9314ac6d01 [4/137] x86/resctrl: Group struct rdt_hw_domain cleanup
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260732.58wp6s70-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=22965510f006f9207f1615ffb3543c9314ac6d01
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout 22965510f006f9207f1615ffb3543c9314ac6d01
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Jan 24, 2022 at 03:26:36PM -0800, Nick Desaulniers wrote:
+> I noticed in that report and
+> https://lore.kernel.org/lkml/202201190702.XNSXrMTK-lkp@intel.com/
+> that gcc-9 was used.  I wonder if %= has been fixed in gcc-10+? Have
+> there been other reports with gcc-10+ for my patch?
 
-All warnings (new ones prefixed by >>):
+None of the %= code (which is trivial) has been changed since 1992.
 
->> arch/x86/kernel/cpu/resctrl/core.c:417:6: warning: no previous prototype for function 'domain_free' [-Wmissing-prototypes]
-   void domain_free(struct rdt_hw_domain *hw_dom)
-        ^
-   arch/x86/kernel/cpu/resctrl/core.c:417:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void domain_free(struct rdt_hw_domain *hw_dom)
-   ^
-   static 
-   1 warning generated.
+> If this is fixed in gcc-10, then we can probably add a comment with a
+> FIXME link to the issue or commit to replace __COUNTER__ with %= one
+> day.  If not, then we can probably come up with a reduced test case
+> for the GCC devs to take a look at, then add the FIXME comment to
+> kernel sources.
+
+Please open a PR?
+
+> I'm more confident that we can remove the `volatile` keyword (I was
+> thinking about adding a new diagnostic to clang to warn that volatile
+> is redundate+implied for asm goto or inline asm that doesn't have
+> outputs) though that's not the problem here and will probably generate
+> some kernel wide cleanup before we could enable such a flag.
+
+Its main value is that it would discourage users from thinking volatile
+is magic.  Seriously worth some pain!
+
+> Perhaps
+> there are known compiler versions that still require the keyword for
+> those cases for some reason.
+
+It was removed from compiler-gcc.h in 3347acc6fcd4 (which changed the
+minimum required GCC version to GCC 5).
 
 
-vim +/domain_free +417 arch/x86/kernel/cpu/resctrl/core.c
-
-   416	
- > 417	void domain_free(struct rdt_hw_domain *hw_dom)
-   418	{
-   419		kfree(hw_dom->ctrl_val);
-   420		kfree(hw_dom->mbps_val);
-   421		kfree(hw_dom);
-   422	}
-   423	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Segher
