@@ -1,107 +1,174 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [5.45.198.250])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EBC29CA
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 08:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643098125; x=1674634125;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=3rARKrczq0kbe7goiRwTPDqPVCq68DDhD8taH5Gx47U=;
-  b=iyFSH8Cc4tu+3E77bkJK7hrniyGfukRKPQNqXcBD71fnlmTyoAf+MKOu
-   LDFyg+q6wu2kuGpGSeHYt74iDLUI5dvNimbFsXXyOcsRnCF4w1DsvJcBw
-   VQkKLGoMc7op04ACYyalVsOqBLtSYq5NaRKB5aDC+Y4EGcyRFoLMtO3bM
-   /5LefMtLN2huIor2bZV3udYjiDP50G8w/18hi7MqhVuQUVSa8Og/kwzf9
-   LS7EWDAEDUih7wCEImNd66p8quEkwjdWo954A24eVnOmUlneOFNtsuwiC
-   HXVPrGScbRe5T8PYG2qwgi+uiqpMBuWJQNZdWj2H1W+N2irUAeh1Tz7Ax
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="246466999"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="246466999"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 00:08:44 -0800
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="520295331"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.29.83]) ([10.255.29.83])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 00:08:42 -0800
-Subject: Re: [kbuild-all] Re: fs/ntfs3/fsntfs.c:2248:41: warning: taking
- address of packed member 'de' of class or structure 'NTFS_DE_SII' may result
- in an unaligned pointer value
-To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
- llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202201242326.uQ3OazUi-lkp@intel.com>
- <Ye7kyA3yJupMLSD2@archlinux-ax161>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <90b97ffb-1feb-a83f-44e7-61e77b77ad6e@intel.com>
-Date: Tue, 25 Jan 2022 16:08:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDF62C82
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 08:08:56 +0000 (UTC)
+Received: from vla1-d53b4f396d89.qloud-c.yandex.net (vla1-d53b4f396d89.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:b8c:0:640:d53b:4f39])
+	by forward500j.mail.yandex.net (Yandex) with ESMTP id 748156CB6689;
+	Tue, 25 Jan 2022 11:01:08 +0300 (MSK)
+Received: from vla1-62318bfe5573.qloud-c.yandex.net (vla1-62318bfe5573.qloud-c.yandex.net [2a02:6b8:c0d:3819:0:640:6231:8bfe])
+	by vla1-d53b4f396d89.qloud-c.yandex.net (mxback/Yandex) with ESMTP id pNAwKE7dnK-17d8u1YQ;
+	Tue, 25 Jan 2022 11:01:08 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1643097668;
+	bh=q9aiavGIEsjbNTguZm0W5pY728tsRKPQNL57qb/RJnA=;
+	h=In-Reply-To:Subject:To:From:References:Date:Message-ID:Cc;
+	b=FcSm1notg3awy/NpOlZDklhUfmE4arK/fI6+B9/ury8N/qa7hpcSzj1jJGVSfeCLT
+	 syMQDpKguyReiAdhZpVjwp4KEMJRHu4XaZdpqXHQ9YS2zJBPef9BHcirc4sKVcmWQK
+	 7ZBq+XmpKRNQ3x5x7xmd87n9vKAKAGFfF0JBDcbI=
+Authentication-Results: vla1-d53b4f396d89.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
+Received: by vla1-62318bfe5573.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id yIWdB9Nobz-17IiQ4Sd;
+	Tue, 25 Jan 2022 11:01:07 +0300
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(Client certificate not present)
+X-Yandex-Fwd: 2
+Date: Tue, 25 Jan 2022 11:01:06 +0300
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, Alexander
+ Sverdlin <alexander.sverdlin@gmail.com>, kernel test robot
+ <yujie.liu@intel.com>, Nathan Huckleberry <nhuck@google.com>, Philip Li
+ <philip.li@intel.com>
+Subject: Re: arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
+ after it is freed [clang-analyzer-unix.Malloc]
+Message-ID: <20220125110106.7043f846@redslave.neermore.group>
+In-Reply-To: <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
+References: <202201200359.lTk9zHg4-lkp@intel.com>
+	<39230575-13ea-7384-71bc-2aac1fa2edb8@intel.com>
+	<CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <Ye7kyA3yJupMLSD2@archlinux-ax161>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+Hello Nick,
 
+On Mon, 24 Jan 2022 13:50:02 -0800
+Nick Desaulniers <ndesaulniers@google.com> wrote:
 
-On 1/25/2022 1:41 AM, Nathan Chancellor wrote:
-> On Mon, Jan 24, 2022 at 11:21:59PM +0800, kernel test robot wrote:
->> Hi Konstantin,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
->> commit: 6e5be40d32fb1907285277c02e74493ed43d77fe fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
->> date:   5 months ago
->> config: mips-buildonly-randconfig-r001-20220122 (https://download.01.org/0day-ci/archive/20220124/202201242326.uQ3OazUi-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install mips cross compiling tool for clang build
->>          # apt-get install binutils-mips-linux-gnu
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5be40d32fb1907285277c02e74493ed43d77fe
->>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>          git fetch --no-tags linus master
->>          git checkout 6e5be40d32fb1907285277c02e74493ed43d77fe
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ntfs3/
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>     fs/ntfs3/fsntfs.c:1874:9: warning: variable 'cnt' set but not used [-Wunused-but-set-variable]
->>             size_t cnt, off;
->>                    ^
->>>> fs/ntfs3/fsntfs.c:2248:41: warning: taking address of packed member 'de' of class or structure 'NTFS_DE_SII' may result in an unaligned pointer value [-Waddress-of-packed-member]
->>             err = indx_insert_entry(indx_sii, ni, &sii_e.de, NULL, NULL);
->>                                                    ^~~~~~~~
->>     2 warnings generated.
+> On Wed, Jan 19, 2022 at 5:46 PM kernel test robot
+> <yujie.liu@intel.com> wrote:
+> >
+> > tree:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > master head:   1d1df41c5a33359a00e919d54eaebfb789711fdc commit:
+> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert
+> > in-place to COMMON_CLK date:   3 months ago config:
+> > arm-randconfig-c002-20220118
+> > (https://download.01.org/0day-ci/archive/20220120/202201200359.lTk9zHg4-lkp@intel.com/config)
+> > compiler: clang version 14.0.0
+> > (https://github.com/llvm/llvm-project
+> > 5f782d25a742302d25ef3c8b84b54f7483c2deb9) reproduce (this is a W=1
+> > build): wget
+> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> > -O ~/bin/make.cross chmod +x ~/bin/make.cross # install arm cross
+> > compiling tool for clang build # apt-get install
+> > binutils-arm-linux-gnueabi #
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+> > git remote add linus
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > git fetch --no-tags linus master git checkout
+> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 # save the config file to
+> > linux build tree COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+> > make.cross ARCH=arm clang-analyzer  
 > 
-> This warning has the same root cause as
-> https://lore.kernel.org/r/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/.
+> Hey! This check finally caught something that looks legit! Cool to see
+> 0day bot running clang-analyzer, too!
+> Nikita, can you PTAL?
+
+Of course, i thought Alexander Sverdlin - already took care of it, he
+is really fast and fires patches before i even realize what happens.
+
+Alexander have you already taken care of it ? If not it's my turn to
+clear my own mess.
+
 > 
-> Intel folks, would it be possible to limit instances of
-> -Waddress-of-packed-member with mips randconfigs to our mailing list for
-> the reason I note in the link above?
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> >
+> > clang-analyzer warnings: (new ones prefixed by >>)
+> >  
+> >  >> arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
+> >  >> after it is freed [clang-analyzer-unix.Malloc]  
+> >             return &psc->hw;
+> >             ^
+> >     arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
+> >             if (IS_ERR(clk))
+> >             ^
+> >     arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
+> >                     kfree(psc);
+> >                     ^~~~~~~~~~
+> >     arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after
+> > it is freed return &psc->hw;
+> >             ^      ~~~~~~~~  
+> >  >> arch/arm/mach-ep93xx/clock.c:484:2: warning: Value stored to
+> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
+> >             hw = clk_hw_register_fixed_factor(NULL, "uart",
+> > "xtali", 0, 1, clk_uart_div); ^
+> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  
+> >  >> arch/arm/mach-ep93xx/clock.c:612:2: warning: Value stored to
+> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
+> >             hw = clk_hw_register_fixed_factor(NULL, "usb_clk",
+> > "pll2", 0, 1, clk_usb_div); ^
+> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > vim +154 arch/arm/mach-ep93xx/clock.c
+> >
+> > ff05c0330b9880 Hartley Sweeten 2009-05-07  125
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  126  static struct
+> > clk_hw *ep93xx_clk_register_gate(const char *name, 9645ccc7bd7a16
+> > Nikita Shubin   2021-10-18  127
+> >  const char *parent_name, 9645ccc7bd7a16 Nikita Shubin   2021-10-18
+> >  128                                      void __iomem *reg,
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  129
+> >                 u8 bit_idx) 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  130  { 9645ccc7bd7a16 Nikita Shubin   2021-10-18  131
+> >        struct clk_init_data init; 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  132          struct clk_psc *psc; 9645ccc7bd7a16 Nikita
+> > Shubin   2021-10-18  133          struct clk *clk; 9645ccc7bd7a16
+> > Nikita Shubin   2021-10-18  134 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  135          psc = kzalloc(sizeof(*psc), GFP_KERNEL);
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  136          if (!psc)
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  137
+> > return ERR_PTR(-ENOMEM); 9645ccc7bd7a16 Nikita Shubin   2021-10-18
+> > 138 9645ccc7bd7a16 Nikita Shubin   2021-10-18  139
+> > init.name = name; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  140
+> >       init.ops = &clk_ep93xx_gate_ops; 9645ccc7bd7a16 Nikita Shubin
+> >   2021-10-18  141          init.flags = CLK_SET_RATE_PARENT;
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  142
+> > init.parent_names = (parent_name ? &parent_name : NULL);
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  143
+> > init.num_parents = (parent_name ? 1 : 0); 9645ccc7bd7a16 Nikita
+> > Shubin   2021-10-18  144 9645ccc7bd7a16 Nikita Shubin   2021-10-18
+> > 145          psc->reg = reg; 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  146          psc->bit_idx = bit_idx; 9645ccc7bd7a16
+> > Nikita Shubin   2021-10-18  147          psc->hw.init = &init;
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  148          psc->lock =
+> > &clk_lock; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  149
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  150          clk =
+> > clk_register(NULL, &psc->hw); 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  151          if (IS_ERR(clk)) 9645ccc7bd7a16 Nikita
+> > Shubin   2021-10-18  152                  kfree(psc);  
 > 
-> Cheers,
-> Nathan
+> probably should `return ERR_CAST(clk);` ?
+> 
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  153
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18 @154          return
+> > &psc->hw; ff05c0330b9880 Hartley Sweeten 2009-05-07  155  }
+> > ff05c0330b9880 Hartley Sweeten 2009-05-07  156
+> >
+> > ---
+> > 0-DAY CI Kernel Test Service, Intel Corporation
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >  
+> 
+> 
 
-Hi Nathan,
-
-Thanks for the advice, will do it.
-
-Best Regards,
-Rong Chen
