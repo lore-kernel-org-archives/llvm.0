@@ -1,41 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4E32C82
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 13:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C76F2C82
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 14:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643118180; x=1674654180;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x+a5Z1XP4uKLId4JeGm19/FSwvCA8i9jwFC/ezaIeWg=;
-  b=lzuq7SxTJFMy7AyPEZM3IK7eXLJWybJ9Sx139mxZQIld9Y5FE84tR5dx
-   4gTuuG1BZ+7JBRm8FI7xyknECXzUwqsY3JRzUxk9sW6hw9tB5nJkc2c6s
-   OvRlaGMPG7CAAPKWKuqn/LycsJz13rdyS8GGoSjGf5/22PtPyIpNKRfRt
-   9kw9SbS1/7n/NdiOgKlJX+ImLimwbVKnHXyMDJj5TaE/az7PBXYpEtZip
-   x/hiRvfuXsAvxCZkvuLJj2Jy7O6rNCQJS77xduUj/FHr+PsUKuqXgmQjz
-   FPlwPIleidFLfZTsF0zeoGfyhRI0LNJ5mr4T1UtXeJGWolUcrHJqSAooD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="245133580"
+  t=1643119997; x=1674655997;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DMZZx473hyKFpxi3QimRs+k6IFab7cQhZ8H/zL3DsAc=;
+  b=ZU4W3vLXVTKmfSemFm0+S8MAFm1sPLLoyAJae0aPwUBtIT6PsWz45kn8
+   b8TggBnUFdbPu9dtNmLHSROFIRFLUGRXiBKJ2cCQeRViL6vGqCM7EsPSQ
+   Y8PHTTCNPiWnKDhti9+DhEyCzf5VAiL1BNzhbURB8BRVCDQgGDaITJoUe
+   v+J2yL3eWCYVysONQqpAQX+RVoV0duMZ5Aenzsix+RC4t5wPZEJkegUMD
+   2dEhPum1eznVbl+S4kBT3OFNugBpWz03HTyedCTduSpKkBB2rorDNK6Ky
+   zNuNkYgNy1Gm03DPjvj64VagCBODcEgs48kEwyV3wcvXyePj9yeVzh/6/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="307024234"
 X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="245133580"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:42:59 -0800
+   d="scan'208";a="307024234"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:13:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="597126727"
+   d="scan'208";a="479503846"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Jan 2022 05:42:57 -0800
+  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 06:12:58 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCM65-000Jxj-90; Tue, 25 Jan 2022 13:42:57 +0000
-Date: Tue, 25 Jan 2022 21:42:03 +0800
+	id 1nCMZ8-000Jzn-9h; Tue, 25 Jan 2022 14:12:58 +0000
+Date: Tue, 25 Jan 2022 22:12:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Melnychenko <andrew@daynix.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 2/5] driver/net/tun: Added features for USO.
-Message-ID: <202201252109.aW3GcH2N-lkp@intel.com>
-References: <20220125084702.3636253-3-andrew@daynix.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 9998/9999] arch/x86/entry/entry_32.S:52:2: warning: DWARF2 only supports one
+ section per compilation unit
+Message-ID: <202201252238.tTDAQpum-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,121 +47,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125084702.3636253-3-andrew@daynix.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Andrew,
+Hi Nick,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master mst-vhost/linux-next linus/master v5.17-rc1 next-20220125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+First bad commit (maybe != root cause):
 
-url:    https://github.com/0day-ci/linux/commits/Andrew-Melnychenko/TUN-VirtioNet-USO-features-support/20220125-171057
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 6e667749271e58d34238cf700e543beabdbe6184
-config: arm-randconfig-r005-20220124 (https://download.01.org/0day-ci/archive/20220125/202201252109.aW3GcH2N-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   e48efff5cb5fd63a687465347bdbb52ef98dad44
+commit: ffff118fe157b534c3244f8b300e655231dbd95c [9998/9999] BACKPORT: scripts/Makefile.clang: default to LLVM_IAS=1
+config: i386-randconfig-r025-20220124 (https://download.01.org/0day-ci/archive/20220125/202201252238.tTDAQpum-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/3c1c2daa10c8eac3d9b546fa8caf99fcb5a40454
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andrew-Melnychenko/TUN-VirtioNet-USO-features-support/20220125-171057
-        git checkout 3c1c2daa10c8eac3d9b546fa8caf99fcb5a40454
+        # https://github.com/ammarfaizi2/linux-block/commit/ffff118fe157b534c3244f8b300e655231dbd95c
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout ffff118fe157b534c3244f8b300e655231dbd95c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/tap.c:945:11: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
-                   if (arg & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/tap.c:945:11: note: place parentheses around the '==' expression to silence this warning
-                   if (arg & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-                           ^
-                             (                                                     )
-   drivers/net/tap.c:945:11: note: place parentheses around the & expression to evaluate it first
-                   if (arg & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-                           ^
-                       (                              )
-   drivers/net/tap.c:958:19: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
-               feature_mask & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/tap.c:958:19: note: place parentheses around the '==' expression to silence this warning
-               feature_mask & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-                            ^
-                              (                                                     )
-   drivers/net/tap.c:958:19: note: place parentheses around the & expression to evaluate it first
-               feature_mask & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-                            ^
-               (                                       )
-   2 warnings generated.
+>> arch/x86/entry/entry_32.S:52:2: warning: DWARF2 only supports one section per compilation unit
+    .section .entry.text, "ax"
+    ^
+>> <instantiation>:11:2: warning: DWARF2 only supports one section per compilation unit
+    .pushsection .altinstr_replacement,"ax"
+    ^
+   <instantiation>:1:1: note: while in macro instantiation
+   ALTERNATIVE "jmp .Lend_25", "", ( 7*32+11)
+   ^
+   <instantiation>:4:2: note: while in macro instantiation
+    SWITCH_TO_KERNEL_CR3 scratch_reg=%eax
+    ^
+   <instantiation>:33:2: note: while in macro instantiation
+    SWITCH_TO_KERNEL_STACK
+    ^
+   <instantiation>:4:2: note: while in macro instantiation
+    SAVE_ALL switch_stacks=1
+    ^
+   arch/x86/include/asm/idtentry.h:626:1: note: while in macro instantiation
+   idtentry_irq 0xFFFF common_interrupt;
+   ^
+   arch/x86/entry/entry_32.S:1010:1: warning: DWARF2 only supports one section per compilation unit
+   .pushsection .fixup, "ax"
+   ^
+--
+>> arch/x86/kernel/head_32.S:66:1: warning: DWARF2 only supports one section per compilation unit
+   .section ".head.text","ax"
+   ^
+   arch/x86/kernel/head_32.S:340:1: warning: DWARF2 only supports one section per compilation unit
+   .section ".init.text","ax"
+   ^
+--
+>> <instantiation>:11:2: warning: DWARF2 only supports one section per compilation unit
+    .pushsection .altinstr_replacement,"ax"
+    ^
+   arch/x86/entry/vdso/vdso32/system_call.S:60:2: note: while in macro instantiation
+    ALTERNATIVE "", "movl %esp, %ebp; sysenter", ( 0*32+11)
+    ^
 
 
-vim +945 drivers/net/tap.c
+vim +52 arch/x86/entry/entry_32.S
 
-   919	
-   920	static int set_offload(struct tap_queue *q, unsigned long arg)
-   921	{
-   922		struct tap_dev *tap;
-   923		netdev_features_t features;
-   924		netdev_features_t feature_mask = 0;
-   925	
-   926		tap = rtnl_dereference(q->tap);
-   927		if (!tap)
-   928			return -ENOLINK;
-   929	
-   930		features = tap->dev->features;
-   931	
-   932		if (arg & TUN_F_CSUM) {
-   933			feature_mask = NETIF_F_HW_CSUM;
-   934	
-   935			if (arg & (TUN_F_TSO4 | TUN_F_TSO6)) {
-   936				if (arg & TUN_F_TSO_ECN)
-   937					feature_mask |= NETIF_F_TSO_ECN;
-   938				if (arg & TUN_F_TSO4)
-   939					feature_mask |= NETIF_F_TSO;
-   940				if (arg & TUN_F_TSO6)
-   941					feature_mask |= NETIF_F_TSO6;
-   942			}
-   943	
-   944			/* TODO: for now USO4 and USO6 should work simultaneously */
- > 945			if (arg & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-   946				features |= NETIF_F_GSO_UDP_L4;
-   947		}
-   948	
-   949		/* tun/tap driver inverts the usage for TSO offloads, where
-   950		 * setting the TSO bit means that the userspace wants to
-   951		 * accept TSO frames and turning it off means that user space
-   952		 * does not support TSO.
-   953		 * For tap, we have to invert it to mean the same thing.
-   954		 * When user space turns off TSO, we turn off GSO/LRO so that
-   955		 * user-space will not receive TSO frames.
-   956		 */
-   957		if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6) ||
-   958		    feature_mask & (TUN_F_USO4 | TUN_F_USO6) == (TUN_F_USO4 | TUN_F_USO6))
-   959			features |= RX_OFFLOADS;
-   960		else
-   961			features &= ~RX_OFFLOADS;
-   962	
-   963		/* tap_features are the same as features on tun/tap and
-   964		 * reflect user expectations.
-   965		 */
-   966		tap->tap_features = feature_mask;
-   967		if (tap->update_features)
-   968			tap->update_features(tap, features);
-   969	
-   970		return 0;
-   971	}
-   972	
+afaef01c001537 arch/x86/entry/entry_32.S  Alexander Popov 2018-08-17  51  
+ea7145477a461e arch/x86/kernel/entry_32.S Jiri Olsa       2011-03-07 @52  	.section .entry.text, "ax"
+ea7145477a461e arch/x86/kernel/entry_32.S Jiri Olsa       2011-03-07  53  
+
+:::::: The code at line 52 was first introduced by commit
+:::::: ea7145477a461e09d8d194cac4b996dc4f449107 x86: Separate out entry text section
+
+:::::: TO: Jiri Olsa <jolsa@redhat.com>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
