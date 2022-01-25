@@ -1,41 +1,29 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93ABF29CA
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 15:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643126167; x=1674662167;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2IZ3rsmbTwIJnlaO8i+w9GZaDCe35ba9MOV8w1ksmx4=;
-  b=PfMv6lFxHjn+LzoS+x2sAJO9l71VpmOTxn2Fepsl1+bY6WBPqeQamgti
-   RWazNKYJOvcGba+OK8VqBtsIlsmFM7I68vbXzmXvfXjLQrHOg1xNm7g+v
-   5ET4VjJiV2Pr4HbQK97apzENsDYhMsTTdwWF3EuHNkyQ3d5hDreZ2Jwra
-   3FKpDlPOqlb+ei/eXNx8UsaZmKiwwdKl66KIQyz5jdWHvQloDG9sdYIKj
-   Vpb3DUubPfeuM2E/Pmx3kTR73yS9iw0G160BdK817F9ZMvPjCXaq/jnz0
-   tra02UEB1LcxX3qQpI4mLQGHyn/5y/M9574LDlI0dWOP+xKfZdAMhMms+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332686452"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="332686452"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 07:56:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="520429004"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 25 Jan 2022 07:56:05 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCOAu-000K6p-Gl; Tue, 25 Jan 2022 15:56:04 +0000
-Date: Tue, 25 Jan 2022 23:55:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 1565/1734] warning: unsafe strcpy() usage lacked
- '__write_overflow' symbol in lib/test_fortify/write_overflow-strcpy.c
-Message-ID: <202201252312.zdGESate-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D882173
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 17:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FB6C340E0;
+	Tue, 25 Jan 2022 17:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643131638;
+	bh=W1JGIllnulbFNWiwuGchryI71/BkLOUPO/+XB5WOUgA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gwfhQKJhgQ4QLE0wtqIDBPxCQSMA8/s+65K0/YTYQStKNuU8VEoTj1e3V+sKKQ4bJ
+	 XgoXeXGCjUxVjpTqGiPuX13bxfhgaurJS2rKJtRYL1Y9cVa1En7k7YF5j2JMTsKBSB
+	 W2YgPdyGECrq+EMMLj0lRBXwAwCcWod3fCwckGxXTZFu1oy/qQExRfecnr39LW5jPi
+	 yZl6NQveyXxtKsdpqN1qa3Z6lZ9Rt/CtDLrjOt24hixPTe0am9aTFQw+tD/A9xxSHm
+	 nCI+dyx3E68cUahLDgA1MmGDR8/xjRFUeTyodlTY1zzpZxDQQDQiHZJ0cbSrEsZcpp
+	 U9CjMB/c2ihrw==
+Date: Tue, 25 Jan 2022 10:27:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>, lkft-triage@lists.linaro.org,
+	linux-stable <stable@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: stable-rc 5.4 queue riscv tinyconfig build failed
+Message-ID: <YfAy8u5u43x1z/jg@archlinux-ax161>
+References: <CA+G9fYuxkfKF=+xebi5z8VodYoXa2G-Agxw49ftz9vck7MxP+Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,37 +32,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CA+G9fYuxkfKF=+xebi5z8VodYoXa2G-Agxw49ftz9vck7MxP+Q@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   d25ee88530253138d0b20d43511ca5acbda4e9f7
-commit: 6303361147fc8984dd259b54c189592cd0551ab6 [1565/1734] fortify: Work around Clang inlining bugs
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220125/202201252312.zdGESate-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6303361147fc8984dd259b54c189592cd0551ab6
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 6303361147fc8984dd259b54c189592cd0551ab6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi Naresh,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, Jan 25, 2022 at 07:18:16PM +0530, Naresh Kamboju wrote:
+> Hi Greg,
+> 
+> Regression found on
+> stable-rc 5.4 queue riscv tinyconfig build failed.
+> 
+> Not sure which patch is causing build failures.
+> We will bisect and get back to you.
 
-All warnings (new ones prefixed by >>):
+These should not be recent failures on 5.4, they should have always been
+there.
 
->> warning: unsafe strcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strcpy.c
---
->> warning: unsafe strlcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strlcpy.c
---
->> warning: unsafe strcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strcpy-lit.c
---
->> warning: unsafe strlcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strlcpy-src.c
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM_IAS=1 ARCH=riscv
+> CROSS_COMPILE=riscv64-linux-gnu- HOSTCC=clang CC=clang
+> 
+> In file included from /builds/linux/kernel/dma/mapping.c:8:
+> In file included from /builds/linux/include/linux/memblock.h:13:
+> In file included from /builds/linux/include/linux/mm.h:10:
+> In file included from /builds/linux/include/linux/gfp.h:6:
+> In file included from /builds/linux/include/linux/mmzone.h:8:
+> In file included from /builds/linux/include/linux/spinlock.h:51:
+> In file included from /builds/linux/include/linux/preempt.h:78:
+> In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+> In file included from /builds/linux/include/asm-generic/preempt.h:5:
+> In file included from /builds/linux/include/linux/thread_info.h:22:
+> /builds/linux/arch/riscv/include/asm/current.h:30:9: warning: variable
+> 'tp' is uninitialized when used here [-Wuninitialized]
+>         return tp;
+>                ^~
+> /builds/linux/arch/riscv/include/asm/current.h:29:33: note: initialize
+> the variable 'tp' to silence this warning
+>         register struct task_struct *tp __asm__("tp");
+>                                        ^
+>                                         = NULL
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Resolved by commit 52e7c52d2ded ("RISC-V: Stop relying on GCC's register
+allocator's hueristics").
+
+It had two follow up fixes:
+
+af2bdf828f79 ("RISC-V: stacktrace: Declare sp_in_global outside ifdef")
+8356c379cfba ("RISC-V: gp_in_global needs register keyword")
+
+> clang: warning: argument unused during compilation: '-no-pie'
+> [-Wunused-command-line-argument]
+
+Resolved by commit 7f3d349065d0 ("riscv: Use $(LD) instead of $(CC) to
+link vDSO"). I don't think that will backport clean but it is not an
+error so I would not worry about it.
+
+> In file included from /builds/linux/arch/riscv/kernel/cpu.c:7:
+> In file included from /builds/linux/include/linux/seq_file.h:8:
+> In file included from /builds/linux/include/linux/mutex.h:14:
+> /builds/linux/arch/riscv/include/asm/current.h:30:9: warning: variable
+> 'tp' is uninitialized when used here [-Wuninitialized]
+>         return tp;
+>                ^~
+> /builds/linux/arch/riscv/include/asm/current.h:29:33: note: initialize
+> the variable 'tp' to silence this warning
+>         register struct task_struct *tp __asm__("tp");
+>                                        ^
+>                                         = NULL
+> 1 warning generated.
+> 1 warning generated.
+> 1 warning generated.
+> 1 warning generated.
+> <instantiation>:1:1: error: unrecognized instruction mnemonic
+> LOCAL _restore_kernel_tpsp
+> ^
+> /builds/linux/arch/riscv/kernel/entry.S:163:2: note: while in macro
+> instantiation
+>  SAVE_ALL
+>  ^
+> <instantiation>:2:2: error: unrecognized instruction mnemonic
+>  LOCAL _save_context
+>  ^
+
+Should be resolved with commits fdff9911f266 ("RISC-V: Inline the
+assembly register save/restore macros") and abc71bf0a703 ("RISC-V: Stop
+using LOCAL for the uaccess fixups").
+
+There might be other issues lurking, I would not say we had decent
+RISC-V build support with LLVM until maybe 5.10 or so (that is the
+version that we start testing RISC-V at in our CI).
+
+Cheers,
+Nathan
