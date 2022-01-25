@@ -1,29 +1,35 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D882173
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 17:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FB6C340E0;
-	Tue, 25 Jan 2022 17:27:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643131638;
-	bh=W1JGIllnulbFNWiwuGchryI71/BkLOUPO/+XB5WOUgA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gwfhQKJhgQ4QLE0wtqIDBPxCQSMA8/s+65K0/YTYQStKNuU8VEoTj1e3V+sKKQ4bJ
-	 XgoXeXGCjUxVjpTqGiPuX13bxfhgaurJS2rKJtRYL1Y9cVa1En7k7YF5j2JMTsKBSB
-	 W2YgPdyGECrq+EMMLj0lRBXwAwCcWod3fCwckGxXTZFu1oy/qQExRfecnr39LW5jPi
-	 yZl6NQveyXxtKsdpqN1qa3Z6lZ9Rt/CtDLrjOt24hixPTe0am9aTFQw+tD/A9xxSHm
-	 nCI+dyx3E68cUahLDgA1MmGDR8/xjRFUeTyodlTY1zzpZxDQQDQiHZJ0cbSrEsZcpp
-	 U9CjMB/c2ihrw==
-Date: Tue, 25 Jan 2022 10:27:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>, lkft-triage@lists.linaro.org,
-	linux-stable <stable@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: stable-rc 5.4 queue riscv tinyconfig build failed
-Message-ID: <YfAy8u5u43x1z/jg@archlinux-ax161>
-References: <CA+G9fYuxkfKF=+xebi5z8VodYoXa2G-Agxw49ftz9vck7MxP+Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19954173
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 18:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QguUO9iElD2uimtN6/KPbOt0qekHNlpVkvs8+DjH69c=; b=uaK3s2h5rUUptGzpogZMFDWObe
+	9ULZR/LqtY/+bEM2lmks7rtmA/gvNTdTE0cJFb5ebFuqX0ZMmKP5MPDeDKuX5xnzPIh6FHG8K34Ok
+	m9SA9LjwcR2yFL0SWaXTAXlFcczAbZyc+LGLFI/bdXOsd0y2i+DhvW3izMOHxAUSTBsBoBUUeiBqe
+	UaO48mGvCi7SJFTFxM44tKdXa4hMH/hXmsUrx9yF0DM/PZZ+NR9FBsUEGKMByeAlqKvkttrxn/+/H
+	O6wMgYXnJvYi3IKF/R5V1YwdbnuESffdlAYaXM9Yj6kjVpHhns2rtpSsFpM1MtDwyVMTiigB8MJLq
+	B/aWlgyQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nCQL8-009Bmm-83; Tue, 25 Jan 2022 18:14:46 +0000
+Date: Tue, 25 Jan 2022 10:14:46 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: kernel test robot <lkp@intel.com>, Tong Zhang <ztong0001@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
+Message-ID: <YfA+FshocO96c/WH@bombadil.infradead.org>
+References: <20220124003342.1457437-1-ztong0001@gmail.com>
+ <202201241937.i9KSsyAj-lkp@intel.com>
+ <20220124151611.30db4381d910c853fc0c9728@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,95 +38,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYuxkfKF=+xebi5z8VodYoXa2G-Agxw49ftz9vck7MxP+Q@mail.gmail.com>
+In-Reply-To: <20220124151611.30db4381d910c853fc0c9728@linux-foundation.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-Hi Naresh,
-
-On Tue, Jan 25, 2022 at 07:18:16PM +0530, Naresh Kamboju wrote:
-> Hi Greg,
+On Mon, Jan 24, 2022 at 03:16:11PM -0800, Andrew Morton wrote:
+> On Mon, 24 Jan 2022 19:40:53 +0800 kernel test robot <lkp@intel.com> wrote:
 > 
-> Regression found on
-> stable-rc 5.4 queue riscv tinyconfig build failed.
+> > Hi Tong,
+> > 
+> > 
+> > >> fs/binfmt_misc.c:828:21: error: incompatible pointer types assigning to 'struct ctl_table_header *' from 'struct sysctl_header *' [-Werror,-Wincompatible-pointer-types]
+> >            binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+> >                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    1 error generated.
+> > 
+> > 
+> > vim +828 fs/binfmt_misc.c
+> > 
+> >    821	
+> >    822	static int __init init_misc_binfmt(void)
+> >    823	{
+> >    824		int err = register_filesystem(&bm_fs_type);
+> >    825		if (!err)
+> >    826			insert_binfmt(&misc_format);
+> >    827	
+> >  > 828		binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+> >    829		if (!binfmt_misc_header) {
+> >    830			pr_warn("Failed to create fs/binfmt_misc sysctl mount point");
+> >    831			return -ENOMEM;
+> >    832		}
+> >    833		return 0;
+> >    834	}
+> >    835	
 > 
-> Not sure which patch is causing build failures.
-> We will bisect and get back to you.
-
-These should not be recent failures on 5.4, they should have always been
-there.
-
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM_IAS=1 ARCH=riscv
-> CROSS_COMPILE=riscv64-linux-gnu- HOSTCC=clang CC=clang
+> This is actually a blooper in Luis's "sysctl: add helper to register a
+> sysctl mount point".
 > 
-> In file included from /builds/linux/kernel/dma/mapping.c:8:
-> In file included from /builds/linux/include/linux/memblock.h:13:
-> In file included from /builds/linux/include/linux/mm.h:10:
-> In file included from /builds/linux/include/linux/gfp.h:6:
-> In file included from /builds/linux/include/linux/mmzone.h:8:
-> In file included from /builds/linux/include/linux/spinlock.h:51:
-> In file included from /builds/linux/include/linux/preempt.h:78:
-> In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
-> In file included from /builds/linux/include/asm-generic/preempt.h:5:
-> In file included from /builds/linux/include/linux/thread_info.h:22:
-> /builds/linux/arch/riscv/include/asm/current.h:30:9: warning: variable
-> 'tp' is uninitialized when used here [-Wuninitialized]
->         return tp;
->                ^~
-> /builds/linux/arch/riscv/include/asm/current.h:29:33: note: initialize
-> the variable 'tp' to silence this warning
->         register struct task_struct *tp __asm__("tp");
->                                        ^
->                                         = NULL
+> Please test, review, ridicule, etc:
+> 
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: include/linux/sysctl.h: fix register_sysctl_mount_point() return type
+> 
+> The CONFIG_SYSCTL=n stub returns the wrong type.
+> 
+> Fixes: ee9efac48a082 ("sysctl: add helper to register a sysctl mount point")
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Tong Zhang <ztong0001@gmail.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
-Resolved by commit 52e7c52d2ded ("RISC-V: Stop relying on GCC's register
-allocator's hueristics").
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-It had two follow up fixes:
-
-af2bdf828f79 ("RISC-V: stacktrace: Declare sp_in_global outside ifdef")
-8356c379cfba ("RISC-V: gp_in_global needs register keyword")
-
-> clang: warning: argument unused during compilation: '-no-pie'
-> [-Wunused-command-line-argument]
-
-Resolved by commit 7f3d349065d0 ("riscv: Use $(LD) instead of $(CC) to
-link vDSO"). I don't think that will backport clean but it is not an
-error so I would not worry about it.
-
-> In file included from /builds/linux/arch/riscv/kernel/cpu.c:7:
-> In file included from /builds/linux/include/linux/seq_file.h:8:
-> In file included from /builds/linux/include/linux/mutex.h:14:
-> /builds/linux/arch/riscv/include/asm/current.h:30:9: warning: variable
-> 'tp' is uninitialized when used here [-Wuninitialized]
->         return tp;
->                ^~
-> /builds/linux/arch/riscv/include/asm/current.h:29:33: note: initialize
-> the variable 'tp' to silence this warning
->         register struct task_struct *tp __asm__("tp");
->                                        ^
->                                         = NULL
-> 1 warning generated.
-> 1 warning generated.
-> 1 warning generated.
-> 1 warning generated.
-> <instantiation>:1:1: error: unrecognized instruction mnemonic
-> LOCAL _restore_kernel_tpsp
-> ^
-> /builds/linux/arch/riscv/kernel/entry.S:163:2: note: while in macro
-> instantiation
->  SAVE_ALL
->  ^
-> <instantiation>:2:2: error: unrecognized instruction mnemonic
->  LOCAL _save_context
->  ^
-
-Should be resolved with commits fdff9911f266 ("RISC-V: Inline the
-assembly register save/restore macros") and abc71bf0a703 ("RISC-V: Stop
-using LOCAL for the uaccess fixups").
-
-There might be other issues lurking, I would not say we had decent
-RISC-V build support with LLVM until maybe 5.10 or so (that is the
-version that we start testing RISC-V at in our CI).
-
-Cheers,
-Nathan
+  Luis
