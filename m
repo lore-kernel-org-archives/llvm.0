@@ -1,131 +1,140 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C76F2C82
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 14:13:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643119997; x=1674655997;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DMZZx473hyKFpxi3QimRs+k6IFab7cQhZ8H/zL3DsAc=;
-  b=ZU4W3vLXVTKmfSemFm0+S8MAFm1sPLLoyAJae0aPwUBtIT6PsWz45kn8
-   b8TggBnUFdbPu9dtNmLHSROFIRFLUGRXiBKJ2cCQeRViL6vGqCM7EsPSQ
-   Y8PHTTCNPiWnKDhti9+DhEyCzf5VAiL1BNzhbURB8BRVCDQgGDaITJoUe
-   v+J2yL3eWCYVysONQqpAQX+RVoV0duMZ5Aenzsix+RC4t5wPZEJkegUMD
-   2dEhPum1eznVbl+S4kBT3OFNugBpWz03HTyedCTduSpKkBB2rorDNK6Ky
-   zNuNkYgNy1Gm03DPjvj64VagCBODcEgs48kEwyV3wcvXyePj9yeVzh/6/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="307024234"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="307024234"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:13:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="479503846"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 06:12:58 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCMZ8-000Jzn-9h; Tue, 25 Jan 2022 14:12:58 +0000
-Date: Tue, 25 Jan 2022 22:12:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
- 9998/9999] arch/x86/entry/entry_32.S:52:2: warning: DWARF2 only supports one
- section per compilation unit
-Message-ID: <202201252238.tTDAQpum-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D3A2C82
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 14:14:51 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id j23so58029277edp.5
+        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 06:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pip/ynndQDsKYwfFpC0FwgQbF11giMSuPMZqW57FgsY=;
+        b=JhfKOo/i4Fe29ouAHZzU4+psdXV+0xA48c4c0lvpjN5WMKYJJ1LcpUFH5mRwD/ZRvQ
+         wvE6vzkVnOsGWq9JOsLOIXLLrFDFT3hkyQgl+JIlgo3AZNqeHOopkcKOVkJ5PnE6XuXf
+         teiZd1ZKMEQ3XJoMu9QBD6j0jXIo2OsJ9S/MofgHPhH6/kuNOjumhQ5eDMh3feiGa96L
+         DpyGP3sdFR2cNlxbUO/fNEt4GTJz5QU4HJw19lRM0hAH990jvl5YspsZW5KtAHdE14TG
+         PjxBFZReLu0F+gs/kY0nBnlCLMiq6tu5jXp5k9TqI0+aDv6p7AEK5U1yK+PnF1IkFulQ
+         ofTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pip/ynndQDsKYwfFpC0FwgQbF11giMSuPMZqW57FgsY=;
+        b=Ye68vsRD0Drt2YlQcFcki8ndXCoCNhWJQUa6CkByHHxYUPeqs1RM9WGC5X4QxWdiHg
+         I1nsHalH37fLGld6TtnU4Xkr1cKoNA7rUXyJSw+o0I04lH0IpSoU11rZdBgBRNJPceqr
+         LHKY6ANbgVNRZQ7lHFKsFA8JW8INH1NgBrFm5sDQUiF7UfXTsgAIidji8b2Tbk8btNNx
+         If6ZHS2aAZFqN/j10VaP6RsJUQfdA5Le/xOZkuND3HUaxeWreot1leRdHVbye1ZUNJeW
+         S1yOv3I+8n1hm8F00kS7isjkecDbc9HcCl0G59ArnZb0G5hO0BXUChL3QkRW84ylhvjB
+         mTlw==
+X-Gm-Message-State: AOAM533djOc4jGZq1b9KPMsirYYCt5PCRqC9qPr2kbm+/2/0K+8Zptqu
+	VdDDK5yuc0h7aJOmm5ZgMMs=
+X-Google-Smtp-Source: ABdhPJz2vAlFtIVwKW+yQfoJzKfPoR9YkgY+Wx8tpFHbshf2R4FZ/56EvcY6WDsY3muCdewvaf0v/g==
+X-Received: by 2002:a17:906:7c4:: with SMTP id m4mr16557083ejc.655.1643120089679;
+        Tue, 25 Jan 2022 06:14:49 -0800 (PST)
+Received: from debianHome.localdomain (dynamic-077-010-144-044.77.10.pool.telefonica.de. [77.10.144.44])
+        by smtp.gmail.com with ESMTPSA id lu44sm6292929ejb.145.2022.01.25.06.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 06:14:48 -0800 (PST)
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To: selinux@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Xiong Zhenwu <xiong.zhenwu@zte.com.cn>,
+	Tyler Hicks <tyhicks@linux.microsoft.com>,
+	Serge Hallyn <serge@hallyn.com>,
+	Austin Kim <austin.kim@lge.com>,
+	Yang Li <yang.lee@linux.alibaba.com>,
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+	Jeff Vander Stoep <jeffv@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 2/9] selinux: declare path parameters of _genfs_sid const
+Date: Tue, 25 Jan 2022 15:14:12 +0100
+Message-Id: <20220125141422.32655-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Nick,
+The path parameter is only read from in security_genfs_sid(),
+selinux_policy_genfs_sid() and __security_genfs_sid(). Since a string
+literal is passed as argument, declare the parameter const.
+Also align the parameter names in the declaration and definition.
 
-First bad commit (maybe != root cause):
+Reported by clang [-Wwrite-strings]:
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
-head:   e48efff5cb5fd63a687465347bdbb52ef98dad44
-commit: ffff118fe157b534c3244f8b300e655231dbd95c [9998/9999] BACKPORT: scripts/Makefile.clang: default to LLVM_IAS=1
-config: i386-randconfig-r025-20220124 (https://download.01.org/0day-ci/archive/20220125/202201252238.tTDAQpum-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/ffff118fe157b534c3244f8b300e655231dbd95c
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
-        git checkout ffff118fe157b534c3244f8b300e655231dbd95c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
+    security/selinux/hooks.c:553:60: error: passing 'const char [2]' to parameter of type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+            rc = security_genfs_sid(&selinux_state, sb->s_type->name, /,
+                                                                      ^~~
+    ./security/selinux/include/security.h:389:36: note: passing argument to parameter 'name' here
+                           const char *fstype, char *name, u16 sclass,
+                                                     ^
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/entry/entry_32.S:52:2: warning: DWARF2 only supports one section per compilation unit
-    .section .entry.text, "ax"
-    ^
->> <instantiation>:11:2: warning: DWARF2 only supports one section per compilation unit
-    .pushsection .altinstr_replacement,"ax"
-    ^
-   <instantiation>:1:1: note: while in macro instantiation
-   ALTERNATIVE "jmp .Lend_25", "", ( 7*32+11)
-   ^
-   <instantiation>:4:2: note: while in macro instantiation
-    SWITCH_TO_KERNEL_CR3 scratch_reg=%eax
-    ^
-   <instantiation>:33:2: note: while in macro instantiation
-    SWITCH_TO_KERNEL_STACK
-    ^
-   <instantiation>:4:2: note: while in macro instantiation
-    SAVE_ALL switch_stacks=1
-    ^
-   arch/x86/include/asm/idtentry.h:626:1: note: while in macro instantiation
-   idtentry_irq 0xFFFF common_interrupt;
-   ^
-   arch/x86/entry/entry_32.S:1010:1: warning: DWARF2 only supports one section per compilation unit
-   .pushsection .fixup, "ax"
-   ^
---
->> arch/x86/kernel/head_32.S:66:1: warning: DWARF2 only supports one section per compilation unit
-   .section ".head.text","ax"
-   ^
-   arch/x86/kernel/head_32.S:340:1: warning: DWARF2 only supports one section per compilation unit
-   .section ".init.text","ax"
-   ^
---
->> <instantiation>:11:2: warning: DWARF2 only supports one section per compilation unit
-    .pushsection .altinstr_replacement,"ax"
-    ^
-   arch/x86/entry/vdso/vdso32/system_call.S:60:2: note: while in macro instantiation
-    ALTERNATIVE "", "movl %esp, %ebp; sysenter", ( 0*32+11)
-    ^
-
-
-vim +52 arch/x86/entry/entry_32.S
-
-afaef01c001537 arch/x86/entry/entry_32.S  Alexander Popov 2018-08-17  51  
-ea7145477a461e arch/x86/kernel/entry_32.S Jiri Olsa       2011-03-07 @52  	.section .entry.text, "ax"
-ea7145477a461e arch/x86/kernel/entry_32.S Jiri Olsa       2011-03-07  53  
-
-:::::: The code at line 52 was first introduced by commit
-:::::: ea7145477a461e09d8d194cac4b996dc4f449107 x86: Separate out entry text section
-
-:::::: TO: Jiri Olsa <jolsa@redhat.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
-
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ security/selinux/include/security.h | 4 ++--
+ security/selinux/ss/services.c      | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
+index ac0ece01305a..6482e0efb368 100644
+--- a/security/selinux/include/security.h
++++ b/security/selinux/include/security.h
+@@ -386,11 +386,11 @@ int security_get_allow_unknown(struct selinux_state *state);
+ int security_fs_use(struct selinux_state *state, struct super_block *sb);
+ 
+ int security_genfs_sid(struct selinux_state *state,
+-		       const char *fstype, char *name, u16 sclass,
++		       const char *fstype, const char *path, u16 sclass,
+ 		       u32 *sid);
+ 
+ int selinux_policy_genfs_sid(struct selinux_policy *policy,
+-		       const char *fstype, char *name, u16 sclass,
++		       const char *fstype, const char *path, u16 sclass,
+ 		       u32 *sid);
+ 
+ #ifdef CONFIG_NETLABEL
+diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+index 8e92af7dd284..5a7df45bdab1 100644
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@ -2875,7 +2875,7 @@ int security_get_user_sids(struct selinux_state *state,
+  */
+ static inline int __security_genfs_sid(struct selinux_policy *policy,
+ 				       const char *fstype,
+-				       char *path,
++				       const char *path,
+ 				       u16 orig_sclass,
+ 				       u32 *sid)
+ {
+@@ -2928,7 +2928,7 @@ static inline int __security_genfs_sid(struct selinux_policy *policy,
+  */
+ int security_genfs_sid(struct selinux_state *state,
+ 		       const char *fstype,
+-		       char *path,
++		       const char *path,
+ 		       u16 orig_sclass,
+ 		       u32 *sid)
+ {
+@@ -2952,7 +2952,7 @@ int security_genfs_sid(struct selinux_state *state,
+ 
+ int selinux_policy_genfs_sid(struct selinux_policy *policy,
+ 			const char *fstype,
+-			char *path,
++			const char *path,
+ 			u16 orig_sclass,
+ 			u32 *sid)
+ {
+-- 
+2.34.1
+
