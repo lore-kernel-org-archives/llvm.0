@@ -1,140 +1,102 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF11E2CA7
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 20:40:33 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id z14so17036364ljc.13
-        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 12:40:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5692CA7
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 20:58:21 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id i17so3342515pfq.13
+        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 12:58:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=n1kkTsjIA/F1IWqHrRaAWXMMPcD/Uv5ibtuDYOR7mwM=;
-        b=mJk2ZakZu9I4pk9ZoweaWEZ3lyYSGbgesgD9J/pjxjHu6TkSoxv0cYzmtihs6k5lU2
-         fz/iNa2Xud3i6QpKnpMf7VR8Z2zqbO4oB1LdCt7Kg3vOzqDKuy33QrHfJiIZxUsZgsI8
-         N0PSaWypurs2tesgR5wsi8QyogQqzn5smMLdvmsrqi/PUHWmtBIzdp9uNKVsschFg1L+
-         mdt2/e/Rz8aD1/HSE58uOXXtxobp4VqjVnQQ8zAgg4S4GcaP5U4gD49Xl19cnDhQ7KwE
-         dqwcwf5Jap/KNesQUYJlyYTtKBzhBsZHLsn3ETpOO0dwrgG08Ii9+pWjZ9mpJOzBfqBo
-         xeag==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PUYqmPkBvQIdGU58jwht3HN/0yzGfx8qaQRsB+UNiy0=;
+        b=GQGmBB1DYw8/WmXT+ZpwruOtWZCF/qyI617MKboXaKLvTx8ABhBi0H+J/pYvhrLRMw
+         33cPD0VliF2igzkBK3n7iiwAcFOBDA7my4ywLqovD98nfw3yIixprfAw/WExFlS3ReyT
+         zor0+7rEnTcGVrnObxdq1OSaJor/ORgM+z1io=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=n1kkTsjIA/F1IWqHrRaAWXMMPcD/Uv5ibtuDYOR7mwM=;
-        b=KE5Ju3ic+s76lO9avk1HZgEPR3cKogloJQlvZheuWsjP0hgE58kqoFJpbWw2Qys0kX
-         OLXIVt+MHmLhFTFyrRgTao3fua6aQD4ah4lkNTGzy3VNNb/Gjy+Y5cZ1gRZhq6Q6CMXJ
-         iWQzwzqseh/d0F4ul/I5/YWY4D9WEQGyhfss5NSC1+rlz/4K4ujDuXblw8gb+CrteWUE
-         g2nWk8+fqcMSQRK3g4N0MeyE+yb6DENVVP2yD2dm6l3aQtSax6CrvNxJoLTtpGkDpmyw
-         RPobGXuvRZumcqZUnMkyZAW2mXk1q6tMTTZJJqYbz2RzhFzRQYRdYWKqMGQ84I8LLFbE
-         2mMw==
-X-Gm-Message-State: AOAM5338MlBM/cqMVzqcnmoPs1zhjzCGqlYfrJjVVUZrRjfDvIj+T7Bk
-	ank8fIW3moS1K+45vFDMpE8AmmUTyPt3DTPDjpQIAQ==
-X-Google-Smtp-Source: ABdhPJwqFYjcPHxaLoTDrVYkTbJkK5FXJutbgwZV1gs460eQh4UwxRmcQkJCvM89L3w0xQnwcPP4T5KE7zK0Rco8yg8=
-X-Received: by 2002:a2e:a5c9:: with SMTP id n9mr16093565ljp.220.1643143231698;
- Tue, 25 Jan 2022 12:40:31 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PUYqmPkBvQIdGU58jwht3HN/0yzGfx8qaQRsB+UNiy0=;
+        b=ESl+6XVEjDhIQIfvil2Sz7T1rcto2AI6HVZ2dHEuXk4q45FrSmX3lgancVYK+xu0Zd
+         Z6yCLIlIM5iYXKL2Zd0T/tcINiW/nzKtcYkiG4199DGlAB/THN4tc4gUhBgT6KuF3qlq
+         y+Z5EJcITEPj5icDKo6ujOzuic73VBThHhJAHdhimGbG9EkfXrHneQvTzMwm+0rTm6Sf
+         4V3+3g/p6o/NJ1Yy03V37ytg5KqOrLnPWaTeQBY+GdyBegn/iuE7igjpRebKaLrSLMIc
+         bXWdsrt1TzlTBXO2yxVOCh9jOgsSWIuU0w6S1KGzgjNm6RhjLovpFdVQeOorjbhKfiMY
+         ++hQ==
+X-Gm-Message-State: AOAM533P8mMFge0jo3SCbyJzMTGnlpyaEj/QnC/yugzHfcU6Kq1UoEqL
+	NyXr98YP7iy4E3C806clilUEOQ==
+X-Google-Smtp-Source: ABdhPJw2O9JF37i0mzVfYkjnoM1KRfH+UcS6dsMeXv3AbRyHDSJglWOnK4x1rGSswLJsPisNjQ+bsw==
+X-Received: by 2002:a63:9712:: with SMTP id n18mr16616112pge.594.1643144301071;
+        Tue, 25 Jan 2022 12:58:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q12sm11984967pfk.199.2022.01.25.12.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 12:58:20 -0800 (PST)
+Date: Tue, 25 Jan 2022 12:58:20 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH] ARM: stackprotector: prefer compiler for TLS based
+ per-task protector
+Message-ID: <202201251258.35AAAB07E5@keescook>
+References: <20211021142516.1843042-1-ardb@kernel.org>
+ <YfBGg+zmIlHmTIm/@dev-arch.archlinux-ax161>
+ <CAMj1kXFgcoWU2XnL-arTKoA0Sk2AoQVjZ-xVLryGR=fkS89FVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-3-cgzones@googlemail.com>
-In-Reply-To: <20220125141422.32655-3-cgzones@googlemail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 25 Jan 2022 12:40:19 -0800
-Message-ID: <CAKwvOdmLAhbvvqi7900yAS5zV8c_Hb7a-Tj_NyVHxh+mePpQbQ@mail.gmail.com>
-Subject: Re: [PATCH 4/9] selinux: enclose macro arguments in parenthesis
-To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc: selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Xiong Zhenwu <xiong.zhenwu@zte.com.cn>, 
-	Tyler Hicks <tyhicks@linux.microsoft.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFgcoWU2XnL-arTKoA0Sk2AoQVjZ-xVLryGR=fkS89FVA@mail.gmail.com>
 
-On Tue, Jan 25, 2022 at 6:14 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> Enclose the macro arguments in parenthesis to avoid potential evaluation
-> order issues.
->
-> Note the xperm and ebitmap macros are still not side-effect safe due to
-> double evaluation.
->
-> Reported by clang-tidy [bugprone-macro-parentheses]
+On Tue, Jan 25, 2022 at 07:55:37PM +0100, Ard Biesheuvel wrote:
+> On Tue, 25 Jan 2022 at 19:50, Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Thu, Oct 21, 2021 at 04:25:16PM +0200, Ard Biesheuvel wrote:
+> > > Currently, we implement the per-task stack protector for ARM using a GCC
+> > > plugin, due to lack of native compiler support. However, work is
+> > > underway to get this implemented in the compiler, which means we will be
+> > > able to deprecate the GCC plugin at some point.
+> > >
+> > > In the meantime, we will need to support both, where the native compiler
+> > > implementation is obviously preferred. So let's wire this up in Kconfig
+> > > and the Makefile.
+> > >
+> > > Cc: Kees Cook <keescook@chromium.org>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > I see this patch in the KSPP tree as commit 151bbc8be85e ("ARM:
+> > stackprotector: prefer compiler for TLS based per-task protector"),
+> > which breaks booting aspeed_g5_defconfig in QEMU with clang-14. It seems
+> > like this patch depends on Ard's patch "ARM: decompressor: disable stack
+> > protector" [1]; applying that on top of next-20220125 allows me to boot
+> > again.
+> >
+> > This patch is still queued up in Russell's devel-stable branch as
+> > commit f05eb1d24eb5 ("ARM: stackprotector: prefer compiler for TLS based
+> > per-task protector") so perhaps this patch should be dropped from the
+> > KSPP tree? I assume once Ard's recent fixes series [2] is applied to
+> > devel-stable, it will be added back to for-next?
+> >
+> > [1]: https://lore.kernel.org/r/20220124174744.1054712-9-ardb@kernel.org/
+> > [2]: https://lore.kernel.org/r/20220125091453.1475246-1-ardb@kernel.org/
+> >
+> 
+> Yeah. better drop it from KSPP.
+> 
+> The problem is that the compiler version of the per-task
+> stackprotector feature does not get disabled when building the
+> decompressor, which means it ends up dereferencing bogus TLS register
+> values.
 
-Good idea to run clang-tidy :)
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Ooh! Whoops, sorry. Dropping.
 
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/include/security.h | 4 ++--
->  security/selinux/ss/ebitmap.h       | 6 +++---
->  security/selinux/ss/sidtab.c        | 4 ++--
->  3 files changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/security/selinux/include/security.h b/security/selinux/inclu=
-de/security.h
-> index 6482e0efb368..d91a5672de99 100644
-> --- a/security/selinux/include/security.h
-> +++ b/security/selinux/include/security.h
-> @@ -254,8 +254,8 @@ struct av_decision {
->  #define XPERMS_AUDITALLOW 2
->  #define XPERMS_DONTAUDIT 4
->
-> -#define security_xperm_set(perms, x) (perms[x >> 5] |=3D 1 << (x & 0x1f)=
-)
-> -#define security_xperm_test(perms, x) (1 & (perms[x >> 5] >> (x & 0x1f))=
-)
-> +#define security_xperm_set(perms, x) ((perms)[(x) >> 5] |=3D 1 << ((x) &=
- 0x1f))
-> +#define security_xperm_test(perms, x) (1 & ((perms)[(x) >> 5] >> ((x) & =
-0x1f)))
->  struct extended_perms_data {
->         u32 p[8];
->  };
-> diff --git a/security/selinux/ss/ebitmap.h b/security/selinux/ss/ebitmap.=
-h
-> index 9eb2d0af2805..58eb822f11ee 100644
-> --- a/security/selinux/ss/ebitmap.h
-> +++ b/security/selinux/ss/ebitmap.h
-> @@ -118,9 +118,9 @@ static inline void ebitmap_node_clr_bit(struct ebitma=
-p_node *n,
->  }
->
->  #define ebitmap_for_each_positive_bit(e, n, bit)       \
-> -       for (bit =3D ebitmap_start_positive(e, &n);       \
-> -            bit < ebitmap_length(e);                   \
-> -            bit =3D ebitmap_next_positive(e, &n, bit))   \
-> +       for ((bit) =3D ebitmap_start_positive(e, &(n));   \
-> +            (bit) < ebitmap_length(e);                 \
-> +            (bit) =3D ebitmap_next_positive(e, &(n), bit))       \
->
->  int ebitmap_cmp(struct ebitmap *e1, struct ebitmap *e2);
->  int ebitmap_cpy(struct ebitmap *dst, struct ebitmap *src);
-> diff --git a/security/selinux/ss/sidtab.c b/security/selinux/ss/sidtab.c
-> index 293ec048af08..a54b8652bfb5 100644
-> --- a/security/selinux/ss/sidtab.c
-> +++ b/security/selinux/ss/sidtab.c
-> @@ -27,8 +27,8 @@ struct sidtab_str_cache {
->         char str[];
->  };
->
-> -#define index_to_sid(index) (index + SECINITSID_NUM + 1)
-> -#define sid_to_index(sid) (sid - (SECINITSID_NUM + 1))
-> +#define index_to_sid(index) ((index) + SECINITSID_NUM + 1)
-> +#define sid_to_index(sid) ((sid) - (SECINITSID_NUM + 1))
->
->  int sidtab_init(struct sidtab *s)
->  {
-> --
-> 2.34.1
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+Kees Cook
