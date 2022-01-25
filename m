@@ -1,114 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6BA2CA7
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 22:19:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD26FC340E7;
-	Tue, 25 Jan 2022 22:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643149189;
-	bh=3ZivQ+FV86iNurkooJ7KOtL0OLNq/84ROVUSZKlyUQk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R1bwuR0A6QqrCq/SDFCiXZKLqitK5ygFouhvtwcGnCqmRrB+sA4+WwQX8sTzzvQUN
-	 i302fTiAqLA6FD6R8XIGsfnzRLUkfhtF5tWAFnW/PnJLX5JLWRCRaImDxJMOcnEd1f
-	 ncOdBckbw2V4fsZ4DTDsciUNrEGo3frRNuwM6skqlVfqLBG3LIWRnXw+nSil75TWl8
-	 Aqy95geVO1I9rDUz18e3ql8vQ44KSCSWChZmkAoFKicY3++slU4WnY8NXCkA1Ew542
-	 0dmeQb2TbPY5TJIAuS20mMBShWABctXvFngYF2KNe5i4Y+Jz2fU+8ViuXDRapHz8ck
-	 4dhQzjVt1Yhfw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 2/2] MIPS: Loongson{2ef,64}: Wrap -mno-branch-likely with cc-option
-Date: Tue, 25 Jan 2022 15:19:25 -0700
-Message-Id: <20220125221925.3547683-2-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220125221925.3547683-1-nathan@kernel.org>
-References: <20220125221925.3547683-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69686D17
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 22:48:06 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id a28so29460188lfl.7
+        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 14:48:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mGu4hUVfAAPMG/lySmrJGJl6zgwYxA7GIIsE6nUuYeM=;
+        b=F8cdrBtSHqo2Z0Wdu2hZS6TosImMwSBca7DPk7TU+0dPo1RQzmbWmsGN+2aV81aGaN
+         81izACf7gyAjcLV9mkx+6Giz0f7M8f2nIey89tbfswPBzAgyzyWlWjD4a+gtGQzR39RF
+         IKb6ZiR5Kkj9qwbwHwF/YexTDhfQEF49pqApQtFPt3XsBo+oM6LOz3HTnD9SP6B09lcq
+         yj3oBE03IT9NdM5kMPf51sZun0hta9DeBk8eLKXsgu6rppFVO0URuOPgDAvs6L2kgPgs
+         LauhbruVRXhQd3K0TNzPF/7sbi1qd0ad9GSU0iwY7ncFTtkd5tvwdB0qNFg8RkbUGfNo
+         WHdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mGu4hUVfAAPMG/lySmrJGJl6zgwYxA7GIIsE6nUuYeM=;
+        b=RHR3QG4/AGqtXGKMytvnWd8ZcOpYOKf4ThFEhnwkq8MAsLxyiqwlJPruY9OkIgB/NX
+         +l1iT0wrnWtnNbzrhhsWblW24c0eReZ3CFNfQmuj3YkQ/o8bhrl1zx6JgHspmtOyFQPz
+         JO7WQXfsqiN77RucEDN/fcMLfAI+36d/kIRo9BL6hTMwx0yiurWzl+sTLpyv3G45A2DV
+         BOoZjMHql/mD3Kyg0SLGt+oeqx6x7eXWb8N7gfQhj8Iuf74BGmGlPDh+UhsO0vI7OPBf
+         Htm9bBottSf7tduZ2m7AkxhIsP67A8CJJNh2Uq4KB3eHnrgXQ8lvZte4xHWunB5GUi00
+         DQCw==
+X-Gm-Message-State: AOAM531CObOhx+lblJ5k1WjfPDXyi+TmJnfoUmoVHb9PkawYQLkuAxSa
+	MXUUkajAoFcUHQ4SX+IjZvtj8QNedHLpNp1EML/stw==
+X-Google-Smtp-Source: ABdhPJzmT2Y2xsealukDgOL1p4z8US3rq7Fw9rDMzOG6kMf1xrw83Fr6LXmzEo8/vnYGtFzKjztv+NqSXUZdyu0Aygk=
+X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr18829314lfb.444.1643150884606;
+ Tue, 25 Jan 2022 14:48:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-8-cgzones@googlemail.com>
+In-Reply-To: <20220125141422.32655-8-cgzones@googlemail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 25 Jan 2022 14:47:52 -0800
+Message-ID: <CAKwvOdkFOCTE5tTjrhPrfTWDwogvJ59LXZDnQ4wruHE93_6qMg@mail.gmail.com>
+Subject: Re: [PATCH 9/9] selinux: drop unused macro
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Xiu Jianfeng <xiujianfeng@huawei.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This flag is not supported by clang, which results in a warning:
+On Tue, Jan 25, 2022 at 6:15 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> The macro _DEBUG_HASHES is nowhere used. The configuration DEBUG_HASHES
+> enables debugging of the SELinux hash tables, but the with an underscore
+> prefixed macro definition has no direct impact or any documentation.
+>
+> Reported by clang [-Wunused-macros]
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 
-  clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-This breaks cc-option, which adds -Werror to make this warning fatal and
-catch flags that are not supported.
+> ---
+>  security/selinux/ss/policydb.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policyd=
+b.c
+> index 67e03f6e8966..d036e1238e77 100644
+> --- a/security/selinux/ss/policydb.c
+> +++ b/security/selinux/ss/policydb.c
+> @@ -41,8 +41,6 @@
+>  #include "mls.h"
+>  #include "services.h"
+>
+> -#define _DEBUG_HASHES
+> -
+>  #ifdef DEBUG_HASHES
+>  static const char *symtab_name[SYM_NUM] =3D {
+>         "common prefixes",
+> --
+> 2.34.1
+>
 
-Wrap this flag in cc-option so that it does not cause cc-option to fail,
-which can cause randconfigs to be really noisy, due to warnings not
-getting disabled that should be.
 
-Additionally, move the cc-option check to Kconfig so that the check is
-done at configuration time, rather than build time, as builds with no
-configuration change will be quicker because the cc-option call will not
-need to happen in those instances.
-
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-v1 -> v2: https://lore.kernel.org/r/20220120214001.1879469-2-nathan@kernel.org/
-
-* Move cc-option call to Kconfig (Nick).
-* Also apply to loongson2ef, even though this will not currently build
-  with clang.
-
- arch/mips/Kconfig              | 4 ++++
- arch/mips/loongson2ef/Platform | 3 ++-
- arch/mips/loongson64/Platform  | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 058446f01487..da6b3e0501a7 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3202,6 +3202,10 @@ config MIPS32_N32
- 
- 	  If unsure, say N.
- 
-+config CC_HAS_MNO_BRANCH_LIKELY
-+	def_bool y
-+	depends on $(cc-option,-mno-branch-likely)
-+
- menu "Power management options"
- 
- config ARCH_HIBERNATION_POSSIBLE
-diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
-index 50e659aca543..eebabf9df6ac 100644
---- a/arch/mips/loongson2ef/Platform
-+++ b/arch/mips/loongson2ef/Platform
-@@ -41,6 +41,7 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
- # Loongson Machines' Support
- #
- 
--cflags-$(CONFIG_MACH_LOONGSON2EF) += -I$(srctree)/arch/mips/include/asm/mach-loongson2ef -mno-branch-likely
-+cflags-$(CONFIG_MACH_LOONGSON2EF) += -I$(srctree)/arch/mips/include/asm/mach-loongson2ef
-+cflags-$(CONFIG_CC_HAS_MNO_BRANCH_LIKELY) += -mno-branch-likely
- load-$(CONFIG_LEMOTE_FULOONG2E) += 0xffffffff80100000
- load-$(CONFIG_LEMOTE_MACH2F) += 0xffffffff80200000
-diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-index f2a08a185ee2..473404cae1c4 100644
---- a/arch/mips/loongson64/Platform
-+++ b/arch/mips/loongson64/Platform
-@@ -18,5 +18,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
- # Loongson Machines' Support
- #
- 
--cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
-+cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64
-+cflags-$(CONFIG_CC_HAS_MNO_BRANCH_LIKELY) += -mno-branch-likely
- load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
--- 
-2.35.0
-
+--=20
+Thanks,
+~Nick Desaulniers
