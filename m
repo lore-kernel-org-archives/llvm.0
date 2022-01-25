@@ -1,94 +1,94 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69686D17
-	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 22:48:06 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id a28so29460188lfl.7
-        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 14:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mGu4hUVfAAPMG/lySmrJGJl6zgwYxA7GIIsE6nUuYeM=;
-        b=F8cdrBtSHqo2Z0Wdu2hZS6TosImMwSBca7DPk7TU+0dPo1RQzmbWmsGN+2aV81aGaN
-         81izACf7gyAjcLV9mkx+6Giz0f7M8f2nIey89tbfswPBzAgyzyWlWjD4a+gtGQzR39RF
-         IKb6ZiR5Kkj9qwbwHwF/YexTDhfQEF49pqApQtFPt3XsBo+oM6LOz3HTnD9SP6B09lcq
-         yj3oBE03IT9NdM5kMPf51sZun0hta9DeBk8eLKXsgu6rppFVO0URuOPgDAvs6L2kgPgs
-         LauhbruVRXhQd3K0TNzPF/7sbi1qd0ad9GSU0iwY7ncFTtkd5tvwdB0qNFg8RkbUGfNo
-         WHdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mGu4hUVfAAPMG/lySmrJGJl6zgwYxA7GIIsE6nUuYeM=;
-        b=RHR3QG4/AGqtXGKMytvnWd8ZcOpYOKf4ThFEhnwkq8MAsLxyiqwlJPruY9OkIgB/NX
-         +l1iT0wrnWtnNbzrhhsWblW24c0eReZ3CFNfQmuj3YkQ/o8bhrl1zx6JgHspmtOyFQPz
-         JO7WQXfsqiN77RucEDN/fcMLfAI+36d/kIRo9BL6hTMwx0yiurWzl+sTLpyv3G45A2DV
-         BOoZjMHql/mD3Kyg0SLGt+oeqx6x7eXWb8N7gfQhj8Iuf74BGmGlPDh+UhsO0vI7OPBf
-         Htm9bBottSf7tduZ2m7AkxhIsP67A8CJJNh2Uq4KB3eHnrgXQ8lvZte4xHWunB5GUi00
-         DQCw==
-X-Gm-Message-State: AOAM531CObOhx+lblJ5k1WjfPDXyi+TmJnfoUmoVHb9PkawYQLkuAxSa
-	MXUUkajAoFcUHQ4SX+IjZvtj8QNedHLpNp1EML/stw==
-X-Google-Smtp-Source: ABdhPJzmT2Y2xsealukDgOL1p4z8US3rq7Fw9rDMzOG6kMf1xrw83Fr6LXmzEo8/vnYGtFzKjztv+NqSXUZdyu0Aygk=
-X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr18829314lfb.444.1643150884606;
- Tue, 25 Jan 2022 14:48:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C0B29CA
+	for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 23:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643153607; x=1674689607;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EU2b9JrQJH1OK/v9lhZZ3ztptNc+djvb662UR9+9vBo=;
+  b=aoZXed9oVmJnAUzq7DTVO3rv+vJeqdOMbGCYQV16tEr4i5kIYwS4NHJH
+   SeB9Evk9HTnMeCC4ETWZAJj+P+UpbLSdAxd5cRRkSE3W31dNicepuMm4S
+   jSgSck/t4VRlMPPCVQleBdj9oPpr7g5xwcE1nYdR0wGOWy9drBzZixlpi
+   JexyDSSXMIHV+yVHIU2LvdDXCxKIf21HPEz4rQnI9SMd2BFwMehGaONtX
+   w6Fmr/wRXpWnEmApcQpHc50+Uj/E3DVDmrWXzvSYIoGsLWqOvRRhqUBJf
+   KW0BtDMJo23P6oX4SgEiKFNiFFrJItjc9WVnh5J4cEjaxPaZb/Iz5kJSJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307155644"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="307155644"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 15:33:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="479691392"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 15:33:25 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCVJU-000KYR-RR; Tue, 25 Jan 2022 23:33:24 +0000
+Date: Wed, 26 Jan 2022 07:32:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.16 4/137]
+ arch/x86/kernel/cpu/resctrl/core.c:417:6: warning: no previous prototype for
+ function 'domain_free'
+Message-ID: <202201260732.58wp6s70-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-8-cgzones@googlemail.com>
-In-Reply-To: <20220125141422.32655-8-cgzones@googlemail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 25 Jan 2022 14:47:52 -0800
-Message-ID: <CAKwvOdkFOCTE5tTjrhPrfTWDwogvJ59LXZDnQ4wruHE93_6qMg@mail.gmail.com>
-Subject: Re: [PATCH 9/9] selinux: drop unused macro
-To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc: selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 25, 2022 at 6:15 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> The macro _DEBUG_HASHES is nowhere used. The configuration DEBUG_HASHES
-> enables debugging of the SELinux hash tables, but the with an underscore
-> prefixed macro definition has no direct impact or any documentation.
->
-> Reported by clang [-Wunused-macros]
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
+head:   364c1c42b229912132e1615c2ce15be7154e2156
+commit: 22965510f006f9207f1615ffb3543c9314ac6d01 [4/137] x86/resctrl: Group struct rdt_hw_domain cleanup
+config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260732.58wp6s70-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=22965510f006f9207f1615ffb3543c9314ac6d01
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.16
+        git checkout 22965510f006f9207f1615ffb3543c9314ac6d01
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  security/selinux/ss/policydb.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policyd=
-b.c
-> index 67e03f6e8966..d036e1238e77 100644
-> --- a/security/selinux/ss/policydb.c
-> +++ b/security/selinux/ss/policydb.c
-> @@ -41,8 +41,6 @@
->  #include "mls.h"
->  #include "services.h"
->
-> -#define _DEBUG_HASHES
-> -
->  #ifdef DEBUG_HASHES
->  static const char *symtab_name[SYM_NUM] =3D {
->         "common prefixes",
-> --
-> 2.34.1
->
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/resctrl/core.c:417:6: warning: no previous prototype for function 'domain_free' [-Wmissing-prototypes]
+   void domain_free(struct rdt_hw_domain *hw_dom)
+        ^
+   arch/x86/kernel/cpu/resctrl/core.c:417:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void domain_free(struct rdt_hw_domain *hw_dom)
+   ^
+   static 
+   1 warning generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/domain_free +417 arch/x86/kernel/cpu/resctrl/core.c
+
+   416	
+ > 417	void domain_free(struct rdt_hw_domain *hw_dom)
+   418	{
+   419		kfree(hw_dom->ctrl_val);
+   420		kfree(hw_dom->mbps_val);
+   421		kfree(hw_dom);
+   422	}
+   423	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
