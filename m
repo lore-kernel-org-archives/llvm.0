@@ -1,44 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A53168
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 17:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F64168
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 18:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643217197; x=1674753197;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WIgJq1vWU6jw1/jQDPrNCQhuhtK+wLmdU8VzdaGKxSI=;
-  b=XmuzVOJuwcgfPIXtOgZqMHRdziVqszi5n/Arb8ZDYWblqu18d/HvtC0y
-   YzZUfFDqENlUSn1MXFvHfL/Ko0PK3OoSQY7VtAvyNsbtDkoHIyozGRC88
-   3anU96cjnED5GDbcPZhZOKxYPDHwZzsSFipV8Xgz2Jxi7K0w+obVIwv+Z
-   V8SfPjUppKbRkwasWwgs+rx7xB65p1pt8p6T2Di3hDBjjsT6Bwf9+f5bc
-   Xt5C2UDeZxn+cGxyp/8DI+64OZclXvPXYTZEnfiXWdJEXYz0GG5JjCRYM
-   zWBSELAOnYS7GOiDUQuvoWqWpSu6ui36tH+VQPOvT09JZQKGo/AEH0/zM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246817358"
+  t=1643220732; x=1674756732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/63UQCkOPCV3csvtYswGzS4KzAA+pga67Yf8Dwpg63A=;
+  b=a5KXYMRdtVnhNjLH0mPjnw29pgdQnZArtBno2mumYpvf8AmgKQn92cum
+   JtenqBqoRnbhrNoom+wReQcyARkjdCQ7G4mpm5gK868rw1WZGqcaHZqtc
+   n7gRzRj0GyJ1d0qJPjlbPtyieZl30A2BvkCLMIBmOrj6C9QPyupB310Mv
+   s4Dq1l4cnpLEGtmM8xE+8E7IP1ba0RU88G09EAI01oK4Z9MX2hf1IwfAf
+   7cHxWY9AvOE4gJGjE9V5f2ouLqvkRIzR5iiZhbVIlrlStppS7WG6I+aQh
+   Kqmvp3Nep1Y1JU/MQLK5/tijcBoZniAMaGz2nuKehXQ9VAvw7rrIk0+64
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309925958"
 X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="246817358"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:11:06 -0800
+   d="scan'208";a="309925958"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 10:12:11 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="696302581"
+   d="scan'208";a="477558701"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 09:11:04 -0800
+  by orsmga003.jf.intel.com with ESMTP; 26 Jan 2022 10:12:09 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nClp1-000LRF-Et; Wed, 26 Jan 2022 17:11:03 +0000
-Date: Thu, 27 Jan 2022 01:10:13 +0800
+	id 1nCmm8-000LUb-Rp; Wed, 26 Jan 2022 18:12:08 +0000
+Date: Thu, 27 Jan 2022 02:11:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
+To: Mateusz Palczewski <mateusz.palczewski@intel.com>,
+	intel-wired-lan@lists.osuosl.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-	Will Deacon <willdeacon@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10
- 1026/9999] arch/arm64/kvm/hyp/include/hyp/switch.h:216:2: error: implicit
- declaration of function 'sve_cond_update_zcr_vq'
-Message-ID: <202201270116.Lw5fVBBz-lkp@intel.com>
+	Mateusz Palczewski <mateusz.palczewski@intel.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next v2 1/2] iavf: Stop leaking
+ iavf_status as "errno" values
+Message-ID: <202201270125.z5yiy42k-lkp@intel.com>
+References: <20220126145938.26500-1-mateusz.palczewski@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,92 +47,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220126145938.26500-1-mateusz.palczewski@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Marc,
+Hi Mateusz,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10
-head:   4b1862e4fc6967bf326107ac0d5695157f32c25d
-commit: 1105b4d1cef4bc19ad20129a716194268c937eaf [1026/9999] BACKPORT: FROMGIT: KVM: arm64: Rework SVE host-save/guest-restore
-config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270116.Lw5fVBBz-lkp@intel.com/config)
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/0day-ci/linux/commits/Mateusz-Palczewski/iavf-Fix-return-values-in-driver/20220126-230536
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git ab14f1802cfb2d7ca120bbf48e3ba6712314ffc3
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220127/202201270125.z5yiy42k-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/1105b4d1cef4bc19ad20129a716194268c937eaf
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10
-        git checkout 1105b4d1cef4bc19ad20129a716194268c937eaf
+        # https://github.com/0day-ci/linux/commit/d0d06ad4899a5e86feef8a2fca3f8f0bf6937767
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Mateusz-Palczewski/iavf-Fix-return-values-in-driver/20220126-230536
+        git checkout d0d06ad4899a5e86feef8a2fca3f8f0bf6937767
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/iavf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm64/kvm/hyp/vhe/switch.c:8:
->> arch/arm64/kvm/hyp/include/hyp/switch.h:216:2: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
-           sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
-           ^
-   arch/arm64/kvm/hyp/vhe/switch.c:227:17: warning: no previous prototype for function 'kvm_unexpected_el2_exception' [-Wmissing-prototypes]
-   asmlinkage void kvm_unexpected_el2_exception(void)
-                   ^
-   arch/arm64/kvm/hyp/vhe/switch.c:227:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void kvm_unexpected_el2_exception(void)
-              ^
-              static 
-   1 warning and 1 error generated.
---
-   In file included from arch/arm64/kvm/hyp/nvhe/switch.c:8:
->> arch/arm64/kvm/hyp/include/hyp/switch.h:216:2: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
-           sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
-           ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:282:17: warning: no previous prototype for function 'kvm_unexpected_el2_exception' [-Wmissing-prototypes]
-   asmlinkage void kvm_unexpected_el2_exception(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:282:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void kvm_unexpected_el2_exception(void)
-              ^
-              static 
-   1 warning and 1 error generated.
---
-   In file included from arch/arm64/kvm/hyp/nvhe/hyp-main.c:7:
->> arch/arm64/kvm/hyp/include/hyp/switch.h:216:2: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
-           sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
-           ^
-   arch/arm64/kvm/hyp/nvhe/hyp-main.c:233:6: warning: no previous prototype for function 'handle_trap' [-Wmissing-prototypes]
-   void handle_trap(struct kvm_cpu_context *host_ctxt)
-        ^
-   arch/arm64/kvm/hyp/nvhe/hyp-main.c:233:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void handle_trap(struct kvm_cpu_context *host_ctxt)
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from arch/arm64/kvm/hyp/nvhe/mem_protect.c:15:
->> arch/arm64/kvm/hyp/include/hyp/switch.h:216:2: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
-           sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
-           ^
-   1 error generated.
+>> drivers/net/ethernet/intel/iavf/iavf_main.c:2141:60: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+                   dev_err(&pdev->dev, "Failed to init Admin Queue (%d)\n", err);
+                                                                            ^~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/net/ethernet/intel/iavf/iavf_main.c:2115:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +/sve_cond_update_zcr_vq +216 arch/arm64/kvm/hyp/include/hyp/switch.h
+vim +/err +2141 drivers/net/ethernet/intel/iavf/iavf_main.c
 
-   213	
-   214	static inline void __hyp_sve_restore_guest(struct kvm_vcpu *vcpu)
-   215	{
- > 216		sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
-   217		__sve_restore_state(vcpu_sve_pffr(vcpu),
-   218				    &vcpu->arch.ctxt.fp_regs.fpsr);
-   219		write_sysreg_el1(__vcpu_sys_reg(vcpu, ZCR_EL1), SYS_ZCR);
-   220	}
-   221	
+8afadd1cd8ba1d Brett Creeley      2021-11-29  2101  
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2102  /**
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2103   * iavf_startup - first step of driver startup
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2104   * @adapter: board private structure
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2105   *
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2106   * Function process __IAVF_STARTUP driver state.
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2107   * When success the state is changed to __IAVF_INIT_VERSION_CHECK
+59756ad6948be9 Mateusz Palczewski 2021-08-19  2108   * when fails the state is changed to __IAVF_INIT_FAILED
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2109   **/
+59756ad6948be9 Mateusz Palczewski 2021-08-19  2110  static void iavf_startup(struct iavf_adapter *adapter)
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2111  {
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2112  	struct pci_dev *pdev = adapter->pdev;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2113  	struct iavf_hw *hw = &adapter->hw;
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2114  	enum iavf_status status;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2115  	int err;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2116  
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2117  	WARN_ON(adapter->state != __IAVF_STARTUP);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2118  
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2119  	/* driver loaded, probe complete */
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2120  	adapter->flags &= ~IAVF_FLAG_PF_COMMS_FAILED;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2121  	adapter->flags &= ~IAVF_FLAG_RESET_PENDING;
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2122  	status = iavf_set_mac_type(hw);
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2123  	if (status) {
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2124  		dev_err(&pdev->dev, "Failed to set MAC type (%d)\n", status);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2125  		goto err;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2126  	}
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2127  
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2128  	status = iavf_check_reset_complete(hw);
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2129  	if (status) {
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2130  		dev_info(&pdev->dev, "Device is still in reset (%d), retrying\n",
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2131  			 status);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2132  		goto err;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2133  	}
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2134  	hw->aq.num_arq_entries = IAVF_AQ_LEN;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2135  	hw->aq.num_asq_entries = IAVF_AQ_LEN;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2136  	hw->aq.arq_buf_size = IAVF_MAX_AQ_BUF_SIZE;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2137  	hw->aq.asq_buf_size = IAVF_MAX_AQ_BUF_SIZE;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2138  
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2139  	status = iavf_init_adminq(hw);
+d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2140  	if (status) {
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14 @2141  		dev_err(&pdev->dev, "Failed to init Admin Queue (%d)\n", err);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2142  		goto err;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2143  	}
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2144  	err = iavf_send_api_ver(adapter);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2145  	if (err) {
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2146  		dev_err(&pdev->dev, "Unable to send to PF (%d)\n", err);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2147  		iavf_shutdown_adminq(hw);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2148  		goto err;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2149  	}
+45eebd62999d37 Mateusz Palczewski 2021-08-19  2150  	iavf_change_state(adapter, __IAVF_INIT_VERSION_CHECK);
+59756ad6948be9 Mateusz Palczewski 2021-08-19  2151  	return;
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2152  err:
+59756ad6948be9 Mateusz Palczewski 2021-08-19  2153  	iavf_change_state(adapter, __IAVF_INIT_FAILED);
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2154  }
+b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2155  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
