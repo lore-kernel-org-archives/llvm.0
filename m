@@ -1,42 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C71229CA
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 07:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF3C29CA
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 08:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643182780; x=1674718780;
+  t=1643184641; x=1674720641;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qpwkq/tfgyuDWo8286GPA9d2hhEfNOjp5kDGgAGyq0I=;
-  b=cC21OywXFxqRudnkmCnrYVinZ2bu+jRt41ZhdG56Q69Gftg2vNGwdxyw
-   H7j1d3qUjrqXBV7dpDcqKnh+nqNTb2IxOLs9fl/CjWP31qWyPVcBvnRR7
-   t3GDm8N2nK3z3rlhnsvDzxSdyUJgULG0TwdwjPg57Q5DoXJGcyEbUoNCD
-   S+pQnaITzvM3RoBW+75xvSccmFCT+f/VyUrUtnj/A8I6vs8Lf687g2cL3
-   DdO5iWmN3JtdURcDWEb1wm4qZVx0f1MeaBzXEWpIEBi61zK4w5iYDhPTt
-   GbDJJ3l4eY0NKJw7xnM8B/woW0yJodo0ElmcjC1jbX6eL/gnkv/FO7bMS
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230073199"
+  bh=UJ9K3fRmLkdMhS/xni+4TwFa1L+mdbTWf6GkHGU/lS0=;
+  b=D2DA93kjbHKzDt9v7umcrOwSL+r8dDBX1pLbRlt4VznMJEi/8J3xxNKU
+   TQn9grng0CeBnm8I1ihlq7wecJPYdzsW1CI4wvFrWH2OjNfaa0xVAWTda
+   s0AN/7q70UiEMnOSX2KLSveIuhWks3XC7YQje56tBDu7ozFVm0m7KrleJ
+   4kvl8CgZFhIXIu2L89xJbhsayHEuqXZfEScXtcZmwHb4xBkXrZgZcyKcc
+   mKYsY7YCW7SQVBloX/fxCywcATwBPjE3RCWg8g1dpgaHMehisn13Pmdiw
+   d8kx20RRIh4oy+kRcQeexaCnEaY2i7hXUo00NnZg8kdVO7Ea9os5kBsYz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244101560"
 X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="230073199"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 23:39:39 -0800
+   d="scan'208";a="244101560"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 00:10:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="696135344"
+   d="scan'208";a="628234024"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2022 23:39:38 -0800
+  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 00:10:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCcu1-000KwV-Ba; Wed, 26 Jan 2022 07:39:37 +0000
-Date: Wed, 26 Jan 2022 15:39:17 +0800
+	id 1nCdO2-000KyG-Jm; Wed, 26 Jan 2022 08:10:38 +0000
+Date: Wed, 26 Jan 2022 16:09:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
+To: Trond Myklebust <trond.myklebust@hammerspace.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.16 60/137] WARNING: modpost:
- vmlinux.o(.text+0x48087): Section mismatch in reference from the function
- resctrl_init() to the function .init.text:thread_throttle_mode_init()
-Message-ID: <202201261528.jKedbVna-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: fs/nfs/callback_xdr.c:274:8: warning: result of comparison of
+ constant 658812288346769700 with expression of type 'uint32_t' (aka
+ 'unsigned int') is always false
+Message-ID: <202201261623.xnoX2uVL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,32 +48,140 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: 5d118e3da1ad725c2ea8da30eda516096e550289 [60/137] x86/resctrl: Drop __init/__exit on assorted symbols
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261528.jKedbVna-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+Hi Trond,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+commit: b05bf5c63b326ce1da84ef42498d8e0e292e694c NFSv4.1: Fix uninitialised variable in devicenotify
+date:   3 weeks ago
+config: x86_64-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261623.xnoX2uVL-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=5d118e3da1ad725c2ea8da30eda516096e550289
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout 5d118e3da1ad725c2ea8da30eda516096e550289
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b05bf5c63b326ce1da84ef42498d8e0e292e694c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b05bf5c63b326ce1da84ef42498d8e0e292e694c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.text+0x48087): Section mismatch in reference from the function resctrl_init() to the function .init.text:thread_throttle_mode_init()
-The function resctrl_init() references
-the function __init thread_throttle_mode_init().
-This is often because resctrl_init lacks a __init
-annotation or the annotation of thread_throttle_mode_init is wrong.
+>> fs/nfs/callback_xdr.c:274:8: warning: result of comparison of constant 658812288346769700 with expression of type 'uint32_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (n > ULONG_MAX / sizeof(*args->devs)) {
+               ~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +274 fs/nfs/callback_xdr.c
+
+f2a625616045fe Fred Isaman       2011-01-06  254  
+1be5683b03a766 Marc Eshel        2011-05-22  255  static
+1be5683b03a766 Marc Eshel        2011-05-22  256  __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+1be5683b03a766 Marc Eshel        2011-05-22  257  				struct xdr_stream *xdr,
+f4dac4ade5ba4e Christoph Hellwig 2017-05-11  258  				void *argp)
+1be5683b03a766 Marc Eshel        2011-05-22  259  {
+f4dac4ade5ba4e Christoph Hellwig 2017-05-11  260  	struct cb_devicenotifyargs *args = argp;
+b05bf5c63b326c Trond Myklebust   2022-01-03  261  	uint32_t tmp, n, i;
+1be5683b03a766 Marc Eshel        2011-05-22  262  	__be32 *p;
+1be5683b03a766 Marc Eshel        2011-05-22  263  	__be32 status = 0;
+1be5683b03a766 Marc Eshel        2011-05-22  264  
+1be5683b03a766 Marc Eshel        2011-05-22  265  	/* Num of device notifications */
+eb72f484a5eb94 Chuck Lever       2019-02-11  266  	p = xdr_inline_decode(xdr, sizeof(uint32_t));
+1be5683b03a766 Marc Eshel        2011-05-22  267  	if (unlikely(p == NULL)) {
+1be5683b03a766 Marc Eshel        2011-05-22  268  		status = htonl(NFS4ERR_BADXDR);
+1be5683b03a766 Marc Eshel        2011-05-22  269  		goto out;
+1be5683b03a766 Marc Eshel        2011-05-22  270  	}
+1be5683b03a766 Marc Eshel        2011-05-22  271  	n = ntohl(*p++);
+b05bf5c63b326c Trond Myklebust   2022-01-03  272  	if (n == 0)
+1be5683b03a766 Marc Eshel        2011-05-22  273  		goto out;
+363e0df057ea8d Dan Carpenter     2012-01-12 @274  	if (n > ULONG_MAX / sizeof(*args->devs)) {
+363e0df057ea8d Dan Carpenter     2012-01-12  275  		status = htonl(NFS4ERR_BADXDR);
+363e0df057ea8d Dan Carpenter     2012-01-12  276  		goto out;
+363e0df057ea8d Dan Carpenter     2012-01-12  277  	}
+1be5683b03a766 Marc Eshel        2011-05-22  278  
+a4f743a6bb2016 Trond Myklebust   2015-02-11  279  	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+1be5683b03a766 Marc Eshel        2011-05-22  280  	if (!args->devs) {
+1be5683b03a766 Marc Eshel        2011-05-22  281  		status = htonl(NFS4ERR_DELAY);
+1be5683b03a766 Marc Eshel        2011-05-22  282  		goto out;
+1be5683b03a766 Marc Eshel        2011-05-22  283  	}
+1be5683b03a766 Marc Eshel        2011-05-22  284  
+1be5683b03a766 Marc Eshel        2011-05-22  285  	/* Decode each dev notification */
+1be5683b03a766 Marc Eshel        2011-05-22  286  	for (i = 0; i < n; i++) {
+1be5683b03a766 Marc Eshel        2011-05-22  287  		struct cb_devicenotifyitem *dev = &args->devs[i];
+1be5683b03a766 Marc Eshel        2011-05-22  288  
+eb72f484a5eb94 Chuck Lever       2019-02-11  289  		p = xdr_inline_decode(xdr, (4 * sizeof(uint32_t)) +
+eb72f484a5eb94 Chuck Lever       2019-02-11  290  				      NFS4_DEVICEID4_SIZE);
+1be5683b03a766 Marc Eshel        2011-05-22  291  		if (unlikely(p == NULL)) {
+1be5683b03a766 Marc Eshel        2011-05-22  292  			status = htonl(NFS4ERR_BADXDR);
+1be5683b03a766 Marc Eshel        2011-05-22  293  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  294  		}
+1be5683b03a766 Marc Eshel        2011-05-22  295  
+1be5683b03a766 Marc Eshel        2011-05-22  296  		tmp = ntohl(*p++);	/* bitmap size */
+1be5683b03a766 Marc Eshel        2011-05-22  297  		if (tmp != 1) {
+1be5683b03a766 Marc Eshel        2011-05-22  298  			status = htonl(NFS4ERR_INVAL);
+1be5683b03a766 Marc Eshel        2011-05-22  299  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  300  		}
+1be5683b03a766 Marc Eshel        2011-05-22  301  		dev->cbd_notify_type = ntohl(*p++);
+1be5683b03a766 Marc Eshel        2011-05-22  302  		if (dev->cbd_notify_type != NOTIFY_DEVICEID4_CHANGE &&
+1be5683b03a766 Marc Eshel        2011-05-22  303  		    dev->cbd_notify_type != NOTIFY_DEVICEID4_DELETE) {
+1be5683b03a766 Marc Eshel        2011-05-22  304  			status = htonl(NFS4ERR_INVAL);
+1be5683b03a766 Marc Eshel        2011-05-22  305  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  306  		}
+1be5683b03a766 Marc Eshel        2011-05-22  307  
+1be5683b03a766 Marc Eshel        2011-05-22  308  		tmp = ntohl(*p++);	/* opaque size */
+1be5683b03a766 Marc Eshel        2011-05-22  309  		if (((dev->cbd_notify_type == NOTIFY_DEVICEID4_CHANGE) &&
+1be5683b03a766 Marc Eshel        2011-05-22  310  		     (tmp != NFS4_DEVICEID4_SIZE + 8)) ||
+1be5683b03a766 Marc Eshel        2011-05-22  311  		    ((dev->cbd_notify_type == NOTIFY_DEVICEID4_DELETE) &&
+1be5683b03a766 Marc Eshel        2011-05-22  312  		     (tmp != NFS4_DEVICEID4_SIZE + 4))) {
+1be5683b03a766 Marc Eshel        2011-05-22  313  			status = htonl(NFS4ERR_INVAL);
+1be5683b03a766 Marc Eshel        2011-05-22  314  			goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  315  		}
+1be5683b03a766 Marc Eshel        2011-05-22  316  		dev->cbd_layout_type = ntohl(*p++);
+1be5683b03a766 Marc Eshel        2011-05-22  317  		memcpy(dev->cbd_dev_id.data, p, NFS4_DEVICEID4_SIZE);
+1be5683b03a766 Marc Eshel        2011-05-22  318  		p += XDR_QUADLEN(NFS4_DEVICEID4_SIZE);
+1be5683b03a766 Marc Eshel        2011-05-22  319  
+1be5683b03a766 Marc Eshel        2011-05-22  320  		if (dev->cbd_layout_type == NOTIFY_DEVICEID4_CHANGE) {
+eb72f484a5eb94 Chuck Lever       2019-02-11  321  			p = xdr_inline_decode(xdr, sizeof(uint32_t));
+1be5683b03a766 Marc Eshel        2011-05-22  322  			if (unlikely(p == NULL)) {
+1be5683b03a766 Marc Eshel        2011-05-22  323  				status = htonl(NFS4ERR_BADXDR);
+1be5683b03a766 Marc Eshel        2011-05-22  324  				goto err;
+1be5683b03a766 Marc Eshel        2011-05-22  325  			}
+1be5683b03a766 Marc Eshel        2011-05-22  326  			dev->cbd_immediate = ntohl(*p++);
+1be5683b03a766 Marc Eshel        2011-05-22  327  		} else {
+1be5683b03a766 Marc Eshel        2011-05-22  328  			dev->cbd_immediate = 0;
+1be5683b03a766 Marc Eshel        2011-05-22  329  		}
+1be5683b03a766 Marc Eshel        2011-05-22  330  
+1be5683b03a766 Marc Eshel        2011-05-22  331  		dprintk("%s: type %d layout 0x%x immediate %d\n",
+1be5683b03a766 Marc Eshel        2011-05-22  332  			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
+1be5683b03a766 Marc Eshel        2011-05-22  333  			dev->cbd_immediate);
+1be5683b03a766 Marc Eshel        2011-05-22  334  	}
+b05bf5c63b326c Trond Myklebust   2022-01-03  335  	args->ndevs = n;
+b05bf5c63b326c Trond Myklebust   2022-01-03  336  	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
+b05bf5c63b326c Trond Myklebust   2022-01-03  337  	return 0;
+b05bf5c63b326c Trond Myklebust   2022-01-03  338  err:
+b05bf5c63b326c Trond Myklebust   2022-01-03  339  	kfree(args->devs);
+1be5683b03a766 Marc Eshel        2011-05-22  340  out:
+b05bf5c63b326c Trond Myklebust   2022-01-03  341  	args->devs = NULL;
+b05bf5c63b326c Trond Myklebust   2022-01-03  342  	args->ndevs = 0;
+1be5683b03a766 Marc Eshel        2011-05-22  343  	dprintk("%s: status %d ndevs %d\n",
+1be5683b03a766 Marc Eshel        2011-05-22  344  		__func__, ntohl(status), args->ndevs);
+1be5683b03a766 Marc Eshel        2011-05-22  345  	return status;
+1be5683b03a766 Marc Eshel        2011-05-22  346  }
+1be5683b03a766 Marc Eshel        2011-05-22  347  
+
+:::::: The code at line 274 was first introduced by commit
+:::::: 363e0df057ea8da539645fe4c3c227e3d44054cc nfs: check for integer overflow in decode_devicenotify_args()
+
+:::::: TO: Dan Carpenter <dan.carpenter@oracle.com>
+:::::: CC: Trond Myklebust <Trond.Myklebust@netapp.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
