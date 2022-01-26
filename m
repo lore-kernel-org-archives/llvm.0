@@ -1,162 +1,79 @@
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701BD29CA
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 06:33:34 +0000 (UTC)
-Received: by mail-yb1-f170.google.com with SMTP id r65so64879106ybc.11
-        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 22:33:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ChJmRDJEm5pXcjV3RhCmm6g5TfXTFkO1Rcc6sHnIoj4=;
-        b=GhWYMsUW3Qbr9HHuE1hilXCPJIChi71Nm2odYfcUOh34TGObPJ6KOcMJ+S/hQuxHV5
-         F+W+7Msf0GoOhpLBKO05zSE8oWLEp3XTqstMnSDTh7ucRYF+L1RJw58oS5Gby58MOtUC
-         LssQfspxrjVVfjjBD5VDWKj7ajonyXUMjFEvFojFx1ET3d3yo6SmYlpibRrbhmc7vYsx
-         U0uhAruxNq+sOCzJo6bqt6YqZvyK8ZtKm/m7cvPM6YQIqXgf9emV8BAVuU9E1tiP4ez5
-         ILuGa68x6JrWOh8QCeDL2ZNdtxqOD0w4kWaT2xtK7MJ4l2Uv8UT+Fbn8eq9ks8PZMgdy
-         AwXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ChJmRDJEm5pXcjV3RhCmm6g5TfXTFkO1Rcc6sHnIoj4=;
-        b=5c2S60Ua1V9dxdjhV8qyWT6NFQJrAt44WhpfydFmPgK2l6cDS8tyae/ZxERRbeW7RV
-         zO9CknJuffc5X2aYHsOBE6bqNb184D+xm2+pSzcXEQwHsFZqtz68vN0Biv1OjemYOJ4C
-         BRY0oGOwKQMwnPYqhXHTapAqSVZD33tfby4u5veWGNzZsDIYr9lhEgdEHPjQCDm12QcV
-         a/1zFnscL7BsRsO1rTr6ptVQmUsLfNQ20FMUSTV5IzVdguMPt2fw+N/jY6+IrzO1ZYai
-         7IjYjjiMs9Soy5k7m8F0CMzsywid5osnJSWcDaiQd9/UPIQXA6HC0FxMOvmgl326ETvb
-         7C8w==
-X-Gm-Message-State: AOAM530oA7tQAYstZNvuPpqeVw9HwDvEDh/H/hRw+v9/GocH+vrdv3QJ
-	YnYTRVh9GIAmA1Y+SKisSNFVNIeQKYxyhnRmjCM=
-X-Google-Smtp-Source: ABdhPJyVOElZioeXwIvY64lBpQdHS4C6bPEoMaUFuCbrg+JVWJA/pH6s/0VZ7VCo2DXoBCw92rWh/r2oABcZTMP35VE=
-X-Received: by 2002:a05:6902:1107:: with SMTP id o7mr30485838ybu.270.1643178813246;
- Tue, 25 Jan 2022 22:33:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C71229CA
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 07:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643182780; x=1674718780;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qpwkq/tfgyuDWo8286GPA9d2hhEfNOjp5kDGgAGyq0I=;
+  b=cC21OywXFxqRudnkmCnrYVinZ2bu+jRt41ZhdG56Q69Gftg2vNGwdxyw
+   H7j1d3qUjrqXBV7dpDcqKnh+nqNTb2IxOLs9fl/CjWP31qWyPVcBvnRR7
+   t3GDm8N2nK3z3rlhnsvDzxSdyUJgULG0TwdwjPg57Q5DoXJGcyEbUoNCD
+   S+pQnaITzvM3RoBW+75xvSccmFCT+f/VyUrUtnj/A8I6vs8Lf687g2cL3
+   DdO5iWmN3JtdURcDWEb1wm4qZVx0f1MeaBzXEWpIEBi61zK4w5iYDhPTt
+   GbDJJ3l4eY0NKJw7xnM8B/woW0yJodo0ElmcjC1jbX6eL/gnkv/FO7bMS
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230073199"
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="230073199"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 23:39:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="696135344"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2022 23:39:38 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCcu1-000KwV-Ba; Wed, 26 Jan 2022 07:39:37 +0000
+Date: Wed, 26 Jan 2022 15:39:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.16 60/137] WARNING: modpost:
+ vmlinux.o(.text+0x48087): Section mismatch in reference from the function
+ resctrl_init() to the function .init.text:thread_throttle_mode_init()
+Message-ID: <202201261528.jKedbVna-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220124003342.1457437-1-ztong0001@gmail.com> <202201241937.i9KSsyAj-lkp@intel.com>
- <20220124151611.30db4381d910c853fc0c9728@linux-foundation.org>
- <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com> <CAA5qM4Btrnp9Te2pm0s=OuDk0ASTE3-LyLt8nf0fXKxhehXUgA@mail.gmail.com>
-In-Reply-To: <CAA5qM4Btrnp9Te2pm0s=OuDk0ASTE3-LyLt8nf0fXKxhehXUgA@mail.gmail.com>
-From: Tong Zhang <ztong0001@gmail.com>
-Date: Tue, 25 Jan 2022 22:33:22 -0800
-Message-ID: <CAA5qM4DdvMNeG-PndWR9vb_jXTZ3v9aBXpW9QjV66DQFny65Wg@mail.gmail.com>
-Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
-To: Murphy Zhou <jencce.kernel@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, kernel test robot <lkp@intel.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 25, 2022 at 9:23 PM Tong Zhang <ztong0001@gmail.com> wrote:
->
-> On Tue, Jan 25, 2022 at 9:04 PM Murphy Zhou <jencce.kernel@gmail.com> wrote:
-> >
-> > Still panic with this patch on Linux-next tree:
-> >
-> > [ 1128.275515] LTP: starting binfmt_misc02 (binfmt_misc02.sh)
-> > [ 1128.303975] CPU: 1 PID: 107182 Comm: modprobe Kdump: loaded
-> > Tainted: G        W         5.17.0-rc1-next-20220125+ #1
-> > [ 1128.305264] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-> > [ 1128.305992] Call Trace:
-> > [ 1128.306376]  <TASK>
-> > [ 1128.306682]  dump_stack_lvl+0x34/0x44
-> > [ 1128.307211]  __register_sysctl_table+0x2c7/0x4a0
-> > [ 1128.307846]  ? load_module+0xb37/0xbb0
-> > [ 1128.308339]  ? 0xffffffffc01b6000
-> > [ 1128.308762]  init_misc_binfmt+0x32/0x1000 [binfmt_misc]
-> > [ 1128.309402]  do_one_initcall+0x44/0x200
-> > [ 1128.309937]  ? kmem_cache_alloc_trace+0x163/0x2c0
-> > [ 1128.310535]  do_init_module+0x5c/0x260
-> > [ 1128.311045]  __do_sys_finit_module+0xb4/0x120
-> > [ 1128.311603]  do_syscall_64+0x3b/0x90
-> > [ 1128.312088]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > [ 1128.312755] RIP: 0033:0x7f929ab85fbd
-> >
-> > Testing patch on Linus tree.
->
-> Hi Murphy,
-> Did you apply this patch?
-> Link: https://lkml.kernel.org/r/20220124181812.1869535-2-ztong0001@gmail.com
-> I tested it on top of the current master branch and it works on my
-> setup using the reproducer I mentioned.
-> Could you share your test script?
-> Thanks,
-> - Tong
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
+head:   364c1c42b229912132e1615c2ce15be7154e2156
+commit: 5d118e3da1ad725c2ea8da30eda516096e550289 [60/137] x86/resctrl: Drop __init/__exit on assorted symbols
+config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261528.jKedbVna-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=5d118e3da1ad725c2ea8da30eda516096e550289
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.16
+        git checkout 5d118e3da1ad725c2ea8da30eda516096e550289
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I can find binfmt_misc02.sh on github, and running the following
-command shows: failed 0.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-./runltp -s binfmt_misc
-Running tests.......
-<<<test_start>>>
-tag=binfmt_misc01 stime=1643178454
-cmdline="binfmt_misc01.sh"
-contacts=""
-analysis=exit
-<<<test_output>>>
-[   90.908282] LTP: starting binfmt_misc01 (binfmt_misc01.sh)
-binfmt_misc01 1 TINFO: timeout per run is 0h 5m 0s
-binfmt_misc01 1 TPASS: Failed to register a binary type
-binfmt_misc01 2 TPASS: Failed to register a binary type
-binfmt_misc01 3 TPASS: Failed to register a binary type
-binfmt_misc01 4 TPASS: Failed to register a binary type
-binfmt_misc01 5 TPASS: Failed to register a binary type
-binfmt_misc01 6 TPASS: Failed to register a binary type
-binfmt_misc01 7 TPASS: Failed to register a binary type
-binfmt_misc01 8 TPASS: Failed to register a binary type
-binfmt_misc01 9 TPASS: Failed to register a binary type
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Summary:
-passed   9
-failed   0
-broken   0
-skipped  0
-warnings 0
-<<<execution_status>>>
-initiation_status="ok"
-duration=0 termination_type=exited termination_id=0 corefile=no
-cutime=2 cstime=17
-<<<test_end>>>
-<<<test_start>>>
-tag=binfmt_misc02 stime=1643178454
-cmdline="binfmt_misc02.sh"
-contacts=""
-analysis=exit
-<<<test_output>>>
-[   91.133399] LTP: starting binfmt_misc02 (binfmt_misc02.sh)
-incrementing stop
-binfmt_misc02 1 TINFO: timeout per run is 0h 5m 0s
-binfmt_misc02 1 TPASS: Recognise and unrecognise a binary type as expected
-binfmt_misc02 2 TPASS: Recognise and unrecognise a binary type as expected
-binfmt_misc02 3 TPASS: Recognise and unrecognise a binary type as expected
-binfmt_misc02 4 TPASS: Recognise and unrecognise a binary type as expected
-binfmt_misc02 5 TPASS: Fail to recognise a binary type
-binfmt_misc02 6 TPASS: Fail to recognise a binary type
+>> WARNING: modpost: vmlinux.o(.text+0x48087): Section mismatch in reference from the function resctrl_init() to the function .init.text:thread_throttle_mode_init()
+The function resctrl_init() references
+the function __init thread_throttle_mode_init().
+This is often because resctrl_init lacks a __init
+annotation or the annotation of thread_throttle_mode_init is wrong.
 
-Summary:
-passed   6
-failed   0
-broken   0
-skipped  0
-warnings 0
-<<<execution_status>>>
-initiation_status="ok"
-duration=0 termination_type=exited termination_id=0 corefile=no
-cutime=3 cstime=25
-<<<test_end>>>
-INFO: ltp-pan reported all tests PASS
-LTP Version: 20220121-9-g010e4f783
-
-       ###############################################################
-
-            Done executing testcases.
-            LTP Version:  20220121-9-g010e4f783
-       ###############################################################
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
