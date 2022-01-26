@@ -1,43 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF3C29CA
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 08:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0DA168
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 08:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643184641; x=1674720641;
+  t=1643185859; x=1674721859;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UJ9K3fRmLkdMhS/xni+4TwFa1L+mdbTWf6GkHGU/lS0=;
-  b=D2DA93kjbHKzDt9v7umcrOwSL+r8dDBX1pLbRlt4VznMJEi/8J3xxNKU
-   TQn9grng0CeBnm8I1ihlq7wecJPYdzsW1CI4wvFrWH2OjNfaa0xVAWTda
-   s0AN/7q70UiEMnOSX2KLSveIuhWks3XC7YQje56tBDu7ozFVm0m7KrleJ
-   4kvl8CgZFhIXIu2L89xJbhsayHEuqXZfEScXtcZmwHb4xBkXrZgZcyKcc
-   mKYsY7YCW7SQVBloX/fxCywcATwBPjE3RCWg8g1dpgaHMehisn13Pmdiw
-   d8kx20RRIh4oy+kRcQeexaCnEaY2i7hXUo00NnZg8kdVO7Ea9os5kBsYz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244101560"
+  bh=45HjdDSSdmmL29uJvlR23zLwGLfFxTjTax9WppNmyUQ=;
+  b=IHXLQ4pU7wFR/tSCnUMooh9N7aWe/Vbtf/nrDtdtmI13micvRwtS52/l
+   1niJ8iHTJp2OhkkmRb/7GFV+1+u5/WsrFUwDJ2/79nq0G8AeB40EctgjU
+   EaGbvujkL0Tv8GK0Tm+ZEiYTlw/Kk3fTg6TAVhD24UKlTDcRMd6CzY9qp
+   vh7MwBzyF2jRspKvdYdgbKgAYdDTrPskqkX0CBeFDo/FUdUIGQxve4S7P
+   RmulFqyGfPEUf1/BIJZubjVeKD+Ep4qP7LU1yBw1Y8c2R5Te4iOCVcarJ
+   pUR4WVN+BJZnwCQOnE9/Cix+eAzrr6jml4FwC5cENaMGpn/oHNbQUvgLq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309821749"
 X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="244101560"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 00:10:41 -0800
+   d="scan'208";a="309821749"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 00:30:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="628234024"
+   d="scan'208";a="520719898"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 00:10:39 -0800
+  by orsmga007.jf.intel.com with ESMTP; 26 Jan 2022 00:30:43 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCdO2-000KyG-Jm; Wed, 26 Jan 2022 08:10:38 +0000
-Date: Wed, 26 Jan 2022 16:09:44 +0800
+	id 1nCdhT-000Kzv-4X; Wed, 26 Jan 2022 08:30:43 +0000
+Date: Wed, 26 Jan 2022 16:30:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Trond Myklebust <trond.myklebust@hammerspace.com>
+To: Hawking Zhang <Hawking.Zhang@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: fs/nfs/callback_xdr.c:274:8: warning: result of comparison of
- constant 658812288346769700 with expression of type 'uint32_t' (aka
- 'unsigned int') is always false
-Message-ID: <202201261623.xnoX2uVL-lkp@intel.com>
+	Alex Deucher <alexander.deucher@amd.com>,
+	"Zhou, Peng Ju" <PengJu.Zhou@amd.com>,
+	Lijo Lazar <lijo.lazar@amd.com>
+Subject: [agd5f:drm-next 124/190]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c:877:51: warning: variable
+ 'reg_access_ctrl' is uninitialized when used here
+Message-ID: <202201261621.Wy5nLVza-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,140 +50,117 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Trond,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
-commit: b05bf5c63b326ce1da84ef42498d8e0e292e694c NFSv4.1: Fix uninitialised variable in devicenotify
-date:   3 weeks ago
-config: x86_64-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261623.xnoX2uVL-lkp@intel.com/config)
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   63e583c8843f305a3e334a96d5de00435f4d38a2
+commit: 5d447e296701484f3df5b31a7a078cbf1e3a9cc9 [124/190] drm/amdgpu: add helper for rlcg indirect reg access
+config: i386-randconfig-a013-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261621.Wy5nLVza-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b05bf5c63b326ce1da84ef42498d8e0e292e694c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b05bf5c63b326ce1da84ef42498d8e0e292e694c
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 5d447e296701484f3df5b31a7a078cbf1e3a9cc9
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/display/amdgpu_dm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/nfs/callback_xdr.c:274:8: warning: result of comparison of constant 658812288346769700 with expression of type 'uint32_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           if (n > ULONG_MAX / sizeof(*args->devs)) {
-               ~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c:877:51: warning: variable 'reg_access_ctrl' is uninitialized when used here [-Wuninitialized]
+           scratch_reg0 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg0;
+                                                            ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c:861:53: note: initialize the variable 'reg_access_ctrl' to silence this warning
+           struct amdgpu_rlcg_reg_access_ctrl *reg_access_ctrl;
+                                                              ^
+                                                               = NULL
    1 warning generated.
 
 
-vim +274 fs/nfs/callback_xdr.c
+vim +/reg_access_ctrl +877 drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
 
-f2a625616045fe Fred Isaman       2011-01-06  254  
-1be5683b03a766 Marc Eshel        2011-05-22  255  static
-1be5683b03a766 Marc Eshel        2011-05-22  256  __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
-1be5683b03a766 Marc Eshel        2011-05-22  257  				struct xdr_stream *xdr,
-f4dac4ade5ba4e Christoph Hellwig 2017-05-11  258  				void *argp)
-1be5683b03a766 Marc Eshel        2011-05-22  259  {
-f4dac4ade5ba4e Christoph Hellwig 2017-05-11  260  	struct cb_devicenotifyargs *args = argp;
-b05bf5c63b326c Trond Myklebust   2022-01-03  261  	uint32_t tmp, n, i;
-1be5683b03a766 Marc Eshel        2011-05-22  262  	__be32 *p;
-1be5683b03a766 Marc Eshel        2011-05-22  263  	__be32 status = 0;
-1be5683b03a766 Marc Eshel        2011-05-22  264  
-1be5683b03a766 Marc Eshel        2011-05-22  265  	/* Num of device notifications */
-eb72f484a5eb94 Chuck Lever       2019-02-11  266  	p = xdr_inline_decode(xdr, sizeof(uint32_t));
-1be5683b03a766 Marc Eshel        2011-05-22  267  	if (unlikely(p == NULL)) {
-1be5683b03a766 Marc Eshel        2011-05-22  268  		status = htonl(NFS4ERR_BADXDR);
-1be5683b03a766 Marc Eshel        2011-05-22  269  		goto out;
-1be5683b03a766 Marc Eshel        2011-05-22  270  	}
-1be5683b03a766 Marc Eshel        2011-05-22  271  	n = ntohl(*p++);
-b05bf5c63b326c Trond Myklebust   2022-01-03  272  	if (n == 0)
-1be5683b03a766 Marc Eshel        2011-05-22  273  		goto out;
-363e0df057ea8d Dan Carpenter     2012-01-12 @274  	if (n > ULONG_MAX / sizeof(*args->devs)) {
-363e0df057ea8d Dan Carpenter     2012-01-12  275  		status = htonl(NFS4ERR_BADXDR);
-363e0df057ea8d Dan Carpenter     2012-01-12  276  		goto out;
-363e0df057ea8d Dan Carpenter     2012-01-12  277  	}
-1be5683b03a766 Marc Eshel        2011-05-22  278  
-a4f743a6bb2016 Trond Myklebust   2015-02-11  279  	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
-1be5683b03a766 Marc Eshel        2011-05-22  280  	if (!args->devs) {
-1be5683b03a766 Marc Eshel        2011-05-22  281  		status = htonl(NFS4ERR_DELAY);
-1be5683b03a766 Marc Eshel        2011-05-22  282  		goto out;
-1be5683b03a766 Marc Eshel        2011-05-22  283  	}
-1be5683b03a766 Marc Eshel        2011-05-22  284  
-1be5683b03a766 Marc Eshel        2011-05-22  285  	/* Decode each dev notification */
-1be5683b03a766 Marc Eshel        2011-05-22  286  	for (i = 0; i < n; i++) {
-1be5683b03a766 Marc Eshel        2011-05-22  287  		struct cb_devicenotifyitem *dev = &args->devs[i];
-1be5683b03a766 Marc Eshel        2011-05-22  288  
-eb72f484a5eb94 Chuck Lever       2019-02-11  289  		p = xdr_inline_decode(xdr, (4 * sizeof(uint32_t)) +
-eb72f484a5eb94 Chuck Lever       2019-02-11  290  				      NFS4_DEVICEID4_SIZE);
-1be5683b03a766 Marc Eshel        2011-05-22  291  		if (unlikely(p == NULL)) {
-1be5683b03a766 Marc Eshel        2011-05-22  292  			status = htonl(NFS4ERR_BADXDR);
-1be5683b03a766 Marc Eshel        2011-05-22  293  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  294  		}
-1be5683b03a766 Marc Eshel        2011-05-22  295  
-1be5683b03a766 Marc Eshel        2011-05-22  296  		tmp = ntohl(*p++);	/* bitmap size */
-1be5683b03a766 Marc Eshel        2011-05-22  297  		if (tmp != 1) {
-1be5683b03a766 Marc Eshel        2011-05-22  298  			status = htonl(NFS4ERR_INVAL);
-1be5683b03a766 Marc Eshel        2011-05-22  299  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  300  		}
-1be5683b03a766 Marc Eshel        2011-05-22  301  		dev->cbd_notify_type = ntohl(*p++);
-1be5683b03a766 Marc Eshel        2011-05-22  302  		if (dev->cbd_notify_type != NOTIFY_DEVICEID4_CHANGE &&
-1be5683b03a766 Marc Eshel        2011-05-22  303  		    dev->cbd_notify_type != NOTIFY_DEVICEID4_DELETE) {
-1be5683b03a766 Marc Eshel        2011-05-22  304  			status = htonl(NFS4ERR_INVAL);
-1be5683b03a766 Marc Eshel        2011-05-22  305  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  306  		}
-1be5683b03a766 Marc Eshel        2011-05-22  307  
-1be5683b03a766 Marc Eshel        2011-05-22  308  		tmp = ntohl(*p++);	/* opaque size */
-1be5683b03a766 Marc Eshel        2011-05-22  309  		if (((dev->cbd_notify_type == NOTIFY_DEVICEID4_CHANGE) &&
-1be5683b03a766 Marc Eshel        2011-05-22  310  		     (tmp != NFS4_DEVICEID4_SIZE + 8)) ||
-1be5683b03a766 Marc Eshel        2011-05-22  311  		    ((dev->cbd_notify_type == NOTIFY_DEVICEID4_DELETE) &&
-1be5683b03a766 Marc Eshel        2011-05-22  312  		     (tmp != NFS4_DEVICEID4_SIZE + 4))) {
-1be5683b03a766 Marc Eshel        2011-05-22  313  			status = htonl(NFS4ERR_INVAL);
-1be5683b03a766 Marc Eshel        2011-05-22  314  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  315  		}
-1be5683b03a766 Marc Eshel        2011-05-22  316  		dev->cbd_layout_type = ntohl(*p++);
-1be5683b03a766 Marc Eshel        2011-05-22  317  		memcpy(dev->cbd_dev_id.data, p, NFS4_DEVICEID4_SIZE);
-1be5683b03a766 Marc Eshel        2011-05-22  318  		p += XDR_QUADLEN(NFS4_DEVICEID4_SIZE);
-1be5683b03a766 Marc Eshel        2011-05-22  319  
-1be5683b03a766 Marc Eshel        2011-05-22  320  		if (dev->cbd_layout_type == NOTIFY_DEVICEID4_CHANGE) {
-eb72f484a5eb94 Chuck Lever       2019-02-11  321  			p = xdr_inline_decode(xdr, sizeof(uint32_t));
-1be5683b03a766 Marc Eshel        2011-05-22  322  			if (unlikely(p == NULL)) {
-1be5683b03a766 Marc Eshel        2011-05-22  323  				status = htonl(NFS4ERR_BADXDR);
-1be5683b03a766 Marc Eshel        2011-05-22  324  				goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  325  			}
-1be5683b03a766 Marc Eshel        2011-05-22  326  			dev->cbd_immediate = ntohl(*p++);
-1be5683b03a766 Marc Eshel        2011-05-22  327  		} else {
-1be5683b03a766 Marc Eshel        2011-05-22  328  			dev->cbd_immediate = 0;
-1be5683b03a766 Marc Eshel        2011-05-22  329  		}
-1be5683b03a766 Marc Eshel        2011-05-22  330  
-1be5683b03a766 Marc Eshel        2011-05-22  331  		dprintk("%s: type %d layout 0x%x immediate %d\n",
-1be5683b03a766 Marc Eshel        2011-05-22  332  			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
-1be5683b03a766 Marc Eshel        2011-05-22  333  			dev->cbd_immediate);
-1be5683b03a766 Marc Eshel        2011-05-22  334  	}
-b05bf5c63b326c Trond Myklebust   2022-01-03  335  	args->ndevs = n;
-b05bf5c63b326c Trond Myklebust   2022-01-03  336  	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
-b05bf5c63b326c Trond Myklebust   2022-01-03  337  	return 0;
-b05bf5c63b326c Trond Myklebust   2022-01-03  338  err:
-b05bf5c63b326c Trond Myklebust   2022-01-03  339  	kfree(args->devs);
-1be5683b03a766 Marc Eshel        2011-05-22  340  out:
-b05bf5c63b326c Trond Myklebust   2022-01-03  341  	args->devs = NULL;
-b05bf5c63b326c Trond Myklebust   2022-01-03  342  	args->ndevs = 0;
-1be5683b03a766 Marc Eshel        2011-05-22  343  	dprintk("%s: status %d ndevs %d\n",
-1be5683b03a766 Marc Eshel        2011-05-22  344  		__func__, ntohl(status), args->ndevs);
-1be5683b03a766 Marc Eshel        2011-05-22  345  	return status;
-1be5683b03a766 Marc Eshel        2011-05-22  346  }
-1be5683b03a766 Marc Eshel        2011-05-22  347  
-
-:::::: The code at line 274 was first introduced by commit
-:::::: 363e0df057ea8da539645fe4c3c227e3d44054cc nfs: check for integer overflow in decode_devicenotify_args()
-
-:::::: TO: Dan Carpenter <dan.carpenter@oracle.com>
-:::::: CC: Trond Myklebust <Trond.Myklebust@netapp.com>
+   858	
+   859	static u32 amdgpu_virt_rlcg_reg_rw(struct amdgpu_device *adev, u32 offset, u32 v, u32 flag)
+   860	{
+   861		struct amdgpu_rlcg_reg_access_ctrl *reg_access_ctrl;
+   862		uint32_t timeout = 50000;
+   863		uint32_t i, tmp;
+   864		uint32_t ret = 0;
+   865		static void *scratch_reg0;
+   866		static void *scratch_reg1;
+   867		static void *scratch_reg2;
+   868		static void *scratch_reg3;
+   869		static void *spare_int;
+   870	
+   871		if (!adev->gfx.rlc.rlcg_reg_access_supported) {
+   872			dev_err(adev->dev,
+   873				"indirect registers access through rlcg is not available\n");
+   874			return 0;
+   875		}
+   876	
+ > 877		scratch_reg0 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg0;
+   878		scratch_reg1 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg1;
+   879		scratch_reg2 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg2;
+   880		scratch_reg3 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg3;
+   881		if (reg_access_ctrl->spare_int)
+   882			spare_int = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->spare_int;
+   883	
+   884		if (offset == reg_access_ctrl->grbm_cntl) {
+   885			/* if the target reg offset is grbm_cntl, write to scratch_reg2 */
+   886			writel(v, scratch_reg2);
+   887			writel(v, ((void __iomem *)adev->rmmio) + (offset * 4));
+   888		} else if (offset == reg_access_ctrl->grbm_idx) {
+   889			/* if the target reg offset is grbm_idx, write to scratch_reg3 */
+   890			writel(v, scratch_reg3);
+   891			writel(v, ((void __iomem *)adev->rmmio) + (offset * 4));
+   892		} else {
+   893			/*
+   894			 * SCRATCH_REG0 	= read/write value
+   895			 * SCRATCH_REG1[30:28]	= command
+   896			 * SCRATCH_REG1[19:0]	= address in dword
+   897			 * SCRATCH_REG1[26:24]	= Error reporting
+   898			 */
+   899			writel(v, scratch_reg0);
+   900			writel((offset | flag), scratch_reg1);
+   901			if (reg_access_ctrl->spare_int)
+   902				writel(1, spare_int);
+   903	
+   904			for (i = 0; i < timeout; i++) {
+   905				tmp = readl(scratch_reg1);
+   906				if (!(tmp & flag))
+   907					break;
+   908				udelay(10);
+   909			}
+   910	
+   911			if (i >= timeout) {
+   912				if (amdgpu_sriov_rlcg_error_report_enabled(adev)) {
+   913					if (tmp & AMDGPU_RLCG_VFGATE_DISABLED) {
+   914						dev_err(adev->dev,
+   915							"vfgate is disabled, rlcg failed to program reg: 0x%05x\n", offset);
+   916					} else if (tmp & AMDGPU_RLCG_WRONG_OPERATION_TYPE) {
+   917						dev_err(adev->dev,
+   918							"wrong operation type, rlcg failed to program reg: 0x%05x\n", offset);
+   919					} else if (tmp & AMDGPU_RLCG_REG_NOT_IN_RANGE) {
+   920						dev_err(adev->dev,
+   921							"regiser is not in range, rlcg failed to program reg: 0x%05x\n", offset);
+   922					} else {
+   923						dev_err(adev->dev,
+   924							"unknown error type, rlcg failed to program reg: 0x%05x\n", offset);
+   925					}
+   926				} else {
+   927					dev_err(adev->dev,
+   928						"timeout: rlcg faled to program reg: 0x%05x\n", offset);
+   929				}
+   930			}
+   931		}
+   932	
+   933		ret = readl(scratch_reg0);
+   934		return ret;
+   935	}
+   936	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
