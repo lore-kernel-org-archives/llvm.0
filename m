@@ -1,75 +1,78 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C821129CA
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 00:02:42 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 20PNVUiB032739;
-	Tue, 25 Jan 2022 17:31:30 -0600
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 20PNVSKH032738;
-	Tue, 25 Jan 2022 17:31:28 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 25 Jan 2022 17:31:28 -0600
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org,
-        llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
-Message-ID: <20220125233128.GT614@gate.crashing.org>
-References: <20220114010526.1776605-1-ndesaulniers@google.com> <YeQei0xNzMq7bFdg@zn.tnic> <20220118192256.jzk5dnceeusq7x7u@treble> <20220118230120.pivvson7qekfiqic@treble> <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17893173
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 00:36:12 +0000 (UTC)
+Received: by mail-ed1-f41.google.com with SMTP id p7so870875edc.12
+        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 16:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oXZqBE0q9OTqMHj3VdB5E02o4A6FjZEHOwhK0PXA+iU=;
+        b=Bq9cmOB9xSKfZwy7Sb1XHF82ViyWkrje71gb/xt7h6ltMt4beZ5ceHBDi96kl0nAsy
+         7hwTrD2JuT4/B6Lxq9l9pEyKUoTnD45PPoNywBMh9zQ/VSEaUXGi8Cb7cboTYLHZRkFc
+         2J7zO9jzPrpkNBZ3wyV7yRdQP9RjmM8yzGHmRpzdBLGpNFUhhwAK63gDPwV6Srikwyeq
+         1q5oROvo9gb5pyYQ7RDMtAA+jJStxllOIiLe7rTZW7Kj/IHIQKSRN84w/6pKz/eJ6KDM
+         mglRA+0XbSyg6dRCLAgGLLT6P95YsSuYQwvrk/4eImwAngVNZSkPnaA0JXhLlcM+hj1H
+         S33Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oXZqBE0q9OTqMHj3VdB5E02o4A6FjZEHOwhK0PXA+iU=;
+        b=ZQhU5KPPeTIQcnvrW1zkhgW7WC0ijssUSFQwfwmN4vAF1ymz6+AK75LTBu89gtVmhp
+         bIZWb4xSSGaLQHgrkRH+8JVC3p0KCGgUM5e67G4dc3EkediVSiTcgwaxtv4d3ukL4aNB
+         SIr99ODQK1b5KYCu5s50bpjcbOodZyFTBiJgWKGcu3CNZG70X8P/fRfhWMNeHj8zwY+w
+         0HlrEsmxAiEPfhLHxD6c2EfJyTDZ0HQDehV8IWYwdpn0aVtdxV5h06ByH4im1tH+39hw
+         LtgI3LAHZLCD0YjU6cxSm1bo1H4T5wXe/Vp0tDEOIP980CbFfV5OBl7+6fjSBrM6JUt6
+         Qc6Q==
+X-Gm-Message-State: AOAM530oHU85BguWCsiUc677Spus1ZY87Divhqt9kXXuJgKwqc3WNYUB
+	b4vZDpQ8vRfxu9JjmnTPw8+W/22lyRL3uLCWQQz1
+X-Google-Smtp-Source: ABdhPJw+5aBMxr72MniVbnSkXxgNfff7nte9AAvKFJsRelZrQ9UuB4LYEUqXJpDD12F6xo3uaFoUBbxUcqYfEI6UJok=
+X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr9937844edc.232.1643157370397;
+ Tue, 25 Jan 2022 16:36:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-9-cgzones@googlemail.com>
+In-Reply-To: <20220125141422.32655-9-cgzones@googlemail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 25 Jan 2022 19:35:59 -0500
+Message-ID: <CAHC9VhQ-kSWQ_w0KwgMboidktdQNN+G5jRpRWsY0Ayb8-HPmMA@mail.gmail.com>
+Subject: Re: [PATCH 1/9] selinux: check return value of sel_make_avc_files
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi!
+On Tue, Jan 25, 2022 at 9:15 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> sel_make_avc_files() might fail and return a negative errno value on
+> memory allocation failures. Re-add the check of the return value,
+> dropped in 66f8e2f03c02.
+>
+> Reported by clang-analyzer:
+>
+>     security/selinux/selinuxfs.c:2129:2: warning: Value stored to 'ret' i=
+s never read [deadcode.DeadStores]
+>             ret =3D sel_make_avc_files(dentry);
+>             ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Fixes: 66f8e2f03c02 ("selinux: sidtab reverse lookup hash table")
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/selinuxfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-On Mon, Jan 24, 2022 at 03:26:36PM -0800, Nick Desaulniers wrote:
-> I noticed in that report and
-> https://lore.kernel.org/lkml/202201190702.XNSXrMTK-lkp@intel.com/
-> that gcc-9 was used.  I wonder if %= has been fixed in gcc-10+? Have
-> there been other reports with gcc-10+ for my patch?
+Merged into selinux/next, thanks Christian.
 
-None of the %= code (which is trivial) has been changed since 1992.
-
-> If this is fixed in gcc-10, then we can probably add a comment with a
-> FIXME link to the issue or commit to replace __COUNTER__ with %= one
-> day.  If not, then we can probably come up with a reduced test case
-> for the GCC devs to take a look at, then add the FIXME comment to
-> kernel sources.
-
-Please open a PR?
-
-> I'm more confident that we can remove the `volatile` keyword (I was
-> thinking about adding a new diagnostic to clang to warn that volatile
-> is redundate+implied for asm goto or inline asm that doesn't have
-> outputs) though that's not the problem here and will probably generate
-> some kernel wide cleanup before we could enable such a flag.
-
-Its main value is that it would discourage users from thinking volatile
-is magic.  Seriously worth some pain!
-
-> Perhaps
-> there are known compiler versions that still require the keyword for
-> those cases for some reason.
-
-It was removed from compiler-gcc.h in 3347acc6fcd4 (which changed the
-minimum required GCC version to GCC 5).
-
-
-Segher
+--=20
+paul-moore.com
