@@ -1,44 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0338C3FCE
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 22:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B646B2CA9
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 22:47:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643236046; x=1674772046;
+  t=1643237245; x=1674773245;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FiUdITY5Eu5ZGdXWjoskPBCnS9kcaGk9t5jjocwL+nc=;
-  b=azhIE/c3aQ++AcQQIPcjxgMm/pFgs63iGKEl2j2+1eSmfynX2kgyb3H2
-   YgsXuK2e88Amo86mwR/JhgRLGnfvSAANGnMA26gP8dVUw7NaL8SAK0vHC
-   +dEteNDAg5ix3z10C+j2Ba6S13tkTWfscEQ7e6MM3kF7qp3oB1C8F6Jo0
-   VRl+ER1H5AH8fxD9KbwXG0pkjXhN0zjqxTEXJzTvIgiyJ0CR9YSGKz7G/
-   t4I7TYZBvc6Xbwc/vvJ42g3RmRABiVFIy9s9FHEggU93NIqDjoDEosbSH
-   PaFWDWUWsBKLqCSU4rr7/EWrPennTA/d0cb1mWk+bbTwo+Ibik8vHpOFo
+  bh=eowpr9egM0K6i5/T3Bb5j1R2wkVLkpVyJ/OXXMM2LeU=;
+  b=kiItJkIz+do4fS9MP9CPprajpo5R01+E2XqAlPfBCL7Dvn3/1CV5enkb
+   P8vNLDouchuNQU0U0O33Pmdq+Xs3egczlSjOWlJrXwvfSIQjgIs4kh0DO
+   DMOoZ6slSfKK23485BeRnRy4xsQW/DApFMUKYjriVdrRk4a6O/bnkbK2z
+   h/JZlb4GqB8+uqXblHn714remzbM3bUe3xfGQ11CzOBhdFsOYhJ89Gjpp
+   P8q6tSLGEEBCYsoDOTxUgMm/h/4N3BEkp3KjattuGIizCaawuEMYMxf8m
+   4wXuPgYn9xhDPqyRp8Ef27w/rRTZVCZ/O0GtEw7xVLi9W+NDGmQL+2mjN
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="244266538"
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="230246442"
 X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="244266538"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 14:27:25 -0800
+   d="scan'208";a="230246442"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 14:47:24 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="696391770"
+   d="scan'208";a="628459407"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 14:27:23 -0800
+  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 14:47:23 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCql8-000Lj7-BJ; Wed, 26 Jan 2022 22:27:22 +0000
-Date: Thu, 27 Jan 2022 06:26:53 +0800
+	id 1nCr4U-000Lje-KE; Wed, 26 Jan 2022 22:47:22 +0000
+Date: Thu, 27 Jan 2022 06:47:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
+To: Qais Yousef <qais.yousef@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-	Will Deacon <willdeacon@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 4728/5866] arch/arm64/kvm/fpsimd.c:129:5: error: implicit declaration of
- function 'sve_cond_update_zcr_vq'
-Message-ID: <202201270637.CwoQKBGC-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:sched/core 5/8] kernel/sched/sched.h:3006:25: warning:
+ incompatible pointer to integer conversion passing 'struct rq *' to
+ parameter of type 'int'
+Message-ID: <202201270632.OV8jDPXB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,63 +47,102 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Marc,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-head:   52cdd137fae0b001197a51646289e3cbdda921d5
-commit: b0e15c8c44275afef4aacfb1560e38b974b02ac8 [4728/5866] FROMGIT: KVM: arm64: Save/restore SVE state for nVHE
-config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270637.CwoQKBGC-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   dbaafd0f1651b35e07c20e33f8c3f133fc65705e
+commit: 6dd3d475cf576edd705885c66b6f1d638a6818f4 [5/8] sched/sugov: Ignore 'busy' filter when rq is capped by uclamp_max
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220127/202201270632.OV8jDPXB-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/b0e15c8c44275afef4aacfb1560e38b974b02ac8
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-        git checkout b0e15c8c44275afef4aacfb1560e38b974b02ac8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=6dd3d475cf576edd705885c66b6f1d638a6818f4
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/core
+        git checkout 6dd3d475cf576edd705885c66b6f1d638a6818f4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/arm64/kvm/fpsimd.c:129:5: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
-                                   sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
-                                   ^
-   1 error generated.
+   In file included from kernel/sched/core.c:13:
+>> kernel/sched/sched.h:3006:25: warning: incompatible pointer to integer conversion passing 'struct rq *' to parameter of type 'int' [-Wint-conversion]
+           rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+                                  ^~
+   kernel/sched/sched.h:2919:46: note: passing argument to parameter 'cpu' here
+   static inline unsigned long cpu_util_cfs(int cpu)
+                                                ^
+   kernel/sched/core.c:3454:6: warning: no previous prototype for function 'sched_set_stop_task' [-Wmissing-prototypes]
+   void sched_set_stop_task(int cpu, struct task_struct *stop)
+        ^
+   kernel/sched/core.c:3454:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void sched_set_stop_task(int cpu, struct task_struct *stop)
+   ^
+   static 
+   kernel/sched/core.c:1672:1: warning: unused function 'uclamp_update_active' [-Wunused-function]
+   uclamp_update_active(struct task_struct *p)
+   ^
+   3 warnings generated.
+--
+   In file included from kernel/sched/loadavg.c:9:
+>> kernel/sched/sched.h:3006:25: warning: incompatible pointer to integer conversion passing 'struct rq *' to parameter of type 'int' [-Wint-conversion]
+           rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+                                  ^~
+   kernel/sched/sched.h:2919:46: note: passing argument to parameter 'cpu' here
+   static inline unsigned long cpu_util_cfs(int cpu)
+                                                ^
+   1 warning generated.
+--
+   In file included from kernel/sched/fair.c:23:
+>> kernel/sched/sched.h:3006:25: warning: incompatible pointer to integer conversion passing 'struct rq *' to parameter of type 'int' [-Wint-conversion]
+           rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+                                  ^~
+   kernel/sched/sched.h:2919:46: note: passing argument to parameter 'cpu' here
+   static inline unsigned long cpu_util_cfs(int cpu)
+                                                ^
+   kernel/sched/fair.c:8405:19: warning: unused function 'check_misfit_status' [-Wunused-function]
+   static inline int check_misfit_status(struct rq *rq, struct sched_domain *sd)
+                     ^
+   2 warnings generated.
+--
+   In file included from kernel/sched/rt.c:6:
+>> kernel/sched/sched.h:3006:25: warning: incompatible pointer to integer conversion passing 'struct rq *' to parameter of type 'int' [-Wint-conversion]
+           rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+                                  ^~
+   kernel/sched/sched.h:2919:46: note: passing argument to parameter 'cpu' here
+   static inline unsigned long cpu_util_cfs(int cpu)
+                                                ^
+   kernel/sched/rt.c:680:6: warning: no previous prototype for function 'sched_rt_bandwidth_account' [-Wmissing-prototypes]
+   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+        ^
+   kernel/sched/rt.c:680:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +/sve_cond_update_zcr_vq +129 arch/arm64/kvm/fpsimd.c
+vim +3006 kernel/sched/sched.h
 
-   108	
-   109	/*
-   110	 * Write back the vcpu FPSIMD regs if they are dirty, and invalidate the
-   111	 * cpu FPSIMD regs so that they can't be spuriously reused if this vcpu
-   112	 * disappears and another task or vcpu appears that recycles the same
-   113	 * struct fpsimd_state.
-   114	 */
-   115	void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
-   116	{
-   117		unsigned long flags;
-   118		bool host_has_sve = system_supports_sve();
-   119		bool guest_has_sve = vcpu_has_sve(vcpu);
-   120	
-   121		local_irq_save(flags);
-   122	
-   123		if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
-   124			if (guest_has_sve) {
-   125				__vcpu_sys_reg(vcpu, ZCR_EL1) = read_sysreg_el1(SYS_ZCR);
-   126	
-   127				/* Restore the VL that was saved when bound to the CPU */
-   128				if (!has_vhe())
- > 129					sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
+  2996	
+  2997	/* Is the rq being capped/throttled by uclamp_max? */
+  2998	static inline bool uclamp_rq_is_capped(struct rq *rq)
+  2999	{
+  3000		unsigned long rq_util;
+  3001		unsigned long max_util;
+  3002	
+  3003		if (!static_branch_likely(&sched_uclamp_used))
+  3004			return false;
+  3005	
+> 3006		rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+  3007		max_util = READ_ONCE(rq->uclamp[UCLAMP_MAX].value);
+  3008	
+  3009		return max_util != SCHED_CAPACITY_SCALE && rq_util >= max_util;
+  3010	}
+  3011	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
