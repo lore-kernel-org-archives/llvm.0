@@ -1,163 +1,105 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584BB168
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 09:01:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643187707; x=1674723707;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G8B6a0BvOHAuJNowulUgiq63eIiXFyJCb8LdkRoTpgw=;
-  b=YBrpnVYirOsRUCMMY29kvs2Xp065XUC8WvzbmtZx/078z49QUlokNsY8
-   1qEYky1Lt7CSunztr9cEgSEUQowQRsaHp2mmWhHw/IRLtO8iUpA67DO4J
-   5cRGWaPNtQg2T7OMkCPL6EfuMx61fSv6EY0C05+uJnznIlkLeCpNRKift
-   07Ijl32Bx4GZAF4cm12lySj2pqIQ1ThtVa2vzWcdu/rH94/PAOrth7wlK
-   XmuybR5tuBq+EUuvB7uIByb+mWs0HrNrEf0gKGU9BMra9H6pyLJ5HrYqd
-   nZG86JXUUGc3+aVGP+SVOLe4zmv+5co0vN2Cg+tb2f5pYbXne/YRDxOrv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244109486"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="244109486"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 01:01:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="563351436"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 01:01:44 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCeBT-000L14-J8; Wed, 26 Jan 2022 09:01:43 +0000
-Date: Wed, 26 Jan 2022 17:00:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/mediatek/mtk_star_emac.c:1559:34: warning:
- unused variable 'mtk_star_of_match'
-Message-ID: <202201261608.BLH8XrDI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D397C168
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 09:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1643190556;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KA0Nc0ItX75FPgCyERB0WlF5d7038F/ySzLM0IrXiEw=;
+	b=OXpFzrnXPcsQh7IP2aMJe3dek+cUpBp6vRcdqeIHZTKiwRz7bNZr2GBpMkA5ghbug/PpEq
+	uobzLe3wRcyp1VqfTRcc/tqFWdAFrYMf/REe2D4QSA8Gfy/FS4fG4UJ1XiE9PU44u6v3v6
+	BD2kw5+kNs/c3MEQyGfebkplYF781Bk=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-Q-sTeU2hN72phzNoqWYGHQ-1; Wed, 26 Jan 2022 04:49:10 -0500
+X-MC-Unique: Q-sTeU2hN72phzNoqWYGHQ-1
+Received: by mail-oi1-f197.google.com with SMTP id t6-20020a056808158600b002cec2812d52so555471oiw.9
+        for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 01:49:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KA0Nc0ItX75FPgCyERB0WlF5d7038F/ySzLM0IrXiEw=;
+        b=fM8kWde+8ogFlj1riScUQG+VRcb9awGQU+nOxwHDCHXz8ls035jwtOK8NQzoQTxB59
+         XDc05tmMzEGQQ0e+OHgH1JNB0ogzSUuEPTy6kM8boVvBIuBLx4zKWbV6s4usR6RuJQrl
+         QnfS2W4FJkr2cVCl6iZmN3WfMfvduUurk7mqNYZeLEhOlRE8pmIAgsrf2MbANafl4FsC
+         H9HfUKmz0CcC9qEmtMW2A4PZT7IIBL+bMSLdx8AgIiGRrr8RY0PhP7MSy1t87czieRim
+         4/ar/4baRVNIejzgnp+4+LRK30pLDMoFnCUtvltb6WcmGxKehYeTjyKN3sUcuQyAtxXf
+         DFug==
+X-Gm-Message-State: AOAM533zI6arhsmTHtnRckNA5p/Br/N3KNaqTf+InVNP6kwlfPgzO1vs
+	Q0z1NltCrGJmGmCH9C00s/mOYotsc+B+MwQC310TO3KKvdNHLx+/ab93WmJf9T1A6NMYwA/Srrs
+	HJO7bwMaCHiX1hysljAcT/atmbj89lA==
+X-Received: by 2002:a9d:24:: with SMTP id 33mr17139534ota.85.1643190549872;
+        Wed, 26 Jan 2022 01:49:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzCVH2FeXnCA6N4JnyJK5PfG1N1gtYzEdZPUmu0B17IXyrRcIBhbE5wS+lu6TRPlh1p3TVmBZrO6OkHmakiitY=
+X-Received: by 2002:a9d:24:: with SMTP id 33mr17139530ota.85.1643190549681;
+ Wed, 26 Jan 2022 01:49:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cki.LKX9M86D1UOULT0MYKRS@redhat.com>
+In-Reply-To: <cki.LKX9M86D1UOULT0MYKRS@redhat.com>
+From: Jan Stancek <jstancek@redhat.com>
+Date: Wed, 26 Jan 2022 10:48:52 +0100
+Message-ID: <CAASaF6yO05hj_e-XwpuiMmvSm8zpj+v5YP4_+qHdsOegFAEUVA@mail.gmail.com>
+Subject: =?UTF-8?B?UmU6IPCfkqUgUEFOSUNLRUQ6IFRlc3QgcmVwb3J0IGZvciBrZXJuZWwgNS4xNy4wLXJjMQ==?=
+	=?UTF-8?B?IChtYWlubGluZS5rZXJuZWwub3JnLWNsYW5nLCA0OWQ3NjZmMyk=?=
+To: CKI Project <cki-project@redhat.com>
+Cc: skt-results-master@redhat.com, llvm@lists.linux.dev, 
+	Memory Management <mm-qe@redhat.com>, Li Wang <liwang@redhat.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jstancek@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lorenzo,
+On Wed, Jan 26, 2022 at 2:35 AM CKI Project <cki-project@redhat.com> wrote:
+>
+>
+>
+> Check out this report and any autotriaged failures in our web dashboard:
+>     https://datawarehouse.cki-project.org/kcidb/checkouts/30259
+>
+> Hello,
+>
+> We ran automated tests on a recent commit from this kernel tree:
+>
+>        Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torva=
+lds/linux.git
+>             Commit: 49d766f3a0e4 - Merge tag 'for-5.17-rc1-tag' of git://=
+git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
+>
+> The results of these automated tests are provided below.
+>
+>     Overall result: FAILED (see details below)
+>              Merge: OK
+>            Compile: OK
+>  Selftests compile: FAILED
+>              Tests: PANICKED
+>     Targeted tests: NO
+>
+> All kernel binaries, config files, and logs are available for download he=
+re:
+>
+>   https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?p=
+refix=3Ddatawarehouse-public/2022/01/25/456059085
+>
+> One or more kernel tests failed:
+>
+>     s390x:
+>      =E2=9D=8C LTP - syscalls
+>      =F0=9F=92=A5 LTP - fs
 
-First bad commit (maybe != root cause):
+discussion about binfmt panic here:
+https://lore.kernel.org/all/20220124181812.1869535-2-ztong0001@gmail.com/T/=
+#u
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
-commit: a3c62a042237d1adeb0290dcb768e17edd6dcd25 net: mtk_eth: add COMPILE_TEST support
-date:   6 weeks ago
-config: s390-buildonly-randconfig-r005-20220126 (https://download.01.org/0day-ci/archive/20220126/202201261608.BLH8XrDI-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a3c62a042237d1adeb0290dcb768e17edd6dcd25
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a3c62a042237d1adeb0290dcb768e17edd6dcd25
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/mediatek/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/mediatek/mtk_star_emac.c:12:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/mediatek/mtk_star_emac.c:12:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/mediatek/mtk_star_emac.c:12:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/ethernet/mediatek/mtk_star_emac.c:1559:34: warning: unused variable 'mtk_star_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mtk_star_of_match[] = {
-                                    ^
-   13 warnings generated.
-
-
-vim +/mtk_star_of_match +1559 drivers/net/ethernet/mediatek/mtk_star_emac.c
-
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1558  
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22 @1559  static const struct of_device_id mtk_star_of_match[] = {
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1560  	{ .compatible = "mediatek,mt8516-eth", },
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1561  	{ .compatible = "mediatek,mt8518-eth", },
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1562  	{ .compatible = "mediatek,mt8175-eth", },
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1563  	{ }
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1564  };
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1565  MODULE_DEVICE_TABLE(of, mtk_star_of_match);
-8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1566  
-
-:::::: The code at line 1559 was first introduced by commit
-:::::: 8c7bd5a454ffc2b0518d1499c4af95f00291d2af net: ethernet: mtk-star-emac: new driver
-
-:::::: TO: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
