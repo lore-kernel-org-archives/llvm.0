@@ -1,91 +1,115 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D4C2CA3
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 19:34:41 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id w14so583921edd.10
-        for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 11:34:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XoFExDa1ENUk04Al1efvQv2YdMKhh28iapevdw2sH5o=;
-        b=AUUQF21p8HydcBPAQC2Be6rRHyPx6Ac1LW4kCboaKffoUSBtVsK/JQZSbqb9Yj0DWR
-         nzci1Sv0xMfjuUzkf3ghEl+PMsbpj2pMLYLIy9FlqAsV59xCUwxg6VYwRjcbCStaT+v3
-         seQTWC1Ke91ax6c+LHUB9B+2lXnq4oMoeTsK39DUZAnSzA18wgSryWmUJAcRMpY2EEhB
-         ITvpsaBEQMSN7Xv4aqohnLC4wq/CfV2tuhifx3te4Jt8JA2wILYi9aVffJseRf5Up3sX
-         +eHYMDuQHBUgHL6yY+eYapLO8NabdqgOH+8fF7S74zrKfK4VKegxqkeC+khvXMfmfhkY
-         xVtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XoFExDa1ENUk04Al1efvQv2YdMKhh28iapevdw2sH5o=;
-        b=PsITvst5DYSt8cBnjPn7nMHoD0SVraBNWXWP3d6jgoeMBq1ZTVX0ZGIpFnTcB1Cy8Q
-         E2/9cUyeoGvTSwHzYTpbbM8AhHjVHfScrQtXgiqJoxCJTyjSfshev6vOPEgYm2AOk3xk
-         6gOZjQdmDB9NDujMMkyz+uPQHobOowhDgxPWpuxeVfKbxt6SeGt5drJmCKP9kufwQ8J9
-         4k1dvmajLYfSQCjrtKgD+kI2hB/sc4BWvStXYC8EqykqzOwgOjNiW8RTlkqoMqgnBzOZ
-         VqYlqDXA43byzYtFzEybgNaBa0rkQGYeAxNPUjyjOaAJnUnBxcnD+qxTw4aYgvK8M4Qf
-         s+Zg==
-X-Gm-Message-State: AOAM5301T1teRpAEn5mw8jxEjZi/FH1bdrKGfmXrrxcsiZ9Fu6LtwyHu
-	WdssQQByxGzQG0MndlyVDty7cY1IjSBcABQeaBht
-X-Google-Smtp-Source: ABdhPJwMNAGOoZ0ZcWzskRXSV/A8+ulNIietH06lvGLxvhYly1IJ5wOyPEQyIJT/E6WZTgtRd8P+c29lJ7sutsYzSLM=
-X-Received: by 2002:a05:6402:270f:: with SMTP id y15mr425193edd.409.1643225680204;
- Wed, 26 Jan 2022 11:34:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B362CA3
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 19:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643226858; x=1674762858;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EiT41giUqcW/0GqXGVf6/xHw6IYAqQc2dNP8ZAMbYls=;
+  b=Hp9XwbwZJgmFB7MzBFt8zc8cAtI+GwgykpZpZudrZ2HvtA/zXXLYPl0s
+   65cCghKk/4D7zUct5TP4OulblzcBXI9xZfiP/d0GToPujqAn+h4YhgEmJ
+   xPz1dwjNcczFxXDawY8mlAXh7rLXjT5+s70Ys4nHtX3orN8ikA+33jBUL
+   bz8ZpLR2ERq+yc23O7AeyDzF83IhuMgOuJF/jJOND21WmrfGdyZ/gkiP9
+   DoqX3PYMyJXsUgXnw+Vvw0D5l1svHgt9+LCplQkWO+pZ2Q4YDj6gefnH0
+   HnBUx5VO4D/9Xi2qP7YIHNyDy/zQhMiOCSKZLTPx5IC+dhQBFI/Cyx9TQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244236694"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="244236694"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 11:54:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="563514541"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 11:54:15 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCoMw-000Lau-S3; Wed, 26 Jan 2022 19:54:14 +0000
+Date: Thu, 27 Jan 2022 03:53:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+	Will Deacon <willdeacon@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4727/5866] arch/arm64/kvm/hyp/nvhe/hyp-main.c:245:3: error: implicit
+ declaration of function 'sve_cond_update_zcr_vq'
+Message-ID: <202201270330.KuQqBytU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-2-cgzones@googlemail.com>
-In-Reply-To: <20220125141422.32655-2-cgzones@googlemail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 26 Jan 2022 14:34:28 -0500
-Message-ID: <CAHC9VhSV17NFrTAT9rUV-cYBtPJg9ZTnn2Cd2Af3Xpe7e_UtJw@mail.gmail.com>
-Subject: Re: [PATCH 3/9] selinux: declare name parameter of hash_eval const
-To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 25, 2022 at 9:14 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> String literals are passed as second argument to hash_eval(). Also the
-> parameter is already declared const in the DEBUG_HASHES configuration.
->
-> Reported by clang [-Wwrite-strings]:
->
->     security/selinux/ss/policydb.c:1881:26: error: passing 'const char [8=
-]' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatibl=
-e-pointer-types-discards-qualifiers]
->             hash_eval(&p->range_tr, rangetr);
->                                     ^~~~~~~~~
->     security/selinux/ss/policydb.c:707:55: note: passing argument to para=
-meter 'hash_name' here
->     static inline void hash_eval(struct hashtab *h, char *hash_name)
->                                                           ^
->     security/selinux/ss/policydb.c:2099:32: error: passing 'const char [1=
-1]' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatib=
-le-pointer-types-discards-qualifiers]
->             hash_eval(&p->filename_trans, filenametr);
->                                           ^~~~~~~~~~~~
->     security/selinux/ss/policydb.c:707:55: note: passing argument to para=
-meter 'hash_name' here
->     static inline void hash_eval(struct hashtab *h, char *hash_name)
->                                                           ^
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/ss/policydb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Marc,
 
-Merged into selinux/next, thanks!
+FYI, the error/warning still remains.
 
---=20
-paul-moore.com
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   52cdd137fae0b001197a51646289e3cbdda921d5
+commit: 194fd166b5d5f6694047b45dc409f9620a8a9646 [4727/5866] BACKPORT: FROMGIT: KVM: arm64: Trap host SVE accesses when the FPSIMD state is dirty
+config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270330.KuQqBytU-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/194fd166b5d5f6694047b45dc409f9620a8a9646
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 194fd166b5d5f6694047b45dc409f9620a8a9646
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm64/kvm/hyp/nvhe/hyp-main.c:7:
+   arch/arm64/kvm/hyp/include/hyp/switch.h:216:2: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
+           sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
+           ^
+>> arch/arm64/kvm/hyp/nvhe/hyp-main.c:245:3: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
+                   sve_cond_update_zcr_vq(ZCR_ELx_LEN_MASK, SYS_ZCR_EL2);
+                   ^
+   arch/arm64/kvm/hyp/nvhe/hyp-main.c:233:6: warning: no previous prototype for function 'handle_trap' [-Wmissing-prototypes]
+   void handle_trap(struct kvm_cpu_context *host_ctxt)
+        ^
+   arch/arm64/kvm/hyp/nvhe/hyp-main.c:233:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void handle_trap(struct kvm_cpu_context *host_ctxt)
+   ^
+   static 
+   1 warning and 2 errors generated.
+
+
+vim +/sve_cond_update_zcr_vq +245 arch/arm64/kvm/hyp/nvhe/hyp-main.c
+
+   232	
+   233	void handle_trap(struct kvm_cpu_context *host_ctxt)
+   234	{
+   235		u64 esr = read_sysreg_el2(SYS_ESR);
+   236	
+   237		switch (ESR_ELx_EC(esr)) {
+   238		case ESR_ELx_EC_HVC64:
+   239			handle_host_hcall(host_ctxt);
+   240			break;
+   241		case ESR_ELx_EC_SMC64:
+   242			handle_host_smc(host_ctxt);
+   243			break;
+   244		case ESR_ELx_EC_SVE:
+ > 245			sve_cond_update_zcr_vq(ZCR_ELx_LEN_MASK, SYS_ZCR_EL2);
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
