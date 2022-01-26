@@ -1,44 +1,39 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCC5168
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 03:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747EB168
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 04:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643168136; x=1674704136;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mYwI8bDS9yfrx46xlY20lLzXkU2HBYLSGC1UflU8rKk=;
-  b=Wv4rjgDNxp6Bx4XzCh+Z4CTH3i4Ad+c+SggjLvpP3hWVcXjwVZv8OkXJ
-   H5QmQ53+3T9Pqg5Gvt5XMsM1Q7Fmc8ZiDWKabDzWYGjKsilONm9nZI9Zp
-   va5KT8gO2T2YqOjFKfIsG+FkXYm0vax+oR/JmDZ04x/nl7mQFy/gZGc2P
-   zW3LJc9foUD8ONz4eHOBHYTwFGsj1uFpoJhhIGZTjeof0WFWaK20rVcKB
-   OxqnM/S64sR4SAapQRZANp+XQMDueGCD1sy1Ux1bjgkLQwQcePXWeQKAc
-   PxM3+ZyTKq3sI8qFBD9Ba8pT28gs9ORgWgOoCjTKR+9yORlxYA2aPwygu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244073233"
+  t=1643169934; x=1674705934;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Hp3zvlqmHKWiii4bMBl+TbJ8iaWcbKO1SBAesZrywV0=;
+  b=kGkJ+kZskNkCdqpv3mPVzm8XZPXQZUYeW1p3XKiJT2tS1Cxo2mmobefG
+   W7Lvq5a5gdNg28CAbJedffLtx5vXQralvApNtzVzlt7m+JbJRAguCLaOQ
+   Rk19CqiHEc0I0RJng9XlrdYcdIaYjbrJUFjQw76cJxPSRtYpzaXzffOhc
+   WpO0jngPdp4MlyCNo9pgLO6okv5oRIlA3dtf+af1wZ4Pmpzt2uLv/GrHg
+   tdosGsu9RkhwRjeK4IiN3sGPGSDA8i9COUvx6aGGLHyZfu1RblkzBzZFo
+   0N0YMcrbYQBQ+A6Rfp4N8feJXL898ViFi2bMfswYKEW9EZER6vh0qUSrh
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332831045"
 X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="244073233"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 19:35:35 -0800
+   d="scan'208";a="332831045"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 20:05:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="479753515"
+   d="scan'208";a="477361975"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 19:35:33 -0800
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 20:05:32 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCZ5n-000KkE-Az; Wed, 26 Jan 2022 03:35:31 +0000
-Date: Wed, 26 Jan 2022 11:34:32 +0800
+	id 1nCZYq-000Kll-0m; Wed, 26 Jan 2022 04:05:32 +0000
+Date: Wed, 26 Jan 2022 12:05:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Sean Christopherson <sean.j.christopherson@intel.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>, Tony Luck <tony.luck@intel.com>
-Subject: [intel-tdx:guest-upstream 24/33] arch/x86/mm/mem_encrypt.c:69:13:
- warning: no previous prototype for function 'mem_encrypt_init'
-Message-ID: <202201261113.3P3URW2n-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [jens-wiklander-tee:rpc_arg-v1 4/4] clang-14: error: unknown
+ argument: '-femit-struct-debug-detailed=any'
+Message-ID: <202201261200.3WLYkr7V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,58 +44,30 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/intel/tdx.git guest-upstream
-head:   5891b2d3ab5941ec7f5fefaa09fdd84a46ec82f5
-commit: 0484e85cb3942b81e2b07162a363bda055c762a0 [24/33] x86/mm/cpa: Add support for TDX shared memory
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220126/202201261113.3P3URW2n-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+CC: linux-kernel@vger.kernel.org
+TO: Jens Wiklander <jens.wiklander@linaro.org>
+
+tree:   http://git.linaro.org/people/jens.wiklander/linux-tee rpc_arg-v1
+head:   1ed704dfc96e16f6d90406d5e0bfff30ff5d0fbc
+commit: 1ed704dfc96e16f6d90406d5e0bfff30ff5d0fbc [4/4] optee: cache argument shared memory structs
+config: hexagon-randconfig-r045-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261200.3WLYkr7V-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/0484e85cb3942b81e2b07162a363bda055c762a0
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-upstream
-        git checkout 0484e85cb3942b81e2b07162a363bda055c762a0
+        git remote add jens-wiklander-tee http://git.linaro.org/people/jens.wiklander/linux-tee
+        git fetch --no-tags jens-wiklander-tee rpc_arg-v1
+        git checkout 1ed704dfc96e16f6d90406d5e0bfff30ff5d0fbc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init mem_encrypt_init(void)
-               ^
-   arch/x86/mm/mem_encrypt.c:69:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init mem_encrypt_init(void)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/mem_encrypt_init +69 arch/x86/mm/mem_encrypt.c
-
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  67  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  68  /* Architecture __weak replacement functions */
-20f07a044a76ae Kirill A. Shutemov 2021-12-06 @69  void __init mem_encrypt_init(void)
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  70  {
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  71  	if (!cc_platform_has(CC_ATTR_MEM_ENCRYPT))
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  72  		return;
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  73  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  74  	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  75  	swiotlb_update_mem_attributes();
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  76  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  77  	print_mem_encrypt_feature_info();
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  78  }
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  79  
-
-:::::: The code at line 69 was first introduced by commit
-:::::: 20f07a044a76aebaaa0603038857229b5c460d69 x86/sev: Move common memory encryption code to mem_encrypt.c
-
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-:::::: CC: Borislav Petkov <bp@suse.de>
+>> clang-14: error: unknown argument: '-femit-struct-debug-detailed=any'
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
