@@ -1,42 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C42168
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 03:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCC5168
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 03:35:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643167473; x=1674703473;
+  t=1643168136; x=1674704136;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7GsL5XJhtGNW/LXU8XAp6ySgVoNVcmklsGFkoTfafyE=;
-  b=QVTJrc6gCKvieQCCRzsUZrbYTaSnBEx/QAHIXhBeQb72/WanK/Bbt843
-   r7TCUfBeytuR7N8WNhG0eZWwzhpcda6NddLdj4M7V1lyNoUUs22tCpV1z
-   WVPl/gEmMir1p1KjfUOoy0+JYWs2BM3lFywpdh7wbtaEAXpDKx8lxFM5N
-   UXwpW0Cc4Xp4HfArR03tSwha0wtOrJTwlTL5xtwkdjHDLYIyho80+8HXC
-   A+IgdCzPu/LObqi20bd10psQiNwvV+/TaOXNsIr9rWhHSNfCm/NMp3CH2
-   pKwaFd9Psr/N/ck6GGz/39F1HR9AUCCbFlCN50OnOf/1THtN9QbczX98Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246416998"
+  bh=mYwI8bDS9yfrx46xlY20lLzXkU2HBYLSGC1UflU8rKk=;
+  b=Wv4rjgDNxp6Bx4XzCh+Z4CTH3i4Ad+c+SggjLvpP3hWVcXjwVZv8OkXJ
+   H5QmQ53+3T9Pqg5Gvt5XMsM1Q7Fmc8ZiDWKabDzWYGjKsilONm9nZI9Zp
+   va5KT8gO2T2YqOjFKfIsG+FkXYm0vax+oR/JmDZ04x/nl7mQFy/gZGc2P
+   zW3LJc9foUD8ONz4eHOBHYTwFGsj1uFpoJhhIGZTjeof0WFWaK20rVcKB
+   OxqnM/S64sR4SAapQRZANp+XQMDueGCD1sy1Ux1bjgkLQwQcePXWeQKAc
+   PxM3+ZyTKq3sI8qFBD9Ba8pT28gs9ORgWgOoCjTKR+9yORlxYA2aPwygu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244073233"
 X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="246416998"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 19:24:33 -0800
+   d="scan'208";a="244073233"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 19:35:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="617842798"
+   d="scan'208";a="479753515"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2022 19:24:31 -0800
+  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 19:35:33 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCYv9-000Kjl-4v; Wed, 26 Jan 2022 03:24:31 +0000
-Date: Wed, 26 Jan 2022 11:24:15 +0800
+	id 1nCZ5n-000KkE-Az; Wed, 26 Jan 2022 03:35:31 +0000
+Date: Wed, 26 Jan 2022 11:34:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.16 9/137]
- arch/x86/kernel/cpu/resctrl/core.c:400:6: warning: no previous prototype for
- function 'setup_default_ctrlval'
-Message-ID: <202201261106.qSo1MG6L-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Sean Christopherson <sean.j.christopherson@intel.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+Subject: [intel-tdx:guest-upstream 24/33] arch/x86/mm/mem_encrypt.c:69:13:
+ warning: no previous prototype for function 'mem_encrypt_init'
+Message-ID: <202201261113.3P3URW2n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,61 +49,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: 1763d5f108c2b9e4fd2e055884b8e290b75fa5f0 [9/137] x86/resctrl: Remove architecture copy of mbps_val
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261106.qSo1MG6L-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git guest-upstream
+head:   5891b2d3ab5941ec7f5fefaa09fdd84a46ec82f5
+commit: 0484e85cb3942b81e2b07162a363bda055c762a0 [24/33] x86/mm/cpa: Add support for TDX shared memory
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220126/202201261113.3P3URW2n-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=1763d5f108c2b9e4fd2e055884b8e290b75fa5f0
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout 1763d5f108c2b9e4fd2e055884b8e290b75fa5f0
+        # https://github.com/intel/tdx/commit/0484e85cb3942b81e2b07162a363bda055c762a0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-upstream
+        git checkout 0484e85cb3942b81e2b07162a363bda055c762a0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/resctrl/core.c:400:6: warning: no previous prototype for function 'setup_default_ctrlval' [-Wmissing-prototypes]
-   void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
-        ^
-   arch/x86/kernel/cpu/resctrl/core.c:400:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+>> arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init mem_encrypt_init(void)
+               ^
+   arch/x86/mm/mem_encrypt.c:69:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init mem_encrypt_init(void)
    ^
    static 
-   arch/x86/kernel/cpu/resctrl/core.c:414:6: warning: no previous prototype for function 'domain_free' [-Wmissing-prototypes]
-   void domain_free(struct rdt_hw_domain *hw_dom)
-        ^
-   arch/x86/kernel/cpu/resctrl/core.c:414:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void domain_free(struct rdt_hw_domain *hw_dom)
-   ^
-   static 
-   2 warnings generated.
+   1 warning generated.
 
 
-vim +/setup_default_ctrlval +400 arch/x86/kernel/cpu/resctrl/core.c
+vim +/mem_encrypt_init +69 arch/x86/mm/mem_encrypt.c
 
-   399	
- > 400	void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
-   401	{
-   402		struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
-   403		int i;
-   404	
-   405		/*
-   406		 * Initialize the Control MSRs to having no control.
-   407		 * For Cache Allocation: Set all bits in cbm
-   408		 * For Memory Allocation: Set b/w requested to 100%
-   409		 */
-   410		for (i = 0; i < hw_res->num_closid; i++, dc++)
-   411			*dc = r->default_ctrl;
-   412	}
-   413	
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  67  
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  68  /* Architecture __weak replacement functions */
+20f07a044a76ae Kirill A. Shutemov 2021-12-06 @69  void __init mem_encrypt_init(void)
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  70  {
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  71  	if (!cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  72  		return;
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  73  
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  74  	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  75  	swiotlb_update_mem_attributes();
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  76  
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  77  	print_mem_encrypt_feature_info();
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  78  }
+20f07a044a76ae Kirill A. Shutemov 2021-12-06  79  
+
+:::::: The code at line 69 was first introduced by commit
+:::::: 20f07a044a76aebaaa0603038857229b5c460d69 x86/sev: Move common memory encryption code to mem_encrypt.c
+
+:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+:::::: CC: Borislav Petkov <bp@suse.de>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
