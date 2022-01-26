@@ -1,116 +1,89 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC6D173
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 00:59:27 +0000 (UTC)
-Received: by mail-lf1-f50.google.com with SMTP id u6so28326849lfm.10
-        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 16:59:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11634173
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 01:04:21 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id me13so34940912ejb.12
+        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 17:04:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z71P7Xp5dv6WjZqQ3zBgUE6e/dyCl8Gv6LZSgzhmEF0=;
-        b=YxkcuAon8bS+2bQjPPNAgxM2rDMFd6aoPVQ/fcKh0AkzpcJfXxuJ4rLkJlfnjnRB8f
-         jeHfmu0k5gmyMY/n9jdN0eW2fAudKR/84WqEBH2x69Bzcicm6s3a6JsQMK6w8lHb1Lps
-         ZxHzEpYXnARrogT72+tdrulFexJ0VbmbUZZJrSH10PQQ+t0/rka4hI0pksA5MwDYyDgj
-         /hzjVQmpPB+HbOh4PC+WQdi+1bMfs8etFyRfSdt6hag3sGL8Ls1pIETUseevlo0mMyNb
-         7MM7CcMS9skmdB687IiPvJNhetJiCiKab2IxnqwgGL9/qONMIm8qYYbGKF5r3ZO1fZgq
-         QiQQ==
+         :cc:content-transfer-encoding;
+        bh=GTAyGpZpmaUsPX9axsiybxghgU18jS0enUJ4yCmKfeA=;
+        b=gqKUWRyRARbRk0SGN0Ug87qWmhiWP++BNrtjFXsLJKVCte7lTE+HTbyWyEoPAy4N5U
+         Cr/nvGCQsDIwzs732Xj1dYSYM47ja/d5pm0F5YZMDHNVCSW37GrkW4saw96qY87DLWe9
+         3J32o/WgUPqJAAwC8BvNXDmAHZ12guTjhNoCBu6SRZd8H/gbavxyahxeyogwFZC7/Ao/
+         TpXQlklenvh9cbGVXERoeSJfI4YGELTJWS0ItxWav3nXitxmb/qlIqL1RYIXHSKrJ5eH
+         SqqxjJSARcyscmkEbZlnJF+wBqo52bftQNRUgPljpqcKO7W5ffyJHyJ66Sbe8IlxTkNp
+         DNaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z71P7Xp5dv6WjZqQ3zBgUE6e/dyCl8Gv6LZSgzhmEF0=;
-        b=sc04+DPBtT2p04q4kES4AMXQG5pTrZJw4ckVn7zuCT4KrUMz9BUVI/dAtV0VHXGcK4
-         2aBglYKjJTsKpF+XReUa83sqH1FNUzc+lLnijrDsdf8H6uM0yju1Bj1UTBxA0GDF0SIh
-         /HF43DyHDCaOZNraZcg/U1z2QoZ6yn5P3610zz21T9rY0oyMN8BNrdCsl3jIEEE4Xp2Z
-         BWDAn0/yqC+VS1/EhlUUaWvn+uY/9vA0xBSpZqwRcwDoO/YS4+mxab3Yxa8449FViS6/
-         VCSiwvMlxeEP0tME5bbSft3M1WwlMVK0P0lQGnNQk229uhBZvcuP+H1a/UDQcjxmgnvn
-         Dt3A==
-X-Gm-Message-State: AOAM532EKVkc3HzttJbAxizf9TOx5ERsVQfKHmlP1ZwxFW2tBio68ydh
-	N59m/W/NVBBDMWdSiG8OPuT6MDTE/1RlmczD/gJIXw==
-X-Google-Smtp-Source: ABdhPJwy4V88GdNrO9tRchz5OfI8p/bCHIpaK5dAlNpQA1JPyiTKreaA0cOPcwZEMFUN2L3ofZuzU/IpAj8pZtAGgN0=
-X-Received: by 2002:a05:6512:b0d:: with SMTP id w13mr18623372lfu.240.1643158765067;
- Tue, 25 Jan 2022 16:59:25 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GTAyGpZpmaUsPX9axsiybxghgU18jS0enUJ4yCmKfeA=;
+        b=P0aaWgmpbUOm2PoHwswcL6LrRzY5spRN24k/sTqrrQxlmmohZNKSIaMCIMmtms/Goa
+         BhY1WUtv9BLMXV+OElbtlAST+3OGTQ3ASgGmANv7JRl4/ERusc/XtbPZJaGVTmxX9Zva
+         HduEJUc155mrBl6mVVvYPnKMh4dez36ozpo1u0/xt3n37X7xCUNDN7cknEgMHOPG24uV
+         USkI3ndyoT0O82A7ywZtxTuxfN9LNeQdqoEDBtdhG0rBkR2YiDf8AXIx11PO6DPW3ie1
+         cmNwvLmM7yB+3xR8OzH/zItptC4gvYuOjBJlwghWLukEcyuxOjCYlfd12SnjR+rNOapA
+         qwhg==
+X-Gm-Message-State: AOAM531EbEKq6S4DMDRyAYldW8UBuwUNYkTko9KHxD4aMiFiW9Yn+Hbz
+	dn3ioFCsHq8kIq/OuLKg+xLjZwtxav2RH4eMnQwv
+X-Google-Smtp-Source: ABdhPJylTjO6CmnEjURDc3496be4uSWx25zcu1IuJcyKxIu4SxC0yap6Qho7LjX/sjkwRB6y+dJR2BuAoych5i4rE90=
+X-Received: by 2002:a17:906:c14f:: with SMTP id dp15mr18137575ejc.327.1643159060317;
+ Tue, 25 Jan 2022 17:04:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220114010526.1776605-1-ndesaulniers@google.com>
- <YeQei0xNzMq7bFdg@zn.tnic> <20220118192256.jzk5dnceeusq7x7u@treble>
- <20220118230120.pivvson7qekfiqic@treble> <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
- <20220125233128.GT614@gate.crashing.org>
-In-Reply-To: <20220125233128.GT614@gate.crashing.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 25 Jan 2022 16:59:12 -0800
-Message-ID: <CAKwvOd=P0VAFrrUXV0z5dES9hYP2b8-KwTzyG5=ezeUve=K3QA@mail.gmail.com>
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Ingo Molnar <mingo@kernel.org>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, x86@kernel.org, 
-	llvm@lists.linux.dev, linux-sparse@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-toolchains@vger.kernel.org
+References: <20220125141422.32655-1-cgzones@googlemail.com>
+In-Reply-To: <20220125141422.32655-1-cgzones@googlemail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 25 Jan 2022 20:04:09 -0500
+Message-ID: <CAHC9VhTiGU_PMDGNKdFD977_Uk2iqVKr51kOzJV+njc0B9Eq5g@mail.gmail.com>
+Subject: Re: [PATCH 2/9] selinux: declare path parameters of _genfs_sid const
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Xiong Zhenwu <xiong.zhenwu@zte.com.cn>, Tyler Hicks <tyhicks@linux.microsoft.com>, 
+	Serge Hallyn <serge@hallyn.com>, Austin Kim <austin.kim@lge.com>, 
+	Yang Li <yang.lee@linux.alibaba.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Jeff Vander Stoep <jeffv@google.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 25, 2022 at 3:34 PM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
+On Tue, Jan 25, 2022 at 9:14 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
 >
-> Hi!
+> The path parameter is only read from in security_genfs_sid(),
+> selinux_policy_genfs_sid() and __security_genfs_sid(). Since a string
+> literal is passed as argument, declare the parameter const.
+> Also align the parameter names in the declaration and definition.
 >
-> On Mon, Jan 24, 2022 at 03:26:36PM -0800, Nick Desaulniers wrote:
+> Reported by clang [-Wwrite-strings]:
 >
-> > If this is fixed in gcc-10, then we can probably add a comment with a
-> > FIXME link to the issue or commit to replace __COUNTER__ with %= one
-> > day.  If not, then we can probably come up with a reduced test case
-> > for the GCC devs to take a look at, then add the FIXME comment to
-> > kernel sources.
+>     security/selinux/hooks.c:553:60: error: passing 'const char [2]' to p=
+arameter of type 'char *' discards qualifiers [-Wincompatible-pointer-types=
+-discards-qualifiers]
+>             rc =3D security_genfs_sid(&selinux_state, sb->s_type->name, /=
+,
+>                                                                       ^~~
+>     ./security/selinux/include/security.h:389:36: note: passing argument =
+to parameter 'name' here
+>                            const char *fstype, char *name, u16 sclass,
+>                                                      ^
 >
-> Please open a PR?
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/include/security.h | 4 ++--
+>  security/selinux/ss/services.c      | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104236
+Merged, thanks!
 
-> > I'm more confident that we can remove the `volatile` keyword (I was
-> > thinking about adding a new diagnostic to clang to warn that volatile
-> > is redundate+implied for asm goto or inline asm that doesn't have
-> > outputs) though that's not the problem here and will probably generate
-> > some kernel wide cleanup before we could enable such a flag.
->
-> Its main value is that it would discourage users from thinking volatile
-> is magic.  Seriously worth some pain!
-
-Yeah, SGTM.
-
->
-> > Perhaps
-> > there are known compiler versions that still require the keyword for
-> > those cases for some reason.
->
-> It was removed from compiler-gcc.h in 3347acc6fcd4 (which changed the
-> minimum required GCC version to GCC 5).
-
-```
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index e512f5505dad..b8fe0c23cfff 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -80,11 +80,25 @@ void ftrace_likely_update(struct
-ftrace_likely_data *f, int val,
-
- /* Optimization barrier */
- #ifndef barrier
--# define barrier() __memory_barrier()
-+/* The "volatile" is due to gcc bugs */
-+# define barrier() __asm__ __volatile__("": : :"memory")
-```
-
-I definitely wish there was a comment with a link to what "gcc bugs"
-they were referring to; otherwise who knows if it's been fixed...if
-they have been...
--- 
-Thanks,
-~Nick Desaulniers
+--=20
+paul-moore.com
