@@ -1,89 +1,170 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232A22C80
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 05:23:55 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id v186so68238226ybg.1
-        for <llvm@lists.linux.dev>; Tue, 25 Jan 2022 21:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BmNhY6FQW/GrrzMUwo58dyScPyirrw0g3CZ9jNL4l2w=;
-        b=qms8N3moNDRD+/zKbUAk2ww2ayLOF0zLPPwvXzOUoQNW27ceiMM7w9iOK3v6so+gFv
-         NxdTlmmH8RVifgQL/YzfUl7HgFnwEoy/rnWgnnBc9El4tLvZ5Fwuh57Y2TQAhdIJS3Fr
-         V+L1yjLtS40JNVvlZYPnQn/OyhNsOcYJZIpzC8Tc3EQtb/UHPxQbiE4+fZ9EAbQaEALp
-         MxePubsggahRdW21qs9tuNKL7j6qJJi7vbMbHDN0ratudWKnO+tQPy1FFCECD7CNHvwN
-         eprmhh68BqZ+0JG9eazFzxIIKgLaIbxWoxcqUZMTRgZAlUPdPiEstJV/LDzh1w6M8Q6Z
-         vjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BmNhY6FQW/GrrzMUwo58dyScPyirrw0g3CZ9jNL4l2w=;
-        b=rvS/fOtl8XIYPnZwmdTe+UUrBXAnE8aCttMZ1x7qo12lTXKJc4gqamM2en8tzwXRgL
-         MfnLIdjYKTYErfP7FHbcUmX7dtRyNUwoYhoBagZsFzfXbMBZNIp8TmsQiAeByjlPdKR7
-         0nTYR3fFC1UgVHFPws4Co8L19TmRJoXIF1Czz4P00oAJpABQJgjauZ8XoZg/zG4J2vLS
-         p5JgdpIsOR+S/cTRTASjiRvt1A3wYW2oI3FFZmBo9kFVE34ad9gdNNnzChnINWkJx+D4
-         WpeKlAIpbyUf02iEU/zdQfMXJcSs7fwfwKVKX0kLalUD6cYcebr8/aPB95AyK1GkqSZ1
-         eoTA==
-X-Gm-Message-State: AOAM533zpujFxzRumxpNNvAUBhS3xfwZbk4FHjUcEgY5N3Yf7e4RCDbh
-	vRwTPQ0fc9au37wCyXYYREt6VXAz5dMf+02IiYk=
-X-Google-Smtp-Source: ABdhPJwSAB5RAnuO1XryMa2zwDZqE9o0YmCGlcohJkr0T/0G49+lz8m3Wt8I/nqj9KzoPm/W9g5/SllzaZjqRNmuyPs=
-X-Received: by 2002:a25:42d7:: with SMTP id p206mr34188694yba.182.1643174634013;
- Tue, 25 Jan 2022 21:23:54 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F782C80
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 05:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643175457; x=1674711457;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K1Ia3evHQmhGL125iZLbYE8s2eqmLUKbbbZVVzu9Ptg=;
+  b=RHy7gqjesTdVGUSqnpHmhAheA60ylZQSylhd2rKikGL2Ns+ElbrMh9bS
+   RHmh/Do5zhNNHwKLORX1FXOmn3djpE7HjLNBuCYeFbu6MZn7taKTL4ybi
+   Kj1RORHz3RNx678qAfNcs915h2vol3HPCGDRtjry4TaC/B8ASAggbVhW/
+   WbqnQHegj8gjknOn6xC5NC0tyhS4KxJuilqaLjYfz+7/A5Jnj5YmYsVib
+   biPZzL3TxxPovsrNoQX/KCMBTje1MvohBpj0pDjtOSh1Kp15AoO8xB+p0
+   bd6rWjLIVFD23fjvTC3eh16QWYJfAyd/nbvupb4RhGkkVDRdIoNFy1qUK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246702294"
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="246702294"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 21:37:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="477375590"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 21:37:34 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCazu-000KpY-2U; Wed, 26 Jan 2022 05:37:34 +0000
+Date: Wed, 26 Jan 2022 13:37:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.16 70/137]
+ include/linux/irqchip/arm-vgic-info.h:13:15: error: unexpected token in
+ argument list
+Message-ID: <202201261305.sZ3Y7MUD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220124003342.1457437-1-ztong0001@gmail.com> <202201241937.i9KSsyAj-lkp@intel.com>
- <20220124151611.30db4381d910c853fc0c9728@linux-foundation.org> <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com>
-In-Reply-To: <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com>
-From: Tong Zhang <ztong0001@gmail.com>
-Date: Tue, 25 Jan 2022 21:23:43 -0800
-Message-ID: <CAA5qM4Btrnp9Te2pm0s=OuDk0ASTE3-LyLt8nf0fXKxhehXUgA@mail.gmail.com>
-Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
-To: Murphy Zhou <jencce.kernel@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, kernel test robot <lkp@intel.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 25, 2022 at 9:04 PM Murphy Zhou <jencce.kernel@gmail.com> wrote:
->
-> Still panic with this patch on Linux-next tree:
->
-> [ 1128.275515] LTP: starting binfmt_misc02 (binfmt_misc02.sh)
-> [ 1128.303975] CPU: 1 PID: 107182 Comm: modprobe Kdump: loaded
-> Tainted: G        W         5.17.0-rc1-next-20220125+ #1
-> [ 1128.305264] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-> [ 1128.305992] Call Trace:
-> [ 1128.306376]  <TASK>
-> [ 1128.306682]  dump_stack_lvl+0x34/0x44
-> [ 1128.307211]  __register_sysctl_table+0x2c7/0x4a0
-> [ 1128.307846]  ? load_module+0xb37/0xbb0
-> [ 1128.308339]  ? 0xffffffffc01b6000
-> [ 1128.308762]  init_misc_binfmt+0x32/0x1000 [binfmt_misc]
-> [ 1128.309402]  do_one_initcall+0x44/0x200
-> [ 1128.309937]  ? kmem_cache_alloc_trace+0x163/0x2c0
-> [ 1128.310535]  do_init_module+0x5c/0x260
-> [ 1128.311045]  __do_sys_finit_module+0xb4/0x120
-> [ 1128.311603]  do_syscall_64+0x3b/0x90
-> [ 1128.312088]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [ 1128.312755] RIP: 0033:0x7f929ab85fbd
->
-> Testing patch on Linus tree.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
+head:   364c1c42b229912132e1615c2ce15be7154e2156
+commit: faf6ce00f9b35ca0a0389a2d66d90214d3c62f34 [70/137] irqchip/gic: Collect GIC_IRQ_TYPE definitions into one place
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220126/202201261305.sZ3Y7MUD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=faf6ce00f9b35ca0a0389a2d66d90214d3c62f34
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.16
+        git checkout faf6ce00f9b35ca0a0389a2d66d90214d3c62f34
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Hi Murphy,
-Did you apply this patch?
-Link: https://lkml.kernel.org/r/20220124181812.1869535-2-ztong0001@gmail.com
-I tested it on top of the current master branch and it works on my
-setup using the reproducer I mentioned.
-Could you share your test script?
-Thanks,
-- Tong
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> include/linux/irqchip/arm-vgic-info.h:13:15: error: unexpected token in argument list
+   enum gic_type {
+                 ^
+>> include/linux/irqchip/arm-vgic-info.h:15:8: error: unexpected token in operand
+    GIC_V2,
+          ^
+   include/linux/irqchip/arm-vgic-info.h:17:8: error: unexpected token in operand
+    GIC_V3,
+          ^
+>> include/linux/irqchip/arm-vgic-info.h:18:1: error: invalid instruction, did you mean: b?
+   };
+   ^
+   include/linux/irqchip/arm-vgic-info.h:20:21: error: unexpected token in argument list
+   struct gic_kvm_info {
+                       ^
+   include/linux/irqchip/arm-vgic-info.h:22:16: error: unexpected token in argument list
+    enum gic_type type;
+                  ^
+   include/linux/irqchip/arm-vgic-info.h:24:18: error: unexpected token in argument list
+    struct resource vcpu;
+                    ^
+   include/linux/irqchip/arm-vgic-info.h:26:15: error: unexpected token in argument list
+    unsigned int maint_irq;
+                 ^
+>> include/linux/irqchip/arm-vgic-info.h:28:2: error: invalid instruction, did you mean: bl?
+    bool no_maint_irq_mask;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:30:18: error: unexpected token in argument list
+    struct resource vctrl;
+                    ^
+   include/linux/irqchip/arm-vgic-info.h:32:2: error: invalid instruction, did you mean: bl?
+    bool has_v4;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:34:2: error: invalid instruction, did you mean: bl?
+    bool has_v4_1;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:36:2: error: invalid instruction, did you mean: bl?
+    bool no_hw_deactivation;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:37:1: error: invalid instruction, did you mean: b?
+   };
+   ^
+   include/linux/irqchip/arm-vgic-info.h:42:15: error: unexpected token in argument list
+   static inline void vgic_set_kvm_info(const struct gic_kvm_info *info) {}
+                 ^
+>> include/linux/irqchip/arm-gic-common.h:25:1: error: invalid instruction, did you mean: strt?
+   struct irq_domain;
+   ^
+   include/linux/irqchip/arm-gic-common.h:26:1: error: invalid instruction, did you mean: strt?
+   struct fwnode_handle;
+   ^
+>> include/linux/irqchip/arm-gic-common.h:27:24: error: unexpected token in variant, expected ')'
+   int gicv2m_init(struct fwnode_handle *parent_handle,
+                          ^
+>> include/linux/irqchip/arm-gic-common.h:28:28: error: unexpected token in argument list
+     struct irq_domain *parent);
+                              ^
+
+
+vim +13 include/linux/irqchip/arm-vgic-info.h
+
+0e5cb7770684b4 Marc Zyngier 2021-02-27  12  
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @13  enum gic_type {
+0e5cb7770684b4 Marc Zyngier 2021-02-27  14  	/* Full GICv2 */
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @15  	GIC_V2,
+0e5cb7770684b4 Marc Zyngier 2021-02-27  16  	/* Full GICv3, optionally with v2 compat */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  17  	GIC_V3,
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @18  };
+0e5cb7770684b4 Marc Zyngier 2021-02-27  19  
+0e5cb7770684b4 Marc Zyngier 2021-02-27  20  struct gic_kvm_info {
+0e5cb7770684b4 Marc Zyngier 2021-02-27  21  	/* GIC type */
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @22  	enum gic_type	type;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  23  	/* Virtual CPU interface */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  24  	struct resource vcpu;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  25  	/* Interrupt number */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  26  	unsigned int	maint_irq;
+669062d2a1aa36 Marc Zyngier 2021-02-28  27  	/* No interrupt mask, no need to use the above field */
+669062d2a1aa36 Marc Zyngier 2021-02-28 @28  	bool		no_maint_irq_mask;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  29  	/* Virtual control interface */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  30  	struct resource vctrl;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  31  	/* vlpi support */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  32  	bool		has_v4;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  33  	/* rvpeid support */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  34  	bool		has_v4_1;
+f6c3e24fb721dd Marc Zyngier 2021-03-15  35  	/* Deactivation impared, subpar stuff */
+f6c3e24fb721dd Marc Zyngier 2021-03-15  36  	bool		no_hw_deactivation;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  37  };
+0e5cb7770684b4 Marc Zyngier 2021-02-27  38  
+
+:::::: The code at line 13 was first introduced by commit
+:::::: 0e5cb7770684b4c81bcc63f4675e488f9a0e31eb irqchip/gic: Split vGIC probing information from the GIC code
+
+:::::: TO: Marc Zyngier <maz@kernel.org>
+:::::: CC: Marc Zyngier <maz@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
