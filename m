@@ -1,53 +1,54 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E76C3FCE
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 20:59:12 +0000 (UTC)
-Received: by mail-ej1-f46.google.com with SMTP id ka4so1125237ejc.11
-        for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 12:59:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E84B3FCE
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 21:21:10 +0000 (UTC)
+Received: by mail-ej1-f51.google.com with SMTP id m4so1255486ejb.9
+        for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 13:21:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=9eB3sinujdfOKjw1Rq4Yv5m0jvLygDYT+UfsakVwvFY=;
-        b=hWc0SIhSU692E7TeE3QERHKR5x+Uc2JnoSd39zct3wR6ZvZdOU20Q/bEetUWnZH2qv
-         k8Y87WwX4DNOZDY7hoIHLsc9RzoCzuP16c0Mu+JCrku3P3474tOJQ88YTSgwbgLVQOT+
-         p17Rn52sDgl4b9IJo4cMCYZa4M7HXtY7gejYzswVMJo7wrdHQ9ep16fmYu3RxZQdUzfZ
-         vbB9+epHe00IVsZhW5xqE5F+iIEAgrwaQry0tFSp3SRgrGpEemNiJ0xnUbptAQCNgexX
-         lKuc1tIxApWOC8mTKsWuY1RGL78bfxNndcg3XKtb+4eUvrpLhDstJvA1Ol1ZPla5q89D
-         6b6w==
+        bh=sfddJG8Ne5pbCi0QrdlrjT/b50oZdx4/kvMtR32BLbo=;
+        b=QIsyaeJL52rp+3sMUQ/8G9bavcWiwWOAPwduuNQzSJTmaE0wmWzJTUXcd6yb7OAw9N
+         /LvLL61/LhqDvVMoD6KM2ou8xCPrVa4xBjQssw+d+82eO2Oa0qqbrJ92xIiA/Fe297Qa
+         zq4y15SlqILN9HRRaHpiVKB2ZQcL2wllShwZl6avz7sIF7hIAEJBO1Mf/xbt3/Q2WHVV
+         LhorNt5gACpE8aU7l7t6YWYZI5IwvludQu6R+YzDS910gZAbgs8gXHu0RWtMcnwX7JqA
+         TFXPJsCamc9Sfz1aGZ8MmF8L77Hu24LMstwIWZb9AZfC9/6hX88Z9s7yMEg0Ird5Rcfi
+         3oDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9eB3sinujdfOKjw1Rq4Yv5m0jvLygDYT+UfsakVwvFY=;
-        b=o+K62mc+4XjD+9ycJPLhtbS2p8flcDakK643J8AMUsko80z90Xid692WIagIx/je4P
-         BqLELWRZ7mnJBML5XYzn5FlccGztfxy/6p9vAOmbGCqloRIJuJmiY+GMAYwPt3y28Cbb
-         Rg6BRVS79LK592H3o8hDFLN02GdBUCEOM5f67L7zoEwLOy1ju1Go/1KoNtYRtmA6GyTd
-         fQvh+BMtsQQaMyQdtxzWSqPCcsT2PLLNCCRg0k9sBHg4EovZittwPL4PfiI73O5oWmae
-         nN4wFK2WAqUglzkaWym3Z8mg+upwAra7MkAJMYt8VB4H0EE9MMJObvZsNFYZwig3jiaJ
-         hJgQ==
-X-Gm-Message-State: AOAM533EsPzSEabsfvGumHquJ3htms4isSuKhAsVeNrA1ozYcj43Syqy
-	4a4ZE61Bk2EuU0UxZGjWI5cxLMo4o/v0DLR67ikd
-X-Google-Smtp-Source: ABdhPJwbGFpX8vGoi0YEZndNed80nrB6pQPwjTtQxv2+KG/+YKLLOPVzvOVF4GemKeM4hVP+ZFNtczQgBVPkJvmYazE=
-X-Received: by 2002:a17:906:2ed0:: with SMTP id s16mr396367eji.327.1643230750765;
- Wed, 26 Jan 2022 12:59:10 -0800 (PST)
+        bh=sfddJG8Ne5pbCi0QrdlrjT/b50oZdx4/kvMtR32BLbo=;
+        b=EYNQOCtjloaGEvtptlsdcuE1WXXpVDLt8yNYMUb/HoGR0bOgiXj6b/ivCLO61taT1d
+         t8QoH2KrF/oDiLgzRYp/PpKE6MzHC+ceBAgelEvtGxO/PhZKLHen4UffnimCoQrd08YP
+         tthSSSIxCDNNPfwBV0gjLUldnWYJywWEyNFEe5fMVdROZPZk62sAMMR7fq2dgBLOeYLw
+         uoElTwx+N+7uLuwWUO57dVCrHsTVSd883JvZERfVPWGCiquBpNfCzNPd6y4y0a41yah8
+         cpVsjVDlujqr4LPunYOodMXUbJdgz3DQIcOZzwQnynAdNAViflmIw2gGxCbpfa1KLJ5z
+         nlHg==
+X-Gm-Message-State: AOAM530swWRltUnEkAixzi6kGXvs233uNB+AGvc81XNi2v9pNI6v4QwJ
+	UEolpAcZlXQHGR4YSFXxF6yT/6u6zu77zUmsMZ9B
+X-Google-Smtp-Source: ABdhPJxw3d5mnv3wPnmpUUVOKLaEA0jO8ZEylbqwXDPVekdv65G/G9q1/pcNh+v3zqOWTeUCasC3T9p1EGRX/t+n1iA=
+X-Received: by 2002:a17:907:3e1d:: with SMTP id hp29mr414495ejc.701.1643232068672;
+ Wed, 26 Jan 2022 13:21:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-7-cgzones@googlemail.com>
-In-Reply-To: <20220125141422.32655-7-cgzones@googlemail.com>
+References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-8-cgzones@googlemail.com>
+In-Reply-To: <20220125141422.32655-8-cgzones@googlemail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 26 Jan 2022 15:58:59 -0500
-Message-ID: <CAHC9VhTJpeb37sOkvKHO7REUJ4K3YMGK6ZY_ptLjVVAkEKdpfA@mail.gmail.com>
-Subject: Re: [PATCH 8/9] selinux: simplify cred_init_security
+Date: Wed, 26 Jan 2022 16:20:57 -0500
+Message-ID: <CAHC9VhSQW3E=K+nDF8tdTi2AxxN91b9Ufk-FSE7XpXimHTA4tA@mail.gmail.com>
+Subject: Re: [PATCH 9/9] selinux: drop unused macro
 To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
 Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
 	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Xiu Jianfeng <xiujianfeng@huawei.com>, Jeff Vander Stoep <jeffv@google.com>, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -55,18 +56,23 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jan 25, 2022 at 9:15 AM Christian G=C3=B6ttsche
 <cgzones@googlemail.com> wrote:
 >
-> The parameter of selinux_cred() is declared const, so an explicit cast
-> dropping the const qualifier is not necessary. Without the cast the
-> local variable cred serves no purpose.
+> The macro _DEBUG_HASHES is nowhere used. The configuration DEBUG_HASHES
+> enables debugging of the SELinux hash tables, but the with an underscore
+> prefixed macro definition has no direct impact or any documentation.
 >
-> Reported by clang [-Wcast-qual]
+> Reported by clang [-Wunused-macros]
 >
 > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 > ---
->  security/selinux/hooks.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  security/selinux/ss/policydb.c | 2 --
+>  1 file changed, 2 deletions(-)
 
-Merged, thanks.
+Merged into selinux/next, thanks Christian.  This macro definition
+predates the move to git so there is no quick answer to "why is this
+here?", but my best guess is that it is an artifact of a developer
+"disabling" the DEBUG_HASHES macro by adding an underscore to the
+front.  Regardless of the reason behind it, I agree it should be
+removed.
 
 --=20
 paul-moore.com
