@@ -1,155 +1,109 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F64168
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 18:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643220732; x=1674756732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/63UQCkOPCV3csvtYswGzS4KzAA+pga67Yf8Dwpg63A=;
-  b=a5KXYMRdtVnhNjLH0mPjnw29pgdQnZArtBno2mumYpvf8AmgKQn92cum
-   JtenqBqoRnbhrNoom+wReQcyARkjdCQ7G4mpm5gK868rw1WZGqcaHZqtc
-   n7gRzRj0GyJ1d0qJPjlbPtyieZl30A2BvkCLMIBmOrj6C9QPyupB310Mv
-   s4Dq1l4cnpLEGtmM8xE+8E7IP1ba0RU88G09EAI01oK4Z9MX2hf1IwfAf
-   7cHxWY9AvOE4gJGjE9V5f2ouLqvkRIzR5iiZhbVIlrlStppS7WG6I+aQh
-   Kqmvp3Nep1Y1JU/MQLK5/tijcBoZniAMaGz2nuKehXQ9VAvw7rrIk0+64
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309925958"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="309925958"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 10:12:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="477558701"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Jan 2022 10:12:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCmm8-000LUb-Rp; Wed, 26 Jan 2022 18:12:08 +0000
-Date: Thu, 27 Jan 2022 02:11:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mateusz Palczewski <mateusz.palczewski@intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Mateusz Palczewski <mateusz.palczewski@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH net-next v2 1/2] iavf: Stop leaking
- iavf_status as "errno" values
-Message-ID: <202201270125.z5yiy42k-lkp@intel.com>
-References: <20220126145938.26500-1-mateusz.palczewski@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F52D168
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 18:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1643221311;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=41Yq0Jiu/p4386qMAQJe5Ihi0AXyzAek0DT2V3OPlfI=;
+	b=FdlAUdRi83s6RL7ZbbBgBSh8CuHpR0ZNYMqDCF2CWLoinnQoeDckRFGbcvcxJZmUL1/bUx
+	KAz35+GOeSLWeEGE2jojmvhZjVv0UeEzrGxrnHVmCqQA9rttbBgHGaJBpoqjcS3kbV8c+C
+	ZGfecU4a4+LyjfI2jbIAhljhUV4qB3A=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-Bm-ky-etPxyeCGPAaLPstw-1; Wed, 26 Jan 2022 13:21:50 -0500
+X-MC-Unique: Bm-ky-etPxyeCGPAaLPstw-1
+Received: by mail-oi1-f199.google.com with SMTP id bq20-20020a05680823d400b002cac339e9b0so319057oib.4
+        for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 10:21:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=41Yq0Jiu/p4386qMAQJe5Ihi0AXyzAek0DT2V3OPlfI=;
+        b=B0ND8Bza08lGxJSuEn9ALHY3NY9jAgRC+Sv96iC7JVS7vJasvf/k6OliDJ8KjHjs5H
+         z9ujmoFntWLzKdxcrjgD0wGm+T8tejpniRbTSGvtBrcOHWgDLhsmQz0hIRGDtVJdJtBH
+         92gRr1opVYsPWYOCMoIboE5OT4OlJkNvenE9w81sfatOQJoAalsIKc0EDtZrutTKCBCi
+         2VxRWvhXxD38iMFO6psVPpHjq08pmGl1/gxBLHnv3uGlKmm2YivuHa5FKF4sU8lAuljt
+         42TLF16WYmLhLu3EqkC8l4xWYp7YcxACSXLaV5j+XK9g02sYqNiMH9TB73v1EQnohDzS
+         kq8g==
+X-Gm-Message-State: AOAM530rlANJWOkIxpdc0uXsH0slU+92/tHI8t1LTSlm58OKRsropTwn
+	cx3CeINJ03Gh30AGHY/b433xfQRbr9DyV+Vb1fxA+FiBi5hq1jcPfjHFYhVDwWZoKN4v4YHLkyO
+	XnAawzmKIy6toDg==
+X-Received: by 2002:a05:6808:2107:: with SMTP id r7mr4948678oiw.18.1643221309972;
+        Wed, 26 Jan 2022 10:21:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyEM82EpXlXd4VOeoPb1JwrJ3tw7RGrD/fSFwmY+6hFf0R10tOQz6ajGuRba8/BQVR+U0tLxQ==
+X-Received: by 2002:a05:6808:2107:: with SMTP id r7mr4948668oiw.18.1643221309819;
+        Wed, 26 Jan 2022 10:21:49 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id h1sm3748002otl.37.2022.01.26.10.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:21:49 -0800 (PST)
+From: trix@redhat.com
+To: perex@perex.cz,
+	tiwai@suse.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	kai.heng.feng@canonical.com,
+	jiapeng.chong@linux.alibaba.com,
+	giun7a@gmail.com,
+	colin.king@intel.com
+Cc: alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] ALSA: usb-audio: initialize variables that could ignore errors
+Date: Wed, 26 Jan 2022 10:21:42 -0800
+Message-Id: <20220126182142.1184819-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126145938.26500-1-mateusz.palczewski@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 
-Hi Mateusz,
+From: Tom Rix <trix@redhat.com>
 
-Thank you for the patch! Perhaps something to improve:
+clang static analysis reports this representative issue
+mixer.c:1548:35: warning: Assigned value is garbage or undefined
+        ucontrol->value.integer.value[0] = val;
+                                         ^ ~~~
 
-[auto build test WARNING on net-next/master]
+The filter_error() macro allows errors to be ignored.
+If errors can be ignored, initialize variables
+so garbage will not be used.
 
-url:    https://github.com/0day-ci/linux/commits/Mateusz-Palczewski/iavf-Fix-return-values-in-driver/20220126-230536
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git ab14f1802cfb2d7ca120bbf48e3ba6712314ffc3
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220127/202201270125.z5yiy42k-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d0d06ad4899a5e86feef8a2fca3f8f0bf6937767
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mateusz-Palczewski/iavf-Fix-return-values-in-driver/20220126-230536
-        git checkout d0d06ad4899a5e86feef8a2fca3f8f0bf6937767
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/iavf/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/iavf/iavf_main.c:2141:60: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-                   dev_err(&pdev->dev, "Failed to init Admin Queue (%d)\n", err);
-                                                                            ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/net/ethernet/intel/iavf/iavf_main.c:2115:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/err +2141 drivers/net/ethernet/intel/iavf/iavf_main.c
-
-8afadd1cd8ba1d Brett Creeley      2021-11-29  2101  
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2102  /**
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2103   * iavf_startup - first step of driver startup
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2104   * @adapter: board private structure
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2105   *
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2106   * Function process __IAVF_STARTUP driver state.
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2107   * When success the state is changed to __IAVF_INIT_VERSION_CHECK
-59756ad6948be9 Mateusz Palczewski 2021-08-19  2108   * when fails the state is changed to __IAVF_INIT_FAILED
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2109   **/
-59756ad6948be9 Mateusz Palczewski 2021-08-19  2110  static void iavf_startup(struct iavf_adapter *adapter)
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2111  {
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2112  	struct pci_dev *pdev = adapter->pdev;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2113  	struct iavf_hw *hw = &adapter->hw;
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2114  	enum iavf_status status;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2115  	int err;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2116  
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2117  	WARN_ON(adapter->state != __IAVF_STARTUP);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2118  
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2119  	/* driver loaded, probe complete */
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2120  	adapter->flags &= ~IAVF_FLAG_PF_COMMS_FAILED;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2121  	adapter->flags &= ~IAVF_FLAG_RESET_PENDING;
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2122  	status = iavf_set_mac_type(hw);
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2123  	if (status) {
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2124  		dev_err(&pdev->dev, "Failed to set MAC type (%d)\n", status);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2125  		goto err;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2126  	}
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2127  
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2128  	status = iavf_check_reset_complete(hw);
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2129  	if (status) {
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2130  		dev_info(&pdev->dev, "Device is still in reset (%d), retrying\n",
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2131  			 status);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2132  		goto err;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2133  	}
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2134  	hw->aq.num_arq_entries = IAVF_AQ_LEN;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2135  	hw->aq.num_asq_entries = IAVF_AQ_LEN;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2136  	hw->aq.arq_buf_size = IAVF_MAX_AQ_BUF_SIZE;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2137  	hw->aq.asq_buf_size = IAVF_MAX_AQ_BUF_SIZE;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2138  
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2139  	status = iavf_init_adminq(hw);
-d0d06ad4899a5e Mateusz Palczewski 2022-01-26  2140  	if (status) {
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14 @2141  		dev_err(&pdev->dev, "Failed to init Admin Queue (%d)\n", err);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2142  		goto err;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2143  	}
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2144  	err = iavf_send_api_ver(adapter);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2145  	if (err) {
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2146  		dev_err(&pdev->dev, "Unable to send to PF (%d)\n", err);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2147  		iavf_shutdown_adminq(hw);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2148  		goto err;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2149  	}
-45eebd62999d37 Mateusz Palczewski 2021-08-19  2150  	iavf_change_state(adapter, __IAVF_INIT_VERSION_CHECK);
-59756ad6948be9 Mateusz Palczewski 2021-08-19  2151  	return;
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2152  err:
-59756ad6948be9 Mateusz Palczewski 2021-08-19  2153  	iavf_change_state(adapter, __IAVF_INIT_FAILED);
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2154  }
-b66c7bc1cd4d72 Jakub Pawlak       2019-05-14  2155  
-
+Fixes: 48cc42973509 ("ALSA: usb-audio: Filter error from connector kctl ops, too")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ sound/usb/mixer.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
+index e8f3f8d622ec5..630766ba259fd 100644
+--- a/sound/usb/mixer.c
++++ b/sound/usb/mixer.c
+@@ -1527,6 +1527,10 @@ static int get_connector_value(struct usb_mixer_elem_info *cval,
+ 		usb_audio_err(chip,
+ 			"cannot get connectors status: req = %#x, wValue = %#x, wIndex = %#x, type = %d\n",
+ 			UAC_GET_CUR, validx, idx, cval->val_type);
++
++		if (val)
++			*val = 0;
++
+ 		return filter_error(cval, ret);
+ 	}
+ 
+-- 
+2.26.3
+
