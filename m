@@ -1,90 +1,128 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1ED29CA
-	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 13:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA462CA3
+	for <llvm@lists.linux.dev>; Wed, 26 Jan 2022 14:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643205478; x=1674741478;
-  h=date:from:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=E8t3LitSRBF/9GqXXOBVsEDeFLttFiDRQTVUOOe+3YU=;
-  b=VgEZ14CGR6YEzZlRSQp0XpWjvoo3KyAN1iA/6LmpHiTsDaD/a0XfFb80
-   kVex4n5dPSRJ/GpZfwizcQjSWSZ5XQwGc/4sxNQwe0h6b3nJd86DAXTlJ
-   5yAMBK0zrnTeCJ9hxjUFFz9eEZIgyQ2kjxPMdjpP27EgBaLD0T+VaCmdD
-   +Mp5QG8eQJQ3wJaVCMomv+RZ9XOAxl6tybAfTLgmzLm87g0hnaarwichk
-   6jcOkSBSOhKxw/Im9QhxKbmN8eryRkXv9urW7alVhAEEWFkQhOTSc9RZh
-   XZZxrCH7r2fsmTmmXiBNduo493mSkgVzvC4Dg9MU4xEbsg1CEC3siM5nN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227224204"
+  t=1643208721; x=1674744721;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+C7GbNvdhhupsiddx9nyBA2kLdGmDvK2B+OFoSsBS2A=;
+  b=lBIehyv5ZcqCNTcVcY22vJnTvHWgmJhgKUujnC1GIaH5SoRnbzTj5ECX
+   UPyopMkTIeJ84XSizZkQ4/OmV9v5rIL0Y2MwdqqZcfaA4/9Ypehvmk8If
+   0/cGAHSarb+yAok6fS9FROEo6pneH1z3T8ynRr2vySe4ydiEThmfw1Y7s
+   cgEiG0d6hF2+SKXFhT6nlB+Fk5XJCw7JEbV4Jq4EfmbNRb1ObZ/zz2LDR
+   3N7ckSQ7nuMngowD9Wjs+MY1WcCkdWa7PM5FzfTBf66nGMyh4TRDKng/m
+   f7VduCIYkmssF0157ydMaQBoq+zITh9c5Gz/crUAomOeDA1PcZtc/IPRB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309877673"
 X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="227224204"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:57:57 -0800
+   d="scan'208";a="309877673"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:52:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="477486281"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Jan 2022 05:57:56 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nCio7-000LGb-6b; Wed, 26 Jan 2022 13:57:55 +0000
-Date: Wed, 26 Jan 2022 21:57:03 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/7] crypto: DRBG - remove internal reseeding operation
-Message-ID: <202201262115.AVuVkS5I-lkp@intel.com>
+   d="scan'208";a="617981478"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jan 2022 06:51:52 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 20QEpn8P004691;
+	Wed, 26 Jan 2022 14:51:49 GMT
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 05/15] x86: support ASM function sections
+Date: Wed, 26 Jan 2022 15:49:52 +0100
+Message-Id: <20220126144952.851066-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <YerMYcin4woehiL9@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-6-alexandr.lobakin@intel.com> <YerMYcin4woehiL9@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-In-Reply-To: <2450379.h6RI2rZIcs@positron.chronox.de>
-References: <2450379.h6RI2rZIcs@positron.chronox.de>
-TO: "Stephan Müller" <smueller@chronox.de>
-TO: herbert@gondor.apana.org.au
-CC: linux-crypto@vger.kernel.org
-CC: simo@redhat.com
-CC: Nicolai Stange <nstange@suse.de>
+From: Borislav Petkov <bp@alien8.de>
+Date: Fri, 21 Jan 2022 16:08:17 +0100
 
-Hi "Stephan,
+> On Thu, Dec 23, 2021 at 01:21:59AM +0100, Alexander Lobakin wrote:
+> > Address places which need special care and enable
+> > CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
+> > 
+> > Notably:
+> >  - propagate --sectname-subst to aflags in x86/boot/Makefile and
+> >    x86/boot/compressed/Makefile as both override aflags;
+> 
+> s/aflags/KBUILD_AFLAGS/
+> 
+> Let's be more precise pls.
+> 
+> >  - symbols starting with a dot (like ".Lbad_gs") should be handled
+> >    manually with SYM_*_START_SECT(.Lbad_gs, bad_gs) as "two dots"
+> >    is a special (and CPP doesn't want to concatenate two dots in
+> >    general);
+> >  - some symbols explicitly need to reside in one section (like
+> >    kexec control code, hibernation page etc.);
+> >  - macros creating aliases for functions (like __memcpy() for
+> >    memcpy() etc.) should go after the main declaration (as
+> >    aliases should be declared in the same section and they
+> >    don't have SYM_PUSH_SECTION() inside);
+> >  - things like ".org", ".align" should be manually pushed to
+> >    the same section the next symbol goes to;
+> >  - expand indirect_thunk and .fixup wildcards in vmlinux.lds.S
+> 
+> $ git grep -E "\.fixup" arch/x86/*.S
+> $
+> 
+> I guess I'll continue with your new version since a bunch of stuff
+> has changed in arch/x86/ in the meantime so that that set would need
+> refreshing.
 
-Thank you for the patch! Yet something to improve:
+Yeah, sure. .fixup usage was removed in particular.
+I'll queue v10 soon.
 
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master linus/master v5.17-rc1 next-20220125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
 
-url:    https://github.com/0day-ci/linux/commits/Stephan-M-ller/Common-entropy-source-and-DRNG-management/20220126-150911
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220126/202201262115.AVuVkS5I-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/14ec08bbd20e04299353eb31a9d43d4ac9af2b22
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephan-M-ller/Common-entropy-source-and-DRNG-management/20220126-150911
-        git checkout 14ec08bbd20e04299353eb31a9d43d4ac9af2b22
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Thanks for the reviews,
+Al
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: call to __compiletime_assert_220 marked "dontcall-error": BUILD_BUG_ON failed: ARRAY_SIZE(drbg_cores) != ARRAY_SIZE(drbg_algs)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
