@@ -1,274 +1,255 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872A729CA
-	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 03:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7178A29CA;
+	Thu, 27 Jan 2022 04:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643252648; x=1674788648;
-  h=message-id:date:subject:references:to:cc:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=YE5w5PnJn8cayenNpXXIeCy24wGFOPWeRxwCCP3XDR0=;
-  b=TgKEDqad0kiCgHmfhP/LwA6Fhfeb9J6qQnNSlRqdQYSt9odYANEcL62k
-   fegSHB86H9Hd5qlNmxLgflTyU90HvNXxv0hljejt7Q0XJpFmdcHbTuNCy
-   xzMyLnNEEObOjqpDVhoD6U07MJsYqB4/PoxcIAU365o1haOdCVGUX8mWN
-   QGs4ZLVIjD68sCJ/afr6CI38kyaTGAyONPWLZWxuqvTR+arCNjc1EM0yY
-   lOmz/IU6qcUQTFRxLLxr4/lpFVj9OnAIH72mXvBsFfnmZ0IFZ8c3odjgd
-   mkOMD/gnivaog7xHJ6CTvsC2XuiJlIj+7QW5XnynVCXw1uwjTYHiK2eJ9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333087082"
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="333087082"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 19:04:06 -0800
+  t=1643257064; x=1674793064;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Azjd8x6g9/a16YpaGEdSzffzRXf3wRzqIxBh/or1f/I=;
+  b=AzhCuESh973Ru8NonDnEoBkzEJeHenM0i7nb+LqFRUff3PKgXbZ1Kepz
+   QAyT92IbEKlQiUvmUOj24NRY098jp9npyltAKgs88O4j+4s5WX/F8fJgB
+   SLqzXTc28TRUxjPGtLX0HBxab2TgVWWzK1BQrgiANoC+N6kh0jCsiLMf4
+   afurLgJjVcp363pQMrRHQBSm7Ib3xuvJ2Sw2KG3w0fIRSjAbX7/ey4o5o
+   8ZCthlc+M4R/dZKfPJoBojCaSY/7uDP/nzoSMqN8edz+D4Mm18jujFyPl
+   9qiA+wsvTJ7LQt0pK5o8jgmmaHbUGcVNZfNqzbFS6W9e/IDj8dyvizciA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="310055941"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="310055941"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 20:17:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="696475700"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 19:04:05 -0800
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 26 Jan 2022 19:04:05 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 26 Jan 2022 19:04:05 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.44) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 26 Jan 2022 19:04:02 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OHzW68kcDzd8JIGHqy6wGk30m+EWOJ6sFNn2HPzPglJPm/2zOum59iVtwdFlrztUyi8DDQL4E+lwHY0xlTwr3HmbaItv6XKCbe5CiKDYztQrQzR7UOiE5y1qgJKxNaTBgeHkJirsAR8OvAvbm6GgtzDeq8EENv3W0JroUxoPYmr0YV6YK17ualVq6QOnuS8wSfPO5e/WDsDJy0As6qttZXlhUIffsYiQ/aY0uT1telnRGSNAL7143I5Tap0SqI41vjB7c6DiuGf/RflCrNTpKuP4yBFA3Xt6stGBp+Gs9fqtRVRmD1MEkTL1UV4WQ0aK+ZNeYcwZ1f1r5HVjFYpobA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gHFaqG8YuRABkMf18EiinC5Dec2DgZbT+evqJcQqUVs=;
- b=l4sRRJsQBN20RzBRa4Cq9ysCZC9DUITr7dwXLT7oZvO565exEDiCiirqieUlXzxjjsZ+eh+X9TfpSgpx6e5PAWR7xuQzayZ434rHNB0a194Cl3/AlvX1JEvxfQm64NpxY3WkmOOKXK26wgfSowsZ/CI0YbWo4rsAgWtThfTlOYZOZiT9EOyiBKGRUMskFJmMVjMDeiSE71clvrZ4pYPSgj+ECiK1QcUaKh/K0Ul8HABGysVx93lmxZykr5sz8RE+n+ILOd/dMSN3YsUjH/ua2nzFtma4Zktfq1G4l+UT2HrIC+fZJTH6ILBnYoTpM8v0jNxMGyWApw1x4b4YgRyciA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
- by BL1PR11MB5255.namprd11.prod.outlook.com (2603:10b6:208:31a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Thu, 27 Jan
- 2022 03:04:00 +0000
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d]) by SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d%6]) with mapi id 15.20.4930.017; Thu, 27 Jan 2022
- 03:04:00 +0000
-Message-ID: <69bcc1c1-5690-1d23-e811-4a7393a76c27@intel.com>
-Date: Thu, 27 Jan 2022 11:03:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.1
-Subject: drivers/misc/habanalabs/common/command_buffer.c:472:24: warning:
- Assigned value is garbage or undefined
- [clang-analyzer-core.uninitialized.Assign]
-References: <202201242342.1CK6hoP8-lkp@intel.com>
-Content-Language: en-US
-To: farah kassabri <fkassabri@habana.ai>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux Kernel Mailing
- List" <linux-kernel@vger.kernel.org>, Oded Gabbay <ogabbay@kernel.org>
-From: kernel test robot <yujie.liu@intel.com>
-In-Reply-To: <202201242342.1CK6hoP8-lkp@intel.com>
-X-Forwarded-Message-Id: <202201242342.1CK6hoP8-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0362.namprd03.prod.outlook.com
- (2603:10b6:408:f7::7) To SJ0PR11MB5598.namprd11.prod.outlook.com
- (2603:10b6:a03:304::12)
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="581338482"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2022 20:17:40 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nCwE7-000M5q-Vw; Thu, 27 Jan 2022 04:17:39 +0000
+Date: Thu, 27 Jan 2022 12:17:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Corentin Labbe <clabbe@baylibre.com>, davem@davemloft.net,
+	herbert@gondor.apana.org.au, jernej.skrabec@gmail.com,
+	mripard@kernel.org, wens@csie.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-sunxi@googlegroups.com
+Subject: Re: [PATCH 1/8] crypto: sun8i-ce: do not allocate memory when
+ handling requests
+Message-ID: <202201271243.hLjdr8IB-lkp@intel.com>
+References: <20220126210441.3661782-2-clabbe@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1b8a0eda-1741-4fa2-a064-08d9e141aad5
-X-MS-TrafficTypeDiagnostic: BL1PR11MB5255:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR11MB5255F847298E95D117B880A7FB219@BL1PR11MB5255.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:46;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /NkHMfC6mcJND2nd7SoPM61SE+LWOvqOEUBB98EXDsFfxnoADx1r1R1gctXjVHMGUzoW0sofku2ne2qy93AVuZMdQtLwA9SKhB1IfXNKnXu3nP3lO9u52HrCRgR99irtY/MgqXwT8qA0uayypNMyx6QFx6viPi1OuwwRNMLaKdQ9Ci6E9Ej+8rMo3NIrBbEFQha5GgGMiOJxeLosOkRNxQtO7Po0a0/qvnDJKWDesEqCvP0AV0l/RFWid5OkvOobI5oMRAJd7JPjVFMmxVpMS/2gZfsF8sl9PDGZeSN9vJizeBeMbf23g/oRGo6azSnqvGrBbjWEQA+KV7ryUxLi8nH3aV82n0OsHtTgfCAWyHEDFnZVZRCwFiFlKbO2FAmsZf8FaTkFt8Uo/qzYarNzxFW9rnsPGYZ7atiPCfNPWuHzrs5XYtjFuZkFw6fxyetylP1fTBSGFQ4jMBPE/l0XNlzIwCuCVTfyQdlQpZNrclFvXeZd7+qUBt9OvEWBDwx6ZrDi2Z/KV1dGR9vUbLei3s+6TrZyQBP51L/+tM6+o8Kuf+XMHa/4bCaD5eBa3z0HpC4/1GR5JOzSuXH7vl5YQt3A9mngRZuTSLeyYRUq2TVGdDJcoRleTwADzcnXxVAdihxsWQV3Ev+WwvPq0tF0wvgp3cvX7nB/GV5N9GePXYifMf2XQbpFrvQa+mvyX/7Gsfx4hrmNGsXl4Fwi4GVITsDS7b3fDfzv3r5wePkSA9ceAJfY0VIH2z2Y7tyKRo8UDxwK2vN7qvBLhe+ov7TfxSX3VfK7JceiAdI0bPUE0VsamBK7Qm30jr3kCDxlW6Zp9kYjZkm35ieCi5ez8785GzGblqQ0u+y5190eFAWmr60=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(36756003)(4326008)(82960400001)(8936002)(66556008)(66476007)(54906003)(6916009)(316002)(6506007)(66946007)(8676002)(38100700002)(6666004)(31686004)(6486002)(31696002)(86362001)(6512007)(508600001)(83380400001)(966005)(186003)(26005)(2906002)(2616005)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z290WmVCbXBXdXYrVjEzcFd4R243M3R3NDZnVm04TzBTeUVSUEk3bnk2OW9D?=
- =?utf-8?B?VUtqY1hZQ1pKNjMzVUNFR3NzUGQyTlU0SlRtMkQ3ZDRWUlVsVkU1UUJkMXBO?=
- =?utf-8?B?UFBMVWpTVWgzUkplbGt6bDNYWXBnR3RPK211M2loRGowWDVZcjJaV3l1RXVO?=
- =?utf-8?B?R1VZcE1NWVJOTDIzS01OWkNPWVBINElaUEtUKytWaUNnaEdNeWxIQUF3dDdn?=
- =?utf-8?B?a2JRMXpOQ1BBY3lMMVFqNE9SR3dpaFBhc05URE85WVI1M3M4aFpEYlhFYy9x?=
- =?utf-8?B?dTQzcHhadE9aQUpEQ1pucS9OMmM0R0FaN3ExVW92NnRsTjFiYlh1RkdwQ0RD?=
- =?utf-8?B?cmloTVpvaXl0TC9zVm1sUFBQTVVVb1hJT1g5KzBRZHowMFZrUm9FTWRCNEVJ?=
- =?utf-8?B?Mk44bnd5Z1hKWjFxL21PaHdvNnJwdnQwZS8ramdodG9WZUN4UytDSkdhSE5G?=
- =?utf-8?B?ZDZzeWlHVGxDRm4vMEdGQlYwQnBiMUVVM0ZheGVPRkhCVXcrNnQyR2NKbENG?=
- =?utf-8?B?VXIrSEJCTjVvU3I2Q25ESlZybGgrb2NtbG9CUUFUY3BjYUl2L2VxNlRwZGtE?=
- =?utf-8?B?amNLVWx1cWcxOVNCcHp3VS9QTUJoQVFYZEYyRUZKdkwveWE4M2lWTDFNMzU5?=
- =?utf-8?B?SXU2N2ZEdkdCQmgrSnpxS1ZoWC9hTzd2ZFdEWTYyRGVOVWp4UmRGdjJxQndk?=
- =?utf-8?B?OUd6d2FhMmdONVVWMjY0SU10SDRITFcxYVVCUCtkS0swZlBpRTVwSE82dzE2?=
- =?utf-8?B?UGNQbmtmNVhKa20xdVNqTThuMjNrbzNxemxoVDl4VTQzZURBZnl6SUQrVWNU?=
- =?utf-8?B?NnpOTURUWTlCTW1EcGRuUzNGVmtOMnJLbXVuUmVrVjlsSWdrVmpUa3ZlSWFZ?=
- =?utf-8?B?ZUg4ejRHeitEbU9GZUQ4MUFIZFRuNmY2bDQ3ekhSMzgwUzA3ZmJ5Zm1TL0tJ?=
- =?utf-8?B?RkYrK0FKZzFKZkNVT3l5WUh0VnFmTnFzZWZSMkYxVEZwbU12MVRhdXREOVNL?=
- =?utf-8?B?Q1dhTm8xMUhJWkwyckpJaXc0cFpnRGpib2tidjUrb0pwRy82VndWZzZZSUVI?=
- =?utf-8?B?RTNvWHNDUVE1dkhTTm1ORXljbXo5TGVjV0tySWEzQzB4eTN4N3NDVVc3OEhz?=
- =?utf-8?B?VGpWL2xZQkRRQ2xUMHNuS2U4QldJd2tiaXJBKzRpeXJPQ3JxcFdscFRXeHk1?=
- =?utf-8?B?dlBEQ3lEVHhMYUpTaDNkcnFRMFVKMXplN2UvdWpVUXpLSmpobzZ2UGlQbWpX?=
- =?utf-8?B?eXhTV3FrYk1JczJFRGFCRjFNdWNhQ3BWeks4RDJwWDJ1ZGt1c3F3ZGdhaHlH?=
- =?utf-8?B?alJHQnpaMy9BSEpjTE4vUTcwNVFSK1c4MllqZUJxcm84UDIvUFRDaW5OcVdD?=
- =?utf-8?B?UnExYm15TTlzZVNwdFpYRnhPV0FwdnJlejZQMlZVQmdTejRvMktEV2JEelRV?=
- =?utf-8?B?TmxJOVQ4OE0wamx1MmkyRG5YblRqMmJXVDJMQjFuVGh6QTBmQXFNdGRMRUZP?=
- =?utf-8?B?VXQ4RzJ0em1Dbm9wdVhTY0N0YzFqZng4Z05LUlk3UzhWT0ZCSVdHNi85TTJz?=
- =?utf-8?B?bURyaVhHZWxVN3p0Q0hqYnJVcW8zWUV1T243djUrcVFQQVM4MHNtSE15TFBl?=
- =?utf-8?B?Rm10d2kwdThoL2g4eHB5RHlUWGpwMWdlUzJTdGY1K2FkTllldFpiU0d3cjkr?=
- =?utf-8?B?RlFxYVpucHF4T01aVlhnQWZxTmlHY05yY3psZ0RFRGk2S0plQUVySzlINFR2?=
- =?utf-8?B?VTBDUjJkMWdUblg4ZlFWVzAxNThkTCtsNmdzR21iSVZIN0owRDJXRnFZUmZL?=
- =?utf-8?B?ZkdqR1V5dy9SSTZFY2ZGdCtqVWc1YS8xNnoyYVpVamppVzV2N2pEZm9HOVh2?=
- =?utf-8?B?NFAwb2NEMTgyb2d1V1ZLRlYrV2hjemVUajYyVEJSdWwrbnNqKzVxNExlWFA1?=
- =?utf-8?B?b1BRZnJuSHdOaWtMOS9qd01iOG9tT1F2NkFiTHdvU0FnamhUQ3MyVTZ5T3Ux?=
- =?utf-8?B?dTIrWWlTOGwwTjVWZTRpR2NZVnh2aUc1WHN0WE04YkR5aU5wTlRSTEZuWHd4?=
- =?utf-8?B?QUJrY1EwUGRSMHBhQ2xsWTcrcjMvbWdDM3FJaXl5Y3JVdERuc1czOU5QRWZT?=
- =?utf-8?B?OWZrQzB6bXlCbjgyVnJIVDg4MWk2RzJqci9uMjFBRmJrUy96ZkIyZ3VHc3Z6?=
- =?utf-8?Q?0vjgqm/1Q0oEXCLP8fE48Zc=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b8a0eda-1741-4fa2-a064-08d9e141aad5
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 03:04:00.7242
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hwEKoWhvf6SOjX874k/PX2Y7QcJnXHduxr0bBnAOdDZqZ0DPv4MknbDu6paZ52/hrqBMWSqH4lr99p91yh57nA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5255
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126210441.3661782-2-clabbe@baylibre.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: b9d31cada7d9f137028c11534fff77fec8511690 habanalabs: change wait_for_interrupt implementation
-date:   4 weeks ago
-config: riscv-randconfig-c006-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242342.1CK6hoP8-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9006bf424847bf91f0a624ffc27ad165c7b804c4)
+Hi Corentin,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on sunxi/sunxi/for-next]
+[also build test WARNING on herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Corentin-Labbe/crypto-allwinner-various-improvments/20220127-050556
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220127/202201271243.hLjdr8IB-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
 reproduce (this is a W=1 build):
-         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # install riscv cross compiling tool for clang build
-         # apt-get install binutils-riscv64-linux-gnu
-         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b9d31cada7d9f137028c11534fff77fec8511690
-         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-         git fetch --no-tags linus master
-         git checkout b9d31cada7d9f137028c11534fff77fec8511690
-         # save the config file to linux build tree
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/d0b880af8c99abcd0f36463b82c92d71024408de
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Corentin-Labbe/crypto-allwinner-various-improvments/20220127-050556
+        git checkout d0b880af8c99abcd0f36463b82c92d71024408de
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/allwinner/sun8i-ce/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-clang-analyzer warnings: (new ones prefixed by >>)
+>> drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c:258:1: warning: unused label 'theend_key' [-Wunused-label]
+   theend_key:
+   ^~~~~~~~~~~
+   1 warning generated.
 
- >> drivers/misc/habanalabs/common/command_buffer.c:472:24: warning: Assigned value is garbage or undefined [clang-analyzer-core.uninitialized.Assign]
-                            args->out.device_va = device_va;
-                                                ^ ~~~~~~~~~
-    drivers/misc/habanalabs/common/command_buffer.c:429:18: note: 'device_va' declared without an initial value
-            u64 handle = 0, device_va;
-                            ^~~~~~~~~
-    drivers/misc/habanalabs/common/command_buffer.c:464:8: note: Calling 'hl_cb_info'
-                    rc = hl_cb_info(hdev, &hpriv->cb_mgr, args->in.cb_handle,
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    drivers/misc/habanalabs/common/command_buffer.c:399:6: note: Assuming 'cb' is null
-            if (!cb) {
-                ^~~
-    drivers/misc/habanalabs/common/command_buffer.c:399:2: note: Taking true branch
-            if (!cb) {
-            ^
-    drivers/misc/habanalabs/common/command_buffer.c:400:3: note: Loop condition is false.  Exiting loop
-                    dev_err(hdev->dev,
-                    ^
-    drivers/misc/habanalabs/common/command_buffer.c:403:3: note: Control jumps to line 420
-                    goto out;
-                    ^
-    drivers/misc/habanalabs/common/command_buffer.c:421:2: note: Returning without writing to '*device_va'
-            return rc;
-            ^
-    drivers/misc/habanalabs/common/command_buffer.c:464:8: note: Returning from 'hl_cb_info'
-                    rc = hl_cb_info(hdev, &hpriv->cb_mgr, args->in.cb_handle,
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    drivers/misc/habanalabs/common/command_buffer.c:471:7: note: Assuming the condition is true
-                    if (args->in.flags & HL_CB_FLAGS_GET_DEVICE_VA)
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    drivers/misc/habanalabs/common/command_buffer.c:471:3: note: Taking true branch
-                    if (args->in.flags & HL_CB_FLAGS_GET_DEVICE_VA)
-                    ^
-    drivers/misc/habanalabs/common/command_buffer.c:472:24: note: Assigned value is garbage or undefined
-                            args->out.device_va = device_va;
-                                                ^ ~~~~~~~~~
 
-vim +472 drivers/misc/habanalabs/common/command_buffer.c
+vim +/theend_key +258 drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
 
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  423
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  424  int hl_cb_ioctl(struct hl_fpriv *hpriv, void *data)
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  425  {
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  426  	union hl_cb_args *args = data;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  427  	struct hl_device *hdev = hpriv->hdev;
-66a76401c50b26 drivers/misc/habanalabs/common/command_buffer.c Ofir Bitton    2020-10-05  428  	enum hl_device_status status;
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  429  	u64 handle = 0, device_va;
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  430  	u32 usage_cnt = 0;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  431  	int rc;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  432
-66a76401c50b26 drivers/misc/habanalabs/common/command_buffer.c Ofir Bitton    2020-10-05  433  	if (!hl_device_operational(hdev, &status)) {
-3f5398cfbf051d drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-04-06  434  		dev_warn_ratelimited(hdev->dev,
-3f5398cfbf051d drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-04-06  435  			"Device is %s. Can't execute CB IOCTL\n",
-66a76401c50b26 drivers/misc/habanalabs/common/command_buffer.c Ofir Bitton    2020-10-05  436  			hdev->status[status]);
-3f5398cfbf051d drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-04-06  437  		return -EBUSY;
-3f5398cfbf051d drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-04-06  438  	}
-3f5398cfbf051d drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-04-06  439
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  440  	switch (args->in.op) {
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  441  	case HL_CB_OP_CREATE:
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  442  		if (args->in.cb_size > HL_MAX_CB_SIZE) {
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  443  			dev_err(hdev->dev,
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  444  				"User requested CB size %d must be less than %d\n",
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  445  				args->in.cb_size, HL_MAX_CB_SIZE);
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  446  			rc = -EINVAL;
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  447  		} else {
-fa8641a14f2841 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-07  448  			rc = hl_cb_create(hdev, &hpriv->cb_mgr, hpriv->ctx,
-ef6a0f6caa4a5d drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-07-09  449  					args->in.cb_size, false,
-ef6a0f6caa4a5d drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-07-09  450  					!!(args->in.flags & HL_CB_FLAGS_MAP),
-ef6a0f6caa4a5d drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-07-09  451  					&handle);
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  452  		}
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  453
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  454  		memset(args, 0, sizeof(*args));
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  455  		args->out.cb_handle = handle;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  456  		break;
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  457
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  458  	case HL_CB_OP_DESTROY:
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  459  		rc = hl_cb_destroy(hdev, &hpriv->cb_mgr,
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  460  					args->in.cb_handle);
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  461  		break;
-39b425170d35ff drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2020-04-17  462
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  463  	case HL_CB_OP_INFO:
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  464  		rc = hl_cb_info(hdev, &hpriv->cb_mgr, args->in.cb_handle,
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  465  				args->in.flags,
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  466  				&usage_cnt,
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  467  				&device_va);
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  468
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  469  		memset(&args->out, 0, sizeof(args->out));
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  470
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  471  		if (args->in.flags & HL_CB_FLAGS_GET_DEVICE_VA)
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02 @472  			args->out.device_va = device_va;
-b9d31cada7d9f1 drivers/misc/habanalabs/common/command_buffer.c farah kassabri 2021-11-02  473  		else
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  474  			args->out.usage_cnt = usage_cnt;
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  475  		break;
-f44afb5b5a5d04 drivers/misc/habanalabs/common/command_buffer.c Tomer Tayar    2020-09-02  476
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  477  	default:
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  478  		rc = -ENOTTY;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  479  		break;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  480  	}
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  481
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  482  	return rc;
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  483  }
-be5d926b5c1043 drivers/misc/habanalabs/command_buffer.c        Oded Gabbay    2019-02-16  484
+06f751b613296cc Corentin Labbe 2019-10-23  108  
+06f751b613296cc Corentin Labbe 2019-10-23  109  	flow = rctx->flow;
+06f751b613296cc Corentin Labbe 2019-10-23  110  
+06f751b613296cc Corentin Labbe 2019-10-23  111  	chan = &ce->chanlist[flow];
+06f751b613296cc Corentin Labbe 2019-10-23  112  
+06f751b613296cc Corentin Labbe 2019-10-23  113  	cet = chan->tl;
+06f751b613296cc Corentin Labbe 2019-10-23  114  	memset(cet, 0, sizeof(struct ce_task));
+06f751b613296cc Corentin Labbe 2019-10-23  115  
+93c7f4d357de68f Corentin Labbe 2019-11-17  116  	cet->t_id = cpu_to_le32(flow);
+93c7f4d357de68f Corentin Labbe 2019-11-17  117  	common = ce->variant->alg_cipher[algt->ce_algo_id];
+93c7f4d357de68f Corentin Labbe 2019-11-17  118  	common |= rctx->op_dir | CE_COMM_INT;
+93c7f4d357de68f Corentin Labbe 2019-11-17  119  	cet->t_common_ctl = cpu_to_le32(common);
+06f751b613296cc Corentin Labbe 2019-10-23  120  	/* CTS and recent CE (H6) need length in bytes, in word otherwise */
+6b4f76c2cd9e6c3 Corentin Labbe 2020-09-18  121  	if (ce->variant->cipher_t_dlen_in_bytes)
+93c7f4d357de68f Corentin Labbe 2019-11-17  122  		cet->t_dlen = cpu_to_le32(areq->cryptlen);
+93c7f4d357de68f Corentin Labbe 2019-11-17  123  	else
+93c7f4d357de68f Corentin Labbe 2019-11-17  124  		cet->t_dlen = cpu_to_le32(areq->cryptlen / 4);
+06f751b613296cc Corentin Labbe 2019-10-23  125  
+93c7f4d357de68f Corentin Labbe 2019-11-17  126  	sym = ce->variant->op_mode[algt->ce_blockmode];
+06f751b613296cc Corentin Labbe 2019-10-23  127  	len = op->keylen;
+06f751b613296cc Corentin Labbe 2019-10-23  128  	switch (len) {
+06f751b613296cc Corentin Labbe 2019-10-23  129  	case 128 / 8:
+93c7f4d357de68f Corentin Labbe 2019-11-17  130  		sym |= CE_AES_128BITS;
+06f751b613296cc Corentin Labbe 2019-10-23  131  		break;
+06f751b613296cc Corentin Labbe 2019-10-23  132  	case 192 / 8:
+93c7f4d357de68f Corentin Labbe 2019-11-17  133  		sym |= CE_AES_192BITS;
+06f751b613296cc Corentin Labbe 2019-10-23  134  		break;
+06f751b613296cc Corentin Labbe 2019-10-23  135  	case 256 / 8:
+93c7f4d357de68f Corentin Labbe 2019-11-17  136  		sym |= CE_AES_256BITS;
+06f751b613296cc Corentin Labbe 2019-10-23  137  		break;
+06f751b613296cc Corentin Labbe 2019-10-23  138  	}
+06f751b613296cc Corentin Labbe 2019-10-23  139  
+93c7f4d357de68f Corentin Labbe 2019-11-17  140  	cet->t_sym_ctl = cpu_to_le32(sym);
+06f751b613296cc Corentin Labbe 2019-10-23  141  	cet->t_asym_ctl = 0;
+06f751b613296cc Corentin Labbe 2019-10-23  142  
+0605fa0f78266cc Corentin Labbe 2020-09-18  143  	rctx->addr_key = dma_map_single(ce->dev, op->key, op->keylen, DMA_TO_DEVICE);
+0605fa0f78266cc Corentin Labbe 2020-09-18  144  	if (dma_mapping_error(ce->dev, rctx->addr_key)) {
+06f751b613296cc Corentin Labbe 2019-10-23  145  		dev_err(ce->dev, "Cannot DMA MAP KEY\n");
+06f751b613296cc Corentin Labbe 2019-10-23  146  		err = -EFAULT;
+06f751b613296cc Corentin Labbe 2019-10-23  147  		goto theend;
+06f751b613296cc Corentin Labbe 2019-10-23  148  	}
+0605fa0f78266cc Corentin Labbe 2020-09-18  149  	cet->t_key = cpu_to_le32(rctx->addr_key);
+06f751b613296cc Corentin Labbe 2019-10-23  150  
+06f751b613296cc Corentin Labbe 2019-10-23  151  	ivsize = crypto_skcipher_ivsize(tfm);
+06f751b613296cc Corentin Labbe 2019-10-23  152  	if (areq->iv && crypto_skcipher_ivsize(tfm) > 0) {
+a216f8d540cf132 Corentin Labbe 2020-09-18  153  		rctx->ivlen = ivsize;
+06f751b613296cc Corentin Labbe 2019-10-23  154  		if (rctx->op_dir & CE_DECRYPTION) {
+06f751b613296cc Corentin Labbe 2019-10-23  155  			offset = areq->cryptlen - ivsize;
+d0b880af8c99abc Corentin Labbe 2022-01-26  156  			scatterwalk_map_and_copy(chan->backup_iv, areq->src,
+a216f8d540cf132 Corentin Labbe 2020-09-18  157  						 offset, ivsize, 0);
+06f751b613296cc Corentin Labbe 2019-10-23  158  		}
+d0b880af8c99abc Corentin Labbe 2022-01-26  159  		memcpy(chan->bounce_iv, areq->iv, ivsize);
+d0b880af8c99abc Corentin Labbe 2022-01-26  160  		rctx->addr_iv = dma_map_single(ce->dev, chan->bounce_iv, rctx->ivlen,
+93c7f4d357de68f Corentin Labbe 2019-11-17  161  					       DMA_TO_DEVICE);
+0605fa0f78266cc Corentin Labbe 2020-09-18  162  		if (dma_mapping_error(ce->dev, rctx->addr_iv)) {
+06f751b613296cc Corentin Labbe 2019-10-23  163  			dev_err(ce->dev, "Cannot DMA MAP IV\n");
+06f751b613296cc Corentin Labbe 2019-10-23  164  			err = -ENOMEM;
+06f751b613296cc Corentin Labbe 2019-10-23  165  			goto theend_iv;
+06f751b613296cc Corentin Labbe 2019-10-23  166  		}
+0605fa0f78266cc Corentin Labbe 2020-09-18  167  		cet->t_iv = cpu_to_le32(rctx->addr_iv);
+06f751b613296cc Corentin Labbe 2019-10-23  168  	}
+06f751b613296cc Corentin Labbe 2019-10-23  169  
+06f751b613296cc Corentin Labbe 2019-10-23  170  	if (areq->src == areq->dst) {
+06f751b613296cc Corentin Labbe 2019-10-23  171  		nr_sgs = dma_map_sg(ce->dev, areq->src, sg_nents(areq->src),
+06f751b613296cc Corentin Labbe 2019-10-23  172  				    DMA_BIDIRECTIONAL);
+06f751b613296cc Corentin Labbe 2019-10-23  173  		if (nr_sgs <= 0 || nr_sgs > MAX_SG) {
+06f751b613296cc Corentin Labbe 2019-10-23  174  			dev_err(ce->dev, "Invalid sg number %d\n", nr_sgs);
+06f751b613296cc Corentin Labbe 2019-10-23  175  			err = -EINVAL;
+06f751b613296cc Corentin Labbe 2019-10-23  176  			goto theend_iv;
+06f751b613296cc Corentin Labbe 2019-10-23  177  		}
+06f751b613296cc Corentin Labbe 2019-10-23  178  		nr_sgd = nr_sgs;
+06f751b613296cc Corentin Labbe 2019-10-23  179  	} else {
+06f751b613296cc Corentin Labbe 2019-10-23  180  		nr_sgs = dma_map_sg(ce->dev, areq->src, sg_nents(areq->src),
+06f751b613296cc Corentin Labbe 2019-10-23  181  				    DMA_TO_DEVICE);
+06f751b613296cc Corentin Labbe 2019-10-23  182  		if (nr_sgs <= 0 || nr_sgs > MAX_SG) {
+06f751b613296cc Corentin Labbe 2019-10-23  183  			dev_err(ce->dev, "Invalid sg number %d\n", nr_sgs);
+06f751b613296cc Corentin Labbe 2019-10-23  184  			err = -EINVAL;
+06f751b613296cc Corentin Labbe 2019-10-23  185  			goto theend_iv;
+06f751b613296cc Corentin Labbe 2019-10-23  186  		}
+06f751b613296cc Corentin Labbe 2019-10-23  187  		nr_sgd = dma_map_sg(ce->dev, areq->dst, sg_nents(areq->dst),
+06f751b613296cc Corentin Labbe 2019-10-23  188  				    DMA_FROM_DEVICE);
+06f751b613296cc Corentin Labbe 2019-10-23  189  		if (nr_sgd <= 0 || nr_sgd > MAX_SG) {
+06f751b613296cc Corentin Labbe 2019-10-23  190  			dev_err(ce->dev, "Invalid sg number %d\n", nr_sgd);
+06f751b613296cc Corentin Labbe 2019-10-23  191  			err = -EINVAL;
+06f751b613296cc Corentin Labbe 2019-10-23  192  			goto theend_sgs;
+06f751b613296cc Corentin Labbe 2019-10-23  193  		}
+06f751b613296cc Corentin Labbe 2019-10-23  194  	}
+06f751b613296cc Corentin Labbe 2019-10-23  195  
+06f751b613296cc Corentin Labbe 2019-10-23  196  	len = areq->cryptlen;
+06f751b613296cc Corentin Labbe 2019-10-23  197  	for_each_sg(areq->src, sg, nr_sgs, i) {
+93c7f4d357de68f Corentin Labbe 2019-11-17  198  		cet->t_src[i].addr = cpu_to_le32(sg_dma_address(sg));
+06f751b613296cc Corentin Labbe 2019-10-23  199  		todo = min(len, sg_dma_len(sg));
+93c7f4d357de68f Corentin Labbe 2019-11-17  200  		cet->t_src[i].len = cpu_to_le32(todo / 4);
+06f751b613296cc Corentin Labbe 2019-10-23  201  		dev_dbg(ce->dev, "%s total=%u SG(%d %u off=%d) todo=%u\n", __func__,
+06f751b613296cc Corentin Labbe 2019-10-23  202  			areq->cryptlen, i, cet->t_src[i].len, sg->offset, todo);
+06f751b613296cc Corentin Labbe 2019-10-23  203  		len -= todo;
+06f751b613296cc Corentin Labbe 2019-10-23  204  	}
+06f751b613296cc Corentin Labbe 2019-10-23  205  	if (len > 0) {
+06f751b613296cc Corentin Labbe 2019-10-23  206  		dev_err(ce->dev, "remaining len %d\n", len);
+06f751b613296cc Corentin Labbe 2019-10-23  207  		err = -EINVAL;
+06f751b613296cc Corentin Labbe 2019-10-23  208  		goto theend_sgs;
+06f751b613296cc Corentin Labbe 2019-10-23  209  	}
+06f751b613296cc Corentin Labbe 2019-10-23  210  
+06f751b613296cc Corentin Labbe 2019-10-23  211  	len = areq->cryptlen;
+06f751b613296cc Corentin Labbe 2019-10-23  212  	for_each_sg(areq->dst, sg, nr_sgd, i) {
+93c7f4d357de68f Corentin Labbe 2019-11-17  213  		cet->t_dst[i].addr = cpu_to_le32(sg_dma_address(sg));
+06f751b613296cc Corentin Labbe 2019-10-23  214  		todo = min(len, sg_dma_len(sg));
+93c7f4d357de68f Corentin Labbe 2019-11-17  215  		cet->t_dst[i].len = cpu_to_le32(todo / 4);
+06f751b613296cc Corentin Labbe 2019-10-23  216  		dev_dbg(ce->dev, "%s total=%u SG(%d %u off=%d) todo=%u\n", __func__,
+06f751b613296cc Corentin Labbe 2019-10-23  217  			areq->cryptlen, i, cet->t_dst[i].len, sg->offset, todo);
+06f751b613296cc Corentin Labbe 2019-10-23  218  		len -= todo;
+06f751b613296cc Corentin Labbe 2019-10-23  219  	}
+06f751b613296cc Corentin Labbe 2019-10-23  220  	if (len > 0) {
+06f751b613296cc Corentin Labbe 2019-10-23  221  		dev_err(ce->dev, "remaining len %d\n", len);
+06f751b613296cc Corentin Labbe 2019-10-23  222  		err = -EINVAL;
+06f751b613296cc Corentin Labbe 2019-10-23  223  		goto theend_sgs;
+06f751b613296cc Corentin Labbe 2019-10-23  224  	}
+06f751b613296cc Corentin Labbe 2019-10-23  225  
+06f751b613296cc Corentin Labbe 2019-10-23  226  	chan->timeout = areq->cryptlen;
+0605fa0f78266cc Corentin Labbe 2020-09-18  227  	rctx->nr_sgs = nr_sgs;
+0605fa0f78266cc Corentin Labbe 2020-09-18  228  	rctx->nr_sgd = nr_sgd;
+0605fa0f78266cc Corentin Labbe 2020-09-18  229  	return 0;
+06f751b613296cc Corentin Labbe 2019-10-23  230  
+06f751b613296cc Corentin Labbe 2019-10-23  231  theend_sgs:
+06f751b613296cc Corentin Labbe 2019-10-23  232  	if (areq->src == areq->dst) {
+884b93c51025026 Xiang Chen     2021-03-16  233  		dma_unmap_sg(ce->dev, areq->src, sg_nents(areq->src),
+884b93c51025026 Xiang Chen     2021-03-16  234  			     DMA_BIDIRECTIONAL);
+06f751b613296cc Corentin Labbe 2019-10-23  235  	} else {
+06f751b613296cc Corentin Labbe 2019-10-23  236  		if (nr_sgs > 0)
+884b93c51025026 Xiang Chen     2021-03-16  237  			dma_unmap_sg(ce->dev, areq->src, sg_nents(areq->src),
+884b93c51025026 Xiang Chen     2021-03-16  238  				     DMA_TO_DEVICE);
+884b93c51025026 Xiang Chen     2021-03-16  239  		dma_unmap_sg(ce->dev, areq->dst, sg_nents(areq->dst),
+884b93c51025026 Xiang Chen     2021-03-16  240  			     DMA_FROM_DEVICE);
+06f751b613296cc Corentin Labbe 2019-10-23  241  	}
+06f751b613296cc Corentin Labbe 2019-10-23  242  
+06f751b613296cc Corentin Labbe 2019-10-23  243  theend_iv:
+06f751b613296cc Corentin Labbe 2019-10-23  244  	if (areq->iv && ivsize > 0) {
+0605fa0f78266cc Corentin Labbe 2020-09-18  245  		if (rctx->addr_iv)
+0605fa0f78266cc Corentin Labbe 2020-09-18  246  			dma_unmap_single(ce->dev, rctx->addr_iv, rctx->ivlen, DMA_TO_DEVICE);
+06f751b613296cc Corentin Labbe 2019-10-23  247  		offset = areq->cryptlen - ivsize;
+06f751b613296cc Corentin Labbe 2019-10-23  248  		if (rctx->op_dir & CE_DECRYPTION) {
+d0b880af8c99abc Corentin Labbe 2022-01-26  249  			memcpy(areq->iv, chan->backup_iv, ivsize);
+d0b880af8c99abc Corentin Labbe 2022-01-26  250  			memzero_explicit(chan->backup_iv, ivsize);
+06f751b613296cc Corentin Labbe 2019-10-23  251  		} else {
+06f751b613296cc Corentin Labbe 2019-10-23  252  			scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
+06f751b613296cc Corentin Labbe 2019-10-23  253  						 ivsize, 0);
+06f751b613296cc Corentin Labbe 2019-10-23  254  		}
+d0b880af8c99abc Corentin Labbe 2022-01-26  255  		memzero_explicit(chan->bounce_iv, ivsize);
+06f751b613296cc Corentin Labbe 2019-10-23  256  	}
+06f751b613296cc Corentin Labbe 2019-10-23  257  
+06f751b613296cc Corentin Labbe 2019-10-23 @258  theend_key:
+0605fa0f78266cc Corentin Labbe 2020-09-18  259  	dma_unmap_single(ce->dev, rctx->addr_key, op->keylen, DMA_TO_DEVICE);
+06f751b613296cc Corentin Labbe 2019-10-23  260  
+06f751b613296cc Corentin Labbe 2019-10-23  261  theend:
+06f751b613296cc Corentin Labbe 2019-10-23  262  	return err;
+06f751b613296cc Corentin Labbe 2019-10-23  263  }
+06f751b613296cc Corentin Labbe 2019-10-23  264  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
