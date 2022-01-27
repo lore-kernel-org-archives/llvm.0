@@ -1,41 +1,46 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD296168
-	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 07:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED84C2CA1
+	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 09:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643269309; x=1674805309;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q+YYg765jhbrMqorIDPszNldXSyDLG9au7ISD3M6E9w=;
-  b=f4FpJPkQQMrATyxoEZq7f0hdAk6OWrJOFyvL9jG/13CexGRKahcq/szp
-   67KQIwQr8Gj0jU0MM+02++l4JmHnIGzI5EsjggmShlZW+7RTUAy+eEbju
-   Pk+p4eLEOdsU0iYz9uLeYfq8GfXxygi9+dVK2ePpQ5/2tdEjAYck/Ib2f
-   iAD99gHkCQlBheIvnvm67xekYjzQXvMLBp4xMZCmsuxZ4MqbC7nEmeX1g
-   Kyg5SgJSQ7YwF82B6+NXy1qXQs/hdHPpuQ/jMfGJvVRq038NwEG7z4die
-   5+Osej0KXt3U78WI49hypKqSesQBvTcWlxOpFTSEN/Jv1oMsW7q4BbAb2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="307492039"
+  t=1643277307; x=1674813307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K3Wy3cH9vFtRwrtEZFfkGv0hwIWiVrjPi5nNs51EmS4=;
+  b=A0vuReVw0G215pGTTi0Gb8mXf+sdjUAWg3OeX087mGcrEhXO4Z+HEoEz
+   lIelEh7puVD3YWK1p0fZ+errPFHPRhPSLTP/4HP95zpNCPjkO2AWyUFjT
+   bMuu3mx580/9Q2W0SC4M+OqKkCiY1piNUsG2BTIH5d5u6pHOhWXbiMN8E
+   C9Gt5rBy089OTUbS9vElC8/RfWMR5jz8hf2oqus7G9VgcweZVZCSo+2ME
+   554lL3ymQsUY8VoVx/Sy9r4RVrlcSYxw7hdwprm67LtszGBY9QP4qy0nr
+   t0t37rqA++og/3rYi+rQ4cczs+xcpW21wG4DDAMN9p1linhcHygDkY7o+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246581955"
 X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="307492039"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 23:41:49 -0800
+   d="scan'208";a="246581955"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:55:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="521115157"
+   d="scan'208";a="618271166"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 26 Jan 2022 23:41:47 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Jan 2022 01:54:53 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nCzPe-000MJ6-S3; Thu, 27 Jan 2022 07:41:46 +0000
-Date: Thu, 27 Jan 2022 15:41:26 +0800
+	id 1nD1UR-000MRh-JN; Thu, 27 Jan 2022 09:54:51 +0000
+Date: Thu, 27 Jan 2022 17:54:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stephane Eranian <eranian@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v5 08/13] ACPI: add perf low power callback
-Message-ID: <202201271501.7zuL3YEw-lkp@intel.com>
-References: <20220126233454.3362047-9-eranian@google.com>
+To: Ben Widawsky <ben.widawsky@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: [cxl:preview 48/60] drivers/cxl/core/region.c:120:6: warning: format
+ specifies type 'unsigned long long' but the argument has type 'unsigned int'
+Message-ID: <202201271745.RlAJUNU9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,125 +49,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126233454.3362047-9-eranian@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stephane,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20220125]
-[cannot apply to tip/x86/core rafael-pm/linux-next tip/perf/core v5.17-rc1 v5.16 v5.16-rc8 v5.17-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Stephane-Eranian/perf-core-add-perf_clear_branch_entry_bitfields-helper/20220127-083516
-base:    d25ee88530253138d0b20d43511ca5acbda4e9f7
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220127/202201271501.7zuL3YEw-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+head:   41c2d219a2c8e14de644f4e953e0c57402c3e884
+commit: 99fd0afb6e1b21f8de1179f39f491347b6f3f04d [48/60] cxl/region: Introduce concept of region configuration
+config: i386-randconfig-a013-20220124 (https://download.01.org/0day-ci/archive/20220127/202201271745.RlAJUNU9-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f400a6012c668dfaa73462caf067ceb074e66c47)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fe7943af61c65b96cff36b8388246531402e7f26
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephane-Eranian/perf-core-add-perf_clear_branch_entry_bitfields-helper/20220127-083516
-        git checkout fe7943af61c65b96cff36b8388246531402e7f26
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=99fd0afb6e1b21f8de1179f39f491347b6f3f04d
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl preview
+        git checkout 99fd0afb6e1b21f8de1179f39f491347b6f3f04d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/acpi/acpi_pad.c:168:4: error: implicit declaration of function 'perf_lopwr_cb' [-Werror,-Wimplicit-function-declaration]
-                           perf_lopwr_cb(true);
-                           ^
-   1 error generated.
+>> drivers/cxl/core/region.c:120:6: warning: format specifies type 'unsigned long long' but the argument has type 'unsigned int' [-Wformat]
+                             cxld->platform_res.start - cxlr->res->start);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/perf_lopwr_cb +168 drivers/acpi/acpi_pad.c
+vim +120 drivers/cxl/core/region.c
 
-   135	
-   136	static unsigned int idle_pct = 5; /* percentage */
-   137	static unsigned int round_robin_time = 1; /* second */
-   138	static int power_saving_thread(void *data)
-   139	{
-   140		int do_sleep;
-   141		unsigned int tsk_index = (unsigned long)data;
-   142		u64 last_jiffies = 0;
-   143	
-   144		sched_set_fifo_low(current);
-   145	
-   146		while (!kthread_should_stop()) {
-   147			unsigned long expire_time;
-   148	
-   149			/* round robin to cpus */
-   150			expire_time = last_jiffies + round_robin_time * HZ;
-   151			if (time_before(expire_time, jiffies)) {
-   152				last_jiffies = jiffies;
-   153				round_robin_cpu(tsk_index);
-   154			}
-   155	
-   156			do_sleep = 0;
-   157	
-   158			expire_time = jiffies + HZ * (100 - idle_pct) / 100;
-   159	
-   160			while (!need_resched()) {
-   161				if (tsc_detected_unstable && !tsc_marked_unstable) {
-   162					/* TSC could halt in idle, so notify users */
-   163					mark_tsc_unstable("TSC halts in idle");
-   164					tsc_marked_unstable = 1;
-   165				}
-   166				local_irq_disable();
-   167	
- > 168				perf_lopwr_cb(true);
-   169	
-   170				tick_broadcast_enable();
-   171				tick_broadcast_enter();
-   172				stop_critical_timings();
-   173	
-   174				mwait_idle_with_hints(power_saving_mwait_eax, 1);
-   175	
-   176				start_critical_timings();
-   177				tick_broadcast_exit();
-   178	
-   179				perf_lopwr_cb(false);
-   180	
-   181				local_irq_enable();
-   182	
-   183				if (time_before(expire_time, jiffies)) {
-   184					do_sleep = 1;
-   185					break;
-   186				}
-   187			}
-   188	
-   189			/*
-   190			 * current sched_rt has threshold for rt task running time.
-   191			 * When a rt task uses 95% CPU time, the rt thread will be
-   192			 * scheduled out for 5% CPU time to not starve other tasks. But
-   193			 * the mechanism only works when all CPUs have RT task running,
-   194			 * as if one CPU hasn't RT task, RT task from other CPUs will
-   195			 * borrow CPU time from this CPU and cause RT task use > 95%
-   196			 * CPU time. To make 'avoid starvation' work, takes a nap here.
-   197			 */
-   198			if (unlikely(do_sleep))
-   199				schedule_timeout_killable(HZ * idle_pct / 100);
-   200	
-   201			/* If an external event has set the need_resched flag, then
-   202			 * we need to deal with it, or this loop will continue to
-   203			 * spin without calling __mwait().
-   204			 */
-   205			if (unlikely(need_resched()))
-   206				schedule();
-   207		}
-   208	
-   209		exit_round_robin(tsk_index);
-   210		return 0;
-   211	}
-   212	
+   109	
+   110	static ssize_t offset_show(struct device *dev, struct device_attribute *attr,
+   111				   char *buf)
+   112	{
+   113		struct cxl_decoder *cxld = to_cxl_decoder(dev->parent);
+   114		struct cxl_region *cxlr = to_cxl_region(dev);
+   115	
+   116		if (!cxlr->res)
+   117			return sysfs_emit(buf, "\n");
+   118	
+   119		return sysfs_emit(buf, "%#llx\n",
+ > 120				  cxld->platform_res.start - cxlr->res->start);
+   121	}
+   122	static DEVICE_ATTR_RO(offset);
+   123	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
