@@ -1,45 +1,39 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89934168
-	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 14:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDBF168
+	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 14:40:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643294244; x=1674830244;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kTKtalO/eSNxbN3G/kGVKsTuiL8JcVv7kpUVtJkiAjg=;
-  b=fzm2adpAEIbM5zulKXdQhXqyR5QpHmnosh9eYK+uLCOwOWPSQvRbX+qk
-   wXEpcK6x7300RGAd2Lw+EWsjlLMpyTdkRkXR9XPLh0fSn7UGaJKPl1LIO
-   zunQRLOsYY7LjCp6kCw8tNbfXvNyDkEuLzfdkYKZ9xYf7bYY3gtHThjSg
-   8g9BDu7rQfKSE2iD2p63okEMGiwh3jLCjkz1z90uVNd7xnuXB7B5kHT1Y
-   fxPpwlv6jq2CYQLD13b5eztmg3OlWVIY+o6zWYYm4U6AxssCnsAYfu9Sb
-   dNptQf6v6WKAfqsoxMf6t0oZ0tv+MY2AmyecqWSXxLp/48FVPdnowVuBp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234244861"
+  t=1643294429; x=1674830429;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=OtMB4Fcs0FgfsexEaKqsyln1q/EkJaGE0SwrI/EZiII=;
+  b=dE7T2rK7r5KEYtTDSG0PrlZvZXKpCbX9EvsNbm6GIX8s3tZd61cuxaBE
+   9naiilzjSz+qDEqy0fykT3TLzRhXidB8FPIB8xM/PqsATSwcjmmNCb/cn
+   A1VOOrt4+fHnE4IqkyKys4HbT6l1Bx8BR9y8BW2pCZFxrKb0SXqQ4iMex
+   Orxjk68DMn+aeJoaFwuD5A4ZpbLmoMFUW8IyiFzzWSEutYkMMGaS1XXQo
+   siyCK0inFK9nU9qzXbaPJDksF/EBDBBuD1PXuQ3UjQgm59njSh/eWuPRS
+   2L8T8zUIyTAZfwE4YGWkVqE7qTwh97MgytrK1QypsNEEfkgvC3uv+Z7lx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246647684"
 X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="234244861"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 06:22:02 -0800
+   d="scan'208";a="246647684"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 06:32:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="535671276"
+   d="scan'208";a="480309829"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Jan 2022 06:22:00 -0800
+  by orsmga006.jf.intel.com with ESMTP; 27 Jan 2022 06:32:00 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nD5ex-000Mgp-GF; Thu, 27 Jan 2022 14:21:59 +0000
-Date: Thu, 27 Jan 2022 22:20:59 +0800
+	id 1nD5od-000MhG-Sb; Thu, 27 Jan 2022 14:31:59 +0000
+Date: Thu, 27 Jan 2022 22:31:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mordechay Goodstein <mordechay.goodstein@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Luca Coelho <luciano.coelho@intel.com>
-Subject: drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2: warning: field
-  within 'struct iwl_rx_mpdu_desc_v1' is less aligned than 'union
- iwl_rx_mpdu_desc_v1::(anonymous at
- drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2)' and is usually due to
- 'struct i...
-Message-ID: <202201272229.T4Old08k-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range:
+ 70368455692288 is not in
+Message-ID: <202201272206.NM7MPo1N-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,127 +44,40 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
+CC: linux-kernel@vger.kernel.org
+TO: Peter Zijlstra <peterz@infradead.org>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@kernel.org>
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
-commit: 9cd243f24ec1960403de5f24f45155af24d94b13 iwlwifi: move iwl_configure_rxq to be used by other op_modes
-date:   10 months ago
-config: arm-buildonly-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220127/202201272229.T4Old08k-lkp@intel.com/config)
+commit: 63b3f96e1a989846a5a521d4fbef4bc86406929d kvm: Select SCHED_INFO instead of TASK_DELAY_ACCT
+date:   9 months ago
+config: arm64-buildonly-randconfig-r003-20220127 (https://download.01.org/0day-ci/archive/20220127/202201272206.NM7MPo1N-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f400a6012c668dfaa73462caf067ceb074e66c47)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9cd243f24ec1960403de5f24f45155af24d94b13
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63b3f96e1a989846a5a521d4fbef4bc86406929d
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 9cd243f24ec1960403de5f24f45155af24d94b13
+        git checkout 63b3f96e1a989846a5a521d4fbef4bc86406929d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/intel/iwlwifi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/intel/iwlwifi/fw/init.c:13:
->> drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2: warning: field  within 'struct iwl_rx_mpdu_desc_v1' is less aligned than 'union iwl_rx_mpdu_desc_v1::(anonymous at drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2)' and is usually due to 'struct iwl_rx_mpdu_desc_v1' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   1 warning generated.
-
-
-vim +442 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h
-
-8a6171a7b601e3 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Luca Coelho    2018-06-26  383  
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  384  /**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  385   * struct iwl_rx_mpdu_desc_v1 - RX MPDU descriptor
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  386   */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  387  struct iwl_rx_mpdu_desc_v1 {
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  388  	/* DW7 - carries rss_hash only when rpa_en == 1 */
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  389  	union {
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  390  		/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  391  		 * @rss_hash: RSS hash value
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  392  		 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  393  		__le32 rss_hash;
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  394  
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  395  		/**
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  396  		 * @phy_data2: depends on info type (see @phy_data1)
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  397  		 */
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  398  		__le32 phy_data2;
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  399  	};
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  400  
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  401  	/* DW8 - carries filter_match only when rpa_en == 1 */
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  402  	union {
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  403  		/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  404  		 * @filter_match: filter match value
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  405  		 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  406  		__le32 filter_match;
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  407  
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  408  		/**
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  409  		 * @phy_data3: depends on info type (see @phy_data1)
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  410  		 */
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  411  		__le32 phy_data3;
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  412  	};
-dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  413  
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  414  	/* DW9 */
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  415  	/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  416  	 * @rate_n_flags: RX rate/flags encoding
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  417  	 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  418  	__le32 rate_n_flags;
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  419  	/* DW10 */
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  420  	/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  421  	 * @energy_a: energy chain A
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  422  	 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  423  	u8 energy_a;
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  424  	/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  425  	 * @energy_b: energy chain B
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  426  	 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  427  	u8 energy_b;
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  428  	/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  429  	 * @channel: channel number
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  430  	 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  431  	u8 channel;
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  432  	/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  433  	 * @mac_context: MAC context mask
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  434  	 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  435  	u8 mac_context;
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  436  	/* DW11 */
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  437  	/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  438  	 * @gp2_on_air_rise: GP2 timer value on air rise (INA)
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  439  	 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  440  	__le32 gp2_on_air_rise;
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  441  	/* DW12 & DW13 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05 @442  	union {
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  443  		/**
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  444  		 * @tsf_on_air_rise:
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  445  		 * TSF value on air rise (INA), only valid if
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  446  		 * %IWL_RX_MPDU_PHY_TSF_OVERLOAD isn't set
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  447  		 */
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  448  		__le64 tsf_on_air_rise;
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  449  
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  450  		struct {
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  451  			/**
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  452  			 * @phy_data0: depends on info_type, see @phy_data1
-6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  453  			 */
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  454  			__le32 phy_data0;
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  455  			/**
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  456  			 * @phy_data1: valid only if
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  457  			 * %IWL_RX_MPDU_PHY_TSF_OVERLOAD is set,
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  458  			 * see &enum iwl_rx_phy_data1.
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  459  			 */
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  460  			__le32 phy_data1;
-bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  461  		};
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  462  	};
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  463  } __packed;
-18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  464  
-
-:::::: The code at line 442 was first introduced by commit
-:::::: 18ead597daa17a557249cf4b2f494361d836ed52 iwlwifi: support new rx_mpdu_desc api
-
-:::::: TO: Golan Ben Ami <golan.ben.ami@intel.com>
-:::::: CC: Luca Coelho <luciano.coelho@intel.com>
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 70368455692288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 70368455692288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 70368455692288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 70368455692288 is not in [-4294967296, 4294967295]
+>> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 70368455692288 is not in [-4294967296, 4294967295]
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
