@@ -1,144 +1,195 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F252CA0
-	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 22:11:20 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id n198-20020a2540cf000000b00614c2ee23b7so8599346yba.9
-        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 14:11:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=MHbMxovO6AcAN2vYhPcfy5isPlyEXuvf7h8ZW6A2Y+Y=;
-        b=JCvw8MBgwkGImJIrpAHCQh0U5vi/BlQwmJPfV3rLDETbMfh6yfDO4M0JWJBqIFu7TJ
-         TETjHmFWbv8fiQozxuzy1HUOPJsr3K5tWuj4R9UEgdiI50+VvKsvJ5MsKSagJExL9Fju
-         0PRFYzsN3Q0/gbZokFUXD2hxuaKKvIWacV5b2XthgTVM1FtGYJnfyl9t/0dsOoTGRkCQ
-         dtbPluEjCNANUna5lmsz23rG9VD0w9KhYvGUfpCIbS/0bGlOrn8/4OC+aQzwJQK76QL9
-         YDS+dr4DylDWMaiYXN9mtpprN7MiRjc5TmMD/zb0AKoGoSgxbvTYzdtxuZMiYrj6er78
-         v4nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=MHbMxovO6AcAN2vYhPcfy5isPlyEXuvf7h8ZW6A2Y+Y=;
-        b=2bAaeOdM8syEifv99xdy1b3gvkZYlUfDm+7uCERt6UHHQsp5rO25zRDoaVbOcAd407
-         QJk/mh0RHHsr23vREYnUtyUi4nHJKPXoLAMlQ2rNerOMgH7NFP+Qk3xrzRBH+N1Pd2Lz
-         ETLawtgcOiCLDC7Z8r3wIkOgmRvwZ056oH1Bt06beTf0C33HBg0ouP+iXWIuh7H/OrG6
-         lYQo3+ZM5Ga6Ys1gRuCWeXQZhyi3cXm5mwhi4w2QexrdKb7n3rlKqTMmEBJoC9mQ01QO
-         7a7Uy6gV71h6rh0ggaC3fqC8+pkgdkxdFmBbTmi9hdExKPchOQygiGB00oMBqLyfCHav
-         wO0A==
-X-Gm-Message-State: AOAM530llQfU87HmnFiQpuMr5VqpM9SKk2SEgmC47XeVG7KdyH+TO+Kc
-	MD9zqnUpiInKm7iBvISYhyt5UT6qaUaopkPqxRk2
-X-Google-Smtp-Source: ABdhPJwN3KVWegxyHHiIXTTmlstEucD6pQ1XLu2joNb+rGzqKl4AWrQa2pDPchrhP0iDqpgB5lXQxHdcXS1/oMS+vh8d
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:c864:1e56:28bc:526b])
- (user=axelrasmussen job=sendgmr) by 2002:a25:9988:: with SMTP id
- p8mr8106207ybo.128.1643321479925; Thu, 27 Jan 2022 14:11:19 -0800 (PST)
-Date: Thu, 27 Jan 2022 14:11:15 -0800
-Message-Id: <20220127221115.3731388-1-axelrasmussen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B482C9E
+	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 22:38:15 +0000 (UTC)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailnew.west.internal (Postfix) with ESMTP id 9C4BA2B00384;
+	Thu, 27 Jan 2022 17:38:13 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 27 Jan 2022 17:38:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=wcr9somIvzZFXM+do
+	LeomZA5zif3KjUFitVyFvJeDYo=; b=Th8UCnAWUfFBauUeRu2r8tL4o/qjWFXUs
+	uJjCsIczCIR7m69lw4gcRi3cHWCHzzC1QQKuFLTFPv0YnqVi1xYyYAfnwhn06jqw
+	7uKcU+w3jzQMl+2YhuVYJzIBHGbtNFDDJF4Dt8MyuyWrjCUwAoUI86TxUlrljsu4
+	o2B3OC13bZ5JEqE02ZVHipmOwadF1NQwqu7oouT8kNj0nvKl24Ny3BVWOUBx8QkC
+	F7gGuSyN3QPZYT04TAQ3v8meFfDMy/GNhT0OmXbhk7FH7XLZgkCA5THYqNfDxvMG
+	Ntej5cBSoZJJKYvvigCUu1ZSuPm3/IDbkRZXYtpC+wGjpHgxzd+mA==
+X-ME-Sender: <xms:1B7zYYVxtd6YEbVnm-4_RCT2C4zKEKMnwFXqMfGOt1upUktoUa_mCA>
+    <xme:1B7zYcnv0Bs3WSo_nVJzSlt-NTiRd8gH3boPstx5drM1FCQAV8OuXZzJrl5OYu8hE
+    88uWCfqQ7AC64PHKgQ>
+X-ME-Received: <xmr:1B7zYcYGEeLRYRQS40-jvSKOLJhHEff8R-Jo-xZSr3-9h3WUOueXMAWjjO70k3K57TsUBN8BdSKd3qrbGxrxoOXz1P4YP9CDe40>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeefgdduieegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
+    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
+    htvghrnhepffduhfegfedvieetudfgleeugeehkeekfeevfffhieevteelvdfhtdevffet
+    uedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
+    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:1B7zYXUywcSuvw1OihWbbXsVHwS0F2KDJIYb0lYQxQ3JfPiwzQMIQw>
+    <xmx:1B7zYSlet4_9vf9KIwN0mL5LDMnM-LS3lc3mv8XtdMW-tEbPM_SQ7Q>
+    <xmx:1B7zYceJXsy-LSX_JAVQ4HiCZESHrHn1H1T3OIjooV6CuF4gImx8UQ>
+    <xmx:1R7zYXjai1E_HJPafK1KO4xThwjq_dU2IjnZ92Ve_7bG49kMyY4asU6_RMw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Jan 2022 17:38:09 -0500 (EST)
+Date: Fri, 28 Jan 2022 09:37:58 +1100 (AEDT)
+From: Finn Thain <fthain@linux-m68k.org>
+To: Tom Rix <trix@redhat.com>
+cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
+    shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
+    martin.petersen@oracle.com, nathan@kernel.org, ndesaulniers@google.com, 
+    megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+In-Reply-To: <20220127151945.1244439-1-trix@redhat.com>
+Message-ID: <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+References: <20220127151945.1244439-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-From: Axel Rasmussen <axelrasmussen@google.com>
-To: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
-	Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-These are some trivial fixups, which were needed to build the tests with
-clang and -Werror. The following issues are fixed:
 
-- Remove various unused variables.
-- In child_poll_leader_exit_test, clang isn't smart enough to realize
-  syscall(SYS_exit, 0) won't return, so it complains we never return
-  from a non-void function. Add an extra exit(0) to appease it.
-- In test_pidfd_poll_leader_exit, ret may be branched on despite being
-  uninitialized, if we have !use_waitpid. Initialize it to zero to get
-  the right behavior in that case.
+On Thu, 27 Jan 2022, trix@redhat.com wrote:
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/clone3/clone3.c    | 2 --
- tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
- tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
- 3 files changed, 5 insertions(+), 8 deletions(-)
+> From: Tom Rix <trix@redhat.com>
+> 
+> checkpatch reports several hundred formatting errors. Run these files 
+> through clang-format and knock off some of them.
+> 
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 076cf4325f78..cd4582129c7d 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
- 
- int main(int argc, char *argv[])
- {
--	pid_t pid;
--
- 	uid_t uid = getuid();
- 
- 	ksft_print_header();
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index 529eb700ac26..9a2d64901d59 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
- {
- 	int pid, pidfd = 0;
- 	int status, ret;
--	pthread_t t1;
- 	time_t prog_start = time(NULL);
- 	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
- 
-@@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
- 	 */
- 	*child_exit_secs = time(NULL);
- 	syscall(SYS_exit, 0);
-+	/* Never reached, but appeases compiler thinking we should return. */
-+	exit(0);
- }
- 
- static void test_pidfd_poll_leader_exit(int use_waitpid)
- {
- 	int pid, pidfd = 0;
--	int status, ret;
--	time_t prog_start = time(NULL);
-+	int status, ret = 0;
- 	const char *test_name = "pidfd_poll check for premature notification on non-empty"
- 				"group leader exit";
- 
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index be2943f072f6..17999e082aa7 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
- 
- TEST(wait_simple)
- {
--	int pidfd = -1, status = 0;
-+	int pidfd = -1;
- 	pid_t parent_tid = -1;
- 	struct clone_args args = {
- 		.parent_tid = ptr_to_u64(&parent_tid),
-@@ -47,7 +47,6 @@ TEST(wait_simple)
- 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
- 		.exit_signal = SIGCHLD,
- 	};
--	int ret;
- 	pid_t pid;
- 	siginfo_t info = {
- 		.si_signo = 0,
-@@ -88,7 +87,7 @@ TEST(wait_simple)
- 
- TEST(wait_states)
- {
--	int pidfd = -1, status = 0;
-+	int pidfd = -1;
- 	pid_t parent_tid = -1;
- 	struct clone_args args = {
- 		.parent_tid = ptr_to_u64(&parent_tid),
--- 
-2.35.0.rc2.247.g8bbb082509-goog
+That method seems like a good recipe for endless churn unless checkpatch 
+and clang-format really agree about these style rules.
 
+Why use checkpatch to assess code style, if we could simply diff the 
+existing source with the output from clang-format... but it seems that 
+clang-format harms readability, makes indentation errors and uses 
+inconsistent style rules. Some examples:
+
+>  static unsigned short int max_sectors_per_io = MAX_SECTORS_PER_IO;
+>  module_param(max_sectors_per_io, ushort, 0);
+> -MODULE_PARM_DESC(max_sectors_per_io, "Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
+> -
+> +MODULE_PARM_DESC(
+> +	max_sectors_per_io,
+> +	"Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
+>  
+>  static unsigned short int max_mbox_busy_wait = MBOX_BUSY_WAIT;
+>  module_param(max_mbox_busy_wait, ushort, 0);
+> -MODULE_PARM_DESC(max_mbox_busy_wait, "Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
+> +MODULE_PARM_DESC(
+> +	max_mbox_busy_wait,
+> +	"Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
+>  
+
+This code is longer for no real improvement.
+
+>  
+>  /*
+>   * The File Operations structure for the serial/ioctl interface of the driver
+>   */
+>  static const struct file_operations megadev_fops = {
+> -	.owner		= THIS_MODULE,
+> -	.unlocked_ioctl	= megadev_unlocked_ioctl,
+> -	.open		= megadev_open,
+> -	.llseek		= noop_llseek,
+> +	.owner = THIS_MODULE,
+> +	.unlocked_ioctl = megadev_unlocked_ioctl,
+> +	.open = megadev_open,
+> +	.llseek = noop_llseek,
+>  };
+>  
+>  /*
+
+Readability loss.
+
+> -		prod_info_dma_handle = dma_map_single(&adapter->dev->dev,
+> -						      (void *)&adapter->product_info,
+> -						      sizeof(mega_product_info),
+> -						      DMA_FROM_DEVICE);
+> +		prod_info_dma_handle = dma_map_single(
+> +			&adapter->dev->dev, (void *)&adapter->product_info,
+> +			sizeof(mega_product_info), DMA_FROM_DEVICE);
+>  
+
+Note the orphaned first parameter and odd indentation.
+
+>  
+>  static DEF_SCSI_QCMD(megaraid_queue)
+>  
+> -/**
+> +	/**
+>   * mega_allocate_scb()
+>   * @adapter: pointer to our soft state
+>   * @cmd: scsi command from the mid-layer
+
+Indentation error.
+
+> @@ -418,15 +409,14 @@ static DEF_SCSI_QCMD(megaraid_queue)
+>   * Allocate a SCB structure. This is the central structure for controller
+>   * commands.
+>   */
+> -static inline scb_t *
+> -mega_allocate_scb(adapter_t *adapter, struct scsi_cmnd *cmd)
+> +	static inline scb_t *mega_allocate_scb(adapter_t *adapter,
+> +					       struct scsi_cmnd *cmd)
+>  {
+>  	struct list_head *head = &adapter->free_list;
+
+Same.
+
+> @@ -586,26 +568,25 @@ mega_build_cmd(adapter_t *adapter, struct scsi_cmnd *cmd, int *busy)
+>  
+>  		ldrv_num = mega_get_ldrv_num(adapter, cmd, channel);
+>  
+> -
+>  		max_ldrv_num = (adapter->flag & BOARD_40LD) ?
+> -			MAX_LOGICAL_DRIVES_40LD : MAX_LOGICAL_DRIVES_8LD;
+> +				       MAX_LOGICAL_DRIVES_40LD :
+> +					     MAX_LOGICAL_DRIVES_8LD;
+>  
+
+Churn, if not readability loss. Note the indentation change here is 
+inconsistent with the indentation change noted above.
+
+>  			 * 6-byte READ(0x08) or WRITE(0x0A) cdb
+>  			 */
+> -			if( cmd->cmd_len == 6 ) {
+> -				mbox->m_out.numsectors = (u32) cmd->cmnd[4];
+> -				mbox->m_out.lba =
+> -					((u32)cmd->cmnd[1] << 16) |
+> -					((u32)cmd->cmnd[2] << 8) |
+> -					(u32)cmd->cmnd[3];
+> +			if (cmd->cmd_len == 6) {
+> +				mbox->m_out.numsectors = (u32)cmd->cmnd[4];
+> +				mbox->m_out.lba = ((u32)cmd->cmnd[1] << 16) |
+> +						  ((u32)cmd->cmnd[2] << 8) |
+> +						  (u32)cmd->cmnd[3];
+>  
+>  				mbox->m_out.lba &= 0x1FFFFF;
+>  
+
+Here, the orphaned term is moved up, next to the =. And yet,
+
+>  
+>  			/* Calculate Scatter-Gather info */
+> -			mbox->m_out.numsgelements = mega_build_sglist(adapter, scb,
+> -					(u32 *)&mbox->m_out.xferaddr, &seg);
+> +			mbox->m_out.numsgelements =
+> +				mega_build_sglist(adapter, scb,
+> +						  (u32 *)&mbox->m_out.xferaddr,
+> +						  &seg);
+>  
+>  			return scb;
+>  
+
+... here the first term is moved down and orphaned, which is another 
+inconsistency.
