@@ -1,141 +1,144 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5973B2CA0
-	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 20:56:22 +0000 (UTC)
-Received: by mail-ej1-f54.google.com with SMTP id d10so8650377eje.10
-        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 12:56:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F252CA0
+	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 22:11:20 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id n198-20020a2540cf000000b00614c2ee23b7so8599346yba.9
+        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 14:11:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7kAa7DmbjkX1n6MBRDKFX0S7TuHMTyFcsHzd9jXMhHA=;
-        b=og56HYNW9zMbHV1nD6aTZuf6AdxyUZ9n7vKKs6qsnU680T7gqS0/dggygfeoNeJVZa
-         HYMHaayIP9pLqKZOQEdKeilJU1D7CAKnsS51s4IWQZIdxJ7RDc3FFH35/4wdChLKn0No
-         A8OJbjwTb7w6iVu9Y7wmcsnRGe/+F/vZYMSG7MQUhTc/MP+s8N/kWQjzbb45jSSyvwA/
-         b1JPehTXGWnpSc5ie5qy93atRVdyZ21OkAjzPkhVl6KjSj4XDYMmcVNhmDncTXyOC0Pw
-         +jVNFVW3uuianZeewCS8LRWTooTEXBtQwT871s3Il4gN9vJa1m/x8YjgzMFyFLXumli8
-         /VDA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MHbMxovO6AcAN2vYhPcfy5isPlyEXuvf7h8ZW6A2Y+Y=;
+        b=JCvw8MBgwkGImJIrpAHCQh0U5vi/BlQwmJPfV3rLDETbMfh6yfDO4M0JWJBqIFu7TJ
+         TETjHmFWbv8fiQozxuzy1HUOPJsr3K5tWuj4R9UEgdiI50+VvKsvJ5MsKSagJExL9Fju
+         0PRFYzsN3Q0/gbZokFUXD2hxuaKKvIWacV5b2XthgTVM1FtGYJnfyl9t/0dsOoTGRkCQ
+         dtbPluEjCNANUna5lmsz23rG9VD0w9KhYvGUfpCIbS/0bGlOrn8/4OC+aQzwJQK76QL9
+         YDS+dr4DylDWMaiYXN9mtpprN7MiRjc5TmMD/zb0AKoGoSgxbvTYzdtxuZMiYrj6er78
+         v4nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7kAa7DmbjkX1n6MBRDKFX0S7TuHMTyFcsHzd9jXMhHA=;
-        b=1bUX+gCiq9yLfvth0TPKMw1kgVzF1iz3mO/mZPUQgqOflU3faWd8B5kyWh8uIx1uXw
-         /RaHQ0hu/qzAvSWBeVJ+pNxHeWy0W03bzReeXGmGf36L2M9VtLLSGEtCQQIEFofOxhEm
-         i2Intpj/1RLUQ9dUTDvZn7UW8QPZDVAhEOWxqkX5OHVQ1UJ8O+F8dXORteYQdG3MByOJ
-         YWhRaeCYS/hlaSVGaq0wzO3QgbZRCsphEg8zBvQK0KpjHPk19dXPiX8KA2u6LPlMVCLx
-         Q/sD4pc8kJ01mjH6qyPR/KNhzv5s6mFX61jNAVsjRYUW08sNUN5YKO7I1O7fJ/z7HlZ6
-         cWcw==
-X-Gm-Message-State: AOAM530sQnqGqnzbZo/c/0h34X7JFIkHB+G0krANrATtyapvrlAN/WS+
-	ETPQ22ECFyscrk4/flxkzPwQRD+LDmaDB9ek2W2B
-X-Google-Smtp-Source: ABdhPJzZKQmoNqlsg8rvyl0Tp8b3ZVh7cenxJppM2y8n1depnFZUFw39U8AWrJeLyu/oL8Ho2LgSaUKtdEyVEZxFsfg=
-X-Received: by 2002:a17:906:5d12:: with SMTP id g18mr4119574ejt.745.1643316980374;
- Thu, 27 Jan 2022 12:56:20 -0800 (PST)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MHbMxovO6AcAN2vYhPcfy5isPlyEXuvf7h8ZW6A2Y+Y=;
+        b=2bAaeOdM8syEifv99xdy1b3gvkZYlUfDm+7uCERt6UHHQsp5rO25zRDoaVbOcAd407
+         QJk/mh0RHHsr23vREYnUtyUi4nHJKPXoLAMlQ2rNerOMgH7NFP+Qk3xrzRBH+N1Pd2Lz
+         ETLawtgcOiCLDC7Z8r3wIkOgmRvwZ056oH1Bt06beTf0C33HBg0ouP+iXWIuh7H/OrG6
+         lYQo3+ZM5Ga6Ys1gRuCWeXQZhyi3cXm5mwhi4w2QexrdKb7n3rlKqTMmEBJoC9mQ01QO
+         7a7Uy6gV71h6rh0ggaC3fqC8+pkgdkxdFmBbTmi9hdExKPchOQygiGB00oMBqLyfCHav
+         wO0A==
+X-Gm-Message-State: AOAM530llQfU87HmnFiQpuMr5VqpM9SKk2SEgmC47XeVG7KdyH+TO+Kc
+	MD9zqnUpiInKm7iBvISYhyt5UT6qaUaopkPqxRk2
+X-Google-Smtp-Source: ABdhPJwN3KVWegxyHHiIXTTmlstEucD6pQ1XLu2joNb+rGzqKl4AWrQa2pDPchrhP0iDqpgB5lXQxHdcXS1/oMS+vh8d
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:c864:1e56:28bc:526b])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:9988:: with SMTP id
+ p8mr8106207ybo.128.1643321479925; Thu, 27 Jan 2022 14:11:19 -0800 (PST)
+Date: Thu, 27 Jan 2022 14:11:15 -0800
+Message-Id: <20220127221115.3731388-1-axelrasmussen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20211215211847.206208-1-morbo@google.com> <20211229021258.176670-1-morbo@google.com>
-In-Reply-To: <20211229021258.176670-1-morbo@google.com>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 27 Jan 2022 12:56:09 -0800
-Message-ID: <CAGG=3QW+P3pO24brQ62g82f0XKVZ3EtZQmrvqAGLCNqWA+5fhg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86: use builtins to read eflags
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Juergen Gross <jgross@suse.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
+From: Axel Rasmussen <axelrasmussen@google.com>
+To: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Bump for review.
+These are some trivial fixups, which were needed to build the tests with
+clang and -Werror. The following issues are fixed:
 
+- Remove various unused variables.
+- In child_poll_leader_exit_test, clang isn't smart enough to realize
+  syscall(SYS_exit, 0) won't return, so it complains we never return
+  from a non-void function. Add an extra exit(0) to appease it.
+- In test_pidfd_poll_leader_exit, ret may be branched on despite being
+  uninitialized, if we have !use_waitpid. Initialize it to zero to get
+  the right behavior in that case.
 
-On Tue, Dec 28, 2021 at 6:13 PM Bill Wendling <morbo@google.com> wrote:
->
-> GCC and Clang both have builtins to read and write the EFLAGS register.
-> This allows the compiler to determine the best way to generate this
-> code, which can improve code generation.
->
-> This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-> chooses to be conservative in these situations, and so uses memory
-> instead of registers. This is a known issue, which is currently being
-> addressed.
->
-> However, using builtins is benefiical in general, because it removes the
-> burden of determining what's the way to read the flags register from the
-> programmer and places it on to the compiler, which has the information
-> needed to make that decision. Indeed, this piece of code has had several
-> changes over the years, some of which were pinging back and forth to
-> determine the correct constraints to use.
->
-> With this change, Clang generates better code:
->
-> Original code:
->         movq    $0, -48(%rbp)
->         #APP
->         # __raw_save_flags
->         pushfq
->         popq    -48(%rbp)
->         #NO_APP
->         movq    -48(%rbp), %rbx
->
-> New code:
->         pushfq
->         popq    %rbx
->         #APP
->
-> Note that the stack slot in the original code is no longer needed in the
-> new code, saving a small amount of stack space.
->
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
-> v2: - Kept the original function to retain the out-of-line symbol.
->     - Improved the commit message.
->     - Note that I couldn't use Nick's suggestion of
->
->         return IS_ENABLED(CONFIG_X86_64) ? ...
->
->       because Clang complains about using __builtin_ia32_readeflags_u32 in
->       64-bit mode.
-> ---
->  arch/x86/include/asm/irqflags.h | 19 +++++--------------
->  1 file changed, 5 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-> index c5ce9845c999..27f919ea7ac3 100644
-> --- a/arch/x86/include/asm/irqflags.h
-> +++ b/arch/x86/include/asm/irqflags.h
-> @@ -19,20 +19,11 @@
->  extern inline unsigned long native_save_fl(void);
->  extern __always_inline unsigned long native_save_fl(void)
->  {
-> -       unsigned long flags;
-> -
-> -       /*
-> -        * "=rm" is safe here, because "pop" adjusts the stack before
-> -        * it evaluates its effective address -- this is part of the
-> -        * documented behavior of the "pop" instruction.
-> -        */
-> -       asm volatile("# __raw_save_flags\n\t"
-> -                    "pushf ; pop %0"
-> -                    : "=rm" (flags)
-> -                    : /* no input */
-> -                    : "memory");
-> -
-> -       return flags;
-> +#ifdef CONFIG_X86_64
-> +       return __builtin_ia32_readeflags_u64();
-> +#else
-> +       return __builtin_ia32_readeflags_u32();
-> +#endif
->  }
->
->  static __always_inline void native_irq_disable(void)
-> --
-> 2.34.1.448.ga2b2bfdf31-goog
->
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/clone3/clone3.c    | 2 --
+ tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
+ tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
+ 3 files changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index 076cf4325f78..cd4582129c7d 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
+ 
+ int main(int argc, char *argv[])
+ {
+-	pid_t pid;
+-
+ 	uid_t uid = getuid();
+ 
+ 	ksft_print_header();
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index 529eb700ac26..9a2d64901d59 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
+ {
+ 	int pid, pidfd = 0;
+ 	int status, ret;
+-	pthread_t t1;
+ 	time_t prog_start = time(NULL);
+ 	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
+ 
+@@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
+ 	 */
+ 	*child_exit_secs = time(NULL);
+ 	syscall(SYS_exit, 0);
++	/* Never reached, but appeases compiler thinking we should return. */
++	exit(0);
+ }
+ 
+ static void test_pidfd_poll_leader_exit(int use_waitpid)
+ {
+ 	int pid, pidfd = 0;
+-	int status, ret;
+-	time_t prog_start = time(NULL);
++	int status, ret = 0;
+ 	const char *test_name = "pidfd_poll check for premature notification on non-empty"
+ 				"group leader exit";
+ 
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index be2943f072f6..17999e082aa7 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
+ 
+ TEST(wait_simple)
+ {
+-	int pidfd = -1, status = 0;
++	int pidfd = -1;
+ 	pid_t parent_tid = -1;
+ 	struct clone_args args = {
+ 		.parent_tid = ptr_to_u64(&parent_tid),
+@@ -47,7 +47,6 @@ TEST(wait_simple)
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
+-	int ret;
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
+@@ -88,7 +87,7 @@ TEST(wait_simple)
+ 
+ TEST(wait_states)
+ {
+-	int pidfd = -1, status = 0;
++	int pidfd = -1;
+ 	pid_t parent_tid = -1;
+ 	struct clone_args args = {
+ 		.parent_tid = ptr_to_u64(&parent_tid),
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
+
