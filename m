@@ -1,44 +1,45 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C05F168
-	for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 15:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070BC168;
+	Thu, 27 Jan 2022 16:14:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643298785; x=1674834785;
+  t=1643300052; x=1674836052;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QssZTDIf2fNZDmmpnhEA2kuDiKjwkOgEBw2ZdOUxWv0=;
-  b=JQifm1EZzgryiBmo7OG01vNgn0q4c03fOOPAlVQHNjQjy1j9ZyqR30N7
-   UPguHcNhw9h/zfEtv1JeTgtTycy/ntohRmf0s9RjZkliQH+v73DOgtMLK
-   eAnLUxCz4a74Z5DogMtp7HTROfrRRN/Ama+QKHTohUFapgKACXsdjhU95
-   29Mj2xoJi+w/xGhIUJ+WaCWPK7oQYbhC0wAjEJr7RA7CE9CAcS0kTB7sL
-   I+CosStMJBucxiK6/dhaIo+mANnJNjk9o9Ck05/ipbvv/tnkZq+K3XN+3
-   /zYWU+4bqE5TsEPOzjiCMADLpFyc64z0H+9UFWWeBsEOno2XKWpzAlxFt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245733505"
+  bh=3bb9JoZDY5PZwbc2+qweKuL9rGbUODs3lF1L0htuqdY=;
+  b=Xi7L59pmAwjHvJKuAlDxQg4kFki/qCBbbLYG4337sTYHZHQdaciXIvDD
+   jvnaErhD8m6bG85uVNUASz90qQ1HnsOiicbdZu3I6T86jGB/a6aGJ6wvt
+   RGNDLz0yUZse1qKZvroStYn8kVPXpiN+kGcWNtZqhmfNa5YgesJalg8C6
+   9rRhHKsjspto/icZDmIz4kjEMnY4X+qs5aCDsU2xwl3lHVhdGtEcoAH1w
+   1Oe58+kkdpWR/ZKBd6ls8k/aqGHyjhtfl3VQRZa40bIP5nwkRNQ8ee+ad
+   vKgrDPgstR5isXK755575q3Ie/FLFh7f4Nvy1v7DKzKiMm6IeMeLIiu18
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="271355397"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="245733505"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 07:53:04 -0800
+   d="scan'208";a="271355397"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:14:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="533151794"
+   d="scan'208";a="674765149"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Jan 2022 07:53:01 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2022 08:14:07 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nD753-000Mk9-9l; Thu, 27 Jan 2022 15:53:01 +0000
-Date: Thu, 27 Jan 2022 23:52:55 +0800
+	id 1nD7PN-000Mm0-Ua; Thu, 27 Jan 2022 16:14:01 +0000
+Date: Fri, 28 Jan 2022 00:13:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: "D. Wythe" <alibuda@linux.alibaba.com>, kgraul@linux.ibm.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kuba@kernel.org,
-	davem@davemloft.net, netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	"D. Wythe" <alibuda@linux.alibaba.com>
-Subject: Re: [PATCH net-next 2/3] net/smc: Limits backlog connections
-Message-ID: <202201272328.JtsPKLkq-lkp@intel.com>
-References: <9b52fc3f11a2ae6f23224a178fd4cff9f9dd4eaa.1643284658.git.alibuda@linux.alibaba.com>
+To: Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, djwong@kernel.org,
+	dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+	jane.chu@oracle.com
+Subject: Re: [PATCH v10 1/9] dax: Introduce holder for dax_device
+Message-ID: <202201280053.mWAlT70p-lkp@intel.com>
+References: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,102 +48,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9b52fc3f11a2ae6f23224a178fd4cff9f9dd4eaa.1643284658.git.alibuda@linux.alibaba.com>
+In-Reply-To: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Wythe",
+Hi Shiyang,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on net-next/master]
+[auto build test WARNING on linux/master]
+[also build test WARNING on linus/master v5.17-rc1 next-20220127]
+[cannot apply to xfs-linux/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/D-Wythe/Optimizing-performance-in-short-lived/20220127-200912
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git fbb8295248e1d6f576d444309fcf79356008eac1
-config: mips-buildonly-randconfig-r004-20220124 (https://download.01.org/0day-ci/archive/20220127/202201272328.JtsPKLkq-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: arm-imx_v4_v5_defconfig (https://download.01.org/0day-ci/archive/20220128/202201280053.mWAlT70p-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/718aff24f3fcc73ecb7bff17fcbe029b799c6624
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/57669ed05e93b37d995c5247eebe218ab2058c9a
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review D-Wythe/Optimizing-performance-in-short-lived/20220127-200912
-        git checkout 718aff24f3fcc73ecb7bff17fcbe029b799c6624
+        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+        git checkout 57669ed05e93b37d995c5247eebe218ab2058c9a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ net/smc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/iomap/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/smc/af_smc.c:2202:18: error: assigning to 'struct inet_connection_sock_af_ops *' from 'const struct inet_connection_sock_af_ops *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           smc->ori_af_ops = inet_csk(smc->clcsock->sk)->icsk_af_ops;
-                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from fs/iomap/buffered-io.c:13:
+>> include/linux/dax.h:73:16: warning: declaration of 'struct dax_holder_operations' will not be visible outside of this function [-Wvisibility]
+                   const struct dax_holder_operations *ops)
+                                ^
+   1 warning generated.
 
 
-vim +2202 net/smc/af_smc.c
+vim +73 include/linux/dax.h
 
-  2166	
-  2167	static int smc_listen(struct socket *sock, int backlog)
-  2168	{
-  2169		struct sock *sk = sock->sk;
-  2170		struct smc_sock *smc;
-  2171		int rc;
-  2172	
-  2173		smc = smc_sk(sk);
-  2174		lock_sock(sk);
-  2175	
-  2176		rc = -EINVAL;
-  2177		if ((sk->sk_state != SMC_INIT && sk->sk_state != SMC_LISTEN) ||
-  2178		    smc->connect_nonblock)
-  2179			goto out;
-  2180	
-  2181		rc = 0;
-  2182		if (sk->sk_state == SMC_LISTEN) {
-  2183			sk->sk_max_ack_backlog = backlog;
-  2184			goto out;
-  2185		}
-  2186		/* some socket options are handled in core, so we could not apply
-  2187		 * them to the clc socket -- copy smc socket options to clc socket
-  2188		 */
-  2189		smc_copy_sock_settings_to_clc(smc);
-  2190		if (!smc->use_fallback)
-  2191			tcp_sk(smc->clcsock->sk)->syn_smc = 1;
-  2192	
-  2193		/* save original sk_data_ready function and establish
-  2194		 * smc-specific sk_data_ready function
-  2195		 */
-  2196		smc->clcsk_data_ready = smc->clcsock->sk->sk_data_ready;
-  2197		smc->clcsock->sk->sk_data_ready = smc_clcsock_data_ready;
-  2198		smc->clcsock->sk->sk_user_data =
-  2199			(void *)((uintptr_t)smc | SK_USER_DATA_NOCOPY);
-  2200	
-  2201		/* save origin ops */
-> 2202		smc->ori_af_ops = inet_csk(smc->clcsock->sk)->icsk_af_ops;
-  2203	
-  2204		smc->af_ops = *smc->ori_af_ops;
-  2205		smc->af_ops.syn_recv_sock = smc_tcp_syn_recv_sock;
-  2206	
-  2207		inet_csk(smc->clcsock->sk)->icsk_af_ops = &smc->af_ops;
-  2208	
-  2209		rc = kernel_listen(smc->clcsock, backlog);
-  2210		if (rc) {
-  2211			smc->clcsock->sk->sk_data_ready = smc->clcsk_data_ready;
-  2212			goto out;
-  2213		}
-  2214		sk->sk_max_ack_backlog = backlog;
-  2215		sk->sk_ack_backlog = 0;
-  2216		sk->sk_state = SMC_LISTEN;
-  2217	
-  2218	out:
-  2219		release_sock(sk);
-  2220		return rc;
-  2221	}
-  2222	
+    48	
+    49	void dax_register_holder(struct dax_device *dax_dev, void *holder,
+    50			const struct dax_holder_operations *ops);
+    51	void dax_unregister_holder(struct dax_device *dax_dev);
+    52	void *dax_get_holder(struct dax_device *dax_dev);
+    53	void put_dax(struct dax_device *dax_dev);
+    54	void kill_dax(struct dax_device *dax_dev);
+    55	void dax_write_cache(struct dax_device *dax_dev, bool wc);
+    56	bool dax_write_cache_enabled(struct dax_device *dax_dev);
+    57	bool dax_synchronous(struct dax_device *dax_dev);
+    58	void set_dax_synchronous(struct dax_device *dax_dev);
+    59	/*
+    60	 * Check if given mapping is supported by the file / underlying device.
+    61	 */
+    62	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+    63						     struct dax_device *dax_dev)
+    64	{
+    65		if (!(vma->vm_flags & VM_SYNC))
+    66			return true;
+    67		if (!IS_DAX(file_inode(vma->vm_file)))
+    68			return false;
+    69		return dax_synchronous(dax_dev);
+    70	}
+    71	#else
+    72	static inline void dax_register_holder(struct dax_device *dax_dev, void *holder,
+  > 73			const struct dax_holder_operations *ops)
+    74	{
+    75	}
+    76	static inline void dax_unregister_holder(struct dax_device *dax_dev)
+    77	{
+    78	}
+    79	static inline void *dax_get_holder(struct dax_device *dax_dev)
+    80	{
+    81		return NULL;
+    82	}
+    83	static inline struct dax_device *alloc_dax(void *private,
+    84			const struct dax_operations *ops)
+    85	{
+    86		/*
+    87		 * Callers should check IS_ENABLED(CONFIG_DAX) to know if this
+    88		 * NULL is an error or expected.
+    89		 */
+    90		return NULL;
+    91	}
+    92	static inline void put_dax(struct dax_device *dax_dev)
+    93	{
+    94	}
+    95	static inline void kill_dax(struct dax_device *dax_dev)
+    96	{
+    97	}
+    98	static inline void dax_write_cache(struct dax_device *dax_dev, bool wc)
+    99	{
+   100	}
+   101	static inline bool dax_write_cache_enabled(struct dax_device *dax_dev)
+   102	{
+   103		return false;
+   104	}
+   105	static inline bool dax_synchronous(struct dax_device *dax_dev)
+   106	{
+   107		return true;
+   108	}
+   109	static inline void set_dax_synchronous(struct dax_device *dax_dev)
+   110	{
+   111	}
+   112	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+   113					struct dax_device *dax_dev)
+   114	{
+   115		return !(vma->vm_flags & VM_SYNC);
+   116	}
+   117	#endif
+   118	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
