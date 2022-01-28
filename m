@@ -1,138 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F63168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 08:58:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E563C340E6;
-	Fri, 28 Jan 2022 08:58:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643360284;
-	bh=VybN4pzch65oeAi5HDL+8lwtT0cmSDE01H8knqAz1I4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eenZ5YRl7LyQLTevsJfI1fCgyoQtVIXJR5MbbBTleOdl/EtGMroCvwYxgxEqnx1Vp
-	 GAGWMZoDRevJBqn1HGs52PgOPYagQ1nCVGKaoBEBjwvnkEfY6MWsn4Nw64ohiS4bbg
-	 4jy7S30AUDvZt1qd1cZcbAmKwKUiZ4kYzRfJM3eupsLGcyWuwlGeLofphxG6E6z77/
-	 hUk1gUrMmO4b8jLyqCH1hzend12wNy83S20a+xoS9tLYcEwYVnx2ww4+W7mMcS1VPZ
-	 zGk2Hhzr07GZkB64mKNr2RYQAdfEGjCyiDeGXY614sira832gTeO/D4W33i9KU79SC
-	 9rGxhdl/xCbYg==
-Date: Fri, 28 Jan 2022 09:57:59 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Axel Rasmussen <axelrasmussen@google.com>
-Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Zach O'Keefe <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-Message-ID: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-References: <20220127221115.3731388-1-axelrasmussen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A26168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643360777; x=1674896777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AiHV+Hg/X7fIRO65fl2bhp054IVzZkdbb+vKsLN50GA=;
+  b=MexMfvrTm/OA7c3mxuEktw90me0hGpogfYpB5gWOeSL7CSpDFF8Vfcgc
+   FHm4frkM4vUgayHE0Pm9j4xNm09ZYa/ldFmcet7pX+dUOB2/AhvT+CidT
+   I23yQZ3lczW93pMoQcSTuEoVK4EEmgjheQNujoAa58GNMsF7jYDDoxMXY
+   OPjBTDNrI+LIJVMyLJa7GutGEpTjkpk4SHE2VVgNMtSxlKVn0KVNAAaNB
+   yrchcfWuvHyX/deqwnxciitmjTVrZLNul7/kLTRWueIS5j+rIkoHwtTbl
+   l1Rd+NMD5q3l4GhAOyvFzbqi+0dYJxL6wsey9hUe1Mv5c0uT1aSUgbnBq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247304167"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="247304167"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:06:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="521623732"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Jan 2022 01:06:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDNCo-000NgI-H5; Fri, 28 Jan 2022 09:06:06 +0000
+Date: Fri, 28 Jan 2022 17:05:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
+	mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+	john.stultz@linaro.org, sboyd@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	tangmeng <tangmeng@uniontech.com>
+Subject: Re: [PATCH] kernel/time: move timer sysctls to its own file
+Message-ID: <202201281650.adOMvtOO-lkp@intel.com>
+References: <20220128065505.16685-1-tangmeng@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127221115.3731388-1-axelrasmussen@google.com>
+In-Reply-To: <20220128065505.16685-1-tangmeng@uniontech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
-> These are some trivial fixups, which were needed to build the tests with
-> clang and -Werror. The following issues are fixed:
-> 
-> - Remove various unused variables.
-> - In child_poll_leader_exit_test, clang isn't smart enough to realize
->   syscall(SYS_exit, 0) won't return, so it complains we never return
->   from a non-void function. Add an extra exit(0) to appease it.
-> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
->   uninitialized, if we have !use_waitpid. Initialize it to zero to get
->   the right behavior in that case.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
+Hi tangmeng,
 
-Thanks!
-(Fwiw, all those tests should also be ported to use the TEST_*() harness
-infra. Currently it's an annoying mix.)
-Acked-by: Christian Brauner <brauner@kernel.org>
+Thank you for the patch! Yet something to improve:
 
->  tools/testing/selftests/clone3/clone3.c    | 2 --
->  tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
->  tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> index 076cf4325f78..cd4582129c7d 100644
-> --- a/tools/testing/selftests/clone3/clone3.c
-> +++ b/tools/testing/selftests/clone3/clone3.c
-> @@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
->  
->  int main(int argc, char *argv[])
->  {
-> -	pid_t pid;
-> -
->  	uid_t uid = getuid();
->  
->  	ksft_print_header();
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index 529eb700ac26..9a2d64901d59 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
->  {
->  	int pid, pidfd = 0;
->  	int status, ret;
-> -	pthread_t t1;
->  	time_t prog_start = time(NULL);
->  	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
->  
-> @@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
->  	 */
->  	*child_exit_secs = time(NULL);
->  	syscall(SYS_exit, 0);
-> +	/* Never reached, but appeases compiler thinking we should return. */
-> +	exit(0);
->  }
->  
->  static void test_pidfd_poll_leader_exit(int use_waitpid)
->  {
->  	int pid, pidfd = 0;
-> -	int status, ret;
-> -	time_t prog_start = time(NULL);
-> +	int status, ret = 0;
->  	const char *test_name = "pidfd_poll check for premature notification on non-empty"
->  				"group leader exit";
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-> index be2943f072f6..17999e082aa7 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-> @@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->  
->  TEST(wait_simple)
->  {
-> -	int pidfd = -1, status = 0;
-> +	int pidfd = -1;
->  	pid_t parent_tid = -1;
->  	struct clone_args args = {
->  		.parent_tid = ptr_to_u64(&parent_tid),
-> @@ -47,7 +47,6 @@ TEST(wait_simple)
->  		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
->  		.exit_signal = SIGCHLD,
->  	};
-> -	int ret;
->  	pid_t pid;
->  	siginfo_t info = {
->  		.si_signo = 0,
-> @@ -88,7 +87,7 @@ TEST(wait_simple)
->  
->  TEST(wait_states)
->  {
-> -	int pidfd = -1, status = 0;
-> +	int pidfd = -1;
->  	pid_t parent_tid = -1;
->  	struct clone_args args = {
->  		.parent_tid = ptr_to_u64(&parent_tid),
-> -- 
-> 2.35.0.rc2.247.g8bbb082509-goog
-> 
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc1 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220128-145647
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220128/202201281650.adOMvtOO-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/5b925ed59a284ee735fd46cb2afa74858509887b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220128-145647
+        git checkout 5b925ed59a284ee735fd46cb2afa74858509887b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/time/timer.c:2047:2: error: implicit declaration of function 'timer_sysctl_init' [-Werror,-Wimplicit-function-declaration]
+           timer_sysctl_init();
+           ^
+   1 error generated.
+
+
+vim +/timer_sysctl_init +2047 kernel/time/timer.c
+
+  2041	
+  2042	void __init init_timers(void)
+  2043	{
+  2044		init_timer_cpus();
+  2045		posix_cputimers_init_work();
+  2046		open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
+> 2047		timer_sysctl_init();
+  2048	}
+  2049	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
