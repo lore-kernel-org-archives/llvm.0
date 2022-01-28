@@ -1,110 +1,168 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2104F2CA4
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 19:00:10 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id p27so13678737lfa.1
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:00:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FA629CA
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 19:10:22 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id u11so6936054plh.13
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:10:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qBRm3X+bFlq2uddMz4dS1v977rSddYeT1DVBPmoaXm0=;
-        b=AV3VOxfAW4xYtFVAqVWiqtqdAo2gePPE6r5NNM7Fle0w13Ckd39WxVpKUkjIj4ivt8
-         3T+5rVMZvBKFSvkfYWLcRGSeRLAz+BDzFTEeTrxLea2DWAm1Sb8U3PNGOxaIm32gs/Xa
-         Vor8qlVZUZxrtccQLgBLDfq3rHkZTP/+ih0xyKaNKbDclffG7qEmS5arelN/bAfo7j0k
-         eN6hWiMBvgPiE8qDn9AJ70q7c95UtrjrzbS8g9rtYv7K48cX2rYPgU5Y7zV7tiPXg3Nc
-         wc3QhElD5tEwheHgwqTgoH7dnPbuBjUSQ2H2zzTcy7pqvimLKRZkA2L1ccA0gVeHkwQD
-         pxXA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qBrhGKhqGDo3ZZGcfTOvBOKxFA+ZreyYbNcf2efMXZM=;
+        b=eCZT8ZHOAxpHWEDrUQItUG+sx9VZ3ivRTx1df1Hb5Ao4XU7bhUL0XL2KBld709fVmg
+         IDG1SPPN7PGddHggtZ7UvMZKXPII86162snNhV14EycqAolc90+QaWRv3QLntN6Dm1Pl
+         nUkCG8lpzib1yRSSeLP62nAkHwE+KizSFaUN8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qBRm3X+bFlq2uddMz4dS1v977rSddYeT1DVBPmoaXm0=;
-        b=nuBXCfLqzc6cgUgFMWq3r1MT8rWvP0xLuBYEn+VO6d5hlxEqvqqVWqIHuKOzNgPpNC
-         HNhq611BuxsDUxuCnpy+gBTUBIU1q44InVpLPr9BCTnlUAGJUo9tSTNoTI/o4TyYwDL0
-         SKY0aUifTJTTbRFQiUjOkryGlS+MsM8JY84WQRMFvB9IfQ3PvvseTIQ9a7xim/TZfUmU
-         MQb0PrTEtnxQzSyFI3nbvtAHprl3/gpEBxc75ed9wFyPHzcNGuZ4evnxET7Ol1Bpf9gY
-         fnFt1Kj/oeFlVY2YAf1ommQ0dkrrEq6AYvDzylK/5hr0wNr8QcRSXjDn/5gOTnAp6iVk
-         KW/w==
-X-Gm-Message-State: AOAM531cUhaHPYyNear9KxhQrHWgmjQzCV2bPDzK4FH6ZO94O9giyqN+
-	gyDZhBzum+F/1+poYMynejUKRc8L3kVAeipffxIq/Q==
-X-Google-Smtp-Source: ABdhPJwNFA5r7YIfbCUFseh+GJz1V3CzzkTvSH4ZreVsrxw477tiR6JvbprCbzDWW7JfZ4pEFuXrrHASRZQs18PzbiQ=
-X-Received: by 2002:ac2:5510:: with SMTP id j16mr7086081lfk.240.1643396407846;
- Fri, 28 Jan 2022 11:00:07 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qBrhGKhqGDo3ZZGcfTOvBOKxFA+ZreyYbNcf2efMXZM=;
+        b=QLLNvflkTjYuEiX8q03R3jDS0LqSiKlQX9y6439G9uaWKFJIVrQoZ4BnveXt1SArUW
+         4jxn0tBTK31tMCa1TQTElMlFpPpoth0dhMhis51YgUWfXEW/LxKeDHvKc6lyzXVvm2V2
+         uI5JOXpQoBY38yVInom9zZM4GD7UVSUldXXVt+RRoq1tqHdO4VxV4QUWiFVMxHSvMpsX
+         SYcdaa2OvWr3UDUyUBOdim6MI5IxPxcIwHiKVEI7DqG3dshHaFLA0O0XG45c0NIbdRWG
+         gyayGZ8GXLctYJN4ib9mo6eEdj40VrNI2c8RFIi4tz6oqnwkeEIKWzBtvEXBhNyXbNel
+         ceiA==
+X-Gm-Message-State: AOAM532lZHtmWoci3+OK9FJjJhPIBmw1Kw5NXuWMJXdakXIYH7Ss6D/0
+	7eGOHRg7DXV46rmbeLmhgOCCow==
+X-Google-Smtp-Source: ABdhPJwkfZT7H5g+ncTdGNx1L3u8QiZklleP3FKxab6bzRDhnivkR2Cau7R+nbnX7dJOZ7yw7amTDg==
+X-Received: by 2002:a17:90a:5890:: with SMTP id j16mr11399493pji.185.1643397021641;
+        Fri, 28 Jan 2022 11:10:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d2sm3142742pju.2.2022.01.28.11.10.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 11:10:21 -0800 (PST)
+Date: Fri, 28 Jan 2022 11:10:20 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] stack: Constrain stack offset randomization with
+ Clang builds
+Message-ID: <202201281058.83EC9565@keescook>
+References: <20220128114446.740575-1-elver@google.com>
+ <20220128114446.740575-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220128105746.2459-1-changbin.du@gmail.com> <20220128152147.mwjkf45z72qwdikq@mail.google.com>
-In-Reply-To: <20220128152147.mwjkf45z72qwdikq@mail.google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 28 Jan 2022 10:59:55 -0800
-Message-ID: <CAKwvOdncnh1sGjaBDOepQrAc+AHgEr=gWTJqKSxwvPu0f5A1dg@mail.gmail.com>
-Subject: Re: [PATCH] kallsyms: ignore local block labels generated by compiler
-To: Changbin Du <changbin.du@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128114446.740575-2-elver@google.com>
 
-On Fri, Jan 28, 2022 at 7:21 AM Changbin Du <changbin.du@gmail.com> wrote:
->
-> On Fri, Jan 28, 2022 at 06:57:46PM +0800, Changbin Du wrote:
-> > The llvm compiler can generate lots of local block labels and they might
-> > overlap with C defined symbols. So let's ignore such local labels.
-> >
-> > Before this change, dumpstack shows a local symbol for epc:
-> > [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-> > [    0.040452][    T0]  ra : restore_all+0x12/0x6e
-> >
-> > After this change, the C defined symbol is shown which is expected:
-> > [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-> > [    0.036567][    T0]  ra : restore_all+0x12/0x6e
-> >
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > ---
-> >  scripts/kallsyms.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > index 54ad86d13784..5f4be9d72a32 100644
-> > --- a/scripts/kallsyms.c
-> > +++ b/scripts/kallsyms.c
-> > @@ -108,6 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
-> >       /* Symbol names that begin with the following are ignored.*/
-> >       static const char * const ignored_prefixes[] = {
-> >               "$",                    /* local symbols for ARM, MIPS, etc. */
-> > +             ".LBB",                 /* local block labels generated by compiler */
-> I aslo found many symbols like '.Ltmpxxx', '.L__unnamed_xx'. So should we just
-> ignore all symbols prefixed by '.L'?
+On Fri, Jan 28, 2022 at 12:44:46PM +0100, Marco Elver wrote:
+> All supported versions of Clang perform auto-init of __builtin_alloca()
+> when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
+> 
+> add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> enabled, add_random_kstack_offset() will auto-init that unused portion
+> of the stack used to add an offset.
+> 
+> There are several problems with this:
+> 
+> 	1. These offsets can be as large as 1023 bytes. Performing
+> 	   memset() on them isn't exactly cheap, and this is done on
+> 	   every syscall entry.
+> 
+> 	2. Architectures adding add_random_kstack_offset() to syscall
+> 	   entry implemented in C require them to be 'noinstr' (e.g. see
+> 	   x86 and s390). The potential problem here is that a call to
+> 	   memset may occur, which is not noinstr.
+> 
+> A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> 
+>  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> 
+> Clang 14 (unreleased) will introduce a way to skip alloca initialization
+> via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
+> 
+> Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
+> auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
+> __builtin_alloca_uninitialized() if the compiler provides it, as is done
+> by Clang 14.
+> 
+> Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
+> Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+>  arch/Kconfig                     |  1 +
+>  include/linux/randomize_kstack.h | 14 ++++++++++++--
+>  2 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 2cde48d9b77c..c5b50bfe31c1 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
+>  	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
+>  	default y
+>  	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+> +	depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
 
-.L prefixes are "local labels" meaning they don't get an entry in the
-symbol table.  The trade off is that there is no such convention
-between compiler generated local label naming conventions, vs hand
-written ones.  If we omit all local labels, then it might be
-surprising that a handwritten local label disappeared from this list.
-I think though that we should omit all local labels, and if someone
-needs a label to appear in their dumpstack, then they should simply
-drop the .L prefix on their handwritten label.
+This makes it _unavailable_ for folks with Clang < 14, which seems
+too strong, especially since it's run-time off by default. I'd prefer
+dropping this hunk and adding some language to the _DEFAULT help noting
+the specific performance impact on Clang < 14.
 
->
-> >               ".LASANPC",             /* s390 kasan local symbols */
-> >               "__crc_",               /* modversions */
-> >               "__efistub_",           /* arm64 EFI stub namespace */
-> > --
-> > 2.32.0
-> >
->
-> --
-> Cheers,
-> Changbin Du
+>  	help
+>  	  The kernel stack offset can be randomized (after pt_regs) by
+>  	  roughly 5 bits of entropy, frustrating memory corruption
+> diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
+> index 91f1b990a3c3..5c711d73ed10 100644
+> --- a/include/linux/randomize_kstack.h
+> +++ b/include/linux/randomize_kstack.h
+> @@ -17,8 +17,18 @@ DECLARE_PER_CPU(u32, kstack_offset);
+>   * alignment. Also, since this use is being explicitly masked to a max of
+>   * 10 bits, stack-clash style attacks are unlikely. For more details see
+>   * "VLAs" in Documentation/process/deprecated.rst
+> + *
+> + * The normal alloca() can be initialized with INIT_STACK_ALL. Initializing the
+> + * unused area on each syscall entry is expensive, and generating an implicit
+> + * call to memset() may also be problematic (such as in noinstr functions).
+> + * Therefore, if the compiler provides it, use the "uninitialized" variant.
 
+Can you include the note that GCC doesn't initialize its alloca()?
 
+Otherwise, yeah, looks good to me.
+
+-Kees
+
+>   */
+> -void *__builtin_alloca(size_t size);
+> +#if __has_builtin(__builtin_alloca_uninitialized)
+> +#define __kstack_alloca __builtin_alloca_uninitialized
+> +#else
+> +#define __kstack_alloca __builtin_alloca
+> +#endif
+> +
+>  /*
+>   * Use, at most, 10 bits of entropy. We explicitly cap this to keep the
+>   * "VLA" from being unbounded (see above). 10 bits leaves enough room for
+> @@ -37,7 +47,7 @@ void *__builtin_alloca(size_t size);
+>  	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
+>  				&randomize_kstack_offset)) {		\
+>  		u32 offset = raw_cpu_read(kstack_offset);		\
+> -		u8 *ptr = __builtin_alloca(KSTACK_OFFSET_MAX(offset));	\
+> +		u8 *ptr = __kstack_alloca(KSTACK_OFFSET_MAX(offset));	\
+>  		/* Keep allocation even after "ptr" loses scope. */	\
+>  		asm volatile("" :: "r"(ptr) : "memory");		\
+>  	}								\
+> -- 
+> 2.35.0.rc0.227.g00780c9af4-goog
+> 
 
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
