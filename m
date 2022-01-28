@@ -1,248 +1,85 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1FD3FE0
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 22:48:22 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id a28so14610185lfl.7
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 14:48:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1033E3FE0
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 22:49:28 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id u6so14597028lfm.10
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 14:49:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WDxlUuw0YGzk2V0HdWKSL5+/ksUHciajNalLhG+gxqM=;
-        b=hAqEtJYUVk6sP7MC5XHXE1eltOu+5jVGyy9Ca89H0exL4Nju28Htb/AC/hkbrEppVl
-         aFYFL00AhsWeOM1m1YvKviHNDIRYlKJ2hL/OPL9/nwDkNvqZcOEXECfCMOU3/qB+Q7Nk
-         mTkcXsL6MSmSTftYusupHruT3O237SWhRtDkVAhNQl2zAtgqWSkRjOW0u0qi3ciI1uzv
-         8rGLmHg3IfiDRQh4D0r8N5Ne//LpBb2DToVXNZCWO83HRHpssZE9KnWBroAoOinJmASI
-         2OeTs857YKqWhrFAuIRDzUmmj0O7MLm5SY72EUmoV8Q0KbJ7ViQAWFppfsEt7rS/WwXz
-         6k5Q==
+        bh=Ga12vASgQepzopTf7itk5qo6jciiWvEYo54yaueBv/k=;
+        b=ocuHiLSMSPTflZxrNNESvCIQ9i+7KDA5CgbR62QaQKXXDLgjYsHYlv8V7w7m89YSBv
+         uqDFU8pu0wkTuGojbwMOm4xC4j81ouCZqMQUv4ylul1TzqWYa5Ej6sz/dpO4Xx6Tk5av
+         UXItrbB9Ml1gsjXRDAWJ85uAnmftgLgl+I/3ZPdhD7ISL1Rx/oofWx6I5gZvy0O+ebnd
+         CCtov4e6Wjt3VZbONDqtD2zgyJK7ekvkOfRukUUMmiEIf1WPwG/vQtQg51YleVk2+yru
+         vtbMsL+rLA3DMH7e2gqooF1lNdWj9PV5SMlT604dQ55IYytTAWSziScWu9bvSVp9McF6
+         OPmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WDxlUuw0YGzk2V0HdWKSL5+/ksUHciajNalLhG+gxqM=;
-        b=R6X94VZn2C3QAlVqQ7gLeEJDjhCB17ZMlHVz0OqHWgfeOjiS8CKhQ2HXpUKXQwlW1c
-         q3FbXz389xrvL1Jd8iVY5yUDHjP5/v+smkonJI+SxAJG7VVSR9z9er5+MT8qRgX1aWJq
-         6EcHUpu9J80YI+AZuL82uw09kFPnwkzj7YIORGvGlYCc4l8/eQez9aUMPE6POVNwsBS+
-         UxXLI8bWUjZT+Be6vLvZjZIOuqjV2ya+0a4qah/A7v10AcJg9X4bwU4u6EIhoJB1hq1p
-         nTyKc3/XR3tGUtI0EbGje3kQztDtr1g5o80sCtD3W6ChEQn9VZnDO/A9dWW2rwRo2zht
-         1zMg==
-X-Gm-Message-State: AOAM532lhema6fDB4D1mRptlORQFpmnxiy36Hmd4LHDr0sGiHifQUt6l
-	gJtW0DQ+yKK8hFuWAP3MeSUHaN8xBpVeRy30lfTFnA==
-X-Google-Smtp-Source: ABdhPJyuU2ZVA5jocmhkvZJpxKezk07FKat+/cuELt0gZKLjlmgPLn8/BiL1nifgCC0ouIG9gPTHHwA1Dpja1HmsMa8=
-X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr7491943lfk.523.1643410100327;
- Fri, 28 Jan 2022 14:48:20 -0800 (PST)
+        bh=Ga12vASgQepzopTf7itk5qo6jciiWvEYo54yaueBv/k=;
+        b=hC/ln/WHi+PD2m61qR5JWpBnuWn7OGwcw5AR6S2ZGdxGo8tpjtaY+p/2wGk6sJheVV
+         GhReRjmk5lUy7uKzpoVZJOxYj/3dPQz0zGYj3L8PLos7rwJBj6Kvr052aLDPs47zXscm
+         xulRArwVlPC5MdLyaeTfF4OJUq/vSsMikzkeDJkPCD5Awu+5g343/hyY1v1510KqG045
+         ckThG/hzvcY+fm73LooPTZ4XdE0zRkW5s5oZ0tgw1cCjS6w4YFe81oRl6oe+NZP2Vsl0
+         xVXjH7B21orU44hsESpxWt0QIBUGMqNHKqNIeQK/bBHkre5JuHAQ1iJgF6VzVTCO6EKl
+         4vLw==
+X-Gm-Message-State: AOAM530Vr01q4b3wZAx5+9Isgqycvaf5BAxQcDeCb3KbjZAsdSjLyshi
+	6NyRYA9lqwEn0t2c6dmXN2Sv2rcNRV0XDTGj5zManw==
+X-Google-Smtp-Source: ABdhPJzaJFI+R0ILoPy/Efjd+HHvfSdGQyGuwezXUpAsCFmnl8paU8d50L8ZlP2AF/lXoKPXGH4nExxQp3vxfXwFFHg=
+X-Received: by 2002:a05:6512:3ba5:: with SMTP id g37mr7601124lfv.651.1643410166929;
+ Fri, 28 Jan 2022 14:49:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220112224342.958358-1-quic_eberman@quicinc.com> <20220128220841.3222637-1-quic_eberman@quicinc.com>
-In-Reply-To: <20220128220841.3222637-1-quic_eberman@quicinc.com>
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+ <20220128220841.3222637-1-quic_eberman@quicinc.com> <20220128224528.f7ejzw55t6kfefmm@google.com>
+In-Reply-To: <20220128224528.f7ejzw55t6kfefmm@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 28 Jan 2022 14:48:08 -0800
-Message-ID: <CAKwvOdmkw30s-sjL0PVfJ2E9Th5cgDSbWMMPZS0cfi4jLyAe4A@mail.gmail.com>
+Date: Fri, 28 Jan 2022 14:49:15 -0800
+Message-ID: <CAKwvOd=Ab+GWNzSC6eaDWTVDF6gJQ9fDDMT3hep-DzhrEA6DpQ@mail.gmail.com>
 Subject: Re: [PATCH v2] kbuild: Add environment variables for userprogs flags
 To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Fangrui Song <maskray@google.com>, 
-	Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Matthias Maennich <maennich@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Matthias Maennich <maennich@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Fangrui Song <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jan 28, 2022 at 2:09 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+ On Fri, Jan 28, 2022 at 2:45 PM Fangrui Song <maskray@google.com> wrote:
 >
-> Allow additional arguments be passed to userprogs compilation.
-> Reproducible clang builds need to provide a sysroot and gcc path to
-> ensure same toolchain is used across hosts. KCFLAGS is not currently
+> On 2022-01-28, Elliot Berman wrote:
+> >Allow additional arguments be passed to userprogs compilation.
+> >Reproducible clang builds need to provide a sysroot and gcc path to
+> >ensure same toolchain is used across hosts. KCFLAGS is not currently
+> >used for any user programs compilation, so add new USERCFLAGS and
+> >USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+> >
+> >Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
+> >an environment where a user sysroot is not specifically available.
+> >Currently, Clang might automatically detect GCC installation on hosts
+> >which have it installed to a default location in /. With addition of
+> >these environment variables, you can specify flags such as:
+> >
+> >$ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
+> >
+> >to force sysroot detection to fail.
+>
+> -Wl,--sysroot=/dev/null => --sysroot
+>
+> As I mentioned in
+> https://lore.kernel.org/all/20220128031549.w5a4bilxbkppagfu@google.com/
+> -Wl,--sysroot=/dev/null does not suppress search paths like -L/lib .
 
-"ensure the same"
-
-> used for any user programs compilation, so add new USERCFLAGS and
-> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
->
-> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
-> an environment where a user sysroot is not specifically available.
-
-^ I think we can be more precise with the description of the problem;
-technically, CC_CAN_LINK _does_ fail consistently when there's no
-sysroot found.
-
-It's more that the sysroot may or may not be available depending on
-what's been installed on the host.
-
-One might argue that "you should install all kernel dependencies
-consistently on your build machines."  Therefor, it might be better to
-describe a different problem this solves: we may want the compiler
-used for userprogs to use an explicit sysroot that may differ from the
-implicit default which may or may not be installed on the host in a
-location the toolchain will search by default.
-
-> Currently, Clang might automatically detect GCC installation on hosts
-> which have it installed to a default location in /. With addition of
-> these environment variables, you can specify flags such as:
->
-> $ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
->
-> to force sysroot detection to fail.
-
-"to force no sysroot to be autodetected on the host. This can also be
-used to specify different sysroots such as musl or bionic, which may
-not be installed on the host in paths that the compiler may search by
-default."
-
->
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->
-> Changes since v1: Addressed minor nits from Nick
-> ---
-
-^ these descriptions of changes should go below the `---` so that
-they're not retained when applied.
-
->  Documentation/kbuild/kbuild.rst    | 9 +++++++++
->  Documentation/kbuild/makefiles.rst | 2 ++
->  Makefile                           | 9 ++++++---
->  init/Kconfig                       | 8 ++++----
->  usr/include/Makefile               | 3 +++
->  5 files changed, 24 insertions(+), 7 deletions(-)
->
-> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> index 2d1fc03d346e..3e7467b19c8f 100644
-> --- a/Documentation/kbuild/kbuild.rst
-> +++ b/Documentation/kbuild/kbuild.rst
-> @@ -77,6 +77,15 @@ HOSTLDLIBS
->  ----------
->  Additional libraries to link against when building host programs.
->
-> +USERCFLAGS
-> +----------
-> +Additional options used for $(CC) when compiling userprogs.
-> +
-> +USERLDFLAGS
-> +----------
-> +Additional options used for $(LD) when linking userprogs. userprogs are linked
-> +with CC, so $(USERLDFLAGS) should include "-Wl," prefix as applicable.
-> +
->  KBUILD_KCONFIG
->  --------------
->  Set the top-level Kconfig file to the value of this environment
-> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-> index b008b90b92c9..39fb70f59429 100644
-> --- a/Documentation/kbuild/makefiles.rst
-> +++ b/Documentation/kbuild/makefiles.rst
-> @@ -982,6 +982,8 @@ The syntax is quite similar. The difference is to use "userprogs" instead of
->
->         When linking bpfilter_umh, it will be passed the extra option -static.
->
-> +       From command line, USERCFLAGS and USERLDFLAGS will also be used (See kbuild.rst)
-> +
-
-^ can we use the (awful) RST syntax to include a hyperlink to kbuild.rst?
-
->  5.4 When userspace programs are actually built
->  ----------------------------------------------
->
-> diff --git a/Makefile b/Makefile
-> index 45278d508d81..8a2324e6bda8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -431,15 +431,17 @@ HOSTCC    = gcc
->  HOSTCXX        = g++
->  endif
->
-> -export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> -                             -O2 -fomit-frame-pointer -std=gnu89
-> -export KBUILD_USERLDFLAGS :=
-> +KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> +                    -O2 -fomit-frame-pointer -std=gnu89
-> +KBUILD_USERLDFLAGS := $(USERLDFLAGS)
->
->  KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
->  KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
->  KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
->  KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
->
-> +KBUILD_USERCFLAGS   += $(USERCFLAGS)
-> +
-
-Earlier you pointed out that the initial assignment of
-KBUILD_USERCFLAGS was reused for KBUILD_HOSTCFLAGS.  I think it would
-be clearer that we were reusing a common base for two different
-purposes if we renamed some of these variables as such:
-
-KBUILD_BASECFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-  -O2 -fomit-frame-pointer -std=gnu89
-KBUILD_USERCFLAGS := $(KBUILD_BASECFLAGS) $(USERCFLAGS)
-KBUILD_USERLDFLAGS := $(USERLDFLAGS)
-KBUILD_HOSTCFLAGS   := $(KBUILD_BASEFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
-...
-
-or maybe KBUILD_USERHOSTCFLAGS would be a better identifier than
-KBUILD_BASECFLAGS? I don't feel strongly either way. As long as the
-common base isn't explicitly exported so that folks may mistakenly use
-it when they probably meant to use one of the two (KBUILD_USERCFLAGS
-or KBUILD_HOSTCFLAGS) derived from it.
-
->  # Make variables (CC, etc...)
->  CPP            = $(CC) -E
->  ifneq ($(LLVM),)
-> @@ -530,6 +532,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
->  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
->  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
->  export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
-> +export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
->
->  export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
->  export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
-> diff --git a/init/Kconfig b/init/Kconfig
-> index f2ae41e6717f..164706c38e8b 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -62,13 +62,13 @@ config LLD_VERSION
->
->  config CC_CAN_LINK
->         bool
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
->
->  config CC_CAN_LINK_STATIC
->         bool
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
->
->  config CC_HAS_ASM_GOTO
->         def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> diff --git a/usr/include/Makefile b/usr/include/Makefile
-> index 1c2ae1368079..6a8c7dd9ccaf 100644
-> --- a/usr/include/Makefile
-> +++ b/usr/include/Makefile
-> @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
->  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
->  UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
->
-> +# USERCFLAGS might contain sysroot location for CC
-
-^ This file is pretty consistent in its use of punctuation to end
-comments. Let's stay consistent for newly added comments by adding a
-period at the end of this comment.
-
-> +UAPI_CFLAGS += $(USERCFLAGS)
-> +
->  override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
->
->  # The following are excluded for now because they fail to build.
-> --
-> 2.25.1
->
->
-
-
+In that case, Elliot, can you please test whether USERLDFLAGS is
+necessary to be specified AT ALL? Maybe we can drop that addition from
+this patch if so?
 -- 
 Thanks,
 ~Nick Desaulniers
