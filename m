@@ -1,308 +1,122 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D9D168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 04:19:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643343596; x=1674879596;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FjoGarZzuqSjMpwHHQsNsciwmBhli4BwtOz9VjpJDOE=;
-  b=OGchKycvJyKuhtPRXX+ACF3BRGRUt6VCNVJzrjrUdT/y9YuufXGuwi7T
-   n7mCEqmyVAsBAjsvJCxvPTrvO/PJds1HrmvBjL485NsP1r2wYswGZdeUE
-   1NLgF1CyvkEyDVRql558Z09HuW+HY1vO7P4/fqFPkGYaJ5/qeFjor9doj
-   159gGhTOdoalVRNN9Ttw/a2BO0lxAj9zzOIjsf+tAh4seqnvp3Ja0+TZw
-   WORZ4dI+XGsQvqif1nLjjaE8S5Uxk3Iq0ap5GF5tGFvVb5n/pUhCxqB1T
-   MhcSJbOCob9ccOp5+tr8i0UgTD5VmFFwftaDyz1RxMs+p8+UMxGCbvB9U
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307757206"
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="307757206"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 20:19:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="696941467"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Jan 2022 20:19:53 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDIjp-000NSF-0o; Fri, 28 Jan 2022 04:19:53 +0000
-Date: Fri, 28 Jan 2022 12:19:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [clangbuiltlinux:reachability 2/6] include/linux/rcupdate.h:1001:2:
- error: expected ')'
-Message-ID: <202201281234.J3kmDPwj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC37F2CA5
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 05:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1643347875;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OD6WAteNVjoEL5BdQQseFUQxBcO/VHXKit43SSCC07c=;
+	b=CHEeGk76PCcr2FYL15DJSWQQJpmgQbziyjMtlEpirF6c6fgFEj7VOwvbsJLSEceXcgkPbZ
+	Wi5Z/dWyRwdRasa5hQW6BJXeqVhbNH0Cp+w1fR7Az27fKvDOXLS2GEQwqkC7S/TCwD3LG5
+	Pg53ShCLa5dJfdx3u8ojDNrA8vt/iW4=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-16-W2zw-3FzMfmV_gok6bApLw-1; Fri, 28 Jan 2022 00:31:12 -0500
+X-MC-Unique: W2zw-3FzMfmV_gok6bApLw-1
+Received: by mail-oi1-f199.google.com with SMTP id bb20-20020a056808169400b002cd940d6247so2679593oib.7
+        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 21:31:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=OD6WAteNVjoEL5BdQQseFUQxBcO/VHXKit43SSCC07c=;
+        b=6Yim0TaMr4hQmJkNomplNz1u++fJ+0NJeY7Y5v7jcLH1dpnbGSC4wivWQ4lEJbm5Cy
+         zshK3zaYCfgHdH9e6hKH8JemynJA2g3BnVWft47QMHgqS4E+g5Mf2/7DZ3zwnXj7PJfF
+         PXWiiqR+Vfymmomtqz2mDh/lHKupV8F7HdXJH8NA2/wg5lvi2ZOM1fUw3/jFwSeddWlH
+         yPO5ZQNM1ItldNK159xKZtJYV8DdE0RZslhgc4wqZ458QVzaOnbfC5xSI2TlcSLqRn74
+         D29hnthJWG2udmQ59KUJX215ysPM07D03xU/INB62T6vNlTGyZwwWZDZm9IsvaxbUDYO
+         Ek0A==
+X-Gm-Message-State: AOAM530JpIoO/wYEc2BDoX/und662/pzJY271hYTU5HP53kcTzfQCeqM
+	duFE0sYuCs8CWuzLAT+3bRw3oBAn4X2/Evn1CGnM4b6tAr79zMlbskLjlrDowjhuv+Qo3eGLJ+6
+	YOhaNiStQyvAgcwfIyVA68FBhlR0e1OpP66IGlvVR/BXG/JjUKyko5fBBTl0z
+X-Received: by 2002:aca:45c4:: with SMTP id s187mr8701066oia.306.1643347871460;
+        Thu, 27 Jan 2022 21:31:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyuhkflKEAecETUqZfO5ziqGnq0F7Y7PbpsqMcaOvz3syLgEDVc9dZjOB54pRce/FUMMXYg5g==
+X-Received: by 2002:aca:45c4:: with SMTP id s187mr8701050oia.306.1643347871213;
+        Thu, 27 Jan 2022 21:31:11 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m7sm2628382ots.32.2022.01.27.21.31.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 21:31:10 -0800 (PST)
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To: Joe Perches <joe@perches.com>, Nick Desaulniers
+ <ndesaulniers@google.com>, Finn Thain <fthain@linux-m68k.org>,
+ Miguel Ojeda <ojeda@kernel.org>
+Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+ shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+ martin.petersen@oracle.com, nathan@kernel.org,
+ megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220127151945.1244439-1-trix@redhat.com>
+ <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+ <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+ <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
+ <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com>
+Date: Thu, 27 Jan 2022 21:31:08 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-tree:   https://github.com/ClangBuiltLinux/linux reachability
-head:   1ebaf6b87ee4d103be3d3f6e00fa4fcb18e7865e
-commit: 473c4f04fa49864f6955062435d8bab02ff87862 [2/6] x86: bug.h: merge asm in __WARN_FLAGS
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220128/202201281234.J3kmDPwj-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ClangBuiltLinux/linux/commit/473c4f04fa49864f6955062435d8bab02ff87862
-        git remote add clangbuiltlinux https://github.com/ClangBuiltLinux/linux
-        git fetch --no-tags clangbuiltlinux reachability
-        git checkout 473c4f04fa49864f6955062435d8bab02ff87862
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ^
-   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ^
-   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
-                   __WARN();                                               \
-                   ^
-   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
-   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-                                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:16:
-   include/linux/seqlock.h:278:1: error: expected ')'
-   SEQCOUNT_LOCKNAME(rwlock,       rwlock_t,        __SEQ_RT, s->lock,        read,     read_lock(s->lock))
-   ^
-   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
-           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
-                      ^
-   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ^
-   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ^
-   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
-                   __WARN();                                               \
-                   ^
-   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
-   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-                                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:16:
-   include/linux/seqlock.h:279:1: error: expected ')'
-   SEQCOUNT_LOCKNAME(mutex,        struct mutex,    true,     s->lock,        mutex,    mutex_lock(s->lock))
-   ^
-   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
-           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
-                      ^
-   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ^
-   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ^
-   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
-                   __WARN();                                               \
-                   ^
-   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
-   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-                                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:16:
-   include/linux/seqlock.h:280:1: error: expected ')'
-   SEQCOUNT_LOCKNAME(ww_mutex,     struct ww_mutex, true,     &s->lock->base, ww_mutex, ww_mutex_lock(s->lock, NULL))
-   ^
-   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
-           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
-                      ^
-   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ^
-   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ^
-   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
-                   __WARN();                                               \
-                   ^
-   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
-   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-                                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:21:
-   In file included from include/linux/mm_types.h:10:
-   In file included from include/linux/rbtree.h:24:
->> include/linux/rcupdate.h:1001:2: error: expected ')'
-           WARN_ON_ONCE(func != (rcu_callback_t)~0L);
-           ^
-   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
-                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
-                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:23:
-   In file included from include/linux/local_lock.h:5:
->> include/linux/local_lock_internal.h:30:2: error: expected ')'
-           DEBUG_LOCKS_WARN_ON(l->owner);
-           ^
-   include/linux/debug_locks.h:31:4: note: expanded from macro 'DEBUG_LOCKS_WARN_ON'
-                           WARN(1, "DEBUG_LOCKS_WARN_ON(%s)", #c);         \
-                           ^
-   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
-                   __WARN_printf(TAINT_WARN, format);                      \
-                   ^
-   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
-                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
-                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:23:
-   In file included from include/linux/local_lock.h:5:
-   include/linux/local_lock_internal.h:36:2: error: expected ')'
-           DEBUG_LOCKS_WARN_ON(l->owner != current);
-           ^
-   include/linux/debug_locks.h:31:4: note: expanded from macro 'DEBUG_LOCKS_WARN_ON'
-                           WARN(1, "DEBUG_LOCKS_WARN_ON(%s)", #c);         \
-                           ^
-   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
-                   __WARN_printf(TAINT_WARN, format);                      \
-                   ^
-   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
-                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
-                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:942:
-   In file included from include/linux/memory_hotplug.h:7:
-   In file included from include/linux/notifier.h:16:
->> include/linux/srcu.h:188:2: error: expected ')'
-           WARN_ON_ONCE(idx & ~0x1);
-           ^
-   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
-                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
-                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:19:
->> include/linux/percpu-refcount.h:280:2: error: expected ')'
-           WARN_ON_ONCE(!rcu_read_lock_held());
-           ^
-   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
-                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
-                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:10:
->> include/linux/sched.h:1816:2: error: expected ')'
-           WARN_ON(p->user_cpus_ptr);
-           ^
-   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
-                   __WARN();                                               \
-                   ^
-   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
-   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-                                   ^
-   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
-           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
-                                  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1197: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+In-Reply-To: <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
 
-vim +1001 include/linux/rcupdate.h
+On 1/27/22 6:43 PM, Joe Perches wrote:
+> On Thu, 2022-01-27 at 16:32 -0800, Tom Rix wrote:
+>> On 1/27/22 2:47 PM, Nick Desaulniers wrote:
+>>> + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
+>>> These criticisms are worth reviewing.
+>>>
+>>> On Thu, Jan 27, 2022 at 2:38 PM Finn Thain <fthain@linux-m68k.org> wrote:
+>>>> On Thu, 27 Jan 2022, trix@redhat.com wrote:
+>>>>
+>>>>> From: Tom Rix <trix@redhat.com>
+>>>>>
+>>>>> checkpatch reports several hundred formatting errors. Run these files
+>>>>> through clang-format and knock off some of them.
+>>>>>
+>>>> That method seems like a good recipe for endless churn unless checkpatch
+>>>> and clang-format really agree about these style rules.
+>>>>
+>>>> Why use checkpatch to assess code style, if we could simply diff the
+>>>> existing source with the output from clang-format... but it seems that
+>>>> clang-format harms readability, makes indentation errors and uses
+>>>> inconsistent style rules. Some examples:
+>> Problems with clang-format should be fixed, I'll take a look.
+>>
+>> I was reviewing this file for another issue and could not get past how
+>> horredously bad it was and really did not want to manually fix the 400+
+>> formatting errors.  I will drop this patch and use the use these files
+>> to verify the .clang-format .
+> I think this is more an issue with clang-format than with checkpatch.
+>
+> If you have specific issues with what checkpatch reports for this
+> file (or any other file), let me know.
 
-74de6960c99d8d Paul E. McKenney 2018-07-24   980  
-2aa5503026ceaa Paul E. McKenney 2018-11-20   981  /**
-000601bb62330f Tobias Klauser   2020-07-09   982   * rcu_head_after_call_rcu() - Has this rcu_head been passed to call_rcu()?
-74de6960c99d8d Paul E. McKenney 2018-07-24   983   * @rhp: The rcu_head structure to test.
-2aa5503026ceaa Paul E. McKenney 2018-11-20   984   * @f: The function passed to call_rcu() along with @rhp.
-74de6960c99d8d Paul E. McKenney 2018-07-24   985   *
-74de6960c99d8d Paul E. McKenney 2018-07-24   986   * Returns @true if the @rhp has been passed to call_rcu() with @func,
-74de6960c99d8d Paul E. McKenney 2018-07-24   987   * and @false otherwise.  Emits a warning in any other case, including
-74de6960c99d8d Paul E. McKenney 2018-07-24   988   * the case where @rhp has already been invoked after a grace period.
-74de6960c99d8d Paul E. McKenney 2018-07-24   989   * Calls to this function must not race with callback invocation.  One way
-74de6960c99d8d Paul E. McKenney 2018-07-24   990   * to avoid such races is to enclose the call to rcu_head_after_call_rcu()
-74de6960c99d8d Paul E. McKenney 2018-07-24   991   * in an RCU read-side critical section that includes a read-side fetch
-74de6960c99d8d Paul E. McKenney 2018-07-24   992   * of the pointer to the structure containing @rhp.
-74de6960c99d8d Paul E. McKenney 2018-07-24   993   */
-74de6960c99d8d Paul E. McKenney 2018-07-24   994  static inline bool
-74de6960c99d8d Paul E. McKenney 2018-07-24   995  rcu_head_after_call_rcu(struct rcu_head *rhp, rcu_callback_t f)
-74de6960c99d8d Paul E. McKenney 2018-07-24   996  {
-b699cce1604e82 Neeraj Upadhyay  2019-03-11   997  	rcu_callback_t func = READ_ONCE(rhp->func);
-b699cce1604e82 Neeraj Upadhyay  2019-03-11   998  
-b699cce1604e82 Neeraj Upadhyay  2019-03-11   999  	if (func == f)
-74de6960c99d8d Paul E. McKenney 2018-07-24  1000  		return true;
-b699cce1604e82 Neeraj Upadhyay  2019-03-11 @1001  	WARN_ON_ONCE(func != (rcu_callback_t)~0L);
-74de6960c99d8d Paul E. McKenney 2018-07-24  1002  	return false;
-74de6960c99d8d Paul E. McKenney 2018-07-24  1003  }
-74de6960c99d8d Paul E. McKenney 2018-07-24  1004  
+Yes, I agree. Its a clang-format problem.
 
-:::::: The code at line 1001 was first introduced by commit
-:::::: b699cce1604e828f19c39845252626eb78cdf38a rcu: Do a single rhp->func read in rcu_head_after_call_rcu()
+I will be looking to minimize the .clang-format settings to only those 
+that agree with checkpatch.
 
-:::::: TO: Neeraj Upadhyay <neeraju@codeaurora.org>
-:::::: CC: Paul E. McKenney <paulmck@linux.ibm.com>
+Then add settings back in later if their problems can be worked out.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Tom
+
