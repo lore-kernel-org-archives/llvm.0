@@ -1,94 +1,136 @@
-Received: from relay.hostedemail.com (relay032.a.hostedemail.com [64.99.140.32])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674C72C80
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 16:40:36 +0000 (UTC)
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id A95A022591;
-	Fri, 28 Jan 2022 16:23:33 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id C78062002A;
-	Fri, 28 Jan 2022 16:23:29 +0000 (UTC)
-Message-ID: <3707328ca9cbad0ecc0adb5d6df95e671b0f9270.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
- Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>,
- Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn
- <lukas.bulwahn@gmail.com>
-Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
- shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
- martin.petersen@oracle.com, nathan@kernel.org,
- megaraidlinux.pdl@broadcom.com,  linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Fri, 28 Jan 2022 08:23:28 -0800
-In-Reply-To: <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
-	 <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
-	 <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
-	 <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
-	 <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com>
-	 <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com>
-	 <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EBA2C80
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 17:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643389715; x=1674925715;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kgXvkvGlDf1JVTYkFL7dYdiuifP4CeQljPpc6IyMVvA=;
+  b=FAxR2A68hcNPPdhInQEMHDxn3DcFfZGPTrx1R/AEI7nOe/fXKz4E8fj3
+   oRSNMz++Kp36v34sbeHhKri/bbVgTDY8A3F+Pl1Zo1C14TU/ynPk6pvgW
+   9hvQyMp8qCI9Deu9an2dSgLJQQaAJyfLkK27h20jlYb0+JMR1vDXSEvVT
+   xV0JmhiA3p08yxMcaEyiixLBwbTlgGGoMi/ers8N2lEdX5DT4PBKy8gbp
+   zr/RaiwjG7L1H+2KlwOZ1XXr/v+Dr6FfWIf0KUJ30OW7lm8GJsLZRrAB1
+   3pqqQBg3gLHFTXI0tpKbauOIhWFUGkzQS/XyoQsb4tDJbLQqsMmC8p8Fl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="271621481"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="271621481"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 09:06:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="533563875"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Jan 2022 09:06:38 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDUhq-000O76-4k; Fri, 28 Jan 2022 17:06:38 +0000
+Date: Sat, 29 Jan 2022 01:06:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: zhanglianjie <zhanglianjie@uniontech.com>, keescook@chromium.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, yzaikin@google.com, mcgrof@kernel.org,
+	akpm@linux-foundation.org,
+	zhanglianjie <zhanglianjie@uniontech.com>
+Subject: Re: [PATCH] mm: move page-writeback sysctls to is own file
+Message-ID: <202201290141.GDKdUC72-lkp@intel.com>
+References: <20220128091901.18074-1-zhanglianjie@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.96
-X-Stat-Signature: udysuemusgnoujnxpumymmtkzku8o18g
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: C78062002A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18uluthQpEWU+bd4U+W52I3l2ayfxC7k3o=
-X-HE-Tag: 1643387009-44340
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128091901.18074-1-zhanglianjie@uniontech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-(adding checkpatch reviewers Dwaipayan and Lukas)
+Hi zhanglianjie,
 
-Original thread: https://lore.kernel.org/lkml/20220127151945.1244439-1-trix@redhat.com/
+Thank you for the patch! Perhaps something to improve:
 
-On Fri, 2022-01-28 at 07:30 -0800, Tom Rix wrote:
-> On 1/28/22 12:41 AM, Joe Perches wrote:
-> > Another option would be to use:
-> > 
-> > 	./scripts/checkpatch.pl -f --fix[-inplace] [--types=<list>] <files>
-> > 
-> > where types is an optional list of specific things to change
-> > 
-> > see:
-> > 	./scripts/checkpatch.pl --list-types --verbose
-> > 
-> > to show the possible types.
-> > 
-> > Only some of these types can be changed with --fix or --fix-inplace
-> > 
-> > If using checkpatch to change formatting, it sometimes can be useful
-> > to run checkpatch --fix multiple times on the same file as a
-> > checkpatch --fix can create a change than checkpatch will suggest
-> > should itself be fixed.
-> > 
-> > Of course another option is to do nothing as many will complain,
-> > sometimes senselessly, about 'churn'.
-> 
-> A testsuite for the fixers may help with churn
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17-rc1 next-20220128]
+[cannot apply to hnaz-mm/master linux/master kees/for-next/pstore]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Likely not, as IMO churn is an 'eye of beholder' issue.
+url:    https://github.com/0day-ci/linux/commits/zhanglianjie/mm-move-page-writeback-sysctls-to-is-own-file/20220128-172052
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 23a46422c56144939c091c76cf389aa863ce9c18
+config: arm64-buildonly-randconfig-r005-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290141.GDKdUC72-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/d24502aa729978894feb2de10481cd139ae5bb42
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review zhanglianjie/mm-move-page-writeback-sysctls-to-is-own-file/20220128-172052
+        git checkout d24502aa729978894feb2de10481cd139ae5bb42
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> Any interest or thought on organization ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Not really.
+All warnings (new ones prefixed by >>):
 
-The checkpatch --fix code isn't perfect as it's just regexes.
+   mm/page-writeback.c:509:5: warning: no previous prototype for function 'dirty_background_ratio_handler' [-Wmissing-prototypes]
+   int dirty_background_ratio_handler(struct ctl_table *table, int write,
+       ^
+   mm/page-writeback.c:509:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dirty_background_ratio_handler(struct ctl_table *table, int write,
+   ^
+   static 
+   mm/page-writeback.c:520:5: warning: no previous prototype for function 'dirty_background_bytes_handler' [-Wmissing-prototypes]
+   int dirty_background_bytes_handler(struct ctl_table *table, int write,
+       ^
+   mm/page-writeback.c:520:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dirty_background_bytes_handler(struct ctl_table *table, int write,
+   ^
+   static 
+   mm/page-writeback.c:531:5: warning: no previous prototype for function 'dirty_ratio_handler' [-Wmissing-prototypes]
+   int dirty_ratio_handler(struct ctl_table *table, int write, void *buffer,
+       ^
+   mm/page-writeback.c:531:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dirty_ratio_handler(struct ctl_table *table, int write, void *buffer,
+   ^
+   static 
+   mm/page-writeback.c:545:5: warning: no previous prototype for function 'dirty_bytes_handler' [-Wmissing-prototypes]
+   int dirty_bytes_handler(struct ctl_table *table, int write,
+       ^
+   mm/page-writeback.c:545:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dirty_bytes_handler(struct ctl_table *table, int write,
+   ^
+   static 
+   mm/page-writeback.c:2002:5: warning: no previous prototype for function 'dirty_writeback_centisecs_handler' [-Wmissing-prototypes]
+   int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
+       ^
+   mm/page-writeback.c:2002:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dirty_writeback_centisecs_handler(struct ctl_table *table, int write,
+   ^
+   static 
+>> mm/page-writeback.c:93:28: warning: unused variable 'dirty_bytes_min' [-Wunused-const-variable]
+   static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
+                              ^
+   6 warnings generated.
 
-When writing the --fix code, I've always just used the kernel
-sources and git history to inspect/verify suggested changes.  
 
-> I can take stab at one.
+vim +/dirty_bytes_min +93 mm/page-writeback.c
 
-Enjoy.
+    91	
+    92	/* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
+  > 93	static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
+    94	
 
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
