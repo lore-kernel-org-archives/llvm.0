@@ -1,77 +1,163 @@
-Received: from relay.hostedemail.com (relay025.a.hostedemail.com [64.99.140.25])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2EC168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 02:43:59 +0000 (UTC)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id B882420D82;
-	Fri, 28 Jan 2022 02:43:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 8AECD1A;
-	Fri, 28 Jan 2022 02:43:10 +0000 (UTC)
-Message-ID: <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
- shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
- martin.petersen@oracle.com, nathan@kernel.org,
- megaraidlinux.pdl@broadcom.com,  linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Thu, 27 Jan 2022 18:43:40 -0800
-In-Reply-To: <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
-	 <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
-	 <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CA0168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 02:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643338074; x=1674874074;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5Z6rpYTwUGuTjUocHChIXuJIH1Xqfusv1NopfrR3Vow=;
+  b=oB84OpLD7koI3ghejlFU9e97GhOuVkbLN8ZQewF0zkbgT5EyCnMhzl6D
+   2XpGXrruVFlDUSQjQlEKMqauVmd/Z8jG2gRkDiBUQcvVCDFkO72L1nt53
+   y5hUmwUXUgFchO7NimR3kyTPb/jxjcKgmGLlEsPrWbbLBviM68gidCCj4
+   /oSkg2Lr4dK5r/RJSggyDOYZim9MP76gXDbWlAUFgeGkyzHlzYsYoycmj
+   hIJpJ1rc6HnFG1g7u20h7Wdu5iVvVBXqQRa61R8g5twkbAha4NRNhFB9q
+   EPXDa+W3J3KFHYmPaIC3mjnooxrT7v6JCdUK/N2C8JPg7EeCON54fqSfW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="230604231"
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="230604231"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:47:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="495971012"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 27 Jan 2022 18:47:50 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDHIj-000NLG-NZ; Fri, 28 Jan 2022 02:47:49 +0000
+Date: Fri, 28 Jan 2022 10:47:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: marek.vasut@gmail.com, linux-pci@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Marek Vasut <marek.vasut+renesas@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <helgaas@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] PCI: rcar: Return all Fs from read which
+ triggered an exception
+Message-ID: <202201281037.40i8elct-lkp@intel.com>
+References: <20220122221554.196311-2-marek.vasut@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.88
-X-Stat-Signature: x39h7xij7ferynwq1baymdwur1t13kh4
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 8AECD1A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/dz/eWBoFmWNgbWpQYIec/MEbMEENQX0Y=
-X-HE-Tag: 1643337790-237904
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220122221554.196311-2-marek.vasut@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, 2022-01-27 at 16:32 -0800, Tom Rix wrote:
-> On 1/27/22 2:47 PM, Nick Desaulniers wrote:
-> > + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
-> > These criticisms are worth reviewing.
-> > 
-> > On Thu, Jan 27, 2022 at 2:38 PM Finn Thain <fthain@linux-m68k.org> wrote:
-> > > 
-> > > On Thu, 27 Jan 2022, trix@redhat.com wrote:
-> > > 
-> > > > From: Tom Rix <trix@redhat.com>
-> > > > 
-> > > > checkpatch reports several hundred formatting errors. Run these files
-> > > > through clang-format and knock off some of them.
-> > > > 
-> > > That method seems like a good recipe for endless churn unless checkpatch
-> > > and clang-format really agree about these style rules.
-> > > 
-> > > Why use checkpatch to assess code style, if we could simply diff the
-> > > existing source with the output from clang-format... but it seems that
-> > > clang-format harms readability, makes indentation errors and uses
-> > > inconsistent style rules. Some examples:
-> 
-> Problems with clang-format should be fixed, I'll take a look.
-> 
-> I was reviewing this file for another issue and could not get past how 
-> horredously bad it was and really did not want to manually fix the 400+ 
-> formatting errors.  I will drop this patch and use the use these files 
-> to verify the .clang-format .
+Hi,
 
-I think this is more an issue with clang-format than with checkpatch.
+I love your patch! Yet something to improve:
 
-If you have specific issues with what checkpatch reports for this
-file (or any other file), let me know.
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.17-rc1 next-20220127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/0day-ci/linux/commits/marek-vasut-gmail-com/PCI-rcar-Finish-transition-to-L1-state-in-rcar_pcie_config_access/20220123-061742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm-buildonly-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220128/202201281037.40i8elct-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f400a6012c668dfaa73462caf067ceb074e66c47)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/1eeb0cd756244c956c8b0fa809f2d4e5bee530b4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review marek-vasut-gmail-com/PCI-rcar-Finish-transition-to-L1-state-in-rcar_pcie_config_access/20220123-061742
+        git checkout 1eeb0cd756244c956c8b0fa809f2d4e5bee530b4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/pci/controller/pcie-rcar-host.c:133:5: warning: no previous prototype for function 'rcar_pci_write_reg_workaround' [-Wmissing-prototypes]
+   int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
+       ^
+   drivers/pci/controller/pcie-rcar-host.c:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
+   ^
+   static 
+   drivers/pci/controller/pcie-rcar-host.c:146:5: warning: no previous prototype for function 'rcar_pci_read_reg_workaround' [-Wmissing-prototypes]
+   int rcar_pci_read_reg_workaround(struct rcar_pcie *pcie, u32 *val, unsigned int reg)
+       ^
+   drivers/pci/controller/pcie-rcar-host.c:146:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int rcar_pci_read_reg_workaround(struct rcar_pcie *pcie, u32 *val, unsigned int reg)
+   ^
+   static 
+>> drivers/pci/controller/pcie-rcar-host.c:138:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("str")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+   drivers/pci/controller/pcie-rcar-host.c:151:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("ldr")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+>> drivers/pci/controller/pcie-rcar-host.c:138:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("str")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+   drivers/pci/controller/pcie-rcar-host.c:151:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("ldr")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+   2 warnings and 4 errors generated.
+
+
+vim +138 drivers/pci/controller/pcie-rcar-host.c
+
+   132	
+   133	int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
+   134	{
+   135		int error = PCIBIOS_SUCCESSFUL;
+   136	#ifdef CONFIG_ARM
+   137		asm volatile(
+ > 138			__rcar_pci_rw_reg_workaround("str")
+   139		: "+r"(error):"r"(val), "r"(pcie->base + reg) : "memory");
+   140	#else
+   141		rcar_pci_write_reg(pcie, val, reg);
+   142	#endif
+   143		return error;
+   144	}
+   145	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
