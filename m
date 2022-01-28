@@ -1,139 +1,138 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6037168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 08:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643359568; x=1674895568;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H+tIbmhjE4QG2sWST/QIM9Alm+fPOHWqQHHUF22ZXGU=;
-  b=O7bcGVpTzKyT7U7bpB15mrvdB4/ahnlS87m/1P1yghpC0G14NHuwzat3
-   rRcK1fqsoLrkIX/CeEAjGLMCM1xZFguNfVHjtc9B20RfZugWkj2fxOuxd
-   y3ocWWNdDzLkCt1dOaAQiomLK9d6AOZpyvoPnvO2TAQt9sR400eZOhDZC
-   tS51KOoHf7MABr+9GyIa/RYVPHNQ4yRdCMBbv3yBok3GJpWnNB2T2Rk4e
-   33SxTuoSPfs8+4YFOH0GwEf9WxnqHzleGHAmH0uoZ4nQYqB6+o5ZPY4WT
-   09g4vI+bX4Gfm5sXNb3rJQ59WjmSMEcJcp7Cf59tpFg78zScwv0mDjLWd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="230657261"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="230657261"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:46:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="496069381"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 00:46:06 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDMtS-000NfW-1H; Fri, 28 Jan 2022 08:46:06 +0000
-Date: Fri, 28 Jan 2022 16:45:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zichar Zhang <zichar.zhang@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 1/1] [RFC] wakeup_reason: Add infrastructure to log and
- report why the system resumed from suspend.
-Message-ID: <202201281645.eC7tWb3B-lkp@intel.com>
-References: <20220128045522.3505336-1-zichar.zhang@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F63168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 08:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E563C340E6;
+	Fri, 28 Jan 2022 08:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643360284;
+	bh=VybN4pzch65oeAi5HDL+8lwtT0cmSDE01H8knqAz1I4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eenZ5YRl7LyQLTevsJfI1fCgyoQtVIXJR5MbbBTleOdl/EtGMroCvwYxgxEqnx1Vp
+	 GAGWMZoDRevJBqn1HGs52PgOPYagQ1nCVGKaoBEBjwvnkEfY6MWsn4Nw64ohiS4bbg
+	 4jy7S30AUDvZt1qd1cZcbAmKwKUiZ4kYzRfJM3eupsLGcyWuwlGeLofphxG6E6z77/
+	 hUk1gUrMmO4b8jLyqCH1hzend12wNy83S20a+xoS9tLYcEwYVnx2ww4+W7mMcS1VPZ
+	 zGk2Hhzr07GZkB64mKNr2RYQAdfEGjCyiDeGXY614sira832gTeO/D4W33i9KU79SC
+	 9rGxhdl/xCbYg==
+Date: Fri, 28 Jan 2022 09:57:59 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Axel Rasmussen <axelrasmussen@google.com>
+Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Zach O'Keefe <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
+Message-ID: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
+References: <20220127221115.3731388-1-axelrasmussen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220128045522.3505336-1-zichar.zhang@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220127221115.3731388-1-axelrasmussen@google.com>
 
-Hi Zichar,
+On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
+> These are some trivial fixups, which were needed to build the tests with
+> clang and -Werror. The following issues are fixed:
+> 
+> - Remove various unused variables.
+> - In child_poll_leader_exit_test, clang isn't smart enough to realize
+>   syscall(SYS_exit, 0) won't return, so it complains we never return
+>   from a non-void function. Add an extra exit(0) to appease it.
+> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
+>   uninitialized, if we have !use_waitpid. Initialize it to zero to get
+>   the right behavior in that case.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linux/master linus/master v5.17-rc1 next-20220127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks!
+(Fwiw, all those tests should also be ported to use the TEST_*() harness
+infra. Currently it's an annoying mix.)
+Acked-by: Christian Brauner <brauner@kernel.org>
 
-url:    https://github.com/0day-ci/linux/commits/Zichar-Zhang/wakeup_reason-Add-infrastructure-to-log-and-report-why-the-system-resumed-from-suspend/20220128-125627
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: i386-randconfig-a014-20220124 (https://download.01.org/0day-ci/archive/20220128/202201281645.eC7tWb3B-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/b932c9637e3e3a14497ff60caedfc67608d93c13
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zichar-Zhang/wakeup_reason-Add-infrastructure-to-log-and-report-why-the-system-resumed-from-suspend/20220128-125627
-        git checkout b932c9637e3e3a14497ff60caedfc67608d93c13
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/power/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/power/main.c:19:
->> include/linux/wakeup_reason.h:29:9: warning: no previous prototype for function 'log_ws_wakeup_reason' [-Wmissing-prototypes]
-   ssize_t log_ws_wakeup_reason(void) { }
-           ^
-   include/linux/wakeup_reason.h:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t log_ws_wakeup_reason(void) { }
-   ^
-   static 
-   include/linux/wakeup_reason.h:29:38: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   ssize_t log_ws_wakeup_reason(void) { }
-                                        ^
->> include/linux/wakeup_reason.h:30:9: warning: no previous prototype for function 'log_irq_wakeup_reason' [-Wmissing-prototypes]
-   ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
-           ^
-   include/linux/wakeup_reason.h:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
-   ^
-   static 
-   include/linux/wakeup_reason.h:30:58: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
-                                                            ^
->> include/linux/wakeup_reason.h:31:6: warning: no previous prototype for function 'clear_wakeup_reason' [-Wmissing-prototypes]
-   void clear_wakeup_reason(void) { }
-        ^
-   include/linux/wakeup_reason.h:31:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void clear_wakeup_reason(void) { }
-   ^
-   static 
->> include/linux/wakeup_reason.h:32:9: warning: no previous prototype for function 'last_wakeup_reason_get' [-Wmissing-prototypes]
-   ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
-           ^
-   include/linux/wakeup_reason.h:32:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
-   ^
-   static 
-   include/linux/wakeup_reason.h:32:58: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
-                                                            ^
-   4 warnings and 3 errors generated.
-
-
-vim +/log_ws_wakeup_reason +29 include/linux/wakeup_reason.h
-
-    22	
-    23	#ifdef CONFIG_SUSPEND
-    24	ssize_t log_ws_wakeup_reason(void);
-    25	ssize_t log_irq_wakeup_reason(unsigned int irq_number);
-    26	void clear_wakeup_reason(void);
-    27	ssize_t last_wakeup_reason_get(char *buf, ssize_t max);
-    28	#else
-  > 29	ssize_t log_ws_wakeup_reason(void) { }
-  > 30	ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
-  > 31	void clear_wakeup_reason(void) { }
-  > 32	ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
-    33	#endif
-    34	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  tools/testing/selftests/clone3/clone3.c    | 2 --
+>  tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
+>  tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
+>  3 files changed, 5 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+> index 076cf4325f78..cd4582129c7d 100644
+> --- a/tools/testing/selftests/clone3/clone3.c
+> +++ b/tools/testing/selftests/clone3/clone3.c
+> @@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
+>  
+>  int main(int argc, char *argv[])
+>  {
+> -	pid_t pid;
+> -
+>  	uid_t uid = getuid();
+>  
+>  	ksft_print_header();
+> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+> index 529eb700ac26..9a2d64901d59 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+> @@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
+>  {
+>  	int pid, pidfd = 0;
+>  	int status, ret;
+> -	pthread_t t1;
+>  	time_t prog_start = time(NULL);
+>  	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
+>  
+> @@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
+>  	 */
+>  	*child_exit_secs = time(NULL);
+>  	syscall(SYS_exit, 0);
+> +	/* Never reached, but appeases compiler thinking we should return. */
+> +	exit(0);
+>  }
+>  
+>  static void test_pidfd_poll_leader_exit(int use_waitpid)
+>  {
+>  	int pid, pidfd = 0;
+> -	int status, ret;
+> -	time_t prog_start = time(NULL);
+> +	int status, ret = 0;
+>  	const char *test_name = "pidfd_poll check for premature notification on non-empty"
+>  				"group leader exit";
+>  
+> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+> index be2943f072f6..17999e082aa7 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+> @@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
+>  
+>  TEST(wait_simple)
+>  {
+> -	int pidfd = -1, status = 0;
+> +	int pidfd = -1;
+>  	pid_t parent_tid = -1;
+>  	struct clone_args args = {
+>  		.parent_tid = ptr_to_u64(&parent_tid),
+> @@ -47,7 +47,6 @@ TEST(wait_simple)
+>  		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+>  		.exit_signal = SIGCHLD,
+>  	};
+> -	int ret;
+>  	pid_t pid;
+>  	siginfo_t info = {
+>  		.si_signo = 0,
+> @@ -88,7 +87,7 @@ TEST(wait_simple)
+>  
+>  TEST(wait_states)
+>  {
+> -	int pidfd = -1, status = 0;
+> +	int pidfd = -1;
+>  	pid_t parent_tid = -1;
+>  	struct clone_args args = {
+>  		.parent_tid = ptr_to_u64(&parent_tid),
+> -- 
+> 2.35.0.rc2.247.g8bbb082509-goog
+> 
