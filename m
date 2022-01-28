@@ -1,98 +1,239 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+	(using TLSv1.2 with cipher AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD7729CA
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 19:59:30 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id c9so7092849plg.11
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:59:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5113D29CA
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 20:08:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k+KRxXOu730X8LGDY8ibWFrqzfk6XaCWgUlQ/FJX/1g=;
-        b=QzY57hp7L7C4IZbQuK3maGb3nj+uWYpqF0Yyk5wwLy6/eJqluG4XaJR5X9c6vaBhca
-         +4eW4VquXi25Krzxq/EFw4Jf45zqP9xeHpsX+yvvP8hH1WFNrNHqwwapMmFbvrCgnuEd
-         huCEf62r6D+yDp31w66z0o2a9sMjTQoSXNUmw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k+KRxXOu730X8LGDY8ibWFrqzfk6XaCWgUlQ/FJX/1g=;
-        b=wvHHijhAiXqrjaIA7TmQYfJcsMF/WCJSBzRvUHfmsZCTakk3tY1WMErWwDeYY92xJb
-         bmhix5w2MYN+EfXQnRYAqF/gbKGRrt0nB3WEy5ZxagdnMxUQxNUsczPfmcV6lAHlomag
-         uAaa7BX8v4lwypVIo09ZRNOxlYJbD7IomWlI9LGXf4dMzWyIFeITP+gcgR3dxc/t5xl8
-         Z4Ri8WXRcLlFYB8qSJaqg8X8x2Y/MEFGhlRcqeOPwxBD1WoVu7oVrOI48+csZO3lKoNS
-         e1GVMamdbUDICzxvu4FQg4wjZt9nec0sIRJA01eub6mVrD4lBxHl3nSLVu3G1Yb/QMUm
-         7IZg==
-X-Gm-Message-State: AOAM5333s4ETvLHnfKP/qeqAdrHBkioTDjSsWFzsAfMrpl4GGsg3J+wi
-	MvmrcwcuEPtNooNWDh0dsjrCfw==
-X-Google-Smtp-Source: ABdhPJy8LTGWug/n9PhrrQSoic5rIepzJSa4BJy1U3x25juPbd5YbLoVYVpCcIMuiwlMvw/asyemWA==
-X-Received: by 2002:a17:90b:1c8d:: with SMTP id oo13mr11600468pjb.59.1643399969749;
-        Fri, 28 Jan 2022 11:59:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o11sm22920833pgj.33.2022.01.28.11.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 11:59:29 -0800 (PST)
-Date: Fri, 28 Jan 2022 11:59:28 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] stack: Constrain stack offset randomization with
- Clang builds
-Message-ID: <202201281141.2491039E@keescook>
-References: <20220128114446.740575-1-elver@google.com>
- <20220128114446.740575-2-elver@google.com>
- <202201281058.83EC9565@keescook>
- <CANpmjNNaQ=06PfmPudBsLG7r9RsFXYo-NQR4CSM=iO11LFSHKw@mail.gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643400531; x=1674936531;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4YFSaVkGknEE1BL8T4nI34l2UDt7GaDRm6fUyYZ387U=;
+  b=naViLUFqel0Ga3G57fAmXfnm7prFgcCNrLhoXnwcbElaqXYEPiDkqRjr
+   cGaYbCH30fkycsEvCBD0rpJaT2+K9DxRPhpG6itsyOi0uox7V7f08CCdv
+   YLKYYNeTdP+lKlXVYnZBWMwepcJaLbSTYRwuzDNjYs1D2kMpLkhvWynLH
+   g=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jan 2022 12:06:41 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:06:41 -0800
+Received: from [10.110.30.198] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 28 Jan
+ 2022 12:06:40 -0800
+Message-ID: <a2687b42-79e2-5609-baf4-356da054b214@quicinc.com>
+Date: Fri, 28 Jan 2022 12:06:39 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNNaQ=06PfmPudBsLG7r9RsFXYo-NQR4CSM=iO11LFSHKw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] kbuild: Add environment variables for userprogs flags
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+CC: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek
+	<michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, "Fangrui
+ Song" <maskray@google.com>, Matthias Maennich <maennich@google.com>,
+	<linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+ <CAKwvOdk73a6FT3o7Pn7_dRM3U=dbrXy+iqmLC6n5msSNMzOTGQ@mail.gmail.com>
+From: Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <CAKwvOdk73a6FT3o7Pn7_dRM3U=dbrXy+iqmLC6n5msSNMzOTGQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 
-On Fri, Jan 28, 2022 at 08:23:02PM +0100, Marco Elver wrote:
-> On Fri, 28 Jan 2022 at 20:10, Kees Cook <keescook@chromium.org> wrote:
-> [...]
-> > >       2. Architectures adding add_random_kstack_offset() to syscall
-> > >          entry implemented in C require them to be 'noinstr' (e.g. see
-> > >          x86 and s390). The potential problem here is that a call to
-> > >          memset may occur, which is not noinstr.
-> [...]
-> > > --- a/arch/Kconfig
-> > > +++ b/arch/Kconfig
-> > > @@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
-> > >       bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
-> > >       default y
-> > >       depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-> > > +     depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
-> >
-> > This makes it _unavailable_ for folks with Clang < 14, which seems
-> > too strong, especially since it's run-time off by default. I'd prefer
-> > dropping this hunk and adding some language to the _DEFAULT help noting
-> > the specific performance impact on Clang < 14.
+
+
+On 1/26/2022 10:21 AM, Nick Desaulniers wrote:
+> On Wed, Jan 12, 2022 at 2:44 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>>
+>> Allow additional arguments be passed to userprogs compilation.
+>> Reproducible clang builds need to provide a sysroot and gcc path to
+>> ensure same toolchain is used across hosts. KCFLAGS is not currently
+>> used for any user programs compilation, so add new USERCFLAGS and
+>> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+>>
+>> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
+>> an environment where a user sysroot is not specifically available.
+>> Currently, Clang might automatically detect GCC installation on hosts
+>> which have it installed to a default location in /. With addition of
+>> these environment variables, our build environment can do like
+>> "--sysroot=/dev/null" to force sysroot detection to fail.
 > 
-> You're right, if it was only about performance. But there's the
-> correctness issue with ARCH_WANTS_NOINSTR architectures, where we
-> really shouldn't emit a call. In those cases, even if compiled in,
-> enabling the feature may cause trouble.
+> Hi Elliot,
+> Thanks for the patch! Sorry for the delay in reviewing; I didn't quite
+> get around to it then went on vacation for a week.  Things get buried
+> in my inbox quickly; feel free to ping me if a week goes by with no
+> response on whichever channel works best for you.
 
-Hrm. While I suspect instrumentation of memset() from a C function that is
-about to turn on instrumentation is likely quite safe, I guess the size
-of the venn diagram overlap of folks wanting to use kstack randomization
-and an older Clang quickly approaches zero. But everyone building with
-an older Clang gets warnings spewed, so I agree: let's opt for complete
-correctness here, and make this >= 14 as you have done.
+No worries :) Thanks for the review.
 
--- 
-Kees Cook
+> 
+> I'm happy with the intent of this patch; GNU binutils has been removed
+> from Android, so supporting CC_CAN_LINK for Android kernel builds has
+> been a question I've been thinking about (though, not with higher
+> priority with some of our other issues), since we'll need to either
+> incorporate musl or bionic libc into our kernel build.  I was thinking
+> of adding a SYSROOT command line variable for that, but I see your
+> approach is more flexible.
+> 
+> One minor nit below, a typo, a few questions, and in the commit
+> message, but this generally LGTM.
+> 
+> For the commit message, I think it would be good to expand `can do
+> like "--sysroot=/dev/null"` fully into
+> ```
+> can specify
+> $ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
+> ```
+> 
+
+Will do.
+
+>>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   Documentation/kbuild/kbuild.rst | 8 ++++++++
+>>   Makefile                        | 9 ++++++---
+>>   init/Kconfig                    | 8 ++++----
+>>   usr/include/Makefile            | 3 +++
+>>   4 files changed, 21 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+>> index 2d1fc03d346e..16e90a3ae01b 100644
+>> --- a/Documentation/kbuild/kbuild.rst
+>> +++ b/Documentation/kbuild/kbuild.rst
+>> @@ -77,6 +77,14 @@ HOSTLDLIBS
+>>   ----------
+>>   Additional libraries to link against when building host programs.
+>>
+>> +USERCFLAGS
+>> +----------
+>> +Additional options used for $(CC) when compiling userprogs.
+>> +
+>> +USERLDFLAGS
+>> +----------
+>> +Additional options used for $(LD) when linking userprogs.
+> 
+> Probably should note the necessity of `-Wl,` prefixes here.
+> 
+> Is `userprogs` cannonical? Yeah, I guess (reading
+> Documentation/kbuild/makefiles.rst). I wonder if we should mention
+> these in Documentation/kbuild/makefiles.rst as well? Under `5.3
+> Controlling compiler options for userspace programs`.
+> 
+
+Will do.
+
+>> +
+>>   KBUILD_KCONFIG
+>>   --------------
+>>   Set the top-level Kconfig file to the value of this environment
+>> diff --git a/Makefile b/Makefile
+>> index 45278d508d81..4a55537c8ca0 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -431,15 +431,17 @@ HOSTCC    = gcc
+>>   HOSTCXX        = g++
+>>   endif
+>>
+>> -export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+>> -                             -O2 -fomit-frame-pointer -std=gnu89
+>> -export KBUILD_USERLDFLAGS :=
+>> +KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+>> +                    -O2 -fomit-frame-pointer -std=gnu89
+>> +KBUILD_USERLDFLAGS := $(USERLDFLAGGS)
+> 
+> ^ I think there's an extra G in USERLDFLAGS above.
+> 
+
+Oops, thanks!
+
+>>
+>>   KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+>>   KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
+>>   KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
+>>   KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+>>
+>> +KBUILD_USERCFLAGS   += $(USERCFLAGS)
+> 
+> Since you added USERLDFLAGS to KBUILD_USERLDFLAGS above where it's
+> defined, why not do so for USERCFLAGS/KBUILD_USERCFLAGS as well?
+> 
+
+The initial KBUILD_USERCFLAGS above is also used in KBUILD_HOSTCFLAGS. I 
+didn't think it would be wise to have USERCFLAGS from command line 
+affect HOSTCFLAGS as well, since a use case might be to add 
+cross-compilation flags in USERCFLAGS but not in HOSTCFLAGS. When 
+Android kernel builds do get arm64 musl/bionic libc available, we will 
+want it only for userprogs and not hostprogs.
+
+>> +
+>>   # Make variables (CC, etc...)
+>>   CPP            = $(CC) -E
+>>   ifneq ($(LLVM),)
+>> @@ -530,6 +532,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
+>>   export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+>>   export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+>>   export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
+>> +export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
+>>
+>>   export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
+>>   export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
+>> diff --git a/init/Kconfig b/init/Kconfig
+>> index f2ae41e6717f..164706c38e8b 100644
+>> --- a/init/Kconfig
+>> +++ b/init/Kconfig
+>> @@ -62,13 +62,13 @@ config LLD_VERSION
+>>
+>>   config CC_CAN_LINK
+>>          bool
+>> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
+>> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
+>> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
+>> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
+>>
+>>   config CC_CAN_LINK_STATIC
+>>          bool
+>> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
+>> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
+>> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
+>> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
+> 
+> since USERLDFLAGS get passed to $(CC), they will need `-Wl`, prefixes,
+> hence the request for expanding the example usage in the commit
+> message.
+> 
+>>
+>>   config CC_HAS_ASM_GOTO
+>>          def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+>> diff --git a/usr/include/Makefile b/usr/include/Makefile
+>> index 1c2ae1368079..6a8c7dd9ccaf 100644
+>> --- a/usr/include/Makefile
+>> +++ b/usr/include/Makefile
+>> @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+>>   # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+>>   UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+>>
+>> +# USERCFLAGS might contain sysroot location for CC
+>> +UAPI_CFLAGS += $(USERCFLAGS)
+>> +
+> 
+> Do we need to worry about USERLDFLAGS here, too? (or usr/Makefile?)
+> 
+>>   override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+>>
+>>   # The following are excluded for now because they fail to build.
+>> --
+>> 2.25.1
+>>
+> 
+> 
