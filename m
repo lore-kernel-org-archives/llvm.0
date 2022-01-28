@@ -1,107 +1,144 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4AD2C80
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 18:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1643392800;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=u+Hmwc9+6O6R90bO9i51djyWsBTgueZPwQigGIkzQcY=;
-	b=KeCnTNgc+X/marPq6erYQgfYZN5XnIRcmW8T+RPluLCeAE2TaogbwS70Z4mZn9TFJtQbkK
-	rAEiO5G0oWoW+mzrBeD3I2axyJ+f6wowT9YU/tFBYkWNZLATNoP0Go9U58g6DcoxN8+oVQ
-	ktLsbQqu0Sc+4RnHXD5rImNhyf1YSXI=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-HsL8EKdyObyxa4W8YeerNQ-1; Fri, 28 Jan 2022 12:59:59 -0500
-X-MC-Unique: HsL8EKdyObyxa4W8YeerNQ-1
-Received: by mail-oi1-f197.google.com with SMTP id bf12-20020a056808190c00b002cf68d61ccfso925981oib.8
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:59:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=u+Hmwc9+6O6R90bO9i51djyWsBTgueZPwQigGIkzQcY=;
-        b=ItY8TOohsOVRTJJyQcV1xQCSIUW4070rmfjNt5zUkRkpLQG5R+EzVTy0lxSNQtoY1p
-         un3epvcOW67Df9XS729XpaQ7DUvAeLl9nc2p/kkx78yvl3ND2xxc3ipz5KqAmuB6m+pX
-         7zCvkmUi1tE2uCHdsLHBWtn7/7jGRmnmeVSCC5O625H9SQAM9/jIdbB4bTIjvXLXVYUS
-         g91Sn4cDHkpo3WrRFFGaes7R66htZ1a2JkcxVD1EktX4mG9yUJHJ7cBZ8jW7X1lbmgcJ
-         Fn42UFOAzFjXT29+d2Bk9ayLHzkyDJ2nOu8/zRqlxcAXHKqSG4mvCMPtz2xQDqvnLPdc
-         XwxQ==
-X-Gm-Message-State: AOAM531oDMOpBsAy5RWyHp15Xf7WLaxZ79S5uzRL5Q1Oj4zody/rAEWy
-	CNlU+WYTmYE3G5wfiztPRWAoo5suAyWHuJty+IjDRxxmm6dzp7h7UWGTZs8/NK15hUFjB3QiGal
-	M0vtIvME3gxWfS/6gM0S56OCrsTADv00Vij6nzwtOZ28zy5lBUU4cAbHjqOe7
-X-Received: by 2002:a05:6830:1091:: with SMTP id y17mr5517937oto.251.1643392798099;
-        Fri, 28 Jan 2022 09:59:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7tzvwbAnDL33am0wCZlnAvRFJbSDVAbo5b1w5J/mtfZ8VVd+wV4q4yxN0XRiY8J66auWK3w==
-X-Received: by 2002:a05:6830:1091:: with SMTP id y17mr5517919oto.251.1643392797859;
-        Fri, 28 Jan 2022 09:59:57 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id l19sm4578463ooa.7.2022.01.28.09.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 09:59:57 -0800 (PST)
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To: Bart Van Assche <bvanassche@acm.org>, kashyap.desai@broadcom.com,
- sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
- jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org,
- ndesaulniers@google.com
-Cc: megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220127151945.1244439-1-trix@redhat.com>
- <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-Date: Fri, 28 Jan 2022 09:59:54 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F11129CA
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 18:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8B3C340E6;
+	Fri, 28 Jan 2022 18:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643395561;
+	bh=tmg5tqWxrNUjL1aQmmYQBWTKs6R9ohKioeAuiOX9yVo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bbUpNxC2KlnIW8Zf7qUELgsBoXzne8oOqLQQqyG7KGdmdVQjYOYhJhXUMdQYuoGCT
+	 UJmCkm4Fj/XMm0BuZD/M8GMm6wpqacwY3rMOFwK2sgdiO3FWg+4D28Vjtsaqk4JKcP
+	 1CCii4/NWqjns2vzsiDFHRiYxkm2Ioa/sV3PfbOlF9GBRh+WQSw4zCEjmZQdyenHdu
+	 BhyJm8B7QalLAIDlExaa+B4WOmMlnbynWKVSeBqODrTho1O6s+4NkaQtxnD47N7InI
+	 O5FpQHGhH2+LAdNZf5xs697XX3WQalBnnbEiEe/zERfx9y/1U8qd9pdhHhRKgDFF6+
+	 VXdhVpoDLa70A==
+Date: Fri, 28 Jan 2022 11:45:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Kees Cook <keescook@chromium.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
+Message-ID: <YfQ54x8zglPT/YnL@dev-arch.archlinux-ax161>
+References: <20220128114446.740575-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128114446.740575-1-elver@google.com>
 
+On Fri, Jan 28, 2022 at 12:44:45PM +0100, Marco Elver wrote:
+> The randomize_kstack_offset feature is unconditionally compiled in when
+> the architecture supports it.
+> 
+> To add constraints on compiler versions, we require a dedicated Kconfig
+> variable. Therefore, introduce RANDOMIZE_KSTACK_OFFSET.
+> 
+> Furthermore, this option is now also configurable by EXPERT kernels:
+> while the feature is supposed to have zero performance overhead when
+> disabled, due to its use of static branches, there are few cases where
+> giving a distribution the option to disable the feature entirely makes
+> sense. For example, in very resource constrained environments, which
+> would never enable the feature to begin with, in which case the
+> additional kernel code size increase would be redundant.
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
 
-On 1/28/22 9:42 AM, Bart Van Assche wrote:
-> On 1/27/22 07:19, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> checkpatch reports several hundred formatting errors.
->> Run these files through clang-format and knock off
->> some of them.
->
-> Isn't this the kind of patches that carries more risk than value? 
-> Additionally, this patch conflicts with a patch series that I plan to 
-> post soon.
->
-> Thanks,
+From a Kconfig perspective:
 
-I have dropped this patch.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Long term, it would be good have a reliable way to automatically fix 
-either new files or really broken old files.
-
-So you could do two patches, first would be fixing formatting problems 
-and second would new stuff.
-
-As it is your new patch will have to both for now.
-
-Tom
-
->
->
-> Bart.
->
-
+> ---
+>  arch/Kconfig                     | 23 ++++++++++++++++++-----
+>  include/linux/randomize_kstack.h |  5 +++++
+>  init/main.c                      |  2 +-
+>  3 files changed, 24 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 678a80713b21..2cde48d9b77c 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1159,16 +1159,29 @@ config HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+>  	  to the compiler, so it will attempt to add canary checks regardless
+>  	  of the static branch state.
+>  
+> -config RANDOMIZE_KSTACK_OFFSET_DEFAULT
+> -	bool "Randomize kernel stack offset on syscall entry"
+> +config RANDOMIZE_KSTACK_OFFSET
+> +	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
+> +	default y
+>  	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+>  	help
+>  	  The kernel stack offset can be randomized (after pt_regs) by
+>  	  roughly 5 bits of entropy, frustrating memory corruption
+>  	  attacks that depend on stack address determinism or
+> -	  cross-syscall address exposures. This feature is controlled
+> -	  by kernel boot param "randomize_kstack_offset=on/off", and this
+> -	  config chooses the default boot state.
+> +	  cross-syscall address exposures.
+> +
+> +	  The feature is controlled via the "randomize_kstack_offset=on/off"
+> +	  kernel boot param, and if turned off has zero overhead due to its use
+> +	  of static branches (see JUMP_LABEL).
+> +
+> +	  If unsure, say Y.
+> +
+> +config RANDOMIZE_KSTACK_OFFSET_DEFAULT
+> +	bool "Default state of kernel stack offset randomization"
+> +	depends on RANDOMIZE_KSTACK_OFFSET
+> +	help
+> +	  Kernel stack offset randomization is controlled by kernel boot param
+> +	  "randomize_kstack_offset=on/off", and this config chooses the default
+> +	  boot state.
+>  
+>  config ARCH_OPTIONAL_KERNEL_RWX
+>  	def_bool n
+> diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
+> index bebc911161b6..91f1b990a3c3 100644
+> --- a/include/linux/randomize_kstack.h
+> +++ b/include/linux/randomize_kstack.h
+> @@ -2,6 +2,7 @@
+>  #ifndef _LINUX_RANDOMIZE_KSTACK_H
+>  #define _LINUX_RANDOMIZE_KSTACK_H
+>  
+> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+>  #include <linux/kernel.h>
+>  #include <linux/jump_label.h>
+>  #include <linux/percpu-defs.h>
+> @@ -50,5 +51,9 @@ void *__builtin_alloca(size_t size);
+>  		raw_cpu_write(kstack_offset, offset);			\
+>  	}								\
+>  } while (0)
+> +#else /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
+> +#define add_random_kstack_offset()		do { } while (0)
+> +#define choose_random_kstack_offset(rand)	do { } while (0)
+> +#endif /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
+>  
+>  #endif
+> diff --git a/init/main.c b/init/main.c
+> index 65fa2e41a9c0..560f45c27ffe 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -853,7 +853,7 @@ static void __init mm_init(void)
+>  	pti_init();
+>  }
+>  
+> -#ifdef CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+>  DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
+>  			   randomize_kstack_offset);
+>  DEFINE_PER_CPU(u32, kstack_offset);
+> -- 
+> 2.35.0.rc0.227.g00780c9af4-goog
+> 
