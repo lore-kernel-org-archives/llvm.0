@@ -1,148 +1,94 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (relay032.a.hostedemail.com [64.99.140.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95882C82
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 16:29:42 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id k17so6488321plk.0
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 08:29:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=4xDtUS2VtuCr0Qb4hVvnnUvCySjUeQQihblMbDnwQHM=;
-        b=QV/MmPQWPgSoOy4dP77wt9pWZS0FAg4ESGF2IKv7+QuqqIeMFH1QkC31L8YxkehpFz
-         f7TcW+/ELmnwnDkDQPj4LOP13GGAGIX6DmdOVfPrWtwIvsXm7v7qQqudC07SN/cXXAMv
-         sEWf2h3wcUGAEDhVJlPa5qMRzQeRAMqeV6LIf/Rq/QpgwOP2Q3onbivecTOgWy+8DF4Y
-         M3ZZZh0GvoDIU4Zp08SAB2kcyohqoL2pfpo5QtUq/L/rn5aci60D395FOsubUqvL5qIi
-         IPmaAta578nuGYMkvQwOdTbYPBhZ5H1wiaoOWBouBiocqWTB3Y0+/RDGg1nGRgZ5sQJN
-         8wYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4xDtUS2VtuCr0Qb4hVvnnUvCySjUeQQihblMbDnwQHM=;
-        b=2iYvChc6KqaP4+QceEl0cxTKvPhflD0pi/MtuP2JPluU88gsx2XSpEg0wQHqgnKv0x
-         eaBgTj4v9FMq2H5/+Csa+y8MVOziI9bHPZBWMYOfVT2Hr3g9VcMDqjHvqbyF97IHFMgz
-         wkVV+jljm/4QC0Jris8BYFeijBbPefK6g2NuXie1vFccQOxOptHFqbtYsZv6tQ4UP80y
-         H/KpUGN3KewgOjwSRw/dtf76aKFsYe98VMHRNWs/11Wpy62DRl1dS1o5BOL5P/J7RzQ/
-         Xz+x591yawlctEnk3O5mDi3QusauUt43abA2e9Yzjak1uAi3UoKK0KAwaIh92dM7RN5G
-         Rrfg==
-X-Gm-Message-State: AOAM530yHgj1Ma6ZHzYbjvYIfQcP6aiomaaRUKfqBM9LDFyFe5yzm+Tc
-	n8zLsfLTB2MfcKNBwcGDPLU+VQ==
-X-Google-Smtp-Source: ABdhPJzKFCZGm3oWvz0iogboERcHFJWKAN3FzB2q4ReutSTe3FD0c0Pj66F/uc8sB4GUXgDl7q36ug==
-X-Received: by 2002:a17:902:ea06:: with SMTP id s6mr8904330plg.161.1643387382043;
-        Fri, 28 Jan 2022 08:29:42 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g11sm8439019pfj.21.2022.01.28.08.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:29:41 -0800 (PST)
-Date: Fri, 28 Jan 2022 16:29:37 +0000
-From: Sean Christopherson <seanjc@google.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-	tglx@linutronix.de, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-	pjt@google.com, posk@google.com, avagin@google.com,
-	jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
-	posk@posk.io, James Y Knight <jyknight@google.com>,
-	llvm@lists.linux.dev
-Subject: Re: [RFC][PATCH v2 4/5] x86/uaccess: Implement
- unsafe_try_cmpxchg_user()
-Message-ID: <YfQZ8cXPDraUqLMN@google.com>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.852009966@infradead.org>
- <YfIAsHQv5Q84fOqO@google.com>
- <YfI9Y5l0fQAKuJav@google.com>
- <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net>
- <YfMruK8/1izZ2VHS@google.com>
- <CAKwvOdmPkCuYuMRBSeK7DaK-wrdH5+C0gL63eqJ1buHsmueFsg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674C72C80
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 16:40:36 +0000 (UTC)
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id A95A022591;
+	Fri, 28 Jan 2022 16:23:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id C78062002A;
+	Fri, 28 Jan 2022 16:23:29 +0000 (UTC)
+Message-ID: <3707328ca9cbad0ecc0adb5d6df95e671b0f9270.camel@perches.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+From: Joe Perches <joe@perches.com>
+To: Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+ Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn
+ <lukas.bulwahn@gmail.com>
+Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
+ shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
+ martin.petersen@oracle.com, nathan@kernel.org,
+ megaraidlinux.pdl@broadcom.com,  linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Fri, 28 Jan 2022 08:23:28 -0800
+In-Reply-To: <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
+References: <20220127151945.1244439-1-trix@redhat.com>
+	 <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+	 <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+	 <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
+	 <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
+	 <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com>
+	 <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com>
+	 <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmPkCuYuMRBSeK7DaK-wrdH5+C0gL63eqJ1buHsmueFsg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.96
+X-Stat-Signature: udysuemusgnoujnxpumymmtkzku8o18g
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: C78062002A
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18uluthQpEWU+bd4U+W52I3l2ayfxC7k3o=
+X-HE-Tag: 1643387009-44340
 
-On Thu, Jan 27, 2022, Nick Desaulniers wrote:
-> On Thu, Jan 27, 2022 at 3:33 PM Sean Christopherson <seanjc@google.com> wrote:
-> > Regarding the param number, gcc also appears to have a goof with asm goto and "+m",
-> > but bumping the param number in that case remedies its woes.
-> >
-> >   $echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
-> >   <stdin>: In function ‘foo’:
-> >   <stdin>:1:19: error: invalid 'asm': '%l' operand isn't a label
-> >
-> >   $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
+(adding checkpatch reviewers Dwaipayan and Lukas)
+
+Original thread: https://lore.kernel.org/lkml/20220127151945.1244439-1-trix@redhat.com/
+
+On Fri, 2022-01-28 at 07:30 -0800, Tom Rix wrote:
+> On 1/28/22 12:41 AM, Joe Perches wrote:
+> > Another option would be to use:
+> > 
+> > 	./scripts/checkpatch.pl -f --fix[-inplace] [--types=<list>] <files>
+> > 
+> > where types is an optional list of specific things to change
+> > 
+> > see:
+> > 	./scripts/checkpatch.pl --list-types --verbose
+> > 
+> > to show the possible types.
+> > 
+> > Only some of these types can be changed with --fix or --fix-inplace
+> > 
+> > If using checkpatch to change formatting, it sometimes can be useful
+> > to run checkpatch --fix multiple times on the same file as a
+> > checkpatch --fix can create a change than checkpatch will suggest
+> > should itself be fixed.
+> > 
+> > Of course another option is to do nothing as many will complain,
+> > sometimes senselessly, about 'churn'.
 > 
-> Right, so in fixing the above issue with tied outputs, I noticed that
-> the GCC implementation of asm goto with outputs had different
-> behavior. I changed clang's implementation in clang-14 (same patch
-> series) to match:
-> https://reviews.llvm.org/rG5c562f62a4ee15592f5d764d0710553a4b07a6f2
-> This comment summarizes most of my thoughts on the issue:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98096#c7
-> Specifically the quote "It appears to me that the GCC decision here
-> was accidental, and that when pointed out, the bug was simply
-> documented rather than fixed."
+> A testsuite for the fixers may help with churn
 
-I guess that makes a certain amount of sense, but wow that is subtle, confusing,
-and potentially dangerous.  Looks like the hidden inputs are numbered after all
-explicit inputs, otherwise there would be broken code left and right, but it means
-that a typo like so:
+Likely not, as IMO churn is an 'eye of beholder' issue.
 
-  echo 'int foo(int x) { asm ("xor %0, %0; xor %2, %2" : "+a"(x) : "b"(x)); return x; return 0; }' | clang -x c - -c -o tmp.o
+> Any interest or thought on organization ?
 
-will compile cleanly.
+Not really.
 
-> Though I think compatibility between compilers is ultimately more
-> important.  There's no standards bodies involved in these extension,
-> which is simultaneously more flexible, yet can also lead to
-> differences in implementations like this. Thanks for attending my TED
-> talk.
-> 
-> >
-> >
-> > So my immediate question: how do we want to we deal with this in the kernel?  Keeping
-> > in mind that I'd really like to send this to stable@ to fix the KVM mess.
-> >
-> > I can think of few options that are varying degrees of gross.
-> >
-> >   1) Use a more complex sequence for probing CC_HAS_ASM_GOTO_OUTPUT.
-> >
-> >   2) Use an output-only "=m" operand.
-> >
-> >   3) Use an input register param.
-> >
-> > Option #1 has the obvious downside of the fancier asm goto for  __get_user_asm()
-> > and friends being collateral damage.  The biggest benefit is it'd reduce the
-> > likelihood of someone else having to debug similar errors, which was quite painful.
-> 
-> Right; I assumed we'd hit this at some point, as soon as people wanted
-> to used tied outputs with asm goto.  I'd rather have a different
-> Kconfig test for working tied outputs, 
+The checkpatch --fix code isn't perfect as it's just regexes.
 
-Is it all tied outputs, or just "+m"?  E.g. using "+r" compiles cleanly.
+When writing the --fix code, I've always just used the kernel
+sources and git history to inspect/verify suggested changes.  
 
-  echo 'int foo(int x) { asm goto ("xor %0, %0;.long (%l[bar]) - .\n": "+r"(x) ::: bar); return x; bar: return 0; }' | clang -x c - -c -o /dev/null
+> I can take stab at one.
 
-It might be a moot point as I can't find any instances of "+"-anything in conjunction
-with asm_volatile_goto, i.e. adding CC_HAS_ASM_GOTO_OUTPUT_TIED_OUTPUTS won't create
-an inconsistency with existing code.
+Enjoy.
 
-Regardless, I like that idea.
 
-> and that all uses in the kernels used the symbolic references which are much
-> more readable and less confusing than the rules for numbered references
-> (which are bug prone IMO).
-
-100% agree, even though it takes me twice as long to write because I can never
-remember the syntax :-)  Converting all existing usage is probably a fools errand,
-but adding a checkpatch rule would get us going in the right direction.
