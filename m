@@ -1,43 +1,30 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AF82C82
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 14:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643381069; x=1674917069;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9MubXPOrZMSDvuDAk4wR9yXEG5Ff3JUogxZoDw218Ag=;
-  b=ApYxAwcepOdTxcRZcEtwu2fKfF/w8BNz4XyXGmuCDjdkSAkvaI3Kocbk
-   5/JaDnOiM+q5jI/VsDG6KeV9AVR8O3q19nAjSpINngFFsi1M+YUT5AFRq
-   J6GnKMP1wfyTJCVD9XaHxDGX7LSEZIo1fwMgK+momCtRFni3Sj16xJ2mA
-   2Z3HbVNZbD62gmk+pbHMqKrS9Onm5QXjc4VXMxWRNoJDrlY9q6Zhicd3p
-   WlZ2NIMrJhlo5acVUSFGk3jVaUbog2Z0oPCKdgDWQ/CgepOyDNJy6mDNl
-   7SdvtrKaPUGdV+suAlSORP8jTfakrqRrAbpwkBvQHaPlaraGKc5ceL76F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="234507554"
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="234507554"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 06:44:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
-   d="scan'208";a="618739123"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2022 06:44:26 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDSUD-000NzG-US; Fri, 28 Jan 2022 14:44:25 +0000
-Date: Fri, 28 Jan 2022 22:43:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Will Deacon <will@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 2786/2952] arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier
- 'smccc_trng_available'
-Message-ID: <202201282248.FsZz69z1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585742C82
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 15:03:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428DFC340E6;
+	Fri, 28 Jan 2022 15:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643382183;
+	bh=8977n+KmEj7ReKrjHl1AOxf+fEeuIQ9yNfDB243E+VA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TAf70PRYBmouertX+8zGnt2OA3GOBrW9BKCpiTUx/FKHWD8ko5NU1Vh8QZNSaxIwb
+	 sB0InlJEntDtGxIJ4eeYMQCU8lro++RobJOjjiEvmxbnmNuQIqxDXYt8gOJ0jscXHw
+	 20aCKTLze0angQC074KZ8UKsg8Bu1tWavkoh0PxIYHT3qP+dLUM4HgchtUw7Jde4uG
+	 YKI+rDpnRCEBU8jJXzr+Cuy4RqV/RPLTwPRVyKG8pLNqEo/bxwcTbjvb2NW8asttuE
+	 BbXtKU8q3bRr9/sxWMA4m11Da4Ngdxry+oRzte9AU4thAGc1Ht26yOJn0gfjiW137D
+	 CHxtGdTxCj+Dg==
+Date: Fri, 28 Jan 2022 08:02:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: ndesaulniers@google.com, mpe@ellerman.id.au,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, christophe.leroy@csgroup.eu,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCHv3] powerpc: mm: radix_tlb: rearrange the if-else block
+Message-ID: <YfQFom4xDcysN1yb@dev-arch.archlinux-ax161>
+References: <20220128131713.299198-1-anders.roxell@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,73 +33,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220128131713.299198-1-anders.roxell@linaro.org>
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   0eaf0db549770f64aa4a81fa6361ad40e42c99f9
-commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/2952] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
-config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220128/202201282248.FsZz69z1-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Fri, Jan 28, 2022 at 02:17:13PM +0100, Anders Roxell wrote:
+> Clang warns:
+> 
+> arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' is uninitialized when used here [-Werror,-Wuninitialized]
+>                                 __tlbiel_va_range(hstart, hend, pid,
+>                                                   ^~~~~~
+> arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the variable 'hstart' to silence this warning
+>                 unsigned long hstart, hend;
+>                                     ^
+>                                      = 0
+> arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is uninitialized when used here [-Werror,-Wuninitialized]
+>                                 __tlbiel_va_range(hstart, hend, pid,
+>                                                           ^~~~
+> arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the variable 'hend' to silence this warning
+>                 unsigned long hstart, hend;
+>                                           ^
+>                                            = 0
+> 2 errors generated.
+> 
+> Rework the 'if (IS_ENABLE(CONFIG_TRANSPARENT_HUGEPAGE))' so hstart/hend
+> always gets initialized, this will silence the warnings. That will also
+> simplify the 'else' path. Clang is getting confused with these warnings,
+> but the warnings is a false-positive.
+> 
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-All errors (new ones prefixed by >>):
-
->> arch/arm64/kvm/arm.c:2011:39: error: use of undeclared identifier 'smccc_trng_available'
-           kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-                                                ^
-   1 error generated.
-
-
-vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
-
-  1997	
-  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
-  1999	{
-  2000		void *addr = phys_to_virt(hyp_mem_base);
-  2001		int ret;
-  2002	
-  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
-  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
-  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
-  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
-  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
-  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
-  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
-  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
-> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-  2012	
-  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
-  2014		if (ret)
-  2015			return ret;
-  2016	
-  2017		ret = init_stage2_iommu();
-  2018		if (ret < 0)
-  2019			return ret;
-  2020	
-  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
-  2022		if (ret)
-  2023			return ret;
-  2024	
-  2025		free_hyp_pgds();
-  2026	
-  2027		return 0;
-  2028	}
-  2029	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  arch/powerpc/mm/book3s64/radix_tlb.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+> index 7724af19ed7e..5172d5cec2c0 100644
+> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
+> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+> @@ -1171,15 +1171,12 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+>  			}
+>  		}
+>  	} else {
+> -		bool hflush = false;
+> +		bool hflush;
+>  		unsigned long hstart, hend;
+>  
+> -		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+> -			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+> -			hend = end & PMD_MASK;
+> -			if (hstart < hend)
+> -				hflush = true;
+> -		}
+> +		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+> +		hend = end & PMD_MASK;
+> +		hflush = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend;
+>  
+>  		if (type == FLUSH_TYPE_LOCAL) {
+>  			asm volatile("ptesync": : :"memory");
+> -- 
+> 2.34.1
+> 
