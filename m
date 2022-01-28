@@ -1,145 +1,197 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023702C9E
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:45:54 +0000 (UTC)
-Received: by mail-wm1-f74.google.com with SMTP id d140-20020a1c1d92000000b0034edefd55caso5765236wmd.4
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 03:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=wFWaeqF62cKOElQQL7pp3r58nzR0TbsroVad70HicBs=;
-        b=fEJYvnHuyG464XI/DpthcQvizr2SjMlBfEuvtx0cNBlSwi5tg6ICnFeqdOsPNED6Zf
-         GURh9bBjH6WhPfTpSMj10rpf+j3KbZ29fEi3pNHCYpTiGF6NicIK1sHx9zvobpNuTZKr
-         RMsEu4Vsw02ns5ISGzKxbqUr3vT01QKV9KfWiWQh1gkXADLxOSboWbzG3t6he2cyHQWd
-         m4KT2O6UVO+Svo1P3pFm5Gq4v1YYmasEn6PZdQuD7VF3TETsfNoEcYcJM+If7j5ZoHbf
-         MsyfoGf2XG4pobrNWRnB2JgKpHfRgXIzp9hKRor6fqv0nUNWl1+qo6QlR6zpygSogVM7
-         SjpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=wFWaeqF62cKOElQQL7pp3r58nzR0TbsroVad70HicBs=;
-        b=4OMGzlXo3RZGDa7cLZin819TtTGr7Nve7bRHGBxgvktuZVX8b6hbvrx5nPie9W7D6Y
-         Z003MAzPPT43fPzyAzgZe7cxSqpoDQhpUowMzcZW4HaRJo8Nln7qZfoZVOg/xIN4fwMA
-         72GxkPihQ+32qU4AWxLYws7HwywK8TVe1aqKv1p2dRxir492EuuKqCz7NRbFt69jM7H8
-         FqZ35M5L6TEE9l61zHBVWvCea3F3puKj1FcVUvBeQQnXc1YlP6MYWQwauvQjbomMQ5LR
-         ORXjtynvOfqI+q1HsfZGgcIWdlhrhqBPw7VosNuhePcL1MMBMv36TGmghQNEPoD1AbK1
-         DPVQ==
-X-Gm-Message-State: AOAM532H2OkN1Xge7WJ5zTreRVVdYzSh0RC/21/ABBg1AUWiEUgRHIPD
-	5GuHrjTAP8CrZNTS9AvfHzE2DeEsAw==
-X-Google-Smtp-Source: ABdhPJx44f6kvLfpYvENtZmEAzR9e4OqkWxLPW+gcw36fp+t/y8ql2nvEXc1QN6+Jb02aVpEMnyozdKZ1A==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:f088:5245:7f91:d730])
- (user=elver job=sendgmr) by 2002:a05:600c:4e0d:: with SMTP id
- b13mr7191313wmq.188.1643370353320; Fri, 28 Jan 2022 03:45:53 -0800 (PST)
-Date: Fri, 28 Jan 2022 12:44:46 +0100
-In-Reply-To: <20220128114446.740575-1-elver@google.com>
-Message-Id: <20220128114446.740575-2-elver@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A7D2C9E
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 12:09:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643371761; x=1674907761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aovGcRhqRG1uGJXXes7TMxooAO2apW+D26PTIvucSHc=;
+  b=g9CFihgxuzW6UKmKGJC+GOLoHmim55TNG1JA/AVPhB7YpE2FYsSbBkWe
+   GCwbhu4UjrMi05mTPu74CBZQvEdfA5UhEeCtrAmxPphNsLMCmBcaVAo5W
+   dv+brH+p069Aks/q/vJM3IQz0V/73G97+FqYRS6l0INxfanLRZbabL9dC
+   2QDVqFF+p2BNhUYgAl+fxYqT7ee8IHZ1PEoawEg0ZU7HHPFlIn0MP36Fs
+   hoGLIiVwWNg+HzIYlczf5YHCGFwyYPtFEZWpff/qXsrQxZ+VZ2v2S5p+D
+   XvFOU6k0Q3uZ/8iOi3KCk1ZMQFbV1Jn6XeDq+dB0LybyozXW9irxNyFBg
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="310423460"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="310423460"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:09:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="697073685"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2022 04:09:18 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDQ45-000Npq-Ng; Fri, 28 Jan 2022 12:09:17 +0000
+Date: Fri, 28 Jan 2022 20:08:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: cgel.zte@gmail.com, stefanr@s5r6.in-berlin.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+	Minghao Chi <chi.minghao@zte.com.cn>,
+	Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] drivers/firewire: use struct_size over open coded
+ arithmetic
+Message-ID: <202201282044.Ye1mhIOd-lkp@intel.com>
+References: <20220128080336.1211525-1-chi.minghao@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220128114446.740575-1-elver@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 2/2] stack: Constrain stack offset randomization with Clang builds
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Thomas Gleixner <tglx@linutronix.de>, Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Elena Reshetova <elena.reshetova@intel.com>, Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev, 
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128080336.1211525-1-chi.minghao@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-All supported versions of Clang perform auto-init of __builtin_alloca()
-when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
+Hi,
 
-add_random_kstack_offset() uses __builtin_alloca() to add a stack
-offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-enabled, add_random_kstack_offset() will auto-init that unused portion
-of the stack used to add an offset.
+Thank you for the patch! Yet something to improve:
 
-There are several problems with this:
+[auto build test ERROR on ieee1394-linux1394/for-next]
+[also build test ERROR on v5.17-rc1 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-	1. These offsets can be as large as 1023 bytes. Performing
-	   memset() on them isn't exactly cheap, and this is done on
-	   every syscall entry.
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/drivers-firewire-use-struct_size-over-open-coded-arithmetic/20220128-160602
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git for-next
+config: hexagon-randconfig-r015-20220128 (https://download.01.org/0day-ci/archive/20220128/202201282044.Ye1mhIOd-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1567c3f747219c35e83d9c1f4ac3c3d36f447d90
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/drivers-firewire-use-struct_size-over-open-coded-arithmetic/20220128-160602
+        git checkout 1567c3f747219c35e83d9c1f4ac3c3d36f447d90
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firewire/
 
-	2. Architectures adding add_random_kstack_offset() to syscall
-	   entry implemented in C require them to be 'noinstr' (e.g. see
-	   x86 and s390). The potential problem here is that a call to
-	   memset may occur, which is not noinstr.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+All errors (new ones prefixed by >>):
 
- | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
- | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
- | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
- | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+>> drivers/firewire/core-transaction.c:780:20: error: member reference type 'struct fw_request' is not a pointer; did you mean to use '.'?
+           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:326:18: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                               ~~~^
+>> drivers/firewire/core-transaction.c:780:20: error: indirection requires pointer operand ('u32[]' (aka 'unsigned int[]') invalid)
+           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:326:14: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                              ^~~~~~~~~~~~
+>> drivers/firewire/core-transaction.c:780:20: error: member reference type 'struct fw_request' is not a pointer; did you mean to use '.'?
+           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:326:49: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+   include/linux/compiler.h:240:59: note: expanded from macro '__must_be_array'
+   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+   include/linux/compiler_types.h:264:63: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                                                                 ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+                                                                ^
+>> drivers/firewire/core-transaction.c:780:20: error: member reference type 'struct fw_request' is not a pointer; did you mean to use '.'?
+           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:326:49: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+   include/linux/compiler.h:240:65: note: expanded from macro '__must_be_array'
+   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   include/linux/compiler_types.h:264:74: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                                                                            ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+                                                                ^
+>> drivers/firewire/core-transaction.c:780:20: error: indirection requires pointer operand ('struct fw_request' invalid)
+           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:327:14: note: expanded from macro 'struct_size'
+                       sizeof(*(p)))
+                              ^~~~
+   5 errors generated.
 
-Clang 14 (unreleased) will introduce a way to skip alloca initialization
-via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
 
-Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
-auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
-__builtin_alloca_uninitialized() if the compiler provides it, as is done
-by Clang 14.
+vim +780 drivers/firewire/core-transaction.c
 
-Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
-Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
-Signed-off-by: Marco Elver <elver@google.com>
+   743	
+   744	static struct fw_request *allocate_request(struct fw_card *card,
+   745						   struct fw_packet *p)
+   746	{
+   747		struct fw_request *request;
+   748		u32 *data, length;
+   749		int request_tcode;
+   750	
+   751		request_tcode = HEADER_GET_TCODE(p->header[0]);
+   752		switch (request_tcode) {
+   753		case TCODE_WRITE_QUADLET_REQUEST:
+   754			data = &p->header[3];
+   755			length = 4;
+   756			break;
+   757	
+   758		case TCODE_WRITE_BLOCK_REQUEST:
+   759		case TCODE_LOCK_REQUEST:
+   760			data = p->payload;
+   761			length = HEADER_GET_DATA_LENGTH(p->header[3]);
+   762			break;
+   763	
+   764		case TCODE_READ_QUADLET_REQUEST:
+   765			data = NULL;
+   766			length = 4;
+   767			break;
+   768	
+   769		case TCODE_READ_BLOCK_REQUEST:
+   770			data = NULL;
+   771			length = HEADER_GET_DATA_LENGTH(p->header[3]);
+   772			break;
+   773	
+   774		default:
+   775			fw_notice(card, "ERROR - corrupt request received - %08x %08x %08x\n",
+   776				 p->header[0], p->header[1], p->header[2]);
+   777			return NULL;
+   778		}
+   779	
+ > 780		request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
+   781		if (request == NULL)
+   782			return NULL;
+   783	
+   784		request->response.speed = p->speed;
+   785		request->response.timestamp =
+   786				compute_split_timeout_timestamp(card, p->timestamp);
+   787		request->response.generation = p->generation;
+   788		request->response.ack = 0;
+   789		request->response.callback = free_response_callback;
+   790		request->ack = p->ack;
+   791		request->length = length;
+   792		if (data)
+   793			memcpy(request->data, data, length);
+   794	
+   795		memcpy(request->request_header, p->header, sizeof(p->header));
+   796	
+   797		return request;
+   798	}
+   799	
+
 ---
- arch/Kconfig                     |  1 +
- include/linux/randomize_kstack.h | 14 ++++++++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 2cde48d9b77c..c5b50bfe31c1 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
- 	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
- 	default y
- 	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-+	depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
- 	help
- 	  The kernel stack offset can be randomized (after pt_regs) by
- 	  roughly 5 bits of entropy, frustrating memory corruption
-diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
-index 91f1b990a3c3..5c711d73ed10 100644
---- a/include/linux/randomize_kstack.h
-+++ b/include/linux/randomize_kstack.h
-@@ -17,8 +17,18 @@ DECLARE_PER_CPU(u32, kstack_offset);
-  * alignment. Also, since this use is being explicitly masked to a max of
-  * 10 bits, stack-clash style attacks are unlikely. For more details see
-  * "VLAs" in Documentation/process/deprecated.rst
-+ *
-+ * The normal alloca() can be initialized with INIT_STACK_ALL. Initializing the
-+ * unused area on each syscall entry is expensive, and generating an implicit
-+ * call to memset() may also be problematic (such as in noinstr functions).
-+ * Therefore, if the compiler provides it, use the "uninitialized" variant.
-  */
--void *__builtin_alloca(size_t size);
-+#if __has_builtin(__builtin_alloca_uninitialized)
-+#define __kstack_alloca __builtin_alloca_uninitialized
-+#else
-+#define __kstack_alloca __builtin_alloca
-+#endif
-+
- /*
-  * Use, at most, 10 bits of entropy. We explicitly cap this to keep the
-  * "VLA" from being unbounded (see above). 10 bits leaves enough room for
-@@ -37,7 +47,7 @@ void *__builtin_alloca(size_t size);
- 	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
- 				&randomize_kstack_offset)) {		\
- 		u32 offset = raw_cpu_read(kstack_offset);		\
--		u8 *ptr = __builtin_alloca(KSTACK_OFFSET_MAX(offset));	\
-+		u8 *ptr = __kstack_alloca(KSTACK_OFFSET_MAX(offset));	\
- 		/* Keep allocation even after "ptr" loses scope. */	\
- 		asm volatile("" :: "r"(ptr) : "memory");		\
- 	}								\
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
