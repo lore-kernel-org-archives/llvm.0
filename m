@@ -1,71 +1,98 @@
-Received: from relay.hostedemail.com (relay032.a.hostedemail.com [64.99.140.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71642CA0
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 19:48:09 +0000 (UTC)
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id CA844607AA;
-	Fri, 28 Jan 2022 19:11:58 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 5CD0635;
-	Fri, 28 Jan 2022 19:11:43 +0000 (UTC)
-Message-ID: <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Tom Rix <trix@redhat.com>, Bart Van Assche <bvanassche@acm.org>, 
-	kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
-	shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
-	martin.petersen@oracle.com, nathan@kernel.org, ndesaulniers@google.com
-Cc: megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Fri, 28 Jan 2022 11:11:55 -0800
-In-Reply-To: <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-	 <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD7729CA
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 19:59:30 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id c9so7092849plg.11
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:59:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k+KRxXOu730X8LGDY8ibWFrqzfk6XaCWgUlQ/FJX/1g=;
+        b=QzY57hp7L7C4IZbQuK3maGb3nj+uWYpqF0Yyk5wwLy6/eJqluG4XaJR5X9c6vaBhca
+         +4eW4VquXi25Krzxq/EFw4Jf45zqP9xeHpsX+yvvP8hH1WFNrNHqwwapMmFbvrCgnuEd
+         huCEf62r6D+yDp31w66z0o2a9sMjTQoSXNUmw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k+KRxXOu730X8LGDY8ibWFrqzfk6XaCWgUlQ/FJX/1g=;
+        b=wvHHijhAiXqrjaIA7TmQYfJcsMF/WCJSBzRvUHfmsZCTakk3tY1WMErWwDeYY92xJb
+         bmhix5w2MYN+EfXQnRYAqF/gbKGRrt0nB3WEy5ZxagdnMxUQxNUsczPfmcV6lAHlomag
+         uAaa7BX8v4lwypVIo09ZRNOxlYJbD7IomWlI9LGXf4dMzWyIFeITP+gcgR3dxc/t5xl8
+         Z4Ri8WXRcLlFYB8qSJaqg8X8x2Y/MEFGhlRcqeOPwxBD1WoVu7oVrOI48+csZO3lKoNS
+         e1GVMamdbUDICzxvu4FQg4wjZt9nec0sIRJA01eub6mVrD4lBxHl3nSLVu3G1Yb/QMUm
+         7IZg==
+X-Gm-Message-State: AOAM5333s4ETvLHnfKP/qeqAdrHBkioTDjSsWFzsAfMrpl4GGsg3J+wi
+	MvmrcwcuEPtNooNWDh0dsjrCfw==
+X-Google-Smtp-Source: ABdhPJy8LTGWug/n9PhrrQSoic5rIepzJSa4BJy1U3x25juPbd5YbLoVYVpCcIMuiwlMvw/asyemWA==
+X-Received: by 2002:a17:90b:1c8d:: with SMTP id oo13mr11600468pjb.59.1643399969749;
+        Fri, 28 Jan 2022 11:59:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o11sm22920833pgj.33.2022.01.28.11.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 11:59:29 -0800 (PST)
+Date: Fri, 28 Jan 2022 11:59:28 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] stack: Constrain stack offset randomization with
+ Clang builds
+Message-ID: <202201281141.2491039E@keescook>
+References: <20220128114446.740575-1-elver@google.com>
+ <20220128114446.740575-2-elver@google.com>
+ <202201281058.83EC9565@keescook>
+ <CANpmjNNaQ=06PfmPudBsLG7r9RsFXYo-NQR4CSM=iO11LFSHKw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 5CD0635
-X-Spam-Status: No, score=-4.87
-X-Stat-Signature: 8653peheyynksmpug8otea4tq5jr88xn
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+tojhrHoxBG59eMTBbAjVdRtmbSPVhEWY=
-X-HE-Tag: 1643397103-49658
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNNaQ=06PfmPudBsLG7r9RsFXYo-NQR4CSM=iO11LFSHKw@mail.gmail.com>
 
-On Fri, 2022-01-28 at 09:59 -0800, Tom Rix wrote:
-> On 1/28/22 9:42 AM, Bart Van Assche wrote:
-> > On 1/27/22 07:19, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > > 
-> > > checkpatch reports several hundred formatting errors.
-> > > Run these files through clang-format and knock off
-> > > some of them.
-> > 
-> > Isn't this the kind of patches that carries more risk than value?
+On Fri, Jan 28, 2022 at 08:23:02PM +0100, Marco Elver wrote:
+> On Fri, 28 Jan 2022 at 20:10, Kees Cook <keescook@chromium.org> wrote:
+> [...]
+> > >       2. Architectures adding add_random_kstack_offset() to syscall
+> > >          entry implemented in C require them to be 'noinstr' (e.g. see
+> > >          x86 and s390). The potential problem here is that a call to
+> > >          memset may occur, which is not noinstr.
+> [...]
+> > > --- a/arch/Kconfig
+> > > +++ b/arch/Kconfig
+> > > @@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
+> > >       bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
+> > >       default y
+> > >       depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+> > > +     depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
+> >
+> > This makes it _unavailable_ for folks with Clang < 14, which seems
+> > too strong, especially since it's run-time off by default. I'd prefer
+> > dropping this hunk and adding some language to the _DEFAULT help noting
+> > the specific performance impact on Clang < 14.
+> 
+> You're right, if it was only about performance. But there's the
+> correctness issue with ARCH_WANTS_NOINSTR architectures, where we
+> really shouldn't emit a call. In those cases, even if compiled in,
+> enabling the feature may cause trouble.
 
-Risk for whitespace style reformatting patches is quite low.
+Hrm. While I suspect instrumentation of memset() from a C function that is
+about to turn on instrumentation is likely quite safe, I guess the size
+of the venn diagram overlap of folks wanting to use kstack randomization
+and an older Clang quickly approaches zero. But everyone building with
+an older Clang gets warnings spewed, so I agree: let's opt for complete
+correctness here, and make this >= 14 as you have done.
 
-Nominally, clang-format changes should not produce a different
-compiled object file unless __LINE__/__DATE__/__TIME__ style
-changes occur.
-
-If it does, the clang-format tool is broken.
-
-> > Additionally, this patch conflicts with a patch series that I plan to 
-> > post soon.
-[]
-> Long term, it would be good have a reliable way to automatically fix 
-> either new files or really broken old files.
-
-That's really a maintainer preference no?
-
-Especially so for any automation.
-
-
+-- 
+Kees Cook
