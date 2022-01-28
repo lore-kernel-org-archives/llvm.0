@@ -1,68 +1,113 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C8D168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:39:33 +0000 (UTC)
-Received: by mail-io1-f52.google.com with SMTP id 9so7036912iou.2
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 01:39:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1954168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 10:08:24 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id x7so10717570lfu.8
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 02:08:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mOWNK48mEIZNTEIU7X2S+zCbDX4zoirQGUmKxIAmRuY=;
-        b=dYsqpb0VN19LiiHn0Ftk9MiBf8mLuwmItMaty3MbxyFbZsMAprnM3GLwYQMQizXEde
-         OXUdAouUsM70Dc4jnK61YRQjw3xCjt2tyvts4oByrKh8WeBqLuW/0zMEhjo5zJjn/maz
-         2gqEuVK9StCfUcp0QWSBnaMkrJpBmIDqrIAvDjqgo33CVzzKz49I07l1H/emAMyU/CFf
-         Ep/7ufX3WJdoBL9KGTvqzN7NAg77FAo8WeSLjjf1Vz5sC3mDPUWoNfiiyA/IvyRml2Ki
-         w5SXy/DhkQZhKnJ9YCkkBLIM0uXaxiz56Cz/skvyda28JMRfIBuA1dXf0LiBFsmHbTjM
-         eckA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pPIs9YPGDV7k07cd7jFYYkWNGuS5b4mzeWo4flha5rw=;
+        b=b56girLI15IIsF4oK/Hs939t9s4O1/gcc0gOszxgrp+bUH0aFjNsQfRUDBc6B9OzDP
+         F3Li62qBgvSbyeCOA3SlwWxvfsFKm3vzvyTxJbhduyYBCyLgv2CNuYX0oeRgCps7KqKY
+         c0+k5HzbbT2RYg1kmKNmlf4BBtetBbDEDhLAIvh/+KeA1CqtgTiOrjVgu8nH1VWM4ekk
+         ZkpR07ArNRdSlIjnVlQl8rdf+d1gxMrkRN36sXO+pjTpxL/0jcUad7FTM/TuYzHssyW3
+         d+MiBjcMQ5pUdfnBWel/+FSS37EcK7l2mg9tlxiPQA3C+P8L7wjdQaX0yLlJ8oR9YPoG
+         hT9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mOWNK48mEIZNTEIU7X2S+zCbDX4zoirQGUmKxIAmRuY=;
-        b=M9FnI/Cui+iXDAMDtAai9Svs6+phm+wfl5UDciYvW3OUXT0274ohut+mxnpodWgoJd
-         hn2heXGUhD+Fdurzg69msNGstQ+HEzVaXS86OoEzL3mRSfRCHQNKcGVJA+QgEcTytyjK
-         7+eDcnaS/BLw7RDZODzZPDBI39Y8F0X04b3NCxHKWNxI3dcQQJEmFqIOZzCiNrtkvfDQ
-         U/LdOTxclTvrHB5K3xF4oegk4+KSzF3ly1F/4d/HBD3W0Vo90rQRYthNb00AQL0xe0eF
-         7YIDfbmrbChu9GQ+u9n0BugofaCwKGZW2T2dtySxz4f0AfL/9A/4TxZwxj0SlqJgoDjL
-         S4pw==
-X-Gm-Message-State: AOAM530q9p5cThHjU3Dwi3iwvpRsO6lVbz9XKvMhY7OKm50T7Ge4hfLF
-	LQUE2k3BKLoSWcqkd/E7d+Kj0TrrQUVt5ju3b0I=
-X-Google-Smtp-Source: ABdhPJyRd+01JR5slNdfK/hcvj1Z2MmaGnoA6OcUp5mGkvnMhpK2nOyd9h65xhRei/JqMCZ7vgEv9TSAUFET9ewfa1A=
-X-Received: by 2002:a05:6638:380f:: with SMTP id i15mr3355679jav.308.1643362772321;
- Fri, 28 Jan 2022 01:39:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pPIs9YPGDV7k07cd7jFYYkWNGuS5b4mzeWo4flha5rw=;
+        b=LdSHL88pKyT7ilSnnxKPm0ioW6ZSu9TyDIpnw+fMoo0aJdXfYGCcEJPjY7s1WySfkQ
+         dAjaHlDR1DjL/tTnhUV6kg2nyn77zfKm/CHH/xn8eXvoqUILMQmUwgYgzc5Ke5tGK+Wc
+         ddyUnXF21igMNW4ZQ2bQFqmJC9P+rCulN1OisGTtTmV8n9PNah5h5p6qxW16tPfxmhJA
+         UXvEwD9GomKXnw2BMWCRBESlq02o3vnMGyHYulsHbl84jLIPUpLHpew6nCGRZPxT1cw7
+         Amrvwkty65F7kpYl3zGcfEgOQAFGT/qoo4YEFi5RxfOvaEhmO1py8fVbpZhgrdtuWDep
+         gVlQ==
+X-Gm-Message-State: AOAM531Q40GRp0UuEklOaSMELB1Q9nDQ9w79p++Cb9JwRobF0WehPI9o
+	8WiAvgHOEEUFZ3bDmq5RNDiUqg==
+X-Google-Smtp-Source: ABdhPJy2ZzvAQ/MsCmkNEnqNIXI59+XYp+TYTg3rqECD18OxWTFLitIFA8t4wVyFa2K8FcrCX8pQHA==
+X-Received: by 2002:ac2:554a:: with SMTP id l10mr5560555lfk.534.1643364502961;
+        Fri, 28 Jan 2022 02:08:22 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id w13sm1830172lfk.148.2022.01.28.02.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 02:08:22 -0800 (PST)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: nathan@kernel.org,
+	ndesaulniers@google.com,
+	mpe@ellerman.id.au
+Cc: linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	christophe.leroy@csgroup.eu,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCHv2] powerpc: mm: radix_tlb: rearrange the if-else block
+Date: Fri, 28 Jan 2022 11:08:15 +0100
+Message-Id: <20220128100815.3231551-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
- <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
-In-Reply-To: <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 28 Jan 2022 10:39:21 +0100
-Message-ID: <CANiq72mjngfR8-y9B_yHXVXpm5zFOo1dP=nNd-j+Ge8RtoEfTA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>, Tom Rix <trix@redhat.com>, 
-	kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
-	shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
-	martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>, 
-	megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 27, 2022 at 11:47 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
-> These criticisms are worth reviewing.
+Clang warns:
 
-Indeed, thanks Nick. In my upgrade to clang-format 11 (from the
-current clang-format 4), I will check whether some of these improve.
+arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' is uninitialized when used here [-Werror,-Wuninitialized]
+                                __tlbiel_va_range(hstart, hend, pid,
+                                                  ^~~~~~
+arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the variable 'hstart' to silence this warning
+                unsigned long hstart, hend;
+                                    ^
+                                     = 0
+arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is uninitialized when used here [-Werror,-Wuninitialized]
+                                __tlbiel_va_range(hstart, hend, pid,
+                                                          ^~~~
+arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the variable 'hend' to silence this warning
+                unsigned long hstart, hend;
+                                          ^
+                                           = 0
+2 errors generated.
 
-Cheers,
-Miguel
+Rework the 'if (IS_ENABLE(CONFIG_TRANSPARENT_HUGEPAGE))' so hstart/hend
+always gets initialized, this will silence the warnings. That will also
+simplify the 'else' path. Clang is getting confused with these warnings,
+but the warnings is a false-positive.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ arch/powerpc/mm/book3s64/radix_tlb.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+index 7724af19ed7e..7d65965a0688 100644
+--- a/arch/powerpc/mm/book3s64/radix_tlb.c
++++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+@@ -1174,12 +1174,9 @@ static inline void __radix__flush_tlb_range(struct mm_struct *mm,
+ 		bool hflush = false;
+ 		unsigned long hstart, hend;
+ 
+-		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+-			hstart = (start + PMD_SIZE - 1) & PMD_MASK;
+-			hend = end & PMD_MASK;
+-			if (hstart < hend)
+-				hflush = true;
+-		}
++		hstart = (start + PMD_SIZE - 1) & PMD_MASK;
++		hend = end & PMD_MASK;
++		hflush = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && hstart < hend;
+ 
+ 		if (type == FLUSH_TYPE_LOCAL) {
+ 			asm volatile("ptesync": : :"memory");
+-- 
+2.34.1
+
