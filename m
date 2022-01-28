@@ -1,240 +1,221 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6BC2C9E
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 00:17:31 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id b9so8474702lfq.6
-        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 16:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IlSEJdjJrMjk0uBxQ1Hapn8YGZniC2X8+hlUSQJTZwM=;
-        b=b0GAq2WgzrvcsiDSn/b3NReLAu13yP5fhdkdH7+7CT6UB+7fWmzEeAHsKA4dDNoeNo
-         paizE2t2lPrMvJe9bILSyix2rdq0PRr2zY9MJG4pVC5F5WXz5wRRUk5hlzex7z7PLHob
-         asTr+61XLgdhhPpPp0RKDRELmqf75iv7SoSyPKD9BNktRE6TCLbmzkjFgoJEVVA7g3zb
-         6CjiFZP8sW76YJ+0pW8jd9eDQvnRKX1hdSL940vNICgmeRzitsOZ4qJcnM++xAhIrNJX
-         KLerT7V508LixrbrvdMjcwYUJsJzwlwqhT/00ZQBa3tUYwEQaJOlcy1E3kH0EaMhdcMY
-         AcdA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EC72C9D
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 00:32:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1643329962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QxwT0p8jQCZb+gDYDDAwQr1KnfSYAuazHgIfPZ6mp0Y=;
+	b=bYZTMqReYLcs2dCuD5EalOTxEeYoMF7K9w3rUraLfFjdd3wq/WT0CC3BPk65sRH3DdiGZb
+	Jz70cKjH3o3uZdccPb1PlTq7lZ3xJrBxBF3RsUzgVtMI9Bx1yqj4C+El8HfWhK1SrDqyOM
+	sQ9ZD0tjzdOMOBiIcMmivBzQKt/hsEQ=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-360-6sZg69z3MFWtBdEyKWgBCg-1; Thu, 27 Jan 2022 19:32:41 -0500
+X-MC-Unique: 6sZg69z3MFWtBdEyKWgBCg-1
+Received: by mail-ot1-f72.google.com with SMTP id l1-20020a9d7341000000b0059c2046f9edso1753628otk.3
+        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 16:32:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IlSEJdjJrMjk0uBxQ1Hapn8YGZniC2X8+hlUSQJTZwM=;
-        b=AXzQ1KIyog1nGxPO/0cpaaCARePW6h/ZkMWCSvG/QmN5l7i+w25MxS5RzRx8v5hYCD
-         pZGkKYX7H+W+nFPwBIQ7D8mjUbRK2H0MSdpq4d3eAYMo4FFPcBTsM65tZMSsUHcm7nU4
-         Xy1+7ldVSpnNEuBJKIA3X/Zlj5LzKi6/+PNlmfP9ljDcb3/f5CZCBSPDeq8iaOxc1iP2
-         2l0W7vLNtUkN6mo2TkLiIamZt6h7A6W4EiEkXsnzr84xMjrfCium1puOc5oHdGMbC18X
-         dlWUF1e/A9iBkFMAU9AuoWP8a+bElDPfacN45M0C/eUmy9LKzXSqgwo9K4NkjI3b8krF
-         EUgA==
-X-Gm-Message-State: AOAM530x7JItJdvEKOgY6BM5D9O1iSopFPjqXEykdzSMrZY6ZZDMdo48
-	dHWUagQdDG2p7HofvSsB+epZZCEbZx/gGRAe8Xrarg==
-X-Google-Smtp-Source: ABdhPJwwq3RWKdq6zaQeBD4zp7BWV/yEz0bPSG5n3byJeJMyzqq7BkL9gHT/C/ZRY8175jaO1A1XGgvkI1yjZL5Hpfk=
-X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr4346659lfk.523.1643329049299;
- Thu, 27 Jan 2022 16:17:29 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=QxwT0p8jQCZb+gDYDDAwQr1KnfSYAuazHgIfPZ6mp0Y=;
+        b=TxYZPP8Lk01Ljl12nKYNfOoltHwB+6Gz/01EbMlA8YlNwfSBHFF5Qo4n5m7C4c7CeC
+         /xaeY+13pYHc8n8QvZlMpMkwC2ljQ8OZDUM/8GWBWmk4Ztt9GPAcXvyekoGqoncCwi6/
+         jkVfG/y6/0EBELrvozuS4gjZefJi+22MxX6vadOl9a/Y7Di28mAWeHVaig3bpNvMlq45
+         YWInj0dARSHAlWjPfGsJ4TjJIZYSeEidPQ/lboChAYotgXNBeBE2kgsA7SSeoxYsdThS
+         gApyghN6antRnu6XBoH8R11EheKaFBfl/pn+RmakEO6D3SipyefbKOpQD/9+AslGEIlW
+         RUDg==
+X-Gm-Message-State: AOAM530+/VHL7bf1IvG72QKedp5WG4lGWBIkcCw7KXRgM5rfQZjzfhLm
+	s5KzH3aIptljHRHdKyu+d1upEnQQjNgxafP0h3VBlq/xI29iBSqp7Ujsr3kEBWU2nbl3qnXd90W
+	N1XD61HvX7juM1g==
+X-Received: by 2002:a4a:b787:: with SMTP id a7mr3106250oop.85.1643329960831;
+        Thu, 27 Jan 2022 16:32:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwF4iZ8xzJp9ZMKoGlSFxuWfDOTK7MBV3+iSOO5oBeoOMi/8a1yzMEOflCdZN68H6r2hM3ikw==
+X-Received: by 2002:a4a:b787:: with SMTP id a7mr3106237oop.85.1643329960607;
+        Thu, 27 Jan 2022 16:32:40 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id o22sm9333917oor.34.2022.01.27.16.32.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 16:32:40 -0800 (PST)
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+ shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+ martin.petersen@oracle.com, nathan@kernel.org,
+ megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Joe Perches <joe@perches.com>
+References: <20220127151945.1244439-1-trix@redhat.com>
+ <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+ <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
+Date: Thu, 27 Jan 2022 16:32:37 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220120155517.066795336@infradead.org> <20220120160822.852009966@infradead.org>
- <YfIAsHQv5Q84fOqO@google.com> <YfI9Y5l0fQAKuJav@google.com>
- <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net> <YfMruK8/1izZ2VHS@google.com>
-In-Reply-To: <YfMruK8/1izZ2VHS@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 27 Jan 2022 16:17:17 -0800
-Message-ID: <CAKwvOdmPkCuYuMRBSeK7DaK-wrdH5+C0gL63eqJ1buHsmueFsg@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 4/5] x86/uaccess: Implement unsafe_try_cmpxchg_user()
-To: Sean Christopherson <seanjc@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, tglx@linutronix.de, 
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-api@vger.kernel.org, 
-	x86@kernel.org, pjt@google.com, posk@google.com, avagin@google.com, 
-	jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com, posk@posk.io, 
-	James Y Knight <jyknight@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
-On Thu, Jan 27, 2022 at 3:33 PM Sean Christopherson <seanjc@google.com> wro=
-te:
->
-> +Nick
 
-(well, you asked the right person; you probably wont like the answer
-much though)
+On 1/27/22 2:47 PM, Nick Desaulniers wrote:
+> + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
+> These criticisms are worth reviewing.
+>
+> On Thu, Jan 27, 2022 at 2:38 PM Finn Thain <fthain@linux-m68k.org> wrote:
+>>
+>> On Thu, 27 Jan 2022, trix@redhat.com wrote:
+>>
+>>> From: Tom Rix <trix@redhat.com>
+>>>
+>>> checkpatch reports several hundred formatting errors. Run these files
+>>> through clang-format and knock off some of them.
+>>>
+>> That method seems like a good recipe for endless churn unless checkpatch
+>> and clang-format really agree about these style rules.
+>>
+>> Why use checkpatch to assess code style, if we could simply diff the
+>> existing source with the output from clang-format... but it seems that
+>> clang-format harms readability, makes indentation errors and uses
+>> inconsistent style rules. Some examples:
 
->
-> On Thu, Jan 27, 2022, Peter Zijlstra wrote:
-> > On Thu, Jan 27, 2022 at 06:36:19AM +0000, Sean Christopherson wrote:
-> > > On Thu, Jan 27, 2022, Sean Christopherson wrote:
-> > > > Doh, I should have specified that KVM needs 8-byte CMPXCHG on 32-bi=
-t kernels due
-> > > > to using it to atomically update guest PAE PTEs and LTR descriptors=
- (yay).
-> > > >
-> > > > Also, KVM's use case isn't a tight loop, how gross would it be to a=
-dd a slightly
-> > > > less unsafe version that does __uaccess_begin_nospec()?  KVM pre-ch=
-ecks the address
-> > > > way ahead of time, so the access_ok() check can be omitted.  Altern=
-atively, KVM
-> > > > could add its own macro, but that seems a little silly.  E.g. somet=
-hign like this,
-> > > > though I don't think this is correct
-> > >
-> > > *sigh*
-> > >
-> > > Finally realized I forgot to add back the page offset after convertin=
-g from guest
-> > > page frame to host virtual address.  Anyways, this is what I ended up=
- with, will
-> > > test more tomorrow.
-> >
-> > Looks about right :-) (famous last words etc..)
->
-> And it was right, but clang-13 ruined the party :-/
->
-> clang barfs on asm goto with a "+m" input/output.  Change the "+m" to "=
-=3Dm" and
-> clang is happy.  Remove usage of the label, clang is happy.
+Problems with clang-format should be fixed, I'll take a look.
 
-Yep, sorry, we only recently noticed that this was broken.  I fixed
-this very recently (over the holidays) in clang-14, and is too risky
-and late to backport to clang-13 IMO.
-https://reviews.llvm.org/rG4edb9983cb8c8b850083ee5941468f5d0ef6fe2c
+I was reviewing this file for another issue and could not get past how 
+horredously bad it was and really did not want to manually fix the 400+ 
+formatting errors.  I will drop this patch and use the use these files 
+to verify the .clang-format .
 
->
-> I tried a bunch of different variants to see if anything would squeak by,=
- but
-> clang found a way to die on everything I threw at it.
->
-> $ clang --version
->
->   Debian clang version 13.0.0-9+build1
->   Target: x86_64-pc-linux-gnu
->   Thread model: posix
->   InstalledDir: /usr/bin
->
-> As written, with a named label param, clang yields:
->
->   $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) :=
-:: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
->   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .=
-'
->   int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar);=
- return *x; bar: return 0; }
->                             ^
->   <stdin>:1:29: error: unknown token in expression
->   <inline asm>:1:9: note: instantiated into assembly here
->           .long () - .
->                ^
->   2 errors generated.
->
-> While clang is perfectly happy switching "+m" to "=3Dm":
->
->   $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "=3Dm"(*x)=
- ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+Tom
 
-=3D constraints should work with older clang releases; + constraints are
-what was broken (Not generally, only when using asm goto with
-outputs), fixed in clang-14.
+>>
+>>>   static unsigned short int max_sectors_per_io = MAX_SECTORS_PER_IO;
+>>>   module_param(max_sectors_per_io, ushort, 0);
+>>> -MODULE_PARM_DESC(max_sectors_per_io, "Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
+>>> -
+>>> +MODULE_PARM_DESC(
+>>> +     max_sectors_per_io,
+>>> +     "Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
+>>>
+>>>   static unsigned short int max_mbox_busy_wait = MBOX_BUSY_WAIT;
+>>>   module_param(max_mbox_busy_wait, ushort, 0);
+>>> -MODULE_PARM_DESC(max_mbox_busy_wait, "Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
+>>> +MODULE_PARM_DESC(
+>>> +     max_mbox_busy_wait,
+>>> +     "Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
+>>>
+>> This code is longer for no real improvement.
+>>
+>>>   /*
+>>>    * The File Operations structure for the serial/ioctl interface of the driver
+>>>    */
+>>>   static const struct file_operations megadev_fops = {
+>>> -     .owner          = THIS_MODULE,
+>>> -     .unlocked_ioctl = megadev_unlocked_ioctl,
+>>> -     .open           = megadev_open,
+>>> -     .llseek         = noop_llseek,
+>>> +     .owner = THIS_MODULE,
+>>> +     .unlocked_ioctl = megadev_unlocked_ioctl,
+>>> +     .open = megadev_open,
+>>> +     .llseek = noop_llseek,
+>>>   };
+>>>
+>>>   /*
+>> Readability loss.
+>>
+>>> -             prod_info_dma_handle = dma_map_single(&adapter->dev->dev,
+>>> -                                                   (void *)&adapter->product_info,
+>>> -                                                   sizeof(mega_product_info),
+>>> -                                                   DMA_FROM_DEVICE);
+>>> +             prod_info_dma_handle = dma_map_single(
+>>> +                     &adapter->dev->dev, (void *)&adapter->product_info,
+>>> +                     sizeof(mega_product_info), DMA_FROM_DEVICE);
+>>>
+>> Note the orphaned first parameter and odd indentation.
+>>
+>>>   static DEF_SCSI_QCMD(megaraid_queue)
+>>>
+>>> -/**
+>>> +     /**
+>>>    * mega_allocate_scb()
+>>>    * @adapter: pointer to our soft state
+>>>    * @cmd: scsi command from the mid-layer
+>> Indentation error.
+>>
+>>> @@ -418,15 +409,14 @@ static DEF_SCSI_QCMD(megaraid_queue)
+>>>    * Allocate a SCB structure. This is the central structure for controller
+>>>    * commands.
+>>>    */
+>>> -static inline scb_t *
+>>> -mega_allocate_scb(adapter_t *adapter, struct scsi_cmnd *cmd)
+>>> +     static inline scb_t *mega_allocate_scb(adapter_t *adapter,
+>>> +                                            struct scsi_cmnd *cmd)
+>>>   {
+>>>        struct list_head *head = &adapter->free_list;
+>> Same.
+>>
+>>> @@ -586,26 +568,25 @@ mega_build_cmd(adapter_t *adapter, struct scsi_cmnd *cmd, int *busy)
+>>>
+>>>                ldrv_num = mega_get_ldrv_num(adapter, cmd, channel);
+>>>
+>>> -
+>>>                max_ldrv_num = (adapter->flag & BOARD_40LD) ?
+>>> -                     MAX_LOGICAL_DRIVES_40LD : MAX_LOGICAL_DRIVES_8LD;
+>>> +                                    MAX_LOGICAL_DRIVES_40LD :
+>>> +                                          MAX_LOGICAL_DRIVES_8LD;
+>>>
+>> Churn, if not readability loss. Note the indentation change here is
+>> inconsistent with the indentation change noted above.
+>>
+>>>                         * 6-byte READ(0x08) or WRITE(0x0A) cdb
+>>>                         */
+>>> -                     if( cmd->cmd_len == 6 ) {
+>>> -                             mbox->m_out.numsectors = (u32) cmd->cmnd[4];
+>>> -                             mbox->m_out.lba =
+>>> -                                     ((u32)cmd->cmnd[1] << 16) |
+>>> -                                     ((u32)cmd->cmnd[2] << 8) |
+>>> -                                     (u32)cmd->cmnd[3];
+>>> +                     if (cmd->cmd_len == 6) {
+>>> +                             mbox->m_out.numsectors = (u32)cmd->cmnd[4];
+>>> +                             mbox->m_out.lba = ((u32)cmd->cmnd[1] << 16) |
+>>> +                                               ((u32)cmd->cmnd[2] << 8) |
+>>> +                                               (u32)cmd->cmnd[3];
+>>>
+>>>                                mbox->m_out.lba &= 0x1FFFFF;
+>>>
+>> Here, the orphaned term is moved up, next to the =. And yet,
+>>
+>>>                        /* Calculate Scatter-Gather info */
+>>> -                     mbox->m_out.numsgelements = mega_build_sglist(adapter, scb,
+>>> -                                     (u32 *)&mbox->m_out.xferaddr, &seg);
+>>> +                     mbox->m_out.numsgelements =
+>>> +                             mega_build_sglist(adapter, scb,
+>>> +                                               (u32 *)&mbox->m_out.xferaddr,
+>>> +                                               &seg);
+>>>
+>>>                        return scb;
+>>>
+>> ... here the first term is moved down and orphaned, which is another
+>> inconsistency.
+>
+>
 
->
-> Referencing the label with a numbered param yields either the original er=
-ror:
->
->   $ echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: b=
-ar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
->   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .=
-'
->   int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); ret=
-urn *x; bar: return 0; }
->                             ^
->   <stdin>:1:29: error: unknown token in expression
->   <inline asm>:1:9: note: instantiated into assembly here
->           .long () - .
->                  ^
->    2 errors generated.
-
-^ That case should not work in either compilers, more info below...
-
->
-> Bumping the param number (more below) yields a different error (I tried d=
-efining
-> tmp1, that didn't work :-) ).
->
->   $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: b=
-ar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
->   error: Undefined temporary symbol .Ltmp1
->   1 error generated.
-
-"Bumping the param number" will be required when using numbered
-references, more info below...
-
->
-> Regarding the param number, gcc also appears to have a goof with asm goto=
- and "+m",
-> but bumping the param number in that case remedies its woes.
->
->   $echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: ba=
-r); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
->   <stdin>: In function =E2=80=98foo=E2=80=99:
->   <stdin>:1:19: error: invalid 'asm': '%l' operand isn't a label
->
->   $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: b=
-ar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
-
-Right, so in fixing the above issue with tied outputs, I noticed that
-the GCC implementation of asm goto with outputs had different
-behavior. I changed clang's implementation in clang-14 (same patch
-series) to match:
-https://reviews.llvm.org/rG5c562f62a4ee15592f5d764d0710553a4b07a6f2
-This comment summarizes most of my thoughts on the issue:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D98096#c7
-Specifically the quote "It appears to me that the GCC decision here
-was accidental, and that when pointed out, the bug was simply
-documented rather than fixed."
-Though I think compatibility between compilers is ultimately more
-important.  There's no standards bodies involved in these extension,
-which is simultaneously more flexible, yet can also lead to
-differences in implementations like this. Thanks for attending my TED
-talk.
-
->
->
-> So my immediate question: how do we want to we deal with this in the kern=
-el?  Keeping
-> in mind that I'd really like to send this to stable@ to fix the KVM mess.
->
-> I can think of few options that are varying degrees of gross.
->
->   1) Use a more complex sequence for probing CC_HAS_ASM_GOTO_OUTPUT.
->
->   2) Use an output-only "=3Dm" operand.
->
->   3) Use an input register param.
->
-> Option #1 has the obvious downside of the fancier asm goto for  __get_use=
-r_asm()
-> and friends being collateral damage.  The biggest benefit is it'd reduce =
-the
-> likelihood of someone else having to debug similar errors, which was quit=
-e painful.
-
-Right; I assumed we'd hit this at some point, as soon as people wanted
-to used tied outputs with asm goto.  I'd rather have a different
-Kconfig test for working tied outputs, and that all uses in the
-kernels used the symbolic references which are much more readable and
-less confusing than the rules for numbered references (which are bug
-prone IMO).
-
->
-> Options #2 and #3 are quite gross, but I _think_ would be ok since the se=
-quence
-> is tagged as clobbering memory anyways?
-
---=20
-Thanks,
-~Nick Desaulniers
