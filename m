@@ -1,65 +1,77 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8DB2CA2
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 17:42:05 +0000 (UTC)
-Received: by mail-pg1-f171.google.com with SMTP id e16so5802853pgn.4
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:42:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF322C80
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 17:58:18 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so5828782pjq.0
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qMBeUtTGoBAaUmn8ulylEeU3TILxfDlpE26BBKiNnGY=;
+        b=J7fuSAhEvpVepqu4bHtpGok7OuYMF9RjkZNrGHmNgrE3z94rFzSezvXY1VOwIJRPne
+         HDraILoeB+OqGPXAMfYrq42DJ1VEKRhNZ5KbKSdVW71X/qYEYlKw9piEK2FL2LkgD438
+         fhLhq8AjSchO7gxQu78V/tqZ3W0KAYttERvW8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PesQloUaxvEmTVPfJQcjOIXm9PVWBcnSQjPoitUS3nY=;
-        b=wVWO83d8X0Ft5BVEPFszw90kBGQtlDI+m2F0f93Ckrv30MRBmSPCPQw8xzEufz4u3U
-         z8ACCa72Y3FZ5Mda+cSgHBXZJfuVQ+gb40Lwtv1/9JKu1RXpzGIR66x+AYdC3ucZZpso
-         Lpplt8moRRqDnJNJJzNUiGVYaH3FnH3iwk2YxmgXhbCNRZfQnTBiy1L0DBdjAuu9Syyu
-         BExdMqq4JW7RSo81p82umdxKidGJNybkxoyc+LuukhVoF7MQ+uCVR0NRy5ldImU7P5Wi
-         GxOGXLa8fv14aABMvnX5sEEZoaBxDLeP2uPZrNLrgdi6dVaDMheLb20ilhXCIbbw3Lo6
-         4OJQ==
-X-Gm-Message-State: AOAM530+d01E26I1c8R+4oeStzVmjZ0/1KI9kKTkMrfCEh5OzBAJ+HOy
-	+zn1hYcryjVyj3JLAV6A+vg=
-X-Google-Smtp-Source: ABdhPJzMLWm8Yz2uo2wdeHC5HjiecMlFM4aw3Bp/FY8+WB3loHfG+lRatSAgH3e6dnaxBBDKBabbxw==
-X-Received: by 2002:a63:e94e:: with SMTP id q14mr7390897pgj.376.1643391725033;
-        Fri, 28 Jan 2022 09:42:05 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id h18sm10275011pfh.51.2022.01.28.09.42.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 09:42:04 -0800 (PST)
-Message-ID: <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-Date: Fri, 28 Jan 2022 09:42:02 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qMBeUtTGoBAaUmn8ulylEeU3TILxfDlpE26BBKiNnGY=;
+        b=bJQIkuMjCYdy7m5XQoGNs5j1scFth5TuDZM/JMIyvYSfvDvESKBiNgOneBC/FWQ/Qa
+         Nuw23o2P7eeB+QaKOR9nXNUMxSyPUFduph9RZGAvkoD8A9D+5HOkpRuSuiAPkLF2z3sS
+         EUS2aEU7FIAPIaSER6MH0xyIQRX7ZVPDQYQU5rcfX4f2bgDWgbTR9L9nvztB2BE6q4qK
+         n4mcROkZ5eDjy8AZICDOJnebwNBLBYsq8G8m1PD0L5Mt1px4Sv4w3CTLKxJQtwXBsPlZ
+         SzKeTTsDHjQud/HT6NzxAYlFKCoo0sPIKxvBXe7E3BEks6X7HmeESH5IrMMjboIDxzE/
+         6/oA==
+X-Gm-Message-State: AOAM532YJSc77KxE9RYugqx4EgY1HK/PFBbKZpS+xHJOuGSFeBBOznbz
+	2sSE9OszK6ql/4jT/yuOsufhBQ==
+X-Google-Smtp-Source: ABdhPJx5tvndvTY7lS7GUegKk//TLoB/LnrEz7voqsYYRocSw26tJo+R5gzx4F/9MEcP+wqMwA5t9w==
+X-Received: by 2002:a17:902:bf0a:: with SMTP id bi10mr9948941plb.164.1643392698276;
+        Fri, 28 Jan 2022 09:58:18 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p17sm5893755pfo.11.2022.01.28.09.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 09:58:18 -0800 (PST)
+Date: Fri, 28 Jan 2022 09:58:17 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-mm@kvack.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] Revert "ubsan, kcsan: Don't combine sanitizer with kcov
+ on clang"
+Message-ID: <202201280957.562D6AC@keescook>
+References: <20220128105631.509772-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-Content-Language: en-US
-To: trix@redhat.com, kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
- shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
- martin.petersen@oracle.com, nathan@kernel.org, ndesaulniers@google.com
-Cc: megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220127151945.1244439-1-trix@redhat.com>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220127151945.1244439-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128105631.509772-1-elver@google.com>
 
-On 1/27/22 07:19, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Fri, Jan 28, 2022 at 11:56:31AM +0100, Marco Elver wrote:
+> This reverts commit ea91a1d45d19469001a4955583187b0d75915759.
 > 
-> checkpatch reports several hundred formatting errors.
-> Run these files through clang-format and knock off
-> some of them.
+> Since df05c0e9496c ("Documentation: Raise the minimum supported version
+> of LLVM to 11.0.0") the minimum Clang version is now 11.0, which fixed
+> the UBSAN/KCSAN vs. KCOV incompatibilities.
+> 
+> Link: https://bugs.llvm.org/show_bug.cgi?id=45831
+> Link: https://lkml.kernel.org/r/YaodyZzu0MTCJcvO@elver.google.com
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Isn't this the kind of patches that carries more risk than value? 
-Additionally, this patch conflicts with a patch series that I plan to 
-post soon.
+Yup, good to get rid of it.
 
-Thanks,
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Bart.
+-- 
+Kees Cook
