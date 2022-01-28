@@ -1,85 +1,150 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1033E3FE0
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 22:49:28 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id u6so14597028lfm.10
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 14:49:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ga12vASgQepzopTf7itk5qo6jciiWvEYo54yaueBv/k=;
-        b=ocuHiLSMSPTflZxrNNESvCIQ9i+7KDA5CgbR62QaQKXXDLgjYsHYlv8V7w7m89YSBv
-         uqDFU8pu0wkTuGojbwMOm4xC4j81ouCZqMQUv4ylul1TzqWYa5Ej6sz/dpO4Xx6Tk5av
-         UXItrbB9Ml1gsjXRDAWJ85uAnmftgLgl+I/3ZPdhD7ISL1Rx/oofWx6I5gZvy0O+ebnd
-         CCtov4e6Wjt3VZbONDqtD2zgyJK7ekvkOfRukUUMmiEIf1WPwG/vQtQg51YleVk2+yru
-         vtbMsL+rLA3DMH7e2gqooF1lNdWj9PV5SMlT604dQ55IYytTAWSziScWu9bvSVp9McF6
-         OPmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ga12vASgQepzopTf7itk5qo6jciiWvEYo54yaueBv/k=;
-        b=hC/ln/WHi+PD2m61qR5JWpBnuWn7OGwcw5AR6S2ZGdxGo8tpjtaY+p/2wGk6sJheVV
-         GhReRjmk5lUy7uKzpoVZJOxYj/3dPQz0zGYj3L8PLos7rwJBj6Kvr052aLDPs47zXscm
-         xulRArwVlPC5MdLyaeTfF4OJUq/vSsMikzkeDJkPCD5Awu+5g343/hyY1v1510KqG045
-         ckThG/hzvcY+fm73LooPTZ4XdE0zRkW5s5oZ0tgw1cCjS6w4YFe81oRl6oe+NZP2Vsl0
-         xVXjH7B21orU44hsESpxWt0QIBUGMqNHKqNIeQK/bBHkre5JuHAQ1iJgF6VzVTCO6EKl
-         4vLw==
-X-Gm-Message-State: AOAM530Vr01q4b3wZAx5+9Isgqycvaf5BAxQcDeCb3KbjZAsdSjLyshi
-	6NyRYA9lqwEn0t2c6dmXN2Sv2rcNRV0XDTGj5zManw==
-X-Google-Smtp-Source: ABdhPJzaJFI+R0ILoPy/Efjd+HHvfSdGQyGuwezXUpAsCFmnl8paU8d50L8ZlP2AF/lXoKPXGH4nExxQp3vxfXwFFHg=
-X-Received: by 2002:a05:6512:3ba5:: with SMTP id g37mr7601124lfv.651.1643410166929;
- Fri, 28 Jan 2022 14:49:26 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EC73FE0
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 23:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643411888; x=1674947888;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gtr5URFvhMGen+44npttODyy0h7F/t99wvMuv/Dqb1s=;
+  b=kjTV+C49PCqejKfSTJzRHyoyDXzTRkGaMXjf2cWRzJpqkEbiyPWDYrs5
+   TNtNjH2uFbGmnUSGXQbZVdkj6FjK7t7QdGuYqZbB7KaGZ/ZtFKzzzl0e1
+   IPCTMzQQJrTP3VleoIgB3y37lvI1g6vY7xdP43uiGXhtPlGQtSyIjlT61
+   fiCRa1KxJ74BDxjfiEZe5TUXIelHcN/1BB8d0SeVKIO0au9pAKfueyxkP
+   FCvRE0hFvEKOyocQS7Gn1knZm5vKOyG1VUysLysqpLyiuxyXkkIXHSFkN
+   PTMb9w/ivNBgwbv89FnnSxBhj66SsHOknnekQXPd5RsknCb0en8TJ3t+B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="230791099"
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="230791099"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 15:18:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="697247236"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2022 15:18:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDaVJ-000ORB-Bb; Fri, 28 Jan 2022 23:18:05 +0000
+Date: Sat, 29 Jan 2022 07:17:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:tiwai/sound/topic/fw-loader-zstd-5.17 1/3]
+ drivers/base/firmware_loader/main.c:326:16: warning: result of comparison of
+ constant 18446744073709551614 with expression of type 'size_t' (aka
+ 'unsigned int') is always false
+Message-ID: <202201290700.RQlEvkeI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220112224342.958358-1-quic_eberman@quicinc.com>
- <20220128220841.3222637-1-quic_eberman@quicinc.com> <20220128224528.f7ejzw55t6kfefmm@google.com>
-In-Reply-To: <20220128224528.f7ejzw55t6kfefmm@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 28 Jan 2022 14:49:15 -0800
-Message-ID: <CAKwvOd=Ab+GWNzSC6eaDWTVDF6gJQ9fDDMT3hep-DzhrEA6DpQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Add environment variables for userprogs flags
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Matthias Maennich <maennich@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
- On Fri, Jan 28, 2022 at 2:45 PM Fangrui Song <maskray@google.com> wrote:
->
-> On 2022-01-28, Elliot Berman wrote:
-> >Allow additional arguments be passed to userprogs compilation.
-> >Reproducible clang builds need to provide a sysroot and gcc path to
-> >ensure same toolchain is used across hosts. KCFLAGS is not currently
-> >used for any user programs compilation, so add new USERCFLAGS and
-> >USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
-> >
-> >Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
-> >an environment where a user sysroot is not specifically available.
-> >Currently, Clang might automatically detect GCC installation on hosts
-> >which have it installed to a default location in /. With addition of
-> >these environment variables, you can specify flags such as:
-> >
-> >$ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
-> >
-> >to force sysroot detection to fail.
->
-> -Wl,--sysroot=/dev/null => --sysroot
->
-> As I mentioned in
-> https://lore.kernel.org/all/20220128031549.w5a4bilxbkppagfu@google.com/
-> -Wl,--sysroot=/dev/null does not suppress search paths like -L/lib .
+tree:   https://github.com/ammarfaizi2/linux-block tiwai/sound/topic/fw-loader-zstd-5.17
+head:   ed4bba5cc56e96fda12bd427e950da2d987c49c9
+commit: d8649529852348bd245bfdc5cee97311c57cf73a [1/3] firmware: Add the support for ZSTD-compressed firmware files
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220129/202201290700.RQlEvkeI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/d8649529852348bd245bfdc5cee97311c57cf73a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tiwai/sound/topic/fw-loader-zstd-5.17
+        git checkout d8649529852348bd245bfdc5cee97311c57cf73a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/base/firmware_loader/
 
-In that case, Elliot, can you please test whether USERLDFLAGS is
-necessary to be specified AT ALL? Maybe we can drop that addition from
-this patch if so?
--- 
-Thanks,
-~Nick Desaulniers
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/base/firmware_loader/main.c:326:16: warning: result of comparison of constant 18446744073709551614 with expression of type 'size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+                       out_size == ZSTD_CONTENTSIZE_ERROR) {
+                       ~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/base/firmware_loader/main.c:325:16: warning: result of comparison of constant 18446744073709551615 with expression of type 'size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+                   if (out_size == ZSTD_CONTENTSIZE_UNKNOWN ||
+                       ~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +326 drivers/base/firmware_loader/main.c
+
+   307	
+   308	/*
+   309	 * ZSTD-compressed firmware support
+   310	 */
+   311	#ifdef CONFIG_FW_LOADER_COMPRESS_ZSTD
+   312	static int fw_decompress_zstd(struct device *dev, struct fw_priv *fw_priv,
+   313				      size_t in_size, const void *in_buffer)
+   314	{
+   315		size_t len, out_size, workspace_size;
+   316		void *workspace, *out_buf;
+   317		zstd_dctx *ctx;
+   318		int err;
+   319	
+   320		if (fw_priv->data) {
+   321			out_size = fw_priv->allocated_size;
+   322			out_buf = fw_priv->data;
+   323		} else {
+   324			out_size = zstd_find_frame_compressed_size(in_buffer, in_size);
+   325			if (out_size == ZSTD_CONTENTSIZE_UNKNOWN ||
+ > 326			    out_size == ZSTD_CONTENTSIZE_ERROR) {
+   327				dev_dbg(dev, "%s: invalid decompression size\n", __func__);
+   328				return -EINVAL;
+   329			}
+   330			out_buf = vzalloc(out_size);
+   331			if (!out_buf)
+   332				return -ENOMEM;
+   333		}
+   334	
+   335		workspace_size = zstd_dctx_workspace_bound();
+   336		workspace = kvzalloc(workspace_size, GFP_KERNEL);
+   337		if (!workspace) {
+   338			err = -ENOMEM;
+   339			goto error;
+   340		}
+   341	
+   342		ctx = zstd_init_dctx(workspace, workspace_size);
+   343		if (!ctx) {
+   344			dev_dbg(dev, "%s: failed to initialize context\n", __func__);
+   345			err = -EINVAL;
+   346			goto error;
+   347		}
+   348	
+   349		len = zstd_decompress_dctx(ctx, out_buf, out_size, in_buffer, in_size);
+   350		if (zstd_is_error(len)) {
+   351			dev_dbg(dev, "%s: failed to decompress: %d\n", __func__,
+   352				zstd_get_error_code(len));
+   353			err = -EINVAL;
+   354			goto error;
+   355		}
+   356	
+   357		fw_priv->size = len;
+   358		if (!fw_priv->data)
+   359			fw_priv->data = out_buf;
+   360		err = 0;
+   361	
+   362	 error:
+   363		kvfree(workspace);
+   364		if (!fw_priv->data)
+   365			vfree(out_buf);
+   366		return err;
+   367	}
+   368	#endif /* CONFIG_FW_LOADER_COMPRESS_ZSTD */
+   369	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
