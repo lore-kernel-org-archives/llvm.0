@@ -1,21 +1,21 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F11129CA
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 18:46:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8B3C340E6;
-	Fri, 28 Jan 2022 18:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C9929CA
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 18:55:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4CDC340E7;
+	Fri, 28 Jan 2022 18:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643395561;
-	bh=tmg5tqWxrNUjL1aQmmYQBWTKs6R9ohKioeAuiOX9yVo=;
+	s=k20201202; t=1643396136;
+	bh=xA8Ep0YfhZQNU2v7DBLtpJhxzd6pHkO59kXWUQ58m2I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bbUpNxC2KlnIW8Zf7qUELgsBoXzne8oOqLQQqyG7KGdmdVQjYOYhJhXUMdQYuoGCT
-	 UJmCkm4Fj/XMm0BuZD/M8GMm6wpqacwY3rMOFwK2sgdiO3FWg+4D28Vjtsaqk4JKcP
-	 1CCii4/NWqjns2vzsiDFHRiYxkm2Ioa/sV3PfbOlF9GBRh+WQSw4zCEjmZQdyenHdu
-	 BhyJm8B7QalLAIDlExaa+B4WOmMlnbynWKVSeBqODrTho1O6s+4NkaQtxnD47N7InI
-	 O5FpQHGhH2+LAdNZf5xs697XX3WQalBnnbEiEe/zERfx9y/1U8qd9pdhHhRKgDFF6+
-	 VXdhVpoDLa70A==
-Date: Fri, 28 Jan 2022 11:45:55 -0700
+	b=nn+lKmbj5RRcD2XU/XkSh9QSUHQoXcjMBlfUEREkDmgiIJEgfnJBWUqiOJUKqIXe5
+	 hjfViPftgOY2Xc870cS2omSHlbx6CA6EFUwlfUPtaD4VJAO0EReqVIiuMMoTBqICxD
+	 Ga5JUzClU3WaIf7FtEnIJGZoUfAAomxbaB5yNayEnbcBFwL7upJXZkKup1NqeS7wCK
+	 JKZcAxxWFnPIGoONo0MTwRj/D0PgC1Lu/uw6VjILd2ZlmvIlPbs1CnxUX3qiI4N3q0
+	 69v1Hz/nsu42s10bfpn0+6hWkjVAT1lT07UoSfIGMQIOnI6QMB96ApNton0pdjD+CN
+	 c2JdsZIjd2DCQ==
+Date: Fri, 28 Jan 2022 11:55:31 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Marco Elver <elver@google.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Kees Cook <keescook@chromium.org>,
@@ -25,9 +25,11 @@ Cc: Thomas Gleixner <tglx@linutronix.de>, Kees Cook <keescook@chromium.org>,
 	Elena Reshetova <elena.reshetova@intel.com>,
 	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
 	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
-Message-ID: <YfQ54x8zglPT/YnL@dev-arch.archlinux-ax161>
+Subject: Re: [PATCH 2/2] stack: Constrain stack offset randomization with
+ Clang builds
+Message-ID: <YfQ8IwCSzbtAhC3B@dev-arch.archlinux-ax161>
 References: <20220128114446.740575-1-elver@google.com>
+ <20220128114446.740575-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,109 +38,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128114446.740575-1-elver@google.com>
+In-Reply-To: <20220128114446.740575-2-elver@google.com>
 
-On Fri, Jan 28, 2022 at 12:44:45PM +0100, Marco Elver wrote:
-> The randomize_kstack_offset feature is unconditionally compiled in when
-> the architecture supports it.
+On Fri, Jan 28, 2022 at 12:44:46PM +0100, Marco Elver wrote:
+> All supported versions of Clang perform auto-init of __builtin_alloca()
+> when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
 > 
-> To add constraints on compiler versions, we require a dedicated Kconfig
-> variable. Therefore, introduce RANDOMIZE_KSTACK_OFFSET.
+> add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> enabled, add_random_kstack_offset() will auto-init that unused portion
+> of the stack used to add an offset.
 > 
-> Furthermore, this option is now also configurable by EXPERT kernels:
-> while the feature is supposed to have zero performance overhead when
-> disabled, due to its use of static branches, there are few cases where
-> giving a distribution the option to disable the feature entirely makes
-> sense. For example, in very resource constrained environments, which
-> would never enable the feature to begin with, in which case the
-> additional kernel code size increase would be redundant.
+> There are several problems with this:
 > 
+> 	1. These offsets can be as large as 1023 bytes. Performing
+> 	   memset() on them isn't exactly cheap, and this is done on
+> 	   every syscall entry.
+> 
+> 	2. Architectures adding add_random_kstack_offset() to syscall
+> 	   entry implemented in C require them to be 'noinstr' (e.g. see
+> 	   x86 and s390). The potential problem here is that a call to
+> 	   memset may occur, which is not noinstr.
+> 
+> A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> 
+>  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> 
+> Clang 14 (unreleased) will introduce a way to skip alloca initialization
+> via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
+> 
+> Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
+> auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
+> __builtin_alloca_uninitialized() if the compiler provides it, as is done
+> by Clang 14.
+> 
+> Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
+> Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
 > Signed-off-by: Marco Elver <elver@google.com>
-
-From a Kconfig perspective:
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+One comment below.
+
 > ---
->  arch/Kconfig                     | 23 ++++++++++++++++++-----
->  include/linux/randomize_kstack.h |  5 +++++
->  init/main.c                      |  2 +-
->  3 files changed, 24 insertions(+), 6 deletions(-)
+>  arch/Kconfig                     |  1 +
+>  include/linux/randomize_kstack.h | 14 ++++++++++++--
+>  2 files changed, 13 insertions(+), 2 deletions(-)
 > 
 > diff --git a/arch/Kconfig b/arch/Kconfig
-> index 678a80713b21..2cde48d9b77c 100644
+> index 2cde48d9b77c..c5b50bfe31c1 100644
 > --- a/arch/Kconfig
 > +++ b/arch/Kconfig
-> @@ -1159,16 +1159,29 @@ config HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
->  	  to the compiler, so it will attempt to add canary checks regardless
->  	  of the static branch state.
->  
-> -config RANDOMIZE_KSTACK_OFFSET_DEFAULT
-> -	bool "Randomize kernel stack offset on syscall entry"
-> +config RANDOMIZE_KSTACK_OFFSET
-> +	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
-> +	default y
+> @@ -1163,6 +1163,7 @@ config RANDOMIZE_KSTACK_OFFSET
+>  	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
+>  	default y
 >  	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+> +	depends on INIT_STACK_NONE || !CC_IS_CLANG || CLANG_VERSION >= 140000
 >  	help
 >  	  The kernel stack offset can be randomized (after pt_regs) by
 >  	  roughly 5 bits of entropy, frustrating memory corruption
->  	  attacks that depend on stack address determinism or
-> -	  cross-syscall address exposures. This feature is controlled
-> -	  by kernel boot param "randomize_kstack_offset=on/off", and this
-> -	  config chooses the default boot state.
-> +	  cross-syscall address exposures.
-> +
-> +	  The feature is controlled via the "randomize_kstack_offset=on/off"
-> +	  kernel boot param, and if turned off has zero overhead due to its use
-> +	  of static branches (see JUMP_LABEL).
-> +
-> +	  If unsure, say Y.
-> +
-> +config RANDOMIZE_KSTACK_OFFSET_DEFAULT
-> +	bool "Default state of kernel stack offset randomization"
-> +	depends on RANDOMIZE_KSTACK_OFFSET
-> +	help
-> +	  Kernel stack offset randomization is controlled by kernel boot param
-> +	  "randomize_kstack_offset=on/off", and this config chooses the default
-> +	  boot state.
->  
->  config ARCH_OPTIONAL_KERNEL_RWX
->  	def_bool n
 > diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
-> index bebc911161b6..91f1b990a3c3 100644
+> index 91f1b990a3c3..5c711d73ed10 100644
 > --- a/include/linux/randomize_kstack.h
 > +++ b/include/linux/randomize_kstack.h
-> @@ -2,6 +2,7 @@
->  #ifndef _LINUX_RANDOMIZE_KSTACK_H
->  #define _LINUX_RANDOMIZE_KSTACK_H
->  
-> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
->  #include <linux/kernel.h>
->  #include <linux/jump_label.h>
->  #include <linux/percpu-defs.h>
-> @@ -50,5 +51,9 @@ void *__builtin_alloca(size_t size);
->  		raw_cpu_write(kstack_offset, offset);			\
+> @@ -17,8 +17,18 @@ DECLARE_PER_CPU(u32, kstack_offset);
+>   * alignment. Also, since this use is being explicitly masked to a max of
+>   * 10 bits, stack-clash style attacks are unlikely. For more details see
+>   * "VLAs" in Documentation/process/deprecated.rst
+> + *
+> + * The normal alloca() can be initialized with INIT_STACK_ALL. Initializing the
+> + * unused area on each syscall entry is expensive, and generating an implicit
+> + * call to memset() may also be problematic (such as in noinstr functions).
+> + * Therefore, if the compiler provides it, use the "uninitialized" variant.
+>   */
+> -void *__builtin_alloca(size_t size);
+
+Is it okay to remove the declaration? Why was it even added in the first
+place (Kees)?
+
+> +#if __has_builtin(__builtin_alloca_uninitialized)
+> +#define __kstack_alloca __builtin_alloca_uninitialized
+> +#else
+> +#define __kstack_alloca __builtin_alloca
+> +#endif
+> +
+>  /*
+>   * Use, at most, 10 bits of entropy. We explicitly cap this to keep the
+>   * "VLA" from being unbounded (see above). 10 bits leaves enough room for
+> @@ -37,7 +47,7 @@ void *__builtin_alloca(size_t size);
+>  	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
+>  				&randomize_kstack_offset)) {		\
+>  		u32 offset = raw_cpu_read(kstack_offset);		\
+> -		u8 *ptr = __builtin_alloca(KSTACK_OFFSET_MAX(offset));	\
+> +		u8 *ptr = __kstack_alloca(KSTACK_OFFSET_MAX(offset));	\
+>  		/* Keep allocation even after "ptr" loses scope. */	\
+>  		asm volatile("" :: "r"(ptr) : "memory");		\
 >  	}								\
->  } while (0)
-> +#else /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
-> +#define add_random_kstack_offset()		do { } while (0)
-> +#define choose_random_kstack_offset(rand)	do { } while (0)
-> +#endif /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
->  
->  #endif
-> diff --git a/init/main.c b/init/main.c
-> index 65fa2e41a9c0..560f45c27ffe 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -853,7 +853,7 @@ static void __init mm_init(void)
->  	pti_init();
->  }
->  
-> -#ifdef CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
->  DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
->  			   randomize_kstack_offset);
->  DEFINE_PER_CPU(u32, kstack_offset);
 > -- 
 > 2.35.0.rc0.227.g00780c9af4-goog
+> 
 > 
