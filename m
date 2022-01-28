@@ -1,242 +1,544 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F24C168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 03:15:54 +0000 (UTC)
-Received: by mail-pg1-f178.google.com with SMTP id g2so4042053pgo.9
-        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 19:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tZcF1ys+J7GpUFASVAGN6Rdu8oCjA7Z3iypwWHCPy8A=;
-        b=gqxpQ0nasANrfgltMjn/UOliGsx/M5Umfd72JjWUW0y8yKFeSco7vy+1wCHMAW8xnj
-         Dcc2akETfd1yWkgWkbHsmV4FRnqHHC6nH2MVji2noPC3VA6GbnL3SKJkJFmt6fM7P1h9
-         SgywbWj6wiGSforGMZ4BA2Ag8qiZh7AWGguN1PI4J+7OVcxbRMohccvA4b9B7h2rJF80
-         n6oz9z2dgmg81U1o2W7CUFLc2Lt4TR4+pPta3CODTyEpseDhGifE1unpNCShesZFbkwp
-         4iwc8gaO/cwNpI85QYa0I5hySL7VCDHegj1wOE8dwq6cClnRcUG52qBBpNvho3B2dOJG
-         Su2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tZcF1ys+J7GpUFASVAGN6Rdu8oCjA7Z3iypwWHCPy8A=;
-        b=rpCZWoKYwRZ4N7ZoV71sY7xlP5pSF7A9jtnIUYEpQwjcNwQyPyyU7yclbqW3pcaPSB
-         I8Wnk6g2N4pxdHNkIlKpGiy1sE/daatzFjYtR9BPs2IrEmptB9hy3vD+Jj9eB/V4hwzN
-         dMU8+icTLlQHDwY+EOZtozVuKenD85A5pQVb1LU7kaLRh1f57r5PFBEwEq7H3PXKEMH8
-         +HTX27vJ0Vn/ByV647hHvBykQmoLVvc+20D0+TefPcw08SHOGWfaoHQfoLp1zGLfhCGB
-         OUtmvFVwBvHm+cN5+w4KTU7zLAhetqveTNvSiXTdrSipvCoNO5uZyV758WwLr84iv3UC
-         IqZg==
-X-Gm-Message-State: AOAM53293alUBXFdbefIq/7Q17sCGNRKgzREehINVMMWXR8zVte5fn8s
-	XFqebAxt/QZaAnfI09dFmkcY9Q==
-X-Google-Smtp-Source: ABdhPJyyOfTrUzr+qvId4zhmjXJ6JWJJMgPDTtPVeTnXiqVP6kUN+6+UkWJsa3wtypi+dlPGwh7JYQ==
-X-Received: by 2002:a63:3d0a:: with SMTP id k10mr5055355pga.179.1643339753623;
-        Thu, 27 Jan 2022 19:15:53 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:e361:f314:a42:f5f8])
-        by smtp.gmail.com with ESMTPSA id j18sm7353848pfj.13.2022.01.27.19.15.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 19:15:53 -0800 (PST)
-Date: Thu, 27 Jan 2022 19:15:49 -0800
-From: Fangrui Song <maskray@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918C2168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 03:48:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643341735; x=1674877735;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JcbnVJiPxgxumRCpUucisGEAl7RYYAzm4NDjItXEN7g=;
+  b=HBt3iiQV7SX/R7CSgChAaYuhi+1ImHQtel0bYqnwtiZLSCU1q3Vx0+4r
+   3ej4krtmyYPY+svOu0mfRO7dDY3z1dNhHbZpjbk7JOCLJ2g9NH5egmi5b
+   Cx00AAeRiArw/2xxBSynanoJhhQ5gojf4TgqIm14CELr9n/V3jkaKugFW
+   z8upDPXvGvEjVsNuRcCvHh5TbzhYZbhBdw4F1kfVKRwHHGBAFR7JSic9J
+   fqwLVNNdRW4PsjbuI9hTUbSWfJ48/pxXKoCWo80QNj9bkda+fTy6T8a1+
+   zVhdBSXccwlv9stCrE+jQEFiXVj/IMn9HmqlBVHYPgzRA9yk2koQr8UoF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="310353209"
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="310353209"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 19:48:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
+   d="scan'208";a="625492889"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 27 Jan 2022 19:48:52 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDIFn-000NP8-It; Fri, 28 Jan 2022 03:48:51 +0000
+Date: Fri, 28 Jan 2022 11:48:13 +0800
+From: kernel test robot <lkp@intel.com>
 To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Elliot Berman <quic_eberman@quicinc.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Matthias Maennich <maennich@google.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: Add environment variables for userprogs flags
-Message-ID: <20220128031549.w5a4bilxbkppagfu@google.com>
-References: <20220112224342.958358-1-quic_eberman@quicinc.com>
- <CAKwvOdk73a6FT3o7Pn7_dRM3U=dbrXy+iqmLC6n5msSNMzOTGQ@mail.gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [clangbuiltlinux:reachability 2/6] include/linux/jump_label.h:290:2:
+ error: expected ')'
+Message-ID: <202201281152.oKuDwq7A-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdk73a6FT3o7Pn7_dRM3U=dbrXy+iqmLC6n5msSNMzOTGQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 2022-01-26, Nick Desaulniers wrote:
->On Wed, Jan 12, 2022 at 2:44 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
->>
->> Allow additional arguments be passed to userprogs compilation.
->> Reproducible clang builds need to provide a sysroot and gcc path to
->> ensure same toolchain is used across hosts. KCFLAGS is not currently
->> used for any user programs compilation, so add new USERCFLAGS and
->> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
->>
->> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
->> an environment where a user sysroot is not specifically available.
->> Currently, Clang might automatically detect GCC installation on hosts
->> which have it installed to a default location in /. With addition of
->> these environment variables, our build environment can do like
->> "--sysroot=/dev/null" to force sysroot detection to fail.
->
->Hi Elliot,
->Thanks for the patch! Sorry for the delay in reviewing; I didn't quite
->get around to it then went on vacation for a week.  Things get buried
->in my inbox quickly; feel free to ping me if a week goes by with no
->response on whichever channel works best for you.
->
->I'm happy with the intent of this patch; GNU binutils has been removed
->from Android, so supporting CC_CAN_LINK for Android kernel builds has
->been a question I've been thinking about (though, not with higher
->priority with some of our other issues), since we'll need to either
->incorporate musl or bionic libc into our kernel build.  I was thinking
->of adding a SYSROOT command line variable for that, but I see your
->approach is more flexible.
->
->One minor nit below, a typo, a few questions, and in the commit
->message, but this generally LGTM.
->
->For the commit message, I think it would be good to expand `can do
->like "--sysroot=/dev/null"` fully into
->```
->can specify
->$ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
->```
+tree:   https://github.com/ClangBuiltLinux/linux reachability
+head:   1ebaf6b87ee4d103be3d3f6e00fa4fcb18e7865e
+commit: 473c4f04fa49864f6955062435d8bab02ff87862 [2/6] x86: bug.h: merge asm in __WARN_FLAGS
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220128/202201281152.oKuDwq7A-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ClangBuiltLinux/linux/commit/473c4f04fa49864f6955062435d8bab02ff87862
+        git remote add clangbuiltlinux https://github.com/ClangBuiltLinux/linux
+        git fetch --no-tags clangbuiltlinux reachability
+        git checkout 473c4f04fa49864f6955062435d8bab02ff87862
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
-Is -Wl,--sysroot=/dev/null to override a -Wl,--sysroot specified
-previously on the command line?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The driver option --sysroot does two things:
+All errors (new ones prefixed by >>):
 
-* Decide include/library search paths (e.g. $sysroot/usr/include, $sysroot/lib64).
-* Pass --sysroot to ld.
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:13:
+   In file included from arch/x86/include/asm/math_emu.h:5:
+   In file included from arch/x86/include/asm/ptrace.h:97:
+   In file included from arch/x86/include/asm/paravirt_types.h:40:
+   In file included from arch/x86/include/asm/nospec-branch.h:6:
+   In file included from include/linux/static_key.h:1:
+>> include/linux/jump_label.h:290:2: error: expected ')'
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:13:
+   In file included from arch/x86/include/asm/math_emu.h:5:
+   In file included from arch/x86/include/asm/ptrace.h:97:
+   In file included from arch/x86/include/asm/paravirt_types.h:40:
+   In file included from arch/x86/include/asm/nospec-branch.h:6:
+   In file included from include/linux/static_key.h:1:
+   include/linux/jump_label.h:296:2: error: expected ')'
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:13:
+   In file included from arch/x86/include/asm/math_emu.h:5:
+   In file included from arch/x86/include/asm/ptrace.h:97:
+   In file included from arch/x86/include/asm/paravirt_types.h:40:
+   In file included from arch/x86/include/asm/nospec-branch.h:6:
+   In file included from include/linux/static_key.h:1:
+   include/linux/jump_label.h:318:2: error: expected ')'
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:13:
+   In file included from arch/x86/include/asm/math_emu.h:5:
+   In file included from arch/x86/include/asm/ptrace.h:97:
+   In file included from arch/x86/include/asm/paravirt_types.h:40:
+   In file included from arch/x86/include/asm/nospec-branch.h:6:
+   In file included from include/linux/static_key.h:1:
+   include/linux/jump_label.h:321:3: error: expected ')'
+                   WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
+                   ^
+   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
+                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:13:
+   In file included from arch/x86/include/asm/math_emu.h:5:
+   In file included from arch/x86/include/asm/ptrace.h:97:
+   In file included from arch/x86/include/asm/paravirt_types.h:40:
+   In file included from arch/x86/include/asm/nospec-branch.h:6:
+   In file included from include/linux/static_key.h:1:
+   include/linux/jump_label.h:329:2: error: expected ')'
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:13:
+   In file included from arch/x86/include/asm/math_emu.h:5:
+   In file included from arch/x86/include/asm/ptrace.h:97:
+   In file included from arch/x86/include/asm/paravirt_types.h:40:
+   In file included from arch/x86/include/asm/nospec-branch.h:6:
+   In file included from include/linux/static_key.h:1:
+   include/linux/jump_label.h:332:3: error: expected ')'
+                   WARN_ON_ONCE(atomic_read(&key->enabled) != 0);
+                   ^
+   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
+                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:22:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+>> include/linux/cpumask.h:108:2: error: expected ')'
+           WARN_ON_ONCE(cpu >= bits);
+           ^
+   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
+                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+>> include/linux/thread_info.h:200:2: error: expected ')'
+           WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
+           ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   include/linux/thread_info.h:216:6: error: expected ')'
+           if (WARN_ON_ONCE(bytes > INT_MAX))
+               ^
+   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
+                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   In file included from include/linux/seqlock.h:20:
+>> include/linux/ww_mutex.h:171:2: error: expected ')'
+           lockdep_assert_held(ctx);
+           ^
+   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ^
+   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ^
+   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+                                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   In file included from include/linux/seqlock.h:20:
+   include/linux/ww_mutex.h:173:2: error: expected ')'
+           DEBUG_LOCKS_WARN_ON(ctx->done_acquire);
+           ^
+   include/linux/debug_locks.h:31:4: note: expanded from macro 'DEBUG_LOCKS_WARN_ON'
+                           WARN(1, "DEBUG_LOCKS_WARN_ON(%s)", #c);         \
+                           ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   In file included from include/linux/seqlock.h:20:
+   include/linux/ww_mutex.h:191:2: error: expected ')'
+           DEBUG_LOCKS_WARN_ON(ctx->acquired);
+           ^
+   include/linux/debug_locks.h:31:4: note: expanded from macro 'DEBUG_LOCKS_WARN_ON'
+                           WARN(1, "DEBUG_LOCKS_WARN_ON(%s)", #c);         \
+                           ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   In file included from include/linux/seqlock.h:20:
+   include/linux/ww_mutex.h:297:2: error: expected ')'
+           DEBUG_LOCKS_WARN_ON(!ctx->contending_lock);
+           ^
+   include/linux/debug_locks.h:31:4: note: expanded from macro 'DEBUG_LOCKS_WARN_ON'
+                           WARN(1, "DEBUG_LOCKS_WARN_ON(%s)", #c);         \
+                           ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   In file included from include/linux/seqlock.h:20:
+   include/linux/ww_mutex.h:333:2: error: expected ')'
+           DEBUG_LOCKS_WARN_ON(!ctx->contending_lock);
+           ^
+   include/linux/debug_locks.h:31:4: note: expanded from macro 'DEBUG_LOCKS_WARN_ON'
+                           WARN(1, "DEBUG_LOCKS_WARN_ON(%s)", #c);         \
+                           ^
+   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                   ^
+   include/asm-generic/bug.h:100:3: note: expanded from macro '__WARN_printf'
+                   __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+>> include/linux/seqlock.h:271:2: error: expected ')'
+           lockdep_assert_preemption_disabled();
+           ^
+   include/linux/lockdep.h:607:2: note: expanded from macro 'lockdep_assert_preemption_disabled'
+           WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_COUNT)   &&              \
+           ^
+   include/asm-generic/bug.h:106:3: note: expanded from macro 'WARN_ON_ONCE'
+                   __WARN_FLAGS(BUGFLAG_ONCE |                     \
+                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   include/linux/seqlock.h:276:1: error: expected ')'
+   SEQCOUNT_LOCKNAME(raw_spinlock, raw_spinlock_t,  false,    s->lock,        raw_spin, raw_spin_lock(s->lock))
+   ^
+   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
+           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
+                      ^
+   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ^
+   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ^
+   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+                                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   include/linux/seqlock.h:277:1: error: expected ')'
+   SEQCOUNT_LOCKNAME(spinlock,     spinlock_t,      __SEQ_RT, s->lock,        spin,     spin_lock(s->lock))
+   ^
+   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
+           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
+                      ^
+   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ^
+   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ^
+   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+                                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   include/linux/seqlock.h:278:1: error: expected ')'
+   SEQCOUNT_LOCKNAME(rwlock,       rwlock_t,        __SEQ_RT, s->lock,        read,     read_lock(s->lock))
+   ^
+   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
+           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
+                      ^
+   include/linux/lockdep.h:316:2: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+           ^
+   include/linux/lockdep.h:310:7: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                ^
+   include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+                                   ^
+   arch/x86/include/asm/bug.h:82:25: note: expanded from macro '__WARN_FLAGS'
+           _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);                  \
+                                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:16:
+   include/linux/seqlock.h:279:1: error: expected ')'
+   SEQCOUNT_LOCKNAME(mutex,        struct mutex,    true,     s->lock,        mutex,    mutex_lock(s->lock))
+   ^
+   include/linux/seqlock.h:247:13: note: expanded from macro 'SEQCOUNT_LOCKNAME'
+           __SEQ_LOCK(lockdep_assert_held(lockmember));                    \
+                      ^
 
-In ld, it means: if a linker script is in the sysroot directory, when ld opens an
-absolute path file (via INPUT or GROUP), add sysroot before the absolute path.
-In ld, --sysroot=/dev/null is not different --sysroot= (empty value).
 
->>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
->>  Documentation/kbuild/kbuild.rst | 8 ++++++++
->>  Makefile                        | 9 ++++++---
->>  init/Kconfig                    | 8 ++++----
->>  usr/include/Makefile            | 3 +++
->>  4 files changed, 21 insertions(+), 7 deletions(-)
->>
->> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
->> index 2d1fc03d346e..16e90a3ae01b 100644
->> --- a/Documentation/kbuild/kbuild.rst
->> +++ b/Documentation/kbuild/kbuild.rst
->> @@ -77,6 +77,14 @@ HOSTLDLIBS
->>  ----------
->>  Additional libraries to link against when building host programs.
->>
->> +USERCFLAGS
->> +----------
->> +Additional options used for $(CC) when compiling userprogs.
->> +
->> +USERLDFLAGS
->> +----------
->> +Additional options used for $(LD) when linking userprogs.
->
->Probably should note the necessity of `-Wl,` prefixes here.
->
->Is `userprogs` cannonical? Yeah, I guess (reading
->Documentation/kbuild/makefiles.rst). I wonder if we should mention
->these in Documentation/kbuild/makefiles.rst as well? Under `5.3
->Controlling compiler options for userspace programs`.
->
->> +
->>  KBUILD_KCONFIG
->>  --------------
->>  Set the top-level Kconfig file to the value of this environment
->> diff --git a/Makefile b/Makefile
->> index 45278d508d81..4a55537c8ca0 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -431,15 +431,17 @@ HOSTCC    = gcc
->>  HOSTCXX        = g++
->>  endif
->>
->> -export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
->> -                             -O2 -fomit-frame-pointer -std=gnu89
->> -export KBUILD_USERLDFLAGS :=
->> +KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
->> +                    -O2 -fomit-frame-pointer -std=gnu89
->> +KBUILD_USERLDFLAGS := $(USERLDFLAGGS)
->
->^ I think there's an extra G in USERLDFLAGS above.
->
->>
->>  KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
->>  KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
->>  KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
->>  KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
->>
->> +KBUILD_USERCFLAGS   += $(USERCFLAGS)
->
->Since you added USERLDFLAGS to KBUILD_USERLDFLAGS above where it's
->defined, why not do so for USERCFLAGS/KBUILD_USERCFLAGS as well?
->
->> +
->>  # Make variables (CC, etc...)
->>  CPP            = $(CC) -E
->>  ifneq ($(LLVM),)
->> @@ -530,6 +532,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
->>  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
->>  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
->>  export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
->> +export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
->>
->>  export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
->>  export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
->> diff --git a/init/Kconfig b/init/Kconfig
->> index f2ae41e6717f..164706c38e8b 100644
->> --- a/init/Kconfig
->> +++ b/init/Kconfig
->> @@ -62,13 +62,13 @@ config LLD_VERSION
->>
->>  config CC_CAN_LINK
->>         bool
->> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
->> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
->> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
->> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
->>
->>  config CC_CAN_LINK_STATIC
->>         bool
->> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
->> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
->> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
->> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
->
->since USERLDFLAGS get passed to $(CC), they will need `-Wl`, prefixes,
->hence the request for expanding the example usage in the commit
->message.
->
->>
->>  config CC_HAS_ASM_GOTO
->>         def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
->> diff --git a/usr/include/Makefile b/usr/include/Makefile
->> index 1c2ae1368079..6a8c7dd9ccaf 100644
->> --- a/usr/include/Makefile
->> +++ b/usr/include/Makefile
->> @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
->>  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
->>  UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
->>
->> +# USERCFLAGS might contain sysroot location for CC
->> +UAPI_CFLAGS += $(USERCFLAGS)
->> +
->
->Do we need to worry about USERLDFLAGS here, too? (or usr/Makefile?)
->
->>  override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
->>
->>  # The following are excluded for now because they fail to build.
->> --
->> 2.25.1
->>
->
->
->-- 
->Thanks,
->~Nick Desaulniers
+vim +290 include/linux/jump_label.h
+
+bf5438fca2950b Jason Baron     2010-09-17  287  
+c5905afb0ee655 Ingo Molnar     2012-02-24  288  static inline void static_key_slow_inc(struct static_key *key)
+d430d3d7e646eb Jason Baron     2011-03-16  289  {
+5cdda5117e125e Borislav Petkov 2017-10-18 @290  	STATIC_KEY_CHECK_USE(key);
+d430d3d7e646eb Jason Baron     2011-03-16  291  	atomic_inc(&key->enabled);
+d430d3d7e646eb Jason Baron     2011-03-16  292  }
+bf5438fca2950b Jason Baron     2010-09-17  293  
+
+:::::: The code at line 290 was first introduced by commit
+:::::: 5cdda5117e125e0dbb020425cc55a4c143c6febc locking/static_keys: Improve uninitialized key warning
+
+:::::: TO: Borislav Petkov <bp@suse.de>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
