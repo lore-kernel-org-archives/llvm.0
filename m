@@ -1,108 +1,139 @@
-Received: from relay.hostedemail.com (relay037.a.hostedemail.com [64.99.140.37])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47791168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 08:41:28 +0000 (UTC)
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay12.hostedemail.com (Postfix) with ESMTP id 3A86E12033B;
-	Fri, 28 Jan 2022 08:41:20 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id AF44C80014;
-	Fri, 28 Jan 2022 08:40:52 +0000 (UTC)
-Message-ID: <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From: Joe Perches <joe@perches.com>
-To: Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
- shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
- martin.petersen@oracle.com, nathan@kernel.org,
- megaraidlinux.pdl@broadcom.com,  linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Fri, 28 Jan 2022 00:41:10 -0800
-In-Reply-To: <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-	 <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
-	 <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
-	 <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com>
-	 <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
-	 <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6037168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 08:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643359568; x=1674895568;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H+tIbmhjE4QG2sWST/QIM9Alm+fPOHWqQHHUF22ZXGU=;
+  b=O7bcGVpTzKyT7U7bpB15mrvdB4/ahnlS87m/1P1yghpC0G14NHuwzat3
+   rRcK1fqsoLrkIX/CeEAjGLMCM1xZFguNfVHjtc9B20RfZugWkj2fxOuxd
+   y3ocWWNdDzLkCt1dOaAQiomLK9d6AOZpyvoPnvO2TAQt9sR400eZOhDZC
+   tS51KOoHf7MABr+9GyIa/RYVPHNQ4yRdCMBbv3yBok3GJpWnNB2T2Rk4e
+   33SxTuoSPfs8+4YFOH0GwEf9WxnqHzleGHAmH0uoZ4nQYqB6+o5ZPY4WT
+   09g4vI+bX4Gfm5sXNb3rJQ59WjmSMEcJcp7Cf59tpFg78zScwv0mDjLWd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="230657261"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="230657261"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:46:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="496069381"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 00:46:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDMtS-000NfW-1H; Fri, 28 Jan 2022 08:46:06 +0000
+Date: Fri, 28 Jan 2022 16:45:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zichar Zhang <zichar.zhang@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 1/1] [RFC] wakeup_reason: Add infrastructure to log and
+ report why the system resumed from suspend.
+Message-ID: <202201281645.eC7tWb3B-lkp@intel.com>
+References: <20220128045522.3505336-1-zichar.zhang@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.90
-X-Stat-Signature: ee1qasspf45yao75rasduwrdbsym8kor
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: AF44C80014
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/s1CB6P0Qi+bndabNk32vMkM+MW6PtAhg=
-X-HE-Tag: 1643359252-762821
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128045522.3505336-1-zichar.zhang@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, 2022-01-27 at 21:31 -0800, Tom Rix wrote:
-> On 1/27/22 6:43 PM, Joe Perches wrote:
-> > On Thu, 2022-01-27 at 16:32 -0800, Tom Rix wrote:
-> > > On 1/27/22 2:47 PM, Nick Desaulniers wrote:
-> > > > + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
-> > > > These criticisms are worth reviewing.
-> > > > 
-> > > > On Thu, Jan 27, 2022 at 2:38 PM Finn Thain <fthain@linux-m68k.org> wrote:
-> > > > > On Thu, 27 Jan 2022, trix@redhat.com wrote:
-> > > > > 
-> > > > > > From: Tom Rix <trix@redhat.com>
-> > > > > > 
-> > > > > > checkpatch reports several hundred formatting errors. Run these files
-> > > > > > through clang-format and knock off some of them.
-> > > > > > 
-> > > > > That method seems like a good recipe for endless churn unless checkpatch
-> > > > > and clang-format really agree about these style rules.
-> > > > > 
-> > > > > Why use checkpatch to assess code style, if we could simply diff the
-> > > > > existing source with the output from clang-format... but it seems that
-> > > > > clang-format harms readability, makes indentation errors and uses
-> > > > > inconsistent style rules. Some examples:
-> > > Problems with clang-format should be fixed, I'll take a look.
-> > > 
-> > > I was reviewing this file for another isseue and could not get past how
-> > > horredously bad it was and really did not want to manually fix the 400+
-> > > formatting errors.  I will drop this patch and use the use these files
-> > > to verify the .clang-format .
-> > I think this is more an issue with clang-format than with checkpatch.
-> > 
-> > If you have specific issues with what checkpatch reports for this
-> > file (or any other file), let me know.
-> 
-> Yes, I agree. Its a clang-format problem.
-> 
-> I will be looking to minimize the .clang-format settings to only those 
-> that agree with checkpatch.
-> 
-> Then add settings back in later if their problems can be worked out.
+Hi Zichar,
 
-Another option would be to use:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linux/master linus/master v5.17-rc1 next-20220127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-	./scripts/checkpatch.pl -f --fix[-inplace] [--types=<list>] <files>
+url:    https://github.com/0day-ci/linux/commits/Zichar-Zhang/wakeup_reason-Add-infrastructure-to-log-and-report-why-the-system-resumed-from-suspend/20220128-125627
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: i386-randconfig-a014-20220124 (https://download.01.org/0day-ci/archive/20220128/202201281645.eC7tWb3B-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/b932c9637e3e3a14497ff60caedfc67608d93c13
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Zichar-Zhang/wakeup_reason-Add-infrastructure-to-log-and-report-why-the-system-resumed-from-suspend/20220128-125627
+        git checkout b932c9637e3e3a14497ff60caedfc67608d93c13
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/power/
 
-where types is an optional list of specific things to change
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-see:
-	./scripts/checkpatch.pl --list-types --verbose
+All warnings (new ones prefixed by >>):
 
-to show the possible types.
+   In file included from kernel/power/main.c:19:
+>> include/linux/wakeup_reason.h:29:9: warning: no previous prototype for function 'log_ws_wakeup_reason' [-Wmissing-prototypes]
+   ssize_t log_ws_wakeup_reason(void) { }
+           ^
+   include/linux/wakeup_reason.h:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t log_ws_wakeup_reason(void) { }
+   ^
+   static 
+   include/linux/wakeup_reason.h:29:38: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   ssize_t log_ws_wakeup_reason(void) { }
+                                        ^
+>> include/linux/wakeup_reason.h:30:9: warning: no previous prototype for function 'log_irq_wakeup_reason' [-Wmissing-prototypes]
+   ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
+           ^
+   include/linux/wakeup_reason.h:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
+   ^
+   static 
+   include/linux/wakeup_reason.h:30:58: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
+                                                            ^
+>> include/linux/wakeup_reason.h:31:6: warning: no previous prototype for function 'clear_wakeup_reason' [-Wmissing-prototypes]
+   void clear_wakeup_reason(void) { }
+        ^
+   include/linux/wakeup_reason.h:31:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void clear_wakeup_reason(void) { }
+   ^
+   static 
+>> include/linux/wakeup_reason.h:32:9: warning: no previous prototype for function 'last_wakeup_reason_get' [-Wmissing-prototypes]
+   ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
+           ^
+   include/linux/wakeup_reason.h:32:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
+   ^
+   static 
+   include/linux/wakeup_reason.h:32:58: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
+                                                            ^
+   4 warnings and 3 errors generated.
 
-Only some of these types can be changed with --fix or --fix-inplace
 
-If using checkpatch to change formatting, it sometimes can be useful
-to run checkpatch --fix multiple times on the same file as a
-checkpatch --fix can create a change than checkpatch will suggest
-should itself be fixed.
+vim +/log_ws_wakeup_reason +29 include/linux/wakeup_reason.h
 
-Of course another option is to do nothing as many will complain,
-sometimes senselessly, about 'churn'.
+    22	
+    23	#ifdef CONFIG_SUSPEND
+    24	ssize_t log_ws_wakeup_reason(void);
+    25	ssize_t log_irq_wakeup_reason(unsigned int irq_number);
+    26	void clear_wakeup_reason(void);
+    27	ssize_t last_wakeup_reason_get(char *buf, ssize_t max);
+    28	#else
+  > 29	ssize_t log_ws_wakeup_reason(void) { }
+  > 30	ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
+  > 31	void clear_wakeup_reason(void) { }
+  > 32	ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
+    33	#endif
+    34	
 
-
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
