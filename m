@@ -1,138 +1,203 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666C12CA1
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 17:02:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643475744; x=1675011744;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W7DZG6qmcOjEcEDWWfMSe6v88eVVQD1gFgLStlTGeVA=;
-  b=c/dgg8AQ2t/iFdhusb6Q6SZiEi1CLeerMvU7ZYZGQJi5uL0PI2117k8W
-   GG0RCjaJPKIIAzGi/+mXdpSYj5B0BwtM+N3uXWmFvT9Uvx1KqEQ2zK5IK
-   K4Gwy/x1s/J86mNGuMDqQoEC4qxdWXA4lf6lr8Z6YecPZgttx5+KgR0Wv
-   QxmZl8HCkOFBMnNsPElfMCGVU/CJnJd9NBTrZ3TNgNEUfPBhmtxzTT8ox
-   YzqPtnjirKDlGyEeLOEIbnXTprf3QG7CdGnp5Twpm9xyIBw/q59yJ2g87
-   NLn+TtHbtr8QMSrHhbIqeaxViH62wMzUraxJ0wKEZc6rG/toco4QZgWH1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="247054806"
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="247054806"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 09:02:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
-   d="scan'208";a="522063039"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jan 2022 09:02:21 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDr7E-000PQO-Vz; Sat, 29 Jan 2022 17:02:20 +0000
-Date: Sun, 30 Jan 2022 01:01:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jordy Zomer <jordy@pwning.systems>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jordy Zomer <jordy@pwning.systems>,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
-	dm-devel@redhat.com
-Subject: Re: [PATCH] dm ioct: prevent potential specter v1 gadget
-Message-ID: <202201300033.eThgyeLo-lkp@intel.com>
-References: <20220129143722.3460829-1-jordy@pwning.systems>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D5C3FE0
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 22:45:33 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so12238008pjj.4
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 14:45:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1lj832tGmFyIqua9wa/r0vYUcYhofrxoYg4e6wRcfOA=;
+        b=MQ686LpLEFIuxqD9Kv770e+zbsPS8ZMDWslLNwEMRN7gbeDfZRmiy9ue5guEvbSUbV
+         q3GoFjjxx3QeRVS2nExeuA9ILxg7Cyrs3idFPIQAXmmm9ii0HVp3zfRlh88FTYuoXbjr
+         SEVAcD1awV+SK2H79UrGepZljae/kBRAzhnmRKsOruA03jc7CdqCX9YuC1RdsbyDmfNw
+         d5BL/XmtS9W8XEe3sG/3VcruI/j7TjYQU6pLaWdISB9J/DyP3avifN/hJ4FAbqFNSl5u
+         YNFMtKFxLvwoiWWVYHcD2fjCXREtTok7N0kt72WMEfxToFXwDNWy27aBzsfJUzjUhkGi
+         pj7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1lj832tGmFyIqua9wa/r0vYUcYhofrxoYg4e6wRcfOA=;
+        b=Y2tkaUItUfceBiDsTRlwBEZG4Bl2/5NGdltd4pVHQhim1EjSY89xsUDhcqlxLCRoEk
+         0/XZJ+iSk5ZPz6rnl6yQ4W/gxdJQNSB1JLggwJSRAKpCh1QXtyOUK+kUcA+hGM4Hwdgi
+         Lpu0kAkGDVFMGFmtHjhGXpMyntQvXJ6CKcpMH6K+e8XonXzjqygAkIqzr15fAKAj9Xeg
+         fPmltfTq1aVD2lSbKnuqtUEpCLOaibzQ0RZq+T9Cgrsni6HbkV6T4T1n01vxp4Dpo17i
+         kvCEtq5gjfjG3xvoB9HM3yWMtTv+CMZY6Dnz1jYqkhjNOUK1k97qL+EPN4oTHs3x3nBV
+         1a8A==
+X-Gm-Message-State: AOAM530SeTQam6n0nX8XoS268m1DtssqV/gPDejJhgJtWxM5+ZdbEhzN
+	AyvBaKcZo8n7V3DtQxuQk/I9wg==
+X-Google-Smtp-Source: ABdhPJx89XALahPbJIO0ez6i3GHoqWvrHrmi0ISshkawVR+Jop9IQB/IbUt1h+uoIWibMBwpYZxFZw==
+X-Received: by 2002:a17:90b:3106:: with SMTP id gc6mr21923698pjb.77.1643409932787;
+        Fri, 28 Jan 2022 14:45:32 -0800 (PST)
+Received: from google.com ([2620:15c:2ce:200:c71a:75b3:3f56:8bc8])
+        by smtp.gmail.com with ESMTPSA id 38sm22668074pgm.37.2022.01.28.14.45.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 14:45:32 -0800 (PST)
+Date: Fri, 28 Jan 2022 14:45:28 -0800
+From: Fangrui Song <maskray@google.com>
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Matthias Maennich <maennich@google.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] kbuild: Add environment variables for userprogs flags
+Message-ID: <20220128224528.f7ejzw55t6kfefmm@google.com>
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+ <20220128220841.3222637-1-quic_eberman@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220129143722.3460829-1-jordy@pwning.systems>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220128220841.3222637-1-quic_eberman@quicinc.com>
 
-Hi Jordy,
+On 2022-01-28, Elliot Berman wrote:
+>Allow additional arguments be passed to userprogs compilation.
+>Reproducible clang builds need to provide a sysroot and gcc path to
+>ensure same toolchain is used across hosts. KCFLAGS is not currently
+>used for any user programs compilation, so add new USERCFLAGS and
+>USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+>
+>Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
+>an environment where a user sysroot is not specifically available.
+>Currently, Clang might automatically detect GCC installation on hosts
+>which have it installed to a default location in /. With addition of
+>these environment variables, you can specify flags such as:
+>
+>$ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
+>
+>to force sysroot detection to fail.
 
-Thank you for the patch! Yet something to improve:
+-Wl,--sysroot=/dev/null => --sysroot
 
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on linux/master linus/master v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jordy-Zomer/dm-ioct-prevent-potential-specter-v1-gadget/20220129-223840
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-config: hexagon-buildonly-randconfig-r001-20220129 (https://download.01.org/0day-ci/archive/20220130/202201300033.eThgyeLo-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/494fed5461aa05e0efaf098b57a2a47dc19ba226
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jordy-Zomer/dm-ioct-prevent-potential-specter-v1-gadget/20220129-223840
-        git checkout 494fed5461aa05e0efaf098b57a2a47dc19ba226
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/md/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/md/dm-ioctl.c:1791:8: error: implicit declaration of function 'array_index_nospec' [-Werror,-Wimplicit-function-declaration]
-           cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
-                 ^
-   1 error generated.
+As I mentioned in
+https://lore.kernel.org/all/20220128031549.w5a4bilxbkppagfu@google.com/
+-Wl,--sysroot=/dev/null does not suppress search paths like -L/lib .
 
 
-vim +/array_index_nospec +1791 drivers/md/dm-ioctl.c
-
-  1752	
-  1753	/*-----------------------------------------------------------------
-  1754	 * Implementation of open/close/ioctl on the special char
-  1755	 * device.
-  1756	 *---------------------------------------------------------------*/
-  1757	static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
-  1758	{
-  1759		static const struct {
-  1760			int cmd;
-  1761			int flags;
-  1762			ioctl_fn fn;
-  1763		} _ioctls[] = {
-  1764			{DM_VERSION_CMD, 0, NULL}, /* version is dealt with elsewhere */
-  1765			{DM_REMOVE_ALL_CMD, IOCTL_FLAGS_NO_PARAMS | IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, remove_all},
-  1766			{DM_LIST_DEVICES_CMD, 0, list_devices},
-  1767	
-  1768			{DM_DEV_CREATE_CMD, IOCTL_FLAGS_NO_PARAMS | IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, dev_create},
-  1769			{DM_DEV_REMOVE_CMD, IOCTL_FLAGS_NO_PARAMS | IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, dev_remove},
-  1770			{DM_DEV_RENAME_CMD, IOCTL_FLAGS_ISSUE_GLOBAL_EVENT, dev_rename},
-  1771			{DM_DEV_SUSPEND_CMD, IOCTL_FLAGS_NO_PARAMS, dev_suspend},
-  1772			{DM_DEV_STATUS_CMD, IOCTL_FLAGS_NO_PARAMS, dev_status},
-  1773			{DM_DEV_WAIT_CMD, 0, dev_wait},
-  1774	
-  1775			{DM_TABLE_LOAD_CMD, 0, table_load},
-  1776			{DM_TABLE_CLEAR_CMD, IOCTL_FLAGS_NO_PARAMS, table_clear},
-  1777			{DM_TABLE_DEPS_CMD, 0, table_deps},
-  1778			{DM_TABLE_STATUS_CMD, 0, table_status},
-  1779	
-  1780			{DM_LIST_VERSIONS_CMD, 0, list_versions},
-  1781	
-  1782			{DM_TARGET_MSG_CMD, 0, target_message},
-  1783			{DM_DEV_SET_GEOMETRY_CMD, 0, dev_set_geometry},
-  1784			{DM_DEV_ARM_POLL, IOCTL_FLAGS_NO_PARAMS, dev_arm_poll},
-  1785			{DM_GET_TARGET_VERSION, 0, get_target_version},
-  1786		};
-  1787	
-  1788		if (unlikely(cmd >= ARRAY_SIZE(_ioctls)))
-  1789			return NULL;
-  1790	
-> 1791		cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
-  1792		*ioctl_flags = _ioctls[cmd].flags;
-  1793		return _ioctls[cmd].fn;
-  1794	}
-  1795	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>
+>Changes since v1: Addressed minor nits from Nick
+>---
+> Documentation/kbuild/kbuild.rst    | 9 +++++++++
+> Documentation/kbuild/makefiles.rst | 2 ++
+> Makefile                           | 9 ++++++---
+> init/Kconfig                       | 8 ++++----
+> usr/include/Makefile               | 3 +++
+> 5 files changed, 24 insertions(+), 7 deletions(-)
+>
+>diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+>index 2d1fc03d346e..3e7467b19c8f 100644
+>--- a/Documentation/kbuild/kbuild.rst
+>+++ b/Documentation/kbuild/kbuild.rst
+>@@ -77,6 +77,15 @@ HOSTLDLIBS
+> ----------
+> Additional libraries to link against when building host programs.
+>
+>+USERCFLAGS
+>+----------
+>+Additional options used for $(CC) when compiling userprogs.
+>+
+>+USERLDFLAGS
+>+----------
+>+Additional options used for $(LD) when linking userprogs. userprogs are linked
+>+with CC, so $(USERLDFLAGS) should include "-Wl," prefix as applicable.
+>+
+> KBUILD_KCONFIG
+> --------------
+> Set the top-level Kconfig file to the value of this environment
+>diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+>index b008b90b92c9..39fb70f59429 100644
+>--- a/Documentation/kbuild/makefiles.rst
+>+++ b/Documentation/kbuild/makefiles.rst
+>@@ -982,6 +982,8 @@ The syntax is quite similar. The difference is to use "userprogs" instead of
+>
+> 	When linking bpfilter_umh, it will be passed the extra option -static.
+>
+>+	From command line, USERCFLAGS and USERLDFLAGS will also be used (See kbuild.rst)
+>+
+> 5.4 When userspace programs are actually built
+> ----------------------------------------------
+>
+>diff --git a/Makefile b/Makefile
+>index 45278d508d81..8a2324e6bda8 100644
+>--- a/Makefile
+>+++ b/Makefile
+>@@ -431,15 +431,17 @@ HOSTCC	= gcc
+> HOSTCXX	= g++
+> endif
+>
+>-export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+>-			      -O2 -fomit-frame-pointer -std=gnu89
+>-export KBUILD_USERLDFLAGS :=
+>+KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+>+		     -O2 -fomit-frame-pointer -std=gnu89
+>+KBUILD_USERLDFLAGS := $(USERLDFLAGS)
+>
+> KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+> KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
+> KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
+> KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+>
+>+KBUILD_USERCFLAGS   += $(USERCFLAGS)
+>+
+> # Make variables (CC, etc...)
+> CPP		= $(CC) -E
+> ifneq ($(LLVM),)
+>@@ -530,6 +532,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
+> export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+> export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+> export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
+>+export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
+>
+> export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
+> export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
+>diff --git a/init/Kconfig b/init/Kconfig
+>index f2ae41e6717f..164706c38e8b 100644
+>--- a/init/Kconfig
+>+++ b/init/Kconfig
+>@@ -62,13 +62,13 @@ config LLD_VERSION
+>
+> config CC_CAN_LINK
+> 	bool
+>-	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
+>-	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
+>+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
+>+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
+>
+> config CC_CAN_LINK_STATIC
+> 	bool
+>-	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
+>-	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
+>+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
+>+	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
+>
+> config CC_HAS_ASM_GOTO
+> 	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+>diff --git a/usr/include/Makefile b/usr/include/Makefile
+>index 1c2ae1368079..6a8c7dd9ccaf 100644
+>--- a/usr/include/Makefile
+>+++ b/usr/include/Makefile
+>@@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+> # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+> UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+>
+>+# USERCFLAGS might contain sysroot location for CC
+>+UAPI_CFLAGS += $(USERCFLAGS)
+>+
+> override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+>
+> # The following are excluded for now because they fail to build.
+>-- 
+>2.25.1
+>
+>
