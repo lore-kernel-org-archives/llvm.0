@@ -1,45 +1,44 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A7D2C9E
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 12:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309982C9D
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 12:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643371761; x=1674907761;
+  t=1643373684; x=1674909684;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=aovGcRhqRG1uGJXXes7TMxooAO2apW+D26PTIvucSHc=;
-  b=g9CFihgxuzW6UKmKGJC+GOLoHmim55TNG1JA/AVPhB7YpE2FYsSbBkWe
-   GCwbhu4UjrMi05mTPu74CBZQvEdfA5UhEeCtrAmxPphNsLMCmBcaVAo5W
-   dv+brH+p069Aks/q/vJM3IQz0V/73G97+FqYRS6l0INxfanLRZbabL9dC
-   2QDVqFF+p2BNhUYgAl+fxYqT7ee8IHZ1PEoawEg0ZU7HHPFlIn0MP36Fs
-   hoGLIiVwWNg+HzIYlczf5YHCGFwyYPtFEZWpff/qXsrQxZ+VZ2v2S5p+D
-   XvFOU6k0Q3uZ/8iOi3KCk1ZMQFbV1Jn6XeDq+dB0LybyozXW9irxNyFBg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="310423460"
+  bh=ztdVh+NZZ18Z6P1Aq48jKG/tZtlC6UcWlAOA5hHHMBE=;
+  b=lQzt5wS2m1NcpuzrINZiBOzLwrR3TYvH6EJUmvWKkfPMrZxQVkAtT4GY
+   k8lUjawd2nyXCruKS4DqQIlcTuUrdc8hi716WkcMtt6RP+R4VyjIcSso1
+   ImMCQf9P2kIeR8HukNMKDG1raacUBUvzTGY+6rLirC2WKh8AGg3bpYdfM
+   Dv4xTsoYGNzEuUW0LblC8R+QQsAVcFwNnDrrLQ/uuVoWvYWwV0MhWGz/u
+   6ylvaXQYODSf4IvdqrziqX3ykmLna5KG+JZFZ2kSokTXXCHYtikR/oADM
+   VjLgb/33teq9yVnftDVY4ui/2Z0Ky0oDbyhTVZmljQ5g2qtN9gkei5Yk3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227783724"
 X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="310423460"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:09:20 -0800
+   d="scan'208";a="227783724"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 04:41:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="697073685"
+   d="scan'208";a="536118366"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2022 04:09:18 -0800
+  by orsmga008.jf.intel.com with ESMTP; 28 Jan 2022 04:41:20 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nDQ45-000Npq-Ng; Fri, 28 Jan 2022 12:09:17 +0000
-Date: Fri, 28 Jan 2022 20:08:57 +0800
+	id 1nDQZ6-000Nrp-32; Fri, 28 Jan 2022 12:41:20 +0000
+Date: Fri, 28 Jan 2022 20:40:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: cgel.zte@gmail.com, stefanr@s5r6.in-berlin.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+To: cgel.zte@gmail.com, davem@davemloft.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kuba@kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Minghao Chi <chi.minghao@zte.com.cn>,
 	Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] drivers/firewire: use struct_size over open coded
- arithmetic
-Message-ID: <202201282044.Ye1mhIOd-lkp@intel.com>
-References: <20220128080336.1211525-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] net/802: use struct_size over open coded arithmetic
+Message-ID: <202201282017.0TQvVTtf-lkp@intel.com>
+References: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,149 +47,178 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128080336.1211525-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220128080541.1211668-1-chi.minghao@zte.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 Hi,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on ieee1394-linux1394/for-next]
-[also build test ERROR on v5.17-rc1 next-20220128]
+[auto build test ERROR on net-next/master]
+[also build test ERROR on net/master horms-ipvs/master linus/master v5.17-rc1 next-20220128]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/drivers-firewire-use-struct_size-over-open-coded-arithmetic/20220128-160602
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git for-next
-config: hexagon-randconfig-r015-20220128 (https://download.01.org/0day-ci/archive/20220128/202201282044.Ye1mhIOd-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/net-802-use-struct_size-over-open-coded-arithmetic/20220128-160925
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 72d044e4bfa6bd9096536e2e1c62aecfe1a525e4
+config: riscv-randconfig-r042-20220124 (https://download.01.org/0day-ci/archive/20220128/202201282017.0TQvVTtf-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1567c3f747219c35e83d9c1f4ac3c3d36f447d90
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/9b64e5078d3d779fc56432d43129479f63996c74
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/drivers-firewire-use-struct_size-over-open-coded-arithmetic/20220128-160602
-        git checkout 1567c3f747219c35e83d9c1f4ac3c3d36f447d90
+        git fetch --no-tags linux-review cgel-zte-gmail-com/net-802-use-struct_size-over-open-coded-arithmetic/20220128-160925
+        git checkout 9b64e5078d3d779fc56432d43129479f63996c74
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firewire/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/wireless/ath/wcn36xx/ net/802/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/firewire/core-transaction.c:780:20: error: member reference type 'struct fw_request' is not a pointer; did you mean to use '.'?
-           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:326:18: note: expanded from macro 'struct_size'
+>> net/802/garp.c:187:17: error: member reference type 'struct garp_attr' is not a pointer; did you mean to use '.'?
+           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:18: note: expanded from macro 'struct_size'
                        sizeof(*(p)->member) + __must_be_array((p)->member),\
                                ~~~^
->> drivers/firewire/core-transaction.c:780:20: error: indirection requires pointer operand ('u32[]' (aka 'unsigned int[]') invalid)
-           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:326:14: note: expanded from macro 'struct_size'
+>> net/802/garp.c:187:17: error: indirection requires pointer operand ('unsigned char[]' invalid)
+           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:14: note: expanded from macro 'struct_size'
                        sizeof(*(p)->member) + __must_be_array((p)->member),\
                               ^~~~~~~~~~~~
->> drivers/firewire/core-transaction.c:780:20: error: member reference type 'struct fw_request' is not a pointer; did you mean to use '.'?
-           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:326:49: note: expanded from macro 'struct_size'
+>> net/802/garp.c:187:17: error: member reference type 'struct garp_attr' is not a pointer; did you mean to use '.'?
+           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
                        sizeof(*(p)->member) + __must_be_array((p)->member),\
                                               ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-   include/linux/compiler.h:240:59: note: expanded from macro '__must_be_array'
+   include/linux/compiler.h:258:59: note: expanded from macro '__must_be_array'
    #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler_types.h:264:63: note: expanded from macro '__same_type'
+   include/linux/compiler_types.h:287:63: note: expanded from macro '__same_type'
    #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
                                                                  ^
    include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
    #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
                                                                 ^
->> drivers/firewire/core-transaction.c:780:20: error: member reference type 'struct fw_request' is not a pointer; did you mean to use '.'?
-           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:326:49: note: expanded from macro 'struct_size'
+>> net/802/garp.c:187:17: error: member reference type 'struct garp_attr' is not a pointer; did you mean to use '.'?
+           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
                        sizeof(*(p)->member) + __must_be_array((p)->member),\
                                               ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-   include/linux/compiler.h:240:65: note: expanded from macro '__must_be_array'
+   include/linux/compiler.h:258:65: note: expanded from macro '__must_be_array'
    #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/compiler_types.h:264:74: note: expanded from macro '__same_type'
+   include/linux/compiler_types.h:287:74: note: expanded from macro '__same_type'
    #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
                                                                             ^
    include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
    #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
                                                                 ^
->> drivers/firewire/core-transaction.c:780:20: error: indirection requires pointer operand ('struct fw_request' invalid)
-           request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:327:14: note: expanded from macro 'struct_size'
+>> net/802/garp.c:187:17: error: indirection requires pointer operand ('struct garp_attr' invalid)
+           attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:195:14: note: expanded from macro 'struct_size'
+                       sizeof(*(p)))
+                              ^~~~
+   5 errors generated.
+--
+>> net/802/mrp.c:276:17: error: member reference type 'struct mrp_attr' is not a pointer; did you mean to use '.'?
+           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:18: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                               ~~~^
+>> net/802/mrp.c:276:17: error: indirection requires pointer operand ('unsigned char[]' invalid)
+           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:14: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                              ^~~~~~~~~~~~
+>> net/802/mrp.c:276:17: error: member reference type 'struct mrp_attr' is not a pointer; did you mean to use '.'?
+           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+   include/linux/compiler.h:258:59: note: expanded from macro '__must_be_array'
+   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+   include/linux/compiler_types.h:287:63: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                                                                 ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+                                                                ^
+>> net/802/mrp.c:276:17: error: member reference type 'struct mrp_attr' is not a pointer; did you mean to use '.'?
+           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:194:49: note: expanded from macro 'struct_size'
+                       sizeof(*(p)->member) + __must_be_array((p)->member),\
+                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+   include/linux/compiler.h:258:65: note: expanded from macro '__must_be_array'
+   #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   include/linux/compiler_types.h:287:74: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                                                                            ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+                                                                ^
+>> net/802/mrp.c:276:17: error: indirection requires pointer operand ('struct mrp_attr' invalid)
+           attr = kmalloc(struct_size(*attr, value, len), GFP_ATOMIC);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:195:14: note: expanded from macro 'struct_size'
                        sizeof(*(p)))
                               ^~~~
    5 errors generated.
 
 
-vim +780 drivers/firewire/core-transaction.c
+vim +187 net/802/garp.c
 
-   743	
-   744	static struct fw_request *allocate_request(struct fw_card *card,
-   745						   struct fw_packet *p)
-   746	{
-   747		struct fw_request *request;
-   748		u32 *data, length;
-   749		int request_tcode;
-   750	
-   751		request_tcode = HEADER_GET_TCODE(p->header[0]);
-   752		switch (request_tcode) {
-   753		case TCODE_WRITE_QUADLET_REQUEST:
-   754			data = &p->header[3];
-   755			length = 4;
-   756			break;
-   757	
-   758		case TCODE_WRITE_BLOCK_REQUEST:
-   759		case TCODE_LOCK_REQUEST:
-   760			data = p->payload;
-   761			length = HEADER_GET_DATA_LENGTH(p->header[3]);
-   762			break;
-   763	
-   764		case TCODE_READ_QUADLET_REQUEST:
-   765			data = NULL;
-   766			length = 4;
-   767			break;
-   768	
-   769		case TCODE_READ_BLOCK_REQUEST:
-   770			data = NULL;
-   771			length = HEADER_GET_DATA_LENGTH(p->header[3]);
-   772			break;
-   773	
-   774		default:
-   775			fw_notice(card, "ERROR - corrupt request received - %08x %08x %08x\n",
-   776				 p->header[0], p->header[1], p->header[2]);
-   777			return NULL;
-   778		}
-   779	
- > 780		request = kmalloc(struct_size(*request, data, length), GFP_ATOMIC);
-   781		if (request == NULL)
-   782			return NULL;
-   783	
-   784		request->response.speed = p->speed;
-   785		request->response.timestamp =
-   786				compute_split_timeout_timestamp(card, p->timestamp);
-   787		request->response.generation = p->generation;
-   788		request->response.ack = 0;
-   789		request->response.callback = free_response_callback;
-   790		request->ack = p->ack;
-   791		request->length = length;
-   792		if (data)
-   793			memcpy(request->data, data, length);
-   794	
-   795		memcpy(request->request_header, p->header, sizeof(p->header));
-   796	
-   797		return request;
-   798	}
-   799	
+   166	
+   167	static struct garp_attr *garp_attr_create(struct garp_applicant *app,
+   168						  const void *data, u8 len, u8 type)
+   169	{
+   170		struct rb_node *parent = NULL, **p = &app->gid.rb_node;
+   171		struct garp_attr *attr;
+   172		int d;
+   173	
+   174		while (*p) {
+   175			parent = *p;
+   176			attr = rb_entry(parent, struct garp_attr, node);
+   177			d = garp_attr_cmp(attr, data, len, type);
+   178			if (d > 0)
+   179				p = &parent->rb_left;
+   180			else if (d < 0)
+   181				p = &parent->rb_right;
+   182			else {
+   183				/* The attribute already exists; re-use it. */
+   184				return attr;
+   185			}
+   186		}
+ > 187		attr = kmalloc(struct_size(*attr, data, len), GFP_ATOMIC);
+   188		if (!attr)
+   189			return attr;
+   190		attr->state = GARP_APPLICANT_VO;
+   191		attr->type  = type;
+   192		attr->dlen  = len;
+   193		memcpy(attr->data, data, len);
+   194	
+   195		rb_link_node(&attr->node, parent, p);
+   196		rb_insert_color(&attr->node, &app->gid);
+   197		return attr;
+   198	}
+   199	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
