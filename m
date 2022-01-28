@@ -1,100 +1,89 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066303FE0
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 23:29:58 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id z7so11173620ljj.4
-        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 15:29:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i321YKyDsRK0btGUb/fjVY8h2mIEqZCos2XNM/JjnFw=;
-        b=qFMSnkB/pzMTJLJplSHVcYU1saiukEFW8xraxGaLExeC1AAMl0n2XMcm3aoEEMiTwM
-         zji2oSEuFStGWrzkFqZN6yDr0YU+xA/eTp+CxveOXQwqGT9SNlR8e2cc4piZ8M+whbE9
-         4p7ziIwZuLxqCrPE1kb7dj/GuKurAUe1PVIUIlppAoEZwuNz/XDcgbtTzfpHLcXsMNwy
-         N332MH6mSy0h0ZWARDyEUQUd5IfR1E/OmQsj/p+pwg5/KQ2+bprFYelA+1314ThJE1CN
-         zGNsK6KSztz7tg6Yc0sE0T4rHKUiVq5ln3jH5fvedRRT4MKrLj9RvA7MjBxHclujUOL8
-         20FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i321YKyDsRK0btGUb/fjVY8h2mIEqZCos2XNM/JjnFw=;
-        b=vVnKlAPyxztnW49OJBzsA18LUHbrrFtZAA0Ikw70L6TMJ5vtAsiC+EkoKXCva279Kn
-         4QJ762FJa2M+GPQFNRerGUwLPcITDyewQTVFNAot7kBxE+bDZpT2RveeNq87MxgTyTWv
-         tR/Vp37tSDfsivGPgSD+4ywSpWbInAtgxN6dM9e3BU0qhGB8IDz32TeUKO184/Ux9+BZ
-         RW/uF7LzWcItSNrOW0hpjcVZdpZ2OUnsw/chTO3+AzmNIHQf1G6O0hxsP2QtrHZB6Jrd
-         7lK4RbXx2j7QZmB6GtehYKQ1WlkeK2hFDyE1Tfj3aTEcQceZ6CQ2e+CQa7NTna6h3T99
-         jCYA==
-X-Gm-Message-State: AOAM532dxNrMSws/jhieLDYn0tWFnGqWReH1XkrsrmKTAMArB3beTfvG
-	USTP7Y4cUOGOkGq1SqLjPXVexaTaZzyzzRWUwaUXAw==
-X-Google-Smtp-Source: ABdhPJyEmbWFCdyMKn2hzT4GP9wF9nEf2Sld8Uyy7Us3WjksoEfiWszRlnIzTxTDiMhM9MtZqBF4MKyjE0pnac0nsxQ=
-X-Received: by 2002:a2e:bd15:: with SMTP id n21mr7203379ljq.128.1643412596849;
- Fri, 28 Jan 2022 15:29:56 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFF73FE0
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 23:46:01 +0000 (UTC)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailnew.nyi.internal (Postfix) with ESMTP id A380D5803A7;
+	Fri, 28 Jan 2022 18:46:00 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 28 Jan 2022 18:46:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=xUwCqbFq5p1l8yHGU
+	oeM5CsdqnzYrFZbgfX57fO0sno=; b=EyZDGmMbZXj3HYgnEN8Ymbbo/jc2DIZ3Z
+	Qpu7CUUstdRFb/Dr2e1rD/Hr3ULWiTkOMRz83O9iN4j3RXRzQ8HATWtu7lgHKj/f
+	tQnVQ+tBhqrGFWKlzROuVq2hN2hC3Nj8anWpNHWJ8OYzUK9h1Yf4Um3CyhZkvtRS
+	iFb1sIDVYRwyxqythbFCiZuJrqLiQLK4KTo8Q/m3wKi3vnoiSUbFb7KMcXexnHEp
+	GEyskn3Y11I8Rg/HLXtgn95VNjJ+28TWTuElb5vDbYLJz9S8L0lL8KhSBXU5Guoq
+	3DPVHqMOga/H3flVKT7zht7E0svjaFKW8cblPLMDaetHuH2Eg6zHA==
+X-ME-Sender: <xms:OID0YdM1wA1GxHlUBm1HWAjxWL0c8sd4g5KNh2QpYtKOirvAy92VPQ>
+    <xme:OID0Yf-YrGvUUh9Eju41yuBlO0uePrxZAziWhbtv1wbL-hxYElY8s822dpd9tRy1V
+    4zz-X1u_rGUYFlLCNE>
+X-ME-Received: <xmr:OID0YcSWZg4nmwrn_xpTvFflBMYvX7VrMy8mGq15BXPw_MDIqym202Eg4lPO4EIWuV1VVW-jLsFF7RFe5yx4ndL_xBzsfEds4KQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeeigddufecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcuvfhh
+    rghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtth
+    gvrhhnpeekveevtdekfedtfefhvdfgleelfefhtdefieetjeejvefghfdufeejkeehgfeu
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdr
+    ohhrgh
+X-ME-Proxy: <xmx:OID0YZu1tYar0MhX_v0vfzusxVV_OJPC956fqgPfooHR48_oBITJaA>
+    <xmx:OID0YVdZr61Jrf5Vn3OCclg7DJSpaeU1V7BCKqpEHNW5qcCE3RLZqQ>
+    <xmx:OID0YV3QB80lXtTxb8E1jvlkoU_4PiBwTORdLy9YvysgT3Whn8O49Q>
+    <xmx:OID0YV20Vqd8eJQSk_4w5hbMfRHLH4lYyGH4iG1MDjyz_KJlmN_8KQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 28 Jan 2022 18:45:57 -0500 (EST)
+Date: Sat, 29 Jan 2022 10:45:53 +1100 (AEDT)
+From: Finn Thain <fthain@linux-m68k.org>
+To: Tom Rix <trix@redhat.com>
+cc: Joe Perches <joe@perches.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+    Miguel Ojeda <ojeda@kernel.org>, kashyap.desai@broadcom.com, 
+    sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com, 
+    jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org, 
+    megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+In-Reply-To: <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
+Message-ID: <56b761a-6cf9-23ab-c849-eff27e5e831e@linux-m68k.org>
+References: <20220127151945.1244439-1-trix@redhat.com> <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org> <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com> <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com> <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
+ <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com> <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com> <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220112224342.958358-1-quic_eberman@quicinc.com>
- <20220128220841.3222637-1-quic_eberman@quicinc.com> <20220128224528.f7ejzw55t6kfefmm@google.com>
- <CAKwvOd=Ab+GWNzSC6eaDWTVDF6gJQ9fDDMT3hep-DzhrEA6DpQ@mail.gmail.com> <094ab4eb-b877-2a14-d6c8-1d9e28335d7d@quicinc.com>
-In-Reply-To: <094ab4eb-b877-2a14-d6c8-1d9e28335d7d@quicinc.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 28 Jan 2022 15:29:44 -0800
-Message-ID: <CAKwvOd=J=84vad_cR06NFDauMXbXsC2o=X4RbPj2cqA1280D=A@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Add environment variables for userprogs flags
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Matthias Maennich <maennich@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Jan 28, 2022 at 3:26 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
->
->
->
-> On 1/28/2022 2:49 PM, Nick Desaulniers wrote:
-> >   On Fri, Jan 28, 2022 at 2:45 PM Fangrui Song <maskray@google.com> wrote:
-> >>
-> >> On 2022-01-28, Elliot Berman wrote:
-> >>> Allow additional arguments be passed to userprogs compilation.
-> >>> Reproducible clang builds need to provide a sysroot and gcc path to
-> >>> ensure same toolchain is used across hosts. KCFLAGS is not currently
-> >>> used for any user programs compilation, so add new USERCFLAGS and
-> >>> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
-> >>>
-> >>> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
-> >>> an environment where a user sysroot is not specifically available.
-> >>> Currently, Clang might automatically detect GCC installation on hosts
-> >>> which have it installed to a default location in /. With addition of
-> >>> these environment variables, you can specify flags such as:
-> >>>
-> >>> $ make USERCFLAGS=--sysroot=/dev/null USERLDFLAGS=-Wl,--sysroot=/dev/null
-> >>>
-> >>> to force sysroot detection to fail.
-> >>
-> >> -Wl,--sysroot=/dev/null => --sysroot
-> >>
-> >> As I mentioned in
-> >> https://lore.kernel.org/all/20220128031549.w5a4bilxbkppagfu@google.com/
-> >> -Wl,--sysroot=/dev/null does not suppress search paths like -L/lib .
-> >
-> > In that case, Elliot, can you please test whether USERLDFLAGS is
-> > necessary to be specified AT ALL? Maybe we can drop that addition from
-> > this patch if so?
->
-> USERLDFLAGS as --sysroot=/dev/null isn't necessary and not needed for
-> the Android kernel usecase. I've included here since we have HOSTLDFLAGS
-> and LDFLAGS for host programs and kernel respectively.
->
+On Fri, 28 Jan 2022, Tom Rix wrote:
 
-Ok, for symmetry it's ok to keep HOSTLDFLAGS, consider dropping it
-from the "example" in the commit message. The note about -Wl, prefixes
-exists in the docs now which is good enough for me.
--- 
-Thanks,
-~Nick Desaulniers
+> A testsuite for the fixers may help with churn
+> 
+> Any interest or thought on organization ?
+> 
+
+Here's one way:
+
+1. Identify some source files that are exemplary (i.e. good style).
+2. Run a new script to introduce style mistakes into those files.
+3. Run the Reformatter Under Test on those files.
+4. Compare the output with the original files.
+
+But that's not sufficient to prevent more style patches (churn). We still 
+need a way to avoid wasting everyone's time writing, submitting, reviewing 
+and merging the inevitably incomplete style patches that may contain 
+regressions and cause conflicts.
+
+The tooling I would like to see is not a script to introduce style 
+mistakes but an editor for binaries, such that C is not the "source" at 
+all but only an ephemeral representation to make it easier for humans to 
+effect changes to binaries (and debug info, commentary etc.)
+
+Nonetheless, perfecting the clang-format tool is a good step towards a 
+better workflow, which I described once before. 
+https://lore.kernel.org/r/alpine.LNX.2.23.453.2010281344120.31@nippy.intranet/
