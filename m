@@ -1,163 +1,111 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CA0168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 02:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643338074; x=1674874074;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5Z6rpYTwUGuTjUocHChIXuJIH1Xqfusv1NopfrR3Vow=;
-  b=oB84OpLD7koI3ghejlFU9e97GhOuVkbLN8ZQewF0zkbgT5EyCnMhzl6D
-   2XpGXrruVFlDUSQjQlEKMqauVmd/Z8jG2gRkDiBUQcvVCDFkO72L1nt53
-   y5hUmwUXUgFchO7NimR3kyTPb/jxjcKgmGLlEsPrWbbLBviM68gidCCj4
-   /oSkg2Lr4dK5r/RJSggyDOYZim9MP76gXDbWlAUFgeGkyzHlzYsYoycmj
-   hIJpJ1rc6HnFG1g7u20h7Wdu5iVvVBXqQRa61R8g5twkbAha4NRNhFB9q
-   EPXDa+W3J3KFHYmPaIC3mjnooxrT7v6JCdUK/N2C8JPg7EeCON54fqSfW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="230604231"
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="230604231"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:47:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="495971012"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Jan 2022 18:47:50 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDHIj-000NLG-NZ; Fri, 28 Jan 2022 02:47:49 +0000
-Date: Fri, 28 Jan 2022 10:47:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: marek.vasut@gmail.com, linux-pci@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Marek Vasut <marek.vasut+renesas@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <helgaas@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] PCI: rcar: Return all Fs from read which
- triggered an exception
-Message-ID: <202201281037.40i8elct-lkp@intel.com>
-References: <20220122221554.196311-2-marek.vasut@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B6E2C82
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 02:48:33 +0000 (UTC)
+Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-04.nifty.com with ESMTP id 20S2fiPU012689
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:41:44 +0900
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
+	by conssluserg-06.nifty.com with ESMTP id 20S2fY46010795
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 11:41:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 20S2fY46010795
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1643337694;
+	bh=4JwARZdKVo3l5mCIOwcu21mpuSYlPGM/jXChU9Tmvv8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lMJ1QSht7dX1owf3nll55YpxS/G/4siojSVe7w7p2iLOjEA5y0bMCCqyjSJUN/54B
+	 +eSlP9dCRjPQUnQd3pqwf3YCEEtCw+z/shb0W6gc2VZT4iOj8Kxeg/j+pXouSgNUjs
+	 B8oxA1r5s9CiIsu3waOEi6UawlRbFKmYdCSjCTub2bIzh9fh+/JDV2Uz+NQ4XOSoKC
+	 lD0X3ilOn6GUkg0CjTtQ4EB4CAq/rOIiT+SzHTrkKxH1sPyK37BKuZJeaai8uHJu6S
+	 hhD+LSPmPrRt5zH0pevbvO9ztWegM52QpkEoxZ3LWd4Q8UPHPOZgqSZHfr2yXA0iT/
+	 AXH44hL8KcwtQ==
+X-Nifty-SrcIP: [209.85.216.47]
+Received: by mail-pj1-f47.google.com with SMTP id r59so5167677pjg.4
+        for <llvm@lists.linux.dev>; Thu, 27 Jan 2022 18:41:34 -0800 (PST)
+X-Gm-Message-State: AOAM530YO4b2SsHG/ZK9GzpG9J32fSR9wG1qDCL1yHy0FcHDB77WLpnY
+	z3cR+Z7XTA8d60lWw5mYREmE6G9agNuxJt1wV8k=
+X-Google-Smtp-Source: ABdhPJy1GiKZizyfLYhMezNIV1ytKYsoKKMkU59dG1DjFD/iKFc6IodPKJ/Y/ET9SfcyfEuczaNspQfIJ50T03XKddU=
+X-Received: by 2002:a17:90b:1647:: with SMTP id il7mr9537952pjb.119.1643337693823;
+ Thu, 27 Jan 2022 18:41:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220122221554.196311-2-marek.vasut@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220112224342.958358-1-quic_eberman@quicinc.com>
+In-Reply-To: <20220112224342.958358-1-quic_eberman@quicinc.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 28 Jan 2022 11:40:56 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ4wXjLfz_+6QeT06tKr_2Pan0qtxf=adKQtCNagZ+5wQ@mail.gmail.com>
+Message-ID: <CAK7LNAQ4wXjLfz_+6QeT06tKr_2Pan0qtxf=adKQtCNagZ+5wQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Add environment variables for userprogs flags
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+(+CC: Arnd)
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on v5.17-rc1 next-20220127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/marek-vasut-gmail-com/PCI-rcar-Finish-transition-to-L1-state-in-rcar_pcie_config_access/20220123-061742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: arm-buildonly-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220128/202201281037.40i8elct-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f400a6012c668dfaa73462caf067ceb074e66c47)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/1eeb0cd756244c956c8b0fa809f2d4e5bee530b4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review marek-vasut-gmail-com/PCI-rcar-Finish-transition-to-L1-state-in-rcar_pcie_config_access/20220123-061742
-        git checkout 1eeb0cd756244c956c8b0fa809f2d4e5bee530b4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/pci/controller/pcie-rcar-host.c:133:5: warning: no previous prototype for function 'rcar_pci_write_reg_workaround' [-Wmissing-prototypes]
-   int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
-       ^
-   drivers/pci/controller/pcie-rcar-host.c:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
-   ^
-   static 
-   drivers/pci/controller/pcie-rcar-host.c:146:5: warning: no previous prototype for function 'rcar_pci_read_reg_workaround' [-Wmissing-prototypes]
-   int rcar_pci_read_reg_workaround(struct rcar_pcie *pcie, u32 *val, unsigned int reg)
-       ^
-   drivers/pci/controller/pcie-rcar-host.c:146:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int rcar_pci_read_reg_workaround(struct rcar_pcie *pcie, u32 *val, unsigned int reg)
-   ^
-   static 
->> drivers/pci/controller/pcie-rcar-host.c:138:3: error: instruction requires: data-barriers
-                   __rcar_pci_rw_reg_workaround("str")
-                   ^
-   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
-                   "2:     isb\n"                                          \
-                    ^
-   <inline asm>:2:4: note: instantiated into assembly here
-   2:      isb
-           ^
-   drivers/pci/controller/pcie-rcar-host.c:151:3: error: instruction requires: data-barriers
-                   __rcar_pci_rw_reg_workaround("ldr")
-                   ^
-   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
-                   "2:     isb\n"                                          \
-                    ^
-   <inline asm>:2:4: note: instantiated into assembly here
-   2:      isb
-           ^
->> drivers/pci/controller/pcie-rcar-host.c:138:3: error: instruction requires: data-barriers
-                   __rcar_pci_rw_reg_workaround("str")
-                   ^
-   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
-                   "2:     isb\n"                                          \
-                    ^
-   <inline asm>:2:4: note: instantiated into assembly here
-   2:      isb
-           ^
-   drivers/pci/controller/pcie-rcar-host.c:151:3: error: instruction requires: data-barriers
-                   __rcar_pci_rw_reg_workaround("ldr")
-                   ^
-   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
-                   "2:     isb\n"                                          \
-                    ^
-   <inline asm>:2:4: note: instantiated into assembly here
-   2:      isb
-           ^
-   2 warnings and 4 errors generated.
+On Thu, Jan 13, 2022 at 7:44 AM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>
+> Allow additional arguments be passed to userprogs compilation.
+> Reproducible clang builds need to provide a sysroot and gcc path to
+> ensure same toolchain is used across hosts. KCFLAGS is not currently
+> used for any user programs compilation, so add new USERCFLAGS and
+> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
+>
+> Specifically, I'm trying to force CC_CAN_LINK to consistently fail in
+> an environment where a user sysroot is not specifically available.
+> Currently, Clang might automatically detect GCC installation on hosts
+> which have it installed to a default location in /. With addition of
+> these environment variables, our build environment can do like
+> "--sysroot=/dev/null" to force sysroot detection to fail.
+>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
 
 
-vim +138 drivers/pci/controller/pcie-rcar-host.c
+> --- a/usr/include/Makefile
+> +++ b/usr/include/Makefile
+> @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+>  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+>  UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+>
+> +# USERCFLAGS might contain sysroot location for CC
+> +UAPI_CFLAGS += $(USERCFLAGS)
+>
 
-   132	
-   133	int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
-   134	{
-   135		int error = PCIBIOS_SUCCESSFUL;
-   136	#ifdef CONFIG_ARM
-   137		asm volatile(
- > 138			__rcar_pci_rw_reg_workaround("str")
-   139		: "+r"(error):"r"(val), "r"(pcie->base + reg) : "memory");
-   140	#else
-   141		rcar_pci_write_reg(pcie, val, reg);
-   142	#endif
-   143		return error;
-   144	}
-   145	
+I am OK with this patch, but I was not sure with this line.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Initially, I thought exported UAPI headers should be self-contained.
+In other words, we should be able to compile-test them without
+relying on compiler or libc headers.
+
+Is this achievable or not?
+
+I think Arnd is an expert in this area.
+I hope some input from him.
+
+
+
+
+
+ +
+>  override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+>
+>  # The following are excluded for now because they fail to build.
+> --
+> 2.25.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
