@@ -1,104 +1,68 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A26168
-	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643360777; x=1674896777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AiHV+Hg/X7fIRO65fl2bhp054IVzZkdbb+vKsLN50GA=;
-  b=MexMfvrTm/OA7c3mxuEktw90me0hGpogfYpB5gWOeSL7CSpDFF8Vfcgc
-   FHm4frkM4vUgayHE0Pm9j4xNm09ZYa/ldFmcet7pX+dUOB2/AhvT+CidT
-   I23yQZ3lczW93pMoQcSTuEoVK4EEmgjheQNujoAa58GNMsF7jYDDoxMXY
-   OPjBTDNrI+LIJVMyLJa7GutGEpTjkpk4SHE2VVgNMtSxlKVn0KVNAAaNB
-   yrchcfWuvHyX/deqwnxciitmjTVrZLNul7/kLTRWueIS5j+rIkoHwtTbl
-   l1Rd+NMD5q3l4GhAOyvFzbqi+0dYJxL6wsey9hUe1Mv5c0uT1aSUgbnBq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247304167"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="247304167"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:06:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="521623732"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jan 2022 01:06:07 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDNCo-000NgI-H5; Fri, 28 Jan 2022 09:06:06 +0000
-Date: Fri, 28 Jan 2022 17:05:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-	mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-	john.stultz@linaro.org, sboyd@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH] kernel/time: move timer sysctls to its own file
-Message-ID: <202201281650.adOMvtOO-lkp@intel.com>
-References: <20220128065505.16685-1-tangmeng@uniontech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C8D168
+	for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 09:39:33 +0000 (UTC)
+Received: by mail-io1-f52.google.com with SMTP id 9so7036912iou.2
+        for <llvm@lists.linux.dev>; Fri, 28 Jan 2022 01:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mOWNK48mEIZNTEIU7X2S+zCbDX4zoirQGUmKxIAmRuY=;
+        b=dYsqpb0VN19LiiHn0Ftk9MiBf8mLuwmItMaty3MbxyFbZsMAprnM3GLwYQMQizXEde
+         OXUdAouUsM70Dc4jnK61YRQjw3xCjt2tyvts4oByrKh8WeBqLuW/0zMEhjo5zJjn/maz
+         2gqEuVK9StCfUcp0QWSBnaMkrJpBmIDqrIAvDjqgo33CVzzKz49I07l1H/emAMyU/CFf
+         Ep/7ufX3WJdoBL9KGTvqzN7NAg77FAo8WeSLjjf1Vz5sC3mDPUWoNfiiyA/IvyRml2Ki
+         w5SXy/DhkQZhKnJ9YCkkBLIM0uXaxiz56Cz/skvyda28JMRfIBuA1dXf0LiBFsmHbTjM
+         eckA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mOWNK48mEIZNTEIU7X2S+zCbDX4zoirQGUmKxIAmRuY=;
+        b=M9FnI/Cui+iXDAMDtAai9Svs6+phm+wfl5UDciYvW3OUXT0274ohut+mxnpodWgoJd
+         hn2heXGUhD+Fdurzg69msNGstQ+HEzVaXS86OoEzL3mRSfRCHQNKcGVJA+QgEcTytyjK
+         7+eDcnaS/BLw7RDZODzZPDBI39Y8F0X04b3NCxHKWNxI3dcQQJEmFqIOZzCiNrtkvfDQ
+         U/LdOTxclTvrHB5K3xF4oegk4+KSzF3ly1F/4d/HBD3W0Vo90rQRYthNb00AQL0xe0eF
+         7YIDfbmrbChu9GQ+u9n0BugofaCwKGZW2T2dtySxz4f0AfL/9A/4TxZwxj0SlqJgoDjL
+         S4pw==
+X-Gm-Message-State: AOAM530q9p5cThHjU3Dwi3iwvpRsO6lVbz9XKvMhY7OKm50T7Ge4hfLF
+	LQUE2k3BKLoSWcqkd/E7d+Kj0TrrQUVt5ju3b0I=
+X-Google-Smtp-Source: ABdhPJyRd+01JR5slNdfK/hcvj1Z2MmaGnoA6OcUp5mGkvnMhpK2nOyd9h65xhRei/JqMCZ7vgEv9TSAUFET9ewfa1A=
+X-Received: by 2002:a05:6638:380f:: with SMTP id i15mr3355679jav.308.1643362772321;
+ Fri, 28 Jan 2022 01:39:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128065505.16685-1-tangmeng@uniontech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220127151945.1244439-1-trix@redhat.com> <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+ <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+In-Reply-To: <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 28 Jan 2022 10:39:21 +0100
+Message-ID: <CANiq72mjngfR8-y9B_yHXVXpm5zFOo1dP=nNd-j+Ge8RtoEfTA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>, Tom Rix <trix@redhat.com>, 
+	kashyap.desai@broadcom.com, sumit.saxena@broadcom.com, 
+	shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com, 
+	martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>, 
+	megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi tangmeng,
+On Thu, Jan 27, 2022 at 11:47 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> + Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
+> These criticisms are worth reviewing.
 
-Thank you for the patch! Yet something to improve:
+Indeed, thanks Nick. In my upgrade to clang-format 11 (from the
+current clang-format 4), I will check whether some of these improve.
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220128-145647
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220128/202201281650.adOMvtOO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5b925ed59a284ee735fd46cb2afa74858509887b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220128-145647
-        git checkout 5b925ed59a284ee735fd46cb2afa74858509887b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> kernel/time/timer.c:2047:2: error: implicit declaration of function 'timer_sysctl_init' [-Werror,-Wimplicit-function-declaration]
-           timer_sysctl_init();
-           ^
-   1 error generated.
-
-
-vim +/timer_sysctl_init +2047 kernel/time/timer.c
-
-  2041	
-  2042	void __init init_timers(void)
-  2043	{
-  2044		init_timer_cpus();
-  2045		posix_cputimers_init_work();
-  2046		open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
-> 2047		timer_sysctl_init();
-  2048	}
-  2049	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Miguel
