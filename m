@@ -1,32 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FD02CA8
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 01:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2337BC340E7;
-	Sat, 29 Jan 2022 01:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643418630;
-	bh=FzrdKJdnCjC7nrl+Ux42pu7GZuSgeLwr59FvsBIsRaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QqQtJfKZS9cYuQv7K3GIwiSOVcQokzpaKZ0uIZEbNDe7Jrz3mfDbazYg5qUIb7xEB
-	 n4pHEoHCE151u7TAwshc7GkKh+VQpWaaJuBS+Ap50Y5DukB7oARn3g7E/kVK3R5hux
-	 UetJdT0CpBu05zCoNPkcOcyjJ1KYY87Zq8GRfVcuR8WIZ3eQ9Zye5ZBiXgrPDeg3P3
-	 qyEp5V7fXrUMv+ahivEzIK0vKpLAQuC2pC3wSfU9ylK0Q0ffFEVOsvwdt1gmLp7ki7
-	 P78y9JamzhUpG83byY+tMJwjAUJsnCsxpEn5Jown1hWd6Tf5Rss6DnxZFgP32Zm2kD
-	 bueUCp0EcrJXg==
-Date: Fri, 28 Jan 2022 18:10:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	shuah@kernel.org, ndesaulniers@google.com, kafai@fb.com,
-	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, quentin@isovalent.com, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 1/6] tools: Help cross-building with clang
-Message-ID: <YfSUAPnZX/wP8U+p@archlinux-ax161>
-References: <20211216163842.829836-1-jean-philippe@linaro.org>
- <20211216163842.829836-2-jean-philippe@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F223FE1
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 06:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643439166; x=1674975166;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OXEwoEBMxYHyfw1o9+Y27zCj9IDiO6kkIrGZbOCAEJA=;
+  b=i+r3EJsQRKFfaq0KtKGIRBx9BT6tNL/z6LnkxjhIzbYtKqb2IjCUjXhn
+   +ZsLP7lB+3IXhFio7gOpCkHqvCUWUzqJjraScVjjJ3Wlky9PhzE2/6gn4
+   VdYysUM2o61kJKL5mJLg9//E6ZX+m/RfhXCzQB+1LClTog3jsHkNRZ50P
+   AYFZHtTNHBARHi34JOqtNOWvuMyDtl4rss+0qn3ZoWeh2IgT5EuCqdov0
+   SJ19b6pLGVXsIE/hcJwSr6BR87E1WAD+FzbZ3OfVd0PO8+oqELbC9UOD2
+   LqK4W4ka7wSh+VGcO+FHmFkOZWb0LakQe+xjz6QsHsvJ0Di7+pSY6f0C3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="247198870"
+X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
+   d="scan'208";a="247198870"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 22:52:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
+   d="scan'208";a="629359322"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2022 22:52:43 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDhbG-000Ost-UA; Sat, 29 Jan 2022 06:52:42 +0000
+Date: Sat, 29 Jan 2022 14:52:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Xu <peterx@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Lokesh Gidra <lokeshgidra@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 78/9999] mm/hugetlb.c:5458:8: error: conflicting types for 'huge_pmd_share'
+Message-ID: <202201291403.OkBFrIUS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,93 +48,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216163842.829836-2-jean-philippe@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Jean-Philippe,
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   8a98494ddc958f3f43d2411306524b505e2f4fa9
+commit: 59caf93f36aed4b7c5960672376b966e3f5b2bf1 [78/9999] BACKPORT: FROMGIT: hugetlb: pass vma into huge_pte_alloc() and huge_pmd_share()
+config: arm64-randconfig-r034-20220127 (https://download.01.org/0day-ci/archive/20220129/202201291403.OkBFrIUS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/59caf93f36aed4b7c5960672376b966e3f5b2bf1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout 59caf93f36aed4b7c5960672376b966e3f5b2bf1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-On Thu, Dec 16, 2021 at 04:38:38PM +0000, Jean-Philippe Brucker wrote:
-> Cross-compilation with clang uses the -target parameter rather than a
-> toolchain prefix. Just like the kernel Makefile, add that parameter to
-> CFLAGS when CROSS_COMPILE is set.
-> 
-> Unlike the kernel Makefile, we use the --sysroot and --gcc-toolchain
-> options because unlike the kernel, tools require standard libraries.
-> Commit c91d4e47e10e ("Makefile: Remove '--gcc-toolchain' flag") provides
-> some background about --gcc-toolchain. Normally clang finds on its own
-> the additional utilities and libraries that it needs (for example GNU ld
-> or glibc). On some systems however, this autodetection doesn't work.
-> There, our only recourse is asking GCC directly, and pass the result to
-> --sysroot and --gcc-toolchain. Of course that only works when a cross
-> GCC is available.
-> 
-> Autodetection worked fine on Debian, but to use the aarch64-linux-gnu
-> toolchain from Archlinux I needed both --sysroot (for crt1.o) and
-> --gcc-toolchain (for crtbegin.o, -lgcc). The --prefix parameter wasn't
-> needed there, but it might be useful on other distributions.
-> 
-> Use the CLANG_CROSS_FLAGS variable instead of CLANG_FLAGS because it
-> allows tools such as bpftool, that need to build both host and target
-> binaries, to easily filter out the cross-build flags from CFLAGS.
-> 
-> Acked-by: Quentin Monnet <quentin@isovalent.com>
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> ---
-> Most tools I looked at needed additional changes to support cross-build
-> with clang. I've only done the work for bpf tools.
-> ---
->  tools/scripts/Makefile.include | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 071312f5eb92..b0be5f40a3f1 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -87,7 +87,18 @@ LLVM_STRIP	?= llvm-strip
->  
->  ifeq ($(CC_NO_CLANG), 1)
->  EXTRA_WARNINGS += -Wstrict-aliasing=3
-> -endif
-> +
-> +else ifneq ($(CROSS_COMPILE),)
-> +CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
-> +GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Apologies for noticing this so late, I only ran into this recently.
+Note: the ammarfaizi2-block/google/android/kernel/common/android13-5.10 HEAD 8a98494ddc958f3f43d2411306524b505e2f4fa9 builds fine.
+      It only hurts bisectability.
 
-This line causes a warning when running 'make clean' when
-'$(CROSS_COMPILE)gcc' does not exist in PATH. For example:
+All errors (new ones prefixed by >>):
 
-$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnu- LLVM=1 LLVM_IAS=0 clean
-which: no powerpc-linux-gnu-gcc in ($PATH)
+>> mm/hugetlb.c:5458:8: error: conflicting types for 'huge_pmd_share'
+   pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct vma,
+          ^
+   include/linux/hugetlb.h:155:8: note: previous declaration is here
+   pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
+          ^
+   1 error generated.
 
-I only have powerpc-linux-gnu binutils in my PATH, not GCC, as I am only
-working with clang.
 
-This happens because of the 'resolve_btfids_clean target', which always
-runs when running the 'clean' target on an in-tree build (since
-$(objtree) = $(srctree)).
+vim +/huge_pmd_share +5458 mm/hugetlb.c
 
-I tried looking into the best way to fix this but I am not at all
-familiar with the tools/ build system; would you mind taking a look?
-I see some machinery at the top of tools/bpf/Makefile for avoiding
-running some commands under certain commands but I am unsure how to
-shuffle that around to make everything work.
+  5425	
+  5426	/*
+  5427	 * unmap huge page backed by shared pte.
+  5428	 *
+  5429	 * Hugetlb pte page is ref counted at the time of mapping.  If pte is shared
+  5430	 * indicated by page_count > 1, unmap is achieved by clearing pud and
+  5431	 * decrementing the ref count. If count == 1, the pte page is not shared.
+  5432	 *
+  5433	 * Called with page table lock held and i_mmap_rwsem held in write mode.
+  5434	 *
+  5435	 * returns: 1 successfully unmapped a shared pte page
+  5436	 *	    0 the underlying pte page is not shared, or it is the last user
+  5437	 */
+  5438	int huge_pmd_unshare(struct mm_struct *mm, struct vm_area_struct *vma,
+  5439						unsigned long *addr, pte_t *ptep)
+  5440	{
+  5441		pgd_t *pgd = pgd_offset(mm, *addr);
+  5442		p4d_t *p4d = p4d_offset(pgd, *addr);
+  5443		pud_t *pud = pud_offset(p4d, *addr);
+  5444	
+  5445		i_mmap_assert_write_locked(vma->vm_file->f_mapping);
+  5446		BUG_ON(page_count(virt_to_page(ptep)) == 0);
+  5447		if (page_count(virt_to_page(ptep)) == 1)
+  5448			return 0;
+  5449	
+  5450		pud_clear(pud);
+  5451		put_page(virt_to_page(ptep));
+  5452		mm_dec_nr_pmds(mm);
+  5453		*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
+  5454		return 1;
+  5455	}
+  5456	#define want_pmd_share()	(1)
+  5457	#else /* !CONFIG_ARCH_WANT_HUGE_PMD_SHARE */
+> 5458	pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct vma,
+  5459			      unsigned long addr, pud_t *pud)
+  5460	{
+  5461		return NULL;
+  5462	}
+  5463	
 
-Cheers,
-Nathan
-
-> +ifneq ($(GCC_TOOLCHAIN_DIR),)
-> +CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
-> +CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
-> +CLANG_CROSS_FLAGS += --gcc-toolchain=$(realpath $(GCC_TOOLCHAIN_DIR)/..)
-> +endif # GCC_TOOLCHAIN_DIR
-> +CFLAGS += $(CLANG_CROSS_FLAGS)
-> +AFLAGS += $(CLANG_CROSS_FLAGS)
-> +endif # CROSS_COMPILE
->  
->  # Hack to avoid type-punned warnings on old systems such as RHEL5:
->  # We should be changing CFLAGS and checking gcc version, but this
-> -- 
-> 2.34.1
-> 
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
