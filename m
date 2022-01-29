@@ -1,48 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3953FE0
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 00:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A09E3FE0
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 00:19:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643414951; x=1674950951;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/L/Hfv09ye6EfL1N83glkJDzTXpiNiAAHTEY4p7wj7U=;
-  b=bXei/i8F309DOur08N/dzXV5d2TyT5gO32UWBSZ/LIPrTDFzy/NJvw93
-   ldxEdhaWa6BfCd/1or5GGWuryXyahQXmxQcRuZ7H/hl99/PP1faRcqN5c
-   mxkyipuShJIvU0y2XA4T6eqK4+2sSu8Dpqf5Do4qcmHFvn1duXL4qsCHS
-   PglFJpXkpBx02Dmd0V8eOn60C45DDPVYak/F3B4uY1DsS/DtwmDWfxS+0
-   B7SLRwNdlod4iX/5QcOmLigoAvOkRzktyTxnw5FPAWrNs9Qv+8K58DTH7
-   1jGBE90lNqgf3XoNMy+jH+NYVJ+FIWXQClLR/Xa/QeIcVXobgovRb6iLG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="234607567"
+  t=1643415551; x=1674951551;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0GBazpexoVldNSQIYAeov6T5VTgvrzGsnWe4cxXBl1c=;
+  b=G4sK/eLCPSSGQqNOFW2Y+cYCNHRpqSq7kacAjzYTPpW1OSKsYoDQ9hAZ
+   UoOiuQ+0whGf5CZXL5n/gXndL9UmqugC+ROLb7jup35lZP2xr9fHlqvh5
+   A51c40G5PGqcjNLT2tUGjX3ItGOqwsR6wTeoudcD1G6QyQfH6rPzH1vdh
+   nQ85AfUlRkncneSZlLL7YZn2hDI4IK+Gj3ZeyXfOKcQ2LxjHA0bvL4Kqj
+   gZAAolDgnEG3IkDW0Jjg3o+roqlELl9r5H4clPx2mnNSwVqea9fsz3z51
+   Mk06d5c2asQ49+B/yS4LJzloPK6h9s+aYP3BcSgZ9AQokjwgjWa37VXvJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="227198961"
 X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="234607567"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 16:09:11 -0800
+   d="scan'208";a="227198961"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 16:19:10 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="536340379"
+   d="scan'208";a="770258528"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 28 Jan 2022 16:09:08 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2022 16:19:09 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nDbIh-000OUT-IQ; Sat, 29 Jan 2022 00:09:07 +0000
-Date: Sat, 29 Jan 2022 08:08:15 +0800
+	id 1nDbSP-000OWT-4I; Sat, 29 Jan 2022 00:19:09 +0000
+Date: Sat, 29 Jan 2022 08:18:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michel Lespinasse <michel@lespinasse.org>,
-	Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel-team@fb.com,
-	Laurent Dufour <ldufour@linux.ibm.com>,
-	Jerome Glisse <jglisse@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
-	Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH v2 12/35] mm: separate mmap locked assertion from find_vma
-Message-ID: <202201290752.GKB0XPLn-lkp@intel.com>
-References: <20220128131006.67712-13-michel@lespinasse.org>
+To: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [hverkuil-media-tree:for-v5.18k 104/107] ld.lld: error: undefined
+ symbol: vb2_dma_contig_memops
+Message-ID: <202201290827.L4uwxbPo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,33 +44,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128131006.67712-13-michel@lespinasse.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Michel,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc1 next-20220128]
-[cannot apply to tip/x86/mm arm64/for-next/core powerpc/next hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Michel-Lespinasse/Speculative-page-faults/20220128-212122
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 145d9b498fc827b79c1260b4caa29a8e59d4c2b9
-config: arm-randconfig-c002-20220124 (https://download.01.org/0day-ci/archive/20220129/202201290752.GKB0XPLn-lkp@intel.com/config)
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18k
+head:   ab1804e24c2d3bb0b511db538d9e834e260db16b
+commit: 6e0f23d9552db48996f82eaa5659fb50c692c6a2 [104/107] media: vimc: Add support for contiguous DMA buffers
+config: arm-randconfig-r006-20220124 (https://download.01.org/0day-ci/archive/20220129/202201290827.L4uwxbPo-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/d9d603df22594c13d340d1036653e0b039f975eb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michel-Lespinasse/Speculative-page-faults/20220128-212122
-        git checkout d9d603df22594c13d340d1036653e0b039f975eb
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v5.18k
+        git checkout 6e0f23d9552db48996f82eaa5659fb50c692c6a2
         # save the config file to linux build tree
         mkdir build_dir
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
@@ -87,46 +68,11 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> mm/nommu.c:666:24: error: redefinition of 'find_vma'
-   struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-                          ^
-   include/linux/mm.h:2759:24: note: previous definition is here
-   struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-                          ^
-   1 error generated.
-
-
-vim +/find_vma +666 mm/nommu.c
-
-8feae13110d60cc David Howells     2009-01-08  661  
-8feae13110d60cc David Howells     2009-01-08  662  /*
-8feae13110d60cc David Howells     2009-01-08  663   * look up the first VMA in which addr resides, NULL if none
-c1e8d7c6a7a682e Michel Lespinasse 2020-06-08  664   * - should be called with mm->mmap_lock at least held readlocked
-8feae13110d60cc David Howells     2009-01-08  665   */
-8feae13110d60cc David Howells     2009-01-08 @666  struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-8feae13110d60cc David Howells     2009-01-08  667  {
-8feae13110d60cc David Howells     2009-01-08  668  	struct vm_area_struct *vma;
-8feae13110d60cc David Howells     2009-01-08  669  
-8feae13110d60cc David Howells     2009-01-08  670  	/* check the cache first */
-615d6e8756c8714 Davidlohr Bueso   2014-04-07  671  	vma = vmacache_find(mm, addr);
-615d6e8756c8714 Davidlohr Bueso   2014-04-07  672  	if (likely(vma))
-8feae13110d60cc David Howells     2009-01-08  673  		return vma;
-8feae13110d60cc David Howells     2009-01-08  674  
-e922c4c5360980b Namhyung Kim      2011-05-24  675  	/* trawl the list (there may be multiple mappings in which addr
-8feae13110d60cc David Howells     2009-01-08  676  	 * resides) */
-e922c4c5360980b Namhyung Kim      2011-05-24  677  	for (vma = mm->mmap; vma; vma = vma->vm_next) {
-8feae13110d60cc David Howells     2009-01-08  678  		if (vma->vm_start > addr)
-8feae13110d60cc David Howells     2009-01-08  679  			return NULL;
-8feae13110d60cc David Howells     2009-01-08  680  		if (vma->vm_end > addr) {
-615d6e8756c8714 Davidlohr Bueso   2014-04-07  681  			vmacache_update(addr, vma);
-8feae13110d60cc David Howells     2009-01-08  682  			return vma;
-8feae13110d60cc David Howells     2009-01-08  683  		}
-8feae13110d60cc David Howells     2009-01-08  684  	}
-8feae13110d60cc David Howells     2009-01-08  685  
-8feae13110d60cc David Howells     2009-01-08  686  	return NULL;
-8feae13110d60cc David Howells     2009-01-08  687  }
-8feae13110d60cc David Howells     2009-01-08  688  EXPORT_SYMBOL(find_vma);
-8feae13110d60cc David Howells     2009-01-08  689  
+>> ld.lld: error: undefined symbol: vb2_dma_contig_memops
+   >>> referenced by vimc-capture.c
+   >>>               media/test-drivers/vimc/vimc-capture.o:(vimc_cap_add) in archive drivers/built-in.a
+   >>> referenced by vimc-capture.c
+   >>>               media/test-drivers/vimc/vimc-capture.o:(vimc_cap_add) in archive drivers/built-in.a
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
