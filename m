@@ -1,41 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1FE2CA8
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 02:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D45D2C9E
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 07:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643421626; x=1674957626;
+  t=1643439826; x=1674975826;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HwFzOUQ3ETlxvQNyfQGh+3gx+Q9wov9hHhNb1uvx0fc=;
-  b=GehjNn92BAkpak/braww/k58nOrabIUP8QnFwjwIpJe/QPFv8mBn7WxB
-   CaQ2xSxaJ4jrEQYit5u+HJh0+bdpASaEc/CgeJKJVSfFDIytiF+0ZWztR
-   di10LWa5a3uFL7teWIYKqAR5QqjX/3NXqq8dcnN4dvdrF1LUB0UKULVE9
-   lqr2i85ve0pLjZg3uujb/TyK51vx4hlawhN3RVONRyYIZPv4j6vg+3Jv/
-   otXngBpNLn4ElKNFPIW2INzs82l5NKaukFh0zoiYOvJgy799eLc8q562m
-   +2m4v6dmSfs5QNIEL5HIMLrcUI4W6FW4+aPtLiVoZV4GuFKur1bD4pL1h
+  bh=Gy+amLjM7g3mHU1szM7Bq3uoZ8SJyvAh77TBOs8M1rk=;
+  b=Xjh62I3wGbQsBf/2HsqZJRxGthfcaz28BVLPGeps+SGV6AxClY8Gq/AJ
+   J5IspoFFw5T7wU1vFnWN3Nj153FgkBkcGtw5B+sYtMF37x18kMgush17Y
+   IRvmQJJxqsy2Cu+UM353HSfPtYw5POtNTl27CSJDeKeRNUEN09Xec/aXN
+   B7opeamza0IihfKFbZ5m8JnwDzFudOdkyCpJo/AOaj/VuYFRWc9KxgUYS
+   5FFpgUZEvJi0H6xWMGFyzU1C0g8bFru5EudCnhPA5Lhw6KLGnMtYE9hIi
+   nHb2pP/HYlaWwYOWiSc50dqn+Tk6kFg4zhSVfj/4BPYFeZ5BFx8Vi14gB
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="227899402"
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="227899402"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 18:00:17 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="247472106"
+X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
+   d="scan'208";a="247472106"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 23:03:45 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
-   d="scan'208";a="496313134"
+X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
+   d="scan'208";a="629361273"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 18:00:16 -0800
+  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2022 23:03:44 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nDd2F-000Ocy-Dn; Sat, 29 Jan 2022 02:00:15 +0000
-Date: Sat, 29 Jan 2022 10:00:06 +0800
+	id 1nDhlv-000OuM-Bg; Sat, 29 Jan 2022 07:03:43 +0000
+Date: Sat, 29 Jan 2022 15:02:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
+To: "Justin M. Forbes" <jforbes@fedoraproject.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jlayton:ceph-fscrypt 53/53] net/ceph/osd_client.c:5775:3: error:
- expected expression
-Message-ID: <202201290935.AEKKkabv-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Jason A. Donenfeld" <zx2c4@kernel.org>
+Subject: arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least
+ version 4.6 of GCC
+Message-ID: <202201291408.Pkylyt75-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,79 +47,71 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
-head:   3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
-commit: 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f [53/53] libceph: define a structure to track SPARSE_READ reply processing
-config: hexagon-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290935.AEKKkabv-lkp@intel.com/config)
+Hi Justin,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   169387e2aa291a4e3cb856053730fe99d6cec06f
+commit: e56e18985596617ae426ed5997fb2e737cffb58b lib/crypto: add prompts back to crypto libraries
+date:   11 days ago
+config: arm-randconfig-r004-20220128 (https://download.01.org/0day-ci/archive/20220129/202201291408.Pkylyt75-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-fscrypt
-        git checkout 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e56e18985596617ae426ed5997fb2e737cffb58b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e56e18985596617ae426ed5997fb2e737cffb58b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/ceph/osd_client.c:5775:3: error: expected expression
-                   u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
-                   ^
->> net/ceph/osd_client.c:5776:7: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-                   u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
-                       ^
-   1 warning and 1 error generated.
+>> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
+   #warning This code requires at least version 4.6 of GCC
+    ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
+   Depends on DMADEVICES && (ARCH_TEGRA || COMPILE_TEST
+   Selected by
+   - SOC_TEGRA_FUSE && ARCH_TEGRA && ARCH_TEGRA_2x_SOC
 
 
-vim +5775 net/ceph/osd_client.c
+vim +30 arch/arm/lib/xor-neon.c
 
-  5746	
-  5747	static int osd_sparse_read(struct ceph_connection *con, u64 *len, char **buf)
-  5748	{
-  5749		struct ceph_osd *o = con->private;
-  5750		struct ceph_sparse_read *sr = &o->o_sparse_read;
-  5751		u32 count = __le32_to_cpu(sr->sr_count);
-  5752		int ret = 1;
-  5753	
-  5754		switch (sr->sr_state) {
-  5755		case CEPH_SPARSE_READ_COUNT:
-  5756			/* number of extents */
-  5757			*len = sizeof(sr->sr_count);
-  5758			*buf = (char *)&sr->sr_count;
-  5759			sr->sr_state = CEPH_SPARSE_READ_EXTENTS;
-  5760			break;
-  5761		case CEPH_SPARSE_READ_EXTENTS:
-  5762			/* the extent array */
-  5763			*len = count * sizeof(*sr->sr_extent);
-  5764			if (count > 1) {
-  5765				/* can't use the embedded extent array */
-  5766				sr->sr_extent = kmalloc_array(count, sizeof(*sr->sr_extent),
-  5767							   GFP_NOIO);
-  5768				if (!sr->sr_extent)
-  5769					return -ENOMEM;
-  5770			}
-  5771			*buf = (char *)sr->sr_extent;
-  5772			sr->sr_state = CEPH_SPARSE_READ_DATA;
-  5773			break;
-  5774		case CEPH_SPARSE_READ_DATA:
-> 5775			u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
-> 5776			u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
-  5777	
-  5778			/* ret to 0 if this is the last extent */
-  5779			++sr->sr_index;
-  5780			if (sr->sr_index >= count)
-  5781				ret = 0;
-  5782			break;
-  5783		}
-  5784		return ret;
-  5785	}
-  5786	
+01956597cbc46d Ard Biesheuvel 2013-05-17  16  
+01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
+01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
+01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
+01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
+01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
+01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
+01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
+01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
+01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
+01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
+01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
+01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
+01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
+01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
+01956597cbc46d Ard Biesheuvel 2013-05-17  32  
+
+:::::: The code at line 30 was first introduced by commit
+:::::: 01956597cbc46df072f20f90a40eebe356200c38 ARM: crypto: add NEON accelerated XOR implementation
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
