@@ -1,43 +1,46 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162182C9E
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 06:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0447D2C9D
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 09:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643439166; x=1674975166;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FoB738ABfuKyQwAKFpU1eA7/cIJ+XYVb7z/u7AHbr3s=;
-  b=hb8TUndVc7tVR4H1q1PpGWisLD1HcSUZsanuTjuXF7nhgZO0U2r4T4NE
-   Yb9/jLWu0zOPbDwi8vrJG0fsrVeeCjO+KJEUdLAayBxNqCTFFY31vhxqs
-   t5+GdbL1ukKg89IF13h/vfCc6DS5W46gJPIV+sp1tFtxfbUfrOj05tIuB
-   CGNKOKdo60gh8iOTneaQG9P2XBSs3yh08Dc7VHBPQg6YIqu6g3u4/awBf
-   Yj0IWDWXAdkmOZcrqEKZLbMyU2RXfzYX6Kyr2rX8ut9YjBy2CPWPuubcm
-   PD3fKISwdcATh5FEuiQoDq4y7AEyrTinW9y4jyyvg1yjrg8rLzeU9rJgS
+  t=1643450098; x=1674986098;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZhaOVweVScer33wJ4pCMjYFtSJDvhcTtpiEpiRE9KCE=;
+  b=FkHYlmgogYV2FwIGIs6M1RaQUZOnnhI5BP4ezsF0vjJjZJhCbhCVzmcP
+   e41sLFyja4jedznUy4bMR7Q9bQyXkPs5cJbe8T0Qh/i58D+EBzvjY9Z4U
+   efaA5jzpV39Toe1ipBmg5LIGszQWaGpRHX9Naw9ZRC+5yhSk7aPPEYa1O
+   oMaoZjQ5ckneFKttUTCXz03AeCKXva+FanG75R9iBsiahGUWf8GzSbbQR
+   utUzNGCW7rWOqFAQDOx850i9sx1KY0x9YJIb74FSi2/5zG3bzbRJ9mskm
+   GAXg9ozA+DhVpXWmcST2nr0o606k6rh2HgABcuLvw7PLwcv4xMwmBJ2Jl
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="244848917"
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="247208098"
 X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="244848917"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 22:52:45 -0800
+   d="scan'208";a="247208098"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 01:54:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="533728520"
+   d="scan'208";a="478537438"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jan 2022 22:52:43 -0800
+  by orsmga003.jf.intel.com with ESMTP; 29 Jan 2022 01:54:54 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nDhbH-000OtB-1f; Sat, 29 Jan 2022 06:52:43 +0000
-Date: Sat, 29 Jan 2022 14:52:21 +0800
+	id 1nDkRZ-000P1q-Fr; Sat, 29 Jan 2022 09:54:53 +0000
+Date: Sat, 29 Jan 2022 17:54:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yishai Hadas <yishaih@nvidia.com>
+To: sean.wang@mediatek.com, marcel@holtmann.org, johan.hedberg@gmail.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>
-Subject: [jgunthorpe:for-yishai 12/17] drivers/vfio/pci/mlx5/main.c:254:10:
- warning: result of comparison of constant 9223372036854775807 with
- expression of type 'size_t' (aka 'unsigned int') is always false
-Message-ID: <202201291323.OBtyolrA-lkp@intel.com>
+	Mark-YW.Chen@mediatek.com, sean.wang@mediatek.com,
+	Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
+	Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
+	Deren.Wu@mediatek.com, km.lin@mediatek.com
+Subject: Re: [PATCH 2/2] Bluetooth: mediatek: fix the conflict between mtk
+ and msft vendor event
+Message-ID: <202201291757.gh2GX6y1-lkp@intel.com>
+References: <2eed797ac2605bd068a025486fc0c09c2687e50c.1643435854.git.objelf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,105 +49,134 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2eed797ac2605bd068a025486fc0c09c2687e50c.1643435854.git.objelf@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jgunthorpe/linux for-yishai
-head:   f63f92a10949b3ad5f769771001e82774bcef055
-commit: 70ccf2dd2a78780dd3fd87a7112938ce05da498c [12/17] vfio/mlx5: Implement vfio_pci driver for mlx5 devices
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220129/202201291323.OBtyolrA-lkp@intel.com/config)
+Hi,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on next-20220128]
+[cannot apply to v5.17-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/sean-wang-mediatek-com/Bluetooth-mt7921s-support-bluetooth-reset-mechanism/20220129-140313
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+config: x86_64-randconfig-a012-20220124 (https://download.01.org/0day-ci/archive/20220129/202201291757.gh2GX6y1-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/70ccf2dd2a78780dd3fd87a7112938ce05da498c
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe for-yishai
-        git checkout 70ccf2dd2a78780dd3fd87a7112938ce05da498c
+        # https://github.com/0day-ci/linux/commit/33092fd43b74594bae07555a6fdf15133cc8ec54
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review sean-wang-mediatek-com/Bluetooth-mt7921s-support-bluetooth-reset-mechanism/20220129-140313
+        git checkout 33092fd43b74594bae07555a6fdf15133cc8ec54
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/vfio/pci/mlx5/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/vfio/pci/mlx5/main.c:254:10: warning: result of comparison of constant 9223372036854775807 with expression of type 'size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           if (len > type_max(loff_t) || *pos < 0 ||
-               ~~~ ^ ~~~~~~~~~~~~~~~~
+>> drivers/bluetooth/btusb.c:2253:24: warning: variable 'hdr' set but not used [-Wunused-but-set-variable]
+           struct hci_event_hdr *hdr;
+                                 ^
    1 warning generated.
 
 
-vim +254 drivers/vfio/pci/mlx5/main.c
+vim +/hdr +2253 drivers/bluetooth/btusb.c
 
-   242	
-   243	static ssize_t mlx5vf_resume_write(struct file *filp, const char __user *buf,
-   244					   size_t len, loff_t *pos)
-   245	{
-   246		struct mlx5_vf_migration_file *migf = filp->private_data;
-   247		loff_t requested_length;
-   248		ssize_t done = 0;
-   249	
-   250		if (pos)
-   251			return -ESPIPE;
-   252		pos = &filp->f_pos;
-   253	
- > 254		if (len > type_max(loff_t) || *pos < 0 ||
-   255		    check_add_overflow((loff_t)len, *pos, &requested_length))
-   256			return -EINVAL;
-   257	
-   258		if (requested_length > MAX_MIGRATION_SIZE)
-   259			return -ENOMEM;
-   260	
-   261		mutex_lock(&migf->lock);
-   262		if (migf->disabled) {
-   263			done = -ENODEV;
-   264			goto out_unlock;
-   265		}
-   266	
-   267		if (migf->allocated_length < requested_length) {
-   268			done = mlx5vf_add_migration_pages(
-   269				migf,
-   270				DIV_ROUND_UP(requested_length - migf->allocated_length,
-   271					     PAGE_SIZE));
-   272			if (done)
-   273				goto out_unlock;
-   274		}
-   275	
-   276		while (len) {
-   277			size_t page_offset;
-   278			struct page *page;
-   279			size_t page_len;
-   280			u8 *to_buff;
-   281			int ret;
-   282	
-   283			page_offset = (*pos) % PAGE_SIZE;
-   284			page = mlx5vf_get_migration_page(migf, *pos - page_offset);
-   285			if (!page) {
-   286				if (done == 0)
-   287					done = -EINVAL;
-   288				goto out_unlock;
-   289			}
-   290	
-   291			page_len = min_t(size_t, len, PAGE_SIZE - page_offset);
-   292			to_buff = kmap_local_page(page);
-   293			ret = copy_from_user(to_buff + page_offset, buf, page_len);
-   294			kunmap_local(to_buff);
-   295			if (ret) {
-   296				done = -EFAULT;
-   297				goto out_unlock;
-   298			}
-   299			*pos += page_len;
-   300			len -= page_len;
-   301			done += page_len;
-   302			buf += page_len;
-   303			migf->total_length += page_len;
-   304		}
-   305	out_unlock:
-   306		mutex_unlock(&migf->lock);
-   307		return done;
-   308	}
-   309	
+5a87679ffd4436 mark-yw.chen 2021-09-01  2248  
+a1c49c434e1505 Sean Wang    2019-06-02  2249  static void btusb_mtk_wmt_recv(struct urb *urb)
+a1c49c434e1505 Sean Wang    2019-06-02  2250  {
+a1c49c434e1505 Sean Wang    2019-06-02  2251  	struct hci_dev *hdev = urb->context;
+a1c49c434e1505 Sean Wang    2019-06-02  2252  	struct btusb_data *data = hci_get_drvdata(hdev);
+a1c49c434e1505 Sean Wang    2019-06-02 @2253  	struct hci_event_hdr *hdr;
+a1c49c434e1505 Sean Wang    2019-06-02  2254  	struct sk_buff *skb;
+a1c49c434e1505 Sean Wang    2019-06-02  2255  	int err;
+a1c49c434e1505 Sean Wang    2019-06-02  2256  
+a1c49c434e1505 Sean Wang    2019-06-02  2257  	if (urb->status == 0 && urb->actual_length > 0) {
+a1c49c434e1505 Sean Wang    2019-06-02  2258  		hdev->stat.byte_rx += urb->actual_length;
+a1c49c434e1505 Sean Wang    2019-06-02  2259  
+a1c49c434e1505 Sean Wang    2019-06-02  2260  		/* WMT event shouldn't be fragmented and the size should be
+a1c49c434e1505 Sean Wang    2019-06-02  2261  		 * less than HCI_WMT_MAX_EVENT_SIZE.
+a1c49c434e1505 Sean Wang    2019-06-02  2262  		 */
+a1c49c434e1505 Sean Wang    2019-06-02  2263  		skb = bt_skb_alloc(HCI_WMT_MAX_EVENT_SIZE, GFP_ATOMIC);
+a1c49c434e1505 Sean Wang    2019-06-02  2264  		if (!skb) {
+a1c49c434e1505 Sean Wang    2019-06-02  2265  			hdev->stat.err_rx++;
+60c6a63a3d3080 Mark-YW.Chen 2021-10-14  2266  			kfree(urb->setup_packet);
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2267  			return;
+a1c49c434e1505 Sean Wang    2019-06-02  2268  		}
+a1c49c434e1505 Sean Wang    2019-06-02  2269  
+a1c49c434e1505 Sean Wang    2019-06-02  2270  		hci_skb_pkt_type(skb) = HCI_EVENT_PKT;
+a1c49c434e1505 Sean Wang    2019-06-02  2271  		skb_put_data(skb, urb->transfer_buffer, urb->actual_length);
+a1c49c434e1505 Sean Wang    2019-06-02  2272  
+a1c49c434e1505 Sean Wang    2019-06-02  2273  		hdr = (void *)skb->data;
+a1c49c434e1505 Sean Wang    2019-06-02  2274  
+a1c49c434e1505 Sean Wang    2019-06-02  2275  		/* When someone waits for the WMT event, the skb is being cloned
+a1c49c434e1505 Sean Wang    2019-06-02  2276  		 * and being processed the events from there then.
+a1c49c434e1505 Sean Wang    2019-06-02  2277  		 */
+a1c49c434e1505 Sean Wang    2019-06-02  2278  		if (test_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags)) {
+22cc6b7a1dbb58 Johan Hovold 2019-11-28  2279  			data->evt_skb = skb_clone(skb, GFP_ATOMIC);
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2280  			if (!data->evt_skb) {
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2281  				kfree_skb(skb);
+60c6a63a3d3080 Mark-YW.Chen 2021-10-14  2282  				kfree(urb->setup_packet);
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2283  				return;
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2284  			}
+a1c49c434e1505 Sean Wang    2019-06-02  2285  		}
+a1c49c434e1505 Sean Wang    2019-06-02  2286  
+a1c49c434e1505 Sean Wang    2019-06-02  2287  		err = hci_recv_frame(hdev, skb);
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2288  		if (err < 0) {
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2289  			kfree_skb(data->evt_skb);
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2290  			data->evt_skb = NULL;
+60c6a63a3d3080 Mark-YW.Chen 2021-10-14  2291  			kfree(urb->setup_packet);
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2292  			return;
+de71a6cb4bf24d Jupeng Zhong 2021-02-02  2293  		}
+a1c49c434e1505 Sean Wang    2019-06-02  2294  
+a1c49c434e1505 Sean Wang    2019-06-02  2295  		if (test_and_clear_bit(BTUSB_TX_WAIT_VND_EVT,
+a1c49c434e1505 Sean Wang    2019-06-02  2296  				       &data->flags)) {
+a1c49c434e1505 Sean Wang    2019-06-02  2297  			/* Barrier to sync with other CPUs */
+a1c49c434e1505 Sean Wang    2019-06-02  2298  			smp_mb__after_atomic();
+a1c49c434e1505 Sean Wang    2019-06-02  2299  			wake_up_bit(&data->flags,
+a1c49c434e1505 Sean Wang    2019-06-02  2300  				    BTUSB_TX_WAIT_VND_EVT);
+a1c49c434e1505 Sean Wang    2019-06-02  2301  		}
+60c6a63a3d3080 Mark-YW.Chen 2021-10-14  2302  		kfree(urb->setup_packet);
+a1c49c434e1505 Sean Wang    2019-06-02  2303  		return;
+a1c49c434e1505 Sean Wang    2019-06-02  2304  	} else if (urb->status == -ENOENT) {
+a1c49c434e1505 Sean Wang    2019-06-02  2305  		/* Avoid suspend failed when usb_kill_urb */
+a1c49c434e1505 Sean Wang    2019-06-02  2306  		return;
+a1c49c434e1505 Sean Wang    2019-06-02  2307  	}
+a1c49c434e1505 Sean Wang    2019-06-02  2308  
+a1c49c434e1505 Sean Wang    2019-06-02  2309  	usb_mark_last_busy(data->udev);
+a1c49c434e1505 Sean Wang    2019-06-02  2310  
+a1c49c434e1505 Sean Wang    2019-06-02  2311  	/* The URB complete handler is still called with urb->actual_length = 0
+a1c49c434e1505 Sean Wang    2019-06-02  2312  	 * when the event is not available, so we should keep re-submitting
+a1c49c434e1505 Sean Wang    2019-06-02  2313  	 * URB until WMT event returns, Also, It's necessary to wait some time
+a1c49c434e1505 Sean Wang    2019-06-02  2314  	 * between the two consecutive control URBs to relax the target device
+a1c49c434e1505 Sean Wang    2019-06-02  2315  	 * to generate the event. Otherwise, the WMT event cannot return from
+a1c49c434e1505 Sean Wang    2019-06-02  2316  	 * the device successfully.
+a1c49c434e1505 Sean Wang    2019-06-02  2317  	 */
+48c13301e6baba Mark Chen    2021-02-02  2318  	udelay(500);
+a1c49c434e1505 Sean Wang    2019-06-02  2319  
+a1c49c434e1505 Sean Wang    2019-06-02  2320  	usb_anchor_urb(urb, &data->ctrl_anchor);
+a1c49c434e1505 Sean Wang    2019-06-02  2321  	err = usb_submit_urb(urb, GFP_ATOMIC);
+a1c49c434e1505 Sean Wang    2019-06-02  2322  	if (err < 0) {
+60c6a63a3d3080 Mark-YW.Chen 2021-10-14  2323  		kfree(urb->setup_packet);
+a1c49c434e1505 Sean Wang    2019-06-02  2324  		/* -EPERM: urb is being killed;
+a1c49c434e1505 Sean Wang    2019-06-02  2325  		 * -ENODEV: device got disconnected
+a1c49c434e1505 Sean Wang    2019-06-02  2326  		 */
+a1c49c434e1505 Sean Wang    2019-06-02  2327  		if (err != -EPERM && err != -ENODEV)
+a1c49c434e1505 Sean Wang    2019-06-02  2328  			bt_dev_err(hdev, "urb %p failed to resubmit (%d)",
+a1c49c434e1505 Sean Wang    2019-06-02  2329  				   urb, -err);
+a1c49c434e1505 Sean Wang    2019-06-02  2330  		usb_unanchor_urb(urb);
+a1c49c434e1505 Sean Wang    2019-06-02  2331  	}
+a1c49c434e1505 Sean Wang    2019-06-02  2332  }
+a1c49c434e1505 Sean Wang    2019-06-02  2333  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
