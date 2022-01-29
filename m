@@ -1,43 +1,41 @@
-Received: from server.lespinasse.org (server.lespinasse.org [63.205.204.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B626C2CA8
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 00:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-53-ed;
- t=1643416409; h=date : from : to : cc : subject : message-id :
- references : mime-version : content-type : in-reply-to : from;
- bh=Ks58RD92sFw1u4MB19gv/koeUljumN7OZNwwzwqESMg=;
- b=GydC0FU6vw4+iPN7EbvznPgucVy/xofT+Usuu4cmXupf8aIP5votm1UGluhzGJVYhYHX0
- VgBMfvgzy49ZWUnAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
- i=@lespinasse.org; q=dns/txt; s=srv-53-rsa; t=1643416409; h=date :
- from : to : cc : subject : message-id : references : mime-version :
- content-type : in-reply-to : from;
- bh=Ks58RD92sFw1u4MB19gv/koeUljumN7OZNwwzwqESMg=;
- b=BQP2aVVJwWLZaQGslcdEA4461tfkn3lV+mH53sNQ4HqTI2qpWTXRzwZarK4tah61Tm20L
- m0c+G76dwHAt+ycXy/dA30Q7OVPsTqIRpwSbJxK7VnADm8SN2dwwTshQj0q1xSz+3gB7+ph
- D049T9ZuLYmaChIFAaseiwvhGtumJbL++TpDybWha/F6lSOsVZmbIBqj7aJwX03n3c9bx0n
- fMoTpXA8guGQQV46TrZJ+GECgavBKXRbvsQMsuF5u63Agz1q/ljaCFYBUZQchYhtL+n3udy
- KBvjjwQDdHnrM5Hyb0/f9J58vZw6IrxWxQXVMqtCQUl85n5zrVEWxWYh9pLA==
-Received: by server.lespinasse.org (Postfix, from userid 1000)
-	id 84F5116094C; Fri, 28 Jan 2022 16:33:29 -0800 (PST)
-Date: Fri, 28 Jan 2022 16:33:29 -0800
-From: Michel Lespinasse <michel@lespinasse.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Michel Lespinasse <michel@lespinasse.org>,
-	Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, kernel-team@fb.com,
-	Laurent Dufour <ldufour@linux.ibm.com>,
-	Jerome Glisse <jglisse@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
-	Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH v2 12/35] mm: separate mmap locked assertion from find_vma
-Message-ID: <20220129003329.GB18863@lespinasse.org>
-References: <20220128131006.67712-13-michel@lespinasse.org>
- <202201290752.GKB0XPLn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1FE2CA8
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 02:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643421626; x=1674957626;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HwFzOUQ3ETlxvQNyfQGh+3gx+Q9wov9hHhNb1uvx0fc=;
+  b=GehjNn92BAkpak/braww/k58nOrabIUP8QnFwjwIpJe/QPFv8mBn7WxB
+   CaQ2xSxaJ4jrEQYit5u+HJh0+bdpASaEc/CgeJKJVSfFDIytiF+0ZWztR
+   di10LWa5a3uFL7teWIYKqAR5QqjX/3NXqq8dcnN4dvdrF1LUB0UKULVE9
+   lqr2i85ve0pLjZg3uujb/TyK51vx4hlawhN3RVONRyYIZPv4j6vg+3Jv/
+   otXngBpNLn4ElKNFPIW2INzs82l5NKaukFh0zoiYOvJgy799eLc8q562m
+   +2m4v6dmSfs5QNIEL5HIMLrcUI4W6FW4+aPtLiVoZV4GuFKur1bD4pL1h
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="227899402"
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="227899402"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 18:00:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,325,1635231600"; 
+   d="scan'208";a="496313134"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2022 18:00:16 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDd2F-000Ocy-Dn; Sat, 29 Jan 2022 02:00:15 +0000
+Date: Sat, 29 Jan 2022 10:00:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jlayton:ceph-fscrypt 53/53] net/ceph/osd_client.c:5775:3: error:
+ expected expression
+Message-ID: <202201290935.AEKKkabv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,132 +44,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201290752.GKB0XPLn-lkp@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Jan 29, 2022 at 08:08:15AM +0800, kernel test robot wrote:
-> >> mm/nommu.c:666:24: error: redefinition of 'find_vma'
->    struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->                           ^
->    include/linux/mm.h:2759:24: note: previous definition is here
->    struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->                           ^
->    1 error generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
+head:   3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
+commit: 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f [53/53] libceph: define a structure to track SPARSE_READ reply processing
+config: hexagon-randconfig-r002-20220127 (https://download.01.org/0day-ci/archive/20220129/202201290935.AEKKkabv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt
+        git checkout 3f014b82b65ebbf30b8e4cd0b307f1f2794d183f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ceph/
 
-Nice catch. The following amended patch should fix this:
-(I only added the mm/nommu.c changes)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
------------------------------------ 8< ----------------------------------
+All error/warnings (new ones prefixed by >>):
 
-mm: separate mmap locked assertion from find_vma
+>> net/ceph/osd_client.c:5775:3: error: expected expression
+                   u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
+                   ^
+>> net/ceph/osd_client.c:5776:7: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+                   u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
+                       ^
+   1 warning and 1 error generated.
 
-This adds a new __find_vma() function, which implements find_vma minus
-the mmap_assert_locked() assertion.
 
-find_vma() is then implemented as an inline wrapper around __find_vma().
+vim +5775 net/ceph/osd_client.c
 
-Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
+  5746	
+  5747	static int osd_sparse_read(struct ceph_connection *con, u64 *len, char **buf)
+  5748	{
+  5749		struct ceph_osd *o = con->private;
+  5750		struct ceph_sparse_read *sr = &o->o_sparse_read;
+  5751		u32 count = __le32_to_cpu(sr->sr_count);
+  5752		int ret = 1;
+  5753	
+  5754		switch (sr->sr_state) {
+  5755		case CEPH_SPARSE_READ_COUNT:
+  5756			/* number of extents */
+  5757			*len = sizeof(sr->sr_count);
+  5758			*buf = (char *)&sr->sr_count;
+  5759			sr->sr_state = CEPH_SPARSE_READ_EXTENTS;
+  5760			break;
+  5761		case CEPH_SPARSE_READ_EXTENTS:
+  5762			/* the extent array */
+  5763			*len = count * sizeof(*sr->sr_extent);
+  5764			if (count > 1) {
+  5765				/* can't use the embedded extent array */
+  5766				sr->sr_extent = kmalloc_array(count, sizeof(*sr->sr_extent),
+  5767							   GFP_NOIO);
+  5768				if (!sr->sr_extent)
+  5769					return -ENOMEM;
+  5770			}
+  5771			*buf = (char *)sr->sr_extent;
+  5772			sr->sr_state = CEPH_SPARSE_READ_DATA;
+  5773			break;
+  5774		case CEPH_SPARSE_READ_DATA:
+> 5775			u64 off = le64_to_cpu(sr->sr_extent[sr->sr_index].off);
+> 5776			u64 len = le64_to_cpu(sr->sr_extent[sr->sr_index].len);
+  5777	
+  5778			/* ret to 0 if this is the last extent */
+  5779			++sr->sr_index;
+  5780			if (sr->sr_index >= count)
+  5781				ret = 0;
+  5782			break;
+  5783		}
+  5784		return ret;
+  5785	}
+  5786	
+
 ---
- drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
- include/linux/mm.h                    | 9 ++++++++-
- mm/mmap.c                             | 5 ++---
- mm/nommu.c                            | 4 ++--
- 4 files changed, 14 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-index 5ae812d60abe..94ab71a9b493 100644
---- a/drivers/gpu/drm/i915/i915_gpu_error.c
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-@@ -515,7 +515,7 @@ static void error_print_context(struct drm_i915_error_state_buf *m,
- }
- 
- static struct i915_vma_coredump *
--__find_vma(struct i915_vma_coredump *vma, const char *name)
-+__i915_find_vma(struct i915_vma_coredump *vma, const char *name)
- {
- 	while (vma) {
- 		if (strcmp(vma->name, name) == 0)
-@@ -529,7 +529,7 @@ __find_vma(struct i915_vma_coredump *vma, const char *name)
- static struct i915_vma_coredump *
- find_batch(const struct intel_engine_coredump *ee)
- {
--	return __find_vma(ee->vma, "batch");
-+	return __i915_find_vma(ee->vma, "batch");
- }
- 
- static void error_print_engine(struct drm_i915_error_state_buf *m,
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 4600dbb98cef..6f7712179503 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2751,10 +2751,17 @@ extern int expand_upwards(struct vm_area_struct *vma, unsigned long address);
- #endif
- 
- /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
--extern struct vm_area_struct * find_vma(struct mm_struct * mm, unsigned long addr);
-+extern struct vm_area_struct * __find_vma(struct mm_struct * mm, unsigned long addr);
- extern struct vm_area_struct * find_vma_prev(struct mm_struct * mm, unsigned long addr,
- 					     struct vm_area_struct **pprev);
- 
-+static inline
-+struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-+{
-+	mmap_assert_locked(mm);
-+	return __find_vma(mm, addr);
-+}
-+
- /**
-  * find_vma_intersection() - Look up the first VMA which intersects the interval
-  * @mm: The process address space.
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 1e8fdb0b51ed..b09a2c875507 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2276,12 +2276,11 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
- EXPORT_SYMBOL(get_unmapped_area);
- 
- /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
--struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-+struct vm_area_struct *__find_vma(struct mm_struct *mm, unsigned long addr)
- {
- 	struct rb_node *rb_node;
- 	struct vm_area_struct *vma;
- 
--	mmap_assert_locked(mm);
- 	/* Check the cache first. */
- 	vma = vmacache_find(mm, addr);
- 	if (likely(vma))
-@@ -2308,7 +2307,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
- 	return vma;
- }
- 
--EXPORT_SYMBOL(find_vma);
-+EXPORT_SYMBOL(__find_vma);
- 
- /*
-  * Same as find_vma, but also return a pointer to the previous VMA in *pprev.
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 55a9e48a7a02..8d2582ff319f 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -663,7 +663,7 @@ static void delete_vma(struct mm_struct *mm, struct vm_area_struct *vma)
-  * look up the first VMA in which addr resides, NULL if none
-  * - should be called with mm->mmap_lock at least held readlocked
-  */
--struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
-+struct vm_area_struct *__find_vma(struct mm_struct *mm, unsigned long addr)
- {
- 	struct vm_area_struct *vma;
- 
-@@ -685,7 +685,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
- 
- 	return NULL;
- }
--EXPORT_SYMBOL(find_vma);
-+EXPORT_SYMBOL(__find_vma);
- 
- /*
-  * find a VMA
--- 
-2.20.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
