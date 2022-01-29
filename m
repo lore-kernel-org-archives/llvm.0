@@ -1,42 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from server.lespinasse.org (server.lespinasse.org [63.205.204.226])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B22B2C82
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 16:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643472682; x=1675008682;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Vam+xzF8b0eUjkmZAxI9VEUITXI2zXjEdpBNsFjy+HI=;
-  b=jpj41be9/rHkWOrsd/DconnGzNHA3fNuFz38+jvK/FEAIYvLFTUGhkve
-   ESKjDwvwOj2MwHHZa5dBynPhqfUGIas2lSpVe7AOAltlc9Pg5G3+YHKoS
-   YsKEE/9QEbu21XK9moO/ndeOkVjEqvhhMWI4yHEZGmjnCrLmc8InlNTHi
-   RLFYIWzey1mB6JgZg42ACVGGZ/n35HB1lGRVgbGJ0T//zi8TKesjuqxOh
-   G3EVg7tUmyUKOGSuuTx4lmr5WLtI1l1Zfq8eSSjFVT6TIza9lTnfaGCB9
-   9QQKRJa8cAWNAxVTFVl0OBnUVjy62QawweH1pKAAbiMDawDNkXd0H43Zt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="247051932"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="247051932"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 08:11:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="481096928"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jan 2022 08:11:20 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDqJr-000POA-OJ; Sat, 29 Jan 2022 16:11:19 +0000
-Date: Sun, 30 Jan 2022 00:10:55 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: drivers/input/touchscreen/ads7846.c:705:24: warning: taking address
- of packed member 'data' of class or structure 'ads7846_buf' may result in an
- unaligned pointer value
-Message-ID: <202201300020.SS6KSznh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B626C2CA8
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 00:33:30 +0000 (UTC)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-53-ed;
+ t=1643416409; h=date : from : to : cc : subject : message-id :
+ references : mime-version : content-type : in-reply-to : from;
+ bh=Ks58RD92sFw1u4MB19gv/koeUljumN7OZNwwzwqESMg=;
+ b=GydC0FU6vw4+iPN7EbvznPgucVy/xofT+Usuu4cmXupf8aIP5votm1UGluhzGJVYhYHX0
+ VgBMfvgzy49ZWUnAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
+ i=@lespinasse.org; q=dns/txt; s=srv-53-rsa; t=1643416409; h=date :
+ from : to : cc : subject : message-id : references : mime-version :
+ content-type : in-reply-to : from;
+ bh=Ks58RD92sFw1u4MB19gv/koeUljumN7OZNwwzwqESMg=;
+ b=BQP2aVVJwWLZaQGslcdEA4461tfkn3lV+mH53sNQ4HqTI2qpWTXRzwZarK4tah61Tm20L
+ m0c+G76dwHAt+ycXy/dA30Q7OVPsTqIRpwSbJxK7VnADm8SN2dwwTshQj0q1xSz+3gB7+ph
+ D049T9ZuLYmaChIFAaseiwvhGtumJbL++TpDybWha/F6lSOsVZmbIBqj7aJwX03n3c9bx0n
+ fMoTpXA8guGQQV46TrZJ+GECgavBKXRbvsQMsuF5u63Agz1q/ljaCFYBUZQchYhtL+n3udy
+ KBvjjwQDdHnrM5Hyb0/f9J58vZw6IrxWxQXVMqtCQUl85n5zrVEWxWYh9pLA==
+Received: by server.lespinasse.org (Postfix, from userid 1000)
+	id 84F5116094C; Fri, 28 Jan 2022 16:33:29 -0800 (PST)
+Date: Fri, 28 Jan 2022 16:33:29 -0800
+From: Michel Lespinasse <michel@lespinasse.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Michel Lespinasse <michel@lespinasse.org>,
+	Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, kernel-team@fb.com,
+	Laurent Dufour <ldufour@linux.ibm.com>,
+	Jerome Glisse <jglisse@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
+	Davidlohr Bueso <dave@stgolabs.net>
+Subject: Re: [PATCH v2 12/35] mm: separate mmap locked assertion from find_vma
+Message-ID: <20220129003329.GB18863@lespinasse.org>
+References: <20220128131006.67712-13-michel@lespinasse.org>
+ <202201290752.GKB0XPLn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,62 +46,132 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202201290752.GKB0XPLn-lkp@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Dmitry,
+On Sat, Jan 29, 2022 at 08:08:15AM +0800, kernel test robot wrote:
+> >> mm/nommu.c:666:24: error: redefinition of 'find_vma'
+>    struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+>                           ^
+>    include/linux/mm.h:2759:24: note: previous definition is here
+>    struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+>                           ^
+>    1 error generated.
 
-FYI, the error/warning still remains.
+Nice catch. The following amended patch should fix this:
+(I only added the mm/nommu.c changes)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cb323ee75d24e7acc2f188d123ba6df46159cf09
-commit: 415e915fdfc775ad0c6675fde1008f6f43dd6251 Merge tag 'v5.11' into next
-date:   11 months ago
-config: mips-randconfig-r025-20220129 (https://download.01.org/0day-ci/archive/20220130/202201300020.SS6KSznh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=415e915fdfc775ad0c6675fde1008f6f43dd6251
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 415e915fdfc775ad0c6675fde1008f6f43dd6251
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ drivers/input/touchscreen/
+----------------------------------- 8< ----------------------------------
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+mm: separate mmap locked assertion from find_vma
 
-All warnings (new ones prefixed by >>):
+This adds a new __find_vma() function, which implements find_vma minus
+the mmap_assert_locked() assertion.
 
->> drivers/input/touchscreen/ads7846.c:705:24: warning: taking address of packed member 'data' of class or structure 'ads7846_buf' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           value = be16_to_cpup(&buf->data);
-                                 ^~~~~~~~~
-   1 warning generated.
+find_vma() is then implemented as an inline wrapper around __find_vma().
 
-
-vim +705 drivers/input/touchscreen/ads7846.c
-
-2991a1ca6e9b13 Jason Wang     2010-10-13  700  
-6965eece2a89c3 Oleksij Rempel 2021-01-20  701  static int ads7846_get_value(struct ads7846_buf *buf)
-2991a1ca6e9b13 Jason Wang     2010-10-13  702  {
-879f2fea8a5a74 Andrey Gelman  2015-10-06  703  	int value;
-2991a1ca6e9b13 Jason Wang     2010-10-13  704  
-6965eece2a89c3 Oleksij Rempel 2021-01-20 @705  	value = be16_to_cpup(&buf->data);
-879f2fea8a5a74 Andrey Gelman  2015-10-06  706  
-879f2fea8a5a74 Andrey Gelman  2015-10-06  707  	/* enforce ADC output is 12 bits width */
-879f2fea8a5a74 Andrey Gelman  2015-10-06  708  	return (value >> 3) & 0xfff;
-2991a1ca6e9b13 Jason Wang     2010-10-13  709  }
-ffa458c1bd9b6f David Brownell 2006-01-08  710  
-
-:::::: The code at line 705 was first introduced by commit
-:::::: 6965eece2a89c3f1d00881c6052ee1e987870c08 Input: ads7846 - convert to one message
-
-:::::: TO: Oleksij Rempel <o.rempel@pengutronix.de>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
+Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
+ include/linux/mm.h                    | 9 ++++++++-
+ mm/mmap.c                             | 5 ++---
+ mm/nommu.c                            | 4 ++--
+ 4 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
+index 5ae812d60abe..94ab71a9b493 100644
+--- a/drivers/gpu/drm/i915/i915_gpu_error.c
++++ b/drivers/gpu/drm/i915/i915_gpu_error.c
+@@ -515,7 +515,7 @@ static void error_print_context(struct drm_i915_error_state_buf *m,
+ }
+ 
+ static struct i915_vma_coredump *
+-__find_vma(struct i915_vma_coredump *vma, const char *name)
++__i915_find_vma(struct i915_vma_coredump *vma, const char *name)
+ {
+ 	while (vma) {
+ 		if (strcmp(vma->name, name) == 0)
+@@ -529,7 +529,7 @@ __find_vma(struct i915_vma_coredump *vma, const char *name)
+ static struct i915_vma_coredump *
+ find_batch(const struct intel_engine_coredump *ee)
+ {
+-	return __find_vma(ee->vma, "batch");
++	return __i915_find_vma(ee->vma, "batch");
+ }
+ 
+ static void error_print_engine(struct drm_i915_error_state_buf *m,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 4600dbb98cef..6f7712179503 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2751,10 +2751,17 @@ extern int expand_upwards(struct vm_area_struct *vma, unsigned long address);
+ #endif
+ 
+ /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
+-extern struct vm_area_struct * find_vma(struct mm_struct * mm, unsigned long addr);
++extern struct vm_area_struct * __find_vma(struct mm_struct * mm, unsigned long addr);
+ extern struct vm_area_struct * find_vma_prev(struct mm_struct * mm, unsigned long addr,
+ 					     struct vm_area_struct **pprev);
+ 
++static inline
++struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
++{
++	mmap_assert_locked(mm);
++	return __find_vma(mm, addr);
++}
++
+ /**
+  * find_vma_intersection() - Look up the first VMA which intersects the interval
+  * @mm: The process address space.
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 1e8fdb0b51ed..b09a2c875507 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2276,12 +2276,11 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
+ EXPORT_SYMBOL(get_unmapped_area);
+ 
+ /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
+-struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
++struct vm_area_struct *__find_vma(struct mm_struct *mm, unsigned long addr)
+ {
+ 	struct rb_node *rb_node;
+ 	struct vm_area_struct *vma;
+ 
+-	mmap_assert_locked(mm);
+ 	/* Check the cache first. */
+ 	vma = vmacache_find(mm, addr);
+ 	if (likely(vma))
+@@ -2308,7 +2307,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+ 	return vma;
+ }
+ 
+-EXPORT_SYMBOL(find_vma);
++EXPORT_SYMBOL(__find_vma);
+ 
+ /*
+  * Same as find_vma, but also return a pointer to the previous VMA in *pprev.
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 55a9e48a7a02..8d2582ff319f 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -663,7 +663,7 @@ static void delete_vma(struct mm_struct *mm, struct vm_area_struct *vma)
+  * look up the first VMA in which addr resides, NULL if none
+  * - should be called with mm->mmap_lock at least held readlocked
+  */
+-struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
++struct vm_area_struct *__find_vma(struct mm_struct *mm, unsigned long addr)
+ {
+ 	struct vm_area_struct *vma;
+ 
+@@ -685,7 +685,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+ 
+ 	return NULL;
+ }
+-EXPORT_SYMBOL(find_vma);
++EXPORT_SYMBOL(__find_vma);
+ 
+ /*
+  * find a VMA
+-- 
+2.20.1
+
