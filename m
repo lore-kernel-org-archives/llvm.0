@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5A12CA2
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 20:23:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B013C340E5;
-	Sat, 29 Jan 2022 20:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493F92CA5
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 20:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68E3C340E5;
+	Sat, 29 Jan 2022 20:30:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643487781;
-	bh=ibfNrnDd+VmWeyoly0lQUrC025/BUGr3gbVTET9B04U=;
+	s=k20201202; t=1643488253;
+	bh=YBtNVYCnYa+w/9Av4t+qwzrK/yfyOR1cVMkdIr9KKHc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fay9tk8OjFXVk8vdBucFW8q9Lae+bmmvVnF+NZk2vUuCFrD1LhEIZ+xhKsX/cmjBw
-	 byAdYx7nhRN2gpaSNxhehoU6ddWrV/7C2K6bm6YAVygo9VGhlKYjEzMrjcelsIU4oN
-	 BefZ0+fqcC+pwugYwINovryHY3EBFY+0/K9vC/2ClF4V4kvPTdLb2J5xibyhp4HX17
-	 MRTPWKZG2wOZw/DEeYB20W77WnJfMXea2zz6/7Jix67Yl0Y590atXG3y6h6IM+irbB
-	 YI8MTa/BDGqcN91XQPLybQgd8yVc2l6yJydPx5HzDb57DBzuRCdU7FUmEM3xjczwJa
-	 v91eGA2cnfY0w==
-Date: Sat, 29 Jan 2022 13:22:57 -0700
+	b=sLPElV0P/nylfr2vGpGoaNeGXgYeV+cJGVc3wF1RjVoK7N51yb/QjhmVTBzbW37d0
+	 /hTodWTrNZfc9RuJYw9eLMwnuyHl3nrb1FcjDpEJEQVZlEUSwNttNLsIqs9n5YAHdu
+	 R1jjqg+P82dw0NfdIfxSXsYTabMhrP+5UJbKjS6a2X9W0u/7azrGII9vxOpD4aTDb5
+	 CLswCEMpLeBda8CTeK+WEftqeg/FAmcF0bkQg2OUUuiTB4LlCOcD71XCTydA3bubOq
+	 xDXLRzUeHmQDGHLCV3u/5i+oBqgULCyG1yx1mGTrGKLF91KV6KzkU21O9TwSf1r5hF
+	 akYhw1C2M2T5Q==
+Date: Sat, 29 Jan 2022 13:30:50 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: kernel test robot <lkp@intel.com>
-Cc: "Justin M. Forbes" <jforbes@fedoraproject.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	"Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: Re: arch/arm/lib/xor-neon.c:30:2: warning: This code requires at
- least version 4.6 of GCC
-Message-ID: <YfWiIZ9QZuWRTYRy@dev-arch.archlinux-ax161>
-References: <202201291408.Pkylyt75-lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: drivers/input/touchscreen/ads7846.c:705:24: warning: taking
+ address of packed member 'data' of class or structure 'ads7846_buf' may
+ result in an unaligned pointer value
+Message-ID: <YfWj+hnMiK8dECOp@dev-arch.archlinux-ax161>
+References: <202201300020.SS6KSznh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,48 +34,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201291408.Pkylyt75-lkp@intel.com>
+In-Reply-To: <202201300020.SS6KSznh-lkp@intel.com>
 
-On Sat, Jan 29, 2022 at 03:02:58PM +0800, kernel test robot wrote:
-> Hi Justin,
+On Sun, Jan 30, 2022 at 12:10:55AM +0800, kernel test robot wrote:
+> Hi Dmitry,
 > 
-> First bad commit (maybe != root cause):
-
-Yeah, this commit definitely does not introduce this warning, it has
-been one of our longest tracked warnings.
-
+> FYI, the error/warning still remains.
+> 
 > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   169387e2aa291a4e3cb856053730fe99d6cec06f
-> commit: e56e18985596617ae426ed5997fb2e737cffb58b lib/crypto: add prompts back to crypto libraries
-> date:   11 days ago
-> config: arm-randconfig-r004-20220128 (https://download.01.org/0day-ci/archive/20220129/202201291408.Pkylyt75-lkp@intel.com/config)
+> head:   cb323ee75d24e7acc2f188d123ba6df46159cf09
+> commit: 415e915fdfc775ad0c6675fde1008f6f43dd6251 Merge tag 'v5.11' into next
+> date:   11 months ago
+> config: mips-randconfig-r025-20220129 (https://download.01.org/0day-ci/archive/20220130/202201300020.SS6KSznh-lkp@intel.com/config)
 > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
 > reproduce (this is a W=1 build):
 >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e56e18985596617ae426ed5997fb2e737cffb58b
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mips-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=415e915fdfc775ad0c6675fde1008f6f43dd6251
 >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 >         git fetch --no-tags linus master
->         git checkout e56e18985596617ae426ed5997fb2e737cffb58b
+>         git checkout 415e915fdfc775ad0c6675fde1008f6f43dd6251
 >         # save the config file to linux build tree
 >         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ drivers/input/touchscreen/
 > 
 > If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
 > 
 > All warnings (new ones prefixed by >>):
 > 
-> >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
->    #warning This code requires at least version 4.6 of GCC
->     ^
+> >> drivers/input/touchscreen/ads7846.c:705:24: warning: taking address of packed member 'data' of class or structure 'ads7846_buf' may result in an unaligned pointer value [-Waddress-of-packed-member]
+>            value = be16_to_cpup(&buf->data);
+>                                  ^~~~~~~~~
 >    1 warning generated.
 
-https://github.com/ClangBuiltLinux/linux/issues/496
+Same root cause as https://lore.kernel.org/r/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/.
 
-https://lore.kernel.org/r/20220127081227.2430-3-ardb@kernel.org/
+Fixed with https://lore.kernel.org/r/20220125221925.3547683-2-nathan@kernel.org/.
+
+Sorry for the noise, this should have only been sent to our mailing
+list, not maintainers.
 
 Cheers,
 Nathan
