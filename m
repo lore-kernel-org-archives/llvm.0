@@ -1,41 +1,32 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406EF2C82
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 15:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643469680; x=1675005680;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pgysy1t4On9EFZB1/FDtBHsS5CHIdnff/t/GCKX1gFM=;
-  b=IndZLpWV7Y2yq9SbRek2P9ZhztMn2gqEeCQi1jVa/KCcFsWCOpgg5nls
-   w9LLSyKw9w9jAggw99wkmPbXTaFTKBhSODQnGz00sX2h5cevAPJGTSnG1
-   nLn5B+X+pEnxiDK5Yl+3z3myJroOVbkQdV8CY6vZMG+YRybuRG97L1knL
-   Q/IOErDE6p/DDUHOjepBiMqlPv+YXq92v2VI+XIx4s30DjXNfzzDmagIX
-   EmWT7z+/i0n0xKrV/YLbkK6PRGkUo2UtlK7NHgEE9QJG3LbzpQLRs+nxT
-   32JLqFhNRk2SB4uI12ex4FCtsLkjft6CLrgVWxxxmcGiw18b+1z0zvfiR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="230852020"
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="230852020"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 07:21:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,326,1635231600"; 
-   d="scan'208";a="629423692"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Jan 2022 07:21:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nDpXR-000PLl-Iy; Sat, 29 Jan 2022 15:21:17 +0000
-Date: Sat, 29 Jan 2022 23:20:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bhaskara Budiredla <bbudiredla@marvell.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: drivers/perf/marvell_cn10k_tad_pmu.c:371:34: warning: unused
- variable 'tad_pmu_of_match'
-Message-ID: <202201292349.zRQLcDDD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FD02CA8
+	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 01:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2337BC340E7;
+	Sat, 29 Jan 2022 01:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643418630;
+	bh=FzrdKJdnCjC7nrl+Ux42pu7GZuSgeLwr59FvsBIsRaE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QqQtJfKZS9cYuQv7K3GIwiSOVcQokzpaKZ0uIZEbNDe7Jrz3mfDbazYg5qUIb7xEB
+	 n4pHEoHCE151u7TAwshc7GkKh+VQpWaaJuBS+Ap50Y5DukB7oARn3g7E/kVK3R5hux
+	 UetJdT0CpBu05zCoNPkcOcyjJ1KYY87Zq8GRfVcuR8WIZ3eQ9Zye5ZBiXgrPDeg3P3
+	 qyEp5V7fXrUMv+ahivEzIK0vKpLAQuC2pC3wSfU9ylK0Q0ffFEVOsvwdt1gmLp7ki7
+	 P78y9JamzhUpG83byY+tMJwjAUJsnCsxpEn5Jown1hWd6Tf5Rss6DnxZFgP32Zm2kD
+	 bueUCp0EcrJXg==
+Date: Fri, 28 Jan 2022 18:10:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	shuah@kernel.org, ndesaulniers@google.com, kafai@fb.com,
+	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, quentin@isovalent.com, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v2 1/6] tools: Help cross-building with clang
+Message-ID: <YfSUAPnZX/wP8U+p@archlinux-ax161>
+References: <20211216163842.829836-1-jean-philippe@linaro.org>
+ <20211216163842.829836-2-jean-philippe@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,107 +35,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211216163842.829836-2-jean-philippe@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   169387e2aa291a4e3cb856053730fe99d6cec06f
-commit: 036a7584bede317d0df6b854e4f531b7a2dd8b33 drivers: perf: Add LLC-TAD perf counter support
-date:   7 weeks ago
-config: s390-randconfig-r001-20220129 (https://download.01.org/0day-ci/archive/20220129/202201292349.zRQLcDDD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=036a7584bede317d0df6b854e4f531b7a2dd8b33
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 036a7584bede317d0df6b854e4f531b7a2dd8b33
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/perf/
+Hi Jean-Philippe,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Dec 16, 2021 at 04:38:38PM +0000, Jean-Philippe Brucker wrote:
+> Cross-compilation with clang uses the -target parameter rather than a
+> toolchain prefix. Just like the kernel Makefile, add that parameter to
+> CFLAGS when CROSS_COMPILE is set.
+> 
+> Unlike the kernel Makefile, we use the --sysroot and --gcc-toolchain
+> options because unlike the kernel, tools require standard libraries.
+> Commit c91d4e47e10e ("Makefile: Remove '--gcc-toolchain' flag") provides
+> some background about --gcc-toolchain. Normally clang finds on its own
+> the additional utilities and libraries that it needs (for example GNU ld
+> or glibc). On some systems however, this autodetection doesn't work.
+> There, our only recourse is asking GCC directly, and pass the result to
+> --sysroot and --gcc-toolchain. Of course that only works when a cross
+> GCC is available.
+> 
+> Autodetection worked fine on Debian, but to use the aarch64-linux-gnu
+> toolchain from Archlinux I needed both --sysroot (for crt1.o) and
+> --gcc-toolchain (for crtbegin.o, -lgcc). The --prefix parameter wasn't
+> needed there, but it might be useful on other distributions.
+> 
+> Use the CLANG_CROSS_FLAGS variable instead of CLANG_FLAGS because it
+> allows tools such as bpftool, that need to build both host and target
+> binaries, to easily filter out the cross-build flags from CFLAGS.
+> 
+> Acked-by: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> ---
+> Most tools I looked at needed additional changes to support cross-build
+> with clang. I've only done the work for bpf tools.
+> ---
+>  tools/scripts/Makefile.include | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index 071312f5eb92..b0be5f40a3f1 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -87,7 +87,18 @@ LLVM_STRIP	?= llvm-strip
+>  
+>  ifeq ($(CC_NO_CLANG), 1)
+>  EXTRA_WARNINGS += -Wstrict-aliasing=3
+> -endif
+> +
+> +else ifneq ($(CROSS_COMPILE),)
+> +CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
+> +GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
 
-All warnings (new ones prefixed by >>):
+Apologies for noticing this so late, I only ran into this recently.
 
-   In file included from drivers/perf/marvell_cn10k_tad_pmu.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/perf/marvell_cn10k_tad_pmu.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/perf/marvell_cn10k_tad_pmu.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/perf/marvell_cn10k_tad_pmu.c:371:34: warning: unused variable 'tad_pmu_of_match' [-Wunused-const-variable]
-   static const struct of_device_id tad_pmu_of_match[] = {
-                                    ^
-   13 warnings generated.
+This line causes a warning when running 'make clean' when
+'$(CROSS_COMPILE)gcc' does not exist in PATH. For example:
 
+$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnu- LLVM=1 LLVM_IAS=0 clean
+which: no powerpc-linux-gnu-gcc in ($PATH)
 
-vim +/tad_pmu_of_match +371 drivers/perf/marvell_cn10k_tad_pmu.c
+I only have powerpc-linux-gnu binutils in my PATH, not GCC, as I am only
+working with clang.
 
-   370	
- > 371	static const struct of_device_id tad_pmu_of_match[] = {
-   372		{ .compatible = "marvell,cn10k-tad-pmu", },
-   373		{},
-   374	};
-   375	
+This happens because of the 'resolve_btfids_clean target', which always
+runs when running the 'clean' target on an in-tree build (since
+$(objtree) = $(srctree)).
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I tried looking into the best way to fix this but I am not at all
+familiar with the tools/ build system; would you mind taking a look?
+I see some machinery at the top of tools/bpf/Makefile for avoiding
+running some commands under certain commands but I am unsure how to
+shuffle that around to make everything work.
+
+Cheers,
+Nathan
+
+> +ifneq ($(GCC_TOOLCHAIN_DIR),)
+> +CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+> +CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
+> +CLANG_CROSS_FLAGS += --gcc-toolchain=$(realpath $(GCC_TOOLCHAIN_DIR)/..)
+> +endif # GCC_TOOLCHAIN_DIR
+> +CFLAGS += $(CLANG_CROSS_FLAGS)
+> +AFLAGS += $(CLANG_CROSS_FLAGS)
+> +endif # CROSS_COMPILE
+>  
+>  # Hack to avoid type-punned warnings on old systems such as RHEL5:
+>  # We should be changing CFLAGS and checking gcc version, but this
+> -- 
+> 2.34.1
+> 
+> 
