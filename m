@@ -1,115 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BCD2CA2
-	for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 14:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1643468042;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ug7sd4MyyeKE9edVrNKTjnr3ZIjzipUabJp6vX5YHNg=;
-	b=IGysB2KkATyff85mIK5A+JMpNrrQyv94v3GY/ODyGwPvLYAwYNaul3S2sJ4P1uk9UJPC9m
-	uSwRSxnNUWttF8oUvEK1hoQyu95DTmACk8SZ2IR3ukOmX/SOI5P7j9Omcfk2XcQFu3h8To
-	le89jZRdtXUFfn9LkKf8WME0GTXOEZo=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321--Z1b3etgP_qdkcrIcyNTxg-1; Sat, 29 Jan 2022 09:54:01 -0500
-X-MC-Unique: -Z1b3etgP_qdkcrIcyNTxg-1
-Received: by mail-io1-f69.google.com with SMTP id b15-20020a056602330f00b006109348c3daso6541359ioz.3
-        for <llvm@lists.linux.dev>; Sat, 29 Jan 2022 06:54:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ug7sd4MyyeKE9edVrNKTjnr3ZIjzipUabJp6vX5YHNg=;
-        b=wHVEKTCV9n9YgLTWPlS+KGWdBB4T+LOK46GAqxxVRa5kg5IGZf4x9EgfiA9V0wkGfN
-         9C/uYnCpzo/nF4SMUOqPr7ZMfG0r7MhTntGgAXoVeoubCaQQ8CEbury6doMYLyF8sSUI
-         VjyY4DNmIAHsQF3dbPjL+9lQ/GdGdMHOIZpBGz0CXP1IUjH1Ec12sOQ7TKgapcNrTZ7O
-         H3Y4TPdSOcoNw/N2DZJpQgiX2+//XSfzRtJg+xOqH7rLu0n6psa1XXuInOVp2yaqc80t
-         qbFInq6hRdVwOz3QHq4lJyXlq6TbEirZbjtBFXVn45iTc0Sz76ZVh7W3SjwLS1yPn3vG
-         gaLg==
-X-Gm-Message-State: AOAM533FHl9NuPouDbqJjgppD+RBmBDQoEqkOwEapc5ReuEESrSO7uOg
-	EVaNp1Zo6Lh46w+Srml2y2Q1ydCouN9PLB7mmmtESdKxBWJILM2q2J6yFeOCYr16+QtF9Qou0ci
-	fV00HLOJz6OdJqg==
-X-Received: by 2002:a05:6638:33a1:: with SMTP id h33mr6293250jav.78.1643468040565;
-        Sat, 29 Jan 2022 06:54:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwwgXCva834kyAbS4ly/S/GHDc8v1pjp6kH32zHTbUhflIF5l0lCvtPA+s2R8yYYEuRITEFGA==
-X-Received: by 2002:a05:6638:33a1:: with SMTP id h33mr6293223jav.78.1643468040391;
-        Sat, 29 Jan 2022 06:54:00 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id p7sm14191616ilo.71.2022.01.29.06.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 06:53:59 -0800 (PST)
-From: trix@redhat.com
-To: alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	PengJu.Zhou@amd.com,
-	candice.li@amd.com,
-	Hawking.Zhang@amd.com,
-	john.clements@amd.com,
-	Jingwen.Chen2@amd.com,
-	bokun.zhang@amd.com,
-	victor.skvortsov@amd.com,
-	bernard@vivo.com,
-	lijo.lazar@amd.com
-Cc: amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amdgpu: initialize reg_access_ctrl
-Date: Sat, 29 Jan 2022 06:53:47 -0800
-Message-Id: <20220129145347.1417849-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198672CA4
+	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 00:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643501953; x=1675037953;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RMLtXCrrnl0r0X3V3Z5LNdqAk4LiJSv63hxZt/wDrms=;
+  b=RQ6Kc1fmel5hGeOPcHxgeh5Pzm9XLf5+/MiJU0LNHFYQMCkoZH/ZcuTT
+   z1D3i4aX0ciVl1tw5I7k1+wyD50r1BV3CEhgFqDDT3Y0EwnFXog//nGIq
+   9BO6TqarbFSz/y9X2Djya4Vr8MCZKRm6fXY238m4XiNJRbV1onGCfgT/u
+   /dfeuh99N7VcFpo5xS/h6ExbqqT3aVZSLfeJy0AvMg/FegDbLivtUUT1m
+   BrdopA7AshJ0GOoV1V1insdh/t0g7FeZE/LKmBd61f/MQkqYj2RnlYE/A
+   5cutDIilVKLNMpqc2BlND0dOmtYG73Ury3IHgD9hO98B5S3nDP2FXCGow
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230879300"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="230879300"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 16:19:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="768231364"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Jan 2022 16:19:09 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nDxvx-000Pnu-2I; Sun, 30 Jan 2022 00:19:09 +0000
+Date: Sun, 30 Jan 2022 08:19:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Qais Yousef <qais.yousef@arm.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 3280/5869] drivers/hwtracing/coresight/coresight-etm4x-core.c:118:5:
+ warning: no previous prototype for function 'ete_sysreg_read'
+Message-ID: <202201300813.TO5y2Xbm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   94a36a1374e79fb3aa3539f8b99aa110fdc7b7a0
+commit: 82ce4a8af88d25d3f75de6e8437de3d2f049cac3 [3280/5869] FROMLIST: coresight: ete: Add support for ETE sysreg access
+config: arm64-buildonly-randconfig-r006-20220130 (https://download.01.org/0day-ci/archive/20220130/202201300813.TO5y2Xbm-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/82ce4a8af88d25d3f75de6e8437de3d2f049cac3
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 82ce4a8af88d25d3f75de6e8437de3d2f049cac3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
 
-clang build fails with
-amdgpu_virt.c:878:51: error: variable 'reg_access_ctrl' is
-  uninitialized when used here
-  ... + 4 * reg_access_ctrl->scratch_reg0;
-            ^~~~~~~~~~~~~~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The reg_access_ctrl ptr is never initialized, so
-initialize once we know it is supported.
+All warnings (new ones prefixed by >>):
 
-Fixes: 5d447e296701 ("drm/amdgpu: add helper for rlcg indirect reg access")
-Signed-off-by: Tom Rix <trix@redhat.com>
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:118:5: warning: no previous prototype for function 'ete_sysreg_read' [-Wmissing-prototypes]
+   u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+       ^
+   drivers/hwtracing/coresight/coresight-etm4x-core.c:118:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+   ^
+   static 
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:135:6: warning: no previous prototype for function 'ete_sysreg_write' [-Wmissing-prototypes]
+   void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+        ^
+   drivers/hwtracing/coresight/coresight-etm4x-core.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/ete_sysreg_read +118 drivers/hwtracing/coresight/coresight-etm4x-core.c
+
+   117	
+ > 118	u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+   119	{
+   120		u64 res = 0;
+   121	
+   122		switch (offset) {
+   123		ETE_READ_CASES(res)
+   124		default :
+   125			pr_warn_ratelimited("ete: trying to read unsupported register @%x\n",
+   126					    offset);
+   127		}
+   128	
+   129		if (!_relaxed)
+   130			__iormb(res);	/* Imitate the !relaxed I/O helpers */
+   131	
+   132		return res;
+   133	}
+   134	
+ > 135	void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+   136	{
+   137		if (!_relaxed)
+   138			__iowmb();	/* Imitate the !relaxed I/O helpers */
+   139		if (!_64bit)
+   140			val &= GENMASK(31, 0);
+   141	
+   142		switch (offset) {
+   143		ETE_WRITE_CASES(val)
+   144		default :
+   145			pr_warn_ratelimited("ete: trying to write to unsupported register @%x\n",
+   146					    offset);
+   147		}
+   148	}
+   149	
+
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-index 80c25176c9932..c137652189190 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-@@ -875,6 +875,7 @@ static u32 amdgpu_virt_rlcg_reg_rw(struct amdgpu_device *adev, u32 offset, u32 v
- 		return 0;
- 	}
- 
-+	reg_access_ctrl = &adev->gfx.rlc.reg_access_ctrl;
- 	scratch_reg0 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg0;
- 	scratch_reg1 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg1;
- 	scratch_reg2 = (void __iomem *)adev->rmmio + 4 * reg_access_ctrl->scratch_reg2;
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
