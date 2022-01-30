@@ -1,45 +1,47 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7D42C9E
-	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 16:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1DC2CA7
+	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 16:52:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643561566; x=1675097566;
+  t=1643561568; x=1675097568;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JZACT/iyqB2JhN54jTXkwvGud6/ti13dN/JMDd1WVyA=;
-  b=PZ7R0OH1gxJ4SjzR9gHtC8ccdadNN7GL39qqpH43gOn+oDUlC6DJ80Og
-   Etwy4+Pn6pMBVsjhjObeyRVNsIgPvaRVGRe4u4sYFeyuWm0fBY7CF79iS
-   +2S3RFiJzozvkwYOBRVANwJ9zXfmZ4pXUkSGUylgvFMen9zurb3RYnD9S
-   vAMOQ7XmYC7D+nXYdQCnNT72oQjjXXPZGStHhLW6L8V/ask5qxzvWLTBS
-   IODPc7sFhBxjnnZ18vmjb7SDcoSIXuZLs6Y9Wqzqu4C9Fua2LczaaGthQ
-   RXjfTh4gaJMv9IhWpYlozqso3RHYJgJDJDNxk9Tw6cBoJZYp/p+TSqSat
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230933519"
+  bh=PHk+oaHZZiojjeI8TMX3SbWxPQ7wloJmh5lcnUZc440=;
+  b=PYP5y7Rq9sD2/NEtnTEfhj1DrCOh6EMxWwfbBqlslKNgRtyaW3spdgXg
+   8mQQvE8pCOikyqteijyq3M1oY8Os0lJQV+sIS0/1Pyc+vDxetlkLaLS19
+   j+r6m5yQs8T4wPiyN3B92kFgKMT8VanWydocICF4ACai7sfJcOCBb1+uo
+   798QoIhJl8WKatzGzDdTxk00GPjO+ZaML7QkwTJo0yrU+7gL2WeN9uTDs
+   zgawGdkARHwFof/xayOITcDlDSKsSvMfKVwO+qFBlX/qUg+STGK3pOavo
+   0rp9PphnA++/kk7X2f7PjEMAeHgh8+AwyHVi0TRi/6htEyZvrWsV+P1mx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="228025246"
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="230933519"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 08:52:46 -0800
+   d="scan'208";a="228025246"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 08:52:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="770566800"
+   d="scan'208";a="481325382"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Jan 2022 08:52:43 -0800
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2022 08:52:44 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEDRT-000Qkd-8u; Sun, 30 Jan 2022 16:52:43 +0000
-Date: Mon, 31 Jan 2022 00:52:28 +0800
+	id 1nEDRT-000Qkf-AN; Sun, 30 Jan 2022 16:52:43 +0000
+Date: Mon, 31 Jan 2022 00:52:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-	mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-	john.stultz@linaro.org, sboyd@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH v3] kernel/time: move timer sysctls to its own file
-Message-ID: <202201310051.QnG1PthP-lkp@intel.com>
-References: <20220130151338.6533-1-tangmeng@uniontech.com>
+To: Paul Blakey <paulb@nvidia.com>, dev@openvswitch.org,
+	netdev@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Pravin B Shelar <pshelar@ovn.org>, davem@davemloft.net,
+	Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH net-next 1/1] net/sched: Enable tc skb ext allocation on
+ chain miss only when needed
+Message-ID: <202201310016.Z4iqHnpx-lkp@intel.com>
+References: <20220130123141.10119-1-paulb@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,56 +50,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220130151338.6533-1-tangmeng@uniontech.com>
+In-Reply-To: <20220130123141.10119-1-paulb@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi tangmeng,
+Hi Paul,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test ERROR on net-next/master]
 
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220130-231458
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: hexagon-randconfig-r045-20220130 (https://download.01.org/0day-ci/archive/20220131/202201310051.QnG1PthP-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Paul-Blakey/net-sched-Enable-tc-skb-ext-allocation-on-chain-miss-only-when-needed/20220130-203224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git ff58831fa02deb42fd731f830d8d9ec545573c7c
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220131/202201310016.Z4iqHnpx-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/40476bc60525c2a3aeffa4af1080bf1c4bfb8f10
+        # https://github.com/0day-ci/linux/commit/0bc6313c4ce18444ed88c99b19d0cb1682772988
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220130-231458
-        git checkout 40476bc60525c2a3aeffa4af1080bf1c4bfb8f10
+        git fetch --no-tags linux-review Paul-Blakey/net-sched-Enable-tc-skb-ext-allocation-on-chain-miss-only-when-needed/20220130-203224
+        git checkout 0bc6313c4ce18444ed88c99b19d0cb1682772988
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/time/timer.c:2048:2: error: implicit declaration of function 'timer_sysctl_init' [-Werror,-Wimplicit-function-declaration]
-           timer_sysctl_init();
-           ^
-   1 error generated.
+>> net/sched/cls_api.c:55:6: error: redefinition of 'tc_skb_ext_tc_ovs_enable'
+   void tc_skb_ext_tc_ovs_enable(void)
+        ^
+   include/net/pkt_cls.h:1037:20: note: previous definition is here
+   static inline void tc_skb_ext_tc_ovs_enable(void) { }
+                      ^
+>> net/sched/cls_api.c:61:6: error: redefinition of 'tc_skb_ext_tc_ovs_disable'
+   void tc_skb_ext_tc_ovs_disable(void)
+        ^
+   include/net/pkt_cls.h:1038:20: note: previous definition is here
+   static inline void tc_skb_ext_tc_ovs_disable(void) { }
+                      ^
+   2 errors generated.
 
 
-vim +/timer_sysctl_init +2048 kernel/time/timer.c
+vim +/tc_skb_ext_tc_ovs_enable +55 net/sched/cls_api.c
 
-  2042	
-  2043	void __init init_timers(void)
-  2044	{
-  2045		init_timer_cpus();
-  2046		posix_cputimers_init_work();
-  2047		open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
-> 2048		timer_sysctl_init();
-  2049	}
-  2050	
+    54	
+  > 55	void tc_skb_ext_tc_ovs_enable(void)
+    56	{
+    57		static_branch_inc(&tc_skb_ext_tc_ovs);
+    58	}
+    59	EXPORT_SYMBOL(tc_skb_ext_tc_ovs_enable);
+    60	
+  > 61	void tc_skb_ext_tc_ovs_disable(void)
+    62	{
+    63		static_branch_dec(&tc_skb_ext_tc_ovs);
+    64	}
+    65	EXPORT_SYMBOL(tc_skb_ext_tc_ovs_disable);
+    66	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
