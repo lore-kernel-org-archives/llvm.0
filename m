@@ -1,100 +1,112 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA842CA1
-	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 10:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643539534; x=1675075534;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C/g4/HjJWtsOpl+TgTQHRBlPefzxtkc/8FHfQdwW9oI=;
-  b=nFrCfRc4eyaXsLwJqjS7eoFTxeEQAGA+9a1mvRIhLw+bQXcIVpYDNrRH
-   j88/uwztZHvdDlYvVrE1nmkFib/4iaWjwr27Jtu43v/WMszFsA5B4HSiY
-   kEa2811qMArRD3Xge2EeGx6QYUftvmkNfz2ayfR72JsxzCSpzhoWgaTbk
-   aueAj/r4HQUBNJBl/CNlLmz/5jZ/PfHzdNXBf+2q/8n7Pw8Fixv/jYmNb
-   frqpKSi9bXt8+hNSvbkN4ac89WMTdaK1OU7AQJtTQt+Ob6Uq78a48HMSc
-   f/limj981pnmDFcUFZmkjxNiLxVNLlysV4M+KvE/o8e9RNA0E89yShH/e
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="246174050"
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="246174050"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 02:45:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="481262583"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2022 02:45:31 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nE7i6-000QOT-P3; Sun, 30 Jan 2022 10:45:30 +0000
-Date: Sun, 30 Jan 2022 18:45:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wenjing Liu <wenjing.liu@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-	Jerry Zuo <Jerry.Zuo@amd.com>
-Subject: [linux-next:master 1798/2855]
- drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:805:6:
- warning: no previous prototype for function
- 'dm_helpers_enable_periodic_detection'
-Message-ID: <202201301809.h2YkYdBY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343912CA5
+	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 15:27:06 +0000 (UTC)
+Received: by mail-vs1-f41.google.com with SMTP id b2so8854854vso.9
+        for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 07:27:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=QX+g1hCOW91cXXnSggcw6gj04u3NWBZ31aKJT4qy8z4=;
+        b=HD/4qz2z/NdjjLU1lR4H3U15s5msIFLg7DBqWhui4lujSGMlzrXXW637fmJHyj7rJg
+         9ZSLBqe0C+Gv5VtDiUFNtMoyYHNHXkH1NpFo+NqijUSbm0XwOJGMaZ5h+0pmGbWRKG28
+         QnPjy7wB8St3ENbSz7Gx/BOgxWyQ04LuBZggu9IcCAiI3HQNAYvlPeZ8tTB9kxKwOZxb
+         E4HRukFXNvmbOGDV1Vgfj7yxjC6SEy1wIsQ8jtKL4zdIx4x9GJP+TTiN2ONPMM9M0tYf
+         zIqUquFg4g0eiezyCtsEWtknBXBlTPEUfphOElqsiWhlniImPrlSNO89ou/k6U1S+FFZ
+         ShwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=QX+g1hCOW91cXXnSggcw6gj04u3NWBZ31aKJT4qy8z4=;
+        b=V+tLdNPcUwoqqcZlPBfN9gURrTy/ypKzKQOSKV7UgngpUSdeHUhU9q1fkjhUSgqgI+
+         18u8KLoFDYSG/8loBH4u+cGkV5LPTxaA1J5+l+0FJ2KQb7W0P1jQynrF8aMdUqLiY9yK
+         id+MhIRZfzVH7piOwrCSitCbygY/nUemA/DjtB2HR8MgciBLjEMEWDp2vKTaq9F8yifM
+         hfcuUpDs8NdWSMKY0l9doGKFR7sjUUpFsZHkiP4FijOBAF4fBpmexFlLm2evB+rVz9WZ
+         IBMj0ZNQEQVmfZxtLrepM2MnVBHCZDUUrFRM5lRv/UDBUKMFgh9KDfMtivXtY0E/+d9l
+         f2Zw==
+X-Gm-Message-State: AOAM531ddhx91F4DiUsgNng/pNjlSblu1u726xuwZpb+Mey9qhxXtxXb
+	0R2+dttwMWdMBQCDPj+vloh3RA==
+X-Google-Smtp-Source: ABdhPJxkGrsc+o2xJu08YhAkeRNFOz6+5hhYb5WDUPUWhPpwgPKwhiHccgAA6hO+d1qRqqhfQPS+dQ==
+X-Received: by 2002:a05:6102:5490:: with SMTP id bk16mr6607320vsb.33.1643556425648;
+        Sun, 30 Jan 2022 07:27:05 -0800 (PST)
+Received: from fedora ([187.36.236.204])
+        by smtp.gmail.com with ESMTPSA id w5sm3139815vkf.12.2022.01.30.07.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 07:27:05 -0800 (PST)
+Date: Sun, 30 Jan 2022 12:27:00 -0300
+From: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+To: gregkh@linuxfoundation.org, tj@kernel.org, viro@zeniv.linux.org.uk,
+	nathan@kernel.org, ndesaulniers@google.com
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] seq_file: fix NULL pointer arithmetic warning
+Message-ID: <YfauRJpYiAT3yEnK@fedora>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   b605fdc54c2b28c30ef06d9db99282d8a32ae4be
-commit: d9eb8fea6862e63421f7b9c93e32bef348488c41 [1798/2855] drm/amd/display: Drop DCN for DP2.x logic
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220130/202201301809.h2YkYdBY-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d9eb8fea6862e63421f7b9c93e32bef348488c41
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout d9eb8fea6862e63421f7b9c93e32bef348488c41
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
+Implement conditional logic in order to replace NULL pointer arithmetic.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The use of NULL pointer arithmetic was pointed out by clang with the
+following warning:
 
-All warnings (new ones prefixed by >>):
+fs/kernfs/file.c:128:15: warning: performing pointer arithmetic on a
+null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                return NULL + !*ppos;
+                       ~~~~ ^
+fs/seq_file.c:559:14: warning: performing pointer arithmetic on a
+null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+        return NULL + (*pos == 0);
 
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:805:6: warning: no previous prototype for function 'dm_helpers_enable_periodic_detection' [-Wmissing-prototypes]
-   void dm_helpers_enable_periodic_detection(struct dc_context *ctx, bool enable)
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:805:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dm_helpers_enable_periodic_detection(struct dc_context *ctx, bool enable)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/dm_helpers_enable_periodic_detection +805 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c
-
-ac02dc34258569 Eric Yang 2021-08-25  804  
-ac02dc34258569 Eric Yang 2021-08-25 @805  void dm_helpers_enable_periodic_detection(struct dc_context *ctx, bool enable)
-
-:::::: The code at line 805 was first introduced by commit
-:::::: ac02dc34258569b793b78483154ca336f103946f drm/amd/display: Add periodic detection when zstate is enabled
-
-:::::: TO: Eric Yang <Eric.Yang2@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
-
+Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ fs/kernfs/file.c | 6 ++++--
+ fs/seq_file.c    | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+index 9414a7a60a9f..3a6990c7fe8e 100644
+--- a/fs/kernfs/file.c
++++ b/fs/kernfs/file.c
+@@ -120,12 +120,14 @@ static void *kernfs_seq_start(struct seq_file *sf, loff_t *ppos)
+ 		if (next == ERR_PTR(-ENODEV))
+ 			kernfs_seq_stop_active(sf, next);
+ 		return next;
+-	} else {
++	} else if (*ppos) {
+ 		/*
+ 		 * The same behavior and code as single_open().  Returns
+ 		 * !NULL if pos is at the beginning; otherwise, NULL.
+ 		 */
+-		return NULL + !*ppos;
++		return NULL;
++	} else {
++		return (void *) 1;
+ 	}
+ }
+ 
+diff --git a/fs/seq_file.c b/fs/seq_file.c
+index f8e1f4ee87ff..7b6165d5d829 100644
+--- a/fs/seq_file.c
++++ b/fs/seq_file.c
+@@ -556,7 +556,7 @@ EXPORT_SYMBOL(seq_dentry);
+ 
+ static void *single_start(struct seq_file *p, loff_t *pos)
+ {
+-	return NULL + (*pos == 0);
++	return *pos ? NULL : (void *) 1;
+ }
+ 
+ static void *single_next(struct seq_file *p, void *v, loff_t *pos)
+-- 
+2.34.1
+
