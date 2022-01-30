@@ -1,42 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C2B29CA
-	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 05:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4202CA4
+	for <llvm@lists.linux.dev>; Sun, 30 Jan 2022 05:34:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643520802; x=1675056802;
+  t=1643520862; x=1675056862;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nFtjbMYQUJKLsc2kTCy7pstMArinbqOSpq480PNgxbY=;
-  b=ckbscICaCsw4x0QaodJgMDstkRRvD0awq3LaZ87DTNLXbVc/KADeNG9K
-   h0czZaVTFFsaeRDE/8ZmX7a8ob2+pzY8bcG7rzjXs4nGc6I4trb2BXcTG
-   AMSNCHfLaARse/7nMhjFByrcsfavVEGFh6i8biO9xkMKUUZDDDcmjQ5+D
-   gHBMZyNHdI8X5HUEbrfQrKKD1A3YtHqQWWuFAtiFEpmtOnLpnufo7qmYA
-   z9U+KfHFcv1Z3Xml65NqeW+Xr/oqxkVGvic778ORmKSyvYLfXke6wG847
-   vzdpOIWaYZxvIIVhPkrlORM0Az3QvETUSDgi5qMnRXc/UMVZ/COvJg96a
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230894269"
+  bh=aduGOJcXsxcxdxjpVqpSmhbJxwuYDU745GkOwzVMwE8=;
+  b=aMbpkvJNYByF0GHXuvmUJAgbeNzMHbjNnmd4JuLVyWjYuqASAiLQMzlf
+   G9DeuM/K41gaieP4Mo7ZEJtGmxUhUCNYAf4+TZymgKt3o0uiP1hum+hEH
+   ppoK15gdKaLZHNTG2mywItJtqRk7srpCUpAWZIpYk18zVMNTDn7vk2p8q
+   TlTqQrQH1DPi/h2YgwFtiVVOqWUt6D2eCNxxloUeLGtn3xTWGKwSHQRBb
+   SMlO4ZP+mpkZt/PiORV5DD6UkX+7CVUPPY2n29wQC2qlaIsBaJK+7d60q
+   fTNqw8JMzE6tPQBstw06Q5UcWClQjogpIs3rOKIK20z0J0li57HdCLeBM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="310630850"
 X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="230894269"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 21:33:21 -0800
+   d="scan'208";a="310630850"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 21:34:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="478693980"
+   d="scan'208";a="533890477"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Jan 2022 21:33:20 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 29 Jan 2022 21:34:20 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nE2pz-000Q5o-R4; Sun, 30 Jan 2022 05:33:19 +0000
-Date: Sun, 30 Jan 2022 13:33:17 +0800
+	id 1nE2qy-000Q6E-2p; Sun, 30 Jan 2022 05:34:20 +0000
+Date: Sun, 30 Jan 2022 13:33:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
+To: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 28/29] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202201301340.5ZMPdDsQ-lkp@intel.com>
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:watchdog-next 1/4]
+ drivers/watchdog/max77620_wdt.c:18:10: fatal error: 'linux/mfd/max77714.h'
+ file not found
+Message-ID: <202201301330.qrjqfMhi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,108 +47,41 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   2aca1bad96b476d6e8043db556d43de866e527ff
-commit: 1c3226c0cd04a531ee9141bffa933f844c717191 [28/29] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r036-20220130 (https://download.01.org/0day-ci/archive/20220130/202201301340.5ZMPdDsQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 33b45ee44b1f32ffdbc995e6fec806271b4b3ba4)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+head:   c00ed93a33886a91023b17f2503d72de49303063
+commit: 4b35b464fe64f6dd5bf8d5df14090961fdf63a07 [1/4] watchdog: max77620: add support for the max77714 variant
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220130/202201301330.qrjqfMhi-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/1c3226c0cd04a531ee9141bffa933f844c717191
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 1c3226c0cd04a531ee9141bffa933f844c717191
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=4b35b464fe64f6dd5bf8d5df14090961fdf63a07
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging watchdog-next
+        git checkout 4b35b464fe64f6dd5bf8d5df14090961fdf63a07
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+>> drivers/watchdog/max77620_wdt.c:18:10: fatal error: 'linux/mfd/max77714.h' file not found
+   #include <linux/mfd/max77714.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+vim +18 drivers/watchdog/max77620_wdt.c
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+  > 18	#include <linux/mfd/max77714.h>
+    19	#include <linux/platform_device.h>
+    20	#include <linux/regmap.h>
+    21	#include <linux/slab.h>
+    22	#include <linux/watchdog.h>
+    23	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
