@@ -1,107 +1,123 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A19A2CA1
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 19:09:41 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id c7so20268745ljr.13
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 11:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Ok0BFBVUs/aGLvZ8hIj39mJA1z2SbFZGpjd3f3p7Vg=;
-        b=hX0xetF3Nl2xlWjDIF6C04FvfYjWAUNtF9/XaoMWge4H3R+tddXnppQBiNsE0QcTf2
-         H1VLpE42C+1XDt+SPkmPcrXc+e5QUUVrzLLDhqapMhQ0cidbmLUZZ/2vX3Wacu7dyBxV
-         Lh8kF3a4RuCGstgCCYTqIB+JyzvN46ciBhUsVNy/FS8vcwjWfECmOJNm+wgYUCFefL1M
-         XUAeYfLXSWd6OTzBH/X9ZmXihVo+k4wq0R9j+D7BO9kOyjrCttYyR+72q4YPJbkP9z5o
-         fWAhJ2aD/U2rBALByHUFY/TdI3p24zf2WUC2OpgmsXuJaqrlVpDqUy/pQvlF7nYYsZWG
-         vbQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Ok0BFBVUs/aGLvZ8hIj39mJA1z2SbFZGpjd3f3p7Vg=;
-        b=mqzIFUf+6bePUngYp0nQw762tq/H44JwvTAqKjbOsabn5/hKv3H0JQ9C+cny6dnXdO
-         8XiDFI+iy3R7WtWUAkgvrpFbVWvianYgwu9cQdF+d0GMGJuDABbFdmycD1NKDIcEMTF7
-         CYm8OzbF4wccDtYhb9+nglT/Rqg0t7EnP2ENZ4P+UAJ2CDamESrK5qxQYPA9TXe3KdCk
-         v7uFqFadkePC7kVwAjS9a50oIhRNakjCO5EHjuiRiqrkuobidJ9UcYil6TYK9N+fq3To
-         NK+GOy273/n7fMygJjWQom7bEMUHFfO2rDaZFEZ+8NCALem6vFeguTTiuu8C58Viui5F
-         U1uA==
-X-Gm-Message-State: AOAM531qZfOk9KG0LC02FRj5BYED4BsBzVGSz0y23I3yuDD6zPlFWOpD
-	hI/1nynQATAVIDomnxlAggK+LOJI6cxDcNewN+Qv6Nihg4UNnw==
-X-Google-Smtp-Source: ABdhPJyfrhQq8UNHudmznONYOwVRAN5a2rNhHhfUuvRoigSmkENJcxC7SBSpqD9IcWpP8HXdLEAMEzjLZqVgJINMisE=
-X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr5956839ljh.338.1643656179244;
- Mon, 31 Jan 2022 11:09:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DA42CA1
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 19:34:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643657699; x=1675193699;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cChH8+znn3t0kReebLQbywe4khYSpVp1da+Pn8uCcTo=;
+  b=Y0ZvV+Wv2Xh9vxrn32grjmnsUSOn02aPTeNODuk0cs54JAqYRjFVph5+
+   4/IRRuU+EGoEyt5wS6Il6oW4kX1OwUO0xR+KcuJcTJPSb6ggyaJKeOtq3
+   iICX8mod7ENfgg9dcE0kh2O/1vHunskVZzZ3bsV3r15GzPOG522FCHJre
+   V0PumxIFqwrKvxLPy64S0dE8hdHJEglr4oIN2ld5nMg1WiCzLlOH2syfI
+   iJBje0/bHtFQraTPmcgxNSI/nOrxuiTPJSxu49iL46N+JMwrKwYEIrwXj
+   BVudBOr4UYPNxZVomErzuE4IawC5nLtHJaoCmBGvgZ6HE9r9cNyYjFlrw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="245127925"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="245127925"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 11:34:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="675836719"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Jan 2022 11:34:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEcRo-000SHh-D0; Mon, 31 Jan 2022 19:34:44 +0000
+Date: Tue, 1 Feb 2022 03:34:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom <support@vamrs.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 29/62] drivers/soc/sifive/sifive_l2_cache.c:152:3:
+ error: implicit declaration of function 'writeq'
+Message-ID: <202202010337.bSdnhIBF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220130181616.420092-1-keescook@chromium.org>
-In-Reply-To: <20220130181616.420092-1-keescook@chromium.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 31 Jan 2022 11:09:27 -0800
-Message-ID: <CAKwvOdmETY-j9B9vms4d31kAc0xb1yE902KijiH2baY5-M=fLQ@mail.gmail.com>
-Subject: Re: [PATCH] fortify: Update compile-time tests for Clang 14
-To: Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Jan 30, 2022 at 10:16 AM Kees Cook <keescook@chromium.org> wrote:
->
-> Clang 14 introduces support for compiletime_assert(). Update the
-> compile-time warning regex to catch Clang's variant of the warning text
-> in preparation for Clang supporting CONFIG_FORTIFY_SOURCE.
+tree:   https://github.com/esmil/linux visionfive
+head:   8c758048edfd830baceb991167131c9d55786544
+commit: 601a2f4e945153ebae8645596eda50ea39369c88 [29/62] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202010337.bSdnhIBF-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/601a2f4e945153ebae8645596eda50ea39369c88
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 601a2f4e945153ebae8645596eda50ea39369c88
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-https://twitter.com/ifosteve/status/1190348262500421634?lang=en
-error messages can change over time. More thoughts below.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-hardening@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> I'm splitting this patch out of the main Clang FORTIFY enabling patch.
-> ---
->  scripts/test_fortify.sh | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
-> index a4da365508f0..c2688ab8281d 100644
-> --- a/scripts/test_fortify.sh
-> +++ b/scripts/test_fortify.sh
-> @@ -46,8 +46,12 @@ if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
->                 status="warning: unsafe ${FUNC}() usage lacked '$WANT' symbol in $IN"
->         fi
->  else
-> -       # If the build failed, check for the warning in the stderr (gcc).
-> -       if ! grep -q -m1 "error: call to .\b${WANT}\b." "$TMP" ; then
-> +       # If the build failed, check for the warning in the stderr.
-> +       # GCC:
-> +       # ./include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-> +       # Clang 14:
-> +       # ./include/linux/fortify-string.h:316:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> +       if ! grep -Eq -m1 "error: call to .?\b${WANT}\b.?" "$TMP" ; then
+All errors (new ones prefixed by >>):
 
-Doesn't this depend on -Werror being set? I guess it did so before
-hand, too, but couldn't I unset CONFIG_WERROR then this check would
-still fail (since instead of `error:` we'd have `warning:`)? If we
-used __attribute__((error(""))) then this would always be an error.
-Right now, it is only because -Werror is set promoting the warning
-diagnostic to an error.
-
->                 status="warning: unsafe ${FUNC}() usage lacked '$WANT' warning in $IN"
->         fi
->  fi
-> --
-> 2.30.2
->
+>> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+   drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
--- 
-Thanks,
-~Nick Desaulniers
+vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
+
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+   142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
