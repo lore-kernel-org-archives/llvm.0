@@ -1,39 +1,39 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2962C82
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 21:14:59 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id i17so13936183pfq.13
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 13:14:59 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3572C82
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 21:15:30 +0000 (UTC)
+Received: by mail-pl1-f174.google.com with SMTP id k17so13720267plk.0
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 13:15:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=PomGqS/ojw0AtqU3Fb7HbY+FvnyoZQSU3mF25QVJV7c=;
-        b=Xn0LtiOPnZ1vxiTS8awYMFTe2/FhG6R5vFOU5b6DthICxjaiSEt3oU4Ss5OnfVHbuY
-         oS5xHSkhz0GOTKg7+NsE2IPMSRIkVivQn1A7bCl+KW3AxDjiGjWF2jtYBv9/qDBzMxA9
-         5RKrkuEXSkU/tKKnrl9aXQhtdaUUHAw0PAObM=
+        bh=cxXm9S9rBUGO+n/qf1n3on2rs5DZHI4UmQ2+ms2iYP4=;
+        b=Qo7cE3plH59PbdtmImyac1lX+en/JDRgSaa4LMeLw6ph0k1EzlPT/BWVNjItFxgULh
+         uYEe69YWJNHzuLftpsMRKtLU9Yx+i9KI7fKy9zSLAwleJOGwAdqbSQ8bIZt8/KNOt0iP
+         XZyBHj77OOJEJ+b4ZrtXZqGJFZNNPAs6Aio2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=PomGqS/ojw0AtqU3Fb7HbY+FvnyoZQSU3mF25QVJV7c=;
-        b=ipKKMcKfuoad5Lv6UFuStWV5nQehidBh66h2jaye2XH3N3a6d50uIHY6q1VGZP2XG2
-         LVXirWFkuilkQaOk4UlDJiuer+jpSfc8glvSEkSNvkfvHazAtYucl58zFHkFpkMfgY6h
-         b54Qfu3MRMyx2iuqgqbOqjrC+d5RG2+nqtlyvWkdoZ1ClwkwrM1WgjTnlLZ4ZeqXX1kh
-         k9tDowXKf5AIxY3qUwDeWlIHzoAmtM38eKqvORcyVuCfIGAoYfeWXrHEYjzD4n0z0XWM
-         rtWZRjc4HrYWDDEUAwIuc4bY5EebN1OERVooea8Gn/8tvKRACCSs1TyTKjdibjmkCAed
-         ZNXA==
-X-Gm-Message-State: AOAM5306rw/HQqYNMBPv1W0hRVNnnVcmpptWP1+X7O3q34qisA8YPTWy
-	IN2fWLthxxlxBnS9hmfc0ho7lA==
-X-Google-Smtp-Source: ABdhPJxixcp/Qg2tN2OKN473PxgWYy14w53S3JGe8e8/8ZnXhTR/q5o3PhRX0or1L9AEhH8XZWmwOA==
-X-Received: by 2002:a62:e40f:: with SMTP id r15mr22514435pfh.24.1643663699526;
-        Mon, 31 Jan 2022 13:14:59 -0800 (PST)
+        bh=cxXm9S9rBUGO+n/qf1n3on2rs5DZHI4UmQ2+ms2iYP4=;
+        b=oiYmQPTzNeOqQPB7KYcYHT4OxLE2iRzJdS5QKmKSPhT2ZkK4u0rFBE0LRpJw1HBWSy
+         uEw41xykGsfGoVlZ9DWDZ8ikcUq/afASSvkG8UHfsy9LV1+pevMkUX3U0zD+Crl7qDai
+         j1ixDx53Y/zDy7OBPY9Dn+xyxZWXpszllyhoq/jCvXpRZZ2HBZrduGwb2kxplfJ0JBFT
+         +hq8YPjmmJGkp0tfhx9XKN8tnxiWxqvPyRwBsRhcaG7b/d324964u2QNKch+pnlyZ0Pv
+         kDodoezs4eGoZnn3YypQZtEy4Birbrf8wgivV0pr6mP/r+/ljzFeJhhAjSevTIKs8awD
+         R+0w==
+X-Gm-Message-State: AOAM530RaexmwtU8LFPhbZA8uQVfC6CUBF6EojJMvullgnRoX1RNxQcN
+	BD+bNfWvc2uBgRpW9KQvRE+bFw==
+X-Google-Smtp-Source: ABdhPJyul6M9uc+iYppo5Cuy0vy4tnGlURb4dMZAIkzric/Dse5pGkQPhJdFSZKL4eflCMSBcXWnew==
+X-Received: by 2002:a17:902:d509:: with SMTP id b9mr22602105plg.3.1643663730410;
+        Mon, 31 Jan 2022 13:15:30 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a1sm29349483pgm.83.2022.01.31.13.14.59
+        by smtp.gmail.com with ESMTPSA id mi18sm219840pjb.35.2022.01.31.13.15.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:14:59 -0800 (PST)
-Date: Mon, 31 Jan 2022 13:14:58 -0800
+        Mon, 31 Jan 2022 13:15:30 -0800 (PST)
+Date: Mon, 31 Jan 2022 13:15:29 -0800
 From: Kees Cook <keescook@chromium.org>
 To: Marco Elver <elver@google.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>,
@@ -44,9 +44,11 @@ Cc: Thomas Gleixner <tglx@linutronix.de>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
 	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
-Message-ID: <202201311314.2978E80C05@keescook>
+Subject: Re: [PATCH v2 2/2] stack: Constrain and fix stack offset
+ randomization with Clang builds
+Message-ID: <202201311315.B9FDD0A@keescook>
 References: <20220131090521.1947110-1-elver@google.com>
+ <20220131090521.1947110-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,24 +57,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131090521.1947110-1-elver@google.com>
+In-Reply-To: <20220131090521.1947110-2-elver@google.com>
 
-On Mon, Jan 31, 2022 at 10:05:20AM +0100, Marco Elver wrote:
-> The randomize_kstack_offset feature is unconditionally compiled in when
-> the architecture supports it.
+On Mon, Jan 31, 2022 at 10:05:21AM +0100, Marco Elver wrote:
+> All supported versions of Clang perform auto-init of __builtin_alloca()
+> when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
 > 
-> To add constraints on compiler versions, we require a dedicated Kconfig
-> variable. Therefore, introduce RANDOMIZE_KSTACK_OFFSET.
+> add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> enabled, add_random_kstack_offset() will auto-init that unused portion
+> of the stack used to add an offset.
 > 
-> Furthermore, this option is now also configurable by EXPERT kernels:
-> while the feature is supposed to have zero performance overhead when
-> disabled, due to its use of static branches, there are few cases where
-> giving a distribution the option to disable the feature entirely makes
-> sense. For example, in very resource constrained environments, which
-> would never enable the feature to begin with, in which case the
-> additional kernel code size increase would be redundant.
+> There are several problems with this:
 > 
+> 	1. These offsets can be as large as 1023 bytes. Performing
+> 	   memset() on them isn't exactly cheap, and this is done on
+> 	   every syscall entry.
+> 
+> 	2. Architectures adding add_random_kstack_offset() to syscall
+> 	   entry implemented in C require them to be 'noinstr' (e.g. see
+> 	   x86 and s390). The potential problem here is that a call to
+> 	   memset may occur, which is not noinstr.
+> 
+> A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> 
+>  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> 
+> Clang 14 (unreleased) will introduce a way to skip alloca initialization
+> via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
+> 
+> Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
+> auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
+> __builtin_alloca_uninitialized() if the compiler provides it, as is done
+> by Clang 14.
+> 
+> Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
+> Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
 > Signed-off-by: Marco Elver <elver@google.com>
+
+Thanks for the tweaks; this looks good to me now.
 
 Acked-by: Kees Cook <keescook@chromium.org>
 
