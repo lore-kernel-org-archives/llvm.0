@@ -1,80 +1,150 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BE32CA2
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 08:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643617337; x=1675153337;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=HvKL1ANkp3O/ofG2q+DcFLRBHxbbWj0sX9yMt6Mqt3Q=;
-  b=IwQnB4z6upCCVxy5H8BNZaV4w+ctNa7nzg59TeA9mcnNxdRbDSNWtGXz
-   tRjf1CRnS0b7IYnfRH7wQXFE6OO//+svvPgPbYyekfGXrWn+aiXykI2pm
-   NLNqJsuq29ZUFCZH9A9LnNwRnMO1Iothuh+VCLkOKZrxpDozhjFFZuSad
-   siOFqoeWXFDiEcuwpIPEnC8eXhaRWaJq9ehizYmmsbLAPH5CEB2qrRxD4
-   J9N37BU0QpUebKAmR8QteZnJnzZhxbKr5qu1DhU5UNYc9kdgIoGKggSCA
-   /zlzB0PGiYIakoRwxtqOfKBEihbHnH6phjFsuXxIahJyeaEj3X7BTgDZh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247374233"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="247374233"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 00:22:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="522565661"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 31 Jan 2022 00:22:15 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nERx1-000Rgs-7q; Mon, 31 Jan 2022 08:22:15 +0000
-Date: Mon, 31 Jan 2022 16:22:08 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [zen:5.16/zen-sauce 14/22] ld.lld: error:
- arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid:
- .text+0xe): relocation R_RISCV_HI20 out of range: 529300 is not in [-524288,
- 524287]; references .L.str
-Message-ID: <202201311600.S6xTWRLP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B812C9E
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 09:07:43 +0000 (UTC)
+Received: by mail-wr1-f73.google.com with SMTP id z1-20020adfbbc1000000b001df54394cebso3715625wrg.20
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 01:07:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PGLVIgpx7K8YPtd39QgkpU42R1uwUVJe3VkPkvQuvOo=;
+        b=YlfBbeCg9MP9aWSNeAsDkv+aT9+uOzfFIOsWSG2YJUVqfbnwYsz5e2XF4/DRfg5+aj
+         NyDx3X+NZYcHJ6nJeSJK3DzerGlQw4eMknMKueGgrfd1BpHx2RtwTFHJL7MeOzKgmP2n
+         QOOUTF3U+KhQhCy8+6UK55z5b904y1g8GunBT9MSxXyaJyUrpf0hgZ47NmbvNFYvozDZ
+         S0O3KZHKdsdNAMM1uBL6XCy4EkUlWuUMlSHX5Tk/YaTDwKScW7+itcpnf1JMYM1UK/Xx
+         EER5yR6XgGvT8/nnhuWtj2ScsY+843EKbFk+kriDrbD7zbmg8sdUMHkD+VEQy1In42vB
+         gAyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PGLVIgpx7K8YPtd39QgkpU42R1uwUVJe3VkPkvQuvOo=;
+        b=GXTwu11dNP54DKrEJjsdcXtkkAPLptDyf6PCYVf84GC3yHesHdsfETFro0leDHijvx
+         xQSznDSgzH14bObr5jvcFG38z+GOSRyX4Qh2bw5Z2tF29HLRNmjWSk5FvBrD2+PADzsC
+         ZzaskZzpTPQWAodmj+quSiRB2FX9rHjeR2WvupNbNeokAYLyb2IBvEiFPHcXCvNV3oT1
+         rdzXNsGdR6rj6TV0VDpTgGvrpid2cqulvHPr91t1PQytGI2jQzo2wrg61r/E9mNV5YWz
+         27sns5+HWfs5rDEbuUClF5K/FNHLe/JNmW0oQivHGdB72a4pOrIYEoQoiqhjI7pjEx0p
+         J9JQ==
+X-Gm-Message-State: AOAM5315xYKsprPju4JXpAPcTEY4y08Zd6D81mNDuLwFyj7OdeAudL5v
+	QKBjHBvW/yDBIjupUo0EGf8BcEJutA==
+X-Google-Smtp-Source: ABdhPJyI5AvPihK6ZnPDWgmdkvKFOrVo/w859xAmb33XpJy9pkRwfhNZiFIW76PqstZoFJYqbtSTmsxxSA==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:9caa:cc34:599f:ecd4])
+ (user=elver job=sendgmr) by 2002:a5d:4c88:: with SMTP id z8mr16383561wrs.209.1643620061954;
+ Mon, 31 Jan 2022 01:07:41 -0800 (PST)
+Date: Mon, 31 Jan 2022 10:05:20 +0100
+Message-Id: <20220131090521.1947110-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH v2 1/2] stack: Introduce CONFIG_RANDOMIZE_KSTACK_OFFSET
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Thomas Gleixner <tglx@linutronix.de>, Kees Cook <keescook@chromium.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
+	Elena Reshetova <elena.reshetova@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-TO: steven@liquorix.net
+The randomize_kstack_offset feature is unconditionally compiled in when
+the architecture supports it.
 
-tree:   https://github.com/zen-kernel/zen-kernel 5.16/zen-sauce
-head:   157e1814f25ab399070c421a96cdbf657f66a097
-commit: 5a57b88b7dd651b2e37febf06b868d60720e8a5f [14/22] ZEN: PCI: Add Intel remapped NVMe device support
-config: riscv-buildonly-randconfig-r001-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311600.S6xTWRLP-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/zen-kernel/zen-kernel/commit/5a57b88b7dd651b2e37febf06b868d60720e8a5f
-        git remote add zen https://github.com/zen-kernel/zen-kernel
-        git fetch --no-tags zen 5.16/zen-sauce
-        git checkout 5a57b88b7dd651b2e37febf06b868d60720e8a5f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+To add constraints on compiler versions, we require a dedicated Kconfig
+variable. Therefore, introduce RANDOMIZE_KSTACK_OFFSET.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Furthermore, this option is now also configurable by EXPERT kernels:
+while the feature is supposed to have zero performance overhead when
+disabled, due to its use of static branches, there are few cases where
+giving a distribution the option to disable the feature entirely makes
+sense. For example, in very resource constrained environments, which
+would never enable the feature to begin with, in which case the
+additional kernel code size increase would be redundant.
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid: .text+0xe): relocation R_RISCV_HI20 out of range: 529300 is not in [-524288, 524287]; references .L.str
-   >>> referenced by cpu.c
-   >>> defined in arch/riscv/built-in.a(kernel/cpu.o)
-
+Signed-off-by: Marco Elver <elver@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/Kconfig                     | 23 ++++++++++++++++++-----
+ include/linux/randomize_kstack.h |  5 +++++
+ init/main.c                      |  2 +-
+ 3 files changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 678a80713b21..2cde48d9b77c 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1159,16 +1159,29 @@ config HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+ 	  to the compiler, so it will attempt to add canary checks regardless
+ 	  of the static branch state.
+ 
+-config RANDOMIZE_KSTACK_OFFSET_DEFAULT
+-	bool "Randomize kernel stack offset on syscall entry"
++config RANDOMIZE_KSTACK_OFFSET
++	bool "Support for randomizing kernel stack offset on syscall entry" if EXPERT
++	default y
+ 	depends on HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+ 	help
+ 	  The kernel stack offset can be randomized (after pt_regs) by
+ 	  roughly 5 bits of entropy, frustrating memory corruption
+ 	  attacks that depend on stack address determinism or
+-	  cross-syscall address exposures. This feature is controlled
+-	  by kernel boot param "randomize_kstack_offset=on/off", and this
+-	  config chooses the default boot state.
++	  cross-syscall address exposures.
++
++	  The feature is controlled via the "randomize_kstack_offset=on/off"
++	  kernel boot param, and if turned off has zero overhead due to its use
++	  of static branches (see JUMP_LABEL).
++
++	  If unsure, say Y.
++
++config RANDOMIZE_KSTACK_OFFSET_DEFAULT
++	bool "Default state of kernel stack offset randomization"
++	depends on RANDOMIZE_KSTACK_OFFSET
++	help
++	  Kernel stack offset randomization is controlled by kernel boot param
++	  "randomize_kstack_offset=on/off", and this config chooses the default
++	  boot state.
+ 
+ config ARCH_OPTIONAL_KERNEL_RWX
+ 	def_bool n
+diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
+index bebc911161b6..91f1b990a3c3 100644
+--- a/include/linux/randomize_kstack.h
++++ b/include/linux/randomize_kstack.h
+@@ -2,6 +2,7 @@
+ #ifndef _LINUX_RANDOMIZE_KSTACK_H
+ #define _LINUX_RANDOMIZE_KSTACK_H
+ 
++#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+ #include <linux/kernel.h>
+ #include <linux/jump_label.h>
+ #include <linux/percpu-defs.h>
+@@ -50,5 +51,9 @@ void *__builtin_alloca(size_t size);
+ 		raw_cpu_write(kstack_offset, offset);			\
+ 	}								\
+ } while (0)
++#else /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
++#define add_random_kstack_offset()		do { } while (0)
++#define choose_random_kstack_offset(rand)	do { } while (0)
++#endif /* CONFIG_RANDOMIZE_KSTACK_OFFSET */
+ 
+ #endif
+diff --git a/init/main.c b/init/main.c
+index 65fa2e41a9c0..560f45c27ffe 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -853,7 +853,7 @@ static void __init mm_init(void)
+ 	pti_init();
+ }
+ 
+-#ifdef CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
++#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+ DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
+ 			   randomize_kstack_offset);
+ DEFINE_PER_CPU(u32, kstack_offset);
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
+
