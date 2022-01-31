@@ -1,42 +1,41 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9EF2CA2
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 07:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BE32CA2
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 08:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643613075; x=1675149075;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TfGiHLZjM4JIeY8ow/1UCu87qM9S1FgtBL6oAE8kFnc=;
-  b=KN8LHF4wHd1SB84tq9SYf9D6Jw+0iaLjmFJNpv8CjJk+epGLzA2Y9rtZ
-   5I/uHh6+UaMrXt6YwIaYRY6fe2xp3mtISAx5pFydYl/SQvEuixuzPC8b/
-   Kr+bzwAAdQW+tYY3k29qPbhT/35vTkj4uY2AcF0HHDm1LR5IiV3hXjuFe
-   0WGnLE3YrEjxS/joKuFyC2TJopuH3YxDRlVvRI4xcKbrt/sH21WQtBxCA
-   L+/eAIf0NSruv44Ao4t6mKVTLdABh6iAsCNgdSjCvY1RNZXZa2lU0UMix
-   KAIU5KxlQiunc55PRpb3xSdvIIhM33kdtyerqgVzdUOgpU/PuE5INZWDX
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="333769609"
+  t=1643617337; x=1675153337;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=HvKL1ANkp3O/ofG2q+DcFLRBHxbbWj0sX9yMt6Mqt3Q=;
+  b=IwQnB4z6upCCVxy5H8BNZaV4w+ctNa7nzg59TeA9mcnNxdRbDSNWtGXz
+   tRjf1CRnS0b7IYnfRH7wQXFE6OO//+svvPgPbYyekfGXrWn+aiXykI2pm
+   NLNqJsuq29ZUFCZH9A9LnNwRnMO1Iothuh+VCLkOKZrxpDozhjFFZuSad
+   siOFqoeWXFDiEcuwpIPEnC8eXhaRWaJq9ehizYmmsbLAPH5CEB2qrRxD4
+   J9N37BU0QpUebKAmR8QteZnJnzZhxbKr5qu1DhU5UNYc9kdgIoGKggSCA
+   /zlzB0PGiYIakoRwxtqOfKBEihbHnH6phjFsuXxIahJyeaEj3X7BTgDZh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247374233"
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="333769609"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 23:11:15 -0800
+   d="scan'208";a="247374233"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 00:22:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="478985543"
+   d="scan'208";a="522565661"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jan 2022 23:11:13 -0800
+  by orsmga007.jf.intel.com with ESMTP; 31 Jan 2022 00:22:15 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEQqH-000RdB-AY; Mon, 31 Jan 2022 07:11:13 +0000
-Date: Mon, 31 Jan 2022 15:10:43 +0800
+	id 1nERx1-000Rgs-7q; Mon, 31 Jan 2022 08:22:15 +0000
+Date: Mon, 31 Jan 2022 16:22:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm-platforms:irq/irq_chip_ro 3/9]
- drivers/irqchip/irq-mvebu-pic.c:74:2: error: implicit declaration of
- function 'seq_printf'
-Message-ID: <202201311558.nL1CN3DT-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [zen:5.16/zen-sauce 14/22] ld.lld: error:
+ arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid:
+ .text+0xe): relocation R_RISCV_HI20 out of range: 529300 is not in [-524288,
+ 524287]; references .L.str
+Message-ID: <202201311600.S6xTWRLP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,45 +46,34 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/irq_chip_ro
-head:   f63a5ded3ea0cd2c587db00f89d219789fbee683
-commit: a57739a1ce5301e34704447de96205450c3bf87d [3/9] irqchip/mvebu-pic: Switch to dynamic chip name output
-config: arm64-randconfig-r015-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311558.nL1CN3DT-lkp@intel.com/config)
+TO: steven@liquorix.net
+
+tree:   https://github.com/zen-kernel/zen-kernel 5.16/zen-sauce
+head:   157e1814f25ab399070c421a96cdbf657f66a097
+commit: 5a57b88b7dd651b2e37febf06b868d60720e8a5f [14/22] ZEN: PCI: Add Intel remapped NVMe device support
+config: riscv-buildonly-randconfig-r001-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311600.S6xTWRLP-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=a57739a1ce5301e34704447de96205450c3bf87d
-        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
-        git fetch --no-tags arm-platforms irq/irq_chip_ro
-        git checkout a57739a1ce5301e34704447de96205450c3bf87d
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/zen-kernel/zen-kernel/commit/5a57b88b7dd651b2e37febf06b868d60720e8a5f
+        git remote add zen https://github.com/zen-kernel/zen-kernel
+        git fetch --no-tags zen 5.16/zen-sauce
+        git checkout 5a57b88b7dd651b2e37febf06b868d60720e8a5f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-mvebu-pic.c:74:2: error: implicit declaration of function 'seq_printf' [-Werror,-Wimplicit-function-declaration]
-           seq_printf(p, "%s", dev_name(&pic->pdev->dev));
-           ^
-   1 error generated.
-
-
-vim +/seq_printf +74 drivers/irqchip/irq-mvebu-pic.c
-
-    69	
-    70	static void mvebu_pic_print_chip(struct irq_data *d, struct seq_file *p)
-    71	{
-    72		struct mvebu_pic *pic = irq_data_get_irq_chip_data(d);
-    73	
-  > 74		seq_printf(p, "%s", dev_name(&pic->pdev->dev));
-    75	}
-    76	
+>> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid: .text+0xe): relocation R_RISCV_HI20 out of range: 529300 is not in [-524288, 524287]; references .L.str
+   >>> referenced by cpu.c
+   >>> defined in arch/riscv/built-in.a(kernel/cpu.o)
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
