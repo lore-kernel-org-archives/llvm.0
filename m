@@ -1,47 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B972CA5
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 14:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD34F2CA5
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 15:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643640631; x=1675176631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kjxgvtg0vA5ioKCecgDjmRu4lWOUQ43UzEpU3sKhBqI=;
-  b=KQJEz2lbgrfel8RSRzF3KejTZ89wZxMN6jiIXJ6pV59DP4ci9FYtOQMW
-   CLbmYaeSFG2BJW3dVfPGGYB6j8d8DRmkhueh3Xm7Qak6ulqJd4CabI5bs
-   0QjEbC8403R0Aisxv6+MKum22/fTsvlZqaSBAK04zIZZHZeSdhXTfPFFw
-   ukauP5qqq47BhBZ7aoAc/CKZ3qfUT6DJZeAaPrj03YCfM/muz6AVFBoFz
-   Wu+jC1X70wlLylYPFSDc67nnUwc2P5Wv7RT9cB4boaoIt/YJIWv+m/041
-   HT5dZewpFMWMaNhPNxHcc5w5vjQ/cZ6XDHdHCnvH+aUrJYinPhZkv2C1o
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247690358"
+  t=1643641229; x=1675177229;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y5Ym/Q75yZiBpCCGoGsOHVJVIzTEDEFIfRQ+YKuNitw=;
+  b=aBXfglylUFjKff6hXIqgJMIJDAkVXm0Wx4iAPGNSxQ5dZ321Wg2GBBFw
+   F3v5askuvEr2ygi1MmkQUQrHaC9/tQCb1qVaqmPWgXRlYNWPTmH+c4ut9
+   BFO//I7ewscTvAd+aKFMByWjg7xnQy2DQWVTrrfOpCU7TGujcM0KXv/Pp
+   PIbf9vdgOJqTymvhVdyQDM1sgYgGmOtUP/vt3uo5w6gvVGRsovtCPBZqt
+   /dT+vRaFQQp839XB58G8rEM2ugr7raVF2auyNhfBni50IxYm15QgsRro5
+   XWdROyC+/UMEx4iCD264nYmAXHhPMUDpUh1oBgf1P0mbbUyJhzQGi4ieF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308207489"
 X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="247690358"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 06:50:29 -0800
+   d="scan'208";a="308207489"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 07:00:29 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="534193833"
+   d="scan'208";a="479180300"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Jan 2022 06:50:27 -0800
+  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2022 07:00:27 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEY0g-000S1u-Pg; Mon, 31 Jan 2022 14:50:26 +0000
-Date: Mon, 31 Jan 2022 22:49:34 +0800
+	id 1nEYAM-000S2T-Um; Mon, 31 Jan 2022 15:00:26 +0000
+Date: Mon, 31 Jan 2022 22:59:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pratyush Yadav <p.yadav@ti.com>, Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pratyush Yadav <p.yadav@ti.com>,
-	Tudor Ambarus <tudor.ambarus@microchip.com>,
-	Michael Walle <michael@walle.cc>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Takahiro Kuwano <tkuw584924@gmail.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
-Message-ID: <202201312233.QPZMOWRk-lkp@intel.com>
-References: <20220131114508.1028306-1-p.yadav@ti.com>
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm-platforms:irq/irq_chip_ro 5/20]
+ drivers/irqchip/irq-versatile-fpga.c:188:9: error: use of undeclared
+ identifier 'irq_start'
+Message-ID: <202201312227.fAor6gZc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,78 +45,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131114508.1028306-1-p.yadav@ti.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Pratyush,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Pratyush-Yadav/spi-spi-mem-check-if-data-buffers-are-on-stack/20220131-195211
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20220131/202201312233.QPZMOWRk-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/irq_chip_ro
+head:   3feae85f6c2365d60a02d167b72a3e7410f82160
+commit: b5c236add4c570b808f3e670cd0073490f03985a [5/20] irqchip/versatile-fpga: Switch to dynamic chip name output
+config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220131/202201312227.fAor6gZc-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/0b93f667f8445e744ca4b8f80ce9a1ad4c981a2e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pratyush-Yadav/spi-spi-mem-check-if-data-buffers-are-on-stack/20220131-195211
-        git checkout 0b93f667f8445e744ca4b8f80ce9a1ad4c981a2e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=b5c236add4c570b808f3e670cd0073490f03985a
+        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
+        git fetch --no-tags arm-platforms irq/irq_chip_ro
+        git checkout b5c236add4c570b808f3e670cd0073490f03985a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/spi/spi-mem.c:212:6: error: implicit declaration of function 'object_is_on_stack' [-Werror,-Wimplicit-function-declaration]
-               object_is_on_stack(op->data.buf.in))
-               ^
+>> drivers/irqchip/irq-versatile-fpga.c:188:9: error: use of undeclared identifier 'irq_start'
+                           if (!irq_start)
+                                ^
    1 error generated.
 
 
-vim +/object_is_on_stack +212 drivers/spi/spi-mem.c
+vim +/irq_start +188 drivers/irqchip/irq-versatile-fpga.c
 
-   193	
-   194	static int spi_mem_check_op(const struct spi_mem_op *op)
-   195	{
-   196		if (!op->cmd.buswidth || !op->cmd.nbytes)
-   197			return -EINVAL;
-   198	
-   199		if ((op->addr.nbytes && !op->addr.buswidth) ||
-   200		    (op->dummy.nbytes && !op->dummy.buswidth) ||
-   201		    (op->data.nbytes && !op->data.buswidth))
-   202			return -EINVAL;
-   203	
-   204		if (!spi_mem_buswidth_is_valid(op->cmd.buswidth) ||
-   205		    !spi_mem_buswidth_is_valid(op->addr.buswidth) ||
-   206		    !spi_mem_buswidth_is_valid(op->dummy.buswidth) ||
-   207		    !spi_mem_buswidth_is_valid(op->data.buswidth))
-   208			return -EINVAL;
-   209	
-   210		/* Buffers must be DMA-able. */
-   211		if (op->data.dir == SPI_MEM_DATA_IN &&
- > 212		    object_is_on_stack(op->data.buf.in))
-   213			return -EINVAL;
-   214	
-   215		if (op->data.dir == SPI_MEM_DATA_OUT &&
-   216		    object_is_on_stack(op->data.buf.out))
-   217			return -EINVAL;
-   218	
-   219		return 0;
-   220	}
-   221	
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  161  
+b5c236add4c570 drivers/irqchip/irq-versatile-fpga.c Marc Zyngier    2022-01-30  162  static void __init fpga_irq_init(void __iomem *base, int parent_irq,
+b5c236add4c570 drivers/irqchip/irq-versatile-fpga.c Marc Zyngier    2022-01-30  163  				 u32 valid, struct device_node *node)
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  164  {
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  165  	struct fpga_irq_data *f;
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  166  	int i;
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  167  
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  168  	if (fpga_irq_id >= ARRAY_SIZE(fpga_irq_devices)) {
+e6423f8be51bab drivers/irqchip/irq-versatile-fpga.c Paul Bolle      2013-03-25  169  		pr_err("%s: too few FPGA IRQ controllers, increase CONFIG_VERSATILE_FPGA_IRQ_NR\n", __func__);
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  170  		return;
+c41b16f8c9d9dc arch/arm/plat-versatile/fpga-irq.c   Russell King    2011-01-19  171  	}
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  172  	f = &fpga_irq_devices[fpga_irq_id];
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  173  	f->base = base;
+b5c236add4c570 drivers/irqchip/irq-versatile-fpga.c Marc Zyngier    2022-01-30  174  	f->np = node;
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  175  	f->valid = valid;
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  176  
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  177  	if (parent_irq != -1) {
+fcd3c5bee16a2c drivers/irqchip/irq-versatile-fpga.c Thomas Gleixner 2015-06-21  178  		irq_set_chained_handler_and_data(parent_irq, fpga_irq_handle,
+fcd3c5bee16a2c drivers/irqchip/irq-versatile-fpga.c Thomas Gleixner 2015-06-21  179  						 f);
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  180  	}
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  181  
+b5c236add4c570 drivers/irqchip/irq-versatile-fpga.c Marc Zyngier    2022-01-30  182  	f->domain = irq_domain_add_linear(node, fls(valid),
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  183  					  &fpga_irqdomain_ops, f);
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  184  
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  185  	/* This will allocate all valid descriptors in the linear case */
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  186  	for (i = 0; i < fls(valid); i++)
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  187  		if (valid & BIT(i)) {
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27 @188  			if (!irq_start)
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  189  				irq_create_mapping(f->domain, i);
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  190  			f->used_irqs++;
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  191  		}
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  192  
+bdd272cbb97a66 drivers/irqchip/irq-versatile-fpga.c Linus Walleij   2013-10-04  193  	pr_info("FPGA IRQ chip %d \"%s\" @ %p, %u irqs",
+b5c236add4c570 drivers/irqchip/irq-versatile-fpga.c Marc Zyngier    2022-01-30  194  		fpga_irq_id, node->name, base, f->used_irqs);
+bdd272cbb97a66 drivers/irqchip/irq-versatile-fpga.c Linus Walleij   2013-10-04  195  	if (parent_irq != -1)
+bdd272cbb97a66 drivers/irqchip/irq-versatile-fpga.c Linus Walleij   2013-10-04  196  		pr_cont(", parent IRQ: %d\n", parent_irq);
+bdd272cbb97a66 drivers/irqchip/irq-versatile-fpga.c Linus Walleij   2013-10-04  197  	else
+bdd272cbb97a66 drivers/irqchip/irq-versatile-fpga.c Linus Walleij   2013-10-04  198  		pr_cont("\n");
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  199  
+3a6ca8c5c9e310 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-10-27  200  	fpga_irq_id++;
+9bc1503185a099 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-09-06  201  }
+3108e6ab21a9b9 arch/arm/plat-versatile/fpga-irq.c   Linus Walleij   2012-04-28  202  
+
+:::::: The code at line 188 was first introduced by commit
+:::::: 3a6ca8c5c9e310d26fe090ac7c777c269661f0e6 ARM: plat-versatile: use simple irqdomain for FPGA IRQ
+
+:::::: TO: Linus Walleij <linus.walleij@linaro.org>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
