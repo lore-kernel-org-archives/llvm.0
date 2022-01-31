@@ -1,106 +1,118 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3572C82
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 21:15:30 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id k17so13720267plk.0
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 13:15:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B29E3FE0
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 21:34:48 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id bu18so29665367lfb.5
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 13:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cxXm9S9rBUGO+n/qf1n3on2rs5DZHI4UmQ2+ms2iYP4=;
-        b=Qo7cE3plH59PbdtmImyac1lX+en/JDRgSaa4LMeLw6ph0k1EzlPT/BWVNjItFxgULh
-         uYEe69YWJNHzuLftpsMRKtLU9Yx+i9KI7fKy9zSLAwleJOGwAdqbSQ8bIZt8/KNOt0iP
-         XZyBHj77OOJEJ+b4ZrtXZqGJFZNNPAs6Aio2E=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fY293kK68vvdcex/3vE1UuGsMyzMf3hMzbBW0CECXWo=;
+        b=sbuqsKlKtbosk9vnW8XyVA7uztBNuHZfZtcNYRiovUgAycS22JZkJ7MxOjZiMGYokE
+         xhXCNkbCRNT88OXvTMndIJGfh2RMckU46x0hrSqGUrxA1AJFOX8bMhXN3oqNP8+elCU0
+         lvDAlF8N3I1u2nhtJaNaqw50gxUEox/7eGGrd2H8M1MqUxiEK4xBNMrtaG72GFm6gQLD
+         qpV2iT3ZgC3M5XpLy/d3zAQeGz90PRYlxIDLCQX2VGb4CyN+fEuNTon7uZ+TdCW3h+Lm
+         bOazphReVxD2+MfnXlHtsZydG2omK43C943jxFBmLXKyDFoYPGqR1UCZxsGliywnVtxc
+         xU9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cxXm9S9rBUGO+n/qf1n3on2rs5DZHI4UmQ2+ms2iYP4=;
-        b=oiYmQPTzNeOqQPB7KYcYHT4OxLE2iRzJdS5QKmKSPhT2ZkK4u0rFBE0LRpJw1HBWSy
-         uEw41xykGsfGoVlZ9DWDZ8ikcUq/afASSvkG8UHfsy9LV1+pevMkUX3U0zD+Crl7qDai
-         j1ixDx53Y/zDy7OBPY9Dn+xyxZWXpszllyhoq/jCvXpRZZ2HBZrduGwb2kxplfJ0JBFT
-         +hq8YPjmmJGkp0tfhx9XKN8tnxiWxqvPyRwBsRhcaG7b/d324964u2QNKch+pnlyZ0Pv
-         kDodoezs4eGoZnn3YypQZtEy4Birbrf8wgivV0pr6mP/r+/ljzFeJhhAjSevTIKs8awD
-         R+0w==
-X-Gm-Message-State: AOAM530RaexmwtU8LFPhbZA8uQVfC6CUBF6EojJMvullgnRoX1RNxQcN
-	BD+bNfWvc2uBgRpW9KQvRE+bFw==
-X-Google-Smtp-Source: ABdhPJyul6M9uc+iYppo5Cuy0vy4tnGlURb4dMZAIkzric/Dse5pGkQPhJdFSZKL4eflCMSBcXWnew==
-X-Received: by 2002:a17:902:d509:: with SMTP id b9mr22602105plg.3.1643663730410;
-        Mon, 31 Jan 2022 13:15:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mi18sm219840pjb.35.2022.01.31.13.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:15:30 -0800 (PST)
-Date: Mon, 31 Jan 2022 13:15:29 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] stack: Constrain and fix stack offset
- randomization with Clang builds
-Message-ID: <202201311315.B9FDD0A@keescook>
-References: <20220131090521.1947110-1-elver@google.com>
- <20220131090521.1947110-2-elver@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fY293kK68vvdcex/3vE1UuGsMyzMf3hMzbBW0CECXWo=;
+        b=0+OaP8dvqAWqf2mlDw6u2GzGZjGqe7fIQ4HCDtRwBAtMmLMFA9j57w/jSiq/kAA5a+
+         FzsWvBcQo/mfTYhLvWW+OKY+zZrAFz6LvFDYLtFcq1Y4/nHYATgopKM795LSVD/ZAnXY
+         5f6YgaVftwGx3vpCpvguc1dvJVbE8+xexOLfbdo9rbYJQ5QEHt5yAwkln27/a6a0fXQ7
+         Vj9nOAxOHNc/SFr5MosMZxlSGxEAaxseYgJQ0TjffpVzSmIfpp7VQW998kiJN42XuGK9
+         hkyz+8nS9W8BMMQUq87Nh5+QsFBryaAzCdhQwHpPEwjNd7Tc2fIwYYnC0ZUGUPDR3LVF
+         s1Tw==
+X-Gm-Message-State: AOAM530IHu0FaSA8IhJGu/7mFou/Mi5Wtou0fkpxjlfmJ4CZYTS6p6w3
+	tUWdc10Jg3Jn6mpbH+z1rL/jPt7cENjDN4VuXH9n3g==
+X-Google-Smtp-Source: ABdhPJzxDldmaLxKkITPTgpnzqLDLhm+/u9GBYoFF9PlNaTLN1bwfw05dn5ekB7WpU3SJDjImTN/TnaMqBt9M4u2EEc=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr17500223lfr.444.1643664886497;
+ Mon, 31 Jan 2022 13:34:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131090521.1947110-2-elver@google.com>
+References: <20220130181616.420092-1-keescook@chromium.org>
+ <CAKwvOdmETY-j9B9vms4d31kAc0xb1yE902KijiH2baY5-M=fLQ@mail.gmail.com> <202201311306.0FC6E303@keescook>
+In-Reply-To: <202201311306.0FC6E303@keescook>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 31 Jan 2022 13:34:34 -0800
+Message-ID: <CAKwvOdnXKfhJQimh6rLe6nU2NrrovbKDGqujinqptoyHyiTKYQ@mail.gmail.com>
+Subject: Re: [PATCH] fortify: Update compile-time tests for Clang 14
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jan 31, 2022 at 10:05:21AM +0100, Marco Elver wrote:
-> All supported versions of Clang perform auto-init of __builtin_alloca()
-> when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
-> 
-> add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> enabled, add_random_kstack_offset() will auto-init that unused portion
-> of the stack used to add an offset.
-> 
-> There are several problems with this:
-> 
-> 	1. These offsets can be as large as 1023 bytes. Performing
-> 	   memset() on them isn't exactly cheap, and this is done on
-> 	   every syscall entry.
-> 
-> 	2. Architectures adding add_random_kstack_offset() to syscall
-> 	   entry implemented in C require them to be 'noinstr' (e.g. see
-> 	   x86 and s390). The potential problem here is that a call to
-> 	   memset may occur, which is not noinstr.
-> 
-> A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> 
->  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> 
-> Clang 14 (unreleased) will introduce a way to skip alloca initialization
-> via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
-> 
-> Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
-> auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
-> __builtin_alloca_uninitialized() if the compiler provides it, as is done
-> by Clang 14.
-> 
-> Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
-> Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
-> Signed-off-by: Marco Elver <elver@google.com>
+On Mon, Jan 31, 2022 at 1:09 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Jan 31, 2022 at 11:09:27AM -0800, Nick Desaulniers wrote:
+> > On Sun, Jan 30, 2022 at 10:16 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Clang 14 introduces support for compiletime_assert(). Update the
+> > > compile-time warning regex to catch Clang's variant of the warning text
+> > > in preparation for Clang supporting CONFIG_FORTIFY_SOURCE.
+> >
+> > https://twitter.com/ifosteve/status/1190348262500421634?lang=en
+> > error messages can change over time. More thoughts below.
+>
+> Sure, but I don't want the compile-time checks to silently regress,
+> which requires looking specifically for the error.
+>
+> > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Cc: linux-hardening@vger.kernel.org
+> > > Cc: llvm@lists.linux.dev
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > > I'm splitting this patch out of the main Clang FORTIFY enabling patch.
+> > > ---
+> > >  scripts/test_fortify.sh | 8 ++++++--
+> > >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
+> > > index a4da365508f0..c2688ab8281d 100644
+> > > --- a/scripts/test_fortify.sh
+> > > +++ b/scripts/test_fortify.sh
+> > > @@ -46,8 +46,12 @@ if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
+> > >                 status="warning: unsafe ${FUNC}() usage lacked '$WANT' symbol in $IN"
+> > >         fi
+> > >  else
+> > > -       # If the build failed, check for the warning in the stderr (gcc).
+> > > -       if ! grep -q -m1 "error: call to .\b${WANT}\b." "$TMP" ; then
+> > > +       # If the build failed, check for the warning in the stderr.
+> > > +       # GCC:
+> > > +       # ./include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+> > > +       # Clang 14:
+> > > +       # ./include/linux/fortify-string.h:316:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> > > +       if ! grep -Eq -m1 "error: call to .?\b${WANT}\b.?" "$TMP" ; then
+> >
+> > Doesn't this depend on -Werror being set? I guess it did so before
+> > hand, too, but couldn't I unset CONFIG_WERROR then this check would
+> > still fail (since instead of `error:` we'd have `warning:`)? If we
+> > used __attribute__((error(""))) then this would always be an error.
+> > Right now, it is only because -Werror is set promoting the warning
+> > diagnostic to an error.
+>
+> Right, see earlier up in the script. "-Werror" is explicitly set:
+>
+> line 40: if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
 
-Thanks for the tweaks; this looks good to me now.
+Yep, I missed that.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Acked-by: Kees Cook <keescook@chromium.org>
+>
+> --
+> Kees Cook
+
+
 
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers
