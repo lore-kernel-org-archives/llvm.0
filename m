@@ -1,54 +1,44 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E7829CA
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 14:10:55 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id c192so10296838wma.4
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 06:10:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6dCXZo48naQwOUhH8exvYmXyz16ZlvGpfz7M4SorczA=;
-        b=LtP9aG592xZgjK6C2a9pl137xzJWzPaoR2KjvWe1Fv+2SmfXKrmeTYeLdiVGu630Sm
-         5hRWBG/0PdVkKihEhIHjwM3lj2pkSd8G4eO59EKA+tHQ+e3PItENr3GriYU/+GxaV0RJ
-         lVJQv2CyNdhJKpS/NmyziFwWtNdqmGLsQFrZCg9pj0K4I7jnm1pQG8val7yBOqXsmLRW
-         PNMrmpRn7BVEYGiKwNRLpeMW8gDi1gF5d/AWVAyuxnQZd+mg/0n7b28Y4WBIuLNd9V0s
-         NgB1/ps6yF38NM6736h3jqcVw50IlcTN/UJzpdyRUwNg33h57R3pg6mtKuGIG9j1rJKM
-         faPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6dCXZo48naQwOUhH8exvYmXyz16ZlvGpfz7M4SorczA=;
-        b=2q2gCNit2RvenIOdDOja8S052l9Ze3ev/943GmhmXy0dJNAGUPOKb3tPSqSCy0L8nL
-         xfaYzcEsJ714o0Mi4mFxrJ0fh4U4nlDwvRuwnxrR2qoqDPFOYfv7pZfYBhdDN6SpYBuE
-         IQ/MCTv/pkigiNCzKX3BpjhA+KGicyuQ9tjBx8ZIt1CwtBL3dX+MM7jmsxGsoiQsEFle
-         SFxL84JUbz4oPxy8Egr4Ec8q6KB6FtdK+nNOVJytHCwQUeQOQuhr7STh7ci1ehav2Tq2
-         tQEQns38alTi+blZqBYZ77WKSyG4JPvh6fgd3HoiYJnAMxVojmbV3rlPE8FZN5eDOpBN
-         5ubQ==
-X-Gm-Message-State: AOAM531Olk/7pxcbPgeeT0r3DIp22xCryQ7p4ESYa1wyJ83Q3YNnMMBc
-	LqV1Kloi1lQNv+1OBho5G8V2IA==
-X-Google-Smtp-Source: ABdhPJy3OERDNAZRYf8Yb6gVLnQDGrGaaDZmV+GvWsDoZBjzs9ZmBZhgiXD/APvrFWls1sP7u4k5EQ==
-X-Received: by 2002:a05:600c:3552:: with SMTP id i18mr7684766wmq.21.1643638253428;
-        Mon, 31 Jan 2022 06:10:53 -0800 (PST)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id 21sm9284582wmk.45.2022.01.31.06.10.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 06:10:53 -0800 (PST)
-Date: Mon, 31 Jan 2022 14:10:30 +0000
-From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	shuah@kernel.org, ndesaulniers@google.com, kafai@fb.com,
-	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, quentin@isovalent.com, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 1/6] tools: Help cross-building with clang
-Message-ID: <Yfft1sqfXGTAjwJ8@myrica>
-References: <20211216163842.829836-1-jean-philippe@linaro.org>
- <20211216163842.829836-2-jean-philippe@linaro.org>
- <YfSUAPnZX/wP8U+p@archlinux-ax161>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFE329CA
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 14:29:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643639369; x=1675175369;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t27D63dmU5/P6d/whQMsjWjh1WkpG0ASB00upGtkJzY=;
+  b=KJ1C0/cOWHlPz8jRJuG0zJBf2vOGB8l+jypR1sE1w2YZqTwDMre9760m
+   OYpHDE6UaKcOoThgJqs+RT8cWB5CmKVKJV4Muk3kXwLMmvfRZ3bktYqnE
+   xboE1cF0pt4BTMwzBDuTj4J05ZK4JpO0HFg9FP0RfcN9oa+QARwq0ab8P
+   wv563qbKy0l045A4qJTcQ5DblwSMsev+0+llePhoNDhVEoxXW3nTcEkY1
+   ObQnTL1q8Nmzajcrdob2e7UCP6G9M4kkUjHZe9YWFPyKANcrZ9fcQnX/M
+   0UqdcTyob4DqLYmDYLHOyNgsedTLYNE3tIUScL55qc/5K/YThIlEFIPMM
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="234860993"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="234860993"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 06:29:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="768603543"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Jan 2022 06:29:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEXgM-000Rzt-9p; Mon, 31 Jan 2022 14:29:26 +0000
+Date: Mon, 31 Jan 2022 22:29:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom <support@vamrs.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 29/62]
+ drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison
+ of constant 36507222016 with expression of type 'unsigned long' is always
+ false
+Message-ID: <202201312255.K6MgEaRZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,52 +47,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfSUAPnZX/wP8U+p@archlinux-ax161>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Nathan,
+tree:   https://github.com/esmil/linux visionfive
+head:   8c758048edfd830baceb991167131c9d55786544
+commit: 601a2f4e945153ebae8645596eda50ea39369c88 [29/62] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220131/202201312255.K6MgEaRZ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/601a2f4e945153ebae8645596eda50ea39369c88
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 601a2f4e945153ebae8645596eda50ea39369c88
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
 
-On Fri, Jan 28, 2022 at 06:10:24PM -0700, Nathan Chancellor wrote:
-> > diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> > index 071312f5eb92..b0be5f40a3f1 100644
-> > --- a/tools/scripts/Makefile.include
-> > +++ b/tools/scripts/Makefile.include
-> > @@ -87,7 +87,18 @@ LLVM_STRIP	?= llvm-strip
-> >  
-> >  ifeq ($(CC_NO_CLANG), 1)
-> >  EXTRA_WARNINGS += -Wstrict-aliasing=3
-> > -endif
-> > +
-> > +else ifneq ($(CROSS_COMPILE),)
-> > +CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
-> > +GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
-> 
-> Apologies for noticing this so late, I only ran into this recently.
-> 
-> This line causes a warning when running 'make clean' when
-> '$(CROSS_COMPILE)gcc' does not exist in PATH. For example:
-> 
-> $ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnu- LLVM=1 LLVM_IAS=0 clean
-> which: no powerpc-linux-gnu-gcc in ($PATH)
-> 
-> I only have powerpc-linux-gnu binutils in my PATH, not GCC, as I am only
-> working with clang.
-> 
-> This happens because of the 'resolve_btfids_clean target', which always
-> runs when running the 'clean' target on an in-tree build (since
-> $(objtree) = $(srctree)).
-> 
-> I tried looking into the best way to fix this but I am not at all
-> familiar with the tools/ build system; would you mind taking a look?
-> I see some machinery at the top of tools/bpf/Makefile for avoiding
-> running some commands under certain commands but I am unsure how to
-> shuffle that around to make everything work.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think it's simpler than that, we should just suppress the errors from
-'which'. It's fine that $(CROSS_COMPILE)gcc doesn't exist and
-$(GCC_TOOLCHAIN_DIR) is empty, but 'which' should keep quiet about it.
-I did test this patch with cross-build and no gcc, but Debian's 'which' is
-quiet by default so I missed the error. I'll send a fix shortly.
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Jean
+   drivers/soc/sifive/sifive_l2_cache.c:152:3: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+>> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
+
+vim +142 drivers/soc/sifive/sifive_l2_cache.c
+
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+ > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
