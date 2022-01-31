@@ -1,47 +1,47 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966E72C82
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 21:09:42 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id e16so13405229pgn.4
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 13:09:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1042C82
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 21:13:31 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id s16so13302125pgs.13
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 13:13:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=QkhfbO5ZuAnM+4vhyHXHVmq11kG0AqyRd/tsjcMAl14=;
-        b=F/nlSE/yNJSASXLMWSaLGYR1yLL+hmZl/FP19SuvRwCudcOLOFjyjyVSys+cJHT9bd
-         DiZvJM5FOigFZ+06vJkHc2u3C3fnV1/DSbQTDMK18auGH7E+/aYpx456r1n6VPV2cenW
-         5C7lLsPmpGYiN/CdnhIbAxw1RAA+Yh655yk9o=
+        bh=GS7ARrVx7mqa1AsFf3AdkLtLmRc92cKknoJbQi/nsN8=;
+        b=VpMxW+eMio0Wu66eA+trKZ060aIZM8z7jb6VDn7qKwkY/PhFOYC8LO+1DYq2da/FxI
+         JAotv9ZcWLXu2zJrGrqOb3fuimLZxVDvBCd1imtyfHmpGXv3gRKgTceDM1NACLwsxF0a
+         fXSM/pmmRC0yZGBYF92QdQD7GqZ4bK4Fiezbw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QkhfbO5ZuAnM+4vhyHXHVmq11kG0AqyRd/tsjcMAl14=;
-        b=O8pi1nkHRSawRUgiN1UzRLCY//3StjIUH8hdIGyTVMbpFeh/lVaps6g7C4XFcwsesX
-         KjCEv7aFsIJtDZJAR5KwZIyejL7kSZumfh/HIFnTk2g5eF70ugL/qsNbG9549M6JxhTj
-         9rwm4h+cSsbOWVcKGrSF2TFJwaMO5IYHy9qUJ+b1nDai6vAuZoS62gxHfFfqoLhCv5Oy
-         ess3+WJJ9oqTtvft70V+UeDg9KMhtJ32N/ftPi/3XMxUIU0wvDZrqzL89p+YTc7N0RX1
-         3gXYaHuIRjqJbeQktB4ojn7oTnvXozSfsYymM249wmSc0odyqFv75xISwSrx+esYNlFT
-         2AlA==
-X-Gm-Message-State: AOAM532HkSFthwNEeRFv84sb7l5d2rUJrqeGhWX+1nQLLTKLaprvisw0
-	DjTM67241DDukU35UT4pLBF8SQ==
-X-Google-Smtp-Source: ABdhPJwLHNNlfqh8k0yscOHN38ElXx7ca741f/SViX5QRk7Zaq7yJAYAxfp6QboGV6M3GgXg8Lw/Tg==
-X-Received: by 2002:a62:1dcc:: with SMTP id d195mr22080045pfd.4.1643663382057;
-        Mon, 31 Jan 2022 13:09:42 -0800 (PST)
+        bh=GS7ARrVx7mqa1AsFf3AdkLtLmRc92cKknoJbQi/nsN8=;
+        b=oOt8iJPnje+FsVWemOKku8gnPM9A75O3QU/7AnpS0tmLKrq1eL62bK41Fa6riPSJsa
+         XVNIygfY+WzopxTvamIHm7L7gq7qsWlWRYJ2YI1aHoFQRvr1D7svXRYmqANwbtiTwNfT
+         kbUVjWWrq++wo2FOQz3sbohdQhWoAHre7GmRIbwce8jiqmDVXL0XTSNf1f4ABgdPvceQ
+         F1TmifyGXnrEwgVnjXvgt0J5B0wncJ++aBGD3dcpLqFWJXxn+yIyGGhwZzY/V9fX/oN0
+         8Y1hr175gUt2np/+PIHTu1ocLDYc21vwf26SxRt5mKrX+N825dekc4B6BzG+zWPSkNCJ
+         K0Yg==
+X-Gm-Message-State: AOAM533/UA4KKCqVlfFe6YFJLVvphMjo9pWlHZ1PhMzNLOYjTZF9z+fJ
+	ealbtjYj829ni08LCaylDMy2Jg==
+X-Google-Smtp-Source: ABdhPJzxIEXhImcS+G4fX4a7La7yj1Sol7mkyBq+x+m4eA/grNnHBkUexrk8Gwx7zzkYa0bvDq2Fcw==
+X-Received: by 2002:a63:69c8:: with SMTP id e191mr1911222pgc.412.1643663610998;
+        Mon, 31 Jan 2022 13:13:30 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bj7sm228915pjb.9.2022.01.31.13.09.41
+        by smtp.gmail.com with ESMTPSA id y42sm17430367pfw.157.2022.01.31.13.13.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:09:41 -0800 (PST)
-Date: Mon, 31 Jan 2022 13:09:41 -0800
+        Mon, 31 Jan 2022 13:13:30 -0800 (PST)
+Date: Mon, 31 Jan 2022 13:13:30 -0800
 From: Kees Cook <keescook@chromium.org>
 To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fortify: Update compile-time tests for Clang 14
-Message-ID: <202201311306.0FC6E303@keescook>
-References: <20220130181616.420092-1-keescook@chromium.org>
- <CAKwvOdmETY-j9B9vms4d31kAc0xb1yE902KijiH2baY5-M=fLQ@mail.gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4] fortify: Work around Clang inlining bugs
+Message-ID: <202201311309.AFF4A0C@keescook>
+References: <20220130182204.420775-1-keescook@chromium.org>
+ <CAKwvOdmrzO9U9Cu5zB07t1C+Xh-kAzk_F-MisAxsrArhJVhSNw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,59 +50,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdmETY-j9B9vms4d31kAc0xb1yE902KijiH2baY5-M=fLQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmrzO9U9Cu5zB07t1C+Xh-kAzk_F-MisAxsrArhJVhSNw@mail.gmail.com>
 
-On Mon, Jan 31, 2022 at 11:09:27AM -0800, Nick Desaulniers wrote:
-> On Sun, Jan 30, 2022 at 10:16 AM Kees Cook <keescook@chromium.org> wrote:
+On Mon, Jan 31, 2022 at 11:04:36AM -0800, Nick Desaulniers wrote:
+> On Sun, Jan 30, 2022 at 10:22 AM Kees Cook <keescook@chromium.org> wrote:
 > >
-> > Clang 14 introduces support for compiletime_assert(). Update the
-> > compile-time warning regex to catch Clang's variant of the warning text
-> > in preparation for Clang supporting CONFIG_FORTIFY_SOURCE.
-> 
-> https://twitter.com/ifosteve/status/1190348262500421634?lang=en
-> error messages can change over time. More thoughts below.
-
-Sure, but I don't want the compile-time checks to silently regress,
-which requires looking specifically for the error.
-
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: linux-hardening@vger.kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > I'm splitting this patch out of the main Clang FORTIFY enabling patch.
-> > ---
-> >  scripts/test_fortify.sh | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > To enable FORTIFY_SOURCE support for Clang, the kernel must work around
+> > a pair of bugs, related to Clang's inlining:
 > >
-> > diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
-> > index a4da365508f0..c2688ab8281d 100644
-> > --- a/scripts/test_fortify.sh
-> > +++ b/scripts/test_fortify.sh
-> > @@ -46,8 +46,12 @@ if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
-> >                 status="warning: unsafe ${FUNC}() usage lacked '$WANT' symbol in $IN"
-> >         fi
-> >  else
-> > -       # If the build failed, check for the warning in the stderr (gcc).
-> > -       if ! grep -q -m1 "error: call to .\b${WANT}\b." "$TMP" ; then
-> > +       # If the build failed, check for the warning in the stderr.
-> > +       # GCC:
-> > +       # ./include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-> > +       # Clang 14:
-> > +       # ./include/linux/fortify-string.h:316:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> > +       if ! grep -Eq -m1 "error: call to .?\b${WANT}\b.?" "$TMP" ; then
+> > 1) Change all the fortified string APIs into macros with different
+> > inline names to bypass Clang's broken inline-of-a-builtin detection:
+> > https://bugs.llvm.org/show_bug.cgi?id=50322
+> >
+> > 2) Lift all misbehaving __builtin_object_size() calls into the macros
+> > to bypass Clang's broken __builtin_object_size() arguments-of-an-inline
+> > visibility:
+> > https://github.com/ClangBuiltLinux/linux/issues/1401
 > 
-> Doesn't this depend on -Werror being set? I guess it did so before
-> hand, too, but couldn't I unset CONFIG_WERROR then this check would
-> still fail (since instead of `error:` we'd have `warning:`)? If we
-> used __attribute__((error(""))) then this would always be an error.
-> Right now, it is only because -Werror is set promoting the warning
-> diagnostic to an error.
+> ^ mentions a difference in compilers for mode 1. I wonder if this
+> patch could "hoist" the BOS calls into the macro ONLY for mode 1 and
+> not mode 0 usage? i.e. the str* functions, not the mem* functions.
 
-Right, see earlier up in the script. "-Werror" is explicitly set:
+Everything (with a couple exceptions) is using mode 1 after the earlier
+patches in the series. e.g.:
 
-line 40: if "$@" -Werror -c "$IN" -o "$OUT".o 2> "$TMP" ; then
++#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s, \
++		__builtin_object_size(p, 0), __builtin_object_size(q, 0), \
++		__builtin_object_size(p, 1), __builtin_object_size(q, 1), \
++		memcpy)
+
+> It's too late to fix these in clang-13.  If we get a fix in clang-14
+> or later, what does that look like for this header?  Is there a way we
+
+If the bos mode 1 got fixed for Clang 14, this patch would likely be
+dropped and the Clang + FORTIFY version check would be moved to Clang
+14.
+
+> can provide a different header than include/linux/fortify-string.h
+> just for clang-13 (or whatever versions until the above are fixed)?
+
+So much of it would be identical. This macro-ification is least
+invasive, and it's pretty invasive.
+
+> I don't see this series getting backported to stable, where older
+> versions of clang may still be in use.
+
+Right.
+
+> I'm tempted to say "let's get get these 2 fixed in clang-14" but we'll
+> probably have to trade something off the existing TODO list.
+
+Agreed.
 
 -- 
 Kees Cook
