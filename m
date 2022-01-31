@@ -1,42 +1,46 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38CE52C80
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 05:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B453D2C80
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 05:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643607495; x=1675143495;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=slGVfj+eDRLHOSu7OXWwRXmATZU9PbhmXv2LwSOWNWo=;
-  b=fszeJ8Zdgg899FuBrmtRGaMkOSKpAxJKUCN/Hv1l9M6SMI0Q+UhN1m1f
-   fMzit1sXM3GNLib0Z/QZmMq9UVtPuwbSfwGcmM+mXHFLJWMs8Pm+3GSDZ
-   qeKcu8cCPRXWol0Q6GpW0zhdmas7GbrT7FrT3coBKLg4lgkMtTtlR6bYI
-   oboHQ+KweVRLJKGoAkGCVTDxy6Lw/VwxbLRkF7eTBDRyl4ZTaWm7AEa/F
-   n2N/HE0xBtVj3Nxk2ZigGo94pjQfl03gtWOaqEuw9uPOWxI/XwUBiH1m+
-   AzSprQYlxOc3+SzUG9mTmi+FtMAfXrDUmfb30crFrbT1UtgPBLEFB6ofn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247357837"
+  t=1643608752; x=1675144752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qSMFveX5lVTif1dekQa1h/+KX8io6E0LwxZv+DKJcis=;
+  b=EQFlBQKwt//X2cyLUEzyNLAHlka0KBZ6uj5qmg6lgWskD1MsliCzH+g5
+   nEOCzRn5BVrKeRhwUW8MlGKIDVXilzTGAJlnL1Orv++qQ6YGrpDC1UiYK
+   toIVaogTHckcxgO/LTK9U2d3lF4aImzZUKUkhSkdGtHvpeSik9dKaHK91
+   /aYL1SeG+6u11Pn+7uWvRRK+8NLpLtUxPsWTUsJ7qIa7iqu2rdgSVzu6Y
+   0P406Z3ZzQa968tN2ONMvOUASZ2x7eXt8PbnsQe1metFMgpK+BWsb0bCt
+   eARc1DVWLzpqKjY2J5TXoiW+W+HCttjp7AsmerUiBtmWZTcTak9yQ0exQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308134964"
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="247357837"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:38:14 -0800
+   d="scan'208";a="308134964"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:59:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="675635696"
+   d="scan'208";a="522530559"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2022 21:38:13 -0800
+  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2022 21:59:09 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEPOB-000RRw-S1; Mon, 31 Jan 2022 05:38:07 +0000
-Date: Mon, 31 Jan 2022 13:38:00 +0800
+	id 1nEPiW-000RUE-Mz; Mon, 31 Jan 2022 05:59:08 +0000
+Date: Mon, 31 Jan 2022 13:58:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
+To: Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+	linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+	linux-i2c@vger.kernel.org, wsa@kernel.org,
+	andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm-platforms:irq/irq_chip_ro 4/9]
- drivers/irqchip/irq-ts4800.c:55:2: error: implicit declaration of function
- 'seq_printf'
-Message-ID: <202201311353.3t1CnmBZ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, wim@linux-watchdog.org
+Subject: Re: [PATCH v4 3/4] Watchdog: sp5100_tco: Add initialization using
+ EFCH MMIO
+Message-ID: <202201311323.CdxiFZ8V-lkp@intel.com>
+References: <20220130191225.303115-4-terry.bowman@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,47 +49,131 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220130191225.303115-4-terry.bowman@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/irq_chip_ro
-head:   f63a5ded3ea0cd2c587db00f89d219789fbee683
-commit: 75f43f84cf6ef6e3a967aa84352173e37a83111d [4/9] irqchip/ts4800: Switch to dynamic chip name output
-config: riscv-buildonly-randconfig-r005-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311353.3t1CnmBZ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
+Hi Terry,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311323.CdxiFZ8V-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=75f43f84cf6ef6e3a967aa84352173e37a83111d
-        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
-        git fetch --no-tags arm-platforms irq/irq_chip_ro
-        git checkout 75f43f84cf6ef6e3a967aa84352173e37a83111d
+        # https://github.com/0day-ci/linux/commit/92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
+        git checkout 92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/irqchip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/irqchip/irq-ts4800.c:55:2: error: implicit declaration of function 'seq_printf' [-Werror,-Wimplicit-function-declaration]
-           seq_printf(p, "%s", dev_name(&data->pdev->dev));
-           ^
-   1 error generated.
+   drivers/watchdog/sp5100_tco.c:272:60: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
+           dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+                                  ~~~~                               ^~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
+           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+                 ^
+>> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
+           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
 
-vim +/seq_printf +55 drivers/irqchip/irq-ts4800.c
+vim +345 drivers/watchdog/sp5100_tco.c
 
-    50	
-    51	static void ts4800_irq_print_chip(struct irq_data *d, struct seq_file *p)
-    52	{
-    53		struct ts4800_irq_data *data = irq_data_get_irq_chip_data(d);
-    54	
-  > 55		seq_printf(p, "%s", dev_name(&data->pdev->dev));
-    56	}
-    57	
+   333	
+   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
+   335					       struct watchdog_device *wdd)
+   336	{
+   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
+   338		const char *dev_name = SB800_DEVNAME;
+   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
+   340		struct resource *res;
+   341		void __iomem *addr;
+   342		int ret;
+   343		u32 val;
+   344	
+ > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
+   347					       "sp5100_tco");
+   348	
+   349		if (!res) {
+   350			dev_err(dev,
+   351				"Memory region 0x%08x already in use\n",
+   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
+   353			return -EBUSY;
+   354		}
+   355	
+   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
+   357		if (!addr) {
+   358			dev_err(dev, "Address mapping failed\n");
+   359			ret = -ENOMEM;
+   360			goto out;
+   361		}
+   362	
+   363		/*
+   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
+   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
+   366		 * also starts the timer operation. Enable if not already enabled.
+   367		 */
+   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
+   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
+   371					    EFCH_PM_DECODEEN_WDT_TMREN);
+   372		}
+   373	
+   374		/* Error if the timer could not be enabled */
+   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
+   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+   377			dev_err(dev, "Failed to enable the timer\n");
+   378			ret = -EFAULT;
+   379			goto out;
+   380		}
+   381	
+   382		mmio_addr = EFCH_PM_WDT_ADDR;
+   383	
+   384		/* Determine alternate MMIO base address */
+   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
+   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
+   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
+   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
+   389	
+   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
+   391		if (!ret) {
+   392			tco_timer_enable_mmio(addr);
+   393			ret = sp5100_tco_timer_init(tco);
+   394		}
+   395	
+   396	out:
+   397		if (addr)
+   398			iounmap(addr);
+   399	
+   400		release_resource(res);
+   401	
+   402		return ret;
+   403	}
+   404	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
