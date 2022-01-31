@@ -1,50 +1,62 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BC92C80
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 23:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643671929; x=1675207929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7igFGXei51V2cTLR/2NKTQd5URRQwT+lybcaF5ntgXU=;
-  b=A0wgi+TBIQpP1x6UNliHWWLFRT5j7TSDPwYEEQjtX0p4mLN7DgFGWaeK
-   kDGIGj80Yy4qed4JFJrJCw/ha8I49scPlXDy2Rqsu0QiNpuo/3NAVLDFg
-   bsO2JtCnuJ+MavezJqi9LkIS9ZAuH/GiTR6wdIw4934i4ByeF+TotGs7s
-   W1WXmmQSQ2zojPfaoA94AE9LpqvJ76E1OuixMxC6Ky7XTZu0Wc8Bs8wov
-   5XOwRDlnWeDBhGdkcngF97hxpvogUzQX3hotOhXqcizNYoR+j99GBPypb
-   927v4arTqIojyJRTKx3NiYtpS2OzXXkb5TyhW7LdEDHWqNLvriT4LkAF1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308307260"
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="308307260"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 15:31:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="582838971"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 31 Jan 2022 15:31:54 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEg9K-000SSP-5C; Mon, 31 Jan 2022 23:31:54 +0000
-Date: Tue, 1 Feb 2022 07:31:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Emil Renner Berthing <kernel@esmil.dk>, linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2 7/7] riscv: Use asm/insn.h for jump labels
-Message-ID: <202202010424.HTgYVdlR-lkp@intel.com>
-References: <20220131182720.236065-8-kernel@esmil.dk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215BC3FE3
+	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 23:53:25 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id k17so14015653plk.0
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 15:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
+        b=YW4/gspNKInMiiqNd58ZCH4h0W4EUl91RhRmEY/57BXNbZ/hMUAkcEwc7FoOjBI4Nt
+         E45rvZBie5zy3Gz0IT/MtOePAEx+D4c06rSLJ0MR4nhBOzD0JqXtbe/3lYMrtOi4Ixjn
+         OBYyuErvU48oU1yNCmORPoTqATZguV8v3Oeuc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
+        b=dllh94rVUq4HVZds1GJPOKrc3DCkTBZu6d7eyQlgcVEgaTvxF+gs3g0YgE/d5E5iJm
+         MR+YjrhWsYYQ6HZyVLOLzlQSCLmq1BVYXVwwdkLWZimCzRqUZqkmtlRlH0gJUekkAsPf
+         UraHP5Hc/FH2X9g/NJDs4AIiepnCxFiOCElsBiL7q/oYnz1Oazg2Cql1L2YAHMJ9CV64
+         wNANsnPkn/ag9tEdNck67cPXCN4UlUUM8Lih5dqv7aW8GJryColOdqWJnweGfiCQM/Jz
+         XKJ/bfiQ3WWGh+BgFbT/AsINFc+xnKJLjZXGMOHjPo7p6fCVWHlD9w5gWTzIkzxkF0X6
+         zQRw==
+X-Gm-Message-State: AOAM530IcyllE4pdYWv8ROQw1niWwCCzA1RNvgVUNTr2C/USbvvDsgxN
+	dbH1nTuky5cVzOEA828cOyea8Q==
+X-Google-Smtp-Source: ABdhPJwQoJTVTbWyz7yUWp71cBeTkkBUzx+D+EJf+jHOTWJCSO09eDNSyMoJg+E1UEDubWnSmjvFOg==
+X-Received: by 2002:a17:902:d512:: with SMTP id b18mr24084400plg.24.1643673204493;
+        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ha21sm392379pjb.48.2022.01.31.15.53.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
+Date: Mon, 31 Jan 2022 15:53:23 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Len Baker <len.baker@gmx.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier()
+ substitute
+Message-ID: <202201311550.31EF589B2@keescook>
+References: <20220131225250.409564-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,67 +65,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131182720.236065-8-kernel@esmil.dk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220131225250.409564-1-ndesaulniers@google.com>
 
-Hi Emil,
+On Mon, Jan 31, 2022 at 02:52:47PM -0800, Nick Desaulniers wrote:
+> Add text to memory-barriers.txt and deprecated.rst to denote that
+> volatile-qualifying an asm statement is not a substitute for either a
+> compiler barrier (``barrier();``) or a clobber list.
+> 
+> This way we can point to this in code that strengthens existing
+> volatile-qualified asm statements to use a compiler barrier.
+> 
+> Suggested-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Example: https://godbolt.org/z/8PW549zz9
+> 
+>  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
+>  Documentation/process/deprecated.rst | 17 +++++++++++++++++
+>  2 files changed, 41 insertions(+)
+> 
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index b12df9137e1c..f3908c0812da 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1726,6 +1726,30 @@ of optimizations:
+>       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
+>       though the CPU of course need not do so.
+>  
+> + (*) Similarly, the compiler is within its rights to reorder instructions
+> +     around an asm statement so long as clobbers are not violated. For example,
+> +
+> +	asm volatile ("");
+> +	flag = true;
+> +
+> +     May be modified by the compiler to:
+> +
+> +	flag = true;
+> +	asm volatile ("");
+> +
+> +     Marking an asm statement as volatile is not a substitute for barrier(),
+> +     and is implicit for asm goto statements and asm statements that do not
+> +     have outputs (like the above example). Prefer either:
+> +
+> +	asm ("":::"memory");
+> +	flag = true;
+> +
+> +     Or:
+> +
+> +	asm ("");
+> +	barrier();
+> +	flag = true;
+> +
 
-I love your patch! Perhaps something to improve:
+I like this!
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>   (*) The compiler is within its rights to invent stores to a variable,
+>       as in the following example:
+>  
+> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+> index 388cb19f5dbb..432816e2f79e 100644
+> --- a/Documentation/process/deprecated.rst
+> +++ b/Documentation/process/deprecated.rst
+> @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
+>          instance->count = count;
+>  
+>          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
+> +
+> +Volatile Qualified asm Statements
+> +=================================
 
-url:    https://github.com/0day-ci/linux/commits/Emil-Renner-Berthing/Module-relocation-fixes-and-asm-insn-h-header/20220201-023028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 26291c54e111ff6ba87a164d85d4a4e134b7315c
-config: riscv-randconfig-r042-20220131 (https://download.01.org/0day-ci/archive/20220201/202202010424.HTgYVdlR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/5508617c47312c3ddd0318c8e084c63f1f77ed5a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Emil-Renner-Berthing/Module-relocation-fixes-and-asm-insn-h-header/20220201-023028
-        git checkout 5508617c47312c3ddd0318c8e084c63f1f77ed5a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+I would open with an example, like:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Instead of::
 
-All warnings (new ones prefixed by >>):
+	volatile asm("...");
 
-   In file included from arch/riscv/kernel/jump_label.c:12:
->> arch/riscv/include/asm/insn.h:64:22: warning: overflow in expression; result is 2147481600 with type 'long' [-Winteger-overflow]
-           return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-                               ^
-   arch/riscv/include/asm/insn.h:64:64: warning: overflow in expression; result is 2147481600 with type 'long' [-Winteger-overflow]
-           return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-                                                                         ^
-   2 warnings generated.
+just use::
+
+	asm("...");
 
 
-vim +/long +64 arch/riscv/include/asm/insn.h
+> +
+> +According to `the GCC docs on inline asm
+> +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
+> +
+> +  asm statements that have no output operands and asm goto statements,
+> +  are implicitly volatile.
 
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  54  
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  55  static inline bool riscv_insn_valid_32bit_offset(ptrdiff_t val)
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  56  {
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  57  	if (IS_ENABLED(CONFIG_32BIT))
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  58  		return true;
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  59  
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  60  	/*
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  61  	 * auipc+jalr can reach any PC-relative offset in the range
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  62  	 * [-2^31 - 2^11, 2^31 - 2^11)
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  63  	 */
-4fc4a021bce139 Emil Renner Berthing 2022-01-31 @64  	return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  65  }
-4fc4a021bce139 Emil Renner Berthing 2022-01-31  66  
+Does this mean "volatile" _is_ needed when there are operands, etc?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+> +For many uses of asm statements, that means adding a volatile qualifier won't
+> +hurt (making the implicit explicit), but it will not strengthen the semantics
+> +for such cases where it would have been implied. Care should be taken not to
+> +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
+> +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
+> +
+> +.. [memory-barriers] Documentation/memory-barriers.txt
+> -- 
+> 2.35.0.rc2.247.g8bbb082509-goog
+> 
+
+-- 
+Kees Cook
