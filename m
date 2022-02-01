@@ -1,139 +1,127 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0902F24
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 19:53:42 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id t9so25637559lji.12
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 11:53:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EDB2F24
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 20:17:06 +0000 (UTC)
+Received: by mail-lj1-f175.google.com with SMTP id e9so25790834ljq.1
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 12:17:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BLa4FR1JDKGzHbMj+swTkk7iSUe7LbD5o7vJbsNybm0=;
-        b=Y8oINUyuGlfKSDFVZrsXaijVo9SnLzPGVFzmquhYvNHyRAMyK7D9s10kUek0cwYrnZ
-         n81auy4xwjhpnqlbeJyTfytijFL/jzg2wxwRE9HYGOohWIG4JzYZa7YZ6Mghs7D23P6c
-         9r8IbL/sAkoo4fx0laDEE6rZA883YUTGEoLhX5Izj2Mju3xWdSUpfSPiTz8vAD8lIrF4
-         cCIqeKEgZTUyw1MJp3TpEu1BssB3Bd4u7qvWCr1xSbCYyWAtNMceiJvgK+wtt4yZjR3r
-         V0343uNAoFxFMdU/UMtMcCbgXXlHZFGgU8L+6g7khbp/pHOCrXovaHiApnhjUuXVTOdu
-         EVSQ==
+        bh=f3bcsAklugUA8X5S8eqHouC9oaHAaVuRIrrTe+rJW24=;
+        b=Kyj6Bc9QCO+JV2e2BYCdvw63ME+XVX7mD1L0xBJ/nJR7GpK9LZTXleDRaKPB68Hxqf
+         NF3WNVeqUx6R8F54VtcOKlozz9fWtsQTPFA/AD1Pn0jyl7Lj1dKaXDHiOb1YWkjeoGoJ
+         MtGMRnHvg7Z5dGCMlqb/pWt0QVDxwvRARjEk0xuXalkpvBZpFsZDM3SWTGZT17z6jwOS
+         lh3I5vIbaqNcWcZoxrH1NQILkUplY21IAs+EM9cLeg2p5s25+9obBeljDVfK+Hws4w3J
+         hK5/clJiK6Qu5YhvtVndyA1SEURtS0GIwvwz9ztDT22zdvvM/9IxjtIRXHGgvTG8fflo
+         UsOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BLa4FR1JDKGzHbMj+swTkk7iSUe7LbD5o7vJbsNybm0=;
-        b=H5t05UlvC8nHzdioEAtPmaiW9E0nmoPZiGZE26XUuR0DoF+/y4MxWCbuE6c56+v76E
-         SX1i/njDIMkQWhF9wPGh16wBEssKW68TAiShUlSFzirAbeifO+QpBR27AkufBW9yG4+X
-         /a/s4/RoxTNLAmtONWMdNSPmh4p39nUpJJ9M/ixYjiY99U+08hy3RcpJB5SF36Qj7+I1
-         fgEY1luaSTaccf3v4chd/S+cLYb9l3mmMX0gvnCYQ2nl+R0vGBJjgEYuGFRuU+qwZxBU
-         n7MuuA4s2LBcAW6LxSjRy0YEPlOGhHhJU9+W1AQ7acN8NS7nuD81gkzMRO8M/TNZ4LDk
-         i0OA==
-X-Gm-Message-State: AOAM5321TlvbOdnn04mnHpynuVRYrSwa0wFO3aKv5e2Azl5BFIPQ7uHH
-	/iX4kHyXxFskWXNHtfdHER3gK5Ulc2OQo+diN9djUjNe1N8=
-X-Google-Smtp-Source: ABdhPJxS2tGwyzowqzneu6o5CJZtfmeuyDYEh1VZjNkBcphAs9augEPBSSqnjPUJKmZC/SuI0rk/coZkTseAyV62ltk=
-X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr9151673ljh.338.1643745220420;
- Tue, 01 Feb 2022 11:53:40 -0800 (PST)
+        bh=f3bcsAklugUA8X5S8eqHouC9oaHAaVuRIrrTe+rJW24=;
+        b=Ym+3T+jXwzzsQG+UnjDx0NYO4VWzXM4OYy2x07V+2fvvigW8EH2tRpQ1WZUM9lT5WP
+         1amPC5PJYJwq2UkXvNogXErW0CRdKoQyJfRwuGsV2XQQHSs8WGLXZXAx2giuEK5EfbqC
+         X3DGEuIgYsrrNVQQFFpB2tk/jcrpFGQiHOVp33Kj8awlfUiC+K6D5jwFxRHErD1CGPM4
+         Vu7AG7IWgp1pO7aHUtfm+taeRL2m9L/wa0xy6HRurlRx9kd0wGmnXJnHAZag4kaJwTdg
+         uP8gFN2Y3cOlMj2RKpU9UiAg/OfeYD6NyzcS038PSAd6YWwvKeBf/SKr2DTB5eo5e256
+         3Ixg==
+X-Gm-Message-State: AOAM53004KWUvXcMLtEWIuY4m3bjkE4jRGlEI0vFJDWB+xtcEnNpSMYn
+	SI41ph6n0f2F4QME5MARpQYykYzAgD1hakr31yv1dQ==
+X-Google-Smtp-Source: ABdhPJyjkIdvcR7h9sTh/jFdfLCfqLgmMdmefPijoRUk1ZPBatDBaznmuG2+rrSk2e+yl8Dtm+jGInhyLkuUyY9YRjA=
+X-Received: by 2002:a2e:954:: with SMTP id 81mr8682225ljj.198.1643746624322;
+ Tue, 01 Feb 2022 12:17:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220201010838.1494405-4-seanjc@google.com> <202202011400.EaZmWZ48-lkp@intel.com>
- <YfmNr8OjOWvsQBKx@google.com>
-In-Reply-To: <YfmNr8OjOWvsQBKx@google.com>
+References: <20220201010838.1494405-1-seanjc@google.com> <20220201010838.1494405-2-seanjc@google.com>
+In-Reply-To: <20220201010838.1494405-2-seanjc@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 1 Feb 2022 11:53:28 -0800
-Message-ID: <CAKwvOdkieUPcXgu4_GNmD_wpH5z2mzuDL+FTxRAQ4EqeF-WbvA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] KVM: x86: Use __try_cmpxchg_user() to update guest
- PTE A/D bits
+Date: Tue, 1 Feb 2022 12:16:52 -0800
+Message-ID: <CAKwvOd=9nwR7z7wn50SU=mf5AywFLd95ZMH-EbYdHfbeHVvq1A@mail.gmail.com>
+Subject: Re: [PATCH 1/5] Kconfig: Add option for asm goto w/ tied outputs to
+ workaround clang-13 bug
 To: Sean Christopherson <seanjc@google.com>
-Cc: kernel test robot <lkp@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Vitaly Kuznetsov <vkuznets@redhat.com>, Wanpeng Li <wanpengli@tencent.com>, 
-	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org
+	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, 
+	syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Feb 1, 2022 at 11:44 AM Sean Christopherson <seanjc@google.com> wrote:
+On Mon, Jan 31, 2022 at 5:08 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> On Tue, Feb 01, 2022, kernel test robot wrote:
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from arch/x86/kvm/mmu/mmu.c:4246:
-> > >> arch/x86/kvm/mmu/paging_tmpl.h:244:9: error: invalid output size for constraint '+a'
-> >                    ret = __try_cmpxchg_user(ptep_user, &orig_pte, pte, fault);
-> >                          ^
-> >    arch/x86/include/asm/uaccess.h:629:11: note: expanded from macro '__try_cmpxchg_user'
-> >            __ret = !unsafe_try_cmpxchg_user(_ptr, _oldp, _nval, _label);   \
-> >                     ^
-> >    arch/x86/include/asm/uaccess.h:606:18: note: expanded from macro 'unsafe_try_cmpxchg_user'
-> >            case 1: __ret = __try_cmpxchg_user_asm("b", "q",                \
-> >                            ^
-> >    arch/x86/include/asm/uaccess.h:467:22: note: expanded from macro '__try_cmpxchg_user_asm'
-> >                           [old] "+a" (__old)                               \
+> Add a config option to guard (future) usage of asm_volatile_goto() that
+> includes "tied outputs", i.e. "+" constraints that specify both an input
+> and output parameter.  clang-13 has a bug[1] that causes compilation of
+> such inline asm to fail, and KVM wants to use a "+m" constraint to
+> implement a uaccess form of CMPXCHG[2].  E.g. the test code fails with
 >
-> #$*&(#$ clang.
+>   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
+>   int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
+>                             ^
+>   <stdin>:1:29: error: unknown token in expression
+>   <inline asm>:1:9: note: instantiated into assembly here
+>           .long () - .
+>                  ^
+>   2 errors generated.
 >
-> clang isn't smart enough to avoid compiling the impossible conditions it will
-> throw away in the end, i.e. it compiles all cases given:
->
->   switch (8) {
->   case 1:
->   case 2:
->   case 4:
->   case 8:
->   }
+> on clang-13, but passes on gcc (with appropriate asm goto support).  The
+> bug is fixed in clang-14, but won't be backported to clang-13 as the
+> changes are too invasive/risky.
 
-This is because Clang generally handles diagnostics, while LLVM
-handles optimizations, in a pipeline, in that order. In order to know
-not to emit a diagnostic, optimizations need to be run.  Do you prefer
-that diagnostics only get emitted for code not optimized out? In this
-case, yes, but in others folks could reasonably desire the others.
-Sorry, but this is a BIG architectural difference between compilers.
+LGTM.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-(FWIW; I've personally implemented warnings in clang that don't work
-that way.  The tradeoff is excessive memory usage and work during
-compile time to basically pessimistically emit the equivalent of debug
-info, and do all the work that entails keeping it up to date as you
-transform the code, even if it may never trigger a warning.  Changing
-all diagnostics to work that way would be tantamount to rewriting most
-of the frontend and would be slower and use more memory at runtime).
+If you're going to respin the series, consider adding a comment in the
+source along the lines of:
+```
+clang-14 and gcc-11 fixed this.
+```
+or w/e. This helps us find (via grep) and remove cruft when the
+minimum supported compiler versions are updated.
+
+Note: gcc-10 had a bug with the symbolic references to labels when
+using tied constraints.
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98096
+
+Both compilers had bugs here, and it may be worth mentioning that in
+the commit message.
 
 >
-> I can fudge around that by casting the pointer, which I don't think can go sideways
-> if the pointer value is a signed type?
+> [1] https://github.com/ClangBuiltLinux/linux/issues/1512
+> [2] https://lore.kernel.org/all/YfMruK8%2F1izZ2VHS@google.com
 >
-> @@ -604,15 +602,15 @@ extern void __try_cmpxchg_user_wrong_size(void);
->         bool __ret;                                                     \
->         switch (sizeof(*(_ptr))) {                                      \
->         case 1: __ret = __try_cmpxchg_user_asm("b", "q",                \
-> -                                              (_ptr), (_oldp),         \
-> +                                              (u8 *)(_ptr), (_oldp),   \
->                                                (_nval), _label);        \
->                 break;                                                  \
->         case 2: __ret = __try_cmpxchg_user_asm("w", "r",                \
-> -                                              (_ptr), (_oldp),         \
-> +                                              (u16 *)(_ptr), (_oldp),  \
->                                                (_nval), _label);        \
->                 break;                                                  \
->         case 4: __ret = __try_cmpxchg_user_asm("l", "r",                \
-> -                                              (_ptr), (_oldp),         \
-> +                                              (u32 *)(_ptr), (_oldp),  \
->                                                (_nval), _label);        \
->                 break;                                                  \
->         case 8: __ret = __try_cmpxchg64_user_asm((_ptr), (_oldp),       \
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  init/Kconfig | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
+> diff --git a/init/Kconfig b/init/Kconfig
+> index e9119bf54b1f..a206b21703be 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -77,6 +77,10 @@ config CC_HAS_ASM_GOTO_OUTPUT
+>         depends on CC_HAS_ASM_GOTO
+>         def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
 >
-> clang also lacks the intelligence to realize that it can/should use a single
-> register for encoding the memory operand and consumes both ESI and EDI, leaving
-> no register for the __err "+r" param in __try_cmpxchg64_user_asm().  That can be
-> avoided by open coding CC_SET and using a single output register for both the
-> result and the -EFAULT error path.
-
+> +config CC_HAS_ASM_GOTO_TIED_OUTPUT
+> +       depends on CC_HAS_ASM_GOTO_OUTPUT
+> +       def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
+> +
+>  config TOOLS_SUPPORT_RELR
+>         def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
+>
+> --
+> 2.35.0.rc2.247.g8bbb082509-goog
+>
 
 
 -- 
