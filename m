@@ -1,49 +1,50 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D812C9C
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 13:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FABE2C9C
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 13:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643721946; x=1675257946;
+  t=1643723208; x=1675259208;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yKGBWShsl1X257518ca8gg6z6D9kxMNiO15gjp8quVo=;
-  b=RgvzTzGjJs8CN02io9R1LTGFlg/9iOUo9azFWe43AyqJVSfiQX9E1Lkw
-   iP3NROgqfOQ87MYciUbYWEWvsofyF/p5yUdS+Xvx6IQ2TchKUs854czMe
-   TnKKAXB9AbQOon+hDE9IeK2Rk+eezlPmAQeAzxuMw9qekpeq5OP3svHUe
-   9wAg+WyMPXPkh/0yh8ka5dEwIcGuwolFnugNs3c6wxa+yjD3Nh/nPgWqm
-   0gzc7rwu00I58bbNqvcJGF3l5MxTf7obxZrgjyiV/3Uox6CcpeeiQAd2L
-   ftfaF5LSOmF432KMmZ9oAp7mhlC05px024P9isoUeE3kvJY5lacvgivfG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="245280019"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="245280019"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 05:25:45 -0800
+  bh=alu1H9qvEw3HFlKI7urAlQj1NT+EXGA6doXsiFrrJ64=;
+  b=j7D+M9ZF0QPypxaNk/zX4tKbaxK6F4drnONNjGk0A8Gz8z4RixHoXl4p
+   Bcsy/98YWm5Q2/A+5nwoCyvPHkBmofK84SjUiRiqcbOx0gi7FmpSFUkXZ
+   1pVlC+9xbrGW/wOMp6Lf8cJUbMIWhRtuWpaXPUXtGKOTIVumgKIGS5uMR
+   lNqKENZ8LFrZJGYhbK8HzsVzmXJT4tOsIiUvaPwccSiBxHvyBdCGWDqVl
+   6VGXFaHgHpoeH8Ozpzr1g+v9lTh/7u03ie+NlMoCbT0Nmi1JUkdqHhqSN
+   V0F62vWuAHQ3Nz9qQm7TjJ/YvocNqbH8vNnGBr5UI83sayul+ArFW/vJJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247462106"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="247462106"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 05:46:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="626730664"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="619793915"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Feb 2022 05:25:42 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Feb 2022 05:46:44 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEtAD-000TJ9-H6; Tue, 01 Feb 2022 13:25:41 +0000
-Date: Tue, 1 Feb 2022 21:25:33 +0800
+	id 1nEtUZ-000TKG-SL; Tue, 01 Feb 2022 13:46:43 +0000
+Date: Tue, 1 Feb 2022 21:46:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: kbuild-all@lists.01.org, Sean Christopherson <seanjc@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
-	kvm@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/5] KVM: x86: Use __try_cmpxchg_user() to update guest
- PTE A/D bits
-Message-ID: <202202012104.eSvVUhWh-lkp@intel.com>
-References: <20220201010838.1494405-4-seanjc@google.com>
+To: marek.vasut@gmail.com, linux-pci@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Marek Vasut <marek.vasut+renesas@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <helgaas@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read
+ which triggered an exception
+Message-ID: <202202012118.qgdNW3Ra-lkp@intel.com>
+References: <20220129043837.172126-2-marek.vasut@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,135 +53,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220201010838.1494405-4-seanjc@google.com>
+In-Reply-To: <20220129043837.172126-2-marek.vasut@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Sean,
+Hi,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on 26291c54e111ff6ba87a164d85d4a4e134b7315c]
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.17-rc2 next-20220131]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-uaccess-CMPXCHG-KVM-bug-fixes/20220201-091001
-base:   26291c54e111ff6ba87a164d85d4a4e134b7315c
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220201/202202012104.eSvVUhWh-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/c880d7a9df876f20dc3acdd893c5c71f3cda5029
+url:    https://github.com/0day-ci/linux/commits/marek-vasut-gmail-com/PCI-rcar-Finish-transition-to-L1-state-in-rcar_pcie_config_access/20220129-124033
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm-randconfig-c002-20220201 (https://download.01.org/0day-ci/archive/20220201/202202012118.qgdNW3Ra-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/88177fcc2d6d4acbea59c90839882f70b7b774a1
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sean-Christopherson/x86-uaccess-CMPXCHG-KVM-bug-fixes/20220201-091001
-        git checkout c880d7a9df876f20dc3acdd893c5c71f3cda5029
+        git fetch --no-tags linux-review marek-vasut-gmail-com/PCI-rcar-Finish-transition-to-L1-state-in-rcar_pcie_config_access/20220129-124033
+        git checkout 88177fcc2d6d4acbea59c90839882f70b7b774a1
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/pci/controller/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
-   arch/x86/kvm/mmu/mmu.c:695:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_begin' - different lock contexts for basic block
-   arch/x86/kvm/mmu/mmu.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, arch/x86/kvm/irq.h):
-   include/linux/rcupdate.h:725:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_end' - unexpected unlock
-   arch/x86/kvm/mmu/mmu.c:2595:9: sparse: sparse: context imbalance in 'mmu_try_to_unsync_pages' - different lock contexts for basic block
-   arch/x86/kvm/mmu/mmu.c: note: in included file:
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
-   arch/x86/kvm/mmu/mmu.c: note: in included file:
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
-   arch/x86/kvm/mmu/mmu.c: note: in included file:
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
->> arch/x86/kvm/mmu/paging_tmpl.h:244:23: sparse: sparse: dereference of noderef expression
-   arch/x86/kvm/mmu/mmu.c:4549:57: sparse: sparse: cast truncates bits from constant value (ffffff33 becomes 33)
-   arch/x86/kvm/mmu/mmu.c:4551:56: sparse: sparse: cast truncates bits from constant value (ffffff0f becomes f)
-   arch/x86/kvm/mmu/mmu.c:4553:57: sparse: sparse: cast truncates bits from constant value (ffffff55 becomes 55)
+   drivers/pci/controller/pcie-rcar-host.c:133:5: warning: no previous prototype for function 'rcar_pci_write_reg_workaround' [-Wmissing-prototypes]
+   int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
+       ^
+   drivers/pci/controller/pcie-rcar-host.c:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
+   ^
+   static 
+   drivers/pci/controller/pcie-rcar-host.c:146:5: warning: no previous prototype for function 'rcar_pci_read_reg_workaround' [-Wmissing-prototypes]
+   int rcar_pci_read_reg_workaround(struct rcar_pcie *pcie, u32 *val, unsigned int reg)
+       ^
+   drivers/pci/controller/pcie-rcar-host.c:146:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int rcar_pci_read_reg_workaround(struct rcar_pcie *pcie, u32 *val, unsigned int reg)
+   ^
+   static 
+>> drivers/pci/controller/pcie-rcar-host.c:138:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("str")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+   drivers/pci/controller/pcie-rcar-host.c:151:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("ldr")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+>> drivers/pci/controller/pcie-rcar-host.c:138:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("str")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+   drivers/pci/controller/pcie-rcar-host.c:151:3: error: instruction requires: data-barriers
+                   __rcar_pci_rw_reg_workaround("ldr")
+                   ^
+   drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+                   "2:     isb\n"                                          \
+                    ^
+   <inline asm>:2:4: note: instantiated into assembly here
+   2:      isb
+           ^
+   2 warnings and 4 errors generated.
 
-vim +244 arch/x86/kvm/mmu/paging_tmpl.h
 
-   191	
-   192	static int FNAME(update_accessed_dirty_bits)(struct kvm_vcpu *vcpu,
-   193						     struct kvm_mmu *mmu,
-   194						     struct guest_walker *walker,
-   195						     gpa_t addr, int write_fault)
-   196	{
-   197		unsigned level, index;
-   198		pt_element_t pte, orig_pte;
-   199		pt_element_t __user *ptep_user;
-   200		gfn_t table_gfn;
-   201		int ret;
-   202	
-   203		/* dirty/accessed bits are not supported, so no need to update them */
-   204		if (!PT_HAVE_ACCESSED_DIRTY(mmu))
-   205			return 0;
-   206	
-   207		for (level = walker->max_level; level >= walker->level; --level) {
-   208			pte = orig_pte = walker->ptes[level - 1];
-   209			table_gfn = walker->table_gfn[level - 1];
-   210			ptep_user = walker->ptep_user[level - 1];
-   211			index = offset_in_page(ptep_user) / sizeof(pt_element_t);
-   212			if (!(pte & PT_GUEST_ACCESSED_MASK)) {
-   213				trace_kvm_mmu_set_accessed_bit(table_gfn, index, sizeof(pte));
-   214				pte |= PT_GUEST_ACCESSED_MASK;
-   215			}
-   216			if (level == walker->level && write_fault &&
-   217					!(pte & PT_GUEST_DIRTY_MASK)) {
-   218				trace_kvm_mmu_set_dirty_bit(table_gfn, index, sizeof(pte));
-   219	#if PTTYPE == PTTYPE_EPT
-   220				if (kvm_x86_ops.nested_ops->write_log_dirty(vcpu, addr))
-   221					return -EINVAL;
-   222	#endif
-   223				pte |= PT_GUEST_DIRTY_MASK;
-   224			}
-   225			if (pte == orig_pte)
-   226				continue;
-   227	
-   228			/*
-   229			 * If the slot is read-only, simply do not process the accessed
-   230			 * and dirty bits.  This is the correct thing to do if the slot
-   231			 * is ROM, and page tables in read-as-ROM/write-as-MMIO slots
-   232			 * are only supported if the accessed and dirty bits are already
-   233			 * set in the ROM (so that MMIO writes are never needed).
-   234			 *
-   235			 * Note that NPT does not allow this at all and faults, since
-   236			 * it always wants nested page table entries for the guest
-   237			 * page tables to be writable.  And EPT works but will simply
-   238			 * overwrite the read-only memory to set the accessed and dirty
-   239			 * bits.
-   240			 */
-   241			if (unlikely(!walker->pte_writable[level - 1]))
-   242				continue;
-   243	
- > 244			ret = __try_cmpxchg_user(ptep_user, &orig_pte, pte, fault);
-   245			if (ret)
-   246				return ret;
-   247	
-   248			kvm_vcpu_mark_page_dirty(vcpu, table_gfn);
-   249			walker->ptes[level - 1] = pte;
-   250		}
-   251		return 0;
-   252	}
-   253	
+vim +138 drivers/pci/controller/pcie-rcar-host.c
+
+   132	
+   133	int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val, unsigned int reg)
+   134	{
+   135		int error = PCIBIOS_SUCCESSFUL;
+   136	#ifdef CONFIG_ARM
+   137		asm volatile(
+ > 138			__rcar_pci_rw_reg_workaround("str")
+   139		: "+r"(error):"r"(val), "r"(pcie->base + reg) : "memory");
+   140	#else
+   141		rcar_pci_write_reg(pcie, val, reg);
+   142	#endif
+   143		return error;
+   144	}
+   145	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
