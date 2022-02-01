@@ -1,265 +1,93 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2B43FDC
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 10:12:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643710352; x=1675246352;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uczqTHPaODNK+FmpdWwJvl32r3xpXoPRvf6PzZCAbW4=;
-  b=RUefQuqHaT86qO545FbONfCjRdht9uvsh2JUeI/Dm7iRIyS2JB4wGjFl
-   Ukx3kXlIFKuDl7PGXnMODJSgOfLQdEi41zeEi9Lx4BMNnU0LBVzDImInk
-   c097I0eqfrPSQOzd75Z2IRXDNQkPKt1mjxMWh0T6gjpAOZtnQSYcoXCP1
-   V3bIG0uYFi1N8+qziIWm/LH/U9NQ0IW/L5A0NE3eUpbvSwoDYe1aJL5Pj
-   11Ty8fAaB+19sebModPD4x1Vh+S5csRplnLC6I/nyXLZtWvUsxVpPpRZ6
-   vEWAoimseyWPbt0Z38JJQLQT5QorGSAIwz1cv2q7ivaUoifC/nsOCN7e8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="310968270"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="310968270"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:12:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="534479772"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2022 02:12:30 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEq9F-000T69-OT; Tue, 01 Feb 2022 10:12:29 +0000
-Date: Tue, 1 Feb 2022 18:11:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lukas Czerner <lczerner@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: fs/ext4/super.c:2173:1: warning: unused function 'ctx_clear_flags'
-Message-ID: <202202011815.ZdbRejCO-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE8D2CA4
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 10:21:50 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id a8so52430875ejc.8
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 02:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w0qn/AbWYdlLKsTLrdNzjvpKb0731eh3D9ihByfG+Cg=;
+        b=GclaufmiyIC2kKKQl4aH3RGgPrbBuv3HO3aoA323ZCByUaHOYBu14a+1X4OPD10WK3
+         fm09gXtsRKcRrXHZzbGhdDWhrBhzp7aZRXgIHcl5GSEivA00a4ZpoPShGxrimismSBbt
+         5hRcYS3bs53+jLtmUacafSZhb65dAhhzN6Q0cXaKlA9pMyNrm3qXPqQ8ZPQkwT4+kxCL
+         k8gWdAn7OfjVIOKW38f7SPxR9tRi6j2OiiPzKJf2uR1GJjx7NLalUItt2Ps4tKxvxxFy
+         TeMbypA4daJ/EklIghqrkNpywc3ae4t5HOTQg5sZADVHQTuDLqg3TFdR6HRfe7zZDMf8
+         AffQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w0qn/AbWYdlLKsTLrdNzjvpKb0731eh3D9ihByfG+Cg=;
+        b=i1Te9dwsCEhfkUNeSXis4Lrkh3bPaJkM9fGWU/0RBhG32m8nIXTmxNJklWOm2SwaJo
+         n5A0xmMiiTGBfmbFf5OC6Bbwnr53JFH4VthQ3PupUr9/2NTYDpVuSDQmsRy792PYQp9N
+         ZPwdCpXzFl5xOsclLdhaCvECzwBWcMdElqz7/QXYPsgvVKJCXSm1DSyGizZS1L0EfOnn
+         uq+8/tCAuM1Pqs4zitafiXkLYyRU3LgEhDNZUxL0Zk+89jwP7cdxRhBp04dSnMtr07cs
+         GgMwij9ssQ9oXWl+STs1u76s1BuLl2kqbxQZT2AVyCTRCODVXLOJ7nusQJPjpM2iMUzP
+         4YAg==
+X-Gm-Message-State: AOAM5317ZxGG0/3xJGUSKqCNqIWswwHnJyMvvaeseTUdWkoGuKRW44Na
+	G8+Z1r55x0fce3SLBGDbJ+3vdQ==
+X-Google-Smtp-Source: ABdhPJzP6DNVGKDR/xSND+TRoZ71TnPMxBl+WvaIrcN/UAaCkj9VHFG9apRFHeZD0UVOyZv+T/zx4w==
+X-Received: by 2002:a17:906:bc4a:: with SMTP id s10mr20318695ejv.371.1643710908455;
+        Tue, 01 Feb 2022 02:21:48 -0800 (PST)
+Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id lm6sm14283211ejb.46.2022.02.01.02.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 02:21:48 -0800 (PST)
+From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+To: nathan@kernel.org
+Cc: ndesaulniers@google.com,
+	llvm@lists.linux.dev,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	quentin@isovalent.com,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: [PATCH] tools: Ignore errors from `which' when searching a GCC toolchain
+Date: Tue,  1 Feb 2022 09:31:20 +0000
+Message-Id: <20220201093119.1713207-1-jean-philippe@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Lukas,
+When cross-building tools with clang, we run `which $(CROSS_COMPILE)gcc`
+to detect whether a GCC toolchain provides the standard libraries. It is
+only a helper because some distros put libraries where LLVM does not
+automatically find them. On other systems, LLVM detects the libc
+automatically and does not need this. There, it is completely fine not
+to have a GCC at all, but some versions of `which' display an error when
+the command is not found:
 
-FYI, the error/warning still remains.
+	which: no aarch64-linux-gnu-gcc in ($PATH)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
-master
-head:   26291c54e111ff6ba87a164d85d4a4e134b7315c
-commit: 4437992be7ca3ac5dd0a62cad10357112d4fb43e ext4: remove lazytime/nola=
-zytime mount options handled by MS_LAZYTIME
-date:   6 weeks ago
-config: mips-randconfig-r026-20220201 (https://download.01.org/0day-ci/arch=
-ive/20220201/202202011815.ZdbRejCO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e84=
-4b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/commit/?id=3D4437992be7ca3ac5dd0a62cad10357112d4fb43e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4437992be7ca3ac5dd0a62cad10357112d4fb43e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash fs/ext4/
+Since the error can safely be ignored, throw it to /dev/null.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/ext4/super.c:2173:1: warning: unused function 'ctx_clear_flags'
-   EXT4_SET_CTX(flags);
-   ^
-   fs/ext4/super.c:2161:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context ^
-   <scratch space>:59:1: note: expanded from here
-   ctx_clear_flags
-   ^
-   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags'
-   fs/ext4/super.c:2167:34: note: expanded from macro 'EXT4_SET_CTX'
-   static inline unsigned long ^
-   <scratch space>:62:1: note: expanded from here
-   ctx_test_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags'
-   EXT4_SET_CTX(mount_flags);
-   ^
-   fs/ext4/super.c:2161:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context ^
-   <scratch space>:83:1: note: expanded from here
-   ctx_clear_mount_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags'
-   fs/ext4/super.c:2167:34: note: expanded from macro 'EXT4_SET_CTX'
-   static inline unsigned long ^
-   <scratch space>:86:1: note: expanded from here
-   ctx_test_mount_flags
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/bitops.h", .line =3D 105, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,fs/ext4/.super.o.d -nostdinc -Iarch=
-/mips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/=
-mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./i=
-nclude/generated/uapi -include include/linux/compiler-version.h -include in=
-clude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ =
--DVMLINUX_LOAD_ADDRESS=3D0xffffffff80100000 -DLINKER_LOAD_ADDRESS=3D0x80100=
-000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_E=
-XTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-st=
-rict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-functio=
-n-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-secu=
-rity -std=3Dgnu89 --target=3Dmips-linux -fintegrated-as -Werror=3Dunknown-w=
-arning-option -Werror=3Dignored-optimization-argument -mno-check-zero-divis=
-ion -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_SET=
-_HARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-stack-check -march=3Dmi=
-ps32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-gene=
-ric -Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tables -f=
-no-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-mem=
-ber -O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wimplicit-fallthro=
-ugh -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable -Wno-unused-con=
-st-variable -fno-stack-clash-protection -pg -Wdeclaration-after-statement -=
-Wvla -Wno-pointer-sign -Wno-array-bounds -fno-strict-overflow -fno-stack-ch=
-eck -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wextra -Wunus=
-ed -Wno-unused-parameter -Wmissing-declarations -Wmissing-format-attribute =
--Wmissing-prototypes -Wold-style-definition -Wmissing-include-dirs -Wunused=
--but-set-variable -Wunused-const-variable -Wno-missing-field-initializers -=
-Wno-sign-compare -Wno-type-limits -I fs/ext4 -I ./fs/ext4 -DKBUILD_MODFILE=
-=3D"fs/ext4/ext4" -DKBUILD_BASENAME=3D"super" -DKBUILD_MODNAME=3D"ext4" -D_=
-_KBUILD_MODNAME=3Dkmod_ext4 -c -o fs/ext4/super.o fs/ext4/super.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'fs/ext4/super.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@ext4_read_bh_nowai=
-t'
-   #0 0x000055a97e99bc1f Signals.cpp:0:0
-   #1 0x000055a97e999afc llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-6b1e844b69/bin/clang-14+0x3441afc)
-   #2 0x000055a97e8da497 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-6b1e844b69/bin/clang-14+0x3382497)
-   #3 0x000055a97e9921ae llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-6b1e844b69/bin/clang-14+0x343a1ae)
-   #4 0x000055a97c5ef61b (/opt/cross/clang-6b1e844b69/bin/clang-14+0x109761=
-b)
-   #5 0x000055a97e8e0f4c llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3388f4c)
-   #6 0x000055a97f5c5337 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-6b1e844b69/bin/clang-14+0x406d337)
-   #7 0x000055a97f5c1294 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-6b1e844b69/bin/clang-14+0x4069294)
-   #8 0x000055a97d0525f7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x1afa5f7)
-   #9 0x000055a97dcfe42d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x000055a97e137727 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x2bdf727)
-   #11 0x000055a97e1378a1 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-6b1e844b69/bin/clang-14+0x2bdf8a1)
-   #12 0x000055a97e138b7f llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-6b1e844b69/bin/clang-14+0x2be0b7f)
-   #13 0x000055a97ecad8a7 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3755=
-8a7)
-   #14 0x000055a97f8dd283 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x4385283)
-   #15 0x000055a9804025b9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-6b1e844b69/bin/clang-14+0x4eaa5b9)
-   #16 0x000055a97f8dc0cf clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-6b1e844b69/bin/clang-14+0x43840cf)
-   #17 0x000055a97f2dbec1 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-6b1e844b69/bin/clang-14+0x3d83ec1)
-   #18 0x000055a97f2736da clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3d1b6da)
-   #19 0x000055a97f3a069b (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3e486=
-9b)
-   #20 0x000055a97c5f0bc4 cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-6b1e844b69/bin/clang-14+0x1098bc4)
-   #21 0x000055a97c5ed89b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x000055a97f10d945 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x000055a97e8da353 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3382353)
-   #24 0x000055a97f10e23e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x000055a97f0e4297 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-6b1=
-e844b69/bin/clang-14+0x3b8c297)
-   #26 0x000055a97f0e4c77 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3b8cc77)
-   #27 0x000055a97f0ee6d9 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-6b1e844b69/bin/clang-14+0x3b966d9)
-   #28 0x000055a97c51752f main (/opt/cross/clang-6b1e844b69/bin/clang-14+0x=
-fbf52f)
-   #29 0x00007fdae2a03d0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x000055a97c5ed3ba _start (/opt/cross/clang-6b1e844b69/bin/clang-14+=
-0x10953ba)
-   clang-14: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 6b1e844b69f15bb7dffaf=
-9365cd2b355d2eb7579)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-6b1e844b69/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch fs include kernel nr_bisected scripts source usr
-
-
-vim +/ctx_clear_flags +2173 fs/ext4/super.c
-
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2172 =20
-6e47a3cc68fc52 Lukas Czerner 2021-10-27 @2173  EXT4_SET_CTX(flags);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2174  EXT4_SET_CTX(mount_opt);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2175  EXT4_SET_CTX(mount_opt2);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2176  EXT4_SET_CTX(mount_flags);
-6e47a3cc68fc52 Lukas Czerner 2021-10-27  2177 =20
-
-:::::: The code at line 2173 was first introduced by commit
-:::::: 6e47a3cc68fc525428297a00524833361ebbb0e9 ext4: get rid of super bloc=
-k and sbi from handle_mount_ops()
-
-:::::: TO: Lukas Czerner <lczerner@redhat.com>
-:::::: CC: Theodore Ts'o <tytso@mit.edu>
-
+Fixes: cebdb7374577 ("tools: Help cross-building with clang")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ tools/scripts/Makefile.include | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+index b0be5f40a3f1..79d102304470 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -90,7 +90,7 @@ EXTRA_WARNINGS += -Wstrict-aliasing=3
+ 
+ else ifneq ($(CROSS_COMPILE),)
+ CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
+-GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
++GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
+ ifneq ($(GCC_TOOLCHAIN_DIR),)
+ CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+ CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
+-- 
+2.34.1
+
