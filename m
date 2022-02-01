@@ -1,119 +1,98 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8413FDD
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 01:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643678049; x=1675214049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JenhozFl+KykgeWde+wvmn+b4rrjRzYh3N2g2SxIUoM=;
-  b=UmkDEOKoeFHLkJeQTYobF+JFeph4AIt957wI51t9VVCGkAYohv1b51Z+
-   oCjbIsYjq2YnURwfLV+jHpW8uJXDpdCdgtA/8QLG+Fvt8VDCJQHCTtD1H
-   a4ELpOMqSjEbobGKrnroZo5U4senhm2SyTDfPUXNWCAZr9SnlxmROodgD
-   +vJiGYqY1jlGGrX+6cybSqQsBqRc591o0MHIIm8TaOGjIsFRxJm6ebsT5
-   gLgT9y8SNJHkX7AYSNlEEcwBKTvV8qj47rTplMjSKevyxSO5EigUbu3EM
-   hwEDdXjuLYgt+UFhxB45hCZ6Rpcpq7mErqvsNfcTdOt4ayUV3fjXZzAZx
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247550895"
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="247550895"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 17:14:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="497163335"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2022 17:14:05 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEhkC-000SYJ-FV; Tue, 01 Feb 2022 01:14:04 +0000
-Date: Tue, 1 Feb 2022 09:13:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Emil Renner Berthing <kernel@esmil.dk>, linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2 5/7] riscv: Use asm/insn.h for module relocations
-Message-ID: <202202010909.dh2CgMcN-lkp@intel.com>
-References: <20220131182720.236065-6-kernel@esmil.dk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8533FDD
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 01:33:06 +0000 (UTC)
+Received: by mail-qt1-f176.google.com with SMTP id e16so13178771qtq.6
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 17:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MoWm32zvhEyqRVmUpa5LXZEYybwAAQFRmq/wU8a+Gt4=;
+        b=EgGzc5rt8LRF5c2Eif2fVlYrh9HTecIoACGjTA6wXsMIE5Cq6qPShWc2VkeRIbLQLJ
+         NzdWdQo2IAl4ibTNTDpXspNbyJX8M4MXNhOrJdH7s1L6p52qZ4QQmdA9tPnPO84GtTBx
+         t7MPx8RQAxDA9goxsppgIVZ+UrbAWYJM/6BsuBOZkSZXcDSdMWpTIxG/j+/nhuMs3Lqj
+         3/1dB0rzc7uOB2csLmqRxJfM1rzyDgXH68UG9wViOR32SdzStDiwpIWGxdl9ILrg8+5K
+         qn0HtVvCShbOisPior89CQpUSaHiw49SefIEMrjQqmB2DRVai7BMhol9HGp4yJaVyAvZ
+         B1yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MoWm32zvhEyqRVmUpa5LXZEYybwAAQFRmq/wU8a+Gt4=;
+        b=jYcSxLkfv/RKitv+T/bN2JrFBd9/z0dp1I1q30rHuOoGhNXx3LCcQJ6Nty8uGRlJvh
+         3jsGJe0TTxfyLkB9lp2eQBhBnPmG75HQu3BcVvoF+z3wDoaL7nWUWgeE0OJp6xX2sLKP
+         gCp4RU7m9munI5TH6hBio9xXxLwMHuetp3AOYlQmRp0DQlawjaqdv6iT0Fazd2kdmbyZ
+         +LHJzsBde6ajyjTV7xOVHKknAv9cYVO7JIK52QVjZTJ6ASeoSUvWNoWbujuolKC9T9T6
+         aS6AMn048k6FZLpku8dUr1LV/NNZSnbnchN/VQXKHiGakeB5WkRfeAGPtSkfx05mTQLC
+         nPEw==
+X-Gm-Message-State: AOAM530+tOg2r26PUZT+6sfuPN56xm/4YmNOHBH3Mvd+6mqclIl1lOui
+	4MQQHxfMyf2Hq8J6FioBndQ=
+X-Google-Smtp-Source: ABdhPJx9XbvUrAI3Emn6dngj5AmQ9NNxFJ3HrnmEE5AIo9Ak4wHhNAJY3XZGyeDXTS4yuiTX27NoKw==
+X-Received: by 2002:a05:622a:1881:: with SMTP id v1mr17345340qtc.683.1643679185259;
+        Mon, 31 Jan 2022 17:33:05 -0800 (PST)
+Received: from WRT-WX9.. ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id v73sm9272458qkb.51.2022.01.31.17.33.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 17:33:04 -0800 (PST)
+From: Changbin Du <changbin.du@gmail.com>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
+Date: Tue,  1 Feb 2022 09:32:57 +0800
+Message-Id: <20220201013257.17926-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131182720.236065-6-kernel@esmil.dk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Hi Emil,
+The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
+'.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
+And they might overlap with handwritten symbols.
 
-I love your patch! Perhaps something to improve:
+Before this change, a dumpstack shows a local symbol for epc:
+[    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
+[    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
+[    0.040452][    T0]  ra : restore_all+0x12/0x6e
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+The simple solution is that we can ignore all local labels prefixed by '.L'.
+For handwritten symbols which need to be preserved should drop the '.L'
+prefix.
 
-url:    https://github.com/0day-ci/linux/commits/Emil-Renner-Berthing/Module-relocation-fixes-and-asm-insn-h-header/20220201-023028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 26291c54e111ff6ba87a164d85d4a4e134b7315c
-config: riscv-randconfig-r022-20220131 (https://download.01.org/0day-ci/archive/20220201/202202010909.dh2CgMcN-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/febc860a4c14d8d94af7c169315520796e0e4460
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Emil-Renner-Berthing/Module-relocation-fixes-and-asm-insn-h-header/20220201-023028
-        git checkout febc860a4c14d8d94af7c169315520796e0e4460
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+After this change, the C defined symbol is shown so we can locate the
+problematical code immediately:
+[    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
+[    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
+[    0.036567][    T0]  ra : restore_all+0x12/0x6e
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/riscv/kernel/module.c:15:
->> arch/riscv/include/asm/insn.h:64:22: warning: overflow in expression; result is 2147481600 with type 'long' [-Winteger-overflow]
-           return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-                               ^
-   arch/riscv/include/asm/insn.h:64:64: warning: overflow in expression; result is 2147481600 with type 'long' [-Winteger-overflow]
-           return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-                                                                         ^
-   2 warnings generated.
-
-
-vim +/long +64 arch/riscv/include/asm/insn.h
-
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  54  
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  55  static inline bool riscv_insn_valid_32bit_offset(ptrdiff_t val)
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  56  {
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  57  	if (IS_ENABLED(CONFIG_32BIT))
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  58  		return true;
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  59  
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  60  	/*
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  61  	 * auipc+jalr can reach any PC-relative offset in the range
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  62  	 * [-2^31 - 2^11, 2^31 - 2^11)
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  63  	 */
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31 @64  	return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  65  }
-4fc4a021bce1398 Emil Renner Berthing 2022-01-31  66  
-
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ scripts/kallsyms.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 54ad86d13784..8caabddf817c 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
+ 	/* Symbol names that begin with the following are ignored.*/
+ 	static const char * const ignored_prefixes[] = {
+ 		"$",			/* local symbols for ARM, MIPS, etc. */
+-		".LASANPC",		/* s390 kasan local symbols */
++		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+ 		"__crc_",		/* modversions */
+ 		"__efistub_",		/* arm64 EFI stub namespace */
+ 		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
+-- 
+2.32.0
+
