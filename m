@@ -1,180 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92AB2F27
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 22:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAD5C340F0
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 22:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCCE2F26
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 23:22:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C362C340EB;
+	Tue,  1 Feb 2022 23:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643753751;
-	bh=j9fLPxs1iagx6L4etF2ktFreBgCWfItK2kWeSLCYSCk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nkdDHrmwIRn2HYguSi4pW+DkBxu48GmWWyRrGpMstneLQLoVzX0is3xr4x/hZ1Bjr
-	 f0OKsRYXqfu3n2C6rjytpesqZGVDOcDzYTghblYzOjlIdDMncDSD2Ny3FmKPowH64U
-	 BFQfcWha4HmkfMPAFI90yhtGGxm58EwW35Lf16FPiCHq3l9P11sJg9TNUVNgbkA9v/
-	 j5LGvy1N7qVpiWdF0sRsDp2BCafgUYbJH4Kq6om6ukxpaoN7S6PSf7VYwxSAdJI9x3
-	 xf4JN41D4i/Ij4GuhQX7r2KYAB9rbguf8yzGhsC5EUblAviqz+CQFIe6/vWvPSuQAx
-	 RQBTWHYl+if9g==
-Received: by mail-wr1-f50.google.com with SMTP id f17so34726340wrx.1
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 14:15:51 -0800 (PST)
-X-Gm-Message-State: AOAM531XG9htzkifbJI19tELzXtHYQA9Uz0tnwb5rxmj0slpT25fJwh2
-	zUBm7hIm7U2duoZA9sHMviq24T4pjJZUbOFUblA=
-X-Google-Smtp-Source: ABdhPJzgPe6aAtYkFuRrcOMkkoNw3wzWRiYmrDgSz2pBPUpj52vklxmCWt3eMMJS7MOAni2N89aSZPc1EcT+TZVos4I=
-X-Received: by 2002:a05:6000:1c9:: with SMTP id t9mr23503888wrx.550.1643753749810;
- Tue, 01 Feb 2022 14:15:49 -0800 (PST)
+	s=k20201202; t=1643757762;
+	bh=GSyiEuas7X9TQ7vDaHSUeqwVJQqlDVvyGfSkTQnLBio=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dbhOgBUEGWKCkicvuYk46wyz6gA2IbEw1DPEzUaVbxPf6+7QmcKfSlWPRbJgGcPkm
+	 +iXtJjZVgJFBRTtGekgcnK3Rf1Wo5z+QVHCJ8pidqYJx+IaBrTgQ0Q3/TGB+43qt/3
+	 iztUZM2xSAGG0fwYfHjtlGerDmjjYfOh6qVSLqy8fJdSsHyGiRta+59uAeXxhkCfyo
+	 c+Ko9mjML8HGLsJgB0z8vH+ZpsdWazaq/suYpbh5z8s3NF9K6q2Au9slwapOPGQQJ5
+	 UsPG5zUOYysW3lCvtj6Q5Q4fSzD7vrYrHaJvkJHr+TuQvQFMHPnnCu0qoHogZgCv4n
+	 LLLaNmT6CqCyg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] Makefile.extrawarn: Move -Wunaligned-access to W=2
+Date: Tue,  1 Feb 2022 16:22:29 -0700
+Message-Id: <20220201232229.2992968-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220131225250.409564-1-ndesaulniers@google.com>
- <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com> <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 1 Feb 2022 23:15:37 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com>
-Message-ID: <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com>
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, 
-	Kees Cook <keescook@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Len Baker <len.baker@gmx.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 1 Feb 2022 at 20:40, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Tue, Feb 1, 2022 at 1:32 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > >
-> > > Add text to memory-barriers.txt and deprecated.rst to denote that
-> > > volatile-qualifying an asm statement is not a substitute for either a
-> > > compiler barrier (``barrier();``) or a clobber list.
-> > >
-> > > This way we can point to this in code that strengthens existing
-> > > volatile-qualified asm statements to use a compiler barrier.
-> > >
-> > > Suggested-by: Kees Cook <keescook@chromium.org>
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > > Example: https://godbolt.org/z/8PW549zz9
-> > >
-> > >  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
-> > >  Documentation/process/deprecated.rst | 17 +++++++++++++++++
-> > >  2 files changed, 41 insertions(+)
-> > >
-> > > diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> > > index b12df9137e1c..f3908c0812da 100644
-> > > --- a/Documentation/memory-barriers.txt
-> > > +++ b/Documentation/memory-barriers.txt
-> > > @@ -1726,6 +1726,30 @@ of optimizations:
-> > >       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
-> > >       though the CPU of course need not do so.
-> > >
-> > > + (*) Similarly, the compiler is within its rights to reorder instructions
-> >
-> > Similar to what? Was this intended to be the second bullet point
-> > rather than the first?
->
-> Similar to the previous bullet point. This isn't the first use of
-> `Similarly, ` in this document.
->
+-Wunaligned-access is a new warning in clang that is default enabled for
+arm and arm64 under certain circumstances within the clang frontend (see
+LLVM commit below). Under an ARCH=arm allmodconfig, there are
+1284 total/70 unique instances of this warning (most of the instances
+are in header files), which is quite noisy.
 
-Ah right, I misread the context and thought you were inserting this
-bullet point at the start. Sorry for the noise.
+To keep the build green through CONFIG_WERROR, only allow this warning
+with W=2, which seems appropriate according to its description:
+"warnings which occur quite often but may still be relevant".
 
-> >
-> > > +     around an asm statement so long as clobbers are not violated. For example,
-> > > +
-> > > +       asm volatile ("");
-> > > +       flag = true;
-> > > +
-> > > +     May be modified by the compiler to:
-> > > +
-> > > +       flag = true;
-> > > +       asm volatile ("");
-> > > +
-> > > +     Marking an asm statement as volatile is not a substitute for barrier(),
-> > > +     and is implicit for asm goto statements and asm statements that do not
-> > > +     have outputs (like the above example). Prefer either:
-> > > +
-> > > +       asm ("":::"memory");
-> > > +       flag = true;
-> > > +
-> > > +     Or:
-> > > +
-> > > +       asm ("");
-> > > +       barrier();
-> > > +       flag = true;
-> > > +
-> >
-> > I would expect the memory clobber to only hazard against the
-> > assignment of flag if it results in a store, but looking at your
-> > Godbolt example, this appears to apply even if flag is kept in a
-> > register.
-> >
-> > Is that behavior documented/codified anywhere? Or are we relying on
-> > compiler implementation details here?
->
-> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-> "Note that the compiler can move even volatile asm instructions
-> relative to other code, including across jump instructions."
->
+This intentionally does not use the -Wno-... + -W... pattern that the
+rest of the Makefile does because this warning is not enabled for
+anything other than certain arm and arm64 configurations within clang so
+it should only be "not disabled", rather than explicitly enabled, so
+that other architectures are not disturbed by the warning.
 
-That doesn't really answer my question. We are documenting here that
-asm volatile does not prevent reordering but non-volatile asm with a
-"memory" clobber does, and even prevents reordering of instructions
-that do not modify memory to begin with.
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/Makefile.extrawarn | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Why is it justified to rely on this undocumented behavior?
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index d53825503874..5f75fec4d5ac 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -70,6 +70,20 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-macros)
+ 
+ KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN2
+ 
++else
++
++ifdef CONFIG_CC_IS_CLANG
++# While this warning is architecture agnostic, it is only default enabled for
++# 32-bit and 64-bit ARM under certain conditions within clang:
++#
++# https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
++#
++# To allow it to be disabled under a normal build or W=1 but show up under W=2
++# for those configurations, disable it when W=2 is not set, rather than enable
++# -Wunaligned-access in the above block explicitly.
++KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
++endif
++
+ endif
+ 
+ #
 
+base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+-- 
+2.35.1
 
-> >
-> >
-> > >   (*) The compiler is within its rights to invent stores to a variable,
-> > >       as in the following example:
-> > >
-> > > diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-> > > index 388cb19f5dbb..432816e2f79e 100644
-> > > --- a/Documentation/process/deprecated.rst
-> > > +++ b/Documentation/process/deprecated.rst
-> > > @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
-> > >          instance->count = count;
-> > >
-> > >          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
-> > > +
-> > > +Volatile Qualified asm Statements
-> > > +=================================
-> > > +
-> > > +According to `the GCC docs on inline asm
-> > > +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
-> > > +
-> > > +  asm statements that have no output operands and asm goto statements,
-> > > +  are implicitly volatile.
-> > > +
-> > > +For many uses of asm statements, that means adding a volatile qualifier won't
-> > > +hurt (making the implicit explicit), but it will not strengthen the semantics
-> > > +for such cases where it would have been implied. Care should be taken not to
-> > > +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
-> > > +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
-> > > +
-> > > +.. [memory-barriers] Documentation/memory-barriers.txt
-> > > --
-> > > 2.35.0.rc2.247.g8bbb082509-goog
-> > >
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
