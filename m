@@ -1,43 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5814C2CA4
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 08:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB702CA4
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 08:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643704470; x=1675240470;
+  t=1643705672; x=1675241672;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EF3Yqvdh6j2b4Wm1XImKI+jJN5u1BtKAxq6OZbs+ktY=;
-  b=TcWBh/ug3lCoK8iRIEYJeRH8nYQ/Znaa9Sc14SuYJa6rzWHXnEVOMfr2
-   p+ZmiIlMw/sQ5/zvnA7wmPrKM8HWzixBjuiUYbvGmPn/iES1xYvrJaAJa
-   dOaVrstkjr0fn7edmt6P3T5iQGck/zGadW2PZN1ORo8kLXtVToz5bFAd/
-   FSYBqBXJDaE6KG2E6IvjPYnsj6Hnjb8ZCzfk6BWpyiyfHoX8jb0y11WLU
-   Xhu7NRpkBlKeY/rVvOwItMLIJwHWAl1non3i7uEy1bEcZPTPO14cmj14i
-   KsoxJi1MQovqS4JWMo0Zn3MZ1pG/eO4+wUVcNbksenk7halR3AlXer3l/
+  bh=FlPTRlUY6HfQlQJg8e/Zs1h1lIDW4JQiYU0jWx1Hv/8=;
+  b=fKxRBA1reuGGuERyy8PnDOGSrypu4FtLZCP4eWOum1ZAlP3+ujxBGd3h
+   kbRkRV7tzgzY6m84D7Y+VpzwriNzMSPnNFu4chfOKLalRMaIjcV4+HYIw
+   olfddITautMLy7vIYnbd4Z/eViXkWkm74m3ilnNF0RPPxH/dU42ig9oCQ
+   oH7Zc91BzDr27XodukfGIpYwI61qENso/x2mAN+9HSE/GbeDL0igjZc3b
+   JqkhYoxmxL8oLrixa5ViS1GgD7VwltfDnPcnpwVy9uIapYrIPqrCD4k4E
+   0liIi9nQ1zzHVPq+j8+NqzsR+eo5+f6ksj9E67YAtM/RZopv5NvMttKik
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="227616807"
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="272123940"
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="227616807"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 00:34:29 -0800
+   d="scan'208";a="272123940"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 00:54:31 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="537716068"
+   d="scan'208";a="582965208"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2022 00:34:28 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 01 Feb 2022 00:54:28 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEocN-000T1X-IZ; Tue, 01 Feb 2022 08:34:27 +0000
-Date: Tue, 1 Feb 2022 16:33:27 +0800
+	id 1nEovk-000T2V-1a; Tue, 01 Feb 2022 08:54:28 +0000
+Date: Tue, 1 Feb 2022 16:53:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
+To: Marc Zyngier <maz@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 23/29]
- drivers/iommu/iommufd/io_pagetable.c:488:6: warning: comparison of distinct
- pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length
- - 1) *' (aka 'unsigned int *'))
-Message-ID: <202202011657.SZg7SZfW-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm-platforms:irq/irq_chip_ro 12/20]
+ drivers/gpio/gpio-omap.c:716:41: error: member reference type 'struct
+ gpio_chip' is not a pointer; did you mean to use '.'?
+Message-ID: <202202011652.44VOL7NK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,119 +47,49 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   086f3f78da96ed1f11c2ac71115bb46e940e141e
-commit: b944c7f08293cd7b049be615e67622f5d0d74cfb [23/29] iommufd: Data structure to provide IOVA to PFN mapping
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220201/202202011657.SZg7SZfW-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/irq_chip_ro
+head:   218869493fda68e8c327a6484f5a6973a3008729
+commit: bb36fd119ef0dcee7e0e7e5f9fd11d5221bf5f73 [12/20] gpio: omap: Switch to dynamic chip name output
+config: arm-randconfig-r002-20220131 (https://download.01.org/0day-ci/archive/20220201/202202011652.44VOL7NK-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/b944c7f08293cd7b049be615e67622f5d0d74cfb
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout b944c7f08293cd7b049be615e67622f5d0d74cfb
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=bb36fd119ef0dcee7e0e7e5f9fd11d5221bf5f73
+        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
+        git fetch --no-tags arm-platforms irq/irq_chip_ro
+        git checkout bb36fd119ef0dcee7e0e7e5f9fd11d5221bf5f73
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iommu/iommufd/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/iommufd/io_pagetable.c:488:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           if (check_add_overflow(iova, length - 1, &last_iova))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   drivers/iommu/iommufd/io_pagetable.c:548:14: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   2 warnings generated.
+>> drivers/gpio/gpio-omap.c:716:41: error: member reference type 'struct gpio_chip' is not a pointer; did you mean to use '.'?
+           seq_printf(p, "%s", dev_name(bank->chip->dev));
+                                        ~~~~~~~~~~^~
+                                                  .
+>> drivers/gpio/gpio-omap.c:716:43: error: no member named 'dev' in 'struct gpio_chip'
+           seq_printf(p, "%s", dev_name(bank->chip->dev));
+                                        ~~~~~~~~~~  ^
+   2 errors generated.
 
 
-vim +488 drivers/iommu/iommufd/io_pagetable.c
+vim +716 drivers/gpio/gpio-omap.c
 
-   462	
-   463	/**
-   464	* iopt_access_pages - Return a list of pages under the iova
-   465	*
-   466	* Reads @npages starting at iova and returns the struct page * pointers. These
-   467	* can be kmap'd by the caller for CPU access.
-   468	*
-   469	* The caller must perform iopt_unaccess_pages() when done to balance this.
-   470	*
-   471	* iova can be unaligned from PAGE_SIZE. The first returned byte starts at
-   472	* page_to_phys(out_pages[0]) + (iova % PAGE_SIZE). The caller promises not
-   473	* to touch memory outside the requested iova slice.
-   474	*
-   475	* FIXME: callers that need a DMA mapping via a sgl should create another
-   476	* interface to build the SGL efficiently
-   477	*/
-   478	int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
-   479			      size_t length, struct page **out_pages, bool write)
-   480	{
-   481		unsigned long cur_iova = iova;
-   482		unsigned long last_iova;
-   483		struct iopt_area *area;
-   484		int rc;
-   485	
-   486		if (!length)
-   487			return -EINVAL;
- > 488		if (check_add_overflow(iova, length - 1, &last_iova))
-   489			return -EOVERFLOW;
-   490	
-   491		down_read(&iopt->rwsem);
-   492		for (area = iopt_area_iter_first(iopt, iova, last_iova); area;
-   493		     area = iopt_area_iter_next(area, iova, last_iova)) {
-   494			unsigned long last = min(last_iova, iopt_area_last_iova(area));
-   495			unsigned long last_index;
-   496			unsigned long index;
-   497	
-   498			/* Need contiguous areas in the access */
-   499			if (iopt_area_iova(area) < cur_iova) {
-   500				rc = -EINVAL;
-   501				goto out_remove;
-   502			}
-   503	
-   504			index = iopt_iova_to_index(area, cur_iova);
-   505			last_index = iopt_iova_to_index(area, last);
-   506			rc = iopt_pages_add_user(area->pages, index, last_index,
-   507						 out_pages, write);
-   508			if (rc)
-   509				goto out_remove;
-   510			if (last == last_iova)
-   511				break;
-   512			/*
-   513			 * Can't cross areas that are not aligned to the system page
-   514			 * size with this API.
-   515			 */
-   516			if (cur_iova % PAGE_SIZE) {
-   517				rc = -EINVAL;
-   518				goto out_remove;
-   519			}
-   520			cur_iova = last + 1;
-   521			out_pages += last_index - index;
-   522			atomic_inc(&area->num_users);
-   523		}
-   524	
-   525		up_read(&iopt->rwsem);
-   526		return 0;
-   527	
-   528	out_remove:
-   529		if (cur_iova != iova)
-   530			iopt_unaccess_pages(iopt, iova, cur_iova - iova);
-   531		return rc;
-   532	}
-   533	
+   711	
+   712	static void omap_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
+   713	{
+   714		struct gpio_bank *bank = omap_irq_data_get_bank(d);
+   715	
+ > 716		seq_printf(p, "%s", dev_name(bank->chip->dev));
+   717	}
+   718	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
