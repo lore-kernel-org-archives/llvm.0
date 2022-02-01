@@ -1,105 +1,176 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59852CA1
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 11:18:32 +0000 (UTC)
-Received: by mail-oi1-f177.google.com with SMTP id y23so32464743oia.13
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 03:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pcT8Frn0n3Hw9SbN/loP8iSe8IeaLdSI0AOmRzA0azM=;
-        b=hKzVGBGbfsCPYJ7HefyXr6bWuywoKmYQ1742/PdhXYVL1PPYWI/07d9VBKqIDjQKlG
-         AnjyTkWXbTrOui9wEp9Ws/Obt6FXRwK3bogt36ZFKq/2FesmgQhkOtU0Dwdm6g5NExQz
-         evPsi84gy9SKtMvgVLeUNRdk5zTgXWxKul8/dDs/VuNoEfqgf+h9cyHuQPsO54btyTyF
-         DeqENVu1pV0fem6L4ajx7cvL9IcVau2AH7EWFNtQniJxePcfsA3yBYGT3T/LDabMKlgw
-         MFJv8z5GPDcZTCIRSz6oijDhwbdCdy8wRWf1SE7atFeRCLswZe7ZLh5VHO//32pFY91U
-         PWjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pcT8Frn0n3Hw9SbN/loP8iSe8IeaLdSI0AOmRzA0azM=;
-        b=hg5/czngml/NhV5GmXlnL9KWzf4Xe2l8ecgjNGTJMH/1pqu3F4zYQBgtJ9h3oBU6iX
-         5FSHEg0MKek4wQO7TfqhlNPmOelq4qTOokFfw1Tt4SmzlrIw5cIg+GsV2CqM+JZtSBMP
-         MASibxWo4VCjiqIT9w/08YQ7j+0C1FYJa9XP6NU0YYVjiNIUjnbHBcJE8zVlpq8n7Elf
-         64QzqfdkvPCaUeEIGhFlOeDS2jPs++ecrUOJnlDEQ5mirjXGdPT22C4QeNOOsDeYy1uy
-         CkUZCgiQuEXoG/US72qBtl6R+kMPzH4qrRukvaUEY5uEKCP4qaYzh8icIdy4LRVkuf+v
-         Twgg==
-X-Gm-Message-State: AOAM531IVqidi+cp1f9dq/ojYtF5G+grUK71Jtpi4M2cW463ZMNsazTX
-	EJvpw9zPndH0GzYMeglIAW0RFshw8VJ+kpNCPsHKAw==
-X-Google-Smtp-Source: ABdhPJwO7fHptuSvmIaQ+/J/5b/+/5PLyjAttUp0EoMB/ZtjFn1J7KrgHwXlEdQXrBtYWjyOG1ilR7VtBLKEvdzrEvU=
-X-Received: by 2002:aca:2b16:: with SMTP id i22mr746926oik.128.1643714311558;
- Tue, 01 Feb 2022 03:18:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673B32CA5
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 12:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643720143; x=1675256143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F/PNLCQjl3adnb0moLdl49HjekyThZribRW7PYNGG6M=;
+  b=M/dgyo0x+05DBEkjsqeqHEfOBKDBxsmP0QVWRNVdP64xMrCoq7RNnFBl
+   O7NVqLhu2qw4HyYCme/+KHvId8OG7uDS9TN6tOwYSX1nko+FtQU2zLb+g
+   pA0al/jAgim9mIMGeuR2qhGuwGzvWM1MRm6jA9/UB5g1/PUbH8KUaDgGI
+   3RiLsEswHAthlMZw6h4nZBVcyQJga0bbeVxSfJtguk31+/Bxv34QlGaJ4
+   cMl7a63snq2mPWBienGSAIspahgyNa3PHxMlZy/XTEdZBzpsBxay/Y7LF
+   1S/gBm8L+RDFtnrk5NFe98YaXuJXVtUV/0MJXpdb6WmGZoclZ2koWSgTY
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247900774"
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="247900774"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 04:55:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="771097518"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2022 04:55:40 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEsh9-000THa-NR; Tue, 01 Feb 2022 12:55:39 +0000
+Date: Tue, 1 Feb 2022 20:54:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
+	mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+	john.stultz@linaro.org, sboyd@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	tangmeng <tangmeng@uniontech.com>
+Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
+Message-ID: <202202012006.823BFJHa-lkp@intel.com>
+References: <20220131102214.2284-1-tangmeng@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220131090521.1947110-1-elver@google.com> <20220131090521.1947110-2-elver@google.com>
- <202201311315.B9FDD0A@keescook>
-In-Reply-To: <202201311315.B9FDD0A@keescook>
-From: Marco Elver <elver@google.com>
-Date: Tue, 1 Feb 2022 12:18:19 +0100
-Message-ID: <CANpmjNPvyKF2LiZAzTOz0mvbxPvJW_a7ysJ3n_kcHYvHXxpw+g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] stack: Constrain and fix stack offset
- randomization with Clang builds
-To: Kees Cook <keescook@chromium.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131102214.2284-1-tangmeng@uniontech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 31 Jan 2022 at 22:15, Kees Cook <keescook@chromium.org> wrote:
-> On Mon, Jan 31, 2022 at 10:05:21AM +0100, Marco Elver wrote:
-> > All supported versions of Clang perform auto-init of __builtin_alloca()
-> > when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
-> >
-> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> > enabled, add_random_kstack_offset() will auto-init that unused portion
-> > of the stack used to add an offset.
-> >
-> > There are several problems with this:
-> >
-> >       1. These offsets can be as large as 1023 bytes. Performing
-> >          memset() on them isn't exactly cheap, and this is done on
-> >          every syscall entry.
-> >
-> >       2. Architectures adding add_random_kstack_offset() to syscall
-> >          entry implemented in C require them to be 'noinstr' (e.g. see
-> >          x86 and s390). The potential problem here is that a call to
-> >          memset may occur, which is not noinstr.
-> >
-> > A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> >
-> >  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
-> >  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
-> >  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
-> >  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> >
-> > Clang 14 (unreleased) will introduce a way to skip alloca initialization
-> > via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
-> >
-> > Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
-> > auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
-> > __builtin_alloca_uninitialized() if the compiler provides it, as is done
-> > by Clang 14.
-> >
-> > Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
-> > Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
-> > Signed-off-by: Marco Elver <elver@google.com>
->
-> Thanks for the tweaks; this looks good to me now.
->
-> Acked-by: Kees Cook <keescook@chromium.org>
+Hi tangmeng,
 
-Kees, which tree do randomize_kstack changes go through these days?
-I've seen previous patches went through -tip via Thomas.
+Thank you for the patch! Yet something to improve:
 
-Thanks,
--- Marco
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220131]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: s390-randconfig-r044-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012006.823BFJHa-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/c54967d83b26ebacf4a1b686c6b659150b73306c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
+        git checkout c54967d83b26ebacf4a1b686c6b659150b73306c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/time/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/time/timer.c:37:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/time/timer.c:37:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/time/timer.c:37:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> kernel/time/timer.c:284:2: error: implicit declaration of function 'register_sysctl_init' [-Werror,-Wimplicit-function-declaration]
+           register_sysctl_init("kernel", timer_sysctl);
+           ^
+   12 warnings and 1 error generated.
+
+
+vim +/register_sysctl_init +284 kernel/time/timer.c
+
+   281	
+   282	static int __init timer_sysctl_init(void)
+   283	{
+ > 284		register_sysctl_init("kernel", timer_sysctl);
+   285		return 0;
+   286	}
+   287	__initcall(timer_sysctl_init);
+   288	#endif
+   289	static inline bool is_timers_nohz_active(void)
+   290	{
+   291		return static_branch_unlikely(&timers_nohz_active);
+   292	}
+   293	#else
+   294	static inline bool is_timers_nohz_active(void) { return false; }
+   295	#endif /* NO_HZ_COMMON */
+   296	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
