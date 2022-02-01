@@ -1,211 +1,147 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EBC2CA4
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:25:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643707534; x=1675243534;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gUWEXzJ4CQlIUlnkVKFBZZcmOw+scAStpajAHmMMh6s=;
-  b=NvHFFDbHexuy9bdefFmCY4IYyHMkbEGLzF+8LdQWJYoQJ+Vbx9c2kW4r
-   sfuRDdL1tdiDj9Is0dy4qXKh+BbvGNpMwqSADJ+wbggz0Pr5SeSg48U9b
-   ksdfYCxambVMjniuMRlIPEmuVBvb6X7nk0TGGnMgMpPheefA1ri0cDtLE
-   XyZPlOvXX7PU+77SVNvgULMCDV8aKq8FNjPeTC66pdFrliegRJTfFnbPJ
-   RbVk7e7RR8P/Mml0Pj2dbZYGZm6SsfP1Of7e/4J36YkzKpXQwtFjYZKdk
-   s+YjriSWc0RZOBsCN1MXjbP5MfircqNuMWoDIwpyYIhfKCJ9Cu1jJqvPh
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="227623774"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="227623774"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 01:25:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="537730962"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2022 01:25:29 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEpPk-000T3l-JD; Tue, 01 Feb 2022 09:25:28 +0000
-Date: Tue, 1 Feb 2022 17:25:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Sean Christopherson <seanjc@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
-	kvm@vger.kernel.org
-Subject: Re: [PATCH 4/5] KVM: x86: Use __try_cmpxchg_user() to emulate atomic
- accesses
-Message-ID: <202202011753.zksthphR-lkp@intel.com>
-References: <20220201010838.1494405-5-seanjc@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299152CA4
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D21C340F8
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1643707944;
+	bh=AX5somM9ZpbRE7b0I2Lmk0rkdReJYL8a9M+tig0TLFs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SSiLe4o9haMmIAkdRuEORI4WZaVph3IcGlXieSxr9iiRCK71b35eDd0Ex2kDLx929
+	 IID9As7MbUFVe75HVZD8cRhKQGbUKPNdrQsrzjg68Bj4iHO8Y8dQGY5wMrESbcMKcG
+	 wIH+uEcAudYv5cJxUnpsaulrXFa2qAdQEeOaLRCvFzcBSXZrpql9s1CP5I6WwXtf+i
+	 iZswmfWbcwra7QMIm92GR+qNtfd9XYT4X5LwjWjbc/sHJ6fZMuLcHO+BSi2U9xdhSg
+	 zpTfbEhKScjRD67LDb0d9dV7zryz522cy7tjLsxpmcYejPgeqjYA34ClgDZEyXfy77
+	 OfMFFt3ZJEjyQ==
+Received: by mail-wr1-f54.google.com with SMTP id s9so30672559wrb.6
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 01:32:24 -0800 (PST)
+X-Gm-Message-State: AOAM530CY3MY3mZQGTePoI6Gnl2Xu7pY9J8IoaXgLhb2Roz9aAsld817
+	2gfYtRKCfz4hTmHoRhCvWM991za/CSJ9EY9oHM8=
+X-Google-Smtp-Source: ABdhPJwPbFQyADbHX6NBehgklXNB/sGBG6xqpbNp+H91J3tdwdx+DOF+NKX+twmrmAyYD4mXONWoLrvDT2Sy8/0OizE=
+X-Received: by 2002:a05:6000:15ca:: with SMTP id y10mr20731709wry.417.1643707943102;
+ Tue, 01 Feb 2022 01:32:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201010838.1494405-5-seanjc@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220131225250.409564-1-ndesaulniers@google.com>
+In-Reply-To: <20220131225250.409564-1-ndesaulniers@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 1 Feb 2022 10:32:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
+Message-ID: <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, 
+	Kees Cook <keescook@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Len Baker <len.baker@gmx.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sean,
+On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> Add text to memory-barriers.txt and deprecated.rst to denote that
+> volatile-qualifying an asm statement is not a substitute for either a
+> compiler barrier (``barrier();``) or a clobber list.
+>
+> This way we can point to this in code that strengthens existing
+> volatile-qualified asm statements to use a compiler barrier.
+>
+> Suggested-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Example: https://godbolt.org/z/8PW549zz9
+>
+>  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
+>  Documentation/process/deprecated.rst | 17 +++++++++++++++++
+>  2 files changed, 41 insertions(+)
+>
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index b12df9137e1c..f3908c0812da 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1726,6 +1726,30 @@ of optimizations:
+>       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
+>       though the CPU of course need not do so.
+>
+> + (*) Similarly, the compiler is within its rights to reorder instructions
 
-I love your patch! Yet something to improve:
+Similar to what? Was this intended to be the second bullet point
+rather than the first?
 
-[auto build test ERROR on 26291c54e111ff6ba87a164d85d4a4e134b7315c]
+> +     around an asm statement so long as clobbers are not violated. For example,
+> +
+> +       asm volatile ("");
+> +       flag = true;
+> +
+> +     May be modified by the compiler to:
+> +
+> +       flag = true;
+> +       asm volatile ("");
+> +
+> +     Marking an asm statement as volatile is not a substitute for barrier(),
+> +     and is implicit for asm goto statements and asm statements that do not
+> +     have outputs (like the above example). Prefer either:
+> +
+> +       asm ("":::"memory");
+> +       flag = true;
+> +
+> +     Or:
+> +
+> +       asm ("");
+> +       barrier();
+> +       flag = true;
+> +
 
-url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-uaccess-CMPXCHG-KVM-bug-fixes/20220201-091001
-base:   26291c54e111ff6ba87a164d85d4a4e134b7315c
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220201/202202011753.zksthphR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5387711f4b49675e162ca30b05a3b2435326e5f9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sean-Christopherson/x86-uaccess-CMPXCHG-KVM-bug-fixes/20220201-091001
-        git checkout 5387711f4b49675e162ca30b05a3b2435326e5f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+I would expect the memory clobber to only hazard against the
+assignment of flag if it results in a store, but looking at your
+Godbolt example, this appears to apply even if flag is kept in a
+register.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/x86.c:7213:7: error: invalid output size for constraint '+a'
-                   r = emulator_try_cmpxchg_user(u64, hva, old, new);
-                       ^
-   arch/x86/kvm/x86.c:7159:3: note: expanded from macro 'emulator_try_cmpxchg_user'
-           (__try_cmpxchg_user((t *)(ptr), (t *)(old), *(t *)(new), efault ## t))
-            ^
-   arch/x86/include/asm/uaccess.h:629:11: note: expanded from macro '__try_cmpxchg_user'
-           __ret = !unsafe_try_cmpxchg_user(_ptr, _oldp, _nval, _label);   \
-                    ^
-   arch/x86/include/asm/uaccess.h:606:18: note: expanded from macro 'unsafe_try_cmpxchg_user'
-           case 1: __ret = __try_cmpxchg_user_asm("b", "q",                \
-                           ^
-   arch/x86/include/asm/uaccess.h:467:22: note: expanded from macro '__try_cmpxchg_user_asm'
-                          [old] "+a" (__old)                               \
-                                      ^
->> arch/x86/kvm/x86.c:7213:7: error: invalid output size for constraint '+a'
-   arch/x86/kvm/x86.c:7159:3: note: expanded from macro 'emulator_try_cmpxchg_user'
-           (__try_cmpxchg_user((t *)(ptr), (t *)(old), *(t *)(new), efault ## t))
-            ^
-   arch/x86/include/asm/uaccess.h:629:11: note: expanded from macro '__try_cmpxchg_user'
-           __ret = !unsafe_try_cmpxchg_user(_ptr, _oldp, _nval, _label);   \
-                    ^
-   arch/x86/include/asm/uaccess.h:610:18: note: expanded from macro 'unsafe_try_cmpxchg_user'
-           case 2: __ret = __try_cmpxchg_user_asm("w", "r",                \
-                           ^
-   arch/x86/include/asm/uaccess.h:467:22: note: expanded from macro '__try_cmpxchg_user_asm'
-                          [old] "+a" (__old)                               \
-                                      ^
->> arch/x86/kvm/x86.c:7213:7: error: invalid output size for constraint '+a'
-   arch/x86/kvm/x86.c:7159:3: note: expanded from macro 'emulator_try_cmpxchg_user'
-           (__try_cmpxchg_user((t *)(ptr), (t *)(old), *(t *)(new), efault ## t))
-            ^
-   arch/x86/include/asm/uaccess.h:629:11: note: expanded from macro '__try_cmpxchg_user'
-           __ret = !unsafe_try_cmpxchg_user(_ptr, _oldp, _nval, _label);   \
-                    ^
-   arch/x86/include/asm/uaccess.h:614:18: note: expanded from macro 'unsafe_try_cmpxchg_user'
-           case 4: __ret = __try_cmpxchg_user_asm("l", "r",                \
-                           ^
-   arch/x86/include/asm/uaccess.h:467:22: note: expanded from macro '__try_cmpxchg_user_asm'
-                          [old] "+a" (__old)                               \
-                                      ^
-   3 errors generated.
+Is that behavior documented/codified anywhere? Or are we relying on
+compiler implementation details here?
 
 
-vim +7213 arch/x86/kvm/x86.c
-
-  7157	
-  7158	#define emulator_try_cmpxchg_user(t, ptr, old, new) \
-  7159		(__try_cmpxchg_user((t *)(ptr), (t *)(old), *(t *)(new), efault ## t))
-  7160	
-  7161	static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
-  7162					     unsigned long addr,
-  7163					     const void *old,
-  7164					     const void *new,
-  7165					     unsigned int bytes,
-  7166					     struct x86_exception *exception)
-  7167	{
-  7168		struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
-  7169		u64 page_line_mask;
-  7170		unsigned long hva;
-  7171		gpa_t gpa;
-  7172		int r;
-  7173	
-  7174		/* guests cmpxchg8b have to be emulated atomically */
-  7175		if (bytes > 8 || (bytes & (bytes - 1)))
-  7176			goto emul_write;
-  7177	
-  7178		gpa = kvm_mmu_gva_to_gpa_write(vcpu, addr, NULL);
-  7179	
-  7180		if (gpa == UNMAPPED_GVA ||
-  7181		    (gpa & PAGE_MASK) == APIC_DEFAULT_PHYS_BASE)
-  7182			goto emul_write;
-  7183	
-  7184		/*
-  7185		 * Emulate the atomic as a straight write to avoid #AC if SLD is
-  7186		 * enabled in the host and the access splits a cache line.
-  7187		 */
-  7188		if (boot_cpu_has(X86_FEATURE_SPLIT_LOCK_DETECT))
-  7189			page_line_mask = ~(cache_line_size() - 1);
-  7190		else
-  7191			page_line_mask = PAGE_MASK;
-  7192	
-  7193		if (((gpa + bytes - 1) & page_line_mask) != (gpa & page_line_mask))
-  7194			goto emul_write;
-  7195	
-  7196		hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
-  7197		if (kvm_is_error_hva(addr))
-  7198			goto emul_write;
-  7199	
-  7200		hva += offset_in_page(gpa);
-  7201	
-  7202		switch (bytes) {
-  7203		case 1:
-  7204			r = emulator_try_cmpxchg_user(u8, hva, old, new);
-  7205			break;
-  7206		case 2:
-  7207			r = emulator_try_cmpxchg_user(u16, hva, old, new);
-  7208			break;
-  7209		case 4:
-  7210			r = emulator_try_cmpxchg_user(u32, hva, old, new);
-  7211			break;
-  7212		case 8:
-> 7213			r = emulator_try_cmpxchg_user(u64, hva, old, new);
-  7214			break;
-  7215		default:
-  7216			BUG();
-  7217		}
-  7218	
-  7219		if (r < 0)
-  7220			goto emul_write;
-  7221		if (r)
-  7222			return X86EMUL_CMPXCHG_FAILED;
-  7223	
-  7224		kvm_page_track_write(vcpu, gpa, new, bytes);
-  7225	
-  7226		return X86EMUL_CONTINUE;
-  7227	
-  7228	emul_write:
-  7229		printk_once(KERN_WARNING "kvm: emulating exchange as write\n");
-  7230	
-  7231		return emulator_write_emulated(ctxt, addr, new, bytes, exception);
-  7232	}
-  7233	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>   (*) The compiler is within its rights to invent stores to a variable,
+>       as in the following example:
+>
+> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+> index 388cb19f5dbb..432816e2f79e 100644
+> --- a/Documentation/process/deprecated.rst
+> +++ b/Documentation/process/deprecated.rst
+> @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
+>          instance->count = count;
+>
+>          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
+> +
+> +Volatile Qualified asm Statements
+> +=================================
+> +
+> +According to `the GCC docs on inline asm
+> +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
+> +
+> +  asm statements that have no output operands and asm goto statements,
+> +  are implicitly volatile.
+> +
+> +For many uses of asm statements, that means adding a volatile qualifier won't
+> +hurt (making the implicit explicit), but it will not strengthen the semantics
+> +for such cases where it would have been implied. Care should be taken not to
+> +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
+> +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
+> +
+> +.. [memory-barriers] Documentation/memory-barriers.txt
+> --
+> 2.35.0.rc2.247.g8bbb082509-goog
+>
