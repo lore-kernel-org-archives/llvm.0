@@ -1,41 +1,42 @@
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A312CA4
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBD22CA4
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 10:12:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643708756; x=1675244756;
+  t=1643710352; x=1675246352;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2PDjrfnypp5a0yXMmV0ApeDlQofZx6TanEhO1UKTVzs=;
-  b=SlO6E8BvFTCZTsR/0T/izT0Pg3s3wajZ+5A6Wag3ew6t+F6L7fSwNqTL
-   BGgIFM4aCYJZtmMx9O6qtafBFWU8f6Ha6qfMTbwIuQrWZfrNBxXPFHfLR
-   3PLnn3XfDWMeSGZwXdvIaYEEQ0VCaFnww95/4FOnKyPqrAE55zM+GA9Bu
-   wZRLwBDS1rNrU8Arf+cbmlqRYUcOBuPsnrdRH7WS/EKwxI0E/QagGoTLo
-   z6GOMYceMJdoS2IhhcPhhpqCg6uT/kqO+HvEfMd4+Ht/dkzbK2hj6jaAM
-   qz+loaRNcLxyI6ukucCqDZMnoucV7C4wFuXm+E0dNkdx4PgWgv5QxRyYi
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308388148"
+  bh=proOJEQ6dZ/oQT0A9LNKC/zS5sKnyJsyQKktVCkkAEM=;
+  b=ggS7oRoK9rEvk+HRG6eftdQ44IKNvVOxVFl3a6Q4+NTILlddN/wUvcEW
+   WFKPCNDFlzAd3yHmXlKOI5kjdtWdGtHn9ra7Zyk2knIZXJ0TMq4w4x0nh
+   VjNr3S0ytwe59TvcXm4ruzGyinPvCFlUxKRrFc0Yy99IUrjy0uFTy4Woh
+   cIRSGMIHlgBVlg0OJDMQPjgNtVeTPpWR/2E10aP57eol7WBntdQkHr3pf
+   xs91OdJuZiAOo6xW/YXtbveaV/kiSgNptw2JQBvcTk01/J/2/W28r0JD3
+   /nsTxf/v9VurmuOh63yRjvvWiQk1Iz+ZJQ/EUncaOQmiRvbua4OjHDHoO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="235054197"
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="308388148"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 01:45:31 -0800
+   d="scan'208";a="235054197"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:12:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="482231117"
+   d="scan'208";a="676036155"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Feb 2022 01:45:29 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 01 Feb 2022 02:12:30 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
 	(envelope-from <lkp@intel.com>)
-	id 1nEpj6-000T4c-Uf; Tue, 01 Feb 2022 09:45:28 +0000
-Date: Tue, 1 Feb 2022 17:45:23 +0800
+	id 1nEq9F-000T67-Nr; Tue, 01 Feb 2022 10:12:29 +0000
+Date: Tue, 1 Feb 2022 18:11:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yizhuo Zhai <yzhai003@ucr.edu>
+To: Daniel Axtens <dja@axtens.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/video/fbdev/core/fbmem.c:1165:7: error: use of undeclared
- identifier 'blank'
-Message-ID: <202202011708.N9Yuf48f-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Alexey Kardashevskiy <aik@ozlabs.ru>
+Subject: arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported
+ directive '.stabs'
+Message-ID: <202202011736.oIfH0Ze8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,139 +47,65 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220201-103710/Yizhuo-Zhai/fbdev-fbmem-Fix-the-implicit-type-casting/20220131-150528
-head:   385d42ed58600c12390f350f56849260a19138a9
-commit: 385d42ed58600c12390f350f56849260a19138a9 fbdev: fbmem: Fix the implicit type casting
-date:   7 hours ago
-config: arm-magician_defconfig (https://download.01.org/0day-ci/archive/20220201/202202011708.N9Yuf48f-lkp@intel.com/config)
+Hi Daniel,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   26291c54e111ff6ba87a164d85d4a4e134b7315c
+commit: f5140cab448e4819ca6f158cb4130352f73c92e4 powerpc: check for support for -Wa,-m{power4,any}
+date:   6 weeks ago
+config: powerpc64-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202011736.oIfH0Ze8-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/385d42ed58600c12390f350f56849260a19138a9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220201-103710/Yizhuo-Zhai/fbdev-fbmem-Fix-the-implicit-type-casting/20220131-150528
-        git checkout 385d42ed58600c12390f350f56849260a19138a9
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5140cab448e4819ca6f158cb4130352f73c92e4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f5140cab448e4819ca6f158cb4130352f73c92e4
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/video/fbdev/core/fbmem.c:1165:7: error: use of undeclared identifier 'blank'
-                   if (blank > FB_BLANK_POWERDOWN)
-                       ^
-   drivers/video/fbdev/core/fbmem.c:1166:4: error: use of undeclared identifier 'blank'
-                           blank = FB_BLANK_POWERDOWN;
-                           ^
-   2 errors generated.
+   <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+   #warning syscall futex_waitv not implemented
+    ^
+   1 warning generated.
+>> arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported directive '.stabs'
+   .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; _restgpr_31_x:
+          ^
+   arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported directive '.stabs'
+   .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32gpr_31_x; _rest32gpr_31_x:
+          ^
+   make[2]: *** [arch/powerpc/kernel/vdso32/Makefile:55: arch/powerpc/kernel/vdso32/gettimeofday.o] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/blank +1165 drivers/video/fbdev/core/fbmem.c
+vim +72 arch/powerpc/kernel/vdso32/gettimeofday.S
 
-  1087	
-  1088	static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
-  1089				unsigned long arg)
-  1090	{
-  1091		const struct fb_ops *fb;
-  1092		struct fb_var_screeninfo var;
-  1093		struct fb_fix_screeninfo fix;
-  1094		struct fb_cmap cmap_from;
-  1095		struct fb_cmap_user cmap;
-  1096		void __user *argp = (void __user *)arg;
-  1097		long ret = 0;
-  1098	
-  1099		switch (cmd) {
-  1100		case FBIOGET_VSCREENINFO:
-  1101			lock_fb_info(info);
-  1102			var = info->var;
-  1103			unlock_fb_info(info);
-  1104	
-  1105			ret = copy_to_user(argp, &var, sizeof(var)) ? -EFAULT : 0;
-  1106			break;
-  1107		case FBIOPUT_VSCREENINFO:
-  1108			if (copy_from_user(&var, argp, sizeof(var)))
-  1109				return -EFAULT;
-  1110			console_lock();
-  1111			lock_fb_info(info);
-  1112			ret = fb_set_var(info, &var);
-  1113			if (!ret)
-  1114				fbcon_update_vcs(info, var.activate & FB_ACTIVATE_ALL);
-  1115			unlock_fb_info(info);
-  1116			console_unlock();
-  1117			if (!ret && copy_to_user(argp, &var, sizeof(var)))
-  1118				ret = -EFAULT;
-  1119			break;
-  1120		case FBIOGET_FSCREENINFO:
-  1121			lock_fb_info(info);
-  1122			memcpy(&fix, &info->fix, sizeof(fix));
-  1123			if (info->flags & FBINFO_HIDE_SMEM_START)
-  1124				fix.smem_start = 0;
-  1125			unlock_fb_info(info);
-  1126	
-  1127			ret = copy_to_user(argp, &fix, sizeof(fix)) ? -EFAULT : 0;
-  1128			break;
-  1129		case FBIOPUTCMAP:
-  1130			if (copy_from_user(&cmap, argp, sizeof(cmap)))
-  1131				return -EFAULT;
-  1132			ret = fb_set_user_cmap(&cmap, info);
-  1133			break;
-  1134		case FBIOGETCMAP:
-  1135			if (copy_from_user(&cmap, argp, sizeof(cmap)))
-  1136				return -EFAULT;
-  1137			lock_fb_info(info);
-  1138			cmap_from = info->cmap;
-  1139			unlock_fb_info(info);
-  1140			ret = fb_cmap_to_user(&cmap_from, &cmap);
-  1141			break;
-  1142		case FBIOPAN_DISPLAY:
-  1143			if (copy_from_user(&var, argp, sizeof(var)))
-  1144				return -EFAULT;
-  1145			console_lock();
-  1146			lock_fb_info(info);
-  1147			ret = fb_pan_display(info, &var);
-  1148			unlock_fb_info(info);
-  1149			console_unlock();
-  1150			if (ret == 0 && copy_to_user(argp, &var, sizeof(var)))
-  1151				return -EFAULT;
-  1152			break;
-  1153		case FBIO_CURSOR:
-  1154			ret = -EINVAL;
-  1155			break;
-  1156		case FBIOGET_CON2FBMAP:
-  1157			ret = fbcon_get_con2fb_map_ioctl(argp);
-  1158			break;
-  1159		case FBIOPUT_CON2FBMAP:
-  1160			ret = fbcon_set_con2fb_map_ioctl(argp);
-  1161			break;
-  1162		case FBIOBLANK:
-  1163			console_lock();
-  1164			lock_fb_info(info);
-> 1165			if (blank > FB_BLANK_POWERDOWN)
-  1166				blank = FB_BLANK_POWERDOWN;
-  1167			ret = fb_blank(info, arg);
-  1168			/* might again call into fb_blank */
-  1169			fbcon_fb_blanked(info, arg);
-  1170			unlock_fb_info(info);
-  1171			console_unlock();
-  1172			break;
-  1173		default:
-  1174			lock_fb_info(info);
-  1175			fb = info->fbops;
-  1176			if (fb->fb_ioctl)
-  1177				ret = fb->fb_ioctl(info, cmd, arg);
-  1178			else
-  1179				ret = -ENOTTY;
-  1180			unlock_fb_info(info);
-  1181		}
-  1182		return ret;
-  1183	}
-  1184	
+08c18b63d9656e Christophe Leroy 2021-03-09  68  
+08c18b63d9656e Christophe Leroy 2021-03-09  69  /* Routines for restoring integer registers, called by the compiler.  */
+08c18b63d9656e Christophe Leroy 2021-03-09  70  /* Called with r11 pointing to the stack header word of the caller of the */
+08c18b63d9656e Christophe Leroy 2021-03-09  71  /* function, just beyond the end of the integer restore area.  */
+08c18b63d9656e Christophe Leroy 2021-03-09 @72  _GLOBAL(_restgpr_31_x)
+
+:::::: The code at line 72 was first introduced by commit
+:::::: 08c18b63d9656e0389087d1956d2b37fd7019172 powerpc/vdso32: Add missing _restgpr_31_x to fix build failure
+
+:::::: TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
