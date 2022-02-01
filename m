@@ -1,141 +1,104 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDBC2F25
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 17:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643734996; x=1675270996;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3XO2RCLpUwqg2gMhv4lmheHfD3ysoJ5vEX8G/1igDeg=;
-  b=kZ523/oTk5A5uAQ+oS2lWKAREDvUfmVyaVn3+yeBgUsu5B3dJFmUDgKf
-   pjuTEjpDnYyUlrKyti6svH6coSZAUJg8VeQI/jcgqC/I5wbAvf2/DSc1O
-   SP4V9bwqqNrGJCmc8QNbIcbEVqqjq34tVzPPwSyClFMGFvI2sRPLgoZVe
-   DARGDcoXybjmiMhc0k4EsBNKF7hO9wWKKiu8twgVMt5bFiBYUpGIYM9zr
-   wtRp8jIXHGqdWjVcPWPdtRfigpjXjQ2WbTo9Xmh1EB24QdYYIPKOHSqHt
-   bCV9lFDWdfEfKs0wsCND22VPxeIlsSYrt8PkfIA5cD+r7VOAZXY88H/om
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="231307134"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="231307134"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 09:00:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="537881840"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2022 09:00:55 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1nEwWV-000TVn-1z; Tue, 01 Feb 2022 17:00:55 +0000
-Date: Wed, 2 Feb 2022 01:00:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [dvyukov:dvyukov-sigtrap-arm64 1/1]
- arch/arm64/kernel/signal.c:566:32: error: use of undeclared identifier 'sf'
-Message-ID: <202202020023.4C6dVeTR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDF72F25
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 17:09:50 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id c9so15857226plg.11
+        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 09:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PUIgelpXEQevWyX1W8jBsBa/dCPezZfxgXScg7BVU5c=;
+        b=SW54mIhtH5QKZwMa5XF99tt04pvq6dTodAAzJOC/fyaSsk3YbovTPXlN9dJtQRy9RV
+         sZ5Dr2tD8bdIVEhWaqhIYeHFefl4pgIq29m2gZi8tpzDap4fJXTdR3kIIi9/v+aYemK7
+         NBsYzn2I5t8ouHEH4apgnJHW2iZ5yr/UbkcAhqdSVDWJW6R9FmeJJWj9nc4+BDqoqw7K
+         Tpk2sYjpqGYmk+u2ZqauQdVk0zErJXuHJDqCphJZJ+T9yXMODdkf4BGotlaiakIQxOy0
+         t25O1aVH9BsUDt+a2ggdR+VkgUv2zOMBHz7WI2miDkM4USIWtb8TTbHAVKfcAvaWPXwj
+         2fBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PUIgelpXEQevWyX1W8jBsBa/dCPezZfxgXScg7BVU5c=;
+        b=5KrhKl+z44qxmrWzvWi+mficJZE0+ZrShPsMr1DF8Aclmwjj4eT6anmUC6Qor/F4h3
+         B9o2QDP3ttc3cjiIBNz+YqdJyf/DZpsjvDoEjkP04UAtIWrENVJAkjvG5rJmaGhFdQcF
+         LhiYuQ8C97XQf9OHeELcqaoLVDQVjqwzVIX96+HAULEmY14mm8P8dZt/wiBxE9t91NLd
+         5cWiWpJdwKDTEgYTBfK69DUJ4rNPQODJ0YJcRC7knWZlfTWYwP8aWpKiazo1bPwvy87d
+         Fl1+wCKTrNJl2o9eHFytbrA32qMTrVF37xRn5qMf8PZEwcNRtqCYfJ2iAN9lVEbEQ7Z7
+         Kt+A==
+X-Gm-Message-State: AOAM530nx5o8868xMwbtPTqPDyvNOO1k9zzevSDfEvgkMRCaOcftW0K4
+	4/gb6KOpbwBoG3/HipKqo9o=
+X-Google-Smtp-Source: ABdhPJz5yB07Ix5o19k8F+dU8Px3ktIP0ST5YMwenoAWVaxtH3aTzk6TAg04YPusVJsGsVMBn8uNyQ==
+X-Received: by 2002:a17:902:e812:: with SMTP id u18mr26752712plg.12.1643735390153;
+        Tue, 01 Feb 2022 09:09:50 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id h14sm23508476pfh.95.2022.02.01.09.09.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 09:09:49 -0800 (PST)
+Message-ID: <d065921b-784c-be0c-3ad2-f2ededb201ac@gmail.com>
+Date: Tue, 1 Feb 2022 09:09:49 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/5] x86: uaccess CMPXCHG + KVM bug fixes
+Content-Language: en-US
+To: Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, Wanpeng Li
+ <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>,
+ Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
+ Tadeusz Struk <tadeusz.struk@linaro.org>
+References: <20220201010838.1494405-1-seanjc@google.com>
+From: Tadeusz Struk <tstruk@gmail.com>
+In-Reply-To: <20220201010838.1494405-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/dvyukov/linux dvyukov-sigtrap-arm64
-head:   dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
-commit: dfd6903d9c6538e3ad792c1df6ffbcce2072b12b [1/1] arm64: try to fix arm64 watchpoints
-config: arm64-randconfig-r001-20220130 (https://download.01.org/0day-ci/archive/20220202/202202020023.4C6dVeTR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/dvyukov/linux/commit/dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
-        git remote add dvyukov https://github.com/dvyukov/linux
-        git fetch --no-tags dvyukov dvyukov-sigtrap-arm64
-        git checkout dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On 1/31/22 17:08, Sean Christopherson wrote:
+> Add uaccess macros for doing CMPXCHG on userspace addresses and use the
+> macros to fix KVM bugs by replacing flawed code that maps memory into the
+> kernel address space without proper mmu_notifier protection (or with
+> broken pfn calculations in one case).
+> 
+> Add yet another Kconfig for guarding asm_volatile_goto() to workaround a
+> clang-13 bug.  I've verified the test passes on gcc versions of arm64,
+> PPC, RISC-V, and s390x that also pass the CC_HAS_ASM_GOTO_OUTPUT test.
+> 
+> Patches 1-4 are tagged for stable@ as patches 3 and 4 (mostly 3) need a
+> backportable fix, and doing CMPXCHG on the userspace address is the
+> simplest fix from a KVM perspective.
+> 
+> Peter Zijlstra (1):
+>    x86/uaccess: Implement macros for CMPXCHG on user addresses
+> 
+> Sean Christopherson (4):
+>    Kconfig: Add option for asm goto w/ tied outputs to workaround
+>      clang-13 bug
+>    KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits
+>    KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses
+>    KVM: x86: Bail to userspace if emulation of atomic user access faults
+> 
+>   arch/x86/include/asm/uaccess.h | 131 +++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/mmu/paging_tmpl.h |  45 +----------
+>   arch/x86/kvm/x86.c             |  35 ++++-----
+>   init/Kconfig                   |   4 +
+>   4 files changed, 150 insertions(+), 65 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This also fixes the following syzbot issue:
+https://syzkaller.appspot.com/bug?id=6cb6102a0a7b0c52060753dd62d070a1d1e71347
 
-All error/warnings (new ones prefixed by >>):
+Tested-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 
->> arch/arm64/kernel/signal.c:566:32: error: use of undeclared identifier 'sf'
-           if (!__copy_from_user(&info, &sf->info, sizeof(info)) &&
-                                         ^
-   arch/arm64/kernel/signal.c:930:6: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
-   void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
-        ^
-   arch/arm64/kernel/signal.c:930:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
-   ^
-   static 
-   1 warning and 1 error generated.
 --
->> arch/arm64/kernel/hw_breakpoint.c:754:6: warning: no previous prototype for function 'hw_bp_single_step' [-Wmissing-prototypes]
-   void hw_bp_single_step(struct pt_regs *regs)
-        ^
-   arch/arm64/kernel/hw_breakpoint.c:754:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hw_bp_single_step(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/sf +566 arch/arm64/kernel/signal.c
-
-   536	
-   537	SYSCALL_DEFINE0(rt_sigreturn)
-   538	{
-   539		struct pt_regs *regs = current_pt_regs();
-   540		struct rt_sigframe __user *frame;
-   541		struct siginfo info;
-   542	
-   543		/* Always make any pending restarted system calls return -EINTR */
-   544		current->restart_block.fn = do_no_restart_syscall;
-   545	
-   546		/*
-   547		 * Since we stacked the signal on a 128-bit boundary, then 'sp' should
-   548		 * be word aligned here.
-   549		 */
-   550		if (regs->sp & 15)
-   551			goto badframe;
-   552	
-   553		frame = (struct rt_sigframe __user *)regs->sp;
-   554	
-   555		if (!access_ok(frame, sizeof (*frame)))
-   556			goto badframe;
-   557	
-   558		if (restore_sigframe(regs, frame))
-   559			goto badframe;
-   560	
-   561		if (restore_altstack(&frame->uc.uc_stack))
-   562			goto badframe;
-   563	
-   564		// TODO: memorize the original return PC in setup_rt_frame
-   565		// and ensure we are returning to the same PC.
- > 566		if (!__copy_from_user(&info, &sf->info, sizeof(info)) &&
-   567			info.si_signo == SIGTRAP && info.si_code == TRAP_PERF &&
-   568			info.si_perf_type == PERF_TYPE_BREAKPOINT)
-   569			hw_bp_single_step(regs);
-   570	
-   571		return regs->regs[0];
-   572	
-   573	badframe:
-   574		arm64_notify_segfault(regs->sp);
-   575		return 0;
-   576	}
-   577	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Tadeusz
