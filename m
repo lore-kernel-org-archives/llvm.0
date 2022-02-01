@@ -1,29 +1,19 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [142.44.231.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159D82F25
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 16:30:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=6qWMva38m5BETEjBXB6GjYEK7Al+xJ8+7XcUp509tRY=; b=TAhLTyuyC+liOj4hdGqtK7Yynq
-	TrvpGa5hk0Vxxk1TPxnwSq28u6molarKW44pFRSqt4hezAE2eA1OJC2kuH/0lX5i84CSD5ZUMOMGN
-	EyAD7A48j+DzV+hdVbgIbMKAVWJoEJm1lW6lAa45kEwAQKmNaWZ+U1akR0dfmLKqS1bZycR+NneeV
-	aS11l5S5n3rtGurkfABCW+PFofosYhyXLT6FNUwO16ExHq22gWrFZNo+rOVSsGASl4rx74QSaa22/
-	y0yHfyUfc9YprQLL/GI3rsD2GTjKUluWEZgUseE81VPxRXoWp7hLBpskmWAqo/LHu6/qDRdLWFI3g
-	ze5/FFbg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nEw2x-00Cdb7-Qo; Tue, 01 Feb 2022 16:30:23 +0000
-Date: Tue, 1 Feb 2022 16:30:23 +0000
-From: Matthew Wilcox <willy@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969472F25
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 16:32:37 +0000 (UTC)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nEw4x-006MKm-Eg; Tue, 01 Feb 2022 16:32:27 +0000
+Date: Tue, 1 Feb 2022 16:32:27 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
 To: =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-Cc: gregkh@linuxfoundation.org, tj@kernel.org, viro@zeniv.linux.org.uk,
-	nathan@kernel.org, ndesaulniers@google.com,
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, nathan@kernel.org,
+	ndesaulniers@google.com, willy@infradead.org,
 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	llvm@lists.linux.dev
 Subject: Re: [PATCH v3] seq_file: fix NULL pointer arithmetic warning
-Message-ID: <YflgH+uaoMJTlUoK@casper.infradead.org>
+Message-ID: <Yflgm3kv1059tIDH@zeniv-ca.linux.org.uk>
 References: <Yfgo8p6Vk+h4+YHY@fedora>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -35,6 +25,7 @@ Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <Yfgo8p6Vk+h4+YHY@fedora>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
 On Mon, Jan 31, 2022 at 03:22:42PM -0300, Maíra Canal wrote:
 > Implement conditional logic in order to replace NULL pointer arithmetic.
@@ -51,5 +42,11 @@ On Mon, Jan 31, 2022 at 03:22:42PM -0300, Maíra Canal wrote:
 >         return NULL + (*pos == 0);
 > 
 > Signed-off-by: Maíra Canal <maira.canal@usp.br>
+> ---
+> V1 -> V2:
+> - Use SEQ_START_TOKEN instead of open-coding it
+> - kernfs_seq_start call single_start instead of open-coding it
+> V2 -> V3:
+> - Remove the EXPORT of the single_start symbol
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Applied.
