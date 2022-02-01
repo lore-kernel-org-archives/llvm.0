@@ -1,108 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176672F25
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 17:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1643737394;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3/onK8AnDtL53ai739ibWRR8ijRtGmfoRrTuaxLarqk=;
-	b=eU/uHJPcL8l079aH9g6zP0a77eKmYpYWFma41idZEgwAccg8VY3ivjkjl8RWCn3IlxIL0m
-	0SySgy/xHt5dbqx5FzoZAWic0XaKVZ57WBzKDXmYM4k369fG5zWvEsf9g8bfx0TYgkm4UB
-	SZbEtg7YkaKMl6YJMDgA8T0M7Q9yAO0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-fuDYpLWTM6qwxcBJlBEVOA-1; Tue, 01 Feb 2022 12:43:08 -0500
-X-MC-Unique: fuDYpLWTM6qwxcBJlBEVOA-1
-Received: by mail-qk1-f199.google.com with SMTP id a134-20020ae9e88c000000b0047ebe47102dso12647954qkg.18
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 09:43:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3/onK8AnDtL53ai739ibWRR8ijRtGmfoRrTuaxLarqk=;
-        b=rUOr+nx1Vr4Gxj+/Aj4HBim86uusTM7ApUl1lEUoPyrGyJGfZDQQYrBQ7JKGIPtRF8
-         Xn35YMEIqCKW+t8gIzA8ew3z5IqRjUy2RM7g6LB3Vsi5ivJlkDqVI+cdP3ABXU39H3Pm
-         mbsjPnXB5kImFQ36Q6+ncukraat9SK9IX05rCxyeyHvKF8QusqV9dhwp9UeK3gIBLKLd
-         sDg+HKIwlzuzhYnK+FOgi/RiHbDydYRAbMGkGI0rynYlK+75srkNWyrK2zUN4MH0qEEj
-         2YajzYqnpJMMOlFu+Zpo0Zv4EFlEuH6dTMmcNEtlHO/PyjE69OYtM7zp/JzJwdk46jOJ
-         3Jrw==
-X-Gm-Message-State: AOAM530WL73BQTq0f7VQPyrtxBmp0tdXM7xUPWl+yp28cvCzRCHkXRaT
-	LKapkYfQro+p/UaoGcqwYPxPFbQSGhfXU8JlL7K7F1cvj+Ij89uRxmP3bexWzS2m2rz0bWxwD02
-	lpf6/ZJoeeAtTBw==
-X-Received: by 2002:a05:622a:44b:: with SMTP id o11mr10694444qtx.507.1643737387526;
-        Tue, 01 Feb 2022 09:43:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyADtOcufdtCgzPuWfrUXmKa/HFQ+qhMTdmjjxzdXxSj8ZJqSx+dyiOnLYrEWaALkPWKiqX+g==
-X-Received: by 2002:a05:622a:44b:: with SMTP id o11mr10694429qtx.507.1643737387313;
-        Tue, 01 Feb 2022 09:43:07 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id d17sm11962845qkn.84.2022.02.01.09.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:43:06 -0800 (PST)
-From: trix@redhat.com
-To: marcel@holtmann.org,
-	johan.hedberg@gmail.com,
-	luiz.dentz@gmail.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-bluetooth@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] Bluetooth: hci_sync: fix undefined return of hci_disconnect_all_sync()
-Date: Tue,  1 Feb 2022 09:42:56 -0800
-Message-Id: <20220201174256.1690515-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9442F25
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 18:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643739663; x=1675275663;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KyOSWEaejFfh8yGXm841fhhAs/IxurylSze+gORwEsM=;
+  b=WhoxNz42PjroNJDyBYQBQifWo+6oDpT3EtHeuvZmeVh3ScGgglpxJaar
+   8nE5o0JwX6kDFhuWx+7sDc+Pb2Us3VLyHSAAn1AFOWhck3uo/C32gkHW7
+   fLPE0fsf3vHc6DJu3BCGtlEkglTDB6C2SdAxxHIc3fjiIjF9jqJKmkE05
+   1obu0I+/lFq9f0mk60u54/5cWsRh0QStfS0QGqiTxfA3eLEe64AndUmhF
+   f1KNE1Q5W6FHP6mNjxET1wLBsHRC3djFoqEP8/SuH10bRYn/7qrG7vgNo
+   hx6AHRM269PoVPoZ444phNqGbhvRFVce2bphp2b49m9zT5DHXZdxdlsDj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247706589"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="247706589"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:21:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="698497799"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2022 10:21:00 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nExm0-000TZo-5j; Tue, 01 Feb 2022 18:21:00 +0000
+Date: Wed, 2 Feb 2022 02:20:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bob Pearson <rpearsonhpe@gmail.com>, jgg@nvidia.com,
+	zyjzyj2000@gmail.com, linux-rdma@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Bob Pearson <rpearsonhpe@gmail.com>
+Subject: Re: [PATCH for-next v10 07/17] RDMA/rxe: Use kzmalloc/kfree for mca
+Message-ID: <202202020207.bxuWR3xX-lkp@intel.com>
+References: <20220131220849.10170-8-rpearsonhpe@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131220849.10170-8-rpearsonhpe@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Tom Rix <trix@redhat.com>
+Hi Bob,
 
-clang static analysis reports this problem
-hci_sync.c:4428:2: warning: Undefined or garbage value
-  returned to caller
-        return err;
-        ^~~~~~~~~~
+Thank you for the patch! Perhaps something to improve:
 
-If there are no connections this function is a noop but
-err is never set and a false error could be reported.
-Return 0 as other hci_* functions do.
+[auto build test WARNING on v5.17-rc2]
+[cannot apply to rdma/for-next next-20220201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Fixes: 182ee45da083 ("Bluetooth: hci_sync: Rework hci_suspend_notifier")
-Signed-off-by: Tom Rix <trix@redhat.com>
+url:    https://github.com/0day-ci/linux/commits/Bob-Pearson/Move-two-object-pools-to-rxe_mcast-c/20220201-061231
+base:    26291c54e111ff6ba87a164d85d4a4e134b7315c
+config: arm-randconfig-r001-20220131 (https://download.01.org/0day-ci/archive/20220202/202202020207.bxuWR3xX-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/f9d560658bbbd5a17cc3c62e566cb9bb77697530
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Bob-Pearson/Move-two-object-pools-to-rxe_mcast-c/20220201-061231
+        git checkout f9d560658bbbd5a17cc3c62e566cb9bb77697530
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/infiniband/sw/rxe/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/infiniband/sw/rxe/rxe_mcast.c:57:6: warning: no previous prototype for function '__rxe_destroy_mcg' [-Wmissing-prototypes]
+   void __rxe_destroy_mcg(struct rxe_mcg *grp)
+        ^
+   drivers/infiniband/sw/rxe/rxe_mcast.c:57:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __rxe_destroy_mcg(struct rxe_mcg *grp)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/__rxe_destroy_mcg +57 drivers/infiniband/sw/rxe/rxe_mcast.c
+
+    55	
+    56	/* caller is holding a ref from lookup and mcg->mcg_lock*/
+  > 57	void __rxe_destroy_mcg(struct rxe_mcg *grp)
+    58	{
+    59		rxe_drop_key(grp);
+    60		rxe_drop_ref(grp);
+    61	
+    62		rxe_mcast_delete(grp->rxe, &grp->mgid);
+    63	}
+    64	
+
 ---
- net/bluetooth/hci_sync.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 6e71aa6b6feae..9327737da6003 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -4425,7 +4425,7 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
- 			return err;
- 	}
- 
--	return err;
-+	return 0;
- }
- 
- /* This function perform power off HCI command sequence as follows:
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
