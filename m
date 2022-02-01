@@ -1,147 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299152CA4
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D21C340F8
-	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643707944;
-	bh=AX5somM9ZpbRE7b0I2Lmk0rkdReJYL8a9M+tig0TLFs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SSiLe4o9haMmIAkdRuEORI4WZaVph3IcGlXieSxr9iiRCK71b35eDd0Ex2kDLx929
-	 IID9As7MbUFVe75HVZD8cRhKQGbUKPNdrQsrzjg68Bj4iHO8Y8dQGY5wMrESbcMKcG
-	 wIH+uEcAudYv5cJxUnpsaulrXFa2qAdQEeOaLRCvFzcBSXZrpql9s1CP5I6WwXtf+i
-	 iZswmfWbcwra7QMIm92GR+qNtfd9XYT4X5LwjWjbc/sHJ6fZMuLcHO+BSi2U9xdhSg
-	 zpTfbEhKScjRD67LDb0d9dV7zryz522cy7tjLsxpmcYejPgeqjYA34ClgDZEyXfy77
-	 OfMFFt3ZJEjyQ==
-Received: by mail-wr1-f54.google.com with SMTP id s9so30672559wrb.6
-        for <llvm@lists.linux.dev>; Tue, 01 Feb 2022 01:32:24 -0800 (PST)
-X-Gm-Message-State: AOAM530CY3MY3mZQGTePoI6Gnl2Xu7pY9J8IoaXgLhb2Roz9aAsld817
-	2gfYtRKCfz4hTmHoRhCvWM991za/CSJ9EY9oHM8=
-X-Google-Smtp-Source: ABdhPJwPbFQyADbHX6NBehgklXNB/sGBG6xqpbNp+H91J3tdwdx+DOF+NKX+twmrmAyYD4mXONWoLrvDT2Sy8/0OizE=
-X-Received: by 2002:a05:6000:15ca:: with SMTP id y10mr20731709wry.417.1643707943102;
- Tue, 01 Feb 2022 01:32:23 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A312CA4
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 09:45:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643708756; x=1675244756;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2PDjrfnypp5a0yXMmV0ApeDlQofZx6TanEhO1UKTVzs=;
+  b=SlO6E8BvFTCZTsR/0T/izT0Pg3s3wajZ+5A6Wag3ew6t+F6L7fSwNqTL
+   BGgIFM4aCYJZtmMx9O6qtafBFWU8f6Ha6qfMTbwIuQrWZfrNBxXPFHfLR
+   3PLnn3XfDWMeSGZwXdvIaYEEQ0VCaFnww95/4FOnKyPqrAE55zM+GA9Bu
+   wZRLwBDS1rNrU8Arf+cbmlqRYUcOBuPsnrdRH7WS/EKwxI0E/QagGoTLo
+   z6GOMYceMJdoS2IhhcPhhpqCg6uT/kqO+HvEfMd4+Ht/dkzbK2hj6jaAM
+   qz+loaRNcLxyI6ukucCqDZMnoucV7C4wFuXm+E0dNkdx4PgWgv5QxRyYi
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308388148"
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="308388148"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 01:45:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="482231117"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Feb 2022 01:45:29 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nEpj6-000T4c-Uf; Tue, 01 Feb 2022 09:45:28 +0000
+Date: Tue, 1 Feb 2022 17:45:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yizhuo Zhai <yzhai003@ucr.edu>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: drivers/video/fbdev/core/fbmem.c:1165:7: error: use of undeclared
+ identifier 'blank'
+Message-ID: <202202011708.N9Yuf48f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220131225250.409564-1-ndesaulniers@google.com>
-In-Reply-To: <20220131225250.409564-1-ndesaulniers@google.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 1 Feb 2022 10:32:11 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
-Message-ID: <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, 
-	Kees Cook <keescook@chromium.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Len Baker <len.baker@gmx.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> Add text to memory-barriers.txt and deprecated.rst to denote that
-> volatile-qualifying an asm statement is not a substitute for either a
-> compiler barrier (``barrier();``) or a clobber list.
->
-> This way we can point to this in code that strengthens existing
-> volatile-qualified asm statements to use a compiler barrier.
->
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Example: https://godbolt.org/z/8PW549zz9
->
->  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
->  Documentation/process/deprecated.rst | 17 +++++++++++++++++
->  2 files changed, 41 insertions(+)
->
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index b12df9137e1c..f3908c0812da 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1726,6 +1726,30 @@ of optimizations:
->       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
->       though the CPU of course need not do so.
->
-> + (*) Similarly, the compiler is within its rights to reorder instructions
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220201-103710/Yizhuo-Zhai/fbdev-fbmem-Fix-the-implicit-type-casting/20220131-150528
+head:   385d42ed58600c12390f350f56849260a19138a9
+commit: 385d42ed58600c12390f350f56849260a19138a9 fbdev: fbmem: Fix the implicit type casting
+date:   7 hours ago
+config: arm-magician_defconfig (https://download.01.org/0day-ci/archive/20220201/202202011708.N9Yuf48f-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/385d42ed58600c12390f350f56849260a19138a9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20220201-103710/Yizhuo-Zhai/fbdev-fbmem-Fix-the-implicit-type-casting/20220131-150528
+        git checkout 385d42ed58600c12390f350f56849260a19138a9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Similar to what? Was this intended to be the second bullet point
-rather than the first?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +     around an asm statement so long as clobbers are not violated. For example,
-> +
-> +       asm volatile ("");
-> +       flag = true;
-> +
-> +     May be modified by the compiler to:
-> +
-> +       flag = true;
-> +       asm volatile ("");
-> +
-> +     Marking an asm statement as volatile is not a substitute for barrier(),
-> +     and is implicit for asm goto statements and asm statements that do not
-> +     have outputs (like the above example). Prefer either:
-> +
-> +       asm ("":::"memory");
-> +       flag = true;
-> +
-> +     Or:
-> +
-> +       asm ("");
-> +       barrier();
-> +       flag = true;
-> +
+All errors (new ones prefixed by >>):
 
-I would expect the memory clobber to only hazard against the
-assignment of flag if it results in a store, but looking at your
-Godbolt example, this appears to apply even if flag is kept in a
-register.
-
-Is that behavior documented/codified anywhere? Or are we relying on
-compiler implementation details here?
+>> drivers/video/fbdev/core/fbmem.c:1165:7: error: use of undeclared identifier 'blank'
+                   if (blank > FB_BLANK_POWERDOWN)
+                       ^
+   drivers/video/fbdev/core/fbmem.c:1166:4: error: use of undeclared identifier 'blank'
+                           blank = FB_BLANK_POWERDOWN;
+                           ^
+   2 errors generated.
 
 
->   (*) The compiler is within its rights to invent stores to a variable,
->       as in the following example:
->
-> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-> index 388cb19f5dbb..432816e2f79e 100644
-> --- a/Documentation/process/deprecated.rst
-> +++ b/Documentation/process/deprecated.rst
-> @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
->          instance->count = count;
->
->          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
-> +
-> +Volatile Qualified asm Statements
-> +=================================
-> +
-> +According to `the GCC docs on inline asm
-> +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
-> +
-> +  asm statements that have no output operands and asm goto statements,
-> +  are implicitly volatile.
-> +
-> +For many uses of asm statements, that means adding a volatile qualifier won't
-> +hurt (making the implicit explicit), but it will not strengthen the semantics
-> +for such cases where it would have been implied. Care should be taken not to
-> +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
-> +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
-> +
-> +.. [memory-barriers] Documentation/memory-barriers.txt
-> --
-> 2.35.0.rc2.247.g8bbb082509-goog
->
+vim +/blank +1165 drivers/video/fbdev/core/fbmem.c
+
+  1087	
+  1088	static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+  1089				unsigned long arg)
+  1090	{
+  1091		const struct fb_ops *fb;
+  1092		struct fb_var_screeninfo var;
+  1093		struct fb_fix_screeninfo fix;
+  1094		struct fb_cmap cmap_from;
+  1095		struct fb_cmap_user cmap;
+  1096		void __user *argp = (void __user *)arg;
+  1097		long ret = 0;
+  1098	
+  1099		switch (cmd) {
+  1100		case FBIOGET_VSCREENINFO:
+  1101			lock_fb_info(info);
+  1102			var = info->var;
+  1103			unlock_fb_info(info);
+  1104	
+  1105			ret = copy_to_user(argp, &var, sizeof(var)) ? -EFAULT : 0;
+  1106			break;
+  1107		case FBIOPUT_VSCREENINFO:
+  1108			if (copy_from_user(&var, argp, sizeof(var)))
+  1109				return -EFAULT;
+  1110			console_lock();
+  1111			lock_fb_info(info);
+  1112			ret = fb_set_var(info, &var);
+  1113			if (!ret)
+  1114				fbcon_update_vcs(info, var.activate & FB_ACTIVATE_ALL);
+  1115			unlock_fb_info(info);
+  1116			console_unlock();
+  1117			if (!ret && copy_to_user(argp, &var, sizeof(var)))
+  1118				ret = -EFAULT;
+  1119			break;
+  1120		case FBIOGET_FSCREENINFO:
+  1121			lock_fb_info(info);
+  1122			memcpy(&fix, &info->fix, sizeof(fix));
+  1123			if (info->flags & FBINFO_HIDE_SMEM_START)
+  1124				fix.smem_start = 0;
+  1125			unlock_fb_info(info);
+  1126	
+  1127			ret = copy_to_user(argp, &fix, sizeof(fix)) ? -EFAULT : 0;
+  1128			break;
+  1129		case FBIOPUTCMAP:
+  1130			if (copy_from_user(&cmap, argp, sizeof(cmap)))
+  1131				return -EFAULT;
+  1132			ret = fb_set_user_cmap(&cmap, info);
+  1133			break;
+  1134		case FBIOGETCMAP:
+  1135			if (copy_from_user(&cmap, argp, sizeof(cmap)))
+  1136				return -EFAULT;
+  1137			lock_fb_info(info);
+  1138			cmap_from = info->cmap;
+  1139			unlock_fb_info(info);
+  1140			ret = fb_cmap_to_user(&cmap_from, &cmap);
+  1141			break;
+  1142		case FBIOPAN_DISPLAY:
+  1143			if (copy_from_user(&var, argp, sizeof(var)))
+  1144				return -EFAULT;
+  1145			console_lock();
+  1146			lock_fb_info(info);
+  1147			ret = fb_pan_display(info, &var);
+  1148			unlock_fb_info(info);
+  1149			console_unlock();
+  1150			if (ret == 0 && copy_to_user(argp, &var, sizeof(var)))
+  1151				return -EFAULT;
+  1152			break;
+  1153		case FBIO_CURSOR:
+  1154			ret = -EINVAL;
+  1155			break;
+  1156		case FBIOGET_CON2FBMAP:
+  1157			ret = fbcon_get_con2fb_map_ioctl(argp);
+  1158			break;
+  1159		case FBIOPUT_CON2FBMAP:
+  1160			ret = fbcon_set_con2fb_map_ioctl(argp);
+  1161			break;
+  1162		case FBIOBLANK:
+  1163			console_lock();
+  1164			lock_fb_info(info);
+> 1165			if (blank > FB_BLANK_POWERDOWN)
+  1166				blank = FB_BLANK_POWERDOWN;
+  1167			ret = fb_blank(info, arg);
+  1168			/* might again call into fb_blank */
+  1169			fbcon_fb_blanked(info, arg);
+  1170			unlock_fb_info(info);
+  1171			console_unlock();
+  1172			break;
+  1173		default:
+  1174			lock_fb_info(info);
+  1175			fb = info->fbops;
+  1176			if (fb->fb_ioctl)
+  1177				ret = fb->fb_ioctl(info, cmd, arg);
+  1178			else
+  1179				ret = -ENOTTY;
+  1180			unlock_fb_info(info);
+  1181		}
+  1182		return ret;
+  1183	}
+  1184	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
