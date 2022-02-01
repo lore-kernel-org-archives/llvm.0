@@ -1,170 +1,89 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215BC3FE3
-	for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 23:53:25 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id k17so14015653plk.0
-        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 15:53:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47303FDD
+	for <llvm@lists.linux.dev>; Tue,  1 Feb 2022 01:08:55 +0000 (UTC)
+Received: by mail-pf1-f201.google.com with SMTP id bd15-20020a056a00278f00b004c7617c47dbso8290927pfb.0
+        for <llvm@lists.linux.dev>; Mon, 31 Jan 2022 17:08:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
-        b=YW4/gspNKInMiiqNd58ZCH4h0W4EUl91RhRmEY/57BXNbZ/hMUAkcEwc7FoOjBI4Nt
-         E45rvZBie5zy3Gz0IT/MtOePAEx+D4c06rSLJ0MR4nhBOzD0JqXtbe/3lYMrtOi4Ixjn
-         OBYyuErvU48oU1yNCmORPoTqATZguV8v3Oeuc=
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=o/Ctb5pvdqwrLO0223Se29dTZOlhSsjZ5d2ehUka66I=;
+        b=etjsVyvxzc7GGnO//2K7LB7LkTZ1BVRdiBiYBT1C6zYTHsbZrDskSdgDCC3t1iuWzA
+         Es73xw3u8AMCXcdAB6FBLEtaXATkKNJfB7voLQt8EAL97SGbadTk3YIlKbLggC6mp6Rw
+         bfbPLyUfUSO1Z0VEEU0tKKwmoRgBbapm2RMizqdLtxUyXTivDY4q3UZYY8Sj2OGjZO3g
+         scKPmN8PY6hbjMILBLGd1aKaSKKyzZmaoaLhRzw9lJ+GvIAn2XCcLVMtjst/Lp9tK/qG
+         SjGnTxEy5+GzBOcMCyzMKFFrAJIM7VeLveT5mwaxT19QtEKA5IXXJn8o89iXxjJBSMn2
+         pPEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+X+AFGoIUnRael26zUdyQVS4Stq52MtE2VPdjxRCScg=;
-        b=dllh94rVUq4HVZds1GJPOKrc3DCkTBZu6d7eyQlgcVEgaTvxF+gs3g0YgE/d5E5iJm
-         MR+YjrhWsYYQ6HZyVLOLzlQSCLmq1BVYXVwwdkLWZimCzRqUZqkmtlRlH0gJUekkAsPf
-         UraHP5Hc/FH2X9g/NJDs4AIiepnCxFiOCElsBiL7q/oYnz1Oazg2Cql1L2YAHMJ9CV64
-         wNANsnPkn/ag9tEdNck67cPXCN4UlUUM8Lih5dqv7aW8GJryColOdqWJnweGfiCQM/Jz
-         XKJ/bfiQ3WWGh+BgFbT/AsINFc+xnKJLjZXGMOHjPo7p6fCVWHlD9w5gWTzIkzxkF0X6
-         zQRw==
-X-Gm-Message-State: AOAM530IcyllE4pdYWv8ROQw1niWwCCzA1RNvgVUNTr2C/USbvvDsgxN
-	dbH1nTuky5cVzOEA828cOyea8Q==
-X-Google-Smtp-Source: ABdhPJwQoJTVTbWyz7yUWp71cBeTkkBUzx+D+EJf+jHOTWJCSO09eDNSyMoJg+E1UEDubWnSmjvFOg==
-X-Received: by 2002:a17:902:d512:: with SMTP id b18mr24084400plg.24.1643673204493;
-        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ha21sm392379pjb.48.2022.01.31.15.53.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 15:53:24 -0800 (PST)
-Date: Mon, 31 Jan 2022 15:53:23 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Len Baker <len.baker@gmx.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier()
- substitute
-Message-ID: <202201311550.31EF589B2@keescook>
-References: <20220131225250.409564-1-ndesaulniers@google.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=o/Ctb5pvdqwrLO0223Se29dTZOlhSsjZ5d2ehUka66I=;
+        b=ONNKgTxYjR5WbKuwiFsSONN3T4dL7XdLk550AeN5xQrAuHON7uy17joeiAkpVquty2
+         EykIu9YQmmlfR6WVUCCNYuKImDOZnBiscAzTbqZlYwYLd9pFx+j8f6mAw24vJK0a7iuT
+         OGBxTsnOUPOtapfIEOBS74SgaBUAnfd80bNSxUY6qA5HMuvjploh9Qn+oFFZTwImPMJX
+         pbjnWRLYxOxb4uD2jEZoPm69eRgFZAKTrL9SlII62VxkUlCS8VkHbe5uPsQcC5/6y3Yb
+         lF0PdGfQ1rH8mIc8ypf1Djrnrai5ThlJSpZNP8jg6+uYnm8E2075TmhVpqq2uLJ7NDj1
+         fRrA==
+X-Gm-Message-State: AOAM531j2cnm5jwBDtyLZGwetCZhxe22eBXcuKpVB7Ltr/2+7mnCDPVO
+	rOwL8G26Tee/tLd0RNNl6bOrQUHH0zM=
+X-Google-Smtp-Source: ABdhPJxoV8PyBKTYstfYoP9G1h0gzxSu1PyQr0nSaF8PIuXs5c2bvk3gV2Jkm8KymhboRC/DVy2FtpVEd+k=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:17c6:: with SMTP id
+ q64mr27331538pja.170.1643677735134; Mon, 31 Jan 2022 17:08:55 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Tue,  1 Feb 2022 01:08:33 +0000
+Message-Id: <20220201010838.1494405-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131225250.409564-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH 0/5] x86: uaccess CMPXCHG + KVM bug fixes
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sean Christopherson <seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, 
+	Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jan 31, 2022 at 02:52:47PM -0800, Nick Desaulniers wrote:
-> Add text to memory-barriers.txt and deprecated.rst to denote that
-> volatile-qualifying an asm statement is not a substitute for either a
-> compiler barrier (``barrier();``) or a clobber list.
-> 
-> This way we can point to this in code that strengthens existing
-> volatile-qualified asm statements to use a compiler barrier.
-> 
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Example: https://godbolt.org/z/8PW549zz9
-> 
->  Documentation/memory-barriers.txt    | 24 ++++++++++++++++++++++++
->  Documentation/process/deprecated.rst | 17 +++++++++++++++++
->  2 files changed, 41 insertions(+)
-> 
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index b12df9137e1c..f3908c0812da 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1726,6 +1726,30 @@ of optimizations:
->       respect the order in which the READ_ONCE()s and WRITE_ONCE()s occur,
->       though the CPU of course need not do so.
->  
-> + (*) Similarly, the compiler is within its rights to reorder instructions
-> +     around an asm statement so long as clobbers are not violated. For example,
-> +
-> +	asm volatile ("");
-> +	flag = true;
-> +
-> +     May be modified by the compiler to:
-> +
-> +	flag = true;
-> +	asm volatile ("");
-> +
-> +     Marking an asm statement as volatile is not a substitute for barrier(),
-> +     and is implicit for asm goto statements and asm statements that do not
-> +     have outputs (like the above example). Prefer either:
-> +
-> +	asm ("":::"memory");
-> +	flag = true;
-> +
-> +     Or:
-> +
-> +	asm ("");
-> +	barrier();
-> +	flag = true;
-> +
+Add uaccess macros for doing CMPXCHG on userspace addresses and use the
+macros to fix KVM bugs by replacing flawed code that maps memory into the
+kernel address space without proper mmu_notifier protection (or with
+broken pfn calculations in one case).
 
-I like this!
+Add yet another Kconfig for guarding asm_volatile_goto() to workaround a
+clang-13 bug.  I've verified the test passes on gcc versions of arm64,
+PPC, RISC-V, and s390x that also pass the CC_HAS_ASM_GOTO_OUTPUT test.
 
->   (*) The compiler is within its rights to invent stores to a variable,
->       as in the following example:
->  
-> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-> index 388cb19f5dbb..432816e2f79e 100644
-> --- a/Documentation/process/deprecated.rst
-> +++ b/Documentation/process/deprecated.rst
-> @@ -329,3 +329,20 @@ struct_size() and flex_array_size() helpers::
->          instance->count = count;
->  
->          memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
-> +
-> +Volatile Qualified asm Statements
-> +=================================
+Patches 1-4 are tagged for stable@ as patches 3 and 4 (mostly 3) need a
+backportable fix, and doing CMPXCHG on the userspace address is the
+simplest fix from a KVM perspective.
 
-I would open with an example, like:
+Peter Zijlstra (1):
+  x86/uaccess: Implement macros for CMPXCHG on user addresses
 
-Instead of::
+Sean Christopherson (4):
+  Kconfig: Add option for asm goto w/ tied outputs to workaround
+    clang-13 bug
+  KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits
+  KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses
+  KVM: x86: Bail to userspace if emulation of atomic user access faults
 
-	volatile asm("...");
-
-just use::
-
-	asm("...");
+ arch/x86/include/asm/uaccess.h | 131 +++++++++++++++++++++++++++++++++
+ arch/x86/kvm/mmu/paging_tmpl.h |  45 +----------
+ arch/x86/kvm/x86.c             |  35 ++++-----
+ init/Kconfig                   |   4 +
+ 4 files changed, 150 insertions(+), 65 deletions(-)
 
 
-> +
-> +According to `the GCC docs on inline asm
-> +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
-> +
-> +  asm statements that have no output operands and asm goto statements,
-> +  are implicitly volatile.
-
-Does this mean "volatile" _is_ needed when there are operands, etc?
-
-> +
-> +For many uses of asm statements, that means adding a volatile qualifier won't
-> +hurt (making the implicit explicit), but it will not strengthen the semantics
-> +for such cases where it would have been implied. Care should be taken not to
-> +confuse ``volatile`` with the kernel's ``barrier()`` macro or an explicit
-> +clobber list. See [memory-barriers]_ for more info on ``barrier()``.
-> +
-> +.. [memory-barriers] Documentation/memory-barriers.txt
-> -- 
-> 2.35.0.rc2.247.g8bbb082509-goog
-> 
-
+base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
 -- 
-Kees Cook
+2.35.0.rc2.247.g8bbb082509-goog
+
